@@ -1,6 +1,7 @@
 # Tools binaries (large files)
 .tools/poppler/
 .tools/qpdf/
+.tools/gs/
 
 # Temporary files
 .tmp_*

@@ -93,9 +93,45 @@ Location: `.tools/qpdf/bin/`
 & ".tools\qpdf\bin\qpdf.exe" --linearize input.pdf output.pdf
 ```
 
+## Ghostscript CLI Tools
+
+Location: `.tools/gs/bin/`
+
+### Compress images (downsize PDF)
+```powershell
+& ".tools\gs\bin\gswin64c.exe" -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dDownsampleColorImages=true -dColorImageResolution=72 -dDownsampleGrayImages=true -dGrayImageResolution=72 -dDownsampleMonoImages=true -dMonoImageResolution=72 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=output.pdf input.pdf
+```
+
+### Quality presets (`-dPDFSETTINGS`)
+- `/screen` - 72 DPI, smallest file size
+- `/ebook` - 150 DPI, medium quality
+- `/printer` - 300 DPI, high quality
+- `/prepress` - 300 DPI, color preserving
+
+### Remove all images (text only)
+```powershell
+& ".tools\gs\bin\gswin64c.exe" -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dFILTERIMAGE=true -dNOPAUSE -dQUIET -dBATCH -sOutputFile=output.pdf input.pdf
+```
+
+## PDF Downsizing Workflow
+
+Two-pass workflow for maximum compression:
+
+### Pass 1: Ghostscript (image compression)
+```powershell
+& ".tools\gs\bin\gswin64c.exe" -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dDownsampleColorImages=true -dColorImageResolution=72 -dDownsampleGrayImages=true -dGrayImageResolution=72 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=temp.pdf input.pdf
+```
+
+### Pass 2: QPDF (structure optimization)
+```powershell
+& ".tools\qpdf\bin\qpdf.exe" --linearize --object-streams=generate --stream-data=compress --compress-streams=y --optimize-images --flatten-annotations=screen temp.pdf output.pdf
+Remove-Item temp.pdf
+```
+
 ## Best Practices
 
 1. **Check existing conversions**: Before converting, check if subfolder exists in `poppler_pdf_jpgs/`
 2. **Use appropriate DPI**: 150 DPI for screen viewing, 300 DPI for OCR
 3. **Convert specific pages**: Use `--pages` to avoid converting entire large PDFs
 4. **Clean up**: Delete old conversions when no longer needed
+5. **Two-pass downsizing**: Use Ghostscript first (images), then QPDF (structure) for best compression
