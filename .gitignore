@@ -1,0 +1,13 @@
+# Tools binaries (large files)
+.tools/poppler/
+
+# Temporary files
+.tmp_*
+*.tmp
+
+# IDE
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
