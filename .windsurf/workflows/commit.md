@@ -10,4 +10,4 @@ Separate into multiple commits:
 - Implementation
 - Tests
 - Documentation
-Read /.windsurf/rules/commit-rules.md and do one or more single line commits until all uncommitted changes are committed.
+Read /.windsurf/rules/git-rules.md and do one or more single line commits until all uncommitted changes are committed.
