@@ -3,7 +3,7 @@
 ## Rules
 
 1. **NEVER commit secrets**: `.env` files, certificates (*.cer, *.pfx, *.pem, *.key), API keys
-2. **Exclude large binaries**: Reinstallable tools (poppler, node_modules) - save repo size
+2. **Exclude large binaries**: Reinstallable tools (poppler, node_modules, .venv/) - save repo size
 3. **Exclude build artifacts**: Generated files (dist/, __pycache__/, *.pyc)
 4. **Track shared config**: `.vscode/`, `Set-*-Env.bat` (environment setup scripts)
 5. **Use negation pattern**: Keep specific files with `!` prefix when excluding folders
