@@ -17,7 +17,7 @@ Rules for writing project documentation: INFO, SPEC, IMPL, TEST, and FIX documen
 - High complexity: propose 2-3 implementation alternatives before committing
 - Place TOC after header block (or after MUST-NOT-FORGET if present)
 - ID-System: `**XXXX-FR-01:**`, `**XXXX-IG-01:**`, `**XXXX-DD-01:**` (FR=Functional, IG=Guarantee, DD=Decision)
-- Be exhaustive: list ALL domain objects, actions, buttons, functions
+- Be exhaustive: list ALL domain objects, workflows, actions, ui elements, functions
 - Include "What we don't want" in Scenario section
 - Spec Changes at end, format: `**[YYYY-MM-DD HH:MM]**`, reverse chronological, prefixes: Added, Changed, Fixed, Removed
 
