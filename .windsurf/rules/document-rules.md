@@ -19,7 +19,7 @@ Rules for writing project documentation: INFO, SPEC, IMPL, TEST, and FIX documen
 - ID-System: `**XXXX-FR-01:**`, `**XXXX-IG-01:**`, `**XXXX-DD-01:**` (FR=Functional, IG=Guarantee, DD=Decision)
 - Be exhaustive: list ALL domain objects, actions, buttons, functions
 - Include "What we don't want" in Scenario section
-- Spec Changes section at end, reverse chronological, action prefixes (Added, Changed, Fixed, Removed)
+- Spec Changes at end, format: `**[YYYY-MM-DD HH:MM]**`, reverse chronological, prefixes: Added, Changed, Fixed, Removed
 
 ## Table of Contents
 
