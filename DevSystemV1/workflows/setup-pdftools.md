@@ -58,6 +58,13 @@ Remove-Item $zipPath -ErrorAction SilentlyContinue
 & "$toolsDir\poppler\Library\bin\pdftoppm.exe" -v
 ```
 
+### Create output folder (tracked in git):
+```powershell
+$jpgDir = "$toolsDir\poppler_pdf_jpgs"
+if (-not (Test-Path $jpgDir)) { New-Item -ItemType Directory -Path $jpgDir }
+if (-not (Test-Path "$jpgDir\.gitkeep")) { New-Item -ItemType File -Path "$jpgDir\.gitkeep" }
+```
+
 ## 4. Install uv/uvx (Python Package Runner)
 
 uvx runs Python packages without installing them globally. Required for MCP servers.
@@ -87,16 +94,7 @@ uvx --version
 pip install pdf2image Pillow
 ```
 
-## 6. Create Output Folder for PDF Conversion
-
-```powershell
-$jpgDir = "$toolsDir\poppler_pdf_jpgs"
-if (-not (Test-Path $jpgDir)) { New-Item -ItemType Directory -Path $jpgDir }
-```
-
-PDF to JPG conversions are stored in `[WORKSPACE_FOLDER]/.tools/poppler_pdf_jpgs/`.
-
-## 7. Final Verification
+## 6. Final Verification
 
 Test Poppler conversion:
 ```powershell
@@ -109,4 +107,4 @@ All tools ready:
 - **Python**: Script execution
 - **Poppler**: PDF to image conversion (`[WORKSPACE_FOLDER]/.tools/poppler/`)
 - **uv/uvx**: Python package runner for MCP servers
-- **Output folder**: `[WORKSPACE_FOLDER]/.tools/poppler_pdf_jpgs/`
+- **Output folder**: `[WORKSPACE_FOLDER]/.tools/poppler_pdf_jpgs/` (tracked via .gitkeep)
