@@ -5,8 +5,8 @@
 .tmp_*
 *.tmp
 
-# IDE
-.vscode/
+# IDE (keep .vscode/ - shared config)
+.vs/
 
 # Python
 __pycache__/

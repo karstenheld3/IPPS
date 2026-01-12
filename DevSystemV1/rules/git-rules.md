@@ -11,7 +11,6 @@ Rules and patterns for Git usage in Windsurf projects.
 *.env
 .env.local
 .env.*
-Set-*-Env.bat
 
 # Certificates and keys
 *.cer
@@ -54,9 +53,6 @@ npm-debug.log*
 ### IDE and OS
 
 ```gitignore
-# VS Code
-.vscode/
-
 # Visual Studio
 .vs/
 .ntvs_analysis.dat
@@ -138,7 +134,6 @@ node_modules/
 dist/
 
 # IDE
-.vscode/
 .vs/
 
 # OS
