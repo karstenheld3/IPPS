@@ -29,13 +29,12 @@ Usage scenarios:
 - Be exhaustive: Verify if you have listed all domain objects, buttons, functions, design mechanisms, etc.
 - Write as much as necessary, but not more. Spec length: small task: ~500 lines, medium task: ~1000 lines, complex task: ~2500 lines
 - Try to fit single statements / decisions / objects on a single line
-- Use ASCII "double" and 'single' quotes - NEVER these: " ", ' ', „, ‚, « », ‹ ›
+- For documentation or UI output, avoid "typographic quotes" and use typewriter / ASCII "double quotes" or 'single quotes'
 - No emojis in the documentation. Use extended ASCII characters only.
 - Avoid Markdown tables when possible for enumerations use simple unnumberred lists with indented properties
-- When creating hierarchies and maps, use Unicode box-drawing characters (├─ └─ │) for tree structures
+- When creating hierarchies and maps, use Unicode box-drawing characters (├── └── │) for tree structures
 - Place a Table of Contents (TOC)at the start of the spec
 - No `---` markers between sections!
-- Auto-verify against [SPEC] after implementation and reverse-update on changes if change was intentional.
 
 **For the user:**
 - If the implementation idea is not very clear at the beginning, ask the agent for at least 3 implementation options.
@@ -61,7 +60,7 @@ Implementation specifications should include these sections when relevant:
 4. **Context**: Project background, related systems
 5. **Functional Requirements**: Numbered requirements (XXXX-FR-01)
 6. **Implementation Guarantees**: Numbered guarantees (XXXX-IG-01)
-7. **Architecture and Design**: Numbered design decisions (XXXX-DD-01), layer diagrams
+7. **Architecture and Design**: Design decisions (XXXX-DD-01), layer diagrams
 8. **Domain Objects**: Core entities, data structures, schemas
 9. **User Actions**: All interactive operations (for UI specs)
 10. **UX Design**: ASCII diagrams with component boundaries (for UI specs)

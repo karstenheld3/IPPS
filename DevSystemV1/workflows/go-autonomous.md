@@ -8,7 +8,7 @@ Do we have enough context for autonomous activity?
 
 If unclear, ask for clarification.
 
-Then re-read the previous conversation, provided and relevant files. Make an internal "MUST-NOT_FORGET" list and review / edit it after each step.
+Then re-read the previous conversation, provided and relevant files. Make an internal MUST-NOT-FORGET list and review / edit it after each step.
 
 Then map out all neessary steps.
 Keep the steps small to ensure high quality.
@@ -19,5 +19,5 @@ Work though each step.
 Use frequent and small commits.
 Run the /verify.md workflow after each step.
 
-After reaching the goal, verify again against MUST-NOT_FORGET list.
+After reaching the goal, verify again against MUST-NOT-FORGET list.
 Do a final commit if necessary.
