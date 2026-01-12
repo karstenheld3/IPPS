@@ -3,12 +3,14 @@
 Convert PDF pages to JPG images for Windsurf Agent vision analysis.
 Uses Poppler's pdftoppm via pdf2image library.
 
+Output: .tools/poppler_pdf_jpgs/[PDF_FILENAME]/[PDF_FILENAME]_page001.jpg
+Each PDF gets its own subfolder to track previous conversions.
+
 Usage:
   python convert-pdf-to-jpg.py <input.pdf> [--output-dir <dir>] [--dpi <dpi>] [--pages <range>]
 
 Examples:
   python convert-pdf-to-jpg.py invoice.pdf
-  python convert-pdf-to-jpg.py invoice.pdf --output-dir ../_Temp
   python convert-pdf-to-jpg.py invoice.pdf --dpi 200 --pages 1-2
   python convert-pdf-to-jpg.py invoice.pdf --pages 1
 """
@@ -18,7 +20,7 @@ from pathlib import Path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 POPPLER_PATH = os.path.join(SCRIPT_DIR, "poppler", "Library", "bin")
-DEFAULT_OUTPUT_DIR = os.path.join(PROJECT_ROOT, "_Temp")
+DEFAULT_OUTPUT_DIR = os.path.join(SCRIPT_DIR, "poppler_pdf_jpgs")
 DEFAULT_DPI = 150
 
 def parse_page_range(page_str: str, total_pages: int) -> tuple[int, int]:
@@ -45,10 +47,11 @@ def convert_pdf_to_jpg(input_pdf: str, output_dir: str, dpi: int, pages: str = N
     print(f"ERROR: File not found: {input_pdf}")
     sys.exit(1)
 
-  output_path = Path(output_dir)
-  output_path.mkdir(parents=True, exist_ok=True)
-
   base_name = input_path.stem
+  
+  # Create subfolder per PDF filename
+  output_path = Path(output_dir) / base_name
+  output_path.mkdir(parents=True, exist_ok=True)
 
   try:
     # First get page count
