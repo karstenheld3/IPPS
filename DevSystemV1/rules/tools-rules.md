@@ -20,10 +20,8 @@ python .tools/convert-pdf-to-jpg.py <input.pdf> [--output-dir <dir>] [--dpi <dpi
 **Examples:**
 ```powershell
 python .tools/convert-pdf-to-jpg.py invoice.pdf
-# Output: .tools/poppler_pdf_jpgs/invoice/invoice_page001.jpg
-
-python .tools/convert-pdf-to-jpg.py "C:\Downloads\bank-statement.pdf" --dpi 200
-# Output: .tools/poppler_pdf_jpgs/bank-statement/bank-statement_page001.jpg
+python .tools/convert-pdf-to-jpg.py invoice.pdf --dpi 200 --pages 1-2
+python .tools/convert-pdf-to-jpg.py invoice.pdf --pages 1
 ```
 
 **Output Convention:**
