@@ -1,140 +1,42 @@
 # Git Rules
 
-Rules and patterns for Git usage in Windsurf projects.
+## Rules
 
-## .gitignore Patterns
+1. **NEVER commit secrets**: `.env` files, certificates (*.cer, *.pfx, *.pem, *.key), API keys
+2. **Exclude large binaries**: Reinstallable tools (poppler, node_modules) - save repo size
+3. **Exclude build artifacts**: Generated files (dist/, __pycache__/, *.pyc)
+4. **Track shared config**: `.vscode/`, `Set-*-Env.bat` (environment setup scripts)
+5. **Use negation pattern**: Keep specific files with `!` prefix when excluding folders
+6. **Add comments**: Document non-obvious exclusions in .gitignore
 
-### Environment and Secrets (NEVER commit)
+## Template
 
 ```gitignore
-# Environment files with secrets
+# Secrets (NEVER commit)
 *.env
-.env.local
 .env.*
-
-# Certificates and keys
 *.cer
 *.pfx
 *.pem
 *.key
-```
-
-### Python
-
-```gitignore
-# Virtual environment
-.venv/
-
-# Cache and build artifacts
-__pycache__/
-*.pyc
-.pytest_cache/
-.mypy_cache/
-```
-
-### Node.js / JavaScript
-
-```gitignore
-# Dependencies
-node_modules/
-
-# Build output
-dist/
-lib/
-release/
-temp/
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-```
-
-### IDE and OS
-
-```gitignore
-# Visual Studio
-.vs/
-.ntvs_analysis.dat
-bin/
-obj/
-
-# macOS
-.DS_Store
-```
-
-### Large Binaries and Tools
-
-```gitignore
-# Reinstallable tools (save repo size)
-.tools/poppler/
-_Tools/poppler/
-
-# Deployment artifacts
-deploy.zip
-*.sppkg
-```
-
-### Temporary Files
-
-```gitignore
-# Temp files
-*.tmp
-.tmp_*
-
-# Backup files
-*.bak
-```
-
-### Project-Specific Sensitive Data
-
-```gitignore
-# Example: Exclude folders with personal data
-[FOLDER]-*/_Input/
-[FOLDER]-*/_Output/
-
-# But keep specific file types
-![FOLDER]-*/*.csv
-![FOLDER]-*/*.md
-```
-
-## Best Practices
-
-1. **Secrets**: NEVER commit `.env` files, certificates, or API keys
-2. **Large binaries**: Exclude reinstallable tools (poppler, node_modules)
-3. **Build artifacts**: Exclude generated files (dist/, __pycache__/)
-4. **Use negation**: Keep specific files with `!` prefix when excluding folders
-5. **Document patterns**: Add comments explaining non-obvious exclusions
-
-## Negation Pattern Example
-
-Keep folder structure but exclude contents:
-```gitignore
-# Ignore contents
-src/uploads/*
-
-# But keep the folder (with .gitkeep)
-!src/uploads/.gitkeep
-```
-
-## Template .gitignore for Windsurf Projects
-
-```gitignore
-# Environment and secrets
-*.env
-.env.*
 
 # Python
 .venv/
 __pycache__/
 *.pyc
+.pytest_cache/
+.mypy_cache/
 
 # Node.js
 node_modules/
 dist/
+lib/
+*.log
 
-# IDE
+# IDE (keep .vscode/)
 .vs/
+bin/
+obj/
 
 # OS
 .DS_Store
