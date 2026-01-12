@@ -65,7 +65,39 @@ if (-not (Test-Path $jpgDir)) { New-Item -ItemType Directory -Path $jpgDir }
 if (-not (Test-Path "$jpgDir\.gitkeep")) { New-Item -ItemType File -Path "$jpgDir\.gitkeep" }
 ```
 
-## 4. Install uv/uvx (Python Package Runner)
+## 4. Install QPDF Locally
+
+QPDF is a command-line tool for PDF transformations (merge, split, encrypt, decrypt, repair).
+
+### Check if already installed:
+```powershell
+Test-Path "$toolsDir\qpdf\bin\qpdf.exe"
+```
+
+### If not installed, download and extract:
+```powershell
+$qpdfDir = "$toolsDir\qpdf"
+
+# Download latest QPDF for Windows
+$qpdfUrl = "https://github.com/qpdf/qpdf/releases/download/v12.3.0/qpdf-12.3.0-msvc64.zip"
+$zipPath = "$toolsDir\qpdf.zip"
+
+Invoke-WebRequest -Uri $qpdfUrl -OutFile $zipPath
+Expand-Archive -Path $zipPath -DestinationPath $toolsDir -Force
+
+# Find extracted folder (qpdf-*) and rename to qpdf
+$extractedFolder = Get-ChildItem $toolsDir -Directory | Where-Object { $_.Name -like "qpdf-*" } | Select-Object -First 1
+if ($extractedFolder) { Move-Item $extractedFolder.FullName $qpdfDir -ErrorAction SilentlyContinue }
+
+Remove-Item $zipPath -ErrorAction SilentlyContinue
+```
+
+### Verify installation:
+```powershell
+& "$toolsDir\qpdf\bin\qpdf.exe" --version
+```
+
+## 5. Install uv/uvx (Python Package Runner)
 
 uvx runs Python packages without installing them globally. Required for MCP servers.
 
@@ -88,13 +120,13 @@ $env:Path = [System.Environment]::GetEnvironmentVariable("Path","User") + ";" + 
 uvx --version
 ```
 
-## 5. Install Python Dependencies
+## 6. Install Python Dependencies
 
 ```powershell
 pip install pdf2image Pillow
 ```
 
-## 6. Final Verification
+## 7. Final Verification
 
 Test Poppler conversion:
 ```powershell
@@ -106,5 +138,6 @@ Test Poppler conversion:
 All tools ready:
 - **Python**: Script execution
 - **Poppler**: PDF to image conversion (`[WORKSPACE_FOLDER]/.tools/poppler/`)
+- **QPDF**: PDF transformations (`[WORKSPACE_FOLDER]/.tools/qpdf/`)
 - **uv/uvx**: Python package runner for MCP servers
 - **Output folder**: `[WORKSPACE_FOLDER]/.tools/poppler_pdf_jpgs/` (tracked via .gitkeep)
