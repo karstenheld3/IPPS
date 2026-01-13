@@ -358,7 +358,7 @@ trigger: always_on
 
 - Use lists, not Markdown tables
 - No emojis - ASCII only, no `---` markers between sections
-- Use box-drawing characters (├─ └─ │) for trees
+- Use box-drawing characters (├── └── │) for trees
 - ASCII UI diagrams have no line width limitation
 - Research APIs on official docs before suggesting usage
 - List assumptions at start - let user verify before proceeding

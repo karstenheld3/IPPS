@@ -10,7 +10,7 @@ Rules for writing project documentation: INFO, SPEC, IMPL, TEST, and FIX documen
 
 - Use lists, not Markdown tables
 - No emojis - ASCII only, no `---` markers between sections
-- Use box-drawing characters (├─ └─ │) for trees
+- Use box-drawing characters (├── └── │) for trees
 - ASCII UI diagrams have no line width limitation
 - Research APIs on official docs before suggesting usage
 - List assumptions at start - let user verify before proceeding
@@ -61,7 +61,7 @@ Rules for writing project documentation: INFO, SPEC, IMPL, TEST, and FIX documen
 - Use ASCII "double quotes" or 'single quotes', not "typographic quotes"
 - No emojis in documentation (exception: UI may use limited set)
 - Avoid Markdown tables; use unnumbered lists with indented properties
-- Use Unicode box-drawing characters (├─ └─ │) for tree structures
+- Use Unicode box-drawing characters (├── └── │) for tree structures (2-space compatible)
 - Try to fit single statements/decisions/objects on a single line
 
 **Structure:**
