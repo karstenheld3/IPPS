@@ -1,6 +1,6 @@
 # IPP - Insanely Productive Programmer
 
-A development system for AI-assisted coding workflows, optimized for Windsurf IDE.
+A development system for AI-assisted coding workflows, optimized for Windsurf IDE on Windows x64.
 
 ## Overview
 
