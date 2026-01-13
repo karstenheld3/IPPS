@@ -99,17 +99,22 @@ All sources in INFO documents MUST have unique IDs.
 - `AGSK-IN01-SC-ASIO-HOME` - agentskills.io/home
 - `AGSK-IN01-SC-CLAUD-SKLBP` - platform.claude.com/.../best-practices
 
-## Tracking IDs (PR, FX)
+## Tracking IDs (BG, FT, PR, FX, TK)
 
-For session and project tracking in PROBLEMS.md and FIXES documents.
+For session and project tracking in PROBLEMS.md, FIXES, and backlog documents.
 
-**Format:** `[TOPIC]-[TYPE]-[NUMBER]`
+**Format:** `[TOPIC]-[TYPE]-[NNN]` (3-digit number)
 
 **Types:**
-- `PR` - Problem (tracked in PROBLEMS.md)
-- `FX` - Fix (tracked in IMPL_*_FIXES.md)
+- `BG` - Bug (defect in existing code)
+- `FT` - Feature (new functionality request)
+- `PR` - Problem (issue discovered during session)
+- `FX` - Fix (documented fix for a problem)
+- `TK` - Task (general work item)
 
 **Examples:**
-- `SAP-PR-01` - SAP-related problem 1
-- `SCHD-FX-01` - Damage module fix 1
-- `PRXL-PR-03` - Project-wide problem 3
+- `SAP-BG-001` - SAP-related bug 1
+- `AUTH-FT-001` - Authentication feature request 1
+- `GLOB-PR-003` - Project-wide problem 3
+- `CRWL-FX-002` - Crawler fix 2
+- `UI-TK-015` - UI task 15
