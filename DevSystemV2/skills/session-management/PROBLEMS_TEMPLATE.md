@@ -25,3 +25,14 @@ Track problems discovered during this session using ID format: `[TOPIC]-PR-[NNN]
 **API-PR-004: No retry logic for network failures** - DEFERRED
 - **Reason**: Requires broader error handling refactor, not critical for current session goal
 - **Next**: Implement exponential backoff retry in separate session after auth fixes are stable
+
+## Problems Changes
+
+**[2026-01-15 16:45]**
+- Resolved: AUTH-PR-003 (migrated to httpOnly cookies)
+- Added: API-PR-004 to Deferred (retry logic postponed)
+
+**[2026-01-15 14:20]**
+- Added: AUTH-PR-001 (race condition on token refresh)
+- Added: API-PR-002 (clock skew issue)
+- Added: AUTH-PR-003 to Open (localStorage security issue)
