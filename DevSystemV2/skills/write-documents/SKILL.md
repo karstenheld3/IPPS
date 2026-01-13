@@ -61,13 +61,13 @@ Read the appropriate template for the document type you are creating:
 See `[AGENT_FOLDER]/rules/devsystem-ids.md` rule (always-on) for complete ID system.
 
 **Quick Reference:**
-- Document: `[TOPIC]-[DOC][NN]` (IN, SP, IP, TP)
+- Document: `[TOPIC]-[DOC][NN]` (IN = Info, SP = Spec, IP = Impl Plan, TP = Test Plan)
   - Example: `CRWL-SP01`, `AUTH-IP01`
-- Spec-Level: `[TOPIC]-[TYPE]-[NN]` (FR, IG, DD)
+- Spec-Level: `[TOPIC]-[TYPE]-[NN]` (FR = Functional Requirement, IG = Implementation Guarantee, DD = Design Decision)
   - Example: `CRWL-FR-01`, `AUTH-DD-03`
-- Plan-Level: `[TOPIC]-[DOC][NN]-[TYPE]-[NN]` (EC, IS, VC, TC)
+- Plan-Level: `[TOPIC]-[DOC][NN]-[TYPE]-[NN]` (EC = Edge Case, IS = Implementation Step, VC = Verification Checklist, TC = Test Case)
   - Example: `CRWL-IP01-EC-01`, `AUTH-TP01-TC-05`
 - Source: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
   - Example: `AGSK-IN01-SC-ASIO-HOME`
-- Tracking: `[TOPIC]-[TYPE]-[NNN]` (BG, FT, PR, FX, TK)
+- Tracking: `[TOPIC]-[TYPE]-[NNN]` (BG = Bug, FT = Feature, PR = Problem, FX = Fix, TK = Task)
   - Example: `SAP-BG-001`, `UI-FT-003`
