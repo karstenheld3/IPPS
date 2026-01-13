@@ -125,7 +125,7 @@ Three dimensions define how the agent should behave. Identify the active scenari
 [WORKSPACE_FOLDER]/
 ├─ [AGENT_FOLDER]/
 │   ├─ rules/              # Agent rules (.md files)
-│   └─ workflows/          # Agent workflows (.md files)
+│   └── workflows/          # Agent workflows (.md files)
 ├─ _Archive/               # Archived sessions
 ├─ _[SESSION_FOLDER]/      # Session folders start with underscore
 │   ├─ _IMPL_*.md          # Implementation plans
@@ -133,11 +133,11 @@ Three dimensions define how the agent should behave. Identify the active scenari
 │   ├─ _SPEC_*.md          # Specifications
 │   ├─ NOTES.md            # Session notes
 │   ├─ PROBLEMS.md         # Session problems
-│   └─ PROGRESS.md         # Session progress
+│   └── PROGRESS.md         # Session progress
 ├─ src/                    # Source code
 ├─ !NOTES.md               # Workspace notes (priority file)
 ├─ !PROBLEMS.md            # Known problems
-└─ !PROGRESS.md            # Overall progress
+└── !PROGRESS.md            # Overall progress
 ```
 
 ### Monorepo (Multiple Projects)
@@ -146,7 +146,7 @@ Three dimensions define how the agent should behave. Identify the active scenari
 [WORKSPACE_FOLDER]/
 ├─ [AGENT_FOLDER]/
 │   ├─ rules/              # Workspace-level rules
-│   └─ workflows/          # Workspace-level workflows
+│   └── workflows/          # Workspace-level workflows
 ├─ _Archive/               # Archived sessions (all projects)
 ├─ [PROJECT_A]/
 │   ├─ _Archive/           # Project A archived sessions
@@ -154,17 +154,17 @@ Three dimensions define how the agent should behave. Identify the active scenari
 │   ├─ src/                # Project A source code
 │   ├─ NOTES.md            # Project A notes
 │   ├─ PROBLEMS.md         # Project A problems
-│   └─ PROGRESS.md         # Project A progress
+│   └── PROGRESS.md         # Project A progress
 ├─ [PROJECT_B]/
 │   ├─ _Archive/           # Project B archived sessions
 │   ├─ _[SESSION_FOLDER]/  # Project B sessions
 │   ├─ src/                # Project B source code
 │   ├─ NOTES.md            # Project B notes
 │   ├─ PROBLEMS.md         # Project B problems
-│   └─ PROGRESS.md         # Project B progress
+│   └── PROGRESS.md         # Project B progress
 ├─ !NOTES.md               # Workspace-level notes (! to indicate priority)
 ├─ !PROBLEMS.md            # Workspace-level problems (! to indicate priority)
-└─ !PROGRESS.md            # Workspace-level progress  (! to indicate priority)
+└── !PROGRESS.md            # Workspace-level progress  (! to indicate priority)
 ```
 
 ## File Naming Conventions
@@ -241,30 +241,30 @@ Example: `_2026-01-12_FixAuthenticationBug/`
 
 ```
 1. INIT: User initializes session (`/session-init`)
-   └─ Session folder, NOTES.md, PROBLEMS.md, PROGRESS.md created
+   └── Session folder, NOTES.md, PROBLEMS.md, PROGRESS.md created
 
 2. PREPARE (one of):
    A) User prepares work manually
-      └─ Creates INFO / SPEC / IMPL documents, tracks progress
+      └── Creates INFO / SPEC / IMPL documents, tracks progress
    B) User explains problem, agent assists
-      └─ Updates Problems, Progress, Notes → researches → creates documents
+      └── Updates Problems, Progress, Notes → researches → creates documents
 
 3. WORK: User or agent implements
-   └─ Makes decisions, creates tests, implements, verifies
-   └─ Progress and findings tracked continuously
+   └── Makes decisions, creates tests, implements, verifies
+   └── Progress and findings tracked continuously
 
 4. SAVE: User saves session for later (`/session-save`)
-   └─ Everything updated and committed
+   └── Everything updated and committed
 
 5. RESUME: User resumes session (`/session-resume`)
-   └─ Agent primes from session files, executes workflows in Notes
-   └─ Continue with steps 2-3
+   └── Agent primes from session files, executes workflows in Notes
+   └── Continue with steps 2-3
 
 6. CLOSE: User closes session (`/session-close`)
-   └─ Everything updated, committed, synced to project/workspace
+   └── Everything updated, committed, synced to project/workspace
 
 7. ARCHIVE: User archives session
-   └─ Session folder moved to _Archive/
+   └── Session folder moved to _Archive/
 ```
 
 ## Document Types
@@ -363,7 +363,7 @@ trigger: always_on
 - Research APIs on official docs before suggesting usage
 - List assumptions at start - let user verify before proceeding
 - High complexity: propose 2-3 implementation alternatives before committing
-- Place TOC at start of spec
+- Place TOC after header block (or after MUST-NOT-FORGET if present)
 - ID-System: `**XXXX-FR-01:**`, `**XXXX-IG-01:**`, `**XXXX-DD-01:**` (FR=Functional, IG=Guarantee, DD=Decision)
 - Be exhaustive: list ALL domain objects, actions, buttons, functions
 - Auto-verify against [SPEC] after implementation and reverse-update on changes if change was intentional.

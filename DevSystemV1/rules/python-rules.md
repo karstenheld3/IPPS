@@ -341,7 +341,7 @@ def generate_simple_page(title: str, html_content: str, body_attributes: str = "
 For documentation or UI output, avoid "typographic quotes" and use typewriter / ASCII "double quotes" or 'single quotes'.
 
 ### GLOB-CM-05: Hierarchy Characters
-When creating hierarchies and maps, use "└─" for indenting.
+When creating hierarchies and maps, use "└──" for indenting.
 
 ## Logging Rules (LG)
 
