@@ -11,6 +11,14 @@ IPP provides structured rules, workflows, and skills for AI agents to follow con
 - **DevSystemV1** - Legacy workflows in `.windsurf/` (being migrated)
 - **DevSystemV2** - Current system with modular skills and workflows
 
+## Key Conventions
+
+- [Core Conventions](DevSystemV2/rules/core-conventions.md) - Text formatting, document structure, header blocks
+- [DevSystem Core](DevSystemV2/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
+- [DevSystem IDs](DevSystemV2/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
+- [Git Conventions](DevSystemV2/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
+- [Coding Conventions](DevSystemV2/skills/coding-conventions/SKILL.md) - Python, PowerShell style rules
+
 ## Project Structure
 
 ```
@@ -164,14 +172,6 @@ Creates `_TEST_*.md` from spec.
 ```
 /commit
 ```
-
-## Key Conventions
-
-- [Core Conventions](DevSystemV2/rules/core-conventions.md) - Text formatting, document structure, header blocks
-- [DevSystem Core](DevSystemV2/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
-- [DevSystem IDs](DevSystemV2/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
-- [Git Conventions](DevSystemV2/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
-- [Coding Conventions](DevSystemV2/skills/coding-conventions/SKILL.md) - Python, PowerShell style rules
 
 ## Setup
 
