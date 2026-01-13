@@ -1,6 +1,29 @@
-# SPEC Document Examples
+# SPEC Document Rules
 
-Examples from document-rules.md for writing specification documents.
+Rules for writing specification documents with GOOD/BAD examples.
+
+## Rule Index
+
+**Requirements (RQ)**
+- **SPEC-RQ-01**: Use numbered IDs for requirements (XXXX-FR-01)
+- **SPEC-RQ-02**: Use numbered IDs for design decisions (XXXX-DD-01)
+
+**Diagrams (DG)**
+- **SPEC-DG-01**: Use ASCII box diagrams with component boundaries
+- **SPEC-DG-02**: Show ALL buttons and actions in UI diagrams
+- **SPEC-DG-03**: Use layer diagrams for multi-tier systems
+
+**Content (CT)**
+- **SPEC-CT-01**: Summarize styling - avoid CSS detail
+- **SPEC-CT-02**: Code outline only - avoid implementation detail
+- **SPEC-CT-03**: Single line statements when possible
+- **SPEC-CT-04**: Document event flows with indented arrows
+- **SPEC-CT-05**: Provide data structure examples (JSON, CSV)
+
+**Format (FT)**
+- **SPEC-FT-01**: Use timestamped changelog, reverse chronological
+- **SPEC-FT-02**: No Markdown tables in changelogs
+- **SPEC-FT-03**: Proper header block and section order
 
 ## Table of Contents
 
