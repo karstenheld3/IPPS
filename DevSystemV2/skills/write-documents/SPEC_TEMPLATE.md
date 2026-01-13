@@ -105,15 +105,15 @@ A **[ObjectName]** represents [description].
 
 ## 8. Action Flow
 
-Document call chains with indented arrows:
+Document call chains with box-drawing characters (2-space indentation compatible):
 
 ```
 User clicks [Button]
-  +-> functionA(param)
-      +-> fetch(`/api/endpoint`)
-          +-> On success:
-              +-> updateState()
-                  +-> renderUI()
+├─> functionA(param)
+│   ├─> fetch(`/api/endpoint`)
+│   │   └─> On success:
+│   │       ├─> updateState()
+│   │       └─> renderUI()
 ```
 
 ## 9. Data Structures

@@ -138,14 +138,14 @@ For multi-layer systems, use ASCII box diagrams showing call hierarchy:
 ```
 +---------------------------------------------------------------------------+
 |  High-Level (Router)                                                      |
-|  +-> function_a()         # Called by router endpoints                    |
+|  ├─> function_a()         # Called by router endpoints                    |
 +---------------------------------------------------------------------------+
 |  Mid-Level (Components)                                                   |
-|  +-> function_b()         # Generates HTML fragments                      |
-|  +-> function_c()         # Generates JavaScript                          |
+|  ├─> function_b()         # Generates HTML fragments                      |
+|  ├─> function_c()         # Generates JavaScript                          |
 +---------------------------------------------------------------------------+
 |  Low-Level (Helpers)                                                      |
-|  +-> json_result()        # Response formatting                           |
+|  └─> json_result()        # Response formatting                           |
 +---------------------------------------------------------------------------+
 ```
 
