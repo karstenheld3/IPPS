@@ -1,5 +1,7 @@
 # Session Progress
 
+**Doc ID**: YYYY-MM-DD_[SessionTopicCamelCase]-PROGRESS
+
 Track implementation progress and decisions.
 
 ## To Do

@@ -1,5 +1,7 @@
 # Session Notes
 
+**Doc ID**: YYYY-MM-DD_[SessionTopicCamelCase]-NOTES
+
 ## Session Info
 
 - **Started**: 2026-01-15
@@ -20,12 +22,6 @@
 - Current implementation has race condition when multiple requests trigger refresh simultaneously [VERIFIED]
 - Token expiration check uses client-side time - vulnerable to clock skew [VERIFIED]
 - Server returns 401 for both expired and invalid tokens - need to distinguish [ASSUMED]
-
-## Workflows to Run on Resume
-
-1. Read this NOTES.md
-2. Read PROGRESS.md for current state
-3. Run `/prime` to load project context
 
 ## Topic Registry
 

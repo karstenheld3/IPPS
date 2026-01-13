@@ -7,7 +7,7 @@ description: Apply when initializing, saving, resuming, or closing a work sessio
 
 ## MUST-NOT-FORGET
 
-- Session folder naming: `_YYYY-MM-DD_[ProblemDescription]/`
+- Session folder naming: `_YYYY-MM-DD_[SessionTopicCamelCase]/`
 - Required files: NOTES.md, PROBLEMS.md, PROGRESS.md
 - Lifecycle: Init → Work → Save → Resume → Close → Archive
 - Sync session PROBLEMS.md to project on /session-close
@@ -22,7 +22,7 @@ description: Apply when initializing, saving, resuming, or closing a work sessio
 
 ## Session Folder Naming
 
-Format: `_YYYY-MM-DD_[ProblemDescription]/`
+Format: `_YYYY-MM-DD_[SessionTopicCamelCase]/`
 
 Example: `_2026-01-12_FixAuthenticationBug/`
 
