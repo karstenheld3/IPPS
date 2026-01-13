@@ -136,17 +136,17 @@ For multi-layer systems, use ASCII box diagrams showing call hierarchy:
 
 **GOOD:**
 ```
-+---------------------------------------------------------------------------+
-|  High-Level (Router)                                                      |
-|  ├─> function_a()         # Called by router endpoints                    |
-+---------------------------------------------------------------------------+
-|  Mid-Level (Components)                                                   |
-|  ├─> function_b()         # Generates HTML fragments                      |
-|  ├─> function_c()         # Generates JavaScript                          |
-+---------------------------------------------------------------------------+
-|  Low-Level (Helpers)                                                      |
-|  └─> json_result()        # Response formatting                           |
-+---------------------------------------------------------------------------+
+┌───────────────────────────────────────────────────────────────────────────┐
+│  High-Level (Router)                                                      │
+│  ├─> function_a()         # Called by router endpoints                    │
+├───────────────────────────────────────────────────────────────────────────┤
+│  Mid-Level (Components)                                                   │
+│  ├─> function_b()         # Generates HTML fragments                      │
+│  ├─> function_c()         # Generates JavaScript                          │
+├───────────────────────────────────────────────────────────────────────────┤
+│  Low-Level (Helpers)                                                      │
+│  └─> json_result()        # Response formatting                           │
+└───────────────────────────────────────────────────────────────────────────┘
 ```
 
 ## 4. Summarize Styling
