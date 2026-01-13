@@ -64,6 +64,15 @@ Use templates from this skill folder:
    └── Session folder moved to _Archive/
 ```
 
+## ID System
+
+Read `DOCUMENT_ID_SYSTEM.md` for complete ID system documentation.
+
+**Key types for session management:**
+- Document IDs: `[TOPIC]-[DOC][NN]` (IN, SP, IP, TP)
+- Tracking: `[TOPIC]-[TYPE]-[NN]` (PR, FX)
+- Topic Registry: Maintained in project NOTES.md
+
 ## Session Init Template
 
 ### NOTES.md
