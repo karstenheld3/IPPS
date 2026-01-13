@@ -103,6 +103,22 @@ All sources in INFO documents MUST have unique IDs.
 - `AGSK-IN01-SC-ASIO-HOME` - agentskills.io/home
 - `AGSK-IN01-SC-CLAUD-SKLBP` - platform.claude.com/.../best-practices
 
+## Session Document IDs
+
+Session tracking documents use date-based IDs instead of TOPIC-based IDs.
+
+**Format:** `YYYY-MM-DD_[SessionTopicCamelCase]-[TYPE]`
+
+**Types:**
+- `NOTES` - Session notes
+- `PROBLEMS` - Session problems tracking
+- `PROGRESS` - Session progress tracking
+
+**Examples:**
+- `2026-01-15_FixAuthenticationBug-NOTES`
+- `2026-01-15_FixAuthenticationBug-PROBLEMS`
+- `2026-01-15_FixAuthenticationBug-PROGRESS`
+
 ## Tracking IDs (BG, FT, PR, FX, TK)
 
 For session and project tracking in PROBLEMS.md, FIXES, and backlog documents.
