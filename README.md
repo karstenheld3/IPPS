@@ -1,4 +1,4 @@
-# IPP - Intelligent Pair Programming
+# IPP - Insanely Productive Programmer
 
 A development system for AI-assisted coding workflows, optimized for Windsurf IDE.
 
