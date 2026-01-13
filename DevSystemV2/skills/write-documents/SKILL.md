@@ -60,7 +60,25 @@ Read the appropriate template for the document type you are creating:
 
 All documents and items must have unique IDs for traceability.
 
+### Topic Registry
+
 **Topic:** 2-5 uppercase letters describing component (e.g., `CRWL` for Crawler, `AUTH` for Authentication)
+
+**REQUIREMENT:** Workspace/project-level NOTES.md MUST maintain a complete list of registered TOPIC IDs.
+
+Before using a new TOPIC ID:
+1. Check workspace/project NOTES.md for existing TOPIC IDs
+2. If new, add to NOTES.md Topic Registry section
+3. Use consistent TOPIC across all related documents
+
+**Example NOTES.md Topic Registry:**
+```
+## Topic Registry
+- `PRXL` - Project-wide (main spec, architecture)
+- `SAP` - SAP Integration (import, temp files)
+- `SCHD` - Schaden/Damage (damage records, workflows)
+- `UI` - User Interface (forms, dialogs)
+```
 
 ### Document IDs
 
@@ -127,3 +145,18 @@ All sources in INFO documents MUST have unique IDs.
 **Examples:**
 - `AGSK-IN01-SC-ASIO-HOME` - agentskills.io/home
 - `AGSK-IN01-SC-CLAUD-SKLBP` - platform.claude.com/.../best-practices
+
+### Tracking IDs (PR, FX)
+
+For session and project tracking in PROBLEMS.md and FIXES documents.
+
+**Format:** `[TOPIC]-[TYPE]-[NUMBER]`
+
+**Types:**
+- `PR` - Problem (tracked in PROBLEMS.md)
+- `FX` - Fix (tracked in IMPL_*_FIXES.md)
+
+**Examples:**
+- `SAP-PR-01` - SAP-related problem 1
+- `SCHD-FX-01` - Damage module fix 1
+- `PRXL-PR-03` - Project-wide problem 3
