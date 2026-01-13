@@ -18,6 +18,23 @@ First find out what the context is:
 
 Then read relevant section below and create a verification task list.
 
+## Verification Labels
+
+Apply these labels to findings, requirements, and decisions in all document types (INFO, SPEC, IMPL, TEST):
+
+- `[ASSUMED]` - Unverified assumption, needs validation
+- `[VERIFIED]` - Finding verified by re-reading source or comparing with other sources
+- `[TESTED]` - Tested in POC (Proof-Of-Concept) or minimal test script
+- `[PROVEN]` - Proven to work in actual project via implementation or tests
+
+**Usage:**
+- INFO docs: Label key findings and source claims
+- SPEC docs: Label design decisions and assumptions
+- IMPL docs: Label edge case handling and implementation choices
+- TEST docs: Label expected behaviors and test assertions
+
+**Progression:** `[ASSUMED]` → `[VERIFIED]` → `[TESTED]` → `[PROVEN]`
+
 **Information Gathering:**
 - Think first: How would another person approach this? Is the scope and trajectory aligned with the problem or question?
 - Verify sources. Read them again and verify or complete findings. Drop all sources that can't be found. 

@@ -6,8 +6,11 @@
 ## Summary
 
 Copy/paste-ready key findings:
-- [Key finding 1] [TESTED]
+- [Key finding 1] 
 - [Key finding 2] [ASSUMED]
+- [Key finding 3] [VERIFIED]
+- [Key finding 4] [TESTED]
+- [Key finding 5] [PROVEN]
 
 ## Table of Contents
 
@@ -18,7 +21,7 @@ Copy/paste-ready key findings:
 
 ## 1. [Section 1]
 
-[Content organized by subtopic]
+[Content organized by subtopic]/
 
 ### 1.1 [Subtopic]
 
@@ -31,8 +34,8 @@ Copy/paste-ready key findings:
 ## 3. Sources
 
 **Primary Sources:**
-- `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`: [URL] - [Primary finding] [TESTED]
-- `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`: `[filename.py]` - [What was analyzed] [TESTED]
+- `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`: [URL] - [Primary finding]
+- `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`: `[filename.py]` - [What was analyzed] [VERIFIED]
 
 ## 4. Next Steps
 
