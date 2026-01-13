@@ -5,8 +5,9 @@ Rules for writing specification documents with GOOD/BAD examples.
 ## Rule Index
 
 **Requirements (RQ)**
-- **SPEC-RQ-01**: Use numbered IDs for requirements (XXXX-FR-01)
+- **SPEC-RQ-01**: Use numbered IDs for functional requirements (XXXX-FR-01)
 - **SPEC-RQ-02**: Use numbered IDs for design decisions (XXXX-DD-01)
+- **SPEC-RQ-03**: Use numbered IDs for implementation guarantees (XXXX-IG-01)
 
 **Diagrams (DG)**
 - **SPEC-DG-01**: Use ASCII box diagrams with component boundaries
@@ -223,17 +224,17 @@ Fit single statements/decisions/objects on a single line.
 
 ## 7. Event Flow Documentation
 
-Document call chains with box-drawing characters (├── └── │).
+Document call chains with box-drawing characters (├─> └─> │).
 
 **GOOD:**
 ```
 User clicks [Pause] or [Resume]
-├── controlJob(jobId, 'pause' | 'resume')
-│   └── fetch(`/testrouter3/control?id=${id}&action=${action}`)
-│       └── On success (data.success):
-│           └── Optimistically updateJob(jobId, { state: 'paused' | 'running' })
-│               └── renderAllJobs()
-│                   └── renderJobActions() # Button changes to Resume/Pause
+├─> controlJob(jobId, 'pause' | 'resume')
+│   └─> fetch(`/testrouter3/control?id=${id}&action=${action}`)
+│       └─> On success (data.success):
+│           └─> Optimistically updateJob(jobId, { state: 'paused' | 'running' })
+│               └─> renderAllJobs()
+│                   └─> renderJobActions() # Button changes to Resume/Pause
 ```
 
 ## 8. Data Structure Examples
