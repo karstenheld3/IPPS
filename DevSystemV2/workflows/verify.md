@@ -76,8 +76,8 @@ Apply these labels to findings, requirements, and decisions in all document type
   - Ordered execution sequence logical?
   - Dependencies between phases documented?
 - Cross-check against spec:
-  - Every FR-XX has at least one TC-XX
-  - Every EC-XX has corresponding test
+  - Every FR-XX (Functional Requirement) has at least one TC-XX (Test Case)
+  - Every EC-XX (Edge Case) has corresponding test
 
 Then re-read the previous conversation, provided and relevant files. Make an internal "MUST-NOT-FORGET" list and review / edit it after each step.
 
