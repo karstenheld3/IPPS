@@ -71,13 +71,23 @@ Before using a new TOPIC ID:
 2. If new, add to NOTES.md Topic Registry section
 3. Use consistent TOPIC across all related documents
 
-**Example NOTES.md Topic Registry:**
+**Example: SINGLE-PROJECT**
 ```
 ## Topic Registry
 - `PRXL` - Project-wide (main spec, architecture)
 - `SAP` - SAP Integration (import, temp files)
-- `SCHD` - Schaden/Damage (damage records, workflows)
+- `SCHD` - Schaden/Damage (damage records)
 - `UI` - User Interface (forms, dialogs)
+```
+
+**Example: MONOREPO** (first 2 letters = repo prefix)
+```
+## Topic Registry
+- `CRCORE` - CR: Crawler Core (shared libraries)
+- `CRAPI` - CR: Crawler API (REST endpoints)
+- `CRUI` - CR: Crawler UI (frontend)
+- `IXCORE` - IX: Indexer Core (indexing engine)
+- `IXSCHED` - IX: Indexer Scheduler (job scheduling)
 ```
 
 ### Document IDs
