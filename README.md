@@ -15,10 +15,10 @@ IPP provides structured rules, workflows, and skills for AI agents to follow con
 
 ```
 IPP/
-├── .windsurf/                    # Windsurf agent configuration
-│   ├── rules/                    # Global rules (symlinked to DevSystemV2)
-│   ├── workflows/                # Workflow definitions (symlinked)
-│   └── skills/                   # Skill definitions (symlinked)
+├── .windsurf/                    # Windsurf agent configuration (active)
+│   ├── rules/                    # Rules (copied from DevSystemVX for testing)
+│   ├── workflows/                # Workflows (copied from DevSystemVX)
+│   └── skills/                   # Skills (copied from DevSystemVX)
 ├── DevSystemV1/                  # Legacy system (deprecated)
 │   ├── rules/
 │   └── workflows/
