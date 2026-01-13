@@ -20,8 +20,26 @@ IPP/
 │   ├── workflows/                # Workflows (copied from DevSystemVX)
 │   └── skills/                   # Skills (copied from DevSystemVX)
 ├── DevSystemV1/                  # Legacy system (deprecated)
+│   ├── _SPEC_V1_TO_V2_USING_SKILLS.md
+│   ├── _IMPL_V1_TO_V2_USING_SKILLS.md
 │   ├── rules/
+│   │   ├── devsystem-rules.md
+│   │   ├── document-rules.md
+│   │   ├── git-rules.md
+│   │   ├── proper-english-rules.md
+│   │   ├── python-rules.md
+│   │   ├── tools-rules.md
+│   │   └── workspace-rules.md
 │   └── workflows/
+│       ├── commit.md
+│       ├── go-autonomous.md
+│       ├── go-research.md
+│       ├── implement.md
+│       ├── prime.md
+│       ├── session-*.md
+│       ├── setup-pdftools.md
+│       ├── verify.md
+│       └── write-*.md
 ├── DevSystemV2/                  # Current system
 │   ├── rules/
 │   │   ├── core-conventions.md   # Text formatting, document structure
