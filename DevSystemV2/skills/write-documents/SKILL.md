@@ -22,6 +22,7 @@ This skill contains document templates and formatting rules.
 Read the appropriate template for the document type you are creating:
 - `INFO_TEMPLATE.md` - Research and analysis documents
 - `SPEC_TEMPLATE.md` - Technical specifications
+- `SPEC_GOOD_BAD_EXAMPLES.md` - GOOD/BAD examples for specs
 - `IMPL_TEMPLATE.md` - Implementation plans
 - `TEST_TEMPLATE.md` - Test plans
 - `FIXES_TEMPLATE.md` - Fix tracking documents
