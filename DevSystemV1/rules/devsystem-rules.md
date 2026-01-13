@@ -39,8 +39,9 @@ Rules and definitions for the development system used with Windsurf/Cascade.
   - `SPEC_MODULE.md`, `!SPEC_ARCHITECTURE.md`, `_SPEC_NEW_FEATURE.md`
 - **[IMPL]**: An implementation plan. When implemented, must be reverse-updated (synced) from verified code changes
   - `IMPL_MODULE.md`, `!IMPL_MIGRATION.md`, `_IMPL_REFACTOR_A.md`
-- **[TEST]**: Testing strategies and test plans
-  - `TEST_MODULE.md`, `!TEST_CRITICAL_PATH.md`, `_TEST_NEW_MODULE.md`
+- **[TEST]**: Test plans suffixed to corresponding SPEC or IMPL
+  - `SPEC_MODULE_TEST.md` - Test plan for specification
+  - `IMPL_MODULE_TEST.md` - Test plan for implementation
 
 **Note:** Prefixes (`!`, `_`) are explained in [File Naming Conventions](#file-naming-conventions).
 
@@ -221,51 +222,7 @@ Example: `_2026-01-12_FixAuthenticationBug/`
 
 ## Document Types
 
-### Information Documents (_INFO_*.md)
-
-Purpose: Capture research findings, analysis, options
-
-Contents:
-- Research sources with URLs
-- Verified findings (marked [TESTED])
-- Assumptions (marked [ASSUMED])
-- Summary at top, sources at bottom
-
-### Specifications (_SPEC_*.md)
-
-Purpose: Define what to build before implementation
-
-Required sections (when relevant):
-- Overview with goal and target files
-- Table of Contents
-- Scenario with "What we don't want"
-- Functional Requirements (numbered: XXXX-FR-01)
-- Implementation Guarantees (numbered: XXXX-IG-01)
-- Domain Objects
-- Key Mechanisms and Design Decisions
-
-Rules:
-- No Markdown tables - use lists
-- No emojis - ASCII only
-- Use box-drawing characters for diagrams
-- Keep synced with implementation
-
-### Implementation Plans (_IMPL_*.md)
-
-Purpose: Step-by-step guide for implementation
-
-Required sections:
-- Header block with goal and target files
-- Edge Cases (numbered: XXXX-IP01-EC-01)
-- Implementation Steps (numbered: XXXX-IP01-IS-01)
-- Test Cases (numbered: XXXX-IP01-TST-01)
-- Verification Checklist (numbered: XXXX-IP01-VC-01)
-- Backward Compatibility Test (for modifications)
-
-Rules:
-- No tables - use lists
-- Include code snippets
-- Keep synced with implementation
+See `[AGENT_FOLDER]/rules/document-rules.md` for detailed structure of INFO, SPEC, IMPL, TEST, and FIX documents.
 
 ## Workflow Reference
 

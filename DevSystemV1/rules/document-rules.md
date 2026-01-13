@@ -39,7 +39,8 @@ Rules for writing project documentation: INFO, SPEC, IMPL, TEST, and FIX documen
 - `_SPEC_[COMPONENT]_UI.md` - UI specifications
 - `_IMPL_[COMPONENT].md` - Implementation plans
 - `_IMPL_[COMPONENT]_FIXES.md` - Fix tracking during implementation
-- `_TEST_[COMPONENT].md` - Test specifications
+- `SPEC_[COMPONENT]_TEST.md` - Test plan for specification
+- `IMPL_[COMPONENT]_TEST.md` - Test plan for implementation
 - `!` prefix for priority docs that must be read first (e.g., `!NOTES.md`, `!PROBLEMS.md`)
 
 ### 1.2 Agent Behavior
@@ -683,7 +684,9 @@ def new_function(...):
 
 **Purpose:** Define test strategy, test cases, and verification.
 
-**Filename:** `_TEST_[COMPONENT].md` or `_IMPL_[COMPONENT]_SELFTEST.md`
+**Filename:** Suffix `_TEST.md` to corresponding SPEC or IMPL:
+- `SPEC_[COMPONENT]_TEST.md` - Test plan for specification
+- `IMPL_[COMPONENT]_TEST.md` - Test plan for implementation
 
 ### 5.1 Structure
 
