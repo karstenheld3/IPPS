@@ -14,6 +14,12 @@ Core definitions and structure for the development system.
 - **[PROJECT]**: If Monorepo (workspace contains multiple projects), the project subfolder. No Monorepo: Workspace = Project
 - **[SESSION]**: All context belonging to a work session - folder, files, conversations, commits, and tracking files (notes, problems, progress)
 
+### Agent Folder
+
+**[AGENT_FOLDER]** location depends on agent:
+- Windsurf: `.windsurf/`
+- Claude Code: `.claude/`
+
 ### Configuration
 
 - **[RULES]**: The current set of agent rules in `[AGENT_FOLDER]/rules/`
@@ -22,10 +28,14 @@ Core definitions and structure for the development system.
 
 ### Document Types
 
-- **[INFO]**: Information gathering from web research, option and code analysis, reading documents
-- **[SPEC]**: A specification conforming to defined rules. When implemented, must be reverse-updated (synced) from verified code changes
-- **[IMPL]**: An implementation plan. When implemented, must be reverse-updated (synced) from verified code changes
-- **[TEST]**: Test plans suffixed to corresponding SPEC or IMPL
+- **[INFO]** (IN): Information gathering from web research, option and code analysis, reading documents
+  - Example: `AUTH-IN01`, `CRWL-IN02`
+- **[SPEC]** (SP): A specification conforming to defined rules. When implemented, must be reverse-updated (synced) from verified code changes
+  - Example: `CRWL-SP01`, `AUTH-SP01`
+- **[IMPL]** (IP): An implementation plan. When implemented, must be reverse-updated (synced) from verified code changes
+  - Example: `CRWL-IP01`, `AUTH-IP02`
+- **[TEST]** (TP): Test plans suffixed to corresponding SPEC or IMPL
+  - Example: `CRWL-TP01`, `AUTH-TP01`
 
 ### Tracking Documents
 
@@ -55,14 +65,6 @@ Three dimensions define how the agent should behave:
 - **PROJECT-WIDE** - Work spans entire project without session boundaries
 
 ## Folder Structure
-
-### Agent Configuration
-
-**[AGENT_FOLDER]** location depends on agent:
-- Windsurf: `.windsurf/`
-- Claude Code: `.claude/`
-
-All agents use: `[AGENT_FOLDER]/rules/`, `[AGENT_FOLDER]/workflows/`, `[AGENT_FOLDER]/skills/`
 
 ### Single Project (No Monorepo)
 
