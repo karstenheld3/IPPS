@@ -59,6 +59,26 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Can we do quick one-off tests to verify we did not break things?
 - Read @coding-conventions skill again and verify against rules.
 
+**Testing (Test Plans):**
+- Verify test strategy matches spec requirements
+- Check test priority matrix:
+  - MUST TEST: Critical business logic covered?
+  - SHOULD TEST: Important workflows included?
+  - DROP: Justified reasons for skipping?
+- Verify test cases:
+  - All edge cases from IMPL plan have corresponding TC-XX
+  - Format: Description -> ok=true/false, expected result
+  - Grouped by category
+- Check test data:
+  - Required fixtures defined?
+  - Setup/teardown procedures clear?
+- Verify test phases:
+  - Ordered execution sequence logical?
+  - Dependencies between phases documented?
+- Cross-check against spec:
+  - Every FR-XX has at least one TC-XX
+  - Every EC-XX has corresponding test
+
 Then re-read the previous conversation, provided and relevant files. Make an internal "MUST-NOT-FORGET" list and review / edit it after each step.
 
 FINALLY:
