@@ -17,7 +17,7 @@ Rules for writing specification documents with GOOD/BAD examples.
 - **SPEC-CT-01**: Summarize styling - avoid CSS detail
 - **SPEC-CT-02**: Code outline only - avoid implementation detail
 - **SPEC-CT-03**: Single line statements when possible
-- **SPEC-CT-04**: Document event flows with indented arrows
+- **SPEC-CT-04**: Document event flows with box-drawing characters
 - **SPEC-CT-05**: Provide data structure examples (JSON, CSV)
 
 **Format (FT)**
@@ -223,17 +223,17 @@ Fit single statements/decisions/objects on a single line.
 
 ## 7. Event Flow Documentation
 
-Document call chains with indented arrows.
+Document call chains with box-drawing characters (├── └── │).
 
 **GOOD:**
 ```
 User clicks [Pause] or [Resume]
-  +-> controlJob(jobId, 'pause' | 'resume')
-      +-> fetch(`/testrouter3/control?id=${id}&action=${action}`)
-          +-> On success (data.success):
-              +-> Optimistically updateJob(jobId, { state: 'paused' | 'running' })
-                  +-> renderAllJobs()
-                      +-> renderJobActions() # Button changes to Resume/Pause
+├── controlJob(jobId, 'pause' | 'resume')
+│   └── fetch(`/testrouter3/control?id=${id}&action=${action}`)
+│       └── On success (data.success):
+│           └── Optimistically updateJob(jobId, { state: 'paused' | 'running' })
+│               └── renderAllJobs()
+│                   └── renderJobActions() # Button changes to Resume/Pause
 ```
 
 ## 8. Data Structure Examples
