@@ -3,6 +3,7 @@
 .tools/qpdf/
 .tools/gs/
 .tools/7z/
+.tools/gh/
 .tools/_installer/
 .tools/_pdf_output/
 .tools/_pdf_to_jpg_converted/
