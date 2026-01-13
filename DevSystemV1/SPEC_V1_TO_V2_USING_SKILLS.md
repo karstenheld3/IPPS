@@ -55,7 +55,7 @@ DevSystem V1 uses 6 always-on rule files totaling ~62KB. All rules are loaded in
 
 ### 2.1 V1 Rules Inventory
 
-**Total: 6 files, ~62KB, all trigger: always_on**
+**Total: 7 files, ~62KB, all trigger: always_on** (workspace-rules.md is empty placeholder)
 
 - **devsystem-rules.md** (14.6KB, 375 lines)
   - Core definitions and placeholders
@@ -242,26 +242,31 @@ A **Workflow** is a step-by-step procedure file.
 
 **Skill: python-coding**
 - Source: `python-rules.md` (551 lines)
+- Description: "Apply when writing, editing, reviewing, or debugging Python code"
 - MUST-NOT-FORGET: Top 10 most-violated rules
 - Full content: All FT, IM, CG, NM, CM, LG rules with examples
 
 **Skill: write-documents**
 - Source: `document-rules.md` §2-6 (670 lines)
+- Description: "Apply when creating or editing INFO, SPEC, IMPL, TEST, or FIX documents"
 - MUST-NOT-FORGET: ID system, header block, no tables
 - Full content: INFO, SPEC, IMPL, TEST, FIX structures and examples
 
 **Skill: git-conventions**
 - Source: `git-rules.md` (88 lines)
+- Description: "Apply when committing code, writing commit messages, or configuring .gitignore"
 - MUST-NOT-FORGET: Conventional commits format, never commit secrets
 - Full content: Types, guidelines, .gitignore template
 
 **Skill: pdf-tools**
 - Source: `tools-rules.md` (138 lines)
+- Description: "Apply when converting, processing, or analyzing PDF files"
 - MUST-NOT-FORGET: Script usage, check existing conversions
 - Full content: All tool CLI examples
 
 **Skill: session-management**
 - Source: `devsystem-rules.md` §6 (50 lines)
+- Description: "Apply when initializing, saving, resuming, or closing a work session"
 - MUST-NOT-FORGET: Lifecycle steps, folder naming
 - Full content: Session lifecycle, required files
 
@@ -460,8 +465,15 @@ Invoke these skills before proceeding:
 - [ ] **MIG-VC-18**: Test /commit with @git-conventions
 - [ ] **MIG-VC-19**: Test /go-autonomous with @python-coding
 - [ ] **MIG-VC-20**: Compare V1 vs V2 token usage
+- [ ] **MIG-VC-21**: Verify progressive disclosure triggers on skill descriptions
+- [ ] **MIG-VC-22**: Delete DevSystemV1 folder after successful validation
 
 ## 10. Spec Changes
+
+**[2026-01-13 16:49]**
+- Fixed: File count "6 files" → "7 files" (includes empty workspace-rules.md)
+- Added: Progressive disclosure descriptions for all 5 skills
+- Added: MIG-VC-21 and MIG-VC-22 to verification checklist
 
 **[2026-01-13 16:40]**
 - Changed: MIG-FR-08 from V1 fallback to workflow-guaranteed loading
