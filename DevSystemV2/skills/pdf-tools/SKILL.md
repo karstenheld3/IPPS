@@ -143,3 +143,7 @@ Remove-Item temp.pdf
 3. **Convert specific pages**: Use `--pages` to avoid converting entire large PDFs
 4. **Clean up**: Delete old conversions when no longer needed
 5. **Two-pass downsizing**: Use Ghostscript first (images), then QPDF (structure) for best compression
+
+## Setup
+
+For initial installation, see `SETUP.md` in this skill folder.
