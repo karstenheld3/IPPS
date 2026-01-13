@@ -1,78 +1,39 @@
 # INFO: [Topic]
 
-**Goal**: [Single sentence describing research purpose]
+**Goal**: [Single sentence describing purpose]
 
-## Table of Contents
+## Summary
 
-1. [Summary](#1-summary)
-2. [Approaches](#2-approaches)
-3. [Approach Comparison](#3-approach-comparison)
-4. [Recommended Approach](#4-recommended-approach)
-5. [Sources](#5-sources)
-6. [Next Steps](#6-next-steps)
-
-## 1. Summary
-
-Copy/paste-ready findings:
+Copy/paste-ready key findings:
 - [Key finding 1] [TESTED]
 - [Key finding 2] [ASSUMED]
 
-## 2. Approaches
+## Table of Contents
 
-### Option A: [Name]
+1. [Section 1](#1-section-1)
+2. [Section 2](#2-section-2)
+3. [Sources](#3-sources)
+4. [Next Steps](#4-next-steps)
 
-**Description**: [Brief explanation]
+## 1. [Section 1]
 
-**Pros**:
-- [Pro 1]
-- [Pro 2]
+[Content organized by subtopic]
 
-**Cons**:
-- [Con 1]
+### 1.1 [Subtopic]
 
-### Option B: [Name]
+[Details, examples, code snippets]
 
-**Description**: [Brief explanation]
+## 2. [Section 2]
 
-**Pros**:
-- [Pro 1]
+[Additional content]
 
-**Cons**:
-- [Con 1]
-
-## 3. Approach Comparison
-
-- **Speed**: [A > B > C]
-- **Complexity**: [A < B < C]
-- **Coverage**: [C > B > A]
-
-## 4. Recommended Approach
-
-**[Option X]** because [rationale].
-
-### Phase 1: [Name] (Immediate)
-- [Step 1]
-- [Step 2]
-
-### Phase 2: [Name] (Later)
-- [Step 3]
-
-## 5. Sources
+## 3. Sources
 
 **Primary Sources:**
-- `[filename.py]` - [Description] [TESTED]
+- `[filename.py]` - [What was analyzed] [TESTED]
 - [URL] - [Primary finding] [TESTED]
 
-## 6. Next Steps
+## 4. Next Steps
 
 1. [Action item 1]
 2. [Action item 2]
-
----
-
-## Rules
-
-- Mark findings as `[TESTED]` or `[ASSUMED]`
-- Drop sources that cannot be found or verified
-- Remove contradicting/unverified findings
-- Summarize copy/paste-ready findings at top

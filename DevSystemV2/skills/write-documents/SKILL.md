@@ -26,6 +26,36 @@ Read the appropriate template for the document type you are creating:
 - `TEST_TEMPLATE.md` - Test plans
 - `FIXES_TEMPLATE.md` - Fix tracking documents
 
+## INFO Document Patterns
+
+INFO documents vary by purpose. Common patterns:
+
+**Knowledge Reference** (most common)
+- Summary with copy/paste-ready findings
+- Topical sections organized by subject
+- Sources at end
+
+**Approach Evaluation** (when choosing between options)
+Add these sections when evaluating alternatives:
+```
+## Approaches
+### Option A: [Name]
+**Description**: [Brief explanation]
+**Pros**: [list]
+**Cons**: [list]
+
+## Approach Comparison
+- **Speed**: A > B > C
+- **Complexity**: A < B < C
+
+## Recommended Approach
+**[Option X]** because [rationale].
+```
+
+**Quick Reference** (cheat sheets)
+- Copy/paste-ready section at top
+- Minimal prose, maximum examples
+
 ## Usage
 
 1. Read this SKILL.md for core rules
