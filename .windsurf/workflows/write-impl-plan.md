@@ -5,11 +5,16 @@ auto_execution_mode: 1
 
 # Write Implementation Plan Workflow
 
+## Required Skills
+
+Invoke these skills before proceeding:
+- @write-documents for document structure and formatting rules
+
 ## Prerequisites
 
 - Specification exists (`_SPEC_[COMPONENT].md`)
 - Read spec completely before starting
-- Read document-rules.md
+- Read @write-documents skill
 
 ## Steps
 

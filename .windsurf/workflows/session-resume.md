@@ -3,6 +3,11 @@ description: Resume a development session
 auto_execution_mode: 1
 ---
 
+## Required Skills
+
+Invoke these skills before proceeding:
+- @session-management for session file structure
+
 Make sure all state progress is documented in `NOTES.md` and `PROGRESS.md` and `PROBLEMS.md`
 
 Execute the prime.md workflow.

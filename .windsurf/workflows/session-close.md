@@ -5,6 +5,12 @@ auto_execution_mode: 1
 
 # Close Session Workflow
 
+## Required Skills
+
+Invoke these skills before proceeding:
+- @session-management for session lifecycle
+- @git-conventions for final commit
+
 Use this workflow when a session is complete and verified working.
 
 ## Steps

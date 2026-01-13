@@ -2,6 +2,11 @@
 auto_execution_mode: 1
 ---
 
+## Required Skills
+
+Invoke these skills before proceeding:
+- @write-documents for INFO document structure
+
 Make a research plan and do a step by step research about the user topic, adding sections step by step to the information document. After each section ask yourself: Do I have to verify these findings with further research? Can I remove duplicates? Can I remove unverified and contradicting findings? Is this information really helpful? If yes, why?
 
 Always review the new section in the context of the existing ones to remove cognitive overload, redundancies, ambiguities, unverified findings.

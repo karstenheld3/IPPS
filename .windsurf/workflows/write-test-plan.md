@@ -5,11 +5,16 @@ auto_execution_mode: 1
 
 # Write Test Plan Workflow
 
+## Required Skills
+
+Invoke these skills before proceeding:
+- @write-documents for document structure and formatting rules
+
 ## Prerequisites
 
 - Specification exists (`_SPEC_[COMPONENT].md`)
 - Implementation plan exists (`_IMPL_[COMPONENT].md`) - optional
-- Read document-rules.md
+- Read @write-documents skill
 
 ## Steps
 

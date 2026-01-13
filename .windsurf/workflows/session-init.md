@@ -2,6 +2,12 @@
 description: Initialize a new development session
 auto_execution_mode: 1
 ---
+
+## Required Skills
+
+Invoke these skills before proceeding:
+- @session-management for session folder structure and tracking files
+
 Check if the user has given you a [SESSION_FOLDER] to work in.
 If not, create one in the root folder with the naming scheme
 `/_YYYY-MM-DD_[PROBLEM_DESCRIPTION]/`

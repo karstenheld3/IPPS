@@ -5,11 +5,16 @@ auto_execution_mode: 1
 
 # Write Specification Workflow
 
+## Required Skills
+
+Invoke these skills before proceeding:
+- @write-documents for document structure and formatting rules
+
 ## Prerequisites
 
 - User has described the problem or feature
 - Clarify scope and naming before starting
-- Read document-rules.md
+- Read @write-documents skill
 
 ## Steps
 
@@ -25,7 +30,7 @@ auto_execution_mode: 1
 
 3. **Create Specification File**
    - Create `_SPEC_[COMPONENT].md` in session folder
-   - Follow document-rules.md structure:
+   - Follow @write-documents skill structure:
      - Header block (Goal, Target file, Dependencies)
      - Table of Contents
      - Scenario (Problem, Solution, What we don't want)

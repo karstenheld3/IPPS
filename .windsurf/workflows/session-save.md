@@ -2,6 +2,12 @@
 auto_execution_mode: 1
 ---
 
+## Required Skills
+
+Invoke these skills before proceeding:
+- @session-management for session file structure
+- @git-conventions for commit format
+
 Re-read the entire conversation and find:
 - New problems found -> to be documented in session PROBLEMS.md
 - Important findings -> to be documented in session NOTES.md
