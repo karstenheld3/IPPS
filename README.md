@@ -42,10 +42,16 @@ IPP/
 │       ├── go-research.md
 │       ├── implement.md
 │       ├── prime.md
-│       ├── session-*.md
+│       ├── session-archive.md
+│       ├── session-close.md
+│       ├── session-init.md
+│       ├── session-resume.md
+│       ├── session-save.md
 │       ├── setup-pdftools.md
 │       ├── verify.md
-│       └── write-*.md
+│       ├── write-impl-plan.md
+│       ├── write-spec.md
+│       └── write-test-plan.md
 ├── DevSystemV2/                  # Current system
 │   ├── rules/
 │   │   ├── core-conventions.md   # Text formatting, document structure
@@ -60,11 +66,21 @@ IPP/
 │   │   ├── session-management/   # Session templates
 │   │   └── write-documents/      # Spec, impl, test templates
 │   └── workflows/
-│       ├── session-*.md          # Session management workflows
-│       ├── write-*.md            # Document creation workflows
 │       ├── commit.md             # Git commit workflow
+│       ├── go-autonomous.md      # Autonomous implementation
+│       ├── go-research.md        # Structured research
+│       ├── implement.md          # Implementation workflow
+│       ├── prime.md              # Context loading workflow
+│       ├── session-archive.md    # Archive session folder
+│       ├── session-close.md      # Close and sync session
+│       ├── session-init.md       # Initialize new session
+│       ├── session-resume.md     # Resume existing session
+│       ├── session-save.md       # Save session progress
+│       ├── setup-pdftools.md     # PDF tools installation
 │       ├── verify.md             # Verification workflow
-│       └── prime.md              # Context loading workflow
+│       ├── write-impl-plan.md    # Create implementation plan
+│       ├── write-spec.md         # Create specification
+│       └── write-test-plan.md    # Create test plan
 └── README.md
 ```
 
