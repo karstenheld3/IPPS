@@ -91,6 +91,80 @@ IPP/
 - **session-management** - Session init, save, resume, close workflows
 - **write-documents** - Spec, impl, test, info document templates
 
+## Usage Examples
+
+### Prime Context
+
+Load workspace context before starting work:
+```
+/prime
+```
+This reads priority docs (`!*.md`), rules, and session files to understand the project.
+
+### Session Workflows
+
+Start a new work session:
+```
+/session-init
+```
+Creates a session folder with NOTES.md, PROBLEMS.md, PROGRESS.md.
+
+Save progress during work:
+```
+/session-save
+```
+
+Resume an existing session:
+```
+/session-resume
+```
+
+Close session and sync findings:
+```
+/session-close
+```
+
+### Document Cycle (INFO -> SPEC -> IMPL -> TEST)
+
+1. **Research** - Gather information:
+```
+/go-research
+```
+Creates `_INFO_*.md` with findings.
+
+2. **Specify** - Create specification:
+```
+/write-spec
+```
+Creates `_SPEC_*.md` from requirements.
+
+3. **Plan** - Create implementation plan:
+```
+/write-impl-plan
+```
+Creates `_IMPL_*.md` from spec.
+
+4. **Test Plan** - Create test plan:
+```
+/write-test-plan
+```
+Creates `_TEST_*.md` from spec.
+
+5. **Implement** - Execute the plan:
+```
+/implement
+```
+
+6. **Verify** - Check work against specs:
+```
+/verify
+```
+
+7. **Commit** - Create conventional commits:
+```
+/commit
+```
+
 ## Setup
 
 Run `SETUP.md` in each skill folder to install required tools locally to `.tools/`.
