@@ -33,3 +33,15 @@ Track implementation progress and decisions.
 - [x] Unit tests for token expiration calculation
 - [ ] Integration tests for concurrent refresh scenario
 - [ ] Manual verification of token refresh flow with network throttling
+
+## Progress Changes
+
+**[2026-01-15 16:45]**
+- Added: AUTH-PR-003 to In Progress (token storage migration)
+- Moved: Token expiration unit tests to Done
+- Added: API-PR-004 to To Do (deferred retry logic)
+
+**[2026-01-15 14:20]**
+- Added: AUTH-PR-001 and API-PR-002 to To Do
+- Added: "Tried But Not Used" section with Promise deduplication approach
+- Initial progress tracking created
