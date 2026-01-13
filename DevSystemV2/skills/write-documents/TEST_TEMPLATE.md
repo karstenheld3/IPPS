@@ -1,11 +1,12 @@
 # TEST: [Component Name]
 
+**Doc ID**: [TOPIC]-TP[NN]
 **Goal**: [Single sentence describing test purpose]
 **Target file**: `[path/to/test_file.py]`
 
 **Depends on:**
-- `SPEC_[X].md` for requirements
-- `IMPL_[X].md` for implementation details
+- `_SPEC_[X].md` [[DOC_ID]] for requirements
+- `_IMPL_[X].md` [[DOC_ID]] for implementation details
 
 ## Table of Contents
 

@@ -1,6 +1,6 @@
 # IMPL: [Feature Name]
 
-**Plan ID**: [PREFIX]-IP01
+**Doc ID**: [TOPIC]-IP[NN]
 **Goal**: [Single sentence describing what to implement]
 
 **Target files**:
@@ -9,7 +9,7 @@
 - `[path/to/file3.py]` (MODIFY)
 
 **Depends on:**
-- `SPEC_[X].md` for [what it provides]
+- `_SPEC_[X].md` [[DOC_ID]] for [what it provides]
 
 ## Table of Contents
 

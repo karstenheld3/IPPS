@@ -1,5 +1,6 @@
 # INFO: [Topic]
 
+**Doc ID**: [TOPIC]-IN[NN]
 **Goal**: [Single sentence describing purpose]
 
 ## Summary
@@ -30,8 +31,8 @@ Copy/paste-ready key findings:
 ## 3. Sources
 
 **Primary Sources:**
-- `[filename.py]` - [What was analyzed] [TESTED]
-- [URL] - [Primary finding] [TESTED]
+- `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`: [URL] - [Primary finding] [TESTED]
+- `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`: `[filename.py]` - [What was analyzed] [TESTED]
 
 ## 4. Next Steps
 

@@ -1,10 +1,11 @@
 # SPEC: [Component Name]
 
+**Doc ID**: [TOPIC]-SP[NN]
 **Goal**: [Single sentence describing what to specify]
 **Target file**: `[path/to/file.py]`
 
 **Depends on:**
-- `[other-spec.md]` for [what it provides]
+- `_SPEC_[X].md` [[DOC_ID]] for [what it provides]
 
 ## MUST-NOT-FORGET
 
