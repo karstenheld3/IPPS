@@ -28,9 +28,11 @@ Example: `_2026-01-12_FixAuthenticationBug/`
 
 ## Required Session Files
 
-- **NOTES.md**: Key information, agent instructions, working patterns
-- **PROBLEMS.md**: Problems found and their status (Open/Resolved/Deferred)
-- **PROGRESS.md**: To-do list, done items, tried-but-not-used approaches
+Use templates from this skill folder:
+
+- **NOTES.md** (`NOTES_TEMPLATE.md`): Key information, agent instructions, working patterns
+- **PROBLEMS.md** (`PROBLEMS_TEMPLATE.md`): Problems found and their status (Open/Resolved/Deferred)
+- **PROGRESS.md** (`PROGRESS_TEMPLATE.md`): To-do list, done items, tried-but-not-used approaches
 
 ## Assumed Workflow
 
