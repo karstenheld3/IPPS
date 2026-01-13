@@ -98,6 +98,25 @@ Local to IMPL and TEST plans. Do NOT use in SPECs.
 - `AUTH-TP01-TC-03` - Authentication Test Plan 01, Test Case 3
 - `AUTH-IP01-VC-02` - Authentication Plan 01, Verification Checklist 2
 
+### Source IDs (INFO documents)
+
+All sources in INFO documents MUST have unique IDs for traceability.
+
+**Format:** `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
+
+**Components:**
+- `SC` - Source type marker
+- `SOURCE_ID` - Website/source mnemonic (2-6 chars)
+- `SOURCE_REF` - Page/section identifier (2-10 chars, human readable, omit vowels)
+
+**Examples:**
+- `AGSK-IN01-SC-ASIO-HOME` - agentskills.io/home
+- `AGSK-IN01-SC-ASIO-WAS` - agentskills.io/what-are-skills
+- `AGSK-IN01-SC-ASIO-SPEC` - agentskills.io/specification
+- `AGSK-IN01-SC-ASIO-INTSK` - agentskills.io/integrate-skills
+- `AGSK-IN01-SC-CLAUD-SKLBP` - platform.claude.com/.../best-practices
+- `CRWL-IN01-SC-MSDN-GRPHAPI` - Microsoft Graph API docs
+
 ## Spec Changes Section
 
 Always at document end, reverse chronological order:
