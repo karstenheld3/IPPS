@@ -8,13 +8,13 @@ Universal formatting and writing conventions for all documents.
 
 ## Text Style
 
-- Use ASCII "double quotes" or 'single quotes', not "typographic quotes"
+- Use ASCII "double quotes" or 'single quotes'. Never use Non-ASCII quotes unless explicitly asked.
 - No emojis in documentation (exception: UI may use limited set)
-- Avoid Markdown tables; use unnumbered lists with indented properties
+- Avoid Markdown tables; use unnumbered lists with indented properties to avoid unreadable rendering
 - Use Unicode box-drawing characters for structures:
   - Trees and flows: `├─>` `└─>` `│` (2-space indentation compatible)
-  - Boxes (non-UI): `┌─` `├─` `└─` `│` `─` `┐` `┤` `┘`
-  - UI diagrams: Keep ASCII `+` `-` `|` for compatibility
+  - Boxes and diagrams (non-UI): `┌─` `├─` `└─` `│` `─` `┐` `┤` `┘`
+  - UI diagrams: Keep ASCII `+` `-` `|` for compatibility and easy manual editing
 - Try to fit single statements/decisions/objects on a single line
 
 ## Document Structure
