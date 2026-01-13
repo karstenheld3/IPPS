@@ -7,7 +7,7 @@ Output: .tools/_pdf_to_jpg_converted/[PDF_FILENAME]/[PDF_FILENAME]_page001.jpg
 Each PDF gets its own subfolder to track previous conversions.
 
 Usage:
-  python convert-pdf-to-jpg.py <input.pdf> [--output-dir <dir>] [--dpi <dpi>] [--pages <range>]
+  python convert-pdf-to-jpg.py <input.pdf> [--output <dir>] [--dpi <dpi>] [--pages <range>]
 
 Examples:
   python convert-pdf-to-jpg.py invoice.pdf
@@ -96,12 +96,12 @@ def convert_pdf_to_jpg(input_pdf: str, output_dir: str, dpi: int, pages: str = N
 def main():
   parser = argparse.ArgumentParser(description='Convert PDF pages to JPG images')
   parser.add_argument('input_pdf', help='Input PDF file path')
-  parser.add_argument('--output-dir', '-o', default=DEFAULT_OUTPUT_DIR, help=f'Output directory (default: {DEFAULT_OUTPUT_DIR})')
-  parser.add_argument('--dpi', '-d', type=int, default=DEFAULT_DPI, help=f'Resolution in DPI (default: {DEFAULT_DPI})')
-  parser.add_argument('--pages', '-p', help='Page range: "1", "1-3", or "all" (default: all)')
+  parser.add_argument('--output', default=DEFAULT_OUTPUT_DIR, help=f'Output directory (default: {DEFAULT_OUTPUT_DIR})')
+  parser.add_argument('--dpi', type=int, default=DEFAULT_DPI, help=f'Resolution in DPI (default: {DEFAULT_DPI})')
+  parser.add_argument('--pages', help='Page range: "1", "1-3", or "all" (default: all)')
   
   args = parser.parse_args()
-  convert_pdf_to_jpg(args.input_pdf, args.output_dir, args.dpi, args.pages)
+  convert_pdf_to_jpg(args.input_pdf, args.output, args.dpi, args.pages)
 
 if __name__ == '__main__':
   main()

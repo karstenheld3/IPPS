@@ -6,13 +6,13 @@ Reduces file size by resampling images to specified DPI.
 Output: .tools/_pdf_output/[PDF_FILENAME]_[DPI]dpi.pdf
 
 Usage:
-  python downsize_pdf_images.py <input.pdf> [--output-dir <dir>] [--dpi <dpi>] [--preset <preset>]
+  python downsize-pdf-images.py <input.pdf> [--output <dir>] [--dpi <dpi>] [--preset <preset>]
 
 Examples:
-  python downsize_pdf_images.py report.pdf
-  python downsize_pdf_images.py report.pdf --dpi 150
-  python downsize_pdf_images.py report.pdf --preset screen
-  python downsize_pdf_images.py report.pdf -o ./output --dpi 72
+  python downsize-pdf-images.py report.pdf
+  python downsize-pdf-images.py report.pdf --dpi 150
+  python downsize-pdf-images.py report.pdf --preset screen
+  python downsize-pdf-images.py report.pdf --output ./output --dpi 72
 """
 
 import argparse, os, sys, subprocess
@@ -127,15 +127,15 @@ Presets:
 """
     )
     parser.add_argument('input_pdf', help='Input PDF file path')
-    parser.add_argument('--output-dir', '-o', default=DEFAULT_OUTPUT_DIR,
+    parser.add_argument('--output', default=DEFAULT_OUTPUT_DIR,
                         help=f'Output directory (default: {DEFAULT_OUTPUT_DIR})')
-    parser.add_argument('--dpi', '-d', type=int, default=DEFAULT_DPI,
+    parser.add_argument('--dpi', type=int, default=DEFAULT_DPI,
                         help=f'Resolution in DPI (default: {DEFAULT_DPI})')
-    parser.add_argument('--preset', '-p', choices=list(PRESETS.keys()),
+    parser.add_argument('--preset', choices=list(PRESETS.keys()),
                         help='Quality preset (overrides --dpi)')
     
     args = parser.parse_args()
-    downsize_pdf(args.input_pdf, args.output_dir, args.dpi, args.preset)
+    downsize_pdf(args.input_pdf, args.output, args.dpi, args.preset)
 
 if __name__ == '__main__':
     main()
