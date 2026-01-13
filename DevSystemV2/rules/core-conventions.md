@@ -42,16 +42,35 @@ Only include "Depends on" / "Does not depend on" if they have items.
 
 ## ID System
 
-Use consistent ID prefixes for traceability:
+Use consistent IDs for traceability. All documents and items must have unique IDs.
 
-**Format:** `[PREFIX]-[TYPE]-[NUMBER]`
+**Topic:** 2-4 uppercase letters describing component (e.g., `CRWL` for Crawler, `AUTH` for Authentication)
 
-**Prefixes:** 2-4 uppercase letters describing component (e.g., `CRWL` for Crawler, `AUTH` for Authentication)
+### Document IDs
 
-### Cross-Document Types (SPEC, IMPL, TEST)
+Every document MUST have an ID in its header block.
 
-These IDs span multiple document types and are referenced across specs, plans, and tests:
+**Format:** `[TOPIC]-[DOC][NN]`
 
+**Document Types:**
+- `IN` - INFO document
+- `SP` - SPEC document
+- `IP` - Implementation Plan
+- `TP` - Test Plan
+
+**Examples:**
+- `AUTH-IN01` - Authentication Info doc 1
+- `CRWL-SP01` - Crawler Spec 1
+- `V2CR-IP01` - V2 Crawler Implementation Plan 1
+- `V2CR-TP01` - V2 Crawler Test Plan 1
+
+### Spec-Level Item IDs (FR, IG, DD)
+
+Defined in SPECs, referenced across IMPL and TEST plans.
+
+**Format:** `[TOPIC]-[TYPE]-[NUMBER]`
+
+**Types:**
 - `FR` - Functional Requirement
 - `IG` - Implementation Guarantee
 - `DD` - Design Decision
@@ -61,10 +80,13 @@ These IDs span multiple document types and are referenced across specs, plans, a
 - `CRWL-DD-03` - Crawler Design Decision 3
 - `AUTH-IG-02` - Authentication Implementation Guarantee 2
 
-### Plan-Specific Types (IMPL, TEST only)
+### Plan-Level Item IDs (EC, IS, VC, TC)
 
-These IDs are introduced by implementation and test plans. Do NOT use in SPECs:
+Local to IMPL and TEST plans. Do NOT use in SPECs.
 
+**Format:** `[TOPIC]-[DOC][NN]-[TYPE]-[NUMBER]`
+
+**Types:**
 - `EC` - Edge Case
 - `IS` - Implementation Step
 - `VC` - Verification Checklist item
