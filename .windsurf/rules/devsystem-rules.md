@@ -9,14 +9,15 @@ Rules and definitions for the development system used with Windsurf/Cascade.
 ## Table of Contents
 
 1. [Definitions](#definitions)
-2. [Folder Structure](#folder-structure)
-3. [File Naming Conventions](#file-naming-conventions)
-4. [Placeholders](#placeholders)
-5. [Session Management](#session-management)
-6. [Document Types](#document-types)
-7. [Workflow Reference](#workflow-reference)
-8. [Agent Instructions](#agent-instructions)
-9. [MUST-NOT-FORGET-LIST](#must-not-forget-list)
+2. [Workspace Scenarios](#workspace-scenarios)
+3. [Folder Structure](#folder-structure)
+4. [File Naming Conventions](#file-naming-conventions)
+5. [Placeholders](#placeholders)
+6. [Session Management](#session-management)
+7. [Document Types](#document-types)
+8. [Workflow Reference](#workflow-reference)
+9. [Agent Instructions](#agent-instructions)
+10. [MUST-NOT-FORGET-LIST](#must-not-forget-list)
 
 ## Definitions
 
@@ -39,28 +40,92 @@ Rules and definitions for the development system used with Windsurf/Cascade.
   - `SPEC_MODULE.md`, `!SPEC_ARCHITECTURE.md`, `_SPEC_NEW_FEATURE.md`
 - **[IMPL]**: An implementation plan. When implemented, must be reverse-updated (synced) from verified code changes
   - `IMPL_MODULE.md`, `!IMPL_MIGRATION.md`, `_IMPL_REFACTOR_A.md`
-- **[TEST]**: Testing strategies and test plans
-  - `TEST_MODULE.md`, `!TEST_CRITICAL_PATH.md`, `_TEST_NEW_MODULE.md`
+- **[TEST]**: Test plans suffixed to corresponding SPEC or IMPL
+  - `SPEC_MODULE_TEST.md` - Test plan for specification
+  - `IMPL_MODULE_TEST.md` - Test plan for implementation
 
 **Note:** Prefixes (`!`, `_`) are explained in [File Naming Conventions](#file-naming-conventions).
 
 ### Tracking Documents
 
 Tracking documents exist at workspace, project, or session level. Only one of each type per scope.
+Actual files are `NOTES.md`, `PROGRESS.md`, `PROBLEMS.md`. User decides prefix (`!` for priority, `_` for session-specific, or none).
 
-- **[NOTES]** / **[WNOTES]** / **[PNOTES]** / **[SNOTES]**: Important information about workspace/project/session. Agent MUST read to avoid unintentional behavior
-- **[PROGRESS]** / **[WPROGRESS]** / **[PPROGRESS]** / **[SPROGRESS]**: Progress tracking within workspace/project/session. Agent MUST read to avoid unintentional behavior
-- **[PROBLEMS]**: Problem tracking within session
+**Single-Project / Session placeholders:**
+- **[NOTES]**: Important information. Agent MUST read to avoid unintentional behavior
+- **[PROGRESS]**: Progress tracking. Agent MUST read to avoid unintentional behavior
+- **[PROBLEMS]**: Problem tracking. Each session tracks issues in its own `PROBLEMS.md`. On `/session-close`, sync to project [PROBLEMS]
+
+**Monorepo placeholders** (to differentiate levels):
+- **[WORKSPACE_NOTES]** / **[WORKSPACE_PROGRESS]** / **[WORKSPACE_PROBLEMS]**: At workspace root, for cross-project items
+- **[PROJECT_NOTES]** / **[PROJECT_PROGRESS]** / **[PROJECT_PROBLEMS]**: In each project folder
+
+## Workspace Scenarios
+
+Three dimensions define how the agent should behave. Identify the active scenario at start of work.
+
+### Dimension 1: Project Structure
+
+**SINGLE-PROJECT** - Workspace contains one project
+**MONOREPO** - Workspace contains multiple independent projects
+
+### Dimension 2: Version Strategy
+
+**SINGLE-VERSION** - One active version, no migration
+**MULTI-VERSION** - Side-by-side versions (e.g., V1 and V2 coexisting)
+
+### Dimension 3: Work Mode
+
+**SESSION-BASED** - Time-limited session with specific goals
+**PROJECT-WIDE** - Work spans entire project without session boundaries
+
+### Scenario Instructions
+
+**SINGLE-PROJECT**
+- Use [NOTES], [PROBLEMS], [PROGRESS] at workspace root
+- Session folders go in workspace root
+
+**MONOREPO**
+- Use [PROJECT_NOTES], [PROJECT_PROGRESS], [PROJECT_PROBLEMS] per project
+- Use [WORKSPACE_NOTES], [WORKSPACE_PROGRESS], [WORKSPACE_PROBLEMS] for cross-project
+- Session folders go inside their respective project folders
+
+**SINGLE-VERSION**
+- No version prefix on document names
+- Direct edits to specs and plans
+
+**MULTI-VERSION**
+- Prefix docs: `V1_SPEC_*.md`, `V2_SPEC_*.md`
+- Never mix version patterns in same file
+
+**SESSION-BASED**
+- Track in session `PROBLEMS.md`, `PROGRESS.md`, `NOTES.md`
+- Sync to project on `/session-close`
+
+**PROJECT-WIDE**
+- Track in [NOTES], [PROGRESS] at project level
+- No session folder needed
 
 ## Folder Structure
+
+**[AGENT_FOLDER]** is the agent configuration folder. Location depends on agent:
+- Windsurf: `.windsurf/` (rules/, workflows/)
+- Claude Code: `.claude/` (CLAUDE.md, settings.json, commands/)
+- OpenAI Codex: `AGENTS.md` in project root (or `~/.codex/` for global)
+- GitHub Copilot: `.github/` (copilot-instructions.md)
+
+**Common subfolders** (inside [AGENT_FOLDER]):
+- `rules/` - Agent rules (.md files)
+- `workflows/` - Agent workflows (.md files) - equivalent to Claude Code `commands/`
+- `skills/` - Agent Skills with `SKILL.md` files (open format, cross-agent compatible)
 
 ### Single Project (No Monorepo)
 
 ```
 [WORKSPACE_FOLDER]/
-├─ .windsurf/
-│   ├─ rules/              # Windsurf rules (.md files)
-│   └─ workflows/          # Windsurf workflows (.md files)
+├─ [AGENT_FOLDER]/
+│   ├─ rules/              # Agent rules (.md files)
+│   └─ workflows/          # Agent workflows (.md files)
 ├─ _Archive/               # Archived sessions
 ├─ _[SESSION_FOLDER]/      # Session folders start with underscore
 │   ├─ _IMPL_*.md          # Implementation plans
@@ -79,22 +144,27 @@ Tracking documents exist at workspace, project, or session level. Only one of ea
 
 ```
 [WORKSPACE_FOLDER]/
-├─ .windsurf/
+├─ [AGENT_FOLDER]/
 │   ├─ rules/              # Workspace-level rules
 │   └─ workflows/          # Workspace-level workflows
 ├─ _Archive/               # Archived sessions (all projects)
 ├─ [PROJECT_A]/
+│   ├─ _Archive/           # Project A archived sessions
 │   ├─ _[SESSION_FOLDER]/  # Project A sessions
 │   ├─ src/                # Project A source code
-│   ├─ !PNOTES.md          # Project A notes
-│   └─ !PPROGRESS.md       # Project A progress
+│   ├─ NOTES.md            # Project A notes
+│   ├─ PROBLEMS.md         # Project A problems
+│   └─ PROGRESS.md         # Project A progress
 ├─ [PROJECT_B]/
+│   ├─ _Archive/           # Project B archived sessions
 │   ├─ _[SESSION_FOLDER]/  # Project B sessions
 │   ├─ src/                # Project B source code
-│   ├─ !PNOTES.md          # Project B notes
-│   └─ !PPROGRESS.md       # Project B progress
-├─ !WNOTES.md              # Workspace-level notes
-└─ !WPROGRESS.md           # Workspace-level progress
+│   ├─ NOTES.md            # Project B notes
+│   ├─ PROBLEMS.md         # Project B problems
+│   └─ PROGRESS.md         # Project B progress
+├─ !NOTES.md               # Workspace-level notes (! to indicate priority)
+├─ !PROBLEMS.md            # Workspace-level problems (! to indicate priority)
+└─ !PROGRESS.md            # Workspace-level progress  (! to indicate priority)
 ```
 
 ## File Naming Conventions
@@ -199,51 +269,7 @@ Example: `_2026-01-12_FixAuthenticationBug/`
 
 ## Document Types
 
-### Information Documents (_INFO_*.md)
-
-Purpose: Capture research findings, analysis, options
-
-Contents:
-- Research sources with URLs
-- Verified findings (marked [TESTED])
-- Assumptions (marked [ASSUMED])
-- Summary at top, sources at bottom
-
-### Specifications (_SPEC_*.md)
-
-Purpose: Define what to build before implementation
-
-Required sections (when relevant):
-- Overview with goal and target files
-- Table of Contents
-- Scenario with "What we don't want"
-- Functional Requirements (numbered: XXXX-FR-01)
-- Implementation Guarantees (numbered: XXXX-IG-01)
-- Domain Objects
-- Key Mechanisms and Design Decisions
-
-Rules:
-- No Markdown tables - use lists
-- No emojis - ASCII only
-- Use box-drawing characters for diagrams
-- Keep synced with implementation
-
-### Implementation Plans (_IMPL_*.md)
-
-Purpose: Step-by-step guide for implementation
-
-Required sections:
-- Header block with goal and target files
-- Edge Cases (numbered: XXXX-IP01-EC-01)
-- Implementation Steps (numbered: XXXX-IP01-IS-01)
-- Test Cases (numbered: XXXX-IP01-TST-01)
-- Verification Checklist (numbered: XXXX-IP01-VC-01)
-- Backward Compatibility Test (for modifications)
-
-Rules:
-- No tables - use lists
-- Include code snippets
-- Keep synced with implementation
+See `[AGENT_FOLDER]/rules/document-rules.md` for detailed structure of INFO, SPEC, IMPL, TEST, and FIX documents.
 
 ## Workflow Reference
 

@@ -10,7 +10,7 @@ Re-read the entire conversation and find:
 - Wait until tests and pocs prove what is working and what not.
 - Use [TESTED] and [ASSUMED] markers
 
-Conpare all changes since the last commit and summarize.
+Compare all changes since the last commit and summarize.
  -> to be documented in session PROGRESS.md
 
 Update all session files.
