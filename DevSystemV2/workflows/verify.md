@@ -79,6 +79,35 @@ Apply these labels to findings, requirements, and decisions in all document type
   - Every FR-XX (Functional Requirement) has at least one TC-XX (Test Case)
   - Every EC-XX (Edge Case) has corresponding test
 
+**Session Tracking (NOTES.md, PROBLEMS.md, PROGRESS.md):**
+
+Verify NOTES.md:
+- Session Info complete (Started date, Goal)?
+- Key Decisions documented?
+- Important Findings recorded?
+- Workflows to Run on Resume listed?
+- Agent instructions still valid?
+
+Verify PROBLEMS.md:
+- All discovered issues documented?
+- Status marked (Open/Resolved/Deferred)?
+- Root cause identified for resolved items?
+- Deferred items have justification?
+- **Sync check**: Which problems should move to project-level PROBLEMS.md?
+
+Verify PROGRESS.md:
+- To Do list current?
+- Done items marked with [x]?
+- Tried But Not Used documented (avoid re-exploring)?
+- Test coverage analysis up to date?
+- **Sync check**: Which findings should move to project-level docs?
+
+**Session Close Sync Checklist:**
+- [ ] Resolved problems with project impact → sync to project PROBLEMS.md
+- [ ] Reusable patterns/decisions → sync to project NOTES.md
+- [ ] Discovered bugs in unrelated code → create issues or sync to PROBLEMS.md
+- [ ] New agent instructions → sync to project rules or NOTES.md
+
 Then re-read the previous conversation, provided and relevant files. Make an internal "MUST-NOT-FORGET" list and review / edit it after each step.
 
 FINALLY:
