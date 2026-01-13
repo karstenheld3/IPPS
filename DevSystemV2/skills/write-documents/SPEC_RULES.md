@@ -56,6 +56,18 @@ Rules for writing specification documents with GOOD/BAD examples.
 **DD-UI-03:** Declarative button configuration. Buttons use `data-*` attributes for endpoint URL, method, format - no custom JS per action.
 ```
 
+**BAD** (invented ID type):
+```
+**CORNER-01:** Empty input list returns empty result
+**EDGE-02:** Network timeout after 30 seconds
+```
+
+**GOOD** (standard EC type):
+```
+**CRWL-EC-01:** Empty input list -> Return empty result, log warning
+**CRWL-EC-02:** Network timeout -> Retry 3 times, then fail with error
+```
+
 ## 2. UI Diagrams
 
 Use ASCII box diagrams with component boundaries. Show ALL buttons and actions.
