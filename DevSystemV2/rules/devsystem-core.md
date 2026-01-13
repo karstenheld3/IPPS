@@ -16,9 +16,9 @@ Core definitions and structure for the development system.
 
 ### Configuration
 
-- **[RULES]**: The current set of Windsurf rules in `.windsurf/rules/` or project rules folder
-- **[WORKFLOWS]**: The current set of Windsurf workflows in `.windsurf/workflows/`
-- **[SKILLS]**: Agent Skills in `.windsurf/skills/` or `DevSystemV2/skills/`
+- **[RULES]**: The current set of agent rules in `[AGENT_FOLDER]/rules/`
+- **[WORKFLOWS]**: The current set of agent workflows in `[AGENT_FOLDER]/workflows/`
+- **[SKILLS]**: Agent Skills in `[AGENT_FOLDER]/skills/`
 
 ### Document Types
 
@@ -59,8 +59,10 @@ Three dimensions define how the agent should behave:
 ### Agent Configuration
 
 **[AGENT_FOLDER]** location depends on agent:
-- Windsurf: `.windsurf/` (rules/, workflows/, skills/)
-- Claude Code: `.claude/` (CLAUDE.md, settings.json, commands/)
+- Windsurf: `.windsurf/`
+- Claude Code: `.claude/`
+
+All agents use: `[AGENT_FOLDER]/rules/`, `[AGENT_FOLDER]/workflows/`, `[AGENT_FOLDER]/skills/`
 
 ### Single Project (No Monorepo)
 

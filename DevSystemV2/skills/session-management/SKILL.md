@@ -66,7 +66,7 @@ Use templates from this skill folder:
 
 ## ID System
 
-See `devsystem-ids.md` rule (always-on) for complete ID system.
+See `[AGENT_FOLDER]/rules/devsystem-ids.md` rule (always-on) for complete ID system.
 
 **Quick Reference:**
 - Document: `[TOPIC]-[DOC][NN]` (IN, SP, IP, TP)
