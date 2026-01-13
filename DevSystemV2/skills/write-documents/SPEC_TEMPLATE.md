@@ -25,7 +25,8 @@
 9. [Data Structures](#9-data-structures)
 10. [User Actions](#10-user-actions) *(UI specs only)*
 11. [UX Design](#11-ux-design) *(UI specs only)*
-12. [Spec Changes](#12-spec-changes)
+12. [Implementation Details](#12-implementation-details)
+13. [Spec Changes](#13-spec-changes)
 
 ## 1. Scenario
 
@@ -153,17 +154,11 @@ Use ASCII box diagrams. Show ALL buttons and actions:
 +-----------------------------------------------------------------------+
 ```
 
-## 12. Spec Changes
+## 12. Implementation Details
+
+[Code organization, function signatures, module structure]
+
+## 13. Spec Changes
 
 **[YYYY-MM-DD HH:MM]**
 - Initial specification created
-
----
-
-## Rules
-
-- Be exhaustive: list ALL domain objects, buttons, functions
-- Document all edge cases
-- Spec length guidelines: small ~500 lines, medium ~1000 lines, complex ~2500 lines
-- Avoid implementation detail in code snippets - focus on architecture
-- Single line statements when possible
