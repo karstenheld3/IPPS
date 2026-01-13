@@ -5,7 +5,7 @@ Run once to install tools locally in `[WORKSPACE_FOLDER]/.tools/`.
 ## 1. Set Workspace Folder
 
 ```powershell
-$workspaceFolder = (Get-Location).Path  # or set explicitly: $workspaceFolder = "E:\Dev\MyProject"
+$workspaceFolder = (Get-Location).Path  # or set explicitly: $workspaceFolder = "C:\Dev\MyProject"
 $toolsDir = "$workspaceFolder\.tools"
 ```
 

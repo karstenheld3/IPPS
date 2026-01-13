@@ -16,20 +16,20 @@ Rules and usage for PDF tools in `[WORKSPACE_FOLDER]/.tools/`.
 
 ## PDF to JPG Conversion
 
-### Script: `.tools/convert-pdf-to-jpg.py`
+### Script: `DevSystemV2/skills/pdf-tools/convert-pdf-to-jpg.py`
 
 Converts PDF pages to JPG images for vision analysis.
 
 **Usage:**
 ```powershell
-python .tools/convert-pdf-to-jpg.py <input.pdf> [--output-dir <dir>] [--dpi <dpi>] [--pages <range>]
+python DevSystemV2/skills/pdf-tools/convert-pdf-to-jpg.py <input.pdf> [--output-dir <dir>] [--dpi <dpi>] [--pages <range>]
 ```
 
 **Examples:**
 ```powershell
-python .tools/convert-pdf-to-jpg.py invoice.pdf
-python .tools/convert-pdf-to-jpg.py invoice.pdf --dpi 200 --pages 1-2
-python .tools/convert-pdf-to-jpg.py invoice.pdf --pages 1
+python DevSystemV2/skills/pdf-tools/convert-pdf-to-jpg.py invoice.pdf
+python DevSystemV2/skills/pdf-tools/convert-pdf-to-jpg.py invoice.pdf --dpi 200 --pages 1-2
+python DevSystemV2/skills/pdf-tools/convert-pdf-to-jpg.py invoice.pdf --pages 1
 ```
 
 **Output Convention:**
