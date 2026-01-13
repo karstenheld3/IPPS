@@ -30,11 +30,10 @@ $ghUrl = "https://github.com/cli/cli/releases/download/v2.63.2/gh_2.63.2_windows
 $zipPath = "$installerDir\gh.zip"
 
 Invoke-WebRequest -Uri $ghUrl -OutFile $zipPath
-Expand-Archive -Path $zipPath -DestinationPath $toolsDir -Force
 
-# Find extracted folder (gh_*) and rename to gh
-$extractedFolder = Get-ChildItem $toolsDir -Directory | Where-Object { $_.Name -like "gh_*" } | Select-Object -First 1
-if ($extractedFolder) { Move-Item $extractedFolder.FullName $ghDir -Force }
+# Extract to gh folder (zip contains bin/ and LICENSE at root)
+New-Item -ItemType Directory -Path $ghDir -Force | Out-Null
+Expand-Archive -Path $zipPath -DestinationPath $ghDir -Force
 ```
 
 **Verify installation:**
