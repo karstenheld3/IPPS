@@ -15,6 +15,12 @@ IPP provides structured rules, workflows, and skills for AI agents to follow con
 
 ```
 IPP/
+├── .tools/                       # Local tool installations (gitignored)
+│   ├── poppler/                  # PDF to image conversion
+│   ├── qpdf/                     # PDF manipulation
+│   ├── gs/                       # Ghostscript PDF compression
+│   ├── 7z/                       # Archive extraction
+│   └── gh/                       # GitHub CLI
 ├── .windsurf/                    # Windsurf agent configuration (active)
 │   ├── rules/                    # Rules (copied from DevSystemVX for testing)
 │   ├── workflows/                # Workflows (copied from DevSystemVX)
@@ -59,12 +65,6 @@ IPP/
 │       ├── commit.md             # Git commit workflow
 │       ├── verify.md             # Verification workflow
 │       └── prime.md              # Context loading workflow
-├── .tools/                       # Local tool installations (gitignored)
-│   ├── poppler/                  # PDF to image conversion
-│   ├── qpdf/                     # PDF manipulation
-│   ├── gs/                       # Ghostscript PDF compression
-│   ├── 7z/                       # Archive extraction
-│   └── gh/                       # GitHub CLI
 └── README.md
 ```
 
