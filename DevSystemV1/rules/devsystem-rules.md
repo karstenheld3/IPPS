@@ -9,14 +9,15 @@ Rules and definitions for the development system used with Windsurf/Cascade.
 ## Table of Contents
 
 1. [Definitions](#definitions)
-2. [Folder Structure](#folder-structure)
-3. [File Naming Conventions](#file-naming-conventions)
-4. [Placeholders](#placeholders)
-5. [Session Management](#session-management)
-6. [Document Types](#document-types)
-7. [Workflow Reference](#workflow-reference)
-8. [Agent Instructions](#agent-instructions)
-9. [MUST-NOT-FORGET-LIST](#must-not-forget-list)
+2. [Workspace Scenarios](#workspace-scenarios)
+3. [Folder Structure](#folder-structure)
+4. [File Naming Conventions](#file-naming-conventions)
+5. [Placeholders](#placeholders)
+6. [Session Management](#session-management)
+7. [Document Types](#document-types)
+8. [Workflow Reference](#workflow-reference)
+9. [Agent Instructions](#agent-instructions)
+10. [MUST-NOT-FORGET-LIST](#must-not-forget-list)
 
 ## Definitions
 
@@ -58,6 +59,52 @@ Actual files are `NOTES.md`, `PROGRESS.md`, `PROBLEMS.md`. User decides prefix (
 **Monorepo placeholders** (to differentiate levels):
 - **[WORKSPACE_NOTES]** / **[WORKSPACE_PROGRESS]** / **[WORKSPACE_PROBLEMS]**: At workspace root, for cross-project items
 - **[PROJECT_NOTES]** / **[PROJECT_PROGRESS]** / **[PROJECT_PROBLEMS]**: In each project folder
+
+## Workspace Scenarios
+
+Three dimensions define how the agent should behave. Identify the active scenario at start of work.
+
+### Dimension 1: Project Structure
+
+**SINGLE-PROJECT** - Workspace contains one project
+**MONOREPO** - Workspace contains multiple independent projects
+
+### Dimension 2: Version Strategy
+
+**SINGLE-VERSION** - One active version, no migration
+**MULTI-VERSION** - Side-by-side versions (e.g., V1 and V2 coexisting)
+
+### Dimension 3: Work Mode
+
+**SESSION-BASED** - Time-limited session with specific goals
+**PROJECT-WIDE** - Work spans entire project without session boundaries
+
+### Scenario Instructions
+
+**SINGLE-PROJECT**
+- Use [NOTES], [PROBLEMS], [PROGRESS] at workspace root
+- Session folders go in workspace root
+
+**MONOREPO**
+- Use [PROJECT_NOTES], [PROJECT_PROGRESS], [PROJECT_PROBLEMS] per project
+- Use [WORKSPACE_NOTES], [WORKSPACE_PROGRESS], [WORKSPACE_PROBLEMS] for cross-project
+- Session folders go inside their respective project folders
+
+**SINGLE-VERSION**
+- No version prefix on document names
+- Direct edits to specs and plans
+
+**MULTI-VERSION**
+- Prefix docs: `V1_SPEC_*.md`, `V2_SPEC_*.md`
+- Never mix version patterns in same file
+
+**SESSION-BASED**
+- Track in session `PROBLEMS.md`, `PROGRESS.md`, `NOTES.md`
+- Sync to project on `/session-close`
+
+**PROJECT-WIDE**
+- Track in [NOTES], [PROGRESS] at project level
+- No session folder needed
 
 ## Folder Structure
 
