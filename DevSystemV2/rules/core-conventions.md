@@ -48,19 +48,33 @@ Use consistent ID prefixes for traceability:
 
 **Prefixes:** 2-4 uppercase letters describing component (e.g., `CRWL` for Crawler, `AUTH` for Authentication)
 
-**Types:**
+### Cross-Document Types (SPEC, IMPL, TEST)
+
+These IDs span multiple document types and are referenced across specs, plans, and tests:
+
 - `FR` - Functional Requirement
 - `IG` - Implementation Guarantee
 - `DD` - Design Decision
+
+**Examples:**
+- `CRWL-FR-01` - Crawler Functional Requirement 1
+- `CRWL-DD-03` - Crawler Design Decision 3
+- `AUTH-IG-02` - Authentication Implementation Guarantee 2
+
+### Plan-Specific Types (IMPL, TEST only)
+
+These IDs are introduced by implementation and test plans. Do NOT use in SPECs:
+
 - `EC` - Edge Case
 - `IS` - Implementation Step
 - `VC` - Verification Checklist item
 - `TC` - Test Case
 
 **Examples:**
-- `CRWL-FR-01` - Crawler Functional Requirement 1
-- `CRWL-DD-03` - Crawler Design Decision 3
-- `CRWL-IP01-IS-05` - Crawler Implementation Plan 01, Step 5
+- `CRWL-IP01-EC-01` - Crawler Plan 01, Edge Case 1
+- `CRWL-IP01-IS-05` - Crawler Plan 01, Implementation Step 5
+- `AUTH-TP01-TC-03` - Authentication Test Plan 01, Test Case 3
+- `AUTH-IP01-VC-02` - Authentication Plan 01, Verification Checklist 2
 
 ## Spec Changes Section
 
