@@ -14,10 +14,17 @@
 ## Table of Contents
 
 1. [Scenario](#1-scenario)
-2. [Domain Objects](#2-domain-objects)
-3. [Functional Requirements](#3-functional-requirements)
-4. [Design Decisions](#4-design-decisions)
-5. [Spec Changes](#5-spec-changes)
+2. [Context](#2-context)
+3. [Domain Objects](#3-domain-objects)
+4. [Functional Requirements](#4-functional-requirements)
+5. [Design Decisions](#5-design-decisions)
+6. [Implementation Guarantees](#6-implementation-guarantees)
+7. [Key Mechanisms](#7-key-mechanisms)
+8. [Action Flow](#8-action-flow)
+9. [Data Structures](#9-data-structures)
+10. [User Actions](#10-user-actions) *(UI specs only)*
+11. [UX Design](#11-ux-design) *(UI specs only)*
+12. [Spec Changes](#12-spec-changes)
 
 ## 1. Scenario
 
@@ -31,7 +38,11 @@
 - [Anti-pattern 1]
 - [Anti-pattern 2]
 
-## 2. Domain Objects
+## 2. Context
+
+[Project background, related systems, how this component fits]
+
+## 3. Domain Objects
 
 ### [ObjectName]
 
@@ -52,7 +63,20 @@ A **[ObjectName]** represents [description].
 }
 ```
 
-## 3. Functional Requirements
+## 4. Functional Requirements
+
+**BAD:**
+```
+- Toast notifications should support info, success, error types
+- Auto-dismiss should be configurable
+```
+
+**GOOD:**
+```
+**UI-FR-01: Toast Notifications**
+- Support info, success, error, warning message types
+- Auto-dismiss configurable per toast (default 5000ms)
+```
 
 **[PREFIX]-FR-01: [Requirement Title]**
 - [Requirement detail 1]
@@ -61,13 +85,84 @@ A **[ObjectName]** represents [description].
 **[PREFIX]-FR-02: [Requirement Title]**
 - [Requirement detail]
 
-## 4. Design Decisions
+## 5. Design Decisions
 
 **[PREFIX]-DD-01:** [Decision description]. Rationale: [Why this decision].
 
 **[PREFIX]-DD-02:** [Decision description]. Rationale: [Why this decision].
 
-## 5. Spec Changes
+## 6. Implementation Guarantees
+
+**[PREFIX]-IG-01:** [What the implementation must guarantee]
+
+**[PREFIX]-IG-02:** [What the implementation must guarantee]
+
+## 7. Key Mechanisms
+
+[Technical patterns, algorithms, declarative approaches used]
+
+## 8. Action Flow
+
+Document call chains with indented arrows:
+
+```
+User clicks [Button]
+  +-> functionA(param)
+      +-> fetch(`/api/endpoint`)
+          +-> On success:
+              +-> updateState()
+                  +-> renderUI()
+```
+
+## 9. Data Structures
+
+**Request/Response Example:**
+```
+<start_json>
+{"id": 42, "state": "running"}
+</start_json>
+<end_json>
+{"id": 42, "state": "completed", "result": "ok"}
+</end_json>
+```
+
+## 10. User Actions
+
+*(For UI specs only)*
+
+- **[Action Name]**: [Description of user interaction and expected result]
+
+## 11. UX Design
+
+*(For UI specs only)*
+
+Use ASCII box diagrams. Show ALL buttons and actions:
+
+```
++-----------------------------------------------------------------------+
+|  Component Name                                                       |
+|                                                                       |
+|  [Button 1]  [Button 2]                                               |
+|                                                                       |
+|  +-----+----------+---------+--------------------------------------+  |
+|  | ID  | Name     | Status  | Actions                              |  |
+|  +-----+----------+---------+--------------------------------------+  |
+|  | 1   | Item A   | active  | [Edit] [Delete]                      |  |
+|  +-----+----------+---------+--------------------------------------+  |
++-----------------------------------------------------------------------+
+```
+
+## 12. Spec Changes
 
 **[YYYY-MM-DD HH:MM]**
 - Initial specification created
+
+---
+
+## Rules
+
+- Be exhaustive: list ALL domain objects, buttons, functions
+- Document all edge cases
+- Spec length guidelines: small ~500 lines, medium ~1000 lines, complex ~2500 lines
+- Avoid implementation detail in code snippets - focus on architecture
+- Single line statements when possible
