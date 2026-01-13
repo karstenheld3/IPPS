@@ -58,11 +58,11 @@ Read the appropriate template for the document type you are creating:
 
 ## ID System
 
-Read `DOCUMENT_ID_SYSTEM.md` for complete ID system documentation.
+See `devsystem-ids.md` rule (always-on) for complete ID system.
 
-**Key types for document writing:**
-- Document IDs: `[TOPIC]-[DOC][NN]` (IN, SP, IP, TP)
+**Quick Reference:**
+- Document: `[TOPIC]-[DOC][NN]` (IN, SP, IP, TP)
 - Spec-Level: `[TOPIC]-[TYPE]-[NN]` (FR, IG, DD)
 - Plan-Level: `[TOPIC]-[DOC][NN]-[TYPE]-[NN]` (EC, IS, VC, TC)
-- Source IDs: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
-- Tracking: `[TOPIC]-[TYPE]-[NN]` (PR, FX)
+- Source: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
+- Tracking: `[TOPIC]-[TYPE]-[NNN]` (BG, FT, PR, FX, TK)

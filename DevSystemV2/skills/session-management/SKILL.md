@@ -66,11 +66,11 @@ Use templates from this skill folder:
 
 ## ID System
 
-Read `DOCUMENT_ID_SYSTEM.md` for complete ID system documentation.
+See `devsystem-ids.md` rule (always-on) for complete ID system.
 
-**Key types for session management:**
-- Document IDs: `[TOPIC]-[DOC][NN]` (IN, SP, IP, TP)
-- Tracking: `[TOPIC]-[TYPE]-[NN]` (PR, FX)
+**Quick Reference:**
+- Document: `[TOPIC]-[DOC][NN]` (IN, SP, IP, TP)
+- Tracking: `[TOPIC]-[TYPE]-[NNN]` (BG, FT, PR, FX, TK)
 - Topic Registry: Maintained in project NOTES.md
 
 ## Session Init Template

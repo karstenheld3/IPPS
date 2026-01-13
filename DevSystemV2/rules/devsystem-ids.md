@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Document ID System
 
 All documents and items must have unique IDs for traceability.
