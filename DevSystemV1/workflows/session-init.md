@@ -1,4 +1,5 @@
 ---
+description: Initialize a new development session
 auto_execution_mode: 1
 ---
 Check if the user has given you a [SESSION_FOLDER] to work in.

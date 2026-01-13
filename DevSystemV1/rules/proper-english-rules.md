@@ -1,3 +1,9 @@
+---
+trigger: always_on
+---
+
+# Proper English Rules
+
 ### Ambiguous Grammar
 
 **RULE:** When a modifier (clause or phrase) can attach to multiple nouns, split into separate sentences.

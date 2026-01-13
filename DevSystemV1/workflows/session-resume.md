@@ -1,4 +1,9 @@
-Make sure all state progress is documented in `NOTES.md`and `PROGRESS.md` and `PROBLEMS.md`
+---
+description: Resume a development session
+auto_execution_mode: 1
+---
+
+Make sure all state progress is documented in `NOTES.md` and `PROGRESS.md` and `PROBLEMS.md`
 
 Execute the prime.md workflow.
 

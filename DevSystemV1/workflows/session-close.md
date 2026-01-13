@@ -12,11 +12,9 @@ Use this workflow when a session is complete and verified working.
 1. **Sync ALL problems to project !PROBLEMS.md**
    - Read session PROBLEMS.md completely
    - For EACH problem listed:
-     - If RESOLVED: Mark corresponding item in `!PROBLEMS.md` as GELOEST/FIXED with date
-     - If OPEN/DEFERRED: Add to `!PROBLEMS.md` (German first, then English)
+     - If RESOLVED: Mark corresponding item in `!PROBLEMS.md` as FIXED with date
+     - If OPEN/DEFERRED: Add to `!PROBLEMS.md`
      - If new issue discovered: Add as new numbered item
-   - Follow bilingual rule: German summary, then English summary
-   - Update `!PROBLEMS_GER.md` to stay in sync
 
 2. **Update session PROBLEMS.md**
    - Change status from `Open` to `RESOLVED` for fixed problems

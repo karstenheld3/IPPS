@@ -1,5 +1,6 @@
 ---
 description: Archive a completed session folder
+auto_execution_mode: 1
 ---
 
 # Archive Session Workflow

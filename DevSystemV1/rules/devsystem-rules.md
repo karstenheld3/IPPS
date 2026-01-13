@@ -47,20 +47,37 @@ Rules and definitions for the development system used with Windsurf/Cascade.
 ### Tracking Documents
 
 Tracking documents exist at workspace, project, or session level. Only one of each type per scope.
+Actual files are `NOTES.md`, `PROGRESS.md`, `PROBLEMS.md`. User decides prefix (`!` for priority, `_` for session-specific, or none).
 
-- **[NOTES]** / **[WNOTES]** / **[PNOTES]** / **[SNOTES]**: Important information about workspace/project/session. Agent MUST read to avoid unintentional behavior
-- **[PROGRESS]** / **[WPROGRESS]** / **[PPROGRESS]** / **[SPROGRESS]**: Progress tracking within workspace/project/session. Agent MUST read to avoid unintentional behavior
-- **[PROBLEMS]**: Problem tracking within session
+**Single-Project / Session placeholders:**
+- **[NOTES]**: Important information. Agent MUST read to avoid unintentional behavior
+- **[PROGRESS]**: Progress tracking. Agent MUST read to avoid unintentional behavior
+- **[PROBLEMS]**: Problem tracking. Each session tracks issues in its own `PROBLEMS.md`. On `/session-close`, sync to project [PROBLEMS]
+
+**Monorepo placeholders** (to differentiate levels):
+- **[WORKSPACE_NOTES]** / **[WORKSPACE_PROGRESS]** / **[WORKSPACE_PROBLEMS]**: At workspace root, for cross-project items
+- **[PROJECT_NOTES]** / **[PROJECT_PROGRESS]** / **[PROJECT_PROBLEMS]**: In each project folder
 
 ## Folder Structure
+
+**[AGENT_FOLDER]** is the agent configuration folder. Location depends on agent:
+- Windsurf: `.windsurf/` (rules/, workflows/)
+- Claude Code: `.claude/` (CLAUDE.md, settings.json, commands/)
+- OpenAI Codex: `AGENTS.md` in project root (or `~/.codex/` for global)
+- GitHub Copilot: `.github/` (copilot-instructions.md)
+
+**Common subfolders** (inside [AGENT_FOLDER]):
+- `rules/` - Agent rules (.md files)
+- `workflows/` - Agent workflows (.md files) - equivalent to Claude Code `commands/`
+- `skills/` - Agent Skills with `SKILL.md` files (open format, cross-agent compatible)
 
 ### Single Project (No Monorepo)
 
 ```
 [WORKSPACE_FOLDER]/
-├─ .windsurf/
-│   ├─ rules/              # Windsurf rules (.md files)
-│   └─ workflows/          # Windsurf workflows (.md files)
+├─ [AGENT_FOLDER]/
+│   ├─ rules/              # Agent rules (.md files)
+│   └─ workflows/          # Agent workflows (.md files)
 ├─ _Archive/               # Archived sessions
 ├─ _[SESSION_FOLDER]/      # Session folders start with underscore
 │   ├─ _IMPL_*.md          # Implementation plans
@@ -79,22 +96,27 @@ Tracking documents exist at workspace, project, or session level. Only one of ea
 
 ```
 [WORKSPACE_FOLDER]/
-├─ .windsurf/
+├─ [AGENT_FOLDER]/
 │   ├─ rules/              # Workspace-level rules
 │   └─ workflows/          # Workspace-level workflows
 ├─ _Archive/               # Archived sessions (all projects)
 ├─ [PROJECT_A]/
+│   ├─ _Archive/           # Project A archived sessions
 │   ├─ _[SESSION_FOLDER]/  # Project A sessions
 │   ├─ src/                # Project A source code
-│   ├─ !PNOTES.md          # Project A notes
-│   └─ !PPROGRESS.md       # Project A progress
+│   ├─ NOTES.md            # Project A notes
+│   ├─ PROBLEMS.md         # Project A problems
+│   └─ PROGRESS.md         # Project A progress
 ├─ [PROJECT_B]/
+│   ├─ _Archive/           # Project B archived sessions
 │   ├─ _[SESSION_FOLDER]/  # Project B sessions
 │   ├─ src/                # Project B source code
-│   ├─ !PNOTES.md          # Project B notes
-│   └─ !PPROGRESS.md       # Project B progress
-├─ !WNOTES.md              # Workspace-level notes
-└─ !WPROGRESS.md           # Workspace-level progress
+│   ├─ NOTES.md            # Project B notes
+│   ├─ PROBLEMS.md         # Project B problems
+│   └─ PROGRESS.md         # Project B progress
+├─ !NOTES.md               # Workspace-level notes (! to indicate priority)
+├─ !PROBLEMS.md            # Workspace-level problems (! to indicate priority)
+└─ !PROGRESS.md            # Workspace-level progress  (! to indicate priority)
 ```
 
 ## File Naming Conventions
