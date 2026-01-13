@@ -62,7 +62,12 @@ See `[AGENT_FOLDER]/rules/devsystem-ids.md` rule (always-on) for complete ID sys
 
 **Quick Reference:**
 - Document: `[TOPIC]-[DOC][NN]` (IN, SP, IP, TP)
+  - Example: `CRWL-SP01`, `AUTH-IP01`
 - Spec-Level: `[TOPIC]-[TYPE]-[NN]` (FR, IG, DD)
+  - Example: `CRWL-FR-01`, `AUTH-DD-03`
 - Plan-Level: `[TOPIC]-[DOC][NN]-[TYPE]-[NN]` (EC, IS, VC, TC)
+  - Example: `CRWL-IP01-EC-01`, `AUTH-TP01-TC-05`
 - Source: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
+  - Example: `AGSK-IN01-SC-ASIO-HOME`
 - Tracking: `[TOPIC]-[TYPE]-[NNN]` (BG, FT, PR, FX, TK)
+  - Example: `SAP-BG-001`, `UI-FT-003`
