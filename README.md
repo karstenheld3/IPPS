@@ -11,17 +11,43 @@ IPP provides structured rules, workflows, and skills for AI agents to follow con
 - **DevSystemV1** - Legacy workflows in `.windsurf/` (being migrated)
 - **DevSystemV2** - Current system with modular skills and workflows
 
-## Structure
+## Project Structure
 
 ```
-.windsurf/
-  rules/          # Agent rules (conventions, IDs, core behavior)
-  workflows/      # Agent workflows (session, commit, verify, etc.)
-  skills/         # Agent skill definitions (SKILL.md files)
-DevSystemV2/
-  skills/         # Skill implementations with scripts and docs
-  workflows/      # Extended workflow definitions
-.tools/           # Local tool installations (gitignored)
+IPP/
+├── .windsurf/                    # Windsurf agent configuration
+│   ├── rules/                    # Global rules (symlinked to DevSystemV2)
+│   ├── workflows/                # Workflow definitions (symlinked)
+│   └── skills/                   # Skill definitions (symlinked)
+├── DevSystemV1/                  # Legacy system (deprecated)
+│   ├── rules/
+│   └── workflows/
+├── DevSystemV2/                  # Current system
+│   ├── rules/
+│   │   ├── core-conventions.md   # Text formatting, document structure
+│   │   ├── devsystem-core.md     # Workspace scenarios, folder structure
+│   │   ├── devsystem-ids.md      # Document and item ID conventions
+│   │   └── workspace-rules.md    # Project-specific rules
+│   ├── skills/
+│   │   ├── coding-conventions/   # Python, PowerShell style rules
+│   │   ├── git-conventions/      # Commit message format
+│   │   ├── github/               # GitHub CLI (SETUP.md, SKILL.md)
+│   │   ├── pdf-tools/            # PDF scripts and tools
+│   │   ├── session-management/   # Session templates
+│   │   └── write-documents/      # Spec, impl, test templates
+│   └── workflows/
+│       ├── session-*.md          # Session management workflows
+│       ├── write-*.md            # Document creation workflows
+│       ├── commit.md             # Git commit workflow
+│       ├── verify.md             # Verification workflow
+│       └── prime.md              # Context loading workflow
+├── .tools/                       # Local tool installations (gitignored)
+│   ├── poppler/                  # PDF to image conversion
+│   ├── qpdf/                     # PDF manipulation
+│   ├── gs/                       # Ghostscript PDF compression
+│   ├── 7z/                       # Archive extraction
+│   └── gh/                       # GitHub CLI
+└── README.md
 ```
 
 ## Skills
