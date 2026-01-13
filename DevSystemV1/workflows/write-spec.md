@@ -9,6 +9,7 @@ auto_execution_mode: 1
 
 - User has described the problem or feature
 - Clarify scope and naming before starting
+- Read document-rules.md
 
 ## Steps
 

@@ -9,6 +9,7 @@ auto_execution_mode: 1
 
 - Specification exists (`_SPEC_[COMPONENT].md`)
 - Read spec completely before starting
+- Read document-rules.md
 
 ## Steps
 

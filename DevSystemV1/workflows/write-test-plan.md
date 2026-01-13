@@ -9,6 +9,7 @@ auto_execution_mode: 1
 
 - Specification exists (`_SPEC_[COMPONENT].md`)
 - Implementation plan exists (`_IMPL_[COMPONENT].md`) - optional
+- Read document-rules.md
 
 ## Steps
 
