@@ -70,7 +70,9 @@ See `[AGENT_FOLDER]/rules/devsystem-ids.md` rule (always-on) for complete ID sys
 
 **Quick Reference:**
 - Document: `[TOPIC]-[DOC][NN]` (IN, SP, IP, TP)
+  - Example: `CRWL-SP01`, `AUTH-IP01`
 - Tracking: `[TOPIC]-[TYPE]-[NNN]` (BG, FT, PR, FX, TK)
+  - Example: `SAP-BG-001`, `UI-PR-003`, `GLOB-TK-015`
 - Topic Registry: Maintained in project NOTES.md
 
 ## Session Init Template
