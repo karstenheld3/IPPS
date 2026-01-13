@@ -2,32 +2,34 @@
 
 ## Session Info
 
-- **Started**: [YYYY-MM-DD]
-- **Goal**: [Brief description of session objective]
-- **Session ID**: [TOPIC]-SS[NN] (optional)
+- **Started**: 2026-01-15
+- **Goal**: Fix authentication token expiration handling in API client
 
 ## Agent Instructions
 
-- [Critical instruction 1]
-- [Critical instruction 2]
+- Use exponential backoff for retry logic (1s, 2s, 4s)
+- All token operations must be thread-safe
 
 ## Key Decisions
 
-- **[TOPIC]-DD-XX**: [Decision description and rationale]
+- **AUTH-DD-01**: Store refresh token in secure storage instead of localStorage. Rationale: localStorage is vulnerable to XSS attacks.
+- **AUTH-DD-02**: Implement token refresh 5 minutes before expiration. Rationale: Prevents race conditions from on-demand refresh.
 
 ## Important Findings
 
-- [Finding 1] [VERIFIED]
-- [Finding 2] [ASSUMED]
+- Current implementation has race condition when multiple requests trigger refresh simultaneously [VERIFIED]
+- Token expiration check uses client-side time - vulnerable to clock skew [VERIFIED]
+- Server returns 401 for both expired and invalid tokens - need to distinguish [ASSUMED]
 
 ## Workflows to Run on Resume
 
 1. Read this NOTES.md
 2. Read PROGRESS.md for current state
-3. [Additional workflow steps]
+3. Run `/prime` to load project context
 
 ## Topic Registry
 
 Maintain list of TOPIC IDs used in this session/project:
 
-- `[TOPIC]` - [Description]
+- `AUTH` - Authentication and authorization system
+- `API` - API client and request handling
