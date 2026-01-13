@@ -101,15 +101,15 @@ DevSystem V1 uses 6 always-on rule files totaling ~62KB. All rules are loaded in
 - **proper-english-rules.md** (1KB, 32 lines)
   - Ambiguous grammar rule
 
-- **workspace-rules.md** (32B, empty)
-  - Placeholder for workspace-specific rules
+- **workspace-rules.md** (5 lines, frontmatter only)
+  - Placeholder for workspace-specific rules, has `trigger: always_on` frontmatter
 
 ### 2.2 V1 Workflows Inventory
 
 **Total: 15 files, ~18KB**
 
 - `/prime` (1.3KB) - Load context. Skills: None (entry point)
-- `/go-autonomous` (0.8KB) - Autonomous loop. Skills: python-coding
+- `/go-autonomous` (0.8KB) - Autonomous loop. Skills: None (language-agnostic)
 - `/go-research` (1.1KB) - Research mode. Skills: write-documents
 - `/session-init` (1.3KB) - Create session. Skills: session-management
 - `/session-save` (0.6KB) - Save session. Skills: session-management, git-conventions
@@ -119,8 +119,8 @@ DevSystem V1 uses 6 always-on rule files totaling ~62KB. All rules are loaded in
 - `/write-spec` (1.3KB) - Write specification. Skills: write-documents
 - `/write-impl-plan` (1.3KB) - Write impl plan. Skills: write-documents
 - `/write-test-plan` (1.3KB) - Write test plan. Skills: write-documents
-- `/implement` (1.2KB) - Implementation. Skills: python-coding, write-documents
-- `/verify` (2KB) - Verification. Skills: write-documents, python-coding
+- `/implement` (1.2KB) - Implementation. Skills: coding-conventions, write-documents
+- `/verify` (2KB) - Verification. Skills: write-documents, coding-conventions
 - `/commit` (0.5KB) - Git commit. Skills: git-conventions
 - `/setup-pdftools` (5.4KB) - Setup PDF tools. Skills: pdf-tools
 
@@ -135,10 +135,16 @@ DevSystemV2/
 │   └── devsystem-core.md         # Definitions, placeholders, folder structure
 │
 ├── skills/                       # Context-triggered skills
-│   ├── python-coding/
-│   │   └── SKILL.md              # Python coding conventions
+│   ├── coding-conventions/
+│   │   ├── SKILL.md              # Router: describes available convention files
+│   │   └── python-rules.md       # Python coding conventions (full content)
 │   ├── write-documents/
-│   │   └── SKILL.md              # INFO/SPEC/IMPL/TEST/FIX writing
+│   │   ├── SKILL.md              # Router: describes available templates, core rules
+│   │   ├── INFO_TEMPLATE.md      # INFO template with examples
+│   │   ├── SPEC_TEMPLATE.md      # SPEC template with examples
+│   │   ├── IMPL_TEMPLATE.md      # IMPL template with examples
+│   │   ├── TEST_TEMPLATE.md      # TEST template with examples
+│   │   └── FIXES_TEMPLATE.md       # FIX template with examples
 │   ├── git-conventions/
 │   │   └── SKILL.md              # Commits, .gitignore
 │   ├── pdf-tools/
@@ -232,7 +238,7 @@ A **Workflow** is a step-by-step procedure file.
 - `devsystem-rules.md` §7-10 (100 lines) → `rules/devsystem-core.md` - Reference info
 - `document-rules.md` §1 (130 lines) → `rules/core-conventions.md` - Universal formatting
 - `document-rules.md` §2-6 (670 lines) → `skills/write-documents/` - Document-specific
-- `python-rules.md` (551 lines) → `skills/python-coding/` - Python-specific
+- `python-rules.md` (551 lines) → `skills/coding-conventions/` - Python-specific
 - `git-rules.md` (88 lines) → `skills/git-conventions/` - Git-specific
 - `tools-rules.md` (138 lines) → `skills/pdf-tools/` - Tool-specific
 - `proper-english-rules.md` (32 lines) → `rules/core-conventions.md` - Universal writing
@@ -240,17 +246,22 @@ A **Workflow** is a step-by-step procedure file.
 
 ### 5.2 Skill Content Mapping
 
-**Skill: python-coding**
-- Source: `python-rules.md` (551 lines)
-- Description: "Apply when writing, editing, reviewing, or debugging Python code"
-- MUST-NOT-FORGET: Top 10 most-violated rules
-- Full content: All FT, IM, CG, NM, CM, LG rules with examples
+**Skill: coding-conventions**
+- Description: "Apply when writing, editing, reviewing, or debugging code (Python, PowerShell, etc.)"
+- Structure:
+  - `SKILL.md` - Router describing available convention files, common cross-language rules
+  - `python-rules.md` - Full Python rules from V1 (551 lines)
+  - (future) `powershell-rules.md` - PowerShell rules
 
 **Skill: write-documents**
-- Source: `document-rules.md` §2-6 (670 lines)
 - Description: "Apply when creating or editing INFO, SPEC, IMPL, TEST, or FIX documents"
-- MUST-NOT-FORGET: ID system, header block, no tables
-- Full content: INFO, SPEC, IMPL, TEST, FIX structures and examples
+- Structure:
+  - `SKILL.md` - Router describing available templates, core formatting rules, MUST-NOT-FORGET
+  - `INFO_TEMPLATE.md` - Full INFO structure from document-rules.md §2
+  - `SPEC_TEMPLATE.md` - Full SPEC structure from document-rules.md §3
+  - `IMPL_TEMPLATE.md` - Full IMPL structure from document-rules.md §4
+  - `TEST_TEMPLATE.md` - Full TEST structure from document-rules.md §5
+  - `FIXES_TEMPLATE.md` - Full FIX structure from document-rules.md §6
 
 **Skill: git-conventions**
 - Source: `git-rules.md` (88 lines)
@@ -366,7 +377,7 @@ Invoke these skills before proceeding:
 ### 8.2 Workflow-to-Skill Mapping
 
 - `/prime` → None (loads core rules only)
-- `/go-autonomous` → @python-coding
+- `/go-autonomous` → None (language-agnostic, progressive disclosure handles skill loading)
 - `/go-research` → @write-documents
 - `/session-init` → @session-management
 - `/session-save` → @session-management, @git-conventions
@@ -376,8 +387,8 @@ Invoke these skills before proceeding:
 - `/write-spec` → @write-documents
 - `/write-impl-plan` → @write-documents
 - `/write-test-plan` → @write-documents
-- `/implement` → @python-coding, @write-documents
-- `/verify` → @write-documents, @python-coding
+- `/implement` → @coding-conventions, @write-documents
+- `/verify` → @write-documents, @coding-conventions
 - `/commit` → @git-conventions
 - `/setup-pdftools` → @pdf-tools
 
@@ -447,7 +458,7 @@ Invoke these skills before proceeding:
 - [ ] **MIG-VC-06**: All workflows updated with skill invocations
 
 ### Content Preservation
-- [ ] **MIG-VC-07**: python-rules.md fully migrated to python-coding skill
+- [ ] **MIG-VC-07**: python-rules.md fully migrated to coding-conventions skill
 - [ ] **MIG-VC-08**: document-rules.md fully migrated (core + write-documents)
 - [ ] **MIG-VC-09**: git-rules.md fully migrated to git-conventions skill
 - [ ] **MIG-VC-10**: tools-rules.md fully migrated to pdf-tools skill
@@ -463,12 +474,34 @@ Invoke these skills before proceeding:
 ### Validation
 - [ ] **MIG-VC-17**: Test /write-spec with @write-documents
 - [ ] **MIG-VC-18**: Test /commit with @git-conventions
-- [ ] **MIG-VC-19**: Test /go-autonomous with @python-coding
+- [ ] **MIG-VC-19**: Test /go-autonomous with @coding-conventions
 - [ ] **MIG-VC-20**: Compare V1 vs V2 token usage
 - [ ] **MIG-VC-21**: Verify progressive disclosure triggers on skill descriptions
 - [ ] **MIG-VC-22**: Delete DevSystemV1 folder after successful validation
 
 ## 10. Spec Changes
+
+**[2026-01-13 17:21]**
+- Changed: write-documents SKILL.md also acts as router for templates
+
+**[2026-01-13 17:18]**
+- Changed: coding-conventions skill now has SKILL.md (router) + python-rules.md (separate file)
+
+**[2026-01-13 17:15]**
+- Changed: Skill renamed from `python-coding` to `coding-conventions` (allows future powershell-rules.md)
+
+**[2026-01-13 17:13]**
+- Fixed: workspace-rules.md description (has frontmatter, not empty)
+- Fixed: /go-autonomous now language-agnostic with no required skill
+- Fixed: V1 box-drawing standardized to double dash (├── └──) in devsystem-rules.md, python-rules.md
+- Fixed: V1 devsystem-rules.md TOC placement rule matches document-rules.md
+
+**[2026-01-13 17:03]**
+- Changed: Template naming from TEMPLATE_*.md to *_TEMPLATE.md
+
+**[2026-01-13 17:01]**
+- Changed: write-documents skill split into SKILL.md + 5 template files
+- Added: Template files with copy-paste structure and example content
 
 **[2026-01-13 16:49]**
 - Fixed: File count "6 files" → "7 files" (includes empty workspace-rules.md)

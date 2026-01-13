@@ -7,7 +7,7 @@
 - `[WORKSPACE_FOLDER]/DevSystemV2/rules/devsystem-core.md` (NEW)
 - `[WORKSPACE_FOLDER]/DevSystemV2/rules/core-conventions.md` (NEW)
 - `[WORKSPACE_FOLDER]/DevSystemV2/rules/workspace-rules.md` (NEW)
-- `[WORKSPACE_FOLDER]/DevSystemV2/skills/python-coding/SKILL.md` (NEW)
+- `[WORKSPACE_FOLDER]/DevSystemV2/skills/coding-conventions/SKILL.md` (NEW)
 - `[WORKSPACE_FOLDER]/DevSystemV2/skills/write-documents/SKILL.md` (NEW)
 - `[WORKSPACE_FOLDER]/DevSystemV2/skills/git-conventions/SKILL.md` (NEW)
 - `[WORKSPACE_FOLDER]/DevSystemV2/skills/pdf-tools/SKILL.md` (NEW)
@@ -35,10 +35,16 @@
 │   └── workspace-rules.md                    # (empty) [NEW] - Placeholder
 │
 ├── skills/
-│   ├── python-coding/
-│   │   └── SKILL.md                          # (~17KB) [NEW] - Full python-rules.md
+│   ├── coding-conventions/
+│   │   ├── SKILL.md                          # (~1KB) [NEW] - Router for convention files
+│   │   └── python-rules.md                   # (~17KB) [NEW] - Full python-rules.md content
 │   ├── write-documents/
-│   │   └── SKILL.md                          # (~20KB) [NEW] - document-rules.md §2-6
+│   │   ├── SKILL.md                          # (~2KB) [NEW] - Router for templates, core rules
+│   │   ├── INFO_TEMPLATE.md                  # (~2KB) [NEW] - INFO document template with examples
+│   │   ├── SPEC_TEMPLATE.md                  # (~3KB) [NEW] - SPEC document template with examples
+│   │   ├── IMPL_TEMPLATE.md                  # (~2KB) [NEW] - IMPL document template with examples
+│   │   ├── TEST_TEMPLATE.md                  # (~2KB) [NEW] - TEST document template with examples
+│   │   └── FIXES_TEMPLATE.md                   # (~1KB) [NEW] - FIX document template with examples
 │   ├── git-conventions/
 │   │   └── SKILL.md                          # (~2KB) [NEW] - Full git-rules.md
 │   ├── pdf-tools/
@@ -48,7 +54,7 @@
 │
 └── workflows/                                # Copy from V1, add skill invocations
     ├── prime.md                              # [MODIFY] - Update for V2
-    ├── go-autonomous.md                      # [MODIFY] - Add @python-coding
+    ├── go-autonomous.md                      # [MODIFY] - No skill (language-agnostic)
     ├── go-research.md                        # [MODIFY] - Add @write-documents
     ├── session-init.md                       # [MODIFY] - Add @session-management
     ├── session-save.md                       # [MODIFY] - Add @session-management, @git-conventions
@@ -58,63 +64,42 @@
     ├── write-spec.md                         # [MODIFY] - Add @write-documents
     ├── write-impl-plan.md                    # [MODIFY] - Add @write-documents
     ├── write-test-plan.md                    # [MODIFY] - Add @write-documents
-    ├── implement.md                          # [MODIFY] - Add @python-coding, @write-documents
-    ├── verify.md                             # [MODIFY] - Add @write-documents, @python-coding
+    ├── implement.md                          # [MODIFY] - Add @coding-conventions, @write-documents
+    ├── verify.md                             # [MODIFY] - Add @write-documents, @coding-conventions
     ├── commit.md                             # [MODIFY] - Add @git-conventions
     └── setup-pdftools.md                     # [MODIFY] - Add @pdf-tools
 ```
 
 ## 2. Skill Content Previews
 
-### 2.1 python-coding/SKILL.md
+### 2.1 coding-conventions/SKILL.md (Router)
 
 ```markdown
 ---
-name: python-coding
-description: Apply when writing, editing, reviewing, or debugging Python code
+name: coding-conventions
+description: Apply when writing, editing, reviewing, or debugging code (Python, PowerShell, etc.)
 ---
 
-# Python Coding Conventions
+# Coding Conventions
 
-## MUST-NOT-FORGET
+This skill contains language-specific coding convention files.
 
-- TAB = 2 spaces, MAX_LINE = 220 chars
-- Single-line statements when ≤ MAX_LINE
-- All imports at top, grouped: stdlib → third-party → internal
-- Core imports on single line: `import asyncio, datetime, json`
-- No emojis, no lambda/map/filter for control flow
-- No docstrings for small functions - use single comment above
-- Log action BEFORE executing, status (OK/ERROR/FAIL/WARNING) on indented line
-- Surround paths/IDs with single quotes in logs
-- Iteration: `[ x / n ]` at line start; Retry: `( x / n )` inline
-- Use `UNKNOWN = '[UNKNOWN]'` for missing API values
+## Available Convention Files
 
-## 1. Formatting Rules (FT)
+- `python-rules.md` - Python coding conventions (formatting, imports, logging, etc.)
 
-[Full content from python-rules.md §Formatting]
+## Usage
 
-## 2. Import Rules (IM)
-
-[Full content from python-rules.md §Imports]
-
-## 3. Code Generation Rules (CG)
-
-[Full content from python-rules.md §Code Generation]
-
-## 4. Naming Rules (NM)
-
-[Full content from python-rules.md §Naming]
-
-## 5. Comment Rules (CM)
-
-[Full content from python-rules.md §Comments]
-
-## 6. Logging Rules (LG)
-
-[Full content from python-rules.md §Logging - most detailed section]
+Read the appropriate convention file for the language you are working with.
+For Python code, read `python-rules.md` in this skill folder.
 ```
 
-### 2.2 write-documents/SKILL.md
+### 2.1.1 coding-conventions/python-rules.md
+
+Full content copied from `DevSystemV1/rules/python-rules.md` (without frontmatter).
+Contains all FT, IM, CG, NM, CM, LG rules with examples (~17KB, 551 lines).
+
+### 2.2 write-documents/SKILL.md (Router)
 
 ```markdown
 ---
@@ -124,36 +109,286 @@ description: Apply when creating or editing INFO, SPEC, IMPL, TEST, or FIX docum
 
 # Document Writing Guide
 
+This skill contains document templates and formatting rules.
+
 ## MUST-NOT-FORGET
 
 - Use lists, not Markdown tables
 - No emojis - ASCII only, no `---` markers between sections
-- Use box-drawing characters (├── └── │) for trees
 - Header block: Goal, Target file, Depends on
 - ID-System: `**XXXX-FR-01:**`, `**XXXX-DD-01:**`
 - Be exhaustive: list ALL domain objects, actions, functions
-- Include "What we don't want" in Scenario section
 - Spec Changes at end, reverse chronological
 
-## 1. INFO Documents
+## Available Templates
 
-[Full content from document-rules.md §2]
+Read the appropriate template for the document type you are creating:
+- `INFO_TEMPLATE.md` - Research and analysis documents
+- `SPEC_TEMPLATE.md` - Technical specifications
+- `IMPL_TEMPLATE.md` - Implementation plans
+- `TEST_TEMPLATE.md` - Test plans
+- `FIXES_TEMPLATE.md` - Fix tracking documents
 
-## 2. SPEC Documents
+## Usage
 
-[Full content from document-rules.md §3]
+1. Read this SKILL.md for core rules
+2. Read the appropriate template for your document type
+3. Follow the template structure
+```
 
-## 3. IMPL Documents
+### 2.2.1 INFO_TEMPLATE.md
 
-[Full content from document-rules.md §4]
+```markdown
+# INFO: [Topic]
 
-## 4. TEST Documents
+**Goal**: [Single sentence describing research purpose]
 
-[Full content from document-rules.md §5]
+## Table of Contents
 
-## 5. FIX Documents
+1. [Approaches](#1-approaches)
+2. [Approach Comparison](#2-approach-comparison)
+3. [Recommended Approach](#3-recommended-approach)
+4. [Sources](#4-sources)
+5. [Next Steps](#5-next-steps)
 
-[Full content from document-rules.md §6]
+## 1. Approaches
+
+### Option A: [Name]
+
+**Description**: [Brief explanation]
+
+**Pros**:
+- [Pro 1]
+- [Pro 2]
+
+**Cons**:
+- [Con 1]
+
+<!-- EXAMPLE: Delete this block after copying -->
+### Option A: Direct API Integration
+
+**Description**: Call external API directly from main application.
+
+**Pros**:
+- Simple implementation
+- No middleware needed
+
+**Cons**:
+- Tight coupling
+- Hard to test
+<!-- END EXAMPLE -->
+
+## 2. Approach Comparison
+
+- **Speed**: [A > B > C]
+- **Complexity**: [A < B < C]
+
+## 3. Recommended Approach
+
+**[Option X]** because [rationale].
+
+## 4. Sources
+
+- [URL or file] - [Primary finding]
+
+## 5. Next Steps
+
+1. [Action item]
+```
+
+### 2.2.2 SPEC_TEMPLATE.md
+
+```markdown
+# SPEC: [Component Name]
+
+**Goal**: [Single sentence describing what to specify]
+**Target file**: `[path/to/file.py]`
+
+**Depends on:**
+- `[other-spec.md]` for [what it provides]
+
+## MUST-NOT-FORGET
+
+- [Critical rule 1]
+- [Critical rule 2]
+
+## Table of Contents
+
+1. [Scenario](#1-scenario)
+2. [Domain Objects](#2-domain-objects)
+3. [Functional Requirements](#3-functional-requirements)
+4. [Design Decisions](#4-design-decisions)
+5. [Spec Changes](#5-spec-changes)
+
+## 1. Scenario
+
+**Problem:** [Real-world problem description]
+
+**Solution:**
+- [Approach point 1]
+- [Approach point 2]
+
+**What we don't want:**
+- [Anti-pattern 1]
+- [Anti-pattern 2]
+
+## 2. Domain Objects
+
+### [ObjectName]
+
+A **[ObjectName]** represents [description].
+
+**Key properties:**
+- `property_1` - [description]
+- `property_2` - [description]
+
+<!-- EXAMPLE: Delete this block after copying -->
+### CrawlJob
+
+A **CrawlJob** represents a scheduled document crawl operation.
+
+**Key properties:**
+- `job_id` - Unique identifier (UUID)
+- `status` - Current state: pending | running | completed | failed
+- `created_at` - Timestamp of creation
+<!-- END EXAMPLE -->
+
+## 3. Functional Requirements
+
+**[PREFIX]-FR-01:** [Requirement Title]
+- [Requirement detail 1]
+- [Requirement detail 2]
+
+## 4. Design Decisions
+
+**[PREFIX]-DD-01:** [Decision Title]
+- [Decision detail]
+- Rationale: [Why this decision]
+
+## 5. Spec Changes
+
+**[YYYY-MM-DD HH:MM]**
+- Initial specification created
+```
+
+### 2.2.3 IMPL_TEMPLATE.md
+
+```markdown
+# IMPL: [Feature Name]
+
+**Plan ID**: [PREFIX]-IP01
+**Goal**: [Single sentence describing what to implement]
+
+**Target files**:
+- `[path/to/file1.py]` (NEW)
+- `[path/to/file2.py]` (MODIFY)
+
+**Depends on:**
+- `SPEC_[X].md` for [what it provides]
+
+## Table of Contents
+
+1. [File Structure](#1-file-structure)
+2. [Implementation Steps](#2-implementation-steps)
+3. [Verification Checklist](#3-verification-checklist)
+
+## 1. File Structure
+
+```
+[folder]/
+├── [file1.py]    # [Description] [NEW]
+└── [file2.py]    # [Description] [MODIFY]
+```
+
+## 2. Implementation Steps
+
+### [PREFIX]-IP01-IS-01: [Action Description]
+
+**Action**: [Add | Modify | Remove] [description]
+
+**Content**: [What to create or change]
+
+## 3. Verification Checklist
+
+- [ ] **[PREFIX]-IP01-VC-01**: [Prerequisite check]
+- [ ] **[PREFIX]-IP01-VC-02**: [Implementation check]
+- [ ] **[PREFIX]-IP01-VC-03**: [Validation check]
+```
+
+### 2.2.4 TEST_TEMPLATE.md
+
+```markdown
+# TEST: [Component Name]
+
+**Goal**: [Single sentence describing test purpose]
+**Target file**: `[path/to/test_file.py]`
+
+**Depends on:**
+- `SPEC_[X].md` for requirements
+- `IMPL_[X].md` for implementation details
+
+## Table of Contents
+
+1. [Test Strategy](#1-test-strategy)
+2. [Test Cases](#2-test-cases)
+3. [Verification Checklist](#3-verification-checklist)
+
+## 1. Test Strategy
+
+**Approach**: [unit | integration | snapshot-based]
+
+**MUST TEST:**
+- [Critical function 1]
+- [Critical function 2]
+
+**DROP:**
+- [Not worth testing] - Reason: [external dependency / UI-only]
+
+## 2. Test Cases
+
+### Category: [Name]
+
+- **[PREFIX]-TC-01**: [Description] -> ok=true, [expected result]
+- **[PREFIX]-TC-02**: [Error case] -> ok=false, [error message]
+
+## 3. Verification Checklist
+
+- [ ] All test cases pass
+- [ ] Coverage meets requirements
+```
+
+### 2.2.5 FIXES_TEMPLATE.md
+
+```markdown
+# FIX: [Issue Description]
+
+**Goal**: [Single sentence describing fix purpose]
+**Target files**:
+- `[path/to/file.py]`
+
+## Fixes
+
+### Fix 1: [Description]
+
+**Location**: `[filename.py:123]`
+
+**BEFORE:**
+```python
+[old_code]
+```
+
+**AFTER:**
+```python
+[new_code]
+```
+
+**Reason**: [Why this change is needed]
+
+## TODO Checklist
+
+- [ ] Fix 1: [Description]
+- [ ] Verify fix works
+- [ ] No regressions
 ```
 
 ### 2.3 git-conventions/SKILL.md
@@ -284,18 +519,20 @@ Invoke these skills before proceeding:
 **No skill required:**
 - `/prime` - Entry point, loads core rules only
 
-**@python-coding:**
-- `/go-autonomous` - Autonomous implementation loop
+**@coding-conventions:**
 - `/implement` - Also needs @write-documents
 - `/verify` - Also needs @write-documents
+
+**No skill required (language-agnostic):**
+- `/go-autonomous` - Autonomous loop, progressive disclosure handles skill loading
 
 **@write-documents:**
 - `/go-research` - Creates INFO documents
 - `/write-spec` - Creates SPEC documents
 - `/write-impl-plan` - Creates IMPL documents
 - `/write-test-plan` - Creates TEST documents
-- `/implement` - Also needs @python-coding
-- `/verify` - Also needs @python-coding
+- `/implement` - Also needs @coding-conventions
+- `/verify` - Also needs @coding-conventions
 
 **@session-management:**
 - `/session-init` - Create session
@@ -368,7 +605,7 @@ Invoke these skills before proceeding:
 mkdir DevSystemV2
 mkdir DevSystemV2/rules
 mkdir DevSystemV2/skills
-mkdir DevSystemV2/skills/python-coding
+mkdir DevSystemV2/skills/coding-conventions
 mkdir DevSystemV2/skills/write-documents
 mkdir DevSystemV2/skills/git-conventions
 mkdir DevSystemV2/skills/pdf-tools
@@ -404,23 +641,29 @@ mkdir DevSystemV2/workflows
 - §1.6 Spec Changes Section
 - proper-english-rules.md (Ambiguous Grammar)
 
-### MIG-IP01-IS-04: Create python-coding skill
+### MIG-IP01-IS-04: Create coding-conventions skill
 
-**Action**: Create `skills/python-coding/SKILL.md`
+**Action**: Create `skills/coding-conventions/` folder with 2 files
 
-**Content**: Full python-rules.md with:
-- Skill frontmatter (name, description)
-- MUST-NOT-FORGET section (top 10 rules)
-- All sections: FT, IM, CG, NM, CM, LG
+**Files**:
+1. `SKILL.md` - Router with skill frontmatter, lists available convention files
+2. `python-rules.md` - Full content from V1 python-rules.md (without frontmatter)
 
 ### MIG-IP01-IS-05: Create write-documents skill
 
-**Action**: Create `skills/write-documents/SKILL.md`
+**Action**: Create `skills/write-documents/` folder with 6 files
 
-**Content**: document-rules.md §2-6 with:
-- Skill frontmatter
-- MUST-NOT-FORGET section
-- All sections: INFO, SPEC, IMPL, TEST, FIX
+**Files**:
+1. `SKILL.md` - Core rules, MUST-NOT-FORGET, template references
+2. `INFO_TEMPLATE.md` - INFO document template with example content
+3. `SPEC_TEMPLATE.md` - SPEC document template with example content
+4. `IMPL_TEMPLATE.md` - IMPL document template with example content
+5. `TEST_TEMPLATE.md` - TEST document template with example content
+6. `FIXES_TEMPLATE.md` - FIX document template with example content
+
+**Content sources**:
+- SKILL.md: document-rules.md §1 (Common Rules)
+- Templates: document-rules.md §2-6 converted to copy-paste templates with `<!-- EXAMPLE -->` blocks
 
 ### MIG-IP01-IS-06: Create git-conventions skill
 
@@ -485,8 +728,14 @@ Changes:
 - [ ] **MIG-IP01-VC-10**: Total core rules <5KB
 
 ### Skills (IS-04 to IS-08)
-- [ ] **MIG-IP01-VC-11**: python-coding/SKILL.md created with frontmatter
+- [ ] **MIG-IP01-VC-11**: coding-conventions/SKILL.md (router) created with frontmatter
+- [ ] **MIG-IP01-VC-11a**: coding-conventions/python-rules.md created
 - [ ] **MIG-IP01-VC-12**: write-documents/SKILL.md created with frontmatter
+- [ ] **MIG-IP01-VC-12a**: write-documents/INFO_TEMPLATE.md created
+- [ ] **MIG-IP01-VC-12b**: write-documents/SPEC_TEMPLATE.md created
+- [ ] **MIG-IP01-VC-12c**: write-documents/IMPL_TEMPLATE.md created
+- [ ] **MIG-IP01-VC-12d**: write-documents/TEST_TEMPLATE.md created
+- [ ] **MIG-IP01-VC-12e**: write-documents/FIXES_TEMPLATE.md created
 - [ ] **MIG-IP01-VC-13**: git-conventions/SKILL.md created with frontmatter
 - [ ] **MIG-IP01-VC-14**: pdf-tools/SKILL.md created with frontmatter
 - [ ] **MIG-IP01-VC-15**: session-management/SKILL.md created with frontmatter
@@ -498,7 +747,7 @@ Changes:
 - [ ] **MIG-IP01-VC-19**: /prime updated for V2
 
 ### Content Preservation (IS-11)
-- [ ] **MIG-IP01-VC-20**: python-rules.md content in python-coding skill
+- [ ] **MIG-IP01-VC-20**: python-rules.md content in coding-conventions skill
 - [ ] **MIG-IP01-VC-21**: document-rules.md §1 in core-conventions
 - [ ] **MIG-IP01-VC-22**: document-rules.md §2-6 in write-documents skill
 - [ ] **MIG-IP01-VC-23**: git-rules.md content in git-conventions skill
@@ -509,7 +758,7 @@ Changes:
 ### Validation
 - [ ] **MIG-IP01-VC-27**: Test /write-spec with @write-documents
 - [ ] **MIG-IP01-VC-28**: Test /commit with @git-conventions
-- [ ] **MIG-IP01-VC-29**: Test /go-autonomous with @python-coding
+- [ ] **MIG-IP01-VC-29**: Test /go-autonomous with @coding-conventions
 - [ ] **MIG-IP01-VC-30**: Progressive disclosure triggers correctly
 
 ### Cleanup (IS-12)
