@@ -10,10 +10,20 @@ Copies DevSystem files from this repo's `.windsurf` folder to all linked reposit
 
 **Default (Preview/Dry-Run):** Show what WOULD be done, then ask for confirmation before making any changes.
 
-**Auto-Execute:** If user starts workflow with confirmation keyword, perform changes immediately:
-- `all`, `yes`, `confirm`, `ok`, `do it`, `execute`
+**Auto-Execute:** ONLY if user message contains an EXPLICIT confirmation keyword:
+- `yes`, `confirm`, `ok`, `do it`, `execute`, `proceed`
 
-Example: `/deploy-to-all-repos confirm` - executes without preview prompt
+Example: `deploy-to-all-repos confirm` - executes without preview prompt
+
+**CRITICAL - NOT Confirmation Keywords:**
+These phrases invoke the workflow but are NOT confirmation:
+- "deploy to all repos"
+- "deploy-to-all-repos"
+- "deploy-all"
+- "deploy all"
+- "deploy to all"
+
+ALWAYS show preview and ask for explicit confirmation first.
 
 ## Prerequisites
 
@@ -133,21 +143,33 @@ Provide final summary:
 - Total files deployed
 - Any errors or skipped repos
 
-## Example Execution
+## Output Format
+
+**CRITICAL:** Use the exact format below. Do NOT use tables or other formats.
 
 ```
-Processing: C:\Dev\Repo1
-  - Copied: rules/core-conventions.md
-  - Copied: rules/devsystem-core.md
-  - Copied: workflows/prime.md
-  - Deleted: workflows/old-deprecated.md (deprecated)
+C:\Dev\Repo1
+  [UP TO DATE] 41 files unchanged
 
-Processing: C:\Dev\Repo2
-  - Copied: rules/core-conventions.md
+C:\Dev\Repo2
+  - Add: 41 files (file1.md, file2.md, ...)
+  - Delete: 1 deprecated file (rules/old-file.md)
+
+C:\Dev\Repo3
+  [NEW REPO] .windsurf folder does not exist - will create with 41 files
+
+C:\Dev\Repo4
+  - Add: 27 new files (file1.md, file2.md, ...)
+  - Overwrite: 13 older files (file3.md, file4.md, ...)
+  - Delete: 7 deprecated files (old1.md, old2.md, ...)
+
+C:\Dev\Repo5
+  - Add: 32 new files (file1.md, file2.md, ...)
+  - Overwrite: 8 older files (file3.md, file4.md, ...)
   - Skipped: session*.md files (per repo rules)
-  ...
+  - Delete: 2 deprecated files (old1.md, old2.md)
 
-Summary: 5 repos processed, 45 files deployed, 0 errors
+Summary: X repos to process, Y files to deploy, Z files to delete.
 ```
 
 ## Files to Exclude
