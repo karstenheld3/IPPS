@@ -29,6 +29,9 @@ Apply to ALL document types and contexts:
 - Use verification labels consistently (see below)
 - Re-read relevant rules and session files before verifying
 - Make internal "MUST-NOT-FORGET" list and check after each step
+- If product names are used, make sure there are spelled correctly. Do web research when needed.
+  - BAD: Sharepoint -> GOOD: SharePoint
+  - BAD: AI Foundry Remote SharePoint -> GOOD: "SharePoint tool" for Azure AI Foundry Agent Service
 
 ## Verification Labels
 

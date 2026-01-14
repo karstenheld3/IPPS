@@ -388,6 +388,34 @@ Highlight error in editor > click "Explain and Fix" for Cascade to resolve.
 
 Problems panel > "Send to Cascade" button to include as @-mention.
 
+### Working with Private/Gitignored Folders
+
+Cascade can read/write gitignored files when explicitly referenced, but gitignored folders are hidden from the workspace snapshot shown at conversation start.
+
+**To make a gitignored folder visible to Cascade while keeping contents private:**
+
+1. Use a `.gitkeep` file to track the folder structure
+2. Configure `.gitignore` to ignore contents but not the `.gitkeep`
+
+**.gitignore pattern:**
+```gitignore
+# Private sessions folder (contents ignored, folder tracked)
+# Pattern: ignore all contents (*) but negate (!) the .gitkeep file
+# Result: folder visible in git/Cascade, but session files stay private
+_PrivateSessions/*
+!_PrivateSessions/.gitkeep
+```
+
+**.gitkeep file:**
+```bash
+echo "# This file makes the folder visible to Cascade" > _PrivateSessions/.gitkeep
+```
+
+**How it works:**
+- `_PrivateSessions/*` - Ignores all files/folders inside
+- `!_PrivateSessions/.gitkeep` - Negation pattern, tracks this specific file
+- Result: Folder appears in workspace, contents stay private
+
 ## Key Files Reference
 
 **User Config:**
