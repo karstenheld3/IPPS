@@ -22,7 +22,7 @@ Automatically push commits to GitHub.
   - Overwrite everything
   - Delete deprecated or renamed files from older DevSystem versions
   - Don't delete unreleated existing files
-- e:\Dev\PRXL
+- e:\Dev\PRXL\src
   - Overwrite everything
   - Delete deprecated or renamed files from older DevSystem versions
   - Don't delete unreleated existing files
@@ -30,8 +30,4 @@ Automatically push commits to GitHub.
   - Overwrite everything
   - Delete deprecated or renamed files from older DevSystem versions
   - Don't delete unreleated existing files
-- e:\Dev\USTVA
-  - Never overwrite `session*.md` files!
-  - Overwrite all other files
-  - Delete deprecated or renamed files from older DevSystem versions
-  - Don't delete unreleated existing files
+/
