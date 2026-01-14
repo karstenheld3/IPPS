@@ -14,7 +14,7 @@ Universal formatting and writing conventions for all documents.
 - Use Unicode box-drawing characters for structures:
   - Trees and flows: `├─>` `└─>` `│` (2-space indentation compatible)
   - Boxes and diagrams (non-UI): `┌─` `├─` `└─` `│` `─` `┐` `┤` `┘`
-  - UI diagrams: Keep ASCII `+` `-` `|` for compatibility and easy manual editing
+  - UI diagrams and designs: Keep ASCII `+` `-` `|` for compatibility and easy manual editing
 - Try to fit single statements/decisions/objects on a single line
 
 ## Document Structure
@@ -31,24 +31,27 @@ All documents start with:
 ```
 # [Document Type]: [Title]
 
+**Doc ID**: [TOPIC]-[TYPE][NN]
 **Goal**: Single sentence describing purpose
 **Target file**: `/path/to/file.py` (or list for multiple)
 
 **Depends on:**
-- `_SPEC_[X].md` for [what it provides]
+- `_SPEC_[X].md [TOPIC-SP01]` for [what it provides]
 
 **Does not depend on:**
-- `_SPEC_[Y].md` (explicitly exclude if might seem related)
+- `_SPEC_[Y].md [TOPIC-SP02]` (explicitly exclude if might seem related)
 ```
 
-Only include "Depends on" / "Does not depend on" if they have items.
+- Doc ID is required for all documents
+- Reference other docs by filename AND Doc ID: `_SPEC_CRAWLER.md [CRWL-SP01]`
+- Omit optional fields if not applicable: Target file, Depends on, Does not depend on
 
-## Spec Changes Section
+## Document History Section
 
 Always at document end, reverse chronological order:
 
 ```
-## Spec Changes
+## Document History
 
 **[2026-01-12 14:30]**
 - Added: "Scenario" section with Problem/Solution/What we don't want
@@ -60,17 +63,3 @@ Always at document end, reverse chronological order:
 ```
 
 **Action prefixes:** Added, Changed, Fixed, Removed, Moved
-
-## Proper English
-
-**RULE:** When a modifier (clause or phrase) can attach to multiple nouns, split into separate sentences.
-
-**BAD:**
-```
-Files starting with '!' signify high relevance that must be treated with extra attention.
-```
-
-**GOOD:**
-```
-Files starting with '!' indicate high relevance. This information must be treated with extra attention.
-```

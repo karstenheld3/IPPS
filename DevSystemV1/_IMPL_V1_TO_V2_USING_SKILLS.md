@@ -265,7 +265,7 @@ A **CrawlJob** represents a scheduled document crawl operation.
 - [Decision detail]
 - Rationale: [Why this decision]
 
-## 5. Spec Changes
+## 5. Changes
 
 **[YYYY-MM-DD HH:MM]**
 - Initial specification created

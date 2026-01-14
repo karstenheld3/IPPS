@@ -15,3 +15,5 @@ If the research results suggest that there is no verified solution to a problem,
 
 At the end of the document, list all read sources with URL and the primary findings.
 At the top of the document, summarize the findings as a copy / paste ready list.
+
+**Source Retention Rule:** ALL sources (web URLs, PDFs, documents, code files) must be kept in the research output. Never discard sources - even if findings were minimal or contradictory, document what was checked to avoid re-checking.

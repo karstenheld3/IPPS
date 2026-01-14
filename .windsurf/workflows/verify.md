@@ -2,64 +2,93 @@
 auto_execution_mode: 1
 ---
 
+# GLOBAL
+
 ## Required Skills
 
 Invoke these skills based on context:
 - @write-documents for document verification
 - @coding-conventions for code verification
 
-First find out what the context is:
+## Workflow
 
-- Information Gathering
-- Specifications
-- Implementation Plans
-- Implementations
-- Testing
+1. First find out what the context is (INFO, SPEC, IMPL, Code, TEST, Session)
+2. Read Global Rules and Verification Labels
+3. Read the relevant Context-Specific section
+4. Create a verification task list
+5. Work through verification task list
+6. Run Final Steps
 
-Then read relevant section below and create a verification task list.
+## Global Rules
+
+Apply to ALL document types and contexts:
+
+- Avoid excessive acronyms. Write out acronyms on first usage.
+  - BAD: `SPN not supported.`
+  - GOOD: `Service Principal Name (SPN) not supported.`
+- Use verification labels consistently (see below)
+- Re-read relevant rules and session files before verifying
+- Make internal "MUST-NOT-FORGET" list and check after each step
 
 ## Verification Labels
 
-Apply these labels to findings, requirements, and decisions in all document types (INFO, SPEC, IMPL, TEST):
+Apply these labels to findings, requirements, and decisions in all document types:
 
 - `[ASSUMED]` - Unverified assumption, needs validation
 - `[VERIFIED]` - Finding verified by re-reading source or comparing with other sources
 - `[TESTED]` - Tested in POC (Proof-Of-Concept) or minimal test script
 - `[PROVEN]` - Proven to work in actual project via implementation or tests
 
-**Usage:**
-- INFO docs: Label key findings and source claims
-- SPEC docs: Label design decisions and assumptions
-- IMPL docs: Label edge case handling and implementation choices
-- TEST docs: Label expected behaviors and test assertions
+**Usage by document type:**
+- INFO: Label key findings and source claims
+- SPEC: Label design decisions and assumptions
+- IMPL: Label edge case handling and implementation choices
+- TEST: Label expected behaviors and test assertions
 
 **Progression:** `[ASSUMED]` → `[VERIFIED]` → `[TESTED]` → `[PROVEN]`
 
-**Information Gathering:**
-- Think first: How would another person approach this? Is the scope and trajectory aligned with the problem or question?
-- Verify sources. Read them again and verify or complete findings. Drop all sources that can't be found. 
+## Final Steps
+
+1. Re-read previous conversation, provided and relevant files
+2. Identify de-prioritized or violated instructions
+3. Add tasks to verification task list
+4. Work through verification task list
+5. Verify again against MUST-NOT-FORGET list
+
+# CONTEXT-SPECIFIC
+
+## Information Gathering (INFO)
+
+- Think first: How would another person approach this? Is scope aligned with problem?
+- Verify sources. Read them again and verify or complete findings.
+- Drop all sources that can't be found.
 - Ask questions that a reader might ask and clarify them.
 - Read `[AGENT_FOLDER]/workflows/go-research.md` again and verify against instructions.
 
-**Specifications:**
-- Verify against the spec requirements and the existing code.
-- Look for bugs, inconsistencies, contradictions, ambiguities, underspeced behavior
+## Specifications (SPEC)
+
+- Verify against spec requirements and existing code.
+- Look for bugs, inconsistencies, contradictions, ambiguities, underspeced behavior.
 - Think of corner cases we haven't covered yet.
-- Ensure we have a detailed changes / additions plan.
-- Ensure we have an exhaustive implementation verification checklist at the end.
+- Ensure detailed changes/additions plan exists.
+- Ensure exhaustive implementation verification checklist at end.
 - Read @write-documents skill again and verify against rules.
 
-**Implementation Plans:**
-- Read spec again and verify against spec. Anything forgotten or not implemented as in SPEC?
+## Implementation Plans (IMPL)
+
+- Read spec again and verify against spec.
+- Anything forgotten or not implemented as in SPEC?
 - Read @coding-conventions skill again and verify against rules.
 
-**Implementations:**
+## Implementations (Code)
+
 - Read specs and plans again and verify against specs.
 - Are there existing tests that we can run to verify?
 - Can we do quick one-off tests to verify we did not break things?
 - Read @coding-conventions skill again and verify against rules.
 
-**Testing (Test Plans):**
+## Testing (TEST)
+
 - Verify test strategy matches spec requirements
 - Check test priority matrix:
   - MUST TEST: Critical business logic covered?
@@ -76,26 +105,26 @@ Apply these labels to findings, requirements, and decisions in all document type
   - Ordered execution sequence logical?
   - Dependencies between phases documented?
 - Cross-check against spec:
-  - Every FR-XX (Functional Requirement) has at least one TC-XX (Test Case)
-  - Every EC-XX (Edge Case) has corresponding test
+  - Every FR-XX has at least one TC-XX
+  - Every EC-XX has corresponding test
 
-**Session Tracking (NOTES.md, PROBLEMS.md, PROGRESS.md):**
+## Session Tracking (NOTES, PROBLEMS, PROGRESS)
 
-Verify NOTES.md:
+**Verify NOTES.md:**
 - Session Info complete (Started date, Goal)?
 - Key Decisions documented?
 - Important Findings recorded?
 - Workflows to Run on Resume listed?
 - Agent instructions still valid?
 
-Verify PROBLEMS.md:
+**Verify PROBLEMS.md:**
 - All discovered issues documented?
 - Status marked (Open/Resolved/Deferred)?
 - Root cause identified for resolved items?
 - Deferred items have justification?
 - **Sync check**: Which problems should move to project-level PROBLEMS.md?
 
-Verify PROGRESS.md:
+**Verify PROGRESS.md:**
 - To Do list current?
 - Done items marked with [x]?
 - Tried But Not Used documented (avoid re-exploring)?
@@ -107,13 +136,3 @@ Verify PROGRESS.md:
 - [ ] Reusable patterns/decisions → sync to project NOTES.md
 - [ ] Discovered bugs in unrelated code → create issues or sync to PROBLEMS.md
 - [ ] New agent instructions → sync to project rules or NOTES.md
-
-Then re-read the previous conversation, provided and relevant files. Make an internal "MUST-NOT-FORGET" list and review / edit it after each step.
-
-FINALLY:
-
-Re-read relevant rules and session files. Identify de-prioritized or violated instructions. Add tasks to verification task list.
-
-Work through verification task list.
-
-After reaching the goal, verify again against MUST-NOT-FORGET list.

@@ -11,12 +11,19 @@ This skill contains document templates and formatting rules.
 
 - Use lists, not Markdown tables
 - No emojis - ASCII only, no `---` markers between sections
-- Header block: Doc ID, Goal, Target file, Depends on
+- Header block: Doc ID (required), Goal (required), Target file, Depends on (omit if N/A)
 - Every document MUST have a unique ID
 - Reference other docs by filename AND Doc ID: `_SPEC_CRAWLER.md [CRWL-SP01]`
 - Be exhaustive: list ALL domain objects, actions, functions
-- Spec Changes at end, reverse chronological
+- Document History section at end, reverse chronological
 - Use box-drawing characters (├── └── │) for trees
+
+## Document Writing Rules
+
+- Enumerations: use comma-separated format (`.pdf, .docx, .ppt`), NOT slash-separated (`.pdf/.docx/.ppt`)
+- Ambiguous modifiers: when a clause can attach to multiple nouns, split into separate sentences
+  - BAD: "Files starting with '!' signify high relevance that must be treated with extra attention."
+  - GOOD: "Files starting with '!' indicate high relevance. This information must be treated with extra attention."
 
 ## Available Templates
 

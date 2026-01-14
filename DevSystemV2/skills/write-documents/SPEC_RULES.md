@@ -36,7 +36,7 @@ Rules for writing specification documents with GOOD/BAD examples.
 6. [Single Line Statements](#6-single-line-statements)
 7. [Event Flow Documentation](#7-event-flow-documentation)
 8. [Data Structure Examples](#8-data-structure-examples)
-9. [Spec Changes Format](#9-spec-changes-format)
+9. [Document History Format](#9-document-history-format)
 10. [Section Order and Header](#10-section-order-and-header)
 
 ## 1. Requirements Format
@@ -271,7 +271,7 @@ Provide examples for JSON, CSV, and other data formats.
 </end_json>
 ```
 
-## 9. Spec Changes Format
+## 9. Document History Format
 
 Use timestamped changelog, reverse chronological. Avoid tables.
 
@@ -285,11 +285,11 @@ Use timestamped changelog, reverse chronological. Avoid tables.
 
 **GOOD:**
 ```
-## Spec Changes
+## Document History
 
 **[2024-12-17 14:30]**
 - Added: "Scenario" section with Problem/Solution/What we don't want
-- Added: Spec Changes section
+- Added: Document History section
 
 **[2024-12-17 11:45]**
 - Added: "Key Mechanisms" section with declarative button pattern

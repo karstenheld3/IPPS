@@ -5,7 +5,10 @@
 **Target file**: `[path/to/file.py]`
 
 **Depends on:**
-- `_SPEC_[X].md` [[DOC_ID]] for [what it provides]
+- `_SPEC_[X].md [TOPIC-SP01]` for [what it provides]
+
+**Does not depend on:**
+- `_SPEC_[Y].md [TOPIC-SP02]` (explicitly exclude if might seem related)
 
 ## MUST-NOT-FORGET
 
@@ -26,7 +29,7 @@
 10. [User Actions](#10-user-actions) *(UI specs only)*
 11. [UX Design](#11-ux-design) *(UI specs only)*
 12. [Implementation Details](#12-implementation-details)
-13. [Spec Changes](#13-spec-changes)
+13. [Document History](#13-document-history)
 
 ## 1. Scenario
 
@@ -158,7 +161,7 @@ Use ASCII box diagrams. Show ALL buttons and actions:
 
 [Code organization, function signatures, module structure]
 
-## 13. Spec Changes
+## 13. Document History
 
 **[YYYY-MM-DD HH:MM]**
 - Initial specification created
