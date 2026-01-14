@@ -9,6 +9,10 @@ DONT auto-sync changes to  .windsurf\workflows if you update workflows in the [D
 
 Automatically push commits to GitHub.
 
+## Special Workflows (Workspace Root)
+
+**`deploy-to-all-repos.md`** - Deploys DevSystem files to all linked repos. Located in workspace root (not `.windsurf/workflows/`) to prevent it from being copied to other repos. Run manually by reading the file and following the instructions.
+
 **[LINKED_REPOS]**:
 - e:\Dev\KarstensWorkspace
   - Overwrite everything
