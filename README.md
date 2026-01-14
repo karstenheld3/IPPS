@@ -34,7 +34,7 @@ your-project/
 
 Local tool installations in `.tools/` (gitignored). Run `SETUP.md` in each skill folder to install.
 
-**pdf-tools** ([SETUP](DevSystemV2/skills/pdf-tools/SETUP.md)):
+**pdf-tools** ([SETUP](DevSystemV2/skills/pdf-tools/SETUP.md)) - Enables agent to read entire PDFs by converting pages to JPG images for vision analysis:
 - **7-Zip** (`.tools/7z/`) - Archive extraction, NSIS installer unpacking
 - **Poppler** (`.tools/poppler/`) - PDF to image, text extraction, split/merge
 - **QPDF** (`.tools/qpdf/`) - PDF manipulation, optimization, repair
@@ -60,8 +60,6 @@ IPP/
 │   ├── workflows/                # Workflows (copied from DevSystemVX)
 │   └── skills/                   # Skills (copied from DevSystemVX)
 ├── DevSystemV1/                  # Legacy system (deprecated)
-│   ├── _SPEC_V1_TO_V2_USING_SKILLS.md
-│   ├── _IMPL_V1_TO_V2_USING_SKILLS.md
 │   ├── rules/
 │   │   ├── devsystem-rules.md
 │   │   ├── document-rules.md
