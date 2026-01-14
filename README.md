@@ -1,4 +1,4 @@
-# IPPS - Insanely Productive Programmer System
+# IPPS - Insanely Productive Programming System
 
 A development system for AI-assisted coding workflows, optimized for Windsurf IDE on Windows x64.
 
