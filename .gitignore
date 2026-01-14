@@ -1,12 +1,11 @@
 # Tools binaries (large files, reinstallable)
-.tools/poppler/
-.tools/qpdf/
-.tools/gs/
-.tools/7z/
-.tools/gh/
-.tools/_installer/
-.tools/_pdf_output/
-.tools/_pdf_to_jpg_converted/
+.tools/
+
+# Private sessions folder (contents ignored, folder tracked)
+# Pattern: ignore all contents (*) but negate (!) the .gitkeep file
+# Result: folder visible in git/Cascade, but session files stay private
+_PrivateSessions/*
+!_PrivateSessions/.gitkeep
 
 # Temporary files
 .tmp_*
