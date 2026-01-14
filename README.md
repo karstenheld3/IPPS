@@ -6,6 +6,17 @@ A development system for AI-assisted coding workflows, optimized for Windsurf ID
 
 IPP provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The system manages sessions, documents, commits, and tool installations.
 
+## How to Add to Your Project
+
+Copy the `.windsurf/` folder to your VS Code or Windsurf workspace root:
+```
+your-project/
+└── .windsurf/
+    ├── rules/
+    ├── workflows/
+    └── skills/
+```
+
 ## DevSystem Versions
 
 - **[DevSystemV1](DevSystemV1/)** - Legacy system using rules and workflows
