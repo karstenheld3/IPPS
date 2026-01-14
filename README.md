@@ -19,6 +19,21 @@ IPP provides structured rules, workflows, and skills for AI agents to follow con
 - [Git Conventions](DevSystemV2/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
 - [Coding Conventions](DevSystemV2/skills/coding-conventions/SKILL.md) - Python, PowerShell style rules
 
+## Agent Tools (installed automatically by skill)
+
+Local tool installations in `.tools/` (gitignored). Run `SETUP.md` in each skill folder to install.
+
+**pdf-tools** ([SETUP](DevSystemV2/skills/pdf-tools/SETUP.md)):
+- **7-Zip** (`.tools/7z/`) - Archive extraction, NSIS installer unpacking
+- **Poppler** (`.tools/poppler/`) - PDF to image, text extraction, split/merge
+- **QPDF** (`.tools/qpdf/`) - PDF manipulation, optimization, repair
+- **Ghostscript** (`.tools/gs/`) - PDF compression, image downsampling
+
+**github** ([SETUP](DevSystemV2/skills/github/SETUP.md)):
+- **GitHub CLI** (`.tools/gh/`) - Repos, issues, PRs, releases
+
+Run `SETUP.md` in each skill folder to install required tools locally to `.tools/`.
+
 ## Project Structure
 
 ```
@@ -85,6 +100,7 @@ IPP/
 │       ├── session-resume.md     # Resume existing session
 │       ├── session-save.md       # Save session progress
 │       ├── setup-pdftools.md     # PDF tools installation
+│       ├── sync.md               # Document synchronization (NEW)
 │       ├── verify.md             # Verification workflow
 │       ├── write-impl-plan.md    # Create implementation plan
 │       ├── write-spec.md         # Create specification
@@ -168,11 +184,12 @@ Creates `_TEST_*.md` from spec.
 /verify
 ```
 
-7. **Commit** - Create conventional commits:
+7. **Sync** - Update dependent documents:
+```
+/sync
+```
+
+8. **Commit** - Create conventional commits:
 ```
 /commit
 ```
-
-## Setup
-
-Run `SETUP.md` in each skill folder to install required tools locally to `.tools/`.
