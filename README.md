@@ -1,4 +1,4 @@
-# IPP - Insanely Productive Programmer
+# IPPS - Insanely Productive Programmer System
 
 A development system for AI-assisted coding workflows, optimized for Windsurf IDE on Windows x64.
 
@@ -8,8 +8,8 @@ IPP provides structured rules, workflows, and skills for AI agents to follow con
 
 ## DevSystem Versions
 
-- **DevSystemV1** - Legacy workflows in `.windsurf/` (being migrated)
-- **DevSystemV2** - Current system with modular skills and workflows
+- **[DevSystemV1](DevSystemV1/)** - Legacy system using rules and workflows
+- **[DevSystemV2](DevSystemV2/)** - Current system with modular skills and workflows
 
 ## Key Conventions
 
