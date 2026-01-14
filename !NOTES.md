@@ -7,3 +7,4 @@ Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 If you update workflows in .windsurf\workflows, sync changes back to the current [DEVSYSTEM_FOLDER].
 DONT auto-sync changes to  .windsurf\workflows if you update workflows in the [DEVSYSTEM_FOLDER].
 
+Automatically push commits to GitHub.
