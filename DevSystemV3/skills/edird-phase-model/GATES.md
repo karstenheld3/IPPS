@@ -37,7 +37,7 @@ Gates are checklists that must pass before transitioning. Agent evaluates gates 
 
 - [ ] Self-review complete
 - [ ] Verification against spec/rules passed
-- [ ] For BUILD COMPLEXITY-HIGH: Critique and reconcile complete
+- [ ] For BUILD COMPLEXITY-MEDIUM or higher: Critique and reconcile complete
 - [ ] For SOLVE: Claims verified, arguments strengthened
 - [ ] All found issues fixed
 

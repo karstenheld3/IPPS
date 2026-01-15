@@ -18,8 +18,8 @@ phase: REFINE
 1. [REVIEW] self-review of work
 2. [VERIFY] against spec/rules
 3. [TEST] regression testing
-4. [CRITIQUE] find problems (devil's advocate) - for COMPLEXITY-HIGH
-5. [RECONCILE] bridge ideal vs practical - for COMPLEXITY-HIGH
+4. [CRITIQUE] find problems (devil's advocate) - for COMPLEXITY-MEDIUM or higher
+5. [RECONCILE] bridge ideal vs practical - for COMPLEXITY-MEDIUM or higher
 6. [FIX] found issues
 7. [IMPROVE] clarity and quality
 
@@ -28,7 +28,7 @@ phase: REFINE
 - [REVIEW] and [FIX] only
 - Skip [CRITIQUE] and [RECONCILE]
 
-### For COMPLEXITY-HIGH
+### For COMPLEXITY-MEDIUM or higher
 
 - Run `/critique` for [CRITIQUE]
 - Run `/reconcile` for [RECONCILE]
@@ -37,7 +37,7 @@ phase: REFINE
 
 - [ ] Self-review complete
 - [ ] Verification against spec/rules passed
-- [ ] For BUILD COMPLEXITY-HIGH: Critique and reconcile complete
+- [ ] For BUILD COMPLEXITY-MEDIUM or higher: Critique and reconcile complete
 - [ ] For SOLVE: Claims verified, arguments strengthened
 - [ ] All found issues fixed
 
