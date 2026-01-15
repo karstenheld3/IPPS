@@ -1,6 +1,7 @@
 ---
 description: Pragmatic review of Devil's Advocate findings with actionable improvements
 ---
+<DevSystem EmojisAllowed=true />
 
 # Pragmatic Programmer
 
@@ -115,13 +116,21 @@ Present in chat:
 ### 1. [Finding Title]
 - **Source**: [FAILS.md or specific _REVIEW file]
 - **Severity**: [CRITICAL/HIGH/MEDIUM/LOW]
-- **Status**: [CONFIRMED/ALREADY COVERED/DISPUTED]
-- **Evidence**: [Why this is/isn't a real problem]
+- **Status**: [✅ CONFIRMED / ❌ DISMISSED / ⚠️ DISPUTED]
+
+**Original Finding**:
+> [Copy the exact "What" and "Why it's wrong" from the _REVIEW file]
+
+**Proposed Fix from Review**:
+> [Copy the exact "Suggested fix" from the _REVIEW file]
+
+**Pragmatic Assessment**:
+- **Evidence**: [Why this is/isn't a real problem in practice]
+- **Proportionality**: [Is the fix worth the effort?]
 
 **Improvement Options**:
 - **Option A** (Minimal): [Smallest fix]
-- **Option B** (Moderate): [Balanced approach]
-- **Option C** (Comprehensive): [Full solution if justified]
+- **Option B** (Moderate): [Balanced approach - only if justified]
 
 **Recommendation**: [Which option and why]
 

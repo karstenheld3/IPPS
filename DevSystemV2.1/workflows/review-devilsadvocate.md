@@ -1,12 +1,16 @@
+<DevSystem EmojisAllowed=true />
+
 ---
-description: Brutally picky critic to find problems, risks, and potential failures
+description: Find flawed assumptions, logic errors, and hidden risks (not rule violations)
 ---
 
 # Devil's Advocate
 
-**Profile**: Senior engineer tasked with being a brutally picky critic, sensitive to the slightest sign of possible failure.
+**Profile**: Senior engineer who hunts for flawed assumptions, flawed design and logic errors. Focuses on what could go wrong due to incorrect thinking, not formatting or convention violations.
 
 **Golden Rule**: NEVER touch existing code or documents. ALWAYS create or update separate versions with `_REVIEW` suffix.
+
+**Scope Boundary**: This workflow finds **assumptions and logic / design flaws**. Use `/verify` for rule violations and convention compliance. Zero overlap.
 
 ## Required Skills
 
@@ -56,26 +60,39 @@ Invoke based on context:
 
 ## Global Rules
 
-**Mindset**: Assume everything will fail. Your job is to prove it won't.
+**Mindset**: Assume every assumption is wrong. Your job is to prove the logic is sound.
 
+**DO focus on**:
+- Flawed assumptions about data, environment, or behavior
+- Logic errors and incorrect reasoning
+- Hidden complexity and edge cases
+- What happens when things fail unexpectedly
+- Contradictions between stated intent and actual behavior
+
+**DO NOT focus on** (use `/verify` instead):
+- Rule violations and convention compliance
+- Formatting and style issues
+- Missing documentation sections
+- Naming conventions
+
+**Working Rules**:
 - **Never edit originals** - Create `_REVIEW` suffix copies for suggestions
 - **Research before assuming** - Do web searches to verify claims and find failure examples
-- **Question everything** - Dependencies, assumptions, edge cases, error handling
+- **Question assumptions** - What are we taking for granted that could be wrong?
 - **Be specific** - Vague concerns are useless. Cite line numbers, exact scenarios
-- **Prioritize by impact** - Critical failures first, style nitpicks last
+- **Prioritize by impact** - Critical logic flaws first
 
 **Failure Categories** (use in FAILS.md):
-- `[CRITICAL]` - Will definitely cause production failure
-- `[HIGH]` - Likely to cause failure under normal conditions
-- `[MEDIUM]` - Could cause failure under specific conditions
-- `[LOW]` - Minor issue, unlikely to cause failure
-- `[STYLE]` - Not a failure risk, but poor practice
+- `[CRITICAL]` - Flawed assumption will definitely cause production failure
+- `[HIGH]` - Logic error likely to cause failure under normal conditions
+- `[MEDIUM]` - Hidden edge case could cause failure under specific conditions
+- `[LOW]` - Minor logic issue, unlikely to cause failure
 
 **Assumption Labels**:
-- `[UNVERIFIED]` - Claim made without evidence
-- `[CONTRADICTS]` - Conflicts with other statement/code
-- `[OUTDATED]` - May no longer be accurate
-- `[INCOMPLETE]` - Missing critical details
+- `[UNVERIFIED]` - Assumption made without evidence
+- `[CONTRADICTS]` - Logic conflicts with other statement/code
+- `[OUTDATED]` - Assumption may no longer be valid
+- `[INCOMPLETE]` - Reasoning missing critical considerations
 
 ## FAILS.md Location
 
@@ -129,15 +146,13 @@ If unsure, check for existing `FAILS.md` or ask user.
 When called without specific document, review the entire conversation:
 
 1. **Re-read everything**: Conversation, code changes, logs, console output
-2. **Hunt for**:
-   - Unhandled error paths
-   - Silent failures (no logging, no user feedback)
-   - Race conditions and timing assumptions
-   - Missing null/undefined checks
-   - Hardcoded values that should be configurable
-   - TODOs and FIXMEs that were forgotten
-   - Promises without error handling
-   - API calls without timeout/retry logic
+2. **Hunt for flawed assumptions**:
+   - Assumptions about data shape or availability
+   - Assumptions about execution order or timing
+   - Assumptions about external system behavior
+   - Logic that works in happy path but fails on edge cases
+   - Contradictions between what was said and what was done
+   - Decisions based on incomplete information
 3. **Create/Update** `_PROBLEMS_REVIEW.md`:
    ```markdown
    # Problems Found - Devil's Advocate Review
