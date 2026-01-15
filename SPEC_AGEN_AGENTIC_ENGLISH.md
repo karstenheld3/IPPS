@@ -303,7 +303,17 @@ Determined during `[ASSESS]`, maps to semantic versioning:
 - **COMPLEXITY-MEDIUM** - Multiple files, some dependencies, backward compatible → minor version
 - **COMPLEXITY-HIGH** - Breaking changes, new patterns, external APIs, architecture → major version
 
+### Operation Modes
+
+Determines where implementation outputs are placed:
+
+- **IMPL-CODEBASE** - (default) Output to project source folders. For: SPEC, IMPL, TEST, [IMPLEMENT], HOTFIX, BUGFIX
+- **IMPL-ISOLATED** - Output to `[SESSION_FOLDER]/` only. For: [PROVE], POCs, prototypes, self-contained test scripts. Requires active session.
+
 ## Document History
+
+**[2026-01-15 23:48]**
+- Added: Operation Modes context states (IMPL-CODEBASE, IMPL-ISOLATED)
 
 **[2026-01-15 20:09]**
 - Added: [PRIME] - Load most relevant information into model context (Information Gathering)

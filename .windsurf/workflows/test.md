@@ -10,6 +10,7 @@ Implements [TEST] verb from EDIRD model.
 ## Required Skills
 
 - @ms-playwright-mcp for UI testing (SCOPE-UI only)
+- @write-documents for documenting problems and failures
 
 ## Context Branching
 
@@ -33,7 +34,7 @@ Test code against IMPL and TEST plans.
 2. [TEST] using existing test framework or temporary scripts
 3. For temporary scripts: prefix with `.tmp_` for cleanup
 4. [VERIFY] all test cases pass
-5. Document failures in PROBLEMS.md
+5. Document problems in PROBLEMS.md and failures in FAILS.md (see @write-documents)
 
 ### SCOPE-BUILD
 

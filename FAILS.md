@@ -1,5 +1,28 @@
 # Failure Log
 
+## 2026-01-15 - Wrong Folder Location for Isolated Implementation
+
+### [WARNING] `GLOB-FL-003` Created isolated implementation folder in workspace root instead of session folder
+
+- **When**: 2026-01-15 ~22:00 UTC+01:00
+- **Where**: `_2026-01-15_SpaceInvadersClone/` (workspace root)
+- **What**: `/solve` workflow (was `/new-task`) created a standalone HTML game file in workspace root instead of keeping it within the session folder or `_PrivateSessions/`
+- **Why it went wrong**:
+  - `/solve` did not distinguish between IMPL-CODEBASE and IMPL-ISOLATED modes
+  - Agent treated BUILD output as a separate "project" folder
+  - No guidance on where isolated implementations should be placed
+- **Evidence**:
+  - Folder created at `e:\Dev\IPPS\_2026-01-15_SpaceInvadersClone\`
+  - Should have been in `_PrivateSessions/_2026-01-15_SolveSpaceInvadersProblem/` or similar
+
+**Prevention rules**:
+1. Workflows MUST specify operation mode: IMPL-CODEBASE or IMPL-ISOLATED
+2. **IMPL-CODEBASE** (default): Implement in existing codebase - for SPEC, IMPL, TEST, [IMPLEMENT]
+3. **IMPL-ISOLATED**: Implement separately - for [PROVE], POCs, prototypes, self-contained test scripts
+   - Place in `[SESSION_FOLDER]/` or dedicated subfolder
+   - Existing code, configuration, or runtime MUST NOT be affected
+4. Never create top-level folders in workspace root for isolated implementations
+
 ## 2026-01-15 - Auto-Deploy to Linked Repos
 
 ### [WARNING] `GLOB-FL-002` Auto-deployed to linked repos without user confirmation

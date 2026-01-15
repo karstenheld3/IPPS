@@ -229,8 +229,8 @@ Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `
 - `workflows/deliver.md` - DELIVER phase
 - `workflows/critique.md` - Devil's Advocate review (replaces review-devilsadvocate.md)
 - `workflows/reconcile.md` - Pragmatic reconciliation (replaces review-pragmaticprogrammer.md)
-- `workflows/new-feature.md` - Start new feature with BUILD workflow
-- `workflows/new-task.md` - Start new task with SOLVE workflow
+- `workflows/build.md` - BUILD workflow entry point (was new-feature.md)
+- `workflows/solve.md` - SOLVE workflow entry point (was new-task.md)
 - `workflows/test.md` - Run tests based on scope
 
 **If a file is NOT on the deprecated list:** Do NOT delete it. It is a custom repo-specific file.

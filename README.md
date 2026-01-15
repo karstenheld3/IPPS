@@ -88,6 +88,10 @@ A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) w
 - `COMPLEXITY-MEDIUM` → minor version (multiple files, backward compatible)
 - `COMPLEXITY-HIGH` → major version (breaking changes, architecture)
 
+**Operation Modes**:
+- `IMPL-CODEBASE` (default) → Output to project source folders
+- `IMPL-ISOLATED` → Output to `[SESSION_FOLDER]/` only (for POCs, prototypes)
+
 **Example BUILD flow**:
 ```
 [EXPLORE] → [ASSESS] complexity → Gate check
@@ -126,44 +130,58 @@ Run `SETUP.md` in each skill folder to install required tools locally to `.tools
 ## Project Structure
 
 ```
-IPP/
+IPPS/
 ├── .tools/                       # Local tool installations (gitignored)
-│   ├── poppler/                  # PDF to image conversion
-│   ├── qpdf/                     # PDF manipulation
-│   ├── gs/                       # Ghostscript PDF compression
-│   ├── 7z/                       # Archive extraction
-│   └── gh/                       # GitHub CLI
-├── .windsurf/                    # Windsurf agent configuration (active)
-│   ├── rules/                    # Rules (copied from DevSystemVX for testing)
-│   ├── workflows/                # Workflows (copied from DevSystemVX)
-│   └── skills/                   # Skills (copied from DevSystemVX)
+├── .windsurf/                    # Active agent configuration (copied from DevSystemV3)
+│   ├── rules/
+│   ├── workflows/
+│   └── skills/
 ├── DevSystemV1/                  # Legacy (deprecated)
-├── DevSystemV2/                  # Previous version
-├── DevSystemV2.1/                # Current system
+├── DevSystemV2/                  # Legacy (deprecated)
+├── DevSystemV2.1/                # Legacy (deprecated)
+├── DevSystemV3/                  # Current system
 │   ├── rules/
 │   │   ├── core-conventions.md   # Text formatting, document structure
-│   │   ├── devsystem-core.md     # Workspace scenarios, folder structure
+│   │   ├── devsystem-core.md     # Workspace scenarios, folder structure, operation modes
 │   │   ├── devsystem-ids.md      # Document and item ID conventions
-│   │   └── workspace-rules.md    # Project-specific rules
+│   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions
+│   │   └── edird-core.md         # EDIRD phase model core rules
 │   ├── skills/
 │   │   ├── coding-conventions/   # Python, PowerShell style rules
+│   │   ├── edird-phase-model/    # Phase gates, flows, branching
 │   │   ├── git-conventions/      # Commit message format
-│   │   ├── github/               # GitHub CLI (SETUP.md, SKILL.md)
+│   │   ├── github/               # GitHub CLI operations
 │   │   ├── pdf-tools/            # PDF scripts and tools
 │   │   ├── session-management/   # Session templates
 │   │   └── write-documents/      # Spec, impl, test templates
 │   └── workflows/
-│       ├── commit.md             # Git commit workflow
-│       ├── go-autonomous.md      # Autonomous implementation
-│       ├── go-research.md        # Structured research
-│       ├── implement.md          # Implementation workflow
-│       ├── prime.md              # Context loading workflow
-│       ├── rename.md             # Global/local pattern replacement (NEW)
-│       ├── session-*.md          # Session management (init, save, resume, close, archive)
-│       ├── setup-pdftools.md     # PDF tools installation
+│       ├── build.md              # BUILD workflow entry point
+│       ├── solve.md              # SOLVE workflow entry point
+│       ├── next.md               # Universal task entry with compliance
+│       ├── explore.md            # EXPLORE phase
+│       ├── design.md             # DESIGN phase
+│       ├── implement.md          # IMPLEMENT phase
+│       ├── refine.md             # REFINE phase
+│       ├── deliver.md            # DELIVER phase
+│       ├── critique.md           # Devil's Advocate review
+│       ├── reconcile.md          # Pragmatic reconciliation
+│       ├── verify.md             # Verification against specs and rules
+│       ├── commit.md             # Git conventional commits
+│       ├── rename.md             # Global/local refactoring
 │       ├── sync.md               # Document synchronization
-│       ├── verify.md             # Verification workflow
-│       └── write-*.md            # Document creation (spec, impl-plan, test-plan)
+│       ├── test.md               # Run tests based on scope
+│       ├── prime.md              # Load workspace context
+│       ├── go-autonomous.md      # Full EDIRD autonomous loop
+│       ├── go-research.md        # Structured research
+│       ├── write-spec.md         # Create specification
+│       ├── write-impl-plan.md    # Create implementation plan
+│       ├── write-test-plan.md    # Create test plan
+│       ├── session-init.md       # Initialize session
+│       ├── session-save.md       # Save session progress
+│       ├── session-resume.md     # Resume session
+│       ├── session-close.md      # Close and sync session
+│       ├── session-archive.md    # Archive session folder
+│       └── setup-pdftools.md     # Install PDF tools
 └── README.md
 ```
 
@@ -196,6 +214,18 @@ The prime workflow:
 2. Finds and reads standard `.md` files (excluding `_` and `!` prefixed)
 3. Detects workspace scenario (project structure, version strategy, work mode)
 4. Reports summary: files read, scenario detected
+
+### Workflow Entry Points
+
+Start a BUILD workflow (create software, features):
+```
+/build "Add user authentication API"
+```
+
+Start a SOLVE workflow (research, analysis, decisions):
+```
+/solve "Evaluate database migration options"
+```
 
 ### Session Workflows
 
