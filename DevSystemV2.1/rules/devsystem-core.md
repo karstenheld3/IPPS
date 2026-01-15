@@ -45,6 +45,18 @@ Tracking documents exist at workspace, project, or session level. Only one of ea
 - **[PROGRESS]**: Progress tracking. Agent MUST read to avoid unintentional behavior
 - **[PROBLEMS]**: Problem tracking. Each session tracks issues in its own `PROBLEMS.md`. On `/session-close`, sync to project [PROBLEMS]
 
+### Placeholders
+
+- **[ACTOR]**: Decision-making entity (default: user, in /go-autonomous: agent)
+
+### Complexity Levels
+
+Maps to semantic versioning:
+
+- **COMPLEXITY-LOW**: Single file, clear scope, no dependencies → patch version
+- **COMPLEXITY-MEDIUM**: Multiple files, some dependencies, backward compatible → minor version
+- **COMPLEXITY-HIGH**: Breaking changes, new patterns, external APIs, architecture → major version
+
 ## Workspace Scenarios
 
 Three dimensions define how the agent should behave:
