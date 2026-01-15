@@ -2,13 +2,13 @@
 
 ## To Do
 
-- IS-08: Skills migration (add verb mappings)
 - IS-09-14: Testing and Deployment
 
 ## In Progress
 
 ## Done
 
+- IS-08: Added verb mappings to skills (`coding-conventions`, `git-conventions`, `write-documents`, `session-management`)
 - Batch 5-7: Added phase/verb mappings to `write-spec.md`, `write-impl-plan.md`, `write-test-plan.md`, `review-devilsadvocate.md`, `review-pragmaticprogrammer.md`, `verify.md`, `rename.md`, `sync.md`
 - Phase 4 Workflows: Created `explore.md`, `design.md`, `refine.md`, `deliver.md`
 - Updated: `next.md` (added [ASSESS]), `go-autonomous.md` (EDIRD cycle), `go-research.md` (SOLVE workflow)
