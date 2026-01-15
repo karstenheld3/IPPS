@@ -197,11 +197,11 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 
 - **[PROVE]** - POC (Proof of Concept), spike, minimal test to validate idea
 - **[PROTOTYPE]** - Build working draft to test approach at scale
-- **[VERIFY]** - Check against rules/specs
+- **[VERIFY]** - Check against formal rules, specs, and conventions (compliance)
 - **[TEST]** - Run automated tests
 - **[REVIEW]** - Inspect work (open-minded)
-- **[CRITIQUE]** - Find problems (devil's advocate)
-- **[RECONCILE]** - Bridge gap between ideal and feasible (pragmatic programmer)
+- **[CRITIQUE]** - Find flaws in logic, strategy, and goal alignment (disregards formal rules)
+- **[RECONCILE]** - Bridge gap between ideal and feasible, balance trade-offs (disregards formal rules)
 
 ### Documentation
 

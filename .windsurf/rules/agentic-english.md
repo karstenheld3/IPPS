@@ -75,11 +75,11 @@ No brackets for tokens in **conditions** - things the agent checks for branching
 
 - **[PROVE]** - POC, spike, minimal test to validate idea
 - **[PROTOTYPE]** - Build working draft to test approach
-- **[VERIFY]** - Check against rules/specs
+- **[VERIFY]** - Check against formal rules, specs, and conventions (compliance)
 - **[TEST]** - Run automated tests
 - **[REVIEW]** - Inspect work (open-minded)
-- **[CRITIQUE]** - Find problems (devil's advocate)
-- **[RECONCILE]** - Bridge gap between ideal and feasible
+- **[CRITIQUE]** - Find flaws in logic, strategy, and goal alignment (disregards formal rules)
+- **[RECONCILE]** - Bridge gap between ideal and feasible, balance trade-offs (disregards formal rules)
 
 ### Documentation
 

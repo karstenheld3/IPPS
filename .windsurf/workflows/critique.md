@@ -19,7 +19,8 @@ Implements [CRITIQUE] verb from EDIRD model.
 
 Invoke based on context:
 - @write-documents for document review (use REVIEW_TEMPLATE.md, FAILS_TEMPLATE.md)
-- @coding-conventions for code review
+
+**Note**: Code review against rules/conventions is done by `/verify`. This workflow focuses on logic, strategy, and goal alignment.
 
 ## Output Files
 
