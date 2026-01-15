@@ -20,6 +20,8 @@ phase: DESIGN
 2. [OUTLINE] high-level structure
 3. [WRITE-SPEC] specification document
 4. [PROVE] risky parts with POC (if COMPLEXITY-MEDIUM or higher)
+   - POC code goes in `[SESSION_FOLDER]/poc/` (IMPL-ISOLATED mode)
+   - NEVER place POC in workspace root or project source folders
 5. [DECOMPOSE] into small testable steps
 6. [WRITE-IMPL-PLAN] implementation plan
 7. [WRITE-TEST-PLAN] test plan

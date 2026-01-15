@@ -58,6 +58,22 @@ Maps to semantic versioning:
 - **COMPLEXITY-MEDIUM**: Multiple files, some dependencies, backward compatible → minor version
 - **COMPLEXITY-HIGH**: Breaking changes, new patterns, external APIs, architecture → major version
 
+### Operation Modes
+
+Determines where implementation outputs are placed:
+
+- **IMPL-CODEBASE** (default): Implement in existing codebase
+  - For: SPEC, IMPL, TEST, [IMPLEMENT], HOTFIX, BUGFIX
+  - Output: Project source folders (`src/`, etc.)
+  - Affects existing code, configuration, runtime
+
+- **IMPL-ISOLATED**: Implement separately from existing codebase
+  - For: [PROVE], POCs, prototypes, self-contained test scripts
+  - Output: `[SESSION_FOLDER]/` or `[SESSION_FOLDER]/poc/`
+  - Existing code/config/runtime MUST NOT be affected
+  - NEVER create folders in workspace root
+  - **REQUIRES SESSION**: If no session exists, run `/session-init` first
+
 ## Workspace Scenarios
 
 Three dimensions define how the agent should behave:

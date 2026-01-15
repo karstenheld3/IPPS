@@ -166,7 +166,7 @@ BUILD Workflow
 └─> [DESIGN] continued → [IMPLEMENT] → [REFINE] → [DELIVER]
 ```
 
-Note: Mini SOLVE can also be a POC with full INFO, SPEC, IMPL, TEST documents when the unknown requires validation.
+Note: Mini SOLVE and POC outputs go in `[SESSION_FOLDER]/poc/` (IMPL-ISOLATED mode). Never create folders in workspace root for isolated implementations.
 
 ### Switching Workflows
 

@@ -42,6 +42,12 @@ Run `/write-test-plan` → [WRITE-TEST-PLAN](IMPL)
 
 **Entry gate:** DESIGN→IMPLEMENT passed (IMPL plan exists)
 
+### Operation Mode Check
+
+Before implementing, verify operation mode from NOTES.md:
+- **IMPL-CODEBASE** → output to project source folders
+- **IMPL-ISOLATED** → output to `[SESSION_FOLDER]/` only, NEVER workspace root
+
 ### Verb Sequence
 
 1. For each step in IMPL plan:
