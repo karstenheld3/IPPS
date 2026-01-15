@@ -14,7 +14,9 @@
 - Agent can always determine next action from: current phase + workflow type + last verb outcome
 - [ACTOR] = Agent in autonomous mode, User in interactive mode
 - Execute verbs in listed order; re-check gate after each verb completion
-- Stuck detection: If no gate progress after 3 verb cycles, or 3 consecutive [FIX] attempts fail, [CONSULT] [ACTOR]
+- Retry limits: COMPLEXITY-LOW: infinite retries (until user stops). COMPLEXITY-MEDIUM/HIGH: max 5 attempts per phase, then [CONSULT] [ACTOR]
+- Small cycles: Break work into small verifiable steps. Run [IMPLEMENT]→[TEST]→[FIX]→green→next. Never implement large steps that can't be tested end-to-end
+- Phase tracking: NOTES.md has current phase (agent updates on transition), PROGRESS.md has full phase plan (phases with status: pending/in_progress/done)
 
 ## Table of Contents
 
@@ -49,7 +51,7 @@
 **What we don't want:**
 - Rigid waterfall - phases can overlap and iterate
 - One-size-fits-all - complexity determines which verbs apply
-- Bureaucracy for simple changes - COMPLEXITY-LOW skips heavy documentation
+- Bureaucracy for simple changes - COMPLEXITY-LOW uses shorter documents, not fewer
 - Code-only focus - SOLVE workflow handles research, writing, decisions
 
 ## 2. Context
@@ -152,6 +154,17 @@ This enables fully autonomous operation when [ACTOR] = Agent.
 
 **Assessment**: COMPLEXITY-LOW / COMPLEXITY-MEDIUM / COMPLEXITY-HIGH
 
+**Required Documents** (enables revisiting previous sessions):
+- `_INFO_*.md` - Research findings, options analysis (EXPLORE phase)
+- `_SPEC_*.md` - Technical specification (DESIGN phase)
+- `_IMPL_*.md` - Implementation plan (DESIGN phase)
+- `_TEST_*.md` - Test plan (DESIGN phase)
+
+**Complexity determines document depth, not document count:**
+- COMPLEXITY-LOW: Concise docs (1-2 pages each)
+- COMPLEXITY-MEDIUM: Standard docs (full sections)
+- COMPLEXITY-HIGH: Comprehensive docs (detailed analysis, edge cases)
+
 ### SOLVE
 
 **Purpose**: Explore problems, evaluate ideas, create knowledge, make decisions
@@ -176,6 +189,19 @@ This enables fully autonomous operation when [ACTOR] = Agent.
 
 **Note**: HOTFIX/BUGFIX are SOLVE because primary focus is understanding the problem; code fix is secondary output.
 
+### Session Tracking Files
+
+Both BUILD and SOLVE workflows use session tracking files:
+
+- **NOTES.md** - Key decisions, constraints, agent instructions, topic registry
+- **PROGRESS.md** - To Do, In Progress, Done items for current session
+- **PROBLEMS.md** - Issues discovered during session (sync to project on close)
+
+These files enable:
+- Resuming work after interruption
+- Understanding original intent when revisiting
+- Tracking what was tried and what worked
+
 ## 6. Phase Definitions
 
 ### [EXPLORE]
@@ -194,7 +220,8 @@ This enables fully autonomous operation when [ACTOR] = Agent.
 - **SOLVE**: Structure, methodology, outline, criteria
 - **Entry**: Gate EXPLORE→DESIGN passed
 - **Exit**: Gate DESIGN→IMPLEMENT passes
-- **Verbs**: [PLAN], [OUTLINE], [FRAME], [PROVE], [WRITE-SPEC], [WRITE-IMPL], [PROPOSE], [VALIDATE]
+- **Verbs**: [PLAN], [OUTLINE], [FRAME], [PROVE], [DECOMPOSE], [WRITE-SPEC], [WRITE-IMPL], [PROPOSE], [VALIDATE]
+- **All BUILD**: Must [DECOMPOSE] plan into small testable steps before [IMPLEMENT]
 
 ### [IMPLEMENT]
 
@@ -229,69 +256,44 @@ Gates are checklists that must pass before transitioning. Agent evaluates gates 
 
 ### EXPLORE → DESIGN
 
-```
-┌─ Gate: EXPLORE → DESIGN ─────────────────────────────────────────────┐
-│                                                                       │
-│  [ ] Problem or goal clearly understood                               │
-│  [ ] Workflow type determined (BUILD or SOLVE)                        │
-│  [ ] Assessment complete:                                             │
-│      - BUILD: COMPLEXITY-LOW/MEDIUM/HIGH                              │
-│      - SOLVE: PROBLEM-TYPE identified                                 │
-│  [ ] Scope boundaries defined                                         │
-│  [ ] No blocking unknowns requiring [ACTOR] input                     │
-│                                                                       │
-│  If any unchecked → remain in [EXPLORE], execute next verb            │
-│  If all checked → proceed to [DESIGN]                                 │
-└───────────────────────────────────────────────────────────────────────┘
-```
+- [ ] Problem or goal clearly understood
+- [ ] Workflow type determined (BUILD or SOLVE)
+- [ ] Assessment complete (BUILD: COMPLEXITY | SOLVE: PROBLEM-TYPE)
+- [ ] Scope boundaries defined
+- [ ] No blocking unknowns requiring [ACTOR] input
+
+**Pass**: proceed to [DESIGN] | **Fail**: remain in [EXPLORE]
 
 ### DESIGN → IMPLEMENT
 
-```
-┌─ Gate: DESIGN → IMPLEMENT ───────────────────────────────────────────┐
-│                                                                       │
-│  [ ] Approach documented (outline, spec, or plan)                     │
-│  [ ] Risky parts proven via POC (if COMPLEXITY-HIGH)                  │
-│  [ ] No open questions requiring [ACTOR] decision                     │
-│  [ ] For BUILD MEDIUM+: Test strategy defined                         │
-│  [ ] For SOLVE: Structure/criteria validated                          │
-│                                                                       │
-│  If any unchecked → remain in [DESIGN], execute next verb             │
-│  If all checked → proceed to [IMPLEMENT]                              │
-└───────────────────────────────────────────────────────────────────────┘
-```
+- [ ] Approach documented (outline, spec, or plan)
+- [ ] Risky parts proven via POC (if COMPLEXITY-HIGH)
+- [ ] No open questions requiring [ACTOR] decision
+- [ ] For BUILD: SPEC, IMPL, TEST documents created
+- [ ] For BUILD: Plan decomposed into small testable steps
+- [ ] For SOLVE: Structure/criteria validated
+
+**Pass**: proceed to [IMPLEMENT] | **Fail**: remain in [DESIGN]
 
 ### IMPLEMENT → REFINE
 
-```
-┌─ Gate: IMPLEMENT → REFINE ───────────────────────────────────────────┐
-│                                                                       │
-│  [ ] Core work complete (code written / document drafted)             │
-│  [ ] For BUILD: Tests pass                                            │
-│  [ ] For BUILD: No TODO/FIXME left unaddressed                        │
-│  [ ] For SOLVE: All sections drafted                                  │
-│  [ ] Progress committed/saved                                         │
-│                                                                       │
-│  If any unchecked → remain in [IMPLEMENT], execute next verb          │
-│  If all checked → proceed to [REFINE]                                 │
-└───────────────────────────────────────────────────────────────────────┘
-```
+- [ ] Core work complete (code written / document drafted)
+- [ ] For BUILD: Tests pass
+- [ ] For BUILD: No TODO/FIXME left unaddressed
+- [ ] For SOLVE: All sections drafted
+- [ ] Progress committed/saved
+
+**Pass**: proceed to [REFINE] | **Fail**: remain in [IMPLEMENT]
 
 ### REFINE → DELIVER
 
-```
-┌─ Gate: REFINE → DELIVER ─────────────────────────────────────────────┐
-│                                                                       │
-│  [ ] Self-review complete                                             │
-│  [ ] Verification against spec/rules passed                           │
-│  [ ] For BUILD COMPLEXITY-HIGH: Critique and reconcile complete       │
-│  [ ] For SOLVE: Claims verified, arguments strengthened               │
-│  [ ] All found issues fixed                                           │
-│                                                                       │
-│  If any unchecked → remain in [REFINE], execute next verb             │
-│  If all checked → proceed to [DELIVER]                                │
-└───────────────────────────────────────────────────────────────────────┘
-```
+- [ ] Self-review complete
+- [ ] Verification against spec/rules passed
+- [ ] For BUILD COMPLEXITY-HIGH: Critique and reconcile complete
+- [ ] For SOLVE: Claims verified, arguments strengthened
+- [ ] All found issues fixed
+
+**Pass**: proceed to [DELIVER] | **Fail**: remain in [REFINE]
 
 ## 8. Verb Mapping
 
@@ -310,12 +312,13 @@ Gates are checklists that must pass before transitioning. Agent evaluates gates 
 [DESIGN]
 ├─> [PLAN] structured approach
 ├─> [OUTLINE] high-level structure (all)
-├─> [WRITE-SPEC] specification (MEDIUM+)
+├─> [WRITE-SPEC] specification (all)
 ├─> [PROVE] risky parts with POC (HIGH)
+├─> [DECOMPOSE] into small testable steps (all)
 ├─> [PROPOSE] options to [ACTOR] (HIGH)
 ├─> [VALIDATE] design with [ACTOR]
-├─> [WRITE-IMPL] implementation plan (MEDIUM+)
-└─> [WRITE-TEST] test plan (HIGH)
+├─> [WRITE-IMPL] implementation plan (all)
+└─> [WRITE-TEST] test plan (all)
 
 [IMPLEMENT]
 ├─> [IMPLEMENT] code changes
@@ -403,30 +406,15 @@ Gates are checklists that must pass before transitioning. Agent evaluates gates 
 
 The agent determines the next action using this decision tree:
 
-```
-┌─ NEXT ACTION DECISION TREE ──────────────────────────────────────────┐
-│                                                                       │
-│  1. What is current phase?                                            │
-│     └─> Check phase gate                                              │
-│                                                                       │
-│  2. Does gate pass?                                                   │
-│     ├─> YES: Transition to next phase, start first verb               │
-│     └─> NO: What gate item is unchecked?                              │
-│         └─> Execute verb that addresses unchecked item                │
-│                                                                       │
-│  3. What was last verb outcome?                                       │
-│     ├─> -OK: Proceed to next verb in phase                            │
-│     ├─> -FAIL: Handle based on verb (see transitions below)           │
-│     └─> -SKIP: Proceed to next verb (complexity didn't require it)    │
-│                                                                       │
-│  4. No more verbs in phase?                                           │
-│     └─> Re-evaluate gate                                              │
-│                                                                       │
-│  5. In [DELIVER] and all done?                                        │
-│     └─> [CLOSE] and [ARCHIVE] if session-based                        │
-│                                                                       │
-└───────────────────────────────────────────────────────────────────────┘
-```
+1. **Check phase gate** → Does it pass?
+   - YES → Transition to next phase, start first verb
+   - NO → Execute verb that addresses unchecked item
+2. **Last verb outcome?**
+   - -OK → Proceed to next verb in phase
+   - -FAIL → Handle based on verb (see transitions below)
+   - -SKIP → Proceed to next verb
+3. **No more verbs?** → Re-evaluate gate
+4. **In [DELIVER] and done?** → [CLOSE] and [ARCHIVE] if session-based
 
 ### Verb Outcome Transitions
 
@@ -703,6 +691,8 @@ Building requires investigation mid-workflow:
 
 **Example**: While designing auth system, need to research OAuth providers → mini SOLVE (RESEARCH) → return to BUILD with findings
 
+**Note**: Mini SOLVE can also be a POC with full INFO, SPEC, IMPL, TEST documents when the unknown requires validation before continuing the parent BUILD workflow.
+
 ### Switching Workflows
 
 Agent can switch workflows if assessment changes:
@@ -792,37 +782,56 @@ Context states (no brackets) used for branching:
 
 ## 14. Design Decisions
 
-**EDIRD-DD-01:** Unified model for BUILD and SOLVE. Rationale: Same phases apply to any intellectual work; verb selection adapts to context.
-
-**EDIRD-DD-02:** Gates enable autonomous operation. Rationale: Agent can always determine if phase is complete by evaluating gate checklist.
-
-**EDIRD-DD-03:** Next action is deterministic. Rationale: Given current state (phase, workflow, last outcome, gate status), exactly one action is correct.
-
-**EDIRD-DD-04:** Verb failures have defined handlers. Rationale: Agent knows how to recover from any failure without [ACTOR] intervention (unless [CONSULT] required).
-
-**EDIRD-DD-05:** Complexity/problem-type assessed in EXPLORE. Rationale: Early assessment determines verb depth for entire workflow.
-
-**EDIRD-DD-06:** SOLVE includes code-related problem types. Rationale: HOTFIX/BUGFIX start with problem investigation (SOLVE) before any code changes.
-
-**EDIRD-DD-07:** Five-phase model (E-D-I-R-D). Rationale: Balances granularity with simplicity. Covers exploration, planning, execution, refinement, and delivery.
-
-**EDIRD-DD-08:** Complexity determines verb application, not phase skipping. Rationale: All phases execute, but with different depth. COMPLEXITY-LOW still has DESIGN phase, just with `[OUTLINE]` instead of `[SPEC]`.
+- **EDIRD-DD-01:** Unified model for BUILD and SOLVE. Rationale: Same phases apply to any intellectual work; verb selection adapts to context
+- **EDIRD-DD-02:** Gates enable autonomous operation. Rationale: Agent can always determine if phase is complete by evaluating gate checklist
+- **EDIRD-DD-03:** Next action is deterministic. Rationale: Given current state (phase, workflow, last outcome, gate status), exactly one action is correct
+- **EDIRD-DD-04:** Verb failures have defined handlers. Rationale: Agent knows how to recover from any failure without [ACTOR] intervention (unless [CONSULT] required)
+- **EDIRD-DD-05:** Complexity/problem-type assessed in EXPLORE. Rationale: Early assessment determines verb depth for entire workflow
+- **EDIRD-DD-06:** SOLVE includes code-related problem types. Rationale: HOTFIX/BUGFIX start with problem investigation (SOLVE) before any code changes
+- **EDIRD-DD-07:** Five-phase model (E-D-I-R-D). Rationale: Balances granularity with simplicity. Covers exploration, planning, execution, refinement, and delivery
+- **EDIRD-DD-08:** Complexity determines document depth, not document count. Rationale: All complexities produce SPEC, IMPL, TEST documents. COMPLEXITY-LOW documents are concise; COMPLEXITY-HIGH documents are comprehensive
 
 ## 15. Implementation Guarantees
 
-**EDIRD-IG-01:** Phase names are stable vocabulary - EXPLORE, DESIGN, IMPLEMENT, REFINE, DELIVER will not change.
-
-**EDIRD-IG-02:** Complexity levels map to semantic versioning - LOW=patch, MEDIUM=minor, HIGH=major.
-
-**EDIRD-IG-03:** All workflows start with EXPLORE phase containing `[ASSESS]` verb.
-
-**EDIRD-IG-04:** Gate failures loop back within current phase, not to previous phases. Verb failures (e.g., `[PROVE]-FAIL`) may trigger iteration to earlier phases.
-
-**EDIRD-IG-05:** Workflow type (BUILD/SOLVE) is determined in EXPLORE and persists for entire workflow unless explicitly switched with [ACTOR] confirmation.
-
-**EDIRD-IG-06:** Every verb outcome (-OK, -FAIL, -SKIP) has a defined handler - agent never gets stuck without knowing next action.
+- **EDIRD-IG-01:** Phase names are stable vocabulary - EXPLORE, DESIGN, IMPLEMENT, REFINE, DELIVER will not change
+- **EDIRD-IG-02:** Complexity levels map to semantic versioning - LOW=patch, MEDIUM=minor, HIGH=major
+- **EDIRD-IG-03:** All workflows start with EXPLORE phase containing `[ASSESS]` verb
+- **EDIRD-IG-04:** Gate failures loop back within current phase, not to previous phases. Verb failures (e.g., `[PROVE]-FAIL`) may trigger iteration to earlier phases
+- **EDIRD-IG-05:** Workflow type (BUILD/SOLVE) is determined in EXPLORE and persists for entire workflow unless explicitly switched with [ACTOR] confirmation
+- **EDIRD-IG-06:** Every verb outcome (-OK, -FAIL, -SKIP) has a defined handler - agent never gets stuck without knowing next action
+- **EDIRD-IG-07:** Implementation uses small verifiable cycles: [IMPLEMENT]→[TEST]→[FIX]→green→next. Plans must be broken into steps that can be tested end-to-end. Large monolithic implementations are prohibited
+- **EDIRD-IG-08:** Agent always knows full phase plan. PROGRESS.md maintains all 5 phases with status (pending/in_progress/done). Agent reads this on session resume.
+- **EDIRD-IG-09:** Agent always knows all gates. Gate summaries in edird-core.md rule (always-on). Full gate checklists in @edird-phase-model skill, invoked for [PLAN] and [DECOMPOSE].
 
 ## 16. Document History
+
+**[2026-01-15 20:34]**
+- Added: EDIRD-IG-08 - Agent always knows full phase plan (PROGRESS.md)
+- Added: EDIRD-IG-09 - Agent always knows all gates (edird-core.md summaries + skill for full checklists)
+
+**[2026-01-15 20:30]**
+- Changed: Retry limits - COMPLEXITY-LOW: infinite (until user stops), MEDIUM/HIGH: max 5 per phase
+- Added: Phase tracking rule - Agent updates NOTES.md on transition, user adds notes between phases
+- Removed: Old "3 verb cycles or 3 [FIX] attempts" stuck detection (replaced by complexity-based limits)
+
+**[2026-01-15 19:56]**
+- Changed: SPEC, IMPL, TEST documents required for ALL complexities (not just MEDIUM+)
+- Changed: [DECOMPOSE] required for ALL BUILD workflows (not just MEDIUM+)
+- Changed: Complexity determines document depth, not document count
+
+**[2026-01-15 19:53]**
+- Added: [DECOMPOSE] verb to DESIGN phase
+- Added: Gate requirement for decomposed plan
+- Cross-ref: [DECOMPOSE] added to AGEN-SP01
+
+**[2026-01-15 19:47]**
+- Added: Small cycles requirement to MUST-NOT-FORGET
+- Added: EDIRD-IG-07 for small verifiable implementation cycles
+
+**[2026-01-15 19:42]**
+- Added: Required Documents for BUILD workflows (INFO, SPEC, IMPL, TEST)
+- Added: Complexity-based document depth requirements
+- Added: Session Tracking Files section (NOTES, PROGRESS, PROBLEMS)
 
 **[2026-01-15 19:35]**
 - Added: Stuck detection rule to MUST-NOT-FORGET (3 verb cycles or 3 [FIX] attempts)
