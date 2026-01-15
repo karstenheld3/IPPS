@@ -33,7 +33,7 @@ Test code against IMPL and TEST plans.
 2. [TEST] using existing test framework or temporary scripts
 3. For temporary scripts: prefix with `.tmp_` for cleanup
 4. [VERIFY] all test cases pass
-5. Document failures in PROBLEMS.md
+5. Document problems in PROBLEMS.md and failures in FAILS.md
 
 ### SCOPE-BUILD
 
