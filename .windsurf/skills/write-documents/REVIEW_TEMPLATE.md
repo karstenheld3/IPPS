@@ -80,31 +80,16 @@
 - [ ] [Action item]
 - [ ] [Action item]
 
-## Issue Categories
+## Reference
 
-- `[CRITICAL]` - Flawed assumption will cause production failure
-- `[HIGH]` - Logic error likely to cause failure under normal conditions
-- `[MEDIUM]` - Edge case could cause failure under specific conditions
-- `[LOW]` - Minor issue, unlikely to cause failure
+**Categories and Labels**: See FAILS_TEMPLATE.md for severity categories and assumption labels.
 
-## Assumption Labels
-
-- `[UNVERIFIED]` - Assumption made without evidence
-- `[CONTRADICTS]` - Logic conflicts with other statement/code
-- `[OUTDATED]` - Assumption may no longer be valid
-- `[INCOMPLETE]` - Reasoning missing critical considerations
-
-## File Naming
-
+**File Naming**:
 - Document review: `_INFO_CRAWLER_REVIEW.md`, `_SPEC_AUTH_REVIEW.md`
 - Code review: `auth_handler_REVIEW.md`
 - Conversation review: `_PROBLEMS_REVIEW.md`
 
-## Management Rules
-
-- Create fresh each review
-- Can be discarded after issues addressed
-- Link from FAILS.md for issues that became actual failures
+**Management**: Create fresh each review. Can be discarded after issues addressed.
 
 ## Document History
 

@@ -88,62 +88,9 @@ Invoke based on context:
 - **Be specific** - Vague concerns are useless. Cite line numbers, exact scenarios
 - **Prioritize by impact** - Critical logic flaws first
 
-**Failure Categories** (use in FAILS.md):
-- `[CRITICAL]` - Flawed assumption will definitely cause production failure
-- `[HIGH]` - Logic error likely to cause failure under normal conditions
-- `[MEDIUM]` - Hidden edge case could cause failure under specific conditions
-- `[LOW]` - Minor logic issue, unlikely to cause failure
+**Categories and Labels**: See FAILS_TEMPLATE.md and REVIEW_TEMPLATE.md in @write-documents skill.
 
-**Assumption Labels**:
-- `[UNVERIFIED]` - Assumption made without evidence
-- `[CONTRADICTS]` - Logic conflicts with other statement/code
-- `[OUTDATED]` - Assumption may no longer be valid
-- `[INCOMPLETE]` - Reasoning missing critical considerations
-
-## FAILS.md Location
-
-Location depends on Work Mode and Project Structure:
-
-- **SESSION-BASED**: `[SESSION_FOLDER]/FAILS.md`
-- **PROJECT-WIDE + SINGLE-PROJECT**: `[WORKSPACE_FOLDER]/FAILS.md`
-- **PROJECT-WIDE + MONOREPO**: `[PROJECT_FOLDER]/FAILS.md`
-
-If unsure, check for existing `FAILS.md` or ask user.
-
-**IMPORTANT**: This file should be included in `/prime` workflow to ensure lessons learned are loaded at conversation start.
-
-## FAILS.md Management
-
-**Format**:
-```markdown
-# Failure Log
-
-## [DATE] - [Context/Topic]
-
-### [CRITICAL] `TOPIC-FL-001` Issue Title
-- **When**: [YYYY-MM-DD HH:MM]
-- **Where**: File/function/line or document section
-- **What**: Exact problem description
-- **Why it went wrong**: Concrete failure scenario
-- **Evidence**: Link, test, or example proving the risk
-- **Suggested fix** or **Applied fix**: Brief recommendation or actual fix applied
-- **Code example** (if applicable):
-  ```
-  // Before (wrong)
-  ...
-  // After (correct)
-  ...
-  ```
-
-### [HIGH] `TOPIC-FL-002` Another Issue
-...
-```
-
-**Rules**:
-- Group by date and context
-- Most recent at top
-- Link to `_REVIEW` files containing detailed suggestions
-- Never delete entries - mark as `[RESOLVED]` with date and solution
+**FAILS.md Location and Format**: See FAILS_TEMPLATE.md in @write-documents skill.
 
 ## Research Phase
 
@@ -179,23 +126,7 @@ For each topic:
 
 ### Adding Research to Review
 
-In the `_REVIEW.md` file, add a section:
-
-```markdown
-## Industry Research Findings
-
-### [Topic 1]
-- **Pattern found**: [Description]
-- **How it applies**: [Connection to reviewed code/doc]
-- **Source**: [URL or reference]
-
-### [Topic 2]
-...
-
-### Alternatives Considered
-- **[Alternative A]**: [Pros/cons vs current approach]
-- **[Alternative B]**: [Pros/cons vs current approach]
-```
+Add "Industry Research Findings" section to `_REVIEW.md` - see REVIEW_TEMPLATE.md for format.
 
 ## Context-Specific Sections
 
