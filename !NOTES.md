@@ -20,6 +20,8 @@ Automatically push commits to GitHub.
 
 **`deploy-to-all-repos.md`** - Deploys DevSystem files to all linked repos. Located in workspace root (not `.windsurf/workflows/`) to prevent it from being copied to other repos. Run manually by reading the file and following the instructions.
 
+**CRITICAL: NEVER auto-deploy to [LINKED_REPOS]**. Always ask user before deploying to linked repos. Deployment to linked repos is a separate, explicit action.
+
 **[LINKED_REPOS]**:
 - e:\Dev\KarstensWorkspace
   - Overwrite everything

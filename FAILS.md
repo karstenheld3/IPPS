@@ -1,5 +1,22 @@
 # Failure Log
 
+## 2026-01-15 - Auto-Deploy to Linked Repos
+
+### [WARNING] `GLOB-FL-002` Auto-deployed to linked repos without user confirmation
+
+- **When**: 2026-01-15 21:30 UTC+01:00
+- **Where**: 4 linked repos (KarstensWorkspace, OpenAI-BackendTools, PRXL, SharePoint-GPT-Middleware)
+- **What**: Cascade auto-deployed DevSystemV3 changes to linked repos during session
+- **Why it went wrong**:
+  - Linked repos deployment should always be a manual step
+  - User should explicitly request deployment to other repos
+  - Changes to linked repos affect multiple projects
+
+**Prevention rules**:
+1. NEVER auto-deploy to [LINKED_REPOS] - always ask user first
+2. Use `/deploy-to-all-repos` workflow only when user explicitly requests
+3. Deployment to linked repos is a separate action from committing to IPPS
+
 ## 2026-01-15 - Skill File Deletion
 
 ### [CRITICAL] `GLOB-FL-001` Unauthorized deletion of ms-playwright-mcp skill
