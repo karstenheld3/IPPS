@@ -16,6 +16,7 @@ This skill implements:
 - [WRITE-TEST-PLAN] - Create TEST documents (use TEST_TEMPLATE.md)
 - [WRITE-FIX] - Create FIX documents (use FIXES_TEMPLATE.md)
 - [WRITE-FAIL] - Create/update FAILS.md (use FAILS_TEMPLATE.md)
+- [WRITE-REVIEW] - Create _REVIEW.md documents (use REVIEW_TEMPLATE.md)
 
 **Phases**: EXPLORE (INFO), DESIGN (SPEC, IMPL, TEST)
 
@@ -47,6 +48,7 @@ You MUST read the appropriate template before creating documents:
 - `TEST_TEMPLATE.md` - Test plans
 - `FIXES_TEMPLATE.md` - Fix tracking documents
 - `FAILS_TEMPLATE.md` - Failure log (lessons learned)
+- `REVIEW_TEMPLATE.md` - Review documents (_REVIEW.md)
 
 ## Usage
 

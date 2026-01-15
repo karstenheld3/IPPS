@@ -18,7 +18,7 @@ Implements [CRITIQUE] verb from EDIRD model.
 ## Required Skills
 
 Invoke based on context:
-- @write-documents for document review and FAILS.md (use FAILS_TEMPLATE.md)
+- @write-documents for document review (use REVIEW_TEMPLATE.md, FAILS_TEMPLATE.md)
 - @coding-conventions for code review
 
 ## Output Files

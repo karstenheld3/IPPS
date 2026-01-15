@@ -15,7 +15,7 @@ Implements [RECONCILE] verb from EDIRD model.
 ## Required Skills
 
 Invoke based on context:
-- @write-documents for document improvements and reading FAILS.md (use FAILS_TEMPLATE.md)
+- @write-documents for reading FAILS.md and _REVIEW.md (use FAILS_TEMPLATE.md, REVIEW_TEMPLATE.md)
 - @coding-conventions for code improvements
 
 ## Input Files
