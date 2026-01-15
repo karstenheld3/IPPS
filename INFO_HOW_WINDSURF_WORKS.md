@@ -1,19 +1,34 @@
-# How Windsurf Works
+# INFO: How Windsurf Works
+
+**Doc ID**: WSRF-IN01
+**Goal**: Document Windsurf IDE features, configuration, and Cascade AI assistant for cross-agent compatibility reference
+
+## Summary
+
+Key findings for cross-agent compatibility:
+- Windsurf uses `.windsurf/rules/*.md` for instructions (always-on or trigger-based) [VERIFIED]
+- Workflows stored in `.windsurf/workflows/*.md`, invoked as `/workflow-name` [VERIFIED]
+- Skills in `.windsurf/skills/<name>/SKILL.md` using Agent Skills format [VERIFIED]
+- Cascade settings in protobuf binary (`user_settings.pb`), not editable by hand [TESTED]
+- MCP config in `~/.codeium/windsurf/mcp_config.json` [VERIFIED]
+- Hooks in `.windsurf/hooks.json` or `~/.codeium/windsurf/hooks.json` [VERIFIED]
+- Memories auto-generated during conversation, workspace-scoped [VERIFIED]
 
 ## Table of Contents
 
 1. [Overview](#overview)
 2. [Directory Structure](#directory-structure)
-3. [Settings Storage](#settings-storage)
-4. [Cascade AI Assistant](#cascade-ai-assistant)
-5. [Cascade Hooks](#cascade-hooks)
-6. [MCP Integration](#mcp-integration)
-7. [Workflows and Rules](#workflows-and-rules)
-8. [Skills](#skills)
-9. [Terminal Features](#terminal-features)
-10. [Other Features](#other-features)
-11. [Key Files Reference](#key-files-reference)
-12. [Sources](#sources)
+3. [Settings and Configuration](#settings-storage)
+4. [AI Assistant Features](#cascade-ai-assistant)
+5. [Memory and Instructions](#workflows-and-rules)
+6. [Commands and Workflows](#workflows-and-rules)
+7. [Skills](#skills)
+8. [Hooks](#cascade-hooks)
+9. [MCP Integration](#mcp-integration)
+10. [Terminal and CLI](#terminal-features)
+11. [Other Features](#other-features)
+12. [Key Files Reference](#key-files-reference)
+13. [Sources](#sources)
 
 ## Overview
 

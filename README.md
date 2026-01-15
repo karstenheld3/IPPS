@@ -2,6 +2,19 @@
 
 A development system for AI-assisted coding workflows, optimized for Windsurf IDE on Windows x64.
 
+## Table of Contents
+
+- [Overview](#overview)
+- [How to Add to Your Project](#how-to-add-to-your-project)
+- [DevSystem Versions](#devsystem-versions)
+- [Key Conventions](#key-conventions)
+- [Agent Tools](#agent-tools-installed-automatically-by-skill)
+- [Project Structure](#project-structure)
+- [Skills](#skills)
+- [File Naming Conventions](#file-naming-conventions)
+- [Usage Examples](#usage-examples)
+- [Agent Compatibility](#agent-compatibility)
+
 ## Overview
 
 IPP provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The system manages sessions, documents, commits, and tool installations.
@@ -124,6 +137,14 @@ IPP/
 - **session-management** - Session init, save, resume, close workflows
 - **write-documents** - Spec, impl, test, info document templates
 
+## File Naming Conventions
+
+IPPS uses special prefixes to control how files are processed:
+
+- **`!` prefix** - Priority files (e.g., `!NOTES.md`). Read first during `/prime`. Contains critical project information.
+- **`_` prefix** - Ignored by automatic workflows (e.g., `_SPEC_*.md`, `_PrivateSessions/`). Used for session-specific, WIP, or archived content.
+- **`.` prefix** - Hidden files following Unix convention (e.g., `.windsurf/`, `.gitignore`).
+
 ## Usage Examples
 
 ### Prime Context
@@ -132,7 +153,12 @@ Load workspace context before starting work:
 ```
 /prime
 ```
-This reads priority docs (`!*.md`), rules, and session files to understand the project.
+
+The prime workflow:
+1. Finds and reads all `!*.md` files (priority documentation)
+2. Finds and reads standard `.md` files (excluding `_` and `!` prefixed)
+3. Detects workspace scenario (project structure, version strategy, work mode)
+4. Reports summary: files read, scenario detected
 
 ### Session Workflows
 
@@ -202,3 +228,74 @@ Creates `_TEST_*.md` from spec.
 ```
 /commit
 ```
+
+## Agent Compatibility
+
+IPPS concepts map to other AI coding agents with different folder structures:
+
+### Claude Code
+
+- **Rules**: `CLAUDE.md` in repo root (or `~/.claude/CLAUDE.md` for global)
+- **Commands**: `.claude/commands/*.md` (invoked as `/project:command-name`)
+- **Skills**: `.claude/skills/<name>/SKILL.md`
+- **MCP Config**: `.mcp.json` in repo root
+
+```
+your-project/
+├── CLAUDE.md              # Rules (auto-loaded)
+├── .claude/
+│   ├── commands/          # Slash commands
+│   │   └── fix-issue.md   # -> /project:fix-issue
+│   └── skills/
+│       └── my-skill/
+│           └── SKILL.md   # Agent skill
+└── .mcp.json              # MCP servers
+```
+
+### OpenAI Codex CLI
+
+- **Rules**: `AGENTS.md` in repo root (or `~/.codex/AGENTS.md` for global)
+- **Override**: `AGENTS.override.md` takes precedence over `AGENTS.md`
+- **Commands**: Not supported (use inline prompts)
+- **Skills**: Not supported natively
+
+```
+your-project/
+├── AGENTS.md              # Project instructions
+├── services/
+│   └── payments/
+│       └── AGENTS.override.md   # Directory-specific override
+```
+
+### GitHub Copilot
+
+- **Rules**: `.github/copilot-instructions.md` (repository-wide)
+- **Path-specific**: `.github/instructions/*.instructions.md` with `applyTo` glob
+- **Prompt files**: `.github/prompts/*.prompt.md` (reusable prompts)
+- **Commands/Skills**: Not supported
+
+```
+your-project/
+├── .github/
+│   ├── copilot-instructions.md        # Repository-wide rules
+│   ├── instructions/
+│   │   ├── python.instructions.md     # applyTo: "**/*.py"
+│   │   └── tests.instructions.md      # applyTo: "**/test_*.py"
+│   └── prompts/
+│       └── review.prompt.md           # Reusable prompt
+```
+
+### Feature Comparison
+
+- **Windsurf**: Rules + Workflows + Skills + MCP
+- **Claude Code**: CLAUDE.md + Commands + Skills + MCP
+- **Codex CLI**: AGENTS.md only (hierarchical, directory-scoped)
+- **Copilot**: Instructions + Path patterns + Prompt files
+
+### Deploying DevSystem Files
+
+To use IPPS with other agents, copy relevant content:
+
+- **Claude Code**: Copy `.windsurf/rules/` content to `CLAUDE.md`, workflows to `.claude/commands/`
+- **Codex CLI**: Merge rules into `AGENTS.md` (no workflow/skill support)
+- **Copilot**: Copy rules to `.github/copilot-instructions.md` (no workflow/skill support)
