@@ -33,10 +33,9 @@ Apply to ALL document types and contexts:
   - BAD: Sharepoint -> GOOD: SharePoint
   - BAD: AI Foundry Remote SharePoint -> GOOD: "SharePoint tool" for Azure AI Foundry Agent Service
 - Check for Document Rule Exceptions (tables, emojis):
-  - If document uses Markdown tables: verify `<MarkdownTablesAllowed enabled=true />` tag exists on first line
-  - If document uses emojis: verify `<EmojisAllowed enabled=true />` tag exists on first line
+  - If document uses Markdown tables or emojis: verify `<DevSystem ... />` tag exists on first line
+  - Tag format: `<DevSystem MarkdownTablesAllowed=true EmojisAllowed=true />`
   - Only allowed emojis: ✅ (yes/pass), ❌ (no/fail), ⚠️ (warning)
-  - Tag format: `<DevSystem><Rules>...</Rules></DevSystem>`
 
 ## Verification Labels
 

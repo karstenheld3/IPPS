@@ -1,4 +1,4 @@
-<DevSystem><Rules><MarkdownTablesAllowed enabled=true /><EmojisAllowed enabled=true /></Rules></DevSystem>
+<DevSystem MarkdownTablesAllowed=true EmojisAllowed=true />
 
 # INFO: AI Coding Agent Comparison
 

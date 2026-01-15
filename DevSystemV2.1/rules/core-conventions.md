@@ -66,16 +66,16 @@ Always at document end, reverse chronological order:
 
 ## Document Rule Exceptions
 
-Documents may opt-in to use Markdown tables or emojis by adding a DevSystem HTML tag as the **first line** of the document (before the title).
+Documents may opt-in to use Markdown tables or emojis by adding a DevSystem tag as the **first line** of the document (before the title).
 
 **Syntax:**
 ```html
-<DevSystem><Rules><MarkdownTablesAllowed enabled=true /><EmojisAllowed enabled=true /></Rules></DevSystem>
+<DevSystem MarkdownTablesAllowed=true EmojisAllowed=true />
 ```
 
-**Individual rules:**
-- `<MarkdownTablesAllowed enabled=true />` - Allow Markdown tables in this document
-- `<EmojisAllowed enabled=true />` - Allow emojis in this document
+**Attributes:**
+- `MarkdownTablesAllowed=true` - Allow Markdown tables in this document
+- `EmojisAllowed=true` - Allow emojis in this document
 
 **Allowed emojis (when enabled):**
 - ✅ - Yes, supported, pass, enabled
