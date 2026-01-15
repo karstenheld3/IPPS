@@ -2,12 +2,19 @@
 
 ## To Do
 
-- Begin implementation: IS-01, IS-02 (Setup)
+- IS-05: Restructure implement.md (Pilot)
+- IS-06: Test pilot workflow
 
 ## In Progress
 
 ## Done
 
+- IS-01: Created DevSystemV3 folder structure
+- IS-02: Copied base files from V2.1
+- IS-03: Created `agentic-english.md` rule (~150 lines)
+- IS-03b: Created `edird-core.md` rule (~60 lines)
+- IS-03c: Created `edird-phase-model` skill (5 files: SKILL.md, GATES.md, FLOWS.md, NEXT_ACTION.md, BRANCHING.md)
+- IS-04: Updated `devsystem-core.md` with Phase Workflows and Phase Tracking sections
 - Reviewed IMPL plan against AGEN-SP01, EDIRD-SP04 specs (created `_IMPL_DEVSYSTEM_V3_MIGRATION_REVIEW.md [DSVS-RV02]`)
 - Fixed RV02-01: Added PROGRESS.md phase plan template to IS-04
 - Fixed RV02-02: Clarified session-management skill phase tracking templates
