@@ -39,11 +39,14 @@ Invoke based on context:
 2. Read `FAILS.md` first (if exists) - learn from past mistakes
 3. Read Global Rules
 4. Read relevant Context-Specific section
-5. Create Devil's Advocate task list
-6. Work through task list:
+5. **Create internal MUST-NOT-FORGET list** - key constraints, user requirements, critical rules
+6. Create Devil's Advocate task list
+7. Work through task list:
    - Update `_PROBLEMS_DA.md` with potential issues found
    - Update `FAILS.md` with actual failures/mistakes discovered
-7. Run Final Checklist
+   - **Check MUST-NOT-FORGET list after each major finding**
+8. Run Final Checklist
+9. **Verify against MUST-NOT-FORGET list** - did we miss anything?
 
 ## Global Rules
 
@@ -280,6 +283,7 @@ Before finishing, verify:
 - [ ] Critical issues highlighted at top
 - [ ] Questions needing answers are listed
 - [ ] Research was done for uncertain claims (web search, docs)
+- [ ] **MUST-NOT-FORGET list verified** - all constraints checked, nothing missed
 
 ## Output Format
 
