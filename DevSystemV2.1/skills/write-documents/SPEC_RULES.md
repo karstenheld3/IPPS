@@ -20,6 +20,7 @@ Rules for writing specification documents with GOOD/BAD examples.
 - **SPEC-CT-03**: Single line statements when possible
 - **SPEC-CT-04**: Document event flows with box-drawing characters
 - **SPEC-CT-05**: Provide data structure examples (JSON, CSV)
+- **SPEC-CT-06**: Compact object definitions - use lists, no empty lines between properties
 
 **Format (FT)**
 - **SPEC-FT-01**: Use timestamped changelog, reverse chronological
@@ -28,18 +29,19 @@ Rules for writing specification documents with GOOD/BAD examples.
 
 ## Table of Contents
 
-1. [Requirements Format](#1-requirements-format)
-2. [UI Diagrams](#2-ui-diagrams)
-3. [Layer Architecture Diagrams](#3-layer-architecture-diagrams)
-4. [Summarize Styling](#4-summarize-styling)
-5. [Code Outline Only](#5-code-outline-only)
-6. [Single Line Statements](#6-single-line-statements)
-7. [Event Flow Documentation](#7-event-flow-documentation)
-8. [Data Structure Examples](#8-data-structure-examples)
-9. [Document History Format](#9-document-history-format)
-10. [Section Order and Header](#10-section-order-and-header)
+- [Requirements Format](#requirements-format)
+- [UI Diagrams](#ui-diagrams)
+- [Layer Architecture Diagrams](#layer-architecture-diagrams)
+- [Summarize Styling](#summarize-styling)
+- [Code Outline Only](#code-outline-only)
+- [Single Line Statements](#single-line-statements)
+- [Compact Object Definitions](#compact-object-definitions)
+- [Event Flow Documentation](#event-flow-documentation)
+- [Data Structure Examples](#data-structure-examples)
+- [Document History Format](#document-history-format)
+- [Section Order and Header](#section-order-and-header)
 
-## 1. Requirements Format
+## Requirements Format
 
 **BAD:**
 ```
@@ -68,7 +70,7 @@ Rules for writing specification documents with GOOD/BAD examples.
 **CRWL-EC-02:** Network timeout -> Retry 3 times, then fail with error
 ```
 
-## 2. UI Diagrams
+## UI Diagrams
 
 Use ASCII box diagrams with component boundaries. Show ALL buttons and actions.
 
@@ -130,7 +132,7 @@ Toast:
 +-----------------------------------------------+
 ```
 
-## 3. Layer Architecture Diagrams
+## Layer Architecture Diagrams
 
 For multi-layer systems, use ASCII box diagrams showing call hierarchy:
 
@@ -149,7 +151,7 @@ For multi-layer systems, use ASCII box diagrams showing call hierarchy:
 └───────────────────────────────────────────────────────────────────────────┘
 ```
 
-## 4. Summarize Styling
+## Summarize Styling
 
 Avoid too much CSS detail in specs.
 
@@ -180,7 +182,7 @@ Avoid too much CSS detail in specs.
 .toast.toast-success { /* Green left border */ }
 ```
 
-## 5. Code Outline Only
+## Code Outline Only
 
 Avoid implementation detail. Focus on architecture completeness. Document intention.
 
@@ -216,7 +218,7 @@ function renderJobRow(job) {
 function renderJobRow(job) { ... }
 ```
 
-## 6. Single Line Statements
+## Single Line Statements
 
 Fit single statements/decisions/objects on a single line.
 
@@ -234,7 +236,40 @@ Fit single statements/decisions/objects on a single line.
 <button class="btn-small" onclick="controlJob(42, 'pause')"> Pause </button>
 ```
 
-## 7. Event Flow Documentation
+## Compact Object Definitions
+
+Use lists for object/phase definitions. No empty lines between properties.
+
+**BAD:**
+```
+### [EXPLORE]
+
+**Purpose**: Understand the situation before acting
+
+**BUILD focus**: What feature? What constraints? What patterns?
+
+**SOLVE focus**: What's the real problem? What do I need to learn?
+
+**Entry**: Start of workflow
+
+**Exit**: Gate EXPLORE→DESIGN passes
+
+**Key verbs**: [RESEARCH], [ANALYZE], [ASSESS], [SCOPE], [GATHER], [CONSULT], [DECIDE]
+```
+
+**GOOD:**
+```
+### [EXPLORE]
+
+- **Purpose**: Understand the situation before acting
+- **BUILD**: What feature? What constraints? What patterns?
+- **SOLVE**: What's the real problem? What do I need to learn?
+- **Entry**: Start of workflow
+- **Exit**: Gate EXPLORE→DESIGN passes
+- **Verbs**: [RESEARCH], [ANALYZE], [ASSESS], [SCOPE], [GATHER], [CONSULT], [DECIDE]
+```
+
+## Event Flow Documentation
 
 Document call chains with box-drawing characters (├─> └─> │).
 
@@ -249,7 +284,7 @@ User clicks [Pause] or [Resume]
 │                   └─> renderJobActions() # Button changes to Resume/Pause
 ```
 
-## 8. Data Structure Examples
+## Data Structure Examples
 
 Provide examples for JSON, CSV, and other data formats.
 
@@ -271,7 +306,7 @@ Provide examples for JSON, CSV, and other data formats.
 </end_json>
 ```
 
-## 9. Document History Format
+## Document History Format
 
 Use timestamped changelog, reverse chronological. Avoid tables.
 
@@ -300,7 +335,7 @@ Use timestamped changelog, reverse chronological. Avoid tables.
 - Initial specification created
 ```
 
-## 10. Section Order and Header
+## Section Order and Header
 
 **BAD:**
 ```
