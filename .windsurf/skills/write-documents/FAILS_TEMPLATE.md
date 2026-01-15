@@ -12,7 +12,7 @@
 
 ### [DATE] - [Context/Topic]
 
-#### [CRITICAL] `TOPIC-FL-001` Issue Title
+#### [CRITICAL] `[TOPIC]-FL-001` Issue Title
 
 - **When**: [YYYY-MM-DD HH:MM]
 - **Where**: File/function/line or document section
@@ -30,7 +30,7 @@
 ...
 ```
 
-#### [HIGH] `TOPIC-FL-002` Another Issue
+#### [HIGH] `[TOPIC]-FL-002` Another Issue
 
 - **When**: [YYYY-MM-DD HH:MM]
 - **Where**: [Location]
@@ -43,7 +43,7 @@
 
 ### [DATE] - [Context/Topic]
 
-#### [RESOLVED] `TOPIC-FL-001` Issue Title
+#### [RESOLVED] `[TOPIC]-FL-001` Issue Title
 
 - **Original severity**: [CRITICAL/HIGH/MEDIUM/LOW]
 - **Resolved**: [YYYY-MM-DD]

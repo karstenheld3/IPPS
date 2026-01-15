@@ -16,7 +16,7 @@
 
 ## Critical Issues
 
-### `TOPIC-RV-001` Issue Title
+### `[TOPIC]-RV-001` Issue Title
 
 - **Location**: File/function/line or document section
 - **What**: Description of the issue
@@ -26,7 +26,7 @@
 
 ## High Priority
 
-### `TOPIC-RV-002` Issue Title
+### `[TOPIC]-RV-002` Issue Title
 
 - **Location**: [Location]
 - **What**: [Description]
@@ -35,7 +35,7 @@
 
 ## Medium Priority
 
-### `TOPIC-RV-003` Issue Title
+### `[TOPIC]-RV-003` Issue Title
 
 - **Location**: [Location]
 - **What**: [Description]
@@ -44,7 +44,7 @@
 
 ## Low Priority
 
-### `TOPIC-RV-004` Issue Title
+### `[TOPIC]-RV-004` Issue Title
 
 - **Location**: [Location]
 - **What**: [Description]

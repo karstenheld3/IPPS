@@ -119,9 +119,9 @@ Session tracking documents use date-based IDs instead of TOPIC-based IDs.
 - `2026-01-15_FixAuthenticationBug-PROBLEMS`
 - `2026-01-15_FixAuthenticationBug-PROGRESS`
 
-## Tracking IDs (BG, FT, PR, FX, TK)
+## Tracking IDs (BG, FT, PR, FX, TK, RV, FL)
 
-For session and project tracking in PROBLEMS.md, FIXES, and backlog documents.
+For session and project tracking in PROBLEMS.md, FAILS.md, _REVIEW.md, and backlog documents.
 
 **Format:** `[TOPIC]-[TYPE]-[NNN]` (3-digit number)
 
@@ -131,6 +131,8 @@ For session and project tracking in PROBLEMS.md, FIXES, and backlog documents.
 - `PR` - Problem (issue discovered during session)
 - `FX` - Fix (documented fix for a problem)
 - `TK` - Task (general work item)
+- `RV` - Review finding (potential issue in _REVIEW.md)
+- `FL` - Failure log entry (actual failure in FAILS.md)
 
 **Examples:**
 - `SAP-BG-001` - SAP-related bug 1
@@ -138,3 +140,7 @@ For session and project tracking in PROBLEMS.md, FIXES, and backlog documents.
 - `GLOB-PR-003` - Project-wide problem 3
 - `CRWL-FX-002` - Crawler fix 2
 - `UI-TK-015` - UI task 15
+- `AUTH-RV-001` - Authentication review finding 1
+- `CRWL-FL-001` - Crawler failure log entry 1
+
+**Note:** The `[TOPIC]` links together related SPEC, IMPL, TEST, INFO, FAILS, and REVIEW documents.
