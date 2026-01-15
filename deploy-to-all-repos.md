@@ -192,7 +192,4 @@ Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `
 - `python-rules.md`
 - `tools-rules.md`
 
-**Known Deprecated DevSystem V1 Workflows:**
-- (none currently identified)
-
 **If a file is NOT on this list:** Do NOT delete it. It is a custom repo-specific file.

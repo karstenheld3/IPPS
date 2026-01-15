@@ -7,6 +7,13 @@ Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 If you update workflows in .windsurf\workflows, sync changes back to the current [DEVSYSTEM_FOLDER].
 DONT auto-sync changes to  .windsurf\workflows if you update workflows in the [DEVSYSTEM_FOLDER].
 
+## Platform Notes
+
+**Windows:** No symlinks. `.windsurf/` is a copy of `[DEVSYSTEM_FOLDER]`, not a symlink. Use PowerShell to sync:
+```powershell
+Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination ".windsurf\" -Recurse -Force
+```
+
 Automatically push commits to GitHub.
 
 ## Special Workflows (Workspace Root)
