@@ -44,7 +44,7 @@ Tracking documents exist at workspace, project, or session level. Only one of ea
 - **[NOTES]**: Important information. Agent MUST read to avoid unintentional behavior
 - **[PROGRESS]**: Progress tracking. Agent MUST read to avoid unintentional behavior
 - **[PROBLEMS]**: Problem tracking. Each session tracks issues in its own `PROBLEMS.md`. On `/session-close`, sync to project [PROBLEMS]
-- **[FAILS]**: Failure log - lessons learned from past mistakes. Agent MUST read during `/prime` to avoid repeating errors. Never delete entries, only append or mark as resolved
+- **[FAILS]**: Failure log - lessons learned from past mistakes. Agent MUST read during `/prime` to avoid repeating errors (except when using the `_` prefix). Never delete entries unconfirmed, only append or mark as resolved.
 
 ### Placeholders
 
@@ -99,7 +99,8 @@ Three dimensions define how the agent should behave:
 ├── src/                    # Source code
 ├── !NOTES.md               # Workspace notes (priority file)
 ├── !PROBLEMS.md            # Known problems
-└── !PROGRESS.md            # Overall progress
+├── !PROGRESS.md            # Overall progress
+└── FAILS.md                # Lessons learned (workspace-level)
 ```
 
 ### Monorepo (Multiple Projects)
@@ -117,12 +118,14 @@ Three dimensions define how the agent should behave:
 │   ├── src/                # Project A source code
 │   ├── NOTES.md            # Project A notes
 │   ├── PROBLEMS.md         # Project A problems
-│   └── PROGRESS.md         # Project A progress
+│   ├── PROGRESS.md         # Project A progress
+│   └── FAILS.md            # Project A lessons learned
 ├── [PROJECT_B]/
 │   └── ...                 # Same structure
 ├── !NOTES.md               # Workspace-level notes
 ├── !PROBLEMS.md            # Workspace-level problems
-└── !PROGRESS.md            # Workspace-level progress
+├── !PROGRESS.md            # Workspace-level progress
+└── FAILS.md                # Lessons learned (workspace-level)
 ```
 
 ## File Naming Conventions
