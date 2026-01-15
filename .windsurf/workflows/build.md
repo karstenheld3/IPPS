@@ -58,6 +58,8 @@ Record in NOTES.md:
 4. [RESEARCH] if task requires accuracy to external system (cite sources, not training data)
 5. [SCOPE] define boundaries
 
+**For UI/game/replica work**: Visual reference (screenshot/video of target) is MANDATORY. Text research alone is insufficient.
+
 ### Gate Check: EXPLORE→DESIGN
 
 - [ ] Problem or goal clearly understood
@@ -79,22 +81,35 @@ Record in NOTES.md:
 
 ### Gate Check: DESIGN→IMPLEMENT
 
-- [ ] Spec document created
-- [ ] POC completed (if MEDIUM+)
-- [ ] Impl plan with testable steps
+**MANDATORY ARTIFACT CHECK** (list actual file paths):
+- [ ] Spec document: `[SESSION_FOLDER]/_SPEC_*.md` exists (MEDIUM+)
+- [ ] Impl plan: `[SESSION_FOLDER]/_IMPL_*.md` exists (MEDIUM+)
+- [ ] Visual [PROVE] completed (if UI/game work)
 - [ ] No open questions
 
+**Gate evidence format**:
+```
+Artifacts created:
+- _SPEC_FEATURE.md (X lines)
+- _IMPL_FEATURE.md (Y lines)
+- POC verified: [screenshot/description]
+```
+
 **Pass**: Proceed to IMPLEMENT | **Fail**: Continue DESIGN
+
+**WARNING**: Claiming gate pass without listing actual artifacts is gate bypass (see GLOB-FL-004).
 
 ## Step 4: IMPLEMENT Phase
 
 For each step in IMPL plan:
 
-1. [IMPLEMENT] code changes
-2. [TEST] verify step works
+1. [IMPLEMENT] code changes (max 100 lines before visual check for UI work)
+2. [TEST] verify step works (visual verification for UI/game)
 3. [FIX] if tests fail (max 3 retries, then [CONSULT])
 4. [COMMIT] when green
 5. Update PROGRESS.md
+
+**UI/Game rule**: Never implement >100 lines without visual verification. Monolithic implementation is forbidden.
 
 ### Gate Check: IMPLEMENT→REFINE
 

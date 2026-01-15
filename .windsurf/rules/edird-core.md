@@ -18,6 +18,7 @@ For full model with gates, flows, and next-action logic: invoke @edird-phase-mod
 - **Verb outcomes**: -OK (proceed), -FAIL (handle per verb), -SKIP (intentional).
 - **Workflow type**: BUILD (code) or SOLVE (knowledge). Determined in EXPLORE, persists unless switched with [ACTOR] confirmation.
 - **Complexity**: LOW=patch, MEDIUM=minor, HIGH=major (maps to semantic versioning).
+- **Visual verification**: UI/game/graphics work MUST include visual [PROVE] before full implementation.
 
 ## Entry Rule
 
@@ -25,7 +26,11 @@ All workflows start in EXPLORE with [ASSESS] to determine workflow type and comp
 
 **Gate output is mandatory.** Before each phase transition, agent MUST output explicit gate evaluation (see @edird-phase-model GATES.md). No self-approval without evidence.
 
+**Artifact verification.** Agent MUST list created artifacts (files) as gate evidence. Claiming "plan complete" without artifact files is gate bypass.
+
 **Research before implementation.** If task requires accuracy to an external system, [RESEARCH] with cited sources is mandatory. Training data assumptions are not research.
+
+**Visual reference for replicas.** Replica/clone work MUST include visual reference (screenshot/video) during EXPLORE, not just text research.
 
 ## Gate Summaries
 
@@ -50,8 +55,10 @@ Assessment: COMPLEXITY-LOW / COMPLEXITY-MEDIUM / COMPLEXITY-HIGH
 
 Required documents by complexity:
 - **LOW**: Inline plan sufficient, documents optional
-- **MEDIUM**: `_SPEC_*.md` + `_IMPL_*.md` required
+- **MEDIUM**: `_SPEC_*.md` + `_IMPL_*.md` required (NO EXCEPTIONS - create files before proceeding)
 - **HIGH**: All documents required (`_INFO_*.md`, `_SPEC_*.md`, `_IMPL_*.md`, `_TEST_*.md`)
+
+**Gate enforcement**: DESIGN→IMPLEMENT gate MUST list actual file paths created. If files don't exist, gate fails.
 
 ### SOLVE (`/solve`)
 
