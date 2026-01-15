@@ -3,7 +3,7 @@
 ## Session Info
 
 - **Started**: 2026-01-15
-- **Goal**: Define Agentic English vocabulary and IPPS Phase Model specifications
+- **Goal**: Define Agentic English vocabulary and EDIRD Phase Model specifications
 
 ## IMPORTANT: Cascade Agent Instructions
 
@@ -19,7 +19,7 @@
 ## Key Decisions
 
 - Instruction tokens (brackets) vs Context states (no brackets) syntax distinction
-- Five-phase model: DISCOVERY, DESIGN, IMPLEMENT, IMPROVE, DELIVER
+- Five-phase EDIRD model: EXPLORE, DESIGN, IMPLEMENT, REFINE, DELIVER
 - Complexity levels map to semantic versioning: LOW=patch, MEDIUM=minor, HIGH=major
 
 ## Important Findings
@@ -30,4 +30,4 @@
 ## Workflows to Run on Resume
 
 - `/prime` to load context
-- Review `_SPEC_AGENTIC_ENGLISH.md` and `_SPEC_IPPS_PHASE_MODEL.md`
+- Review `_SPEC_AGEN_AGENTIC_ENGLISH.md` and `_SPEC_EDIRD_PHASE_MODEL.md`

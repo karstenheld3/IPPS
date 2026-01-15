@@ -126,7 +126,7 @@ No brackets for tokens that appear in **conditions** - things the agent checks f
 - **Brackets `[XXX]`** = Instruction stream (do / substitute / tag)
 - **No brackets `XXX-YYY`** = Condition headers (if / when / for)
 - **Grep instructions**: `\[[A-Z_-]+\]`
-- **Grep conditions**: `[A-Z]+-[A-Z]+`
+- **Grep conditions**: `[A-Z]+(-[A-Z]+)?`
 
 ## Placeholders
 
@@ -203,10 +203,10 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 - **[IMPLEMENT]** - Write code or implement proposed changes
 - **[CONFIGURE]** - Set up or update environment/settings
 - **[INTEGRATE]** - Connect components
-- **[REFACTOR]** - Restructure existing code to meet requirements
+- **[REFACTOR]** - Restructure code per stated goal (SPEC, IMPL, or instruction)
 - **[FIX]** - Correct issues
-- **[IMPROVE]** - Enhance quality
-- **[OPTIMIZE]** - Rewrite or change existing code to work more efficiently
+- **[IMPROVE]** - General quality improvements (robustness, error handling, flow, clarity, comments)
+- **[OPTIMIZE]** - Performance, memory, or efficiency improvements only
 
 ### Communication
 
@@ -289,6 +289,10 @@ Classified at task start:
 - **MIGRATION** - Data or API migration
 
 ## Document History
+
+**[2026-01-15 18:39]**
+- Fixed: Verb disambiguation (OPTIMIZE=performance, IMPROVE=general quality, REFACTOR=per goal)
+- Fixed: Grep pattern for context states to match single-word states
 
 **[2026-01-15 18:23]**
 - Fixed: Document type INFO → SPEC in title
