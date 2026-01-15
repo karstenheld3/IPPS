@@ -182,12 +182,10 @@ Write-Host "Restart Windsurf to apply changes" -ForegroundColor White
 
 ## What Gets Removed
 
-| Option | Config | Profile | Auth | Browsers | NPM | Use Case |
-|--------|--------|---------|------|----------|-----|----------|
-| **1** | Yes | No | No | No | No | Quick disable |
-| **2** | Yes | Yes | Yes | No | No | Clean uninstall |
-| **3** | Yes | Yes | Yes | Yes | No | Complete removal |
-| **4** | Yes | Yes | Yes | Yes | Yes | Full purge |
+- **Option 1 (Quick disable)** - Config only
+- **Option 2 (Clean uninstall)** - Config + Profile + Auth
+- **Option 3 (Complete removal)** - Config + Profile + Auth + Browsers
+- **Option 4 (Full purge)** - Config + Profile + Auth + Browsers + NPM
 
 **Components:**
 - **Config**: Entry in `mcp_config.json` (required to disable MCP)

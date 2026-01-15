@@ -397,10 +397,8 @@ auth.json
 
 ## Quick Reference
 
-| Option | Use Case |
-|--------|----------|
-| Default | Clean isolated sessions |
-| `--user-data-dir` | Persistent logins |
-| `--headless` | Background automation |
-| `--isolated --storage-state` | Pre-authenticated |
-| `--extension` | Connect to existing browser |
+- **Default** - Clean isolated sessions
+- **`--user-data-dir`** - Persistent logins
+- **`--headless`** - Background automation
+- **`--isolated --storage-state`** - Pre-authenticated
+- **`--extension`** - Connect to existing browser

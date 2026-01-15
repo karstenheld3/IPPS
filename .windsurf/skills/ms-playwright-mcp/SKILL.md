@@ -13,27 +13,14 @@ Rules and usage for Microsoft Playwright MCP server.
 - Reference elements via `aria-ref=e5` format from browser_snapshot
 - Always call `browser_snapshot` before clicking to get current element refs
 - Use `browser_close` when done to free resources
-- For logged-in sessions: Use Playwriter extension or persistent user profile
+- For logged-in sessions: Use persistent user profile or storage state file
 
-## MCP Server Options
-
-### Option 1: Microsoft Playwright MCP (Official)
-
-Best for: Clean browser sessions, automated testing, headless operation.
+## MCP Server
 
 **Repository**: https://github.com/microsoft/playwright-mcp
 **Package**: `@playwright/mcp`
 
-### Option 2: Playwriter (Chrome Extension)
-
-Best for: Existing logged-in sessions, working alongside user, bypassing detection.
-
-**Repository**: https://github.com/remorses/playwriter
-**Package**: `playwriter`
-
 ## Configuration
-
-### Microsoft Playwright MCP
 
 **Basic configuration (isolated session):**
 ```json
@@ -74,16 +61,29 @@ Best for: Existing logged-in sessions, working alongside user, bypassing detecti
 }
 ```
 
-### Playwriter (Chrome Extension)
-
-1. Install Chrome extension from Chrome Web Store
-2. Configure MCP:
+**With timeout configuration (recommended for slow pages):**
 ```json
 {
   "mcpServers": {
-    "playwriter": {
+    "playwright": {
       "command": "npx",
-      "args": ["playwriter@latest"]
+      "args": [
+        "@playwright/mcp@latest",
+        "--timeout-action", "10000",
+        "--timeout-navigation", "120000"
+      ]
+    }
+  }
+}
+```
+
+**Reduced token usage (skip accessibility details):**
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest", "--snapshot-mode", "none"]
     }
   }
 }
@@ -262,12 +262,21 @@ Use with `--storage-state`:
 }
 ```
 
-### Strategy 3: Playwriter Extension
+### Strategy 3: Browser Extension Mode
 
-Use existing browser with logged-in sessions:
-1. Log in manually in Chrome
-2. Connect Playwriter extension
-3. MCP uses your authenticated session
+Connect to existing browser with remote debugging:
+```json
+{
+  "args": ["@playwright/mcp@latest", "--extension"]
+}
+```
+
+**Start Chrome with debugging enabled:**
+```powershell
+& "[PROGRAM_FILES]\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222
+```
+
+**Note:** Known issue (GitHub #921) - may launch new Chrome instead of connecting.
 
 ## Troubleshooting
 
@@ -290,20 +299,20 @@ Remove-Item "[USER_PROFILE_PATH]\.ms-playwright-mcp-profile\SingletonLock" -Forc
 ### Extension mode not connecting
 
 Known issue (GitHub #921): `--extension` flag may launch new Chrome.
-Workaround: Use Playwriter extension instead.
+Workaround: Ensure Chrome is running with `--remote-debugging-port=9222` before starting MCP.
 
 ### Element not found
 
-1. Call `browser_snapshot()` to refresh refs
+1. Call `browser_snapshot(mode: "tree")` to refresh refs
 2. Wait for page to fully load
 3. Check if element is in iframe (use `browser_evaluate` to access)
 
 ### Automation detection
 
 If site blocks automation:
-1. Use Playwriter with existing browser profile
-2. Disconnect extension temporarily for sensitive sites
-3. Use headed mode instead of headless
+1. Use `--user-data-dir` with existing browser profile
+2. Use headed mode instead of headless
+3. Try `--extension` mode with real browser
 
 ## Flaky Test Prevention
 
@@ -326,4 +335,3 @@ For initial installation, see `SETUP.md` in this skill folder.
 **Requirements:**
 - Node.js 18+ with npx in PATH
 - Chrome/Chromium for headed mode
-- For Playwriter: Chrome extension installed
