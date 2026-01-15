@@ -165,14 +165,45 @@ Files starting with `.` follow Unix convention - hidden from directory listings.
 - `/session-close` - Sync to project files and archive
 - `/session-archive` - Move session folder to archive
 
+### Phase Workflows
+
+- **EXPLORE**: `/explore` - [RESEARCH], [ANALYZE], [ASSESS], [SCOPE]
+- **DESIGN**: `/design` - [PLAN], [WRITE-SPEC], [WRITE-IMPL], [WRITE-TEST], [PROVE]
+- **IMPLEMENT**: `/implement` - [IMPLEMENT], [TEST], [FIX], [COMMIT]
+- **REFINE**: `/refine` - [REVIEW], [VERIFY], [CRITIQUE], [RECONCILE]
+- **DELIVER**: `/deliver` - [VALIDATE], [MERGE], [DEPLOY], [CLOSE], [ARCHIVE]
+
 ### Process Workflows
 
 - `/write-spec` - Create specification from requirements
 - `/write-impl-plan` - Create implementation plan from spec
 - `/write-test-plan` - Create test plan from spec
-- `/implement` - Autonomous implementation with tracking
 - `/verify` - Verify work against specs and rules
 - `/commit` - Create conventional commits
+
+## Phase Tracking
+
+Sessions track current phase in NOTES.md:
+
+```markdown
+## Current Phase
+
+**Phase**: DESIGN
+**Last verb**: [WRITE-SPEC]-OK
+**Gate status**: 3/5 items checked
+```
+
+Sessions track full phase plan in PROGRESS.md:
+
+```markdown
+## Phase Plan
+
+- [ ] **EXPLORE** - pending
+- [x] **DESIGN** - done
+- [ ] **IMPLEMENT** - in_progress
+- [ ] **REFINE** - pending
+- [ ] **DELIVER** - pending
+```
 
 ## Agent Instructions
 
@@ -182,17 +213,19 @@ Files starting with `.` follow Unix convention - hidden from directory listings.
 2. Read all `!*.md` files (priority documentation)
 3. Read session tracking files if in a session
 4. Check for existing specs and plans
+5. Determine current phase from NOTES.md
 
-### During Work
+### During Work (EDIRD Flow)
 
-1. Track progress in PROGRESS.md
-2. Document problems in PROBLEMS.md
-3. Use small, frequent commits
-4. Run `/verify` after significant changes
-5. Keep specs and plans synced with code
+1. Start with [ASSESS] in EXPLORE to determine workflow type and complexity
+2. Execute verbs in phase order, check gates before transitions
+3. Use small cycles: [IMPLEMENT]→[TEST]→[FIX]→green→next
+4. Track progress in PROGRESS.md, problems in PROBLEMS.md
+5. Update NOTES.md with current phase on transitions
+6. Run `/verify` after significant changes
 
 ### Before Ending Session
 
 1. Run `/session-save` to document findings
 2. Ensure all changes are committed
-3. Update tracking files with current state
+3. Update tracking files with current phase state

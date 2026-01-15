@@ -1,8 +1,11 @@
 ---
-auto_execution_mode: 1
+description: Verify work against specs and rules
+phase: REFINE
 ---
 
-# GLOBAL
+# Verify Workflow
+
+Implements [VERIFY] verb from EDIRD model.
 
 ## Required Skills
 

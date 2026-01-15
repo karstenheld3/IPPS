@@ -7,6 +7,16 @@ description: Apply when creating or editing INFO, SPEC, IMPL, TEST, or FIX docum
 
 This skill contains document templates and formatting rules.
 
+## Verb Mapping
+
+This skill implements:
+- [WRITE-INFO] - Create INFO documents (use INFO_TEMPLATE.md)
+- [WRITE-SPEC] - Create SPEC documents (use SPEC_TEMPLATE.md)
+- [WRITE-IMPL] - Create IMPL documents (use IMPL_TEMPLATE.md)
+- [WRITE-TEST] - Create TEST documents (use TEST_TEMPLATE.md)
+
+**Phases**: EXPLORE (INFO), DESIGN (SPEC, IMPL, TEST)
+
 ## MUST-NOT-FORGET
 
 - Use lists, not Markdown tables
