@@ -8,7 +8,7 @@ All documents and items must have unique IDs for traceability.
 
 ## Topic Registry
 
-**Topic:** 2-5 uppercase letters describing component (e.g., `CRWL` for Crawler, `AUTH` for Authentication)
+**Topic:** 2-6 uppercase letters describing component (e.g., `CRWL` for Crawler, `AUTH` for Authentication, `EDIRD` for EDIRD Phase Model)
 
 **REQUIREMENT:** Workspace/project-level NOTES.md MUST maintain a complete list of registered TOPIC IDs.
 

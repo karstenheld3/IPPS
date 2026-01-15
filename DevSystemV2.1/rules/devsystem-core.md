@@ -142,6 +142,8 @@ Files starting with `.` follow Unix convention - hidden from directory listings.
 - **[WORKSPACE_FOLDER]**: Absolute path of root folder where Windsurf operates
 - **[PROJECT_FOLDER]**: Absolute path of project folder (same as workspace if no monorepo)
 - **[SRC_FOLDER]**: Absolute path of source folder
+- **[SESSIONS_FOLDER]**: Base folder for sessions (default: `[WORKSPACE_FOLDER]`, override in `!NOTES.md`)
+- **[SESSIONS_ARCHIVE]**: Archive folder for closed sessions (default: `[SESSIONS_FOLDER]/_Archive`)
 - **[SESSION_FOLDER]**: Absolute path of currently active session folder
 
 ## Workflow Reference
