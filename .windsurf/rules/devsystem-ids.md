@@ -55,6 +55,17 @@ Every document MUST have an ID in its header block.
 - `V2CR-IP01` - V2 Crawler Implementation Plan 1
 - `V2CR-TP01` - V2 Crawler Test Plan 1
 
+## Review Document IDs
+
+Reviews reference their source document with `-RV` suffix.
+
+**Format:** `[SOURCE-DOC-ID]-RV[NN]`
+
+**Examples:**
+- `AUTH-SP01-RV01` - First review of AUTH-SP01
+- `CRWL-IP01-RV02` - Second review of CRWL-IP01
+- `V2CR-IN01-RV01` - First review of V2CR-IN01
+
 ## Spec-Level Item IDs (FR, IG, DD)
 
 Defined in SPECs, referenced across IMPL and TEST plans.
