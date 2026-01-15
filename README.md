@@ -66,11 +66,11 @@ A controlled vocabulary for agent-human communication. Provides consistent termi
 
 **Full specification**: [SPEC_AGENTIC_ENGLISH.md](SPEC_AGENTIC_ENGLISH.md)
 
-## EDIRD Phase Model
+## EDIRD Phase Model - Explore, Design, Implement, Refine, Deliver
 
 A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) work.
 
-**Goal**: Consistent phase structure for all development work with deterministic next-action logic.
+**Goal**: Consistent phase structure for all development work with deterministic next-action logic. We want the agent to always do the right thing when the `/next` workflow / command is executed until the initial goal is reached.
 
 **Rationale**: Without phases, agents skip important steps or apply heavyweight processes to simple tasks. EDIRD provides the right amount of process for each complexity level.
 
