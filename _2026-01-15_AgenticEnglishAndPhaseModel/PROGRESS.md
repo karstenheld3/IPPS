@@ -2,13 +2,17 @@
 
 ## To Do
 
-- IS-05: Restructure implement.md (Pilot)
-- IS-06: Test pilot workflow
+- Batch 5-7: Document, Review, Utility workflow updates
+- IS-08: Skills migration
+- IS-09-14: Testing and Deployment
 
 ## In Progress
 
 ## Done
 
+- Phase 4 Workflows: Created `explore.md`, `design.md`, `refine.md`, `deliver.md`
+- Updated: `next.md` (added [ASSESS]), `go-autonomous.md` (EDIRD cycle), `go-research.md` (SOLVE workflow)
+- Updated: `commit.md` ([COMMIT] verb), `session-init.md` (phase tracking), `session-resume.md` (phase restore)
 - IS-01: Created DevSystemV3 folder structure
 - IS-02: Copied base files from V2.1
 - IS-03: Created `agentic-english.md` rule (~150 lines)
