@@ -81,13 +81,17 @@ Documents may opt-in to use Markdown tables or emojis by adding a DevSystem HTML
 - ✅ - Yes, supported, pass, enabled
 - ❌ - No, unsupported, fail, disabled
 - ⚠️ - Warning, partial, caution
+- ★ - Filled star (rating)
+- ☆ - Outlined star (rating)
+- ⯪ - Half-filled star (rating)
 
-**Usage pattern in tables:**
+**Usage pattern:** Emoji first, then textual equivalent
 ```markdown
-| Feature | Supported |
-|---------|-----------|
-| MCP     | ✅ Yes    |
-| Hooks   | ❌ No     |
+- **MCP** - ✅ Yes
+- **Hooks** - ❌ No
+- **Data** - ⚠️ Partial (read-only)
+- **Quality** - ★★★☆☆ (3)
+- **Docs** - ★★★★⯪ (4.5)
 ```
 
 **When to use exceptions:**
