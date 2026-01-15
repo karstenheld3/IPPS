@@ -29,5 +29,16 @@
   - Next Action Logic for deterministic autonomous agent operation
   - Verb outcome transition handlers
   - Workflow flows for BUILD (HIGH/LOW) and SOLVE (EVALUATION/WRITING)
+- Added Mini SOLVE POC note to Hybrid Situations section
+- Created `_INFO_DEVSYSTEM_V3_MIGRATION.md [DSVS-IN01]` - migration challenges analysis:
+  - Analyzed DevSystemV2.1 structure (4 rules, 20 workflows, 7 skills)
+  - Identified 8 migration challenges (CH-01 through CH-08)
+  - Proposed V3 structure with phase-based workflows
+  - Recommended hybrid migration strategy
+- Created `_IMPL_DEVSYSTEM_V3_MIGRATION.md [DSVS-IP01]` - migration plan:
+  - 7 migration phases, 25 hours estimated effort
+  - 14 implementation steps (IS-01 through IS-14)
+  - 3 edge cases identified (EC-01 through EC-03)
+  - Pilot workflow: implement.md
 
 ## Tried But Not Used
