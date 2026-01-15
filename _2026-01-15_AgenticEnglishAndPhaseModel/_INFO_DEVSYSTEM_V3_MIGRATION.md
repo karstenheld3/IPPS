@@ -52,8 +52,8 @@
 - `commit.md` - Git commits
 
 **Review workflows:**
-- `review-devilsadvocate.md` - Critical review
-- `review-pragmaticprogrammer.md` - Pragmatic review
+- `critique.md` - Critical review
+- `reconcile.md` - Pragmatic review
 
 **Utility workflows:**
 - `next.md` - Universal entry point with planning
@@ -146,7 +146,7 @@ Gate check: Tests pass, no TODO/FIXME
 
 **Examples needing SOLVE:**
 - `go-research.md` - SOLVE: RESEARCH
-- `review-devilsadvocate.md` - SOLVE: ANALYSIS
+- `critique.md` - SOLVE: ANALYSIS
 - `write-spec.md` - SOLVE: WRITING (outputs document, not code)
 
 **Impact:** Add [ASSESS] step to entry workflows (`next.md`, `go-autonomous.md`).
@@ -229,8 +229,8 @@ Gate check: Tests pass, no TODO/FIXME
 - `session-*.md` - Add phase tracking, otherwise similar
 
 **Review workflows:**
-- `review-devilsadvocate.md` - Becomes [CRITIQUE] implementation
-- `review-pragmaticprogrammer.md` - Becomes [RECONCILE] implementation
+- `critique.md` - Becomes [CRITIQUE] implementation
+- `reconcile.md` - Becomes [RECONCILE] implementation
 
 ### Skills
 

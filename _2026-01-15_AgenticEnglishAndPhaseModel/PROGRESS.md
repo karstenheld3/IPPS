@@ -14,7 +14,7 @@
 - IS-11: Deployed DevSystemV3 to .windsurf (EDIRD phase model live)
 - IS-09-10: Testing verified (structure, verb mappings, phase tracking)
 - IS-08: Added verb mappings to skills (`coding-conventions`, `git-conventions`, `write-documents`, `session-management`)
-- Batch 5-7: Added phase/verb mappings to `write-spec.md`, `write-impl-plan.md`, `write-test-plan.md`, `review-devilsadvocate.md`, `review-pragmaticprogrammer.md`, `verify.md`, `rename.md`, `sync.md`
+- Batch 5-7: Added phase/verb mappings to `write-spec.md`, `write-impl-plan.md`, `write-test-plan.md`, `critique.md`, `reconcile.md`, `verify.md`, `rename.md`, `sync.md`
 - Phase 4 Workflows: Created `explore.md`, `design.md`, `refine.md`, `deliver.md`
 - Updated: `next.md` (added [ASSESS]), `go-autonomous.md` (EDIRD cycle), `go-research.md` (SOLVE workflow)
 - Updated: `commit.md` ([COMMIT] verb), `session-init.md` (phase tracking), `session-resume.md` (phase restore)
@@ -34,7 +34,7 @@
 - Added `[TEST]` verb to REFINE phase for regression testing
 - Ran Devil's Advocate and Pragmatic Programmer reviews
 - Updated `devsystem-ids.md` to allow 2-6 char topic IDs
-- Updated `review-devilsadvocate.md` with MUST-RESEARCH phase (5 topics + industry research)
+- Updated `critique.md` with MUST-RESEARCH phase (5 topics + industry research)
 - Committed and pushed 4 commits to GitHub
 - Clarified BUILD vs SOLVE distinction (code-centric vs universal problem-solving)
 - Added new verbs to AGEN-SP01: [EVALUATE], [SYNTHESIZE], [CONCLUDE], [RECOMMEND]

@@ -385,8 +385,8 @@ If 3 consecutive [FIX] attempts fail:
 
 | File | Action | Verb Mapping |
 |------|--------|--------------|
-| `review-devilsadvocate.md` | RESTRUCTURE | [CRITIQUE] implementation |
-| `review-pragmaticprogrammer.md` | RESTRUCTURE | [RECONCILE] implementation |
+| `critique.md` | RESTRUCTURE | [CRITIQUE] implementation |
+| `reconcile.md` | RESTRUCTURE | [RECONCILE] implementation |
 
 ### Batch 7: Utility Workflows (UPDATE)
 

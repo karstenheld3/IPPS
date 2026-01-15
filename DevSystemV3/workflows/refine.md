@@ -30,8 +30,8 @@ phase: REFINE
 
 ### For COMPLEXITY-HIGH
 
-- Run `/review-devilsadvocate` for [CRITIQUE]
-- Run `/review-pragmaticprogrammer` for [RECONCILE]
+- Run `/critique` for [CRITIQUE]
+- Run `/reconcile` for [RECONCILE]
 
 ### Gate Check: REFINE→DELIVER
 
