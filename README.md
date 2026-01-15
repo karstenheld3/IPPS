@@ -1,3 +1,5 @@
+<DevSystem><Rules><MarkdownTablesAllowed enabled=true /><EmojisAllowed enabled=true /></Rules></DevSystem>
+
 # IPPS - Insanely Productive Programming System
 
 A development system for AI-assisted coding workflows, optimized for Windsurf IDE on Windows x64.
@@ -231,71 +233,36 @@ Creates `_TEST_*.md` from spec.
 
 ## Agent Compatibility
 
-IPPS concepts map to other AI coding agents with different folder structures:
+| Feature | Windsurf | Claude Code | Codex CLI | GitHub Copilot |
+|---------|----------|-------------|-----------|----------------|
+| **Type** | IDE | Terminal | Terminal | IDE Extension |
+| **Platform** | Windows, macOS, Linux | Windows, macOS, Linux | macOS, Linux, Windows (WSL) | VS Code, Visual Studio, JetBrains |
+| **Instructions** | `.windsurf/rules/*.md` | `CLAUDE.md` | `AGENTS.md` | `.github/copilot-instructions.md` |
+| **Commands/Workflows** | `.windsurf/workflows/*.md` | `.claude/commands/*.md` | Custom prompts only | Prompt files only |
+| **Skills** | ✅ Yes | ✅ Yes | ❌ No | ❌ No |
+| **Subagents** | ❌ No | ✅ Yes | ❌ No | ✅ Yes (custom agents) |
+| **Hooks** | ✅ Yes | ✅ Yes | ❌ No | ❌ No |
+| **MCP Support** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
+| **Sandbox** | ❌ No | ❌ No | ✅ Yes (OS-level) | ❌ No |
+| **Config Format** | JSON + Protobuf | JSON | TOML | JSON |
 
-### Claude Code
+### Deploying to Other Agents
 
-- **Rules**: `CLAUDE.md` in repo root (or `~/.claude/CLAUDE.md` for global)
-- **Commands**: `.claude/commands/*.md` (invoked as `/project:command-name`)
-- **Skills**: `.claude/skills/<name>/SKILL.md`
-- **MCP Config**: `.mcp.json` in repo root
+**Claude Code:**
+- `.windsurf/rules/*.md` → `CLAUDE.md` (merge into single file)
+- `.windsurf/workflows/*.md` → `.claude/commands/*.md`
+- `.windsurf/skills/*/SKILL.md` → `.claude/skills/*/SKILL.md`
 
-```
-your-project/
-├── CLAUDE.md              # Rules (auto-loaded)
-├── .claude/
-│   ├── commands/          # Slash commands
-│   │   └── fix-issue.md   # -> /project:fix-issue
-│   └── skills/
-│       └── my-skill/
-│           └── SKILL.md   # Agent skill
-└── .mcp.json              # MCP servers
-```
+**Codex CLI:**
+- `.windsurf/rules/*.md` → `AGENTS.md` (merge into single file)
 
-### OpenAI Codex CLI
+**GitHub Copilot:**
+- `.windsurf/rules/*.md` → `.github/copilot-instructions.md` (merge into single file)
 
-- **Rules**: `AGENTS.md` in repo root (or `~/.codex/AGENTS.md` for global)
-- **Override**: `AGENTS.override.md` takes precedence over `AGENTS.md`
-- **Commands**: Not supported (use inline prompts)
-- **Skills**: Not supported natively
+### Detailed Documentation
 
-```
-your-project/
-├── AGENTS.md              # Project instructions
-├── services/
-│   └── payments/
-│       └── AGENTS.override.md   # Directory-specific override
-```
-
-### GitHub Copilot
-
-- **Rules**: `.github/copilot-instructions.md` (repository-wide)
-- **Path-specific**: `.github/instructions/*.instructions.md` with `applyTo` glob
-- **Prompt files**: `.github/prompts/*.prompt.md` (reusable prompts)
-- **Commands/Skills**: Not supported
-
-```
-your-project/
-├── .github/
-│   ├── copilot-instructions.md        # Repository-wide rules
-│   ├── instructions/
-│   │   ├── python.instructions.md     # applyTo: "**/*.py"
-│   │   └── tests.instructions.md      # applyTo: "**/test_*.py"
-│   └── prompts/
-│       └── review.prompt.md           # Reusable prompt
-```
-
-### Feature Comparison
-
-- **Windsurf**: Rules + Workflows + Skills + MCP
-- **Claude Code**: CLAUDE.md + Commands + Skills + MCP
-- **Codex CLI**: AGENTS.md only (hierarchical, directory-scoped)
-- **Copilot**: Instructions + Path patterns + Prompt files
-
-### Deploying DevSystem Files
-
-To use IPPS with other agents, copy relevant content:
-
-- **Claude Code**: Copy `.windsurf/rules/` content to `CLAUDE.md`, workflows to `.claude/commands/`
-- **Codex CLI**: Merge rules into `AGENTS.md` (no workflow/skill support)
-- **Copilot**: Copy rules to `.github/copilot-instructions.md` (no workflow/skill support)
+- [Agent Comparison](_INFO_AGENT_COMPARISON.md) - Full feature comparison with detailed tables
+- [How Windsurf Works](INFO_HOW_WINDSURF_WORKS.md) - Windsurf IDE and Cascade assistant
+- [How Claude Code Works](_INFO_HOW_CLAUDE_CODE_WORKS.md) - Anthropic's terminal agent
+- [How Codex CLI Works](_INFO_HOW_CODEX_WORKS.md) - OpenAI's terminal agent
+- [How GitHub Copilot Works](_INFO_HOW_COPILOT_WORKS.md) - GitHub's IDE extension
