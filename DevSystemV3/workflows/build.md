@@ -55,7 +55,8 @@ Record in NOTES.md:
 1. [ASSESS] complexity: COMPLEXITY-LOW / MEDIUM / HIGH
 2. [ANALYZE] existing code and patterns
 3. [GATHER] requirements from user
-4. [SCOPE] define boundaries
+4. [RESEARCH] if task requires accuracy to external system (cite sources, not training data)
+5. [SCOPE] define boundaries
 
 ### Gate Check: EXPLORE→DESIGN
 

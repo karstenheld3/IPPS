@@ -63,7 +63,7 @@ Record in NOTES.md:
    - HOTFIX - Urgent production fix
    - BUGFIX - Non-urgent defect resolution
 
-2. [RESEARCH] existing information
+2. [RESEARCH] existing information (MANDATORY if research triggers detected - cite sources)
 3. [ANALYZE] the problem space
 4. [SCOPE] define boundaries
 

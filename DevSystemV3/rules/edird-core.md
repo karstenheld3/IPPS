@@ -23,6 +23,10 @@ For full model with gates, flows, and next-action logic: invoke @edird-phase-mod
 
 All workflows start in EXPLORE with [ASSESS] to determine workflow type and complexity/problem-type.
 
+**Gate output is mandatory.** Before each phase transition, agent MUST output explicit gate evaluation (see @edird-phase-model GATES.md). No self-approval without evidence.
+
+**Research before implementation.** If task requires accuracy to an external system, [RESEARCH] with cited sources is mandatory. Training data assumptions are not research.
+
 ## Gate Summaries
 
 - **EXPLORE→DESIGN**: Problem understood, scope defined, workflow type determined
@@ -38,19 +42,18 @@ All workflows start in EXPLORE with [ASSESS] to determine workflow type and comp
 
 ## Workflow Types
 
-### BUILD
+### BUILD (`/build`)
 
 Primary output is working code. Triggers: "Add a feature...", "Build...", "Implement..."
 
 Assessment: COMPLEXITY-LOW / COMPLEXITY-MEDIUM / COMPLEXITY-HIGH
 
-Required documents (all complexities, depth varies):
-- `_INFO_*.md` - Research findings (EXPLORE)
-- `_SPEC_*.md` - Technical specification (DESIGN)
-- `_IMPL_*.md` - Implementation plan (DESIGN)
-- `_TEST_*.md` - Test plan (DESIGN)
+Required documents by complexity:
+- **LOW**: Inline plan sufficient, documents optional
+- **MEDIUM**: `_SPEC_*.md` + `_IMPL_*.md` required
+- **HIGH**: All documents required (`_INFO_*.md`, `_SPEC_*.md`, `_IMPL_*.md`, `_TEST_*.md`)
 
-### SOLVE
+### SOLVE (`/solve`)
 
 Primary output is knowledge, decisions, or documents. Triggers: "Research...", "Evaluate...", "Write...", "Decide..."
 

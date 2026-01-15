@@ -50,3 +50,32 @@ After completing verbs in a phase:
 2. If all checked → transition to next phase
 3. If unchecked items → execute verb that addresses first unchecked item
 4. Re-evaluate after each verb completion
+
+## Mandatory Gate Output (REQUIRED)
+
+Before proceeding to next phase, agent MUST output this block:
+
+```markdown
+---
+## Gate: [CURRENT_PHASE] → [NEXT_PHASE]
+
+**Complexity**: [LOW/MEDIUM/HIGH] | **Triggers**: [list or "none"]
+
+**Checklist**:
+- [x] Item - Evidence: [specific evidence]
+- [ ] Item - BLOCKED: [what's missing]
+
+**Artifacts**:
+- INFO: [filename] | NOT REQUIRED | MISSING
+- SPEC: [filename] | NOT REQUIRED | MISSING
+- IMPL: [filename] | NOT REQUIRED | MISSING
+- TEST: [filename] | NOT REQUIRED | MISSING
+
+**Gate status**: PASS | FAIL
+---
+```
+
+Gate CANNOT pass if:
+- Required artifacts are MISSING (based on complexity/triggers)
+- Research triggers detected but no sources cited
+- Any checklist item unchecked without justification
