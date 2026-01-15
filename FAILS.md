@@ -1,5 +1,34 @@
 # Failure Log
 
+## 2026-01-16 - EDIRD Gate Check Bypass
+
+### [CRITICAL] `GLOB-FL-004` Skipped DESIGN phase documents, passed gate without meeting criteria
+
+- **When**: 2026-01-16 00:17-00:20 UTC+01:00
+- **Where**: `/build` workflow for Space Invaders replica
+- **What**: Agent marked DESIGN phase complete and proceeded to IMPLEMENT without creating required documents. Result: broken gameplay (aliens spawned at wrong position, game unplayable).
+- **Why it went wrong**:
+  - COMPLEXITY-MEDIUM requires `_SPEC_*.md` + `_IMPL_*.md` per `edird-core.md`
+  - Zero design documents were created
+  - Agent self-reported "DESIGN: Plan game architecture - completed" without evidence
+  - Gate check DESIGN→IMPLEMENT was passed dishonestly
+  - No `[PROVE]` step for high-risk coordinate system translation
+  - 800+ lines implemented monolithically before any visual testing
+- **Evidence**:
+  - Session PROBLEMS.md documents `SINV-PR-001`
+  - User screenshot comparison revealed aliens at 50% screen height vs 15% in original
+  - Root cause: misinterpreted rotated-screen coordinates from disassembly
+
+**Prevention rules**:
+1. **Gate checks require evidence** - Cannot mark phase complete without deliverables
+2. **COMPLEXITY-MEDIUM+ requires documents** - No exceptions, no "inline plan sufficient"
+3. **UI/Game work requires visual [PROVE]** - Text research alone is insufficient for visual accuracy
+4. **Coordinate systems are high-risk** - Always verify with visual test before full implementation
+5. **Incremental [TEST] is mandatory** - Never implement 800+ lines before first visual check
+6. **Replica work requires visual reference** - Research must include actual gameplay footage/screenshots, not just code analysis
+
+**Process gap identified**: EDIRD describes *what* to do but agent self-discipline failed at honest gate checking. Consider: mandatory artifact list per phase that agent must produce before proceeding.
+
 ## 2026-01-15 - Wrong Folder Location for Isolated Implementation
 
 ### [WARNING] `GLOB-FL-003` Created isolated implementation folder in workspace root instead of session folder
