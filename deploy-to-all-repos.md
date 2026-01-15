@@ -62,8 +62,11 @@ $targets = @(
     # Populate from [LINKED_REPOS] in !NOTES.md
 )
 
-# Deprecated V1 files (only these can be deleted)
-$deprecatedRules = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md")
+# Deprecated files from V1 and V2 migrations (only these can be deleted)
+$deprecatedFiles = @{
+    "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md")
+    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md")
+}
 
 # Get all source files (relative paths)
 $sourceFiles = Get-ChildItem -Path $source -Recurse -File | ForEach-Object {
@@ -91,9 +94,13 @@ foreach ($target in $targets) {
         }
     }
     
-    # Find deprecated files
-    $deprecated = Get-ChildItem -Path "$target\rules" -File -ErrorAction SilentlyContinue | 
-        Where-Object { $deprecatedRules -contains $_.Name } | ForEach-Object { $_.Name }
+    # Find deprecated files in rules and workflows
+    $deprecated = @()
+    foreach ($folder in $deprecatedFiles.Keys) {
+        $deprecated += Get-ChildItem -Path "$target\$folder" -File -ErrorAction SilentlyContinue | 
+            Where-Object { $deprecatedFiles[$folder] -contains $_.Name } | 
+            ForEach-Object { "$folder\$($_.Name)" }
+    }
     
     # Output summary
     if ($new.Count -eq 0 -and $modified.Count -eq 0 -and $deprecated.Count -eq 0) {
@@ -183,13 +190,47 @@ Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `
 
 **CRITICAL:** Only delete files that are KNOWN deprecated DevSystem files. If a file is not on this list, it is considered an unrelated custom file and MUST be left untouched.
 
-**Known Deprecated DevSystem V1 Rules:**
-- `commit-rules.md`
-- `devsystem-rules.md`
-- `document-rules.md`
-- `git-rules.md`
-- `proper-english-rules.md`
-- `python-rules.md`
-- `tools-rules.md`
+### V1 → V2 Migration (Deprecated Rules)
 
-**If a file is NOT on this list:** Do NOT delete it. It is a custom repo-specific file.
+- `rules/commit-rules.md`
+- `rules/devsystem-rules.md`
+- `rules/document-rules.md`
+- `rules/git-rules.md`
+- `rules/proper-english-rules.md`
+- `rules/python-rules.md`
+- `rules/tools-rules.md`
+
+### V2 → V3 Migration (Deprecated Workflows)
+
+- `workflows/review-devilsadvocate.md` → replaced by `workflows/critique.md`
+- `workflows/review-pragmaticprogrammer.md` → replaced by `workflows/reconcile.md`
+
+### V3 New Files (18 files)
+
+**New Rules:**
+- `rules/agentic-english.md` - Controlled vocabulary for agent instructions
+- `rules/edird-core.md` - EDIRD phase model core definitions
+
+**New Skill (edird-phase-model):**
+- `skills/edird-phase-model/SKILL.md`
+- `skills/edird-phase-model/BRANCHING.md`
+- `skills/edird-phase-model/FLOWS.md`
+- `skills/edird-phase-model/GATES.md`
+- `skills/edird-phase-model/NEXT_ACTION.md`
+
+**New Templates:**
+- `skills/write-documents/FAILS_TEMPLATE.md`
+- `skills/write-documents/REVIEW_TEMPLATE.md`
+
+**New Workflows (Phase Workflows):**
+- `workflows/explore.md` - EXPLORE phase
+- `workflows/design.md` - DESIGN phase
+- `workflows/refine.md` - REFINE phase
+- `workflows/deliver.md` - DELIVER phase
+- `workflows/critique.md` - Devil's Advocate review (replaces review-devilsadvocate.md)
+- `workflows/reconcile.md` - Pragmatic reconciliation (replaces review-pragmaticprogrammer.md)
+- `workflows/new-feature.md` - Start new feature with BUILD workflow
+- `workflows/new-task.md` - Start new task with SOLVE workflow
+- `workflows/test.md` - Run tests based on scope
+
+**If a file is NOT on the deprecated list:** Do NOT delete it. It is a custom repo-specific file.
