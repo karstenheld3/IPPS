@@ -2,12 +2,15 @@
 
 ## To Do
 
-- IS-12-14: Deploy to linked repos (optional)
+(none)
 
 ## In Progress
 
 ## Done
 
+- IS-12-14: Deployed DevSystemV3 to 4 linked repos (KarstensWorkspace, OpenAI-BackendTools, PRXL, SharePoint-GPT-Middleware)
+- Updated `!NOTES.md` to set current DevSystem to V3
+- Verified all 28 workflows, fixed `next.md` step numbering issue
 - IS-11: Deployed DevSystemV3 to .windsurf (EDIRD phase model live)
 - IS-09-10: Testing verified (structure, verb mappings, phase tracking)
 - IS-08: Added verb mappings to skills (`coding-conventions`, `git-conventions`, `write-documents`, `session-management`)

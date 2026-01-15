@@ -1,7 +1,7 @@
 [SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
 [SESSIONS_ARCHIVE]: [SESSIONS_FOLDER]\_Archive
 
-Current [DEVSYSTEM]: DevSystemV2.1
+Current [DEVSYSTEM]: DevSystemV3
 Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
 If you update workflows in .windsurf\workflows, sync changes back to the current [DEVSYSTEM_FOLDER].
