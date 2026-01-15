@@ -26,16 +26,16 @@ Invoke these skills before proceeding:
 
 ### IMPLEMENT
 1. [RESEARCH] step by step, adding sections to INFO document
-2. After each section:
-   - Do I need to verify with further research?
-   - Can I remove duplicates/contradictions?
-   - Is this information helpful?
+2. After each section, ask yourself:
+   - Do I need to verify these findings with further research?
+   - Can I remove duplicates and contradicting findings?
+   - Is this information really helpful? If yes, why?
 3. [SYNTHESIZE] findings into coherent understanding
 
 ### REFINE
-1. [REVIEW] in context of existing sections
-2. [VERIFY] claims against sources
-3. [IMPROVE] remove cognitive overload, redundancies
+1. [REVIEW] each section in context of existing ones
+2. [VERIFY] claims against sources - remove unverified findings
+3. [IMPROVE] remove cognitive overload, redundancies, ambiguities
 
 ### DELIVER
 1. [SUMMARIZE] at top - copy/paste ready findings
