@@ -9,6 +9,8 @@ A development system for AI-assisted coding workflows, optimized for Windsurf ID
 - [Overview](#overview)
 - [How to Add to Your Project](#how-to-add-to-your-project)
 - [DevSystem Versions](#devsystem-versions)
+- [Agentic English](#agentic-english)
+- [EDIRD Phase Model](#edird-phase-model)
 - [Key Conventions](#key-conventions)
 - [Agent Tools](#agent-tools-installed-automatically-by-skill)
 - [Project Structure](#project-structure)
@@ -19,7 +21,7 @@ A development system for AI-assisted coding workflows, optimized for Windsurf ID
 
 ## Overview
 
-IPP provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The system manages sessions, documents, commits, and tool installations.
+IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V3) introduces the EDIRD phase model and Agentic English vocabulary for deterministic agent behavior.
 
 ## How to Add to Your Project
 
