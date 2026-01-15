@@ -2,12 +2,14 @@
 
 ## To Do
 
-- IS-09-14: Testing and Deployment
+- IS-12-14: Deploy to linked repos (optional)
 
 ## In Progress
 
 ## Done
 
+- IS-11: Deployed DevSystemV3 to .windsurf (EDIRD phase model live)
+- IS-09-10: Testing verified (structure, verb mappings, phase tracking)
 - IS-08: Added verb mappings to skills (`coding-conventions`, `git-conventions`, `write-documents`, `session-management`)
 - Batch 5-7: Added phase/verb mappings to `write-spec.md`, `write-impl-plan.md`, `write-test-plan.md`, `review-devilsadvocate.md`, `review-pragmaticprogrammer.md`, `verify.md`, `rename.md`, `sync.md`
 - Phase 4 Workflows: Created `explore.md`, `design.md`, `refine.md`, `deliver.md`

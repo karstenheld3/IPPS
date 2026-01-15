@@ -1,5 +1,6 @@
 ---
 description: Start any task - ensures planning, self-review, and compliance tracking
+phase: EXPLORE
 ---
 
 # Next Task
@@ -42,7 +43,7 @@ Create plan in session folder or `PROGRESS.md`:
 2. Catch missing information early
 3. Verify dependencies exist
 
-## Step 2: Execute Task
+## Step 3: Execute Task
 
 Proceed with task following your plan.
 
@@ -51,7 +52,7 @@ Proceed with task following your plan.
 - Behavioral choices (how something should work)
 - Trade-offs (option A vs B)
 
-## Step 3: Self-Review (Before Completing)
+## Step 4: Self-Review (Before Completing)
 
 Before marking complete, switch to critical reviewer mindset:
 
@@ -65,7 +66,7 @@ Before marking complete, switch to critical reviewer mindset:
 - Did I stop at "good enough" or push for "actually good"?
 - If this fails later, what would I wish I had checked?
 
-## Step 4: Compliance Output (REQUIRED)
+## Step 5: Compliance Output (REQUIRED)
 
 **At the end of EVERY response using this workflow:**
 
