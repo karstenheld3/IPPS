@@ -5,6 +5,12 @@ description: Apply when initializing, saving, resuming, or closing a work sessio
 
 # Session Management Guide
 
+## Phase Tracking
+
+Sessions track EDIRD phases:
+- NOTES.md: "Current Phase" section with phase, last verb, gate status
+- PROGRESS.md: "Phase Plan" section with 5 phases and status
+
 ## MUST-NOT-FORGET
 
 - Session folder location: `[SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
@@ -12,6 +18,7 @@ description: Apply when initializing, saving, resuming, or closing a work sessio
 - Required files: NOTES.md, PROBLEMS.md, PROGRESS.md
 - Lifecycle: Init → Work → Save → Resume → Close → Archive
 - Sync session PROBLEMS.md to project on /session-close
+- Phase tracking: NOTES.md has current phase, PROGRESS.md has full phase plan
 
 ## Session Lifecycle
 
