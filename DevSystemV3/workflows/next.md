@@ -8,7 +8,16 @@ description: Start any task - ensures planning, self-review, and compliance trac
 
 **Usage:** `/next [your task description]`
 
-## Step 1: Create Plan (Before Execution)
+## Step 1: Assess (EXPLORE Phase Entry)
+
+**Before planning, determine workflow type and complexity:**
+
+1. [ASSESS] workflow type: BUILD (code output) or SOLVE (knowledge/decision output)
+2. [ASSESS] complexity/problem-type:
+   - BUILD: COMPLEXITY-LOW / MEDIUM / HIGH
+   - SOLVE: RESEARCH / ANALYSIS / EVALUATION / WRITING / DECISION
+
+## Step 2: Create Plan (Before Execution)
 
 **Before implementing anything, create a plan.**
 
