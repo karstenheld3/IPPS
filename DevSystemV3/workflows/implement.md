@@ -10,6 +10,34 @@ phase: IMPLEMENT
 - @coding-conventions for coding style
 - @write-documents for tracking
 
+## Context Branching
+
+Check what documents exist and proceed accordingly:
+
+### No SPEC, IMPL, TEST documents
+
+[IMPLEMENT] whatever was proposed or specified in conversation.
+
+### Existing INFO only
+
+Run `/write-spec` → [WRITE-SPEC](INFO, Problem or Feature)
+
+### Existing SPEC only
+
+Run `/write-impl-plan` → [WRITE-IMPL-PLAN](SPEC)
+
+### Existing IMPL only
+
+Run `/write-test-plan` → [WRITE-TEST-PLAN](IMPL)
+
+### Existing TEST (no test code)
+
+[IMPLEMENT] function skeletons from IMPL, then full failing tests from TEST.
+
+### Existing TEST + test code
+
+[IMPLEMENT] full implementations from IMPL in small verifiable steps.
+
 ## Phase: IMPLEMENT
 
 **Entry gate:** DESIGN→IMPLEMENT passed (IMPL plan exists)
