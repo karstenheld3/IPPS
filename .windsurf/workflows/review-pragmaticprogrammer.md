@@ -84,8 +84,8 @@ For proposed code changes or identified problems:
 
 For proposed document changes:
 
-1. **Is this as precise as possible while being as detailed as needed?**
-   Balance brevity with completeness - neither under- nor over-specify.
+1. **Does this clarify or complicate?**
+   More words often means less clarity.
 
 2. **Is this addressing a real confusion that occurred?**
    Don't document hypothetical misunderstandings.
