@@ -13,8 +13,8 @@ Sessions track EDIRD phases:
 
 ## MUST-NOT-FORGET
 
-- Session folder location: `[SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
-- Default: `[SESSIONS_FOLDER]` = `[WORKSPACE_FOLDER]` (override in `!NOTES.md`)
+- Session folder location: `[DEFAULT_SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
+- Default: `[DEFAULT_SESSIONS_FOLDER]` = `[WORKSPACE_FOLDER]` (override in `!NOTES.md`)
 - Required files: NOTES.md, PROBLEMS.md, PROGRESS.md
 - Lifecycle: Init → Work → Save → Resume → Close → Archive
 - Sync session PROBLEMS.md to project on /session-close
@@ -30,9 +30,9 @@ Sessions track EDIRD phases:
 
 ## Session Folder Location
 
-**Base:** `[SESSIONS_FOLDER]` (default: `[WORKSPACE_FOLDER]`, can be overridden in `!NOTES.md`)
+**Base:** `[DEFAULT_SESSIONS_FOLDER]` (default: `[WORKSPACE_FOLDER]`, can be overridden in `!NOTES.md`)
 
-**Format:** `[SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
+**Format:** `[DEFAULT_SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
 
 **Example:** `_PrivateSessions/_2026-01-12_FixAuthenticationBug/`
 

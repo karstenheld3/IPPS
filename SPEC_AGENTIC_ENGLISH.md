@@ -141,16 +141,15 @@ No brackets for tokens that appear in **conditions** - things the agent checks f
 
 - **[WORKSPACE_FOLDER]** - Absolute path of root folder where agent operates
 - **[PROJECT_FOLDER]** - Absolute path of project folder (same as workspace if no monorepo)
-- **[SESSIONS_FOLDER]** - Base folder for sessions (default: `[WORKSPACE_FOLDER]`, override in `!NOTES.md`)
-- **[SESSIONS_ARCHIVE]** - Archive folder for closed sessions (default: `[SESSIONS_FOLDER]/_Archive`)
 - **[SESSION_FOLDER]** - Absolute path of currently active session folder
 - **[SRC_FOLDER]** - Absolute path of source folder
 - **[AGENT_FOLDER]** - Agent config folder (`.windsurf/` or `.claude/`)
 
 **Override example in `!NOTES.md`:**
 ```
-[SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
-[SESSIONS_ARCHIVE]: [SESSIONS_FOLDER]\_Archive
+[SESSION_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
+[DEFAULT_SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
+[SESSION_ARCHIVE_FOLDER]: [DEFAULT_SESSIONS_FOLDER]\_Archive
 ```
 
 ### Configuration

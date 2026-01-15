@@ -88,7 +88,7 @@ Three dimensions define how the agent should behave:
 │   ├── workflows/          # Agent workflows (.md files)
 │   └── skills/             # Agent Skills (folders with SKILL.md)
 ├── _Archive/               # Archived sessions
-├── _[SESSION_FOLDER]/      # Session folders start with underscore
+├── _[SESSION_FOLDER]/       # Session folders start with underscore
 │   ├── _IMPL_*.md          # Implementation plans
 │   ├── _INFO_*.md          # Information documents
 │   ├── _SPEC_*.md          # Specifications
@@ -115,7 +115,7 @@ Three dimensions define how the agent should behave:
 ├── _Archive/               # Archived sessions (all projects)
 ├── [PROJECT_A]/
 │   ├── _Archive/           # Project A archived sessions
-│   ├── _[SESSION_FOLDER]/  # Project A sessions
+│   ├── _[SESSION_FOLDER]/   # Project A sessions
 │   ├── src/                # Project A source code
 │   ├── NOTES.md            # Project A notes
 │   ├── PROBLEMS.md         # Project A problems
@@ -148,8 +148,8 @@ Files starting with `.` follow Unix convention - hidden from directory listings.
 - **[WORKSPACE_FOLDER]**: Absolute path of root folder where Windsurf operates
 - **[PROJECT_FOLDER]**: Absolute path of project folder (same as workspace if no monorepo)
 - **[SRC_FOLDER]**: Absolute path of source folder
-- **[SESSIONS_FOLDER]**: Base folder for sessions (default: `[WORKSPACE_FOLDER]`, override in `!NOTES.md`)
-- **[SESSIONS_ARCHIVE]**: Archive folder for closed sessions (default: `[SESSIONS_FOLDER]/_Archive`)
+- **[DEFAULT_SESSIONS_FOLDER]**: Base folder for sessions (default: `[WORKSPACE_FOLDER]`, override in `!NOTES.md`)
+- **[SESSION_ARCHIVE_FOLDER]**: Archive folder for closed sessions (default: `[SESSION_FOLDER]/../_Archive`)
 - **[SESSION_FOLDER]**: Absolute path of currently active session folder
 
 ## Workflow Reference
