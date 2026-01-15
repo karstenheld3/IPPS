@@ -22,9 +22,10 @@ Syntax for conditional logic based on context states.
 ## For COMPLEXITY-MEDIUM
 
 1. [WRITE-SPEC] concise specification
-2. [WRITE-IMPL] implementation plan
-3. [DECOMPOSE] into testable steps
-4. [IMPLEMENT] each step with [TEST]
+2. [PROVE] risky parts with POC
+3. [WRITE-IMPL] implementation plan
+4. [DECOMPOSE] into testable steps
+5. [IMPLEMENT] each step with [TEST]
 
 ## For COMPLEXITY-HIGH
 
@@ -98,7 +99,7 @@ Use nested headers for multiple conditions:
 ```markdown
 ## For BUILD
 
-### If COMPLEXITY-HIGH
+### If COMPLEXITY-MEDIUM or higher
 
 [PROVE] with POC before [IMPLEMENT]
 

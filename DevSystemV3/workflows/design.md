@@ -19,7 +19,7 @@ phase: DESIGN
 1. [PLAN] structured approach
 2. [OUTLINE] high-level structure
 3. [WRITE-SPEC] specification document
-4. [PROVE] risky parts with POC (if COMPLEXITY-HIGH)
+4. [PROVE] risky parts with POC (if COMPLEXITY-MEDIUM or higher)
 5. [DECOMPOSE] into small testable steps
 6. [WRITE-IMPL] implementation plan
 7. [WRITE-TEST] test plan
@@ -37,7 +37,7 @@ Minimal documents - concise 1-2 page versions of SPEC, IMPL, TEST.
 ### Gate Check: DESIGN→IMPLEMENT
 
 - [ ] Approach documented (outline, spec, or plan)
-- [ ] Risky parts proven via POC (if COMPLEXITY-HIGH)
+- [ ] Risky parts proven via POC (if COMPLEXITY-MEDIUM or higher)
 - [ ] No open questions requiring [ACTOR] decision
 - [ ] For BUILD: SPEC, IMPL, TEST documents created
 - [ ] For BUILD: Plan decomposed into small testable steps

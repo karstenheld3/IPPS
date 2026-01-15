@@ -267,7 +267,7 @@ Gates are checklists that must pass before transitioning. Agent evaluates gates 
 ### DESIGN → IMPLEMENT
 
 - [ ] Approach documented (outline, spec, or plan)
-- [ ] Risky parts proven via POC (if COMPLEXITY-HIGH)
+- [ ] Risky parts proven via POC (if COMPLEXITY-MEDIUM or higher)
 - [ ] No open questions requiring [ACTOR] decision
 - [ ] For BUILD: SPEC, IMPL, TEST documents created
 - [ ] For BUILD: Plan decomposed into small testable steps
