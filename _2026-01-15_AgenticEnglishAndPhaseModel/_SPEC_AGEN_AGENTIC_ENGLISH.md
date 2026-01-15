@@ -3,7 +3,10 @@
 **Doc ID**: AGEN-SP01
 **Goal**: Define a controlled vocabulary for agent-human communication in workflows, skills, and documents
 
-**See also:** `_SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP01]` for phase model using these verbs
+**See also:**
+- `_SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP01]` for phase model using these verbs
+- `_SPEC_EDIRD_VARIATION_A_UNIFIED.md [EDIRD-SP02]` for unified BUILD/SOLVE model
+- `_SPEC_EDIRD_VARIATION_B_DUAL.md [EDIRD-SP03]` for dual model approach
 
 ## Table of Contents
 
@@ -171,13 +174,22 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 
 - **[RESEARCH]** - Web search, read docs, explore options
 - **[ANALYZE]** - Study code, data, or documents
+- **[EXPLORE]** - Open-ended investigation without specific target
+- **[INVESTIGATE]** - Focused inquiry into specific issue or question
+- **[GATHER]** - Collect information, logs, context, requirements
 
 ### Thinking and Planning
 
-- **[PLAN]** - Create structured approach
+- **[SCOPE]** - Define boundaries and constraints
+- **[FRAME]** - Structure the problem or approach
+- **[PLAN]** - Create structured approach with steps
 - **[DECIDE]** - Make a choice between options
-- **[ASSESS]** - Assess effort/time/risk
-- **[PRIORITIZE]** - Order by importance
+- **[ASSESS]** - Assess effort, time, risk, or complexity
+- **[PRIORITIZE]** - Order by importance or urgency
+- **[EVALUATE]** - Compare options against criteria, score, rank
+- **[SYNTHESIZE]** - Combine findings into coherent understanding
+- **[CONCLUDE]** - Draw conclusions from analysis
+- **[DEFINE]** - Establish clear definitions or criteria
 
 ### Validation and Proof
 
@@ -197,6 +209,10 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 - **[WRITE-IMPL]** - Write IMPL document (implementation plan)
 - **[WRITE-TEST]** - Write TEST document (test plan)
 - **[OUTLINE]** - Create high-level structure
+- **[SUMMARIZE]** - Create concise summary of longer content
+- **[EXPLAIN]** - Provide clear explanation of concept or decision
+- **[DOCUMENT]** - Record information for future reference
+- **[DRAFT]** - Create initial version for review
 
 ### Implementation
 
@@ -210,11 +226,16 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 
 ### Communication
 
-- **[CONSULT]** - Request input, clarification, decisions
+- **[CONSULT]** - Request input, clarification, decisions from [ACTOR]
+- **[CLARIFY]** - Make something clearer or resolve ambiguity
+- **[QUESTION]** - Ask specific questions to gather information
 - **[STATUS]** - Write status report
-- **[PROPOSE]** - Suggest options for decision (2 for linear, 3+ for multi-dimensional problems)
-- **[VALIDATE]** - Confirm with [ACTOR]
-- **[ENUMERATE]** - Generate list of options before proposing
+- **[PROPOSE]** - Present multiple options for [ACTOR] to choose from
+- **[RECOMMEND]** - Suggest single option with rationale (use with [DECIDE])
+- **[VALIDATE]** - Confirm approach or result with [ACTOR]
+- **[ENUMERATE]** - Generate comprehensive list before proposing
+- **[PRESENT]** - Share findings or results with [ACTOR]
+- **[COMPARE]** - Show side-by-side differences (not scored like [EVALUATE])
 
 ### Completion
 
@@ -279,16 +300,28 @@ Determined during `[ASSESS]`, maps to semantic versioning:
 - **COMPLEXITY-MEDIUM** - Multiple files, some dependencies, backward compatible → minor version
 - **COMPLEXITY-HIGH** - Breaking changes, new patterns, external APIs, architecture → major version
 
-### Problem Type
-
-Classified at task start:
-
-- **HOTFIX** - Production down, immediate action required
-- **BUGFIX** - Defect in existing functionality
-- **CHORE** - Technical debt, cleanup, refactoring
-- **MIGRATION** - Data or API migration
-
 ## Document History
+
+**[2026-01-15 19:18]**
+- Added: Information Gathering - [EXPLORE], [INVESTIGATE], [GATHER]
+- Added: Thinking and Planning - [SCOPE], [FRAME], [DEFINE]
+- Added: Documentation - [SUMMARIZE], [EXPLAIN], [DOCUMENT], [DRAFT]
+- Added: Communication - [CLARIFY], [QUESTION], [PRESENT], [COMPARE]
+- Changed: Improved descriptions for existing verbs
+- Removed: Workflow Type and Problem Type (moved to EDIRD spec)
+
+**[2026-01-15 19:12]**
+- Added: Workflow Type context states (BUILD, SOLVE)
+- Added: SOLVE problem types (RESEARCH, ANALYSIS, EVALUATION, WRITING, DECISION)
+- Changed: Renamed "Problem Type" to "Problem Type (BUILD workflow)"
+- Added: Cross-references to EDIRD variation specs
+
+**[2026-01-15 19:09]**
+- Added: [EVALUATE] - Compare options against criteria, score, rank (Thinking)
+- Added: [SYNTHESIZE] - Combine findings into coherent understanding (Thinking)
+- Added: [CONCLUDE] - Draw conclusions from analysis (Thinking)
+- Added: [RECOMMEND] - Suggest single option with rationale (Communication)
+- Changed: [PROPOSE] description clarified - present multiple options for choice
 
 **[2026-01-15 18:39]**
 - Fixed: Verb disambiguation (OPTIMIZE=performance, IMPROVE=general quality, REFACTOR=per goal)
