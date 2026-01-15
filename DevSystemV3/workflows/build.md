@@ -1,11 +1,11 @@
 ---
-description: Start a new feature with session-based BUILD workflow
+description: BUILD workflow - create software, features, systems
 phase: EXPLORE
 ---
 
-# New Feature Workflow
+# Build Workflow
 
-Session-based BUILD workflow for implementing new features.
+Main entry point for BUILD workflow - creating software, features, systems.
 
 ## Required Skills
 
@@ -16,7 +16,7 @@ Session-based BUILD workflow for implementing new features.
 ## Usage
 
 ```
-/new-feature "Add user authentication API"
+/build "Add user authentication API"
 ```
 
 ## Step 1: Initialize Session
@@ -27,6 +27,28 @@ Creates session folder with:
 - NOTES.md (with Current Phase tracking)
 - PROGRESS.md (with Phase Plan)
 - PROBLEMS.md
+
+## Step 1b: Determine Operation Mode
+
+**CRITICAL**: Before any implementation, determine operation mode:
+
+- **IMPL-CODEBASE** (default): Implement in existing codebase
+  - For: SPEC, IMPL, TEST, [IMPLEMENT]
+  - Files created in project source folders
+  - Affects existing code/config/runtime
+
+- **IMPL-ISOLATED**: Implement separately from existing codebase
+  - For: [PROVE], POCs, prototypes, self-contained test scripts
+  - Files created in `[SESSION_FOLDER]/` or `[SESSION_FOLDER]/poc/`
+  - Existing code, configuration, or runtime MUST NOT be affected
+  - NEVER create folders in workspace root
+  - **REQUIRES SESSION**: If no session exists, run `/session-init` first
+
+Record in NOTES.md:
+```markdown
+**Operation Mode**: IMPL-CODEBASE
+**Target**: src/features/[feature]/
+```
 
 ## Step 2: EXPLORE Phase
 

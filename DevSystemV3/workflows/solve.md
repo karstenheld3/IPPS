@@ -1,11 +1,11 @@
 ---
-description: Start a new task with session-based SOLVE workflow
+description: SOLVE workflow - explore problems, evaluate ideas, make decisions
 phase: EXPLORE
 ---
 
-# New Task Workflow
+# Solve Workflow
 
-Session-based SOLVE workflow for research, analysis, and problem solving.
+Main entry point for SOLVE workflow - research, analysis, evaluation, decisions.
 
 ## Required Skills
 
@@ -16,9 +16,9 @@ Session-based SOLVE workflow for research, analysis, and problem solving.
 ## Usage
 
 ```
-/new-task "Research authentication best practices"
-/new-task "Analyze why API returns 500 errors"
-/new-task "Evaluate database migration options"
+/solve "Research authentication best practices"
+/solve "Analyze why API returns 500 errors"
+/solve "Evaluate database migration options"
 ```
 
 ## Step 1: Initialize Session
@@ -29,6 +29,28 @@ Creates session folder with:
 - NOTES.md (with Current Phase tracking)
 - PROGRESS.md (with Phase Plan)
 - PROBLEMS.md
+
+## Step 1b: Determine Operation Mode
+
+**CRITICAL**: Before any implementation, determine operation mode:
+
+- **IMPL-CODEBASE** (default): Implement in existing codebase
+  - For: SPEC, IMPL, TEST, [IMPLEMENT], HOTFIX, BUGFIX
+  - Files created in project source folders
+  - Affects existing code/config/runtime
+
+- **IMPL-ISOLATED**: Implement separately from existing codebase
+  - For: [PROVE], POCs, prototypes, self-contained test scripts
+  - Files created in `[SESSION_FOLDER]/` or `[SESSION_FOLDER]/poc/`
+  - Existing code, configuration, or runtime MUST NOT be affected
+  - NEVER create folders in workspace root
+  - **REQUIRES SESSION**: If no session exists, run `/session-init` first
+
+Record in NOTES.md:
+```markdown
+**Operation Mode**: IMPL-ISOLATED
+**Output Location**: [SESSION_FOLDER]/poc/
+```
 
 ## Step 2: EXPLORE Phase
 
