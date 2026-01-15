@@ -17,6 +17,7 @@ This skill contains document templates and formatting rules.
 - Be exhaustive: list ALL domain objects, actions, functions
 - Document History section at end, reverse chronological
 - Use box-drawing characters (├── └── │) for trees
+- SPEC, IMPL, TEST documents MUST have MUST-NOT-FORGET section (after header block, before TOC)
 
 ## Document Writing Rules
 
@@ -25,12 +26,11 @@ This skill contains document templates and formatting rules.
   - BAD: "Files starting with '!' signify high relevance that must be treated with extra attention."
   - GOOD: "Files starting with '!' indicate high relevance. This information must be treated with extra attention."
 
-## Available Templates
+## Templates (Required)
 
-Read the appropriate template for the document type you are creating:
+You MUST read the appropriate template before creating documents:
 - `INFO_TEMPLATE.md` - Research and analysis documents
 - `SPEC_TEMPLATE.md` - Technical specifications
-- `SPEC_RULES.md` - SPEC writing rules with GOOD/BAD examples
 - `IMPL_TEMPLATE.md` - Implementation plans
 - `TEST_TEMPLATE.md` - Test plans
 - `FIXES_TEMPLATE.md` - Fix tracking documents
@@ -38,8 +38,9 @@ Read the appropriate template for the document type you are creating:
 ## Usage
 
 1. Read this SKILL.md for core rules
-2. Read the appropriate template for your document type
-3. Follow the template structure
+2. Read the template for your document type (required)
+3. For SPEC documents: also read `SPEC_RULES.md` (required)
+4. Follow the template structure exactly, except when user requests exceptions or different structure
 
 ## File Naming
 

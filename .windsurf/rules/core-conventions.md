@@ -9,8 +9,8 @@ Universal formatting and writing conventions for all documents.
 ## Text Style
 
 - Use ASCII "double quotes" or 'single quotes'. Never use Non-ASCII quotes unless explicitly asked.
-- No emojis in documentation (exception: UI may use limited set)
-- Avoid Markdown tables; use unnumbered lists with indented properties to avoid unreadable rendering
+- No emojis in documentation (see Document Rule Exceptions below)
+- Avoid Markdown tables; use unnumbered lists with indented properties (see Document Rule Exceptions below)
 - Use Unicode box-drawing characters for structures:
   - Trees and flows: `├─>` `└─>` `│` (2-space indentation compatible)
   - Boxes and diagrams (non-UI): `┌─` `├─` `└─` `│` `─` `┐` `┤` `┘`
@@ -63,3 +63,34 @@ Always at document end, reverse chronological order:
 ```
 
 **Action prefixes:** Added, Changed, Fixed, Removed, Moved
+
+## Document Rule Exceptions
+
+Documents may opt-in to use Markdown tables or emojis by adding a DevSystem HTML tag as the **first line** of the document (before the title).
+
+**Syntax:**
+```html
+<DevSystem><Rules><MarkdownTablesAllowed enabled=true /><EmojisAllowed enabled=true /></Rules></DevSystem>
+```
+
+**Individual rules:**
+- `<MarkdownTablesAllowed enabled=true />` - Allow Markdown tables in this document
+- `<EmojisAllowed enabled=true />` - Allow emojis in this document
+
+**Allowed emojis (when enabled):**
+- ✅ - Yes, supported, pass, enabled
+- ❌ - No, unsupported, fail, disabled
+- ⚠️ - Warning, partial, caution
+
+**Usage pattern in tables:**
+```markdown
+| Feature | Supported |
+|---------|-----------|
+| MCP     | ✅ Yes    |
+| Hooks   | ❌ No     |
+```
+
+**When to use exceptions:**
+- Comparison documents where tables improve readability
+- Feature matrices and compatibility charts
+- Status dashboards
