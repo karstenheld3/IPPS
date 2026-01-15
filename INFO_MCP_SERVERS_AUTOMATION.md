@@ -24,6 +24,7 @@
 - **SaaS Providers**: Composio (500+ toolkits), Arcade (OAuth-first), Nango (unified API auth), Cloudflare (edge hosting) [VERIFIED]
 - **Enterprise Gateways**: Microsoft MCP Gateway (Kubernetes), Microsoft MCP Server for Enterprise (free M365), Azure API Management [VERIFIED]
 - **Registries**: Smithery (marketplace), Docker MCP Catalog (secure), Official MCP Registry [VERIFIED]
+- **Agent Orchestration**: sub-agents-mcp brings Claude Code-style sub-agents to Windsurf and other MCP clients [VERIFIED]
 
 ## Table of Contents
 
@@ -43,8 +44,9 @@
 14. [Local Machine Automation MCPs](#14-local-machine-automation-mcps)
 15. [Testing and Quality MCPs](#15-testing-and-quality-mcps)
 16. [SaaS Providers and Managed MCP Solutions](#16-saas-providers-and-managed-mcp-solutions)
-17. [Sources](#17-sources)
-18. [Document History](#18-document-history)
+17. [Agent Orchestration MCPs](#17-agent-orchestration-mcps)
+18. [Sources](#18-sources)
+19. [Document History](#19-document-history)
 
 ## 1. Document Reading MCPs
 
@@ -964,7 +966,80 @@ SharePoint access included in ms-365-mcp-server with `--org-mode`:
 - **Microsoft 365 Integration**: Microsoft MCP Server for Enterprise (free)
 - **Browser Automation**: Browserbase or Browser-Use Cloud for scale
 
-## 17. Sources
+## 17. Agent Orchestration MCPs
+
+### 17.1 sub-agents-mcp (shinpr)
+
+**sub-agents-mcp** - Claude Code-style sub-agents for any MCP client
+- Brings programmatic sub-agent delegation to Windsurf, Cursor, Claude Desktop
+- Define agents as markdown files in a folder
+- Each sub-agent starts with fresh context (no leakage)
+- GitHub: `github.com/shinpr/sub-agents-mcp`
+
+**How it works**:
+1. Define agents as markdown files in AGENTS_DIR
+2. Configure MCP server with execution backend
+3. MCP server exposes agents as callable tools
+4. Main agent delegates tasks by calling the MCP tool
+
+**Execution backends**:
+- `claude` - Uses Claude Code CLI
+- `cursor` - Uses cursor-agent CLI
+- `gemini` - Uses Gemini CLI
+- `codex` - Uses Codex CLI
+
+**Configuration for Windsurf**:
+
+```json
+{
+  "mcpServers": {
+    "sub-agents": {
+      "command": "npx",
+      "args": ["-y", "sub-agents-mcp"],
+      "env": {
+        "AGENTS_DIR": "C:\\Users\\YourUser\\agents",
+        "AGENT_TYPE": "claude"
+      }
+    }
+  }
+}
+```
+
+### 17.2 Creating a Sub-Agent
+
+Create markdown file in AGENTS_DIR (e.g., `code-reviewer.md`):
+
+```markdown
+# Code Reviewer
+Review code for quality and maintainability issues.
+
+## Task
+- Find bugs and potential issues
+- Suggest improvements
+- Check code style consistency
+
+## Done When
+- All target files reviewed
+- Issues listed with explanations
+```
+
+### 17.3 Design Philosophy
+
+**Fresh context per sub-agent**:
+- No context leakage between runs
+- Sub-agents specialize in single goal
+- Large tasks safely split into smaller sub-tasks
+- Main agent coordinates without hitting context limits
+
+**Trade-off**: Startup overhead for each call, but ensures accuracy and reliability.
+
+**Use cases**:
+- Parallel code review across multiple files
+- Research delegation while main agent continues
+- Specialized analysis (security audit, performance review)
+- Multi-step workflows with isolated contexts
+
+## 18. Sources
 
 **Primary Sources:**
 
@@ -1010,7 +1085,17 @@ SharePoint access included in ms-365-mcp-server with `--org-mode`:
 - `MCPS-IN01-SC-DKRMCP`: https://www.docker.com/blog/docker-mcp-catalog-secure-way-to-discover-and-run-mcp-servers/ - Docker MCP Catalog [VERIFIED]
 - `MCPS-IN01-SC-SMITH`: https://smithery.ai/ - Smithery MCP marketplace [VERIFIED]
 
-## 18. Document History
+**Agent Orchestration Sources:**
+
+- `MCPS-IN01-SC-GH-SUBAG`: https://github.com/shinpr/sub-agents-mcp - Sub-agents MCP server [VERIFIED]
+
+## 19. Document History
+
+**[2026-01-15 20:20]**
+- Added: Section 17 - Agent Orchestration MCPs
+- Added: sub-agents-mcp (shinpr) - Claude Code-style sub-agents for Windsurf/Cursor/Claude Desktop
+- Added: Configuration example, agent definition template, design philosophy
+- Updated: TOC and Summary with Agent Orchestration entry
 
 **[2026-01-15 10:57]**
 - Added: Playwriter (remorses) to Section 3 - Chrome extension-based MCP for existing browser sessions

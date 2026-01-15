@@ -21,6 +21,7 @@ Rules for writing specification documents with GOOD/BAD examples.
 - **SPEC-CT-04**: Document event flows with box-drawing characters
 - **SPEC-CT-05**: Provide data structure examples (JSON, CSV)
 - **SPEC-CT-06**: Compact object definitions - use lists, no empty lines between properties
+- **SPEC-CT-07**: Compact gate checklists - use simple lists, not ASCII box diagrams
 
 **Format (FT)**
 - **SPEC-FT-01**: Use timestamped changelog, reverse chronological
@@ -36,6 +37,7 @@ Rules for writing specification documents with GOOD/BAD examples.
 - [Code Outline Only](#code-outline-only)
 - [Single Line Statements](#single-line-statements)
 - [Compact Object Definitions](#compact-object-definitions)
+- [Compact Gate Checklists](#compact-gate-checklists)
 - [Event Flow Documentation](#event-flow-documentation)
 - [Data Structure Examples](#data-structure-examples)
 - [Document History Format](#document-history-format)
@@ -267,6 +269,28 @@ Use lists for object/phase definitions. No empty lines between properties.
 - **Entry**: Start of workflow
 - **Exit**: Gate EXPLORE→DESIGN passes
 - **Verbs**: [RESEARCH], [ANALYZE], [ASSESS], [SCOPE], [GATHER], [CONSULT], [DECIDE]
+```
+
+## Compact Gate Checklists
+
+Use simple lists for gate/transition checklists. ASCII box diagrams waste characters.
+
+**BAD:** (ASCII box wastes ~600 chars)
+```
+┌─ Gate: X → Y ────────────────────────┐
+│  [ ] Item 1                          │
+│  [ ] Item 2                          │
+│  If unchecked → remain in [X]        │
+└──────────────────────────────────────┘
+```
+
+**GOOD:** (simple list)
+```
+### Gate: X → Y
+- [ ] Item 1
+- [ ] Item 2
+
+**Pass**: proceed to [Y] | **Fail**: remain in [X]
 ```
 
 ## Event Flow Documentation
