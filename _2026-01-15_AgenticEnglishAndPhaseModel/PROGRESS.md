@@ -2,10 +2,15 @@
 
 ## To Do
 
+- Begin implementation: IS-01, IS-02 (Setup)
+
 ## In Progress
 
 ## Done
 
+- Reviewed IMPL plan against AGEN-SP01, EDIRD-SP04 specs (created `_IMPL_DEVSYSTEM_V3_MIGRATION_REVIEW.md [DSVS-RV02]`)
+- Fixed RV02-01: Added PROGRESS.md phase plan template to IS-04
+- Fixed RV02-02: Clarified session-management skill phase tracking templates
 - Defined Agentic English syntax (instruction tokens vs context states)
 - Created `_SPEC_AGEN_AGENTIC_ENGLISH.md [AGEN-SP01]` with verbs, placeholders, labels, context states
 - Created `_SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP01]` with 5-phase model (EXPLORE, DESIGN, IMPLEMENT, REFINE, DELIVER)

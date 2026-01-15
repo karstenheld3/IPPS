@@ -255,6 +255,18 @@ Sessions track current phase in NOTES.md:
 **Gate status**: 3/5 items checked
 ```
 
+Sessions track full phase plan in PROGRESS.md:
+
+```markdown
+## Phase Plan
+
+- [ ] **EXPLORE** - pending
+- [x] **DESIGN** - done
+- [ ] **IMPLEMENT** - in_progress
+- [ ] **REFINE** - pending
+- [ ] **DELIVER** - pending
+```
+
 ## 4. Phase 3: Pilot Workflow
 
 ### DSVS-IP01-IS-05: Restructure implement.md (Pilot)
@@ -451,7 +463,7 @@ This skill implements:
 | `github` | KEEP (external tool integration) |
 | `ms-playwright-mcp` | KEEP (external tool integration) |
 | `pdf-tools` | KEEP (external tool integration) |
-| `session-management` | Add phase tracking templates |
+| `session-management` | Add phase tracking templates: NOTES.md gets "Current Phase" section, PROGRESS.md gets "Phase Plan" section with 5 phases |
 | `write-documents` | Add verb mapping for all [WRITE-*] verbs |
 
 ## 7. Phase 6: Testing
@@ -610,6 +622,10 @@ If repo has custom workflows in .windsurf/workflows/:
 - User must migrate manually
 
 ## Document History
+
+**[2026-01-15 20:41]**
+- Fixed: RV02-01 - Added PROGRESS.md phase plan template to IS-04
+- Fixed: RV02-02 - Clarified session-management skill phase tracking templates
 
 **[2026-01-15 20:29]**
 - Fixed: RV-01 - Added gate summaries to edird-core.md template
