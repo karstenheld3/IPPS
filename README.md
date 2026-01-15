@@ -51,6 +51,8 @@ A controlled vocabulary for agent-human communication. Provides consistent termi
 
 **Syntax**:
 - `[VERB]` - Action to execute (e.g., `[RESEARCH]`, `[VERIFY]`, `[IMPLEMENT]`)
+
+**Extensibility**: Verbs are abstract concepts. Complex verbs CAN be concretized as dedicated workflows (e.g., `[COMMIT]` → `/commit`), but this is optional. Simple verbs work inline within phase workflows.
 - `[PLACEHOLDER]` - Value to substitute (e.g., `[ACTOR]`, `[WORKSPACE_FOLDER]`)
 - `[LABEL]` - Classification to apply (e.g., `[UNVERIFIED]`, `[CRITICAL]`)
 - Context states use NO brackets: `COMPLEXITY-HIGH`, `HOTFIX`, `SINGLE-PROJECT`

@@ -169,6 +169,8 @@ No brackets for tokens that appear in **conditions** - things the agent checks f
 
 Reusable activities that can be used within any phase. Use as markers like `[RESEARCH]`, `[PROVE]`, `[TEST]`.
 
+**Extensibility**: Verbs are abstract concepts that CAN be concretized as dedicated workflows, but this is not required. Complex verbs benefit from workflows (e.g., `[COMMIT]` → `/commit`, `[CRITIQUE]` → `/critique`), while simple verbs work inline within phase workflows. New verbs can be added to extend the vocabulary as needed.
+
 ### Information Gathering
 
 - **[RESEARCH]** - Web search, read docs, explore options
