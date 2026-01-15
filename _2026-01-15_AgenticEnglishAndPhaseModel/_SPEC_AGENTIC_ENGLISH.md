@@ -3,6 +3,19 @@
 **Doc ID**: AGEN-IN01
 **Goal**: Define a controlled vocabulary for agent-human communication in workflows, skills, and documents
 
+**See also:** `INFO_PROJECT_PHASES_OPTIONS.md [PHSE-IN01]` for phase hierarchies using these verbs
+
+## Table of Contents
+
+- [Purpose](#purpose)
+- [Usage](#usage)
+- [Syntax](#syntax)
+- [Placeholders](#placeholders)
+- [Atomic Activities (Verbs)](#atomic-activities-verbs)
+- [Labels](#labels)
+- [Context States](#context-states)
+- [Document History](#document-history)
+
 ## Purpose
 
 Agentic English is a controlled vocabulary that prevents ambiguous instructions and hardcoded values in agent-facing content. It provides:
@@ -65,15 +78,55 @@ Tracking files use verbs for status:
 
 ## Syntax
 
-**Use in all workflows to prevent ambiguous instructions and hardcoded values:**
+Agentic English has two token types with distinct syntax:
 
-- `[VERB]` - Defined activity, entity, or placeholder (e.g., `[RESEARCH]`, `[VERIFY]`, `[ACTOR]`)
-- `[VERB]-OK` - Successful outcome of activity, proceed to next step
+### Instruction Tokens `[BRACKETS]`
+
+Use brackets for tokens that appear in **instructions** - things the agent reads and DOES:
+
+- `[VERB]` - Action to execute (e.g., `[RESEARCH]`, `[VERIFY]`, `[IMPLEMENT]`)
+- `[PLACEHOLDER]` - Value to substitute (e.g., `[ACTOR]`, `[WORKSPACE_FOLDER]`)
+- `[LABEL]` - Classification to apply (e.g., `[UNVERIFIED]`, `[CRITICAL]`)
+
+**Verb modifiers:**
+
+- `[VERB]-OK` - Successful outcome, proceed to next step
 - `[VERB]-FAIL` - Failed outcome, re-iterate or escalate
 - `[VERB]-SKIP` - Intentionally skipped (complexity doesn't require it)
-- `[VERB-VARIANT]` - Specific variant of a verb (e.g., `[WRITE-IMPL]`, `[WRITE-TEST]`)
-- `[VERB](input)` - Verb with input parameter (e.g., `[WRITE-IMPL](SPEC)` = write impl plan from spec)
-- `STATE-NAME` - Defined state that maps to different verb sequences (e.g., `COMPLEXITY-HIGH`, `HOTFIX`)
+- `[VERB-VARIANT]` - Specific variant (e.g., `[WRITE-IMPL]`, `[WRITE-TEST]`)
+- `[VERB](input)` - Verb with parameter (e.g., `[WRITE-IMPL](SPEC)`)
+
+**Example instruction:**
+```
+In [WORKSPACE_FOLDER], [WRITE-INFO] about dependencies. Mark as [UNVERIFIED] if no source.
+```
+
+### Context States `NO-BRACKETS`
+
+No brackets for tokens that appear in **conditions** - things the agent checks for branching:
+
+- `PREFIX-VALUE` format (e.g., `SINGLE-PROJECT`, `COMPLEXITY-HIGH`, `HOTFIX`)
+- Used in conditional headers and branching logic
+- Never substituted or executed - only checked
+
+**Example branching:**
+```
+## For SINGLE-PROJECT
+[WRITE-INFO] in [WORKSPACE_FOLDER]
+
+## For MONOREPO  
+[WRITE-INFO] in [PROJECT_FOLDER] for each project
+
+## If COMPLEXITY-HIGH
+[PROVE] with POC before [IMPLEMENT]
+```
+
+### Quick Reference
+
+- **Brackets `[XXX]`** = Instruction stream (do / substitute / tag)
+- **No brackets `XXX-YYY`** = Condition headers (if / when / for)
+- **Grep instructions**: `\[[A-Z_-]+\]`
+- **Grep conditions**: `[A-Z]+-[A-Z]+`
 
 ## Placeholders
 
@@ -130,7 +183,7 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 
 ### Documentation
 
-- **[WRITE]** - Generic write action (use specific variants below)
+- **[WRITE]** - Generic write action (based on context)
 - **[WRITE-INFO]** - Write INFO document (research findings)
 - **[WRITE-SPEC]** - Write SPEC document (specification)
 - **[WRITE-IMPL]** - Write IMPL document (implementation plan)
@@ -165,24 +218,86 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 - **[CLOSE]** - Mark as done and sync data to container (task, project, session, feature)
 - **[ARCHIVE]** - Archive closed
 
-## Complexity Levels
+## Labels
 
-Maps to semantic versioning:
+Labels classify and mark items. Unlike verbs (actions) and placeholders (substitutions), labels categorize.
+
+### Assumption Labels
+
+Use in reviews and problem tracking:
+
+- **[UNVERIFIED]** - Assumption made without evidence
+- **[CONTRADICTS]** - Logic conflicts with other statement/code
+- **[OUTDATED]** - Assumption may no longer be valid
+- **[INCOMPLETE]** - Reasoning missing critical considerations
+
+### Failure Categories
+
+Use in FAILS.md:
+
+- **[CRITICAL]** - Will definitely cause production failure
+- **[HIGH]** - Likely to cause failure under normal conditions
+- **[MEDIUM]** - Could cause failure under specific conditions
+- **[LOW]** - Minor issue, unlikely to cause failure
+
+### Status Labels
+
+Use in tracking files:
+
+- **[RESOLVED]** - Issue fixed, documented for reference
+- **[WONT-FIX]** - Acknowledged risk, accepted trade-off
+- **[NEEDS-DISCUSSION]** - Requires [CONSULT] with [ACTOR]
+
+## Context States
+
+Context states are condition tokens (no brackets) used for branching. Format: `PREFIX-VALUE`.
+
+### Workspace Context
+
+Detected during `/prime`:
+
+- **SINGLE-PROJECT** - Workspace contains one project
+- **MONOREPO** - Workspace contains multiple independent projects
+- **SINGLE-VERSION** - One active version, no migration
+- **MULTI-VERSION** - Side-by-side versions (e.g., V1 and V2 coexisting)
+- **SESSION-BASED** - Time-limited session with specific goals
+- **PROJECT-WIDE** - Work spans entire project without session boundaries
+
+### Complexity Assessment
+
+Determined during `[ASSESS]`, maps to semantic versioning:
 
 - **COMPLEXITY-LOW** - Single file, clear scope, no dependencies → patch version
 - **COMPLEXITY-MEDIUM** - Multiple files, some dependencies, backward compatible → minor version
 - **COMPLEXITY-HIGH** - Breaking changes, new patterns, external APIs, architecture → major version
 
-## Problem Types
+### Problem Type
+
+Classified at task start:
 
 - **HOTFIX** - Production down, immediate action required
 - **BUGFIX** - Defect in existing functionality
 - **CHORE** - Technical debt, cleanup, refactoring
 - **MIGRATION** - Data or API migration
-- **REVIEW** - Code review, audit
-- **ASSESSMENT** - Research and options analysis
 
 ## Document History
+
+**[2026-01-15 17:42]**
+- Changed: Rewrote Syntax section with clear instruction vs condition distinction
+- Changed: Merged Complexity Levels and Problem Types into Context States section
+- Added: Workspace Context states (SINGLE-PROJECT, MONOREPO, etc.)
+- Added: Quick Reference with grep patterns
+- Added: Example branching syntax
+- Updated: TOC to reflect new structure
+
+**[2026-01-15 17:30]**
+- Added: Labels section with Assumption, Failure, and Status labels
+- Updated: TOC to include Labels
+
+**[2026-01-15 17:17]**
+- Added: Table of Contents
+- Added: Cross-reference to INFO_PROJECT_PHASES_OPTIONS.md
+- Fixed: Clarified why STATE-NAME doesn't use brackets
 
 **[2026-01-15 16:54]**
 - Fixed: Placeholders section with correct definitions from devsystem-core.md
