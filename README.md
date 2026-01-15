@@ -96,7 +96,7 @@ IPP/
 │       ├── go-research.md        # Structured research
 │       ├── implement.md          # Implementation workflow
 │       ├── prime.md              # Context loading workflow
-│       ├── refactor.md           # Global/local pattern replacement (NEW)
+│       ├── rename.md             # Global/local pattern replacement (NEW)
 │       ├── session-*.md          # Session management (init, save, resume, close, archive)
 │       ├── setup-pdftools.md     # PDF tools installation
 │       ├── sync.md               # Document synchronization
@@ -199,9 +199,9 @@ Creates `_TEST_*.md` from spec.
 /sync
 ```
 
-8. **Refactor** - Global/local pattern replacement:
+8. **Rename** - Global/local pattern replacement:
 ```
-/refactor
+/rename
 ```
 
 9. **Commit** - Create conventional commits:
