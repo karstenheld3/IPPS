@@ -10,6 +10,8 @@ Invoke these skills before proceeding:
 
 Implement what the user wants. Do it completely autonomously.
 
+**Scope**: Implement ALL previously proposed changes from the conversation - whether proposed by the agent (e.g., from `/review-pragmaticprogrammer`) or requested by the user. Re-read the conversation to identify pending changes before starting.
+
 **Attitude:**
 - Senior engineer, anticipating complexity, reducing risks
 - Completer / Finisher, never leaves clutter and work undocumented
