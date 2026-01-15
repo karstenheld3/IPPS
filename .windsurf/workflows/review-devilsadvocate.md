@@ -6,7 +6,7 @@ description: Brutally picky critic to find problems, risks, and potential failur
 
 **Profile**: Senior engineer tasked with being a brutally picky critic, sensitive to the slightest sign of possible failure.
 
-**Golden Rule**: NEVER touch existing code or documents. ALWAYS create or update separate versions with `_DA` suffix.
+**Golden Rule**: NEVER touch existing code or documents. ALWAYS create or update separate versions with `_REVIEW` suffix.
 
 ## Required Skills
 
@@ -18,11 +18,17 @@ Invoke based on context:
 
 **Two distinct output files with different purposes:**
 
-- **`_PROBLEMS_DA.md`** - Problems that COULD appear
+- **`[filename]_REVIEW.md`** - Problems found in specific document/code
+  - For document review: `_INFO_CRAWLER_REVIEW.md`, `_SPEC_AUTH_REVIEW.md`
+  - For code review: `auth_handler_REVIEW.md`
   - Potential risks, concerns, edge cases not yet triggered
   - Hypothetical failure scenarios
   - Questions that need answers
   - Created fresh each review, can be discarded after addressing
+
+- **`_PROBLEMS_REVIEW.md`** - Problems found in conversation/logs (no specific file)
+  - Use when reviewing conversation history without specific document
+  - General issues spanning multiple files
 
 - **`FAILS.md`** - Problems that DID appear
   - Wrong assumptions that caused issues
@@ -42,7 +48,7 @@ Invoke based on context:
 5. **Create internal MUST-NOT-FORGET list** - key constraints, user requirements, critical rules
 6. Create Devil's Advocate task list
 7. Work through task list:
-   - Update `_PROBLEMS_DA.md` with potential issues found
+   - Update `_PROBLEMS_REVIEW.md` with potential issues found
    - Update `FAILS.md` with actual failures/mistakes discovered
    - **Check MUST-NOT-FORGET list after each major finding**
 8. Run Final Checklist
@@ -52,7 +58,7 @@ Invoke based on context:
 
 **Mindset**: Assume everything will fail. Your job is to prove it won't.
 
-- **Never edit originals** - Create `_DA` suffix copies for suggestions
+- **Never edit originals** - Create `_REVIEW` suffix copies for suggestions
 - **Research before assuming** - Do web searches to verify claims and find failure examples
 - **Question everything** - Dependencies, assumptions, edge cases, error handling
 - **Be specific** - Vague concerns are useless. Cite line numbers, exact scenarios
@@ -113,7 +119,7 @@ If unsure, check for existing `FAILS.md` or ask user.
 **Rules**:
 - Group by date and context
 - Most recent at top
-- Link to `_DA` files containing detailed suggestions
+- Link to `_REVIEW` files containing detailed suggestions
 - Never delete entries - mark as `[RESOLVED]` with date and solution
 
 ## Context-Specific Sections
@@ -132,7 +138,7 @@ When called without specific document, review the entire conversation:
    - TODOs and FIXMEs that were forgotten
    - Promises without error handling
    - API calls without timeout/retry logic
-3. **Create/Update** `_PROBLEMS_DA.md`:
+3. **Create/Update** `_PROBLEMS_REVIEW.md`:
    ```markdown
    # Problems Found - Devil's Advocate Review
    
@@ -189,7 +195,7 @@ When called without specific document, review the entire conversation:
 
 **Meta-principle behind everything**: Where is the complexity hiding, and who will pay for it in the long-term?
 
-Create `[filename]_DA.md` with findings.
+Create `[filename]_REVIEW.md` with findings.
 
 **First, read all relevant context and answer these architectural questions:**
 
@@ -257,7 +263,7 @@ When reviewing error logs or console output:
    - Timing patterns = race condition or resource exhaustion
    - Cascading errors = missing error boundaries
 
-4. **Update** `_PROBLEMS_DA.md` and `FAILS.md` with root causes found
+4. **Update** `_PROBLEMS_REVIEW.md` and `FAILS.md` with root causes found
 
 ## Devil's Advocate Questions
 
@@ -276,8 +282,9 @@ Ask these for EVERY review:
 
 Before finishing, verify:
 
-- [ ] `FAILS.md` updated with all findings (categorized by severity)
-- [ ] `_PROBLEMS_DA.md` or `*_DA.md` created with detailed analysis
+- [ ] `FAILS.md` updated with actual failures discovered (categorized by severity)
+- [ ] `[filename]_REVIEW.md` created for specific document/code review
+- [ ] `_PROBLEMS_REVIEW.md` created only for conversation/logs review (no specific file)
 - [ ] No original files were modified
 - [ ] Each finding has: What, Where, Why it went wrong, Suggested fix
 - [ ] Critical issues highlighted at top
@@ -308,7 +315,7 @@ End every Devil's Advocate review with:
 
 **Files Created/Updated**:
 - `FAILS.md` - [X] new entries
-- `[filename]_DA.md` - Detailed findings
+- `[filename]_REVIEW.md` - Detailed findings
 
 **Recommendation**: [PROCEED / PROCEED WITH CAUTION / STOP AND FIX]
 ```

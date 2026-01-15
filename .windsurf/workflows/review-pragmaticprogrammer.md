@@ -18,13 +18,13 @@ Invoke based on context:
 
 Read all Devil's Advocate findings:
 - **`FAILS.md`** - Actual failures and mistakes discovered
-- **`*_DA.md`** - Detailed analysis and suggestions from reviews
+- **`*_REVIEW.md`** - Detailed analysis and suggestions from reviews
 
 ## Workflow
 
 1. Read `FAILS.md` (if exists)
-2. Find and read all `*_DA.md` files in scope
-3. **If no FAILS.md or _DA.md files exist**: Re-read all `[NOTES]` files and apply the same review questions to conversation context
+2. Find and read all `*_REVIEW.md` files in scope
+3. **If no FAILS.md or _REVIEW.md files exist**: Re-read all `[NOTES]` files and apply the same review questions to conversation context
 4. Read relevant conversation, code, and documents
 5. **Create internal MUST-NOT-FORGET list** - key constraints, user decisions, existing solutions
 6. For each finding, verify:
@@ -108,12 +108,12 @@ Present in chat:
 # Pragmatic Review of Devil's Advocate Findings
 
 **Reviewed**: [Date] [Time]
-**Sources**: FAILS.md, [list of _DA files]
+**Sources**: FAILS.md, [list of _REVIEW files]
 
 ## Verified Findings
 
 ### 1. [Finding Title]
-- **Source**: [FAILS.md or specific _DA file]
+- **Source**: [FAILS.md or specific _REVIEW file]
 - **Severity**: [CRITICAL/HIGH/MEDIUM/LOW]
 - **Status**: [CONFIRMED/ALREADY COVERED/DISPUTED]
 - **Evidence**: [Why this is/isn't a real problem]
@@ -156,7 +156,7 @@ When followed by `/implement` workflow:
 1. User selects which improvements to implement
 2. Agent implements selected options
 3. Updates `FAILS.md` entries as `[RESOLVED]`
-4. Removes or archives addressed `_DA` files
+4. Removes or archives addressed `_REVIEW` files
 
 **Without `/implement`**: All output remains in chat. No files modified.
 
@@ -165,7 +165,7 @@ When followed by `/implement` workflow:
 Before finishing, verify:
 
 - [ ] All FAILS.md entries reviewed
-- [ ] All *_DA.md files in scope reviewed
+- [ ] All *_REVIEW.md files in scope reviewed
 - [ ] Each finding verified against existing code/docs/conversation
 - [ ] Improvement options provided for confirmed findings
 - [ ] Dismissed findings have clear justification
