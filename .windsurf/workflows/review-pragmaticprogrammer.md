@@ -84,14 +84,20 @@ For proposed code changes or identified problems:
 
 For proposed document changes:
 
-1. **Does this clarify or complicate?**
-   More words often means less clarity.
+1. **Is this as precise as possible while being as detailed as needed?**
+   Balance brevity with completeness - neither under- nor over-specify.
 
 2. **Is this addressing a real confusion that occurred?**
    Don't document hypothetical misunderstandings.
 
-3. **Can this be a comment in code instead?**
-   Keep documentation close to what it describes.
+3. **Does this belong in the document, not in code comments?**
+   Specs and requirements belong in documents. Code comments are for implementation notes only.
+
+4. **Does this reduce cognitive overload?**
+   Strive for maintainable, lean solutions that serve the overall goal.
+
+5. **Does this solution reduce the number of concepts a reader must understand?**
+   Concept count is a primary driver of bugs and maintenance cost.
 
 ## Findings Checklist Format
 
