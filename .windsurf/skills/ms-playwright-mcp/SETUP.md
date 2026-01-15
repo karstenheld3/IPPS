@@ -43,6 +43,32 @@ Run this PowerShell script to add Playwright MCP without modifying existing serv
 
 ```powershell
 # === Add Microsoft Playwright MCP to Windsurf ===
+
+# Pre-checks
+Write-Host "=== Pre-flight Checks ===" -ForegroundColor Cyan
+
+# Check npx availability
+$npxPath = Get-Command npx -ErrorAction SilentlyContinue
+if (-not $npxPath) {
+    Write-Host "[FAIL] npx not found in PATH" -ForegroundColor Red
+    Write-Host "Install Node.js 18+ from https://nodejs.org" -ForegroundColor Yellow
+    return
+}
+Write-Host "[OK] npx found: $($npxPath.Source)" -ForegroundColor Green
+
+# Check Node.js version
+$nodeVersion = node --version 2>$null
+if ($nodeVersion -match 'v(\d+)') {
+    $majorVersion = [int]$matches[1]
+    if ($majorVersion -lt 18) {
+        Write-Host "[WARN] Node.js $nodeVersion detected, v18+ recommended" -ForegroundColor Yellow
+    } else {
+        Write-Host "[OK] Node.js $nodeVersion" -ForegroundColor Green
+    }
+}
+
+Write-Host ""
+
 $configPath = "$env:USERPROFILE\.codeium\windsurf\mcp_config.json"
 
 # Expected target config
@@ -78,10 +104,28 @@ if (Test-Path $configPath) {
     $needsUpdate = $true
 }
 
-# Ensure mcpServers key exists
-if (-not $config.ContainsKey("mcpServers") -or $null -eq $config.mcpServers) {
-    $config.mcpServers = @{}
-    $needsUpdate = $true
+# Ensure mcpServers key exists (handle both Hashtable and PSCustomObject)
+if ($config -is [System.Collections.Hashtable]) {
+    if (-not $config.ContainsKey("mcpServers") -or $null -eq $config.mcpServers) {
+        $config.mcpServers = @{}
+        $needsUpdate = $true
+    }
+} else {
+    # PSCustomObject from JSON - convert to hashtable for easier manipulation
+    $configHash = @{}
+    $config.PSObject.Properties | ForEach-Object { $configHash[$_.Name] = $_.Value }
+    $config = $configHash
+    if (-not $config.mcpServers) {
+        $config.mcpServers = @{}
+        $needsUpdate = $true
+    }
+}
+
+# Convert mcpServers to hashtable if needed
+if ($config.mcpServers -and $config.mcpServers -isnot [System.Collections.Hashtable]) {
+    $serversHash = @{}
+    $config.mcpServers.PSObject.Properties | ForEach-Object { $serversHash[$_.Name] = $_.Value }
+    $config.mcpServers = $serversHash
 }
 
 # Check current state vs target state
@@ -113,12 +157,27 @@ if ($needsUpdate) {
     # Backup before modifying
     if (Test-Path $configPath) {
         $backupPath = "$configPath._beforeAddingMsPlaywrightMcp_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
-        Copy-Item $configPath $backupPath
-        Write-Host "Backup: $backupPath" -ForegroundColor Cyan
+        try {
+            Copy-Item $configPath $backupPath -ErrorAction Stop
+            Write-Host "Backup: $backupPath" -ForegroundColor Cyan
+        } catch {
+            Write-Host "[FAIL] Could not create backup: $_" -ForegroundColor Red
+            Write-Host "Aborting to prevent data loss" -ForegroundColor Yellow
+            return
+        }
     }
     
-    $config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
-    Write-Host "Added Playwright MCP to Windsurf" -ForegroundColor Green
+    try {
+        $config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8 -ErrorAction Stop
+        Write-Host "Added Playwright MCP to Windsurf" -ForegroundColor Green
+    } catch {
+        Write-Host "[FAIL] Could not write config: $_" -ForegroundColor Red
+        if ($backupPath -and (Test-Path $backupPath)) {
+            Write-Host "Restoring from backup..." -ForegroundColor Yellow
+            Copy-Item $backupPath $configPath -Force
+        }
+        return
+    }
 }
 
 # === Installation Summary ===

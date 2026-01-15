@@ -60,6 +60,13 @@ Write-Host ""
 
 $choice = Read-Host "What to remove? [1/2/3/4/Q]"
 
+# Validate input
+$validChoices = @('1', '2', '3', '4', 'Q', 'q')
+if ($choice -notin $validChoices) {
+    Write-Host "Invalid choice: '$choice'. Please enter 1, 2, 3, 4, or Q" -ForegroundColor Red
+    return
+}
+
 if ($choice -eq 'Q' -or $choice -eq 'q') {
     Write-Host "Cancelled. No changes made." -ForegroundColor Yellow
     return
@@ -76,12 +83,29 @@ Write-Host ""
 # Remove MCP Config
 if ($removeConfig -and $hasConfig) {
     try {
-        $backupPath = "$configPath._beforeRemovingMsPlaywrightMcp_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
-        Copy-Item $configPath $backupPath
+        # Re-read config fresh to ensure we have current data
+        $configContent = Get-Content $configPath -Raw
+        $config = $configContent | ConvertFrom-Json -AsHashtable
         
-        $config.mcpServers.Remove("playwright")
-        $config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
-        Write-Host "[C] Removed MCP config entry (backup: $backupPath)" -ForegroundColor Green
+        # Handle PSCustomObject conversion for mcpServers
+        if ($config.mcpServers -and $config.mcpServers -isnot [System.Collections.Hashtable]) {
+            $serversHash = @{}
+            $config.mcpServers.PSObject.Properties | ForEach-Object { $serversHash[$_.Name] = $_.Value }
+            $config.mcpServers = $serversHash
+        }
+        
+        # Verify playwright still exists before removal
+        if (-not $config.mcpServers -or -not $config.mcpServers.ContainsKey("playwright")) {
+            Write-Host "[C] Config already removed (changed since scan)" -ForegroundColor Gray
+        } else {
+            # Backup with error handling
+            $backupPath = "$configPath._beforeRemovingMsPlaywrightMcp_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+            Copy-Item $configPath $backupPath -ErrorAction Stop
+            
+            $config.mcpServers.Remove("playwright")
+            $config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8 -ErrorAction Stop
+            Write-Host "[C] Removed MCP config entry (backup: $backupPath)" -ForegroundColor Green
+        }
     } catch {
         Write-Host "[C] Failed to remove config: $_" -ForegroundColor Red
     }
