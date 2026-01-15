@@ -45,6 +45,18 @@ Tracking documents exist at workspace, project, or session level. Only one of ea
 - **[PROGRESS]**: Progress tracking. Agent MUST read to avoid unintentional behavior
 - **[PROBLEMS]**: Problem tracking. Each session tracks issues in its own `PROBLEMS.md`. On `/session-close`, sync to project [PROBLEMS]
 
+### Placeholders
+
+- **[ACTOR]**: Decision-making entity (default: user, in /go-autonomous: agent)
+
+### Complexity Levels
+
+Maps to semantic versioning:
+
+- **COMPLEXITY-LOW**: Single file, clear scope, no dependencies → patch version
+- **COMPLEXITY-MEDIUM**: Multiple files, some dependencies, backward compatible → minor version
+- **COMPLEXITY-HIGH**: Breaking changes, new patterns, external APIs, architecture → major version
+
 ## Workspace Scenarios
 
 Three dimensions define how the agent should behave:
@@ -130,6 +142,8 @@ Files starting with `.` follow Unix convention - hidden from directory listings.
 - **[WORKSPACE_FOLDER]**: Absolute path of root folder where Windsurf operates
 - **[PROJECT_FOLDER]**: Absolute path of project folder (same as workspace if no monorepo)
 - **[SRC_FOLDER]**: Absolute path of source folder
+- **[SESSIONS_FOLDER]**: Base folder for sessions (default: `[WORKSPACE_FOLDER]`, override in `!NOTES.md`)
+- **[SESSIONS_ARCHIVE]**: Archive folder for closed sessions (default: `[SESSIONS_FOLDER]/_Archive`)
 - **[SESSION_FOLDER]**: Absolute path of currently active session folder
 
 ## Workflow Reference

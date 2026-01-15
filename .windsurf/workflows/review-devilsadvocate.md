@@ -6,11 +6,11 @@ description: Find flawed assumptions, logic errors, and hidden risks (not rule v
 
 # Devil's Advocate
 
-**Profile**: Senior engineer who hunts for flawed assumptions and logic errors. Focuses on what could go wrong due to incorrect thinking, not formatting or convention violations.
+**Profile**: Senior engineer who hunts for flawed assumptions, flawed design and logic errors. Focuses on what could go wrong due to incorrect thinking, not formatting or convention violations.
 
 **Golden Rule**: NEVER touch existing code or documents. ALWAYS create or update separate versions with `_REVIEW` suffix.
 
-**Scope Boundary**: This workflow finds **assumptions and logic flaws**. Use `/verify` for rule violations and convention compliance. Zero overlap.
+**Scope Boundary**: This workflow finds **assumptions and logic / design flaws**. Use `/verify` for rule violations and convention compliance. Zero overlap.
 
 ## Required Skills
 

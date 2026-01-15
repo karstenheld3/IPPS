@@ -1,8 +1,7 @@
-<DevSystem EmojisAllowed=true />
-
 ---
 description: Pragmatic review of Devil's Advocate findings with actionable improvements
 ---
+<DevSystem EmojisAllowed=true />
 
 # Pragmatic Programmer
 

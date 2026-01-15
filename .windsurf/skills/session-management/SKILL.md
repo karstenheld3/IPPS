@@ -7,7 +7,8 @@ description: Apply when initializing, saving, resuming, or closing a work sessio
 
 ## MUST-NOT-FORGET
 
-- Session folder naming: `_YYYY-MM-DD_[SessionTopicCamelCase]/`
+- Session folder location: `[SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
+- Default: `[SESSIONS_FOLDER]` = `[WORKSPACE_FOLDER]` (override in `!NOTES.md`)
 - Required files: NOTES.md, PROBLEMS.md, PROGRESS.md
 - Lifecycle: Init → Work → Save → Resume → Close → Archive
 - Sync session PROBLEMS.md to project on /session-close
@@ -20,11 +21,13 @@ description: Apply when initializing, saving, resuming, or closing a work sessio
 4. **Resume** (`/session-resume`): Re-read session documents, continue work
 5. **Close** (`/session-close`): Sync findings to project files, archive
 
-## Session Folder Naming
+## Session Folder Location
 
-Format: `_YYYY-MM-DD_[SessionTopicCamelCase]/`
+**Base:** `[SESSIONS_FOLDER]` (default: `[WORKSPACE_FOLDER]`, can be overridden in `!NOTES.md`)
 
-Example: `_2026-01-12_FixAuthenticationBug/`
+**Format:** `[SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
+
+**Example:** `_PrivateSessions/_2026-01-12_FixAuthenticationBug/`
 
 ## Required Session Files
 
