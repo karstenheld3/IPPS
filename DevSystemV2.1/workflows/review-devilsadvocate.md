@@ -50,13 +50,16 @@ Invoke based on context:
 3. Read Global Rules
 4. Read relevant Context-Specific section
 5. **Create internal MUST-NOT-FORGET list** - key constraints, user requirements, critical rules
-6. Create Devil's Advocate task list
-7. Work through task list:
+6. **Create MUST-RESEARCH list** - identify 5 topics for industry research (see Research Phase below)
+7. **Execute research** - search for industry patterns, alternatives, known pitfalls
+8. Create Devil's Advocate task list (informed by research)
+9. Work through task list:
    - Update `_PROBLEMS_REVIEW.md` with potential issues found
    - Update `FAILS.md` with actual failures/mistakes discovered
    - **Check MUST-NOT-FORGET list after each major finding**
-8. Run Final Checklist
-9. **Verify against MUST-NOT-FORGET list** - did we miss anything?
+   - **Include research findings** in issue analysis
+10. Run Final Checklist
+11. **Verify against MUST-NOT-FORGET list** - did we miss anything?
 
 ## Global Rules
 
@@ -138,6 +141,58 @@ If unsure, check for existing `FAILS.md` or ask user.
 - Most recent at top
 - Link to `_REVIEW` files containing detailed suggestions
 - Never delete entries - mark as `[RESOLVED]` with date and solution
+
+## Research Phase
+
+After creating MUST-NOT-FORGET list, identify **5 topics** for industry research.
+
+### Creating MUST-RESEARCH List
+
+For each review, identify topics where external knowledge would strengthen the analysis:
+
+1. **Core pattern/approach** - What industry pattern is being used? Are there better alternatives?
+2. **Known failure modes** - What breaks in production for this type of system?
+3. **Security considerations** - What attack vectors exist for this approach?
+4. **Scalability patterns** - How do others handle growth in this domain?
+5. **Testing strategies** - What testing approaches work for this type of code/design?
+
+**Format:**
+```markdown
+## MUST-RESEARCH
+1. [Topic 1] - [Why this matters for the review]
+2. [Topic 2] - [Why this matters]
+3. [Topic 3] - [Why this matters]
+4. [Topic 4] - [Why this matters]
+5. [Topic 5] - [Why this matters]
+```
+
+### Executing Research
+
+For each topic:
+1. **Web search** for industry patterns, blog posts, case studies
+2. **Look for failure examples** - post-mortems, Stack Overflow issues, GitHub issues
+3. **Find alternatives** - what do other teams/frameworks do differently?
+4. **Note sources** - document where findings came from
+
+### Adding Research to Review
+
+In the `_REVIEW.md` file, add a section:
+
+```markdown
+## Industry Research Findings
+
+### [Topic 1]
+- **Pattern found**: [Description]
+- **How it applies**: [Connection to reviewed code/doc]
+- **Source**: [URL or reference]
+
+### [Topic 2]
+...
+
+### Alternatives Considered
+- **[Alternative A]**: [Pros/cons vs current approach]
+- **[Alternative B]**: [Pros/cons vs current approach]
+```
 
 ## Context-Specific Sections
 
@@ -304,6 +359,8 @@ Before finishing, verify:
 - [ ] Each finding has: What, Where, Why it went wrong, Suggested fix
 - [ ] Critical issues highlighted at top
 - [ ] Questions needing answers are listed
+- [ ] **MUST-RESEARCH list created** - 5 topics identified and researched
+- [ ] **Industry Research Findings section** added to review file
 - [ ] Research was done for uncertain claims (web search, docs)
 - [ ] **MUST-NOT-FORGET list verified** - all constraints checked, nothing missed
 
@@ -317,6 +374,13 @@ End every Devil's Advocate review with:
 **Reviewed**: [What was reviewed]
 **Time spent**: [Duration]
 
+**Research Topics Investigated**:
+1. [Topic 1] - [Key finding]
+2. [Topic 2] - [Key finding]
+3. [Topic 3] - [Key finding]
+4. [Topic 4] - [Key finding]
+5. [Topic 5] - [Key finding]
+
 **Findings**:
 - CRITICAL: [count]
 - HIGH: [count]
@@ -328,9 +392,12 @@ End every Devil's Advocate review with:
 2. [Second most critical - one line]
 3. [Third most critical - one line]
 
+**Industry Alternatives Identified**:
+- [Alternative approach worth considering]
+
 **Files Created/Updated**:
 - `FAILS.md` - [X] new entries
-- `[filename]_REVIEW.md` - Detailed findings
+- `[filename]_REVIEW.md` - Detailed findings + Industry Research
 
 **Recommendation**: [PROCEED / PROCEED WITH CAUTION / STOP AND FIX]
 ```
