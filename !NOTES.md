@@ -1,5 +1,5 @@
-Default Sessions folder where to create new sessions: [WORKSPACE_FOLDER]\_PrivateSessions
-Default Sessions archive folder: [WORKSPACE_FOLDER]\_PrivateSessions\_Archive
+[SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
+[SESSIONS_ARCHIVE]: [SESSIONS_FOLDER]\_Archive
 
 Current [DEVSYSTEM]: DevSystemV2.1
 Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
