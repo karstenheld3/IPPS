@@ -1,6 +1,6 @@
-# SPEC: Agentic English
+# SPEC: AGEN - Agentic English
 
-**Doc ID**: AGEN-SP02
+**Doc ID**: AGEN-SP01
 **Goal**: Define a controlled vocabulary for agent-human communication in workflows, skills, and documents
 
 **See also:**
@@ -141,16 +141,15 @@ No brackets for tokens that appear in **conditions** - things the agent checks f
 
 - **[WORKSPACE_FOLDER]** - Absolute path of root folder where agent operates
 - **[PROJECT_FOLDER]** - Absolute path of project folder (same as workspace if no monorepo)
-- **[SESSIONS_FOLDER]** - Base folder for sessions (default: `[WORKSPACE_FOLDER]`, override in `!NOTES.md`)
-- **[SESSIONS_ARCHIVE]** - Archive folder for closed sessions (default: `[SESSIONS_FOLDER]/_Archive`)
 - **[SESSION_FOLDER]** - Absolute path of currently active session folder
 - **[SRC_FOLDER]** - Absolute path of source folder
 - **[AGENT_FOLDER]** - Agent config folder (`.windsurf/` or `.claude/`)
 
 **Override example in `!NOTES.md`:**
 ```
-[SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
-[SESSIONS_ARCHIVE]: [SESSIONS_FOLDER]\_Archive
+[SESSION_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
+[DEFAULT_SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
+[SESSION_ARCHIVE_FOLDER]: [DEFAULT_SESSIONS_FOLDER]\_Archive
 ```
 
 ### Configuration
@@ -169,6 +168,8 @@ No brackets for tokens that appear in **conditions** - things the agent checks f
 ## Atomic Activities (Verbs)
 
 Reusable activities that can be used within any phase. Use as markers like `[RESEARCH]`, `[PROVE]`, `[TEST]`.
+
+**Extensibility**: Verbs are abstract concepts that CAN be concretized as dedicated workflows, but this is not required. Complex verbs benefit from workflows (e.g., `[COMMIT]` → `/commit`, `[CRITIQUE]` → `/critique`), while simple verbs work inline within phase workflows. New verbs can be added to extend the vocabulary as needed.
 
 ### Information Gathering
 
