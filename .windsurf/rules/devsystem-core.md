@@ -92,6 +92,7 @@ Three dimensions define how the agent should behave:
 │   ├── _IMPL_*.md          # Implementation plans
 │   ├── _INFO_*.md          # Information documents
 │   ├── _SPEC_*.md          # Specifications
+│   ├── _TEST_*.md          # Test plans
 │   ├── NOTES.md            # Session notes
 │   ├── PROBLEMS.md         # Session problems
 │   ├── PROGRESS.md         # Session progress
