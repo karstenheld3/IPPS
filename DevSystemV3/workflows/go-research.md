@@ -34,7 +34,7 @@ Invoke these skills before proceeding:
 
 ### REFINE
 1. [REVIEW] each section in context of existing ones
-2. [VERIFY] claims against sources - remove unverified findings
+2. [VERIFY] claims against sources - remove unverified findings (run `/verify`)
 3. [IMPROVE] remove cognitive overload, redundancies, ambiguities
 
 ### DELIVER
