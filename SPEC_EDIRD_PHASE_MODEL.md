@@ -1,10 +1,10 @@
 # SPEC: EDIRD Phase Model v2
 
-**Doc ID**: EDIRD-SP05
+**Doc ID**: EDIRD-SP04
 **Goal**: Unified phase model for BUILD and SOLVE workflows with deterministic next-action logic for autonomous agent operation
 
 **Depends on:**
-- `_SPEC_AGEN_AGENTIC_ENGLISH.md [AGEN-SP02]` for verb definitions and syntax
+- `_SPEC_AGEN_AGENTIC_ENGLISH.md [AGEN-SP01]` for verb definitions and syntax
 
 ## MUST-NOT-FORGET
 

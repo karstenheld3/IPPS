@@ -36,15 +36,73 @@ your-project/
 
 - **[DevSystemV1](DevSystemV1/)** - Legacy system using rules and workflows
 - **[DevSystemV2](DevSystemV2/)** - Previous version with modular skills and workflows
-- **[DevSystemV2.1](DevSystemV2.1/)** - Current system with refined workflows
+- **[DevSystemV2.1](DevSystemV2.1/)** - Previous version with refined workflows
+- **[DevSystemV3](DevSystemV3/)** - Current system with EDIRD phase model and Agentic English
+
+## Agentic English
+
+A controlled vocabulary for agent-human communication. Provides consistent terminology across all workflows.
+
+**Goal**: Eliminate ambiguity in agent instructions by using bracketed verbs, placeholders, and labels.
+
+**Rationale**: Agents interpret natural language inconsistently. Agentic English provides deterministic instructions that agents can reliably parse and execute.
+
+**Syntax**:
+- `[VERB]` - Action to execute (e.g., `[RESEARCH]`, `[VERIFY]`, `[IMPLEMENT]`)
+- `[PLACEHOLDER]` - Value to substitute (e.g., `[ACTOR]`, `[WORKSPACE_FOLDER]`)
+- `[LABEL]` - Classification to apply (e.g., `[UNVERIFIED]`, `[CRITICAL]`)
+- Context states use NO brackets: `COMPLEXITY-HIGH`, `HOTFIX`, `SINGLE-PROJECT`
+
+**Example workflow instruction**:
+```
+1. [RESEARCH] affected code in [SRC_FOLDER]
+2. [CONSULT] with [ACTOR] if unclear
+3. [IMPLEMENT] changes
+4. [VERIFY] against spec
+5. [COMMIT] with conventional message
+```
+
+**Full specification**: [SPEC_AGENTIC_ENGLISH.md](SPEC_AGENTIC_ENGLISH.md)
+
+## EDIRD Phase Model
+
+A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) work.
+
+**Goal**: Consistent phase structure for all development work with deterministic next-action logic.
+
+**Rationale**: Without phases, agents skip important steps or apply heavyweight processes to simple tasks. EDIRD provides the right amount of process for each complexity level.
+
+**Phases**:
+- **EXPLORE** - Understand before acting: `[RESEARCH]`, `[ANALYZE]`, `[ASSESS]`, `[SCOPE]`
+- **DESIGN** - Plan before executing: `[PLAN]`, `[WRITE-SPEC]`, `[PROVE]`, `[DECOMPOSE]`
+- **IMPLEMENT** - Execute the plan: `[IMPLEMENT]`, `[TEST]`, `[FIX]`, `[COMMIT]`
+- **REFINE** - Improve quality: `[REVIEW]`, `[VERIFY]`, `[CRITIQUE]`, `[RECONCILE]`
+- **DELIVER** - Complete and hand off: `[VALIDATE]`, `[MERGE]`, `[DEPLOY]`, `[CLOSE]`
+
+**Complexity mapping**:
+- `COMPLEXITY-LOW` → patch version (single file, clear scope)
+- `COMPLEXITY-MEDIUM` → minor version (multiple files, backward compatible)
+- `COMPLEXITY-HIGH` → major version (breaking changes, architecture)
+
+**Example BUILD flow**:
+```
+[EXPLORE] → [ASSESS] complexity → Gate check
+[DESIGN] → [WRITE-SPEC] → [PROVE] risky parts → Gate check
+[IMPLEMENT] → [IMPLEMENT]→[TEST]→[FIX]→green→next → Gate check
+[REFINE] → [VERIFY] against spec → [CRITIQUE] if MEDIUM+ → Gate check
+[DELIVER] → [COMMIT] → [MERGE]
+```
+
+**Full specification**: [SPEC_EDIRD_PHASE_MODEL.md](SPEC_EDIRD_PHASE_MODEL.md)
 
 ## Key Conventions
 
-- [Core Conventions](DevSystemV2.1/rules/core-conventions.md) - Text formatting, document structure, header blocks
-- [DevSystem Core](DevSystemV2.1/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
-- [DevSystem IDs](DevSystemV2.1/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
-- [Git Conventions](DevSystemV2.1/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
-- [Coding Conventions](DevSystemV2.1/skills/coding-conventions/SKILL.md) - Python, PowerShell style rules
+- [Core Conventions](DevSystemV3/rules/core-conventions.md) - Text formatting, document structure, header blocks
+- [DevSystem Core](DevSystemV3/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
+- [DevSystem IDs](DevSystemV3/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
+- [Agentic English](DevSystemV3/rules/agentic-english.md) - Controlled vocabulary for agent instructions
+- [Git Conventions](DevSystemV3/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
+- [Coding Conventions](DevSystemV3/skills/coding-conventions/SKILL.md) - Python, PowerShell style rules
 
 ## Agent Tools (installed automatically by skill)
 
