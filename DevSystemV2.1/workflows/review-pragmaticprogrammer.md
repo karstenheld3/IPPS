@@ -24,14 +24,15 @@ Read all Devil's Advocate findings:
 
 1. Read `FAILS.md` (if exists)
 2. Find and read all `*_DA.md` files in scope
-3. Read relevant conversation, code, and documents
-4. **Create internal MUST-NOT-FORGET list** - key constraints, user decisions, existing solutions
-5. For each finding, verify:
+3. **If no FAILS.md or _DA.md files exist**: Re-read all `[NOTES]` files and apply the same review questions to conversation context
+4. Read relevant conversation, code, and documents
+5. **Create internal MUST-NOT-FORGET list** - key constraints, user decisions, existing solutions
+6. For each finding, verify:
    - Is this a real problem or already covered?
    - Is the proposed solution appropriate?
-6. Create Findings Checklist with improvement options
-7. Present all findings and options in chat
-8. **Verify against MUST-NOT-FORGET list**
+7. Create Findings Checklist with improvement options
+8. Present all findings and options in chat
+9. **Verify against MUST-NOT-FORGET list**
 
 ## Global Rules
 
