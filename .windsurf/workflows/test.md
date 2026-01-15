@@ -9,7 +9,6 @@ Implements [TEST] verb from EDIRD model.
 
 ## Required Skills
 
-- @coding-conventions for test code style
 - @ms-playwright-mcp for UI testing (SCOPE-UI only)
 
 ## Context Branching
