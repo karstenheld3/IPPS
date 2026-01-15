@@ -21,8 +21,8 @@ phase: DESIGN
 3. [WRITE-SPEC] specification document
 4. [PROVE] risky parts with POC (if COMPLEXITY-MEDIUM or higher)
 5. [DECOMPOSE] into small testable steps
-6. [WRITE-IMPL] implementation plan
-7. [WRITE-TEST] test plan
+6. [WRITE-IMPL-PLAN] implementation plan
+7. [WRITE-TEST-PLAN] test plan
 8. [VALIDATE] design with [ACTOR] (if needed)
 
 ### For COMPLEXITY-LOW

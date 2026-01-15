@@ -210,7 +210,7 @@ Gate check: Tests pass, no TODO/FIXME
 - `explore.md` - NEW: [RESEARCH], [ANALYZE], [GATHER], [ASSESS], [SCOPE]
 
 **DESIGN phase:**
-- `design.md` - NEW: [PLAN], [OUTLINE], [WRITE-SPEC], [WRITE-IMPL], [WRITE-TEST]
+- `design.md` - NEW: [PLAN], [OUTLINE], [WRITE-SPEC], [WRITE-IMPL-PLAN], [WRITE-TEST-PLAN]
 - `prove.md` - NEW: POC workflow with [PROVE]
 
 **IMPLEMENT phase:**

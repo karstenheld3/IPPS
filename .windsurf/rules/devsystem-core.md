@@ -168,7 +168,7 @@ Files starting with `.` follow Unix convention - hidden from directory listings.
 ### Phase Workflows
 
 - **EXPLORE**: `/explore` - [RESEARCH], [ANALYZE], [ASSESS], [SCOPE]
-- **DESIGN**: `/design` - [PLAN], [WRITE-SPEC], [WRITE-IMPL], [WRITE-TEST], [PROVE]
+- **DESIGN**: `/design` - [PLAN], [WRITE-SPEC], [WRITE-IMPL-PLAN], [WRITE-TEST-PLAN], [PROVE]
 - **IMPLEMENT**: `/implement` - [IMPLEMENT], [TEST], [FIX], [COMMIT]
 - **REFINE**: `/refine` - [REVIEW], [VERIFY], [CRITIQUE], [RECONCILE]
 - **DELIVER**: `/deliver` - [VALIDATE], [MERGE], [DEPLOY], [CLOSE], [ARCHIVE]

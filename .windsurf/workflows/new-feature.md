@@ -50,8 +50,8 @@ Creates session folder with:
 1. [PLAN] structured approach
 2. [WRITE-SPEC] → `_SPEC_[FEATURE].md`
 3. [PROVE] risky parts with POC (if COMPLEXITY-MEDIUM or higher)
-4. [WRITE-IMPL] → `_IMPL_[FEATURE].md`
-5. [WRITE-TEST] → `_TEST_[FEATURE].md` (optional for LOW)
+4. [WRITE-IMPL-PLAN] → `_IMPL_[FEATURE].md`
+5. [WRITE-TEST-PLAN] → `_TEST_[FEATURE].md` (optional for LOW)
 6. [DECOMPOSE] into small testable steps
 
 ### Gate Check: DESIGN→IMPLEMENT

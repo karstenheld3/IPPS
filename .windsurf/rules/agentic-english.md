@@ -86,8 +86,8 @@ No brackets for tokens in **conditions** - things the agent checks for branching
 - **[WRITE]** - Generic write action
 - **[WRITE-INFO]** - Write INFO document (research findings)
 - **[WRITE-SPEC]** - Write SPEC document (specification)
-- **[WRITE-IMPL]** - Write IMPL document (implementation plan)
-- **[WRITE-TEST]** - Write TEST document (test plan)
+- **[WRITE-IMPL-PLAN]** - Write IMPL document (implementation plan)
+- **[WRITE-TEST-PLAN]** - Write TEST document (test plan)
 - **[OUTLINE]** - Create high-level structure
 - **[SUMMARIZE]** - Create concise summary
 - **[DRAFT]** - Create initial version for review

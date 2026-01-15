@@ -427,8 +427,8 @@ The DESIGN phase scales based on work type - heavy for features, light for fixes
 ├─> [PROVE] - POC for risky parts (if HIGH)
 ├─> [PROPOSE] - Present options to [ACTOR] (if HIGH)
 ├─> [VALIDATE] - Confirm design with [ACTOR]
-├─> [WRITE-IMPL](SPEC) - Create IMPL plan from spec (if MEDIUM+)
-└─> [WRITE-TEST](SPEC) - Create TEST plan from spec (if HIGH)
+├─> [WRITE-IMPL-PLAN](SPEC) - Create IMPL plan from spec (if MEDIUM+)
+└─> [WRITE-TEST-PLAN](SPEC) - Create TEST plan from spec (if HIGH)
 
 [IMPLEMENT] ─────────────────────────────────────────────────────────────────
 ├─> [IMPLEMENT] - Write code
@@ -617,9 +617,9 @@ ASSESSMENT: DISCOVERY(full) → [RESEARCH] → [ANALYZE] → [PROPOSE] → DELIV
 - Added: Reference to new document
 
 **[2026-01-15 16:40]**
-- Added: WRITE verb variants ([WRITE-INFO], [WRITE-SPEC], [WRITE-IMPL], [WRITE-TEST])
+- Added: WRITE verb variants ([WRITE-INFO], [WRITE-SPEC], [WRITE-IMPL-PLAN], [WRITE-TEST-PLAN])
 - Added: [VERB-VARIANT] and [VERB](input) syntax patterns
-- Changed: Updated DESIGN phase to use [WRITE-IMPL](SPEC) and [WRITE-TEST](SPEC)
+- Changed: Updated DESIGN phase to use [WRITE-IMPL-PLAN](SPEC) and [WRITE-TEST-PLAN](SPEC)
 
 **[2026-01-15 16:31]**
 - Added: Syntax explanation section in Summary

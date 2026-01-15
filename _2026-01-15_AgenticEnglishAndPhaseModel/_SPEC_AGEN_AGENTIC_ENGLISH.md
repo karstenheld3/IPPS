@@ -96,8 +96,8 @@ Use brackets for tokens that appear in **instructions** - things the agent reads
 - `[VERB]-OK` - Successful outcome, proceed to next step
 - `[VERB]-FAIL` - Failed outcome, re-iterate or escalate
 - `[VERB]-SKIP` - Intentionally skipped (complexity doesn't require it)
-- `[VERB-VARIANT]` - Specific variant (e.g., `[WRITE-IMPL]`, `[WRITE-TEST]`)
-- `[VERB](input)` - Verb with parameter (e.g., `[WRITE-IMPL](SPEC)`)
+- `[VERB-VARIANT]` - Specific variant (e.g., `[WRITE-IMPL-PLAN]`, `[WRITE-TEST-PLAN]`)
+- `[VERB](input)` - Verb with parameter (e.g., `[WRITE-IMPL-PLAN](SPEC)`)
 
 **Example instruction:**
 ```
@@ -208,8 +208,8 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 - **[WRITE]** - Generic write action (based on context)
 - **[WRITE-INFO]** - Write INFO document (research findings)
 - **[WRITE-SPEC]** - Write SPEC document (specification)
-- **[WRITE-IMPL]** - Write IMPL document (implementation plan)
-- **[WRITE-TEST]** - Write TEST document (test plan)
+- **[WRITE-IMPL-PLAN]** - Write IMPL document (implementation plan)
+- **[WRITE-TEST-PLAN]** - Write TEST document (test plan)
 - **[OUTLINE]** - Create high-level structure
 - **[SUMMARIZE]** - Create concise summary of longer content
 - **[EXPLAIN]** - Provide clear explanation of concept or decision

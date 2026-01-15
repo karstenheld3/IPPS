@@ -23,7 +23,7 @@ Syntax for conditional logic based on context states.
 
 1. [WRITE-SPEC] concise specification
 2. [PROVE] risky parts with POC
-3. [WRITE-IMPL] implementation plan
+3. [WRITE-IMPL-PLAN] implementation plan
 4. [DECOMPOSE] into testable steps
 5. [IMPLEMENT] each step with [TEST]
 
@@ -32,7 +32,7 @@ Syntax for conditional logic based on context states.
 1. [WRITE-SPEC] comprehensive specification
 2. [PROVE] risky parts with POC
 3. [PROPOSE] approach to [ACTOR]
-4. [WRITE-IMPL] detailed plan
+4. [WRITE-IMPL-PLAN] detailed plan
 5. [DECOMPOSE] into small verifiable steps
 6. [IMPLEMENT] with [TEST] after each step
 7. [CRITIQUE] and [RECONCILE] in REFINE

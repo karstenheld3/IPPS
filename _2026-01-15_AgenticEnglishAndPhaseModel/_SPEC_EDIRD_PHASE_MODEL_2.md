@@ -220,7 +220,7 @@ These files enable:
 - **SOLVE**: Structure, methodology, outline, criteria
 - **Entry**: Gate EXPLORE→DESIGN passed
 - **Exit**: Gate DESIGN→IMPLEMENT passes
-- **Verbs**: [PLAN], [OUTLINE], [FRAME], [PROVE], [DECOMPOSE], [WRITE-SPEC], [WRITE-IMPL], [PROPOSE], [VALIDATE]
+- **Verbs**: [PLAN], [OUTLINE], [FRAME], [PROVE], [DECOMPOSE], [WRITE-SPEC], [WRITE-IMPL-PLAN], [PROPOSE], [VALIDATE]
 - **All BUILD**: Must [DECOMPOSE] plan into small testable steps before [IMPLEMENT]
 
 ### [IMPLEMENT]
@@ -317,8 +317,8 @@ Gates are checklists that must pass before transitioning. Agent evaluates gates 
 ├─> [DECOMPOSE] into small testable steps (all)
 ├─> [PROPOSE] options to [ACTOR] (HIGH)
 ├─> [VALIDATE] design with [ACTOR]
-├─> [WRITE-IMPL] implementation plan (all)
-└─> [WRITE-TEST] test plan (all)
+├─> [WRITE-IMPL-PLAN] implementation plan (all)
+└─> [WRITE-TEST-PLAN] test plan (all)
 
 [IMPLEMENT]
 ├─> [IMPLEMENT] code changes
@@ -477,7 +477,7 @@ ELIF verb_outcome == SKIP:
 
 [DESIGN]
 ├─> [PLAN] → [OUTLINE] → [WRITE-SPEC] → [PROVE] → [PROPOSE] → [VALIDATE]
-├─> [WRITE-IMPL] → [WRITE-TEST]
+├─> [WRITE-IMPL-PLAN] → [WRITE-TEST-PLAN]
 └─> Gate check
 
 [IMPLEMENT]

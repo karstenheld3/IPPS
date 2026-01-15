@@ -11,7 +11,7 @@ Verb sequences for BUILD and SOLVE workflows.
 
 [DESIGN]
 ├─> [PLAN] → [OUTLINE] → [WRITE-SPEC] → [PROVE] → [PROPOSE] → [VALIDATE]
-├─> [WRITE-IMPL] → [WRITE-TEST]
+├─> [WRITE-IMPL-PLAN] → [WRITE-TEST-PLAN]
 └─> Gate check
 
 [IMPLEMENT]

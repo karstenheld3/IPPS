@@ -5,7 +5,7 @@ phase: DESIGN
 
 # Write Test Plan Workflow
 
-Implements [WRITE-TEST] verb from EDIRD model.
+Implements [WRITE-TEST-PLAN] verb from EDIRD model.
 
 ## Required Skills
 

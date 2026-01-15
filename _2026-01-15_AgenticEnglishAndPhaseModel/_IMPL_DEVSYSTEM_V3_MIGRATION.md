@@ -235,7 +235,7 @@ Assessment: COMPLEXITY-LOW/MEDIUM/HIGH | PROBLEM-TYPE (RESEARCH/ANALYSIS/etc.)
 ### Phase Workflows
 
 - **EXPLORE**: `/explore` - [RESEARCH], [ANALYZE], [ASSESS], [SCOPE]
-- **DESIGN**: `/design` - [PLAN], [WRITE-SPEC], [WRITE-IMPL], [WRITE-TEST], [PROVE]
+- **DESIGN**: `/design` - [PLAN], [WRITE-SPEC], [WRITE-IMPL-PLAN], [WRITE-TEST-PLAN], [PROVE]
 - **IMPLEMENT**: `/implement` - [IMPLEMENT], [TEST], [FIX], [COMMIT]
 - **REFINE**: `/refine` - [REVIEW], [VERIFY], [CRITIQUE], [RECONCILE]
 - **DELIVER**: `/deliver` - [VALIDATE], [MERGE], [DEPLOY], [CLOSE], [ARCHIVE]
@@ -378,8 +378,8 @@ If 3 consecutive [FIX] attempts fail:
 | File | Action | Phase |
 |------|--------|-------|
 | `write-spec.md` | UPDATE | DESIGN phase, [WRITE-SPEC] verb |
-| `write-impl-plan.md` | UPDATE | DESIGN phase, [WRITE-IMPL] verb |
-| `write-test-plan.md` | UPDATE | DESIGN phase, [WRITE-TEST] verb |
+| `write-impl-plan.md` | UPDATE | DESIGN phase, [WRITE-IMPL-PLAN] verb |
+| `write-test-plan.md` | UPDATE | DESIGN phase, [WRITE-TEST-PLAN] verb |
 
 ### Batch 6: Review Workflows (RESTRUCTURE)
 
@@ -447,7 +447,7 @@ If no progress after 3 verb cycles: [CONSULT] with [ACTOR]
 
 This skill implements:
 - [WRITE-SPEC] - Use SPEC_TEMPLATE.md
-- [WRITE-IMPL] - Use IMPL_TEMPLATE.md
+- [WRITE-IMPL-PLAN] - Use IMPL_TEMPLATE.md
 ```
 
 2. **Update placeholders** - Replace informal paths with `[PLACEHOLDER]` syntax

@@ -5,7 +5,7 @@ phase: DESIGN
 
 # Write Implementation Plan Workflow
 
-Implements [WRITE-IMPL] verb from EDIRD model.
+Implements [WRITE-IMPL-PLAN] verb from EDIRD model.
 
 ## Required Skills
 
