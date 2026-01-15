@@ -1,4 +1,4 @@
-<DevSystem><Rules><MarkdownTablesAllowed enabled=true /><EmojisAllowed enabled=true /></Rules></DevSystem>
+<DevSystem MarkdownTablesAllowed=true EmojisAllowed=true />
 
 # IPPS - Insanely Productive Programming System
 
@@ -35,27 +35,28 @@ your-project/
 ## DevSystem Versions
 
 - **[DevSystemV1](DevSystemV1/)** - Legacy system using rules and workflows
-- **[DevSystemV2](DevSystemV2/)** - Current system with modular skills and workflows
+- **[DevSystemV2](DevSystemV2/)** - Previous version with modular skills and workflows
+- **[DevSystemV2.1](DevSystemV2.1/)** - Current system with refined workflows
 
 ## Key Conventions
 
-- [Core Conventions](DevSystemV2/rules/core-conventions.md) - Text formatting, document structure, header blocks
-- [DevSystem Core](DevSystemV2/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
-- [DevSystem IDs](DevSystemV2/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
-- [Git Conventions](DevSystemV2/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
-- [Coding Conventions](DevSystemV2/skills/coding-conventions/SKILL.md) - Python, PowerShell style rules
+- [Core Conventions](DevSystemV2.1/rules/core-conventions.md) - Text formatting, document structure, header blocks
+- [DevSystem Core](DevSystemV2.1/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
+- [DevSystem IDs](DevSystemV2.1/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
+- [Git Conventions](DevSystemV2.1/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
+- [Coding Conventions](DevSystemV2.1/skills/coding-conventions/SKILL.md) - Python, PowerShell style rules
 
 ## Agent Tools (installed automatically by skill)
 
 Local tool installations in `.tools/` (gitignored). Run `SETUP.md` in each skill folder to install.
 
-**pdf-tools** ([SETUP](DevSystemV2/skills/pdf-tools/SETUP.md)) - Enables agent to read entire PDFs by converting pages to JPG images for vision analysis:
+**pdf-tools** ([SETUP](DevSystemV2.1/skills/pdf-tools/SETUP.md)) - Enables agent to read entire PDFs by converting pages to JPG images for vision analysis:
 - **7-Zip** (`.tools/7z/`) - Archive extraction, NSIS installer unpacking
 - **Poppler** (`.tools/poppler/`) - PDF to image, text extraction, split/merge
 - **QPDF** (`.tools/qpdf/`) - PDF manipulation, optimization, repair
 - **Ghostscript** (`.tools/gs/`) - PDF compression, image downsampling
 
-**github** ([SETUP](DevSystemV2/skills/github/SETUP.md)):
+**github** ([SETUP](DevSystemV2.1/skills/github/SETUP.md)):
 - **GitHub CLI** (`.tools/gh/`) - Repos, issues, PRs, releases
 
 Run `SETUP.md` in each skill folder to install required tools locally to `.tools/`.
@@ -74,32 +75,9 @@ IPP/
 │   ├── rules/                    # Rules (copied from DevSystemVX for testing)
 │   ├── workflows/                # Workflows (copied from DevSystemVX)
 │   └── skills/                   # Skills (copied from DevSystemVX)
-├── DevSystemV1/                  # Legacy system (deprecated)
-│   ├── rules/
-│   │   ├── devsystem-rules.md
-│   │   ├── document-rules.md
-│   │   ├── git-rules.md
-│   │   ├── proper-english-rules.md
-│   │   ├── python-rules.md
-│   │   ├── tools-rules.md
-│   │   └── workspace-rules.md
-│   └── workflows/
-│       ├── commit.md
-│       ├── go-autonomous.md
-│       ├── go-research.md
-│       ├── implement.md
-│       ├── prime.md
-│       ├── session-archive.md
-│       ├── session-close.md
-│       ├── session-init.md
-│       ├── session-resume.md
-│       ├── session-save.md
-│       ├── setup-pdftools.md
-│       ├── verify.md
-│       ├── write-impl-plan.md
-│       ├── write-spec.md
-│       └── write-test-plan.md
-├── DevSystemV2/                  # Current system
+├── DevSystemV1/                  # Legacy (deprecated)
+├── DevSystemV2/                  # Previous version
+├── DevSystemV2.1/                # Current system
 │   ├── rules/
 │   │   ├── core-conventions.md   # Text formatting, document structure
 │   │   ├── devsystem-core.md     # Workspace scenarios, folder structure
@@ -118,17 +96,12 @@ IPP/
 │       ├── go-research.md        # Structured research
 │       ├── implement.md          # Implementation workflow
 │       ├── prime.md              # Context loading workflow
-│       ├── session-archive.md    # Archive session folder
-│       ├── session-close.md      # Close and sync session
-│       ├── session-init.md       # Initialize new session
-│       ├── session-resume.md     # Resume existing session
-│       ├── session-save.md       # Save session progress
+│       ├── refactor.md           # Global/local pattern replacement (NEW)
+│       ├── session-*.md          # Session management (init, save, resume, close, archive)
 │       ├── setup-pdftools.md     # PDF tools installation
-│       ├── sync.md               # Document synchronization (NEW)
+│       ├── sync.md               # Document synchronization
 │       ├── verify.md             # Verification workflow
-│       ├── write-impl-plan.md    # Create implementation plan
-│       ├── write-spec.md         # Create specification
-│       └── write-test-plan.md    # Create test plan
+│       └── write-*.md            # Document creation (spec, impl-plan, test-plan)
 └── README.md
 ```
 
@@ -226,7 +199,12 @@ Creates `_TEST_*.md` from spec.
 /sync
 ```
 
-8. **Commit** - Create conventional commits:
+8. **Refactor** - Global/local pattern replacement:
+```
+/refactor
+```
+
+9. **Commit** - Create conventional commits:
 ```
 /commit
 ```
