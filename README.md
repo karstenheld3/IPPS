@@ -66,7 +66,7 @@ A controlled vocabulary for agent-human communication. Provides consistent termi
 5. [COMMIT] with conventional message
 ```
 
-**Full specification**: [SPEC_AGENTIC_ENGLISH.md](SPEC_AGENTIC_ENGLISH.md)
+**Full specification**: [SPEC_AGEN_AGENTIC_ENGLISH.md](SPEC_AGEN_AGENTIC_ENGLISH.md)
 
 ## EDIRD Phase Model - Explore, Design, Implement, Refine, Deliver
 

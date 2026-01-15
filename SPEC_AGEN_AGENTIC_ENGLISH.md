@@ -1,4 +1,4 @@
-# SPEC: Agentic English
+# SPEC: AGEN - Agentic English
 
 **Doc ID**: AGEN-SP01
 **Goal**: Define a controlled vocabulary for agent-human communication in workflows, skills, and documents
