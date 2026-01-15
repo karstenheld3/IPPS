@@ -1,9 +1,9 @@
-# INFO: Agentic English
+# SPEC: Agentic English
 
-**Doc ID**: AGEN-IN01
+**Doc ID**: AGEN-SP01
 **Goal**: Define a controlled vocabulary for agent-human communication in workflows, skills, and documents
 
-**See also:** `INFO_PROJECT_PHASES_OPTIONS.md [PHSE-IN01]` for phase hierarchies using these verbs
+**See also:** `_SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP01]` for phase model using these verbs
 
 ## Table of Contents
 
@@ -138,9 +138,17 @@ No brackets for tokens that appear in **conditions** - things the agent checks f
 
 - **[WORKSPACE_FOLDER]** - Absolute path of root folder where agent operates
 - **[PROJECT_FOLDER]** - Absolute path of project folder (same as workspace if no monorepo)
+- **[SESSIONS_FOLDER]** - Base folder for sessions (default: `[WORKSPACE_FOLDER]`, override in `!NOTES.md`)
+- **[SESSIONS_ARCHIVE]** - Archive folder for closed sessions (default: `[SESSIONS_FOLDER]/_Archive`)
 - **[SESSION_FOLDER]** - Absolute path of currently active session folder
 - **[SRC_FOLDER]** - Absolute path of source folder
 - **[AGENT_FOLDER]** - Agent config folder (`.windsurf/` or `.claude/`)
+
+**Override example in `!NOTES.md`:**
+```
+[SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
+[SESSIONS_ARCHIVE]: [SESSIONS_FOLDER]\_Archive
+```
 
 ### Configuration
 
@@ -281,6 +289,10 @@ Classified at task start:
 - **MIGRATION** - Data or API migration
 
 ## Document History
+
+**[2026-01-15 18:23]**
+- Fixed: Document type INFO → SPEC in title
+- Changed: Cross-reference to EDIRD Phase Model spec
 
 **[2026-01-15 17:42]**
 - Changed: Rewrote Syntax section with clear instruction vs condition distinction

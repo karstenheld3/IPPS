@@ -1,17 +1,17 @@
-# SPEC: IPPS Phase Model
+# SPEC: EDIRD Phase Model
 
-**Doc ID**: PHSE-SP01
+**Doc ID**: EDIRD-SP01
 **Goal**: Specify the phase-based workflow model for agent-driven development
 
 **Depends on:**
-- `_SPEC_AGENTIC_ENGLISH.md [AGEN-IN01]` for verb definitions and syntax
+- `_SPEC_AGEN_AGENTIC_ENGLISH.md [AGEN-SP01]` for verb definitions and syntax
 
 ## MUST-NOT-FORGET
 
 - Phases use brackets `[PHASE]` - they are instruction tokens
 - Context states use no brackets (COMPLEXITY-HIGH, HOTFIX) - they are condition tokens
 - Phase transitions require gate checks before proceeding
-- Complexity assessment happens in DISCOVERY phase, not before
+- Complexity assessment happens in EXPLORE phase, not before
 
 ## Table of Contents
 
@@ -30,7 +30,7 @@
 **Problem:** Development workflows lack consistent phase structure. Agents and humans use different terminology, skip important steps, or apply heavyweight processes to simple tasks.
 
 **Solution:**
-- Define 5 standard phases: DISCOVERY, DESIGN, IMPLEMENT, IMPROVE, DELIVER
+- Define 5 standard phases: EXPLORE, DESIGN, IMPLEMENT, REFINE, DELIVER
 - Map verbs to phases based on complexity level
 - Use gates to ensure prerequisites before phase transitions
 - Support both FEATURE-BASED and PROBLEM-BASED workflows
@@ -51,7 +51,7 @@ This specification formalizes the phase model researched in `INFO_PROJECT_PHASES
 A **Phase** is a high-level stage in the development workflow.
 
 **Properties:**
-- `name` - Phase identifier (DISCOVERY, DESIGN, IMPLEMENT, IMPROVE, DELIVER)
+- `name` - Phase identifier (EXPLORE, DESIGN, IMPLEMENT, REFINE, DELIVER)
 - `verbs` - List of applicable verbs for this phase
 - `gate` - Checklist of prerequisites for exiting this phase
 
@@ -85,59 +85,59 @@ A **Gate** is a checklist of prerequisites that must be satisfied before transit
 
 ## 4. Functional Requirements
 
-**PHSE-FR-01: Phase Structure**
-- Workflow consists of 5 sequential phases: DISCOVERY, DESIGN, IMPLEMENT, IMPROVE, DELIVER
+**EDIRD-FR-01: Phase Structure**
+- Workflow consists of 5 sequential phases: EXPLORE, DESIGN, IMPLEMENT, REFINE, DELIVER
 - Phases use bracket syntax `[PHASE]` as instruction tokens
 - Each phase maps to specific verbs from Agentic English vocabulary
 
-**PHSE-FR-02: Complexity Assessment**
-- First action in DISCOVERY phase is `[ASSESS]` complexity
+**EDIRD-FR-02: Complexity Assessment**
+- First action in EXPLORE phase is `[ASSESS]` complexity
 - Complexity determines which verbs apply in subsequent phases
 - For COMPLEXITY-LOW: skip heavy documentation (specs, plans)
 - For COMPLEXITY-HIGH: require POC, specs, and full review cycle
 
-**PHSE-FR-03: Phase Gates**
+**EDIRD-FR-03: Phase Gates**
 - Each phase transition requires gate check
 - Gate is a checklist of prerequisites
 - Cannot proceed to next phase until gate passes
 - Gates are context-dependent (complexity, problem type)
 
-**PHSE-FR-04: Verb-Phase Mapping**
+**EDIRD-FR-04: Verb-Phase Mapping**
 - Each verb belongs to one primary phase
 - Verbs can be skipped based on complexity level
 - Verb outcomes (-OK, -FAIL, -SKIP) determine next action
 
-**PHSE-FR-05: Problem-Based Workflows**
+**EDIRD-FR-05: Problem-Based Workflows**
 - HOTFIX, BUGFIX, CHORE, MIGRATION use abbreviated phase flows
-- Problem type assessed in DISCOVERY instead of complexity
+- Problem type assessed in EXPLORE instead of complexity
 - Same phase structure, different verb emphasis
 
-**PHSE-FR-06: Workflow Branching**
+**EDIRD-FR-06: Workflow Branching**
 - Context states (no brackets) appear in condition headers
 - Instruction tokens (brackets) appear in action steps
 - Format: `## For CONTEXT-STATE` followed by `[VERB]` instructions
 
 ## 5. Design Decisions
 
-**PHSE-DD-01:** Five-phase model (D-D-I-I-D). Rationale: Balances granularity with simplicity. Covers research, planning, execution, quality, and delivery.
+**EDIRD-DD-01:** Five-phase model (E-D-I-R-D). Rationale: Balances granularity with simplicity. Covers exploration, planning, execution, refinement, and delivery.
 
-**PHSE-DD-02:** Complexity determines verb application, not phase skipping. Rationale: All phases execute, but with different depth. COMPLEXITY-LOW still has DESIGN phase, just with `[OUTLINE]` instead of `[SPEC]`.
+**EDIRD-DD-02:** Complexity determines verb application, not phase skipping. Rationale: All phases execute, but with different depth. COMPLEXITY-LOW still has DESIGN phase, just with `[OUTLINE]` instead of `[SPEC]`.
 
-**PHSE-DD-03:** Gates use checklist format. Rationale: Explicit, verifiable conditions prevent premature phase transitions.
+**EDIRD-DD-03:** Gates use checklist format. Rationale: Explicit, verifiable conditions prevent premature phase transitions.
 
-**PHSE-DD-04:** Phases are instruction tokens (brackets). Rationale: Phases are actions the agent executes, not conditions to check.
+**EDIRD-DD-04:** Phases are instruction tokens (brackets). Rationale: Phases are actions the agent executes, not conditions to check.
 
-**PHSE-DD-05:** IMPROVE phase includes both self-review and external review. Rationale: Separates implementation from quality assurance, catches issues before delivery.
+**EDIRD-DD-05:** REFINE phase includes both self-review and external review. Rationale: Separates implementation from quality assurance, catches issues before delivery.
 
 ## 6. Implementation Guarantees
 
-**PHSE-IG-01:** Phase names are stable vocabulary - DISCOVERY, DESIGN, IMPLEMENT, IMPROVE, DELIVER will not change.
+**EDIRD-IG-01:** Phase names are stable vocabulary - EXPLORE, DESIGN, IMPLEMENT, REFINE, DELIVER will not change.
 
-**PHSE-IG-02:** Complexity levels map to semantic versioning - LOW=patch, MEDIUM=minor, HIGH=major.
+**EDIRD-IG-02:** Complexity levels map to semantic versioning - LOW=patch, MEDIUM=minor, HIGH=major.
 
-**PHSE-IG-03:** All workflows start with DISCOVERY phase containing `[ASSESS]` verb.
+**EDIRD-IG-03:** All workflows start with EXPLORE phase containing `[ASSESS]` verb.
 
-**PHSE-IG-04:** Gate failures loop back within current phase, not to previous phases.
+**EDIRD-IG-04:** Gate failures loop back within current phase, not to previous phases. Verb failures (e.g., `[PROVE]-FAIL`) may trigger iteration to earlier phases.
 
 ## 7. Key Mechanisms
 
@@ -175,7 +175,7 @@ Verb outcomes determine control flow:
 
 ```
 [PROVE]-OK   → [SPEC] or [IMPLEMENT]
-[PROVE]-FAIL → [RESEARCH] (back to discovery)
+[PROVE]-FAIL → [RESEARCH] (back to explore)
 [VERIFY]-OK  → next phase
 [VERIFY]-FAIL → [FIX] → [VERIFY] (loop until OK)
 ```
@@ -185,7 +185,7 @@ Verb outcomes determine control flow:
 ### Feature-Based Workflow (COMPLEXITY-HIGH)
 
 ```
-[DISCOVERY]
+[EXPLORE]
 ├─> [RESEARCH] existing solutions
 ├─> [ANALYZE] affected code
 ├─> [ASSESS] → COMPLEXITY-HIGH
@@ -212,9 +212,10 @@ Verb outcomes determine control flow:
 └─> [COMMIT] small, frequent
     └─> Gate: All code complete, tests pass
 
-[IMPROVE]
+[REFINE]
 ├─> [REVIEW] self-review
 ├─> [VERIFY] against spec/rules
+├─> [TEST] regression testing
 ├─> [CRITIQUE] devil's advocate
 ├─> [RECONCILE] pragmatic adjustments
 ├─> [FIX] found issues
@@ -235,7 +236,7 @@ Verb outcomes determine control flow:
 ### Problem-Based Workflow (HOTFIX)
 
 ```
-[DISCOVERY]
+[EXPLORE]
 ├─> [ANALYZE] identify root cause
 ├─> [ASSESS] → HOTFIX
 └─> [DECIDE] fix approach
@@ -252,8 +253,9 @@ Verb outcomes determine control flow:
 └─> [COMMIT] with hotfix message
     └─> Gate: Fix applied, tests pass
 
-[IMPROVE]
+[REFINE]
 ├─> [VERIFY] no regressions
+├─> [TEST] regression testing
 └─> [REVIEW] quick review
     └─> Gate: No regressions
 
@@ -264,6 +266,16 @@ Verb outcomes determine control flow:
 ```
 
 ## 9. Document History
+
+**[2026-01-15 18:23]**
+- Changed: Renamed from "IPPS Phase Model" to "EDIRD Phase Model"
+- Changed: Phase names DISCOVERY → EXPLORE, IMPROVE → REFINE
+- Changed: Doc ID prefix PHSE → EDRD
+- Added: `[TEST]` verb to REFINE phase for regression testing
+
+**[2026-01-15 18:08]**
+- Fixed: Doc ID reference AGEN-IN01 → AGEN-SP01
+- Changed: EDRD-IG-04 clarified - verb failures may trigger phase iteration
 
 **[2026-01-15 17:46]**
 - Initial specification created from INFO_PROJECT_PHASES_OPTIONS.md
