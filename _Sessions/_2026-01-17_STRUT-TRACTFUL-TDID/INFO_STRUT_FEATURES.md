@@ -619,17 +619,6 @@ Three named patterns for complex STRUT plans.
 ```
 ├─ [VERB]{max_N, on_exhaust}: description
 │   └─ -FAIL{1..N} → [RECOVERY-VERB]
-│   └─ -FAIL{N+1} → on_exhaust
-```
-
-**Parameters:**
-- `max_N`: Maximum retry attempts (default: 3)
-- `on_exhaust`: Action when retries exhausted ([CONSULT], [DEFER], [FAIL-PHASE])
-
-**Semantics:**
-- Track retry count per verb instance
-- Each -FAIL increments counter and triggers recovery
-- When counter > max_N, execute on_exhaust action
 - Counter resets on -OK or phase restart
 
 **Example: Bounded test-fix cycle**

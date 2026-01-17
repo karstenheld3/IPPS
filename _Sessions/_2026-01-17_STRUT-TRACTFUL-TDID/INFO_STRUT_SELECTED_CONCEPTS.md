@@ -174,18 +174,18 @@ Explicit transitions define what happens on failure.
 ### 5.1 [RETRY] Verb (SELECTED NOTATION)
 
 ```
-├─ [RETRY](xN) UNTIL [VERB]:
+├─ [RETRY](xN) until [VERB]:
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 ├─ [COMMIT]
 ```
 
-**Syntax:** `[RETRY](xN) UNTIL [VERB]:`
+**Syntax:** `[RETRY](xN) until [VERB]:`
 
 **Elements:**
 - `[RETRY]` - Retry verb (from AGEN vocabulary)
 - `(xN)` - Max N attempts in parameter
-- `UNTIL [VERB]` - Deciding verb that determines success/failure
+- `until [VERB]` - Deciding verb that determines success/failure
 - Block body - Steps to run between retry attempts
 - `on -FAIL` - Handler when all N attempts exhausted
 
@@ -212,7 +212,7 @@ UNTIL verb fails N times → execute on -FAIL handler
 ```
 ├─ for item[n] in 1..N:
 │   ├─ [IMPLEMENT](item[n])
-│   ├─ [RETRY](x3) UNTIL [TEST](item[n]):
+│   ├─ [RETRY](x3) until [TEST](item[n]):
 │   │   └─ [FIX]
 │   ├─ [CONSULT] on -FAIL
 │   └─ [COMMIT](item[n])
@@ -412,7 +412,7 @@ Gate failure triggers phase iteration or escalation.
 - **`-FAIL`** - Failure outcome
 - **`-OK`** - Success outcome (usually implicit)
 - **`[RETRY](xN)`** - Retry verb with max N attempts
-- **`UNTIL [VERB]`** - Deciding verb for retry
+- **`until [VERB]`** - Deciding verb for retry
 - **`on -FAIL`** - Exhaustion handler
 - **`for item in 1..N:`** - For-loop iteration
 - **`( | )`** - Choice/alternation
@@ -425,7 +425,7 @@ Gate failure triggers phase iteration or escalation.
 [IMPLEMENT]: Fix endpoints
 ├─ fix_endpoint_A:
 │   ├─ [IMPLEMENT](add database index)
-│   ├─ [RETRY](x3) UNTIL [TEST](verify improvement):
+│   ├─ [RETRY](x3) until [TEST](verify improvement):
 │   │   └─ [FIX]
 │   ├─ [CONSULT] on -FAIL
 │   └─ [COMMIT](fix A)
@@ -489,7 +489,7 @@ Defines what WILL be done. Only gate checkboxes may be modified during execution
 ## Document History
 
 **[2026-01-17 18:46]**
-- Changed: Replaced all loop notation with `[RETRY](xN) UNTIL [VERB]:` syntax
+- Changed: Replaced all loop notation with `[RETRY](xN) until [VERB]:` syntax
 - Added: `for item in 1..N:` for-loop iteration syntax
 - Removed: `|: :|` loop markers and labeled blocks (superseded by [RETRY])
 - Changed: Section 5 renamed to "Retry Blocks"

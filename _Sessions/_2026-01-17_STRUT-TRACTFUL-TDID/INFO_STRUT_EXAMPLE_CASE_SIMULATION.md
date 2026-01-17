@@ -19,7 +19,7 @@
 
 All 10 test cases formalized in STRUT notation with:
 - Phase transitions with gate checkboxes (`[x]`/`[ ]`)
-- Retry blocks (`[RETRY](xN) UNTIL [VERB]`)
+- Retry blocks (`[RETRY](xN) until [VERB]`)
 - Escalation patterns (CONSULT, DEFER, ABORT, DECOMPOSE)
 - Nested workflows (NEST pattern in Case 6)
 - Phase iteration (backtracking in Case 10)
@@ -47,7 +47,7 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 - `[CONSULT] -FAIL -> [QUESTION]`
 
 **Retry blocks**:
-- `[RETRY](xN) UNTIL [VERB]:` - retry block up to N times until VERB succeeds
+- `[RETRY](xN) until [VERB]:` - retry block up to N times until VERB succeeds
 - Block steps run, then UNTIL verb evaluated
 - `-FAIL` on exhaustion triggers `on -FAIL` handler
 
@@ -82,7 +82,7 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 
 [IMPLEMENT]: Apply fix
 ├─ [IMPLEMENT](null check)
-├─ [RETRY](x10) UNTIL [TEST]:
+├─ [RETRY](x10) until [TEST]:
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 ├─ [COMMIT](hotfix branch)
@@ -110,7 +110,7 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 ├─ [ANALYZE](cart calculation code)
 ├─ [PROVE](add logging)
 ├─ [DEPLOY](staging instrumented)
-├─ [RETRY](x3) UNTIL [TEST](reproduce issue):
+├─ [RETRY](x3) until [TEST](reproduce issue):
 │   └─ [ANALYZE](more logs)
 ├─ [CONSULT] on -FAIL
 ├─ [ASSESS](COMPLEXITY-MEDIUM)
@@ -128,7 +128,7 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 
 [IMPLEMENT]: Apply fix and add test
 ├─ [IMPLEMENT](optimistic lock)
-├─ [RETRY](x3) UNTIL [TEST](new regression test):
+├─ [RETRY](x3) until [TEST](new regression test):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 ├─ [COMMIT](bugfix branch)
@@ -139,7 +139,7 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 
 [REFINE]: Verify fix
 ├─ [REVIEW](self review)
-├─ [RETRY](x3) UNTIL [TEST](full regression):
+├─ [RETRY](x3) until [TEST](full regression):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 └─> Gate:
@@ -188,31 +188,31 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 [IMPLEMENT]: Build endpoint
 ├─ step 1:
 │   ├─ [IMPLEMENT](repository query)
-│   ├─ [RETRY](x3) UNTIL [TEST](unit test repo):
+│   ├─ [RETRY](x3) until [TEST](unit test repo):
 │   │   └─ [FIX]
 │   ├─ [CONSULT] on -FAIL
 │   └─ [COMMIT](step 1)
 ├─ step 2:
 │   ├─ [IMPLEMENT](service layer)
-│   ├─ [RETRY](x3) UNTIL [TEST](unit test service):
+│   ├─ [RETRY](x3) until [TEST](unit test service):
 │   │   └─ [FIX]
 │   ├─ [CONSULT] on -FAIL
 │   └─ [COMMIT](step 2)
 ├─ step 3:
 │   ├─ [IMPLEMENT](controller)
-│   ├─ [RETRY](x3) UNTIL [TEST](integration test):
+│   ├─ [RETRY](x3) until [TEST](integration test):
 │   │   └─ [FIX]
 │   ├─ [CONSULT] on -FAIL
 │   └─ [COMMIT](step 3)
 ├─ step 4:
 │   ├─ [IMPLEMENT](pagination filtering)
-│   ├─ [RETRY](x3) UNTIL [TEST](pagination tests):
+│   ├─ [RETRY](x3) until [TEST](pagination tests):
 │   │   └─ [FIX]
 │   ├─ [CONSULT] on -FAIL
 │   └─ [COMMIT](step 4)
 ├─ step 5:
 │   ├─ [IMPLEMENT](rate limiting)
-│   ├─ [RETRY](x3) UNTIL [TEST](rate limit tests):
+│   ├─ [RETRY](x3) until [TEST](rate limit tests):
 │   │   └─ [FIX]
 │   ├─ [CONSULT] on -FAIL
 │   └─ [COMMIT](step 5)
@@ -223,7 +223,7 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 
 [REFINE]: Review and docs
 ├─ [REVIEW](self review)
-├─ [RETRY](x3) UNTIL [VERIFY](against spec):
+├─ [RETRY](x3) until [VERIFY](against spec):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 ├─ [WRITE](api documentation)
@@ -290,7 +290,7 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 
 [REFINE]: Verify findings
 ├─ [REVIEW](evaluation logic)
-├─ [RETRY](x3) UNTIL [VERIFY](benchmark methodology):
+├─ [RETRY](x3) until [VERIFY](benchmark methodology):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 ├─ [CRITIQUE](are criteria complete)
@@ -349,10 +349,10 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 [IMPLEMENT]: Incremental refactor
 ├─ for step[n] in 1..12:
 │   ├─ [IMPLEMENT](step[n])
-│   ├─ [RETRY](x2) UNTIL [TEST](step[n] tests):
+│   ├─ [RETRY](x2) until [TEST](step[n] tests):
 │   │   └─ [FIX]
 │   ├─ [CONSULT](tech lead) on -FAIL
-│   ├─ [RETRY](x2) UNTIL [VERIFY](backward compat):
+│   ├─ [RETRY](x2) until [VERIFY](backward compat):
 │   │   └─ [FIX]
 │   ├─ [CONSULT] on -FAIL
 │   └─ [COMMIT](step[n])
@@ -364,10 +364,10 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 
 [REFINE]: Comprehensive review
 ├─ [REVIEW](full module)
-├─ [RETRY](x3) UNTIL [VERIFY](against spec):
+├─ [RETRY](x3) until [VERIFY](against spec):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
-├─ [RETRY](x3) UNTIL [TEST](full regression):
+├─ [RETRY](x3) until [TEST](full regression):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 ├─ [CRITIQUE](architecture review)
@@ -443,11 +443,11 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 ├─ [IMPLEMENT](reset token generation)
 ├─ [IMPLEMENT](sendgrid integration)
 ├─ [IMPLEMENT](reset endpoint)
-├─ [RETRY](x3) UNTIL [TEST]:
+├─ [RETRY](x3) until [TEST]:
 │   └─ [FIX](mock config)
 ├─ [CONSULT] on -FAIL
 ├─ [IMPLEMENT](failure handling: retry, fallback)
-├─ [RETRY](x3) UNTIL [TEST](end to end):
+├─ [RETRY](x3) until [TEST](end to end):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 ├─ [COMMIT](feature)
@@ -458,7 +458,7 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 
 [REFINE]: Review
 ├─ [REVIEW](security review)
-├─ [RETRY](x3) UNTIL [VERIFY](against spec):
+├─ [RETRY](x3) until [VERIFY](against spec):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 └─> Gate:
@@ -502,13 +502,13 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 
 [IMPLEMENT]: Build with failures and recovery
 ├─ [IMPLEMENT](payment client)
-├─ [RETRY](x3) UNTIL [TEST](sandbox):
+├─ [RETRY](x3) until [TEST](sandbox):
 │   └─ [FIX](adjust to actual response)
 ├─ [CONSULT](tech lead) on -FAIL
 │   ├─ [CONSULT](vendor)
 │   └─ [FIX](apply workaround)
 ├─ [IMPLEMENT](remaining edge cases)
-├─ [RETRY](x3) UNTIL [TEST](full suite):
+├─ [RETRY](x3) until [TEST](full suite):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 ├─ [COMMIT](integration)
@@ -519,7 +519,7 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 
 [REFINE]: Review
 ├─ [REVIEW](self review)
-├─ [RETRY](x3) UNTIL [VERIFY](against spec):
+├─ [RETRY](x3) until [VERIFY](against spec):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 └─> Gate:
@@ -537,7 +537,7 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 
 **ABORT Scenario (edge case)**:
 ```
-├─ [RETRY](x3) UNTIL [TEST](sandbox):
+├─ [RETRY](x3) until [TEST](sandbox):
 │   └─ [FIX]
 ├─ [CONSULT](tech lead) on -FAIL
 │   ├─ [CONSULT](vendor)
@@ -588,13 +588,13 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 │
 ├─ for subtask[n] in 1..5:
 │   ├─ [IMPLEMENT](subtask[n])
-│   ├─ [RETRY](x3) UNTIL [TEST](subtask[n]):
+│   ├─ [RETRY](x3) until [TEST](subtask[n]):
 │   │   └─ [FIX]
 │   ├─ [CONSULT] on -FAIL
 │   └─ [COMMIT](subtask[n])
 │
 ├─ [IMPLEMENT](aggregation module)
-├─ [RETRY](x3) UNTIL [TEST](integration test):
+├─ [RETRY](x3) until [TEST](integration test):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 ├─ [COMMIT](unified export)
@@ -605,7 +605,7 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 
 [REFINE]: Review
 ├─ [REVIEW](all components)
-├─ [RETRY](x3) UNTIL [VERIFY](against requirements):
+├─ [RETRY](x3) until [VERIFY](against requirements):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 └─> Gate:
@@ -647,21 +647,21 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 [IMPLEMENT]: Fix what we can, defer rest
 ├─ fix_endpoint_A:
 │   ├─ [IMPLEMENT](add database index)
-│   ├─ [RETRY](x3) UNTIL [TEST](verify improvement):
+│   ├─ [RETRY](x3) until [TEST](verify improvement):
 │   │   └─ [FIX]
 │   ├─ [CONSULT] on -FAIL
 │   └─ [COMMIT](fix A)
 │
 ├─ fix_endpoint_B:
 │   ├─ [IMPLEMENT](fix n plus 1 query)
-│   ├─ [RETRY](x3) UNTIL [TEST](verify improvement):
+│   ├─ [RETRY](x3) until [TEST](verify improvement):
 │   │   └─ [FIX]
 │   ├─ [CONSULT] on -FAIL
 │   └─ [COMMIT](fix B)
 │
 ├─ fix_endpoint_E:
 │   ├─ [IMPLEMENT](optimize serialization)
-│   ├─ [RETRY](x3) UNTIL [TEST](verify improvement):
+│   ├─ [RETRY](x3) until [TEST](verify improvement):
 │   │   └─ [FIX]
 │   ├─ [CONSULT] on -FAIL
 │   └─ [COMMIT](fix E)
@@ -677,7 +677,7 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 
 [REFINE]: Review completed fixes
 ├─ [REVIEW](fixes A B E)
-├─ [RETRY](x3) UNTIL [VERIFY](performance improvement):
+├─ [RETRY](x3) until [VERIFY](performance improvement):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 └─> Gate:
@@ -744,7 +744,7 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 [IMPLEMENT]: Build dashboard
 ├─ for component[n] in 1..5:
 │   ├─ [IMPLEMENT](component[n])
-│   ├─ [RETRY](x3) UNTIL [TEST](component[n]):
+│   ├─ [RETRY](x3) until [TEST](component[n]):
 │   │   └─ [FIX]
 │   ├─ [CONSULT](tech lead) on -FAIL
 │   └─ [COMMIT](component[n])
@@ -756,13 +756,13 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 
 [REFINE]: Review with issues found
 ├─ [REVIEW](self review)
-├─ [RETRY](x3) UNTIL [VERIFY](against spec):
+├─ [RETRY](x3) until [VERIFY](against spec):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 ├─ [CRITIQUE](accessibility review) -> ISSUES FOUND
 │   └─ issue: missing ARIA labels
 ├─ [FIX](add aria labels)
-├─ [RETRY](x3) UNTIL [TEST](accessibility tests):
+├─ [RETRY](x3) until [TEST](accessibility tests):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 ├─ [VALIDATE](stakeholder review) -> MISSING CHART TYPE
@@ -770,11 +770,11 @@ Patterns demonstrated: Phase skip (1), Retry (2,5,6,7,8,10), NEST (6), DEFER (9)
 │   └─ -FAIL -> [CONSULT]
 ├─ iterate on feedback:
 │   ├─ [IMPLEMENT](pie chart component)
-│   ├─ [RETRY](x3) UNTIL [TEST](pie chart):
+│   ├─ [RETRY](x3) until [TEST](pie chart):
 │   │   └─ [FIX]
 │   ├─ [CONSULT] on -FAIL
 │   └─ [COMMIT](add pie chart)
-├─ [RETRY](x3) UNTIL [TEST](full regression):
+├─ [RETRY](x3) until [TEST](full regression):
 │   └─ [FIX]
 ├─ [CONSULT] on -FAIL
 ├─ [VALIDATE](stakeholder final)
