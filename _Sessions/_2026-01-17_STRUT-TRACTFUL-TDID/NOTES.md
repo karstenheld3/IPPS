@@ -72,6 +72,7 @@ New verbs:
 - `[READ]` - careful reading of provided content
 - `[RESEARCH]` - iterative research with MEPI strategy
 - `[PARTITION]` - split IMPL/TEST/TASK plans into testable chunks
+- `[RETRY]` - retry block with bounded attempts: `[RETRY](xN) UNTIL [VERB]:`
 
 ### SOCAS (Signs Of Confusion And Sloppiness)
 
@@ -134,6 +135,11 @@ Research strategy for [RESEARCH] verb:
 - Sequence determined by order in plan
 - Time estimates belong in TASKS documents
 - Priority determined by dependency order
+
+**KD-04: STRUT does NOT invent new keywords**
+- Use only existing AGEN verbs and outcomes (-OK, -FAIL, -SKIP)
+- No EXHAUST, TRY, or other invented keywords
+- Loop exhaustion handled via fall-through to next sibling or labeled blocks
 
 ## Important Findings
 
