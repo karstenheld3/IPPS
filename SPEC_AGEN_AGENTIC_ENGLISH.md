@@ -91,6 +91,8 @@ Use brackets for tokens that appear in **instructions** - things the agent reads
 - `[PLACEHOLDER]` - Value to substitute (e.g., `[ACTOR]`, `[WORKSPACE_FOLDER]`)
 - `[LABEL]` - Classification to apply (e.g., `[UNVERIFIED]`, `[CRITICAL]`)
 
+**Important:** Only UPPERCASE tokens in brackets are instructions. Lowercase content like `[x]` (checkbox) or `[link text](url)` is regular Markdown, not AGEN syntax.
+
 **Verb modifiers:**
 
 - `[VERB]-OK` - Successful outcome, proceed to next step
