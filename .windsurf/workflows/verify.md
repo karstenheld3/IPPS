@@ -76,7 +76,7 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Ask questions that a reader might ask and clarify them.
 - Verify Timeline field is present and accurate (Created date, update count, date range)
 - Verify Document History section exists and is up to date
-- Read `[AGENT_FOLDER]/workflows/go-research.md` again and verify against instructions.
+- Read `[AGENT_FOLDER]/workflows/research.md` again and verify against instructions.
 
 ## Specifications (SPEC)
 

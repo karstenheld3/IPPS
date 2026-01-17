@@ -23,7 +23,7 @@ Main entry point for SOLVE workflow - research, analysis, evaluation, decisions.
 
 ## Step 1: Initialize Session
 
-Run `/session-init` with task name as topic.
+Run `/session-new` with task name as topic.
 
 Creates session folder with:
 - NOTES.md (with Current Phase tracking)
@@ -44,7 +44,7 @@ Creates session folder with:
   - Files created in `[SESSION_FOLDER]/` or `[SESSION_FOLDER]/poc/`
   - Existing code, configuration, or runtime MUST NOT be affected
   - NEVER create folders in workspace root
-  - **REQUIRES SESSION**: If no session exists, run `/session-init` first
+  - **REQUIRES SESSION**: If no session exists, run `/session-new` first
 
 Record in NOTES.md:
 ```markdown

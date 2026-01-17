@@ -55,6 +55,17 @@ Every document MUST have an ID in its header block.
 - `V2CR-IP01` - V2 Crawler Implementation Plan 1
 - `V2CR-TP01` - V2 Crawler Test Plan 1
 
+### Why IMPL and TEST, not PLAN
+
+We use **IMPL** (Implementation Plan) and **TEST** (Test Plan) instead of generic "PLAN" to avoid term collision. "Plan" is overloaded in software development:
+- Project plan (schedule, milestones)
+- Task list / backlog
+- Sprint plan
+- Release plan
+- Migration plan
+
+IMPL and TEST provide specificity: IMPL = "how to build it", TEST = "how to verify it". This enables unambiguous references like `[WRITE-IMPL-PLAN]` vs `[WRITE-TEST-PLAN]` and distinct Doc IDs (`IP` vs `TP`).
+
 ## Review Document IDs
 
 Reviews reference their source document with `-RV` suffix.

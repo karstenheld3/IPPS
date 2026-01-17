@@ -72,7 +72,7 @@ Determines where implementation outputs are placed:
   - Output: `[SESSION_FOLDER]/` or `[SESSION_FOLDER]/poc/`
   - Existing code/config/runtime MUST NOT be affected
   - NEVER create folders in workspace root
-  - **REQUIRES SESSION**: If no session exists, run `/session-init` first
+  - **REQUIRES SESSION**: If no session exists, run `/session-new` first
 
 ## Workspace Scenarios
 
@@ -181,7 +181,7 @@ Files starting with `.` follow Unix convention - hidden from directory listings.
 
 ### Session Workflows
 
-- `/session-init` - Create new session folder with tracking files
+- `/session-new` - Create new session folder with tracking files
 - `/session-save` - Document findings and commit
 - `/session-resume` - Re-read session docs and continue
 - `/session-close` - Sync to project files and archive

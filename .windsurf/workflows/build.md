@@ -21,7 +21,7 @@ Main entry point for BUILD workflow - creating software, features, systems.
 
 ## Step 1: Initialize Session
 
-Run `/session-init` with feature name as topic.
+Run `/session-new` with feature name as topic.
 
 Creates session folder with:
 - NOTES.md (with Current Phase tracking)
@@ -42,7 +42,7 @@ Creates session folder with:
   - Files created in `[SESSION_FOLDER]/` or `[SESSION_FOLDER]/poc/`
   - Existing code, configuration, or runtime MUST NOT be affected
   - NEVER create folders in workspace root
-  - **REQUIRES SESSION**: If no session exists, run `/session-init` first
+  - **REQUIRES SESSION**: If no session exists, run `/session-new` first
 
 Record in NOTES.md:
 ```markdown
@@ -58,7 +58,7 @@ Record in NOTES.md:
 4. [RESEARCH] if task requires accuracy to external system (cite sources, not training data)
 5. [SCOPE] define boundaries
 
-**For UI/game/replica work**: Visual reference (screenshot/video of target) is MANDATORY. Text research alone is insufficient.
+**For UI work**: Visual reference (screenshot/video of target) is MANDATORY. Text research alone is insufficient.
 
 ### Gate Check: EXPLORE→DESIGN
 
