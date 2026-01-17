@@ -65,7 +65,7 @@ $targets = @(
 # Deprecated files from V1 and V2 migrations (only these can be deleted)
 $deprecatedFiles = @{
     "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md")
-    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md")
+    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md")
 }
 
 # Get all source files (relative paths)

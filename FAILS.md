@@ -1,5 +1,23 @@
 # Failure Log
 
+## 2026-01-17 - Ignored Documented Sync Process
+
+### [LOW] `GLOB-FL-005` Edited DevSystemV3 without proposing .windsurf sync command
+
+- **When**: 2026-01-17 13:50 UTC+01:00
+- **Where**: `DevSystemV3/rules/devsystem-ids.md`
+- **What**: Agent edited source file and stopped, without proposing the documented sync command to update `.windsurf/`
+- **Why it went wrong**:
+  - `!NOTES.md` lines 14-17 clearly document: "Agent cannot directly edit `.windsurf/` files. To update `.windsurf/` after editing DevSystemV3: `Copy-Item -Path "DevSystemV3\*" -Destination ".windsurf\" -Recurse -Force`"
+  - Agent did not read `!NOTES.md` before attempting the edit
+  - After edit succeeded in DevSystemV3, agent did not propose the sync command
+- **Evidence**: Agent said "The `.windsurf` folder is protected. Let me edit the source in DevSystemV3" - correct action, but incomplete follow-through
+
+**Prevention rules**:
+1. Always read `!NOTES.md` during `/prime` - it contains critical workspace-specific procedures
+2. After editing DevSystemV3, always propose the sync command: `Copy-Item -Path "DevSystemV3\*" -Destination ".windsurf\" -Recurse -Force`
+3. Treat DevSystemV3 edits as two-step: (1) edit source, (2) sync to .windsurf
+
 ## 2026-01-16 - EDIRD Gate Check Bypass
 
 ### [CRITICAL] `GLOB-FL-004` Skipped DESIGN phase documents, passed gate without meeting criteria

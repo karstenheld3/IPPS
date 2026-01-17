@@ -176,7 +176,7 @@ IPPS/
 │       ├── write-spec.md         # Create specification
 │       ├── write-impl-plan.md    # Create implementation plan
 │       ├── write-test-plan.md    # Create test plan
-│       ├── session-init.md       # Initialize session
+│       ├── session-new.md        # Initialize session
 │       ├── session-save.md       # Save session progress
 │       ├── session-resume.md     # Resume session
 │       ├── session-close.md      # Close and sync session
@@ -231,7 +231,7 @@ Start a SOLVE workflow (research, analysis, decisions):
 
 Start a new work session:
 ```
-/session-init
+/session-new
 ```
 Creates a session folder with NOTES.md, PROBLEMS.md, PROGRESS.md.
 
