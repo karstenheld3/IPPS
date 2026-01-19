@@ -90,10 +90,10 @@ P1 [IMPLEMENT]: Fix and verify
 ├─ P1-S4 [FIX](if tests fail)
 ├─ P1-S5 [COMMIT]("fix: null check in getUserById")
 ├─ Deliverables:
-│   ├─ [x] P1-D1: Root cause identified
-│   ├─ [x] P1-D2: Fix implemented
-│   ├─ [x] P1-D3: Tests pass
-│   └─ [x] P1-D4: Committed
+│   ├─ [ ] P1-D1: Root cause identified
+│   ├─ [ ] P1-D2: Fix implemented
+│   ├─ [ ] P1-D3: Tests pass
+│   └─ [ ] P1-D4: Committed
 └─> Transitions:
     - P1-D1 - P1-D4 checked → [END]
     - Tests fail after 3 attempts → [CONSULT]
@@ -102,56 +102,62 @@ P1 [IMPLEMENT]: Fix and verify
 ### Example 2: Feature Build (Multi-Phase)
 
 ```
-P1 [EXPLORE]: Understand requirements
+[ ] P1 [EXPLORE]: Understand requirements
 ├─ Objectives:
 │   ├─ [ ] Know what to build
 │   ├─ [ ] Correct API documentation researched
 │   ├─ [ ] Assess complexity
 │   └─ [ ] Create [DESIGN] phase STRUT
-├─ Strategy: Ready for design in 5min AWT
+├─ Strategy: Ready for design in 5min AWT (agent work time)
 │   - Read all project documents first
-├─ P1-S1 [GATHER](requirements from ticket AUTH-123)
-├─ P1-S2 [ANALYZE](existing auth module)
-├─ P1-S3 [RESEARCH](JWT library version)
-├─ P1-S4 [ASSESS](complexity of feature)
-├─ P1-S5 [BRAINSTORM](3 design options)
+├─ [ ] P1-S1 [GATHER](requirements from ticket AUTH-123)
+├─ [ ] P1-S2 [ANALYZE](existing auth module)
+├─ [ ] P1-S3 [RESEARCH](JWT library version) → [VERIFY]
+├─ [ ] P1-S4 [ASSESS](complexity of feature)
+├─ [ ] P1-S5 [PROPOSE](3 design options)
+├─ [ ] P1-S6 [PLAN](next phase STRUT)
 ├─ Deliverables:
 │   ├─ [ ] P1-D1: Workflow = BUILD
 │   ├─ [ ] P1-D2: Complexity = MEDIUM
-│   ├─ [ ] P1-D3: API version verified with examples
+│   ├─ [ ] P1-D3: P1-S3 outout = API version verified with examples
 │   ├─ [ ] P1-D4: Requirements list (5+ items)
 │   └─ [ ] P1-D5: Next phase STRUT created
 └─> Transitions:
-    - P1-D1 - P1-D5 checked → [DESIGN]
+    - P1-D1 - P1-D5 checked → P2 [DESIGN]
     - Otherwise → P1-S2
 
-P2 [DESIGN]: Plan implementation
+[ ] P2 [DESIGN]: Plan implementation
 ├─ Objectives:
 │   ├─ [ ] Architecture decided (from 2+ options)
 │   └─ [ ] SPEC, IMPL, TEST ready
 ├─ Strategy: TBD based on P1 findings
-├─ P2-S1 [PLAN](token-based password reset)
-├─ P2-S2 [WRITE-SPEC](_SPEC_PASSWORD_RESET.md)
-├─ P2-S3 [WRITE-IMPL-PLAN](_IMPL_PASSWORD_RESET.md)
-├─ P2-S4 [WRITE-TEST-PLAN](_TEST_PASSWORD_RESET.md)
+├─ [ ] P2-S1 [PLAN](token-based password reset)
+├─ [ ] P2-S2 [WRITE-SPEC](_SPEC_PASSWORD_RESET.md) → [VERIFY] → [REVIEW] → [VERIFY]
+├─ [ ] P2-S3 [WRITE-IMPL-PLAN](_IMPL_PASSWORD_RESET.md) → [VERIFY] → [REVIEW] → [CROSSCHECK] → [VERIFY]
+├─ [ ] P2-S4 [WRITE-TEST-PLAN](_TEST_PASSWORD_RESET.md) → [VERIFY]
+├─ [ ] P2-S5 [PLAN](next phase STRUT) → [VERIFY]
+├─ [ ] P2-S6 [REVIEW](Phase documents: SPEC, IMPL, TEST) 
 ├─ Deliverables:
 │   ├─ [ ] P2-D1: Architecture = token-based, 24h expiry
-│   ├─ [ ] P2-D2: SPEC created and verified
-│   └─ [ ] P2-D3: IMPL plan created
+│   ├─ [ ] P2-D2: SPEC created, verified, reviewed
+│   ├─ [ ] P2-D3: IMPL plan created, verified, reviewed
+│   ├─ [ ] P2-D4: P2-S6 [REVIEW] yielded no critical findings 
+│   └─ [ ] P2-D5: Next phase STRUT created, verified
 └─> Transitions:
-    - P2-D1 - P2-D3 checked → [IMPLEMENT]
+    - P2-D1 - P2-D4 checked → P3 [IMPLEMENT]
+    - Otherwise: → P2-S1 [PLAN](fix P2-S6 critical findings)
 
-P3 [IMPLEMENT]: Build feature
+[ ] P3 [IMPLEMENT]: Build feature
 ├─ Objectives:
 │   ├─ [ ] Feature working
 │   └─ [ ] Tests passing
 ├─ Strategy: Implement per IMPL plan, test-fix loop
-├─ P3-S1 [IMPLEMENT](ResetToken model)
-├─ P3-S2 [IMPLEMENT](/forgot-password endpoint)
-├─ P3-S3 [IMPLEMENT](/reset-password endpoint)
-├─ P3-S4 [TEST]
-├─ P3-S5 [FIX](if tests fail)
-├─ P3-S6 [COMMIT]("feat(auth): add password reset")
+├─ [ ] P3-S1 [IMPLEMENT](ResetToken model)
+├─ [ ] P3-S2 [IMPLEMENT](/forgot-password endpoint)
+├─ [ ] P3-S3 [IMPLEMENT](/reset-password endpoint)
+├─ [ ] P3-S4 [TEST]
+├─ [ ] P3-S5 [FIX](if tests fail)
+├─ [ ] P3-S6 [COMMIT]("feat(auth): add password reset")
 ├─ Deliverables:
 │   ├─ [ ] P3-D1: ResetToken model
 │   ├─ [ ] P3-D2: /forgot-password endpoint
@@ -159,27 +165,27 @@ P3 [IMPLEMENT]: Build feature
 │   ├─ [ ] P3-D4: Tests pass
 │   └─ [ ] P3-D5: Committed
 └─> Transitions:
-    - P3-D1 - P3-D5 checked → [REFINE]
+    - P3-D1 - P3-D5 checked → P4 [REFINE]
     - Tests fail after 5 attempts → [CONSULT]
 
-P4 [REFINE]: Review
+[ ] P4 [REFINE]: Review
 ├─ Objectives:
 │   └─ [ ] Code matches SPEC
 ├─ Strategy: Verify, test integration
-├─ P4-S1 [VERIFY](code matches SPEC)
-├─ P4-S2 [TEST](integration)
+├─ [ ] P4-S1 [VERIFY](code matches SPEC)
+├─ [ ] P4-S2 [TEST](integration)
 ├─ Deliverables:
 │   ├─ [ ] P4-D1: SPEC satisfied
 │   └─ [ ] P4-D2: Integration tests pass
 └─> Transitions:
     - P4-D1, P4-D2 checked → [DELIVER]
 
-P5 [DELIVER]: Complete
+[ ] P5 [DELIVER]: Complete
 ├─ Objectives:
 │   └─ [ ] Feature delivered
 ├─ Strategy: Validate, close ticket
-├─ P5-S1 [VALIDATE](manual test)
-├─ P5-S2 [CLOSE](ticket AUTH-123)
+├─ [ ] P5-S1 [VALIDATE](manual test)
+├─ [ ] P5-S2 [CLOSE](ticket AUTH-123)
 ├─ Deliverables:
 │   ├─ [ ] P5-D1: Manual test passed
 │   └─ [ ] P5-D2: Ticket closed
