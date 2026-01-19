@@ -65,9 +65,9 @@ See `TASKS_STRUT.md [STRUT-TK01]` for full task details, dependencies, and verif
 
 ## In Progress
 
-- Writing STRUT specification documents
-
 ## Done
+
+- Created SPEC_STRUT.md [STRUT-SP01] - simplified flat-sequence model
 
 - Created session folder
 - Created NOTES.md with topic registry and key concepts
