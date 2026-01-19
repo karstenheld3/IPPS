@@ -177,7 +177,7 @@ Files starting with `.` follow Unix convention - hidden from directory listings.
 ### Autonomous Action Workflows
 
 - `/go-autonomous` - Generic autonomous implementation loop
-- `/go-research` - Structured research with verification
+- `/research` - Structured research with verification
 
 ### Session Workflows
 
