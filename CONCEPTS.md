@@ -17,8 +17,8 @@ Inventory of named concepts used in the DevSystem. Brief definitions only - see 
 
 ## Measurement
 
-- **HHW** - Human Hours of Work. Partition target: max 0.5 HHW per task
-- **AHW** - Agentic Hours of Work. Agent time estimate
+- **HWT** - Human Work Time. Partition target: max 0.5h HWT per task
+- **AWT** - Agentic Work Time. Agent time estimate
 
 ## Strategies
 
