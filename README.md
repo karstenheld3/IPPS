@@ -2,10 +2,51 @@
 
 # IPPS - Insanely Productive Programming System
 
-A development system for AI-assisted coding workflows, optimized for Windsurf IDE on Windows x64.
+A development system for AI-assisted coding workflows, optimized for a single programmer working with AI agents.
+
+**Philosophy:** One programmer, structured workflows, AI handling the cognitive overhead. Inspired by Douglas Engelbart's intelligence augmentation and Frederick Brooks' "surgical team" concept - but replacing the support team entirely with AI. No sync meetings, no communication costs, minimum coordination necessary.
+
+## Core Concepts
+
+IPPS is built on four integrated specifications that enable autonomous agent operation:
+
+- **[AGEN - Agentic English](SPEC_AGEN_AGENTIC_ENGLISH.md)** - Controlled vocabulary with verbs `[VERB]`, placeholders `[PLACEHOLDER]`, and context states `CONTEXT-STATE`. Eliminates ambiguity in agent instructions.
+
+- **[EDIRD - Phase Model](SPEC_EDIRD_PHASE_MODEL.md)** - Five-phase workflow (Explore, Design, Implement, Refine, Deliver) with gates and deterministic next-action logic. Supports BUILD (code) and SOLVE (knowledge) workflows.
+
+- **[STRUT - Structured Thinking](SPEC_STRUT_STRUCTURED_THINKING.md)** - Tree notation for planning and tracking agent work. Uses unique IDs (`P1`, `P1-S1`, `P1-D1`), checkbox states (`[ ]`, `[x]`, `[N]`), and transitions for flow control.
+
+**How they work together:**
+```
+AGEN provides the language    → Verbs, placeholders, outcomes (-OK, -FAIL, -SKIP)
+EDIRD provides the phases     → EXPLORE → DESIGN → IMPLEMENT → REFINE → DELIVER
+STRUT provides the notation   → Tree structure for plans with progress tracking
+```
+
+**Design principle:** Each spec has a single responsibility. AGEN defines vocabulary. EDIRD defines phases and gates. STRUT defines notation. Workflows orchestrate them without hardcoding phase knowledge.
+
+**Mini-example** - A hotfix plan in STRUT notation:
+```
+[ ] P1 [IMPLEMENT]: Fix null pointer bug
+├─ Objectives:
+│   └─ [ ] Bug no longer reproduces
+├─ Strategy: Locate root cause, apply minimal fix, test
+├─ [ ] P1-S1 [ANALYZE](stack trace)
+├─ [ ] P1-S2 [IMPLEMENT](null check)
+├─ [ ] P1-S3 [TEST]
+├─ [ ] P1-S4 [COMMIT]("fix: null check in getUserById")
+├─ Deliverables:
+│   ├─ [ ] P1-D1: Root cause identified
+│   ├─ [ ] P1-D2: Fix implemented
+│   └─ [ ] P1-D3: Tests pass
+└─> Transitions:
+    - P1-D1 - P1-D3 checked → [END]
+    - Tests fail after 3 attempts → [CONSULT]
+```
 
 ## Table of Contents
 
+- [Core Concepts](#core-concepts)
 - [Overview](#overview)
 - [How to Add to Your Project](#how-to-add-to-your-project)
 - [DevSystem Versions](#devsystem-versions)
