@@ -1,12 +1,10 @@
-# SPEC: AGEN - Agentic English v2
+# SPEC: AGEN - Agentic English
 
-**Doc ID**: AGEN-SP02
+**Doc ID**: AGEN-SP01
 **Goal**: Define a controlled vocabulary for agent-human communication in workflows, skills, and documents
 
 **See also:**
-- `_SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP01]` for phase model using these verbs
-- `_SPEC_EDIRD_VARIATION_A_UNIFIED.md [EDIRD-SP02]` for unified BUILD/SOLVE model
-- `_SPEC_EDIRD_VARIATION_B_DUAL.md [EDIRD-SP03]` for dual model approach
+- `SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP04]` for phase model using these verbs
 
 ## Table of Contents
 
@@ -16,7 +14,7 @@
 - [Placeholders](#placeholders)
 - [Atomic Activities (Verbs)](#atomic-activities-verbs)
 - [Labels](#labels)
-- [Context States](#context-states)
+- [States](#states)
 - [Document History](#document-history)
 
 ## Purpose
@@ -83,13 +81,15 @@ Tracking files use verbs for status:
 
 Agentic English has two token types with distinct syntax:
 
-### Instruction Tokens `[BRACKETS]`
+### Instructions `[BRACKETS]`
 
 Use brackets for tokens that appear in **instructions** - things the agent reads and DOES:
 
 - `[VERB]` - Action to execute (e.g., `[RESEARCH]`, `[VERIFY]`, `[IMPLEMENT]`)
 - `[PLACEHOLDER]` - Value to substitute (e.g., `[ACTOR]`, `[WORKSPACE_FOLDER]`)
 - `[LABEL]` - Classification to apply (e.g., `[UNVERIFIED]`, `[CRITICAL]`)
+
+**Important:** Only UPPERCASE tokens in brackets are instructions. Lowercase content like `[x]` (checkbox) or `[link text](url)` is regular Markdown, not AGEN syntax.
 
 **Verb modifiers:**
 
@@ -104,7 +104,7 @@ Use brackets for tokens that appear in **instructions** - things the agent reads
 In [WORKSPACE_FOLDER], [WRITE-INFO] about dependencies. Mark as [UNVERIFIED] if no source.
 ```
 
-### Context States `NO-BRACKETS`
+### States `NO-BRACKETS`
 
 No brackets for tokens that appear in **conditions** - things the agent checks for branching:
 
@@ -179,19 +179,13 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 - **[INVESTIGATE]** - Focused inquiry into specific issue or question
 - **[GATHER]** - Collect information, logs, context, requirements
 - **[PRIME]** - Load most relevant information into model context
+- **[READ]** - Careful, thorough reading of provided content with attention to detail
 
 ### Thinking and Planning
 
 - **[SCOPE]** - Define boundaries and constraints
 - **[FRAME]** - Structure the problem or approach
-- **[PLAN]** - Create structured approach with steps. Problem-type variants:
-  - BUILD: Architecture/design approach ("Token-based auth, Redis, 24h expiry")
-  - RESEARCH: Research strategy ("Academic sources first, then industry")
-  - ANALYSIS: Analysis framework ("Compare by cost, performance, security")
-  - EVALUATION: Criteria definition ("Must: X, Y. Nice-to-have: Z")
-  - WRITING: Document structure ("Intro → Problem → Solution → Conclusion")
-  - DECISION: Decision matrix ("Options A/B/C vs criteria 1/2/3")
-  - HOTFIX: Fix strategy ("Patch first, root cause after stabilize")
+- **[PLAN]** - Create structured approach with steps
 - **[DECOMPOSE]** - Break large plan into small testable steps, each with verification criteria
 - **[DECIDE]** - Make a choice between options
 - **[ASSESS]** - Assess effort, time, risk, or complexity
@@ -200,6 +194,9 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 - **[SYNTHESIZE]** - Combine findings into coherent understanding
 - **[CONCLUDE]** - Draw conclusions from analysis
 - **[DEFINE]** - Establish clear definitions or criteria
+- **[RECAP]** - Analyze context, revisit plan, identify current status
+- **[CONTINUE]** - Forward-looking assessment, execute next items on plan
+- **[GO]** - Sequence of [RECAP] + [CONTINUE] until goal reached
 
 ### Validation and Proof
 
@@ -287,9 +284,9 @@ Use in tracking files:
 - **[WONT-FIX]** - Acknowledged risk, accepted trade-off
 - **[NEEDS-DISCUSSION]** - Requires [CONSULT] with [ACTOR]
 
-## Context States
+## States
 
-Context states are condition tokens (no brackets) used for branching. Format: `PREFIX-VALUE`.
+States are condition tokens (no brackets) used for branching. Format: `PREFIX-VALUE`.
 
 ### Workspace Context
 
@@ -319,11 +316,17 @@ Determines where implementation outputs are placed:
 
 ## Document History
 
-**[2026-01-17 15:48]**
-- Changed: [PLAN] verb expanded with problem-type variants (BUILD, RESEARCH, ANALYSIS, EVALUATION, WRITING, DECISION, HOTFIX)
+**[2026-01-20 19:05]**
+- Added: [READ] - Careful reading of provided content (Information Gathering)
+- Added: [RECAP] - Analyze context, revisit plan, identify status (Thinking and Planning)
+- Added: [CONTINUE] - Forward-looking assessment, execute next items (Thinking and Planning)
+- Added: [GO] - Sequence of RECAP + CONTINUE until goal reached (Thinking and Planning)
+
+**[2026-01-20 10:41]**
+- Fixed: Updated stale EDIRD cross-references to consolidated SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP04]
 
 **[2026-01-15 23:48]**
-- Added: Operation Modes context states (IMPL-CODEBASE, IMPL-ISOLATED)
+- Added: Operation Modes states (IMPL-CODEBASE, IMPL-ISOLATED)
 
 **[2026-01-15 20:09]**
 - Added: [PRIME] - Load most relevant information into model context (Information Gathering)
@@ -340,7 +343,7 @@ Determines where implementation outputs are placed:
 - Removed: Workflow Type and Problem Type (moved to EDIRD spec)
 
 **[2026-01-15 19:12]**
-- Added: Workflow Type context states (BUILD, SOLVE)
+- Added: Workflow Type states (BUILD, SOLVE)
 - Added: SOLVE problem types (RESEARCH, ANALYSIS, EVALUATION, WRITING, DECISION)
 - Changed: Renamed "Problem Type" to "Problem Type (BUILD workflow)"
 - Added: Cross-references to EDIRD variation specs
@@ -354,7 +357,7 @@ Determines where implementation outputs are placed:
 
 **[2026-01-15 18:39]**
 - Fixed: Verb disambiguation (OPTIMIZE=performance, IMPROVE=general quality, REFACTOR=per goal)
-- Fixed: Grep pattern for context states to match single-word states
+- Fixed: Grep pattern for states to match single-word states
 
 **[2026-01-15 18:23]**
 - Fixed: Document type INFO → SPEC in title
@@ -362,8 +365,8 @@ Determines where implementation outputs are placed:
 
 **[2026-01-15 17:42]**
 - Changed: Rewrote Syntax section with clear instruction vs condition distinction
-- Changed: Merged Complexity Levels and Problem Types into Context States section
-- Added: Workspace Context states (SINGLE-PROJECT, MONOREPO, etc.)
+- Changed: Merged Complexity Levels and Problem Types into States section
+- Added: Workspace States (SINGLE-PROJECT, MONOREPO, etc.)
 - Added: Quick Reference with grep patterns
 - Added: Example branching syntax
 - Updated: TOC to reflect new structure
