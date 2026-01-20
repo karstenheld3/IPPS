@@ -10,12 +10,13 @@ All documents and items must have unique IDs for traceability.
 
 **Topic:** 2-6 uppercase letters describing component (e.g., `CRWL` for Crawler, `AUTH` for Authentication, `EDIRD` for EDIRD Phase Model)
 
-**REQUIREMENT:** Workspace/project-level NOTES.md MUST maintain a complete list of registered TOPIC IDs.
+**REQUIREMENT:** Workspace must have an `ID-REGISTRY.md` file as the authoritative source for all TOPICs, acronyms, and context states to avoid conflicting topic ids. Topic ids must be unique.
 
-Before using a new TOPIC ID:
-1. Check workspace/project NOTES.md for existing TOPIC IDs
-2. If new, add to NOTES.md Topic Registry section
+**Before creating a new TOPIC or acronym:**
+1. Read `ID-REGISTRY.md` to check for existing TOPICs
+2. If new, add to `ID-REGISTRY.md` with description
 3. Use consistent TOPIC across all related documents
+4. Never create duplicate or conflicting TOPICs
 
 **Example: SINGLE-PROJECT**
 ```
