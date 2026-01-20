@@ -5,14 +5,15 @@
 **Timeline**: Created 2026-01-19
 
 **Depends on:**
-- `SPEC_AGEN_AGENTIC_ENGLISH.md [AGEN-SP02]` for verb definitions
+- `SPEC_AGEN_AGENTIC_ENGLISH.md [AGEN-SP01]` for verb definitions
 
 ## MUST-NOT-FORGET
 
 - STRUT is a pure tree notation using box-drawing characters
 - Every phase, step, deliverable has unique ID: `P1`, `P1-S1`, `P1-D1`
 - Tree nodes: Objectives, Strategy, Steps (verbs), Deliverables, Transitions
-- Steps use AGEN verbs: `P1-S1 [VERB](params)`
+- Steps use AGEN verbs: `[ ] P1-S1 [VERB](params)`
+- Checkbox states: `[ ]` pending, `[x]` done, `[N]` done N times
 - Strategy can include AWT (Agentic Work Time) estimates
 - Transitions define flow control at phase end
 
@@ -36,20 +37,25 @@
 - Phase complete when Transition condition met
 
 **STRUT-FR-03: Step Format**
-- Format: `P1-S1 [VERB](params)`
+- Format: `[ ] P1-S1 [VERB](params)`
 - Steps use AGEN verbs
-- Steps are a flat list
+- Steps are a flat list with checkboxes
 
-**STRUT-FR-04: Objectives**
-- Format: `[ ] Goal description` (no IDs)
+**STRUT-FR-04: Checkbox States**
+- `[ ]` - Not done (pending)
+- `[x]` - Done (completed once)
+- `[N]` - Done N times (e.g., `[2]` = executed twice, for loops/retries)
 
-**STRUT-FR-05: Strategy**
+**STRUT-FR-05: Objectives**
+- Format: `[ ] Goal description` (no IDs, uses checkbox states)
+
+**STRUT-FR-06: Strategy**
 - Free text, may include AWT estimates
 
-**STRUT-FR-06: Deliverables**
-- Format: `[ ] P1-D1: Description`
+**STRUT-FR-07: Deliverables**
+- Format: `[ ] P1-D1: Description` (uses checkbox states)
 
-**STRUT-FR-07: Transitions**
+**STRUT-FR-08: Transitions**
 - Format: `- Condition → Target`
 - Targets: `[PHASE-NAME]`, `[CONSULT]`, `[END]`
 
@@ -58,15 +64,15 @@
 ### Phase Template
 
 ```
-P1 [PHASE-NAME]: Description
+[ ] P1 [PHASE-NAME]: Description
 ├─ Objectives:
 │   ├─ [ ] Goal 1
 │   └─ [ ] Goal 2
 ├─ Strategy: Approach description
 │   - Sub-item if needed
-├─ P1-S1 [VERB](params)
-├─ P1-S2 [VERB](params)
-├─ P1-S3 [VERB](params)
+├─ [ ] P1-S1 [VERB](params)
+├─ [ ] P1-S2 [VERB](params)
+├─ [ ] P1-S3 [VERB](params)
 ├─ Deliverables:
 │   ├─ [ ] P1-D1: Outcome 1
 │   └─ [ ] P1-D2: Outcome 2
@@ -80,15 +86,15 @@ P1 [PHASE-NAME]: Description
 ### Example 1: Simple Hotfix
 
 ```
-P1 [IMPLEMENT]: Fix and verify
+[ ] P1 [IMPLEMENT]: Fix and verify
 ├─ Objectives:
 │   └─ [ ] Bug no longer reproduces
 ├─ Strategy: Locate bug, apply minimal fix, test, commit
-├─ P1-S1 [ANALYZE](stack trace)
-├─ P1-S2 [IMPLEMENT](null check fix)
-├─ P1-S3 [TEST]
-├─ P1-S4 [FIX](if tests fail)
-├─ P1-S5 [COMMIT]("fix: null check in getUserById")
+├─ [ ] P1-S1 [ANALYZE](stack trace)
+├─ [ ] P1-S2 [IMPLEMENT](null check fix)
+├─ [ ] P1-S3 [TEST]
+├─ [ ] P1-S4 [FIX](if tests fail)
+├─ [ ] P1-S5 [COMMIT]("fix: null check in getUserById")
 ├─ Deliverables:
 │   ├─ [ ] P1-D1: Root cause identified
 │   ├─ [ ] P1-D2: Fix implemented
@@ -196,16 +202,16 @@ P1 [IMPLEMENT]: Fix and verify
 ### Example 3: Research Task
 
 ```
-P1 [EXPLORE]: Research OAuth providers
+[ ] P1 [EXPLORE]: Research OAuth providers
 ├─ Objectives:
 │   ├─ [ ] Understand OAuth landscape
 │   └─ [ ] Make recommendation
 ├─ Strategy: Gather providers, research, define criteria, evaluate, recommend
-├─ P1-S1 [GATHER](provider list)
-├─ P1-S2 [RESEARCH](Auth0, Okta, Firebase, Cognito)
-├─ P1-S3 [DEFINE](criteria: price, docs, SDKs)
-├─ P1-S4 [EVALUATE](each provider against criteria)
-├─ P1-S5 [RECOMMEND](Auth0)
+├─ [ ] P1-S1 [GATHER](provider list)
+├─ [ ] P1-S2 [RESEARCH](Auth0, Okta, Firebase, Cognito)
+├─ [ ] P1-S3 [DEFINE](criteria: price, docs, SDKs)
+├─ [ ] P1-S4 [EVALUATE](each provider against criteria)
+├─ [ ] P1-S5 [RECOMMEND](Auth0)
 ├─ Deliverables:
 │   ├─ [ ] P1-D1: 5 providers identified
 │   ├─ [ ] P1-D2: Criteria defined
@@ -214,11 +220,11 @@ P1 [EXPLORE]: Research OAuth providers
 └─> Transitions:
     - P1-D1 - P1-D4 checked → [DESIGN]
 
-P2 [DESIGN]: Document decision
+[ ] P2 [DESIGN]: Document decision
 ├─ Objectives:
 │   └─ [ ] Decision documented
 ├─ Strategy: Write INFO document
-├─ P2-S1 [WRITE-INFO](_INFO_OAUTH_EVALUATION.md)
+├─ [ ] P2-S1 [WRITE-INFO](_INFO_OAUTH_EVALUATION.md)
 ├─ Deliverables:
 │   └─ [ ] P2-D1: INFO document created
 └─> Transitions:
@@ -235,9 +241,16 @@ P2 [DESIGN]: Document decision
 
 ## Document History
 
+**[2026-01-20 10:42]**
+- Added: STRUT-FR-04 Checkbox States with `[ ]`, `[x]`, `[N]` for repeat count
+- Changed: All examples updated with checkboxes on phases and steps
+- Changed: Renumbered FR-05 through FR-08
+
+**[2026-01-20 10:41]**
+- Fixed: Cross-reference from [AGEN-SP02] to [AGEN-SP01]
+
 **[2026-01-19 09:35]**
 - Minimized spec: removed DD, IG, redundant sections
-- Simplified checkbox states to `[ ]` and `[x]` only
 - Steps are flat list
 
 **[2026-01-19 08:30]**

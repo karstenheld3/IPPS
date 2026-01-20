@@ -29,7 +29,7 @@ See `TASKS_STRUT.md [STRUT-TK01]` for full task details, dependencies, and verif
 
 ### DESIGN Phase - Specifications
 
-- [ ] **STRUT-TK-007** - Write SPEC_STRUT.md (1.0 HHW)
+- [ ] **STRUT-TK-007** - Write SPEC_STRUT_STRUCTURED_THINKING.md (1.0 HHW)
 - [ ] **STRUT-TK-008** - Write SPEC_TRACTFUL.md (1.0 HHW)
 - [ ] **STRUT-TK-009** - Write SPEC_TDID.md (0.5 HHW)
 - [ ] **STRUT-TK-010** - Update SPEC_AGEN.md with new verbs and CONSTANT syntax (0.5 HHW)
@@ -67,7 +67,7 @@ See `TASKS_STRUT.md [STRUT-TK01]` for full task details, dependencies, and verif
 
 ## Done
 
-- Created SPEC_STRUT.md [STRUT-SP01] - simplified flat-sequence model
+- Created SPEC_STRUT_STRUCTURED_THINKING.md [STRUT-SP01] - simplified flat-sequence model
 
 - Created session folder
 - Created NOTES.md with topic registry and key concepts

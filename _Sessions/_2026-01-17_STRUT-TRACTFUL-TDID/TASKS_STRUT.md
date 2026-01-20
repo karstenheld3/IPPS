@@ -67,8 +67,8 @@ Run before starting any implementation:
 
 ### DESIGN Phase - Specifications
 
-- [ ] **STRUT-TK-007** - Write SPEC_STRUT.md
-  - Files: `SPEC_STRUT.md [STRUT-SP01]` (new)
+- [ ] **STRUT-TK-007** - Write SPEC_STRUT_STRUCTURED_THINKING.md
+  - Files: `SPEC_STRUT_STRUCTURED_THINKING.md [STRUT-SP01]` (new)
   - Done when: STRUT spec with FR, DD, IG, AC sections complete
   - Verify: Spec follows SPEC_TEMPLATE.md structure
   - Depends: TK-003

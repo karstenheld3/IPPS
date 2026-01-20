@@ -4,9 +4,7 @@
 **Goal**: Define a controlled vocabulary for agent-human communication in workflows, skills, and documents
 
 **See also:**
-- `_SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP01]` for phase model using these verbs
-- `_SPEC_EDIRD_VARIATION_A_UNIFIED.md [EDIRD-SP02]` for unified BUILD/SOLVE model
-- `_SPEC_EDIRD_VARIATION_B_DUAL.md [EDIRD-SP03]` for dual model approach
+- `SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP04]` for phase model using these verbs
 
 ## Table of Contents
 
@@ -313,6 +311,9 @@ Determines where implementation outputs are placed:
 - **IMPL-ISOLATED** - Output to `[SESSION_FOLDER]/` only. For: [PROVE], POCs, prototypes, self-contained test scripts. Requires active session.
 
 ## Document History
+
+**[2026-01-20 10:41]**
+- Fixed: Updated stale EDIRD cross-references to consolidated SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP04]
 
 **[2026-01-15 23:48]**
 - Added: Operation Modes context states (IMPL-CODEBASE, IMPL-ISOLATED)

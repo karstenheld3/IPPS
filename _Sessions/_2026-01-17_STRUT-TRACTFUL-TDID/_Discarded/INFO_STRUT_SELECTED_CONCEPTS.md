@@ -1,7 +1,7 @@
 # INFO: STRUT Selected Concepts for Specification
 
 **Doc ID**: STRUT-IN04
-**Goal**: Exhaustive inventory of formal concepts and syntax selected for SPEC_STRUT.md
+**Goal**: Exhaustive inventory of formal concepts and syntax selected for SPEC_STRUT_STRUCTURED_THINKING.md
 
 **Timeline**: Created 2026-01-17, single day
 
@@ -11,7 +11,7 @@
 
 ## Summary
 
-This document consolidates all formal concepts and syntax needed to write SPEC_STRUT.md. It resolves inconsistencies between research documents and selects the final notation.
+This document consolidates all formal concepts and syntax needed to write SPEC_STRUT_STRUCTURED_THINKING.md. It resolves inconsistencies between research documents and selects the final notation.
 
 **Key Principle**: STRUT is a PLAN, not a log. It defines what WILL be done. Only gate checkboxes may be modified during execution.
 

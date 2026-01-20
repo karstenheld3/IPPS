@@ -19,7 +19,7 @@
 4. Use Unicode box-drawing for trees/flows: `├─>` `└─>` `│`
 5. Keep ASCII `+` `-` `|` for UI diagrams
 6. Most recent changes at top in changelog sections
-7. Reference docs by filename AND Doc ID: `SPEC_STRUT.md [STRUT-SP01]`
+7. Reference docs by filename AND Doc ID: `SPEC_STRUT_STRUCTURED_THINKING.md [STRUT-SP01]`
 8. Gate checks require evidence - cannot mark phase complete without deliverables
 9. Never auto-deploy to linked repos
 10. COMPLEXITY-HIGH requires comprehensive docs with detailed analysis
@@ -113,7 +113,7 @@ Research strategy for [RESEARCH] verb:
 ## Session Outputs
 
 - `DevSystemV3.1/` - New DevSystem version folder
-- `SPEC_STRUT.md [STRUT-SP01]` - Structured Thinking spec
+- `SPEC_STRUT_STRUCTURED_THINKING.md [STRUT-SP01]` - Structured Thinking spec
 - `SPEC_TRACTFUL.md [TRACTFUL-SP01]` - Document framework spec
 - `SPEC_TDID.md [TDID-SP01]` - Document ID system spec
 - `SPEC_AGEN_AGENTIC_ENGLISH.md [AGEN-SP02]` - Updated AGEN spec
