@@ -18,14 +18,6 @@
 **Impact**: Cannot adapt vocabulary to domain-specific needs.
 **Proposed solution**: Define verb extension mechanism with scope precedence.
 
-### STRUT-PR-003: No central TOPIC ID registry
-
-**Status**: Open
-**Severity**: HIGH
-**Description**: TOPIC IDs are mentioned in devsystem-ids.md but no enforcement of uniqueness.
-**Impact**: Risk of duplicate TOPIC IDs causing traceability issues.
-**Proposed solution**: Mandatory TOPIC registry in workspace NOTES.md, TDID spec defines validation.
-
 ### STRUT-PR-004: AGEN syntax ambiguity
 
 **Status**: Open
@@ -51,6 +43,14 @@
 **Proposed solution**: Add AC (Acceptance Criteria) section to SPEC template.
 
 ## Resolved
+
+### STRUT-PR-003: No central TOPIC ID registry
+
+**Status**: Resolved
+**Severity**: HIGH
+**Description**: TOPIC IDs are mentioned in devsystem-ids.md but no enforcement of uniqueness.
+**Impact**: Risk of duplicate TOPIC IDs causing traceability issues.
+**Solution applied**: Comprehensive ID-REGISTRY.md created with all IDs, acronyms, context states, and labels. Includes Document Type IDs, Spec-Level IDs, Plan-Level IDs, Tracking IDs, and measurement units.
 
 ### STRUT-PR-006: FAILS.md captures only technical failures
 
