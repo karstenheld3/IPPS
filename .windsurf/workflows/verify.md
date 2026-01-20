@@ -36,10 +36,12 @@ Apply to ALL document types and contexts:
   - BAD: AI Foundry Remote SharePoint -> GOOD: "SharePoint tool" for Azure AI Foundry Agent Service
 - **Avoid Markdown tables** - Convert to lists:
   - Tables found? → Convert to unnumbered lists with bold labels
-  - Only [ACTOR] may add `<DevSystem MarkdownTablesAllowed=true />` exception
+  - Exception: README.md may use tables without `<DevSystem>` tag
+  - Only [ACTOR] may add `<DevSystem MarkdownTablesAllowed=true />` exception to other files
 - **Avoid emojis** - Remove or replace with text:
   - Emojis found? → Replace with text equivalents (Yes/No/Warning)
-  - Only [ACTOR] may add `<DevSystem EmojisAllowed=true />` exception
+  - Exception: README.md may use emojis without `<DevSystem>` tag
+  - Only [ACTOR] may add `<DevSystem EmojisAllowed=true />` exception to other files
 
 ## Verification Labels
 
