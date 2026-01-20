@@ -18,15 +18,15 @@
 **Impact**: Inconsistent usage, unclear when to use brackets vs uppercase.
 **Proposed solution**: Formalize CONSTANT (uppercase, no brackets) vs [INSTRUCTION] (brackets) distinction.
 
+## Resolved
+
 ### STRUT-PR-007: No Acceptance Criteria in SPECs
 
-**Status**: Open
+**Status**: Resolved
 **Severity**: MEDIUM
 **Description**: SPECs have FR/DD/IG but no explicit AC section defining when spec is implemented.
 **Impact**: Unclear completion criteria, ambiguous verification.
-**Proposed solution**: Add AC (Acceptance Criteria) section to SPEC template.
-
-## Resolved
+**Solution applied**: AC (Acceptance Criteria) section added to SPEC_TEMPLATE.md with AC-XX format. AC registered in ID-REGISTRY.md as Spec-Level Item ID.
 
 ### STRUT-PR-001: Workflows depend on EDIRD phase model
 
