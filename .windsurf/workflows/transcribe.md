@@ -6,6 +6,8 @@ description: Transcribe PDFs and web pages to complete markdown with 100% conten
 
 Convert Portable Document Format (PDF) files and web pages to complete markdown files. **Nothing may be omitted.**
 
+PDF images are converted to JPEG (JPG) format for processing.
+
 ## Required Skills
 
 - @pdf-tools for PDF to image conversion
@@ -17,17 +19,15 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 
 ## Source Types
 
-| Source | Detection | Processing |
-|--------|-----------|------------|
-| Local PDF | File path ends in `.pdf` | Convert to JPG, transcribe |
-| URL to PDF | URL ends in `.pdf` | Download first, then process |
-| Web page | URL to HTML | Screenshot, transcribe |
+- **Local PDF** - File path ends in `.pdf` → Convert to JPG, transcribe
+- **URL to PDF** - URL ends in `.pdf` → Download first, then process
+- **Web page** - URL to HTML → Screenshot, transcribe
 
 ## Step 1: Prepare Source
 
 ### For Local PDF
 ```powershell
-python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "path/to/document.pdf" --dpi 300  # 300 DPI (Dots Per Inch)
+python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "path/to/document.pdf" --dpi 300  # 300 Dots Per Inch (DPI)
 ```
 
 ### For URL to PDF
@@ -60,12 +60,10 @@ Write-Host "Total pages: $totalPages, Chunks needed: $chunks"
 
 ## Step 3: Determine Output Strategy
 
-| Total Pages | Output Strategy |
-|-------------|-----------------|
-| 1-20 | Single markdown file |
-| 21-50 | Single file, write after each 4-page chunk |
-| 51-100 | Multiple section files + index, merge optional |
-| 100+ | Multiple chapter files + index |
+- **1-20 pages** - Single markdown file
+- **21-50 pages** - Single file, write after each 4-page chunk
+- **51-100 pages** - Multiple section files + index, merge optional
+- **100+ pages** - Multiple chapter files + index
 
 ## Step 4: Create Output File with Header
 
@@ -82,7 +80,7 @@ Pages completed: 0 of [total]
 -->
 
 ## Table of Contents
-[Generate after first pass or from PDF Table of Contents (TOC)]
+[Generate after first pass or from PDF Table of Contents]
 
 ---
 ```

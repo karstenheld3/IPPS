@@ -4,7 +4,7 @@
 Current [DEVSYSTEM]: DevSystemV3.1
 Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
-**CONCEPTS.md** - Inventory of named concepts (frameworks, identifiers, strategies, document types). Reference only, specs have details.
+**ID-REGISTRY.md** - Prevents term and ID collisions. Contains DevSystem constants and project TOPIC registry.
 
 If you update workflows in .windsurf\workflows, sync changes back to the current [DEVSYSTEM_FOLDER].
 DONT auto-sync changes to  .windsurf\workflows if you update workflows in the [DEVSYSTEM_FOLDER].

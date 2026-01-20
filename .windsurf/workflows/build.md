@@ -1,6 +1,5 @@
 ---
 description: BUILD workflow - create software, features, systems
-phase: EXPLORE
 ---
 
 # Build Workflow
@@ -10,7 +9,6 @@ Main entry point for BUILD workflow - creating software, features, systems.
 ## Required Skills
 
 - @session-management for session setup
-- @edird-phase-model for phase details
 - @write-documents for document templates
 
 ## Usage
@@ -50,7 +48,7 @@ Record in NOTES.md:
 **Target**: src/features/[feature]/
 ```
 
-## Step 2: EXPLORE Phase
+## Step 2: Understand
 
 1. [ASSESS] complexity: COMPLEXITY-LOW / MEDIUM / HIGH
 2. [ANALYZE] existing code and patterns
@@ -60,7 +58,7 @@ Record in NOTES.md:
 
 **For UI work**: Visual reference (screenshot/video of target) is MANDATORY. Text research alone is insufficient.
 
-### Gate Check: EXPLORE→DESIGN
+### Quality Gate: Understanding
 
 - [ ] Problem or goal clearly understood
 - [ ] Workflow type: BUILD confirmed
@@ -68,9 +66,7 @@ Record in NOTES.md:
 - [ ] Scope boundaries defined
 - [ ] No blocking unknowns
 
-**Pass**: Proceed to DESIGN | **Fail**: Continue EXPLORE
-
-## Step 3: DESIGN Phase
+## Step 3: Plan
 
 1. [PLAN] structured approach
 2. [WRITE-SPEC] → `_SPEC_[FEATURE].md`
@@ -79,7 +75,7 @@ Record in NOTES.md:
 5. [WRITE-TEST-PLAN] → `_TEST_[FEATURE].md` (optional for LOW)
 6. [DECOMPOSE] into small testable steps
 
-### Gate Check: DESIGN→IMPLEMENT
+### Quality Gate: Planning
 
 **MANDATORY ARTIFACT CHECK** (list actual file paths):
 - [ ] Spec document: `[SESSION_FOLDER]/_SPEC_*.md` exists (MEDIUM+)
@@ -95,11 +91,9 @@ Artifacts created:
 - POC verified: [screenshot/description]
 ```
 
-**Pass**: Proceed to IMPLEMENT | **Fail**: Continue DESIGN
-
 **WARNING**: Claiming gate pass without listing actual artifacts is gate bypass (see GLOB-FL-004).
 
-## Step 4: IMPLEMENT Phase
+## Step 4: Execute
 
 For each step in IMPL plan:
 
@@ -111,16 +105,14 @@ For each step in IMPL plan:
 
 **UI/Game rule**: Never implement >100 lines without visual verification. Monolithic implementation is forbidden.
 
-### Gate Check: IMPLEMENT→REFINE
+### Quality Gate: Execution
 
 - [ ] All IMPL steps complete
 - [ ] Tests pass
 - [ ] No TODO/FIXME unaddressed
 - [ ] Progress committed
 
-**Pass**: Proceed to REFINE | **Fail**: Continue IMPLEMENT
-
-## Step 5: REFINE Phase
+## Step 5: Review
 
 1. [REVIEW] self-review of work
 2. [VERIFY] against spec/rules
@@ -128,16 +120,14 @@ For each step in IMPL plan:
 4. [CRITIQUE] and [RECONCILE] (if MEDIUM+)
 5. [FIX] issues found
 
-### Gate Check: REFINE→DELIVER
+### Quality Gate: Review
 
 - [ ] Self-review complete
 - [ ] Verification passed
 - [ ] Critique/reconcile done (if MEDIUM+)
 - [ ] All issues fixed
 
-**Pass**: Proceed to DELIVER | **Fail**: Continue REFINE
-
-## Step 6: DELIVER Phase
+## Step 6: Complete
 
 1. [VALIDATE] with user (final approval)
 2. [MERGE] branches if applicable
@@ -145,17 +135,9 @@ For each step in IMPL plan:
 4. [CLOSE] mark as done
 5. Run `/session-close`
 
-## Phase Tracking
+## Progress Tracking
 
-Update NOTES.md after each phase:
-
-```markdown
-## Current Phase
-
-**Phase**: IMPLEMENT
-**Last verb**: [TEST]-OK
-**Gate status**: 3/4 items checked
-```
+Update NOTES.md after each step with current status.
 
 ## Stuck Detection
 

@@ -54,7 +54,7 @@ mcp0_browser_take_screenshot(fullPage: true, filename: ".tools/_web_screenshots/
 ```powershell
 $images = Get-ChildItem ".tools/_pdf_to_jpg_converted/[NAME]/" -Filter "*.jpg"
 $totalPages = $images.Count
-$chunks = [math]::Ceiling($totalPages / 4)
+$chunks = [math]::Ceiling($totalPages / 2)
 Write-Host "Total pages: $totalPages, Chunks needed: $chunks"
 ```
 

@@ -1,6 +1,5 @@
 ---
 description: SOLVE workflow - explore problems, evaluate ideas, make decisions
-phase: EXPLORE
 ---
 
 # Solve Workflow
@@ -10,7 +9,6 @@ Main entry point for SOLVE workflow - research, analysis, evaluation, decisions.
 ## Required Skills
 
 - @session-management for session setup
-- @edird-phase-model for phase details
 - @write-documents for document templates
 
 ## Usage
@@ -52,7 +50,7 @@ Record in NOTES.md:
 **Output Location**: [SESSION_FOLDER]/poc/
 ```
 
-## Step 2: EXPLORE Phase
+## Step 2: Understand
 
 1. [ASSESS] problem type:
    - RESEARCH - Gather information on a topic
@@ -67,7 +65,7 @@ Record in NOTES.md:
 3. [ANALYZE] the problem space
 4. [SCOPE] define boundaries
 
-### Gate Check: EXPLORE→DESIGN
+### Quality Gate: Understanding
 
 - [ ] Problem clearly understood
 - [ ] Workflow type: SOLVE confirmed
@@ -75,9 +73,7 @@ Record in NOTES.md:
 - [ ] Scope boundaries defined
 - [ ] No blocking unknowns
 
-**Pass**: Proceed to DESIGN | **Fail**: Continue EXPLORE
-
-## Step 3: DESIGN Phase
+## Step 3: Plan
 
 1. [PLAN] approach to solving
 2. [OUTLINE] structure for output
@@ -99,15 +95,13 @@ Record in NOTES.md:
 - Focus on root cause identification
 - Output: Fix plan, then switch to BUILD mode
 
-### Gate Check: DESIGN→IMPLEMENT
+### Quality Gate: Planning
 
 - [ ] Approach documented
 - [ ] Structure/criteria validated
 - [ ] No open questions
 
-**Pass**: Proceed to IMPLEMENT | **Fail**: Continue DESIGN
-
-## Step 4: IMPLEMENT Phase
+## Step 4: Execute
 
 1. [EXECUTE] the plan:
    - For RESEARCH: [GATHER] → [SYNTHESIZE]
@@ -120,15 +114,13 @@ Record in NOTES.md:
 2. [DOCUMENT] findings in session docs
 3. Update PROGRESS.md
 
-### Gate Check: IMPLEMENT→REFINE
+### Quality Gate: Execution
 
 - [ ] Core work complete
 - [ ] All sections drafted
 - [ ] Progress documented
 
-**Pass**: Proceed to REFINE | **Fail**: Continue IMPLEMENT
-
-## Step 5: REFINE Phase
+## Step 5: Review
 
 1. [REVIEW] self-review of work
 2. [VERIFY] claims and findings
@@ -136,16 +128,14 @@ Record in NOTES.md:
 4. [RECONCILE] ideal vs practical
 5. [IMPROVE] clarity and quality
 
-### Gate Check: REFINE→DELIVER
+### Quality Gate: Review
 
 - [ ] Self-review complete
 - [ ] Claims verified
 - [ ] Arguments strengthened
 - [ ] Quality improved
 
-**Pass**: Proceed to DELIVER | **Fail**: Continue REFINE
-
-## Step 6: DELIVER Phase
+## Step 6: Complete
 
 1. [CONCLUDE] draw final conclusions
 2. [RECOMMEND] with rationale (or [PROPOSE] if multiple options)
@@ -154,18 +144,9 @@ Record in NOTES.md:
 5. [CLOSE] mark as done
 6. Run `/session-close`
 
-## Phase Tracking
+## Progress Tracking
 
-Update NOTES.md after each phase:
-
-```markdown
-## Current Phase
-
-**Phase**: IMPLEMENT
-**Problem Type**: RESEARCH
-**Last verb**: [SYNTHESIZE]-OK
-**Gate status**: 2/3 items checked
-```
+Update NOTES.md after each step with current status.
 
 ## Problem Type Quick Reference
 

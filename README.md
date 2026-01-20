@@ -221,6 +221,7 @@ IPPS/
 │       ├── session-resume.md     # Resume session
 │       ├── session-close.md      # Close and sync session
 │       └── session-archive.md    # Archive session folder
+├── ID-REGISTRY.md                # Prevents term/ID collisions (DevSystem constants + project topics)
 └── README.md
 ```
 

@@ -1,9 +1,10 @@
 ---
 description: Execute implementation from IMPL plan
-phase: IMPLEMENT
 ---
 
 # Implement Workflow
+
+Implements execution phase - build from plan in small verified steps.
 
 ## Required Skills
 
@@ -16,72 +17,66 @@ Check what documents exist and proceed accordingly:
 
 ### No SPEC, IMPL, TEST documents
 
-[IMPLEMENT] whatever was proposed or specified in conversation.
+Implement whatever was proposed or specified in conversation.
 
 ### Existing INFO only
 
-Run `/write-spec` → [WRITE-SPEC](INFO, Problem or Feature)
+Run `/write-spec` first.
 
 ### Existing SPEC only
 
-Run `/write-impl-plan` → [WRITE-IMPL-PLAN](SPEC)
+Run `/write-impl-plan` first.
 
 ### Existing IMPL only
 
-Run `/write-test-plan` → [WRITE-TEST-PLAN](IMPL)
+Run `/write-test-plan` first.
 
 ### Existing TEST (no test code)
 
-[IMPLEMENT] function skeletons from IMPL, then full failing tests from TEST.
+Implement function skeletons from IMPL, then full failing tests from TEST.
 
 ### Existing TEST + test code
 
-[IMPLEMENT] full implementations from IMPL in small verifiable steps.
+Implement everything from IMPL in small verifiable steps.
 
-## Phase: IMPLEMENT
-
-**Entry gate:** DESIGN→IMPLEMENT passed (IMPL plan exists)
-
-### Operation Mode Check
+## Operation Mode Check
 
 Before implementing, verify operation mode from NOTES.md:
 - **IMPL-CODEBASE** → output to project source folders
 - **IMPL-ISOLATED** → output to `[SESSION_FOLDER]/` only, NEVER workspace root
 
-### Verb Sequence
+## Execution Loop
 
-1. For each step in IMPL plan:
-   - [IMPLEMENT] code changes
-   - [TEST] verify step works
-   - [FIX] if tests fail (per retry limits)
-   - [COMMIT] when green
-2. [VERIFY] against IMPL plan
+For each step in IMPL plan:
+1. Make code changes
+2. Verify step works
+3. Fix if tests fail (max 3 retries)
+4. Commit when green
+5. Check against IMPL plan
 
-### Gate Check: IMPLEMENT→REFINE
+## Quality Gate
 
 - [ ] All steps from IMPL plan implemented
 - [ ] Tests pass
 - [ ] No TODO/FIXME left unaddressed
 - [ ] Progress committed
 
-**Pass**: Run `/refine` | **Fail**: Continue [IMPLEMENT]
-
 ## Stuck Detection
 
-If 3 consecutive [FIX] attempts fail:
-1. [CONSULT] with [ACTOR]
+If 3 consecutive fix attempts fail:
+1. Consult with user
 2. Document in PROBLEMS.md
-3. Either get guidance or [DEFER] and continue
+3. Either get guidance or defer and continue
 
 ## Attitude
 
 - Senior engineer, anticipating complexity, reducing risks
 - Completer / Finisher, never leaves clutter undocumented
-- Small cycles: [IMPLEMENT]→[TEST]→[FIX]→green→next
+- Small cycles: implement→test→fix→green→next
 
 ## Rules
 
 - Use small, verifiable steps - never implement large untestable chunks
-- Track progress in PROGRESS.md after each [COMMIT]
+- Track progress in PROGRESS.md after each commit
 - Document problems in PROBLEMS.md immediately when found
 - Remove temporary `.tmp_*` files after implementation complete

@@ -1,17 +1,14 @@
 ---
 description: Create conventional commits
-phase: IMPLEMENT
 ---
 
 # Commit Workflow
-
-Implements [COMMIT] verb from EDIRD model.
 
 ## Required Skills
 
 - @git-conventions for commit message format
 
-## Verb: [COMMIT]
+## Instructions
 
 1. Analyze what was done since last commit
 2. If multiple activities with different files, plan multiple commits

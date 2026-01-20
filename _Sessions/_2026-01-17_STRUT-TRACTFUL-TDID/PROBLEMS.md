@@ -2,14 +2,6 @@
 
 ## Open
 
-### STRUT-PR-001: Workflows depend on EDIRD phase model
-
-**Status**: Open
-**Severity**: HIGH
-**Description**: Current workflow implementations contain knowledge about EDIRD phases. This prevents swapping EDIRD for alternative phase models.
-**Impact**: Cannot experiment with different phase models without rewriting workflows.
-**Proposed solution**: Workflows should only contain task knowledge. Phase orchestration should be in a separate layer.
-
 ### STRUT-PR-002: Verbs cannot be extended per scope
 
 **Status**: Open
@@ -17,14 +9,6 @@
 **Description**: AGEN verbs are globally defined. No mechanism to add workspace/project/session-specific verbs.
 **Impact**: Cannot adapt vocabulary to domain-specific needs.
 **Proposed solution**: Define verb extension mechanism with scope precedence.
-
-### STRUT-PR-003: No central TOPIC ID registry
-
-**Status**: Open
-**Severity**: HIGH
-**Description**: TOPIC IDs are mentioned in devsystem-ids.md but no enforcement of uniqueness.
-**Impact**: Risk of duplicate TOPIC IDs causing traceability issues.
-**Proposed solution**: Mandatory TOPIC registry in workspace NOTES.md, TDID spec defines validation.
 
 ### STRUT-PR-004: AGEN syntax ambiguity
 
@@ -59,5 +43,22 @@
 **Proposed solution**: Add AC (Acceptance Criteria) section to SPEC template.
 
 ## Resolved
+
+### STRUT-PR-003: No central TOPIC ID registry
+
+**Status**: Resolved
+**Severity**: HIGH
+**Description**: TOPIC IDs are mentioned in devsystem-ids.md but no enforcement of uniqueness.
+**Impact**: Risk of duplicate TOPIC IDs causing traceability issues.
+**Solution applied**: Created `ID-REGISTRY.md` in workspace root with DevSystem constants and Project Topics sections. Updated `!NOTES.md` and `README.md` references.
+
+### STRUT-PR-001: Workflows depend on EDIRD phase model
+
+**Status**: Resolved
+**Severity**: HIGH
+**Description**: Current workflow implementations contain knowledge about EDIRD phases. This prevents swapping EDIRD for alternative phase models.
+**Impact**: Cannot experiment with different phase models without rewriting workflows.
+**Solution applied**: Removed `phase:` field from 16 workflows. Renamed EDIRD phase headers to generic step names (Understand, Plan, Execute, Review, Complete). Renamed gate checks to "Quality Gate". Workflows now contain only task knowledge.
+**Files changed**: 16 workflows in `.windsurf/workflows/`
 
 ## Deferred

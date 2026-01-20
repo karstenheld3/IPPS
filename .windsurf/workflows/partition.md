@@ -4,8 +4,6 @@ description: Partition plans into discrete tasks
 
 # Partition Workflow
 
-Implements [PARTITION](STRATEGY?) verb.
-
 ## Required Skills
 
 - @write-documents for document structure
