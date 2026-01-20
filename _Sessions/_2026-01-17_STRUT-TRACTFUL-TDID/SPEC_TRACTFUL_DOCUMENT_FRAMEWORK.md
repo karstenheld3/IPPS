@@ -12,7 +12,8 @@
 - `write-documents` skill for template implementation
 
 **Does not depend on:**
-- `SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP04]` (TRACTFUL is phase-model agnostic)
+- `SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP05]` (TRACTFUL is phase-model agnostic)
+- `SPEC_STRUT_STRUCTURED_THINKING.md [STRUT-SP01]` (STRUT notation may be used within planning sections)
 
 ## MUST-NOT-FORGET
 
@@ -289,51 +290,15 @@ SPEC is considered implemented when:
 
 ## 8. Writing Rules
 
-TRACTFUL uses the `write-documents` skill to implement TRACT. The skill provides:
+TRACTFUL is implemented by the `write-documents` skill in `[AGENT_FOLDER]/skills/write-documents/`.
 
-### 8.1 Verb Mapping
+The skill provides:
+- Templates for each document type (verb mapping)
+- Formatting rules (lists, ASCII, box-drawing)
+- Header block requirements
+- File naming conventions
 
-Each document type maps to an AGEN verb:
-- [WRITE-INFO] → INFO_TEMPLATE.md
-- [WRITE-SPEC] → SPEC_TEMPLATE.md
-- [WRITE-IMPL-PLAN] → IMPL_TEMPLATE.md
-- [WRITE-TEST-PLAN] → TEST_TEMPLATE.md
-- [WRITE-TASKS-PLAN] → TASKS_TEMPLATE.md
-- [WRITE-FIX] → FIXES_TEMPLATE.md
-- [WRITE-FAIL] → FAILS_TEMPLATE.md
-- [WRITE-REVIEW] → REVIEW_TEMPLATE.md
-
-### 8.2 Formatting Rules
-
-- Use lists, not Markdown tables
-- No emojis, ASCII only
-- No `---` markers between sections
-- Use box-drawing characters (├── └── │) for trees
-- Enumerations: comma-separated (`.pdf, .docx`), not slash-separated
-
-### 8.3 Header Block
-
-Required fields:
-- `Doc ID (TDID)` - Unique document identifier
-- `Goal` - Single sentence purpose
-
-Optional fields:
-- `Target file` - Implementation target
-- `Depends on` - Required documents
-- `Uses` - Referenced but not required
-- `Does not depend on` - Explicit exclusions
-
-### 8.4 File Naming
-
-- `_INFO_[TOPIC].md` - Research documents
-- `_SPEC_[COMPONENT].md` or `SPEC_[COMPONENT].md` - Specifications
-- `_IMPL_[COMPONENT].md` - Implementation plans
-- `_TEST_[COMPONENT].md` - Test plans
-- `TASKS_[TOPIC].md` - Task plans
-- `_IMPL_[COMPONENT]_FIXES.md` - Fix tracking
-- `FAILS.md`, `LEARNINGS.md` - Learning documents
-- `_REVIEW.md` - Review documents
-- `!` prefix for priority docs
+See `write-documents/SKILL.md` for implementation details.
 
 ## 9. Functional Requirements
 
@@ -403,6 +368,11 @@ Optional fields:
 - Pass: Upstream documents updated with change evidence
 
 ## 13. Document History
+
+**[2026-01-20 19:35]**
+- Refactored: Section 8 - moved implementation details to write-documents skill, kept reference only
+- Added: "Does not depend on" STRUT clarification
+- Fixed: EDIRD doc reference from SP04 to SP05
 
 **[2026-01-20 19:15]**
 - Added: Section 8 - Writing Rules (verb mapping, formatting, header block, file naming)

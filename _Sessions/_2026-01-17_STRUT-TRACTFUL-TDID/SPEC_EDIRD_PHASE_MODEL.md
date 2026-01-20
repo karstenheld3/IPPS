@@ -31,7 +31,7 @@
 - [9. Next Action Logic](#9-next-action-logic)
 - [10. Workflow Flows](#10-workflow-flows)
 - [11. Hybrid Situations](#11-hybrid-situations)
-- [12. States](#12-states)
+- [12. Context Values](#12-context-values)
 - [13. Functional Requirements](#13-functional-requirements)
 - [14. Design Decisions](#14-design-decisions)
 - [15. Implementation Guarantees](#15-implementation-guarantees)
@@ -738,9 +738,9 @@ THEN:
         restart_with_appropriate_verbs
 ```
 
-## 12. States
+## 12. Context Values
 
-States (no brackets) used for branching:
+Context values (states, no brackets) used for branching:
 
 ### Workflow Type
 
@@ -871,6 +871,9 @@ States (no brackets) used for branching:
 - Added: [DECOMPOSE] verb to DESIGN phase
 - Added: Gate requirement for decomposed plan
 - Cross-ref: [DECOMPOSE] added to AGEN-SP01
+
+**[2026-01-20 19:35]**
+- Changed: Section 12 renamed from "States" to "Context Values" for clarity
 
 **[2026-01-15 19:47]**
 - Added: Small cycles requirement to MUST-NOT-FORGET
