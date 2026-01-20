@@ -6,7 +6,10 @@
 
 **Depends on:**
 - `SPEC_AGEN_AGENTIC_ENGLISH.md [AGEN-SP01]` for controlled vocabulary
-- `ID-REGISTRY.md` for TOPIC registration
+
+**Uses:**
+- `ID-REGISTRY.md` for TOPIC registration (not a dependency)
+- `write-documents` skill for template implementation
 
 **Does not depend on:**
 - `SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP04]` (TRACTFUL is phase-model agnostic)
@@ -27,11 +30,12 @@
 5. [Document Types](#5-document-types)
 6. [Document Lifecycle](#6-document-lifecycle)
 7. [Traceability Rules](#7-traceability-rules)
-8. [Functional Requirements](#8-functional-requirements)
-9. [Design Decisions](#9-design-decisions)
-10. [Implementation Guarantees](#10-implementation-guarantees)
-11. [Acceptance Criteria](#11-acceptance-criteria)
-12. [Document History](#12-document-history)
+8. [Writing Rules](#8-writing-rules)
+9. [Functional Requirements](#9-functional-requirements)
+10. [Design Decisions](#10-design-decisions)
+11. [Implementation Guarantees](#11-implementation-guarantees)
+12. [Acceptance Criteria](#12-acceptance-criteria)
+13. [Document History](#13-document-history)
 
 ## 1. Scenario
 
@@ -283,7 +287,55 @@ SPEC is considered implemented when:
 - All IG items are proven (via test or inspection)
 - No open REVIEW findings at CRITICAL or HIGH severity
 
-## 8. Functional Requirements
+## 8. Writing Rules
+
+TRACTFUL uses the `write-documents` skill to implement TRACT. The skill provides:
+
+### 8.1 Verb Mapping
+
+Each document type maps to an AGEN verb:
+- [WRITE-INFO] → INFO_TEMPLATE.md
+- [WRITE-SPEC] → SPEC_TEMPLATE.md
+- [WRITE-IMPL-PLAN] → IMPL_TEMPLATE.md
+- [WRITE-TEST-PLAN] → TEST_TEMPLATE.md
+- [WRITE-TASKS-PLAN] → TASKS_TEMPLATE.md
+- [WRITE-FIX] → FIXES_TEMPLATE.md
+- [WRITE-FAIL] → FAILS_TEMPLATE.md
+- [WRITE-REVIEW] → REVIEW_TEMPLATE.md
+
+### 8.2 Formatting Rules
+
+- Use lists, not Markdown tables
+- No emojis, ASCII only
+- No `---` markers between sections
+- Use box-drawing characters (├── └── │) for trees
+- Enumerations: comma-separated (`.pdf, .docx`), not slash-separated
+
+### 8.3 Header Block
+
+Required fields:
+- `Doc ID (TDID)` - Unique document identifier
+- `Goal` - Single sentence purpose
+
+Optional fields:
+- `Target file` - Implementation target
+- `Depends on` - Required documents
+- `Uses` - Referenced but not required
+- `Does not depend on` - Explicit exclusions
+
+### 8.4 File Naming
+
+- `_INFO_[TOPIC].md` - Research documents
+- `_SPEC_[COMPONENT].md` or `SPEC_[COMPONENT].md` - Specifications
+- `_IMPL_[COMPONENT].md` - Implementation plans
+- `_TEST_[COMPONENT].md` - Test plans
+- `TASKS_[TOPIC].md` - Task plans
+- `_IMPL_[COMPONENT]_FIXES.md` - Fix tracking
+- `FAILS.md`, `LEARNINGS.md` - Learning documents
+- `_REVIEW.md` - Review documents
+- `!` prefix for priority docs
+
+## 9. Functional Requirements
 
 **TRACT-FR-01: Document Templates**
 - Each document type has a corresponding template
@@ -314,7 +366,7 @@ SPEC is considered implemented when:
 - Direction: Code→IMPL→SPEC or SPEC→IMPL→TEST
 - Labels updated: [ASSUMED]→[VERIFIED]→[TESTED]→[PROVEN]
 
-## 9. Design Decisions
+## 10. Design Decisions
 
 **TRACT-DD-01:** Phase-model agnostic. TRACTFUL defines document types and traceability, not the order of creation. Any phase model (EDIRD or alternative) can use TRACTFUL documents.
 
@@ -326,7 +378,7 @@ SPEC is considered implemented when:
 
 **TRACT-DD-05:** Learning documents are optional. FAILS.md and LEARNINGS.md capture lessons but are not required for every project.
 
-## 10. Implementation Guarantees
+## 11. Implementation Guarantees
 
 **TRACT-IG-01:** Every template exists in `write-documents` skill folder with corresponding verb mapping.
 
@@ -336,7 +388,7 @@ SPEC is considered implemented when:
 
 **TRACT-IG-04:** Document History section is always at document end (before any appendices).
 
-## 11. Acceptance Criteria
+## 12. Acceptance Criteria
 
 **TRACT-AC-01:** Template coverage (verifies: FR-01)
 - Test: List all document types, verify each has template
@@ -350,7 +402,12 @@ SPEC is considered implemented when:
 - Test: Run `/sync` after code change
 - Pass: Upstream documents updated with change evidence
 
-## 12. Document History
+## 13. Document History
+
+**[2026-01-20 19:15]**
+- Added: Section 8 - Writing Rules (verb mapping, formatting, header block, file naming)
+- Changed: Uses write-documents skill to implement TRACT
+- Fixed: ID-REGISTRY.md is "used" not "depends on"
 
 **[2026-01-20 19:12]**
 - Changed: Document Types subsections renamed from "X Phase" to "X Documents" (phase-agnostic)
