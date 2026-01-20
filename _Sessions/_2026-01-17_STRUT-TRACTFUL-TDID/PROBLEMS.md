@@ -26,15 +26,15 @@
 **Impact**: Repeated strategic mistakes, not just technical ones.
 **Proposed solution**: Extend FAILS.md categories to include planning, assessment, conceptual failures.
 
+## Resolved
+
 ### STRUT-PR-007: No Acceptance Criteria in SPECs
 
-**Status**: Open
+**Status**: Resolved
 **Severity**: MEDIUM
 **Description**: SPECs have FR/DD/IG but no explicit AC section defining when spec is implemented.
 **Impact**: Unclear completion criteria, ambiguous verification.
-**Proposed solution**: Add AC (Acceptance Criteria) section to SPEC template.
-
-## Resolved
+**Solution applied**: Added AC (Acceptance Criteria) section to SPEC_TEMPLATE.md after Implementation Guarantees. AC format includes criterion description, test method, and pass criteria. Added AC to ID-REGISTRY.md as Spec-Level Item ID.
 
 ### STRUT-PR-005: IMPL plans give agent too much freedom
 

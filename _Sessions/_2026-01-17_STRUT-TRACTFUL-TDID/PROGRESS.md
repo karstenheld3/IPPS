@@ -44,7 +44,7 @@
 ├─ [x] P3-S2 [IMPLEMENT](refactor composite workflows) - 3 files
 ├─ [x] P3-S3 [IMPLEMENT](handle phase-named workflows per decision) - 4 files
 ├─ [x] P3-S4 [VERIFY](no EDIRD phase names in workflows) - 0 matches
-├─ [ ] P3-S5 [COMMIT]("refactor: decouple workflows from EDIRD")
+├─ [x] P3-S5 [COMMIT]("refactor: decouple workflows from EDIRD")
 ├─ Deliverables:
 │   ├─ [x] P3-D1: 9 task workflows updated
 │   ├─ [x] P3-D2: 3 composite workflows updated
@@ -72,10 +72,16 @@
 - **STRUT-PR-002** - Verbs cannot be extended per scope
 - **STRUT-PR-004** - AGEN syntax ambiguity
 - **STRUT-PR-006** - FAILS.md captures only technical failures
-- **STRUT-PR-007** - No Acceptance Criteria in SPECs
 
 ## Done
 
+- [2026-01-20] Resolved PR-007: Added AC (Acceptance Criteria) section to SPEC_TEMPLATE.md
+- [2026-01-20] Resolved PR-001: Decoupled 16 workflows from EDIRD phase model
+- [2026-01-20] Resolved PR-003: Created ID-REGISTRY.md with topic registry + exhaustive ID types
+- [2026-01-20] Resolved PR-005: Made TASKS mandatory before implementation, added SDD references
+- [2026-01-20] Removed AGEN verb notation from task workflows (kept in entry points only)
+- [2026-01-20] Strengthened /verify rules (tables→lists, only [ACTOR] adds exceptions)
+- [2026-01-20] Redesigned FIXES_TEMPLATE.md for release documentation
 - Created SPEC_STRUT_STRUCTURED_THINKING.md [STRUT-SP01] - simplified flat-sequence model
 - Created session folder with NOTES.md, PROGRESS.md, PROBLEMS.md
 - Created TASKS_STRUT.md [STRUT-TK01] with partitioned tasks

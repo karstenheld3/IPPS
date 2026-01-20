@@ -25,13 +25,14 @@
 4. [Functional Requirements](#4-functional-requirements)
 5. [Design Decisions](#5-design-decisions)
 6. [Implementation Guarantees](#6-implementation-guarantees)
-7. [Key Mechanisms](#7-key-mechanisms)
-8. [Action Flow](#8-action-flow)
-9. [Data Structures](#9-data-structures)
-10. [User Actions](#10-user-actions) *(UI specs only)*
-11. [UX Design](#11-ux-design) *(UI specs only)*
-12. [Implementation Details](#12-implementation-details)
-13. [Document History](#13-document-history)
+7. [Acceptance Criteria](#7-acceptance-criteria)
+8. [Key Mechanisms](#8-key-mechanisms)
+9. [Action Flow](#9-action-flow)
+10. [Data Structures](#10-data-structures)
+11. [User Actions](#11-user-actions) *(UI specs only)*
+12. [UX Design](#12-ux-design) *(UI specs only)*
+13. [Implementation Details](#13-implementation-details)
+14. [Document History](#14-document-history)
 
 ## 1. Scenario
 
@@ -104,11 +105,23 @@ A **[ObjectName]** represents [description].
 
 **[PREFIX]-IG-02:** [What the implementation must guarantee]
 
-## 7. Key Mechanisms
+## 7. Acceptance Criteria
+
+Define when this spec is fully implemented. Each AC maps to one or more FR/IG.
+
+**[PREFIX]-AC-01:** [Criterion description] (verifies: FR-01, FR-02)
+- **Test**: [How to verify - command, manual check, or test case]
+- **Pass**: [Expected result]
+
+**[PREFIX]-AC-02:** [Criterion description] (verifies: IG-01)
+- **Test**: [How to verify]
+- **Pass**: [Expected result]
+
+## 8. Key Mechanisms
 
 [Technical patterns, algorithms, declarative approaches used]
 
-## 8. Action Flow
+## 9. Action Flow
 
 Document call chains with box-drawing characters (2-space indentation compatible):
 
@@ -121,7 +134,7 @@ User clicks [Button]
 │   │       └─> renderUI()
 ```
 
-## 9. Data Structures
+## 10. Data Structures
 
 **Request/Response Example:**
 ```
@@ -133,13 +146,13 @@ User clicks [Button]
 </end_json>
 ```
 
-## 10. User Actions
+## 11. User Actions
 
 *(For UI specs only)*
 
 - **[Action Name]**: [Description of user interaction and expected result]
 
-## 11. UX Design
+## 12. UX Design
 
 *(For UI specs only)*
 
@@ -159,11 +172,11 @@ Use ASCII box diagrams. Show ALL buttons and actions:
 +-----------------------------------------------------------------------+
 ```
 
-## 12. Implementation Details
+## 13. Implementation Details
 
 [Code organization, function signatures, module structure]
 
-## 13. Document History
+## 14. Document History
 
 **[YYYY-MM-DD HH:MM]**
 - Initial specification created

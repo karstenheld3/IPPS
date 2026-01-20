@@ -52,6 +52,7 @@ Used in SPEC documents, referenced across IMPL and TEST.
 - **FR** - Functional Requirement (`[TOPIC]-FR-[NN]`)
 - **DD** - Design Decision (`[TOPIC]-DD-[NN]`)
 - **IG** - Implementation Guarantee (`[TOPIC]-IG-[NN]`)
+- **AC** - Acceptance Criterion (`[TOPIC]-AC-[NN]`)
 
 ### Plan-Level Item IDs
 
