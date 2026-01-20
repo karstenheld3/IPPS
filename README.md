@@ -233,10 +233,11 @@ IPPS/
 
 ## Skills
 
+- **edird-phase-planning** - Phase gates, flows, and planning logic for BUILD/SOLVE workflows
 - **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF
 - **github** - GitHub CLI operations (repos, issues, PRs)
 - **session-management** - Session init, save, resume, close workflows
-- **write-documents** - Spec, impl, test, info document templates
+- **write-documents** - Spec, impl, test, info, tasks document templates
 
 ## File Naming Conventions
 
@@ -296,13 +297,25 @@ Close session and sync findings:
 /session-close
 ```
 
+### Autonomous Execution
+
+Run autonomous loop until goal reached:
+```
+/go
+```
+
+The `/go` workflow cycles through:
+1. `/recap` - Analyze context, identify current status
+2. `/continue` - Execute next items on plan
+3. Repeat until goal reached or blocker hit
+
 ### Document Cycle (INFO -> SPEC -> IMPL -> TEST -> TASKS)
 
 This follows the Specification-Driven Development (SDD) methodology used by [GitHub spec-kit](https://github.com/github/spec-kit) and [Zencoder](https://docs.zencoder.ai/user-guides/tutorials/spec-driven-development-guide).
 
 1. **Research** - Gather information:
 ```
-/go-research
+/research
 ```
 Creates `_INFO_*.md` with findings.
 
