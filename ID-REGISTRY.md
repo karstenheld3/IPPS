@@ -8,6 +8,7 @@ Inventory of all IDs, acronyms, and named concepts in the DevSystem.
 - **EDIRD** - Explore, Design, Implement, Refine, Deliver. 5-phase workflow model
 - **STRUT** - Structured Thinking. Method for planning and tracking complex autonomous work
 - **TRACTFUL** - Traceable Requirements Artifacts and Coded Templates For Unified Lifecycle
+- **TRACT** - TOPIC prefix for TRACTFUL documents
 
 ## Core Identifiers
 
