@@ -1,11 +1,10 @@
 ---
 description: Verify work against specs and rules
-phase: REFINE
 ---
 
 # Verify Workflow
 
-Implements [VERIFY] verb from EDIRD model.
+Verify work against specs, rules, and quality standards.
 
 ## Required Skills
 
@@ -35,10 +34,14 @@ Apply to ALL document types and contexts:
 - If product names are used, make sure there are spelled correctly. Do web research when needed.
   - BAD: Sharepoint -> GOOD: SharePoint
   - BAD: AI Foundry Remote SharePoint -> GOOD: "SharePoint tool" for Azure AI Foundry Agent Service
-- Check for Document Rule Exceptions (tables, emojis):
-  - If document uses Markdown tables or emojis: verify `<DevSystem ... />` tag exists on first line
-  - Tag format: `<DevSystem MarkdownTablesAllowed=true EmojisAllowed=true />`
-  - Only allowed emojis: ✅ (yes/pass), ❌ (no/fail), ⚠️ (warning)
+- **Avoid Markdown tables** - Convert to lists:
+  - Tables found? → Convert to unnumbered lists with bold labels
+  - Exception: README.md may use tables without `<DevSystem>` tag
+  - Only [ACTOR] may add `<DevSystem MarkdownTablesAllowed=true />` exception to other files
+- **Avoid emojis** - Remove or replace with text:
+  - Emojis found? → Replace with text equivalents (Yes/No/Warning)
+  - Exception: README.md may use emojis without `<DevSystem>` tag
+  - Only [ACTOR] may add `<DevSystem EmojisAllowed=true />` exception to other files
 
 ## Verification Labels
 
@@ -164,6 +167,12 @@ Apply these labels to findings, requirements, and decisions in all document type
 
 Verify markdown files that were converted from PDF sources.
 
+**CRITICAL RULE: Transcribed content MUST be 100% identical to the original.**
+- Do NOT correct grammar, spelling, or punctuation in transcribed text
+- Do NOT "improve" or "fix" original author's writing
+- Preserve errors, unusual phrasing, and stylistic choices exactly as they appear
+- Only structural elements (markdown formatting, ASCII art) may be agent-created
+
 **Step 1: Locate Source Images**
 - Find source JPGs in `.tools/_pdf_to_jpg_converted/[PDF_FILENAME]/`
 - If not found, re-run `/transcribe` workflow to regenerate
@@ -219,7 +228,7 @@ For each omitted graphic:
 - **FIX**: Correct any discrepancies found
 
 **Step 8: Finalize Document**
-- Add `<DevSystem MarkdownTablesAllowed=true />` if tables used
+- Convert any Markdown tables to lists (unless comparison/matrix data)
 - Add Document Info section at end if missing
 - Ensure all fixes from Steps 3-7 are applied
 - Verify NO content is marked as "omitted" - everything must be transcribed
