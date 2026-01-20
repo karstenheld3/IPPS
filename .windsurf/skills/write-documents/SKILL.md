@@ -15,6 +15,7 @@ This skill implements:
 - [WRITE-IMPL-PLAN] - Create IMPL documents (use IMPL_TEMPLATE.md)
 - [WRITE-TEST-PLAN] - Create TEST documents (use TEST_TEMPLATE.md)
 - [WRITE-FAIL] - Create/update FAILS.md (use FAILS_TEMPLATE.md)
+- [WRITE-LEARNING] - Create/update LEARNINGS.md (use LEARNINGS_TEMPLATE.md)
 - [WRITE-REVIEW] - Create _REVIEW.md documents (use REVIEW_TEMPLATE.md)
 - [WRITE-TASKS-PLAN] - Create TASKS documents (use TASKS_TEMPLATE.md)
 
@@ -47,6 +48,7 @@ You MUST read the appropriate template before creating documents:
 - `TASKS_TEMPLATE.md` - Task plans (partitioned work items)
 - `FIXES_TEMPLATE.md` - Code changes log for release documentation
 - `FAILS_TEMPLATE.md` - Failure log (lessons learned)
+- `LEARNINGS_TEMPLATE.md` - Retrospective analysis (via `/learn` workflow)
 - `REVIEW_TEMPLATE.md` - Review documents (_REVIEW.md)
 - `WORKFLOW_TEMPLATE.md` - AGEN verb workflow structure
 

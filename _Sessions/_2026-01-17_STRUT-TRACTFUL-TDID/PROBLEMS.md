@@ -2,6 +2,14 @@
 
 ## Open
 
+### STRUT-PR-001: Workflows depend on EDIRD phase model
+
+**Status**: Open
+**Severity**: HIGH
+**Description**: Current workflow implementations contain knowledge about EDIRD phases. This prevents swapping EDIRD for alternative phase models.
+**Impact**: Cannot experiment with different phase models without rewriting workflows.
+**Proposed solution**: Workflows should only contain task knowledge. Phase orchestration should be in a separate layer.
+
 ### STRUT-PR-002: Verbs cannot be extended per scope
 
 **Status**: Open
@@ -9,6 +17,14 @@
 **Description**: AGEN verbs are globally defined. No mechanism to add workspace/project/session-specific verbs.
 **Impact**: Cannot adapt vocabulary to domain-specific needs.
 **Proposed solution**: Define verb extension mechanism with scope precedence.
+
+### STRUT-PR-003: No central TOPIC ID registry
+
+**Status**: Open
+**Severity**: HIGH
+**Description**: TOPIC IDs are mentioned in devsystem-ids.md but no enforcement of uniqueness.
+**Impact**: Risk of duplicate TOPIC IDs causing traceability issues.
+**Proposed solution**: Mandatory TOPIC registry in workspace NOTES.md, TDID spec defines validation.
 
 ### STRUT-PR-004: AGEN syntax ambiguity
 
@@ -18,47 +34,30 @@
 **Impact**: Inconsistent usage, unclear when to use brackets vs uppercase.
 **Proposed solution**: Formalize CONSTANT (uppercase, no brackets) vs [INSTRUCTION] (brackets) distinction.
 
-### STRUT-PR-006: FAILS.md captures only technical failures
-
-**Status**: Open
-**Severity**: MEDIUM
-**Description**: Current FAILS.md mechanism focuses on implementation failures. Missing conceptual, planning, and assessment failures.
-**Impact**: Repeated strategic mistakes, not just technical ones.
-**Proposed solution**: Extend FAILS.md categories to include planning, assessment, conceptual failures.
-
-## Resolved
-
-### STRUT-PR-007: No Acceptance Criteria in SPECs
-
-**Status**: Resolved
-**Severity**: MEDIUM
-**Description**: SPECs have FR/DD/IG but no explicit AC section defining when spec is implemented.
-**Impact**: Unclear completion criteria, ambiguous verification.
-**Solution applied**: Added AC (Acceptance Criteria) section to SPEC_TEMPLATE.md after Implementation Guarantees. AC format includes criterion description, test method, and pass criteria. Added AC to ID-REGISTRY.md as Spec-Level Item ID.
-
 ### STRUT-PR-005: IMPL plans give agent too much freedom
 
-**Status**: Resolved
+**Status**: Open
 **Severity**: HIGH
 **Description**: IMPL plans are directly implemented without intermediate partitioning. Agent can choose arbitrary strategies that fail.
 **Impact**: Unpredictable implementation quality, difficult to test incrementally.
-**Solution applied**: Made TASKS mandatory before implementation. Updated `implement.md` to require `/write-tasks-plan` before execution. Added re-partition logic on failure. Updated README.md with SDD methodology references (GitHub spec-kit, Zencoder). Document cycle now: INFO → SPEC → IMPL → TEST → TASKS → IMPLEMENT.
+**Proposed solution**: Add [PARTITION] verb and TASKS document type for discrete, testable work chunks.
 
-### STRUT-PR-003: No central TOPIC ID registry
+### STRUT-PR-007: No Acceptance Criteria in SPECs
+
+**Status**: Open
+**Severity**: MEDIUM
+**Description**: SPECs have FR/DD/IG but no explicit AC section defining when spec is implemented.
+**Impact**: Unclear completion criteria, ambiguous verification.
+**Proposed solution**: Add AC (Acceptance Criteria) section to SPEC template.
+
+## Resolved
+
+### STRUT-PR-006: FAILS.md captures only technical failures
 
 **Status**: Resolved
-**Severity**: HIGH
-**Description**: TOPIC IDs are mentioned in devsystem-ids.md but no enforcement of uniqueness.
-**Impact**: Risk of duplicate TOPIC IDs causing traceability issues.
-**Solution applied**: Created `ID-REGISTRY.md` in workspace root with DevSystem constants and Project Topics sections. Updated `!NOTES.md` and `README.md` references.
-
-### STRUT-PR-001: Workflows depend on EDIRD phase model
-
-**Status**: Resolved
-**Severity**: HIGH
-**Description**: Current workflow implementations contain knowledge about EDIRD phases. This prevents swapping EDIRD for alternative phase models.
-**Impact**: Cannot experiment with different phase models without rewriting workflows.
-**Solution applied**: Removed `phase:` field from 16 workflows. Renamed EDIRD phase headers to generic step names (Understand, Plan, Execute, Review, Complete). Renamed gate checks to "Quality Gate". Workflows now contain only task knowledge.
-**Files changed**: 16 workflows in `.windsurf/workflows/`
+**Severity**: MEDIUM
+**Description**: Current FAILS.md mechanism focuses on implementation failures. Missing conceptual, planning, and assessment failures.
+**Impact**: Repeated strategic mistakes, not just technical ones.
+**Solution applied**: Created `/learn` workflow and LEARNINGS.md document type. FAILS.md stays simple (what failed). LEARNINGS.md captures structured retrospective analysis: problem type classification, assumption reconstruction, rationale analysis, dependency tree, root cause identification. Learning entries update linked FAILS.md entries with insights.
 
 ## Deferred
