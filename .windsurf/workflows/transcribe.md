@@ -13,7 +13,7 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 
 ## Core Principle
 
-**Maximum 4 pages per transcription call.** Write output to file immediately after each chunk.
+**Maximum 1 page per transcription call.** Write output to file immediately after each page. This prevents JSON truncation errors in edit tools.
 
 ## Source Types
 
@@ -87,16 +87,13 @@ Pages completed: 0 of [total]
 ---
 ```
 
-## Step 5: Transcribe in 4-Page Chunks
+## Step 5: Transcribe One Page at a Time
 
-For each chunk (pages 1-4, 5-8, 9-12, etc.):
+For each page:
 
-### 5a. Read exactly 4 page images (or fewer for final chunk)
+### 5a. Read exactly 1 page image
 ```
 read_file(file_path: "[path]_page001.jpg")
-read_file(file_path: "[path]_page002.jpg")
-read_file(file_path: "[path]_page003.jpg")
-read_file(file_path: "[path]_page004.jpg")
 ```
 
 ### 5b. Extract ALL content from these pages
@@ -111,12 +108,11 @@ Do not wait until end. Write after each chunk.
 ### 5d. Update progress marker
 ```markdown
 <!-- TRANSCRIPTION PROGRESS
-Chunk: 2 of 5
-Pages completed: 4 of 20
+Page: 2 of 20
 -->
 ```
 
-### 5e. Continue with next chunk
+### 5e. Continue with next page
 Repeat until all pages processed.
 
 ## Step 6: Finalize
@@ -178,8 +174,8 @@ After transcription, run `/verify` to:
 
 ## Best Practices
 
-1. **4 pages max per call** - Prevents context overflow and ensures quality
-2. **Write immediately** - Append to file after each chunk
+1. **1 page per call** - Prevents JSON truncation errors in edit tools
+2. **Write immediately** - Append to file after each page
 3. **Track progress** - Use progress markers for resumability
 4. **300 DPI for PDFs** - Higher quality for accurate transcription
 5. **Keep source images** - Required for `/verify`
