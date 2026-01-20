@@ -7,6 +7,11 @@
 **Depends on:**
 - `SPEC_AGEN_AGENTIC_ENGLISH.md [AGEN-SP01]` for verb definitions
 
+**Does not depend on:**
+- `SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP05]` (examples use EDIRD phases for illustration; STRUT works with any phase model)
+
+**Note:** STRUT plans are embedded in TRACTFUL documents (NOTES.md, PROGRESS.md). STRUT IDs are ephemeral and session-scoped.
+
 ## MUST-NOT-FORGET
 
 - STRUT is a pure tree notation using box-drawing characters
@@ -240,6 +245,11 @@
 **Resuming:** Find first unchecked Deliverable, read Strategy, continue
 
 ## Document History
+
+**[2026-01-20 19:35]**
+- Added: Explicit "Does not depend on" EDIRD (phase-model agnostic)
+- Added: Note about STRUT plans embedded in TRACTFUL documents
+- Added: Clarification that STRUT IDs are ephemeral/session-scoped
 
 **[2026-01-20 10:42]**
 - Added: STRUT-FR-04 Checkbox States with `[ ]`, `[x]`, `[N]` for repeat count
