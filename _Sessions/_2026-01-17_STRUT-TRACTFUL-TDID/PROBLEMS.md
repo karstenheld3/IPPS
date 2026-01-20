@@ -26,14 +26,6 @@
 **Impact**: Inconsistent usage, unclear when to use brackets vs uppercase.
 **Proposed solution**: Formalize CONSTANT (uppercase, no brackets) vs [INSTRUCTION] (brackets) distinction.
 
-### STRUT-PR-005: IMPL plans give agent too much freedom
-
-**Status**: Open
-**Severity**: HIGH
-**Description**: IMPL plans are directly implemented without intermediate partitioning. Agent can choose arbitrary strategies that fail.
-**Impact**: Unpredictable implementation quality, difficult to test incrementally.
-**Proposed solution**: Add [PARTITION] verb and TASKS document type for discrete, testable work chunks.
-
 ### STRUT-PR-007: No Acceptance Criteria in SPECs
 
 **Status**: Open
@@ -43,6 +35,14 @@
 **Proposed solution**: Add AC (Acceptance Criteria) section to SPEC template.
 
 ## Resolved
+
+### STRUT-PR-005: IMPL plans give agent too much freedom
+
+**Status**: Resolved
+**Severity**: HIGH
+**Description**: IMPL plans are directly implemented without intermediate partitioning. Agent can choose arbitrary strategies that fail.
+**Impact**: Unpredictable implementation quality, difficult to test incrementally.
+**Solution applied**: Added [PARTITION] verb and TASKS_*.md to Required Documents in SPEC_EDIRD. DESIGN→IMPLEMENT gate now requires TASKS document. partition.md workflow exists with strategies (DEFAULT, DEPENDENCY, SLICE, RISK). TASKS_TEMPLATE.md provides structure. Replaced [DECOMPOSE] with [PARTITION] throughout spec.
 
 ### STRUT-PR-003: No central TOPIC ID registry
 

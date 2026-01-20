@@ -191,6 +191,7 @@ This enables fully autonomous operation when [ACTOR] = Agent.
 - `_SPEC_*.md` - Technical specification (DESIGN phase)
 - `_IMPL_*.md` - Implementation plan (DESIGN phase)
 - `_TEST_*.md` - Test plan (DESIGN phase)
+- `_TASKS_*.md` - Partitioned tasks (DESIGN phase, before IMPLEMENT)
 
 **Complexity determines document depth, not document count:**
 - COMPLEXITY-LOW: Concise docs (1-2 pages each)
@@ -246,8 +247,8 @@ These files enable:
 - **SOLVE**: Structure, methodology, outline, criteria
 - **Entry**: Gate EXPLORE→DESIGN passed
 - **Exit**: Gate DESIGN→IMPLEMENT passes
-- **Verbs**: [PLAN], [OUTLINE], [FRAME], [PROVE], [DECOMPOSE], [WRITE-SPEC], [WRITE-IMPL-PLAN], [PROPOSE], [VALIDATE]
-- **All BUILD**: Must [DECOMPOSE] plan into small testable steps before [IMPLEMENT]
+- **Verbs**: [PLAN], [OUTLINE], [FRAME], [PROVE], [PARTITION], [WRITE-SPEC], [WRITE-IMPL-PLAN], [PROPOSE], [VALIDATE]
+- **All BUILD**: Must [PARTITION] IMPL into TASKS document before [IMPLEMENT]
 
 ### [IMPLEMENT]
 
@@ -296,7 +297,7 @@ Gates are checklists that must pass before transitioning. Agent evaluates gates 
 - [ ] Risky parts proven via POC (if COMPLEXITY-MEDIUM or higher)
 - [ ] No open questions requiring [ACTOR] decision
 - [ ] For BUILD: SPEC, IMPL, TEST documents created
-- [ ] For BUILD: Plan decomposed into small testable steps
+- [ ] For BUILD: TASKS document created via [PARTITION]
 - [ ] For SOLVE: Structure/criteria validated
 
 **Pass**: proceed to [IMPLEMENT] | **Fail**: remain in [DESIGN]
@@ -340,7 +341,7 @@ Gates are checklists that must pass before transitioning. Agent evaluates gates 
 ├─> [OUTLINE] high-level structure (all)
 ├─> [WRITE-SPEC] specification (all)
 ├─> [PROVE] risky parts with POC (HIGH)
-├─> [DECOMPOSE] into small testable steps (all)
+├─> [PARTITION] IMPL into TASKS document (all)
 ├─> [PROPOSE] options to [ACTOR] (HIGH)
 ├─> [VALIDATE] design with [ACTOR]
 ├─> [WRITE-IMPL-PLAN] implementation plan (all)
@@ -830,9 +831,15 @@ Context states (no brackets) used for branching:
 - **EDIRD-IG-06:** Every verb outcome (-OK, -FAIL, -SKIP) has a defined handler - agent never gets stuck without knowing next action
 - **EDIRD-IG-07:** Implementation uses small verifiable cycles: [IMPLEMENT]→[TEST]→[FIX]→green→next. Plans must be broken into steps that can be tested end-to-end. Large monolithic implementations are prohibited
 - **EDIRD-IG-08:** Agent always knows full phase plan. PROGRESS.md maintains all 5 phases with status (pending/in_progress/done). Agent reads this on session resume.
-- **EDIRD-IG-09:** Agent always knows all gates. Gate summaries in edird-core.md rule (always-on). Full gate checklists in @edird-phase-model skill, invoked for [PLAN] and [DECOMPOSE].
+- **EDIRD-IG-09:** Agent always knows all gates. Gate summaries in edird-core.md rule (always-on). Full gate checklists in @edird-phase-model skill, invoked for [PLAN] and [PARTITION].
 
 ## 16. Document History
+
+**[2026-01-20 18:35]**
+- Changed: Replaced [DECOMPOSE] with [PARTITION] throughout
+- Added: TASKS_*.md to Required Documents for BUILD workflows
+- Changed: DESIGN→IMPLEMENT gate now requires TASKS document via [PARTITION]
+- Changed: Verb mapping uses [PARTITION] IMPL into TASKS document
 
 **[2026-01-17 16:05]**
 - Changed: Expanded "Problem Type" to cover both BUILD and SOLVE workflows

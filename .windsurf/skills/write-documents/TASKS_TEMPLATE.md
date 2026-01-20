@@ -20,7 +20,7 @@ Template for creating task plan documents from partitioned IMPL/TEST plans.
 ## Task Overview
 
 - Total tasks: N
-- Estimated total: X HHW
+- Estimated total: X HWT
 - Parallelizable: M tasks
 ```
 
@@ -46,14 +46,14 @@ Run before starting any implementation:
   - Guardrails: [must not change X]
   - Depends: none | TK-NNN
   - Parallel: [P] or blank
-  - Est: 0.5 HHW
+  - Est: 0.5 HWT
 ```
 
 **Required fields:**
 - Task ID and description
 - Files affected
 - Done when (completion criteria)
-- Est (HHW estimate)
+- Est (HWT estimate)
 
 **Optional fields:**
 - Verify (commands)
@@ -108,7 +108,7 @@ TK-003 ─> TK-004
 ## Task Overview
 
 - Total tasks: 5
-- Estimated total: 2.5 HHW
+- Estimated total: 2.5 HWT
 - Parallelizable: 2 tasks
 
 ## Task 0 - Baseline (MANDATORY)
@@ -125,7 +125,7 @@ Run before starting any implementation:
   - Files: src/models/user.py
   - Done when: User model with email, password_hash fields exists
   - Verify: python -m pytest tests/models/
-  - Est: 0.5 HHW
+  - Est: 0.5 HWT
 
 ### Service Layer
 
@@ -135,14 +135,14 @@ Run before starting any implementation:
   - Verify: python -m pytest tests/services/test_auth.py
   - Guardrails: Must use bcrypt, not MD5
   - Depends: TK-001
-  - Est: 0.5 HHW
+  - Est: 0.5 HWT
 
 - [ ] **AUTH-TK-003** - Implement JWT tokens
   - Files: src/services/auth.py
   - Done when: create_token and verify_token functions work
   - Verify: python -m pytest tests/services/test_auth.py
   - Parallel: [P]
-  - Est: 0.5 HHW
+  - Est: 0.5 HWT
 
 ### API Layer
 
@@ -151,7 +151,7 @@ Run before starting any implementation:
   - Done when: POST /login returns JWT on valid credentials
   - Verify: python -m pytest tests/api/test_auth.py
   - Depends: TK-002, TK-003
-  - Est: 0.5 HHW
+  - Est: 0.5 HWT
 
 ## Task N - Final Verification (MANDATORY)
 

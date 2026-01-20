@@ -69,10 +69,8 @@ New verbs:
 - `[CONTINUE]` - forward-looking assessment, execute next items
 - `[GO]` - sequence of RECAP + CONTINUE until goal reached
 - `[LEARN]` - analyze for fails, document in FAILS.md
-- `[READ]` - careful reading of provided content
 - `[RESEARCH]` - iterative research with MEPI strategy
 - `[PARTITION]` - split IMPL/TEST/TASK plans into testable chunks
-- `[RETRY]` - retry block with bounded attempts: `[RETRY](xN) until [VERB]:`
 
 ### SOCAS (Signs Of Confusion And Sloppiness)
 
