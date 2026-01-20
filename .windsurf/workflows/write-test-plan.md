@@ -1,5 +1,6 @@
 ---
 description: Create test plan from spec
+phase: DESIGN
 ---
 
 # Write Test Plan Workflow

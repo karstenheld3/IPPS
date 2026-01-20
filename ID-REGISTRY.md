@@ -73,7 +73,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **MCPI** - Most Complete Point of Information
 - **SOCAS** - Signs Of Confusion And Sloppiness (10 criteria)
 
-## Context States (no brackets)
+## States (no brackets)
 
 ### Workflow Types
 - **BUILD** - Primary output is working code

@@ -1,5 +1,6 @@
 ---
 description: Create specification from requirements
+phase: DESIGN
 ---
 
 # Write Specification Workflow

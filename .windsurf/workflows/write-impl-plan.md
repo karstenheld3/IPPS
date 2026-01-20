@@ -1,5 +1,6 @@
 ---
 description: Create implementation plan from spec
+phase: DESIGN
 ---
 
 # Write Implementation Plan Workflow

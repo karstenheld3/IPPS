@@ -31,7 +31,7 @@
 - [9. Next Action Logic](#9-next-action-logic)
 - [10. Workflow Flows](#10-workflow-flows)
 - [11. Hybrid Situations](#11-hybrid-situations)
-- [12. Context States](#12-context-states)
+- [12. States](#12-states)
 - [13. Functional Requirements](#13-functional-requirements)
 - [14. Design Decisions](#14-design-decisions)
 - [15. Implementation Guarantees](#15-implementation-guarantees)
@@ -738,9 +738,9 @@ THEN:
         restart_with_appropriate_verbs
 ```
 
-## 12. Context States
+## 12. States
 
-Context states (no brackets) used for branching:
+States (no brackets) used for branching:
 
 ### Workflow Type
 
@@ -769,7 +769,7 @@ Context states (no brackets) used for branching:
 
 **EDIRD-FR-01: Phase Structure**
 - Workflow consists of 5 sequential phases: EXPLORE, DESIGN, IMPLEMENT, REFINE, DELIVER
-- Phases use bracket syntax `[PHASE]` as instruction tokens
+- Phases use bracket syntax `[PHASE]` as instructions
 - Each phase maps to specific verbs from Agentic English vocabulary
 
 **EDIRD-FR-02: Workflow Type Selection**
@@ -801,8 +801,8 @@ Context states (no brackets) used for branching:
 - Enables fully autonomous operation when [ACTOR] = Agent
 
 **EDIRD-FR-07: Workflow Branching**
-- Context states (no brackets) appear in condition headers
-- Instruction tokens (brackets) appear in action steps
+- States (no brackets) appear in condition headers
+- Instructions (brackets) appear in action steps
 - Format: `## For CONTEXT-STATE` followed by `[VERB]` instructions
 
 **EDIRD-FR-08: Hybrid Workflow Support**

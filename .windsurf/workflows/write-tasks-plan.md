@@ -4,7 +4,7 @@ description: Create tasks plan document from IMPL/TEST
 
 # Write Tasks Plan Workflow
 
-Create a TASKS document by partitioning IMPL/TEST plans into discrete work items.
+Implements [WRITE-TASKS-PLAN] verb. Combines [PARTITION] + document creation.
 
 ## Required Skills
 
@@ -17,8 +17,8 @@ Create a TASKS document by partitioning IMPL/TEST plans into discrete work items
 
 ## Steps
 
-1. **Run partition**
-   - Apply `/partition` workflow with STRATEGY if specified
+1. **Run [PARTITION]**
+   - Apply /partition workflow with STRATEGY if specified
    - Collect partitioned tasks
 
 2. **Create Tasks Plan File**

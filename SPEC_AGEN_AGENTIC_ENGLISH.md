@@ -14,7 +14,7 @@
 - [Placeholders](#placeholders)
 - [Atomic Activities (Verbs)](#atomic-activities-verbs)
 - [Labels](#labels)
-- [Context States](#context-states)
+- [States](#states)
 - [Document History](#document-history)
 
 ## Purpose
@@ -81,7 +81,7 @@ Tracking files use verbs for status:
 
 Agentic English has two token types with distinct syntax:
 
-### Instruction Tokens `[BRACKETS]`
+### Instructions `[BRACKETS]`
 
 Use brackets for tokens that appear in **instructions** - things the agent reads and DOES:
 
@@ -104,7 +104,7 @@ Use brackets for tokens that appear in **instructions** - things the agent reads
 In [WORKSPACE_FOLDER], [WRITE-INFO] about dependencies. Mark as [UNVERIFIED] if no source.
 ```
 
-### Context States `NO-BRACKETS`
+### States `NO-BRACKETS`
 
 No brackets for tokens that appear in **conditions** - things the agent checks for branching:
 
@@ -280,9 +280,9 @@ Use in tracking files:
 - **[WONT-FIX]** - Acknowledged risk, accepted trade-off
 - **[NEEDS-DISCUSSION]** - Requires [CONSULT] with [ACTOR]
 
-## Context States
+## States
 
-Context states are condition tokens (no brackets) used for branching. Format: `PREFIX-VALUE`.
+States are condition tokens (no brackets) used for branching. Format: `PREFIX-VALUE`.
 
 ### Workspace Context
 
@@ -316,7 +316,7 @@ Determines where implementation outputs are placed:
 - Fixed: Updated stale EDIRD cross-references to consolidated SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP04]
 
 **[2026-01-15 23:48]**
-- Added: Operation Modes context states (IMPL-CODEBASE, IMPL-ISOLATED)
+- Added: Operation Modes states (IMPL-CODEBASE, IMPL-ISOLATED)
 
 **[2026-01-15 20:09]**
 - Added: [PRIME] - Load most relevant information into model context (Information Gathering)
@@ -333,7 +333,7 @@ Determines where implementation outputs are placed:
 - Removed: Workflow Type and Problem Type (moved to EDIRD spec)
 
 **[2026-01-15 19:12]**
-- Added: Workflow Type context states (BUILD, SOLVE)
+- Added: Workflow Type states (BUILD, SOLVE)
 - Added: SOLVE problem types (RESEARCH, ANALYSIS, EVALUATION, WRITING, DECISION)
 - Changed: Renamed "Problem Type" to "Problem Type (BUILD workflow)"
 - Added: Cross-references to EDIRD variation specs
@@ -347,7 +347,7 @@ Determines where implementation outputs are placed:
 
 **[2026-01-15 18:39]**
 - Fixed: Verb disambiguation (OPTIMIZE=performance, IMPROVE=general quality, REFACTOR=per goal)
-- Fixed: Grep pattern for context states to match single-word states
+- Fixed: Grep pattern for states to match single-word states
 
 **[2026-01-15 18:23]**
 - Fixed: Document type INFO → SPEC in title
@@ -355,8 +355,8 @@ Determines where implementation outputs are placed:
 
 **[2026-01-15 17:42]**
 - Changed: Rewrote Syntax section with clear instruction vs condition distinction
-- Changed: Merged Complexity Levels and Problem Types into Context States section
-- Added: Workspace Context states (SINGLE-PROJECT, MONOREPO, etc.)
+- Changed: Merged Complexity Levels and Problem Types into States section
+- Added: Workspace States (SINGLE-PROJECT, MONOREPO, etc.)
 - Added: Quick Reference with grep patterns
 - Added: Example branching syntax
 - Updated: TOC to reflect new structure

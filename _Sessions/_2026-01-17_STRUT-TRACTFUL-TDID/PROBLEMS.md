@@ -10,15 +10,15 @@
 **Impact**: Cannot adapt vocabulary to domain-specific needs.
 **Proposed solution**: Define verb extension mechanism with scope precedence.
 
+## Resolved
+
 ### STRUT-PR-004: AGEN syntax ambiguity
 
-**Status**: Open
+**Status**: Resolved
 **Severity**: MEDIUM
 **Description**: Two token types (Instruction Tokens in brackets, Context States in uppercase) but unclear generalization for TOPICs, concepts.
 **Impact**: Inconsistent usage, unclear when to use brackets vs uppercase.
-**Proposed solution**: Formalize CONSTANT (uppercase, no brackets) vs [INSTRUCTION] (brackets) distinction.
-
-## Resolved
+**Solution applied**: Formalized STATE (no brackets) vs [INSTRUCTION] (brackets) distinction. Updated SPEC_AGEN, agentic-english.md rule, ID-REGISTRY.md, and SPEC_EDIRD. Synced DevSystemV3.1 to .windsurf.
 
 ### STRUT-PR-007: No Acceptance Criteria in SPECs
 

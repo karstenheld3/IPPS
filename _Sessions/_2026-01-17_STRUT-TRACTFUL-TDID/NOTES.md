@@ -29,6 +29,7 @@
 - **AGEN** - Agentic English - controlled vocabulary
 - **EDIRD** - Phase model (Explore, Design, Implement, Refine, Deliver)
 - **STRUT** - Structured Thinking - method and notation
+- **TRACT** - Traceable Requirements Artifacts and Coded Templates
 - **TRACTFUL** - Traceable Requirements Artifacts and Coded Templates For Unified Lifecycle
 - **TDID** - Tractful Document ID system
 - **GLOB** - Global/workspace-wide concerns
@@ -61,7 +62,7 @@ Document types and templates:
 ### AGEN Extensions
 
 New syntax distinction:
-- `CONSTANT` (uppercase, no brackets) - TOPICs, concepts, states
+- `STATE` (uppercase, no brackets) - TOPICs, concepts, conditions, context state
 - `[INSTRUCTION]` (brackets) - verbs, placeholders, labels
 
 New verbs:

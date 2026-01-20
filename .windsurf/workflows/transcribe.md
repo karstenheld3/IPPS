@@ -6,8 +6,6 @@ description: Transcribe PDFs and web pages to complete markdown with 100% conten
 
 Convert Portable Document Format (PDF) files and web pages to complete markdown files. **Nothing may be omitted.**
 
-PDF images are converted to JPEG (JPG) format for processing.
-
 ## Required Skills
 
 - @pdf-tools for PDF to image conversion
@@ -15,19 +13,21 @@ PDF images are converted to JPEG (JPG) format for processing.
 
 ## Core Principle
 
-**Maximum 1 page per transcription call.** Write output to file immediately after each page. This prevents JSON truncation errors in edit tools.
+**Maximum 4 pages per transcription call.** Write output to file immediately after each chunk.
 
 ## Source Types
 
-- **Local PDF** - File path ends in `.pdf` → Convert to JPG, transcribe
-- **URL to PDF** - URL ends in `.pdf` → Download first, then process
-- **Web page** - URL to HTML → Screenshot, transcribe
+| Source | Detection | Processing |
+|--------|-----------|------------|
+| Local PDF | File path ends in `.pdf` | Convert to JPG, transcribe |
+| URL to PDF | URL ends in `.pdf` | Download first, then process |
+| Web page | URL to HTML | Screenshot, transcribe |
 
 ## Step 1: Prepare Source
 
 ### For Local PDF
 ```powershell
-python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "path/to/document.pdf" --dpi 300  # 300 Dots Per Inch (DPI)
+python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "path/to/document.pdf" --dpi 300  # 300 DPI (Dots Per Inch)
 ```
 
 ### For URL to PDF
@@ -54,16 +54,18 @@ mcp0_browser_take_screenshot(fullPage: true, filename: ".tools/_web_screenshots/
 ```powershell
 $images = Get-ChildItem ".tools/_pdf_to_jpg_converted/[NAME]/" -Filter "*.jpg"
 $totalPages = $images.Count
-$chunks = [math]::Ceiling($totalPages / 4)
+$chunks = [math]::Ceiling($totalPages / 2)
 Write-Host "Total pages: $totalPages, Chunks needed: $chunks"
 ```
 
 ## Step 3: Determine Output Strategy
 
-- **1-20 pages** - Single markdown file
-- **21-50 pages** - Single file, write after each 4-page chunk
-- **51-100 pages** - Multiple section files + index, merge optional
-- **100+ pages** - Multiple chapter files + index
+| Total Pages | Output Strategy |
+|-------------|-----------------|
+| 1-20 | Single markdown file |
+| 21-50 | Single file, write after each 4-page chunk |
+| 51-100 | Multiple section files + index, merge optional |
+| 100+ | Multiple chapter files + index |
 
 ## Step 4: Create Output File with Header
 
@@ -80,18 +82,21 @@ Pages completed: 0 of [total]
 -->
 
 ## Table of Contents
-[Generate after first pass or from PDF Table of Contents]
+[Generate after first pass or from PDF Table of Contents (TOC)]
 
 ---
 ```
 
-## Step 5: Transcribe One Page at a Time
+## Step 5: Transcribe in 4-Page Chunks
 
-For each page:
+For each chunk (pages 1-4, 5-8, 9-12, etc.):
 
-### 5a. Read exactly 1 page image
+### 5a. Read exactly 4 page images (or fewer for final chunk)
 ```
 read_file(file_path: "[path]_page001.jpg")
+read_file(file_path: "[path]_page002.jpg")
+read_file(file_path: "[path]_page003.jpg")
+read_file(file_path: "[path]_page004.jpg")
 ```
 
 ### 5b. Extract ALL content from these pages
@@ -106,11 +111,12 @@ Do not wait until end. Write after each chunk.
 ### 5d. Update progress marker
 ```markdown
 <!-- TRANSCRIPTION PROGRESS
-Page: 2 of 20
+Chunk: 2 of 5
+Pages completed: 4 of 20
 -->
 ```
 
-### 5e. Continue with next page
+### 5e. Continue with next chunk
 Repeat until all pages processed.
 
 ## Step 6: Finalize
@@ -172,8 +178,8 @@ After transcription, run `/verify` to:
 
 ## Best Practices
 
-1. **1 page per call** - Prevents JSON truncation errors in edit tools
-2. **Write immediately** - Append to file after each page
+1. **4 pages max per call** - Prevents context overflow and ensures quality
+2. **Write immediately** - Append to file after each chunk
 3. **Track progress** - Use progress markers for resumability
 4. **300 DPI for PDFs** - Higher quality for accurate transcription
 5. **Keep source images** - Required for `/verify`

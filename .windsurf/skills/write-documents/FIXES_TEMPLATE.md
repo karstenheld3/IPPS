@@ -1,44 +1,85 @@
-# FIXES: [Version/Release]
+# FIX: [Issue Description]
 
-**Purpose**: Document code changes for release notes and change tracking.
+**Goal**: [Single sentence describing fix purpose]
+**Target files**:
+- `[path/to/file1.py]`
+- `[path/to/file2.py]`
 
-**Use when**: You need to track what changes were made during implementation for later reference in release documentation, changelogs, or handoff.
+## Table of Contents
 
-## Changes by Category
+1. [Rules Summary](#1-rules-summary)
+2. [Violations by Category](#2-violations-by-category)
+3. [Detailed Fix Plan](#3-detailed-fix-plan)
+4. [TODO Checklist](#4-todo-checklist)
+5. [Document History](#5-document-history)
 
-### Bug Fixes
+## 1. Rules Summary
 
-- **[TOPIC]-FX-001**: [Brief description]
-  - Files: `path/to/file.py`
-  - Commit: [hash]
+*(If fixing rule violations)*
 
-### Features
+- [Rule 1 being violated]
+- [Rule 2 being violated]
 
-- **[TOPIC]-FT-001**: [Brief description]
-  - Files: `path/to/file.py`, `path/to/other.py`
-  - Commit: [hash]
+## 2. Violations by Category
 
-### Refactoring
+### Category A: [Name]
 
-- **[TOPIC]-RF-001**: [Brief description]
-  - Files: `path/to/file.py`
-  - Commit: [hash]
+- `file1.py:123` - [Brief description]
+- `file1.py:456` - [Brief description]
 
-## Notable Changes
+### Category B: [Name]
 
-### [Change Title]
+- `file2.py:78` - [Brief description]
 
-**What changed**: [Description of the change]
+## 3. Detailed Fix Plan
 
-**Why**: [Reason for the change]
+### Fix 1: [Description]
 
-**Impact**: [What users/developers should know]
+**Location**: `filename.py:123`
 
-## Breaking Changes
+**BEFORE:**
+```python
+old_code_here
+```
 
-- [List any breaking changes that require migration or attention]
+**AFTER:**
+```python
+new_code_here
+```
 
-## Document History
+**Reason**: [Why this change is needed]
+
+### Fix 2: [Description]
+
+**Location**: `filename.py:456`
+
+**BEFORE:**
+```python
+old_code_here
+```
+
+**AFTER:**
+```python
+new_code_here
+```
+
+**Reason**: [Why this change is needed]
+
+## 4. TODO Checklist
+
+### File: `file1.py`
+- [ ] Fix 1: [Description] (line 123)
+- [ ] Fix 2: [Description] (line 456)
+
+### File: `file2.py`
+- [ ] Fix 3: [Description] (line 78)
+
+### Verification
+- [ ] All fixes applied
+- [ ] No regressions
+- [ ] Tests pass
+
+## 5. Document History
 
 **[YYYY-MM-DD HH:MM]**
-- Initial fixes document created
+- Initial fix plan created

@@ -1,10 +1,9 @@
 ---
 description: Execute implementation from IMPL plan
+phase: IMPLEMENT
 ---
 
 # Implement Workflow
-
-Implements execution phase - build from plan in small verified steps.
 
 ## Required Skills
 
@@ -17,70 +16,72 @@ Check what documents exist and proceed accordingly:
 
 ### No SPEC, IMPL, TEST documents
 
-Implement whatever was proposed or specified in conversation.
+[IMPLEMENT] whatever was proposed or specified in conversation.
 
 ### Existing INFO only
 
-Run `/write-spec` first.
+Run `/write-spec` → [WRITE-SPEC](INFO, Problem or Feature)
 
 ### Existing SPEC only
 
-Run `/write-impl-plan` first.
+Run `/write-impl-plan` → [WRITE-IMPL-PLAN](SPEC)
 
 ### Existing IMPL only
 
-Run `/write-test-plan` first.
+Run `/write-test-plan` → [WRITE-TEST-PLAN](IMPL)
 
-### Existing TEST only (no TASKS)
+### Existing TEST (no test code)
 
-Run `/write-tasks-plan` first. TASKS document is mandatory before implementation.
+[IMPLEMENT] function skeletons from IMPL, then full failing tests from TEST.
 
-### Existing TASKS (no code yet)
+### Existing TEST + test code
 
-Implement function skeletons from IMPL, then full failing tests from TEST.
+[IMPLEMENT] full implementations from IMPL in small verifiable steps.
 
-### Existing TASKS + test code
+## Phase: IMPLEMENT
 
-Implement everything from TASKS in small verifiable steps.
+**Entry gate:** DESIGN→IMPLEMENT passed (IMPL plan exists)
 
-## Operation Mode Check
+### Operation Mode Check
 
 Before implementing, verify operation mode from NOTES.md:
 - **IMPL-CODEBASE** → output to project source folders
 - **IMPL-ISOLATED** → output to `[SESSION_FOLDER]/` only, NEVER workspace root
 
-## Execution Loop
+### Verb Sequence
 
-For each task in TASKS plan:
-1. Make code changes
-2. Verify task works
-3. Fix if tests fail
-4. Commit when green
-5. Mark task complete in TASKS
+1. For each step in IMPL plan:
+   - [IMPLEMENT] code changes
+   - [TEST] verify step works
+   - [FIX] if tests fail (per retry limits)
+   - [COMMIT] when green
+2. [VERIFY] against IMPL plan
 
-## Quality Gate
+### Gate Check: IMPLEMENT→REFINE
 
-- [ ] All tasks from TASKS plan completed
+- [ ] All steps from IMPL plan implemented
 - [ ] Tests pass
 - [ ] No TODO/FIXME left unaddressed
 - [ ] Progress committed
 
+**Pass**: Run `/refine` | **Fail**: Continue [IMPLEMENT]
+
 ## Stuck Detection
 
-If 3 consecutive fix attempts fail on a task:
-1. Document failure in PROBLEMS.md
-2. **Re-partition**: Run `/write-tasks-plan` to create new TASKS version with smaller chunks
-3. If re-partition doesn't help: Consult with user
+If 3 consecutive [FIX] attempts fail:
+1. [CONSULT] with [ACTOR]
+2. Document in PROBLEMS.md
+3. Either get guidance or [DEFER] and continue
 
 ## Attitude
 
 - Senior engineer, anticipating complexity, reducing risks
 - Completer / Finisher, never leaves clutter undocumented
-- Small cycles: implement→test→fix→green→next
+- Small cycles: [IMPLEMENT]→[TEST]→[FIX]→green→next
 
 ## Rules
 
 - Use small, verifiable steps - never implement large untestable chunks
-- Track progress in PROGRESS.md after each commit
+- Track progress in PROGRESS.md after each [COMMIT]
 - Document problems in PROBLEMS.md immediately when found
 - Remove temporary `.tmp_*` files after implementation complete
