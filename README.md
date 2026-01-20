@@ -62,7 +62,7 @@ STRUT provides the notation   → Tree structure for plans with progress trackin
 
 ## Overview
 
-IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V3) introduces the EDIRD phase model and Agentic English vocabulary for deterministic agent behavior.
+IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V3.1) introduces the EDIRD phase model, Agentic English vocabulary, and STRUT notation for deterministic agent behavior.
 
 ## How to Add to Your Project
 
@@ -80,7 +80,8 @@ your-project/
 - **[DevSystemV1](DevSystemV1/)** - Legacy system using rules and workflows
 - **[DevSystemV2](DevSystemV2/)** - Previous version with modular skills and workflows
 - **[DevSystemV2.1](DevSystemV2.1/)** - Previous version with refined workflows
-- **[DevSystemV3](DevSystemV3/)** - Current system with EDIRD phase model and Agentic English
+- **[DevSystemV3](DevSystemV3/)** - Previous version with EDIRD phase model and Agentic English
+- **[DevSystemV3.1](DevSystemV3.1/)** - Current system with STRUT notation and refined specs
 
 ## Agentic English
 
@@ -173,14 +174,15 @@ Run `SETUP.md` in each skill folder to install required tools locally to `.tools
 ```
 IPPS/
 ├── .tools/                       # Local tool installations (gitignored)
-├── .windsurf/                    # Active agent configuration (copied from DevSystemV3)
+├── .windsurf/                    # Active agent configuration (copied from DevSystemV3.1)
 │   ├── rules/
 │   ├── workflows/
 │   └── skills/
 ├── DevSystemV1/                  # Legacy (deprecated)
 ├── DevSystemV2/                  # Legacy (deprecated)
 ├── DevSystemV2.1/                # Legacy (deprecated)
-├── DevSystemV3/                  # Current system
+├── DevSystemV3/                  # Previous version
+├── DevSystemV3.1/                # Current system
 │   ├── rules/
 │   │   ├── core-conventions.md   # Text formatting, document structure
 │   │   ├── devsystem-core.md     # Workspace scenarios, folder structure, operation modes
@@ -196,33 +198,29 @@ IPPS/
 │   │   ├── session-management/   # Session templates
 │   │   └── write-documents/      # Spec, impl, test templates
 │   └── workflows/
-│       ├── build.md              # BUILD workflow entry point
-│       ├── solve.md              # SOLVE workflow entry point
 │       ├── next.md               # Universal task entry with compliance
-│       ├── explore.md            # EXPLORE phase
-│       ├── design.md             # DESIGN phase
 │       ├── implement.md          # IMPLEMENT phase
-│       ├── refine.md             # REFINE phase
-│       ├── deliver.md            # DELIVER phase
 │       ├── critique.md           # Devil's Advocate review
 │       ├── reconcile.md          # Pragmatic reconciliation
 │       ├── verify.md             # Verification against specs and rules
 │       ├── commit.md             # Git conventional commits
 │       ├── rename.md             # Global/local refactoring
+│       ├── partition.md          # Split plans into testable chunks
 │       ├── sync.md               # Document synchronization
 │       ├── test.md               # Run tests based on scope
 │       ├── prime.md              # Load workspace context
 │       ├── go-autonomous.md      # Full EDIRD autonomous loop
-│       ├── go-research.md        # Structured research
+│       ├── research.md           # Structured research
+│       ├── transcribe.md         # PDF/web transcription
 │       ├── write-spec.md         # Create specification
 │       ├── write-impl-plan.md    # Create implementation plan
 │       ├── write-test-plan.md    # Create test plan
+│       ├── write-tasks-plan.md   # Create tasks plan
 │       ├── session-new.md        # Initialize session
 │       ├── session-save.md       # Save session progress
 │       ├── session-resume.md     # Resume session
 │       ├── session-close.md      # Close and sync session
-│       ├── session-archive.md    # Archive session folder
-│       └── setup-pdftools.md     # Install PDF tools
+│       └── session-archive.md    # Archive session folder
 └── README.md
 ```
 
