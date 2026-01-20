@@ -2,14 +2,6 @@
 
 ## Open
 
-### STRUT-PR-001: Workflows depend on EDIRD phase model
-
-**Status**: Open
-**Severity**: HIGH
-**Description**: Current workflow implementations contain knowledge about EDIRD phases. This prevents swapping EDIRD for alternative phase models.
-**Impact**: Cannot experiment with different phase models without rewriting workflows.
-**Proposed solution**: Workflows should only contain task knowledge. Phase orchestration should be in a separate layer.
-
 ### STRUT-PR-002: Verbs cannot be extended per scope
 
 **Status**: Open
@@ -35,6 +27,14 @@
 **Proposed solution**: Add AC (Acceptance Criteria) section to SPEC template.
 
 ## Resolved
+
+### STRUT-PR-001: Workflows depend on EDIRD phase model
+
+**Status**: Resolved
+**Severity**: HIGH
+**Description**: Current workflow implementations contain knowledge about EDIRD phases. This prevents swapping EDIRD for alternative phase models.
+**Impact**: Cannot experiment with different phase models without rewriting workflows.
+**Solution applied**: Task-specific workflows (partition, verify, commit, learn, fail, etc.) are now phase model independent. Only BUILD and SOLVE entry-point workflows in SPEC_EDIRD contain phase orchestration logic. Workflows reference skills and templates, not phases.
 
 ### STRUT-PR-005: IMPL plans give agent too much freedom
 
