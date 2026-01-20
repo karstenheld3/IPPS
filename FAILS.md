@@ -1,5 +1,23 @@
 # Failure Log
 
+## 2026-01-20 - Workflow-Skill Content Duplication
+
+### [MEDIUM] `EDIRD-FL-003` Duplicated content between skill and workflows
+
+- **When**: 2026-01-20 20:12 UTC+01:00
+- **Where**: `DevSystemV3.1/workflows/build.md`, `solve.md`
+- **What**: build.md and solve.md contained detailed phase steps, gates, and verb sequences that duplicated content in @edird-phase-planning skill
+- **Why it went wrong**:
+  - Original workflow design included full phase details
+  - Skill was added but workflows weren't simplified
+  - Violated DRY principle
+- **Learning**: `EDIRD-LN-001` - Workflow-Skill Separation Principle
+
+**Prevention rules**:
+1. Workflows that invoke skills should NOT duplicate skill content
+2. Workflow = entry point + skill reference + workflow-specific rules only
+3. After adding skills, review and simplify referencing workflows
+
 ## 2026-01-17 - Ignored Documented Sync Process
 
 ### [LOW] `GLOB-FL-005` Edited DevSystemV3 without proposing .windsurf sync command
