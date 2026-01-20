@@ -9,6 +9,7 @@ Inventory of all IDs, acronyms, and named concepts in the DevSystem.
 - **STRUT** - Structured Thinking. Method for planning and tracking complex autonomous work
 - **TRACTFUL** - Traceable Requirements Artifacts and Coded Templates For Unified Lifecycle
 - **TRACT** - TOPIC prefix for TRACTFUL documents
+- **TDID** - Tractful Document ID system. TOPIC prefix for ID system spec
 
 ## Core Identifiers
 
