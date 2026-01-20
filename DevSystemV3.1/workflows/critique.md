@@ -1,5 +1,3 @@
-<DevSystem EmojisAllowed=true />
-
 ---
 description: Find flawed assumptions, logic errors, and hidden risks (not rule violations)
 phase: REFINE
