@@ -114,13 +114,13 @@ A controlled vocabulary for agent-human communication. Provides consistent termi
 
 A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) work.
 
-**Goal**: Consistent phase structure for all development work with deterministic next-action logic. We want the agent to always do the right thing when the `/next` workflow / command is executed until the initial goal is reached.
+**Goal**: Consistent phase structure for all development work with deterministic next-action logic. We want the agent to always do the right thing when the `/go` workflow is executed until the initial goal is reached.
 
 **Rationale**: Without phases, agents skip important steps or apply heavyweight processes to simple tasks. EDIRD provides the right amount of process for each complexity level.
 
 **Phases**:
 - **EXPLORE** - Understand before acting: `[RESEARCH]`, `[ANALYZE]`, `[ASSESS]`, `[SCOPE]`
-- **DESIGN** - Plan before executing: `[PLAN]`, `[WRITE-SPEC]`, `[PROVE]`, `[DECOMPOSE]`
+- **DESIGN** - Plan before executing: `[PLAN]`, `[WRITE-SPEC]`, `[PROVE]`, `[PARTITION]`
 - **IMPLEMENT** - Execute the plan: `[IMPLEMENT]`, `[TEST]`, `[FIX]`, `[COMMIT]`
 - **REFINE** - Improve quality: `[REVIEW]`, `[VERIFY]`, `[CRITIQUE]`, `[RECONCILE]`
 - **DELIVER** - Complete and hand off: `[VALIDATE]`, `[MERGE]`, `[DEPLOY]`, `[CLOSE]`
@@ -147,12 +147,13 @@ A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) w
 
 ## Key Conventions
 
-- [Core Conventions](DevSystemV3/rules/core-conventions.md) - Text formatting, document structure, header blocks
-- [DevSystem Core](DevSystemV3/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
-- [DevSystem IDs](DevSystemV3/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
-- [Agentic English](DevSystemV3/rules/agentic-english.md) - Controlled vocabulary for agent instructions
-- [Git Conventions](DevSystemV3/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
-- [Coding Conventions](DevSystemV3/skills/coding-conventions/SKILL.md) - Python, PowerShell style rules
+- [Core Conventions](DevSystemV3.1/rules/core-conventions.md) - Text formatting, document structure, header blocks
+- [DevSystem Core](DevSystemV3.1/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
+- [DevSystem IDs](DevSystemV3.1/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
+- [Agentic English](DevSystemV3.1/rules/agentic-english.md) - Controlled vocabulary for agent instructions
+- [EDIRD Phase Planning](DevSystemV3.1/rules/edird-phase-planning.md) - Phase model core rules
+- [Git Conventions](DevSystemV3.1/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
+- [Coding Conventions](DevSystemV3.1/skills/coding-conventions/SKILL.md) - Python, PowerShell style rules
 
 ## Agent Tools (installed automatically by skill)
 
@@ -188,17 +189,21 @@ IPPS/
 │   │   ├── devsystem-core.md     # Workspace scenarios, folder structure, operation modes
 │   │   ├── devsystem-ids.md      # Document and item ID conventions
 │   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions
-│   │   └── edird-core.md         # EDIRD phase model core rules
+│   │   └── edird-phase-planning.md # EDIRD phase model core rules
 │   ├── skills/
 │   │   ├── coding-conventions/   # Python, PowerShell style rules
-│   │   ├── edird-phase-model/    # Phase gates, flows, branching
+│   │   ├── edird-phase-planning/ # Phase gates, flows, planning
 │   │   ├── git-conventions/      # Commit message format
 │   │   ├── github/               # GitHub CLI operations
 │   │   ├── pdf-tools/            # PDF scripts and tools
 │   │   ├── session-management/   # Session templates
 │   │   └── write-documents/      # Spec, impl, test templates
 │   └── workflows/
-│       ├── next.md               # Universal task entry with compliance
+│       ├── build.md              # BUILD workflow entry point
+│       ├── solve.md              # SOLVE workflow entry point
+│       ├── go.md                 # Autonomous loop (recap + continue)
+│       ├── recap.md              # Analyze context, identify status
+│       ├── continue.md           # Execute next items on plan
 │       ├── implement.md          # IMPLEMENT phase
 │       ├── critique.md           # Devil's Advocate review
 │       ├── reconcile.md          # Pragmatic reconciliation
@@ -209,9 +214,10 @@ IPPS/
 │       ├── sync.md               # Document synchronization
 │       ├── test.md               # Run tests based on scope
 │       ├── prime.md              # Load workspace context
-│       ├── go-autonomous.md      # Full EDIRD autonomous loop
 │       ├── research.md           # Structured research
 │       ├── transcribe.md         # PDF/web transcription
+│       ├── fail.md               # Record failures
+│       ├── learn.md              # Extract learnings from failures
 │       ├── write-spec.md         # Create specification
 │       ├── write-impl-plan.md    # Create implementation plan
 │       ├── write-test-plan.md    # Create test plan

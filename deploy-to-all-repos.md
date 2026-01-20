@@ -62,11 +62,13 @@ $targets = @(
     # Populate from [LINKED_REPOS] in !NOTES.md
 )
 
-# Deprecated files from V1 and V2 migrations (only these can be deleted)
+# Deprecated files from V1, V2, V3 migrations (only these can be deleted)
 $deprecatedFiles = @{
-    "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md")
-    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md")
+    "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md", "edird-core.md")
+    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md")
 }
+# Deprecated skill folders (entire folder can be deleted if renamed)
+$deprecatedSkillFolders = @("edird-phase-model")
 
 # Get all source files (relative paths)
 $sourceFiles = Get-ChildItem -Path $source -Recurse -File | ForEach-Object {
@@ -205,32 +207,27 @@ Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `
 - `workflows/review-devilsadvocate.md` → replaced by `workflows/critique.md`
 - `workflows/review-pragmaticprogrammer.md` → replaced by `workflows/reconcile.md`
 
-### V3 New Files (18 files)
+### V3 → V3.1 Migration (Deprecated/Renamed)
 
-**New Rules:**
-- `rules/agentic-english.md` - Controlled vocabulary for agent instructions
-- `rules/edird-core.md` - EDIRD phase model core definitions
+- `rules/edird-core.md` → renamed to `rules/edird-phase-planning.md`
+- `workflows/go-autonomous.md` → renamed to `workflows/go.md`
+- `workflows/next.md` → removed (use `/go` instead)
+- `skills/edird-phase-model/` → renamed to `skills/edird-phase-planning/`
+  - `SKILL.md` consolidated (BRANCHING.md, FLOWS.md, GATES.md, NEXT_ACTION.md removed)
 
-**New Skill (edird-phase-model):**
-- `skills/edird-phase-model/SKILL.md`
-- `skills/edird-phase-model/BRANCHING.md`
-- `skills/edird-phase-model/FLOWS.md`
-- `skills/edird-phase-model/GATES.md`
-- `skills/edird-phase-model/NEXT_ACTION.md`
+### V3.1 New Files
 
-**New Templates:**
-- `skills/write-documents/FAILS_TEMPLATE.md`
-- `skills/write-documents/REVIEW_TEMPLATE.md`
+**Renamed Rules:**
+- `rules/edird-phase-planning.md` - EDIRD phase model core (was edird-core.md)
 
-**New Workflows (Phase Workflows):**
-- `workflows/explore.md` - EXPLORE phase
-- `workflows/design.md` - DESIGN phase
-- `workflows/refine.md` - REFINE phase
-- `workflows/deliver.md` - DELIVER phase
-- `workflows/critique.md` - Devil's Advocate review (replaces review-devilsadvocate.md)
-- `workflows/reconcile.md` - Pragmatic reconciliation (replaces review-pragmaticprogrammer.md)
-- `workflows/build.md` - BUILD workflow entry point (was new-feature.md)
-- `workflows/solve.md` - SOLVE workflow entry point (was new-task.md)
-- `workflows/test.md` - Run tests based on scope
+**Renamed/Consolidated Skill:**
+- `skills/edird-phase-planning/SKILL.md` - Single consolidated file (was edird-phase-model/)
+
+**New Workflows:**
+- `workflows/go.md` - Autonomous loop using recap + continue (was go-autonomous.md)
+- `workflows/recap.md` - Analyze context, identify current status
+- `workflows/continue.md` - Execute next items on plan
+- `workflows/fail.md` - Record failures to FAILS.md
+- `workflows/learn.md` - Extract learnings from failures
 
 **If a file is NOT on the deprecated list:** Do NOT delete it. It is a custom repo-specific file.
