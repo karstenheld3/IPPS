@@ -179,6 +179,7 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 - **[INVESTIGATE]** - Focused inquiry into specific issue or question
 - **[GATHER]** - Collect information, logs, context, requirements
 - **[PRIME]** - Load most relevant information into model context
+- **[READ]** - Careful, thorough reading of provided content with attention to detail
 
 ### Thinking and Planning
 
@@ -193,6 +194,9 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 - **[SYNTHESIZE]** - Combine findings into coherent understanding
 - **[CONCLUDE]** - Draw conclusions from analysis
 - **[DEFINE]** - Establish clear definitions or criteria
+- **[RECAP]** - Analyze context, revisit plan, identify current status
+- **[CONTINUE]** - Forward-looking assessment, execute next items on plan
+- **[GO]** - Sequence of [RECAP] + [CONTINUE] until goal reached
 
 ### Validation and Proof
 
@@ -311,6 +315,12 @@ Determines where implementation outputs are placed:
 - **IMPL-ISOLATED** - Output to `[SESSION_FOLDER]/` only. For: [PROVE], POCs, prototypes, self-contained test scripts. Requires active session.
 
 ## Document History
+
+**[2026-01-20 19:05]**
+- Added: [READ] - Careful reading of provided content (Information Gathering)
+- Added: [RECAP] - Analyze context, revisit plan, identify status (Thinking and Planning)
+- Added: [CONTINUE] - Forward-looking assessment, execute next items (Thinking and Planning)
+- Added: [GO] - Sequence of RECAP + CONTINUE until goal reached (Thinking and Planning)
 
 **[2026-01-20 10:41]**
 - Fixed: Updated stale EDIRD cross-references to consolidated SPEC_EDIRD_PHASE_MODEL.md [EDIRD-SP04]
