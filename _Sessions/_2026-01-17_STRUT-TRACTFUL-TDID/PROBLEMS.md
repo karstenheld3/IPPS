@@ -18,14 +18,6 @@
 **Impact**: Inconsistent usage, unclear when to use brackets vs uppercase.
 **Proposed solution**: Formalize CONSTANT (uppercase, no brackets) vs [INSTRUCTION] (brackets) distinction.
 
-### STRUT-PR-005: IMPL plans give agent too much freedom
-
-**Status**: Open
-**Severity**: HIGH
-**Description**: IMPL plans are directly implemented without intermediate partitioning. Agent can choose arbitrary strategies that fail.
-**Impact**: Unpredictable implementation quality, difficult to test incrementally.
-**Proposed solution**: Add [PARTITION] verb and TASKS document type for discrete, testable work chunks.
-
 ### STRUT-PR-006: FAILS.md captures only technical failures
 
 **Status**: Open
@@ -43,6 +35,14 @@
 **Proposed solution**: Add AC (Acceptance Criteria) section to SPEC template.
 
 ## Resolved
+
+### STRUT-PR-005: IMPL plans give agent too much freedom
+
+**Status**: Resolved
+**Severity**: HIGH
+**Description**: IMPL plans are directly implemented without intermediate partitioning. Agent can choose arbitrary strategies that fail.
+**Impact**: Unpredictable implementation quality, difficult to test incrementally.
+**Solution applied**: Made TASKS mandatory before implementation. Updated `implement.md` to require `/write-tasks-plan` before execution. Added re-partition logic on failure. Updated README.md with SDD methodology references (GitHub spec-kit, Zencoder). Document cycle now: INFO → SPEC → IMPL → TEST → TASKS → IMPLEMENT.
 
 ### STRUT-PR-003: No central TOPIC ID registry
 

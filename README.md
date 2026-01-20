@@ -290,7 +290,9 @@ Close session and sync findings:
 /session-close
 ```
 
-### Document Cycle (INFO -> SPEC -> IMPL -> TEST)
+### Document Cycle (INFO -> SPEC -> IMPL -> TEST -> TASKS)
+
+This follows the Specification-Driven Development (SDD) methodology used by [GitHub spec-kit](https://github.com/github/spec-kit) and [Zencoder](https://docs.zencoder.ai/user-guides/tutorials/spec-driven-development-guide).
 
 1. **Research** - Gather information:
 ```
@@ -316,27 +318,33 @@ Creates `_IMPL_*.md` from spec.
 ```
 Creates `_TEST_*.md` from spec.
 
-5. **Implement** - Execute the plan:
+5. **Tasks** - Partition into discrete work items:
+```
+/write-tasks-plan
+```
+Creates `_TASKS_*.md` from IMPL/TEST. **Mandatory before implementation.**
+
+6. **Implement** - Execute the tasks:
 ```
 /implement
 ```
 
-6. **Verify** - Check work against specs:
+7. **Verify** - Check work against specs:
 ```
 /verify
 ```
 
-7. **Sync** - Update dependent documents:
+8. **Sync** - Update dependent documents:
 ```
 /sync
 ```
 
-8. **Rename** - Global/local pattern replacement:
+9. **Rename** - Global/local pattern replacement:
 ```
 /rename
 ```
 
-9. **Commit** - Create conventional commits:
+10. **Commit** - Create conventional commits:
 ```
 /commit
 ```

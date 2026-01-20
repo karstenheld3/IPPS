@@ -71,7 +71,6 @@
 
 - **STRUT-PR-002** - Verbs cannot be extended per scope
 - **STRUT-PR-004** - AGEN syntax ambiguity
-- **STRUT-PR-005** - IMPL plans give agent too much freedom
 - **STRUT-PR-006** - FAILS.md captures only technical failures
 - **STRUT-PR-007** - No Acceptance Criteria in SPECs
 

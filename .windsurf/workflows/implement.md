@@ -31,13 +31,17 @@ Run `/write-impl-plan` first.
 
 Run `/write-test-plan` first.
 
-### Existing TEST (no test code)
+### Existing TEST only (no TASKS)
+
+Run `/write-tasks-plan` first. TASKS document is mandatory before implementation.
+
+### Existing TASKS (no code yet)
 
 Implement function skeletons from IMPL, then full failing tests from TEST.
 
-### Existing TEST + test code
+### Existing TASKS + test code
 
-Implement everything from IMPL in small verifiable steps.
+Implement everything from TASKS in small verifiable steps.
 
 ## Operation Mode Check
 
@@ -47,26 +51,26 @@ Before implementing, verify operation mode from NOTES.md:
 
 ## Execution Loop
 
-For each step in IMPL plan:
+For each task in TASKS plan:
 1. Make code changes
-2. Verify step works
-3. Fix if tests fail (max 3 retries)
+2. Verify task works
+3. Fix if tests fail
 4. Commit when green
-5. Check against IMPL plan
+5. Mark task complete in TASKS
 
 ## Quality Gate
 
-- [ ] All steps from IMPL plan implemented
+- [ ] All tasks from TASKS plan completed
 - [ ] Tests pass
 - [ ] No TODO/FIXME left unaddressed
 - [ ] Progress committed
 
 ## Stuck Detection
 
-If 3 consecutive fix attempts fail:
-1. Consult with user
-2. Document in PROBLEMS.md
-3. Either get guidance or defer and continue
+If 3 consecutive fix attempts fail on a task:
+1. Document failure in PROBLEMS.md
+2. **Re-partition**: Run `/write-tasks-plan` to create new TASKS version with smaller chunks
+3. If re-partition doesn't help: Consult with user
 
 ## Attitude
 
