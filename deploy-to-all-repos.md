@@ -65,7 +65,7 @@ $targets = @(
 # Deprecated files from V1, V2, V3 migrations (only these can be deleted)
 $deprecatedFiles = @{
     "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md", "edird-core.md")
-    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md")
+    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md")
 }
 # Deprecated skill folders (entire folder can be deleted if renamed)
 $deprecatedSkillFolders = @("edird-phase-model")
@@ -206,6 +206,9 @@ Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `
 
 - `workflows/review-devilsadvocate.md` → replaced by `workflows/critique.md`
 - `workflows/review-pragmaticprogrammer.md` → replaced by `workflows/reconcile.md`
+- `workflows/new-feature.md` → replaced by `workflows/build.md`
+- `workflows/new-task.md` → replaced by `workflows/solve.md`
+- `workflows/setup-pdftools.md` → moved to `skills/pdf-tools/SETUP.md`
 
 ### V3 → V3.1 Migration (Deprecated/Renamed)
 
