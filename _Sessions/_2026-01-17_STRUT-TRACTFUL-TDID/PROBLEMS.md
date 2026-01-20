@@ -2,13 +2,7 @@
 
 ## Open
 
-### STRUT-PR-002: Verbs cannot be extended per scope
-
-**Status**: Open
-**Severity**: MEDIUM
-**Description**: AGEN verbs are globally defined. No mechanism to add workspace/project/session-specific verbs.
-**Impact**: Cannot adapt vocabulary to domain-specific needs.
-**Proposed solution**: Define verb extension mechanism with scope precedence.
+(none)
 
 ## Resolved
 
@@ -61,3 +55,11 @@
 **Solution applied**: Created `/learn` workflow and LEARNINGS.md document type. FAILS.md stays simple (what failed). LEARNINGS.md captures structured retrospective analysis: problem type classification, assumption reconstruction, rationale analysis, dependency tree, root cause identification. Learning entries update linked FAILS.md entries with insights.
 
 ## Deferred
+
+### STRUT-PR-002: Verbs cannot be extended per scope
+
+**Status**: Deferred
+**Severity**: MEDIUM
+**Description**: AGEN verbs are globally defined. No mechanism to add workspace/project/session-specific verbs.
+**Impact**: Cannot adapt vocabulary to domain-specific needs.
+**Rationale**: Over-engineering for current needs. Revisit when domain-specific requirements emerge.
