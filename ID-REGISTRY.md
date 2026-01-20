@@ -7,8 +7,8 @@ Inventory of all IDs, acronyms, and named concepts in the DevSystem.
 - **AGEN** - Agentic English. Controlled vocabulary for agent-human communication
 - **EDIRD** - Explore, Design, Implement, Refine, Deliver. 5-phase workflow model
 - **STRUT** - Structured Thinking. Method for planning and tracking complex autonomous work
-- **TRACTFUL** - Traceable Requirements Artifacts and Coded Templates For Unified Lifecycle
-- **TRACT** - TOPIC prefix for TRACTFUL documents
+- **TRACT** - Traceability concept/goal. Ensuring development artifacts remain connected from ideation to maintenance
+- **TRACTFUL** - TRACT implementation via documents. Traceable Requirements Artifacts and Coded Templates For Unified Lifecycle
 - **TDID** - Tractful Document ID system (defined in TRACTFUL spec section 4)
 
 ## Core Identifiers
