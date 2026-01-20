@@ -1,15 +1,16 @@
 # Session Critique: STRUT-TRACTFUL-TDID
 
 **Doc ID**: STRUT-RV01
-**Reviewed**: 2026-01-20 19:20
-**Context**: Devil's Advocate review of session outcomes for modularity and scope clarity
+**Reviewed**: 2026-01-20 19:20, Reconciled 2026-01-20 19:30
+**Context**: Devil's Advocate review + Pragmatic reconciliation of session outcomes
 
-## MUST-NOT-FORGET
+## MUST-NOT-FORGET (from INITIAL_PROMPT)
 
-- Each spec must have clear scope and not interfere with other specs
-- Specs can build on each other but must not diffuse clarity
-- No ambiguities between specs
-- Clear modularity required
+- Separation of concerns: STRUT = method/notation, EDIRD = thinking logic, TRACTFUL = document framework, AGEN = language, TDID = cross-referencing
+- STRUT and EDIRD are completely independent
+- Writing skills implement TRACT and belong to TRACTFUL framework
+- `/sync` workflow exists at `DevSystemV3.1/workflows/sync.md`
+- STRUT IDs are ephemeral (session-scoped), TDID is permanent (cross-document)
 
 ## Specs Under Review
 
@@ -79,54 +80,38 @@
 - STRUT uses: `P1`, `P1-S1`, `P1-D1` (phase/step/deliverable)
 - TRACTFUL uses: `TOPIC-TYPE-NN` (document/item IDs via TDID)
 
-**Impact:** Confusion about which ID system to use when.
+**Status:** ✅ DISMISSED - Not a problem
 
-**Question:** Are these complementary or overlapping?
+**Reconciliation:** User confirmed these are intentionally separate:
+- STRUT IDs are **ephemeral** and **session-scoped** (temporary execution tracking)
+- TDID is **permanent** for cross-document referencing
+- They do not overlap - different purposes, different scopes
 
-**Analysis:**
-- STRUT IDs are for **plan execution** (ephemeral, per-session)
-- TRACTFUL IDs are for **documents and requirements** (persistent, cross-session)
-- They operate at different levels and do not conflict
-
-**Recommendation:** Clarify in both specs that:
-- STRUT IDs = execution tracking (temporary)
-- TDID = document traceability (permanent)
+**Action:** None needed. This is correct design.
 
 ### CRIT-02: States Definition Overlap (AGEN vs EDIRD)
 
-**Problem:** States are defined in both:
-- AGEN defines: Syntax for states (no brackets, uppercase)
-- EDIRD defines: Actual state values (BUILD, SOLVE, COMPLEXITY-HIGH, etc.)
+**Problem:** States defined in both AGEN and EDIRD.
 
-**Impact:** Unclear where to look for state definitions.
+**Status:** ✅ DISMISSED - Correct layering
 
-**Question:** Should AGEN define syntax only, or also define states?
+**Reconciliation:** User confirmed:
+- AGEN defines **what states exist** (vocabulary)
+- EDIRD **uses states** to define conditional behavior
 
-**Analysis:**
-- AGEN defines the **syntax** for states
-- EDIRD defines **workflow-specific** states
-- ID-REGISTRY.md lists all states
-
-**Recommendation:** 
-- AGEN should define syntax only, reference ID-REGISTRY for values
-- EDIRD should define workflow states
-- ID-REGISTRY is the authoritative list
+**Action:** None needed. AGEN owns definitions, EDIRD uses them.
 
 ### CRIT-03: Verb Ownership (AGEN vs EDIRD)
 
-**Problem:** Both specs discuss verbs:
-- AGEN defines all verbs (vocabulary)
-- EDIRD maps verbs to phases
+**Problem:** Both specs discuss verbs.
 
-**Impact:** Confusion about where to add new verbs.
+**Status:** ✅ DISMISSED - Correct layering
 
-**Analysis:**
-- AGEN owns verb **definitions** (what the verb means)
-- EDIRD owns verb **mapping** (when to use the verb)
+**Reconciliation:** User confirmed:
+- AGEN defines verbs (vocabulary)
+- EDIRD uses AGEN verbs (orchestration)
 
-**Verdict:** This is correct layering. AGEN = definitions, EDIRD = orchestration.
-
-**Recommendation:** Make this explicit in both specs.
+**Action:** None needed. Correct separation of concerns.
 
 ## High Priority Issues
 
@@ -134,39 +119,45 @@
 
 **Problem:** STRUT examples use EDIRD phase names (EXPLORE, DESIGN, IMPLEMENT).
 
-**Impact:** Coupling between STRUT and EDIRD when STRUT claims to be phase-model agnostic.
+**Status:** ✅ DISMISSED - Correct independence
 
-**Question:** Is STRUT coupled to EDIRD or not?
+**Reconciliation:** User confirmed:
+- STRUT is a way to keep track of long running session phases
+- STRUT does NOT depend on EDIRD - they are completely independent
+- Examples happen to use EDIRD phases but STRUT works with any phase model
 
-**Analysis:** STRUT depends on AGEN for verbs. STRUT examples use EDIRD phases, but STRUT notation could work with any phase model.
-
-**Recommendation:** 
-- STRUT-SP01 should clarify: "Examples use EDIRD phases but STRUT works with any phase model"
-- Or: STRUT explicitly depends on EDIRD
+**Action:** Clarify in STRUT-SP01 that examples use EDIRD phases for illustration only. STRUT is phase-model agnostic.
 
 ### HIGH-02: TRACTFUL Writing Rules Duplication
 
 **Problem:** TRACTFUL section 8 duplicates write-documents skill content.
 
-**Impact:** Two sources of truth for writing rules.
+**Status:** ⚠️ CONFIRMED - Needs refactoring
 
-**Analysis:** TRACTFUL is the spec, write-documents skill is the implementation. The spec should define requirements, not copy implementation details.
+**Reconciliation:** User confirmed:
+- Writing skills implement TRACT and belong to TRACTFUL framework
+- Skills are independent of STRUT and EDIRD
+- TRACTFUL owns write-documents skill
 
-**Recommendation:** 
-- TRACTFUL should reference write-documents skill, not duplicate it
-- Keep FR/IG/AC in TRACTFUL, move implementation details to skill
+**Action:** 
+- TRACTFUL spec defines requirements (FR/IG/AC)
+- write-documents skill provides implementation (templates, rules)
+- Remove duplication: TRACTFUL references skill, skill implements TRACTFUL
 
 ### HIGH-03: Missing STRUT-TRACTFUL Integration
 
 **Problem:** No clear statement on how STRUT plans relate to TRACTFUL documents.
 
-**Impact:** Unclear how planning (STRUT) connects to documentation (TRACTFUL).
+**Status:** ✅ DISMISSED - Correct separation
 
-**Question:** Does a STRUT plan live in a TRACTFUL document?
+**Reconciliation:** User confirmed:
+- STRUT is notation (how to write plans)
+- TRACTFUL is the container (where plans live)
+- STRUT is used in sessions, defined in DevSystem rules, not in EDIRD
 
-**Recommendation:** Add clarification:
-- STRUT plans can be embedded in NOTES.md or PROGRESS.md
-- STRUT is notation, TRACTFUL is the container
+**Action:** Add one-line clarification to both specs:
+- STRUT-SP01: "STRUT plans are embedded in TRACTFUL documents (NOTES.md, PROGRESS.md)"
+- TRACT-SP01: "STRUT notation may be used within planning sections"
 
 ## Medium Priority Issues
 
@@ -174,59 +165,87 @@
 
 **Problem:** TDID is defined in TRACTFUL spec section 4, but ID-REGISTRY.md also describes IDs.
 
-**Impact:** Unclear which is authoritative.
+**Status:** ✅ DISMISSED - Correct layering
 
-**Recommendation:**
+**Reconciliation:** 
 - TRACTFUL defines TDID **system** (rules, formats)
 - ID-REGISTRY lists **registered values** (actual TOPICs, IDs in use)
+
+**Action:** None needed. This is correct separation.
 
 ### MED-02: Acceptance Criteria Not Testable
 
 **Problem:** TRACT-AC-03 requires `/sync` workflow which doesn't exist.
 
-**Impact:** Cannot verify acceptance criteria.
+**Status:** ✅ DISMISSED - Already exists
 
-**Recommendation:** Either create `/sync` workflow or defer AC-03.
+**Reconciliation:** User confirmed `/sync` workflow exists at `DevSystemV3.1/workflows/sync.md`
+
+**Action:** None needed.
 
 ### MED-03: EDIRD States Section Name
 
-**Problem:** EDIRD section 12 is called "States" but includes workflow types, complexity levels, and problem types - not just states.
+**Problem:** EDIRD section 12 is called "States" but includes workflow types, complexity levels, and problem types.
 
-**Recommendation:** Rename to "Context Values" or keep as "States" with subsections.
+**Status:** ⚠️ CONFIRMED - Minor improvement
 
-## Questions That Need Answers
+**Action:** Consider renaming to "Context Values" for clarity. Low priority.
 
-1. Should STRUT explicitly depend on EDIRD, or remain phase-model agnostic?
-2. Should TRACTFUL Writing Rules section be moved entirely to write-documents skill?
-3. Where should `/sync` workflow be defined?
-4. Is the STRUT ID system (P1-S1) related to TDID or completely separate?
+## Questions Resolved
+
+1. **Should STRUT depend on EDIRD?** → No. Completely independent.
+2. **Should Writing Rules move to skill?** → Yes. Skills implement TRACT, belong to TRACTFUL.
+3. **Where is `/sync` workflow?** → `DevSystemV3.1/workflows/sync.md`
+4. **Are STRUT IDs related to TDID?** → No. STRUT IDs are ephemeral/session-scoped.
 
 ## Summary
 
-**Overall assessment:** The specs are reasonably modular with clear scope boundaries. The main issues are:
+**Overall assessment:** The specs are well-designed with clear scope boundaries. Most findings were dismissed as correct design after user reconciliation.
 
-1. **ID systems** - Two systems exist (STRUT and TDID) but they serve different purposes
-2. **State definitions** - Split between AGEN (syntax) and EDIRD (values) is correct but needs clarification
-3. **Writing rules duplication** - TRACTFUL duplicates skill content
-
-**Layering (bottom to top):**
+**Confirmed Layering (independent, not stacked):**
 ```
-AGEN        - Language layer (vocabulary)
-TRACTFUL    - Document layer (templates, IDs, traceability)
-STRUT       - Planning layer (execution notation)
-EDIRD       - Orchestration layer (phases, gates, flow)
+AGEN        - Language layer (vocabulary: verbs, states, placeholders)
+TRACTFUL    - Document layer (templates, TDID, traceability, owns write-documents skill)
+STRUT       - Planning layer (session notation, ephemeral IDs)
+EDIRD       - Orchestration layer (phases, gates, flow - uses AGEN verbs)
 ```
 
-Each layer builds on lower layers without circular dependencies.
+**Key Clarifications:**
+- STRUT and EDIRD are completely independent
+- STRUT IDs are ephemeral (session-scoped), TDID is permanent
+- Writing skills belong to TRACTFUL, not EDIRD
+- AGEN defines vocabulary, EDIRD uses it
 
-## Recommendations
+## Pragmatic Review Summary
 
-1. Add explicit clarification about STRUT IDs vs TDID to both specs
-2. Move Writing Rules details from TRACTFUL to write-documents skill, keep only FR/IG/AC
-3. Clarify STRUT's relationship to EDIRD (uses examples but works with any phase model)
-4. Add "Relationship to Other Specs" section to each spec
+**Findings Reviewed**: 9
+**Confirmed**: 2 (HIGH-02, MED-03)
+**Dismissed**: 7 (CRIT-01, CRIT-02, CRIT-03, HIGH-01, HIGH-03, MED-01, MED-02)
+**Needs Discussion**: 0
+
+**Recommended Actions** (in priority order):
+
+1. **Refactor TRACTFUL section 8** - Move implementation details to write-documents skill, keep only FR/IG/AC in spec
+   - Effort: Medium
+   - Impact: High (removes duplication, clarifies ownership)
+
+2. **Add STRUT-TRACTFUL clarification** - One line in each spec about how they relate
+   - Effort: Low
+   - Impact: Medium (prevents future confusion)
+
+3. **Rename EDIRD section 12** - "States" → "Context Values" (optional)
+   - Effort: Low
+   - Impact: Low (minor clarity improvement)
+
+**Next Step**: Implement actions 1-2 or defer to next session.
 
 ## Document History
+
+**[2026-01-20 19:30]**
+- Reconciled: Applied user clarifications to all findings
+- Dismissed: 7 findings as correct design
+- Confirmed: 2 findings need action (HIGH-02, MED-03)
+- Added: Pragmatic Review Summary
 
 **[2026-01-20 19:20]**
 - Initial critique created
