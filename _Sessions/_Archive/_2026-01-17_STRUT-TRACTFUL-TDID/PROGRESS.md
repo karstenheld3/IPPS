@@ -2,11 +2,11 @@
 
 ## Phase Plan
 
-- [ ] **EXPLORE** - in_progress
-- [ ] **DESIGN** - pending
-- [ ] **IMPLEMENT** - pending
-- [ ] **REFINE** - pending
-- [ ] **DELIVER** - pending
+- [x] **EXPLORE** - done
+- [x] **DESIGN** - done
+- [x] **IMPLEMENT** - done
+- [x] **REFINE** - done
+- [x] **DELIVER** - done
 
 ## To Do
 
@@ -68,7 +68,6 @@ See `TASKS_STRUT.md [STRUT-TK01]` for full task details, dependencies, and verif
 ## Done
 
 - Created SPEC_STRUT_STRUCTURED_THINKING.md [STRUT-SP01] - simplified flat-sequence model
-
 - Created session folder
 - Created NOTES.md with topic registry and key concepts
 - Created PROGRESS.md
@@ -78,5 +77,21 @@ See `TASKS_STRUT.md [STRUT-TK01]` for full task details, dependencies, and verif
 - Created INFO_STRUT_EXAMPLE_CASES.md [STRUT-IN02] - 10 test cases
 - Created INFO_STRUT_EXAMPLE_CASE_SIMULATION.md [STRUT-IN03] - STRUT notation for all cases
 - Verified both INFO documents (added Summary, Timeline, DevSystem tags)
+
+### DevSystemV3.1 Implementation (2026-01-20)
+
+- Renamed edird-core.md -> edird-phase-planning.md (rule)
+- Renamed go-autonomous.md -> go.md (workflow)
+- Renamed edird-phase-model/ -> edird-phase-planning/ (skill folder)
+- Consolidated skill files (5->1) using session edird-phase-planning-SKILL.md
+- Updated agentic-english.md rule with [PARTITION], [READ], [RECAP], [CONTINUE], [GO]
+- Updated devsystem-ids.md with TDID (TK, RV, LN, AC)
+- Simplified build.md and solve.md (removed skill duplication)
+- Created recap.md and continue.md workflows
+- Rewrote go.md to use /recap + /continue
+- Updated test.md with context branching, plain English
+- Removed EDIRD references from 8 workflows
+- Created FAILS.md and LEARNINGS.md with 3 entries each
+- Fixed skill references in edird-phase-planning.md rule
 
 ## Tried But Not Used

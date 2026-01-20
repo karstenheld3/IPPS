@@ -17,6 +17,7 @@
 - Retry limits: COMPLEXITY-LOW: infinite retries (until user stops). COMPLEXITY-MEDIUM/HIGH: max 5 attempts per phase, then [CONSULT] [ACTOR]
 - Small cycles: Break work into small verifiable steps. Run [IMPLEMENT]→[TEST]→[FIX]→green→next. Never implement large steps that can't be tested end-to-end
 - Phase tracking: NOTES.md has current phase (agent updates on transition), PROGRESS.md has full phase plan (phases with status: pending/in_progress/done)
+- Plan one phase ahead: Only plan current phase + next phase. Do NOT plan IMPLEMENT before DESIGN gate passes. Do NOT plan REFINE before IMPLEMENT gate passes. Requirements evolve.
 
 ## Table of Contents
 
@@ -168,6 +169,29 @@ This enables fully autonomous operation when [ACTOR] = Agent.
 │  Output: Working code             │  Output: Knowledge/decisions        │
 │  Assess: COMPLEXITY               │  Assess: PROBLEM-TYPE               │
 └─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Planning Horizon
+
+Agent plans phases progressively, not all at once:
+
+```
+[EXPLORE]  ← Plan now
+[DESIGN]   ← Plan now
+[IMPLEMENT] ← TBD (defined after DESIGN gate passes)
+[REFINE]    ← TBD (defined after IMPLEMENT gate passes)
+[DELIVER]  ← Plan now (shipping tasks from project/session NOTES)
+```
+
+**Rationale:**
+- EXPLORE and DESIGN define *what* to build and *how*
+- IMPLEMENT details emerge from [PARTITION] after DESIGN is complete
+- REFINE steps depend on what was actually implemented
+- DELIVER tasks are known upfront (deploy, merge, notify) - record from NOTES
+
+**TBD means:** Mark phase as planned but steps undefined. Example:
+```
+[ ] [IMPLEMENT]: TBD - defined after DESIGN gate passes
 ```
 
 ## 5. Workflow Types
@@ -431,312 +455,45 @@ Gates are checklists that must pass before transitioning. Agent evaluates gates 
 
 ## 9. Next Action Logic
 
-The agent determines the next action using this decision tree:
+1. **Check phase gate** → Pass? → Next phase, first verb
+2. **Gate fails?** → Execute verb that addresses unchecked item
+3. **Verb outcome:** -OK → next verb | -FAIL → handle | -SKIP → next verb
+4. **No more verbs?** → Re-evaluate gate
+5. **[DELIVER] done?** → [CLOSE] and [ARCHIVE] if session-based
 
-1. **Check phase gate** → Does it pass?
-   - YES → Transition to next phase, start first verb
-   - NO → Execute verb that addresses unchecked item
-2. **Last verb outcome?**
-   - -OK → Proceed to next verb in phase
-   - -FAIL → Handle based on verb (see transitions below)
-   - -SKIP → Proceed to next verb
-3. **No more verbs?** → Re-evaluate gate
-4. **In [DELIVER] and done?** → [CLOSE] and [ARCHIVE] if session-based
-
-### Verb Outcome Transitions
-
-```
-[RESEARCH]-OK   → next verb in sequence
-[RESEARCH]-FAIL → [CONSULT] (need help finding info)
-
-[ASSESS]-OK     → [SCOPE] or [DECIDE]
-[ASSESS]-FAIL   → [RESEARCH] (need more context)
-
-[PLAN]-OK       → [WRITE-SPEC] or [OUTLINE] (approach determined)
-[PLAN]-FAIL     → [RESEARCH] (need more context) or [CONSULT] (need guidance)
-
-[PROVE]-OK      → [WRITE-SPEC] or proceed to gate check
-[PROVE]-FAIL    → [RESEARCH] (back to explore fundamentals)
-
-[VERIFY]-OK     → next verb or gate check
-[VERIFY]-FAIL   → [FIX] → [VERIFY] (loop until OK)
-
-[CRITIQUE]-OK   → [RECONCILE]
-[CRITIQUE]-FAIL → [FIX] (immediate issues found)
-
-[TEST]-OK       → next verb or gate check
-[TEST]-FAIL     → [FIX] → [TEST] (loop until OK)
-
-[VALIDATE]-OK   → proceed
-[VALIDATE]-FAIL → [CONSULT] (clarify requirements)
-
-[CONSULT]-OK    → resume previous activity
-[CONSULT]-FAIL  → [QUESTION] more specifically, or escalate
-```
-
-### Autonomous Mode Decision
-
-When [ACTOR] = Agent, the agent uses this logic:
-
-```
-IF gate_passes(current_phase):
-    current_phase = next_phase
-    current_verb = first_verb_for(current_phase, workflow_type, complexity)
-ELSE:
-    unchecked = find_unchecked_gate_items()
-    current_verb = verb_that_addresses(unchecked[0])
-    
-EXECUTE current_verb
-
-IF verb_outcome == OK:
-    current_verb = next_verb_in_sequence()
-ELIF verb_outcome == FAIL:
-    current_verb = failure_handler(current_verb)
-ELIF verb_outcome == SKIP:
-    current_verb = next_verb_in_sequence()
-```
+**Common failure handlers:**
+- -FAIL on [RESEARCH], [ASSESS], [PLAN] → [CONSULT] or more [RESEARCH]
+- -FAIL on [TEST], [VERIFY] → [FIX] → retry
 
 ## 10. Workflow Flows
 
-### BUILD COMPLEXITY-HIGH Flow
+### BUILD Example (COMPLEXITY-HIGH)
 
 ```
-[EXPLORE]
-├─> [RESEARCH] → [ANALYZE] → [GATHER] → [ASSESS] → [SCOPE] → [DECIDE]
-└─> Gate check
-
-[DESIGN]
-├─> [PLAN] → [OUTLINE] → [WRITE-SPEC] → [PROVE] → [PROPOSE] → [VALIDATE]
-├─> [WRITE-IMPL-PLAN] → [WRITE-TEST-PLAN]
-└─> Gate check
-
-[IMPLEMENT]
-├─> [IMPLEMENT] → [CONFIGURE] → [INTEGRATE] → [TEST] → [COMMIT]
-└─> Gate check
-
-[REFINE]
-├─> [REVIEW] → [VERIFY] → [TEST] → [CRITIQUE] → [RECONCILE] → [FIX]
-└─> Gate check
-
-[DELIVER]
-├─> [VALIDATE] → [MERGE] → [DEPLOY] → [FINALIZE] → [HANDOFF] → [CLOSE]
-└─> [ARCHIVE] if session-based
+[EXPLORE] → [RESEARCH] → [ANALYZE] → [ASSESS] → [SCOPE] → Gate
+[DESIGN]  → [PLAN] → [WRITE-SPEC] → [WRITE-IMPL-PLAN] → [PROVE] → [PARTITION] → Gate
+[IMPLEMENT] → [IMPLEMENT] → [TEST] → [FIX] → [COMMIT] → Gate (loop until green)
+[REFINE] → [REVIEW] → [VERIFY] → [CRITIQUE] → [RECONCILE] → Gate
+[DELIVER] → [VALIDATE] → [MERGE] → [CLOSE] → [ARCHIVE]
 ```
 
-### BUILD COMPLEXITY-LOW Flow
+### SOLVE Example (EVALUATION)
 
 ```
-[EXPLORE]
-├─> [ANALYZE] → [ASSESS] → [DECIDE]
-└─> Gate check
-
-[DESIGN]
-├─> [OUTLINE]
-└─> Gate check
-
-[IMPLEMENT]
-├─> [IMPLEMENT] → [TEST] → [COMMIT]
-└─> Gate check
-
-[REFINE]
-├─> [REVIEW] → [FIX]
-└─> Gate check
-
-[DELIVER]
-├─> [MERGE] → [CLOSE]
-└─> Done
+[EXPLORE] → [RESEARCH] → [ANALYZE] → [ASSESS] → EVALUATION → Gate
+[DESIGN]  → [FRAME] → [OUTLINE] criteria → [DEFINE] framework → Gate
+[IMPLEMENT] → [RESEARCH] options → [EVALUATE] → [SYNTHESIZE] → Gate
+[REFINE] → [CRITIQUE] → [VERIFY] claims → [IMPROVE] → Gate
+[DELIVER] → [CONCLUDE] → [RECOMMEND] → [VALIDATE] → [ARCHIVE]
 ```
 
-### SOLVE EVALUATION Flow
-
-```
-[EXPLORE]
-├─> [RESEARCH] → [ANALYZE] → [ASSESS] → EVALUATION → [SCOPE] → [ENUMERATE]
-└─> Gate check
-
-[DESIGN]
-├─> [FRAME] → [OUTLINE] criteria → [DEFINE] evaluation framework → [VALIDATE]
-└─> Gate check
-
-[IMPLEMENT]
-├─> [RESEARCH] each option → [ANALYZE] against criteria → [EVALUATE] → [SYNTHESIZE]
-└─> Gate check
-
-[REFINE]
-├─> [REVIEW] → [VERIFY] claims → [CRITIQUE] → [RECONCILE] → [IMPROVE]
-└─> Gate check
-
-[DELIVER]
-├─> [CONCLUDE] → [RECOMMEND] with rationale → [PRESENT] → [VALIDATE] → [ARCHIVE]
-└─> Done
-```
-
-### SOLVE WRITING Flow
-
-```
-[EXPLORE]
-├─> [RESEARCH] topic → [ANALYZE] audience needs → [ASSESS] → WRITING → [SCOPE]
-└─> Gate check
-
-[DESIGN]
-├─> [FRAME] → [OUTLINE] structure → [PLAN] examples → [VALIDATE] with [ACTOR]
-└─> Gate check
-
-[IMPLEMENT]
-├─> [DRAFT] → [WRITE] sections → [RESEARCH] additional details → [COMMIT]
-└─> Gate check
-
-[REFINE]
-├─> [REVIEW] → [CRITIQUE] → [VERIFY] facts → [IMPROVE] prose → [FIX]
-└─> Gate check
-
-[DELIVER]
-├─> [FINALIZE] → [VALIDATE] with [ACTOR] → [HANDOFF] → [ARCHIVE]
-└─> Done
-```
-
-### SOLVE HOTFIX Flow
-
-```
-[EXPLORE]
-├─> [ANALYZE] identify root cause
-├─> [GATHER] logs and context
-├─> [ASSESS] → HOTFIX
-└─> [DECIDE] fix approach
-    └─> Gate: Root cause identified
-
-[DESIGN]
-├─> [PROVE] fix works
-└─> [VALIDATE] with [ACTOR] (if time permits)
-    └─> Gate: Fix proven
-
-[IMPLEMENT]
-├─> [FIX] apply fix
-├─> [TEST] verify fix
-└─> [COMMIT] with hotfix message
-    └─> Gate: Fix applied, tests pass
-
-[REFINE]
-├─> [VERIFY] no regressions
-├─> [TEST] regression testing
-└─> [REVIEW] quick review
-    └─> Gate: No regressions
-
-[DELIVER]
-├─> [DEPLOY] immediately
-├─> [STATUS] notify stakeholders
-└─> [CLOSE] mark resolved
-```
-
-### SOLVE DECISION Flow
-
-```
-[EXPLORE]
-├─> [RESEARCH] options and constraints
-├─> [ANALYZE] stakeholder needs
-├─> [ASSESS] → DECISION
-├─> [ENUMERATE] all factors
-└─> [SCOPE] decision boundaries
-    └─> Gate check
-
-[DESIGN]
-├─> [FRAME] decision structure
-├─> [DEFINE] evaluation criteria
-├─> [OUTLINE] options to evaluate
-└─> [VALIDATE] criteria with [ACTOR]
-    └─> Gate check
-
-[IMPLEMENT]
-├─> [RESEARCH] each option
-├─> [ANALYZE] against criteria
-├─> [EVALUATE] score options
-└─> [SYNTHESIZE] findings
-    └─> Gate check
-
-[REFINE]
-├─> [CRITIQUE] blind spots?
-├─> [VERIFY] assumptions
-├─> [RECONCILE] trade-offs
-└─> [IMPROVE] clarity
-    └─> Gate check
-
-[DELIVER]
-├─> [CONCLUDE] final assessment
-├─> [RECOMMEND] with rationale
-├─> [VALIDATE] with [ACTOR]
-├─> [DECIDE] final choice
-└─> [ARCHIVE] decision rationale
-```
+**Note:** Complexity determines verb depth. COMPLEXITY-LOW skips [PROVE], [CRITIQUE], [RECONCILE].
 
 ## 11. Hybrid Situations
 
-Some work involves both BUILD and SOLVE workflows.
-
-### SOLVE then BUILD
-
-Research best approach, then build it:
-
-```
-┌─ SOLVE Workflow ──────────────────────────────────────────────────────┐
-│                                                                       │
-│  [EXPLORE] → [DESIGN] → [IMPLEMENT] → [REFINE] → [DELIVER]            │
-│                                                    │                  │
-│  Output: Decision or recommendation ───────────────┘                  │
-│                                                                       │
-└───────────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─ BUILD Workflow ──────────────────────────────────────────────────────┐
-│                                                                       │
-│  [EXPLORE] → [DESIGN] → [IMPLEMENT] → [REFINE] → [DELIVER]            │
-│  (use decision from SOLVE as input)                                   │
-│                                                                       │
-│  Output: Working code                                                 │
-└───────────────────────────────────────────────────────────────────────┘
-```
-
-**Example**: "Should we use PostgreSQL or MongoDB?" (SOLVE: EVALUATION) → decision made → "Implement PostgreSQL integration" (BUILD)
-
-### BUILD with Embedded SOLVE
-
-Building requires investigation mid-workflow:
-
-```
-┌─ BUILD Workflow ──────────────────────────────────────────────────────┐
-│                                                                       │
-│  [EXPLORE] → [DESIGN]                                                 │
-│                  │                                                    │
-│                  ▼ Encounter unknown                                  │
-│           ┌─ Mini SOLVE ──────────┐                                   │
-│           │ [EXPLORE] → [DESIGN]  │                                   │
-│           │ → [IMPLEMENT] → ...   │                                   │
-│           │ → [DELIVER](insight)  │                                   │
-│           └───────────────────────┘                                   │
-│                  │                                                    │
-│                  ▼ Resume with knowledge                              │
-│            [DESIGN] continued → [IMPLEMENT] → [REFINE] → [DELIVER]    │
-│                                                                       │
-└───────────────────────────────────────────────────────────────────────┘
-```
-
-**Example**: While designing auth system, need to research OAuth providers → mini SOLVE (RESEARCH) → return to BUILD with findings
-
-**Note**: Mini SOLVE can also be a POC with full INFO, SPEC, IMPL, TEST documents when the unknown requires validation before continuing the parent BUILD workflow.
-
-### Switching Workflows
-
-Agent can switch workflows if assessment changes:
-
-```
-IF during [EXPLORE]:
-    initial_assessment = BUILD
-    BUT primary_output_changes_to_document
-THEN:
-    [CONSULT] with [ACTOR]: "This looks more like a SOLVE workflow. Confirm?"
-    IF confirmed:
-        workflow_type = SOLVE
-        restart_with_appropriate_verbs
-```
+- **SOLVE then BUILD** - Research best approach, then build it. Example: "PostgreSQL vs MongoDB?" (SOLVE) → "Implement PostgreSQL" (BUILD)
+- **BUILD with Embedded SOLVE** - Investigation mid-workflow. Example: Need OAuth research during auth system build → mini SOLVE → resume BUILD
+- **Switching Workflows** - If assessment changes, [CONSULT] [ACTOR] before switching workflow type
 
 ## 12. States
 
@@ -795,17 +552,11 @@ States (no brackets) used for branching:
 - Verbs can be skipped based on complexity level or problem type
 - Verb outcomes (-OK, -FAIL, -SKIP) determine next action
 
-**EDIRD-FR-06: Deterministic Next Action**
-- Agent can always determine next action from current state
-- State = (workflow_type, current_phase, last_verb_outcome, gate_status)
-- Enables fully autonomous operation when [ACTOR] = Agent
+**EDIRD-FR-06: Phase Plan Structure**
+- Plans created via [PLAN] must define: Objectives, Strategy, Deliverables, Transitions
+- Each phase plan enables tracking progress toward gate completion
 
-**EDIRD-FR-07: Workflow Branching**
-- States (no brackets) appear in condition headers
-- Instructions (brackets) appear in action steps
-- Format: `## For CONTEXT-STATE` followed by `[VERB]` instructions
-
-**EDIRD-FR-08: Hybrid Workflow Support**
+**EDIRD-FR-07: Hybrid Workflow Support**
 - SOLVE can transition to BUILD (research then implement)
 - BUILD can embed mini-SOLVE (investigate during implementation)
 - Agent can switch workflows with [ACTOR] confirmation
@@ -828,12 +579,26 @@ States (no brackets) used for branching:
 - **EDIRD-IG-03:** All workflows start with EXPLORE phase containing `[ASSESS]` verb
 - **EDIRD-IG-04:** Gate failures loop back within current phase, not to previous phases. Verb failures (e.g., `[PROVE]-FAIL`) may trigger iteration to earlier phases
 - **EDIRD-IG-05:** Workflow type (BUILD/SOLVE) is determined in EXPLORE and persists for entire workflow unless explicitly switched with [ACTOR] confirmation
-- **EDIRD-IG-06:** Every verb outcome (-OK, -FAIL, -SKIP) has a defined handler - agent never gets stuck without knowing next action
-- **EDIRD-IG-07:** Implementation uses small verifiable cycles: [IMPLEMENT]→[TEST]→[FIX]→green→next. Plans must be broken into steps that can be tested end-to-end. Large monolithic implementations are prohibited
-- **EDIRD-IG-08:** Agent always knows full phase plan. PROGRESS.md maintains all 5 phases with status (pending/in_progress/done). Agent reads this on session resume.
-- **EDIRD-IG-09:** Agent always knows all gates. Gate summaries in edird-core.md rule (always-on). Full gate checklists in @edird-phase-model skill, invoked for [PLAN] and [PARTITION].
+- **EDIRD-IG-06:** Implementation uses small verifiable cycles: [IMPLEMENT]→[TEST]→[FIX]→green→next. Plans must be broken into steps that can be tested end-to-end. Large monolithic implementations are prohibited
+- **EDIRD-IG-07:** Agent always knows full phase plan. PROGRESS.md maintains all 5 phases with status (pending/in_progress/done). Agent reads this on session resume.
+- **EDIRD-IG-08:** Agent always knows all gates. Gate summaries in edird-phase-planning.md rule (always-on). Full gate checklists in @edird-phase-planning skill, invoked for [PLAN] and [PARTITION].
 
 ## 16. Document History
+
+**[2026-01-20 20:05]**
+- Added: Planning Horizon subsection to Concept - plan EXPLORE, DESIGN, DELIVER now; leave IMPLEMENT, REFINE as TBD
+- Added: "Plan one phase ahead" rule to MUST-NOT-FORGET
+
+**[2026-01-20 19:58]**
+- Simplified: Condensed Section 9 (Next Action Logic) - removed verbose verb outcome transitions
+- Simplified: Condensed Section 10 (Workflow Flows) - reduced to 2 brief examples
+- Simplified: Condensed Section 11 (Hybrid Situations) - brief list instead of diagrams
+- Removed: EDIRD-FR-06 (Deterministic Next Action) - agent understands this
+- Removed: EDIRD-FR-07 (Workflow Branching) - agent knows syntax
+- Removed: EDIRD-IG-06 (verb outcome handlers) - obvious to agent
+- Added: EDIRD-FR-06 (Phase Plan Structure) - plans must define Objectives, Strategy, Deliverables, Transitions
+- Changed: Renumbered FRs and IGs after removals
+- Changed: Skill reference updated from @edird-phase-model to @edird-phase-planning
 
 **[2026-01-20 18:35]**
 - Changed: Replaced [DECOMPOSE] with [PARTITION] throughout

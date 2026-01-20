@@ -1,6 +1,6 @@
 # EDIRD Phase Model (Core)
 
-For full model with gates, flows, and next-action logic: invoke @edird-phase-model
+For full model with gates, flows, and planning: invoke @edird-phase-planning skill
 
 ## Phases
 
@@ -24,7 +24,7 @@ For full model with gates, flows, and next-action logic: invoke @edird-phase-mod
 
 All workflows start in EXPLORE with [ASSESS] to determine workflow type and complexity/problem-type.
 
-**Gate output is mandatory.** Before each phase transition, agent MUST output explicit gate evaluation (see @edird-phase-model GATES.md). No self-approval without evidence.
+**Gate output is mandatory.** Before each phase transition, agent MUST output explicit gate evaluation (see @edird-phase-planning skill). No self-approval without evidence.
 
 **Artifact verification.** Agent MUST list created artifacts (files) as gate evidence. Claiming "plan complete" without artifact files is gate bypass.
 

@@ -48,6 +48,9 @@ Every document MUST have an ID in its header block.
 - `SP` - SPEC document
 - `IP` - Implementation Plan
 - `TP` - Test Plan
+- `TK` - TASKS document
+- `RV` - REVIEW document
+- `LN` - LEARNINGS document
 
 **Examples:**
 - `AUTH-IN01` - Authentication Info doc 1
@@ -87,6 +90,7 @@ Defined in SPECs, referenced across IMPL and TEST plans.
 - `FR` - Functional Requirement
 - `IG` - Implementation Guarantee
 - `DD` - Design Decision
+- `AC` - Acceptance Criteria
 
 **Examples:**
 - `CRWL-FR-01` - Crawler Functional Requirement 1

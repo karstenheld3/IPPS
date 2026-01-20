@@ -4,10 +4,11 @@ description: BUILD workflow - create software, features, systems
 
 # Build Workflow
 
-Main entry point for BUILD workflow - creating software, features, systems.
+Entry point for BUILD workflow - creating software, features, systems.
 
 ## Required Skills
 
+- @edird-phase-planning for phase gates and planning
 - @session-management for session setup
 - @write-documents for document templates
 
@@ -17,131 +18,17 @@ Main entry point for BUILD workflow - creating software, features, systems.
 /build "Add user authentication API"
 ```
 
-## Step 1: Initialize Session
+## Workflow
 
-Run `/session-new` with feature name as topic.
+1. Run `/session-new` with feature name
+2. Invoke @edird-phase-planning skill
+3. Follow phases: EXPLORE → DESIGN → IMPLEMENT → REFINE → DELIVER
+4. Check gates before each transition
+5. Run `/session-close` when done
 
-Creates session folder with:
-- NOTES.md (with Current Phase tracking)
-- PROGRESS.md (with Phase Plan)
-- PROBLEMS.md
+## BUILD-Specific Rules
 
-## Step 1b: Determine Operation Mode
-
-**CRITICAL**: Before any implementation, determine operation mode:
-
-- **IMPL-CODEBASE** (default): Implement in existing codebase
-  - For: SPEC, IMPL, TEST, [IMPLEMENT]
-  - Files created in project source folders
-  - Affects existing code/config/runtime
-
-- **IMPL-ISOLATED**: Implement separately from existing codebase
-  - For: [PROVE], POCs, prototypes, self-contained test scripts
-  - Files created in `[SESSION_FOLDER]/` or `[SESSION_FOLDER]/poc/`
-  - Existing code, configuration, or runtime MUST NOT be affected
-  - NEVER create folders in workspace root
-  - **REQUIRES SESSION**: If no session exists, run `/session-new` first
-
-Record in NOTES.md:
-```markdown
-**Operation Mode**: IMPL-CODEBASE
-**Target**: src/features/[feature]/
-```
-
-## Step 2: Understand
-
-1. [ASSESS] complexity: COMPLEXITY-LOW / MEDIUM / HIGH
-2. [ANALYZE] existing code and patterns
-3. [GATHER] requirements from user
-4. [RESEARCH] if task requires accuracy to external system (cite sources, not training data)
-5. [SCOPE] define boundaries
-
-**For UI work**: Visual reference (screenshot/video of target) is MANDATORY. Text research alone is insufficient.
-
-### Quality Gate: Understanding
-
-- [ ] Problem or goal clearly understood
-- [ ] Workflow type: BUILD confirmed
-- [ ] Complexity assessed
-- [ ] Scope boundaries defined
-- [ ] No blocking unknowns
-
-## Step 3: Plan
-
-1. [PLAN] structured approach
-2. [WRITE-SPEC] → `_SPEC_[FEATURE].md`
-3. [PROVE] risky parts with POC (if COMPLEXITY-MEDIUM or higher)
-4. [WRITE-IMPL-PLAN] → `_IMPL_[FEATURE].md`
-5. [WRITE-TEST-PLAN] → `_TEST_[FEATURE].md` (optional for LOW)
-6. [DECOMPOSE] into small testable steps
-
-### Quality Gate: Planning
-
-**MANDATORY ARTIFACT CHECK** (list actual file paths):
-- [ ] Spec document: `[SESSION_FOLDER]/_SPEC_*.md` exists (MEDIUM+)
-- [ ] Impl plan: `[SESSION_FOLDER]/_IMPL_*.md` exists (MEDIUM+)
-- [ ] Visual [PROVE] completed (if UI/game work)
-- [ ] No open questions
-
-**Gate evidence format**:
-```
-Artifacts created:
-- _SPEC_FEATURE.md (X lines)
-- _IMPL_FEATURE.md (Y lines)
-- POC verified: [screenshot/description]
-```
-
-**WARNING**: Claiming gate pass without listing actual artifacts is gate bypass (see GLOB-FL-004).
-
-## Step 4: Execute
-
-For each step in IMPL plan:
-
-1. [IMPLEMENT] code changes (max 100 lines before visual check for UI work)
-2. [TEST] verify step works (visual verification for UI/game)
-3. [FIX] if tests fail (max 3 retries, then [CONSULT])
-4. [COMMIT] when green
-5. Update PROGRESS.md
-
-**UI/Game rule**: Never implement >100 lines without visual verification. Monolithic implementation is forbidden.
-
-### Quality Gate: Execution
-
-- [ ] All IMPL steps complete
-- [ ] Tests pass
-- [ ] No TODO/FIXME unaddressed
-- [ ] Progress committed
-
-## Step 5: Review
-
-1. [REVIEW] self-review of work
-2. [VERIFY] against spec/rules
-3. [TEST] regression testing
-4. [CRITIQUE] and [RECONCILE] (if MEDIUM+)
-5. [FIX] issues found
-
-### Quality Gate: Review
-
-- [ ] Self-review complete
-- [ ] Verification passed
-- [ ] Critique/reconcile done (if MEDIUM+)
-- [ ] All issues fixed
-
-## Step 6: Complete
-
-1. [VALIDATE] with user (final approval)
-2. [MERGE] branches if applicable
-3. [FINALIZE] documentation
-4. [CLOSE] mark as done
-5. Run `/session-close`
-
-## Progress Tracking
-
-Update NOTES.md after each step with current status.
-
-## Stuck Detection
-
-If 3 consecutive [FIX] attempts fail:
-1. Document in PROBLEMS.md
-2. [CONSULT] with user
-3. Wait for guidance or [DEFER]
+- **UI work**: Visual reference (screenshot/video) is MANDATORY
+- **UI work**: Max 100 lines before visual verification
+- **Artifacts**: SPEC, IMPL, TEST documents required (depth per complexity)
+- **Gate bypass forbidden**: Must list actual artifact paths as evidence

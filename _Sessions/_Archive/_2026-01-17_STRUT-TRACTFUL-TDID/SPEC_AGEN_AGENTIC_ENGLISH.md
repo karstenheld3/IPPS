@@ -186,7 +186,7 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 - **[SCOPE]** - Define boundaries and constraints
 - **[FRAME]** - Structure the problem or approach
 - **[PLAN]** - Create structured approach with steps
-- **[DECOMPOSE]** - Break large plan into small testable steps, each with verification criteria
+- **[PARTITION]** - Break large plan into small testable steps (TASKS document), each with verification criteria
 - **[DECIDE]** - Make a choice between options
 - **[ASSESS]** - Assess effort, time, risk, or complexity
 - **[PRIORITIZE]** - Order by importance or urgency
@@ -315,6 +315,9 @@ Determines where implementation outputs are placed:
 - **IMPL-ISOLATED** - Output to `[SESSION_FOLDER]/` only. For: [PROVE], POCs, prototypes, self-contained test scripts. Requires active session.
 
 ## Document History
+
+**[2026-01-20 20:00]**
+- Changed: Renamed [DECOMPOSE] to [PARTITION] - aligns with EDIRD spec change
 
 **[2026-01-20 19:05]**
 - Added: [READ] - Careful reading of provided content (Information Gathering)

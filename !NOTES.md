@@ -18,6 +18,12 @@ DONT auto-sync changes to  .windsurf\workflows if you update workflows in the [D
 - Phase orchestration belongs in the phase model (EDIRD), not in workflows
 - This allows swapping EDIRD for alternative phase models without rewriting workflows
 
+**Workflow-Skill Separation (from session 2026-01-17):**
+- Workflows are thin: entry point + skill refs + workflow-specific rules only
+- Skills hold knowledge: phase logic, gates, detailed procedures
+- Plain English in workflows: AGEN verbs for rules/skills only
+- DRY check: after adding skills, review referencing workflows for duplication
+
 ## Platform Notes
 
 **Windows:** No symlinks. `.windsurf/` is a copy of `[DEVSYSTEM_FOLDER]`, not a symlink.

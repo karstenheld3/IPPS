@@ -5,7 +5,7 @@ phase: IMPLEMENT
 
 # Commit Workflow
 
-Implements [COMMIT] verb from EDIRD model.
+Implements [COMMIT] verb.
 
 ## Required Skills
 

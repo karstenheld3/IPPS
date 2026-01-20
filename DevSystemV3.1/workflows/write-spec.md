@@ -5,7 +5,7 @@ phase: DESIGN
 
 # Write Specification Workflow
 
-Implements [WRITE-SPEC] verb from EDIRD model.
+Implements [WRITE-SPEC] verb.
 
 ## Required Skills
 
