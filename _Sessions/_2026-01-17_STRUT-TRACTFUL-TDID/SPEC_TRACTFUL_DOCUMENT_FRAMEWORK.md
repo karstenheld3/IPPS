@@ -240,7 +240,7 @@ Tracking:   ^[A-Z]{2,6}-(PR|FL|LN|BG|FT)-\d{3}$
 [WRITE-TEST-PLAN] define verification approach
 ├─> IMPL and TEST documents
 │
-[PARTITION] create TASKS from IMPL/TEST
+[WRITE-TASKS-PLAN] create TASKS from IMPL/TEST (uses [PARTITION])
 ├─> TASKS document with work items
 │
 [IMPLEMENT] execute tasks
