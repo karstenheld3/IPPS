@@ -247,7 +247,7 @@ These files enable:
 - **SOLVE**: Structure, methodology, outline, criteria
 - **Entry**: Gate EXPLORE→DESIGN passed
 - **Exit**: Gate DESIGN→IMPLEMENT passes
-- **Verbs**: [PLAN], [OUTLINE], [FRAME], [PROVE], [PARTITION], [WRITE-SPEC], [WRITE-IMPL-PLAN], [PROPOSE], [VALIDATE]
+- **Verbs**: [PLAN], [OUTLINE], [FRAME], [PROVE], [WRITE-SPEC], [WRITE-IMPL-PLAN], [WRITE-TEST-PLAN], [VERIFY], [CRITIQUE], [WRITE-TASKS-PLAN], [PROPOSE], [VALIDATE]
 - **All BUILD**: Must [PARTITION] IMPL into TASKS document before [IMPLEMENT]
 
 ### [IMPLEMENT]

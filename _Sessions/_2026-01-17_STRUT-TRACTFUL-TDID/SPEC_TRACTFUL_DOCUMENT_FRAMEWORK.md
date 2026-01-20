@@ -240,7 +240,11 @@ Tracking:   ^[A-Z]{2,6}-(PR|FL|LN|BG|FT)-\d{3}$
 [WRITE-TEST-PLAN] define verification approach
 ├─> IMPL and TEST documents
 │
-[WRITE-TASKS-PLAN] create TASKS from IMPL/TEST (uses [PARTITION])
+[VERIFY] SPECs and IMPL plans against rules
+[CRITIQUE] SPECs and IMPL plans for logic flaws
+├─> REVIEW document with findings (fix before proceeding)
+│
+[WRITE-TASKS-PLAN] create TASKS from IMPL/TEST
 ├─> TASKS document with work items
 │
 [IMPLEMENT] execute tasks
@@ -248,10 +252,6 @@ Tracking:   ^[A-Z]{2,6}-(PR|FL|LN|BG|FT)-\d{3}$
 │
 [TEST] verify implementation
 ├─> TC results recorded
-│
-[VERIFY] SPECs and IMPL plans against rules
-[CRITIQUE] SPECs and IMPL plans for logic flaws
-├─> REVIEW document with findings
 │
 [FAIL] record failures when they occur
 [LEARN] analyze resolved problems
