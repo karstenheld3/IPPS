@@ -165,21 +165,21 @@ Tracking:   ^[A-Z]{2,6}-(PR|FL|LN|BG|FT)-\d{3}$
 
 ## 5. Document Types
 
-### Ideation Phase
+### Research Documents
 
 - **INFO** - Research findings, options analysis, background context
   - Template: `INFO_TEMPLATE.md`
   - Naming: `_INFO_[TOPIC].md`
   - Contains: Sources, findings, recommendations
 
-### Specification Phase
+### Specification Documents
 
 - **SPEC** - Technical specification defining what to build
   - Template: `SPEC_TEMPLATE.md`
   - Naming: `_SPEC_[COMPONENT].md` or `SPEC_[COMPONENT].md`
   - Contains: FR (Functional Requirements), DD (Design Decisions), IG (Implementation Guarantees), AC (Acceptance Criteria)
 
-### Planning Phase
+### Planning Documents
 
 - **IMPL** - Implementation plan defining how to build
   - Template: `IMPL_TEMPLATE.md`
@@ -196,14 +196,14 @@ Tracking:   ^[A-Z]{2,6}-(PR|FL|LN|BG|FT)-\d{3}$
   - Naming: `TASKS_[TOPIC].md`
   - Contains: TK (Tasks) with dependencies, estimates, verification commands
 
-### Execution Phase
+### Execution Documents
 
 - **FIXES** - Code changes log for release documentation
   - Template: `FIXES_TEMPLATE.md`
   - Naming: `_IMPL_[COMPONENT]_FIXES.md`
   - Contains: Bug fixes, features, refactoring changes
 
-### Learning Phase
+### Learning Documents
 
 - **FAILS** - Failure log capturing mistakes and lessons
   - Template: `FAILS_TEMPLATE.md`
@@ -215,7 +215,7 @@ Tracking:   ^[A-Z]{2,6}-(PR|FL|LN|BG|FT)-\d{3}$
   - Naming: `LEARNINGS.md`
   - Contains: LN (Learning entries) with root cause analysis
 
-### Review Phase
+### Review Documents
 
 - **REVIEW** - Potential issues and improvement suggestions
   - Template: `REVIEW_TEMPLATE.md`
@@ -225,35 +225,34 @@ Tracking:   ^[A-Z]{2,6}-(PR|FL|LN|BG|FT)-\d{3}$
 ## 6. Document Lifecycle
 
 ```
-Ideation
-├─> [WRITE-INFO] research and analysis
+[WRITE-INFO] research and analysis
+├─> INFO documents created
 │
-Specification
-├─> [WRITE-SPEC] define requirements
-│   └─> FR, DD, IG, AC items created
+[WRITE-SPEC] define requirements
+├─> SPEC with FR, DD, IG, AC items
 │
-Planning
-├─> [WRITE-IMPL-PLAN] define implementation approach
-├─> [WRITE-TEST-PLAN] define verification approach
-└─> [PARTITION] create TASKS from IMPL/TEST
+[WRITE-IMPL-PLAN] define implementation approach
+[WRITE-TEST-PLAN] define verification approach
+├─> IMPL and TEST documents
 │
-Execution
-├─> [IMPLEMENT] execute tasks
-│   └─> Code changes tracked in FIXES
-├─> [TEST] verify implementation
-│   └─> TC results recorded
+[PARTITION] create TASKS from IMPL/TEST
+├─> TASKS document with work items
 │
-Review
-├─> [VERIFY] check against spec/rules
-├─> [CRITIQUE] find logic/design flaws
-└─> [REVIEW] document findings
+[IMPLEMENT] execute tasks
+├─> Code changes tracked in FIXES
 │
-Learning
-├─> [FAIL] record failures when they occur
-└─> [LEARN] analyze resolved problems
+[TEST] verify implementation
+├─> TC results recorded
 │
-Maintenance
-└─> [SYNC] update documents when implementation changes
+[VERIFY] SPECs and IMPL plans against rules
+[CRITIQUE] SPECs and IMPL plans for logic flaws
+├─> REVIEW document with findings
+│
+[FAIL] record failures when they occur
+[LEARN] analyze resolved problems
+├─> FAILS and LEARNINGS documents
+│
+[SYNC] update documents when implementation changes
 ```
 
 ## 7. Traceability Rules
@@ -352,6 +351,11 @@ SPEC is considered implemented when:
 - Pass: Upstream documents updated with change evidence
 
 ## 12. Document History
+
+**[2026-01-20 19:12]**
+- Changed: Document Types subsections renamed from "X Phase" to "X Documents" (phase-agnostic)
+- Changed: Document Lifecycle now shows verbs and document outputs, not phases
+- Changed: Review section clarifies we review SPECs and IMPL plans
 
 **[2026-01-20 19:10]**
 - Added: Section 4 - ID System (TDID) with TOPIC registration, document IDs, item IDs, cross-references, regex patterns
