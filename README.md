@@ -6,6 +6,20 @@ A development system for AI-assisted coding workflows, optimized for a single pr
 
 **Philosophy:** One programmer, structured workflows, AI handling the cognitive overhead. Inspired by Douglas Engelbart's intelligence augmentation and Frederick Brooks' "surgical team" concept - but replacing the support team entirely with AI. No sync meetings, no communication costs, minimum coordination necessary.
 
+**Why all this structure?** AI agents are powerful but inconsistent. Without constraints, they:
+- Interpret instructions differently each time
+- Skip important steps or over-engineer simple tasks
+- Lose context across sessions
+- Make the same mistakes repeatedly
+
+IPPS solves this through **deterministic agent behavior**:
+- **AGEN** eliminates ambiguity - same verb always means same action (users can extend)
+- **EDIRD** prevents skipped steps - gates enforce quality before progress
+- **STRUT** tracks state - agent always knows where it is in the plan
+- **TRACTFUL** preserves knowledge - documents survive session boundaries
+
+The goal: Run `/go` and watch the agent execute a multi-session project autonomously, picking up exactly where it left off, never repeating past failures.
+
 ## Core Concepts
 
 IPPS is built on four integrated specifications that enable autonomous agent operation:
@@ -16,14 +30,17 @@ IPPS is built on four integrated specifications that enable autonomous agent ope
 
 - **[STRUT - Structured Thinking](SPEC_STRUT_STRUCTURED_THINKING.md)** - Tree notation for planning and tracking agent work. Uses unique IDs (`P1`, `P1-S1`, `P1-D1`), checkbox states (`[ ]`, `[x]`, `[N]`), and transitions for flow control.
 
+- **[TRACTFUL - Document Framework](SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md)** - Document types (INFO, SPEC, IMPL, TEST, TASKS) with unique IDs and traceability. Defines how documents reference each other and track progress.
+
 **How they work together:**
 ```
 AGEN provides the language    → Verbs, placeholders, outcomes (-OK, -FAIL, -SKIP)
 EDIRD provides the phases     → EXPLORE → DESIGN → IMPLEMENT → REFINE → DELIVER
 STRUT provides the notation   → Tree structure for plans with progress tracking
+TRACTFUL provides the docs    → INFO, SPEC, IMPL, TEST, TASKS with unique IDs
 ```
 
-**Design principle:** Each spec has a single responsibility. AGEN defines vocabulary. EDIRD defines phases and gates. STRUT defines notation. Workflows orchestrate them without hardcoding phase knowledge.
+**Design principle:** Each spec has a single responsibility. AGEN defines vocabulary. EDIRD defines phases and gates. STRUT defines notation. TRACTFUL defines documents. Workflows orchestrate them without hardcoding phase knowledge.
 
 **Mini-example** - A hotfix plan in STRUT notation:
 ```
@@ -200,33 +217,33 @@ IPPS/
 │   │   └── write-documents/      # Spec, impl, test templates
 │   └── workflows/
 │       ├── build.md              # BUILD workflow entry point
-│       ├── solve.md              # SOLVE workflow entry point
-│       ├── go.md                 # Autonomous loop (recap + continue)
-│       ├── recap.md              # Analyze context, identify status
-│       ├── continue.md           # Execute next items on plan
-│       ├── implement.md          # IMPLEMENT phase
-│       ├── critique.md           # Devil's Advocate review
-│       ├── reconcile.md          # Pragmatic reconciliation
-│       ├── verify.md             # Verification against specs and rules
 │       ├── commit.md             # Git conventional commits
-│       ├── rename.md             # Global/local refactoring
+│       ├── continue.md           # Execute next items on plan
+│       ├── critique.md           # Devil's Advocate review
+│       ├── fail.md               # Record failures
+│       ├── go.md                 # Autonomous loop (recap + continue)
+│       ├── implement.md          # IMPLEMENT phase
+│       ├── learn.md              # Extract learnings from failures
 │       ├── partition.md          # Split plans into testable chunks
+│       ├── prime.md              # Load workspace context
+│       ├── recap.md              # Analyze context, identify status
+│       ├── reconcile.md          # Pragmatic reconciliation
+│       ├── rename.md             # Global/local refactoring
+│       ├── research.md           # Structured research
+│       ├── session-archive.md    # Archive session folder
+│       ├── session-close.md      # Close and sync session
+│       ├── session-new.md        # Initialize session
+│       ├── session-resume.md     # Resume session
+│       ├── session-save.md       # Save session progress
+│       ├── solve.md              # SOLVE workflow entry point
 │       ├── sync.md               # Document synchronization
 │       ├── test.md               # Run tests based on scope
-│       ├── prime.md              # Load workspace context
-│       ├── research.md           # Structured research
 │       ├── transcribe.md         # PDF/web transcription
-│       ├── fail.md               # Record failures
-│       ├── learn.md              # Extract learnings from failures
-│       ├── write-spec.md         # Create specification
+│       ├── verify.md             # Verification against specs and rules
 │       ├── write-impl-plan.md    # Create implementation plan
-│       ├── write-test-plan.md    # Create test plan
+│       ├── write-spec.md         # Create specification
 │       ├── write-tasks-plan.md   # Create tasks plan
-│       ├── session-new.md        # Initialize session
-│       ├── session-save.md       # Save session progress
-│       ├── session-resume.md     # Resume session
-│       ├── session-close.md      # Close and sync session
-│       └── session-archive.md    # Archive session folder
+│       └── write-test-plan.md    # Create test plan
 ├── ID-REGISTRY.md                # Prevents term/ID collisions (DevSystem constants + project topics)
 └── README.md
 ```
