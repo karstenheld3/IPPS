@@ -24,7 +24,7 @@ The goal: Run `/go` and watch the agent execute a multi-session project autonomo
 
 IPPS is built on four integrated specifications that enable autonomous agent operation:
 
-- **[AGEN - Agentic English](SPEC_AGEN_AGENTIC_ENGLISH.md)** - Controlled vocabulary with verbs `[VERB]`, placeholders `[PLACEHOLDER]`, and context states `CONTEXT-STATE`. Eliminates ambiguity in agent instructions.
+- **[AGEN - Agentic English](SPEC_AGEN_AGENTIC_ENGLISH.md)** - Controlled vocabulary with verbs `[VERB]`, placeholders `[PLACEHOLDER]`, and states `STATE`. Eliminates ambiguity in agent instructions.
 
 - **[EDIRD - Phase Model](SPEC_EDIRD_PHASE_MODEL.md)** - Five-phase workflow (Explore, Design, Implement, Refine, Deliver) with gates and deterministic next-action logic. Supports BUILD (code) and SOLVE (knowledge) workflows.
 
@@ -41,6 +41,12 @@ TRACTFUL provides the docs    → INFO, SPEC, IMPL, TEST, TASKS with unique IDs
 ```
 
 **Design principle:** Each spec has a single responsibility. AGEN defines vocabulary. EDIRD defines phases and gates. STRUT defines notation. TRACTFUL defines documents. Workflows orchestrate them without hardcoding phase knowledge.
+
+**Acronyms:**
+- **AGEN** - AGENtic English
+- **EDIRD** - Explore, Design, Implement, Refine, Deliver
+- **STRUT** - STRUctured Thinking
+- **TRACTFUL** - Traceable Requirements Artifacts and Coded Templates For Unified Lifecycle
 
 **Mini-example** - A hotfix plan in STRUT notation:
 ```
@@ -114,7 +120,7 @@ A controlled vocabulary for agent-human communication. Provides consistent termi
 **Extensibility**: Verbs are abstract concepts. Complex verbs CAN be concretized as dedicated workflows (e.g., `[COMMIT]` → `/commit`), but this is optional. Simple verbs work inline within phase workflows.
 - `[PLACEHOLDER]` - Value to substitute (e.g., `[ACTOR]`, `[WORKSPACE_FOLDER]`)
 - `[LABEL]` - Classification to apply (e.g., `[UNVERIFIED]`, `[CRITICAL]`)
-- Context states use NO brackets: `COMPLEXITY-HIGH`, `HOTFIX`, `SINGLE-PROJECT`
+- States use NO brackets: `COMPLEXITY-HIGH`, `HOTFIX`, `SINGLE-PROJECT`
 
 **Example workflow instruction**:
 ```
