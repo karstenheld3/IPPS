@@ -188,62 +188,66 @@ Files starting with `.tmp` are temporary helper scripts created during operation
 
 ## Workflow Reference
 
-### Context Workflows
-
-- `/prime` - Load workspace context (priority docs, then standard docs)
-
-### Autonomous Action Workflows
-
-- `/go-autonomous` - Generic autonomous implementation loop
-- `/research` - Structured research with verification
-
-### Session Workflows
-
-- `/session-new` - Create new session folder with tracking files
-- `/session-save` - Document findings and commit
-- `/session-resume` - Re-read session docs and continue
-- `/session-close` - Sync to project files and archive
-- `/session-archive` - Move session folder to archive
-
-### Phase Workflows
-
-- **EXPLORE**: `/explore` - [RESEARCH], [ANALYZE], [ASSESS], [SCOPE]
-- **DESIGN**: `/design` - [PLAN], [WRITE-SPEC], [WRITE-IMPL-PLAN], [WRITE-TEST-PLAN], [PROVE]
-- **IMPLEMENT**: `/implement` - [IMPLEMENT], [TEST], [FIX], [COMMIT]
-- **REFINE**: `/refine` - [REVIEW], [VERIFY], [CRITIQUE], [RECONCILE]
-- **DELIVER**: `/deliver` - [VALIDATE], [MERGE], [DEPLOY], [CLOSE], [ARCHIVE]
-
-### Process Workflows
-
-- `/write-spec` - Create specification from requirements
-- `/write-impl-plan` - Create implementation plan from spec
-- `/write-test-plan` - Create test plan from spec
-- `/verify` - Verify work against specs and rules
+- `/build` - BUILD workflow entry point (code output)
 - `/commit` - Create conventional commits
+- `/continue` - Execute next items on plan
+- `/critique` - Devil's Advocate review
+- `/fail` - Record failures to FAILS.md
+- `/go` - Autonomous loop (recap + continue until done)
+- `/implement` - Execute implementation from plan
+- `/learn` - Extract learnings from resolved problems
+- `/partition` - Split plans into discrete tasks
+- `/prime` - Load workspace context
+- `/recap` - Analyze context, identify current status
+- `/reconcile` - Pragmatic review of critique findings
+- `/rename` - Global/local refactoring with verification
+- `/research` - Structured research with verification
+- `/session-archive` - Move session folder to archive
+- `/session-close` - Close session, sync findings, archive
+- `/session-new` - Initialize new session
+- `/session-resume` - Resume existing session
+- `/session-save` - Save session progress
+- `/solve` - SOLVE workflow entry point (knowledge output)
+- `/sync` - Document synchronization
+- `/test` - Run tests based on scope
+- `/transcribe` - PDF/web to markdown transcription
+- `/verify` - Verify work against specs and rules
+- `/write-impl-plan` - Create implementation plan from spec
+- `/write-spec` - Create specification from requirements
+- `/write-tasks-plan` - Create tasks plan from IMPL/TEST
+- `/write-test-plan` - Create test plan from spec
 
-## Phase Tracking
+## STRUT Execution
 
-Sessions track current phase in NOTES.md:
+STRUT plans use structured notation for progress tracking. Execution follows these rules:
 
-```markdown
-## Current Phase
+### Execution Algorithm
 
-**Phase**: DESIGN
-**Last verb**: [WRITE-SPEC]-OK
-**Gate status**: 3/5 items checked
-```
+1. **Locate current position**: Find first unchecked step `[ ] Px-Sy`
+2. **Execute step**: Perform the verb action with given parameters
+3. **Update checkbox**: Mark `[x]` on success, increment `[N]` on retry
+4. **Check deliverables**: After step completion, verify if any `Px-Dy` can be checked
+5. **Evaluate transitions**: When all steps done, check transition conditions
+6. **Follow transition**: Go to next phase, `[CONSULT]`, or `[END]`
 
-Sessions track full phase plan in PROGRESS.md:
+### Resuming Interrupted Plans
 
-```markdown
-## Phase Plan
+1. Read PROGRESS.md or document containing STRUT plan
+2. Find first unchecked deliverable `[ ] Px-Dy`
+3. Identify which steps feed that deliverable
+4. Continue from first unchecked step
 
-- [ ] **EXPLORE** - pending
-- [x] **DESIGN** - done
-- [ ] **IMPLEMENT** - in_progress
-- [ ] **REFINE** - pending
-- [ ] **DELIVER** - pending
-```
+### Checkbox States
+
+- `[ ]` - Pending (not started)
+- `[x]` - Done (completed once)
+- `[N]` - Done N times (e.g., `[2]` = retried twice)
+
+### Transition Targets
+
+- `[PHASE-NAME]` - Next phase (e.g., `[DESIGN]`, `[IMPLEMENT]`)
+- `[CONSULT]` - Escalate to [ACTOR]
+- `[END]` - Plan complete
 
 ## Agent Instructions
 

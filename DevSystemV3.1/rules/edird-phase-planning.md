@@ -2,6 +2,8 @@
 
 For full model with gates, flows, and planning: invoke @edird-phase-planning skill
 
+**Execution logic**: Execution rules are defined in `devsystem-core.md`.
+
 ## Phases
 
 - **EXPLORE** - Understand before acting. [RESEARCH], [ANALYZE], [ASSESS], [SCOPE]
@@ -44,6 +46,21 @@ All workflows start in EXPLORE with [ASSESS] to determine workflow type and comp
 
 - Agent updates NOTES.md with current phase on transition. User adds notes manually.
 - Agent maintains full phase plan in PROGRESS.md (phases with status: pending/in_progress/done).
+
+## Planning Notation
+
+Use appropriate notation based on scope:
+
+- **STRUT** - Orchestrate complex multi-phase processes with goals, transitions, and verification
+  - When: Multi-phase work, autonomous runs (/go), session-spanning tasks
+  - Contains: Phases, Objectives (← linked to Deliverables), Strategy, Steps, Deliverables, Transitions
+  - Invoke: @write-documents skill for STRUT_TEMPLATE.md
+  - Verify: /verify workflow (STRUT Planning + STRUT Transition contexts)
+
+- **TASKS** - Flat sequential to-do lists with testable buckets
+  - When: Single-phase execution, partitioned IMPL steps
+  - Contains: Task items with files, done-when criteria, verification commands
+  - Created via: [PARTITION] verb from IMPL plan
 
 ## Workflow Types
 
