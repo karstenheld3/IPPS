@@ -96,9 +96,137 @@ read_file(file_path: "[path]_page004.jpg")
 
 ### 5b. Extract ALL content from these pages
 - Every heading, paragraph, list, footnote
-- Every figure → ASCII diagram OR verbalized description
+- Every figure → See **Figure Transcription Protocol** below
 - Every table → Markdown table
 - Every caption, label, reference
+
+### Special Characters for Accurate Transcription
+
+Use proper Unicode characters to match the original document:
+
+**Superscripts (footnotes, exponents):**
+```
+¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹ ⁰   (use instead of ^1 ^2 ^3)
+ᵃ ᵇ ᶜ ᵈ ᵉ ᶠ ᵍ ʰ ⁱ ʲ ᵏ ˡ ᵐ ⁿ ᵒ ᵖ ʳ ˢ ᵗ ᵘ ᵛ ʷ ˣ ʸ ᶻ
+```
+
+**Subscripts:**
+```
+₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉
+ₐ ₑ ₕ ᵢ ⱼ ₖ ₗ ₘ ₙ ₒ ₚ ᵣ ₛ ₜ ᵤ ᵥ ₓ
+```
+
+**Greek letters:**
+```
+α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω
+Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω
+```
+
+**Common symbols:**
+```
+© ® ™ § ¶ † ‡ ° ′ ″ ‴   (copyright, registered, trademark, section, pilcrow, dagger, degree, prime)
+± × ÷ − ≠ ≈ ≡ ≤ ≥ ∞    (math operators)
+→ ← ↔ ⇒ ⇐ ⇔            (arrows in text)
+```
+
+**Fractions:**
+```
+½ ⅓ ⅔ ¼ ¾ ⅕ ⅖ ⅗ ⅘ ⅙ ⅚ ⅛ ⅜ ⅝ ⅞
+```
+
+## Figure Transcription Protocol
+
+**MANDATORY**: Every figure MUST have BOTH ASCII art AND XML description.
+
+### Step F1: Create ASCII Art (Required)
+
+Generate ASCII representation using these character sets:
+
+**Unicode Character Reference** (JetBrains Mono verified)
+```
+Boxes:    ┌─┬─┐  ╔═╦═╗  ╭──╮   Single/Double/Rounded
+          ├─┼─┤  ╠═╬═╣  │  │
+          └─┴─┘  ╚═╩═╝  ╰──╯
+Heavy:    ┏━┳━┓ ┃ ┣━╋━┫ ┗━┻━┛
+Arrows:   ← → ↑ ↓ ↔ ↕ ↖ ↗ ↘ ↙   ⇐ ⇒ ⇑ ⇓ ⇔ ⇕
+Triangles:◀ ▶ ▲ ▼ ◄ ► △ ▽ ◁ ▷
+Shapes:   ○ ● ◎ ◉ ⊙   □ ■ ▢ ▣   ◇ ◆   ☆ ★
+Circles:  ◐ ◑ ◒ ◓   (half-circles only)
+Shading:  ░ ▒ ▓ █   ▀ ▄ ▌ ▐ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟
+Lines:    ─ ━ │ ┃ ═ ║   ┆ ┇ ┊ ┋
+Diagonal: / \ X   (ASCII only, avoid ╱ ╲ ╳)
+Dots:     ·   (single dot only, avoid ellipsis)
+Math:     + - x : = < >   ∈ ⊂ ⊃ ∩ ∪   ∧ ∨ ¬ ⊕ ⊗
+Brackets: ( ) { } [ ]   (ASCII only, avoid ⟨ ⟩ 〈 〉)
+Special:  • ◦   ✓ ✗ ☐ ☑ ☒
+```
+
+**AVOID** (broken width in JetBrains Mono):
+`➔ ➜ ➤ ➡ ◯ ⬤ ⦿ ⦾ ⟨ ⟩ 〈 〉 ⦃ ⦄ … ⋯ ⋮ ⌒ ⌓ ◜ ◝ ◞ ◟ ❖ ✦ ✧ ‣ ⁃ ╱ ╲ ╳`
+
+````
+**Figure [N]: [Caption from original]**
+
+```ascii
+[ASCII art representation here]
+```
+````
+
+### Step F2: Compare and Describe (Required)
+
+After creating ASCII, compare with original image and add description using standard markdown inside XML tags:
+
+```
+<transcribe_figure>
+- ASCII captures: What the ASCII diagram successfully represents
+- ASCII misses: Visual elements that cannot be shown in ASCII
+- Colors:
+  - [color name] - what it represents
+  - [color name] - what it represents
+- Layout: Spatial arrangement, panels, relative positions
+- Details: Fine details, textures, gradients, 3D effects
+- Data: Specific values, measurements, or quantities visible
+</transcribe_figure>
+```
+
+### Step F3: Example
+
+Original: A flowchart with colored boxes showing data flow
+
+```markdown
+**Figure 3: Data Processing Pipeline**
+
+```ascii
+┌─────────┐     ┌─────────┐     ┌─────────┐
+│  Input  │────>│ Process │────>│ Output  │
+└─────────┘     └─────────┘     └─────────┘
+     │               │               │
+     v               v               v
+┌─────────┐     ┌─────────┐     ┌─────────┐
+│  Log A  │     │  Log B  │     │  Log C  │
+└─────────┘     └─────────┘     └─────────┘
+```
+
+<transcribe_figure>
+- ASCII captures: Box structure, flow direction, hierarchical logging
+- ASCII misses: Rounded corners, shadow effects, icon inside Process box
+- Colors:
+  - Blue - input/output stages
+  - Green - processing stage
+  - Gray - logging components
+- Layout: Horizontal flow left-to-right, vertical drops to log boxes
+- Details: Process box contains gear icon; arrows have gradient fill
+- Data: None
+</transcribe_figure>
+```
+
+### Figure Protocol Rules
+
+1. **NO EXCEPTIONS**: Every figure gets ASCII + XML, even photographs
+2. **Photographs**: ASCII shows composition/layout; XML describes subject matter
+3. **Graphs/Charts**: ASCII shows axes and trend; XML provides data points
+4. **Network Diagrams**: ASCII shows topology; XML describes node colors and link types
+5. **3D Visualizations**: ASCII shows 2D projection; XML describes depth and perspective
 
 ### 5c. Append to output file IMMEDIATELY
 Do not wait until end. Write after each chunk.
@@ -155,8 +283,11 @@ Index file format:
 After transcription, run `/verify` to:
 1. Compare page count
 2. Check all sections present
-3. Verify all figures transcribed
+3. Verify all figures have BOTH:
+   - ASCII art block (` ```ascii `)
+   - XML description block (`<transcribe_figure>`)
 4. Cross-check text accuracy
+5. Validate XML tags are well-formed
 
 ## Best Practices
 
@@ -166,3 +297,4 @@ After transcription, run `/verify` to:
 4. **300 DPI for PDFs** - Higher quality for accurate transcription
 5. **Keep source images** - Required for `/verify`
 6. **No omissions** - Every piece of content must be transcribed
+7. **ASCII + XML for figures** - Every figure requires both ASCII art and `<transcribe_figure>` XML block
