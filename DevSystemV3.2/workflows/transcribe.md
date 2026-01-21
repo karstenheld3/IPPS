@@ -153,18 +153,18 @@ Boxes:    ┌─┬─┐  ╔═╦═╗  ╭──╮   Single/Double/Rounded
 Heavy:    ┏━┳━┓ ┃ ┣━╋━┫ ┗━┻━┛
 Arrows:   ← → ↑ ↓ ↔ ↕ ↖ ↗ ↘ ↙   ⇐ ⇒ ⇑ ⇓ ⇔ ⇕
 Triangles:◀ ▶ ▲ ▼ ◄ ► △ ▽ ◁ ▷
+Shapes:   ○ ● ◎ ◉ ⊙   □ ■ ▢ ▣   ◇ ◆   ☆ ★
+Circles:  ◐ ◑ ◒ ◓   (half-circles)
 Shading:  ░ ▒ ▓ █   ▀ ▄ ▌ ▐ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟
 Lines:    ─ ━ │ ┃ ═ ║   ┆ ┇ ┊ ┋
-Diagonal: / \ X ╱ ╲ ╳
-Dots:     · ⋯ ⋮
-Math:     + - x : = < >
-Brackets: ( ) { } [ ] ⟨ ⟩
-Nodes:    o O @ * # x X   (ASCII only for shapes)
+Diagonal: / \ X ╱ ╲ ╳   (all OK)
+Dots:     · ⋯ ⋮           (midline/vertical OK)
+Math:     + - x : = < >   ∈ ⊂ ⊃ ∩ ∪   ∧ ∨ ¬ ⊕ ⊗
+Brackets: ( ) { } [ ] ⟨ ⟩   (math angles OK)
+Special:  • ◦   ✓ ✗ ☐ ☑ ☒
 ```
 
-**AVOID** (broken width - causes misalignment):
-`○ ● ◎ ◉ ⊙ □ ■ ▢ ▣ ◇ ◆ ☆ ★ ◐ ◑ ◒ ◓ • ◦ ✓ ✗ ☐ ☑ ☒`
-`∈ ⊂ ⊃ ∩ ∪ ∧ ∨ ¬ ⊕ ⊗`
+**AVOID** (broken width in JetBrains Mono):
 `➔ ➜ ➤ ➡ ◯ ⬤ ⦿ ⦾ 〈 〉 ⦃ ⦄ ❖ ✦ ✧ ‣ ⁃ ⌒ ⌓ ◜ ◝ ◞ ◟ …`
 
 ````

@@ -133,36 +133,38 @@ Each character sits between two `|` bars. If the bars stay aligned vertically, t
 
 ## JetBrains Mono Test Results (2026-01-21)
 
-### OK (properly aligned)
+### OK (properly aligned) - Verification Grid
 ```
-← → ↑ ↓ ↔ ↕ ↖ ↗ ↘ ↙ ⇐ ⇒ ⇑ ⇓ ⇔ ⇕     arrows
-◀ ▶ ▲ ▼ ◄ ► △ ▽ ◁ ▷                   triangles
-┌ ─ ┬ ┐ │ ├ ┼ ┤ └ ┴ ┘                 box single
-╔ ═ ╦ ╗ ║ ╠ ╬ ╣ ╚ ╩ ╝                 box double
-╭ ╮ ╰ ╯                               box rounded
-┏ ━ ┳ ┓ ┃ ┣ ╋ ┫ ┗ ┻ ┛                 box heavy
-─ ━ │ ┃ ═ ║ ┆ ┇ ┊ ┋                   lines
-░ ▒ ▓ █ ▀ ▄ ▌ ▐ + quadrants           shading
-( ) { } [ ] < > ⟨ ⟩                   brackets
-+ - x : = < >                         math basic
-/ \ X ╱ ╲ ╳                           diagonals
-· ⋯ ⋮                                 dots/ellipsis
+|a|b|c|d|e|f|g|h|i|j|  ref
+|←|→|↑|↓|↔|↕|↖|↗|↘|↙|  arrows
+|┌|─|┬|┐|│|├|┼|┤|└|┘|  box single
+|╔|═|╦|╗|║|╠|╬|╣|╚|╝|  box double
+|╭|╮|╰|╯|x|x|x|x|x|x|  box rounded
+|┏|━|┳|┓|┃|┣|╋|┫|┗|┛|  box heavy
+|─|━|│|┃|═|║|┆|┇|┊|┋|  lines
+|░|▒|▓|█|▀|▄|▌|▐|x|x|  shading
+|▖|▗|▘|▙|▚|▛|▜|▝|▞|▟|  quadrants
+|+|-|x|:|=|<|>|x|x|x|  math basic
+|/|\|X|╱|╲|╳|x|x|x|x|  diagonals
+|·|⋯|⋮|x|x|x|x|x|x|x|  dots/ellipsis
 ```
 
 ### BROKEN - TOO WIDE
 ```
-➔ ➜ ➤ ➡                              fancy arrows
-○ ● ◎ ◉ ⊙ ◯ ⬤ ⦿ ⦾                    circles (ALL)
-□ ■ ▢ ▣                               squares
-◇ ◆                                    diamonds
-☆ ★                                    stars
-◐ ◑ ◒ ◓                               half-circles
-〈 〉 ⦃ ⦄                               CJK/curly brackets
-∈ ⊂ ⊃ ∩ ∪ ∧ ∨ ¬ ⊕ ⊗                   math set/logic
-• ◦                                    bullets
-✓ ✗ ☐ ☑ ☒                             checks
-❖ ✦ ✧ ‣ ⁃                             decorative
-⌒ ⌓ ◜ ◝ ◞ ◟                           arcs
+fancy arrows:   ➔ ➜ ➤ ➡
+double arrows:  ⇐ ⇒ ⇑ ⇓ ⇔ ⇕
+triangles:      ◀ ▶ ▲ ▼ ◄ ► △ ▽ ◁ ▷
+circles:        ○ ● ◎ ◉ ⊙ ◯ ⬤ ⦿ ⦾
+squares:        □ ■ ▢ ▣
+diamonds:       ◇ ◆
+stars:          ☆ ★
+half-circles:   ◐ ◑ ◒ ◓
+brackets:       ( ) { } [ ] < > ⟨ ⟩ 〈 〉 ⦃ ⦄
+math set/logic: ∈ ⊂ ⊃ ∩ ∪ ∧ ∨ ¬ ⊕ ⊗
+bullets:        • ◦
+checks:         ✓ ✗ ☐ ☑ ☒
+decorative:     ❖ ✦ ✧ ‣ ⁃
+arcs:           ⌒ ⌓ ◜ ◝ ◞ ◟
 ```
 
 ### BROKEN - TOO NARROW
@@ -172,8 +174,10 @@ Each character sits between two `|` bars. If the bars stay aligned vertically, t
 
 ### AVOID List (for transcribe.md)
 ```
-➔ ➜ ➤ ➡ ○ ● ◎ ◉ ⊙ ◯ ⬤ ⦿ ⦾ □ ■ ▢ ▣ ◇ ◆ ☆ ★ ◐ ◑ ◒ ◓
-〈 〉 ⦃ ⦄ ∈ ⊂ ⊃ ∩ ∪ ∧ ∨ ¬ ⊕ ⊗ • ◦ ✓ ✗ ☐ ☑ ☒ ❖ ✦ ✧ ‣ ⁃ ⌒ ⌓ ◜ ◝ ◞ ◟ …
+➔ ➜ ➤ ➡ ⇐ ⇒ ⇑ ⇓ ⇔ ⇕ ◀ ▶ ▲ ▼ ◄ ► △ ▽ ◁ ▷
+○ ● ◎ ◉ ⊙ ◯ ⬤ ⦿ ⦾ □ ■ ▢ ▣ ◇ ◆ ☆ ★ ◐ ◑ ◒ ◓
+( ) { } [ ] < > ⟨ ⟩ 〈 〉 ⦃ ⦄
+∈ ⊂ ⊃ ∩ ∪ ∧ ∨ ¬ ⊕ ⊗ • ◦ ✓ ✗ ☐ ☑ ☒ ❖ ✦ ✧ ‣ ⁃ ⌒ ⌓ ◜ ◝ ◞ ◟ …
 ```
 
 ## How to Read Results
