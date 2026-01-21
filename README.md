@@ -13,10 +13,10 @@ A development system for AI-assisted coding workflows, optimized for a single pr
 - Make the same mistakes repeatedly
 
 IPPS solves this through **deterministic agent behavior**:
-- **AGEN** eliminates ambiguity - same verb always means same action (users can extend)
-- **EDIRD** prevents skipped steps - gates enforce quality before progress
-- **STRUT** tracks state - agent always knows where it is in the plan
-- **TRACTFUL** preserves knowledge - every detail is covered by documents that survive session boundaries
+- **AGEN** (AGENtic English) eliminates ambiguity - same verb always means same action (users can extend)
+- **EDIRD** (Explore, Design, Implement, Refine, Deliver) prevents skipped steps - gates enforce quality before progress
+- **STRUT** (STRUctured Thinking) tracks state - agent always knows where it is in the plan
+- **TRACTFUL** (Traceable Requirements Artifacts and Coded Templates For Unified Lifecycle) preserves knowledge - every detail is covered by documents that survive session boundaries
 
 The goal: Run `/go` and watch the agent execute a multi-session project autonomously, picking up exactly where it left off, never repeating past failures.
 
@@ -41,12 +41,6 @@ TRACTFUL provides the docs    → INFO, SPEC, IMPL, TEST, TASKS with unique IDs
 ```
 
 **Design principle:** Each spec has a single responsibility. AGEN defines vocabulary. EDIRD defines phases and gates. STRUT defines notation. TRACTFUL defines documents. Workflows orchestrate them without hardcoding phase knowledge.
-
-**Acronyms:**
-- **AGEN** - AGENtic English
-- **EDIRD** - Explore, Design, Implement, Refine, Deliver
-- **STRUT** - STRUctured Thinking
-- **TRACTFUL** - Traceable Requirements Artifacts and Coded Templates For Unified Lifecycle
 
 **Mini-example** - A hotfix plan in STRUT notation:
 ```
