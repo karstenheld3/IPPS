@@ -16,7 +16,7 @@ IPPS solves this through **deterministic agent behavior**:
 - **AGEN** eliminates ambiguity - same verb always means same action (users can extend)
 - **EDIRD** prevents skipped steps - gates enforce quality before progress
 - **STRUT** tracks state - agent always knows where it is in the plan
-- **TRACTFUL** preserves knowledge - documents survive session boundaries
+- **TRACTFUL** preserves knowledge - every detail is covered by documents that survive session boundaries
 
 The goal: Run `/go` and watch the agent execute a multi-session project autonomously, picking up exactly where it left off, never repeating past failures.
 
