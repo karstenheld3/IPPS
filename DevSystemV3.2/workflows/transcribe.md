@@ -145,27 +145,11 @@ Use proper Unicode characters to match the original document:
 
 Generate ASCII representation using these character sets:
 
-**Unicode Character Reference** (JetBrains Mono verified 2026-01-21)
-```
-Boxes:    ┌─┬─┐  ╔═╦═╗  ╭──╮   Single/Double/Rounded
-          ├─┼─┤  ╠═╬═╣  │  │
-          └─┴─┘  ╚═╩═╝  ╰──╯
-Heavy:    ┏━┳━┓ ┃ ┣━╋━┫ ┗━┻━┛
-Arrows:   ← → ↑ ↓ ↔ ↕ ↖ ↗ ↘ ↙   ⇐ ⇒ ⇑ ⇓ ⇔ ⇕
-Triangles:◀ ▶ ▲ ▼ ◄ ► △ ▽ ◁ ▷
-Shapes:   ○ ● ◎ ◉ ⊙   □ ■ ▢ ▣   ◇ ◆   ☆ ★
-Circles:  ◐ ◑ ◒ ◓   (half-circles)
-Shading:  ░ ▒ ▓ █   ▀ ▄ ▌ ▐ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟
-Lines:    ─ ━ │ ┃ ═ ║   ┆ ┇ ┊ ┋
-Diagonal: / \ X ╱ ╲ ╳   (all OK)
-Dots:     · ⋯ ⋮           (midline/vertical OK)
-Math:     + - x : = < >   ∈ ⊂ ⊃ ∩ ∪   ∧ ∨ ¬ ⊕ ⊗
-Brackets: ( ) { } [ ] ⟨ ⟩   (math angles OK)
-Special:  • ◦   ✓ ✗ ☐ ☑ ☒
-```
+**USE** (JetBrains Mono OK):
+`←→↑↓↔↕↖↗↘↙` `┌─┬┐│├┼┤└┘` `╔═╦╗║╠╬╣╚╝` `╭╮╰╯` `┏━┳┓┃┣╋┫┗┛` `░▒▓█▀▄▌▐` `▖▗▘▙▚▛▜▝▞▟` `+-x:=<>` `/\X╱╲╳` `·⋯⋮`
 
-**AVOID** (broken width in JetBrains Mono):
-`➔ ➜ ➤ ➡ ◯ ⬤ ⦿ ⦾ 〈 〉 ⦃ ⦄ ❖ ✦ ✧ ‣ ⁃ ⌒ ⌓ ◜ ◝ ◞ ◟ …`
+**DONT USE** (broken width):
+`⇐⇒⇑⇓⇔⇕` `◀▶▲▼◄►△▽◁▷` `○●◎◉⊙◯⬤◐◑◒◓` `□■▢▣◇◆☆★` `(){}[]<>⟨⟩〈〉` `∈⊂⊃∩∪∧∨¬⊕⊗` `•◦✓✗☐☑☒❖✦✧‣⁃➔➜➤➡⌒⌓◜◝◞◟…`
 
 ````
 **Figure [N]: [Caption from original]**
