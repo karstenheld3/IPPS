@@ -159,7 +159,7 @@ A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) w
 [EXPLORE] → [ASSESS] complexity → Gate check
 [DESIGN] → [WRITE-SPEC] → [PROVE] risky parts → Gate check
 [IMPLEMENT] → [IMPLEMENT]→[TEST]→[FIX]→green→next → Gate check
-[REFINE] → [VERIFY] against spec → [CRITIQUE] if MEDIUM+ → Gate check
+[REFINE] → [VERIFY] against spec → [CRITIQUE] if HIGH → Gate check
 [DELIVER] → [COMMIT] → [MERGE]
 ```
 
@@ -177,7 +177,7 @@ Tree notation for planning and tracking complex autonomous work.
 - **Plan ID** - Unique identifier (e.g., `P1`, `P2`)
 - **Step ID** - Plan + sequence (e.g., `P1-S1`, `P1-S2`)
 - **Deliverable ID** - Plan + deliverable (e.g., `P1-D1`, `P1-D2`)
-- **Checkbox states** - `[ ]` pending, `[x]` done, `[~]` in progress, `[N]` skipped
+- **Checkbox states** - `[ ]` pending, `[x]` done, `[N]` done N times (retry count)
 
 **Structure**:
 ```
