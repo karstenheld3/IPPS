@@ -1,5 +1,3 @@
-<DevSystem MarkdownTablesAllowed=true EmojisAllowed=true />
-
 # IPPS - Insanely Productive Programming System
 
 A development system for AI-assisted coding workflows, optimized for a single programmer working with AI agents.
@@ -323,7 +321,7 @@ IPPS uses special prefixes to control how files are processed:
 
 ## Workspaces and Sessions
 
-IPPS uses a two-level tracking system: **workspace-level** files for project-wide information and **session-level** files for focused work periods.
+IPPS uses a two-level tracking system: **workspace-level** files for project-wide information and **session-level** files for focused work periods. In MONOREPO workspaces, there's an additional **project-level** layer between workspace and sessions.
 
 ### Workspace Files
 
