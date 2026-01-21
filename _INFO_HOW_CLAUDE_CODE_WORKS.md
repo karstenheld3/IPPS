@@ -191,6 +191,12 @@ Claude Code supports several input enrichments for precise control:
 **# key** - Memory shortcut (not a hashtag system):
 - Press `#` during conversation to save current instruction to `CLAUDE.md`
 - Single-purpose key, not user-defined tags
+- Example:
+  ```
+  You: "Always use pnpm instead of npm"
+       [press # key]
+  Claude: "I've added this to your project instructions in CLAUDE.md"
+  ```
 
 **Other enrichments:**
 - **Pipe input** - `cat file.txt | claude -p "explain"` includes file content
