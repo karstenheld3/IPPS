@@ -76,6 +76,7 @@ TRACTFUL provides the docs    → INFO, SPEC, IMPL, TEST, TASKS with unique IDs
 - [Project Structure](#project-structure)
 - [Skills](#skills)
 - [File Naming Conventions](#file-naming-conventions)
+- [Workspaces and Sessions](#workspaces-and-sessions)
 - [Usage Examples](#usage-examples)
 - [Agent Compatibility](#agent-compatibility)
 
@@ -319,6 +320,59 @@ IPPS uses special prefixes to control how files are processed:
 - **`!` prefix** - Priority files (e.g., `!NOTES.md`). Read first during `/prime`. Contains critical project information.
 - **`_` prefix** - Ignored by automatic workflows (e.g., `_SPEC_*.md`, `_PrivateSessions/`). Used for session-specific, WIP, or archived content.
 - **`.` prefix** - Hidden files following Unix convention (e.g., `.windsurf/`, `.gitignore`).
+
+## Workspaces and Sessions
+
+IPPS uses a two-level tracking system: **workspace-level** files for project-wide information and **session-level** files for focused work periods.
+
+### Workspace Files
+
+Located in workspace root (or project root in monorepos):
+
+| File | Required | Purpose |
+|------|----------|---------|
+| `!NOTES.md` | ✅ Yes | Critical project info, agent instructions, key patterns |
+| `!PROBLEMS.md` | Optional | Known issues across the project |
+| `!PROGRESS.md` | Optional | Overall project progress |
+| `FAILS.md` | Auto-created | Lessons learned from past mistakes (synced from sessions) |
+| `LEARNINGS.md` | Auto-created | Reusable patterns extracted from sessions |
+
+### Session Files
+
+Located in session folder (e.g., `_2026-01-15_FixAuthBug/`):
+
+| File | Required | Purpose |
+|------|----------|---------|
+| `NOTES.md` | ✅ Yes | Session goal, key decisions, findings, resume instructions |
+| `PROBLEMS.md` | ✅ Yes | Problems discovered during session (Open/Resolved/Deferred) |
+| `PROGRESS.md` | ✅ Yes | To-do list, in-progress, done, tried-but-not-used |
+| `FAILS.md` | Auto-created | Session-specific failures and their causes |
+| `LEARNINGS.md` | Auto-created | Lessons extracted from session failures |
+
+### Session Lifecycle
+
+```
+/session-new     → Create session folder with NOTES, PROBLEMS, PROGRESS
+    ↓
+  [work]         → Create specs, implement, track progress
+    ↓
+/session-save    → Document findings, commit changes
+    ↓
+/session-resume  → Re-read session docs, continue work
+    ↓
+/session-close   → Sync FAILS and LEARNINGS to workspace, prepare for archive
+    ↓
+/session-archive → Move session folder to _Archive/
+```
+
+### Sync on Session Close
+
+When `/session-close` runs:
+- **FAILS.md** - [MEDIUM] and [HIGH] severity entries sync to workspace `FAILS.md`
+- **LEARNINGS.md** - Patterns from [MEDIUM]/[HIGH] fails sync to workspace `LEARNINGS.md` or `!NOTES.md`
+- **PROBLEMS.md** - Open/deferred problems sync to workspace `!PROBLEMS.md`
+
+This ensures lessons learned survive session boundaries and prevent repeated mistakes.
 
 ## Usage Examples
 
