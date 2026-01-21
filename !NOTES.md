@@ -1,13 +1,25 @@
 [DEFAULT_SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
-[SESSION_ARCHIVE_FOLDER]: [SESSION_FOLDER]\..\_Archive
+[SESSION_ARCHIVE_FOLDER]: [SESSION_FOLDER]\..\Archive
 
 Current [DEVSYSTEM]: DevSystemV3.2
 Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
 **ID-REGISTRY.md** - Prevents term and ID collisions. Contains DevSystem constants and project TOPIC registry.
 
-If you update workflows in .windsurf\workflows, sync changes back to the current [DEVSYSTEM_FOLDER].
-DONT auto-sync changes to  .windsurf\workflows if you update workflows in the [DEVSYSTEM_FOLDER].
+## DevSystem Source/Sync Rules
+
+**CRITICAL: [DEVSYSTEM_FOLDER] is the SOURCE. .windsurf is the SYNC TARGET.**
+
+- **Creating new rules, workflows, skills** -> Create in [DEVSYSTEM_FOLDER] first, then sync
+- **Editing existing content** -> Edit in [DEVSYSTEM_FOLDER] first, then sync
+- **NEVER create or edit directly in `.windsurf/`** (except for temp testing)
+
+**Sync direction:**
+```
+[DEVSYSTEM_FOLDER] ---(sync to)---> .windsurf/
+```
+
+**Exception:** If user edits .windsurf directly, sync BACK to [DEVSYSTEM_FOLDER] first.
 
 ## Workflow Design Rules
 
@@ -28,9 +40,9 @@ DONT auto-sync changes to  .windsurf\workflows if you update workflows in the [D
 
 **Windows:** No symlinks. `.windsurf/` is a copy of `[DEVSYSTEM_FOLDER]`, not a symlink.
 
-**Agent sync method:** Agent cannot directly edit `.windsurf/` files. To update `.windsurf/` after editing DevSystemV3:
+**Sync command** (run after editing [DEVSYSTEM_FOLDER]):
 ```powershell
-Copy-Item -Path "DevSystemV3\*" -Destination ".windsurf\" -Recurse -Force
+Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination ".windsurf\" -Recurse -Force
 ```
 
 Automatically push commits to GitHub.

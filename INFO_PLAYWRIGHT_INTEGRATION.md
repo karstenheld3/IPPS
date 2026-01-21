@@ -17,6 +17,7 @@
 - **Common MCP issues**: npx path not found, profile lock errors, inotify exhaustion on Linux [VERIFIED]
 - **Flaky test causes**: Race conditions, unstable selectors, network unpredictability, state contamination [VERIFIED]
 - **CAPTCHA workarounds**: Stealth browsers, real browser fingerprints, human-in-the-loop, profile persistence [VERIFIED]
+- **computer-use-mcp** (domdomegg) wraps Claude Computer Use as MCP server for any MCP client including Windsurf [VERIFIED]
 
 ## Table of Contents
 
@@ -220,6 +221,49 @@ Self-hosted:
 - `anchor-browser` - Remote-hosted controllable browser
 - `airtop-mcp-server` - Airtop cloud browser integration
 - `nova-act-mcp-server` - Amazon Nova Act SDK integration
+
+### 2.7 computer-use-mcp (Desktop Control)
+
+**Repository**: https://github.com/domdomegg/computer-use-mcp
+**Package**: `computer-use-mcp`
+
+**Key Differentiator**: Wraps Anthropic's Computer Use capabilities as an MCP server, enabling any MCP client (Windsurf, Cursor, Claude Desktop) to control the entire desktop.
+
+**Capabilities:**
+- Screenshot capture of entire screen
+- Mouse control (click, drag, move)
+- Keyboard input (type, shortcuts)
+- Full desktop automation (not browser-specific)
+
+**Installation for Windsurf:**
+
+Add to `~/.codeium/windsurf/mcp_config.json`:
+```json
+{
+  "mcpServers": {
+    "computer-use": {
+      "command": "npx",
+      "args": ["-y", "computer-use-mcp"]
+    }
+  }
+}
+```
+
+**Tips for best results:**
+- Use small, common resolution (720p works well)
+- Install Rango browser extension for keyboard navigation
+- Use latest Claude models for better accuracy
+
+**Limitations:**
+- Full desktop control = security risk (use sandboxed account)
+- Models make frequent mistakes, vulnerable to prompt injections
+- Not browser-specific - controls entire OS
+- For browser-only tasks, Playwriter is more appropriate
+
+**How it works:**
+- Implements near-identical tool to Anthropic's official Computer Use
+- Uses nut.js for native OS control
+- Nudges model to prefer keyboard shortcuts
 
 ## 3. Agent Frameworks
 
@@ -695,6 +739,7 @@ await page.waitForURL('**/dashboard');
 - `PWRT-IN01-SC-MSGH-OMNI`: https://github.com/microsoft/OmniParser - OmniParser vision-based GUI agent [VERIFIED]
 - `PWRT-IN01-SC-EXAU-MCPP`: https://github.com/executeautomation/mcp-playwright - ExecuteAutomation Playwright MCP [VERIFIED]
 - `PWRT-IN01-SC-BRMCP-IO`: https://browsermcp.io - Browser MCP extension and server [VERIFIED]
+- `PWRT-IN01-SC-DMDG-CUMCP`: https://github.com/domdomegg/computer-use-mcp - Computer Use MCP server for desktop control [VERIFIED]
 - `PWRT-IN01-SC-VRCEL-AGBR`: https://agent-browser.dev - Vercel Agent-Browser CLI [VERIFIED]
 - `PWRT-IN01-SC-MCPSO-BRAU`: https://mcp.so/servers?category=browser-automation - MCP server directory [VERIFIED]
 - `PWRT-IN01-SC-BRUS-MCP`: https://docs.browser-use.com/customize/mcp-server - Browser-Use MCP documentation [VERIFIED]
@@ -722,6 +767,12 @@ await page.waitForURL('**/dashboard');
 5. **For desktop automation**: Evaluate Claude Computer Use with OmniParser for vision-based control
 
 ## 10. Document History
+
+**[2026-01-21 14:25]**
+- Added: Section 2.7 - computer-use-mcp (Desktop Control)
+- Added: Windsurf MCP configuration for computer-use-mcp
+- Added: Source PWRT-IN01-SC-DMDG-CUMCP
+- Added: Summary line for computer-use-mcp
 
 **[2026-01-15 11:05]**
 - Added: Section 7.2 - Microsoft Playwright MCP Specific Issues

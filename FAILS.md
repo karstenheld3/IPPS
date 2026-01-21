@@ -1,5 +1,24 @@
 # Failure Log
 
+## 2026-01-21 - Wrong Source Location for Skill
+
+### [MEDIUM] `GLOB-FL-007` Created skill directly in .windsurf instead of DevSystemV3.2
+
+- **When**: 2026-01-21 14:28 UTC+01:00
+- **Where**: `.windsurf/skills/computer-use-mcp/`
+- **What**: Created new skill files directly in `.windsurf/skills/` instead of source location `DevSystemV3.2/skills/`
+- **Why it went wrong**:
+  - `!NOTES.md` documents: DevSystemV3.2 is source, .windsurf is sync target
+  - Agent knew the sync process but created in wrong location
+  - Same pattern as `GLOB-FL-005` - incomplete understanding of source/target relationship
+- **Evidence**: Files created at `.windsurf/skills/computer-use-mcp/SKILL.md` and `SETUP.md`
+
+**Prevention rules**:
+1. DevSystemV3.2 is ALWAYS the source for rules, workflows, skills
+2. .windsurf is ALWAYS the sync TARGET, never edit directly
+3. Pattern: Create in DevSystemV3.2 → Sync to .windsurf
+4. Before creating any DevSystem content, verify target folder starts with `DevSystemV3`
+
 ## 2026-01-21 - Outdated Workflow Reference
 
 ### [LOW] `GLOB-FL-006` Workflow Reference section outdated in devsystem-core.md
