@@ -35,6 +35,8 @@ Copy-Item -Path "DevSystemV3\*" -Destination ".windsurf\" -Recurse -Force
 
 Automatically push commits to GitHub.
 
+**2026-01-21**: Workflow Reference in devsystem-core.md was outdated (`GLOB-FL-006`). Updated to flat list of all 28 workflows.
+
 ## Special Workflows (Workspace Root)
 
 **`deploy-to-all-repos.md`** - Deploys DevSystem files to all linked repos. Located in workspace root (not `.windsurf/workflows/`) to prevent it from being copied to other repos. Run manually by reading the file and following the instructions.

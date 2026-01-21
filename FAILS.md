@@ -1,5 +1,20 @@
 # Failure Log
 
+## 2026-01-21 - Outdated Workflow Reference
+
+### [LOW] `GLOB-FL-006` Workflow Reference section outdated in devsystem-core.md
+
+- **When**: 2026-01-21 11:47 UTC+01:00
+- **Where**: `DevSystemV3.1/rules/devsystem-core.md` lines 189-222
+- **What**: Workflow Reference section listed outdated/non-existent workflows and used categorization that no longer matched actual workflow set
+- **Why it went wrong**:
+  - Workflows evolved but reference section wasn't updated
+  - Categories (Context, Autonomous, Session, Phase, Process) were arbitrary groupings not tied to actual system structure
+
+**Prevention rules**:
+1. When adding/removing/renaming workflows, update devsystem-core.md Workflow Reference
+2. Keep workflow listings flat - avoid arbitrary categorization that drifts from reality
+
 ## 2026-01-20 - Workflow-Skill Content Duplication
 
 ### [MEDIUM] `EDIRD-FL-003` Duplicated content between skill and workflows
