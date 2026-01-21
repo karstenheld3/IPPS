@@ -1,12 +1,12 @@
-# Context State Branching
+# State Branching
 
-Syntax for conditional logic based on context states.
+Syntax for conditional logic based on states.
 
 ## Syntax Rules
 
-- **Context states** (no brackets) appear in condition headers
+- **States** (no brackets) appear in condition headers
 - **Instruction tokens** (brackets) appear in action steps
-- Format: `## For CONTEXT-STATE` followed by `[VERB]` instructions
+- Format: `## For STATE` followed by `[VERB]` instructions
 
 ## Examples
 

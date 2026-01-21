@@ -10,7 +10,7 @@ All documents and items must have unique IDs for traceability.
 
 **Topic:** 2-6 uppercase letters describing component (e.g., `CRWL` for Crawler, `AUTH` for Authentication, `EDIRD` for EDIRD Phase Model)
 
-**REQUIREMENT:** Workspace must have an `ID-REGISTRY.md` file as the authoritative source for all TOPICs, acronyms, and context states to avoid conflicting topic ids. Topic ids must be unique.
+**REQUIREMENT:** Workspace must have an `ID-REGISTRY.md` file as the authoritative source for all TOPICs, acronyms, and states to avoid conflicting topic ids. Topic ids must be unique.
 
 **Before creating a new TOPIC or acronym:**
 1. Read `ID-REGISTRY.md` to check for existing TOPICs

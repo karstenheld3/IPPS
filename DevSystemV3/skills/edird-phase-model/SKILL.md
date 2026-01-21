@@ -22,7 +22,7 @@ Assessment: COMPLEXITY-LOW/MEDIUM/HIGH | PROBLEM-TYPE (RESEARCH/ANALYSIS/EVALUAT
 - **GATES.md** - Full gate checklists for each phase transition
 - **FLOWS.md** - Verb sequences for BUILD and SOLVE workflows, hybrid situations
 - **NEXT_ACTION.md** - Deterministic next-action logic for autonomous mode
-- **BRANCHING.md** - Context state branching syntax
+- **BRANCHING.md** - State branching syntax
 
 ## Phase Overview
 

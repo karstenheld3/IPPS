@@ -142,7 +142,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 **[2026-01-20 16:40]**
 - Comprehensive update: added all IDs from devsystem-ids.md
 - Added: Document Type IDs, Spec-Level, Plan-Level, Tracking IDs
-- Added: Context States (workflow types, complexity, problem types)
+- Added: States (workflow types, complexity, problem types)
 - Added: Labels (severity, assumption, status)
 - Renamed title to "ID Registry"
 

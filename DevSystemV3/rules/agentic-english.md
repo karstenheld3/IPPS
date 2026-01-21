@@ -19,7 +19,7 @@ Use brackets for tokens in **instructions** - things the agent reads and DOES:
 - `[VERB]-FAIL` - Failed outcome, re-iterate or escalate
 - `[VERB]-SKIP` - Intentionally skipped (complexity doesn't require it)
 
-### Context States `NO-BRACKETS`
+### States `NO-BRACKETS`
 
 No brackets for tokens in **conditions** - things the agent checks for branching:
 
@@ -138,7 +138,7 @@ No brackets for tokens in **conditions** - things the agent checks for branching
 - **[WONT-FIX]** - Acknowledged risk, accepted trade-off
 - **[NEEDS-DISCUSSION]** - Requires [CONSULT] with [ACTOR]
 
-## Context States
+## States
 
 ### Workspace Context
 
