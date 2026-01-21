@@ -72,10 +72,6 @@ Write-Host "Total pages: $totalPages, Chunks needed: $chunks"
 ```markdown
 # [Document Title]
 
-**Source**: [filename].pdf
-**Pages**: [total]
-**Transcribed**: [date]
-
 <!-- TRANSCRIPTION PROGRESS
 Chunk: 1 of [total_chunks]
 Pages completed: 0 of [total]
@@ -83,8 +79,6 @@ Pages completed: 0 of [total]
 
 ## Table of Contents
 [Generate after first pass or from PDF Table of Contents (TOC)]
-
----
 ```
 
 ## Step 5: Transcribe in 4-Page Chunks
@@ -123,16 +117,7 @@ Repeat until all pages processed.
 
 1. Remove progress markers
 2. Generate/verify Table of Contents
-3. Add Document Info section at end:
-```markdown
----
-**Document Info**
-- Source: [filename]
-- Total pages: [count]
-- Figures: [count] (ASCII: [n], Verbalized: [n])
-- Transcribed: [date]
-- Verified: [pending/date]
-```
+3. Log metadata to session NOTES.md (source, pages, figures, date) per core-conventions.md
 
 ## Output Locations
 
@@ -156,10 +141,6 @@ For documents over 50 pages, create multiple files:
 Index file format:
 ```markdown
 # [Document Title] - Index
-
-**Source**: [filename].pdf
-**Total Pages**: [n]
-**Parts**: [n]
 
 ## Parts
 

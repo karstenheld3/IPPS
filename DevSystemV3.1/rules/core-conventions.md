@@ -98,3 +98,16 @@ Documents may opt-in to use Markdown tables or emojis by adding a DevSystem tag 
 - Comparison documents where tables improve readability
 - Feature matrices and compatibility charts
 - Status dashboards
+
+## Transcription Output
+
+Transcribed content MUST contain only the original document's content. No processing metadata, agent annotations, or workflow artifacts.
+
+**Prohibited in transcription output:**
+- Source filename, path, or URL
+- Page counts, figure counts, or statistics
+- Transcription date or processing timestamps
+- Verification status or progress markers
+- Agent notes or processing comments
+
+**Store metadata separately:** If tracking is needed, create a companion `[FILENAME]_meta.json` or add to session NOTES.md.
