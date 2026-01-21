@@ -10,8 +10,6 @@ Inventory of all IDs, acronyms, and named concepts in the DevSystem.
 - **TRACT** - Traceability concept/goal. Ensuring development artifacts remain connected from ideation to maintenance
 - **TRACTFUL** - TRACT implementation via documents. Traceable Requirements Artifacts and Coded Templates For Unified Lifecycle
 - **TDID** - Tractful Document ID system (defined in TRACTFUL spec section 4)
-- **MNF** - Must Not Forget. Technique for critical item tracking during task execution
-- **ASANAPAP** - As Short As Necessary, As Precise As Possible. Conciseness principle for workflows and documents
 
 ## Core Identifiers
 
@@ -70,11 +68,13 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 
 - **PREN** - "Proper english" - precise natural language avoiding confusion, ambiguities, term conflicts 
 - **AGEN** - "Agentic english" - proper english, enriched with semantics like `@mentions`, `/workflow`, `[INSTRUCTION]`, etc.
-- **HWT** - Human Work Time. Partition target: max 0.5h per task
-- **AWT** - Agentic Work Time. Agent time estimate
+- **HWT** - Human Work Time. Example: "max 0.5h HWT per task"
+- **AWT** - Agentic Work Time. Agent time estimate. Example: "complete in < 5mins AWT"
 - **MEPI** - Most Executable Point of Information (used for research and decision making)
 - **MCPI** - Most Complete Point of Information (used for research)
 - **SOCAS** - Signs Of Confusion And Sloppiness (10 criteria)
+- **MNF** - Must Not Forget. Technique for critical item tracking during task execution
+- **ASANAPAP** - As Short As Necessary, As Precise As Possible. Conciseness principle for workflows and documents
 
 ## States (no brackets)
 

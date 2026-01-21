@@ -69,6 +69,7 @@ TRACTFUL provides the docs    → INFO, SPEC, IMPL, TEST, TASKS with unique IDs
 - [EDIRD Phase Model](#edird-phase-model---explore-design-implement-refine-deliver)
 - [STRUT - Structured Thinking](#strut---structured-thinking)
 - [TRACTFUL - Document Framework](#tractful---document-framework)
+- [Agentic Concepts and Strategies](#agentic-concepts-and-strategies)
 - [Key Conventions](#key-conventions)
 - [Agent Tools](#agent-tools-installed-automatically-by-skill)
 - [Project Structure](#project-structure)
@@ -215,6 +216,22 @@ Document types and templates that cover the entire development cycle from explor
 - **Item ID** - `[TOPIC]-[ITEM]-[NN]` (e.g., `AUTH-FR-01`, `CRWL-DD-03`)
 - **Cross-reference** - `filename.md [DOC-ID]`
 
+## Agentic Concepts and Strategies
+
+Acronyms and techniques used throughout IPPS for consistent agent behavior:
+
+- **PREN** - Proper English. Precise natural language avoiding confusion, ambiguities, and term conflicts
+- **AGEN** - Agentic English. PREN enriched with semantics: `@mentions`, `/workflow`, `[VERB]`, `[PLACEHOLDER]`
+- **HWT** - Human Work Time. Partition target: max 0.5h per task for predictable progress
+- **AWT** - Agentic Work Time. Agent time estimate for planning and capacity
+- **MEPI** - Most Executable Point of Information. Used for research when action is needed
+- **MCPI** - Most Complete Point of Information. Used for research when thoroughness is needed
+- **SOCAS** - Signs Of Confusion And Sloppiness. 10 criteria for detecting agent degradation
+- **MNF** - Must Not Forget. Technique for critical item tracking during task execution
+- **ASANAPAP** - As Short As Necessary, As Precise As Possible. Conciseness principle for workflows and documents
+
+**Full registry**: [ID-REGISTRY.md](ID-REGISTRY.md) - All acronyms, TOPICs, states, and named concepts
+
 ## Key Conventions
 
 - [Core Conventions](DevSystemV3.1/rules/core-conventions.md) - Text formatting, document structure, header blocks
@@ -223,7 +240,8 @@ Document types and templates that cover the entire development cycle from explor
 - [Agentic English](DevSystemV3.1/rules/agentic-english.md) - Controlled vocabulary for agent instructions
 - [EDIRD Phase Planning](DevSystemV3.1/rules/edird-phase-planning.md) - Phase model core rules
 - [Git Conventions](DevSystemV3.1/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
-- [Coding Conventions](DevSystemV3.1/skills/coding-conventions/SKILL.md) - Python, PowerShell style rules
+- [Coding Conventions](DevSystemV3.1/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
+- [Workflow Rules](DevSystemV3.1/skills/coding-conventions/WORKFLOW-RULES.md) - ASANAPAP principle, workflow formatting
 
 ## Agent Tools (installed automatically by skill)
 
