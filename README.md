@@ -379,19 +379,19 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ### Prime Context
 
-Load workspace context before starting work (constants and documents from workspace and devsystem):
+Load workspace context before starting work:
 ```
 /prime
 ```
 
 The prime workflow:
-1. Finds and reads all `!*.md` files (priority documentation)
-2. Finds and reads standard `.md` files (excluding `_` and `!` prefixed)
-3. Detects workspace scenario (project structure, version strategy, work mode)
-4. Reports summary: files read, scenario detected
+1. Reads all `.md` files in `[AGENT_FOLDER]/rules/` (core conventions, system behavior)
+2. Reads all `!*.md` files (priority documentation with critical project info)
+3. Reads standard `.md` files in workspace root (excluding `_` and `!` prefixed)
+4. Detects workspace scenario (project structure, version strategy, work mode)
+5. Reports summary: files read, scenario detected
 
-Usually loads:
-- `README.md`, `NOTES.md`, `PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`, ...)
+Typically loads: `README.md`, `!NOTES.md`, `!PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`, agent rules
 
 ### Workflow Entry Points
 
