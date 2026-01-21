@@ -217,30 +217,6 @@ Files starting with `.tmp` are temporary helper scripts created during operation
 - `/write-tasks-plan` - Create tasks plan from IMPL/TEST
 - `/write-test-plan` - Create test plan from spec
 
-## Phase Tracking
-
-Sessions track current phase in NOTES.md:
-
-```markdown
-## Current Phase
-
-**Phase**: DESIGN
-**Last verb**: [WRITE-SPEC]-OK
-**Gate status**: 3/5 items checked
-```
-
-Sessions track full phase plan in PROGRESS.md:
-
-```markdown
-## Phase Plan
-
-- [ ] **EXPLORE** - pending
-- [x] **DESIGN** - done
-- [ ] **IMPLEMENT** - in_progress
-- [ ] **REFINE** - pending
-- [ ] **DELIVER** - pending
-```
-
 ## STRUT Execution
 
 STRUT plans use structured notation for progress tracking. Execution follows these rules:
@@ -251,8 +227,14 @@ STRUT plans use structured notation for progress tracking. Execution follows the
 2. **Execute step**: Perform the verb action with given parameters
 3. **Update checkbox**: Mark `[x]` on success, increment `[N]` on retry
 4. **Check deliverables**: After step completion, verify if any `Px-Dy` can be checked
-5. **Evaluate transitions**: When all steps done, check transition conditions
+5. **At phase boundary**: Run `/verify` to evaluate transition conditions
 6. **Follow transition**: Go to next phase, `[CONSULT]`, or `[END]`
+
+### Verification Gates
+
+- **Planning time**: Run `/verify` after creating STRUT plans to validate structure
+- **Phase transitions**: Run `/verify` before transitioning between phases
+- **Mandate**: Only `/verify` workflow has authority to approve autonomous phase transitions
 
 ### Resuming Interrupted Plans
 
