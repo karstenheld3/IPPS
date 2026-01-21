@@ -50,6 +50,34 @@
 | **Command format** | Markdown with YAML frontmatter | Markdown with arguments | Not supported | Markdown with YAML frontmatter |
 | **Built-in commands** | `/prime`, `/verify`, `/commit` | `/init`, `/memory`, `/agents` | `/review`, `/compact`, `/diff` | None |
 
+### Prompt Syntax (Agentic Language Enrichments)
+
+| Enrichment | Windsurf | Claude Code | Codex CLI | GitHub Copilot |
+|------------|----------|-------------|-----------|----------------|
+| **File reference** | `@file` | `@file` | `@` (fuzzy picker) | `#file:name` |
+| **Folder reference** | `@folder/` | `@folder/` | ❌ No | ❌ No |
+| **Skill invocation** | `@skill-name` | `@skill-name` | N/A | N/A |
+| **Web/docs search** | `@web`, `@docs` | ❌ No | `--search` flag | ❌ No |
+| **Terminal reference** | `@terminal` | ❌ No | ❌ No | `@terminal` |
+| **Conversation reference** | `@conversation` | ❌ No | ❌ No | ❌ No |
+| **Workspace context** | (automatic) | (automatic) | (automatic) | `@workspace` |
+| **Selection reference** | (automatic) | (automatic) | (automatic) | `#selection` |
+| **Codemap reference** | `@codemap-name` | ❌ No | ❌ No | ❌ No |
+| **Slash commands** | `/workflow-name` | `/command-name` | `/command` | ❌ No (use prompts) |
+| **Custom prompts** | N/A | N/A | `/prompts: name` | Prompt files |
+| **Shell execution** | ❌ No | `!command` | `!command` | ❌ No |
+| **Memory shortcut** | ❌ No | `#` key (saves to CLAUDE.md) | ❌ No | ❌ No |
+| **MCP tool reference** | (automatic) | (automatic) | (automatic) | `#tool:name` |
+| **URL pasting** | ✅ Yes (fetches content) | ❌ No | ❌ No | ❌ No |
+| **Image attachments** | ✅ Yes (drag/drop) | ✅ Yes (CLI flag) | ✅ Yes (`-i` flag) | ✅ Yes (Agent mode) |
+| **Pipe input** | N/A | `cat file \| claude -p` | `cat file \| codex exec` | N/A |
+
+**Key differences:**
+- **Windsurf/Claude use `@`** for context references, **Copilot uses `#`** (same concept, different syntax)
+- **Only terminal agents** (Claude Code, Codex) support `!bang` for direct shell execution
+- **Only Windsurf** supports URL pasting with automatic content fetching
+- **Only Windsurf** has `@conversation` to reference previous chat sessions
+
 ### Skills
 
 | Aspect | Windsurf | Claude Code | Codex CLI | GitHub Copilot |
@@ -167,6 +195,10 @@ Windsurf and Claude Code share the same `SKILL.md` format:
 - Skills can be copied between `.windsurf/skills/` and `.claude/skills/`
 
 ## Document History
+
+**[2026-01-21 11:02]**
+- Added: Prompt Syntax (Agentic Language Enrichments) comparison table
+- Covers: @mentions, /commands, !bang, #references, URL pasting, images, pipe input
 
 **[2026-01-15 09:20]**
 - Added DevSystem exception tags for tables and emojis
