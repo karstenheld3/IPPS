@@ -567,3 +567,7 @@ Creates `_TASKS_*.md` from IMPL/TEST. **Mandatory before implementation.**
 - [How Claude Code Works](_INFO_HOW_CLAUDE_CODE_WORKS.md) - Anthropic's terminal agent
 - [How Codex CLI Works](_INFO_HOW_CODEX_WORKS.md) - OpenAI's terminal agent
 - [How GitHub Copilot Works](_INFO_HOW_COPILOT_WORKS.md) - GitHub's IDE extension
+
+### Technical Reference
+
+- [ASCII Art Width Test](_INFO_ASCII_ART_WIDTH_TEST.md) - Unicode character width testing for monospace fonts

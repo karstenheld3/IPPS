@@ -125,9 +125,12 @@ Use proper Unicode characters to match the original document:
 **Common symbols:**
 ```
 © ® ™ § ¶ † ‡ ° ′ ″ ‴   (copyright, registered, trademark, section, pilcrow, dagger, degree, prime)
-± × ÷ − ≠ ≈ ≡ ≤ ≥ ∞    (math operators)
-→ ← ↔ ⇒ ⇐ ⇔            (arrows in text)
 ```
+
+**Math formulas:** Use standard Markdown math extension (LaTeX syntax):
+- Inline: `$E = mc^2$` renders as $E = mc^2$
+- Block: `$$\sum_{i=1}^{n} x_i$$` for display equations
+- Avoid Unicode math operators (± × ÷ ≠ ≈) and arrows (→ ←) - use LaTeX instead
 
 **Fractions:**
 ```
