@@ -21,10 +21,26 @@ This skill provides guidance for using the `computer-use-mcp` server to give Cas
 
 ## When NOT to Use
 
+- **Windsurf/Cascade** - MCP protocol incompatibility causes Cascade failures (see `MCPS-FL-008`)
 - Browser-only automation with logged-in sessions (use Playwriter instead)
 - Tasks requiring you to work alongside the AI (mouse/keyboard are hijacked)
 - High-security environments (full desktop access is risky)
 - Tasks requiring high precision (models make frequent coordinate errors)
+
+## Compatibility
+
+**Verified compatible:**
+- Claude Desktop
+- Cursor
+- Cline
+
+**NOT compatible:**
+- Windsurf/Cascade - MCP protocol/tool schema issue, breaks all Cascade operations
+
+**Platform support** (when using compatible clients):
+- macOS - Full support via Core Graphics
+- Linux - Full support via X11/libxdo
+- Windows - Package runs, but untested with compatible clients
 
 ## Architecture
 

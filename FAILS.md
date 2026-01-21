@@ -1,5 +1,34 @@
 # Failure Log
 
+## 2026-01-21 - computer-use-mcp Breaks Cascade on Windows
+
+### [CRITICAL] `MCPS-FL-008` computer-use-mcp MCP server causes Cascade failures
+
+- **When**: 2026-01-21 15:00 UTC+01:00
+- **Where**: `~/.codeium/windsurf/mcp_config.json`
+- **What**: Adding computer-use-mcp to MCP config caused all Cascade requests to fail with "Invalid argument: an internal error occurred"
+- **Evidence**: 
+  - Multiple error IDs: `0ccce4bc7a12480fabd481519ec19c95`, `0a9e553eeadb489591861da8602ca87b`
+  - Anthropic API returned 400 Bad Request
+  - Cascade unusable until server removed from config
+- **Why it went wrong**:
+  - Package itself works fine (`npx -y computer-use-mcp` shows "server running on stdio")
+  - Root cause: MCP protocol or tool schema incompatibility with Windsurf/Cascade
+  - GitHub repo lists Claude Desktop, Cursor, Cline - NOT Windsurf as compatible
+  - Windsurf may not handle this server's tool definitions or initialization correctly
+  - "Invalid argument" errors suggest protocol-level failure, not Windows issue
+- **Fix applied**: Removed `computer-use` entry from mcp_config.json
+
+**Prevention rules**:
+1. Check MCP server compatibility list - if Windsurf not listed, expect issues
+2. Test in isolation is NOT sufficient - `--help` works but MCP handshake may fail
+3. Have rollback plan before adding new MCP servers to config
+4. For desktop automation with Windsurf, use playwriter (verified working)
+
+**Root cause**: UNKNOWN - likely MCP protocol incompatibility, NOT Windows/nut.js issue
+
+**Status**: RESOLVED - Cascade working after removal
+
 ## 2026-01-21 - Wrong Source Location for Skill
 
 ### [MEDIUM] `GLOB-FL-007` Created skill directly in .windsurf instead of DevSystemV3.2

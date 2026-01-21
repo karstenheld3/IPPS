@@ -222,47 +222,43 @@ Self-hosted:
 - `airtop-mcp-server` - Airtop cloud browser integration
 - `nova-act-mcp-server` - Amazon Nova Act SDK integration
 
-### 2.7 computer-use-mcp (Desktop Control)
+### 2.7 computer-use-mcp (Desktop Control) - NOT COMPATIBLE WITH WINDSURF
 
 **Repository**: https://github.com/domdomegg/computer-use-mcp
 **Package**: `computer-use-mcp`
+**Status**: DOES NOT WORK with Windsurf/Cascade (see `MCPS-FL-008`)
 
-**Key Differentiator**: Wraps Anthropic's Computer Use capabilities as an MCP server, enabling any MCP client (Windsurf, Cursor, Claude Desktop) to control the entire desktop.
+**Key Differentiator**: Wraps Anthropic's Computer Use capabilities as an MCP server.
 
-**Capabilities:**
+**Verified Compatible Clients:**
+- Claude Desktop
+- Cursor
+- Cline
+
+**NOT Compatible:**
+- Windsurf/Cascade - Breaks all Cascade operations when added to config
+
+**Capabilities (when using compatible clients):**
 - Screenshot capture of entire screen
 - Mouse control (click, drag, move)
 - Keyboard input (type, shortcuts)
 - Full desktop automation (not browser-specific)
 
-**Installation for Windsurf:**
+**Windsurf Failure Analysis (2026-01-21):**
 
-Add to `~/.codeium/windsurf/mcp_config.json`:
-```json
-{
-  "mcpServers": {
-    "computer-use": {
-      "command": "npx",
-      "args": ["-y", "computer-use-mcp"]
-    }
-  }
-}
-```
+Tested on Windows with Windsurf. Results:
+1. Package runs fine: `npx -y computer-use-mcp` shows "Computer Use MCP server running on stdio"
+2. Adding to mcp_config.json causes ALL Cascade requests to fail
+3. Errors: "Invalid argument: an internal error occurred" and Anthropic API 400 errors
+4. Removing from config restores Cascade functionality
 
-**Tips for best results:**
-- Use small, common resolution (720p works well)
-- Install Rango browser extension for keyboard navigation
-- Use latest Claude models for better accuracy
+**Root cause**: Likely requires Anthropic computer-use beta API access. When Cascade sees the `computer` tool, it may route to Anthropic's computer-use beta endpoint which requires special permissions/billing.
 
-**Limitations:**
-- Full desktop control = security risk (use sandboxed account)
-- Models make frequent mistakes, vulnerable to prompt injections
-- Not browser-specific - controls entire OS
-- For browser-only tasks, Playwriter is more appropriate
+**Recommendation**: For desktop automation with Windsurf, use **Playwriter** (browser-based, verified working) instead.
 
-**How it works:**
+**How it works (for compatible clients):**
 - Implements near-identical tool to Anthropic's official Computer Use
-- Uses nut.js for native OS control
+- Uses nut.js for native OS control (works on Windows, macOS, Linux)
 - Nudges model to prefer keyboard shortcuts
 
 ## 3. Agent Frameworks
