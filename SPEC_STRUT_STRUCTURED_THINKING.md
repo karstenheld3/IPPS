@@ -19,8 +19,10 @@
 - Tree nodes: Objectives, Strategy, Steps (verbs), Deliverables, Transitions
 - Steps use AGEN verbs: `[ ] P1-S1 [VERB](params)`
 - Checkbox states: `[ ]` pending, `[x]` done, `[N]` done N times
+- **Objectives link to Deliverables**: `[ ] Goal ← P1-D1, P1-D2` (evidence-based verification)
 - Strategy can include AWT (Agentic Work Time) estimates
 - Transitions define flow control at phase end
+- Verify STRUT plans via /verify workflow (Planning + Transition contexts)
 
 ## 1. Scenario
 
@@ -52,7 +54,10 @@
 - `[N]` - Done N times (e.g., `[2]` = executed twice, for loops/retries)
 
 **STRUT-FR-05: Objectives**
-- Format: `[ ] Goal description` (no IDs, uses checkbox states)
+- Format: `[ ] Goal description ← P1-D1, P1-D2` (link to proving Deliverables)
+- No IDs, uses checkbox states
+- Each Objective SHOULD link to at least one Deliverable
+- Unlinked Objectives require [ACTOR] confirmation at transition
 
 **STRUT-FR-06: Strategy**
 - Free text, may include AWT estimates
@@ -71,8 +76,8 @@
 ```
 [ ] P1 [PHASE-NAME]: Description
 ├─ Objectives:
-│   ├─ [ ] Goal 1
-│   └─ [ ] Goal 2
+│   ├─ [ ] Goal 1 ← P1-D1, P1-D2
+│   └─ [ ] Goal 2 ← P1-D3
 ├─ Strategy: Approach description
 │   - Sub-item if needed
 ├─ [ ] P1-S1 [VERB](params)
@@ -93,7 +98,7 @@
 ```
 [ ] P1 [IMPLEMENT]: Fix and verify
 ├─ Objectives:
-│   └─ [ ] Bug no longer reproduces
+│   └─ [ ] Bug no longer reproduces ← P1-D2, P1-D3
 ├─ Strategy: Locate bug, apply minimal fix, test, commit
 ├─ [ ] P1-S1 [ANALYZE](stack trace)
 ├─ [ ] P1-S2 [IMPLEMENT](null check fix)
@@ -115,10 +120,10 @@
 ```
 [ ] P1 [EXPLORE]: Understand requirements
 ├─ Objectives:
-│   ├─ [ ] Know what to build
-│   ├─ [ ] Correct API documentation researched
-│   ├─ [ ] Assess complexity
-│   └─ [ ] Create [DESIGN] phase STRUT
+│   ├─ [ ] Know what to build ← P1-D4
+│   ├─ [ ] Correct API documentation researched ← P1-D3
+│   ├─ [ ] Assess complexity ← P1-D1, P1-D2
+│   └─ [ ] Create [DESIGN] phase STRUT ← P1-D5
 ├─ Strategy: Ready for design in 5min AWT (agent work time)
 │   - Read all project documents first
 ├─ [ ] P1-S1 [GATHER](requirements from ticket AUTH-123)
@@ -139,8 +144,8 @@
 
 [ ] P2 [DESIGN]: Plan implementation
 ├─ Objectives:
-│   ├─ [ ] Architecture decided (from 2+ options)
-│   └─ [ ] SPEC, IMPL, TEST ready
+│   ├─ [ ] Architecture decided (from 2+ options) ← P2-D1
+│   └─ [ ] SPEC, IMPL, TEST ready ← P2-D2, P2-D3
 ├─ Strategy: TBD based on P1 findings
 ├─ [ ] P2-S1 [PLAN](token-based password reset)
 ├─ [ ] P2-S2 [WRITE-SPEC](_SPEC_PASSWORD_RESET.md) → [VERIFY] → [REVIEW] → [VERIFY]
@@ -160,8 +165,8 @@
 
 [ ] P3 [IMPLEMENT]: Build feature
 ├─ Objectives:
-│   ├─ [ ] Feature working
-│   └─ [ ] Tests passing
+│   ├─ [ ] Feature working ← P3-D1, P3-D2, P3-D3
+│   └─ [ ] Tests passing ← P3-D4
 ├─ Strategy: Implement per IMPL plan, test-fix loop
 ├─ [ ] P3-S1 [IMPLEMENT](ResetToken model)
 ├─ [ ] P3-S2 [IMPLEMENT](/forgot-password endpoint)
@@ -181,7 +186,7 @@
 
 [ ] P4 [REFINE]: Review
 ├─ Objectives:
-│   └─ [ ] Code matches SPEC
+│   └─ [ ] Code matches SPEC ← P4-D1, P4-D2
 ├─ Strategy: Verify, test integration
 ├─ [ ] P4-S1 [VERIFY](code matches SPEC)
 ├─ [ ] P4-S2 [TEST](integration)
@@ -193,7 +198,7 @@
 
 [ ] P5 [DELIVER]: Complete
 ├─ Objectives:
-│   └─ [ ] Feature delivered
+│   └─ [ ] Feature delivered ← P5-D1, P5-D2
 ├─ Strategy: Validate, close ticket
 ├─ [ ] P5-S1 [VALIDATE](manual test)
 ├─ [ ] P5-S2 [CLOSE](ticket AUTH-123)
@@ -209,8 +214,8 @@
 ```
 [ ] P1 [EXPLORE]: Research OAuth providers
 ├─ Objectives:
-│   ├─ [ ] Understand OAuth landscape
-│   └─ [ ] Make recommendation
+│   ├─ [ ] Understand OAuth landscape ← P1-D1, P1-D2, P1-D3
+│   └─ [ ] Make recommendation ← P1-D4
 ├─ Strategy: Gather providers, research, define criteria, evaluate, recommend
 ├─ [ ] P1-S1 [GATHER](provider list)
 ├─ [ ] P1-S2 [RESEARCH](Auth0, Okta, Firebase, Cognito)
@@ -227,7 +232,7 @@
 
 [ ] P2 [DESIGN]: Document decision
 ├─ Objectives:
-│   └─ [ ] Decision documented
+│   └─ [ ] Decision documented ← P2-D1
 ├─ Strategy: Write INFO document
 ├─ [ ] P2-S1 [WRITE-INFO](_INFO_OAUTH_EVALUATION.md)
 ├─ Deliverables:
@@ -245,6 +250,13 @@
 **Resuming:** Find first unchecked Deliverable, read Strategy, continue
 
 ## Document History
+
+**[2026-01-21 11:35]**
+- Added: STRUT-FR-05 expanded - Objectives link to Deliverables via `← P1-Dx` syntax
+- Added: Unlinked Objectives require [ACTOR] confirmation at transition
+- Added: MUST-NOT-FORGET - Objectives link to Deliverables, verify via /verify workflow
+- Changed: Phase Template updated with Objective-Deliverable links
+- Changed: All 3 examples updated with Objective-Deliverable links
 
 **[2026-01-20 19:35]**
 - Added: Explicit "Does not depend on" EDIRD (phase-model agnostic)

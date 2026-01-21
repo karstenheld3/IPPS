@@ -163,6 +163,33 @@ Apply these labels to findings, requirements, and decisions in all document type
 - [ ] Discovered bugs in unrelated code → create issues or sync to PROBLEMS.md
 - [ ] New agent instructions → sync to project rules or NOTES.md
 
+## STRUT Plans (Planning Phase)
+
+Verify when STRUT plan is created or updated:
+
+- [ ] Every Objective links to at least one Deliverable (`← P1-Dx`)
+- [ ] Unlinked Objectives flagged - require [ACTOR] confirmation at transition
+- [ ] All Deliverables have clear completion criteria
+- [ ] Transitions reference Deliverables (not Objectives)
+- [ ] Steps use valid AGEN verbs with `[VERB](params)` format
+- [ ] Problem/goal addressed by Objectives?
+- [ ] Strategy includes approach summary (AWT estimate optional)
+
+## STRUT Plans (Transition Phase)
+
+Verify before phase transition (when evaluating Transitions):
+
+- [ ] All Deliverables in Transition condition are checked?
+- [ ] For each Objective: are ALL linked Deliverables checked?
+- [ ] Deliverable evidence supports Objective claim?
+- [ ] Unlinked Objectives: [ACTOR] confirmation obtained?
+- [ ] Transition target is valid (`[PHASE-NAME]`, `[CONSULT]`, or `[END]`)?
+
+**Objective Verification Rule:**
+- Objective is verified when ALL linked Deliverables are checked
+- Check Objective checkbox only after confirming linked Deliverables
+- If Objective has no links (`←`), require explicit [ACTOR] confirmation
+
 ## PDF-to-Markdown Conversions
 
 Verify markdown files that were converted from PDF sources.

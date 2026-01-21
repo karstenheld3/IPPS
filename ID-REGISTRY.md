@@ -65,15 +65,14 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 
 - **SC** - Source marker
 
-## Measurement
+## Agentic concepts and strategies
 
+- **PREN** - "Proper english" - precise natural language avoiding confusion, ambiguities, term conflicts 
+- **AGEN** - "Agentic english" - proper english, enriched with semantics like `@mentions`, `/workflow`, `[INSTRUCTION]`, etc.
 - **HWT** - Human Work Time. Partition target: max 0.5h per task
 - **AWT** - Agentic Work Time. Agent time estimate
-
-## Strategies
-
-- **MEPI** - Most Executable Point of Information
-- **MCPI** - Most Complete Point of Information
+- **MEPI** - Most Executable Point of Information (used for research and decision making)
+- **MCPI** - Most Complete Point of Information (used for research)
 - **SOCAS** - Signs Of Confusion And Sloppiness (10 criteria)
 
 ## States (no brackets)
