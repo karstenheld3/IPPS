@@ -23,7 +23,7 @@ If no [SESSION_FOLDER] provided, create one in the default sessions folder with 
 
 In the [SESSION_FOLDER], create tracking files from @session-management templates:
 
-- `NOTES.md` - Include "Current Phase" section for EDIRD tracking
+- `NOTES.md` - Include "Current Phase" section for phase tracking
 - `PROGRESS.md` - Include "Phase Plan" section with 5 phases
 - `PROBLEMS.md` - Track issues discovered during session
 

@@ -50,6 +50,20 @@ Tracking documents exist at workspace, project, or session level. Only one of ea
 
 - **[ACTOR]**: Decision-making entity (default: user, in /go-autonomous: agent)
 
+### MNF (MUST-NOT-FORGET) Technique
+
+Prevents critical oversights during task execution.
+
+**Planning phase:**
+1. Create `MUST-NOT-FORGET` list (5-15 items max). Name must not be changed to be greppable.
+2. Collect items from: FAILS.md, learnings, rules, specs, user instructions
+3. Include in plan or at top of working document
+
+**Completion phase:**
+1. Review each MNF item before marking task done
+2. Verify compliance or document why item doesn't apply
+3. Update FAILS.md if any MNF item was violated
+
 ### Complexity Levels
 
 Maps to semantic versioning:

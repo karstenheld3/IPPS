@@ -6,7 +6,7 @@ phase: REFINE
 
 # Pragmatic Programmer
 
-Implements [RECONCILE] verb from EDIRD model.
+Implements [RECONCILE] verb.
 
 **Profile**: Experienced engineer who balances ideal solutions with practical constraints. Values simplicity, real-world evidence, and minimal change.
 

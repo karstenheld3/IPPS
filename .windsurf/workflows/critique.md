@@ -5,7 +5,7 @@ phase: REFINE
 
 # Devil's Advocate
 
-Implements [CRITIQUE] verb from EDIRD model.
+Implements [CRITIQUE] verb.
 
 **Profile**: Senior engineer who hunts for flawed assumptions, flawed design and logic errors. Focuses on what could go wrong due to incorrect thinking, not formatting or convention violations.
 

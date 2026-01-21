@@ -6,6 +6,16 @@ description: Deploy DevSystem files to all linked repositories
 
 Copies DevSystem files from this repo's `.windsurf` folder to all linked repositories according to their specific rules.
 
+## MUST-NOT-FORGET
+
+1. **Check DevSystem version FIRST** - Read `!NOTES.md` to get `[DEVSYSTEM]` (e.g., `DevSystemV3.1`) before ANY other action
+2. **Sync before deploy** - Copy from `[DEVSYSTEM]\*` to `.windsurf\` BEFORE running preview
+3. **Clean deprecated files** - Remove deprecated files from `.windsurf/` after sync (edird-core.md, go-autonomous.md, next.md, edird-phase-model/)
+4. **Output format** - ALWAYS use the exact text format in "Output Format" section (NO tables, NO markdown tables)
+5. **List filenames** - ALWAYS list explicit filenames after each category (Add, Overwrite, Delete), not just counts
+
+**WHY:** `.windsurf/` may contain stale files from older DevSystem versions. Deploying without syncing first will propagate deprecated files to all linked repos.
+
 ## Execution Modes
 
 **Default (Preview/Dry-Run):** Show what WOULD be done, then ask for confirmation before making any changes.
@@ -113,6 +123,7 @@ foreach ($target in $targets) {
         if ($deprecated.Count -gt 0) { Write-Host "  DELETE: $($deprecated.Count)" -ForegroundColor Red; $deprecated | ForEach-Object { Write-Host "    $_" -ForegroundColor Red } }
         if ($unchanged.Count -gt 0) { Write-Host "  UNCHANGED: $($unchanged.Count)" -ForegroundColor Gray }
     }
+    
 }
 ```
 
@@ -161,22 +172,29 @@ C:\Dev\Repo1
   [UP TO DATE] 41 files unchanged
 
 C:\Dev\Repo2
-  - Add: 41 files (file1.md, file2.md, ...)
-  - Delete: 1 deprecated file (rules/old-file.md)
+  - Add: 41 files
+      workflows\build.md, commit.md, critique.md, reconcile.md
+      workflows\session-close.md, session-new.md, solve.md, test.md
+      workflows\write-impl-plan.md, write-spec.md, write-test-plan.md
+      ...
+  - Delete: 1 deprecated file
+      rules/old-file.md
 
 C:\Dev\Repo3
   [NEW REPO] .windsurf folder does not exist - will create with 41 files
 
 C:\Dev\Repo4
-  - Add: 27 new files (file1.md, file2.md, ...)
-  - Overwrite: 13 older files (file3.md, file4.md, ...)
-  - Delete: 7 deprecated files (old1.md, old2.md, ...)
-
-C:\Dev\Repo5
-  - Add: 32 new files (file1.md, file2.md, ...)
-  - Overwrite: 8 older files (file3.md, file4.md, ...)
+  - Add: 27 new files
+      workflows\build.md, commit.md, critique.md, reconcile.md
+      workflows\session-close.md, session-new.md, solve.md, test.md
+      workflows\write-impl-plan.md, write-spec.md, write-test-plan.md
+      ...
+  - Overwrite: 13 older files
+      skills/file28.md, file29.md
+      ...
+  - Delete: 7 deprecated files
+      full/path/to/file/old1.md, old2.md
   - Skipped: session*.md files (per repo rules)
-  - Delete: 2 deprecated files (old1.md, old2.md)
 
 Summary: X repos to process, Y files to deploy, Z files to delete.
 ```

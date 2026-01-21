@@ -10,6 +10,7 @@ Inventory of all IDs, acronyms, and named concepts in the DevSystem.
 - **TRACT** - Traceability concept/goal. Ensuring development artifacts remain connected from ideation to maintenance
 - **TRACTFUL** - TRACT implementation via documents. Traceable Requirements Artifacts and Coded Templates For Unified Lifecycle
 - **TDID** - Tractful Document ID system (defined in TRACTFUL spec section 4)
+- **MNF** - Must Not Forget. Technique for critical item tracking during task execution
 
 ## Core Identifiers
 

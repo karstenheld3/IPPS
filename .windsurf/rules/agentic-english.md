@@ -56,13 +56,14 @@ No brackets for tokens in **conditions** - things the agent checks for branching
 - **[INVESTIGATE]** - Focused inquiry into specific issue
 - **[GATHER]** - Collect information, logs, context, requirements
 - **[PRIME]** - Load most relevant information into context
+- **[READ]** - Careful, thorough reading of provided content with attention to detail
 
 ### Thinking and Planning
 
 - **[SCOPE]** - Define boundaries and constraints
 - **[FRAME]** - Structure the problem or approach
 - **[PLAN]** - Create structured approach with steps
-- **[DECOMPOSE]** - Break large plan into small testable steps
+- **[PARTITION]** - Break large plan into small testable steps (TASKS document)
 - **[DECIDE]** - Make a choice between options
 - **[ASSESS]** - Assess effort, time, risk, or complexity
 - **[PRIORITIZE]** - Order by importance or urgency
@@ -70,6 +71,9 @@ No brackets for tokens in **conditions** - things the agent checks for branching
 - **[SYNTHESIZE]** - Combine findings into coherent understanding
 - **[CONCLUDE]** - Draw conclusions from analysis
 - **[DEFINE]** - Establish clear definitions or criteria
+- **[RECAP]** - Analyze context, revisit plan, identify current status
+- **[CONTINUE]** - Forward-looking assessment, execute next items on plan
+- **[GO]** - Sequence of [RECAP] + [CONTINUE] until goal reached
 
 ### Validation and Proof
 
