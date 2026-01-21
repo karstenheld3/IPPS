@@ -74,7 +74,9 @@ TRACTFUL provides the docs    → INFO, SPEC, IMPL, TEST, TASKS with unique IDs
 - [How to Add to Your Project](#how-to-add-to-your-project)
 - [DevSystem Versions](#devsystem-versions)
 - [Agentic English](#agentic-english)
-- [EDIRD Phase Model](#edird-phase-model)
+- [EDIRD Phase Model](#edird-phase-model---explore-design-implement-refine-deliver)
+- [STRUT - Structured Thinking](#strut---structured-thinking)
+- [TRACTFUL - Document Framework](#tractful---document-framework)
 - [Key Conventions](#key-conventions)
 - [Agent Tools](#agent-tools-installed-automatically-by-skill)
 - [Project Structure](#project-structure)
@@ -110,17 +112,19 @@ your-project/
 
 A controlled vocabulary for agent-human communication. Provides consistent terminology across all workflows.
 
+**Full specification**: [SPEC_AGEN_AGENTIC_ENGLISH.md](SPEC_AGEN_AGENTIC_ENGLISH.md)
+
 **Goal**: Eliminate ambiguity in agent instructions by using bracketed verbs, placeholders, and labels.
 
 **Rationale**: Agents interpret natural language inconsistently. Agentic English provides deterministic instructions that agents can reliably parse and execute.
 
 **Syntax**:
 - `[VERB]` - Action to execute (e.g., `[RESEARCH]`, `[VERIFY]`, `[IMPLEMENT]`)
-
-**Extensibility**: Verbs are abstract concepts. Complex verbs CAN be concretized as dedicated workflows (e.g., `[COMMIT]` → `/commit`), but this is optional. Simple verbs work inline within phase workflows.
 - `[PLACEHOLDER]` - Value to substitute (e.g., `[ACTOR]`, `[WORKSPACE_FOLDER]`)
 - `[LABEL]` - Classification to apply (e.g., `[UNVERIFIED]`, `[CRITICAL]`)
-- States use NO brackets: `COMPLEXITY-HIGH`, `HOTFIX`, `SINGLE-PROJECT`
+- `STATE` - Condition with NO brackets (e.g., `COMPLEXITY-HIGH`, `HOTFIX`, `SINGLE-PROJECT`)
+
+**Extensibility**: Verbs are abstract concepts. Complex verbs CAN be concretized as dedicated workflows (e.g., `[COMMIT]` → `/commit`), but this is optional. Simple verbs work inline within phase workflows.
 
 **Example workflow instruction**:
 ```
@@ -131,11 +135,11 @@ A controlled vocabulary for agent-human communication. Provides consistent termi
 5. [COMMIT] with conventional message
 ```
 
-**Full specification**: [SPEC_AGEN_AGENTIC_ENGLISH.md](SPEC_AGEN_AGENTIC_ENGLISH.md)
-
 ## EDIRD Phase Model - Explore, Design, Implement, Refine, Deliver
 
 A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) work.
+
+**Full specification**: [SPEC_EDIRD_PHASE_MODEL.md](SPEC_EDIRD_PHASE_MODEL.md)
 
 **Goal**: Consistent phase structure for all development work with deterministic next-action logic. We want the agent to always do the right thing when the `/go` workflow is executed until the initial goal is reached.
 
@@ -166,7 +170,57 @@ A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) w
 [DELIVER] → [COMMIT] → [MERGE]
 ```
 
-**Full specification**: [SPEC_EDIRD_PHASE_MODEL.md](SPEC_EDIRD_PHASE_MODEL.md)
+## STRUT - Structured Thinking
+
+Tree notation for planning and tracking complex autonomous work.
+
+**Full specification**: [SPEC_STRUT_STRUCTURED_THINKING.md](SPEC_STRUT_STRUCTURED_THINKING.md)
+
+**Goal**: Provide a notation for agent plans that supports progress tracking, hierarchical decomposition, and flow control.
+
+**Rationale**: Agents need structured plans they can parse, update, and resume across sessions. STRUT provides unique IDs for every item, checkbox states for progress, and transitions for conditional flow.
+
+**Core elements**:
+- **Plan ID** - Unique identifier (e.g., `P1`, `P2`)
+- **Step ID** - Plan + sequence (e.g., `P1-S1`, `P1-S2`)
+- **Deliverable ID** - Plan + deliverable (e.g., `P1-D1`, `P1-D2`)
+- **Checkbox states** - `[ ]` pending, `[x]` done, `[~]` in progress, `[N]` skipped
+
+**Structure**:
+```
+[ ] P1 [VERB]: Description
+├─ Objectives:
+│   └─ [ ] Success criterion
+├─ Strategy: Approach summary
+├─ [ ] P1-S1 [VERB](context)
+├─ [ ] P1-S2 [VERB](context)
+├─ Deliverables:
+│   └─ [ ] P1-D1: Output artifact
+└─> Transitions:
+    - Condition → [ACTION]
+```
+
+## TRACTFUL - Document Framework
+
+Document types and traceability for development lifecycle artifacts.
+
+**Full specification**: [SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md](SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md)
+
+**Goal**: Ensure all development artifacts are uniquely identified, properly structured, and traceable from ideation to maintenance.
+
+**Rationale**: Agents need consistent document templates to create, reference, and update. TRACTFUL provides document types for each stage and a unified ID system (TDID) for cross-referencing.
+
+**Document types**:
+- **INFO** (IN) - Research findings, analysis results
+- **SPEC** (SP) - Specifications with requirements and design decisions
+- **IMPL** (IP) - Implementation plans with steps and edge cases
+- **TEST** (TP) - Test plans with test cases and verification
+- **TASKS** (TK) - Partitioned work items for execution
+
+**ID system (TDID)**:
+- **Document ID** - `[TOPIC]-[TYPE][NN]` (e.g., `AUTH-SP01`, `CRWL-IP02`)
+- **Item ID** - `[TOPIC]-[ITEM]-[NN]` (e.g., `AUTH-FR-01`, `CRWL-DD-03`)
+- **Cross-reference** - `filename.md [DOC-ID]`
 
 ## Key Conventions
 
