@@ -145,7 +145,7 @@ Use proper Unicode characters to match the original document:
 
 Generate ASCII representation using these character sets:
 
-**Unicode Character Reference** (JetBrains Mono verified)
+**Unicode Character Reference** (JetBrains Mono verified 2026-01-21)
 ```
 Boxes:    ┌─┬─┐  ╔═╦═╗  ╭──╮   Single/Double/Rounded
           ├─┼─┤  ╠═╬═╣  │  │
@@ -153,19 +153,19 @@ Boxes:    ┌─┬─┐  ╔═╦═╗  ╭──╮   Single/Double/Rounded
 Heavy:    ┏━┳━┓ ┃ ┣━╋━┫ ┗━┻━┛
 Arrows:   ← → ↑ ↓ ↔ ↕ ↖ ↗ ↘ ↙   ⇐ ⇒ ⇑ ⇓ ⇔ ⇕
 Triangles:◀ ▶ ▲ ▼ ◄ ► △ ▽ ◁ ▷
-Shapes:   ○ ● ◎ ◉ ⊙   □ ■ ▢ ▣   ◇ ◆   ☆ ★
-Circles:  ◐ ◑ ◒ ◓   (half-circles only)
 Shading:  ░ ▒ ▓ █   ▀ ▄ ▌ ▐ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟
 Lines:    ─ ━ │ ┃ ═ ║   ┆ ┇ ┊ ┋
-Diagonal: / \ X   (ASCII only, avoid ╱ ╲ ╳)
-Dots:     ·   (single dot only, avoid ellipsis)
-Math:     + - x : = < >   ∈ ⊂ ⊃ ∩ ∪   ∧ ∨ ¬ ⊕ ⊗
-Brackets: ( ) { } [ ]   (ASCII only, avoid ⟨ ⟩ 〈 〉)
-Special:  • ◦   ✓ ✗ ☐ ☑ ☒
+Diagonal: / \ X ╱ ╲ ╳
+Dots:     · ⋯ ⋮
+Math:     + - x : = < >
+Brackets: ( ) { } [ ] ⟨ ⟩
+Nodes:    o O @ * # x X   (ASCII only for shapes)
 ```
 
-**AVOID** (broken width in JetBrains Mono):
-`➔ ➜ ➤ ➡ ◯ ⬤ ⦿ ⦾ ⟨ ⟩ 〈 〉 ⦃ ⦄ … ⋯ ⋮ ⌒ ⌓ ◜ ◝ ◞ ◟ ❖ ✦ ✧ ‣ ⁃ ╱ ╲ ╳`
+**AVOID** (broken width - causes misalignment):
+`○ ● ◎ ◉ ⊙ □ ■ ▢ ▣ ◇ ◆ ☆ ★ ◐ ◑ ◒ ◓ • ◦ ✓ ✗ ☐ ☑ ☒`
+`∈ ⊂ ⊃ ∩ ∪ ∧ ∨ ¬ ⊕ ⊗`
+`➔ ➜ ➤ ➡ ◯ ⬤ ⦿ ⦾ 〈 〉 ⦃ ⦄ ❖ ✦ ✧ ‣ ⁃ ⌒ ⌓ ◜ ◝ ◞ ◟ …`
 
 ````
 **Figure [N]: [Caption from original]**
