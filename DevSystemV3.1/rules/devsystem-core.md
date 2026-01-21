@@ -173,6 +173,10 @@ Files starting with `_` are skipped by automatic priming workflows. Use for sess
 
 Files starting with `.` follow Unix convention - hidden from directory listings.
 
+### Temporary Files (.tmp prefix)
+
+Files starting with `.tmp` are temporary helper scripts created during operations. They should be deleted after use. Example: `.tmp_fix_quotes.ps1`
+
 ## Placeholders
 
 - **[WORKSPACE_FOLDER]**: Absolute path of root folder where Windsurf operates
