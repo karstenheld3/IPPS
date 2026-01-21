@@ -1,5 +1,6 @@
 ---
 description: SOLVE workflow - explore problems, evaluate ideas, make decisions
+auto_execution_mode: 1
 ---
 
 # Solve Workflow

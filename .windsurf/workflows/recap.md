@@ -1,16 +1,11 @@
 ---
 description: Analyze context, revisit plan, identify current status
+auto_execution_mode: 1
 ---
 
 # Recap Workflow
 
-Implements [RECAP] verb - backward-looking assessment of current state.
-
-## Usage
-
-```
-/recap
-```
+Backward-looking assessment of current state.
 
 ## Step 1: Read All Session Documents
 

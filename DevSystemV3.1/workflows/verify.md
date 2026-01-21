@@ -1,5 +1,6 @@
 ---
 description: Verify work against specs and rules
+auto_execution_mode: 1
 ---
 
 # Verify Workflow
@@ -15,13 +16,13 @@ Invoke these skills based on context:
 ## Workflow
 
 1. First find out what the context is (INFO, SPEC, IMPL, Code, TEST, Session)
-2. Read Global Rules and Verification Labels
+2. Read GLOBAL-RULES and Verification Labels
 3. Read the relevant Context-Specific section
 4. Create a verification task list
 5. Work through verification task list
 6. Run Final Steps
 
-## Global Rules
+## GLOBAL-RULES
 
 Apply to ALL document types and contexts:
 
@@ -133,6 +134,13 @@ Apply these labels to findings, requirements, and decisions in all document type
   - Every FR-XX has at least one TC-XX
   - Every EC-XX has corresponding test
 - Verify Document History section exists and is up to date
+
+## Workflows
+
+- Verify structure follows GLOBAL-RULES + CONTEXT-SPECIFIC pattern (recommended)
+- Verify workflow references use inline code format: `/verify`, `/research`
+- Verify AGEN verb format: `[VERB](params)`
+- Read @coding-conventions `WORKFLOW-RULES.md` and verify against rules
 
 ## Session Tracking (NOTES, PROBLEMS, PROGRESS)
 

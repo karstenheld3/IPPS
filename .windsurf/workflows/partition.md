@@ -1,10 +1,11 @@
 ---
 description: Partition plans into discrete tasks
+auto_execution_mode: 1
 ---
 
 # Partition Workflow
 
-Implements [PARTITION](STRATEGY?) verb.
+Split implementation plans into discrete, testable tasks.
 
 ## Required Skills
 

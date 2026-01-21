@@ -1,17 +1,18 @@
-# AGEN Verb Workflow Template
+# Workflow Template
 
-Template for writing Windsurf workflows (or Claude Code commands) that implement AGEN verbs.
+Template for writing Windsurf workflows (or Claude Code commands).
 
 ## Workflow Structure
 
 ```markdown
 ---
 description: [Brief description of what the verb does]
+auto_execution_mode: 1
 ---
 
 # [Verb Name] Workflow
 
-Implements [VERB] verb.
+[Brief description in plain English - no AGEN verb references]
 
 ## Required Skills
 - @skill-name for [what it provides]

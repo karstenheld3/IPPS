@@ -16,6 +16,7 @@ Universal formatting and writing conventions for all documents.
   - Boxes and diagrams (non-UI): `┌─` `├─` `└─` `│` `─` `┐` `┤` `┘`
   - UI diagrams and designs: Keep ASCII `+` `-` `|` for compatibility and easy manual editing
 - Try to fit single statements/decisions/objects on a single line
+- Format workflow references as inline code: `/verify`, `/go`, `/recap`
 
 ## Document Structure
 
@@ -98,6 +99,10 @@ Documents may opt-in to use Markdown tables or emojis by adding a DevSystem tag 
 - Comparison documents where tables improve readability
 - Feature matrices and compatibility charts
 - Status dashboards
+
+## Temporary Files (.tmp prefix)
+
+Files starting with `.tmp` are temporary helper scripts created during operations. They should be deleted after use. Example: `.tmp_fix_quotes.ps1`
 
 ## Transcription Output
 

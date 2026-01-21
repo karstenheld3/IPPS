@@ -1,5 +1,6 @@
 ---
 description: BUILD workflow - create software, features, systems
+auto_execution_mode: 1
 ---
 
 # Build Workflow

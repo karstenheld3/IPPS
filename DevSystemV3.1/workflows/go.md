@@ -1,20 +1,34 @@
 ---
-description: Sequence of [RECAP] + [CONTINUE] until goal reached
+description: Autonomous loop until goal reached
+auto_execution_mode: 1
 ---
 
 # Go Workflow
 
-Implements [GO] verb - autonomous execution loop using /recap and /continue.
+Autonomous execution loop using `/recap` and `/continue`.
 
-## Usage
+## Step 0: Completion Check
 
+Before any work, check if goal is already reached:
+
+1. Read STRUT plan (PROGRESS.md or session document)
+2. Run `/verify` (STRUT Transition Phase) to check:
+   - All Deliverables in final phase checked?
+   - All Objectives verified via linked Deliverables?
+   - Final Transition points to `[END]`?
+
+**If already complete:**
 ```
-/go
+Goal already reached. No further work needed.
+Last completed: [final deliverable]
 ```
+→ Stop. Do not execute. Do not re-verify on subsequent `/go` calls.
+
+**If not complete:** Proceed to Pre-Flight Check.
 
 ## Pre-Flight Check
 
-1. Do we have enough context? If unclear, [CONSULT] with [ACTOR].
+1. Do we have enough context? If unclear, ask user.
 2. Do we have stop or acceptance criteria?
 3. Re-read conversation, make internal MUST-NOT-FORGET list.
 
@@ -26,8 +40,8 @@ WHILE goal not reached:
     /continue # Execute next item
     
     IF blocker:
-        [CONSULT] with [ACTOR]
-        WAIT for guidance
+        Ask user for guidance
+        WAIT for response
 ```
 
 ## Step 1: Recap
@@ -47,12 +61,24 @@ Run `/continue` to:
 ## Step 3: Loop or Stop
 
 - **Goal reached?** Stop, output summary
-- **Blocker?** Log to PROBLEMS.md, [CONSULT]
+- **Blocker?** Log to PROBLEMS.md, ask user
 - **More work?** Return to Step 1
 
 ## Stopping Conditions
 
-- All tasks complete
-- Blocker requires [ACTOR] input
-- [ACTOR] interruption
+- All tasks complete (final Transition = `[END]` checked)
+- Blocker requires user input
+- User interruption
 - Retry limit exceeded (5 attempts for MEDIUM/HIGH complexity)
+
+## Idempotent Behavior
+
+Multiple `/go` commands on completed work:
+
+1. First `/go` after completion: Output "Goal already reached" message
+2. Subsequent `/go`: Same message, no re-verification, no action
+
+This prevents:
+- Wasted tokens on redundant verification
+- Misinterpreting queued `/go` as dissatisfaction
+- Overengineering completed deliverables

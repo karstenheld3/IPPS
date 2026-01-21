@@ -1,10 +1,11 @@
 ---
 description: Create tasks plan document from IMPL/TEST
+auto_execution_mode: 1
 ---
 
 # Write Tasks Plan Workflow
 
-Implements [WRITE-TASKS-PLAN] verb. Combines [PARTITION] + document creation.
+Create partitioned task documents from IMPL plans. Combines `/partition` workflow with document creation.
 
 ## Required Skills
 
@@ -17,8 +18,8 @@ Implements [WRITE-TASKS-PLAN] verb. Combines [PARTITION] + document creation.
 
 ## Steps
 
-1. **Run [PARTITION]**
-   - Apply /partition workflow with STRATEGY if specified
+1. **Run `/partition`**
+   - Apply `/partition` workflow with STRATEGY if specified
    - Collect partitioned tasks
 
 2. **Create Tasks Plan File**

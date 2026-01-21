@@ -1,5 +1,6 @@
 ---
-description: Record a failure in FAILS.md, either from [ACTOR] input or by analyzing context
+description: Record a failure in FAILS.md, either from user input or by analyzing context
+auto_execution_mode: 1
 ---
 
 # Fail Workflow

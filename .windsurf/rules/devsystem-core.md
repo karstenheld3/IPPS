@@ -36,6 +36,9 @@ Core definitions and structure for the development system.
   - Example: `CRWL-IP01`, `AUTH-IP02`
 - **[TEST]** (TP): Test plans suffixed to corresponding SPEC or IMPL
   - Example: `CRWL-TP01`, `AUTH-TP01`
+- **[TASKS]** (TK): Partitioned task lists from IMPL/TEST plans
+  - Example: `CRWL-TK01`, `AUTH-TK01`
+  - Created via `/write-tasks-plan` or `/partition`
 
 ### Tracking Documents
 

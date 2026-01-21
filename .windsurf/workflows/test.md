@@ -1,10 +1,11 @@
 ---
 description: Run tests based on scope and context
+auto_execution_mode: 1
 ---
 
 # Test Workflow
 
-Implements [TEST] verb.
+Run tests based on scope and context.
 
 ## Required Skills
 
@@ -29,7 +30,7 @@ Invoke based on context:
 - After each test: update checklist, note failures immediately
 - Never skip documenting failures - they inform future work
 
-## Global Rules
+## GLOBAL-RULES
 
 - Always run tests before committing
 - Use existing test infrastructure when available

@@ -1,5 +1,6 @@
 ---
 description: Close a development session, sync findings, and archive
+auto_execution_mode: 1
 ---
 
 # Close Session Workflow

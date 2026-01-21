@@ -1,16 +1,11 @@
 ---
 description: Forward-looking assessment, execute next items on plan
+auto_execution_mode: 1
 ---
 
 # Continue Workflow
 
-Implements [CONTINUE] verb - forward-looking execution of next steps.
-
-## Usage
-
-```
-/continue
-```
+Forward-looking execution of next steps in a plan.
 
 ## Step 1: Identify Next Action
 
@@ -44,13 +39,13 @@ After each task:
 
 ## When to Use
 
-- After [RECAP] confirms state
+- After `/recap` confirms state
 - To execute plan items sequentially
-- As second part of [GO]
+- As second part of `/go`
 
 ## Stopping Conditions
 
 - All tasks complete
-- Blocker requires [CONSULT]
+- Blocker requires user input
 - Gate check needed
 - User interruption

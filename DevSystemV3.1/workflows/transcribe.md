@@ -1,5 +1,6 @@
 ---
 description: Transcribe PDFs and web pages to complete markdown with 100% content preservation
+auto_execution_mode: 1
 ---
 
 # Transcribe Workflow
