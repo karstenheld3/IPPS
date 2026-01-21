@@ -334,6 +334,7 @@ Located in workspace root (or project root in monorepos):
 | `!PROGRESS.md` | Optional | Overall project progress |
 | `FAILS.md` | Auto-created | Lessons learned from past mistakes (via `/fail` workflow, synced from sessions) |
 | `LEARNINGS.md` | Auto-created | Reusable patterns (via `/learn` workflow analyzing fails) |
+| `ID-REGISTRY.md` | ✅ Yes | Authoritative source for TOPICs, acronyms, and IDs |
 
 ### Session Files
 
@@ -351,7 +352,7 @@ Located in session folder (e.g., `_2026-01-15_FixAuthBug/`):
 
 ```
 /prime           → Load constants and documents from workspace and devsystem
-                   (README, NOTES, PROBLEMS, FAILS, LEARNINGS, ...)
+                   (README, NOTES, PROBLEMS, FAILS, LEARNINGS, ID-REGISTRY, ...)
 /session-new     → Create session folder with NOTES, PROBLEMS, PROGRESS
     ↓
   [work]         → Create specs, implement, track progress
@@ -391,7 +392,7 @@ The prime workflow:
 4. Detects workspace scenario (project structure, version strategy, work mode)
 5. Reports summary: files read, scenario detected
 
-Typically loads: `README.md`, `!NOTES.md`, `!PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`, agent rules
+Typically loads: `README.md`, `!NOTES.md`, `!PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`, `ID-REGISTRY.md`, agent rules
 
 ### Workflow Entry Points
 
