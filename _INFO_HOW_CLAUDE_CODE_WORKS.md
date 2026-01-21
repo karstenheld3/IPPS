@@ -188,8 +188,9 @@ Claude Code supports several input enrichments for precise control:
 **!bang** - Direct shell execution:
 - `!command` - Execute bash command directly without AI interpretation
 
-**#hashtag** - Memory shortcut:
-- `#` key - Add instruction to CLAUDE.md during conversation
+**# key** - Memory shortcut (not a hashtag system):
+- Press `#` during conversation to save current instruction to `CLAUDE.md`
+- Single-purpose key, not user-defined tags
 
 **Other enrichments:**
 - **Pipe input** - `cat file.txt | claude -p "explain"` includes file content
