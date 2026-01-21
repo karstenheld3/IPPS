@@ -270,6 +270,7 @@ IPPS/
 │   ├── skills/
 │   │   ├── coding-conventions/   # Python, PowerShell style rules
 │   │   ├── edird-phase-planning/ # Phase gates, flows, planning
+│   │   ├── git/                  # Commit history navigation, file recovery
 │   │   ├── git-conventions/      # Commit message format
 │   │   ├── github/               # GitHub CLI operations
 │   │   ├── pdf-tools/            # PDF scripts and tools
@@ -311,6 +312,7 @@ IPPS/
 ## Skills
 
 - **edird-phase-planning** - Phase gates, flows, and planning logic for BUILD/SOLVE workflows
+- **git** - Commit history navigation, file recovery from previous commits
 - **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF
 - **github** - GitHub CLI operations (repos, issues, PRs)
 - **session-management** - Session init, save, resume, close workflows
