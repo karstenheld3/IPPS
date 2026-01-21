@@ -81,7 +81,7 @@ TRACTFUL provides the docs    → INFO, SPEC, IMPL, TEST, TASKS with unique IDs
 
 ## Overview
 
-IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V3.1) introduces the EDIRD phase model, Agentic English vocabulary, and STRUT notation for deterministic agent behavior.
+IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V3.2) introduces the EDIRD phase model, Agentic English vocabulary, and STRUT notation for deterministic agent behavior.
 
 ## How to Add to Your Project
 
@@ -100,7 +100,8 @@ your-project/
 - **[DevSystemV2](DevSystemV2/)** - Previous version with modular skills and workflows
 - **[DevSystemV2.1](DevSystemV2.1/)** - Previous version with refined workflows
 - **[DevSystemV3](DevSystemV3/)** - Previous version with EDIRD phase model and Agentic English
-- **[DevSystemV3.1](DevSystemV3.1/)** - Current system with STRUT notation and refined specs
+- **[DevSystemV3.1](DevSystemV3.1/)** - Previous version with STRUT notation
+- **[DevSystemV3.2](DevSystemV3.2/)** - Current system with WORKFLOW-RULES and auto_execution_mode
 
 ## Agentic English
 
@@ -234,14 +235,14 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 
 ## Key Conventions
 
-- [Core Conventions](DevSystemV3.1/rules/core-conventions.md) - Text formatting, document structure, header blocks
-- [DevSystem Core](DevSystemV3.1/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
-- [DevSystem IDs](DevSystemV3.1/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
-- [Agentic English](DevSystemV3.1/rules/agentic-english.md) - Controlled vocabulary for agent instructions
-- [EDIRD Phase Planning](DevSystemV3.1/rules/edird-phase-planning.md) - Phase model core rules
-- [Git Conventions](DevSystemV3.1/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
-- [Coding Conventions](DevSystemV3.1/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
-- [Workflow Rules](DevSystemV3.1/skills/coding-conventions/WORKFLOW-RULES.md) - ASANAPAP principle, workflow formatting
+- [Core Conventions](DevSystemV3.2/rules/core-conventions.md) - Text formatting, document structure, header blocks
+- [DevSystem Core](DevSystemV3.2/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
+- [DevSystem IDs](DevSystemV3.2/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
+- [Agentic English](DevSystemV3.2/rules/agentic-english.md) - Controlled vocabulary for agent instructions
+- [EDIRD Phase Planning](DevSystemV3.2/rules/edird-phase-planning.md) - Phase model core rules
+- [Git Conventions](DevSystemV3.2/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
+- [Coding Conventions](DevSystemV3.2/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
+- [Workflow Rules](DevSystemV3.2/skills/coding-conventions/WORKFLOW-RULES.md) - ASANAPAP principle, workflow formatting
 
 ## Agent Tools (installed automatically by skill)
 
@@ -263,7 +264,7 @@ Run `SETUP.md` in each skill folder to install required tools locally to `.tools
 ```
 IPPS/
 ├── .tools/                       # Local tool installations (gitignored)
-├── .windsurf/                    # Active agent configuration (copied from DevSystemV3.1)
+├── .windsurf/                    # Active agent configuration (copied from DevSystemV3.2)
 │   ├── rules/
 │   ├── workflows/
 │   └── skills/
@@ -271,7 +272,8 @@ IPPS/
 ├── DevSystemV2/                  # Legacy (deprecated)
 ├── DevSystemV2.1/                # Legacy (deprecated)
 ├── DevSystemV3/                  # Previous version
-├── DevSystemV3.1/                # Current system
+├── DevSystemV3.1/                # Previous version
+├── DevSystemV3.2/                # Current system
 │   ├── rules/
 │   │   ├── core-conventions.md   # Text formatting, document structure
 │   │   ├── devsystem-core.md     # Workspace scenarios, folder structure, operation modes
@@ -279,7 +281,7 @@ IPPS/
 │   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions
 │   │   └── edird-phase-planning.md # EDIRD phase model core rules
 │   ├── skills/
-│   │   ├── coding-conventions/   # Python, PowerShell style rules
+│   │   ├── coding-conventions/   # Python, PowerShell, workflow style rules
 │   │   ├── edird-phase-planning/ # Phase gates, flows, planning
 │   │   ├── git/                  # Commit history navigation, file recovery
 │   │   ├── git-conventions/      # Commit message format

@@ -1,7 +1,7 @@
 [DEFAULT_SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
 [SESSION_ARCHIVE_FOLDER]: [SESSION_FOLDER]\..\_Archive
 
-Current [DEVSYSTEM]: DevSystemV3.1
+Current [DEVSYSTEM]: DevSystemV3.2
 Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
 **ID-REGISTRY.md** - Prevents term and ID collisions. Contains DevSystem constants and project TOPIC registry.
