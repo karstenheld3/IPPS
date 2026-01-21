@@ -350,6 +350,8 @@ Located in session folder (e.g., `_2026-01-15_FixAuthBug/`):
 ### Session Lifecycle
 
 ```
+/prime           → Load constants and documents from workspace and devsystem
+                   (README, NOTES, PROBLEMS, FAILS, LEARNINGS, ...)
 /session-new     → Create session folder with NOTES, PROBLEMS, PROGRESS
     ↓
   [work]         → Create specs, implement, track progress
@@ -377,7 +379,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ### Prime Context
 
-Load workspace context before starting work:
+Load workspace context before starting work (constants and documents from workspace and devsystem):
 ```
 /prime
 ```
@@ -387,6 +389,9 @@ The prime workflow:
 2. Finds and reads standard `.md` files (excluding `_` and `!` prefixed)
 3. Detects workspace scenario (project structure, version strategy, work mode)
 4. Reports summary: files read, scenario detected
+
+Usually loads:
+- `README.md`, `NOTES.md`, `PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`, ...)
 
 ### Workflow Entry Points
 
