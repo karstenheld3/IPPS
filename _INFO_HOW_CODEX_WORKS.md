@@ -407,6 +407,32 @@ codex resume --all
 - `--enable <feature>` - Enable feature flag
 - `--yolo` / `--dangerously-bypass-approvals-and-sandbox` - Full access (dangerous)
 
+### Prompt Syntax (Agentic Language Enrichments)
+
+Codex CLI supports several input enrichments for precise control:
+
+**@mentions** - Reference context:
+- `@` - Opens fuzzy file search picker
+- Type after `@` to filter files in workspace
+
+**/commands** - Invoke automation:
+- `/command` - Built-in slash commands (`/init`, `/compact`, `/diff`, `/review`, etc.)
+- `/prompts: <name>` - Run custom prompt from prompts directory
+- No custom slash command system like Claude Code
+
+**!bang** - Direct shell execution:
+- `!command` - Execute shell command directly in TUI
+
+**Other enrichments:**
+- **Image attachments** - `-i, --image <files>` CLI flag to attach images
+- **Pipe input** - Pipe content to `codex exec` for processing
+- **Web search** - Enable with `--search` flag or `web_search_request` feature
+
+**Not supported:**
+- No `#hashtag` syntax
+- No URL pasting (use web search feature instead)
+- No @skill invocation (no skills system)
+
 ### Shortcuts in TUI
 
 - `@` - Fuzzy file search

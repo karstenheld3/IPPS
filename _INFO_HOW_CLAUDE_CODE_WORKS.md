@@ -171,6 +171,31 @@ Scopes listed from highest to lowest precedence:
 - **Vim mode** - Enable with `/vim` command
 - **Bash mode** - Prefix with `!` to run shell commands directly
 
+### Prompt Syntax (Agentic Language Enrichments)
+
+Claude Code supports several input enrichments for precise control:
+
+**@mentions** - Reference context:
+- `@file` or `@path/to/file` - Reference specific files
+- `@folder/` - Reference entire directories
+- Files in prompts via `@README` syntax in CLAUDE.md
+
+**/commands** - Invoke automation:
+- `/command-name` - Run command from `.claude/commands/`
+- Built-in: `/memory`, `/init`, `/clear`, `/compact`, `/resume`, etc.
+- Custom commands support `$ARGUMENTS`, `$1`, `$2` placeholders
+
+**!bang** - Direct shell execution:
+- `!command` - Execute bash command directly without AI interpretation
+
+**#hashtag** - Memory shortcut:
+- `#` key - Add instruction to CLAUDE.md during conversation
+
+**Other enrichments:**
+- **Pipe input** - `cat file.txt | claude -p "explain"` includes file content
+- **Multiline** - Use `\` at end of line or `Shift+Enter`
+- **Image attachments** - Supported via CLI flags
+
 ### Keyboard Shortcuts
 
 - `Ctrl+C` - Cancel current operation

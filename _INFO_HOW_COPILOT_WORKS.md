@@ -148,6 +148,37 @@ Built-in AI-enhanced actions:
 - Rename symbols with AI assistance
 - Semantic search for files
 
+### Prompt Syntax (Agentic Language Enrichments)
+
+GitHub Copilot supports several input enrichments for precise control:
+
+**@participants** - Reference context:
+- `@workspace` - Include workspace context
+- `@terminal` - Include terminal output
+- `@github` - Access GitHub-specific context (issues, PRs)
+- `@vscode` - VS Code settings and commands
+
+**#references** - Reference specific items:
+- `#file:filename` - Reference specific file
+- `#selection` - Reference selected code
+- `#editor` - Reference current editor content
+- `#tool:toolName` - Reference MCP tool
+
+**No /commands:**
+- Copilot does NOT support slash commands
+- Use **prompt files** (`.github/prompts/*.prompt.md`) instead
+- Prompts accessed via "Add Context > Prompts" in Chat view
+
+**Other enrichments:**
+- **Selected text** - Highlight code, then `Ctrl+I` for inline chat
+- **Image attachments** - Drag/drop images into chat (Agent mode)
+- **MCP tools** - Reference with `#tool:toolName`
+
+**Not supported:**
+- No `!bang` shell execution syntax
+- No `#hashtag` memory shortcuts
+- No URL pasting for web content
+
 ### Keyboard Shortcuts (VS Code)
 
 - `Ctrl+I` - Open inline chat

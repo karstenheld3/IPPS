@@ -170,13 +170,26 @@ Cascade is aware of your real-time actions - no need to re-prompt context. Just 
 Multiple Cascades can run simultaneously. Navigate via dropdown (top left of panel).
 **Warning**: If two Cascades edit same file simultaneously, edits can race and fail.
 
-### @-Mentions
+### Prompt Syntax (Agentic Language Enrichments)
 
+Cascade supports several input enrichments for precise control:
+
+**@mentions** - Reference context:
 - `@file` - Reference specific files
 - `@skill-name` - Invoke a skill
 - `@web` / `@docs` - Web/docs search
 - `@terminal` - Reference terminal output
 - `@conversation` - Reference previous conversations (retrieves relevant parts)
+- `@codemap-name` - Reference a codemap
+
+**/workflows** - Invoke automation:
+- `/workflow-name` - Run workflow from `.windsurf/workflows/`
+- Workflows are Markdown files with YAML frontmatter
+
+**Other enrichments:**
+- **URL pasting** - Paste URLs directly, Cascade fetches content
+- **Selected text** - Highlight in editor/terminal, then `Ctrl+L` to include
+- **Image attachments** - Drag/drop or paste images into chat
 
 ### Sharing Conversations
 
