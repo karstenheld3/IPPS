@@ -395,7 +395,7 @@ Typically loads: `README.md`, `!NOTES.md`, `!PROBLEMS.md`, `FAILS.md`, `LEARNING
 
 ### Workflow Entry Points
 
-Both workflows automatically create a session, follow EDIRD phases, and close when done.
+Both workflows **automatically create a session**, follow EDIRD phases, and close when done.
 
 Start a BUILD workflow (create software, new features):
 ```
