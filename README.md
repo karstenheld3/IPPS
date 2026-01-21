@@ -202,7 +202,7 @@ Tree notation for planning and tracking complex autonomous work.
 
 ## TRACTFUL - Document Framework
 
-Document types and traceability for development lifecycle artifacts.
+Document types and templates that cover the entire development cycle from exploration of ideas to fixing issues.
 
 **Full specification**: [SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md](SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md)
 
