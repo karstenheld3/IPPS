@@ -332,8 +332,8 @@ Located in workspace root (or project root in monorepos):
 | `!NOTES.md` | ✅ Yes | Critical project info, agent instructions, key patterns |
 | `!PROBLEMS.md` | Optional | Known issues across the project |
 | `!PROGRESS.md` | Optional | Overall project progress |
-| `FAILS.md` | Auto-created | Lessons learned from past mistakes (synced from sessions) |
-| `LEARNINGS.md` | Auto-created | Reusable patterns extracted from sessions |
+| `FAILS.md` | Auto-created | Lessons learned from past mistakes (via `/fail` workflow, synced from sessions) |
+| `LEARNINGS.md` | Auto-created | Reusable patterns (via `/learn` workflow analyzing fails) |
 
 ### Session Files
 
@@ -344,8 +344,8 @@ Located in session folder (e.g., `_2026-01-15_FixAuthBug/`):
 | `NOTES.md` | ✅ Yes | Session goal, key decisions, findings, resume instructions |
 | `PROBLEMS.md` | ✅ Yes | Problems discovered during session (Open/Resolved/Deferred) |
 | `PROGRESS.md` | ✅ Yes | To-do list, in-progress, done, tried-but-not-used |
-| `FAILS.md` | Auto-created | Session-specific failures and their causes |
-| `LEARNINGS.md` | Auto-created | Lessons extracted from session failures |
+| `FAILS.md` | Auto-created | Session-specific failures (run `/fail` to record) |
+| `LEARNINGS.md` | Auto-created | Lessons from failures (run `/learn` to analyze fails) |
 
 ### Session Lifecycle
 
@@ -353,6 +353,7 @@ Located in session folder (e.g., `_2026-01-15_FixAuthBug/`):
 /session-new     → Create session folder with NOTES, PROBLEMS, PROGRESS
     ↓
   [work]         → Create specs, implement, track progress
+    ↓              (/fail to record failures, /learn to extract lessons)
     ↓
 /session-save    → Document findings, commit changes
     ↓
