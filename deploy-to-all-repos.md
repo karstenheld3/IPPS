@@ -75,7 +75,7 @@ $targets = @(
 # Deprecated files from V1, V2, V3 migrations (only these can be deleted)
 $deprecatedFiles = @{
     "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md", "edird-core.md")
-    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md")
+    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md", "deliver.md", "design.md", "explore.md", "go-research.md", "refine.md")
 }
 # Deprecated skill folders (entire folder can be deleted if renamed)
 $deprecatedSkillFolders = @("edird-phase-model")
@@ -235,6 +235,14 @@ Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `
 - `workflows/next.md` → removed (use `/go` instead)
 - `skills/edird-phase-model/` → renamed to `skills/edird-phase-planning/`
   - `SKILL.md` consolidated (BRANCHING.md, FLOWS.md, GATES.md, NEXT_ACTION.md removed)
+
+### V3.1 → V3.2 Migration (Deprecated Workflows)
+
+- `workflows/deliver.md` → removed (phase-specific, use `/implement` instead)
+- `workflows/design.md` → removed (phase-specific, use `/write-spec` instead)
+- `workflows/explore.md` → removed (phase-specific, use `/research` instead)
+- `workflows/go-research.md` → removed (use `/research` instead)
+- `workflows/refine.md` → removed (phase-specific, use `/verify` instead)
 
 ### V3.1 New Files
 
