@@ -380,6 +380,8 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ### Prime Context
 
+**Workflows:** [`/prime`](.windsurf/workflows/prime.md)
+
 Load workspace context before starting work:
 ```
 /prime
@@ -398,6 +400,8 @@ Typically loads: `README.md`, `!NOTES.md`, `!PROBLEMS.md`, `FAILS.md`, `LEARNING
 
 Both workflows **automatically create a session**, follow EDIRD phases, and close when done.
 
+**Workflows:** [`/build`](.windsurf/workflows/build.md), [`/solve`](.windsurf/workflows/solve.md)
+
 Start a BUILD workflow (create software, new features):
 ```
 /build "Add user authentication API"
@@ -409,6 +413,8 @@ Start a SOLVE workflow (research, analysis, decisions):
 ```
 
 ### Session Workflows
+
+**Workflows:** [`/session-new`](.windsurf/workflows/session-new.md), [`/session-save`](.windsurf/workflows/session-save.md), [`/session-resume`](.windsurf/workflows/session-resume.md), [`/session-close`](.windsurf/workflows/session-close.md)
 
 Start a new work session:
 ```
@@ -433,6 +439,8 @@ Close session and sync findings:
 
 ### Autonomous Execution
 
+**Workflows:** [`/go`](.windsurf/workflows/go.md), [`/recap`](.windsurf/workflows/recap.md), [`/continue`](.windsurf/workflows/continue.md)
+
 Run autonomous loop until goal reached:
 ```
 /go
@@ -444,6 +452,8 @@ The [`/go`](.windsurf/workflows/go.md) workflow cycles through:
 3. Repeat until goal reached or blocker hit
 
 ### Document Cycle (INFO -> SPEC -> IMPL -> TEST -> TASKS)
+
+**Workflows:** [`/research`](.windsurf/workflows/research.md), [`/write-spec`](.windsurf/workflows/write-spec.md), [`/write-impl-plan`](.windsurf/workflows/write-impl-plan.md), [`/write-test-plan`](.windsurf/workflows/write-test-plan.md), [`/write-tasks-plan`](.windsurf/workflows/write-tasks-plan.md), [`/implement`](.windsurf/workflows/implement.md), [`/verify`](.windsurf/workflows/verify.md), [`/sync`](.windsurf/workflows/sync.md), [`/rename`](.windsurf/workflows/rename.md), [`/commit`](.windsurf/workflows/commit.md)
 
 This follows the Specification-Driven Development (SDD) methodology used by [GitHub spec-kit](https://github.com/github/spec-kit) and [Zencoder](https://docs.zencoder.ai/user-guides/tutorials/spec-driven-development-guide).
 
