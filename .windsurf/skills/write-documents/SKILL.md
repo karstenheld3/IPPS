@@ -1,6 +1,6 @@
 ---
 name: write-documents
-description: Apply when creating or editing INFO, SPEC, IMPL, TEST, or FIX documents
+description: Apply when creating or editing INFO, SPEC, IMPL, TEST, FIX documents, or STRUT plans
 ---
 
 # Document Writing Guide
@@ -18,6 +18,7 @@ This skill implements:
 - [WRITE-FAIL] - Create/update FAILS.md (use FAILS_TEMPLATE.md)
 - [WRITE-REVIEW] - Create _REVIEW.md documents (use REVIEW_TEMPLATE.md)
 - [WRITE-TASKS-PLAN] - Create TASKS documents (use TASKS_TEMPLATE.md)
+- [WRITE-STRUT] - Create/insert STRUT plans (use STRUT_TEMPLATE.md)
 
 ## MUST-NOT-FORGET
 
@@ -50,6 +51,7 @@ You MUST read the appropriate template before creating documents:
 - `FAILS_TEMPLATE.md` - Failure log (lessons learned)
 - `REVIEW_TEMPLATE.md` - Review documents (_REVIEW.md)
 - `WORKFLOW_TEMPLATE.md` - AGEN verb workflow structure
+- `STRUT_TEMPLATE.md` - STRUT plans (embeddable in any document)
 
 ## Usage
 
