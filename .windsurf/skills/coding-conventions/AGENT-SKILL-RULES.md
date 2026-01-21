@@ -125,6 +125,60 @@ Only AFTER pre-installation verification passes:
 3. Provide rollback instructions inline
 4. Show expected results after each step
 
+### 3.2.1 MCP Config Modification Pattern (Windsurf)
+
+For skills that modify `~/.codeium/windsurf/mcp_config.json`, use this PowerShell pattern:
+
+```powershell
+$configPath = "$env:USERPROFILE\.codeium\windsurf\mcp_config.json"
+
+# Define target server config
+$targetServer = @{
+    command = "npx"
+    args = @("package-name")
+}
+
+# Read existing config (handle empty/missing)
+if (Test-Path $configPath) {
+    $config = Get-Content $configPath -Raw | ConvertFrom-Json -AsHashtable
+} else {
+    $config = @{ mcpServers = @{} }
+}
+
+# Convert PSCustomObject to Hashtable if needed
+if ($config.mcpServers -isnot [System.Collections.Hashtable]) {
+    $serversHash = @{}
+    $config.mcpServers.PSObject.Properties | ForEach-Object { $serversHash[$_.Name] = $_.Value }
+    $config.mcpServers = $serversHash
+}
+
+# Compare current vs target (idempotent)
+if ($config.mcpServers.ContainsKey("server-name")) {
+    $currentJson = $config.mcpServers["server-name"] | ConvertTo-Json -Compress
+    $targetJson = $targetServer | ConvertTo-Json -Compress
+    if ($currentJson -eq $targetJson) {
+        Write-Host "Already configured" -ForegroundColor Green
+        return
+    }
+}
+
+# Backup before modifying
+$backupPath = "$configPath._backup_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+Copy-Item $configPath $backupPath -ErrorAction SilentlyContinue
+
+# Add/update server
+$config.mcpServers["server-name"] = $targetServer
+
+# Write config
+$config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
+```
+
+**Key requirements:**
+- **Idempotent** - Running twice produces same result
+- **Backup first** - Always backup before modifying
+- **Handle PSCustomObject** - JSON parsing returns PSCustomObject, convert to Hashtable
+- **Compare before write** - Don't modify if already correct
+
 ### 3.3 Post-Installation Verification
 
 1. Verify installation succeeded
