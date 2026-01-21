@@ -16,7 +16,7 @@ IPPS solves this through **deterministic agent behavior**:
 - **STRUT** (STRUctured Thinking) tracks state - agent always knows where it is in the plan
 - **TRACTFUL** (Traceable Requirements Artifacts and Coded Templates For Unified Lifecycle) preserves knowledge - every detail is covered by documents that survive session boundaries
 
-The goal: Run `/go` and watch the agent execute a multi-session project autonomously, picking up exactly where it left off, never repeating past failures.
+The goal: Run [`/go`](.windsurf/workflows/go.md) and watch the agent execute a multi-session project autonomously, picking up exactly where it left off, never repeating past failures.
 
 ## Core Concepts
 
@@ -117,7 +117,7 @@ A controlled vocabulary for agent-human communication. Provides consistent termi
 - `[LABEL]` - Classification to apply (e.g., `[UNVERIFIED]`, `[CRITICAL]`)
 - `STATE` - Condition with NO brackets (e.g., `COMPLEXITY-HIGH`, `HOTFIX`, `SINGLE-PROJECT`)
 
-**Extensibility**: Verbs are abstract concepts. Complex verbs CAN be concretized as dedicated workflows (e.g., `[COMMIT]` → `/commit`), but this is optional. Simple verbs work inline within phase workflows.
+**Extensibility**: Verbs are abstract concepts. Complex verbs CAN be concretized as dedicated workflows (e.g., `[COMMIT]` → [`/commit`](.windsurf/workflows/commit.md)), but this is optional. Simple verbs work inline within phase workflows.
 
 **Example workflow instruction**:
 ```
@@ -134,7 +134,7 @@ A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) w
 
 **Full specification**: [SPEC_EDIRD_PHASE_MODEL.md](SPEC_EDIRD_PHASE_MODEL.md)
 
-**Goal**: Consistent phase structure for all development work with deterministic next-action logic. We want the agent to always do the right thing when the `/go` workflow is executed until the initial goal is reached.
+**Goal**: Consistent phase structure for all development work with deterministic next-action logic. We want the agent to always do the right thing when the [`/go`](.windsurf/workflows/go.md) workflow is executed until the initial goal is reached.
 
 **Rationale**: Without phases, agents skip important steps or apply heavyweight processes to simple tasks. EDIRD provides the right amount of process for each complexity level.
 
@@ -315,7 +315,7 @@ IPPS/
 
 IPPS uses special prefixes to control how files are processed:
 
-- **`!` prefix** - Priority files (e.g., `!NOTES.md`). Read first during `/prime`. Contains critical project information.
+- **`!` prefix** - Priority files (e.g., `!NOTES.md`). Read first during [`/prime`](.windsurf/workflows/prime.md). Contains critical project information.
 - **`_` prefix** - Ignored by automatic workflows (e.g., `_SPEC_*.md`, `_PrivateSessions/`). Used for session-specific, WIP, or archived content.
 - **`.` prefix** - Hidden files following Unix convention (e.g., `.windsurf/`, `.gitignore`).
 
@@ -332,8 +332,8 @@ Located in workspace root (or project root in monorepos):
 | `!NOTES.md` | ✅ Yes | Critical project info, agent instructions, key patterns |
 | `!PROBLEMS.md` | Optional | Known issues across the project |
 | `!PROGRESS.md` | Optional | Overall project progress |
-| `FAILS.md` | Auto-created | Lessons learned from past mistakes (via `/fail` workflow, synced from sessions) |
-| `LEARNINGS.md` | Auto-created | Reusable patterns (via `/learn` workflow analyzing fails) |
+| `FAILS.md` | Auto-created | Lessons learned from past mistakes (via [`/fail`](.windsurf/workflows/fail.md) workflow, synced from sessions) |
+| `LEARNINGS.md` | Auto-created | Reusable patterns (via [`/learn`](.windsurf/workflows/learn.md) workflow analyzing fails) |
 | `ID-REGISTRY.md` | ✅ Yes | Authoritative source for TOPICs, acronyms, and IDs |
 
 ### Session Files
@@ -345,8 +345,8 @@ Located in session folder (e.g., `_2026-01-15_FixAuthBug/`):
 | `NOTES.md` | ✅ Yes | Session goal, key decisions, findings, resume instructions |
 | `PROBLEMS.md` | ✅ Yes | Problems discovered during session (Open/Resolved/Deferred) |
 | `PROGRESS.md` | ✅ Yes | To-do list, in-progress, done, tried-but-not-used |
-| `FAILS.md` | Auto-created | Session-specific failures (run `/fail` to record) |
-| `LEARNINGS.md` | Auto-created | Lessons from failures (run `/learn` to analyze fails) |
+| `FAILS.md` | Auto-created | Session-specific failures (run [`/fail`](.windsurf/workflows/fail.md) to record) |
+| `LEARNINGS.md` | Auto-created | Lessons from failures (run [`/learn`](.windsurf/workflows/learn.md) to analyze fails) |
 
 ### Session Lifecycle
 
@@ -369,7 +369,7 @@ Located in session folder (e.g., `_2026-01-15_FixAuthBug/`):
 
 ### Sync on Session Close
 
-When `/session-close` runs:
+When [`/session-close`](.windsurf/workflows/session-close.md) runs:
 - **FAILS.md** - [MEDIUM] and [HIGH] severity entries sync to workspace `FAILS.md`
 - **LEARNINGS.md** - Patterns from [MEDIUM]/[HIGH] fails sync to workspace `LEARNINGS.md` or `!NOTES.md`
 - **PROBLEMS.md** - Open/deferred problems sync to workspace `!PROBLEMS.md`
@@ -438,9 +438,9 @@ Run autonomous loop until goal reached:
 /go
 ```
 
-The `/go` workflow cycles through:
-1. `/recap` - Analyze context, identify current status
-2. `/continue` - Execute next items on plan
+The [`/go`](.windsurf/workflows/go.md) workflow cycles through:
+1. [`/recap`](.windsurf/workflows/recap.md) - Analyze context, identify current status
+2. [`/continue`](.windsurf/workflows/continue.md) - Execute next items on plan
 3. Repeat until goal reached or blocker hit
 
 ### Document Cycle (INFO -> SPEC -> IMPL -> TEST -> TASKS)
