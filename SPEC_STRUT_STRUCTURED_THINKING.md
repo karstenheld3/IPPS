@@ -22,6 +22,7 @@
 - **Objectives link to Deliverables**: `[ ] Goal ← P1-D1, P1-D2` (evidence-based verification)
 - Strategy can include AWT (Agentic Work Time) estimates
 - Transitions define flow control at phase end
+- **Concurrent blocks**: `Concurrent: <strategy>` groups parallel steps; `← Px-Sy` for explicit dependencies
 - Verify STRUT plans via /verify workflow (Planning + Transition contexts)
 
 ## 1. Scenario
@@ -68,6 +69,15 @@
 **STRUT-FR-08: Transitions**
 - Format: `- Condition → Target`
 - Targets: `[PHASE-NAME]`, `[CONSULT]`, `[END]`
+
+**STRUT-FR-09: Concurrent Blocks**
+- Format: `Concurrent: <strategy>` as virtual step (no checkbox) grouping parallel steps
+- Steps inside Concurrent block can run in parallel
+- First step after Concurrent block is implicit barrier (waits for all)
+- Explicit dependencies via `← Px-Sy` suffix on step line
+- `← P1-S2` waits only for S2; `← P1-S2, P1-S3` waits for both
+- No arrow within block = truly parallel (no internal dependencies)
+- Concurrent blocks can nest (discouraged beyond 1 level)
 
 ## 3. Notation Reference
 
@@ -241,6 +251,40 @@
     - P2-D1 checked → [END]
 ```
 
+### Example 4: Concurrent Steps with Dependencies
+
+```
+[ ] P1 [IMPLEMENT]: Build auth system
+├─ Objectives:
+│   ├─ [ ] All auth services working ← P1-D1, P1-D2, P1-D3
+│   └─ [ ] Tests pass ← P1-D4
+├─ Strategy: Build data layer first, then parallelize independent services
+├─ [ ] P1-S1 [IMPLEMENT](User model)
+├─ Concurrent: Independent services, build in parallel
+│   ├─ [ ] P1-S2 [IMPLEMENT](password hashing)
+│   ├─ [ ] P1-S3 [IMPLEMENT](JWT tokens) ← P1-S2
+│   └─ [ ] P1-S4 [IMPLEMENT](email service)
+├─ [ ] P1-S5 [IMPLEMENT](login endpoint) ← P1-S2, P1-S3
+├─ [ ] P1-S6 [IMPLEMENT](register endpoint) ← P1-S4, P1-S5
+├─ [ ] P1-S7 [TEST]
+├─ Deliverables:
+│   ├─ [ ] P1-D1: Password hashing works
+│   ├─ [ ] P1-D2: JWT tokens work
+│   ├─ [ ] P1-D3: Email service works
+│   └─ [ ] P1-D4: All tests pass
+└─> Transitions:
+    - P1-D1 - P1-D4 checked → [END]
+    - Tests fail after 3 attempts → [CONSULT]
+```
+
+**Execution order:**
+1. S1 runs first (sequential)
+2. S2, S4 start concurrently (S3 waits for S2)
+3. S3 starts when S2 completes
+4. S5 starts when S2 AND S3 complete (S4 may still run)
+5. S6 starts when S4 AND S5 complete
+6. S7 starts when S6 completes
+
 ## 5. Usage
 
 **Creating:** Phase header → Objectives → Strategy → Steps → Deliverables → Transitions
@@ -250,6 +294,12 @@
 **Resuming:** Find first unchecked Deliverable, read Strategy, continue
 
 ## Document History
+
+**[2026-01-22 17:40]**
+- Added: STRUT-FR-09 Concurrent Blocks for parallel step execution
+- Added: Step dependency syntax `← Px-Sy` for explicit wait conditions
+- Added: Concurrent block implicit barrier (first step after block waits for all)
+- Added: Example 4 demonstrating Concurrent blocks with dependencies
 
 **[2026-01-21 11:35]**
 - Added: STRUT-FR-05 expanded - Objectives link to Deliverables via `← P1-Dx` syntax
