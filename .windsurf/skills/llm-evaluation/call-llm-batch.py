@@ -187,26 +187,25 @@ def call_anthropic(client, model: str, prompt: str, image_data: str = None, imag
     }
 
 
-def get_output_path(input_file: Path, output_folder: Path, model: str, run: int) -> Path:
-    """Generate output path for a file."""
+def get_output_paths(input_file: Path, output_folder: Path, model: str, run: int) -> tuple:
+    """Generate output paths for content (.md) and metadata (.meta.json)."""
     safe_model = model.replace('/', '_').replace(':', '_')
-    output_name = f"{input_file.stem}__processed__{safe_model}__run{run:02d}.json"
-    return output_folder / output_name
+    base_name = f"{input_file.stem}__processed__{safe_model}__run{run:02d}"
+    content_path = output_folder / f"{base_name}.md"
+    meta_path = output_folder / f"{base_name}.meta.json"
+    return content_path, meta_path
 
 
-def should_process(output_path: Path, force: bool) -> bool:
+def should_process(content_path: Path, meta_path: Path, force: bool) -> bool:
     """Check if file should be processed (resume logic)."""
     if force:
         return True
-    if output_path.exists():
+    if content_path.exists() and meta_path.exists():
         try:
-            json.loads(output_path.read_text(encoding='utf-8'))
+            json.loads(meta_path.read_text(encoding='utf-8'))
             return False
         except:
             return True
-    tmp_path = output_path.with_suffix('.tmp')
-    if tmp_path.exists():
-        return True
     return True
 
 
@@ -241,10 +240,10 @@ def process_file(worker_id: int, file_idx: int, total_files: int, input_file: Pa
         return
     
     for run in range(1, args.runs + 1):
-        output_path = get_output_path(input_file, args.output_folder, args.model, run)
+        content_path, meta_path = get_output_paths(input_file, args.output_folder, args.model, run)
         
-        if not should_process(output_path, args.force):
-            log(worker_id, file_idx, total_files, f"Skipping (exists): {output_path.name}")
+        if not should_process(content_path, meta_path, args.force):
+            log(worker_id, file_idx, total_files, f"Skipping (exists): {content_path.name}")
             continue
         
         log(worker_id, file_idx, total_files, f"Processing: {input_file.name} run {run}")
@@ -270,19 +269,22 @@ def process_file(worker_id: int, file_idx: int, total_files: int, input_file: Pa
                     lambda: call_anthropic(client, args.model, file_prompt, image_data, image_media_type)
                 )
             
-            output_data = {
+            # Write content to .md file
+            with results_lock:
+                content_path.write_text(result["text"], encoding='utf-8')
+            
+            # Write metadata to .meta.json file
+            meta_data = {
                 "source_file": str(input_file),
                 "model": result["model"],
                 "run": run,
-                "text": result["text"],
                 "usage": result["usage"],
                 "timestamp": datetime.now(timezone.utc).isoformat()
             }
-            
-            atomic_write_json(output_path, output_data, results_lock)
+            atomic_write_json(meta_path, meta_data, results_lock)
             update_token_usage(args.output_folder, args.model, result["usage"], usage_lock)
             
-            log(worker_id, file_idx, total_files, f"Done: {output_path.name} ({result['usage']['input_tokens']}+{result['usage']['output_tokens']} tokens)")
+            log(worker_id, file_idx, total_files, f"Done: {content_path.name} ({result['usage']['input_tokens']}+{result['usage']['output_tokens']} tokens)")
             
         except Exception as e:
             log(worker_id, file_idx, total_files, f"ERROR: {input_file.name} run {run}: {e}")

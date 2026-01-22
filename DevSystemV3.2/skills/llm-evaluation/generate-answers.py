@@ -212,23 +212,14 @@ def main():
     
     transcriptions = {}
     for f in args.input_folder.iterdir():
-        if f.is_file() and f.suffix.lower() in {'.txt', '.md', '.json'}:
+        if f.is_file() and f.suffix.lower() in {'.txt', '.md'}:
             if f.name.startswith('_'):
                 continue
             if '.meta.' in f.name:
                 continue
-            if f.suffix.lower() == '.json':
-                try:
-                    data = json.loads(f.read_text(encoding='utf-8'))
-                    text = data.get("text", "")
-                    if text:
-                        transcriptions[f.stem] = text
-                except:
-                    pass
-            else:
-                content = f.read_text(encoding='utf-8')
-                if content.strip():
-                    transcriptions[f.stem] = content
+            content = f.read_text(encoding='utf-8')
+            if content.strip():
+                transcriptions[f.stem] = content
     
     for q in questions:
         source = q.get("source_file", "")
