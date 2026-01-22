@@ -1,0 +1,607 @@
+{
+  "model": "gpt-5-mini",
+  "total_answers": 50,
+  "generated_at": "2026-01-22T23:33:02.788884+00:00",
+  "answers": [
+    {
+      "question": "What company is this presentation about?",
+      "category": "easy",
+      "reference_answer": "Edison (Edison EDF Group)",
+      "model_answer": "The presentation is about Edison.",
+      "source_file": "Edison-Financial-Report-2023-FY2023-Results_page004",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1885,
+        "output_tokens": 143
+      }
+    },
+    {
+      "question": "What was the percentage change in Italian power demand between FY2022 and FY2023?",
+      "category": "medium_facts",
+      "reference_answer": "-2.7%",
+      "model_answer": "Italian power demand decreased by 2.7% between FY2022 and FY2023.",
+      "source_file": "Edison-Financial-Report-2023-FY2023-Results_page004",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1896,
+        "output_tokens": 156
+      }
+    },
+    {
+      "question": "What was the thermoelectric production value in TWh for both FY2023 and FY2022?",
+      "category": "medium_facts",
+      "reference_answer": "14.2 TWh in FY2023 and 15.7 TWh in FY2022",
+      "model_answer": "Thermoelectric production was 14,2 TWh in FY2023 and 15,7 TWh in FY2022.",
+      "source_file": "Edison-Financial-Report-2023-FY2023-Results_page004",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1899,
+        "output_tokens": 228
+      }
+    },
+    {
+      "question": "What was the total power demand in TWh for FY2023?",
+      "category": "easy",
+      "reference_answer": "308.4 TWh",
+      "model_answer": "The total power demand for FY2023 was 308.4 TWh.",
+      "source_file": "Edison-Financial-Report-2023-FY2023-Results_page004",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1892,
+        "output_tokens": 281
+      }
+    },
+    {
+      "question": "What does the lightning bolt symbol on the right side of the slide indicate?",
+      "category": "medium_graphics",
+      "reference_answer": "It indicates power/electricity, reinforcing the topic of power generation and distribution",
+      "model_answer": "Cannot answer from provided text",
+      "source_file": "Edison-Financial-Report-2023-FY2023-Results_page004",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1893,
+        "output_tokens": 142
+      }
+    },
+    {
+      "question": "What was the reason for lower thermo production according to the presentation?",
+      "category": "hard_semantics",
+      "reference_answer": "Lower thermo production (-17.4%) was due to higher imports",
+      "model_answer": "The presentation said lower thermo production was due to higher imports.",
+      "source_file": "Edison-Financial-Report-2023-FY2023-Results_page004",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1891,
+        "output_tokens": 149
+      }
+    },
+    {
+      "question": "What do the green and red bars at the top left represent?",
+      "category": "medium_graphics",
+      "reference_answer": "They represent Italy (green bar) and another country (red bar), likely showing the geographic scope of the data",
+      "model_answer": "They are the green and red stripes of the Italy flag.",
+      "source_file": "Edison-Financial-Report-2023-FY2023-Results_page004",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1891,
+        "output_tokens": 341
+      }
+    },
+    {
+      "question": "According to the bullet points, what two factors contributed to renewables covering 30% of demand?",
+      "category": "hard_semantics",
+      "reference_answer": "Improved hydro production thanks to stronger rainfall and growth in PV and wind generation supported by growth in installed capacity",
+      "model_answer": "Improved hydro production thanks to stronger rainfall, and growth in PV and wind generation supported by growth in installed capacity.",
+      "source_file": "Edison-Financial-Report-2023-FY2023-Results_page004",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1898,
+        "output_tokens": 160
+      }
+    },
+    {
+      "question": "How many different colored segments are used in each stacked bar chart for Sources and Uses?",
+      "category": "hard_graphics",
+      "reference_answer": "5 colored segments in each stacked bar chart",
+      "model_answer": "Sources use five colored segments; Uses use three colored segments.",
+      "source_file": "Edison-Financial-Report-2023-FY2023-Results_page004",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1895,
+        "output_tokens": 149
+      }
+    },
+    {
+      "question": "What is the dividend (full year) shown in the value section?",
+      "category": "easy",
+      "reference_answer": "60p dividend (full year)",
+      "model_answer": "60p.",
+      "source_file": "SSE-Annual-Report-2024-Group-Risk-Report_page002",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1924,
+        "output_tokens": 140
+      }
+    },
+    {
+      "question": "How many direct employees does SSE have?",
+      "category": "easy",
+      "reference_answer": "c14,000 direct employees",
+      "model_answer": "Approximately 14,000 direct employees.",
+      "source_file": "SSE-Annual-Report-2024-Group-Risk-Report_page002",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1918,
+        "output_tokens": 145
+      }
+    },
+    {
+      "question": "What color is used to represent Wind & other renewables production in the Sources chart?",
+      "category": "hard_graphics",
+      "reference_answer": "Green",
+      "model_answer": "Green is used to represent Wind & other renewables production in the Sources chart.",
+      "source_file": "Edison-Financial-Report-2023-FY2023-Results_page004",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1895,
+        "output_tokens": 153
+      }
+    },
+    {
+      "question": "What do the circular icons with letters (A, B, C, D) represent in the business model sections?",
+      "category": "medium_graphics",
+      "reference_answer": "They appear to be classification or category markers for different business segments within SSE's structure",
+      "model_answer": "Cannot answer from provided text",
+      "source_file": "SSE-Annual-Report-2024-Group-Risk-Report_page002",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1933,
+        "output_tokens": 142
+      }
+    },
+    {
+      "question": "What does the circular diagram in the center with 'Develop', 'Build', 'Invest', and 'Operate' represent?",
+      "category": "medium_graphics",
+      "reference_answer": "It represents SSE's business cycle showing how they develop, build, invest in, and operate their assets",
+      "model_answer": "It represents the Group’s operating (value-creation) cycle — a continuous loop of Develop, Build, Operate and Invest.",
+      "source_file": "SSE-Annual-Report-2024-Group-Risk-Report_page002",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1934,
+        "output_tokens": 227
+      }
+    },
+    {
+      "question": "How much investment was made in net zero infrastructure and how many customers were served?",
+      "category": "medium_facts",
+      "reference_answer": "£2.5bn investment in net zero infrastructure and c5m customers served (Networked and supply)",
+      "model_answer": "£2.5bn investment in net zero infrastructure and c5m customers served.",
+      "source_file": "SSE-Annual-Report-2024-Group-Risk-Report_page002",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1926,
+        "output_tokens": 282
+      }
+    },
+    {
+      "question": "According to the business model flow, what is the relationship between SSE's development activities and achieving net zero?",
+      "category": "hard_semantics",
+      "reference_answer": "SSE drives progress towards net zero by developing, building, operating and investing in clean, secure and affordable electricity infrastructure needed for the energy system of tomorrow",
+      "model_answer": "SSE's development activities are the \"Develop\" step in its Develop/Build/Operate/Invest cycle that helps drive progress towards net zero by creating clean, secure and affordable electricity infrastructure.",
+      "source_file": "SSE-Annual-Report-2024-Group-Risk-Report_page002",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1931,
+        "output_tokens": 239
+      }
+    },
+    {
+      "question": "What are the specific colors used to differentiate between the Renewables, Flexibility, and Networks business segments?",
+      "category": "hard_graphics",
+      "reference_answer": "Renewables uses teal/turquoise, Flexibility uses lighter teal/aqua, and Networks uses dark blue/navy",
+      "model_answer": "Renewables and Flexibility are shown in teal/green, while Networks are shown in dark blue (navy).",
+      "source_file": "SSE-Annual-Report-2024-Group-Risk-Report_page002",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1931,
+        "output_tokens": 224
+      }
+    },
+    {
+      "question": "What is the page number shown at the top of the image?",
+      "category": "easy",
+      "reference_answer": "11",
+      "model_answer": "11",
+      "source_file": "Werner_2016_Stem_Cell_Networks_page014",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1729,
+        "output_tokens": 138
+      }
+    },
+    {
+      "question": "What type of businesses are classified as 'economically-regulated' versus 'market-based' in SSE's portfolio?",
+      "category": "hard_semantics",
+      "reference_answer": "SSEN Transmission and SSEN Distribution are economically-regulated businesses (Networks), while SSE Renewables, SSE Thermal, SSE Enterprise, and SSE Energy Markets are market-based businesses",
+      "model_answer": "Economically‑regulated businesses are the networks (SSEN Transmission and SSEN Distribution), whereas market‑based businesses include renewables and flexibility (SSE Renewables, SSE Thermal) and market‑facing products/services (SSE Airtricity/SSE Business Energy, SSE Enterprise, SSE Energy Markets).",
+      "source_file": "SSE-Annual-Report-2024-Group-Risk-Report_page002",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1933,
+        "output_tokens": 454
+      }
+    },
+    {
+      "question": "Who is the author listed at the top of the page?",
+      "category": "easy",
+      "reference_answer": "Eric Werner",
+      "model_answer": "The author listed at the top of the page is Eric Werner.",
+      "source_file": "Werner_2016_Stem_Cell_Networks_page014",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1728,
+        "output_tokens": 86
+      }
+    },
+    {
+      "question": "What are the two types of SSE businesses under the Renewables category?",
+      "category": "medium_facts",
+      "reference_answer": "SSE Renewables (Providing clean and affordable home-grown energy) and SSE Thermal (Balancing the market with flexible generation)",
+      "model_answer": "Cannot answer from provided text",
+      "source_file": "SSE-Annual-Report-2024-Group-Risk-Report_page002",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1924,
+        "output_tokens": 974
+      }
+    },
+    {
+      "question": "How many distinct photographic images are shown in 'The value we create' section on the right side of the document?",
+      "category": "hard_graphics",
+      "reference_answer": "Six photographic images are shown in the value creation section",
+      "model_answer": "Eight distinct photographic images.",
+      "source_file": "SSE-Annual-Report-2024-Group-Risk-Report_page002",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1933,
+        "output_tokens": 590
+      }
+    },
+    {
+      "question": "According to Figure 8, what type of cells does the linear stem cell network ultimately produce n × 2^k of?",
+      "category": "medium_facts",
+      "reference_answer": "Terminal cells of type B",
+      "model_answer": "According to Figure 8, it ultimately produces n × 2^k terminal cells of type B.",
+      "source_file": "Werner_2016_Stem_Cell_Networks_page014",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1742,
+        "output_tokens": 158
+      }
+    },
+    {
+      "question": "In Figure 7, what formula is given for the total number of cells after n rounds when n > k?",
+      "category": "medium_facts",
+      "reference_answer": "Cells(n,k) = 2^k × (n - k + 2)",
+      "model_answer": "Cells(n,k) = 2^k + 2^k × (n − k + 1) = 2^k × (n − k + 2) for n > k.",
+      "source_file": "Werner_2016_Stem_Cell_Networks_page014",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1739,
+        "output_tokens": 307
+      }
+    },
+    {
+      "question": "What is the meaning of the dotted line segment between A2 and Ak-1 in both figures?",
+      "category": "medium_graphics",
+      "reference_answer": "It indicates continuation of the pattern - there are more cells in the sequence between A2 and Ak-1 that are not shown",
+      "model_answer": "In both figures the dotted red segment denotes omitted intermediate repeats (i.e., omitted intermediate steps) in the linear A‑chain between A2 and Ak−1.",
+      "source_file": "Werner_2016_Stem_Cell_Networks_page014",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1736,
+        "output_tokens": 298
+      }
+    },
+    {
+      "question": "In Figure 7's network, what happens to the B stem cells after n rounds of division?",
+      "category": "hard_semantics",
+      "reference_answer": "The B stem cells are controlled by a linear stem cell sub-network that maintains a constant 2^k of linear stem cells of type B",
+      "model_answer": "They jointly produce 2^k × n terminal C cells while retaining a constant 2^k B stem cells.",
+      "source_file": "Werner_2016_Stem_Cell_Networks_page014",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1736,
+        "output_tokens": 225
+      }
+    },
+    {
+      "question": "What do the curved arrows labeled with α (alpha) represent in both network diagrams?",
+      "category": "medium_graphics",
+      "reference_answer": "They represent self-renewal loops where cells divide to produce identical daughter cells",
+      "model_answer": "They denote the curved transition arcs α (green top and blue bottom) connecting successive A nodes (with the red self-loop variants α_k or α_L at Ak/AL).",
+      "source_file": "Werner_2016_Stem_Cell_Networks_page014",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1733,
+        "output_tokens": 428
+      }
+    },
+    {
+      "question": "What is the title of the roadmap shown in the image?",
+      "category": "easy",
+      "reference_answer": "Your Copilot adoption roadmap",
+      "model_answer": "Your Copilot adoption roadmap.",
+      "source_file": "Microsoft-365-Copilot-Adotion-Playbook_page003",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 826,
+        "output_tokens": 143
+      }
+    },
+    {
+      "question": "How many different colors are used to represent cells in Figure 7, and what are they?",
+      "category": "hard_graphics",
+      "reference_answer": "Three colors: red (for A cells and stem cells), blue (for B and C cells), and white/unfilled circles for self-renewal loops",
+      "model_answer": "Three colors are used: red, green, and blue.",
+      "source_file": "Werner_2016_Stem_Cell_Networks_page014",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1735,
+        "output_tokens": 277
+      }
+    },
+    {
+      "question": "Based on Figure 8, what is the relationship between the AL stem cell and the Ak cell?",
+      "category": "hard_semantics",
+      "reference_answer": "The AL stem cell is the founder cell that initiates the linear stem cell network, while Ak is the last cell in the chain that produces type B cells",
+      "model_answer": "AL is the upstream linear stem cell (A_L) that, via its linear sub-network loops, produces A_k (A_k = B), generating 2^k identical A_k=B daughter cells each loop.",
+      "source_file": "Werner_2016_Stem_Cell_Networks_page014",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1736,
+        "output_tokens": 372
+      }
+    },
+    {
+      "question": "What is the name of Phase 3?",
+      "category": "easy",
+      "reference_answer": "Deliver impact",
+      "model_answer": "Phase 3 is \"Deliver impact.\"",
+      "source_file": "Microsoft-365-Copilot-Adotion-Playbook_page003",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 823,
+        "output_tokens": 81
+      }
+    },
+    {
+      "question": "Which phase includes Step 6 and what is that step about?",
+      "category": "medium_facts",
+      "reference_answer": "Phase 2 (Onboard and engage) includes Step 6: Identify champions to lead the way",
+      "model_answer": "Phase 2: Onboard and engage (Accelerating usage and engagement) includes Step 6, which is \"Identify champions to lead the way.\"",
+      "source_file": "Microsoft-365-Copilot-Adotion-Playbook_page003",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 827,
+        "output_tokens": 167
+      }
+    },
+    {
+      "question": "In Figure 8, how many self-renewal loops (α arrows) are shown explicitly before the dotted continuation?",
+      "category": "hard_graphics",
+      "reference_answer": "Three self-renewal loops are shown explicitly (α0 on AL, α1 on A0, and α2 on A1)",
+      "model_answer": "Three alpha arrows (alpha0, alpha1, alpha2) are shown explicitly.",
+      "source_file": "Werner_2016_Stem_Cell_Networks_page014",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1740,
+        "output_tokens": 602
+      }
+    },
+    {
+      "question": "What does the horizontal navigation bar at the top of the image represent?",
+      "category": "medium_graphics",
+      "reference_answer": "It represents the same phases as a navigation menu with tabs: Introduction, Get ready, Onboard and engage, Deliver impact, Extend and optimize, and Next steps",
+      "model_answer": "It’s a top navigation–style row showing the document sections (\"Introduction · Get ready · Onboard and engage · Deliver impact · Extend and optimize · Next steps\") and the page number \"3\".",
+      "source_file": "Microsoft-365-Copilot-Adotion-Playbook_page003",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 828,
+        "output_tokens": 305
+      }
+    },
+    {
+      "question": "What are the two steps included in Phase 1 (Get ready)?",
+      "category": "medium_facts",
+      "reference_answer": "Step 1: Review your security and data settings, and Step 3: Create an AI council",
+      "model_answer": "They are: \"Review your security and data settings.\" and \"Be intentional with seat assignments.\"",
+      "source_file": "Microsoft-365-Copilot-Adotion-Playbook_page003",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 828,
+        "output_tokens": 476
+      }
+    },
+    {
+      "question": "What is the purpose of the subtitle text under each phase title?",
+      "category": "medium_graphics",
+      "reference_answer": "The subtitle text provides a brief description of what each phase focuses on (e.g., 'Preparing your business for AI' for Phase 1)",
+      "model_answer": "To provide a brief descriptor that summarizes each phase (for example, \"Preparing your business for AI\", \"Accelerating usage and engagement\", \"Tracking progress and business results\", and \"Building agents into your business\").",
+      "source_file": "Microsoft-365-Copilot-Adotion-Playbook_page003",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 827,
+        "output_tokens": 371
+      }
+    },
+    {
+      "question": "According to the roadmap progression, at what point does the focus shift from internal preparation to measuring actual business outcomes?",
+      "category": "hard_semantics",
+      "reference_answer": "The focus shifts from internal preparation to measuring business outcomes at Phase 3 (Deliver impact), which focuses on 'Tracking progress and business results'",
+      "model_answer": "The shift occurs in Phase 3 (Deliver impact), beginning with Step 8: \"Quantify impact with Microsoft Copilot Dashboard.\"",
+      "source_file": "Microsoft-365-Copilot-Adotion-Playbook_page003",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 836,
+        "output_tokens": 292
+      }
+    },
+    {
+      "question": "What are the exact colors used for each of the four main phase boxes from left to right?",
+      "category": "hard_graphics",
+      "reference_answer": "Blue (Phase 1), Teal/Cyan (Phase 2), Pink/Magenta (Phase 3), and Peach/Light Orange (Phase 4)",
+      "model_answer": "From left to right: Deep blue; Light blue/cyan; Purple/magenta; Peach/orange.",
+      "source_file": "Microsoft-365-Copilot-Adotion-Playbook_page003",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 833,
+        "output_tokens": 223
+      }
+    },
+    {
+      "question": "Based on the roadmap sequence, what foundational work must be completed before you can start tracking progress and business results?",
+      "category": "hard_semantics",
+      "reference_answer": "You must complete Phase 1 (Get ready - preparing your business for AI) and Phase 2 (Onboard and engage - accelerating usage and engagement) before moving to Phase 3 where you track progress and business results",
+      "model_answer": "Complete the \"Get ready\" and \"Onboard and engage\" steps—review your security and data settings; be intentional with seat assignments; create an AI council; help people build new work habits; create a Copilot user community; identify champions; and make ongoing training the standard.",
+      "source_file": "Microsoft-365-Copilot-Adotion-Playbook_page003",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 836,
+        "output_tokens": 450
+      }
+    },
+    {
+      "question": "How many total numbered steps are visible across all phases in the roadmap?",
+      "category": "hard_graphics",
+      "reference_answer": "12 steps total (Steps 1-4 in Phase 1, Steps 5-7 in Phase 2, Steps 8-10 in Phase 3, and Steps 11-12 in Phase 4)",
+      "model_answer": "12 total numbered steps are visible.",
+      "source_file": "Microsoft-365-Copilot-Adotion-Playbook_page003",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 828,
+        "output_tokens": 144
+      }
+    },
+    {
+      "question": "What is the data source mentioned at the bottom of the image?",
+      "category": "easy",
+      "reference_answer": "Numbeo via Deutsche Bank",
+      "model_answer": "The data source is \"Numbeo via Deutsche Bank.\"",
+      "source_file": "Rent_Prices_Around_the_World_SITE-2",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1667,
+        "output_tokens": 149
+      }
+    },
+    {
+      "question": "What is the rent price difference between New York and San Francisco?",
+      "category": "medium_facts",
+      "reference_answer": "$371 (New York: $5,211, San Francisco: $4,840)",
+      "model_answer": "The rent difference is $3.0K per month (New York $8.4K vs San Francisco $5.4K).",
+      "source_file": "Rent_Prices_Around_the_World_SITE-2",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1667,
+        "output_tokens": 229
+      }
+    },
+    {
+      "question": "What is the title of this infographic?",
+      "category": "easy",
+      "reference_answer": "Rent Prices AROUND THE WORLD",
+      "model_answer": "Rent Prices Around the World.",
+      "source_file": "Rent_Prices_Around_the_World_SITE-2",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1662,
+        "output_tokens": 207
+      }
+    },
+    {
+      "question": "What visual element is used to display the rent prices for each city?",
+      "category": "medium_graphics",
+      "reference_answer": "Radiating lines/bars extending from each continental region with city names and prices",
+      "model_answer": "Radial \"spokes\" — radial rent labels radiating outward from each regional globe.",
+      "source_file": "Rent_Prices_Around_the_World_SITE-2",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1668,
+        "output_tokens": 155
+      }
+    },
+    {
+      "question": "What do the different colored regions on the world maps represent?",
+      "category": "medium_graphics",
+      "reference_answer": "They represent different continents/regions: North America (blue), South America (green), Asia (pink), Europe (light blue), and Australia (orange)",
+      "model_answer": "They denote world regions: blue = North America, green = South America (Latin America), pink = Asia, orange = Oceania, cyan/teal = Europe, and yellow = Africa.",
+      "source_file": "Rent_Prices_Around_the_World_SITE-2",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1666,
+        "output_tokens": 304
+      }
+    },
+    {
+      "question": "According to the subtitle, what type of apartment does this rent data represent?",
+      "category": "hard_semantics",
+      "reference_answer": "Monthly rent for a 1-bedroom apartment in the city center (USD)",
+      "model_answer": "The subtitle indicates monthly rent for a three‑bedroom apartment in the city center (USD).",
+      "source_file": "Rent_Prices_Around_the_World_SITE-2",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1669,
+        "output_tokens": 156
+      }
+    },
+    {
+      "question": "Which two cities in Asia have rent prices of exactly $1,200?",
+      "category": "medium_facts",
+      "reference_answer": "Jakarta and Taipei",
+      "model_answer": "Cannot answer from provided text",
+      "source_file": "Rent_Prices_Around_the_World_SITE-2",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1669,
+        "output_tokens": 718
+      }
+    },
+    {
+      "question": "How many cities are displayed for the European continent section?",
+      "category": "hard_graphics",
+      "reference_answer": "20 cities",
+      "model_answer": "There are 28 cities displayed for the European continent section.",
+      "source_file": "Rent_Prices_Around_the_World_SITE-2",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1665,
+        "output_tokens": 405
+      }
+    },
+    {
+      "question": "Based on the data shown, which continent has the highest concentration of cities with rent above $3,000?",
+      "category": "hard_semantics",
+      "reference_answer": "North America, with 5 cities above $3,000 (New York, Boston, San Francisco, Chicago, LA)",
+      "model_answer": "Europe has the highest concentration of cities with rent above $3,000.",
+      "source_file": "Rent_Prices_Around_the_World_SITE-2",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1676,
+        "output_tokens": 1176
+      }
+    },
+    {
+      "question": "What color are the dots/circles next to each city name in the infographic?",
+      "category": "hard_graphics",
+      "reference_answer": "Various colors including white, pink, and gray dots",
+      "model_answer": "They match the region colors — blue for North America, green for Latin America, pink for Asia, orange for Oceania, cyan/teal for Europe, and yellow for Africa.",
+      "source_file": "Rent_Prices_Around_the_World_SITE-2",
+      "model": "gpt-5-mini-2025-08-07",
+      "usage": {
+        "input_tokens": 1671,
+        "output_tokens": 814
+      }
+    }
+  ]
+}

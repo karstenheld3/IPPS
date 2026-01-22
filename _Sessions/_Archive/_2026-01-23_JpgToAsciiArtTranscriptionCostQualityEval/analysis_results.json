@@ -1,0 +1,106 @@
+{
+  "Claude_Opus_4": {
+    "avg_score": 3.56,
+    "pass_rate": 66.0,
+    "cost": 0.111,
+    "quality_per_dollar": 32.072072072072075,
+    "by_category": {
+      "medium_facts": 3.2,
+      "easy": 4.9,
+      "medium_graphics": 3.8,
+      "hard_semantics": 3.9,
+      "hard_graphics": 2
+    }
+  },
+  "Claude_Haiku_3_5": {
+    "avg_score": 2.7,
+    "pass_rate": 44.0,
+    "cost": 0.004,
+    "quality_per_dollar": 675.0,
+    "by_category": {
+      "medium_facts": 3,
+      "easy": 4.4,
+      "medium_graphics": 2.5,
+      "hard_graphics": 0.9,
+      "hard_semantics": 2.7
+    }
+  },
+  "Claude_Sonnet_4": {
+    "avg_score": 3.08,
+    "pass_rate": 52.0,
+    "cost": 0.024,
+    "quality_per_dollar": 128.33333333333334,
+    "by_category": {
+      "easy": 4.4,
+      "medium_facts": 2.1,
+      "medium_graphics": 3,
+      "hard_semantics": 3.3,
+      "hard_graphics": 2.6
+    }
+  },
+  "GPT-5-mini": {
+    "avg_score": 3.48,
+    "pass_rate": 62.0,
+    "cost": 0.017,
+    "quality_per_dollar": 204.70588235294116,
+    "by_category": {
+      "easy": 4.9,
+      "medium_facts": 3.3,
+      "hard_semantics": 3.5,
+      "medium_graphics": 3.2,
+      "hard_graphics": 2.5
+    }
+  },
+  "GPT_5": {
+    "avg_score": 3.38,
+    "pass_rate": 64.0,
+    "cost": 0.1,
+    "quality_per_dollar": 33.8,
+    "by_category": {
+      "easy": 5,
+      "medium_facts": 3.3,
+      "medium_graphics": 3.1,
+      "hard_semantics": 3.5,
+      "hard_graphics": 2
+    }
+  },
+  "GPT_4_1": {
+    "avg_score": 3.36,
+    "pass_rate": 62.0,
+    "cost": 0.045,
+    "quality_per_dollar": 74.66666666666667,
+    "by_category": {
+      "easy": 5,
+      "medium_facts": 3.3,
+      "hard_semantics": 3.5,
+      "medium_graphics": 3.4,
+      "hard_graphics": 1.6
+    }
+  },
+  "GPT_4o": {
+    "avg_score": 2.8,
+    "pass_rate": 48.0,
+    "cost": 0.038,
+    "quality_per_dollar": 73.68421052631578,
+    "by_category": {
+      "easy": 4.4,
+      "medium_facts": 3,
+      "medium_graphics": 1.7,
+      "hard_semantics": 3.5,
+      "hard_graphics": 1.4
+    }
+  },
+  "GPT_5_2": {
+    "avg_score": 3.56,
+    "pass_rate": 66.0,
+    "cost": 0.047,
+    "quality_per_dollar": 75.74468085106383,
+    "by_category": {
+      "easy": 4.9,
+      "medium_facts": 3.2,
+      "hard_semantics": 3.9,
+      "medium_graphics": 3.2,
+      "hard_graphics": 2.6
+    }
+  }
+}
