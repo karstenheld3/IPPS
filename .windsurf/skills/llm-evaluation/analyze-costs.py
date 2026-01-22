@@ -84,7 +84,7 @@ def calculate_cost(model: str, input_tokens: int, output_tokens: int, pricing: d
 def find_token_usage_files(input_folder: Path) -> list:
     """Find all token usage files in folder."""
     usage_files = []
-    for f in input_folder.rglob("_token_usage__*.json"):
+    for f in input_folder.rglob("_token_usage_*.json"):
         usage_files.append(f)
     return usage_files
 
@@ -109,7 +109,7 @@ def main():
     
     if not usage_files:
         print(f"[WARN] No token usage files found in {args.input_folder}", file=sys.stderr)
-        print("Looking for files matching: _token_usage__*.json", file=sys.stderr)
+        print("Looking for files matching: _token_usage_*.json", file=sys.stderr)
     
     model_costs = {}
     total_input_tokens = 0

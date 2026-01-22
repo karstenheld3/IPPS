@@ -280,7 +280,7 @@ def main():
         "scores": results
     }
     
-    output_file = args.output_folder / f"scores__{args.model.replace('/', '_')}.json"
+    output_file = args.output_folder / f"scores_{args.model.replace('/', '_')}.json"
     output_file.write_text(json.dumps(output, indent=2, ensure_ascii=False), encoding='utf-8')
     
     print(f"\nResults: {passed}/{len(results)} passed ({output['pass_rate']}%), avg score: {avg_score:.2f}", file=sys.stderr)

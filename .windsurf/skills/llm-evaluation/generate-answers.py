@@ -277,7 +277,7 @@ def main():
         "answers": results
     }
     
-    output_file = args.output_folder / f"answers__{args.model.replace('/', '_')}.json"
+    output_file = args.output_folder / f"answers_{args.model.replace('/', '_')}.json"
     output_file.write_text(json.dumps(output, indent=2, ensure_ascii=False), encoding='utf-8')
     
     print(f"Generated {len(results)} answers -> {output_file}", file=sys.stderr)

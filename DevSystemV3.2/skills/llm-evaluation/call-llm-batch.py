@@ -190,7 +190,7 @@ def call_anthropic(client, model: str, prompt: str, image_data: str = None, imag
 def get_output_paths(input_file: Path, output_folder: Path, model: str, run: int) -> tuple:
     """Generate output paths for content (.md) and metadata (.meta.json)."""
     safe_model = model.replace('/', '_').replace(':', '_')
-    base_name = f"{input_file.stem}__processed__{safe_model}__run{run:02d}"
+    base_name = f"{input_file.stem}_processed_{safe_model}_run{run:02d}"
     content_path = output_folder / f"{base_name}.md"
     meta_path = output_folder / f"{base_name}.meta.json"
     return content_path, meta_path
@@ -212,7 +212,7 @@ def should_process(content_path: Path, meta_path: Path, force: bool) -> bool:
 def update_token_usage(output_folder: Path, model: str, usage: dict, lock: Lock):
     """Update token usage file for model."""
     safe_model = model.replace('/', '_').replace(':', '_')
-    usage_file = output_folder / f"_token_usage__{safe_model}.json"
+    usage_file = output_folder / f"_token_usage_{safe_model}.json"
     
     with lock:
         if usage_file.exists():
