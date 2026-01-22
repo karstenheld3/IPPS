@@ -1,0 +1,371 @@
+#!/usr/bin/env python3
+"""
+call-llm-batch.py - Batch LLM calls with parallel processing, resume, and incremental save.
+
+Usage:
+  python call-llm-batch.py --model gpt-4o --input-folder images/ --output-folder out/ --prompt-file prompt.md
+"""
+
+import os
+import sys
+import json
+import time
+import base64
+import argparse
+from pathlib import Path
+from datetime import datetime, timezone
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from threading import Lock
+
+UNKNOWN = '[UNKNOWN]'
+
+IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
+TEXT_EXTENSIONS = {'.txt', '.md', '.json', '.py', '.html', '.xml', '.csv'}
+
+
+def load_api_keys(keys_file: Path) -> dict:
+    """Load API keys from .env or key=value file."""
+    keys = {}
+    if not keys_file.exists():
+        print(f"[ERROR] Keys file not found: {keys_file}", file=sys.stderr)
+        sys.exit(1)
+    
+    with open(keys_file, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            if '=' in line:
+                key, value = line.split('=', 1)
+                keys[key.strip()] = value.strip()
+    return keys
+
+
+def detect_provider(model_id: str) -> str:
+    """Detect provider from model ID prefix."""
+    model_lower = model_id.lower()
+    if model_lower.startswith(('gpt-', 'o1-', 'o3-', 'davinci', 'curie', 'babbage', 'ada')):
+        return 'openai'
+    if model_lower.startswith('claude'):
+        return 'anthropic'
+    print(f"[ERROR] Cannot detect provider for model: {model_id}", file=sys.stderr)
+    sys.exit(1)
+
+
+def detect_file_type(file_path: Path) -> str:
+    """Detect file type by suffix."""
+    suffix = file_path.suffix.lower()
+    if suffix in IMAGE_EXTENSIONS:
+        return 'image'
+    if suffix in TEXT_EXTENSIONS:
+        return 'text'
+    return None
+
+
+def retry_with_backoff(fn, retries=3, backoff=(1, 2, 4)):
+    """Retry function with exponential backoff."""
+    last_error = None
+    for attempt in range(retries):
+        try:
+            return fn()
+        except Exception as e:
+            last_error = e
+            if attempt < retries - 1:
+                wait = backoff[attempt] if attempt < len(backoff) else backoff[-1]
+                time.sleep(wait)
+    raise last_error
+
+
+def encode_image_to_base64(file_path: Path) -> str:
+    """Encode image file to base64."""
+    with open(file_path, 'rb') as f:
+        return base64.b64encode(f.read()).decode('utf-8')
+
+
+def get_image_media_type(file_path: Path) -> str:
+    """Get media type for image."""
+    suffix = file_path.suffix.lower()
+    media_types = {
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.png': 'image/png',
+        '.gif': 'image/gif',
+        '.webp': 'image/webp'
+    }
+    return media_types.get(suffix, 'image/jpeg')
+
+
+def log(worker_id: int, current: int, total: int, msg: str):
+    """Log with worker ID and progress."""
+    print(f"[ {worker_id} ] [ {current} / {total} ] {msg}", file=sys.stderr)
+
+
+def atomic_write_json(path: Path, data: dict, lock: Lock):
+    """Write JSON atomically using temp file pattern."""
+    tmp_path = path.with_suffix('.tmp')
+    with lock:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding='utf-8')
+        tmp_path.rename(path)
+
+
+def create_openai_client(keys: dict):
+    """Create OpenAI client."""
+    from openai import OpenAI
+    api_key = keys.get('OPENAI_API_KEY')
+    if not api_key:
+        print("[ERROR] OPENAI_API_KEY not found in keys file", file=sys.stderr)
+        sys.exit(1)
+    return OpenAI(api_key=api_key)
+
+
+def create_anthropic_client(keys: dict):
+    """Create Anthropic client."""
+    from anthropic import Anthropic
+    api_key = keys.get('ANTHROPIC_API_KEY')
+    if not api_key:
+        print("[ERROR] ANTHROPIC_API_KEY not found in keys file", file=sys.stderr)
+        sys.exit(1)
+    return Anthropic(api_key=api_key)
+
+
+def call_openai(client, model: str, prompt: str, image_data: str = None, image_media_type: str = None):
+    """Call OpenAI API."""
+    if image_data:
+        content = [
+            {"type": "text", "text": prompt},
+            {"type": "image_url", "image_url": {"url": f"data:{image_media_type};base64,{image_data}"}}
+        ]
+    else:
+        content = prompt
+    
+    response = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": content}],
+        max_tokens=4096
+    )
+    
+    return {
+        "text": response.choices[0].message.content,
+        "usage": {
+            "input_tokens": response.usage.prompt_tokens,
+            "output_tokens": response.usage.completion_tokens
+        },
+        "model": response.model
+    }
+
+
+def call_anthropic(client, model: str, prompt: str, image_data: str = None, image_media_type: str = None):
+    """Call Anthropic API."""
+    content = []
+    
+    if image_data:
+        content.append({
+            "type": "image",
+            "source": {
+                "type": "base64",
+                "media_type": image_media_type,
+                "data": image_data
+            }
+        })
+    
+    content.append({"type": "text", "text": prompt})
+    
+    response = client.messages.create(
+        model=model,
+        max_tokens=4096,
+        messages=[{"role": "user", "content": content}]
+    )
+    
+    return {
+        "text": response.content[0].text,
+        "usage": {
+            "input_tokens": response.usage.input_tokens,
+            "output_tokens": response.usage.output_tokens
+        },
+        "model": response.model
+    }
+
+
+def get_output_path(input_file: Path, output_folder: Path, model: str, run: int) -> Path:
+    """Generate output path for a file."""
+    safe_model = model.replace('/', '_').replace(':', '_')
+    output_name = f"{input_file.stem}__processed__{safe_model}__run{run:02d}.json"
+    return output_folder / output_name
+
+
+def should_process(output_path: Path, force: bool) -> bool:
+    """Check if file should be processed (resume logic)."""
+    if force:
+        return True
+    if output_path.exists():
+        try:
+            json.loads(output_path.read_text(encoding='utf-8'))
+            return False
+        except:
+            return True
+    tmp_path = output_path.with_suffix('.tmp')
+    if tmp_path.exists():
+        return True
+    return True
+
+
+def update_token_usage(output_folder: Path, model: str, usage: dict, lock: Lock):
+    """Update token usage file for model."""
+    safe_model = model.replace('/', '_').replace(':', '_')
+    usage_file = output_folder / f"_token_usage__{safe_model}.json"
+    
+    with lock:
+        if usage_file.exists():
+            try:
+                data = json.loads(usage_file.read_text(encoding='utf-8'))
+            except:
+                data = {"model": model, "total_input_tokens": 0, "total_output_tokens": 0, "calls": 0}
+        else:
+            data = {"model": model, "total_input_tokens": 0, "total_output_tokens": 0, "calls": 0}
+        
+        data["total_input_tokens"] += usage.get("input_tokens", 0)
+        data["total_output_tokens"] += usage.get("output_tokens", 0)
+        data["calls"] += 1
+        data["last_updated"] = datetime.now(timezone.utc).isoformat()
+        
+        usage_file.write_text(json.dumps(data, indent=2), encoding='utf-8')
+
+
+def process_file(worker_id: int, file_idx: int, total_files: int, input_file: Path, 
+                 args, client, provider: str, prompt: str, results_lock: Lock, usage_lock: Lock):
+    """Process a single file."""
+    file_type = detect_file_type(input_file)
+    if not file_type:
+        log(worker_id, file_idx, total_files, f"Skipping unknown type: {input_file.name}")
+        return
+    
+    for run in range(1, args.runs + 1):
+        output_path = get_output_path(input_file, args.output_folder, args.model, run)
+        
+        if not should_process(output_path, args.force):
+            log(worker_id, file_idx, total_files, f"Skipping (exists): {output_path.name}")
+            continue
+        
+        log(worker_id, file_idx, total_files, f"Processing: {input_file.name} run {run}")
+        
+        try:
+            image_data = None
+            image_media_type = None
+            file_prompt = prompt
+            
+            if file_type == 'image':
+                image_data = retry_with_backoff(lambda: encode_image_to_base64(input_file))
+                image_media_type = get_image_media_type(input_file)
+            else:
+                text_content = input_file.read_text(encoding='utf-8')
+                file_prompt = f"{prompt}\n\n---\n\n{text_content}"
+            
+            if provider == 'openai':
+                result = retry_with_backoff(
+                    lambda: call_openai(client, args.model, file_prompt, image_data, image_media_type)
+                )
+            else:
+                result = retry_with_backoff(
+                    lambda: call_anthropic(client, args.model, file_prompt, image_data, image_media_type)
+                )
+            
+            output_data = {
+                "source_file": str(input_file),
+                "model": result["model"],
+                "run": run,
+                "text": result["text"],
+                "usage": result["usage"],
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+            
+            atomic_write_json(output_path, output_data, results_lock)
+            update_token_usage(args.output_folder, args.model, result["usage"], usage_lock)
+            
+            log(worker_id, file_idx, total_files, f"Done: {output_path.name} ({result['usage']['input_tokens']}+{result['usage']['output_tokens']} tokens)")
+            
+        except Exception as e:
+            log(worker_id, file_idx, total_files, f"ERROR: {input_file.name} run {run}: {e}")
+
+
+def parse_args():
+    """Parse command line arguments."""
+    parser = argparse.ArgumentParser(
+        description='Batch LLM calls with parallel processing, resume, and incremental save.',
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument('--model', required=True, help='API model ID')
+    parser.add_argument('--input-folder', type=Path, required=True, help='Input folder with files')
+    parser.add_argument('--output-folder', type=Path, required=True, help='Output folder for results')
+    parser.add_argument('--prompt-file', type=Path, required=True, help='Prompt file (.md)')
+    parser.add_argument('--runs', type=int, default=1, help='Runs per file (default: 1)')
+    parser.add_argument('--workers', type=int, default=4, help='Parallel workers (default: 4)')
+    parser.add_argument('--keys-file', type=Path, default=Path('.env'), help='API keys file (default: .env)')
+    parser.add_argument('--force', action='store_true', help='Force reprocess existing files')
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    
+    if args.workers < 1:
+        print("[WARN] Workers set to 0, defaulting to 1", file=sys.stderr)
+        args.workers = 1
+    
+    keys = load_api_keys(args.keys_file)
+    provider = detect_provider(args.model)
+    
+    if not args.input_folder.exists():
+        print(f"[ERROR] Input folder not found: {args.input_folder}", file=sys.stderr)
+        sys.exit(1)
+    
+    if not args.prompt_file.exists():
+        print(f"[ERROR] Prompt file not found: {args.prompt_file}", file=sys.stderr)
+        sys.exit(1)
+    
+    prompt = args.prompt_file.read_text(encoding='utf-8')
+    args.output_folder.mkdir(parents=True, exist_ok=True)
+    
+    all_extensions = IMAGE_EXTENSIONS | TEXT_EXTENSIONS
+    input_files = [f for f in args.input_folder.iterdir() 
+                   if f.is_file() and f.suffix.lower() in all_extensions]
+    
+    if not input_files:
+        print(f"[ERROR] No files found in {args.input_folder}", file=sys.stderr)
+        sys.exit(1)
+    
+    input_files.sort()
+    total_files = len(input_files)
+    
+    print(f"Processing {total_files} files with {args.workers} workers, {args.runs} run(s) each", file=sys.stderr)
+    print(f"Model: {args.model} ({provider})", file=sys.stderr)
+    
+    if provider == 'openai':
+        client = create_openai_client(keys)
+    else:
+        client = create_anthropic_client(keys)
+    
+    results_lock = Lock()
+    usage_lock = Lock()
+    
+    with ThreadPoolExecutor(max_workers=args.workers) as executor:
+        futures = {}
+        for idx, input_file in enumerate(input_files, 1):
+            worker_id = (idx - 1) % args.workers
+            future = executor.submit(
+                process_file, worker_id, idx, total_files, input_file,
+                args, client, provider, prompt, results_lock, usage_lock
+            )
+            futures[future] = input_file
+        
+        for future in as_completed(futures):
+            try:
+                future.result()
+            except Exception as e:
+                print(f"[ERROR] Unhandled: {futures[future]}: {e}", file=sys.stderr)
+    
+    print(f"Batch complete. Output: {args.output_folder}", file=sys.stderr)
+
+
+if __name__ == '__main__':
+    main()
