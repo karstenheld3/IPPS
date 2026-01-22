@@ -93,7 +93,7 @@
   - `--output-folder` - Folder for .json answer files
   - `--questions-file` - .json file (output of `generate-questions.py`)
   - `--workers` - Parallel workers (default: 4)
-  - `--prompt-file` - Custom answering prompt file
+  - `--prompt-file` - Custom answering prompt file (override default prompt for domain-specific answering styles, e.g., "be precise with numbers" or "answer in 1-2 sentences")
   - `--keys-file` - API keys file (default: .env)
   - Examples:
     ```

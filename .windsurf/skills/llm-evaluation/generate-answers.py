@@ -114,8 +114,7 @@ def call_anthropic(client, model: str, prompt: str):
     }
 
 
-def build_answer_prompt(question: str, text_content: str) -> str:
-    return f"""Based on the provided text, answer the following question.
+DEFAULT_ANSWER_PROMPT = """Based on the provided text, answer the following question.
 
 Rules:
 - Answer ONLY using information from the provided text
@@ -127,6 +126,11 @@ Question: {question}
 Text:
 {text_content}
 """
+
+
+def build_answer_prompt(question: str, text_content: str, custom_prompt: str = None) -> str:
+    template = custom_prompt if custom_prompt else DEFAULT_ANSWER_PROMPT
+    return template.format(question=question, text_content=text_content)
 
 
 def find_transcription_for_source(source_file: str, input_folder: Path) -> Path:
@@ -142,7 +146,8 @@ def find_transcription_for_source(source_file: str, input_folder: Path) -> Path:
 
 
 def process_question(worker_id: int, q_idx: int, total: int, question: dict,
-                     transcriptions_mapped: dict, args, client, provider: str, results: list, lock: Lock):
+                     transcriptions_mapped: dict, args, client, provider: str, 
+                     results: list, lock: Lock, custom_prompt: str = None):
     source_file = question.get("source_file", "")
     q_text = question.get("question", "")
     
@@ -154,7 +159,7 @@ def process_question(worker_id: int, q_idx: int, total: int, question: dict,
     log(worker_id, q_idx, total, f"Answering: {q_text[:50]}...")
     
     try:
-        prompt = build_answer_prompt(q_text, transcription)
+        prompt = build_answer_prompt(q_text, transcription, custom_prompt)
         
         if provider == 'openai':
             result = retry_with_backoff(lambda: call_openai(client, args.model, prompt))
@@ -187,6 +192,7 @@ def parse_args():
     parser.add_argument('--output-folder', type=Path, required=True, help='Output folder for answers')
     parser.add_argument('--questions-file', type=Path, required=True, help='Questions JSON file')
     parser.add_argument('--workers', type=int, default=4, help='Parallel workers (default: 4)')
+    parser.add_argument('--prompt-file', type=Path, help='Custom answering prompt file (use {question} and {text_content} placeholders)')
     parser.add_argument('--keys-file', type=Path, default=Path('.env'), help='API keys file')
     parser.add_argument('--clear-folder', action='store_true', help='Clear output folder before processing')
     return parser.parse_args()
@@ -239,6 +245,14 @@ def main():
                 q["_transcription_key"] = key
                 break
     
+    custom_prompt = None
+    if args.prompt_file:
+        if not args.prompt_file.exists():
+            print(f"[ERROR] Prompt file not found: {args.prompt_file}", file=sys.stderr)
+            sys.exit(1)
+        custom_prompt = args.prompt_file.read_text(encoding='utf-8')
+        print(f"Using custom prompt from: {args.prompt_file}", file=sys.stderr)
+    
     print(f"Generating answers for {len(questions)} questions with {args.workers} workers", file=sys.stderr)
     
     if provider == 'openai':
@@ -271,7 +285,7 @@ def main():
         for idx, q in enumerate(questions, 1):
             worker_id = (idx - 1) % args.workers
             future = executor.submit(process_question, worker_id, idx, len(questions), q,
-                                     transcriptions_mapped, args, client, provider, results, lock)
+                                     transcriptions_mapped, args, client, provider, results, lock, custom_prompt)
             futures[future] = q
         
         for future in as_completed(futures):

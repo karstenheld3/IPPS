@@ -208,6 +208,8 @@ def parse_args():
     parser.add_argument('--model', required=True, help='Judge model ID')
     parser.add_argument('--input-folder', type=Path, required=True, help='Folder with answer JSON files')
     parser.add_argument('--output-folder', type=Path, required=True, help='Output folder for scores')
+    parser.add_argument('--method', choices=['llm', 'openai-eval'], default='llm', 
+                        help='Evaluation method: llm (LLM-as-judge) or openai-eval (OpenAI Eval API)')
     parser.add_argument('--judge-prompt', type=str, help='Custom judge prompt (use {question}, {reference_answer}, {model_answer})')
     parser.add_argument('--pass-threshold', type=int, default=4, help='Pass threshold score (default: 4)')
     parser.add_argument('--workers', type=int, default=4, help='Parallel workers (default: 4)')
@@ -218,6 +220,10 @@ def parse_args():
 
 def main():
     args = parse_args()
+    
+    if args.method == 'openai-eval':
+        print("[ERROR] OpenAI Eval API method not yet implemented. Use --method llm", file=sys.stderr)
+        sys.exit(1)
     
     if args.clear_folder and args.output_folder.exists():
         import shutil
