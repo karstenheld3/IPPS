@@ -6,16 +6,13 @@ Usage:
   python generate-questions.py --model gpt-4o --input-folder images/ --output-file questions.json
 """
 
-import os
-import sys
-import json
-import time
-import base64
-import argparse
+import os, sys, json, time, base64, argparse
 from pathlib import Path
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
+
+UNKNOWN = '[UNKNOWN]'
 
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
 TEXT_EXTENSIONS = {'.txt', '.md', '.json', '.py', '.html', '.xml', '.csv'}

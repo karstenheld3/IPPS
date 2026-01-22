@@ -6,12 +6,7 @@ Usage:
   python call-llm-batch.py --model gpt-4o --input-folder images/ --output-folder out/ --prompt-file prompt.md
 """
 
-import os
-import sys
-import json
-import time
-import base64
-import argparse
+import os, sys, json, time, base64, argparse
 from pathlib import Path
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
