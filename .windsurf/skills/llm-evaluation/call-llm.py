@@ -130,10 +130,12 @@ def call_openai(client, model: str, prompt: str, image_data: str = None, image_m
     
     messages.append({"role": "user", "content": content})
     
+    # Use max_completion_tokens for newer models (gpt-5, o1, o3), max_tokens for older
+    token_param = "max_completion_tokens" if any(x in model for x in ['gpt-5', 'o1-', 'o3-']) else "max_tokens"
     response = client.chat.completions.create(
         model=model,
         messages=messages,
-        max_tokens=4096
+        **{token_param: 4096}
     )
     
     return {

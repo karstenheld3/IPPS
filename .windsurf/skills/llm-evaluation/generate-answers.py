@@ -87,10 +87,12 @@ def create_anthropic_client(keys: dict):
 
 
 def call_openai(client, model: str, prompt: str):
+    # Use max_completion_tokens for newer models (gpt-5, o1, o3), max_tokens for older
+    token_param = "max_completion_tokens" if any(x in model for x in ['gpt-5', 'o1-', 'o3-']) else "max_tokens"
     response = client.chat.completions.create(
         model=model,
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=2048
+        **{token_param: 2048}
     )
     return {
         "text": response.choices[0].message.content,
