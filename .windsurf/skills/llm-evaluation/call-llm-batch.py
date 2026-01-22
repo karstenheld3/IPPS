@@ -304,6 +304,7 @@ def parse_args():
     parser.add_argument('--workers', type=int, default=4, help='Parallel workers (default: 4)')
     parser.add_argument('--keys-file', type=Path, default=Path('.env'), help='API keys file (default: .env)')
     parser.add_argument('--force', action='store_true', help='Force reprocess existing files')
+    parser.add_argument('--clear', action='store_true', help='Clear output folder before processing')
     return parser.parse_args()
 
 
@@ -326,6 +327,12 @@ def main():
         sys.exit(1)
     
     prompt = args.prompt_file.read_text(encoding='utf-8')
+    
+    if args.clear and args.output_folder.exists():
+        import shutil
+        shutil.rmtree(args.output_folder)
+        print(f"Cleared output folder: {args.output_folder}", file=sys.stderr)
+    
     args.output_folder.mkdir(parents=True, exist_ok=True)
     
     all_extensions = IMAGE_EXTENSIONS | TEXT_EXTENSIONS

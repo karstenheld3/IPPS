@@ -1,0 +1,59 @@
+{
+  "description": "Question schema with categories and reference answers for evaluation",
+  "questions_per_item": 10,
+  "categories": [
+    {
+      "name": "easy",
+      "count": 2,
+      "description": "Simple factual questions with clear answers"
+    },
+    {
+      "name": "medium_facts",
+      "count": 2,
+      "description": "Questions requiring understanding of multiple facts"
+    },
+    {
+      "name": "medium_graphics",
+      "count": 2,
+      "description": "Questions about visual elements and graphics"
+    },
+    {
+      "name": "hard_semantics",
+      "count": 2,
+      "description": "Questions requiring inference and reasoning"
+    },
+    {
+      "name": "hard_graphics",
+      "count": 2,
+      "description": "Complex questions about visual details and layout"
+    }
+  ],
+  "question_format": {
+    "id": "integer, sequential per source",
+    "category": "one of: easy, medium_facts, medium_graphics, hard_semantics, hard_graphics",
+    "question": "the question text",
+    "reference_answer": "expected correct answer",
+    "answerable": "boolean, true if answerable from the content"
+  },
+  "example_output": {
+    "questions": [
+      {
+        "id": 1,
+        "category": "easy",
+        "question": "What is the title of this document?",
+        "reference_answer": "Annual Report 2024",
+        "answerable": true,
+        "source_file": "document.jpg"
+      },
+      {
+        "id": 2,
+        "category": "medium_facts",
+        "question": "What were the two main revenue drivers mentioned?",
+        "reference_answer": "Product sales ($45M) and service contracts ($12M)",
+        "answerable": true,
+        "source_file": "document.jpg"
+      }
+    ]
+  },
+  "system_prompt": "Generate exactly 10 questions per source file following this category distribution: 2 easy, 2 medium_facts, 2 medium_graphics, 2 hard_semantics, 2 hard_graphics. Each question must have a reference_answer that can be verified against the original content."
+}
