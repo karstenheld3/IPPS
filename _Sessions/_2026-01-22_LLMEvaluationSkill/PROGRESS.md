@@ -8,11 +8,11 @@
 - [x] **DESIGN** - Created SPEC_LLM_EVALUATION_SKILL.md [LLMEV-SP01]
 - [x] **IMPLEMENT** - Created all 6 scripts + configs in DevSystemV3.2/skills/llm-evaluation/
 - [x] **TEST** - Full pipeline test: 81.1% pass rate, $4.82 cost
-- [ ] **DEPLOY** - Final review, sync, close session
+- [x] **DEPLOY** - Final review, sync, close session
 
 ## To Do
 
-- [ ] Close session (`/session-close`)
+(none)
 
 ## In Progress
 

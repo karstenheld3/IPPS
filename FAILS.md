@@ -1,5 +1,19 @@
 # Failure Log
 
+## 2026-01-22 - LLM Evaluation Skill Session
+
+### [MEDIUM] `LLMEV-FL-009` Ignored documented settings in NOTES.md
+
+- **When**: 2026-01-22 23:03 UTC+01:00
+- **Where**: Agent command execution for test runs
+- **What**: Agent repeatedly used `--workers 2` instead of `--workers 4` despite NOTES.md clearly specifying "Workers: 4 parallel" in Test Configuration section
+- **Why it went wrong**: Agent used hardcoded value from memory instead of reading current NOTES.md settings before executing commands
+
+**Prevention rules**:
+1. Before running test commands, always read NOTES.md Test Configuration section
+2. Use exact values from session documentation, not memory
+3. When in doubt, re-read the config section
+
 ## 2026-01-21 - computer-use-mcp Breaks Cascade on Windows
 
 ### [CRITICAL] `MCPS-FL-008` computer-use-mcp MCP server causes Cascade failures
