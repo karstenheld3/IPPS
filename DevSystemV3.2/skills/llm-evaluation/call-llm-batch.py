@@ -97,7 +97,7 @@ def get_image_media_type(file_path: Path) -> str:
 
 def log(worker_id: int, current: int, total: int, msg: str):
     """Log with worker ID and progress."""
-    print(f"[ {worker_id} ] [ {current} / {total} ] {msg}", file=sys.stderr)
+    print(f"[ worker {worker_id + 1} ] [ {current} / {total} ] {msg}", file=sys.stderr)
 
 
 def atomic_write_json(path: Path, data: dict, lock: Lock):
@@ -187,26 +187,39 @@ def call_anthropic(client, model: str, prompt: str, image_data: str = None, imag
     }
 
 
-def get_output_paths(input_file: Path, output_folder: Path, model: str, run: int) -> tuple:
-    """Generate output paths for content (.md) and metadata (.meta.json)."""
+def get_output_path(input_file: Path, output_folder: Path, model: str, run: int) -> Path:
+    """Generate output path for content (.md)."""
     safe_model = model.replace('/', '_').replace(':', '_')
     base_name = f"{input_file.stem}_processed_{safe_model}_run{run:02d}"
-    content_path = output_folder / f"{base_name}.md"
-    meta_path = output_folder / f"{base_name}.meta.json"
-    return content_path, meta_path
+    return output_folder / f"{base_name}.md"
 
 
-def should_process(content_path: Path, meta_path: Path, force: bool) -> bool:
+def should_process(content_path: Path, force: bool) -> bool:
     """Check if file should be processed (resume logic)."""
     if force:
         return True
-    if content_path.exists() and meta_path.exists():
-        try:
-            json.loads(meta_path.read_text(encoding='utf-8'))
-            return False
-        except:
-            return True
-    return True
+    return not content_path.exists()
+
+
+def update_batch_metadata(output_folder: Path, model: str, entry: dict, lock: Lock):
+    """Update consolidated batch metadata file."""
+    safe_model = model.replace('/', '_').replace(':', '_')
+    meta_file = output_folder / f"_batch_metadata_{safe_model}.json"
+    
+    with lock:
+        if meta_file.exists():
+            try:
+                data = json.loads(meta_file.read_text(encoding='utf-8'))
+            except:
+                data = {"model": model, "files": []}
+        else:
+            data = {"model": model, "files": []}
+        
+        data["files"].append(entry)
+        data["last_updated"] = datetime.now(timezone.utc).isoformat()
+        data["total_files"] = len(data["files"])
+        
+        meta_file.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding='utf-8')
 
 
 def update_token_usage(output_folder: Path, model: str, usage: dict, lock: Lock):
@@ -240,9 +253,9 @@ def process_file(worker_id: int, file_idx: int, total_files: int, input_file: Pa
         return
     
     for run in range(1, args.runs + 1):
-        content_path, meta_path = get_output_paths(input_file, args.output_folder, args.model, run)
+        content_path = get_output_path(input_file, args.output_folder, args.model, run)
         
-        if not should_process(content_path, meta_path, args.force):
+        if not should_process(content_path, args.force):
             log(worker_id, file_idx, total_files, f"Skipping (exists): {content_path.name}")
             continue
         
@@ -273,15 +286,16 @@ def process_file(worker_id: int, file_idx: int, total_files: int, input_file: Pa
             with results_lock:
                 content_path.write_text(result["text"], encoding='utf-8')
             
-            # Write metadata to .meta.json file
-            meta_data = {
+            # Update consolidated metadata file
+            meta_entry = {
+                "output_file": content_path.name,
                 "source_file": str(input_file),
                 "model": result["model"],
                 "run": run,
                 "usage": result["usage"],
                 "timestamp": datetime.now(timezone.utc).isoformat()
             }
-            atomic_write_json(meta_path, meta_data, results_lock)
+            update_batch_metadata(args.output_folder, args.model, meta_entry, results_lock)
             update_token_usage(args.output_folder, args.model, result["usage"], usage_lock)
             
             log(worker_id, file_idx, total_files, f"Done: {content_path.name} ({result['usage']['input_tokens']}+{result['usage']['output_tokens']} tokens)")

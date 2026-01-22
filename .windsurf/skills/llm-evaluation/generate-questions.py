@@ -91,7 +91,7 @@ def get_image_media_type(file_path: Path) -> str:
 
 
 def log(worker_id: int, current: int, total: int, msg: str):
-    print(f"[ {worker_id} ] [ {current} / {total} ] {msg}", file=sys.stderr)
+    print(f"[ worker {worker_id + 1} ] [ {current} / {total} ] {msg}", file=sys.stderr)
 
 
 def create_openai_client(keys: dict):

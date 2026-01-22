@@ -57,7 +57,7 @@ def retry_with_backoff(fn, retries=3, backoff=(1, 2, 4)):
 
 
 def log(worker_id: int, current: int, total: int, msg: str):
-    print(f"[ {worker_id} ] [ {current} / {total} ] {msg}", file=sys.stderr)
+    print(f"[ worker {worker_id + 1} ] [ {current} / {total} ] {msg}", file=sys.stderr)
 
 
 def atomic_write_json(path: Path, data: dict, lock: Lock):
