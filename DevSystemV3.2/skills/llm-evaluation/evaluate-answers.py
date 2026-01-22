@@ -210,14 +210,14 @@ def parse_args():
     parser.add_argument('--pass-threshold', type=int, default=4, help='Pass threshold score (default: 4)')
     parser.add_argument('--workers', type=int, default=4, help='Parallel workers (default: 4)')
     parser.add_argument('--keys-file', type=Path, default=Path('.env'), help='API keys file')
-    parser.add_argument('--clear', action='store_true', help='Clear output folder before processing')
+    parser.add_argument('--clear-folder', action='store_true', help='Clear output folder before processing')
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
     
-    if args.clear and args.output_folder.exists():
+    if args.clear_folder and args.output_folder.exists():
         import shutil
         shutil.rmtree(args.output_folder)
         print(f"Cleared output folder: {args.output_folder}", file=sys.stderr)
