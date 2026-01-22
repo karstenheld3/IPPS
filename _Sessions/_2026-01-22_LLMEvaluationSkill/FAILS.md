@@ -10,7 +10,15 @@
 
 ## Active Issues
 
-*No active issues*
+### `LLMEV-FL-009` Ignored documented settings in NOTES.md
+
+- **Severity**: [MEDIUM]
+- **When**: 2026-01-22 23:03
+- **Where**: Agent command execution for test runs
+- **What**: Agent repeatedly used `--workers 2` instead of `--workers 4` despite NOTES.md clearly specifying "Workers: 4 parallel" in Test Configuration section
+- **Evidence**: User had to stop agent multiple times and explicitly point to NOTES.md:L65 showing "Workers: 4 parallel"
+- **Why it went wrong**: Agent used hardcoded value from memory instead of reading current NOTES.md settings before executing commands
+- **Suggested fix**: Before running test commands, always read NOTES.md Test Configuration section and use those exact values
 
 ## Resolved Issues
 
@@ -90,6 +98,9 @@
 - **Link**: Commit `07b6318`
 
 ## Document History
+
+**[2026-01-22 23:05]**
+- Added: LLMEV-FL-009 for ignoring documented settings
 
 **[2026-01-22 22:00]**
 - Added: LLMEV-FL-007 for transcription matching bug (resolved)
