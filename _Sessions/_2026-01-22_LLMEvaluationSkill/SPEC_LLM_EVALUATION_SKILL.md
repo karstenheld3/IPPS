@@ -10,6 +10,7 @@
 
 - **INCREMENTAL SAVE**: ALL scripts MUST write results after EACH item processed, not just at end. Better to write JSON 1000 times than lose everything on crash.
 - **CONCURRENCY**: ALL scripts processing multiple items MUST support `--workers N` for parallel execution (default: 4)
+- **RETRY WITH BACKOFF**: Use simple retry pattern (3x with exponential backoff) for transient API errors. Reference: `openai_backendtools.retry_on_openai_errors()`
 - Model IDs MUST match original API model IDs exactly (e.g., `gpt-4o`, `claude-opus-4-20250514`)
 - Keys file supports both `.env` and `key=value` formats
 - All input/output paths MUST be parameters with sensible defaults
@@ -356,7 +357,8 @@ An **EvalScores** file contains LLM-as-judge scores for answers.
 - Auto-detect file type by suffix (no `--input-type` override)
 - Support multiple runs per file via `--runs N`
 - Support parallel processing via `--workers N` (default: 4)
-- Skip existing outputs (resume capability)
+- Resume: detect incomplete outputs by JSON parse failure or missing `.json` extension
+- Write to temp file first (`{output}.tmp`), rename on success
 - Save each output immediately after generation
 - Output naming: `{source}__processed__{model}__run{NN}.md`
 - Token usage: `_token_usage__{model}.json` (updated incrementally)
@@ -410,7 +412,11 @@ An **EvalScores** file contains LLM-as-judge scores for answers.
 
 **LLMEV-DD-07:** Parallel processing as default for all batch operations. Rationale: API calls are I/O bound, parallelism dramatically improves throughput. Default 4 workers, configurable via `--workers N`.
 
-**LLMEV-DD-08:** Thread-safe incremental saving with file locks. Rationale: Parallel workers must not corrupt output files when saving concurrently.
+**LLMEV-DD-08:** Use `concurrent.futures.ThreadPoolExecutor` for parallel API calls. Thread-safe incremental saving with `threading.Lock` for file I/O. Rationale: Simple Python concurrency, API calls are I/O bound.
+
+**LLMEV-DD-09:** Atomic file writes via temp file pattern. Write to `{output}.tmp`, rename to `{output}.json` on success. Rationale: Prevents corrupt partial files on crash, enables reliable resume detection.
+
+**LLMEV-DD-10:** Structured logging with worker ID. Format: `[ worker_id ] [ x / n ] action...`. Log levels: INFO (progress), WARNING (retries), ERROR (failures). Reference: PYTHON-LG-05 iteration format `[ x / n ]`.
 
 ## 6. Implementation Guarantees
 
@@ -418,7 +424,7 @@ An **EvalScores** file contains LLM-as-judge scores for answers.
 
 **LLMEV-IG-02:** Scripts MUST save state after EACH completed item, before processing the next item.
 
-**LLMEV-IG-03:** Scripts MUST handle API errors gracefully and continue processing remaining items.
+**LLMEV-IG-03:** Scripts MUST handle API errors gracefully: retry transient errors 3x with exponential backoff (1s, 2s, 4s), then skip item and continue. Strip markdown code fences (```json) before JSON parse. Retry image encoding/embedding failures 3x before skipping.
 
 **LLMEV-IG-04:** Scripts MUST validate model ID exists in registry before making API calls (if registry available).
 
@@ -714,14 +720,40 @@ Common flags:
 - `--output-file PATH` - Output .json file
 - `--pricing PATH` - Custom pricing JSON file
 
-### Dependencies
+### Prerequisites
 
+**Python**: 3.10+
+
+**Dependencies** (`requirements.txt`):
 ```
 openai>=1.0.0
 anthropic>=0.18.0
 ```
 
+**API Keys** (create `.env` in working directory):
+```
+OPENAI_API_KEY=sk-proj-...
+ANTHROPIC_API_KEY=sk-ant-api03-...
+```
+
+**Verify Installation**:
+```bash
+python call-llm.py --model gpt-4o --prompt-file prompts/transcribe-page.md --help
+```
+
 ## 11. Document History
+
+**[2026-01-22 21:23]**
+- Changed: LLMEV-IG-03 added image encoding/embedding retry (3x)
+
+**[2026-01-22 21:21]**
+- Added: LLMEV-DD-09 atomic file writes (temp file pattern)
+- Added: LLMEV-DD-10 structured logging with worker ID
+- Added: Prerequisites section (Python, dependencies, API keys)
+- Changed: LLMEV-DD-08 explicit ThreadPoolExecutor + threading.Lock
+- Changed: LLMEV-FR-04 resume detection via JSON parse failure
+- Changed: LLMEV-IG-03 explicit retry policy (3x backoff) + JSON fence strip
+- Changed: MUST-NOT-FORGET added retry pattern reference
 
 **[2026-01-22 21:03]**
 - Fixed: Script names updated throughout (call-llm.py, call-llm-batch.py, generate-answers.py)
