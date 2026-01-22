@@ -27,7 +27,7 @@
 - **INCREMENTAL SAVE**: Write results after EACH item, not at end
 - **RETRY**: 3x with exponential backoff (1s, 2s, 4s) for transient errors
 - **ATOMIC WRITES**: Write to `.tmp`, rename on success
-- **LOGGING**: Format `[ worker_id ] [ x / n ] action...`
+- **LOGGING**: Format `[ worker N ] [ x / n ] action...` (1-indexed worker IDs)
 - **CONCURRENCY**: Use `concurrent.futures.ThreadPoolExecutor` + `threading.Lock`
 - Reference: `E:\Dev\OpenAI-BackendTools\src\openai_backendtools.py` for patterns
 
@@ -124,7 +124,7 @@ def load_api_keys(keys_file: Path) -> dict: ...
 def detect_provider(model_id: str) -> str: ...
 def retry_with_backoff(fn, retries=3, backoff=(1,2,4)): ...
 def atomic_write_json(path: Path, data: dict, lock: Lock): ...
-def log(worker_id: int, current: int, total: int, msg: str): ...
+def log(worker_id: int, current: int, total: int, msg: str): ...  # outputs [ worker {id+1} ]
 ```
 
 ### Phase 2: Single Call Script
@@ -294,8 +294,8 @@ def main():
 ```python
 # CLI: python analyze-costs.py --input-folder IN --output-file OUT
 def main():
-  # Find all _token_usage__*.json files
-  usage_files = list(args.input_folder.glob("_token_usage__*.json"))
+  # Find all _token_usage_*.json files
+  usage_files = list(args.input_folder.glob("_token_usage_*.json"))
   
   # Load pricing
   pricing = load_pricing(args.pricing)

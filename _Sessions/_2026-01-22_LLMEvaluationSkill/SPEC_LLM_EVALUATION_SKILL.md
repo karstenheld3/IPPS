@@ -58,11 +58,13 @@
 - `call-llm-batch.py` - Batch LLM calls on folder (auto-detects image or text)
   - `--model` - API model ID (required)
   - `--input-folder` - Folder with input files (.jpg, .png, .md, .txt)
-  - `--output-folder` - Folder for output .md files + _token_usage__.json
+  - `--output-folder` - Folder for output .md files + metadata JSON files
   - `--prompt-file` - Prompt file (.md)
   - `--runs` - Number of runs per file (default: 1)
   - `--workers` - Parallel workers (default: 4)
   - `--keys-file` - API keys file (default: .env)
+  - `--clear-folder` - Clear output folder before processing
+  - `--force` - Force reprocess existing files
   - Examples:
     ```
     python call-llm-batch.py --model claude-opus-4-20250514 --input-folder images/ --output-folder transcriptions/ --prompt-file transcribe.md --runs 3
@@ -117,7 +119,7 @@
     ```
 
 - `analyze-costs.py` - Token cost analysis from usage logs
-  - `--input-folder` - Folder with _token_usage__{model}.json files (output of `call-llm-batch.py`)
+  - `--input-folder` - Folder with _token_usage_{model}.json files (output of `call-llm-batch.py`)
   - `--output-file` - Output .json file for cost analysis
   - `--pricing` - Custom pricing JSON file
   - Examples:
@@ -360,8 +362,9 @@ An **EvalScores** file contains LLM-as-judge scores for answers.
 - Resume: detect incomplete outputs by JSON parse failure or missing `.json` extension
 - Write to temp file first (`{output}.tmp`), rename on success
 - Save each output immediately after generation
-- Output naming: `{source}__processed__{model}__run{NN}.md`
-- Token usage: `_token_usage__{model}.json` (updated incrementally)
+- Output naming: `{source}_processed_{model}_run{NN}.md`
+- Batch metadata: `_batch_metadata_{model}.json` (consolidated, updated after each file)
+- Token usage: `_token_usage_{model}.json` (updated incrementally)
 - Use cases: transcription, summarization, analysis, extraction
 
 **LLMEV-FR-05: Question Generation (generate-questions.py)**
@@ -406,7 +409,7 @@ An **EvalScores** file contains LLM-as-judge scores for answers.
 
 **LLMEV-DD-04:** JSON output for all scripts. Rationale: Machine-readable, enables pipeline composition, easy to parse.
 
-**LLMEV-DD-05:** Token usage stored in separate `_token_usage.json` files. Rationale: Keeps output files clean, structured JSON is easier to analyze, updated incrementally for crash resilience.
+**LLMEV-DD-05:** Token usage stored in separate `_token_usage_{model}.json` files. Batch metadata consolidated in `_batch_metadata_{model}.json`. Rationale: Keeps output files clean, structured JSON is easier to analyze, updated incrementally for crash resilience.
 
 **LLMEV-DD-06:** Provider auto-detection from model ID prefix. Rationale: `claude-*` = anthropic, `gpt-*` = openai, `o1-*` = openai. Simplifies usage.
 
