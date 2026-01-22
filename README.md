@@ -101,7 +101,7 @@ your-project/
 - **[DevSystemV2.1](DevSystemV2.1/)** - Previous version with refined workflows
 - **[DevSystemV3](DevSystemV3/)** - Previous version with EDIRD phase model and Agentic English
 - **[DevSystemV3.1](DevSystemV3.1/)** - Previous version with STRUT notation
-- **[DevSystemV3.2](DevSystemV3.2/)** - Current system with WORKFLOW-RULES and auto_execution_mode
+- **[DevSystemV3.2](DevSystemV3.2/)** - Current system with Concurrent blocks, effort allocation, planning guidance
 
 ## Agentic English
 
@@ -180,19 +180,28 @@ Tree notation for planning and tracking complex autonomous work.
 - **Step ID** - Plan + sequence (e.g., `P1-S1`, `P1-S2`)
 - **Deliverable ID** - Plan + deliverable (e.g., `P1-D1`, `P1-D2`)
 - **Checkbox states** - `[ ]` pending, `[x]` done, `[N]` done N times (retry count)
+- **Concurrent blocks** - Group parallel steps under `Concurrent: <strategy>`
+- **Dependencies** - `← Px-Sy` suffix for explicit wait conditions
 
 **Structure**:
 ```
-[ ] P1 [VERB]: Description
+[ ] P1 [EXPLORE]: Evaluate database options
 ├─ Objectives:
-│   └─ [ ] Success criterion
-├─ Strategy: Approach summary
-├─ [ ] P1-S1 [VERB](context)
-├─ [ ] P1-S2 [VERB](context)
+│   └─ [ ] Recommendation ready ← P1-D1, P1-D2
+├─ Strategy: Research 3 options in parallel, then compare (10min AWT)
+├─ [ ] P1-S1 [DEFINE](evaluation criteria)
+├─ Concurrent: Independent research, no shared state
+│   ├─ [ ] P1-S2 [RESEARCH](PostgreSQL)
+│   ├─ [ ] P1-S3 [RESEARCH](MongoDB)
+│   └─ [ ] P1-S4 [RESEARCH](DynamoDB)
+├─ [ ] P1-S5 [EVALUATE](compare against criteria)
+├─ [ ] P1-S6 [RECOMMEND](winner with rationale)
 ├─ Deliverables:
-│   └─ [ ] P1-D1: Output artifact
+│   ├─ [ ] P1-D1: Comparison matrix complete
+│   └─ [ ] P1-D2: Recommendation documented
 └─> Transitions:
-    - Condition → [ACTION]
+    - P1-D1, P1-D2 checked → [END]
+    - No clear winner → [CONSULT]
 ```
 
 ## TRACTFUL - Document Framework
@@ -316,6 +325,7 @@ IPPS/
 │       ├── verify.md             # Verification against specs and rules
 │       ├── write-impl-plan.md    # Create implementation plan
 │       ├── write-spec.md         # Create specification
+│       ├── write-strut.md        # Create STRUT plans
 │       ├── write-tasks-plan.md   # Create tasks plan
 │       └── write-test-plan.md    # Create test plan
 ├── ID-REGISTRY.md                # Prevents term/ID collisions (DevSystem constants + project topics)
@@ -324,7 +334,7 @@ IPPS/
 
 ## Skills
 
-- **edird-phase-planning** - Phase gates, flows, and planning logic for BUILD/SOLVE workflows
+- **edird-phase-planning** - High-level phase planning with effort allocation, planning guidance, gates
 - **git** - Commit history navigation, file recovery from previous commits
 - **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF
 - **github** - GitHub CLI operations (repos, issues, PRs)

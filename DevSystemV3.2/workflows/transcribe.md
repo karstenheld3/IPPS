@@ -102,54 +102,98 @@ read_file(file_path: "[path]_page004.jpg")
 
 ### Special Characters for Accurate Transcription
 
-Use proper Unicode characters to match the original document:
+- **Superscripts/subscripts**: Use Unicode (¹ ² ³, ₁ ₂ ₃) not ASCII (^1 ^2 ^3)
+- **Greek letters**: Use actual Unicode characters (α β γ)
+- **Math formulas**: Use LaTeX syntax (`$E = mc^2$`) not Unicode operators
+- **Symbols**: Use proper Unicode (© ® ™ § † ‡ °)
 
-**Superscripts (footnotes, exponents):**
-```
-¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹ ⁰   (use instead of ^1 ^2 ^3)
-ᵃ ᵇ ᶜ ᵈ ᵉ ᶠ ᵍ ʰ ⁱ ʲ ᵏ ˡ ᵐ ⁿ ᵒ ᵖ ʳ ˢ ᵗ ᵘ ᵛ ʷ ˣ ʸ ᶻ
-```
+### Page Boundary Markers
 
-**Subscripts:**
-```
-₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉
-ₐ ₑ ₕ ᵢ ⱼ ₖ ₗ ₘ ₙ ₒ ₚ ᵣ ₛ ₜ ᵤ ᵥ ₓ
-```
+Preserve exact page structure with headers and footers from original document.
 
-**Greek letters:**
-```
-α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω
-Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω
+**Page Footer** - Place BEFORE `---` page separator:
+```markdown
+<transcription_page_footer> Page 5 | Company Name | Confidential </transcription_page_footer>
+
+---
 ```
 
-**Common symbols:**
-```
-© ® ™ § ¶ † ‡ ° ′ ″ ‴   (copyright, registered, trademark, section, pilcrow, dagger, degree, prime)
+**Page Header** - Place IMMEDIATELY AFTER `---` page separator:
+```markdown
+---
+
+<transcription_page_header> Annual Report 2024 | Section 3: Financials </transcription_page_header>
 ```
 
-**Math formulas:** Use standard Markdown math extension (LaTeX syntax):
-- Inline: `$E = mc^2$` renders as $E = mc^2$
-- Block: `$$\sum_{i=1}^{n} x_i$$` for display equations
-- Avoid Unicode math operators (± × ÷ ≠ ≈) and arrows (→ ←) - use LaTeX instead
+**Formatting Rules:**
+- **Single-line**: Tags and content on one line
+  ```markdown
+  <transcription_page_footer> 12 | FY 2023 | Vestas. </transcription_page_footer>
+  ```
+- **Multi-line**: Tags on separate lines, content indented
+  ```markdown
+  <transcription_page_header>
+  Annual Report 2024
+  Section 3: Financial Statements
+  Classification: Public
+  </transcription_page_header>
+  ```
 
-**Fractions:**
-```
-½ ⅓ ⅔ ¼ ¾ ⅕ ⅖ ⅗ ⅘ ⅙ ⅚ ⅛ ⅜ ⅝ ⅞
-```
+**Content to capture:**
+- Page numbers (any format: "5", "Page 5", "5 of 20", "v")
+- Document title / section name
+- Company name / logo text
+- Classification labels (Public, Confidential, etc.)
+- Version / date stamps
+- Navigation text (e.g., "Introduction | Get ready | Onboard and engage")
+
+**Omit if absent:** If a page has no header or footer, omit the corresponding tag entirely.
 
 ## Figure Transcription Protocol
 
 **MANDATORY**: Every figure MUST have BOTH ASCII art AND XML description.
 
+### Step F0: Analyze Before Drawing (Required)
+
+Before creating ASCII art, describe the image:
+1. **Subject**: What is this? (diagram type, subject matter)
+2. **Elements**: What are the key parts? (list 3-7 main components)
+3. **Relationships**: How do elements connect? (spatial, logical, flow)
+4. **Priority**: What matters most for understanding?
+
 ### Step F1: Create ASCII Art (Required)
 
-Generate ASCII representation using these character sets:
+**CHOOSE MODE** based on figure type:
 
-**USE** (JetBrains Mono OK):
-`←→↑↓↔↕↖↗↘↙` `┌─┬┐│├┼┤└┘` `╔═╦╗║╠╬╣╚╝` `╭╮╰╯` `┏━┳┓┃┣╋┫┗┛` `░▒▓█▀▄▌▐` `▖▗▘▙▚▛▜▝▞▟` `+-x:=<>` `/\X╱╲╳` `·⋯⋮`
+**Mode A: Structural** (flowcharts, diagrams, architecture, UI)
+```
+Box/lines:  + - | / \ _ [ ] ( ) { } < >
+Arrows:     -> <- v ^ >> <<
+Labels:     A-Z a-z 0-9
+Connectors: --- ||| === ...
+```
 
-**DONT USE** (broken width):
-`⇐⇒⇑⇓⇔⇕` `◀▶▲▼◄►△▽◁▷` `○●◎◉⊙◯⬤◐◑◒◓` `□■▢▣◇◆☆★` `(){}[]<>⟨⟩〈〉` `∈⊂⊃∩∪∧∨¬⊕⊗` `•◦✓✗☐☑☒❖✦✧‣⁃➔➜➤➡⌒⌓◜◝◞◟…`
+**Mode B: Shading** (photographs, complex graphics, gradients)
+```
+Density ramp (dark to light): @#%&8BWM*oahkbd=+-:. 
+Or simplified:                 @%#*+=-:.
+```
+
+**MAXIMIZE SEMANTICS** - Pack as much meaning into ASCII art as possible:
+- **Title header**: Start with `[DIAGRAM TITLE - WHAT IT SHOWS]`
+- **Inline legends**: Embed symbol meanings directly (`[S] = Server`, `[C] = Client`)
+- **Semantic labels**: Label every node, region, and outcome (`[DATABASE]`, `(pending)`, `RETRY LOOP`)
+- **State annotations**: Mark states explicitly (`(inactive)` vs `(ACTIVE)`)
+- **Result summaries**: Include outcome text where applicable (`Result: Request completed`)
+
+LLMs understand explicit labels better than visual patterns. Inline semantics beat cross-referencing metadata.
+
+**LAYOUT RULES**:
+- **Width**: 80-120 characters (max 180 for very complex diagrams)
+- **Aspect ratio**: Characters are ~2:1 (taller than wide) - compensate by doubling horizontal spacing
+- **Whitespace**: Use blank lines to separate logical sections
+
+**PURE ASCII ONLY** - No Unicode box-drawing, arrows, or shading blocks. Unicode adds no LLM value and risks alignment issues.
 
 ````
 **Figure [N]: [Caption from original]**
@@ -164,47 +208,76 @@ Generate ASCII representation using these character sets:
 After creating ASCII, compare with original image and add description using standard markdown inside XML tags:
 
 ```
-<transcribe_figure>
+<transcription_notes>
+- Mode: Structural | Shading
+- Dimensions: [width]x[height] characters
 - ASCII captures: What the ASCII diagram successfully represents
 - ASCII misses: Visual elements that cannot be shown in ASCII
 - Colors:
-  - [color name] - what it represents
+  - [color name] - what it represents (e.g., "Blue - input nodes")
   - [color name] - what it represents
 - Layout: Spatial arrangement, panels, relative positions
-- Details: Fine details, textures, gradients, 3D effects
-- Data: Specific values, measurements, or quantities visible
-</transcribe_figure>
+- Details: Fine details, textures, gradients, 3D effects, icons
+- Data: Specific values, measurements, labels, or quantities visible
+- Reconstruction hint: Key detail needed to imagine original
+</transcription_notes>
 ```
+
+### Step F2b: Self-Verify (Required)
+
+Before proceeding, verify ASCII art quality:
+- [ ] All labeled elements from original present?
+- [ ] Spatial relationships preserved (left/right, above/below)?
+- [ ] Flow or hierarchy clear (if applicable)?
+- [ ] Readable without seeing original?
+
+If any check fails, revise ASCII art before continuing.
 
 ### Step F3: Example
 
 Original: A flowchart with colored boxes showing data flow
 
+**Step F0 Analysis**:
+- Subject: Data processing pipeline flowchart
+- Elements: Input box, Process box, Output box, 3 log boxes, arrows
+- Relationships: Linear flow left-to-right, each stage logs downward
+- Priority: Flow direction and logging hierarchy
+
 ```markdown
 **Figure 3: Data Processing Pipeline**
 
 ```ascii
-┌─────────┐     ┌─────────┐     ┌─────────┐
-│  Input  │────>│ Process │────>│ Output  │
-└─────────┘     └─────────┘     └─────────┘
-     │               │               │
-     v               v               v
-┌─────────┐     ┌─────────┐     ┌─────────┐
-│  Log A  │     │  Log B  │     │  Log C  │
-└─────────┘     └─────────┘     └─────────┘
+DATA PROCESSING PIPELINE - 3 STAGE FLOW WITH LOGGING
+
+STAGE 1: INPUT        STAGE 2: PROCESS       STAGE 3: OUTPUT
++===========+         +===========+          +===========+
+|   INPUT   |-------->|  PROCESS  |--------->|  OUTPUT   |
+|   (data)  |         |   [gear]  |          |  (result) |
++===========+         +===========+          +===========+
+      |                     |                      |
+      v                     v                      v
++-----------+         +-----------+          +-----------+
+|   Log A   |         |   Log B   |          |   Log C   |
+| (received)|         |(processed)|          |  (sent)   |
++-----------+         +-----------+          +-----------+
+
+Legend: === main flow  --- log output  [gear] = processing icon
 ```
 
-<transcribe_figure>
-- ASCII captures: Box structure, flow direction, hierarchical logging
-- ASCII misses: Rounded corners, shadow effects, icon inside Process box
+<transcription_notes>
+- Mode: Structural
+- Dimensions: 70x14 characters
+- ASCII captures: Box structure, flow direction (arrows), hierarchical logging, all labels, stage numbers, inline annotations
+- ASCII misses: Rounded corners, shadow effects, actual gear icon graphic
 - Colors:
-  - Blue - input/output stages
-  - Green - processing stage
-  - Gray - logging components
-- Layout: Horizontal flow left-to-right, vertical drops to log boxes
-- Details: Process box contains gear icon; arrows have gradient fill
+  - Blue - input/output stages (INPUT, OUTPUT boxes)
+  - Green - processing stage (PROCESS box)
+  - Gray - logging components (Log A, B, C)
+- Layout: Horizontal flow left-to-right, vertical drops to log boxes below each stage
+- Details: Process box contains gear icon; arrows have gradient fill; boxes have subtle shadows
 - Data: None
-</transcribe_figure>
+- Reconstruction hint: Main boxes are larger with double borders; log boxes are smaller with single borders
+</transcription_notes>
 ```
 
 ### Figure Protocol Rules
@@ -272,9 +345,12 @@ After transcription, run `/verify` to:
 2. Check all sections present
 3. Verify all figures have BOTH:
    - ASCII art block (` ```ascii `)
-   - XML description block (`<transcribe_figure>`)
-4. Cross-check text accuracy
-5. Validate XML tags are well-formed
+   - XML description block (`<transcription_notes>`)
+4. Verify page boundary markers:
+   - `<transcription_page_header>` after each `---` (if header exists in source)
+   - `<transcription_page_footer>` before each `---` (if footer exists in source)
+5. Cross-check text accuracy
+6. Validate XML tags are well-formed
 
 ## Best Practices
 
@@ -284,4 +360,5 @@ After transcription, run `/verify` to:
 4. **300 DPI for PDFs** - Higher quality for accurate transcription
 5. **Keep source images** - Required for `/verify`
 6. **No omissions** - Every piece of content must be transcribed
-7. **ASCII + XML for figures** - Every figure requires both ASCII art and `<transcribe_figure>` XML block
+7. **ASCII + XML for figures** - Every figure requires both ASCII art and `<transcription_notes>` XML block
+8. **Page boundaries** - Preserve headers/footers with `<transcription_page_header>` and `<transcription_page_footer>` tags
