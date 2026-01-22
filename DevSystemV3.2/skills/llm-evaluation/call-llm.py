@@ -7,12 +7,7 @@ Usage:
   python call-llm.py --model claude-opus-4-20250514 --input-file doc.md --prompt-file prompt.md
 """
 
-import os
-import sys
-import json
-import time
-import base64
-import argparse
+import os, sys, json, time, base64, argparse
 from pathlib import Path
 from datetime import datetime, timezone
 

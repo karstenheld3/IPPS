@@ -6,15 +6,13 @@ Usage:
   python evaluate-answers.py --model gpt-4o --input-folder answers/ --output-folder scores/
 """
 
-import os
-import sys
-import json
-import time
-import argparse
+import os, sys, json, time, argparse
 from pathlib import Path
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
+
+UNKNOWN = '[UNKNOWN]'
 
 
 def load_api_keys(keys_file: Path) -> dict:

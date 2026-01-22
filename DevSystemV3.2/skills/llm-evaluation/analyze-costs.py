@@ -6,12 +6,11 @@ Usage:
   python analyze-costs.py --input-folder transcriptions/ --output-file costs.json
 """
 
-import os
-import sys
-import json
-import argparse
+import os, sys, json, argparse
 from pathlib import Path
 from datetime import datetime, timezone
+
+UNKNOWN = '[UNKNOWN]'
 
 DEFAULT_PRICING = {
     "openai": {
