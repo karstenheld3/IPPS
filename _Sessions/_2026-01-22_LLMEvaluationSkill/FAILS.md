@@ -10,9 +10,38 @@
 
 ## Active Issues
 
+*No active issues*
+
+## Resolved Issues
+
+### 2026-01-22 - Wrong Location
+
+#### [RESOLVED] `LLMEV-FL-008` Created skill in .windsurf instead of DevSystemV3.2
+
+- **Original severity**: [HIGH]
+- **When**: 2026-01-22 21:45 during `/implement` workflow
+- **Where**: Entire `llm-evaluation` skill folder
+- **What**: Created skill directly in `.windsurf/skills/llm-evaluation/` instead of source location `DevSystemV3.2/skills/llm-evaluation/`
+- **Why it went wrong**: Did not check workspace structure; assumed .windsurf was the source location
+- **Resolved**: 2026-01-22 22:02
+- **Solution**: Copied skill folder to `DevSystemV3.2/skills/llm-evaluation/`
+
+### 2026-01-22 - Implementation Bug
+
+#### [RESOLVED] `LLMEV-FL-007` Transcription matching loaded empty .meta.json files
+
+- **Original severity**: [MEDIUM]
+- **When**: 2026-01-22 21:53 during API testing
+- **Where**: `generate-answers.py` lines 213-231
+- **What**: Script matched `sample_document_summary.meta.json` (empty text field) instead of actual transcription JSON, resulting in 0 answers generated
+- **Why it went wrong**: No filtering for `_*` files, `.meta.*` files, or empty content when loading transcriptions
+- **Resolved**: 2026-01-22 21:57
+- **Solution**: Added filters to skip `_*` files, `.meta.*` files, and only include non-empty content
+- **Link**: Commit `6f12e2e`
+
 ### 2026-01-22 - Agent Workflow Error
 
-#### [LOW] `LLMEV-FL-005` Writing FL entries to wrong file
+#### [RESOLVED] `LLMEV-FL-005` Writing FL entries to wrong file
 
 - **When**: 2026-01-22 21:03
 - **Where**: `/fail` workflow execution
@@ -21,9 +50,7 @@
 - **Evidence**: PROBLEMS.md contains FL-001 through FL-004 entries
 - **Suggested fix**: Always check /fail workflow Step 7 - SESSION-FIRST rule specifies `[SESSION_FOLDER]/FAILS.md`
 
-## Resolved Issues
-
-### 2026-01-22 - Agent Workflow Error
+### 2026-01-22 - Spec Refinement
 
 #### [RESOLVED] `LLMEV-FL-006` Editing .windsurf directly instead of DevSystemV3.2
 
@@ -63,6 +90,10 @@
 - **Link**: Commit `07b6318`
 
 ## Document History
+
+**[2026-01-22 22:00]**
+- Added: LLMEV-FL-007 for transcription matching bug (resolved)
+- Moved: FL-005 to resolved
 
 **[2026-01-22 21:03]**
 - Added: LLMEV-FL-005 for wrong file usage
