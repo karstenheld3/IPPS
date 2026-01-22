@@ -87,9 +87,10 @@ python evaluate-answers.py --model gpt-5 --input-folder answers/ --output-folder
 - `--model` - Judge model ID (required)
 - `--input-folder` - Folder with answer JSON files
 - `--output-folder` - Folder for score JSON files
-- `--method` - `llm` or `openai-eval` (default: llm)
 - `--judge-prompt` - Custom judge prompt
 - `--pass-threshold` - Pass threshold (default: 4)
+- `--workers` - Parallel workers (default: 4)
+- `--keys-file` - API keys file (default: .env)
 
 ### analyze-costs.py - Cost Analysis
 
