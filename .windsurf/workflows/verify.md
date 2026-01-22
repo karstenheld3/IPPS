@@ -13,6 +13,8 @@ Invoke these skills based on context:
 - @write-documents for document verification
 - @coding-conventions for code verification
 
+**CRITICAL**: Skill invocation returns instructions only. You MUST also read the supporting files listed in skill output (e.g., `PYTHON-RULES.md`, `WORKFLOW-RULES.md`) to get actual verification rules.
+
 ## Workflow
 
 1. First find out what the context is (INFO, SPEC, IMPL, Code, TEST, Session)
