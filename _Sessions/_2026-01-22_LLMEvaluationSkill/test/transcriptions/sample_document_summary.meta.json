@@ -1,0 +1,10 @@
+{
+  "model": "gpt-4o-mini-2024-07-18",
+  "usage": {
+    "input_tokens": 236,
+    "output_tokens": 183
+  },
+  "timestamp": "2026-01-22T20:52:56.576158+00:00",
+  "input_file": "_Sessions\\_2026-01-22_LLMEvaluationSkill\\test\\images\\sample_document.txt",
+  "prompt_file": ".windsurf\\skills\\llm-evaluation\\prompts\\summarize-text.md"
+}

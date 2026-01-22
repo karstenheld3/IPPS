@@ -1,0 +1,132 @@
+{
+  "judge_model": "gpt-4o-mini",
+  "pass_threshold": 4,
+  "total_evaluated": 10,
+  "passed": 10,
+  "failed": 0,
+  "pass_rate": 100.0,
+  "average_score": 5.0,
+  "evaluated_at": "2026-01-22T20:56:46.263766+00:00",
+  "scores": [
+    {
+      "question": "How many employees did TechCorp have in 2024?",
+      "category": "easy",
+      "reference_answer": "342",
+      "model_answer": "TechCorp had 342 employees in 2024.",
+      "score": 5,
+      "rationale": "The model answer is a perfect match to the reference answer, containing all the key information with no errors.",
+      "passed": true,
+      "judge_model": "gpt-4o-mini-2024-07-18",
+      "source_file": "_Sessions\\_2026-01-22_LLMEvaluationSkill\\test\\images\\sample_document.txt",
+      "answer_model": "gpt-4o-mini-2024-07-18"
+    },
+    {
+      "question": "What was TechCorp's revenue for 2024?",
+      "category": "easy",
+      "reference_answer": "$45.2 million",
+      "model_answer": "TechCorp's revenue for 2024 was $45.2 million.",
+      "score": 5,
+      "rationale": "The model answer matches the reference answer perfectly, containing all key information with no errors.",
+      "passed": true,
+      "judge_model": "gpt-4o-mini-2024-07-18",
+      "source_file": "_Sessions\\_2026-01-22_LLMEvaluationSkill\\test\\images\\sample_document.txt",
+      "answer_model": "gpt-4o-mini-2024-07-18"
+    },
+    {
+      "question": "In how many international markets did TechCorp expand in 2024?",
+      "category": "medium_facts",
+      "reference_answer": "3",
+      "model_answer": "TechCorp expanded into three international markets in 2024.",
+      "score": 5,
+      "rationale": "The model answer perfectly matches the reference answer, containing all key information without any errors.",
+      "passed": true,
+      "judge_model": "gpt-4o-mini-2024-07-18",
+      "source_file": "_Sessions\\_2026-01-22_LLMEvaluationSkill\\test\\images\\sample_document.txt",
+      "answer_model": "gpt-4o-mini-2024-07-18"
+    },
+    {
+      "question": "Based on the CEO's statement, what aspect of TechCorp's strategy contributed significantly to their success in 2024?",
+      "category": "medium_inference",
+      "reference_answer": "Strategic investments in AI technology",
+      "model_answer": "The CEO highlighted that strategic investments in AI technology significantly contributed to TechCorp's success in 2024.",
+      "score": 5,
+      "rationale": "The model answer perfectly matches the reference answer by including all key information without any errors.",
+      "passed": true,
+      "judge_model": "gpt-4o-mini-2024-07-18",
+      "source_file": "_Sessions\\_2026-01-22_LLMEvaluationSkill\\test\\images\\sample_document.txt",
+      "answer_model": "gpt-4o-mini-2024-07-18"
+    },
+    {
+      "question": "What was the percentage increase in revenue from 2023 to 2024?",
+      "category": "medium_facts",
+      "reference_answer": "23%",
+      "model_answer": "The percentage increase in revenue from 2023 to 2024 was 23%.",
+      "score": 5,
+      "rationale": "The model answer perfectly matches the reference answer, containing all key information with no errors.",
+      "passed": true,
+      "judge_model": "gpt-4o-mini-2024-07-18",
+      "source_file": "_Sessions\\_2026-01-22_LLMEvaluationSkill\\test\\images\\sample_document.txt",
+      "answer_model": "gpt-4o-mini-2024-07-18"
+    },
+    {
+      "question": "What does a 94% customer satisfaction score indicate about TechCorp's customer relations?",
+      "category": "medium_inference",
+      "reference_answer": "It indicates a high level of customer satisfaction.",
+      "model_answer": "A 94% customer satisfaction score indicates that TechCorp has strong customer relations.",
+      "score": 5,
+      "rationale": "The model answer accurately conveys the core information from the reference answer, stating that the high score reflects strong customer relations without any errors or omissions.",
+      "passed": true,
+      "judge_model": "gpt-4o-mini-2024-07-18",
+      "source_file": "_Sessions\\_2026-01-22_LLMEvaluationSkill\\test\\images\\sample_document.txt",
+      "answer_model": "gpt-4o-mini-2024-07-18"
+    },
+    {
+      "question": "What was the net profit of TechCorp in 2024, and what does that suggest about their profitability?",
+      "category": "hard_reasoning",
+      "reference_answer": "$8.7 million, suggesting they were profitable.",
+      "model_answer": "TechCorp's net profit in 2024 was $8.7 million, suggesting that the company is profitable and positioned for continued growth.",
+      "score": 5,
+      "rationale": "The model answer contains all key information from the reference answer, including the exact net profit figure and the implication of profitability, with an added positive note about continued growth.",
+      "passed": true,
+      "judge_model": "gpt-4o-mini-2024-07-18",
+      "source_file": "_Sessions\\_2026-01-22_LLMEvaluationSkill\\test\\images\\sample_document.txt",
+      "answer_model": "gpt-4o-mini-2024-07-18"
+    },
+    {
+      "question": "Considering the revenue from the new AI product line, what can be inferred about the company's focus for future growth?",
+      "category": "hard_reasoning",
+      "reference_answer": "The company is focusing on AI technology for future growth.",
+      "model_answer": "The successful revenue generation from the new AI product line suggests that TechCorp Inc. is focusing on AI technology for future growth.",
+      "score": 5,
+      "rationale": "The model answer perfectly captures the core idea of the reference answer, including the emphasis on AI technology for future growth, without any omissions or errors.",
+      "passed": true,
+      "judge_model": "gpt-4o-mini-2024-07-18",
+      "source_file": "_Sessions\\_2026-01-22_LLMEvaluationSkill\\test\\images\\sample_document.txt",
+      "answer_model": "gpt-4o-mini-2024-07-18"
+    },
+    {
+      "question": "Who is the Chair of the Board of Directors at TechCorp?",
+      "category": "hard_details",
+      "reference_answer": "Sarah Chen",
+      "model_answer": "The Chair of the Board of Directors at TechCorp is Sarah Chen.",
+      "score": 5,
+      "rationale": "The model answer perfectly matches the reference answer by providing the exact name of the Chair of the Board of Directors at TechCorp with no errors.",
+      "passed": true,
+      "judge_model": "gpt-4o-mini-2024-07-18",
+      "source_file": "_Sessions\\_2026-01-22_LLMEvaluationSkill\\test\\images\\sample_document.txt",
+      "answer_model": "gpt-4o-mini-2024-07-18"
+    },
+    {
+      "question": "List all members of the Board of Directors at TechCorp.",
+      "category": "hard_details",
+      "reference_answer": "Sarah Chen, Michael Rodriguez, Emily Watson, David Kim",
+      "model_answer": "The members of the Board of Directors at TechCorp are Chair Sarah Chen, Michael Rodriguez, Emily Watson, and David Kim.",
+      "score": 5,
+      "rationale": "The model answer contains all the members listed in the reference answer and includes the title of 'Chair' for Sarah Chen, which does not alter the correctness of the information provided.",
+      "passed": true,
+      "judge_model": "gpt-4o-mini-2024-07-18",
+      "source_file": "_Sessions\\_2026-01-22_LLMEvaluationSkill\\test\\images\\sample_document.txt",
+      "answer_model": "gpt-4o-mini-2024-07-18"
+    }
+  ]
+}

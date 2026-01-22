@@ -1,0 +1,11 @@
+{
+  "source_file": "_Sessions\\_2026-01-22_LLMEvaluationSkill\\test\\images\\sample_document.txt",
+  "model": "gpt-4o-mini-2024-07-18",
+  "run": 1,
+  "text": "```markdown\n# Annual Report 2024 - TechCorp Inc.\n\n**Revenue:** $45.2 million (up 23% from 2023)  \n**Net Profit:** $8.7 million  \n**Employees:** 342  \n\n## Key Achievements:\n- Launched new AI product line generating $12M in revenue\n- Expanded to 3 new international markets (Germany, Japan, Brazil)\n- Customer satisfaction score improved to 94%\n\n## CEO Statement:\n\"2024 was a transformative year for TechCorp. Our strategic investments in AI \ntechnology paid off significantly, and we're well-positioned for continued \ngrowth in 2025.\"\n\n## Board of Directors:\n- Sarah Chen (Chair)\n- Michael Rodriguez\n- Emily Watson\n- David Kim\n```",
+  "usage": {
+    "input_tokens": 238,
+    "output_tokens": 156
+  },
+  "timestamp": "2026-01-22T20:53:15.139739+00:00"
+}
