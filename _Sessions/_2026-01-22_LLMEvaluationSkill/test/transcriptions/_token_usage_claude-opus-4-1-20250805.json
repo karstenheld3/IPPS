@@ -1,0 +1,7 @@
+{
+  "model": "claude-opus-4-1-20250805",
+  "total_input_tokens": 83020,
+  "total_output_tokens": 47648,
+  "calls": 44,
+  "last_updated": "2026-01-22T22:13:44.728133+00:00"
+}

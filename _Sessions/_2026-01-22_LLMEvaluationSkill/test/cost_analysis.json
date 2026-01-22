@@ -1,26 +1,26 @@
 {
   "summary": {
-    "total_input_tokens": 238,
-    "total_output_tokens": 156,
-    "total_tokens": 394,
-    "total_cost": 0.0001,
+    "total_input_tokens": 83020,
+    "total_output_tokens": 47648,
+    "total_tokens": 130668,
+    "total_cost": 4.8189,
     "currency": "USD",
     "models_used": 1
   },
   "by_model": [
     {
-      "model": "gpt-4o-mini",
-      "provider": "openai",
-      "total_input_tokens": 238,
-      "total_output_tokens": 156,
-      "total_calls": 1,
-      "input_cost": 3.6e-05,
-      "output_cost": 9.4e-05,
-      "total_cost": 0.000129,
+      "model": "claude-opus-4-1-20250805",
+      "provider": "anthropic",
+      "total_input_tokens": 83020,
+      "total_output_tokens": 47648,
+      "total_calls": 44,
+      "input_cost": 1.2453,
+      "output_cost": 3.5736,
+      "total_cost": 4.8189,
       "currency": "USD",
       "pricing_found": true
     }
   ],
-  "analyzed_at": "2026-01-22T20:56:54.144076+00:00",
+  "analyzed_at": "2026-01-22T22:28:20.542251+00:00",
   "files_processed": 1
 }
