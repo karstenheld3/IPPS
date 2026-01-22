@@ -131,7 +131,7 @@
 - `model-pricing.json` - Token costs per model for cost analysis
 
 **Prompts:**
-- `prompts/transcribe-image.md` - Default for image transcription
+- `prompts/transcribe-page.md` - Default for image transcription
 - `prompts/summarize-text.md` - Default for text summarization
 - `prompts/answer-from-text.md` - Default for `generate-answers.py`
 - `prompts/judge-answer.md` - Default for `evaluate-answers.py`
@@ -661,7 +661,7 @@ When user runs evaluation pipeline, results are stored in a structured folder:
 ├── model-registry.json       # Model IDs and providers
 ├── model-pricing.json        # Token pricing
 ├── prompts/
-│   ├── transcribe-image.md   # Default prompt for image transcription
+│   ├── transcribe-page.md   # Default prompt for image transcription
 │   ├── summarize-text.md     # Default prompt for text summarization
 │   ├── answer-from-text.md   # Default for generate-answers.py
 │   └── judge-answer.md       # Default for evaluate-answers.py
