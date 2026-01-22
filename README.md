@@ -266,6 +266,10 @@ Local tool installations in `.tools/` (gitignored). Run `SETUP.md` in each skill
 **github** ([SETUP](DevSystemV2.1/skills/github/SETUP.md)):
 - **GitHub CLI** (`.tools/gh/`) - Repos, issues, PRs, releases
 
+**llm-evaluation** ([SKILL](DevSystemV3.2/skills/llm-evaluation/SKILL.md)) - Evaluate LLM output quality by generating questions, collecting answers, and scoring with a judge model:
+- **Python venv** (`.tools/llm-eval-venv/`) - OpenAI, Anthropic SDKs
+- **API keys** (`.env` in current working directory, or use `--keys-file`) - OPENAI_API_KEY, ANTHROPIC_API_KEY
+
 Run `SETUP.md` in each skill folder to install required tools locally to `.tools/`.
 
 ## Project Structure
@@ -295,6 +299,7 @@ IPPS/
 │   │   ├── git/                  # Commit history navigation, file recovery
 │   │   ├── git-conventions/      # Commit message format
 │   │   ├── github/               # GitHub CLI operations
+│   │   ├── llm-evaluation/       # LLM evaluation pipeline scripts
 │   │   ├── pdf-tools/            # PDF scripts and tools
 │   │   ├── session-management/   # Session templates
 │   │   └── write-documents/      # Spec, impl, test templates
@@ -336,8 +341,9 @@ IPPS/
 
 - **edird-phase-planning** - High-level phase planning with effort allocation, planning guidance, gates
 - **git** - Commit history navigation, file recovery from previous commits
-- **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF
 - **github** - GitHub CLI operations (repos, issues, PRs)
+- **llm-evaluation** - Generic LLM evaluation pipeline (process, questions, answers, scoring)
+- **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF
 - **session-management** - Session init, save, resume, close workflows
 - **write-documents** - Spec, impl, test, info, tasks document templates
 
@@ -581,3 +587,4 @@ Creates `_TASKS_*.md` from IMPL/TEST. **Mandatory before implementation.**
 ### Technical Reference
 
 - [ASCII Art Width Test](_INFO_ASCII_ART_WIDTH_TEST.md) - Unicode character width testing for monospace fonts
+- [ASCII Art Transcription Cost/Quality Eval](_Sessions/_Archive/_2026-01-23_JpgToAsciiArtTranscriptionCostQualityEval/INFO_ASCII_ART_TRANSCRIPTION_COST_QUALITY_EVAL.md) - LLM model comparison for image-to-ASCII transcription

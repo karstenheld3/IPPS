@@ -143,8 +143,12 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **GLOB** - Global/project-wide items
 - **MCPS** - MCP server integrations
 - **TRNGFX** - Transcription graphics/ASCII art optimization
+- **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
 
 ## Document History
+
+**[2026-01-23 00:45]**
+- Added: LLMEV topic (LLM Evaluation Skill)
 
 **[2026-01-22 09:45]**
 - Added: Project Topics section with GLOB, MCPS, TRNGFX
