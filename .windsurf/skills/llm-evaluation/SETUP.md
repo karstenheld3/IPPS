@@ -44,13 +44,13 @@ python -m venv $venvDir
 **Activate venv and install:**
 ```powershell
 & "$venvDir\Scripts\Activate.ps1"
-pip install "openai>=1.0.0,<2.0.0" "anthropic>=0.18.0,<1.0.0"
+pip install "openai==2.8.0" "anthropic>=0.18.0,<1.0.0"
 deactivate
 ```
 
 **Or install without activating:**
 ```powershell
-& "$venvDir\Scripts\pip.exe" install openai>=1.0.0 anthropic>=0.18.0
+& "$venvDir\Scripts\pip.exe" install "openai==2.8.0" "anthropic>=0.18.0,<1.0.0"
 ```
 
 **Verify packages:**
