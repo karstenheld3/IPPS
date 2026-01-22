@@ -1,4 +1,4 @@
-# LLM Evaluation Skill Uninstall
+# LLM (Large Language Model) Evaluation Skill Uninstall
 
 Remove LLM Evaluation Skill from your workspace.
 
@@ -115,10 +115,8 @@ Write-Host "To completely remove the skill, delete that folder manually." -Foreg
 
 ## What Gets Removed
 
-| Option | Components |
-|--------|------------|
-| **1 (Minimal)** | Virtual environment only |
-| **2 (Complete)** | Virtual environment + .env file |
+- **Option 1 (Minimal)** - Virtual environment only
+- **Option 2 (Complete)** - Virtual environment + .env file
 
 **Components:**
 
