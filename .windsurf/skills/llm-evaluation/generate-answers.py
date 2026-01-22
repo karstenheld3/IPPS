@@ -140,11 +140,11 @@ def find_transcription_for_source(source_file: str, input_folder: Path) -> Path:
 
 
 def process_question(worker_id: int, q_idx: int, total: int, question: dict,
-                     transcriptions: dict, args, client, provider: str, results: list, lock: Lock):
+                     transcriptions_mapped: dict, args, client, provider: str, results: list, lock: Lock):
     source_file = question.get("source_file", "")
     q_text = question.get("question", "")
     
-    transcription = transcriptions.get(source_file)
+    transcription = transcriptions_mapped.get(source_file)
     if not transcription:
         log(worker_id, q_idx, total, f"No transcription for: {source_file}")
         return
@@ -213,14 +213,22 @@ def main():
     transcriptions = {}
     for f in args.input_folder.iterdir():
         if f.is_file() and f.suffix.lower() in {'.txt', '.md', '.json'}:
+            if f.name.startswith('_'):
+                continue
+            if '.meta.' in f.name:
+                continue
             if f.suffix.lower() == '.json':
                 try:
                     data = json.loads(f.read_text(encoding='utf-8'))
-                    transcriptions[f.stem] = data.get("text", "")
+                    text = data.get("text", "")
+                    if text:
+                        transcriptions[f.stem] = text
                 except:
                     pass
             else:
-                transcriptions[f.stem] = f.read_text(encoding='utf-8')
+                content = f.read_text(encoding='utf-8')
+                if content.strip():
+                    transcriptions[f.stem] = content
     
     for q in questions:
         source = q.get("source_file", "")
@@ -246,6 +254,14 @@ def main():
         key = q.get("_transcription_key")
         if key and key in transcriptions:
             transcriptions_mapped[source] = transcriptions[key]
+    
+    print(f"Loaded {len(transcriptions)} transcription files, mapped {len(transcriptions_mapped)} to questions", file=sys.stderr)
+    if transcriptions_mapped:
+        for k, v in list(transcriptions_mapped.items())[:1]:
+            print(f"  Mapped key: '{k}' (len={len(v)} chars)", file=sys.stderr)
+    if not transcriptions_mapped and transcriptions:
+        print(f"  Transcription keys: {list(transcriptions.keys())[:3]}...", file=sys.stderr)
+        print(f"  Question source stems: {[Path(q.get('source_file','')).stem for q in questions[:3]]}...", file=sys.stderr)
     
     args.output_folder.mkdir(parents=True, exist_ok=True)
     
