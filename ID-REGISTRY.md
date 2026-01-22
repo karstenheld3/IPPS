@@ -138,7 +138,16 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **FAILS** - Failure log (what went wrong)
 - **LEARNINGS** - Retrospective analysis (via `/learn`)
 
+## Project Topics
+
+- **GLOB** - Global/project-wide items
+- **MCPS** - MCP server integrations
+- **TRNGFX** - Transcription graphics/ASCII art optimization
+
 ## Document History
+
+**[2026-01-22 09:45]**
+- Added: Project Topics section with GLOB, MCPS, TRNGFX
 
 **[2026-01-20 16:40]**
 - Comprehensive update: added all IDs from devsystem-ids.md

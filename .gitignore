@@ -17,3 +17,6 @@ _PrivateSessions/*
 # Python
 __pycache__/
 *.pyc
+
+# API keys
+.api-keys.txt

@@ -17,7 +17,7 @@
 |---------|----------|-------------|-----------|----------------|
 | **Type** | IDE | Terminal | Terminal | IDE Extension |
 | **Platform** | Windows, macOS, Linux | Windows, macOS, Linux | macOS, Linux, Windows (WSL) | VS Code, Visual Studio, JetBrains |
-| **Instructions** | `.windsurf/rules/*.md` | `CLAUDE.md` | `AGENTS.md` | `.github/copilot-instructions.md` |
+| **Instructions** / **Rules** | `.windsurf/rules/*.md` | `CLAUDE.md` | `AGENTS.md` | `.github/copilot-instructions.md` |
 | **Commands/Workflows** | `.windsurf/workflows/*.md` | `.claude/commands/*.md` | Custom prompts only | Prompt files only |
 | **Skills** | ✅ Yes | ✅ Yes | ❌ No | ❌ No |
 | **Subagents** | ❌ No | ✅ Yes | ❌ No | ✅ Yes (custom agents) |

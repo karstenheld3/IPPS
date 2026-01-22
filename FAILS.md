@@ -1,5 +1,30 @@
 # Failure Log
 
+## 2026-01-22 - Background Command Unexpectedly Canceled
+
+### [MEDIUM] `TRNGFX-FL-001` Background script terminated without user action
+
+- **When**: 2026-01-22 17:10 UTC+01:00
+- **Where**: `_ModelComparisonTest/generate-eval-questions.py`
+- **What**: Script running as background command (ID 54) was marked CANCELED after processing 16/25 images, despite user not canceling
+- **Evidence**:
+  - Command status returned `Status: CANCELED`
+  - Script was working correctly - 16 images processed successfully
+  - User confirmed they did not cancel
+  - No error messages in output - clean processing until termination
+- **Why it went wrong**:
+  - Unknown - possibly Windsurf background command timeout or resource management
+  - Script was running for ~10+ minutes with API calls
+  - Long-running background commands may be subject to automatic termination
+- **Fix applied**: Re-run script
+
+**Prevention rules**:
+1. For long-running scripts (10+ images with API calls), monitor more frequently
+2. Consider breaking into smaller batches for resilience
+3. Save intermediate results to disk during processing (not just at end)
+
+**Status**: INVESTIGATING - will re-run script
+
 ## 2026-01-21 - computer-use-mcp Breaks Cascade on Windows
 
 ### [CRITICAL] `MCPS-FL-008` computer-use-mcp MCP server causes Cascade failures
