@@ -14,7 +14,7 @@
 - Keys file supports both `.env` and `key=value` formats
 - All input/output paths MUST be parameters with sensible defaults
 - JSON output for all scripts (machine-readable)
-- No hardcoded paths - use `--keys`, `--input`, `--output` parameters
+- No hardcoded paths - use `--keys-file`, `--input-file`, `--input-folder`, `--output-file`, `--output-folder` parameters
 
 ## Table of Contents
 
@@ -30,15 +30,124 @@
 10. [Implementation Details](#10-implementation-details)
 11. [Document History](#11-document-history)
 
+## Skill Summary
+
+**File Type Detection:**
+- Auto-detect by suffix only (no override to prevent mismatches)
+- Image: `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`
+- Text: `.txt`, `.md`, `.json`, `.py`, `.html`, `.xml`, `.csv`
+- Unknown suffix: script exits with error, user must rename file
+
+**Scripts:**
+
+- `call-llm.py` - Single LLM call (auto-detects image or text input)
+  - `--model` - API model ID (required)
+  - `--input-file` - Input file: image (.jpg, .png) or text (.txt, .md)
+  - `--prompt-file` - Prompt file (.md)
+  - `--output-file` - Output file (default: stdout)
+  - `--keys-file` - API keys file (default: .env)
+  - `--write-json-metadata` - Write JSON with token usage to separate file
+  - Examples:
+    ```
+    python call-llm.py --model gpt-4o --input-file photo.jpg --prompt-file transcribe.md
+    python call-llm.py --model claude-opus-4-20250514 --input-file document.md --prompt-file summarize.md
+    python call-llm.py --model gpt-5-mini --prompt-file question.md --write-json-metadata
+    ```
+
+- `call-llm-batch.py` - Batch LLM calls on folder (auto-detects image or text)
+  - `--model` - API model ID (required)
+  - `--input-folder` - Folder with input files (.jpg, .png, .md, .txt)
+  - `--output-folder` - Folder for output .md files + _token_usage__.json
+  - `--prompt-file` - Prompt file (.md)
+  - `--runs` - Number of runs per file (default: 1)
+  - `--workers` - Parallel workers (default: 4)
+  - `--keys-file` - API keys file (default: .env)
+  - Examples:
+    ```
+    python call-llm-batch.py --model claude-opus-4-20250514 --input-folder images/ --output-folder transcriptions/ --prompt-file transcribe.md --runs 3
+    python call-llm-batch.py --model gpt-4o --input-folder docs/ --output-folder summaries/ --prompt-file summarize.md
+    python call-llm-batch.py --model gpt-5-mini --input-folder screenshots/ --output-folder processed/ --workers 8
+    ```
+
+- `generate-questions.py` - Generate evaluation questions from source files
+  - `--model` - API model ID (required)
+  - `--input-folder` - Folder with source files (.jpg, .png, .md, .txt)
+  - `--output-file` - Output .json file with questions
+  - `--schema-file` - Question schema JSON file (categories, counts)
+  - `--workers` - Parallel workers (default: 4)
+  - `--keys-file` - API keys file (default: .env)
+  - Examples:
+    ```
+    python generate-questions.py --model claude-opus-4-20250514 --input-folder images/ --output-file questions.json
+    python generate-questions.py --model gpt-4o --input-folder docs/ --output-file questions.json --schema-file custom.json
+    python generate-questions.py --model gpt-5-mini --input-folder images/ --output-file q.json --workers 8
+    ```
+  - **Dependency Note:** Output file (`--output-file`) is used as input for `generate-answers.py` (`--questions-file`)
+
+- `generate-answers.py` - Generate answers from processed text files
+  - `--model` - API model ID (required)
+  - `--input-folder` - Folder with .md files (output of `call-llm-batch.py`)
+  - `--output-folder` - Folder for .json answer files
+  - `--questions-file` - .json file (output of `generate-questions.py`)
+  - `--workers` - Parallel workers (default: 4)
+  - `--prompt-file` - Custom answering prompt file
+  - `--keys-file` - API keys file (default: .env)
+  - Examples:
+    ```
+    python generate-answers.py --model gpt-5-mini --input-folder transcriptions/ --output-folder answers/ --questions-file questions.json
+    python generate-answers.py --model claude-3-5-haiku-20241022 --input-folder summaries/ --output-folder answers/ --questions-file q.json --workers 8
+    python generate-answers.py --model gpt-4o --input-folder processed/ --output-folder answers/ --questions-file q.json --prompt-file custom.md
+    ```
+
+- `evaluate-answers.py` - Score answers with LLM-as-judge
+  - `--model` - API model ID for judge (required)
+  - `--input-folder` - Folder with .json answer files (output of `generate-answers.py`)
+  - `--output-folder` - Folder for .json score files
+  - `--method` - `llm` or `openai-eval` (default: llm)
+  - `--judge-prompt` - Custom judge prompt file
+  - `--pass-threshold` - Pass threshold score (default: 4)
+  - `--workers` - Parallel workers (default: 4)
+  - `--keys-file` - API keys file (default: .env)
+  - Examples:
+    ```
+    python evaluate-answers.py --model gpt-5 --input-folder answers/ --output-folder scores/
+    python evaluate-answers.py --model gpt-4o --input-folder answers/ --output-folder scores/ --method openai-eval
+    python evaluate-answers.py --model claude-opus-4-20250514 --input-folder answers/ --output-folder scores/ --judge-prompt strict.md --pass-threshold 3
+    ```
+
+- `analyze-costs.py` - Token cost analysis from usage logs
+  - `--input-folder` - Folder with _token_usage__{model}.json files (output of `call-llm-batch.py`)
+  - `--output-file` - Output .json file for cost analysis
+  - `--pricing` - Custom pricing JSON file
+  - Examples:
+    ```
+    python analyze-costs.py --input-folder transcriptions/ --output-file cost_analysis.json
+    python analyze-costs.py --input-folder llm-eval/my-eval/ --output-file costs.json --pricing custom-pricing.json
+    python analyze-costs.py --input-folder . --output-file summary.json
+    ```
+
+**Configuration:**
+- `model-registry.json` - Available models with providers and status
+- `model-pricing.json` - Token costs per model for cost analysis
+
+**Prompts:**
+- `prompts/transcribe-image.md` - Default for image transcription
+- `prompts/summarize-text.md` - Default for text summarization
+- `prompts/answer-from-text.md` - Default for `generate-answers.py`
+- `prompts/judge-answer.md` - Default for `evaluate-answers.py`
+
+**Schemas:**
+- `schemas/default-questions.json` - Default question schema
+
 ## 1. Scenario
 
 **Problem:** Evaluating LLM output quality requires multiple steps: processing, question generation, answer generation, and scoring. Current scripts are hardcoded to specific input types (images only) and session folders.
 
 **Solution:**
-- Create input-agnostic scripts that work with images, text files, PDFs, or any content
-- Use `--input-type` parameter to specify: `image`, `text`, `auto` (detect from extension)
+- Create input-agnostic scripts that work with images or text files
+- Auto-detect file type by suffix (no override parameter)
 - Use original API model IDs (no custom naming)
-- Support both `.env` and `key=value` API key formats
+- Support `.env` format for API keys
 - Include model registry and pricing configs as part of skill
 
 **Use cases:**
@@ -56,16 +165,34 @@
 
 ## 2. Context
 
-This skill extracts and generalizes scripts created during the ASCII Art Transcription optimization session. The original scripts in `_ModelComparisonTest/` folder implemented a full evaluation pipeline but were tied to session-specific paths.
+### Pipeline Overview
 
-**Source scripts analyzed:**
-- `transcribe-image.py` - Single image transcription
-- `parallel-runner.py` - Batch transcription with runs
-- `generate-eval-questions.py` - Question generation from images
-- `answer-from-transcription.py` - Answer questions from text
-- `evaluate-with-openai-eval.py` - OpenAI Eval API scoring
-- `validate-eval-questions.py` - Question validation with LLM-as-judge
-- `collect-token-data.py` - Token cost analysis
+The LLM evaluation pipeline consists of 5 independent stages:
+
+```
+[INPUT] images, text, PDFs, any file
+    │
+    ▼
+[PROCESS] call-llm-batch.py
+    │     (transcribe, summarize, analyze)
+    ▼
+[GENERATE] generate-questions.py
+    │       (create Q&A pairs from source)
+    ▼
+[ANSWER] generate-answers.py
+    │     (answer from processed text)
+    ▼
+[EVALUATE] evaluate-answers.py
+          (score with LLM-as-judge)
+```
+
+### Design Principles
+
+- **Stateless scripts**: Each script reads input, produces output, no shared state
+- **Composable**: Run any subset of the pipeline, skip stages as needed
+- **Input-agnostic**: Same scripts work with images, text, PDFs, code
+- **Provider-agnostic**: Works with OpenAI, Anthropic, or any compatible API
+- **Crash-resilient**: Incremental saves after each item, resume from partial results
 
 ## 3. Domain Objects
 
@@ -216,36 +343,35 @@ An **EvalScores** file contains LLM-as-judge scores for answers.
 - Validate model ID against `model-registry.json` if available
 - Auto-detect provider from model ID prefix when possible
 
-**LLMEV-FR-03: Single LLM Call (llm-call.py)**
-- Support text-only input via `--input` or stdin
-- Support image+text input via `--image` and `--input`
-- Support file input via `--file PATH` (reads file content as input)
+**LLMEV-FR-03: Single LLM Call (call-llm.py)**
+- Support text-only input via `--prompt-file`
+- Support image+text input via `--input-file` (image) and `--prompt-file`
+- Auto-detect file type by suffix
 - Support image formats: `.jpg, .jpeg, .png, .gif, .webp`
-- Output to stdout by default, or file via `--output`
-- Return token usage in JSON format via `--json` flag
+- Output to stdout by default, or file via `--output-file`
+- Return token usage in JSON format via `--write-json-metadata` flag
 
-**LLMEV-FR-04: Batch Process (batch-process.py)**
-- Process all files in input folder with configurable prompt
-- Support `--input-type` parameter: `image`, `text`, `auto` (detect from extension)
+**LLMEV-FR-04: Batch Process (call-llm-batch.py)**
+- Process all files in `--input-folder` with configurable `--prompt-file`
+- Auto-detect file type by suffix (no `--input-type` override)
 - Support multiple runs per file via `--runs N`
 - Support parallel processing via `--workers N` (default: 4)
 - Skip existing outputs (resume capability)
 - Save each output immediately after generation
-- Output naming: `{file_stem}_run{NN}.md` (clean output, no metadata)
-- Token usage stored separately in `_token_usage.json` (updated incrementally)
+- Output naming: `{source}__processed__{model}__run{NN}.md`
+- Token usage: `_token_usage__{model}.json` (updated incrementally)
 - Use cases: transcription, summarization, analysis, extraction
 
 **LLMEV-FR-05: Question Generation (generate-questions.py)**
 - Generate questions from ANY input type (image or text file)
-- Support `--input-type` parameter: `image`, `text`, `auto`
-- Support `--schema PATH` for custom question requirements (JSON file)
-- Support `--questions-per-item N` as simple override (default 10)
+- Auto-detect file type by suffix (no `--input-type` override)
+- Support `--schema-file PATH` for custom question requirements (JSON file)
 - Support parallel processing via `--workers N` (default: 4)
 - Save incrementally after each item (thread-safe)
 - Output JSON with questions and reference answers
 - Default schema: 2 questions each for easy, medium_facts, medium_inference, hard_reasoning, hard_details
 
-**LLMEV-FR-06: Answer Generation (answer-questions.py)**
+**LLMEV-FR-06: Answer Generation (generate-answers.py)**
 - Answer questions from processed text (transcriptions, summaries, analyses)
 - Process all runs for each source item
 - Support parallel processing via `--workers N`
@@ -367,22 +493,22 @@ with ThreadPoolExecutor(max_workers=workers) as executor:
 
 ```
 User has images to evaluate
-├─> batch-transcribe.py --model MODEL --input images/ --output transcriptions/
+├─> call-llm-batch.py --model MODEL --input-folder images/ --output-folder transcriptions/ --prompt-file transcribe.md
 │   ├─> For each image:
 │   │   ├─> Encode image to base64
 │   │   ├─> Call LLM API with prompt
 │   │   ├─> Save transcription_run{NN}.md
-│   │   └─> Embed token usage as comment
+│   │   └─> Update _token_usage__{model}.json
 │   └─> Save _summary.json
 │
-├─> generate-questions.py --model MODEL --input images/ --output questions.json
+├─> generate-questions.py --model MODEL --input-folder images/ --output-file questions.json
 │   ├─> For each image:
 │   │   ├─> Call LLM API with question generation prompt
 │   │   ├─> Parse JSON response
 │   │   └─> Save incrementally
 │   └─> Output: questions.json
 │
-├─> answer-questions.py --model MODEL --input transcriptions/ --questions questions.json --output answers/
+├─> generate-answers.py --model MODEL --input-folder transcriptions/ --questions-file questions.json --output-folder answers/
 │   ├─> For each image:
 │   │   ├─> Find all transcription runs
 │   │   ├─> For each run:
@@ -392,7 +518,7 @@ User has images to evaluate
 │   │   └─> Save {image}_answers.json
 │   └─> Save _summary.json
 │
-├─> evaluate-answers.py --method llm --model JUDGE_MODEL --input answers/ --output scores/
+├─> evaluate-answers.py --method llm --model JUDGE_MODEL --input-folder answers/ --output-folder scores/
 │   ├─> Collect all question-answer pairs
 │   ├─> For each pair:
 │   │   ├─> Call judge LLM with scoring prompt
@@ -400,7 +526,7 @@ User has images to evaluate
 │   │   └─> Save incrementally
 │   └─> Output: scores.json, summary.json
 │
-└─> analyze-costs.py --input transcriptions/ --pricing model-pricing.json
+└─> analyze-costs.py --input-folder transcriptions/ --pricing model-pricing.json
     ├─> Extract token counts from files
     ├─> Calculate costs per model
     └─> Output: cost_analysis.json
@@ -478,62 +604,69 @@ Stored separately from output files, updated incrementally after each item.
 
 When user runs evaluation pipeline, results are stored in a structured folder:
 
-```bash
-{project_root}/llm-eval/
-├── {eval_name}/                          # Named evaluation run (e.g., "ascii-transcription-2026-01")
-│   ├── config.json                       # Evaluation configuration snapshot
-│   ├── input/                            # Symlink or copy of source files
-│   │
-│   ├── processed/                        # Output from batch-process.py
-│   │   ├── {model_id}/                   # One folder per model
-│   │   │   ├── {file_stem}_run01.md
-│   │   │   ├── {file_stem}_run02.md
-│   │   │   └── _token_usage.json
-│   │   └── {another_model_id}/
-│   │
-│   ├── questions/                        # Output from generate-questions.py
-│   │   └── questions.json
-│   │
-│   ├── answers/                          # Output from answer-questions.py
-│   │   ├── {transcription_model}_{answer_model}/
-│   │   │   ├── {file_stem}_answers.json
-│   │   │   └── _summary.json
-│   │   └── {another_combination}/
-│   │
-│   ├── scores/                           # Output from evaluate-answers.py
-│   │   ├── {timestamp}_scores.json
-│   │   └── {timestamp}_summary.json
-│   │
-│   └── analysis/                         # Output from analyze-costs.py
-│       └── cost_analysis.json
+```
+{project_root}/llm-eval/{eval_name}/
+│
+├── _config__{eval_name}.json
+│
+├── processed/
+│   ├── {source}__processed__{model}__run01.md
+│   ├── {source}__processed__{model}__run02.md
+│   └── _token_usage__{model}.json
+│
+├── questions/
+│   └── questions__from__{input_type}__{model}__{timestamp}.json
+│
+├── answers/
+│   ├── {source}__answers__{process_model}__{answer_model}.json
+│   └── _summary__answers__{process_model}__{answer_model}.json
+│
+├── scores/
+│   ├── scores__{process_model}__{answer_model}__judged__{judge_model}__{timestamp}.json
+│   └── _summary__scores__{judge_model}__{timestamp}.json
+│
+└── analysis/
+    └── cost_analysis__{timestamp}.json
 ```
 
-**Conventions:**
-- `{model_id}` uses original API model ID (e.g., `claude-opus-4-20250514`)
-- `{eval_name}` is user-provided or auto-generated from timestamp
-- `config.json` captures all parameters used for reproducibility
-- Each script defaults to appropriate subfolder but can be overridden with `--output`
+### Filename Convention
+
+**Pattern:** `{what}__{context}__{model}__{qualifier}.{ext}`
+
+**Separator:** Double underscore `__` separates semantic parts (single `_` allowed within parts)
+
+**Examples:**
+- `image001__processed__claude-opus-4-20250514__run01.md`
+- `questions__from__image__gpt-4o__2026-01-22T20-15.json`
+- `doc005__answers__claude-opus-4__gpt-5-mini.json`
+- `scores__claude-opus-4__gpt-5-mini__judged__gpt-5__2026-01-22T20-30.json`
+
+**Principles:**
+- Filename alone tells you: what it is, what model(s), what source, when
+- No information loss - can reconstruct context from filename
+- Sortable - related files group together alphabetically
+- Parseable - split on `__` to extract components
 
 ### Skill Folder Structure
 
 ```
 .windsurf/skills/llm-evaluation/
 ├── SKILL.md                  # Skill documentation
-├── llm-call.py               # Single LLM API call (text or image)
-├── batch-process.py          # Batch process any input (images, text, PDFs)
-├── generate-questions.py     # Generate eval questions from any input
-├── answer-questions.py       # Answer questions from processed text
-├── evaluate-answers.py       # Score answers with LLM
+├── call-llm.py               # Single LLM call
+├── call-llm-batch.py         # Batch LLM calls
+├── generate-questions.py     # Generate eval questions
+├── generate-answers.py       # Generate answers from text
+├── evaluate-answers.py       # Score with LLM-as-judge
 ├── analyze-costs.py          # Token cost analysis
 ├── model-registry.json       # Model IDs and providers
 ├── model-pricing.json        # Token pricing
 ├── prompts/
-│   ├── process-image-prompt.md     # Default for image processing (transcription)
-│   ├── process-text-prompt.md      # Default for text processing (summarization)
-│   ├── answering-prompt.md         # Default for --answering-prompt
-│   └── judge-prompt.md             # Default for --judge-prompt
+│   ├── transcribe-image.md   # Default prompt for image transcription
+│   ├── summarize-text.md     # Default prompt for text summarization
+│   ├── answer-from-text.md   # Default for generate-answers.py
+│   └── judge-answer.md       # Default for evaluate-answers.py
 └── schemas/
-    └── default-question-schema.json # Default schema with categories + prompt
+    └── default-questions.json # Default question schema
 ```
 
 ### CLI Interface Pattern
@@ -541,50 +674,44 @@ When user runs evaluation pipeline, results are stored in a structured folder:
 All scripts follow consistent CLI pattern:
 
 ```
-python script.py --model MODEL_ID [--keys KEYS_FILE] [--input PATH] [--output PATH] [options]
+python script.py --model MODEL_ID [--keys-file KEYS_FILE] [--input-folder PATH] [--output-folder PATH] [options]
 
 Common flags:
-  --model MODEL_ID    Required. API model ID (e.g., gpt-4o, claude-opus-4-20250514)
-  --keys PATH         API keys file. Default: .env in cwd
-  --input PATH        Input file or folder
-  --output PATH       Output file or folder
-  --json              Output JSON to stdout
-  --verbose           Verbose logging
-  --help              Show help
+  --model MODEL_ID      Required. API model ID (e.g., gpt-4o, claude-opus-4-20250514)
+  --keys-file PATH      API keys file. Default: .env in cwd
+  --workers N           Parallel workers (default: 4)
+  --help                Show help
 ```
 
-### Script-Specific Parameters
+**Script-specific flags:**
 
-**llm-call.py:**
-- `--image PATH` - Image file for multimodal call
-- `--system-prompt PATH` - System prompt file
-- `--user-prompt PATH` - User prompt file (overrides --input for prompt text)
-
-**batch-process.py:**
-- `--input-type TYPE` - Input type: `image`, `text`, `auto` (default: auto)
-- `--runs N` - Number of runs per file (default: 5)
-- `--workers N` - Parallel workers (default: 4)
-- `--process-prompt PATH` - Custom processing prompt (transcription, summarization, etc.)
-- `--max-tokens N` - Max output tokens (default: 8192)
+**call-llm-batch.py:**
+- `--input-folder PATH` - Folder with input files
+- `--output-folder PATH` - Folder for output files
+- `--prompt-file PATH` - Prompt file (.md)
+- `--runs N` - Number of runs per file (default: 1)
 
 **generate-questions.py:**
-- `--input-type TYPE` - Input type: `image`, `text`, `auto` (default: auto)
-- `--schema PATH` - Question requirements schema (JSON file, includes categories + optional prompt_template)
-- `--questions-per-item N` - Simple override: total questions (uses default prompt, ignores schema)
-- `--workers N` - Parallel workers (default: 4)
+- `--input-folder PATH` - Folder with source files
+- `--output-file PATH` - Output .json file
+- `--schema-file PATH` - Question requirements schema (JSON file)
 
-**answer-questions.py:**
-- `--questions PATH` - Eval questions JSON file (required)
-- `--workers N` - Parallel workers (default: 4)
-- `--answering-prompt PATH` - Custom answering prompt (how to answer from transcription)
+**generate-answers.py:**
+- `--input-folder PATH` - Folder with .md files (output of call-llm-batch.py)
+- `--output-folder PATH` - Folder for .json answer files
+- `--questions-file PATH` - Questions .json file (output of generate-questions.py)
+- `--prompt-file PATH` - Custom answering prompt
 
 **evaluate-answers.py:**
+- `--input-folder PATH` - Folder with .json answer files
+- `--output-folder PATH` - Folder for .json score files
 - `--method METHOD` - Evaluation method: `llm` or `openai-eval`
-- `--judge-model MODEL` - Judge model ID (for --method llm)
 - `--judge-prompt PATH` - Custom judge prompt for scoring
 - `--pass-threshold N` - Pass threshold score (default: 4)
 
 **analyze-costs.py:**
+- `--input-folder PATH` - Folder with _token_usage__.json files
+- `--output-file PATH` - Output .json file
 - `--pricing PATH` - Custom pricing JSON file
 
 ### Dependencies
@@ -595,6 +722,14 @@ anthropic>=0.18.0
 ```
 
 ## 11. Document History
+
+**[2026-01-22 21:03]**
+- Fixed: Script names updated throughout (call-llm.py, call-llm-batch.py, generate-answers.py)
+- Fixed: Parameter names made explicit (--keys-file, --input-folder, --output-folder, --prompt-file)
+- Fixed: Removed --input-type override (auto-detect only)
+- Fixed: Removed --questions-per-item (use --schema-file)
+- Added: File type annotations to all input/output parameters
+- Added: Pipeline dependency notes to parameters
 
 **[2026-01-22 20:19]**
 - Added: Concurrency (`--workers N`) as standard feature for all batch scripts
