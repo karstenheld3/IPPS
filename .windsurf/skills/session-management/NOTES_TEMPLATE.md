@@ -1,5 +1,7 @@
 # Session Notes
 
+Populated by `/session-new` workflow. Captures session context, decisions, and agent instructions.
+
 **Doc ID**: YYYY-MM-DD_[SessionTopicCamelCase]-NOTES
 
 ## Session Info
