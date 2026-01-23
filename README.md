@@ -253,24 +253,87 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - [Coding Conventions](DevSystemV3.2/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
 - [Workflow Rules](DevSystemV3.2/skills/coding-conventions/WORKFLOW-RULES.md) - ASANAPAP principle, workflow formatting
 
-## Agent Tools (installed automatically by skill)
+## Skills
+
+Agent skills in `DevSystemV3.2/skills/`. Each skill contains scripts, documentation, and optional setup.
+
+### llm-evaluation
+
+Evaluate LLM output quality by generating questions, collecting answers, and scoring with a judge model.
+
+**Setup**: Run `SETUP.md` to install Python venv with OpenAI/Anthropic SDKs in `.tools/llm-eval-venv/`.
+
+**Scripts**:
+- `call-llm.py` - Single LLM call (image or text input)
+- `call-llm-batch.py` - Batch processing with parallel workers and resume
+- `generate-questions.py` - Generate evaluation questions from source content
+- `generate-answers.py` - Generate answers from transcribed content
+- `evaluate-answers.py` - Score answers with LLM-as-judge or OpenAI Eval API
+- `analyze-costs.py` - Calculate token costs from usage files
+
+**Quick examples**:
+```powershell
+$venv = ".tools\llm-eval-venv\Scripts\python.exe"
+$skill = "DevSystemV3.2\skills\llm-evaluation"
+
+# Transcribe images
+& $venv "$skill\call-llm-batch.py" --model gpt-4o --input-folder images/ --output-folder out/ --prompt-file "$skill\prompts\transcribe-page.md"
+
+# Evaluate answers
+& $venv "$skill\evaluate-answers.py" --model gpt-4o --method openai-eval --input-folder answers/ --output-folder scores/
+```
+
+### pdf-tools
+
+Convert, compress, and analyze PDF files using local CLI tools.
+
+**Setup**: Run `SETUP.md` to install tools in `.tools/`:
+- **7-Zip** (`.tools/7z/`) - Archive extraction
+- **Poppler** (`.tools/poppler/`) - PDF to image, text extraction
+- **QPDF** (`.tools/qpdf/`) - PDF manipulation, optimization
+- **Ghostscript** (`.tools/gs/`) - PDF compression
+
+**Scripts**:
+- `convert-pdf-to-jpg.py` - Convert PDF pages to JPG for vision analysis
+- `compress-pdf.py` - Intelligent PDF compression with strategy selection
+- `downsize-pdf-images.py` - Direct Ghostscript wrapper for DPI control
+
+**Quick examples**:
+```powershell
+# Convert PDF to JPG (output: .tools/_pdf_to_jpg_converted/)
+python DevSystemV3.2\skills\pdf-tools\convert-pdf-to-jpg.py report.pdf --dpi 150
+
+# Compress PDF
+python DevSystemV3.2\skills\pdf-tools\compress-pdf.py report.pdf --compression high
+```
+
+### coding-conventions
+
+Python and workflow coding style rules with enforcement tools.
+
+**Files**:
+- `PYTHON-RULES.md` - Formatting, imports, logging, naming conventions
+- `WORKFLOW-RULES.md` - Workflow document structure and formatting
+- `reindent.py` - Convert Python indentation to target spaces
+
+**Quick examples**:
+```powershell
+# Convert folder to 2-space indentation
+python DevSystemV3.2\skills\coding-conventions\reindent.py folder/ --to 2 --recursive
+
+# Dry-run (preview only)
+python DevSystemV3.2\skills\coding-conventions\reindent.py folder/ --to 2 --recursive --dry-run
+```
+
+### github
+
+GitHub CLI integration for repos, issues, PRs, releases.
+
+**Setup**: Run `SETUP.md` to install GitHub CLI in `.tools/gh/`.
+
+## Agent Tools
 
 Local tool installations in `.tools/` (gitignored). Run `SETUP.md` in each skill folder to install.
-
-**pdf-tools** ([SETUP](DevSystemV2.1/skills/pdf-tools/SETUP.md)) - Enables agent to read entire PDFs by converting pages to JPG images for vision analysis:
-- **7-Zip** (`.tools/7z/`) - Archive extraction, NSIS installer unpacking
-- **Poppler** (`.tools/poppler/`) - PDF to image, text extraction, split/merge
-- **QPDF** (`.tools/qpdf/`) - PDF manipulation, optimization, repair
-- **Ghostscript** (`.tools/gs/`) - PDF compression, image downsampling
-
-**github** ([SETUP](DevSystemV2.1/skills/github/SETUP.md)):
-- **GitHub CLI** (`.tools/gh/`) - Repos, issues, PRs, releases
-
-**llm-evaluation** ([SKILL](DevSystemV3.2/skills/llm-evaluation/SKILL.md)) - Evaluate LLM output quality by generating questions, collecting answers, and scoring with a judge model:
-- **Python venv** (`.tools/llm-eval-venv/`) - OpenAI, Anthropic SDKs
-- **API keys** (`.env` in current working directory, or use `--keys-file`) - OPENAI_API_KEY, ANTHROPIC_API_KEY
-
-Run `SETUP.md` in each skill folder to install required tools locally to `.tools/`.
 
 ## Project Structure
 
