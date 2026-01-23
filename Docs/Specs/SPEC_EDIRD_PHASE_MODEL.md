@@ -4,7 +4,7 @@
 **Goal**: Unified phase model for BUILD and SOLVE workflows with deterministic next-action logic for autonomous agent operation
 
 **Depends on:**
-- `_SPEC_AGEN_AGENTIC_ENGLISH.md [AGEN-SP01]` for verb definitions and syntax
+- `SPEC_AGEN_AGENTIC_ENGLISH.md [AGEN-SP01]` for verb definitions and syntax
 
 ## MUST-NOT-FORGET
 
