@@ -260,11 +260,19 @@ def test_env(tmp_path):
 - **LLMEV-TP01-TC-44**: Image encoding failure -> ok=false, retried 3x then skipped
 - **LLMEV-TP01-TC-45**: Workers set to 0 -> ok=true, defaults to 1 with warning
 
-### Category 11: End-to-End (3 tests)
+### Category 11: OpenAI Eval API (5 tests)
 
-- **LLMEV-TP01-TC-46**: call-llm.py with image -> ok=true, output contains transcription
-- **LLMEV-TP01-TC-47**: call-llm-batch.py with folder -> ok=true, all files processed
-- **LLMEV-TP01-TC-48**: Full pipeline (transcribe -> questions -> answers -> score) -> ok=true, scores generated
+- **LLMEV-TP01-TC-46**: evaluate-answers.py --method openai-eval creates eval config -> ok=true, client.evals.create() called with score_model grader
+- **LLMEV-TP01-TC-47**: evaluate-answers.py --method openai-eval creates run -> ok=true, client.evals.runs.create() called with JSONL data
+- **LLMEV-TP01-TC-48**: evaluate-answers.py --method openai-eval polls completion -> ok=true, status checked until "completed"
+- **LLMEV-TP01-TC-49**: evaluate-answers.py --method openai-eval parses results -> ok=true, scores and rationale extracted from output items
+- **LLMEV-TP01-TC-50**: evaluate-answers.py --method openai-eval timeout -> ok=false, TimeoutError after max attempts
+
+### Category 12: End-to-End (3 tests)
+
+- **LLMEV-TP01-TC-51**: call-llm.py with image -> ok=true, output contains transcription
+- **LLMEV-TP01-TC-52**: call-llm-batch.py with folder -> ok=true, all files processed
+- **LLMEV-TP01-TC-53**: Full pipeline (transcribe -> questions -> answers -> score) -> ok=true, scores generated
 
 ## 7. Test Phases
 
@@ -289,7 +297,11 @@ Ordered execution sequence:
    - Individual script behavior
    - Edge cases specific to each script
 
-5. **Phase 5: Integration Tests** (TC-46 to TC-48)
+5. **Phase 5: OpenAI Eval API Tests** (TC-46 to TC-50)
+   - OpenAI Eval API integration
+   - Requires TK-010b implementation
+
+6. **Phase 6: Integration Tests** (TC-51 to TC-53)
    - End-to-end workflows
    - Requires all unit tests to pass first
 
@@ -354,15 +366,24 @@ All tests use `pytest.tmp_path` fixture which auto-cleans. No manual cleanup nee
 ### Phase 4: Script-Specific
 - [ ] **LLMEV-TP01-VC-12**: TC-40 to TC-45 (Script tests) pass
 
-### Phase 5: Integration
-- [ ] **LLMEV-TP01-VC-13**: TC-46 to TC-48 (E2E) pass
+### Phase 5: OpenAI Eval API
+- [ ] **LLMEV-TP01-VC-13**: TC-46 to TC-50 (OpenAI Eval API) pass
+
+### Phase 6: Integration
+- [ ] **LLMEV-TP01-VC-14**: TC-51 to TC-53 (E2E) pass
 
 ### Coverage
-- [ ] **LLMEV-TP01-VC-14**: All FR-* from SPEC have at least one TC
-- [ ] **LLMEV-TP01-VC-15**: All EC-* from IMPL have corresponding TC
-- [ ] **LLMEV-TP01-VC-16**: Coverage >= 80%
+- [ ] **LLMEV-TP01-VC-15**: All FR-* from SPEC have at least one TC
+- [ ] **LLMEV-TP01-VC-16**: All EC-* from IMPL have corresponding TC
+- [ ] **LLMEV-TP01-VC-17**: Coverage >= 80%
 
 ## 11. Document History
+
+**[2026-01-23 10:40]**
+- Added: Category 11 - OpenAI Eval API tests (TC-46 to TC-50)
+- Changed: Renumbered E2E tests to Category 12 (TC-51 to TC-53)
+- Added: Phase 5 for OpenAI Eval API, Phase 6 for E2E
+- Reference: test_eval_operations.py from OpenAI-BackendTools
 
 **[2026-01-22 21:27]**
 - Added: TC-40 to TC-45 for FR-05, FR-06, FR-07 and missing EC coverage

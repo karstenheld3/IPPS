@@ -95,6 +95,7 @@
   - `--workers` - Parallel workers (default: 4)
   - `--prompt-file` - Custom answering prompt file (override default prompt for domain-specific answering styles, e.g., "be precise with numbers" or "answer in 1-2 sentences")
   - `--keys-file` - API keys file (default: .env)
+  - `--clear-folder` - Clear output folder before processing
   - Examples:
     ```
     python generate-answers.py --model gpt-5-mini --input-folder transcriptions/ --output-folder answers/ --questions-file questions.json
@@ -107,10 +108,11 @@
   - `--input-folder` - Folder with .json answer files (output of `generate-answers.py`)
   - `--output-folder` - Folder for .json score files
   - `--method` - `llm` or `openai-eval` (default: llm)
-  - `--judge-prompt` - Custom judge prompt file
+  - `--judge-prompt` - Custom judge prompt file (.md)
   - `--pass-threshold` - Pass threshold score (default: 4)
   - `--workers` - Parallel workers (default: 4)
   - `--keys-file` - API keys file (default: .env)
+  - `--clear-folder` - Clear output folder before processing
   - Examples:
     ```
     python evaluate-answers.py --model gpt-5 --input-folder answers/ --output-folder scores/
@@ -302,11 +304,11 @@ A **QuestionSchema** defines custom question generation requirements.
 ```json
 {
   "categories": [
-    {"name": "easy", "count": 2, "description": "Simple facts - single numbers, names, titles"},
-    {"name": "medium_facts", "count": 2, "description": "Combined facts requiring synthesis"},
-    {"name": "medium_graphics", "count": 2, "description": "Graphical element semantics"},
-    {"name": "hard_semantics", "count": 2, "description": "Deep understanding, sequences, dependencies"},
-    {"name": "hard_graphics", "count": 2, "description": "Specific graphical details, colors, counts"}
+    {"name": "easy", "count": 2, "description": "Simple facts - single numbers, names, titles, dates"},
+    {"name": "medium_facts", "count": 2, "description": "Combined facts requiring synthesis of 2-3 pieces"},
+    {"name": "medium_inference", "count": 2, "description": "Questions requiring simple logical inference"},
+    {"name": "hard_reasoning", "count": 2, "description": "Questions requiring multi-step reasoning or analysis"},
+    {"name": "hard_details", "count": 2, "description": "Questions about specific details requiring careful reading"}
   ]
 }
 ```
@@ -745,6 +747,11 @@ python call-llm.py --model gpt-4o --prompt-file prompts/transcribe-page.md --hel
 ```
 
 ## 11. Document History
+
+**[2026-01-23 10:36]**
+- Changed: Default schema categories to generic types (medium_inference, hard_reasoning, hard_details)
+- Added: `--clear-folder` to generate-answers.py and evaluate-answers.py parameters
+- Fixed: `--judge-prompt` clarified as file path (.md)
 
 **[2026-01-22 21:23]**
 - Changed: LLMEV-IG-03 added image encoding/embedding retry (3x)

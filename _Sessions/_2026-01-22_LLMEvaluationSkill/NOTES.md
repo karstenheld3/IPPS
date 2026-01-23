@@ -69,6 +69,7 @@
 - **Runs**: 2 per file
 - **Pass Threshold**: 4 (out of 5)
 - **Clear folders on re-run**: Use `--clear-folder` flag
+- **Evaluation Method**: Use `--method openai-eval` (preferred over `--method llm`)
 
 ### Custom Prompts (test/prompts/)
 

@@ -20,6 +20,8 @@
 
 ## Done
 
+- [x] Implemented LLMEV-TK-010b: OpenAI Eval API in evaluate-answers.py
+- [x] Tested --method openai-eval: 3/3 passed (100%), gpt-4o judge
 - [x] SPEC/IMPL sync review - identified 3 discrepancies
 - [x] Fixed LLMEV-PR-001: Added --prompt-file to generate-answers.py
 - [x] Fixed LLMEV-PR-002: Added --method to evaluate-answers.py

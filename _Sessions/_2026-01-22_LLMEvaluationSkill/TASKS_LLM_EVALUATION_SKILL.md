@@ -8,8 +8,8 @@
 
 ## Task Overview
 
-- Total tasks: 15
-- Estimated total: 8.0 HHW
+- Total tasks: 16
+- Estimated total: 9.5 HHW
 - Parallelizable: 6 tasks (scripts can be built in parallel after infrastructure)
 
 ## Task 0 - Baseline (MANDATORY)
@@ -94,12 +94,27 @@ Run before starting any implementation:
   - Parallel: [P]
   - Est: 1.0 HHW
 
-- [ ] **LLMEV-TK-010** - Implement evaluate-answers.py
+- [ ] **LLMEV-TK-010** - Implement evaluate-answers.py (LLM method)
   - Files: `evaluate-answers.py`
-  - Done when: LLM-as-judge scoring 0-5 works
+  - Done when: LLM-as-judge scoring 0-5 works with `--method llm`
   - Verify: `python evaluate-answers.py --help`
   - Depends: TK-006
   - Est: 1.0 HHW
+
+- [ ] **LLMEV-TK-010b** - Implement evaluate-answers.py (OpenAI Eval API method)
+  - Files: `evaluate-answers.py`
+  - Done when: `--method openai-eval` works using OpenAI Eval API
+  - Reference: `https://github.com/karstenheld3/OpenAI-BackendTools/blob/main/src/test_eval_operations.py`
+  - Implementation notes:
+    - Use `client.evals.create()` with score_model grader
+    - Use `client.evals.runs.create()` with JSONL data source
+    - Poll for completion with timeout
+    - Parse output items for scores and rationale
+    - Item schema: `{input, reference, output_text}`
+    - Score range: 0-5, pass_threshold from --pass-threshold
+  - Verify: `python evaluate-answers.py --method openai-eval --model gpt-4o --input-folder answers/ --output-folder scores/`
+  - Depends: TK-010
+  - Est: 1.5 HHW
 
 - [ ] **LLMEV-TK-011** - Implement analyze-costs.py
   - Files: `analyze-costs.py`
@@ -169,6 +184,10 @@ TK-001 ─┬─> TK-002 ──────────────────�
 **Group B** (after TK-006): TK-008, TK-009, TK-011
 
 ## Document History
+
+**[2026-01-23 10:40]**
+- Added: LLMEV-TK-010b for OpenAI Eval API implementation
+- Reference: test_eval_operations.py from OpenAI-BackendTools
 
 **[2026-01-22 21:28]**
 - Initial tasks plan created from IMPL/TEST

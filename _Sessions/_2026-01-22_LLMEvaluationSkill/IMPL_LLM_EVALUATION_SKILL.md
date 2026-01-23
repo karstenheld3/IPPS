@@ -260,15 +260,15 @@ def generate_answers_for_item(worker_id, item_name, transcription_files, questio
 
 ### Phase 6: Evaluation Script
 
-#### LLMEV-IP01-IS-07: Implement evaluate-answers.py
+#### LLMEV-IP01-IS-07: Implement evaluate-answers.py (LLM method)
 
 **Location**: `.windsurf/skills/llm-evaluation/evaluate-answers.py`
 
-**Action**: Add - LLM-as-judge scoring
+**Action**: Add - LLM-as-judge scoring with `--method llm`
 
 **Code**:
 ```python
-# CLI: python evaluate-answers.py --model MODEL --input-folder IN --output-folder OUT
+# CLI: python evaluate-answers.py --model MODEL --input-folder IN --output-folder OUT --method llm
 def score_answer(worker_id, qa_pair, judge_prompt, client, args):
   prompt = build_judge_prompt(qa_pair, judge_prompt)
   response = retry_with_backoff(lambda: call_api(...))
@@ -281,6 +281,51 @@ def main():
   # Aggregate scores, calculate pass rate
   ...
 ```
+
+#### LLMEV-IP01-IS-07b: Implement evaluate-answers.py (OpenAI Eval API method)
+
+**Location**: `.windsurf/skills/llm-evaluation/evaluate-answers.py`
+
+**Action**: Add - OpenAI Eval API scoring with `--method openai-eval`
+
+**Reference**: `https://github.com/karstenheld3/OpenAI-BackendTools/blob/main/src/test_eval_operations.py`
+
+**Code**:
+```python
+# CLI: python evaluate-answers.py --model MODEL --input-folder IN --output-folder OUT --method openai-eval
+def score_answers_using_openai_eval(client, items, eval_model, pass_threshold):
+  # 1. Create eval config with score_model grader
+  eval_cfg = client.evals.create(
+    name=eval_name,
+    data_source_config={"type": "custom", "item_schema": {...}},
+    testing_criteria=[{
+      "type": "score_model", "model": eval_model,
+      "input": [{"role": "system", "content": prompt_template}],
+      "range": [0, 5], "pass_threshold": pass_threshold
+    }]
+  )
+  
+  # 2. Create and run evaluation
+  eval_run = client.evals.runs.create(
+    eval_id=eval_cfg.id,
+    data_source={"type": "jsonl", "source": {"type": "file_content", "content": items}}
+  )
+  
+  # 3. Poll for completion
+  while status != "completed":
+    status = client.evals.runs.retrieve(eval_run.id, eval_id=eval_cfg.id).status
+    time.sleep(10)
+  
+  # 4. Get output items and extract scores
+  output_items = get_all_eval_run_output_items(client, run_id=eval_run.id, eval_id=eval_cfg.id)
+  for item in output_items:
+    score = item.results[0].score
+    rationale = item.results[0].rationale
+```
+
+**Item schema**: `{input: str, reference: str, output_text: str}`
+
+**Status**: IMPLEMENTED (2026-01-23) - tested with gpt-4o, 3/3 passed
 
 ### Phase 7: Cost Analysis Script
 
@@ -456,6 +501,11 @@ def main():
 - [ ] **LLMEV-IP01-VC-17**: Resume after simulated crash works
 
 ## 6. Document History
+
+**[2026-01-23 10:40]**
+- Added: LLMEV-IP01-IS-07b for OpenAI Eval API method
+- Reference: test_eval_operations.py from OpenAI-BackendTools
+- Status: NOT YET IMPLEMENTED (stub returns error)
 
 **[2026-01-22 21:25]**
 - Fixed: Added `status` field to model-registry.json per SPEC
