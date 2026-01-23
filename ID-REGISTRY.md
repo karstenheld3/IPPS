@@ -144,6 +144,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **MCPS** - MCP server integrations
 - **TRNGFX** - Transcription graphics/ASCII art optimization
 - **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
+- **SDDEV** - Spec-Driven Development (research topic)
 
 ## Document History
 
