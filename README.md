@@ -649,5 +649,5 @@ Creates `_TASKS_*.md` from IMPL/TEST. **Mandatory before implementation.**
 
 ### Technical Reference
 
-- [ASCII Art Width Test](_INFO_ASCII_ART_WIDTH_TEST.md) - Unicode character width testing for monospace fonts
+- [ASCII Art Width Test](docs/FurtherResearch/_TEST_ASCII_ART_WIDTH.md) - Unicode character width testing for monospace fonts
 - [ASCII Art Transcription Cost/Quality Eval](_Sessions/_Archive/_2026-01-23_JpgToAsciiArtTranscriptionCostQualityEval/INFO_ASCII_ART_TRANSCRIPTION_COST_QUALITY_EVAL.md) - LLM model comparison for image-to-ASCII transcription
