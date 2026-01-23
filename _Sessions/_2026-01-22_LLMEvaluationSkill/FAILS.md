@@ -10,6 +10,22 @@
 
 ## Active Issues
 
+### `LLMEV-FL-010` Failed to recognize workspace workflow and executed without confirmation
+
+- **Severity**: [MEDIUM]
+- **When**: 2026-01-23 11:05
+- **Where**: Agent response to "deploy-to-all" user message
+- **What**: User said "deploy-to-all" which maps to `deploy-to-all-repos.md` workflow in workspace root. Agent ignored the workflow, assumed meaning, and executed sync commands immediately.
+- **Evidence**: Workflow file exists at `E:\Dev\IPPS\deploy-to-all-repos.md` with explicit rules: default mode is preview, requires explicit confirmation keywords ("yes", "confirm", etc.)
+- **Why it went wrong**: 
+  1. Did not check workspace root for matching workflow files
+  2. Did not read the workflow's execution mode rules (preview by default)
+  3. Executed batch file operations without confirmation
+- **Suggested fix**: 
+  1. When receiving command-like messages, check workspace root for matching `.md` workflow files
+  2. Read and follow workflow's execution mode (preview vs auto-execute)
+  3. Never execute batch file operations without explicit confirmation
+
 ### `LLMEV-FL-009` Ignored documented settings in NOTES.md
 
 - **Severity**: [MEDIUM]
@@ -98,6 +114,9 @@
 - **Link**: Commit `07b6318`
 
 ## Document History
+
+**[2026-01-23 11:05]**
+- Added: LLMEV-FL-010 for executing ambiguous command without confirmation
 
 **[2026-01-22 23:05]**
 - Added: LLMEV-FL-009 for ignoring documented settings
