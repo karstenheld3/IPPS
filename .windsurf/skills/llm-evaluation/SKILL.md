@@ -201,20 +201,31 @@ $skill = ".windsurf\skills\llm-evaluation"
 
 ## Tested Models
 
-Self-test results from **2026-01-24 23:55 UTC+01:00**:
+Session testing from **2026-01-22 to 2026-01-24**:
 
-**Passed (15/15 tests):**
+**Self-test passed (15/15 API integration tests):**
 - `gpt-4o` - OpenAI, temperature model
 - `gpt-4o-mini` - OpenAI, temperature model
 - `gpt-5-mini` - OpenAI, reasoning model
-- `claude-sonnet-4-5-20250929` - Anthropic, Claude Sonnet 4.5, extended thinking model
-- `claude-sonnet-4-20250514` - Anthropic, extended thinking model
-- `claude-3-5-haiku-20241022` - Anthropic, temperature model
+- `claude-sonnet-4-5-20250929` - Anthropic, Claude Sonnet 4.5
+- `claude-sonnet-4-20250514` - Anthropic, Claude Sonnet 4
+- `claude-3-5-haiku-20241022` - Anthropic, Claude 3.5 Haiku
 
-**Disabled:**
+**Pipeline tested (full evaluation workflow):**
+- `claude-opus-4-1-20250805` - Transcription: 130K tokens, $4.82 cost
+- `gpt-4o-mini` - Batch processing, questions, answers, evaluation
+- `gpt-5-mini` - Question generation, answer generation
+- `gpt-5` - LLM-as-judge scoring (81.1% pass rate, 4.14/5 avg)
+
+**Judge prompt calibration tested:**
+- `gpt-4o` - Overestimates 75% similarity (95% vs expected 65-85)
+- `gpt-5-mini` - Best calibration, all 5 degradation levels within tolerance (recommended)
+- `claude-sonnet-4-5-20250929` - Parse error with extended thinking output
+
+**Disabled/blocked:**
 - `o1-preview`, `o1-mini` - No API access
 - `claude-opus-4-20250514` - Requires streaming for extended thinking (>10 min timeout)
-- `claude-3-5-sonnet-20241022` - Model deprecated
+- `claude-3-5-sonnet-20241022` - Model deprecated (404 error)
 
 ## Claude Model ID Reference
 
