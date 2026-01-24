@@ -204,12 +204,16 @@ $skill = ".windsurf\skills\llm-evaluation"
 Session testing from **2026-01-22 to 2026-01-24**:
 
 **Self-test passed (15/15 API integration tests):**
-- `gpt-4o` - OpenAI, temperature model
-- `gpt-4o-mini` - OpenAI, temperature model
+- `gpt-5.2` - OpenAI, reasoning model
+- `gpt-5.1` - OpenAI, reasoning model
+- `gpt-5` - OpenAI, reasoning model
+- `gpt-5-mini` - OpenAI, reasoning model
+- `gpt-5-nano` - OpenAI, reasoning model
 - `gpt-4.1` - OpenAI, temperature model, multi-modal
 - `gpt-4.1-mini` - OpenAI, temperature model, multi-modal
 - `gpt-4.1-nano` - OpenAI, temperature model, multi-modal
-- `gpt-5-mini` - OpenAI, reasoning model
+- `gpt-4o` - OpenAI, temperature model
+- `gpt-4o-mini` - OpenAI, temperature model
 - `claude-sonnet-4-5-20250929` - Anthropic, Claude Sonnet 4.5
 - `claude-sonnet-4-20250514` - Anthropic, Claude Sonnet 4
 - `claude-3-5-haiku-20241022` - Anthropic, Claude 3.5 Haiku
