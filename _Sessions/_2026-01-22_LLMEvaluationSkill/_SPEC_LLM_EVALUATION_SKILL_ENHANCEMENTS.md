@@ -1,6 +1,6 @@
 # SPEC: LLM Evaluation Skill Enhancements
 
-**Doc ID**: LLMEV-SP01
+**Doc ID**: LLMEV-SP02
 **Goal**: Add model control parameters and quality metrics to llm-evaluation skill scripts
 **Timeline**: Created 2026-01-24
 **Target files**: `call-llm.py`, `call-llm-batch.py`, new `compare-outputs.py`, new `model-parameter-mapping.json`, new `model-registry.json`
