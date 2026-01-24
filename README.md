@@ -234,8 +234,8 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - **AGEN** - Agentic English. PREN enriched with semantics: `@mentions`, `/workflow`, `[VERB]`, `[PLACEHOLDER]`
 - **HWT** - Human Work Time. Partition target: max 0.5h per task for predictable progress
 - **AWT** - Agentic Work Time. Agent time estimate for planning and capacity
-- **MEPI** - Most Executable Point of Information. Used for research when action is needed
-- **MCPI** - Most Complete Point of Information. Used for research when thoroughness is needed
+- **MEPI** - Most Executable Point of Information. Present 2-3 curated options aligned with implicit intentions. See [MEPI vs MCPI Principle](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md)
+- **MCPI** - Most Complete Point of Information. Present exhaustive options when thoroughness is explicitly required
 - **SOCAS** - Signs Of Confusion And Sloppiness. 10 criteria for detecting agent degradation
 - **MNF** - Must Not Forget. Technique for critical item tracking during task execution
 - **ASANAPAP** - As Short As Necessary, As Precise As Possible. Conciseness principle for workflows and documents
