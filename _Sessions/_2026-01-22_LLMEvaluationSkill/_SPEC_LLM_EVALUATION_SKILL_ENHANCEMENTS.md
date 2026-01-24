@@ -368,6 +368,8 @@ python compare-transcription-runs.py --input-folder runs/ --output-file report.j
 3. **Image sections** (inside tags) - Compare with LLM-as-a-judge (semantic equivalence)
 4. **Combine scores** - Weighted average or separate reporting
 
+**Recommended judge model**: `gpt-5-mini` (better calibration than gpt-4o, see `_TEST_JUDGE_PROMPT_CALIBRATION.md`)
+
 ### Output Schema
 
 ```json

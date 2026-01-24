@@ -249,6 +249,13 @@ report["summary"]["judge_usage"] = {"model": ..., "total_input_tokens": ..., "to
 
 ## 6. Document History
 
+**[2026-01-24 21:45]**
+- Phase 2 refinement: Wired effort levels to judge API calls
+- Fixed max_tokens vs max_completion_tokens for reasoning models
+- Added load_configs(), get_model_config(), build_judge_api_params()
+- Judge now respects --temperature, --reasoning-effort, --output-length
+- Calibration testing: gpt-5-mini recommended over gpt-4o
+
 **[2026-01-24 21:12]**
 - Phase 2 complete: Hybrid comparison for compare-transcription-runs.py
 - IS-09: Added --method, --judge-model, --judge-prompt, --keys-file CLI args

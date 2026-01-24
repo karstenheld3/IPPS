@@ -20,6 +20,70 @@ from typing import Optional
 
 EFFORT_LEVELS = ['none', 'minimal', 'low', 'medium', 'high', 'xhigh']
 
+
+def load_configs(script_dir: Path) -> tuple:
+    """Load model-parameter-mapping.json and model-registry.json."""
+    mapping_file = script_dir / 'model-parameter-mapping.json'
+    registry_file = script_dir / 'model-registry.json'
+    
+    mapping = {}
+    registry = {}
+    
+    if mapping_file.exists():
+        with open(mapping_file, 'r', encoding='utf-8') as f:
+            mapping = json.load(f)
+    if registry_file.exists():
+        with open(registry_file, 'r', encoding='utf-8') as f:
+            registry = json.load(f)
+    
+    return mapping, registry
+
+
+def get_model_config(model: str, registry: dict) -> dict:
+    """Return model config from registry using prefix matching."""
+    for entry in registry.get('model_id_startswith', []):
+        if model.startswith(entry['prefix']):
+            return entry
+    return {'provider': 'openai', 'method': 'temperature', 'temp_max': 2.0, 'max_output': 4096}
+
+
+def build_judge_api_params(model: str, mapping: dict, registry: dict,
+                           temperature: str, reasoning_effort: str, output_length: str) -> dict:
+    """Build API parameters for judge model using effort levels."""
+    model_config = get_model_config(model, registry)
+    effort_map = mapping.get('effort_mapping', {})
+    params = {}
+    
+    method = model_config.get('method', 'temperature')
+    
+    # Calculate output tokens first
+    if output_length in effort_map:
+        output_factor = effort_map[output_length].get('output_length_factor', 0.25)
+        max_output = model_config.get('max_output', 4096)
+        params['max_tokens'] = int(output_factor * max_output)
+    else:
+        params['max_tokens'] = 500
+    
+    # Then configure method-specific parameters
+    if method == 'temperature' and temperature in effort_map:
+        factor = effort_map[temperature].get('temperature_factor', 0.25)
+        params['temperature'] = factor * model_config.get('temp_max', 2.0)
+    elif method == 'reasoning_effort' and reasoning_effort in effort_map:
+        params['reasoning_effort'] = effort_map[reasoning_effort].get('openai_reasoning_effort', 'medium')
+    elif method == 'thinking' and reasoning_effort in effort_map:
+        factor = effort_map[reasoning_effort].get('anthropic_thinking_factor', 0.0)
+        thinking_max = model_config.get('thinking_max', 100000)
+        budget = int(factor * thinking_max)
+        # Ensure max_tokens > thinking budget for Claude extended thinking models
+        if budget > 0:
+            params['thinking'] = {'type': 'enabled', 'budget_tokens': budget}
+            # Claude requires max_tokens > budget_tokens
+            if params['max_tokens'] <= budget:
+                params['max_tokens'] = budget + 500
+    
+    return params, method, model_config.get('provider', 'openai')
+
+
 DEFAULT_JUDGE_PROMPT = """Compare these two transcriptions of the same figure. Score semantic equivalence 0-100.
 
 **Transcription A:**
@@ -173,31 +237,48 @@ def load_api_keys(keys_file: Path) -> dict:
     return keys
 
 
-def call_judge_llm(prompt: str, model: str, keys: dict, script_dir: Path) -> dict:
+def call_judge_llm(prompt: str, model: str, keys: dict, api_params: dict, method: str, provider: str) -> dict:
     """Call LLM to judge similarity. Returns score and usage."""
-    provider = 'anthropic' if model.startswith('claude') else 'openai'
-    
     try:
         if provider == 'openai':
             from openai import OpenAI
             client = OpenAI(api_key=keys.get('OPENAI_API_KEY'))
-            response = client.chat.completions.create(
-                model=model,
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=500,
-                temperature=0.0
-            )
+            
+            is_reasoning = any(x in model for x in ['gpt-5', 'o1-', 'o3-', 'o4-'])
+            call_params = {
+                'model': model,
+                'messages': [{"role": "user", "content": prompt}],
+            }
+            
+            # Token limit parameter
+            if is_reasoning:
+                call_params['max_completion_tokens'] = api_params.get('max_tokens', 500)
+            else:
+                call_params['max_tokens'] = api_params.get('max_tokens', 500)
+                if 'temperature' in api_params:
+                    call_params['temperature'] = api_params['temperature']
+            
+            if 'reasoning_effort' in api_params:
+                call_params['reasoning_effort'] = api_params['reasoning_effort']
+            
+            response = client.chat.completions.create(**call_params)
             text = response.choices[0].message.content
             usage = {"input_tokens": response.usage.prompt_tokens, "output_tokens": response.usage.completion_tokens}
         else:
             from anthropic import Anthropic
             client = Anthropic(api_key=keys.get('ANTHROPIC_API_KEY'))
-            response = client.messages.create(
-                model=model,
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=500,
-                temperature=0.0
-            )
+            
+            call_params = {
+                'model': model,
+                'messages': [{"role": "user", "content": prompt}],
+                'max_tokens': api_params.get('max_tokens', 500),
+            }
+            if 'temperature' in api_params:
+                call_params['temperature'] = api_params['temperature']
+            if 'thinking' in api_params:
+                call_params['thinking'] = api_params['thinking']
+            
+            response = client.messages.create(**call_params)
             text = response.content[0].text if hasattr(response.content[0], 'text') else ""
             usage = {"input_tokens": response.usage.input_tokens, "output_tokens": response.usage.output_tokens}
         
@@ -214,7 +295,7 @@ def call_judge_llm(prompt: str, model: str, keys: dict, script_dir: Path) -> dic
 
 
 def compare_images_with_llm(images_a: list, images_b: list, model: str, keys: dict, 
-                            judge_prompt: str, script_dir: Path) -> dict:
+                            judge_prompt: str, api_params: dict, method: str, provider: str) -> dict:
     """Compare image sections using LLM judge."""
     if not images_a or not images_b:
         return {"avg_similarity": 1.0, "figures": [], "usage": {"input_tokens": 0, "output_tokens": 0, "calls": 0}}
@@ -226,7 +307,7 @@ def compare_images_with_llm(images_a: list, images_b: list, model: str, keys: di
     
     for i, (img_a, img_b) in enumerate(zip(images_a, images_b)):
         prompt = judge_prompt.format(transcription_a=img_a, transcription_b=img_b)
-        result = call_judge_llm(prompt, model, keys, script_dir)
+        result = call_judge_llm(prompt, model, keys, api_params, method, provider)
         
         figures.append({
             "figure": f"Figure {i+1}",
@@ -290,10 +371,20 @@ def main():
     
     # Load API keys for LLM judge
     keys = {}
+    api_params = {}
+    method = 'temperature'
+    provider = 'openai'
     if args.method in ['semantic', 'hybrid']:
         keys = load_api_keys(args.keys_file)
         if not keys:
             print(f"[WARN] No API keys loaded from {args.keys_file}", file=sys.stderr)
+        
+        # Load configs and build API params using effort levels
+        mapping, registry = load_configs(script_dir)
+        api_params, method, provider = build_judge_api_params(
+            args.judge_model, mapping, registry,
+            args.temperature, args.reasoning_effort, args.output_length
+        )
     
     if args.input_folder:
         if not args.input_folder.exists():
@@ -352,7 +443,7 @@ def main():
                         if len(sections) >= 2 and sections[0]["images"] and sections[1]["images"]:
                             img_result = compare_images_with_llm(
                                 sections[0]["images"], sections[1]["images"],
-                                args.judge_model, keys, judge_prompt, script_dir
+                                args.judge_model, keys, judge_prompt, api_params, method, provider
                             )
                             result["images"] = {
                                 "method": "llm-judge",
@@ -389,6 +480,43 @@ def main():
             report["summary"]["judge_usage"] = total_judge_usage
     else:
         result = compare_files(files)
+        
+        # Hybrid comparison for non-grouped mode
+        if args.method == 'hybrid' and len(files) >= 2:
+            contents = [f.read_text(encoding='utf-8') for f in files]
+            sections = [extract_sections(c) for c in contents]
+            
+            has_images = any(s["images"] for s in sections)
+            if not has_images:
+                print("[WARN] No <transcription_image> tags found, using levenshtein only", file=sys.stderr)
+            else:
+                # Compare text with levenshtein
+                text_similarities = []
+                for i in range(len(sections)):
+                    for j in range(i + 1, len(sections)):
+                        text_similarities.append(similarity(sections[i]["text"], sections[j]["text"]))
+                result["text"] = {
+                    "method": "levenshtein",
+                    "avg_similarity": round(sum(text_similarities) / len(text_similarities), 4) if text_similarities else 1.0
+                }
+                
+                # Compare images with LLM judge
+                if sections[0]["images"] and sections[1]["images"]:
+                    img_result = compare_images_with_llm(
+                        sections[0]["images"], sections[1]["images"],
+                        args.judge_model, keys, judge_prompt, api_params, method, provider
+                    )
+                    result["images"] = {
+                        "method": "llm-judge",
+                        "model": args.judge_model,
+                        "avg_similarity": img_result["avg_similarity"],
+                        "figures": img_result["figures"],
+                        "usage": img_result["usage"]
+                    }
+                    total_judge_usage["total_input_tokens"] += img_result["usage"]["input_tokens"]
+                    total_judge_usage["total_output_tokens"] += img_result["usage"]["output_tokens"]
+                    total_judge_usage["calls"] += img_result["usage"]["calls"]
+        
         report = {
             "summary": {
                 "method": args.method,
@@ -401,6 +529,8 @@ def main():
             "comparison": result,
             "generated": datetime.now(timezone.utc).isoformat()
         }
+        if args.method in ['semantic', 'hybrid'] and total_judge_usage["calls"] > 0:
+            report["summary"]["judge_usage"] = total_judge_usage
     
     args.output_file.parent.mkdir(parents=True, exist_ok=True)
     args.output_file.write_text(json.dumps(report, indent=2), encoding='utf-8')
