@@ -9,10 +9,19 @@ Forward-looking execution of next steps in a plan.
 
 ## Step 1: Identify Next Action
 
-**SESSION-BASED mode requirement**: Always re-read these tracking documents first:
+**Mandatory re-read before continuing:**
+
+**SESSION-BASED mode** - Re-read session folder documents:
 - NOTES.md
 - PROBLEMS.md
 - PROGRESS.md
+- FAILS.md
+- LEARNINGS.md (if exists)
+
+**PROJECT-WIDE mode** - Re-read workspace-level documents:
+- !NOTES.md
+- !PROBLEMS.md (if exists)
+- !PROGRESS.md (if exists)
 - FAILS.md
 - LEARNINGS.md (if exists)
 

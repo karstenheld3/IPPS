@@ -7,12 +7,21 @@ auto_execution_mode: 1
 
 Backward-looking assessment of current state.
 
-## Step 1: Read All Session Documents
+## Step 1: Read All Tracking Documents
 
-**SESSION-BASED mode requirement**: Always re-read these tracking documents first:
+**Mandatory re-read before recap:**
+
+**SESSION-BASED mode** - Re-read session folder documents:
 - NOTES.md
 - PROBLEMS.md
 - PROGRESS.md
+- FAILS.md
+- LEARNINGS.md (if exists)
+
+**PROJECT-WIDE mode** - Re-read workspace-level documents:
+- !NOTES.md
+- !PROBLEMS.md (if exists)
+- !PROGRESS.md (if exists)
 - FAILS.md
 - LEARNINGS.md (if exists)
 

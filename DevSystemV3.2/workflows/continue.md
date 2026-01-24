@@ -9,6 +9,24 @@ Forward-looking execution of next steps in a plan.
 
 ## Step 1: Identify Next Action
 
+**Mandatory re-read before continuing:**
+
+**SESSION-BASED mode** - Re-read session folder documents:
+- NOTES.md
+- PROBLEMS.md
+- PROGRESS.md
+- FAILS.md
+- LEARNINGS.md (if exists)
+
+**PROJECT-WIDE mode** - Re-read workspace-level documents:
+- README.md
+- !NOTES.md or NOTES.md
+- !PROBLEMS.md or PROBLEMS.md (if exists)
+- !PROGRESS.md or PROGRESS.md (if exists)
+- FAILS.md
+- LEARNINGS.md (if exists)
+Then identify next action:
+
 1. Read PROGRESS.md for current phase and status
 2. Read TASKS document (if exists) for next unchecked task
 3. If no TASKS, use IMPL plan steps
