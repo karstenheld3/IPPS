@@ -16,7 +16,8 @@ Read these before proceeding:
   - `[VERIFIED]` - Re-read source, confirmed
   - `[TESTED]` - Tested in POC or script
   - `[PROVEN]` - Works in actual implementation
-- **MEPI by default** - 2-3 curated options, not exhaustive lists
+- **MEPI by default** - 2-3 curated options, **MCPI** when completeness needed
+- **Deep beats wide** - Tokens better spent on 2-3 well-researched options than 10+ superficial ones
 - **Document exclusions** - What was NOT considered and why
 - **Keep ALL sources** - Even if findings were minimal
 

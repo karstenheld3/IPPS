@@ -44,6 +44,13 @@
 
 The counterintuitive insight: **completeness is not always valuable**. In fact, it often produces worse outcomes than carefully curated incompleteness.
 
+### Agentic Research Implication
+
+For AI agents doing research, effort, tokens, and compute are better spent on 2-3 well-researched options than on 10+ superficially researched options:
+- **Deep beats wide**: One thoroughly verified option with sources, edge cases, and caveats is worth more than five options with surface-level descriptions
+- **Verification is expensive**: Each additional option multiplies verification work
+- **Quality signals expertise**: Well-researched recommendations build trust; superficial lists signal uncertainty
+
 ### The Philosophy
 
 MEPI acknowledges that every decision has:

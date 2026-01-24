@@ -7,23 +7,10 @@ auto_execution_mode: 1
 
 Create research and analysis documents following INFO_TEMPLATE.md structure.
 
-## Required Rules and Skills
+## Required Skills
 
-Read these before proceeding:
-- `[AGENT_FOLDER]/rules/research-and-report-writing-rules.md` for MEPI/MCPI research depth
+Invoke these skills before proceeding:
 - @write-documents for INFO document structure and formatting rules
-
-## MUST-NOT-FORGET
-
-- **Summary section is mandatory** - Copy/paste ready list at document top
-- **Label ALL findings** with verification status:
-  - `[ASSUMED]` - Unverified, needs validation
-  - `[VERIFIED]` - Re-read source, confirmed
-  - `[TESTED]` - Tested in POC or script
-  - `[PROVEN]` - Works in actual implementation
-- **MEPI by default** - 2-3 curated options, not exhaustive lists
-- **Document exclusions** - What was NOT considered and why
-- **Keep ALL sources** - Even if findings were minimal
 
 ## Prerequisites
 
