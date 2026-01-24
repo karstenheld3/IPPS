@@ -6,6 +6,9 @@
   "models": [
     {"provider": "openai", "model_id": "gpt-4o", "name": "GPT-4o", "enabled": true, "status": "available"},
     {"provider": "openai", "model_id": "gpt-4o-mini", "name": "GPT-4o Mini", "enabled": true, "status": "available"},
+    {"provider": "openai", "model_id": "gpt-4.1", "name": "GPT-4.1", "enabled": true, "status": "available"},
+    {"provider": "openai", "model_id": "gpt-4.1-mini", "name": "GPT-4.1 Mini", "enabled": true, "status": "available"},
+    {"provider": "openai", "model_id": "gpt-4.1-nano", "name": "GPT-4.1 Nano", "enabled": true, "status": "available"},
     {"provider": "openai", "model_id": "gpt-5-mini", "name": "GPT-5 Mini", "enabled": true, "status": "available"},
     {"provider": "openai", "model_id": "o1-preview", "name": "O1 Preview", "enabled": false, "status": "no_access"},
     {"provider": "openai", "model_id": "o1-mini", "name": "O1 Mini", "enabled": false, "status": "no_access"},
