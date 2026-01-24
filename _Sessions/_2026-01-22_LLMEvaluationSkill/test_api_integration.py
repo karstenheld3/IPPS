@@ -10,7 +10,8 @@ from pathlib import Path
 SCRIPT_DIR = Path(r'E:\Dev\IPPS\DevSystemV3.2\skills\llm-evaluation')
 TEST_INPUT = Path(r'E:\Dev\KarstensWorkspace\_Sessions\_2026-01-23_LLMTranscriptionEvaluation\2026-01-23_TranscriptionVariabilityComparison\01_input\ic_fluent_copilot_64_256@2x.jpg')
 OUTPUT_DIR = Path(r'E:\Dev\IPPS\_Sessions\_2026-01-22_LLMEvaluationSkill\test_output')
-KEYS_FILE = Path(r'E:\Dev\OpenAI-BackendTools\OpenAi.env')
+KEYS_FILE = Path(r'E:\Dev\IPPS\.tools\.api-keys.txt')
+PYTHON_EXE = Path(r'E:\Dev\IPPS\.tools\llm-eval-venv\Scripts\python.exe')
 
 # Create simple prompt for testing
 PROMPT_FILE = OUTPUT_DIR / 'test_prompt.md'
@@ -25,7 +26,7 @@ def run_call_llm(model: str, temperature: str = 'medium', reasoning_effort: str 
                  output_length: str = 'none', seed: int = None) -> dict:
     """Run call-llm.py with given parameters."""
     cmd = [
-        'python', str(SCRIPT_DIR / 'call-llm.py'),
+        str(PYTHON_EXE), str(SCRIPT_DIR / 'call-llm.py'),
         '--model', model,
         '--input-file', str(TEST_INPUT),
         '--prompt-file', str(PROMPT_FILE),
@@ -103,7 +104,7 @@ def test_anthropic_temperature_model():
     print("TEST: Anthropic Temperature Model (claude-3.5-sonnet)")
     print("=" * 60)
     
-    result = run_call_llm('claude-3.5-sonnet-20241022', temperature='low', output_length='none')
+    result = run_call_llm('claude-sonnet-4-20250514', temperature='low', output_length='none')
     return result.get('ok', False)
 
 
@@ -122,7 +123,7 @@ def test_compare_outputs():
     output_json = OUTPUT_DIR / 'compare_result.json'
     
     cmd = [
-        'python', str(SCRIPT_DIR / 'compare-outputs.py'),
+        str(PYTHON_EXE), str(SCRIPT_DIR / 'compare-outputs.py'),
         '--files', str(test_file1), str(test_file2),
         '--output-file', str(output_json)
     ]

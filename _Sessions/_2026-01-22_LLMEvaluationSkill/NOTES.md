@@ -49,8 +49,8 @@
 
 ### Paths
 
-- **API Keys**: `.tools/.api-keys.txt`
-- **Virtual Environment**: `.tools/llm-eval-venv/`
+- **API Keys**: `.tools/.api-keys.txt` (contains OPENAI_API_KEY and ANTHROPIC_API_KEY)
+- **Virtual Environment**: `.tools/llm-eval-venv/` (use `$venv = ".tools\llm-eval-venv\Scripts\python.exe"`)
 - **Test Input**: `test/input/` (16 images + 1 text)
 - **Test Transcriptions**: `test/transcriptions/`
 - **Test Prompts**: `test/prompts/` (custom prompts for this test)
