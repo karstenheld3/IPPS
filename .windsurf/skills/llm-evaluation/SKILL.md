@@ -214,7 +214,9 @@ Session testing from **2026-01-22 to 2026-01-24**:
 - `gpt-4.1-nano` - OpenAI, temperature model, multi-modal
 - `gpt-4o` - OpenAI, temperature model
 - `gpt-4o-mini` - OpenAI, temperature model
+- `claude-opus-4-5-20251101` - Anthropic, Claude Opus 4.5
 - `claude-sonnet-4-5-20250929` - Anthropic, Claude Sonnet 4.5
+- `claude-haiku-4-5-20251001` - Anthropic, Claude Haiku 4.5
 - `claude-sonnet-4-20250514` - Anthropic, Claude Sonnet 4
 - `claude-3-7-sonnet-20250219` - Anthropic, Claude 3.7 Sonnet
 - `claude-3-5-haiku-20241022` - Anthropic, Claude 3.5 Haiku
@@ -237,15 +239,34 @@ Session testing from **2026-01-22 to 2026-01-24**:
 
 ## Claude Model ID Reference
 
-**Why Claude 4.5 models may fail:** Anthropic uses versioned model IDs with date suffixes. Generic names like `claude-sonnet-4.5` do not work - you must use the full versioned ID.
+**Why Claude models return 404 errors:** [VERIFIED]
 
-**Current Claude model IDs** (as of 2026-01-24):
-- `claude-sonnet-4-5-20250929` - Claude Sonnet 4.5 (recommended)
-- `claude-sonnet-4-20250514` - Claude Sonnet 4
-- `claude-opus-4-20250514` - Claude Opus 4 (requires streaming for extended thinking)
-- `claude-3-5-haiku-20241022` - Claude 3.5 Haiku
+Anthropic model IDs follow `{model-family}-{version}-{YYYYMMDD}` format. The date suffix is the **release date**, NOT a predictable pattern. Common mistakes:
+- Using wrong dates (e.g., `20250514` for Opus 4.5 when correct is `20251101`)
+- Using aliases without dates (e.g., `claude-opus-4-5` may not work via direct API)
+- Assuming date patterns from other models apply universally
 
-**Note:** Aliases like `claude-sonnet-4-5` automatically point to the latest snapshot, but Anthropic recommends using specific versions (e.g., `claude-sonnet-4-5-20250929`) in production for consistent behavior.
+**Research findings (2026-01-25):**
+
+| Model | Wrong IDs Tried (404) | Correct ID | Release Date |
+|-------|----------------------|------------|--------------|
+| Opus 4.5 | `claude-opus-4-5-20250929`, `claude-opus-4-5-20251022` | `claude-opus-4-5-20251101` | Nov 1, 2025 |
+| Haiku 4.5 | `claude-haiku-4-5-20250514`, `claude-haiku-4-5-20251022` | `claude-haiku-4-5-20251001` | Oct 1, 2025 |
+| Sonnet 4.5 | - | `claude-sonnet-4-5-20250929` | Sep 29, 2025 |
+| Sonnet 4 | - | `claude-sonnet-4-20250514` | May 14, 2025 |
+| Opus 4 | - | `claude-opus-4-20250514` | May 14, 2025 |
+| 3.7 Sonnet | - | `claude-3-7-sonnet-20250219` | Feb 19, 2025 |
+| 3.5 Haiku | - | `claude-3-5-haiku-20241022` | Oct 22, 2024 |
+
+**How to find correct model IDs:**
+1. Check third-party docs (OpenRouter, TypingMind, AI/ML API) - they often list exact IDs
+2. Search for `"claude-{model}-{version}"` with release announcements
+3. The date is the **release date** of that specific model version
+
+**Sources:**
+- https://docs.aimlapi.com/api-references/text-models-llm/anthropic/claude-4.5-opus
+- https://www.typingmind.com/guide/anthropic/claude-haiku-4-5-20251001
+- https://milvus.io/ai-quick-reference/how-do-i-call-claude-opus-45-via-the-claude-api
 
 ## Key Patterns
 
