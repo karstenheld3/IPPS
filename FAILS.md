@@ -1,5 +1,25 @@
 # Failure Log
 
+## 2026-01-24 - MEPI/MCPI Document ID
+
+### [LOW] `GLOB-FL-008` Used wrong TOPIC for MEPI/MCPI INFO document
+
+- **When**: 2026-01-24 18:58 UTC+01:00
+- **Where**: `Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md` line 3
+- **What**: Used `GLOB-IN01` as Doc ID, but MEPI/MCPI is a distinct concept that should have its own TOPIC
+- **Why it went wrong**:
+  - Assumed `GLOB` was appropriate for "global concepts"
+  - Did not check ID-REGISTRY.md for existing MEPI/MCPI TOPIC
+  - `GLOB` is for project-wide architecture, not for named concepts like MEPI/MCPI
+- **Evidence**: Doc ID `GLOB-IN01` on line 3, but MEPI/MCPI are listed as concepts in ID-REGISTRY.md
+
+**Prevention rules**:
+1. Named concepts (MEPI, MCPI, EDIRD, STRUT) should have their own TOPIC
+2. Check ID-REGISTRY.md before assigning TOPIC
+3. `GLOB` is for project-wide items without a specific concept name
+
+**Fix**: Change Doc ID to `MEPI-IN01` and register `MEPI` as TOPIC in ID-REGISTRY.md
+
 ## 2026-01-22 - LLM Evaluation Skill Session
 
 ### [MEDIUM] `LLMEV-FL-009` Ignored documented settings in NOTES.md

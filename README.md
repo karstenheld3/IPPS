@@ -40,24 +40,28 @@ TRACTFUL provides the docs    → INFO, SPEC, IMPL, TEST, TASKS with unique IDs
 
 **Design principle:** Each spec has a single responsibility. AGEN defines vocabulary. EDIRD defines phases and gates. STRUT defines notation. TRACTFUL defines documents. Workflows orchestrate them without hardcoding phase knowledge.
 
-**Mini-example** - A hotfix plan in STRUT notation:
+**Example** - A hotfix plan in STRUT notation:
 ```
-[ ] P1 [IMPLEMENT]: Fix null pointer bug
+[ ] P1 [IMPLEMENT]: Fix and verify
 ├─ Objectives:
-│   └─ [ ] Bug no longer reproduces
-├─ Strategy: Locate root cause, apply minimal fix, test
+│   └─ [ ] Bug no longer reproduces ← P1-D2, P1-D3
+├─ Strategy: Locate bug, apply minimal fix, test, commit
 ├─ [ ] P1-S1 [ANALYZE](stack trace)
-├─ [ ] P1-S2 [IMPLEMENT](null check)
+├─ [ ] P1-S2 [IMPLEMENT](null check fix)
 ├─ [ ] P1-S3 [TEST]
-├─ [ ] P1-S4 [COMMIT]("fix: null check in getUserById")
+├─ [ ] P1-S4 [FIX](if tests fail)
+├─ [ ] P1-S5 [COMMIT]("fix: null check in getUserById")
 ├─ Deliverables:
 │   ├─ [ ] P1-D1: Root cause identified
 │   ├─ [ ] P1-D2: Fix implemented
-│   └─ [ ] P1-D3: Tests pass
+│   ├─ [ ] P1-D3: Tests pass
+│   └─ [ ] P1-D4: Committed
 └─> Transitions:
-    - P1-D1 - P1-D3 checked → [END]
+    - P1-D1 - P1-D4 checked → [END]
     - Tests fail after 3 attempts → [CONSULT]
 ```
+
+**Key elements**: Objectives link to Deliverables (`← P1-D2, P1-D3`), steps use AGEN verbs, checkboxes track state.
 
 ## Table of Contents
 
@@ -234,8 +238,8 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - **AGEN** - Agentic English. PREN enriched with semantics: `@mentions`, `/workflow`, `[VERB]`, `[PLACEHOLDER]`
 - **HWT** - Human Work Time. Partition target: max 0.5h per task for predictable progress
 - **AWT** - Agentic Work Time. Agent time estimate for planning and capacity
-- **MEPI** - Most Executable Point of Information. Present 2-3 curated options aligned with implicit intentions. See [MEPI vs MCPI Principle](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md)
-- **MCPI** - Most Complete Point of Information. Present exhaustive options when thoroughness is explicitly required
+- [**MEPI**](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Executable Point of Information. Present 2-3 curated options aligned with implicit intentions.
+- [**MCPI**](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Complete Point of Information. Present exhaustive options when thoroughness is explicitly required
 - **SOCAS** - Signs Of Confusion And Sloppiness. 10 criteria for detecting agent degradation
 - **MNF** - Must Not Forget. Technique for critical item tracking during task execution
 - **ASANAPAP** - As Short As Necessary, As Precise As Possible. Conciseness principle for workflows and documents

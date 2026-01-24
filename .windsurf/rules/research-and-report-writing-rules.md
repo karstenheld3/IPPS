@@ -1,5 +1,7 @@
 # Research Rules
 
+Source: https://github.com/karstenheld3/IPPS/blob/master/Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md
+
 ## When to Use MEPI (Default)
 
 **MEPI** = Most Executable Point of Information. Present 2-3 curated options.

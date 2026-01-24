@@ -142,11 +142,15 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 
 - **GLOB** - Global/project-wide items
 - **MCPS** - MCP server integrations
+- **MEPI** - MEPI/MCPI research depth principle
 - **TRNGFX** - Transcription graphics/ASCII art optimization
 - **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
 - **SDDEV** - Spec-Driven Development (research topic)
 
 ## Document History
+
+**[2026-01-24 18:58]**
+- Added: MEPI topic (MEPI/MCPI research depth principle)
 
 **[2026-01-23 00:45]**
 - Added: LLMEV topic (LLM Evaluation Skill)

@@ -1,6 +1,6 @@
 # INFO: MEPI vs MCPI - Decision Cost Principle
 
-**Doc ID**: GLOB-IN01
+**Doc ID**: MEPI-IN01
 **Goal**: Explain the MEPI/MCPI principle for research and decision-making with backing from cognitive science and software/business practices
 **Timeline**: Created 2026-01-24, Updated 5 times
 
@@ -286,21 +286,21 @@ The following studies were reviewed but excluded because they address methodolog
 
 **Cognitive Science Sources:**
 
-- `GLOB-IN01-SC-TDLAB-SYS12`: https://thedecisionlab.com/reference-guide/philosophy/system-1-and-system-2-thinking - System 1/2 definition and Kahneman quote [VERIFIED]
-- `GLOB-IN01-SC-WIKI-SATIS`: https://en.wikipedia.org/wiki/Satisficing - Simon's satisficing theory, bounded rationality, maximizer/satisficer research [VERIFIED]
-- `GLOB-IN01-SC-TDLAB-PARA`: https://thedecisionlab.com/reference-guide/economics/the-paradox-of-choice - Paradox of choice definition, Schwartz quote [VERIFIED]
-- `GLOB-IN01-SC-MODTH-JAM`: https://modelthinkers.com/mental-model/paradox-of-choice - Jam study data (24 vs 6 jams, 3% vs 30% purchase) [VERIFIED]
-- `GLOB-IN01-SC-PUBM-MAXS`: https://pubmed.ncbi.nlm.nih.gov/12416921/ - Schwartz et al. 2002 study on maximizers vs satisficers [VERIFIED]
-- `GLOB-IN01-SC-TDLAB-SUNK`: https://thedecisionlab.com/biases/the-sunk-cost-fallacy - Sunk cost fallacy definition [VERIFIED]
-- `GLOB-IN01-SC-WIKI-ESCA`: https://en.wikipedia.org/wiki/Escalation_of_commitment - Escalation of commitment definition [VERIFIED]
+- `MEPI-IN01-SC-TDLAB-SYS12`: https://thedecisionlab.com/reference-guide/philosophy/system-1-and-system-2-thinking - System 1/2 definition and Kahneman quote [VERIFIED]
+- `MEPI-IN01-SC-WIKI-SATIS`: https://en.wikipedia.org/wiki/Satisficing - Simon's satisficing theory, bounded rationality, maximizer/satisficer research [VERIFIED]
+- `MEPI-IN01-SC-TDLAB-PARA`: https://thedecisionlab.com/reference-guide/economics/the-paradox-of-choice - Paradox of choice definition, Schwartz quote [VERIFIED]
+- `MEPI-IN01-SC-MODTH-JAM`: https://modelthinkers.com/mental-model/paradox-of-choice - Jam study data (24 vs 6 jams, 3% vs 30% purchase) [VERIFIED]
+- `MEPI-IN01-SC-PUBM-MAXS`: https://pubmed.ncbi.nlm.nih.gov/12416921/ - Schwartz et al. 2002 study on maximizers vs satisficers [VERIFIED]
+- `MEPI-IN01-SC-TDLAB-SUNK`: https://thedecisionlab.com/biases/the-sunk-cost-fallacy - Sunk cost fallacy definition [VERIFIED]
+- `MEPI-IN01-SC-WIKI-ESCA`: https://en.wikipedia.org/wiki/Escalation_of_commitment - Escalation of commitment definition [VERIFIED]
 
 **Software and Business Sources:**
 
-- `GLOB-IN01-SC-WIKI-ANPA`: https://en.wikipedia.org/wiki/Analysis_paralysis - Analysis paralysis definition, software development anti-pattern [VERIFIED]
-- `GLOB-IN01-SC-ISACA-ANPA`: https://www.isaca.org/resources/news-and-trends/newsletters/atisaca/2024/volume-5/how-to-avoid-analysis-paralysis-in-decision-making - BlackBerry/Microsoft case studies, causes of analysis paralysis [VERIFIED]
-- `GLOB-IN01-SC-WIKI-BDUF`: https://en.wikipedia.org/wiki/Big_design_up_front - BDUF arguments for/against, Spolsky quote [VERIFIED]
-- `GLOB-IN01-SC-FORB-BEZOS`: https://www.forbes.com/sites/eriklarson/2018/09/24/how-jeff-bezos-uses-faster-better-decisions-to-keep-amazon-innovating/ - Bezos 70% rule, Type 1/2 decisions, disagree and commit [VERIFIED]
-- `GLOB-IN01-SC-MCKIN-SPEED`: McKinsey research - Speed and quality correlation (URL inaccessible, cited from search summary) [ASSUMED]
+- `MEPI-IN01-SC-WIKI-ANPA`: https://en.wikipedia.org/wiki/Analysis_paralysis - Analysis paralysis definition, software development anti-pattern [VERIFIED]
+- `MEPI-IN01-SC-ISACA-ANPA`: https://www.isaca.org/resources/news-and-trends/newsletters/atisaca/2024/volume-5/how-to-avoid-analysis-paralysis-in-decision-making - BlackBerry/Microsoft case studies, causes of analysis paralysis [VERIFIED]
+- `MEPI-IN01-SC-WIKI-BDUF`: https://en.wikipedia.org/wiki/Big_design_up_front - BDUF arguments for/against, Spolsky quote [VERIFIED]
+- `MEPI-IN01-SC-FORB-BEZOS`: https://www.forbes.com/sites/eriklarson/2018/09/24/how-jeff-bezos-uses-faster-better-decisions-to-keep-amazon-innovating/ - Bezos 70% rule, Type 1/2 decisions, disagree and commit [VERIFIED]
+- `MEPI-IN01-SC-MCKIN-SPEED`: McKinsey research - Speed and quality correlation (URL inaccessible, cited from search summary) [ASSUMED]
 
 **Book References:**
 
