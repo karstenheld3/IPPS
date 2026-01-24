@@ -1,0 +1,1 @@
+This image shows a modern, colorful logo consisting of two interlocked rounded rectangular shapes with vibrant gradient colors transitioning from blue and purple to yellow and orange.

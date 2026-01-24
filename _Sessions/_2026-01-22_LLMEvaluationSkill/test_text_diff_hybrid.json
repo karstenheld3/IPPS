@@ -1,0 +1,65 @@
+{
+  "summary": {
+    "method": "hybrid",
+    "total_files": 2,
+    "exact_match": false,
+    "avg_similarity": 0.9373,
+    "max_distance": 0.0627,
+    "judge_usage": {
+      "model": "gpt-4o",
+      "total_input_tokens": 698,
+      "total_output_tokens": 16,
+      "calls": 1
+    }
+  },
+  "input_files": [
+    {
+      "path": "test_hybrid\\run1_text_diff_img_same.md",
+      "size_bytes": 740
+    },
+    {
+      "path": "test_hybrid\\run2_text_diff_img_same.md",
+      "size_bytes": 739
+    }
+  ],
+  "comparison": {
+    "files": [
+      "run1_text_diff_img_same.md",
+      "run2_text_diff_img_same.md"
+    ],
+    "exact_match": false,
+    "pairwise": [
+      {
+        "a": "run1_text_diff_img_same.md",
+        "b": "run2_text_diff_img_same.md",
+        "distance": 0.0627,
+        "similarity": 0.9373,
+        "diff_lines": 4
+      }
+    ],
+    "avg_similarity": 0.9373,
+    "max_distance": 0.0627,
+    "text": {
+      "method": "levenshtein",
+      "avg_similarity": 0.7925
+    },
+    "images": {
+      "method": "llm-judge",
+      "model": "gpt-4o",
+      "avg_similarity": 1.0,
+      "figures": [
+        {
+          "figure": "Figure 1",
+          "score": 1.0,
+          "differences": []
+        }
+      ],
+      "usage": {
+        "input_tokens": 698,
+        "output_tokens": 16,
+        "calls": 1
+      }
+    }
+  },
+  "generated": "2026-01-24T20:20:15.154114+00:00"
+}

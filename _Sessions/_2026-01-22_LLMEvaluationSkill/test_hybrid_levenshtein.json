@@ -1,0 +1,46 @@
+{
+  "summary": {
+    "method": "levenshtein",
+    "total_groups": 0,
+    "total_files": 0,
+    "exact_matches": 0,
+    "avg_similarity": 1.0,
+    "max_distance": 0.0
+  },
+  "input_files": [
+    {
+      "path": "test_hybrid\\run1_both_diff.md",
+      "size_bytes": 653
+    },
+    {
+      "path": "test_hybrid\\run1_both_identical.md",
+      "size_bytes": 534
+    },
+    {
+      "path": "test_hybrid\\run1_text_diff_img_same.md",
+      "size_bytes": 740
+    },
+    {
+      "path": "test_hybrid\\run1_text_same_img_diff.md",
+      "size_bytes": 940
+    },
+    {
+      "path": "test_hybrid\\run2_both_diff.md",
+      "size_bytes": 672
+    },
+    {
+      "path": "test_hybrid\\run2_both_identical.md",
+      "size_bytes": 534
+    },
+    {
+      "path": "test_hybrid\\run2_text_diff_img_same.md",
+      "size_bytes": 739
+    },
+    {
+      "path": "test_hybrid\\run2_text_same_img_diff.md",
+      "size_bytes": 946
+    }
+  ],
+  "comparisons": [],
+  "generated": "2026-01-24T20:18:12.966440+00:00"
+}

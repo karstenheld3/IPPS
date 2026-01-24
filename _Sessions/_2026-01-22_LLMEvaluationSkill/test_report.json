@@ -1,0 +1,116 @@
+{
+  "summary": {
+    "method": "levenshtein",
+    "total_files": 5,
+    "exact_match": false,
+    "avg_similarity": 0.2763,
+    "max_distance": 0.8852
+  },
+  "input_files": [
+    {
+      "path": "test_output\\compare_test1.md",
+      "size_bytes": 28
+    },
+    {
+      "path": "test_output\\compare_test2.md",
+      "size_bytes": 28
+    },
+    {
+      "path": "test_output\\test_claude_sonnet_4_20250514_low.md",
+      "size_bytes": 183
+    },
+    {
+      "path": "test_output\\test_gpt_4o_none.md",
+      "size_bytes": 112
+    },
+    {
+      "path": "test_output\\test_prompt.md",
+      "size_bytes": 36
+    }
+  ],
+  "comparison": {
+    "files": [
+      "compare_test1.md",
+      "compare_test2.md",
+      "test_claude_sonnet_4_20250514_low.md",
+      "test_gpt_4o_none.md",
+      "test_prompt.md"
+    ],
+    "exact_match": false,
+    "pairwise": [
+      {
+        "a": "compare_test1.md",
+        "b": "compare_test2.md",
+        "distance": 0.0357,
+        "similarity": 0.9643,
+        "diff_lines": 1
+      },
+      {
+        "a": "compare_test1.md",
+        "b": "test_claude_sonnet_4_20250514_low.md",
+        "distance": 0.8798,
+        "similarity": 0.1202,
+        "diff_lines": 1
+      },
+      {
+        "a": "compare_test1.md",
+        "b": "test_gpt_4o_none.md",
+        "distance": 0.8304,
+        "similarity": 0.1696,
+        "diff_lines": 1
+      },
+      {
+        "a": "compare_test1.md",
+        "b": "test_prompt.md",
+        "distance": 0.7222,
+        "similarity": 0.2778,
+        "diff_lines": 1
+      },
+      {
+        "a": "compare_test2.md",
+        "b": "test_claude_sonnet_4_20250514_low.md",
+        "distance": 0.8852,
+        "similarity": 0.1148,
+        "diff_lines": 1
+      },
+      {
+        "a": "compare_test2.md",
+        "b": "test_gpt_4o_none.md",
+        "distance": 0.8393,
+        "similarity": 0.1607,
+        "diff_lines": 1
+      },
+      {
+        "a": "compare_test2.md",
+        "b": "test_prompt.md",
+        "distance": 0.75,
+        "similarity": 0.25,
+        "diff_lines": 1
+      },
+      {
+        "a": "test_claude_sonnet_4_20250514_low.md",
+        "b": "test_gpt_4o_none.md",
+        "distance": 0.6612,
+        "similarity": 0.3388,
+        "diff_lines": 1
+      },
+      {
+        "a": "test_claude_sonnet_4_20250514_low.md",
+        "b": "test_prompt.md",
+        "distance": 0.847,
+        "similarity": 0.153,
+        "diff_lines": 1
+      },
+      {
+        "a": "test_gpt_4o_none.md",
+        "b": "test_prompt.md",
+        "distance": 0.7857,
+        "similarity": 0.2143,
+        "diff_lines": 1
+      }
+    ],
+    "avg_similarity": 0.2763,
+    "max_distance": 0.8852
+  },
+  "generated": "2026-01-24T20:12:00.664567+00:00"
+}

@@ -1,0 +1,38 @@
+{
+  "summary": {
+    "method": "levenshtein",
+    "total_files": 2,
+    "exact_match": false,
+    "avg_similarity": 0.8768,
+    "max_distance": 0.1232
+  },
+  "input_files": [
+    {
+      "path": "test_hybrid\\run1_text_same_img_diff.md",
+      "size_bytes": 940
+    },
+    {
+      "path": "test_hybrid\\run2_text_same_img_diff.md",
+      "size_bytes": 946
+    }
+  ],
+  "comparison": {
+    "files": [
+      "run1_text_same_img_diff.md",
+      "run2_text_same_img_diff.md"
+    ],
+    "exact_match": false,
+    "pairwise": [
+      {
+        "a": "run1_text_same_img_diff.md",
+        "b": "run2_text_same_img_diff.md",
+        "distance": 0.1232,
+        "similarity": 0.8768,
+        "diff_lines": 8
+      }
+    ],
+    "avg_similarity": 0.8768,
+    "max_distance": 0.1232
+  },
+  "generated": "2026-01-24T20:18:31.389221+00:00"
+}

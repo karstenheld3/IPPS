@@ -1,0 +1,10 @@
+{
+  "model": "gpt-4o-2024-08-06",
+  "usage": {
+    "input_tokens": 269,
+    "output_tokens": 21
+  },
+  "timestamp": "2026-01-24T19:37:14.907704+00:00",
+  "input_file": "E:\\Dev\\KarstensWorkspace\\_Sessions\\_2026-01-23_LLMTranscriptionEvaluation\\2026-01-23_TranscriptionVariabilityComparison\\01_input\\ic_fluent_copilot_64_256@2x.jpg",
+  "prompt_file": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-22_LLMEvaluationSkill\\test_output\\test_prompt.md"
+}

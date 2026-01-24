@@ -19,9 +19,10 @@ Backward-looking assessment of current state.
 - LEARNINGS.md (if exists)
 
 **PROJECT-WIDE mode** - Re-read workspace-level documents:
-- !NOTES.md
-- !PROBLEMS.md (if exists)
-- !PROGRESS.md (if exists)
+- README.md
+- !NOTES.md or NOTES.md
+- !PROBLEMS.md or PROBLEMS.md (if exists)
+- !PROGRESS.md or PROGRESS.md (if exists)
 - FAILS.md
 - LEARNINGS.md (if exists)
 

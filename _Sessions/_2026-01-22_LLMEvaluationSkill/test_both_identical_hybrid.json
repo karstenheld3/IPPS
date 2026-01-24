@@ -1,0 +1,65 @@
+{
+  "summary": {
+    "method": "hybrid",
+    "total_files": 2,
+    "exact_match": true,
+    "avg_similarity": 1.0,
+    "max_distance": 0.0,
+    "judge_usage": {
+      "model": "gpt-4o",
+      "total_input_tokens": 624,
+      "total_output_tokens": 16,
+      "calls": 1
+    }
+  },
+  "input_files": [
+    {
+      "path": "test_hybrid\\run1_both_identical.md",
+      "size_bytes": 534
+    },
+    {
+      "path": "test_hybrid\\run2_both_identical.md",
+      "size_bytes": 534
+    }
+  ],
+  "comparison": {
+    "files": [
+      "run1_both_identical.md",
+      "run2_both_identical.md"
+    ],
+    "exact_match": true,
+    "pairwise": [
+      {
+        "a": "run1_both_identical.md",
+        "b": "run2_both_identical.md",
+        "distance": 0.0,
+        "similarity": 1.0,
+        "diff_lines": 0
+      }
+    ],
+    "avg_similarity": 1.0,
+    "max_distance": 0.0,
+    "text": {
+      "method": "levenshtein",
+      "avg_similarity": 1.0
+    },
+    "images": {
+      "method": "llm-judge",
+      "model": "gpt-4o",
+      "avg_similarity": 1.0,
+      "figures": [
+        {
+          "figure": "Figure 1",
+          "score": 1.0,
+          "differences": []
+        }
+      ],
+      "usage": {
+        "input_tokens": 624,
+        "output_tokens": 16,
+        "calls": 1
+      }
+    }
+  },
+  "generated": "2026-01-24T20:20:19.249825+00:00"
+}

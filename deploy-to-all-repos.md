@@ -61,16 +61,19 @@ Execute the following for each repo in `[LINKED_REPOS]`:
 
 Check that the target repo path exists. Skip if not found (warn user).
 
-#### 2.2 Compare Source and Target Files
+#### 2.2 Compare Source and Target Files (Parallel)
 
-Use this PowerShell snippet to analyze all target repos at once:
+Use this PowerShell snippet to analyze all target repos **in parallel**:
 
 ```powershell
-# Compare DevSystem files between source and multiple target repos
+# Compare DevSystem files between source and multiple target repos (PARALLEL)
 $source = "[WORKSPACE_FOLDER]\.windsurf"  # This repo's .windsurf folder
 $targets = @(
     # Populate from [LINKED_REPOS] in !NOTES.md
 )
+
+# NOTE: Run comparisons in parallel for faster analysis
+# $targets | ForEach-Object -Parallel { ... } -ThrottleLimit 4
 
 # Deprecated files from V1, V2, V3 migrations (only these can be deleted)
 $deprecatedFiles = @{
