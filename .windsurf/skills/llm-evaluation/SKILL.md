@@ -103,10 +103,57 @@ python analyze-costs.py --input-folder transcriptions/ --output-file costs.json
 - `--output-file` - Output JSON file
 - `--pricing` - Custom pricing file (default: model-pricing.json)
 
+### compare-transcription-runs.py - Hybrid Comparison
+
+```powershell
+python compare-transcription-runs.py --files run1/*.md run2/*.md --output-file comparison.json --method hybrid --judge-model gpt-5-mini --judge-prompt prompts/compare-image-transcription.md
+```
+
+**Parameters:**
+- `--files` - List of files to compare (2+ files)
+- `--input-folder` - Folder with files (alternative to --files)
+- `--output-file` - Output JSON file (required)
+- `--method` - Comparison method: levenshtein, semantic, hybrid (default: levenshtein)
+- `--judge-model` - LLM judge model (required for semantic/hybrid)
+- `--judge-prompt` - Judge prompt file (default: built-in)
+- `--temperature` - Effort level: none, minimal, low, medium, high, xhigh (default: medium)
+- `--reasoning-effort` - Reasoning effort level (for reasoning models)
+- `--output-length` - Output length effort level (default: medium)
+- `--baseline` - Baseline file for comparison
+- `--grouped` - Group files by source name
+- `--keys-file` - API keys file (default: .env)
+
+**Features:**
+- Hybrid comparison: Levenshtein for text, LLM judge for images
+- Section parsing: splits by `<transcription_image>` tags
+- Effort level control: temperature, reasoning_effort, output_length
+- Model-aware parameter building (temperature vs reasoning models)
+
+### llm-evaluation-selftest.py - Self-Test
+
+```powershell
+python llm-evaluation-selftest.py [--skip-api-calls]
+```
+
+**Purpose:**
+Validates all scripts work correctly and detects breaking changes during development.
+
+**Tests:**
+- Configuration file loading (model-registry.json, model-pricing.json, model-parameter-mapping.json)
+- Script help text availability
+- File type detection logic
+- JSON output schema validation
+- API integration (optional, requires valid API keys)
+
+**Exit codes:**
+- 0 - All tests passed
+- 1 - One or more tests failed
+
 ## Configuration Files
 
-- `model-registry.json` - Available models with providers and status
+- `model-registry.json` - Model definitions with provider, method (temperature/reasoning_effort/thinking), max_output, and parameter constraints
 - `model-pricing.json` - Token costs per model (USD)
+- `model-parameter-mapping.json` - Effort level mappings (none/minimal/low/medium/high/xhigh) to API parameters
 - `schemas/default-questions.json` - Default question categories
 
 ## Prompts
@@ -115,6 +162,18 @@ python analyze-costs.py --input-folder transcriptions/ --output-file costs.json
 - `prompts/summarize-text.md` - Text summarization
 - `prompts/answer-from-text.md` - Question answering
 - `prompts/judge-answer.md` - Answer scoring (0-5)
+- `prompts/compare-image-transcription.md` - Semantic similarity scoring for image transcriptions (0-100)
+
+## Judge Prompt Calibration
+
+The `compare-image-transcription.md` prompt has been calibrated with degradation test cases (0%, 25%, 50%, 75%, 98% similarity).
+
+**Tested models:**
+- **gpt-4o**: Overestimates 75% similarity (95% vs expected 65-85), otherwise acceptable
+- **gpt-5-mini**: Best calibration, all test cases within tolerance (recommended)
+- **claude-sonnet-4-5-20250929**: Parse error with extended thinking output (known issue)
+
+**Recommendation:** Use gpt-5-mini as default judge model for best accuracy.
 
 ## Pipeline Example
 
