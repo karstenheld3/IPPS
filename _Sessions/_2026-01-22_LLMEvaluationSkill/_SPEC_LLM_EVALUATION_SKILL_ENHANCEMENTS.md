@@ -52,7 +52,6 @@
 - Save all parameters in output metadata for reproducibility
 
 **What we don't want:**
-- Breaking existing CLI usage
 - Provider-specific flags (keep it generic, handle internally)
 - Complex configuration files (CLI-first)
 
@@ -326,45 +325,92 @@ Same new parameters, plus recorded in `used_settings_{model}.json`:
 }
 ```
 
-## 9. New Script: compare-outputs.py
+## 9. Script: compare-transcription-runs.py
+
+Renamed from `compare-outputs.py` to reflect purpose: comparing transcription runs with hybrid text/image comparison.
 
 ### Usage
 
 ```powershell
-python compare-outputs.py --input-folder outputs/ --output-file comparison.json
-python compare-outputs.py --files output1.md output2.md output3.md --output-file comparison.json
+# Basic (Levenshtein only)
+python compare-transcription-runs.py --input-folder runs/ --output-file report.json
+
+# Hybrid comparison (text=Levenshtein, images=LLM-judge)
+python compare-transcription-runs.py --input-folder runs/ --output-file report.json \
+    --method hybrid \
+    --judge-model gpt-4o \
+    --judge-prompt prompts/compare-images.md \
+    --keys-file .tools/.api-keys.txt \
+    --temperature medium \
+    --reasoning-effort medium \
+    --output-length none
 ```
 
 ### Parameters
 
 - `--input-folder` - Folder with output files to compare
-- `--files` - Explicit list of files to compare
-- `--output-file` - JSON report output
+- `--files` - Explicit list of files to compare (mutually exclusive with --input-folder)
+- `--output-file` - JSON report output (required)
+- `--method` - Comparison method: `levenshtein` (default), `semantic`, `hybrid`
+- `--judge-model` - Model for semantic/hybrid comparison (required for those methods)
+- `--judge-prompt` - Custom judge prompt file (default: built-in)
+- `--keys-file` - API keys file (default: .env)
+- `--temperature` - Judge temperature effort level (default: medium)
+- `--reasoning-effort` - Judge reasoning effort (default: medium)
+- `--output-length` - Judge output length (default: none)
 - `--group-by-input` - Group by source input file (extract from filename)
 - `--baseline` - File to use as baseline for comparison
+
+### Hybrid Comparison Algorithm
+
+1. **Parse sections** - Split content by `<transcription_image>` tags
+2. **Text sections** (outside tags) - Compare with Levenshtein distance
+3. **Image sections** (inside tags) - Compare with LLM-as-a-judge (semantic equivalence)
+4. **Combine scores** - Weighted average or separate reporting
 
 ### Output Schema
 
 ```json
 {
   "summary": {
-    "total_files": 10,
+    "method": "hybrid",
+    "total_files": 6,
+    "text_avg_similarity": 0.95,
+    "image_avg_similarity": 0.87,
+    "combined_avg_similarity": 0.91,
     "exact_matches": 0,
-    "avg_similarity": 0.87,
-    "max_distance": 0.23
+    "judge_usage": {
+      "model": "gpt-4o",
+      "total_input_tokens": 12450,
+      "total_output_tokens": 890,
+      "calls": 18
+    }
   },
+  "input_files": [
+    {"path": "runs/page001_run1.md", "size_bytes": 4521},
+    {"path": "runs/page001_run2.md", "size_bytes": 4498}
+  ],
   "comparisons": [
     {
-      "group": "image1.jpg",
-      "files": ["image1_run01.md", "image1_run02.md", "image1_run03.md"],
-      "exact_match": false,
-      "pairwise": [
-        {"a": "run01", "b": "run02", "distance": 0.08, "diff_lines": 3},
-        {"a": "run01", "b": "run03", "distance": 0.12, "diff_lines": 5}
-      ],
-      "avg_similarity": 0.90
+      "group": "page001",
+      "files": ["page001_run1.md", "page001_run2.md"],
+      "text": {
+        "method": "levenshtein",
+        "avg_similarity": 0.95,
+        "pairwise": [{"a": "run1", "b": "run2", "distance": 0.05, "diff_lines": 3}]
+      },
+      "images": {
+        "method": "llm-judge",
+        "model": "gpt-4o",
+        "avg_similarity": 0.87,
+        "usage": {"input_tokens": 4150, "output_tokens": 297},
+        "figures": [
+          {"figure": "Figure 1", "avg_score": 0.90, "pairwise": [...]}
+        ]
+      }
     }
-  ]
+  ],
+  "generated": "2026-01-24T21:00:00Z"
 }
 ```
 
@@ -373,17 +419,22 @@ python compare-outputs.py --files output1.md output2.md output3.md --output-file
 - **exact_match** - Boolean: all files identical
 - **distance** - Normalized Levenshtein (0.0 = identical, 1.0 = completely different)
 - **similarity** - 1.0 - distance
-- **diff_lines** - Count of lines that differ (simplified diff)
+- **diff_lines** - Count of lines that differ
+- **judge_usage** - Token usage for LLM judge calls (hybrid/semantic only)
 
 ## 10. Edge Cases
 
 **LLMEV-EC-01:** Effort level not supported by model -> Use fallback from mapping, print info message
 
-**LLMEV-EC-02:** Both `--input-folder` and `--files` provided to compare-outputs.py -> Error, mutually exclusive
+**LLMEV-EC-02:** Both `--input-folder` and `--files` provided to compare-transcription-runs.py -> Error, mutually exclusive
 
 **LLMEV-EC-03:** Seed provided for non-OpenAI or reasoning model -> Warning printed, parameter ignored
 
-**LLMEV-EC-04:** Empty output folder for compare-outputs.py -> Error with clear message
+**LLMEV-EC-04:** Empty output folder for compare-transcription-runs.py -> Error with clear message
+
+**LLMEV-EC-07:** `--method hybrid` without `--judge-model` -> Error with clear message
+
+**LLMEV-EC-08:** No `<transcription_image>` tags found with hybrid method -> Fall back to levenshtein with warning
 
 **LLMEV-EC-05:** Non-text files in comparison folder -> Skip with warning
 
