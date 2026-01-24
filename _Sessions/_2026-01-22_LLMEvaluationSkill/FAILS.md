@@ -10,6 +10,38 @@
 
 ## Active Issues
 
+### `LLMEV-FL-013` Repeatedly misunderstanding user's parameter design intent
+
+- **Severity**: [MEDIUM]
+- **When**: 2026-01-24 19:41
+- **Where**: model-parameter-mapping.json design iterations
+- **What**: Agent kept trying to create a unified `--effort` parameter when user wanted THREE separate CLI params (`--temperature`, `--reasoning-effort`, `--output-length`) that all use the same keywords. Required multiple corrections before understanding.
+- **Evidence**: User said "you misunderstood me!" and had to explicitly clarify the three-parameter design
+- **Why it went wrong**: 
+  1. Assumed user wanted simplification when they wanted granular control
+  2. Did not ask clarifying questions early
+  3. Kept iterating on wrong design instead of stopping to confirm understanding
+- **Suggested fix**: 
+  1. When user says "no" or corrects, STOP and ask for clarification
+  2. Restate understanding before implementing: "So you want X, Y, Z - is that correct?"
+  3. Don't assume simplification is always the goal
+
+### `LLMEV-FL-012` Repeatedly confusing API parameter ranges between providers
+
+- **Severity**: [MEDIUM]
+- **When**: 2026-01-24 19:27
+- **Where**: SPEC document, model-parameter-mapping.json, multiple iterations
+- **What**: Agent repeatedly wrote incorrect temperature ranges - swapping OpenAI (0-2) and Anthropic (0-1) values. User had to correct multiple times.
+- **Evidence**: User stated "this again has the openai temp 0...1 anthropic 0...2 bug" indicating repeated error
+- **Why it went wrong**: 
+  1. Did not verify claims against original research before asserting "values are correct"
+  2. Pattern of assuming correctness instead of double-checking
+  3. When user reports error, should investigate rather than defend
+- **Suggested fix**: 
+  1. When user reports a bug, assume they are correct and find it
+  2. Create reference table and verify against it each time
+  3. **OpenAI legacy: 0-2, Anthropic: 0-1** (memorize this)
+
 ### `LLMEV-FL-010` Failed to recognize workspace workflow and executed without confirmation
 
 - **Severity**: [MEDIUM]
@@ -37,6 +69,15 @@
 - **Suggested fix**: Before running test commands, always read NOTES.md Test Configuration section and use those exact values
 
 ## Resolved Issues
+
+### 2026-01-24 - Session Artifact Location
+
+#### [RESOLVED] `LLMEV-FL-011` Saved session artifacts outside [SESSION_FOLDER]
+
+- **Original severity**: [HIGH]
+- **Resolved**: 2026-01-24 17:00
+- **Solution**: Moved all artifacts to `2026-01-23_TranscriptionVariabilityComparison\` subfolder in session
+- **Lesson**: Always check for active session before creating artifacts; INFO/SPEC/IMPL/TEST docs MUST go in [SESSION_FOLDER]
 
 ### 2026-01-22 - Wrong Location
 
@@ -114,6 +155,15 @@
 - **Link**: Commit `07b6318`
 
 ## Document History
+
+**[2026-01-24 19:41]**
+- Added: LLMEV-FL-013 for misunderstanding user's parameter design intent
+
+**[2026-01-24 19:27]**
+- Added: LLMEV-FL-012 for repeatedly confusing temperature ranges between providers
+
+**[2026-01-24 16:58]**
+- Added: LLMEV-FL-011 for saving session artifacts outside [SESSION_FOLDER]
 
 **[2026-01-23 11:05]**
 - Added: LLMEV-FL-010 for executing ambiguous command without confirmation
