@@ -23,9 +23,12 @@
     {"provider": "openai", "model_id": "o3-pro", "name": "O3 Pro", "enabled": false, "status": "untested"},
     {"provider": "openai", "model_id": "o3-mini", "name": "O3 Mini", "enabled": false, "status": "untested"},
     {"provider": "openai", "model_id": "o4-mini", "name": "O4 Mini", "enabled": false, "status": "untested"},
+    {"provider": "anthropic", "model_id": "claude-opus-4-5-?", "name": "Claude Opus 4.5", "enabled": false, "status": "unknown_id"},
     {"provider": "anthropic", "model_id": "claude-sonnet-4-5-20250929", "name": "Claude Sonnet 4.5", "enabled": true, "status": "available"},
     {"provider": "anthropic", "model_id": "claude-opus-4-20250514", "name": "Claude Opus 4", "enabled": false, "status": "streaming_required"},
     {"provider": "anthropic", "model_id": "claude-sonnet-4-20250514", "name": "Claude Sonnet 4", "enabled": true, "status": "available"},
+    {"provider": "anthropic", "model_id": "claude-haiku-4-5-?", "name": "Claude Haiku 4.5", "enabled": false, "status": "unknown_id"},
+    {"provider": "anthropic", "model_id": "claude-3-7-sonnet-20250219", "name": "Claude 3.7 Sonnet", "enabled": true, "status": "available"},
     {"provider": "anthropic", "model_id": "claude-3-5-sonnet-20241022", "name": "Claude 3.5 Sonnet", "enabled": false, "status": "deprecated"},
     {"provider": "anthropic", "model_id": "claude-3-5-haiku-20241022", "name": "Claude 3.5 Haiku", "enabled": true, "status": "available"}
   ],

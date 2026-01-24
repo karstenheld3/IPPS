@@ -216,6 +216,7 @@ Session testing from **2026-01-22 to 2026-01-24**:
 - `gpt-4o-mini` - OpenAI, temperature model
 - `claude-sonnet-4-5-20250929` - Anthropic, Claude Sonnet 4.5
 - `claude-sonnet-4-20250514` - Anthropic, Claude Sonnet 4
+- `claude-3-7-sonnet-20250219` - Anthropic, Claude 3.7 Sonnet
 - `claude-3-5-haiku-20241022` - Anthropic, Claude 3.5 Haiku
 
 **Pipeline tested (full evaluation workflow):**
