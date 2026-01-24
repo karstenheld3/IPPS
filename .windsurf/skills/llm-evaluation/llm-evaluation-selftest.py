@@ -6,7 +6,12 @@ Validates that all scripts work correctly with minimal API calls.
 Detects breaking changes during development.
 
 Usage:
-    python llm-evaluation-selftest.py [--skip-api-calls]
+    python llm-evaluation-selftest.py [--skip-api-calls] [--model MODEL] [--keys-file PATH]
+    
+Options:
+    --skip-api-calls    Skip actual API integration tests
+    --model MODEL       Model to use for API tests (default: gpt-4o-mini)
+    --keys-file PATH    Path to API keys file (default: .env)
     
 Exit codes:
     0 - All tests passed
@@ -22,9 +27,16 @@ import subprocess
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-# Test configuration
-TEST_MODEL = "gpt-4o-mini"  # Cheap model for testing
+# Parse command line arguments
 SKIP_API = "--skip-api-calls" in sys.argv
+TEST_MODEL = "gpt-4o-mini"
+KEYS_FILE = ".env"
+
+for i, arg in enumerate(sys.argv):
+    if arg == "--model" and i + 1 < len(sys.argv):
+        TEST_MODEL = sys.argv[i + 1]
+    elif arg == "--keys-file" and i + 1 < len(sys.argv):
+        KEYS_FILE = sys.argv[i + 1]
 
 class TestResult:
     def __init__(self):
@@ -263,6 +275,9 @@ def test_api_integration(skill_dir: Path, temp_dir: Path, fixtures: Dict, result
         results.add_skip("API call test (use real API keys to test)")
         return
     
+    # Use real keys file if specified, otherwise use test fixtures
+    keys_path = Path(KEYS_FILE) if Path(KEYS_FILE).exists() else fixtures["keys"]
+    
     # Test single call
     output_file = temp_dir / "output.txt"
     code, out, err = run_script("call-llm.py", [
@@ -270,7 +285,7 @@ def test_api_integration(skill_dir: Path, temp_dir: Path, fixtures: Dict, result
         "--input-file", str(fixtures["text"]),
         "--prompt-file", str(fixtures["prompt"]),
         "--output-file", str(output_file),
-        "--keys-file", str(fixtures["keys"])
+        "--keys-file", str(keys_path)
     ], skill_dir)
     
     if code == 0 and output_file.exists():
@@ -291,6 +306,8 @@ def main():
         return 1
     
     print(f"Skill directory: {skill_dir}")
+    print(f"Test model: {TEST_MODEL}")
+    print(f"Keys file: {KEYS_FILE}")
     print(f"API calls: {'SKIPPED' if SKIP_API else 'ENABLED'}")
     
     results = TestResult()
