@@ -79,6 +79,13 @@ def build_api_params(model: str, mapping: dict, registry: dict,
     max_output = model_config.get('max_output', 16384)
     params['max_tokens'] = int(output_factor * max_output)
     
+    # Anthropic constraint: max_tokens must be > thinking.budget_tokens
+    if 'thinking' in params and params['thinking'].get('budget_tokens', 0) > 0:
+        thinking_budget = params['thinking']['budget_tokens']
+        if params['max_tokens'] <= thinking_budget:
+            params['max_tokens'] = thinking_budget + 1024
+            print(f"[WARN] max_tokens adjusted to {params['max_tokens']} (must be > thinking budget {thinking_budget})", file=sys.stderr)
+    
     if seed is not None:
         if model_config.get('seed', False):
             params['seed'] = seed
@@ -286,8 +293,15 @@ def call_anthropic(client, model: str, prompt: str, api_params: dict, method: st
     
     response = client.messages.create(**call_params)
     
+    # Handle thinking responses: find text block (skip ThinkingBlock)
+    text_content = ""
+    for block in response.content:
+        if hasattr(block, 'text'):
+            text_content = block.text
+            break
+    
     return {
-        "text": response.content[0].text,
+        "text": text_content,
         "usage": {
             "input_tokens": response.usage.input_tokens,
             "output_tokens": response.usage.output_tokens
