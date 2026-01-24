@@ -199,6 +199,22 @@ $skill = ".windsurf\skills\llm-evaluation"
 & $venv "$skill\analyze-costs.py" --input-folder transcriptions/ --output-file cost_analysis.json
 ```
 
+## Tested Models
+
+Self-test results from **2026-01-24 23:45 UTC+01:00**:
+
+**Passed (15/15 tests):**
+- `gpt-4o` - OpenAI, temperature model
+- `gpt-4o-mini` - OpenAI, temperature model
+- `gpt-5-mini` - OpenAI, reasoning model
+- `claude-sonnet-4-20250514` - Anthropic, extended thinking model
+- `claude-3-5-haiku-20241022` - Anthropic, temperature model
+
+**Disabled:**
+- `o1-preview`, `o1-mini` - No API access
+- `claude-opus-4-20250514` - Requires streaming for extended thinking (>10 min timeout)
+- `claude-3-5-sonnet-20241022` - Model deprecated
+
 ## Key Patterns
 
 **Retry with backoff:**
