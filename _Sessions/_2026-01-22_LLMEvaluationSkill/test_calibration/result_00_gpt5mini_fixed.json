@@ -1,0 +1,77 @@
+{
+  "summary": {
+    "method": "hybrid",
+    "total_files": 2,
+    "exact_match": false,
+    "avg_similarity": 0.2923,
+    "max_distance": 0.7077,
+    "judge_usage": {
+      "model": "gpt-5-mini",
+      "total_input_tokens": 978,
+      "total_output_tokens": 582,
+      "calls": 1
+    }
+  },
+  "input_files": [
+    {
+      "path": "test_calibration\\deg_00_completely_different.md",
+      "size_bytes": 783
+    },
+    {
+      "path": "test_calibration\\reference.md",
+      "size_bytes": 1808
+    }
+  ],
+  "comparison": {
+    "files": [
+      "deg_00_completely_different.md",
+      "reference.md"
+    ],
+    "exact_match": false,
+    "pairwise": [
+      {
+        "a": "deg_00_completely_different.md",
+        "b": "reference.md",
+        "distance": 0.7077,
+        "similarity": 0.2923,
+        "diff_lines": 42
+      }
+    ],
+    "avg_similarity": 0.2923,
+    "max_distance": 0.7077,
+    "text": {
+      "method": "levenshtein",
+      "avg_similarity": 1.0
+    },
+    "images": {
+      "method": "llm-judge",
+      "model": "gpt-5-mini",
+      "avg_similarity": 0.05,
+      "figures": [
+        {
+          "figure": "Figure 1",
+          "score": 0.05,
+          "differences": [
+            "Completely different subject matter: Transcription A is a quarterly sales revenue chart, Transcription B is a user authentication flow diagram",
+            "Different structural elements: A describes bars/curve and axes, B describes actor boxes, arrows, and a database node",
+            "Different hierarchy/flow: A is an XY chart with time on x-axis and revenue on y-axis; B is a left-to-right message sequence/timeline between actors",
+            "Labels and annotations differ: A uses Q1\u2013Q4 and revenue values, B uses numbered steps 1\u20135, USER/SERVER/DB labels",
+            "Mode mismatch: A mode = Shading (chart), B mode = Structural (sequence diagram)",
+            "Colors documented do not match: A lists purple/white/black for chart elements, B lists blue/green/orange/gray for actors/arrows",
+            "Different reconstruction hints: A says 'curve shows growth then decline' and 'peak Q2\u2013Q3'; B gives 'server box larger, database shown as cylinder' and step sequence",
+            "Dimensions differ significantly (35x15 vs 60x25) and imply different spatial complexity",
+            "Visual details missed differ: A notes missing exact values/grid lines; B notes missing colors/icons/rounded corners",
+            "Relationships and directional flow differ: A shows numeric magnitude over quarters, B shows message exchange and session establishment",
+            "Completeness mismatch: Each includes elements the other omits entirely (e.g., axes and numerical peaks vs session token generation and cookie storage)"
+          ]
+        }
+      ],
+      "usage": {
+        "input_tokens": 978,
+        "output_tokens": 582,
+        "calls": 1
+      }
+    }
+  },
+  "generated": "2026-01-24T20:36:00.521087+00:00"
+}

@@ -1,0 +1,67 @@
+{
+  "summary": {
+    "method": "hybrid",
+    "total_files": 2,
+    "exact_match": false,
+    "avg_similarity": 0.5465,
+    "max_distance": 0.4535,
+    "judge_usage": {
+      "model": "claude-sonnet-4-5-20250929",
+      "total_input_tokens": 1119,
+      "total_output_tokens": 1582,
+      "calls": 1
+    }
+  },
+  "input_files": [
+    {
+      "path": "test_calibration\\deg_50_half_missing.md",
+      "size_bytes": 1099
+    },
+    {
+      "path": "test_calibration\\reference.md",
+      "size_bytes": 1808
+    }
+  ],
+  "comparison": {
+    "files": [
+      "deg_50_half_missing.md",
+      "reference.md"
+    ],
+    "exact_match": false,
+    "pairwise": [
+      {
+        "a": "deg_50_half_missing.md",
+        "b": "reference.md",
+        "distance": 0.4535,
+        "similarity": 0.5465,
+        "diff_lines": 36
+      }
+    ],
+    "avg_similarity": 0.5465,
+    "max_distance": 0.4535,
+    "text": {
+      "method": "levenshtein",
+      "avg_similarity": 1.0
+    },
+    "images": {
+      "method": "llm-judge",
+      "model": "claude-sonnet-4-5-20250929",
+      "avg_similarity": 0.5,
+      "figures": [
+        {
+          "figure": "Figure 1",
+          "score": 0.5,
+          "differences": [
+            "Could not parse response"
+          ]
+        }
+      ],
+      "usage": {
+        "input_tokens": 1119,
+        "output_tokens": 1582,
+        "calls": 1
+      }
+    }
+  },
+  "generated": "2026-01-24T20:41:36.287455+00:00"
+}

@@ -1,0 +1,67 @@
+{
+  "summary": {
+    "method": "hybrid",
+    "total_files": 2,
+    "exact_match": false,
+    "avg_similarity": 0.996,
+    "max_distance": 0.004,
+    "judge_usage": {
+      "model": "gpt-5-mini",
+      "total_input_tokens": 0,
+      "total_output_tokens": 0,
+      "calls": 1
+    }
+  },
+  "input_files": [
+    {
+      "path": "test_calibration\\deg_98_near_perfect.md",
+      "size_bytes": 1804
+    },
+    {
+      "path": "test_calibration\\reference.md",
+      "size_bytes": 1808
+    }
+  ],
+  "comparison": {
+    "files": [
+      "deg_98_near_perfect.md",
+      "reference.md"
+    ],
+    "exact_match": false,
+    "pairwise": [
+      {
+        "a": "deg_98_near_perfect.md",
+        "b": "reference.md",
+        "distance": 0.004,
+        "similarity": 0.996,
+        "diff_lines": 1
+      }
+    ],
+    "avg_similarity": 0.996,
+    "max_distance": 0.004,
+    "text": {
+      "method": "levenshtein",
+      "avg_similarity": 1.0
+    },
+    "images": {
+      "method": "llm-judge",
+      "model": "gpt-5-mini",
+      "avg_similarity": 0.0,
+      "figures": [
+        {
+          "figure": "Figure 1",
+          "score": 0.0,
+          "differences": [
+            "Error code: 400 - {'error': {'message': \"Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.\", 'type': 'invalid_request_error', 'param': 'max_tokens', 'code': 'unsupported_parameter'}}"
+          ]
+        }
+      ],
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "calls": 1
+      }
+    }
+  },
+  "generated": "2026-01-24T20:27:14.416069+00:00"
+}

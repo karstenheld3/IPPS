@@ -1,0 +1,76 @@
+{
+  "summary": {
+    "method": "hybrid",
+    "total_files": 2,
+    "exact_match": false,
+    "avg_similarity": 0.3348,
+    "max_distance": 0.6652,
+    "judge_usage": {
+      "model": "gpt-5-mini",
+      "total_input_tokens": 952,
+      "total_output_tokens": 596,
+      "calls": 1
+    }
+  },
+  "input_files": [
+    {
+      "path": "test_calibration\\deg_25_major_errors.md",
+      "size_bytes": 846
+    },
+    {
+      "path": "test_calibration\\reference.md",
+      "size_bytes": 1808
+    }
+  ],
+  "comparison": {
+    "files": [
+      "deg_25_major_errors.md",
+      "reference.md"
+    ],
+    "exact_match": false,
+    "pairwise": [
+      {
+        "a": "deg_25_major_errors.md",
+        "b": "reference.md",
+        "distance": 0.6652,
+        "similarity": 0.3348,
+        "diff_lines": 42
+      }
+    ],
+    "avg_similarity": 0.3348,
+    "max_distance": 0.6652,
+    "text": {
+      "method": "levenshtein",
+      "avg_similarity": 1.0
+    },
+    "images": {
+      "method": "llm-judge",
+      "model": "gpt-5-mini",
+      "avg_similarity": 0.12,
+      "figures": [
+        {
+          "figure": "Figure 1",
+          "score": 0.12,
+          "differences": [
+            "Different diagram type: A is a three-tier system architecture diagram, B is a user authentication sequence/flow",
+            "Different primary components: A lists Client, Proxy, Backend (with Cache, Logs, Database), B lists User, Server, Database, Browser/Cookie, Session Token",
+            "Different relationships/flow: A shows horizontal connections between components (client -> proxy -> backend) while B shows a left-to-right/vertical timeline of message steps (credential submission, validation, token generation, redirect)",
+            "Labels and annotations differ: B includes numbered steps (1-5) and explicit message labels; A lacks stepwise messaging and instead notes caching/logging as components",
+            "Auxiliary elements differ: A highlights Cache and Logs as separate downstream elements; B highlights storing token in cookie and redirecting to dashboard",
+            "Color documentation differs: A uses Red/Blue/Green for client/proxy/backend; B uses Blue/Green/Orange/Gray for user/server/database/arrows",
+            "Reconstruction hints differ: A hints 'Proxy in the middle'; B hints server box larger and database shown as cylinder",
+            "Dimensions and level-of-detail differ: A is smaller (50x12) and focuses on structural tiers; B is larger (60x25) and details message flow and step labels",
+            "Missing/misplaced content: A's notes explicitly say authentication flow is completely missed; B documents authentication-specific elements that A omits (session token, cookie, redirect)",
+            "Overall semantic interpretation diverges: the two transcriptions represent different underlying visuals rather than two renditions of the same figure"
+          ]
+        }
+      ],
+      "usage": {
+        "input_tokens": 952,
+        "output_tokens": 596,
+        "calls": 1
+      }
+    }
+  },
+  "generated": "2026-01-24T20:36:02.291636+00:00"
+}

@@ -1,0 +1,76 @@
+{
+  "summary": {
+    "method": "hybrid",
+    "total_files": 2,
+    "exact_match": false,
+    "avg_similarity": 0.3348,
+    "max_distance": 0.6652,
+    "judge_usage": {
+      "model": "gpt-4o",
+      "total_input_tokens": 953,
+      "total_output_tokens": 97,
+      "calls": 1
+    }
+  },
+  "input_files": [
+    {
+      "path": "test_calibration\\deg_25_major_errors.md",
+      "size_bytes": 846
+    },
+    {
+      "path": "test_calibration\\reference.md",
+      "size_bytes": 1808
+    }
+  ],
+  "comparison": {
+    "files": [
+      "deg_25_major_errors.md",
+      "reference.md"
+    ],
+    "exact_match": false,
+    "pairwise": [
+      {
+        "a": "deg_25_major_errors.md",
+        "b": "reference.md",
+        "distance": 0.6652,
+        "similarity": 0.3348,
+        "diff_lines": 42
+      }
+    ],
+    "avg_similarity": 0.3348,
+    "max_distance": 0.6652,
+    "text": {
+      "method": "levenshtein",
+      "avg_similarity": 1.0
+    },
+    "images": {
+      "method": "llm-judge",
+      "model": "gpt-4o",
+      "avg_similarity": 0.2,
+      "figures": [
+        {
+          "figure": "Figure 1",
+          "score": 0.2,
+          "differences": [
+            "different structural elements identified",
+            "different hierarchy and flow depicted",
+            "different labels and annotations present",
+            "different colors documented",
+            "different visual details noted as missing",
+            "different reconstruction hints provided",
+            "different spatial arrangement described",
+            "different directional flow captured",
+            "different groupings or regions identified",
+            "different level of detail captured"
+          ]
+        }
+      ],
+      "usage": {
+        "input_tokens": 953,
+        "output_tokens": 97,
+        "calls": 1
+      }
+    }
+  },
+  "generated": "2026-01-24T20:26:43.291417+00:00"
+}
