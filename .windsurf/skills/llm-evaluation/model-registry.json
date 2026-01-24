@@ -9,6 +9,7 @@
     {"provider": "openai", "model_id": "gpt-5-mini", "name": "GPT-5 Mini", "enabled": true, "status": "available"},
     {"provider": "openai", "model_id": "o1-preview", "name": "O1 Preview", "enabled": false, "status": "no_access"},
     {"provider": "openai", "model_id": "o1-mini", "name": "O1 Mini", "enabled": false, "status": "no_access"},
+    {"provider": "anthropic", "model_id": "claude-sonnet-4-5-20250929", "name": "Claude Sonnet 4.5", "enabled": true, "status": "available"},
     {"provider": "anthropic", "model_id": "claude-opus-4-20250514", "name": "Claude Opus 4", "enabled": false, "status": "streaming_required"},
     {"provider": "anthropic", "model_id": "claude-sonnet-4-20250514", "name": "Claude Sonnet 4", "enabled": true, "status": "available"},
     {"provider": "anthropic", "model_id": "claude-3-5-sonnet-20241022", "name": "Claude 3.5 Sonnet", "enabled": false, "status": "deprecated"},

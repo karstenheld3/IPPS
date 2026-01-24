@@ -201,12 +201,13 @@ $skill = ".windsurf\skills\llm-evaluation"
 
 ## Tested Models
 
-Self-test results from **2026-01-24 23:45 UTC+01:00**:
+Self-test results from **2026-01-24 23:55 UTC+01:00**:
 
 **Passed (15/15 tests):**
 - `gpt-4o` - OpenAI, temperature model
 - `gpt-4o-mini` - OpenAI, temperature model
 - `gpt-5-mini` - OpenAI, reasoning model
+- `claude-sonnet-4-5-20250929` - Anthropic, Claude Sonnet 4.5, extended thinking model
 - `claude-sonnet-4-20250514` - Anthropic, extended thinking model
 - `claude-3-5-haiku-20241022` - Anthropic, temperature model
 
@@ -214,6 +215,18 @@ Self-test results from **2026-01-24 23:45 UTC+01:00**:
 - `o1-preview`, `o1-mini` - No API access
 - `claude-opus-4-20250514` - Requires streaming for extended thinking (>10 min timeout)
 - `claude-3-5-sonnet-20241022` - Model deprecated
+
+## Claude Model ID Reference
+
+**Why Claude 4.5 models may fail:** Anthropic uses versioned model IDs with date suffixes. Generic names like `claude-sonnet-4.5` do not work - you must use the full versioned ID.
+
+**Current Claude model IDs** (as of 2026-01-24):
+- `claude-sonnet-4-5-20250929` - Claude Sonnet 4.5 (recommended)
+- `claude-sonnet-4-20250514` - Claude Sonnet 4
+- `claude-opus-4-20250514` - Claude Opus 4 (requires streaming for extended thinking)
+- `claude-3-5-haiku-20241022` - Claude 3.5 Haiku
+
+**Note:** Aliases like `claude-sonnet-4-5` automatically point to the latest snapshot, but Anthropic recommends using specific versions (e.g., `claude-sonnet-4-5-20250929`) in production for consistent behavior.
 
 ## Key Patterns
 
