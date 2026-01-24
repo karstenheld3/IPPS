@@ -9,6 +9,15 @@ Forward-looking execution of next steps in a plan.
 
 ## Step 1: Identify Next Action
 
+**SESSION-BASED mode requirement**: Always re-read these tracking documents first:
+- NOTES.md
+- PROBLEMS.md
+- PROGRESS.md
+- FAILS.md
+- LEARNINGS.md (if exists)
+
+Then identify next action:
+
 1. Read PROGRESS.md for current phase and status
 2. Read TASKS document (if exists) for next unchecked task
 3. If no TASKS, use IMPL plan steps
