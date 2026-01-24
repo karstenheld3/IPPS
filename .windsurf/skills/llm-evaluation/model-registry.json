@@ -1,8 +1,20 @@
 {
-  "_version": "1.0.0",
+  "_version": "1.1.0",
   "_updated": "2026-01-24",
   "_comment": "Model properties and boundaries. max_output in tokens, temp_max for temperature models, thinking_max for extended thinking models.",
   
+  "models": [
+    {"provider": "openai", "model_id": "gpt-4o", "name": "GPT-4o", "enabled": true, "status": "available"},
+    {"provider": "openai", "model_id": "gpt-4o-mini", "name": "GPT-4o Mini", "enabled": true, "status": "available"},
+    {"provider": "openai", "model_id": "gpt-5-mini", "name": "GPT-5 Mini", "enabled": true, "status": "available"},
+    {"provider": "openai", "model_id": "o1-preview", "name": "O1 Preview", "enabled": false, "status": "no_access"},
+    {"provider": "openai", "model_id": "o1-mini", "name": "O1 Mini", "enabled": false, "status": "no_access"},
+    {"provider": "anthropic", "model_id": "claude-opus-4-20250514", "name": "Claude Opus 4", "enabled": false, "status": "streaming_required"},
+    {"provider": "anthropic", "model_id": "claude-sonnet-4-20250514", "name": "Claude Sonnet 4", "enabled": true, "status": "available"},
+    {"provider": "anthropic", "model_id": "claude-3-5-sonnet-20241022", "name": "Claude 3.5 Sonnet", "enabled": false, "status": "deprecated"},
+    {"provider": "anthropic", "model_id": "claude-3-5-haiku-20241022", "name": "Claude 3.5 Haiku", "enabled": true, "status": "available"}
+  ],
+
   "model_id_startswith": [
     { "prefix": "gpt-3.5",   "provider": "openai", "method": "temperature", "max_output": 4096,  "temp_max": 2.0, "seed": true },
     { "prefix": "gpt-4o",    "provider": "openai", "method": "temperature", "max_output": 16384, "temp_max": 2.0, "seed": true },
