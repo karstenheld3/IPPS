@@ -4,8 +4,8 @@
 param(
     [string]$WindowTitle = "*Windsurf*",
     [string]$OutputFolder = "shots",
-    [int]$FirstScrollCount = 10,      # DOWN keys for first scroll (visible model count)
-    [int]$SubsequentScrollCount = 10, # DOWN keys for subsequent scrolls (same as visible count)
+    [int]$FirstScrollCount = 16,      # DOWN keys for first scroll (from search box to end of first page)
+    [int]$SubsequentScrollCount = 7,  # DOWN keys for subsequent scrolls (page jump size)
     [int]$MaxSections = 25
 )
 
