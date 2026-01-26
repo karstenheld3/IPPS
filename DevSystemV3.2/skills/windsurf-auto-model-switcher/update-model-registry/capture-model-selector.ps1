@@ -1,22 +1,14 @@
 # Model Registry Update - Captures Model Selector Screenshots
 # 
 # WARNING: This script OPENS the model selector popup and sends keystrokes.
-# DO NOT use for general screenshots - use simple-screenshot.ps1 instead.
+# DO NOT use for general screenshots - use windows-desktop-control/simple-screenshot.ps1 instead.
 #
-# Two-phase model discovery:
-# Phase 1: Fullscreen screenshot to detect popup position (Cascade analyzes)
-# Phase 2: Cropped screenshots of popup area only
+# Captures fullscreen screenshots while scrolling through the model selector list.
 
 param(
     [string]$WindowTitle = "*Windsurf*",
-    [string]$OutputFolder = "",    # Default: [WORKSPACE]/.tools/_screenshots/YYYY-MM-DD_HH-MM-SS
-    [switch]$Phase1Only,           # Only take initial fullscreen shot
-    [int]$CropX = 0,               # Popup X position (from Phase 1 analysis)
-    [int]$CropY = 0,               # Popup Y position
-    [int]$CropWidth = 0,           # Popup width
-    [int]$CropHeight = 0,          # Popup height
-    [int]$FirstScrollCount = 16,
-    [int]$SubsequentScrollCount = 7,
+    [string]$OutputFolder = "",
+    [int]$ScrollsPerSection = 7,
     [int]$MaxSections = 10
 )
 
@@ -31,6 +23,27 @@ $filePrefix = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+
+# Get PHYSICAL screen resolution (handles DPI scaling)
+Add-Type -TypeDefinition @"
+using System;
+using System.Runtime.InteropServices;
+public class ScreenMetrics {
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetDC(IntPtr hwnd);
+    [DllImport("user32.dll")]
+    public static extern int ReleaseDC(IntPtr hwnd, IntPtr hdc);
+    [DllImport("gdi32.dll")]
+    public static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+    public const int DESKTOPHORZRES = 118;
+    public const int DESKTOPVERTRES = 117;
+}
+"@ -ErrorAction SilentlyContinue
+
+$hdc = [ScreenMetrics]::GetDC([IntPtr]::Zero)
+$physWidth = [ScreenMetrics]::GetDeviceCaps($hdc, [ScreenMetrics]::DESKTOPHORZRES)
+$physHeight = [ScreenMetrics]::GetDeviceCaps($hdc, [ScreenMetrics]::DESKTOPVERTRES)
+[ScreenMetrics]::ReleaseDC([IntPtr]::Zero, $hdc) | Out-Null
 
 Add-Type @"
 using System;
@@ -95,44 +108,13 @@ Start-Sleep -Milliseconds 100
 [Win32]::SendKey([Win32]::VK_DOWN)
 Start-Sleep -Milliseconds 300
 
-$screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
-
-if ($Phase1Only) {
-    # PHASE 1: Fullscreen screenshot for Cascade to analyze
-    $bitmap = New-Object System.Drawing.Bitmap($screen.Width, $screen.Height)
-    $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
-    $graphics.CopyFromScreen(0, 0, 0, 0, $screen.Size)
-    $filename = Join-Path $OutputFolder "${filePrefix}_phase1_fullscreen.jpg"
-    $bitmap.Save($filename, [System.Drawing.Imaging.ImageFormat]::Jpeg)
-    $graphics.Dispose()
-    $bitmap.Dispose()
-    
-    [Win32]::SendKey([Win32]::VK_ESCAPE)
-    
-    Write-Host "Phase 1 complete: $filename"
-    Write-Host ""
-    Write-Host "Cascade: Analyze this screenshot and return popup coordinates:"
-    Write-Host '  { "x": NNN, "y": NNN, "width": NNN, "height": NNN }'
-    Write-Host ""
-    Write-Host "Then run Phase 2:"
-    Write-Host '  .\capture-with-crop.ps1 -CropX NNN -CropY NNN -CropWidth NNN -CropHeight NNN'
-    exit 0
-}
-
-# PHASE 2: Cropped screenshots
-if ($CropWidth -eq 0 -or $CropHeight -eq 0) {
-    Write-Error "Phase 2 requires -CropX, -CropY, -CropWidth, -CropHeight from Phase 1 analysis"
-    [Win32]::SendKey([Win32]::VK_ESCAPE)
-    exit 1
-}
-
-Write-Host "Capturing $MaxSections sections, cropped to ${CropWidth}x${CropHeight} at ($CropX, $CropY)"
+Write-Host "Capturing $MaxSections fullscreen sections at ${physWidth}x${physHeight}"
 
 for ($section = 1; $section -le $MaxSections; $section++) {
-    # Capture cropped area only
-    $bitmap = New-Object System.Drawing.Bitmap($CropWidth, $CropHeight)
+    # Capture fullscreen using physical resolution
+    $bitmap = New-Object System.Drawing.Bitmap($physWidth, $physHeight)
     $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
-    $graphics.CopyFromScreen($CropX, $CropY, 0, 0, (New-Object System.Drawing.Size($CropWidth, $CropHeight)))
+    $graphics.CopyFromScreen(0, 0, 0, 0, $bitmap.Size)
     $filename = Join-Path $OutputFolder ("${filePrefix}_section_{0:D2}.jpg" -f $section)
     $bitmap.Save($filename, [System.Drawing.Imaging.ImageFormat]::Jpeg)
     $graphics.Dispose()
@@ -140,9 +122,8 @@ for ($section = 1; $section -le $MaxSections; $section++) {
     
     Write-Host "Captured section $section"
     
-    # Scroll
-    $scrollCount = if ($section -eq 1) { $FirstScrollCount } else { $SubsequentScrollCount }
-    for ($i = 0; $i -lt $scrollCount; $i++) {
+    # Scroll down
+    for ($i = 0; $i -lt $ScrollsPerSection; $i++) {
         [Win32]::SendKey([Win32]::VK_DOWN)
     }
     Start-Sleep -Milliseconds 150

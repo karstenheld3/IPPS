@@ -8,7 +8,7 @@ Use `windows-desktop-control` skill:
 .\simple-screenshot.ps1
 ```
 
-## capture-with-crop.ps1
+## capture-model-selector.ps1
 
 **Purpose:** Model registry update workflow
 
