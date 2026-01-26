@@ -15,8 +15,8 @@ MODEL-HIGH-QUERY = "opus 4.5 thinking"
 MODEL-MID = "Claude Sonnet 4.5"
 MODEL-MID-QUERY = "sonnet 4.5"
 
-MODEL-LOW = "Claude Haiku 4.5"
-MODEL-LOW-QUERY = "haiku 4.5"
+MODEL-LOW = "Gemini 3 Flash Medium"
+MODEL-LOW-QUERY = "gemini 3 flash medium"
 ```
 
 ## Required Skills

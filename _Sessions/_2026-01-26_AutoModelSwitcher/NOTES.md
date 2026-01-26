@@ -59,48 +59,30 @@ File: `%APPDATA%/Windsurf/User/keybindings.json`
 
 **Note**: `Ctrl+Alt+*` does NOT work on German keyboards (AltGr produces special chars like µ)
 
+### Best Fast + Cheap Options [VERIFIED]
+- **Gemini 3 Flash Medium**: 372 TPS, 78% SWE-Bench (Fastest + Best coding)
+- **Grok Code Fast 1**: 236 TPS, 70.8% SWE-Bench (Free in Windsurf)
+- **Claude Haiku 4.5**: ~150 TPS, 73.3% SWE-Bench (1x Windsurf cost)
+- **DeepSeek V3**: ~80 TPS, 38.8% SWE-Bench (Free, general purpose)
+
 ### Tested Approaches
 
 1. **Keyboard simulation (cycling)** - [WORKS] `switch-model-v3.ps1` cycles models reliably
 2. **Keyboard simulation (selection)** - [WORKS] `select-windsurf-model-in-ide.ps1` with Ctrl+Shift+F9
-3. **Hooks + auto-model-switch.ps1** - [DROPPED] Too fragile - requires Cascade restart to reload config, timing issues, popup interference
-4. **Ctrl+L focus** - [FAILED] Toggles panel closed instead of focusing
-5. **Ctrl+Shift+I focus** - [FAILED] Spawns new Cascade windows
-6. **Ctrl+Alt+M** - [FAILED] Produces µ on German keyboard (AltGr conflict)
-
-## IMPORTANT: Cascade Agent Instructions
-
-- Use `/prime` to load context when resuming
-- Track all findings in this NOTES.md
-- Problems go in PROBLEMS.md with IDs
-- Progress tracked in PROGRESS.md
-- Follow EDIRD phases: EXPLORE -> DESIGN -> IMPLEMENT -> REFINE -> DELIVER
-
-## Workflows to Run on Resume
-
-1. `/prime` - Load workspace context
-2. `/recap` - Review session state
-3. `/continue` - Execute next items
-
-## Model Discovery Findings [TESTED]
-
-**Approach**: Fullscreen screenshot capture for all sections
-
-**DPI Scaling Fix** [CRITICAL]:
-- Windows DPI scaling causes `.NET Screen.Bounds` to return logical pixels, not physical
-- Physical: 2560x1600, Logical: 2048x1280 (125% scaling)
-- Must use Win32 `GetDeviceCaps(DESKTOPHORZRES/DESKTOPVERTRES)` for actual resolution
-- Fixed in `simple-screenshot.ps1`
-
-**Two screenshot scripts**:
-- `simple-screenshot.ps1` - Passive, no UI interaction, for testing/verification
-- `capture-with-crop.ps1` - Opens model selector, sends keystrokes, for registry updates
-
-**Screenshots saved to**: `[WORKSPACE]/.tools/_screenshots/`
+3. **Dry-run mode** - [WORKS] `-DryRun` parameter previews selection without keyboard events
+4. **Fuzzy matching + cost priority** - [WORKS] Correctly selects cheapest matching model
+5. **Default fallback** - [WORKS] Defaults to Claude Sonnet 4 when no match found
+6. **Refocus method** - [PROVEN] `Ctrl+Shift+A` is the bulletproof method to refocus Cascade chat
 
 ## Document History
 
-**[2026-01-26 14:05]**
+**[2026-01-26 16:30]**
+- PRODUCTION READY: `select-windsurf-model-in-ide.ps1` finalized
+- ADDED: Dry-run mode, mandatory validation, cost-based prioritization
+- FIXED: Default model set to Claude Sonnet 4 (2x)
+- UPDATED: MODEL-LOW to Gemini 3 Flash Medium (78% SWE-Bench, 372 TPS)
+- RESEARCHED: Fast and cheap models (Grok, Gemini Flash, DeepSeek)
+
 - TESTED: Screenshot-based safety check workflow [SUCCESS]
 - Agent successfully: took screenshot, verified 4 safety conditions, switched Opus→Sonnet
 - Added switch-back pattern to cascade-model-switching.md rule

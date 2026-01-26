@@ -9,7 +9,7 @@ Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 **Tier Definitions:**
 - **MODEL-HIGH** = Claude Opus 4.5 (Thinking) [5x] - Complex reasoning, specs, architecture
 - **MODEL-MID** = Claude Sonnet 4.5 [2x] - Code verification, bug fixes, refactoring
-- **MODEL-LOW** = Claude Haiku 4.5 [1x] - Scripts, git, file ops, monitoring
+- **MODEL-LOW** = Gemini 3 Flash Medium [1x] - Scripts, git, file ops, monitoring (78% SWE-Bench, 372 TPS)
 
 **Activity Mapping:**
 - MODEL-HIGH: Writing docs, analyzing problems, architecture, gates

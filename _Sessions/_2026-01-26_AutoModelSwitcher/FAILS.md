@@ -1,5 +1,68 @@
 # Session Failures
 
+## AMSW-FL-014: Confused Claude Sonnet 4 with Claude Sonnet 4.5
+
+**Severity**: [HIGH]
+**When**: 2026-01-26 16:14
+**Where**: `select-windsurf-model-in-ide.ps1:22-27, 57-58`
+**What**: Used "Claude Sonnet 4.5" as the default model when user explicitly wanted "Claude Sonnet 4". These are different models.
+
+### Evidence
+- User correction: "are you stupid? Sonnet 4 is NOT sonnet 4.5"
+- Registry has both:
+  - Claude Sonnet 4 (2x)
+  - Claude Sonnet 4.5 (2x)
+- Kept implementing 4.5 despite user saying "sonnet 4"
+
+### Root Cause
+- Did not read user request carefully
+- Assumed "sonnet 4" meant "latest sonnet" (4.5)
+- Did not verify against registry to see both versions exist
+
+### Fix
+Change all references from "Claude Sonnet 4.5" to "Claude Sonnet 4":
+- Line 22-27: fallback models array
+- Line 57-58: default selection on no match
+
+## AMSW-FL-013: No dry-run mode to preview model selection before keyboard events
+
+**Severity**: [HIGH]
+**When**: 2026-01-26 16:11
+**Where**: `select-windsurf-model-in-ide.ps1`
+**What**: Script immediately executes keyboard events after fuzzy matching without showing user what will be selected. No way to verify the match before it happens.
+
+### Evidence
+- User request: "could you add a dry_run mode and evaluate first before executing this?"
+- Script flow: Query → Fuzzy match → Immediately send keyboard events
+- No preview or confirmation step
+- If fuzzy match picks wrong model, keyboard events already sent
+
+### Root Cause
+- Designed for automation, not interactive verification
+- Assumed fuzzy matching would always be correct
+- No safety check between validation and execution
+
+### Correct Approach
+Add `-DryRun` parameter that:
+1. Shows what model would be selected
+2. Shows the fuzzy match score and cost
+3. Exits without sending keyboard events
+4. Allows user to verify before running without `-DryRun`
+
+### Fix
+```powershell
+param(
+    [string]$Query,
+    [switch]$DryRun
+)
+# ... fuzzy matching logic ...
+if ($DryRun) {
+    Write-Host "Would select: $Query"
+    exit 0
+}
+# ... keyboard events ...
+```
+
 ## AMSW-FL-012: Misunderstood STRUT execution - modified document instead of executing plan
 
 **Severity**: [HIGH]

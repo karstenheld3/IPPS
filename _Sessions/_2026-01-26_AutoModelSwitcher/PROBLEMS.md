@@ -8,6 +8,24 @@
 
 ## Resolved
 
+### AMSW-PR-011: PowerShell UTF8 encoding corrupted script
+- **Type**: Bug
+- **Description**: Here-string in `select-windsurf-model-in-ide.ps1` was corrupted by UTF8 BOM encoding.
+- **Fix Applied**: Saved script with ASCII encoding.
+- **Status**: Resolved [TESTED]
+
+### AMSW-PR-010: Confused Claude Sonnet 4 with Sonnet 4.5
+- **Type**: Logic error
+- **Description**: Implemented Sonnet 4.5 as default when user explicitly wanted Sonnet 4.
+- **Fix Applied**: Corrected all references to Claude Sonnet 4.
+- **Status**: Resolved [PROVEN]
+
+### AMSW-PR-009: No dry-run mode for selection preview
+- **Type**: Feature request
+- **Description**: No way to verify fuzzy match before sending keyboard events.
+- **Fix Applied**: Added `-DryRun` parameter to exit before keyboard events.
+- **Status**: Resolved [TESTED]
+
 ### AMSW-PR-005: Model selector script typed into editor
 - **Type**: Bug
 - **Description**: `select-model.ps1` typed query into editor instead of model selector search box

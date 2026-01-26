@@ -39,7 +39,7 @@
 - [x] [TESTED] Fullscreen capture workflow
 - [x] Created `windsurf-model-registry.json` with 68 models and costs
 - [x] Updated UPDATE_WINDSURF_MODEL_REGISTRY.md with workflow
-- [x] Recorded failures AMSW-FL-001 through AMSW-FL-011 in FAILS.md
+- [x] Recorded failures AMSW-FL-001 through AMSW-FL-014 in FAILS.md
 - [x] [TESTED] Fixed DPI scaling issue - use Win32 GetDeviceCaps for physical resolution
 - [x] Created `simple-screenshot.ps1` for passive screenshots (no UI interaction)
 - [x] Separated screenshot scripts: simple (passive) vs capture-with-crop (active)
@@ -49,6 +49,13 @@
 - [x] Added script name and milliseconds to screenshot filenames for both scripts
 - [x] Created `cascade-model-switching.md` rule (now redesigning)
 - [x] Moved tier definitions to !NOTES.md (rule references only)
+- [x] [TESTED] Dry-run mode for model selection preview
+- [x] [TESTED] Fuzzy matching with cost prioritization
+- [x] [TESTED] Refocus Cascade chat using Ctrl+Shift+A
+- [x] [TESTED] Default to Claude Sonnet 4 on no match
+- [x] Updated MODEL-LOW to Gemini 3 Flash Medium
+- [x] Researched fast and cheap models benchmarks (INFO_FAST_CHEAP_MODELS.md)
+- [x] Verified 20 model matches with dry-run
 
 ## Completed Design & Testing
 
