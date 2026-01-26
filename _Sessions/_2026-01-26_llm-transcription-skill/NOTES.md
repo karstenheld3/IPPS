@@ -20,7 +20,8 @@
 
 User wants to add a new skill "llm-transcription" as a universal transcription tool with optimized prompts for each purpose. Initial features:
 1. `transcribe-image-to-markdown.py` - Convert images to markdown
-2. `transcribe-audio-to-markdown.py` - Convert audio to markdown
+2. `transcribe-image-to-markdown-advanced.py` - Convert images to markdown with refinement
+3. `transcribe-audio-to-markdown.py` - Convert audio to markdown
 
 ## IMPORTANT: Cascade Agent Instructions
 
