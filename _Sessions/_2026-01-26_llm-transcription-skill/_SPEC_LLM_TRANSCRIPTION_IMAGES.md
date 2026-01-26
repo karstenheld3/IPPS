@@ -16,7 +16,7 @@
 - **RETRY WITH BACKOFF**: 3x with exponential backoff (1s, 2s, 4s) for API errors
 - **TEMP FILES**: Store in `[WORKSPACE]/.tools/_image_to_markdown/`, prefix `.tmp_YYYY-MM-DD_HH-MM-SS-xxx_`, delete after success
 - Use original API model IDs exactly (e.g., `gpt-4o`, `claude-sonnet-4-20250514`)
-- Reuse `model-registry.json`, `model-parameter-mapping.json` from @llm-evaluation
+- Reuse `model-registry.json`, `model-parameter-mapping.json`, `model-pricing.json` from @llm-evaluation
 - JSON output for machine-readable results
 - Prompts stored in `prompts/` folder (transcription.md, judge.md)
 
@@ -83,6 +83,7 @@
 **Reuse directly:**
 - `model-registry.json` - Model properties (provider, method, max_output)
 - `model-parameter-mapping.json` - Effort levels (none/minimal/low/medium/high/xhigh)
+- `model-pricing.json` - Cost per 1M tokens (optional, for cost tracking)
 - API key loading from `.env` file
 - Provider auto-detection from model ID prefix
 - Retry with exponential backoff pattern
@@ -133,7 +134,8 @@ Output metadata for each processed image.
 - `candidates` - Number of transcriptions generated
 - `refinement_applied` - Whether refinement was used
 - `scores` - Array of individual candidate scores
-- `total_input_tokens`, `total_output_tokens` - Cost tracking
+- `total_input_tokens`, `total_output_tokens` - Token tracking
+- `total_cost_usd` - Total cost in USD (if model-pricing.json available)
 - `elapsed_seconds` - Processing time
 
 ## 4. Functional Requirements
@@ -443,6 +445,7 @@ python transcribe-image-to-markdown.py --input doc.png --output doc.md
   "refinement_applied": false,
   "total_input_tokens": 15420,
   "total_output_tokens": 8230,
+  "total_cost_usd": 0.0203,
   "elapsed_seconds": 12.3,
   "timestamp": "2026-01-27T00:15:00+01:00"
 }
@@ -485,6 +488,7 @@ python transcribe-image-to-markdown.py --input doc.png --output doc.md
   "refinements_applied": 2,
   "total_input_tokens": 154200,
   "total_output_tokens": 82300,
+  "total_cost_usd": 0.203,
   "total_elapsed_seconds": 145.7
 }
 ```
@@ -508,6 +512,10 @@ python transcribe-image-to-markdown.py --input doc.png --output doc.md
 **LLMTR-EC-08:** Empty input directory -> Error with clear message
 
 ## 12. Document History
+
+**[2026-01-27 00:38]**
+- Added: `model-pricing.json` for cost tracking
+- Added: `total_cost_usd` to PipelineResult and data structures
 
 **[2026-01-27 00:30]**
 - Fixed: Removed stale `--verbose` from FR-06 and Pipeline Flow

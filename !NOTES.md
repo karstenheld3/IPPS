@@ -18,6 +18,12 @@ Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
 **Default:** MODEL-HIGH (when uncertain)
 
+## API Keys Location
+
+**API keys file**: `.tools/.api-keys.txt`
+
+Usage: `--keys-file .tools/.api-keys.txt`
+
 ## Prevention Rules (from session fails)
 
 - **Model Accuracy**: Read model requests literally. Version numbers matter (e.g., Sonnet 4 != Sonnet 4.5).

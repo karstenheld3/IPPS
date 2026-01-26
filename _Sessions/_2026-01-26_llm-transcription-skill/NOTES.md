@@ -31,7 +31,8 @@ User wants to add a new skill "llm-transcription" as a universal transcription t
 
 ## Key Decisions
 
-(To be filled during DESIGN phase)
+- **API Keys**: Use `--keys-file .tools/.api-keys.txt` for all LLM scripts
+- **Default models**: gpt-5-mini for both transcription and judge
 
 ## Important Findings
 

@@ -19,6 +19,7 @@
 - **TEMP FILES**: `.tmp_YYYY-MM-DD_HH-MM-SS-xxx_` prefix, delete after success
 - Use `model-parameter-mapping.json` for effort levels
 - Use `model-registry.json` for provider detection and model config
+- Use `model-pricing.json` for cost calculation (optional)
 - Prompts from `prompts/transcription.md` and `prompts/judge.md`
 
 ## Table of Contents
@@ -37,7 +38,7 @@ DevSystemV3.2/skills/llm-transcription/
 ├── transcribe-image-to-markdown-advanced.py  # Main pipeline script (~600 lines) [REWRITE]
 ├── model-registry.json           # Model properties [EXISTS]
 ├── model-parameter-mapping.json  # Effort levels [EXISTS]
-├── model-pricing.json            # Cost tracking [EXISTS]
+├── model-pricing.json            # Cost per 1M tokens [EXISTS]
 └── prompts/
     ├── transcription.md          # Transcription prompt [EXISTS]
     └── judge.md                  # Judge prompt [EXISTS]
@@ -98,12 +99,34 @@ IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
 **Code**:
 ```python
 def get_script_dir() -> Path: ...
-def load_configs(script_dir: Path) -> tuple[dict, dict]: ...
+def load_configs(script_dir: Path) -> tuple[dict, dict, dict | None]: ...  # registry, mapping, pricing
 def get_model_config(model: str, registry: dict) -> dict: ...
 def build_api_params(model, mapping, registry, temperature, reasoning_effort, output_length) -> dict: ...
 ```
 
 **Note**: Copy patterns from `call-llm-batch.py`
+
+### LLMTR-IP01-IS-02b: Cost Calculation
+
+**Location**: `transcribe-image-to-markdown-advanced.py` > after config loading
+
+**Action**: Add cost calculation function
+
+**Code**:
+```python
+def calculate_cost(model: str, input_tokens: int, output_tokens: int, pricing: dict | None) -> float | None:
+    if not pricing:
+        return None
+    provider = detect_provider(model)
+    if provider not in pricing.get('pricing', {}):
+        return None
+    model_pricing = pricing['pricing'][provider].get(model)
+    if not model_pricing:
+        return None
+    input_cost = (input_tokens / 1_000_000) * model_pricing['input_per_1m']
+    output_cost = (output_tokens / 1_000_000) * model_pricing['output_per_1m']
+    return input_cost + output_cost
+```
 
 ### LLMTR-IP01-IS-03: API Key Loading
 
