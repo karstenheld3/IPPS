@@ -31,7 +31,7 @@ STRUT plans can be inserted into:
 │   ├─ [ ] Goal 1 ← P1-D1, P1-D2
 │   └─ [ ] Goal 2 ← P1-D3
 ├─ Strategy: Approach description (may include AWT estimate)
-│   - Model: Opus for analysis, Sonnet for implementation
+│   - Model: Opus for analysis and implementation, Sonnet for fixes, Haiku for chores
 │   - Sub-item if needed
 ├─ [ ] P1-S1 [VERB](params)
 ├─ [ ] P1-S2 [VERB](params)
@@ -67,10 +67,7 @@ Strategy sections may include model hints for auto model switching:
 │   - Opus for analysis, Sonnet for implementation
 ```
 
-**Guidelines:**
-- Planning/Analysis phases: Claude Opus 4.5 (Thinking)
-- Implementation/Bugfix phases: Claude Sonnet 4.5
-- Chore phases (commits, file ops): Claude Haiku 4.5
+**Source:** Model definitions and activity mappings are in `!NOTES.md` under `## Cascade Model Tiers`.
 
 Model hints are recommendations - agent decides based on actual task.
 

@@ -65,12 +65,9 @@ Run before starting any implementation:
 
 ## Model Hints
 
-Tasks may include model hints for auto model switching:
+Tasks may include model hints for auto model switching.
 
-**Guidelines:**
-- **Opus**: Complex analysis, architecture decisions, spec writing
-- **Sonnet**: Implementation, bug fixes, refactoring
-- **Haiku**: File operations, git commits, simple scripts
+**Source:** Model definitions and activity mappings are in `!NOTES.md` under `## Cascade Model Tiers`.
 
 Model hints are recommendations - agent decides based on actual task.
 
