@@ -140,14 +140,19 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 
 ## Project Topics
 
+- **AMSW** - Auto Model SWitcher (Windsurf model switching automation)
 - **GLOB** - Global/project-wide items
+- **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
 - **MCPS** - MCP server integrations
 - **MEPI** - MEPI/MCPI research depth principle
-- **TRNGFX** - Transcription graphics/ASCII art optimization
-- **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
 - **SDDEV** - Spec-Driven Development (research topic)
+- **TRNGFX** - Transcription graphics/ASCII art optimization
 
 ## Document History
+
+**[2026-01-26 16:33]**
+- Added: AMSW topic (Auto Model SWitcher)
+- Fixed: Alphabetized Project Topics list
 
 **[2026-01-24 18:58]**
 - Added: MEPI topic (MEPI/MCPI research depth principle)

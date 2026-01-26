@@ -2,6 +2,21 @@
 
 ## 2026-01-26 - Auto Model Switcher Session
 
+### [MEDIUM] `AMSW-FL-015` Session TOPIC not registered in ID-REGISTRY.md
+
+- **When**: 2026-01-26 09:28 UTC+01:00 (session creation)
+- **Where**: `ID-REGISTRY.md` Project Topics section
+- **What**: Session created with TOPIC `AMSW` but never added it to ID-REGISTRY.md.
+- **Why it went wrong**:
+  - `/session-new` workflow does not explicitly require TOPIC registration
+  - Agent knew the ID system rules but did not follow them during session init
+  - No checklist item for "Add TOPIC to ID-REGISTRY.md"
+- **Evidence**: `AMSW-NOTES`, `AMSW-FL-*`, `AMSW-PR-*` all used throughout session without registry entry
+- **Prevention rules**:
+  1. `/session-new` workflow MUST include step: "Add session TOPIC to ID-REGISTRY.md"
+  2. Before using any new TOPIC, verify it exists in ID-REGISTRY.md
+  3. Session NOTES.md header should include: "TOPIC: [X] (registered in ID-REGISTRY.md)"
+
 ### [HIGH] `AMSW-FL-014` Confused Claude Sonnet 4 with Claude Sonnet 4.5
 
 - **When**: 2026-01-26 16:14 UTC+01:00
