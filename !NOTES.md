@@ -7,16 +7,16 @@ Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 ## Cascade Model Switching
 
 **Tier Definitions:**
-- **HIGH** = Claude Opus 4.5 (Thinking) [5x] - Complex reasoning, specs, architecture
-- **MID** = Claude Sonnet 4.5 [2x] - Code verification, bug fixes, refactoring
-- **CHORES** = Claude Haiku 4.5 [1x] - Scripts, git, file ops, monitoring
+- **MODEL-HIGH** = Claude Opus 4.5 (Thinking) [5x] - Complex reasoning, specs, architecture
+- **MODEL-MID** = Claude Sonnet 4.5 [2x] - Code verification, bug fixes, refactoring
+- **MODEL-LOW** = Claude Haiku 4.5 [1x] - Scripts, git, file ops, monitoring
 
 **Activity Mapping:**
-- HIGH: Writing docs, analyzing problems, architecture, gates
-- MID: Code verification, bug fixes, refactoring, implementation
-- CHORES: Running scripts, git commit, file reads, session archive
+- MODEL-HIGH: Writing docs, analyzing problems, architecture, gates
+- MODEL-MID: Code verification, bug fixes, refactoring, implementation
+- MODEL-LOW: Running scripts, git commit, file reads, session archive
 
-**Default:** HIGH (when uncertain)
+**Default:** MODEL-HIGH (when uncertain)
 
 **ID-REGISTRY.md** - Prevents term and ID collisions. Contains DevSystem constants and project TOPIC registry.
 

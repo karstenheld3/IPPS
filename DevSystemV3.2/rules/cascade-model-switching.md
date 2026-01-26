@@ -22,9 +22,9 @@ Hints are recommendations - agent decides based on actual task.
 ## Default Model Selection
 
 When no STRUT hint exists, use task-based selection:
-- **Planning/Analysis**: Claude Opus 4.5 (Thinking)
-- **Implementation/Bugfix**: Claude Sonnet 4.5
-- **Chores (git, files)**: Claude Haiku 4.5
+- **MODEL-HIGH** (Planning/Analysis): Claude Opus 4.5 (Thinking)
+- **MODEL-MID** (Implementation/Bugfix): Claude Sonnet 4.5
+- **MODEL-LOW** (git, files, scripts): Claude Haiku 4.5
 
 ## Safety Conditions (ALL required)
 
@@ -48,3 +48,23 @@ Auto-switching ONLY happens if NO user activity detected:
    - Is the Cascade chat input field empty?
 3. If ALL conditions met: Run `select-windsurf-model-in-ide.ps1 -Query "<model>"`
 4. If ANY condition fails: Do not switch, do not log, do not notify
+5. **After task completion: Switch back to original model**
+
+## Switch-Back Pattern
+
+After completing a task with a different model, ALWAYS switch back to the original model:
+
+```
+1. Complete the task (implementation, bugfix, chores)
+2. Run safety check (screenshot + analysis)
+3. If safe: Switch back to original model
+4. Continue with next task
+```
+
+**Example:**
+- Start: Opus (planning)
+- Switch to: Sonnet (implementation)
+- Complete: Implementation done
+- Switch back: Opus (for next planning task)
+
+**Why:** Prevents model drift - ensures user returns to expected model for next interaction.
