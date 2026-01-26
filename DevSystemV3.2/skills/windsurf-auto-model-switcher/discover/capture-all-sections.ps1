@@ -89,8 +89,8 @@ for ($section = 1; $section -le $MaxSections; $section++) {
     $bitmap = New-Object System.Drawing.Bitmap($screen.Width, $screen.Height)
     $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
     $graphics.CopyFromScreen(0, 0, 0, 0, $screen.Size)
-    $filename = Join-Path $OutputFolder ("section_{0:D2}.png" -f $section)
-    $bitmap.Save($filename, [System.Drawing.Imaging.ImageFormat]::Png)
+    $filename = Join-Path $OutputFolder ("section_{0:D2}.jpg" -f $section)
+    $bitmap.Save($filename, [System.Drawing.Imaging.ImageFormat]::Jpeg)
     $graphics.Dispose()
     $bitmap.Dispose()
     
