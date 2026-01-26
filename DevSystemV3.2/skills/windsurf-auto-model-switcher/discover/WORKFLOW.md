@@ -1,58 +1,44 @@
 # Discover Windsurf Models Workflow
 
-Interactive workflow where Cascade dynamically detects popup position each time.
+Simplified workflow: fullscreen capture for all sections (no cropping needed).
 
-## CRITICAL: No Hardcoded Coordinates
+## Why Fullscreen?
 
-Popup position changes when:
-- Screen resolution changes
-- Window moves
-- Different monitor
+Cropping requires accurate pixel coordinates, but:
+- LLM sees scaled-down images, can't map to actual screen pixels
+- Popup position changes when window moves or resolution changes
+- Cropping adds complexity with minimal benefit
 
-**Always run Phase 1 to detect current popup position.**
-
-## Prerequisites
-
-- Windsurf running with Cascade panel visible
-- Custom keybinding `Ctrl+Shift+F9` installed (see ../SETUP.md)
+Fullscreen JPEG at default quality is ~150KB per image. 10 sections = ~1.5MB total.
 
 ## Workflow Steps
 
-### Phase 1: Detect Popup Position (ALWAYS RUN)
+### Step 1: Capture All Sections
 
 ```powershell
-.\capture-with-crop.ps1 -Phase1Only
+.\capture-with-crop.ps1 -CropX 0 -CropY 0 -CropWidth 2048 -CropHeight 1280 -MaxSections 10
 ```
 
-1. Takes fullscreen screenshot
-2. Cascade analyzes screenshot
-3. Cascade returns popup coordinates as JSON:
-   ```json
-   { "x": 1570, "y": 1070, "width": 320, "height": 210 }
-   ```
+Replace 2048x1280 with your screen resolution.
 
-### Phase 2: Capture with Dynamic Coordinates
+### Step 2: Cascade Reads Screenshots
+
+Cascade reads each fullscreen screenshot from `.tools/_screenshots/`.
+Extracts model names and costs from the popup visible in each image.
+
+### Step 3: Stop When List Wraps
+
+When Cascade sees duplicate models (list wrapped around), extraction is complete.
+
+### Step 4: Update Registry
+
+Update `windsurf-model-registry.json` with discovered models and costs.
+
+### Step 5: Cleanup
 
 ```powershell
-.\capture-with-crop.ps1 -CropX [x] -CropY [y] -CropWidth [w] -CropHeight [h] -MaxSections 12
+Remove-Item -Path "[WORKSPACE]/.tools/_screenshots/*.jpg" -Force
 ```
-
-Use coordinates from Phase 1 analysis.
-
-### Phase 3: Extract Models
-
-1. Cascade reads each cropped screenshot
-2. Extracts model names and costs
-3. Stops when list wraps around (duplicate models seen)
-4. Updates `windsurf-model-registry.json`
-
-## Debugging Blank Screenshots
-
-If cropped screenshots are blank:
-1. Query screen resolution: `[System.Windows.Forms.Screen]::PrimaryScreen.Bounds`
-2. Zoom out: capture large area (500x300) at estimated position
-3. Shift x/y to move toward popup
-4. Refine width/height
 
 ## Output Format
 
@@ -60,11 +46,9 @@ If cropped screenshots are blank:
 {
   "_version": "1.3",
   "_updated": "2026-01-26",
-  "_source": "discovered from Windsurf model selector UI via capture-with-crop.ps1",
+  "_source": "discovered from Windsurf model selector UI",
   "models": [
     { "name": "Claude 3.5 Sonnet", "cost": "2x" }
   ]
 }
 ```
-
-No hardcoded coordinates in output - they are session-specific.
