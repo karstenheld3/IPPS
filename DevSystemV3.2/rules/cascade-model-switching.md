@@ -1,5 +1,12 @@
 # Cascade Model Switching
 
+## Required Skills
+
+- `@windsurf-auto-model-switcher` for model switching script
+- `@windows-desktop-control` for screenshot-based safety checks
+
+## Overview
+
 Automatically switch AI models based on task type and STRUT hints.
 
 ## Model Hints
