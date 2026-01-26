@@ -56,6 +56,9 @@
 - [x] Safety checks via screenshot before switching (4 conditions)
 - [x] `cascade-model-switching.md` rule rewritten with new approach
 - [x] Required skills referenced: `@windsurf-auto-model-switcher`, `@windows-desktop-control`
+- [x] Created `NOTES_TEMPLATE.md` with Cascade Model Switching section
+- [x] Updated STRUT_TEMPLATE.md and TASKS_TEMPLATE.md with model hints
+- [x] All templates reference `!NOTES.md` for model definitions (no hardcoding)
 
 ## Tried But Not Used
 
