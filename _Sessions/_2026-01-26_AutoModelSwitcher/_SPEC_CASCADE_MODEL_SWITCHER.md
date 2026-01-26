@@ -1,62 +1,53 @@
 # SPEC: Cascade Auto Model Switcher
 
-**Doc ID**: CAMS-SP01
-**Goal**: Proactively switch Cascade models during plan execution to optimize cost while maintaining quality
+**Doc ID**: AMSW-SP01
+**Goal**: Switch Cascade models via `/switch-model` workflow to optimize cost while maintaining quality
 
 **Depends on:**
-- `windsurf-auto-model-switcher` skill [AMSW] for model switching mechanics
-- `devsystem-core.md` for workflow integration points
+- `windsurf-auto-model-switcher` skill for model switching mechanics
+- `switch-model.md` workflow for tier-based switching
 
 ## MUST-NOT-FORGET
 
-- Always return to DEFAULT model after completing a sequence
+- Model switch takes effect on user's NEXT message (not current)
 - Model switches add latency (~2s each) - batch similar activities
-- User can override with `[MODEL:tier]` annotation in plans
+- Default to MODEL-HIGH when uncertain
 - Never downgrade during critical paths (gate checks, error handling)
+- Tier definitions live in `!NOTES.md` and `switch-model.md` (not hardcoded here)
 
 ## Table of Contents
 
 1. [Model Tiers](#model-tiers)
 2. [Activity Mapping](#activity-mapping)
 3. [Integration Points](#integration-points)
-4. [Plan Annotation Syntax](#plan-annotation-syntax)
-5. [Cost Estimation](#cost-estimation)
-6. [Implementation Strategy](#implementation-strategy)
+4. [Cost Estimation](#cost-estimation)
+5. [Implementation Status](#implementation-status)
 
 ## Model Tiers
 
-### Tier Definitions
+### Tier Definitions (from !NOTES.md)
 
-- **CASCADE-MODEL-HIGH** (Default)
+- **MODEL-HIGH** (Default)
   - Model: Claude Opus 4.5 (Thinking)
   - Cost: 5x
-  - Use: Complex reasoning, architecture, spec writing
+  - Use: Complex reasoning, specs, architecture, gate evaluations
 
-- **CASCADE-MODEL-MID**
+- **MODEL-MID**
   - Model: Claude Sonnet 4.5
   - Cost: 2x
-  - Use: Code verification, bug fixes, standard tasks
+  - Use: Code verification, bug fixes, refactoring, implementation
 
-- **CASCADE-MODEL-LOW**
-  - Model: Claude Haiku 4.5
+- **MODEL-LOW**
+  - Model: Gemini 3 Flash Medium
   - Cost: 1x
-  - Use: Simple edits, formatting, quick lookups
-
-- **CASCADE-MODEL-CHORES**
-  - Model: SWE-1.5 Fast
-  - Cost: 0.5x
-  - Use: Script execution, file operations, monitoring
-
-- **CASCADE-MODEL-IMAGE**
-  - Model: GPT-4.1
-  - Cost: 1x
-  - Use: Screenshot analysis, UI verification, visual tasks
+  - Speed: 372 TPS, 78% SWE-Bench
+  - Use: Scripts, git operations, file reads, session archive
 
 ### Tier Selection Priority
 
 When multiple activities overlap, use highest tier:
 ```
-HIGH > MID > IMAGE > LOW > CHORES
+HIGH > MID > LOW
 ```
 
 ## Activity Mapping
@@ -65,165 +56,113 @@ HIGH > MID > IMAGE > LOW > CHORES
 
 **HIGH (5x) - Complex Reasoning**
 - Writing documents (SPEC, IMPL, TEST, INFO)
-- Verifying documents
-- Writing new code (not edits)
 - Analyzing complex problems
 - Architecture decisions
 - Gate evaluations
-- `/critique`, `/reconcile`
+- `/critique`, `/reconcile`, `/build`, `/solve`
 
 **MID (2x) - Standard Tasks**
 - Verifying existing code
 - Fixing bugs (after root cause identified)
 - Code refactoring
-- `/verify` (code context)
 - Standard `/implement` steps
+- `/verify`, `/test`
 
-**LOW (1x) - Simple Tasks**
-- Formatting changes
-- Comment updates
-- Simple renames
-- File moves
-- Quick lookups
-
-**CHORES (0.5x) - Automation**
-- Running planned scripts
-- Monitoring execution output
-- File system operations
+**LOW (1x) - Fast Tasks**
+- Running scripts
 - Git operations (commit, status)
-- `/session-archive`, `/session-close` (mechanical steps)
-
-**IMAGE (1x) - Visual Tasks**
-- Screenshot analysis
-- UI element detection
-- Visual verification
-- Image-based workflows
+- File reads/writes
+- Session management
+- `/prime`, `/commit`, `/session-archive`, `/session-close`
 
 ### Workflow to Tier Mapping
 
 | Workflow | Default Tier | Notes |
 |----------|--------------|-------|
-| `/prime` | CHORES | Reading files, building context |
+| `/prime` | LOW | Reading files, building context |
 | `/recap` | MID | Analysis but not creation |
 | `/continue` | varies | Depends on task type |
-| `/go` | varies | Orchestration is CHORES, tasks vary |
+| `/go` | varies | Orchestration is LOW, tasks vary |
 | `/build` | HIGH | Complex code creation |
 | `/solve` | HIGH | Research and analysis |
-| `/implement` | MID→HIGH | Depends on step complexity |
+| `/implement` | MID | Standard implementation |
 | `/verify` | MID | Checking, not creating |
 | `/critique` | HIGH | Deep analysis |
 | `/reconcile` | HIGH | Decision making |
-| `/commit` | CHORES | Mechanical git operations |
-| `/transcribe` | IMAGE | Text extraction |
+| `/commit` | LOW | Mechanical git operations |
 | `/test` | MID | Running and analyzing tests |
+| `/session-*` | LOW | Session management |
 
 ## Integration Points
 
-### 1. Plan Generation (`/continue`, `/go`)
+### 1. Manual Switching via Workflow
 
-When building execution sequence, annotate each step with model tier:
+User or agent invokes `/switch-model` workflow:
 
-```markdown
-## Execution Sequence
-
-1. [CHORES] Read session files
-2. [HIGH] Analyze problem from PROBLEMS.md
-3. [MID] Implement fix in auth.py
-4. [CHORES] Run tests
-5. [MID] Verify test results
-6. [CHORES] Commit changes
-7. [HIGH] → DEFAULT (restore)
+```
+/switch-model high   # Switch to Claude Opus 4.5 (Thinking)
+/switch-model mid    # Switch to Claude Sonnet 4.5
+/switch-model low    # Switch to Gemini 3 Flash Medium
 ```
 
-### 2. STRUT Plans
+Aliases: `h`, `m`, `l` or `MODEL-HIGH`, `MODEL-MID`, `MODEL-LOW`
 
-Add `[MODEL:tier]` annotation to steps:
+### 2. Script Execution
 
-```markdown
-## P1: EXPLORE
+The workflow calls `select-windsurf-model-in-ide.ps1`:
 
-### Steps
-- [ ] P1-S1 [CHORES] [READ] session NOTES.md, PROBLEMS.md
-- [ ] P1-S2 [HIGH] [ANALYZE] root cause of authentication failure
-- [ ] P1-S3 [MID] [RESEARCH] OAuth 2.0 token refresh patterns
+```powershell
+# With fuzzy matching
+.\select-windsurf-model-in-ide.ps1 -Query "opus 4.5 thinking"
 
-### Transition
-- IF all deliverables checked → [MODEL:DEFAULT] [DESIGN]
+# Dry-run mode (preview only)
+.\select-windsurf-model-in-ide.ps1 -Query "sonnet" -DryRun
 ```
 
-### 3. Step Execution
+**Script features:**
+- Fuzzy matching with cost prioritization
+- `-DryRun` mode for safe preview
+- Default fallback to Claude Sonnet 4 if no match
+- Bulletproof refocus via `Ctrl+Shift+A`
 
-Before executing each step:
-1. Check current model tier
-2. If step requires different tier, switch model
-3. Execute step
-4. If next step needs different tier OR sequence complete, prepare switch
-
-### 4. Batch Optimization
+### 3. Batch Optimization (Advisory)
 
 Group consecutive same-tier steps to minimize switches:
 
 ```markdown
 ## Optimized Sequence
 
-[SWITCH → CHORES]
+/switch-model low
 1. Read session files
 2. Run git status
 3. List directory
 
-[SWITCH → HIGH]
+/switch-model high
 4. Analyze problem
 5. Write spec section
 
-[SWITCH → MID]
+/switch-model mid
 6. Implement fix
 7. Verify fix
-
-[SWITCH → DEFAULT]
 ```
 
-## Plan Annotation Syntax
-
-### Step-Level Annotation
-
-```markdown
-- [ ] P1-S1 [MODEL:CHORES] [READ] files
-- [ ] P1-S2 [MODEL:HIGH] [ANALYZE] problem
-```
-
-### Block-Level Annotation
-
-```markdown
-## [MODEL:CHORES] File Operations Block
-- [ ] Read NOTES.md
-- [ ] Read PROBLEMS.md
-- [ ] Check git status
-## [MODEL:DEFAULT]
-```
-
-### Override Annotation
-
-User can force a tier:
-```markdown
-- [ ] P1-S1 [MODEL:HIGH!] [READ] files  # Force HIGH even though READ is normally CHORES
-```
+**Recommendation**: Batch at least 3 same-tier operations before switching.
 
 ## Cost Estimation
 
 ### Example Session Cost Comparison
 
-**Without auto-switching (all HIGH):**
+**Without switching (all HIGH):**
 ```
 10 steps x 5x = 50 credits
 ```
 
-**With auto-switching:**
+**With tier switching:**
 ```
-3 CHORES steps x 0.5x = 1.5 credits
+3 LOW steps x 1x = 3 credits
 2 HIGH steps x 5x = 10 credits
-4 MID steps x 2x = 8 credits
-1 IMAGE step x 1x = 1 credit
-Total: 20.5 credits (59% savings)
+5 MID steps x 2x = 10 credits
+Total: 23 credits (54% savings)
 ```
 
 ### Switch Overhead
@@ -233,30 +172,21 @@ Each model switch:
 - No credit cost (switching is free)
 - Risk: Context may be slightly different between models
 
-**Recommendation**: Batch at least 3 same-tier operations before switching.
+## Implementation Status
 
-## Implementation Strategy
+### Implemented [TESTED]
 
-### Phase 1: Manual Annotation (No Code)
+- `/switch-model` workflow with HIGH/MID/LOW tiers
+- `select-windsurf-model-in-ide.ps1` with fuzzy matching and dry-run
+- `windsurf-model-registry.json` with 68 models and costs
+- Bulletproof refocus via `Ctrl+Shift+A`
+- German keyboard compatible keybindings (`Ctrl+Shift+F9/F10`)
 
-1. Update workflow docs to include tier recommendations
-2. Agent manually adds `[MODEL:tier]` annotations to plans
-3. User runs `select-windsurf-model-in-ide.ps1` when seeing annotation
+### Not Implemented
 
-### Phase 2: Semi-Automatic
-
-1. Agent outputs switch command as part of execution sequence
-2. Agent pauses for user to execute switch
-3. Agent continues after switch confirmed
-
-### Phase 3: Fully Automatic (Requires Hook)
-
-1. Agent detects tier change needed
-2. Agent calls model switch script
-3. Script switches model
-4. Agent continues in new model
-
-**Blocker for Phase 3**: Cascade hooks don't trigger reliably (see AMSW-PR-006)
+- Automatic switching based on activity detection
+- STRUT plan annotations with `[MODEL:tier]`
+- Cascade hooks (unreliable - see AMSW-PR-006)
 
 ## Design Decisions
 
@@ -264,19 +194,30 @@ Each model switch:
 
 Rationale: Quality over cost. User explicitly opts into cost savings.
 
-### DD-02: Always restore DEFAULT after sequence
+### DD-02: Three-tier system (HIGH/MID/LOW)
 
-Rationale: Predictable state. User always knows what model they're using.
+Rationale: Simplified from 5 tiers. CHORES and IMAGE merged into LOW. Easier to remember and use.
 
 ### DD-03: No auto-switch during error handling
 
 Rationale: Errors need full reasoning capability. Never downgrade when things go wrong.
 
-### DD-04: Batch optimization is advisory
+### DD-04: Gemini 3 Flash Medium for LOW tier
 
-Rationale: Agent suggests batching but executes step-by-step. Premature optimization adds complexity.
+Rationale: Best balance of speed (372 TPS) and quality (78% SWE-Bench) at 1x cost.
+
+### DD-05: Fuzzy matching with cost prioritization
+
+Rationale: User can type partial model names. When multiple matches, prefer cheaper option.
 
 ## Document History
+
+**[2026-01-26 16:36]**
+- Updated to match actual implementation
+- Simplified to 3 tiers (HIGH/MID/LOW)
+- Removed unimplemented features (CHORES, IMAGE, auto-annotations)
+- Added implementation status section
+- Updated DD-02, DD-04, DD-05
 
 **[2026-01-26 12:15]**
 - Initial specification created
