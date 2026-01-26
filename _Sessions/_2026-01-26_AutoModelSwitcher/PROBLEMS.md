@@ -41,5 +41,19 @@
 
 ## Deferred
 
+### AMSW-PR-007: LLM cannot map scaled images to screen pixels
+- **Type**: Technical limitation
+- **Description**: When Cascade views screenshots, they are scaled down. LLM cannot reliably estimate actual pixel coordinates from visual position.
+- **Impact**: Cropping-based screenshot optimization doesn't work
+- **Workaround**: Use fullscreen capture for all sections [TESTED]
+- **Status**: Deferred (workaround in place)
+
+### AMSW-PR-008: Antivirus blocks modified PowerShell scripts
+- **Type**: Environment issue
+- **Description**: Modifying PowerShell scripts with keybd_event triggers antivirus false positive
+- **Impact**: Cannot add 55% JPEG compression to capture scripts
+- **Workaround**: Use unmodified scripts from git [TESTED]
+- **Status**: Deferred (workaround in place)
+
 ### AMSW-PR-006: Cascade hooks not triggering
 - Moved from Open - not critical for model switching POC

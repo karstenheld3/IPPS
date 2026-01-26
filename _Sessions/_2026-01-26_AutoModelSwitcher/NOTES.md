@@ -82,7 +82,31 @@ File: `%APPDATA%/Windsurf/User/keybindings.json`
 2. `/recap` - Review session state
 3. `/continue` - Execute next items
 
+## Model Discovery Findings [TESTED]
+
+**Approach**: Fullscreen screenshot capture for all sections (no cropping)
+
+**Why no cropping**:
+- LLM sees scaled-down images, can't map to actual screen pixels
+- Popup position changes when window moves or resolution changes
+- Cropping complexity not worth the benefit
+
+**Working command**:
+```powershell
+.\capture-with-crop.ps1 -CropX 0 -CropY 0 -CropWidth 2048 -CropHeight 1280 -MaxSections 10
+```
+
+**Screenshots saved to**: `[WORKSPACE]/.tools/_screenshots/YYYY-MM-DD_HH-MM-SS_section_NN.jpg`
+
+**Antivirus issue**: Modifying PowerShell scripts with keybd_event triggers false positive. Reverted to git version.
+
 ## Document History
+
+**[2026-01-26 11:43]**
+- Model discovery workflow simplified to fullscreen capture
+- Cropping abandoned - LLM cannot map scaled images to actual pixels
+- 55% JPEG compression blocked by antivirus (script modification triggers scan)
+- WORKFLOW.md updated with simplified approach
 
 **[2026-01-26 10:09]**
 - Model selection WORKING with `select-model.ps1` + `Ctrl+Shift+F9`
