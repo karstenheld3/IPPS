@@ -16,6 +16,7 @@ python call-llm.py --model claude-opus-4-20250514 --input-file doc.md --prompt-f
 - `--output-file` - Output file (default: stdout)
 - `--keys-file` - API keys file (default: .env)
 - `--write-json-metadata` - Write token usage to separate JSON file
+- `--use-prompt-caching` - Enable prompt caching (see Prompt Caching section)
 
 ## call-llm-batch.py - Batch Processing
 
@@ -31,12 +32,14 @@ python call-llm-batch.py --model gpt-4o --input-folder images/ --output-folder o
 - `--runs` - Runs per file (default: 1)
 - `--workers` - Parallel workers (default: 4)
 - `--keys-file` - API keys file (default: .env)
+- `--use-prompt-caching` - Enable prompt caching (see Prompt Caching section)
 
 **Features:**
 - Parallel processing with configurable workers
 - Resume capability (skips existing outputs)
 - Incremental save after each item
 - Token usage tracking per model
+- Cache warm-up: first file processed before parallel workers (Anthropic only)
 
 ## find-workers-limit.py - Worker Limit Discovery
 
@@ -201,3 +204,26 @@ $skill = ".windsurf\skills\llm-evaluation"
 **File type detection:** Auto-detect by suffix only (no override)
 - Image: `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`
 - Text: `.txt`, `.md`, `.json`, `.py`, `.html`, `.xml`, `.csv`
+
+## Prompt Caching
+
+Reduce costs and latency for repetitive LLM calls with large prompts.
+
+```powershell
+# Single call with caching
+python call-llm.py --model claude-sonnet-4-20250514 --prompt-file large_prompt.md --use-prompt-caching
+
+# Batch with caching (automatic cache warm-up)
+python call-llm-batch.py --model claude-sonnet-4-20250514 --input-folder images/ --output-folder out/ --prompt-file prompts/transcribe.md --use-prompt-caching
+```
+
+**Provider behavior:**
+- **OpenAI** - Automatic caching, no API changes needed. Prompts >1024 tokens eligible. 50% discount on cached tokens.
+- **Anthropic** - Explicit `cache_control` on system blocks. Minimum 1024-4096 tokens depending on model. 90% read discount, 25% write premium.
+
+**Batch cache warm-up (Anthropic):** First file processes synchronously to populate cache, then remaining files process in parallel. All parallel requests benefit from cache reads.
+
+**Cache metrics in metadata:**
+- `cached_tokens` - OpenAI cached input tokens
+- `cache_write_tokens` - Anthropic cache creation tokens
+- `cache_read_tokens` - Anthropic cache hit tokens
