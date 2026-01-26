@@ -44,6 +44,9 @@
 - [x] Created `simple-screenshot.ps1` for passive screenshots (no UI interaction)
 - [x] Separated screenshot scripts: simple (passive) vs capture-with-crop (active)
 - [x] Created `windows-desktop-control` skill with `simple-screenshot.ps1`
+- [x] Renamed `capture-with-crop.ps1` to `capture-model-selector.ps1` (no cropping)
+- [x] [TESTED] DPI-aware capture works with different resolutions (tested 1920x1080)
+- [x] Added script name and milliseconds to screenshot filenames for both scripts
 
 ## Tried But Not Used
 
