@@ -77,21 +77,19 @@ HIGH > MID > LOW
 
 ### Workflow to Tier Mapping
 
-| Workflow | Default Tier | Notes |
-|----------|--------------|-------|
-| `/prime` | LOW | Reading files, building context |
-| `/recap` | MID | Analysis but not creation |
-| `/continue` | varies | Depends on task type |
-| `/go` | varies | Orchestration is LOW, tasks vary |
-| `/build` | HIGH | Complex code creation |
-| `/solve` | HIGH | Research and analysis |
-| `/implement` | MID | Standard implementation |
-| `/verify` | MID | Checking, not creating |
-| `/critique` | HIGH | Deep analysis |
-| `/reconcile` | HIGH | Decision making |
-| `/commit` | LOW | Mechanical git operations |
-| `/test` | MID | Running and analyzing tests |
-| `/session-*` | LOW | Session management |
+- `/prime` - LOW (reading files, building context)
+- `/recap` - MID (analysis but not creation)
+- `/continue` - varies (depends on task type)
+- `/go` - varies (orchestration is LOW, tasks vary)
+- `/build` - HIGH (complex code creation)
+- `/solve` - HIGH (research and analysis)
+- `/implement` - MID (standard implementation)
+- `/verify` - MID (checking, not creating)
+- `/critique` - HIGH (deep analysis)
+- `/reconcile` - HIGH (decision making)
+- `/commit` - LOW (mechanical git operations)
+- `/test` - MID (running and analyzing tests)
+- `/session-*` - LOW (session management)
 
 ## Integration Points
 
