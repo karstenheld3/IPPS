@@ -18,8 +18,8 @@ if (-not $OutputFolder) {
     $OutputFolder = Join-Path $workspaceRoot ".tools\_screenshots"
 }
 
-# Timestamp prefix for filenames
-$filePrefix = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+# Timestamp prefix for filenames (with milliseconds and script name)
+$filePrefix = "capture-model-selector_" + (Get-Date -Format "yyyy-MM-dd_HH-mm-ss-fff")
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
