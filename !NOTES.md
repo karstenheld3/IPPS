@@ -6,12 +6,10 @@ Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
 ## Cascade Model Tiers
 
-Cost-optimized model switching. Hook reads `.windsurf/next-model.txt` and switches.
-
 **Tier Definitions:**
 - **HIGH** = Claude Opus 4.5 (Thinking) [5x] - Complex reasoning, specs, architecture
 - **MID** = Claude Sonnet 4.5 [2x] - Code verification, bug fixes, refactoring
-- **CHORES** = SWE-1.5 Fast [0.5x] - Scripts, git, file ops, monitoring
+- **CHORES** = Claude Haiku 4.5 [1x] - Scripts, git, file ops, monitoring
 
 **Activity Mapping:**
 - HIGH: Writing docs, analyzing problems, architecture, gates
