@@ -18,6 +18,17 @@ Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
 **Default:** MODEL-HIGH (when uncertain)
 
+## Prevention Rules (from session fails)
+
+- **Model Accuracy**: Read model requests literally. Version numbers matter (e.g., Sonnet 4 != Sonnet 4.5).
+- **Safety First**: UI automation scripts MUST have a `-DryRun` mode. Preview changes before sending irreversible keyboard events.
+
+## Model Switching Findings (2026-01-26)
+
+- **Bulletproof Refocus**: Use `Ctrl+Shift+A` to reliably focus the Cascade chat panel in VS Code/Windsurf.
+- **German Keyboards**: Avoid `Ctrl+Alt` shortcuts; they conflict with `AltGr`. Use `Ctrl+Shift+F9/F10` for reliable model selection automation.
+- **Fast & Cheap Models**: Gemini 3 Flash Medium (372 TPS, 78% SWE-Bench) is the current best performer for MODEL-LOW tasks. Grok Code Fast 1 (236 TPS, 70.8% SWE-Bench) is the best free option in Windsurf for speed.
+
 **ID-REGISTRY.md** - Prevents term and ID collisions. Contains DevSystem constants and project TOPIC registry.
 
 ## DevSystem Source/Sync Rules

@@ -1,5 +1,29 @@
 # Failure Log
 
+## 2026-01-26 - Auto Model Switcher Session
+
+### [HIGH] `AMSW-FL-014` Confused Claude Sonnet 4 with Claude Sonnet 4.5
+
+- **When**: 2026-01-26 16:14 UTC+01:00
+- **Where**: `select-windsurf-model-in-ide.ps1:22-27, 57-58`
+- **What**: Used "Claude Sonnet 4.5" as default despite user explicitly wanting "Claude Sonnet 4".
+- **Why it went wrong**: Assumed "sonnet 4" meant "latest sonnet" (4.5) instead of the specific older version.
+- **Evidence**: User correction: "are you stupid? Sonnet 4 is NOT sonnet 4.5"
+- **Prevention rules**:
+  1. Read user model requests literally - version numbers matter.
+  2. Verify available models in registry before defaulting.
+
+### [HIGH] `AMSW-FL-013` No dry-run mode to preview model selection
+
+- **When**: 2026-01-26 16:11 UTC+01:00
+- **Where**: `select-windsurf-model-in-ide.ps1`
+- **What**: Script executed keyboard events immediately without previewing selection.
+- **Why it went wrong**: Designed for speed rather than safety/verification.
+- **Evidence**: User request: "could you add a dry_run mode and evaluate first before executing this?"
+- **Prevention rules**:
+  1. UI automation scripts should have a `-DryRun` mode for safe verification.
+  2. Always show what will happen before sending irreversible keyboard events.
+
 ## 2026-01-24 - MEPI/MCPI Document ID
 
 ### [LOW] `GLOB-FL-008` Used wrong TOPIC for MEPI/MCPI INFO document
