@@ -4,7 +4,6 @@
 
 param(
     [string]$WindowTitle = "*Windsurf*",
-    [string]$OutputFolder = "shots",
     [switch]$Phase1Only,           # Only take initial fullscreen shot
     [int]$CropX = 0,               # Popup X position (from Phase 1 analysis)
     [int]$CropY = 0,               # Popup Y position
@@ -12,8 +11,14 @@ param(
     [int]$CropHeight = 0,          # Popup height
     [int]$FirstScrollCount = 16,
     [int]$SubsequentScrollCount = 7,
-    [int]$MaxSections = 10
+    [int]$MaxSections = 10,
+    [switch]$Cleanup               # Delete screenshots after use
 )
+
+# Output folder: [WORKSPACE]/.tools/_screenshots/YYYY-MM-DD_HH-MM-SS
+$timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+$workspaceRoot = (Get-Item $PSScriptRoot).Parent.Parent.Parent.Parent.FullName
+$OutputFolder = Join-Path $workspaceRoot ".tools\_screenshots\$timestamp"
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -136,3 +141,11 @@ for ($section = 1; $section -le $MaxSections; $section++) {
 
 [Win32]::SendKey([Win32]::VK_ESCAPE)
 Write-Host "`nDone! Cropped screenshots saved to: $OutputFolder"
+Write-Host "Run with -Cleanup after analysis to delete: Remove-Item -Recurse '$OutputFolder'"
+
+# Cleanup if requested
+if ($Cleanup) {
+    Write-Host "Cleaning up screenshots..."
+    Remove-Item -Recurse -Force $OutputFolder -ErrorAction SilentlyContinue
+    Write-Host "Deleted: $OutputFolder"
+}
