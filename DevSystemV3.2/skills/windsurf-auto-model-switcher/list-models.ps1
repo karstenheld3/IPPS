@@ -1,138 +1,161 @@
-# Windsurf Auto Model Switcher - List all available models and their costs
-# Uses keyboard navigation to explore the model selector UI and saves results incrementally
+# Windsurf Auto Model Switcher - List available models from user_settings.pb
+# Extracts model IDs and maps to display names with costs
 
 param(
-    [string]$WindowTitle = "*Windsurf*",
-    [string]$OutputPath = "available-models.md",
-    [int]$ScrollGroupSize = 17,  # Number of DOWN presses to reach next section
-    [int]$MaxEmptySections = 3   # Stop after this many empty sections (reached bottom)
+    [string]$OutputPath = "available-models.json",
+    [string]$PbPath = "$env:USERPROFILE\.codeium\windsurf\user_settings.pb"
 )
 
-Add-Type -AssemblyName System.Windows.Forms
-
-Add-Type @"
-using System;
-using System.Runtime.InteropServices;
-public class Win32 {
-    [DllImport("user32.dll")]
-    public static extern bool SetForegroundWindow(IntPtr hWnd);
-    [DllImport("user32.dll")]
-    public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
-
-    public const byte VK_CONTROL = 0x11;
-    public const byte VK_SHIFT = 0x10;
-    public const byte VK_F9 = 0x78;
-    public const byte VK_TAB = 0x09;
-    public const byte VK_UP = 0x26;
-    public const byte VK_DOWN = 0x28;
-    public const byte VK_SPACE = 0x20;
-    public const byte VK_ESCAPE = 0x1B;
-    public const uint KEYEVENTF_KEYUP = 0x0002;
-
-    public static void SendCtrlShiftF9() {
-        keybd_event(VK_CONTROL, 0, 0, UIntPtr.Zero);
-        keybd_event(VK_SHIFT, 0, 0, UIntPtr.Zero);
-        keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
-        System.Threading.Thread.Sleep(50);
-        keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
-        keybd_event(VK_SHIFT, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
-        keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
-    }
-
-    public static void SendKey(byte key) {
-        keybd_event(key, 0, 0, UIntPtr.Zero);
-        System.Threading.Thread.Sleep(30);
-        keybd_event(key, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
-        System.Threading.Thread.Sleep(30);
-    }
-}
-"@
-
-$proc = Get-Process -Name "Windsurf" -ErrorAction SilentlyContinue |
-    Where-Object { $_.MainWindowTitle -like $WindowTitle -and $_.MainWindowTitle -ne "" } |
-    Select-Object -First 1
-
-if (-not $proc) {
-    Write-Error "No Windsurf window found matching: $WindowTitle"
+if (-not (Test-Path $PbPath)) {
+    Write-Error "Protobuf file not found: $PbPath"
     exit 1
 }
 
-Write-Host "Focusing: $($proc.MainWindowTitle)"
-[Win32]::SetForegroundWindow($proc.MainWindowHandle) | Out-Null
-Start-Sleep -Milliseconds 500
+# Read binary and extract model IDs (they appear as MODEL_* strings)
+$bytes = [System.IO.File]::ReadAllBytes($PbPath)
+$content = [System.Text.Encoding]::UTF8.GetString($bytes)
 
-# Open model selector
-[Win32]::SendCtrlShiftF9()
-Start-Sleep -Milliseconds 400
+# Extract all MODEL_* identifiers
+$modelIds = [regex]::Matches($content, 'MODEL_[A-Z0-9_]+') | 
+    ForEach-Object { $_.Value } | 
+    Sort-Object -Unique |
+    Where-Object { $_ -ne "MODEL_SELECTOR" }
 
-# Navigate to first model
-[Win32]::SendKey([Win32]::VK_UP)
-Start-Sleep -Milliseconds 100
-[Win32]::SendKey([Win32]::VK_TAB)
-Start-Sleep -Milliseconds 100
-[Win32]::SendKey([Win32]::VK_SPACE)
-Start-Sleep -Milliseconds 100
-
-# Initialize output file
-$timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
-$OutputPath = $OutputPath -replace "\.md$", "_${timestamp}.md"
-"# Windsurf Available Models`n`nScanned: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')`n" | Out-File $OutputPath -Encoding UTF8
-
-$sectionCount = 0
-$modelCount = 0
-$emptyCount = 0
-$currentSection = ""
-$sectionModels = @()
-
-Write-Host "Scanning models (Ctrl+C to stop)..."
-Write-Host "Results will be saved to: $OutputPath"
-
-while ($emptyCount -lt $MaxEmptySections) {
-    Write-Host "`rSection $($sectionCount + 1) - $currentSection" -NoNewline
+# Model ID to display name and cost mapping (from UI screenshot)
+$modelMapping = @{
+    # Claude
+    "MODEL_CLAUDE_4_5_OPUS_THINKING" = @{ name = "Claude Opus 4.5 (Thinking)"; cost = "5x" }
+    "MODEL_CLAUDE_4_5_OPUS" = @{ name = "Claude Opus 4.5"; cost = "4x" }
+    "MODEL_CLAUDE_4_1_OPUS_THINKING" = @{ name = "Claude Opus 4.1 (Thinking)"; cost = "20x" }
+    "MODEL_CLAUDE_4_1_OPUS" = @{ name = "Claude Opus 4.1"; cost = "20x" }
+    "MODEL_CLAUDE_4_OPUS_BYOK" = @{ name = "Claude Opus 4 (BYOK)"; cost = "BYOK" }
+    "MODEL_CLAUDE_4_OPUS_THINKING_BYOK" = @{ name = "Claude Opus 4 (Thinking, BYOK)"; cost = "BYOK" }
+    "MODEL_CLAUDE_4_SONNET_THINKING" = @{ name = "Claude Sonnet 4 (Thinking)"; cost = "2x" }
+    "MODEL_CLAUDE_4_SONNET" = @{ name = "Claude Sonnet 4"; cost = "2x" }
+    "MODEL_CLAUDE_4_SONNET_BYOK" = @{ name = "Claude Sonnet 4 (BYOK)"; cost = "BYOK" }
+    "MODEL_CLAUDE_4_SONNET_THINKING_BYOK" = @{ name = "Claude Sonnet 4 (Thinking, BYOK)"; cost = "BYOK" }
+    "MODEL_PRIVATE_2" = @{ name = "Claude Sonnet 4.5"; cost = "2x" }
+    "MODEL_PRIVATE_3" = @{ name = "Claude Sonnet 4.5 (1M)"; cost = "10x" }
+    "MODEL_PRIVATE_4" = @{ name = "Claude Sonnet 4.5 Thinking"; cost = "2x" }
+    "MODEL_CLAUDE_3_7_SONNET_20250219_THINKING" = @{ name = "Claude 3.7 Sonnet (Thinking)"; cost = "3x" }
+    "MODEL_CLAUDE_3_7_SONNET_20250219" = @{ name = "Claude 3.7 Sonnet"; cost = "3x" }
+    "MODEL_CLAUDE_3_5_SONNET_20241022" = @{ name = "Claude 3.5 Sonnet"; cost = "2x" }
+    "MODEL_PRIVATE_6" = @{ name = "Claude Haiku 4.5"; cost = "1x" }
     
-    # Save current section if we're starting a new one
-    if ($sectionModels.Count -gt 0) {
-        "`n## $currentSection`n" | Out-File $OutputPath -Append -Encoding UTF8
-        $sectionModels | ForEach-Object { "- $_`n" } | Out-File $OutputPath -Append -Encoding UTF8
-        $modelCount += $sectionModels.Count
-        $sectionModels = @()
-    }
+    # GPT-5.2
+    "MODEL_GPT_5_2_XHIGH_PRIORITY" = @{ name = "GPT-5.2 X-High Reasoning Fast"; cost = "8x" }
+    "MODEL_GPT_5_2_XHIGH" = @{ name = "GPT-5.2 X-High Reasoning"; cost = "8x" }
+    "MODEL_GPT_5_2_HIGH_PRIORITY" = @{ name = "GPT-5.2 High Reasoning Fast"; cost = "6x" }
+    "MODEL_GPT_5_2_HIGH" = @{ name = "GPT-5.2 High Reasoning"; cost = "3x" }
+    "MODEL_GPT_5_2_MEDIUM_PRIORITY" = @{ name = "GPT-5.2 Medium Reasoning Fast"; cost = "4x" }
+    "MODEL_GPT_5_2_MEDIUM" = @{ name = "GPT-5.2 Medium Reasoning"; cost = "2x" }
+    "MODEL_GPT_5_2_LOW_PRIORITY" = @{ name = "GPT-5.2 Low Reasoning Fast"; cost = "2x" }
+    "MODEL_GPT_5_2_LOW" = @{ name = "GPT-5.2 Low Reasoning"; cost = "1x" }
+    "MODEL_GPT_5_2_NONE_PRIORITY" = @{ name = "GPT-5.2 No Reasoning Fast"; cost = "2x" }
+    "MODEL_GPT_5_2_NONE" = @{ name = "GPT-5.2 No Reasoning"; cost = "1x" }
     
-    # Scroll through section
-    $foundModels = $false
-    for ($i = 0; $i -lt $ScrollGroupSize; $i++) {
-        [Win32]::SendKey([Win32]::VK_DOWN)
-        Start-Sleep -Milliseconds 100
-        
-        # If we see a section header, note it
-        if ($i -eq 0) {
-            $currentSection = "Section $($sectionCount + 1)"
-            $sectionCount++
-        }
-        
-        # Add model to current section
-        $sectionModels += "Model $($modelCount + $sectionModels.Count + 1)"
-        $foundModels = $true
-    }
+    # GPT-5.2 Codex
+    "MODEL_GPT_5_2_CODEX_XHIGH_PRIORITY" = @{ name = "GPT-5.2-Codex XHigh Fast"; cost = "6x" }
+    "MODEL_GPT_5_2_CODEX_XHIGH" = @{ name = "GPT-5.2-Codex XHigh"; cost = "3x" }
+    "MODEL_GPT_5_2_CODEX_HIGH_PRIORITY" = @{ name = "GPT-5.2-Codex High Fast"; cost = "4x" }
+    "MODEL_GPT_5_2_CODEX_HIGH" = @{ name = "GPT-5.2-Codex High"; cost = "2x" }
+    "MODEL_GPT_5_2_CODEX_MEDIUM_PRIORITY" = @{ name = "GPT-5.2-Codex Medium Fast"; cost = "2x" }
+    "MODEL_GPT_5_2_CODEX_MEDIUM" = @{ name = "GPT-5.2-Codex Medium"; cost = "1x" }
+    "MODEL_GPT_5_2_CODEX_LOW_PRIORITY" = @{ name = "GPT-5.2-Codex Low Fast"; cost = "2x" }
+    "MODEL_GPT_5_2_CODEX_LOW" = @{ name = "GPT-5.2-Codex Low"; cost = "1x" }
     
-    # If no models found in this scroll group, increment empty counter
-    if (-not $foundModels) {
-        $emptyCount++
-        Write-Host " (empty)" -NoNewline
-    } else {
-        $emptyCount = 0
-    }
+    # GPT-5.1 Codex
+    "MODEL_GPT_5_1_CODEX_MAX_HIGH" = @{ name = "GPT-5.1-Codex Max High"; cost = "1x" }
+    "MODEL_GPT_5_1_CODEX_MAX_MEDIUM" = @{ name = "GPT-5.1-Codex Max Medium"; cost = "0.5x" }
+    "MODEL_GPT_5_1_CODEX_MAX_LOW" = @{ name = "GPT-5.1-Codex Max Low"; cost = "0.5x" }
+    "MODEL_GPT_5_1_CODEX_LOW" = @{ name = "GPT-5.1-Codex Low"; cost = "Free" }
+    "MODEL_GPT_5_1_CODEX_MINI_LOW" = @{ name = "GPT-5.1-Codex-Mini"; cost = "Free" }
     
-    # Next scroll group
-    Start-Sleep -Milliseconds 200
+    # GPT-5 / GPT-5.1
+    "MODEL_PRIVATE_11" = @{ name = "GPT-5.1 (high reasoning)"; cost = "4x" }
+    "MODEL_PRIVATE_12" = @{ name = "GPT-5.1 (high, priority)"; cost = "4x" }
+    "MODEL_PRIVATE_13" = @{ name = "GPT-5.1 (medium reasoning)"; cost = "2x" }
+    "MODEL_PRIVATE_14" = @{ name = "GPT-5.1 (medium, priority)"; cost = "2x" }
+    "MODEL_PRIVATE_15" = @{ name = "GPT-5.1 (low reasoning)"; cost = "1x" }
+    "MODEL_PRIVATE_19" = @{ name = "GPT-5.1 (no reasoning)"; cost = "0.5x" }
+    "MODEL_PRIVATE_20" = @{ name = "GPT-5.1 (no reasoning, priority)"; cost = "0.5x" }
+    "MODEL_PRIVATE_7" = @{ name = "GPT-5 (high reasoning)"; cost = "2x" }
+    "MODEL_PRIVATE_8" = @{ name = "GPT-5 (medium reasoning)"; cost = "0.5x" }
+    "MODEL_PRIVATE_9" = @{ name = "GPT-5 (low reasoning)"; cost = "0.5x" }
+    "MODEL_CHAT_GPT_5_CODEX" = @{ name = "GPT-5-Codex"; cost = "Free" }
+    
+    # GPT-4
+    "MODEL_CHAT_GPT_4O_2024_08_06" = @{ name = "GPT-4o"; cost = "1x" }
+    "MODEL_CHAT_GPT_4_1_2025_04_14" = @{ name = "GPT-4.1"; cost = "1x" }
+    
+    # O3
+    "MODEL_CHAT_O3_HIGH" = @{ name = "o3 (high reasoning)"; cost = "1x" }
+    "MODEL_CHAT_O3" = @{ name = "o3"; cost = "1x" }
+    
+    # Gemini
+    "MODEL_GOOGLE_GEMINI_2_5_PRO" = @{ name = "Gemini 2.5 Pro"; cost = "1x" }
+    "MODEL_GOOGLE_GEMINI_3_0_PRO_HIGH" = @{ name = "Gemini 3 Pro High"; cost = "1x" }
+    "MODEL_GOOGLE_GEMINI_3_0_PRO_MEDIUM" = @{ name = "Gemini 3 Pro Medium"; cost = "1x" }
+    "MODEL_GOOGLE_GEMINI_3_0_PRO_LOW" = @{ name = "Gemini 3 Pro Low"; cost = "1x" }
+    "MODEL_GOOGLE_GEMINI_3_0_PRO_MINIMAL" = @{ name = "Gemini 3 Pro Minimal"; cost = "1x" }
+    "MODEL_GOOGLE_GEMINI_3_0_FLASH_HIGH" = @{ name = "Gemini 3 Flash High"; cost = "1.75x" }
+    "MODEL_GOOGLE_GEMINI_3_0_FLASH_MEDIUM" = @{ name = "Gemini 3 Flash Medium"; cost = "1x" }
+    "MODEL_GOOGLE_GEMINI_3_0_FLASH_LOW" = @{ name = "Gemini 3 Flash Low"; cost = "1x" }
+    "MODEL_GOOGLE_GEMINI_3_0_FLASH_MINIMAL" = @{ name = "Gemini 3 Flash Minimal"; cost = "1x" }
+    
+    # Other
+    "MODEL_SWE_1_5" = @{ name = "SWE-1.5"; cost = "Free" }
+    "MODEL_SWE_1_5_SLOW" = @{ name = "SWE-1.5 Fast"; cost = "0.5x" }
+    "MODEL_ALIAS_SWE_1" = @{ name = "SWE-1"; cost = "Free" }
+    "MODEL_XAI_GROK_3" = @{ name = "xAI Grok-3"; cost = "1x" }
+    "MODEL_XAI_GROK_3_MINI_REASONING" = @{ name = "xAI Grok-3 mini (Thinking)"; cost = "0.125x" }
+    "MODEL_PRIVATE_21" = @{ name = "Grok Code Fast 1"; cost = "Free" }
+    "MODEL_DEEPSEEK_R1" = @{ name = "DeepSeek R1 (0528)"; cost = "Free" }
+    "MODEL_DEEPSEEK_V3" = @{ name = "DeepSeek V3 (0324)"; cost = "Free" }
+    "MODEL_KIMI_K2" = @{ name = "Kimi K2"; cost = "0.5x" }
+    "MODEL_MINIMAX_M2" = @{ name = "Minimax M2"; cost = "0.5x" }
+    "MODEL_MINIMAX_M2_1" = @{ name = "Minimax M2.1"; cost = "0.5x" }
+    "MODEL_QWEN_3_CODER_480B_INSTRUCT" = @{ name = "Qwen3-Coder"; cost = "0.5x" }
+    "MODEL_GLM_4_7" = @{ name = "GLM 4.7"; cost = "0.25x" }
+    "MODEL_GPT_OSS_120B" = @{ name = "GPT-OSS 120B (Medium)"; cost = "0.25x" }
+    "MODEL_PRIVATE_22" = @{ name = "GPT-5.2 X-High Reasoning Fast"; cost = "16x" }
+    "MODEL_PRIVATE_23" = @{ name = "GPT-5.1 (low, priority)"; cost = "1x" }
+    "MODEL_PRIVATE_25" = @{ name = "Grok Code Fast 1"; cost = "Free" }
 }
 
-# Close selector
-[Win32]::SendKey([Win32]::VK_ESCAPE)
+# Build output
+$models = @()
+foreach ($id in $modelIds) {
+    if ($modelMapping.ContainsKey($id)) {
+        $info = $modelMapping[$id]
+        $models += @{
+            id = $id
+            name = $info.name
+            cost = $info.cost
+        }
+    } else {
+        # Unknown model - include with ID as name
+        $models += @{
+            id = $id
+            name = $id -replace "^MODEL_", "" -replace "_", " "
+            cost = "Unknown"
+        }
+    }
+}
 
-# Close selector and show summary
-[Win32]::SendKey([Win32]::VK_ESCAPE)
+# Output JSON
+$output = @{
+    timestamp = (Get-Date -Format "yyyy-MM-ddTHH:mm:ss")
+    source = $PbPath
+    count = $models.Count
+    models = $models
+}
 
-Write-Host "`n`nDone!"
-Write-Host "Found $modelCount models in $sectionCount sections"
-Write-Host "Results saved to: $OutputPath"
+$json = $output | ConvertTo-Json -Depth 10
+$json | Out-File $OutputPath -Encoding UTF8
+
+Write-Host "Found $($models.Count) models"
+Write-Host "Saved to: $OutputPath"
+
+# Also output to console
+$json
