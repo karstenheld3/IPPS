@@ -20,28 +20,28 @@ Switch Windsurf Cascade AI models programmatically using keyboard simulation.
 
 ## Files
 
-- `select-model.ps1` - Select a model by search query
+- `select-windsurf-model-in-ide.ps1` - Select a model by search query
 - `windsurf-model-registry.json` - All available models and costs
-- `update-model-registry/` - Workflow to update the registry
+- `update-model-registry/UPDATE_WINDSURF_MODEL_REGISTRY.md` - Workflow to update the registry
 
 ## Usage
 
 ```powershell
 # Select Claude Sonnet 4.5
-.\select-model.ps1 -Query "sonnet 4.5"
+.\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
 
 # Select Claude Opus 4.5 (Thinking)
-.\select-model.ps1 -Query "opus thinking"
+.\select-windsurf-model-in-ide.ps1 -Query "opus thinking"
 
 # Select GPT-5.2 Low Reasoning
-.\select-model.ps1 -Query "gpt-5.2 low"
+.\select-windsurf-model-in-ide.ps1 -Query "gpt-5.2 low"
 ```
 
 ## Model Registry
 
 See `windsurf-model-registry.json` for all available models and their credit costs.
 
-To update the registry, see `update-model-registry/WORKFLOW.md`.
+To update the registry, see `update-model-registry/UPDATE_WINDSURF_MODEL_REGISTRY.md`.
 
 ## Keybindings
 

@@ -1,5 +1,25 @@
 # Session Failures
 
+## AMSW-FL-006: Generic file names instead of specific descriptive names
+
+**Severity**: [LOW]
+**When**: 2026-01-26 11:50
+**Where**: `DevSystemV3.2/skills/windsurf-auto-model-switcher/`
+**What**: Used generic names like `WORKFLOW.md`, `select-model.ps1` instead of specific names
+
+### Evidence
+- `WORKFLOW.md` - doesn't say what workflow
+- `select-model.ps1` - doesn't say which product/context
+
+### Root Cause
+- Defaulted to short generic names
+- Didn't consider that files may be referenced from other contexts
+
+### Fix
+- Rename to specific names:
+  - `WORKFLOW.md` -> `UPDATE_WINDSURF_MODEL_REGISTRY.md`
+  - `select-model.ps1` -> `select-windsurf-model-in-ide.ps1`
+
 ## AMSW-FL-005: Temporary screenshots committed to git
 
 **Severity**: [MEDIUM]
