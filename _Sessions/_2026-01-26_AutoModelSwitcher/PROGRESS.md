@@ -50,11 +50,12 @@
 - [x] Created `cascade-model-switching.md` rule (now redesigning)
 - [x] Moved tier definitions to !NOTES.md (rule references only)
 
-## In Design
+## Completed Design
 
-- Model assignment in STRUT: Strategy section default + step suffix overrides
-- Safety checks before auto-switch via screenshot analysis
-- Configuration priority: Session NOTES.md > Workspace !NOTES.md
+- [x] Model hints in STRUT Strategy (recommendations, not mandates)
+- [x] Safety checks via screenshot before switching (4 conditions)
+- [x] `cascade-model-switching.md` rule rewritten with new approach
+- [x] Required skills referenced: `@windsurf-auto-model-switcher`, `@windows-desktop-control`
 
 ## Tried But Not Used
 
