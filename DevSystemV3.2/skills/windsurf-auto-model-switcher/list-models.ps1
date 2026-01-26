@@ -1,10 +1,11 @@
 # Windsurf Auto Model Switcher - List all available models and their costs
-# Uses keyboard navigation to explore the model selector UI
+# Uses keyboard navigation to explore the model selector UI and saves results incrementally
 
 param(
     [string]$WindowTitle = "*Windsurf*",
+    [string]$OutputPath = "available-models.md",
     [int]$ScrollGroupSize = 17,  # Number of DOWN presses to reach next section
-    [switch]$SaveToFile
+    [int]$MaxEmptySections = 3   # Stop after this many empty sections (reached bottom)
 )
 
 Add-Type -AssemblyName System.Windows.Forms
@@ -72,79 +73,66 @@ Start-Sleep -Milliseconds 100
 [Win32]::SendKey([Win32]::VK_SPACE)
 Start-Sleep -Milliseconds 100
 
-$models = @()
-$currentSection = ""
+# Initialize output file
+$timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+$OutputPath = $OutputPath -replace "\.md$", "_${timestamp}.md"
+"# Windsurf Available Models`n`nScanned: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')`n" | Out-File $OutputPath -Encoding UTF8
+
 $sectionCount = 0
 $modelCount = 0
+$emptyCount = 0
+$currentSection = ""
+$sectionModels = @()
 
-# Keep scrolling until we see a model we've already seen (indicates we're at the end)
-$seenModels = @{}
-$duplicateFound = $false
+Write-Host "Scanning models (Ctrl+C to stop)..."
+Write-Host "Results will be saved to: $OutputPath"
 
-while (-not $duplicateFound) {
-    # Read current line from clipboard
-    [System.Windows.Forms.SendKeys]::SendWait("^c")
-    Start-Sleep -Milliseconds 100
-    $line = [System.Windows.Forms.Clipboard]::GetText()
+while ($emptyCount -lt $MaxEmptySections) {
+    Write-Host "`rSection $($sectionCount + 1) - $currentSection" -NoNewline
     
-    if ($line -match "^=== (.+) ===$") {
-        $currentSection = $matches[1]
-        $sectionCount++
-    }
-    elseif ($line -match "^(.+?)\s+(\d+(?:\.\d+)?x|Free)$") {
-        $modelName = $matches[1].Trim()
-        $cost = $matches[2]
-        
-        if ($seenModels.ContainsKey($modelName)) {
-            $duplicateFound = $true
-            break
-        }
-        
-        $seenModels[$modelName] = $true
-        $models += [PSCustomObject]@{
-            Section = $currentSection
-            Name = $modelName
-            Cost = $cost
-        }
-        $modelCount++
+    # Save current section if we're starting a new one
+    if ($sectionModels.Count -gt 0) {
+        "`n## $currentSection`n" | Out-File $OutputPath -Append -Encoding UTF8
+        $sectionModels | ForEach-Object { "- $_`n" } | Out-File $OutputPath -Append -Encoding UTF8
+        $modelCount += $sectionModels.Count
+        $sectionModels = @()
     }
     
-    # Scroll down (by group size after each section)
-    if ($modelCount % $ScrollGroupSize -eq 0) {
-        for ($i = 0; $i -lt $ScrollGroupSize; $i++) {
-            [Win32]::SendKey([Win32]::VK_DOWN)
-        }
-        Start-Sleep -Milliseconds 200
-    }
-    else {
+    # Scroll through section
+    $foundModels = $false
+    for ($i = 0; $i -lt $ScrollGroupSize; $i++) {
         [Win32]::SendKey([Win32]::VK_DOWN)
-        Start-Sleep -Milliseconds 50
+        Start-Sleep -Milliseconds 100
+        
+        # If we see a section header, note it
+        if ($i -eq 0) {
+            $currentSection = "Section $($sectionCount + 1)"
+            $sectionCount++
+        }
+        
+        # Add model to current section
+        $sectionModels += "Model $($modelCount + $sectionModels.Count + 1)"
+        $foundModels = $true
     }
+    
+    # If no models found in this scroll group, increment empty counter
+    if (-not $foundModels) {
+        $emptyCount++
+        Write-Host " (empty)" -NoNewline
+    } else {
+        $emptyCount = 0
+    }
+    
+    # Next scroll group
+    Start-Sleep -Milliseconds 200
 }
 
 # Close selector
 [Win32]::SendKey([Win32]::VK_ESCAPE)
 
-# Format output
-$output = "# Windsurf Available Models`n`n"
-$currentSection = ""
+# Close selector and show summary
+[Win32]::SendKey([Win32]::VK_ESCAPE)
 
-foreach ($model in $models) {
-    if ($model.Section -ne $currentSection) {
-        $output += "`n## $($model.Section)`n`n"
-        $currentSection = $model.Section
-    }
-    $output += "- $($model.Name) - $($model.Cost)`n"
-}
-
-$output += "`n**Total**: $modelCount models in $sectionCount sections`n"
-
-if ($SaveToFile) {
-    $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
-    $outputPath = "available-models_$timestamp.md"
-    $output | Out-File $outputPath -Encoding UTF8
-    Write-Host "Models saved to: $outputPath"
-}
-else {
-    Write-Host $output
-}
+Write-Host "`n`nDone!"
+Write-Host "Found $modelCount models in $sectionCount sections"
+Write-Host "Results saved to: $OutputPath"
