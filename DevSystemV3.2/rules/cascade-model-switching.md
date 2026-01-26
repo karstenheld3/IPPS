@@ -7,7 +7,7 @@
 
 ## Overview
 
-Automatically switch AI models based on task type and STRUT hints.
+Automatically switch AI models based on task type and STRUT or TASKS hints.
 
 ## Model Hints
 
@@ -28,17 +28,23 @@ When no STRUT hint exists, use task-based selection:
 
 ## Safety Conditions (ALL required)
 
-Before auto-switching, verify via screenshot:
-1. Windsurf window is foreground
-2. Cascade panel visible with our conversation
-3. User not actively typing in editor
-4. Cascade chat input is empty
+Auto-switching ONLY happens if NO user activity detected:
 
-**If any condition fails: Skip switch silently.**
+1. **OUR Windsurf instance in foreground** - Not another app, not another Windsurf window
+2. **OUR conversation open in Cascade** - The conversation we are in, not a different one
+3. **User NOT doing anything else** - Not typing in editor, not selecting text, not scrolling
+4. **Cascade chat input is empty** - Only queued commands allowed, no partial user input
+
+**If ANY condition fails: Skip switch silently.**
 
 ## Switching Procedure
 
 1. Take screenshot using `@windows-desktop-control` skill
-2. Analyze screenshot for safety conditions
-3. If safe: Run `select-windsurf-model-in-ide.ps1 -Query "<model>"`
-4. If unsafe: Do not switch (user is busy)
+2. Analyze screenshot for ALL safety conditions:
+   - Is Windsurf the foreground window?
+   - Is Cascade panel visible?
+   - Is our conversation showing (check conversation title/context)?
+   - Is the code editor idle (no cursor activity, no selection)?
+   - Is the Cascade chat input field empty?
+3. If ALL conditions met: Run `select-windsurf-model-in-ide.ps1 -Query "<model>"`
+4. If ANY condition fails: Do not switch, do not log, do not notify
