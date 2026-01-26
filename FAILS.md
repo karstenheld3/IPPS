@@ -1,5 +1,24 @@
 # Failure Log
 
+## 2026-01-26 - LLM Evaluation Skill Session
+
+### [MEDIUM] `LLMEV-FL-014` Deleted content before creating reference files
+
+- **When**: 2026-01-26 21:00 UTC+01:00
+- **Where**: `DevSystemV3.2/skills/llm-evaluation/SKILL.md`
+- **What**: User asked for "progressive disclosure" in SKILL.md. Agent deleted 600 lines of detail BEFORE creating the reference files (SCRIPTS.md, CLAUDE_MODELS.md, TESTED_MODELS.md) that would hold those details.
+- **Why it went wrong**:
+  - Misunderstood "progressive disclosure" as "remove details" instead of "reorganize details"
+  - Committed the deletion before creating replacement files
+  - User had to correct: "all details are gone. Progressive disclosure means we make details available as the llm uses the skill. not delete all details"
+- **Evidence**: Commit `cf48ea9` deleted 600 lines; reference files created in separate commit `9175d66` only after user correction
+
+**Prevention rules**:
+1. Progressive disclosure = reorganize, NOT delete
+2. When moving content to reference files: CREATE reference files FIRST, THEN update main file to reference them
+3. Never commit content deletion without the replacement ready
+4. If restructuring, do it in ONE commit with both changes
+
 ## 2026-01-26 - Auto Model Switcher Session
 
 ### [MEDIUM] `AMSW-FL-015` Session TOPIC not registered in ID-REGISTRY.md

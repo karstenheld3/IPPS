@@ -44,7 +44,7 @@ Evaluate LLM performance through structured testing pipelines.
 - `analyze-costs.py` - Calculate token costs
 - `llm-evaluation-selftest.py` - Validate all scripts work
 
-**Details:** See `SCRIPTS.md` for parameters and examples
+**Details:** See `LLM_EVALUATION_SCRIPTS.md` for parameters and examples
 
 ## Key Findings
 
@@ -54,7 +54,7 @@ Evaluate LLM performance through structured testing pipelines.
 - OpenAI models: 120+ concurrent workers
 - Anthropic models: 60+ concurrent workers
 
-**Claude model IDs:** Use exact release dates (e.g., `claude-opus-4-5-20251101` not `20250514`). See `CLAUDE_MODELS.md` for verified IDs.
+**Claude model IDs:** Use exact release dates (e.g., `claude-opus-4-5-20251101` not `20250514`). See `LLM_EVALUATION_CLAUDE_MODELS.md` for verified IDs.
 
-**Tested models:** 16+ models validated via `llm-evaluation-selftest.py`. See `TESTED_MODELS.md` for full list.
+**Tested models:** 16+ models validated via `llm-evaluation-selftest.py`. See `LLM_EVALUATION_TESTED_MODELS.md` for full list.
 
