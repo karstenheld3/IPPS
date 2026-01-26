@@ -20,6 +20,7 @@
 
 ## Done
 
+- [x] Session closed: 2026-01-26 - SPEC vs IMPL verified, syncs complete
 - [x] Implemented LLMEV-TK-010b: OpenAI Eval API in evaluate-answers.py
 - [x] Tested --method openai-eval: 3/3 passed (100%), gpt-4o judge
 - [x] SPEC/IMPL sync review - identified 3 discrepancies

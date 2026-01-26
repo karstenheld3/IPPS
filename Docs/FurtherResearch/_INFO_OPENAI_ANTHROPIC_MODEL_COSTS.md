@@ -7,13 +7,28 @@
 
 ### OpenAI (USD per 1M tokens)
 
-- **gpt-5**: $1.25 input, $10.00 output
+**GPT-5 Family:**
+- **gpt-5.2**: $1.75 input, $14.00 output
+- **gpt-5.1 / gpt-5**: $1.25 input, $10.00 output
 - **gpt-5-mini**: $0.25 input, $2.00 output
 - **gpt-5-nano**: $0.05 input, $0.40 output
-- **gpt-4.1**: $3.00 input, $12.00 output
-- **gpt-4o**: $5.00 input, $20.00 output (realtime); $2.50 input, $10.00 output (standard)
-- **gpt-4o-mini**: $0.60 input, $2.40 output (realtime); $0.15 input, $0.60 output (standard)
-- **o3-mini**: ~$1.25 input, $10.00 output (similar to gpt-5)
+- **gpt-5.2-pro**: $21.00 input, $168.00 output
+- **gpt-5-pro**: $15.00 input, $120.00 output
+
+**GPT-4 Family:**
+- **gpt-4.1**: $2.00 input, $8.00 output
+- **gpt-4.1-mini**: $0.40 input, $1.60 output
+- **gpt-4.1-nano**: $0.10 input, $0.40 output
+- **gpt-4o**: $2.50 input, $10.00 output
+- **gpt-4o-mini**: $0.15 input, $0.60 output
+
+**o-Series (Reasoning):**
+- **o4-mini**: $1.10 input, $4.40 output
+- **o3-mini**: $1.10 input, $4.40 output
+- **o3-deep-research**: $10.00 input, $40.00 output
+- **o1**: $15.00 input, $60.00 output
+- **o1-mini**: $1.10 input, $4.40 output
+- **o1-pro**: $150.00 input, $600.00 output
 
 ### Anthropic (USD per 1M tokens)
 
@@ -33,14 +48,24 @@
 ### OpenAI Pricing Structure
 
 GPT-5 family released August 2025:
-- **GPT-5**: Flagship model, $1.25/1M input, $10.00/1M output, 400K context
-- **GPT-5 Mini**: Smaller variant, $0.25/1M input, $2.00/1M output
-- **GPT-5 Nano**: Smallest, $0.05/1M input, $0.40/1M output
+- **GPT-5.2**: Latest flagship, $1.75/1M input, $14.00/1M output
+- **GPT-5.1 / GPT-5**: $1.25/1M input, $10.00/1M output, 400K context
+- **GPT-5 Mini**: $0.25/1M input, $2.00/1M output
+- **GPT-5 Nano**: $0.05/1M input, $0.40/1M output
+- **GPT-5.2-pro / GPT-5-pro**: Extended thinking, $15-21/1M input, $120-168/1M output
 
 GPT-4 series:
-- **GPT-4.1** (April 2025): $3.00/1M input, $12.00/1M output
-- **GPT-4o**: $2.50/1M input (cached $1.25), $10.00/1M output (standard)
+- **GPT-4.1**: $2.00/1M input, $8.00/1M output
+- **GPT-4.1-mini**: $0.40/1M input, $1.60/1M output
+- **GPT-4.1-nano**: $0.10/1M input, $0.40/1M output
+- **GPT-4o**: $2.50/1M input, $10.00/1M output
 - **GPT-4o-mini**: $0.15/1M input, $0.60/1M output
+
+o-Series (Reasoning models):
+- **o4-mini / o3-mini / o1-mini**: $1.10/1M input, $4.40/1M output
+- **o3-deep-research**: $10.00/1M input, $40.00/1M output
+- **o1**: $15.00/1M input, $60.00/1M output
+- **o1-pro**: $150.00/1M input, $600.00/1M output
 
 Newer models (gpt-5, o1, o3) use `max_completion_tokens` parameter instead of `max_tokens`.
 

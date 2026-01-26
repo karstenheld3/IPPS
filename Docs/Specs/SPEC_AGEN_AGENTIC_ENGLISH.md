@@ -239,7 +239,7 @@ Reusable activities that can be used within any phase. Use as markers like `[RES
 - **[STATUS]** - Write status report
 - **[PROPOSE]** - Present multiple options for [ACTOR] to choose from
 - **[RECOMMEND]** - Suggest single option with rationale (use with [DECIDE])
-- **[VALIDATE]** - Confirm approach or result with [ACTOR]
+- **[CONFIRM]** - Confirm approach or result with [ACTOR]
 - **[ENUMERATE]** - Generate comprehensive list before proposing
 - **[PRESENT]** - Share findings or results with [ACTOR]
 - **[COMPARE]** - Show side-by-side differences (not scored like [EVALUATE])

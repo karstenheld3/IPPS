@@ -22,6 +22,39 @@
 
 ## 2026-01-22 - LLM Evaluation Skill Session
 
+### [MEDIUM] `LLMEV-FL-013` Repeatedly misunderstanding user's parameter design intent
+
+- **When**: 2026-01-24 19:41 UTC+01:00
+- **Where**: model-parameter-mapping.json design iterations
+- **What**: Agent kept trying to create a unified `--effort` parameter when user wanted THREE separate CLI params (`--temperature`, `--reasoning-effort`, `--output-length`) that all use the same keywords
+
+**Prevention rules**:
+1. When user says "no" or corrects, STOP and ask for clarification
+2. Restate understanding before implementing: "So you want X, Y, Z - is that correct?"
+3. Don't assume simplification is always the goal
+
+### [MEDIUM] `LLMEV-FL-012` Repeatedly confusing API parameter ranges between providers
+
+- **When**: 2026-01-24 19:27 UTC+01:00
+- **Where**: SPEC document, model-parameter-mapping.json
+- **What**: Agent repeatedly wrote incorrect temperature ranges - swapping OpenAI (0-2) and Anthropic (0-1) values
+
+**Prevention rules**:
+1. When user reports a bug, assume they are correct and find it
+2. Create reference table and verify against it each time
+3. **OpenAI legacy: 0-2, Anthropic: 0-1** (memorize this)
+
+### [MEDIUM] `LLMEV-FL-010` Failed to recognize workspace workflow and executed without confirmation
+
+- **When**: 2026-01-23 11:05 UTC+01:00
+- **Where**: Agent response to "deploy-to-all" user message
+- **What**: User said "deploy-to-all" which maps to `deploy-to-all-repos.md` workflow in workspace root. Agent ignored the workflow and executed sync commands immediately.
+
+**Prevention rules**:
+1. When receiving command-like messages, check workspace root for matching `.md` workflow files
+2. Read and follow workflow's execution mode (preview vs auto-execute)
+3. Never execute batch file operations without explicit confirmation
+
 ### [MEDIUM] `LLMEV-FL-009` Ignored documented settings in NOTES.md
 
 - **When**: 2026-01-22 23:03 UTC+01:00

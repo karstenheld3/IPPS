@@ -1,1 +1,0 @@
-The image features a colorful, abstract logo with a gradient design forming a loop around a white central shape.
