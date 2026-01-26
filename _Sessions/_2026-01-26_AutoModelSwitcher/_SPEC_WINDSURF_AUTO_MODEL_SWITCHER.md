@@ -1,7 +1,15 @@
-# SPEC: Cascade Auto Model Switcher
+# SPEC: Windsurf Auto Model Switcher
 
 **Doc ID**: AMSW-SP01
 **Goal**: Document the model switching system for Windsurf Cascade
+**Timeline**: Created 2026-01-26, updated 3x
+
+## MUST-NOT-FORGET
+
+- Model switch takes effect on user's NEXT message (not current)
+- Tier definitions live in `!NOTES.md` and `switch-model.md` (not hardcoded here)
+- German keyboards: Use F-keys (Ctrl+Shift+F9/F10), not Ctrl+Alt (AltGr conflict)
+- Default to MODEL-HIGH when uncertain - quality over cost
 
 ## Table of Contents
 
@@ -183,13 +191,18 @@ Hints are recommendations - agent decides based on actual task.
 
 ## Design Decisions
 
-- **DD-01**: Default to HIGH - Quality over cost. User explicitly opts into savings.
-- **DD-02**: Three-tier system - Simplified from 5 tiers. Easier to remember.
-- **DD-03**: No auto-switch during errors - Errors need full reasoning capability.
-- **DD-04**: Gemini 3 Flash for LOW - Best speed (372 TPS) and quality (78% SWE-Bench) at 1x.
-- **DD-05**: Fuzzy matching + cost priority - Partial names work, prefer cheaper on tie.
+- **AMSW-DD-01**: Default to HIGH - Quality over cost. User explicitly opts into savings.
+- **AMSW-DD-02**: Three-tier system - Simplified from 5 tiers. Easier to remember.
+- **AMSW-DD-03**: No auto-switch during errors - Errors need full reasoning capability.
+- **AMSW-DD-04**: Gemini 3 Flash for LOW - Best speed (372 TPS) and quality (78% SWE-Bench) at 1x.
+- **AMSW-DD-05**: Fuzzy matching + cost priority - Partial names work, prefer cheaper on tie.
 
 ## Document History
+
+**[2026-01-26 16:41]**
+- Renamed: `_SPEC_WINDSURF_AUTO_MODEL_SWITCHER.md`
+- Added: MUST-NOT-FORGET section, Timeline field
+- Fixed: Design Decision IDs to use AMSW-DD-XX format
 
 **[2026-01-26 16:39]**
 - Restructured to document skill, workflow, rule, and DevSystem integration
