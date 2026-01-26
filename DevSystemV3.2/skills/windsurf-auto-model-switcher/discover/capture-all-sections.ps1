@@ -4,8 +4,8 @@
 param(
     [string]$WindowTitle = "*Windsurf*",
     [string]$OutputFolder = "shots",
-    [int]$FirstScrollCount = 4,      # DOWN keys for first scroll (visible model count)
-    [int]$SubsequentScrollCount = 3, # DOWN keys for subsequent scrolls (visible - 1 for overlap detection)
+    [int]$FirstScrollCount = 10,     # DOWN keys for first scroll (visible model count)
+    [int]$SubsequentScrollCount = 9, # DOWN keys for subsequent scrolls (visible - 1 for overlap detection)
     [int]$MaxSections = 25
 )
 
