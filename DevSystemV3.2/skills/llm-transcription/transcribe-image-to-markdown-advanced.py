@@ -226,9 +226,14 @@ def call_openai_vision(model: str, image_data: str, media_type: str,
         'Authorization': f'Bearer {api_key}',
         'Content-Type': 'application/json'
     }
+    
+    # gpt-5 and o-series models use max_completion_tokens instead of max_tokens
+    uses_completion_tokens = any(x in model for x in ['gpt-5', 'o1-', 'o3-', 'o4-'])
+    token_param = 'max_completion_tokens' if uses_completion_tokens else 'max_tokens'
+    
     payload = {
         'model': model,
-        'max_tokens': api_params.get('max_tokens', 8192),
+        token_param: api_params.get('max_tokens', 8192),
         'messages': [{
             'role': 'user',
             'content': [
