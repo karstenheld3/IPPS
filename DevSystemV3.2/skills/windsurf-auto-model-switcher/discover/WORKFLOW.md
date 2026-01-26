@@ -1,6 +1,15 @@
 # Discover Windsurf Models Workflow
 
-This workflow runs in Cascade to discover all available models and their costs.
+Interactive workflow where Cascade dynamically detects popup position each time.
+
+## CRITICAL: No Hardcoded Coordinates
+
+Popup position changes when:
+- Screen resolution changes
+- Window moves
+- Different monitor
+
+**Always run Phase 1 to detect current popup position.**
 
 ## Prerequisites
 
@@ -9,52 +18,53 @@ This workflow runs in Cascade to discover all available models and their costs.
 
 ## Workflow Steps
 
-### Phase 1: Initial Screenshot
+### Phase 1: Detect Popup Position (ALWAYS RUN)
 
-1. Run `step1-open-selector.ps1` to open model selector and take screenshot
-2. Analyze screenshot to determine:
-   - How many models are visible in the popup (typically 4-6)
-   - Extract model names and costs from visible list
-3. Record models seen so far
+```powershell
+.\capture-with-crop.ps1 -Phase1Only
+```
 
-### Phase 2: Scroll and Capture Loop
+1. Takes fullscreen screenshot
+2. Cascade analyzes screenshot
+3. Cascade returns popup coordinates as JSON:
+   ```json
+   { "x": 1570, "y": 1070, "width": 320, "height": 210 }
+   ```
 
-4. Run `step2-scroll-and-capture.ps1 -ScrollCount N` where N = visible model count
-5. Analyze new screenshot to extract model names and costs
-6. If we see a model we already recorded -> STOP (reached end)
-7. Otherwise, record new models and go to step 4
+### Phase 2: Capture with Dynamic Coordinates
 
-### Phase 3: Build Output
+```powershell
+.\capture-with-crop.ps1 -CropX [x] -CropY [y] -CropWidth [w] -CropHeight [h] -MaxSections 12
+```
 
-8. Run `step3-close-selector.ps1` to close selector
-9. Build `windsurf-model-registry.json` with all discovered models
+Use coordinates from Phase 1 analysis.
+
+### Phase 3: Extract Models
+
+1. Cascade reads each cropped screenshot
+2. Extracts model names and costs
+3. Stops when list wraps around (duplicate models seen)
+4. Updates `windsurf-model-registry.json`
+
+## Debugging Blank Screenshots
+
+If cropped screenshots are blank:
+1. Query screen resolution: `[System.Windows.Forms.Screen]::PrimaryScreen.Bounds`
+2. Zoom out: capture large area (500x300) at estimated position
+3. Shift x/y to move toward popup
+4. Refine width/height
 
 ## Output Format
 
-Output must follow JSON-RULES.md:
-- 2-space indentation
-- snake_case field names
-- One model per line for readability
-
 ```json
 {
-  "_version": "1.0",
+  "_version": "1.3",
   "_updated": "2026-01-26",
-  "_source": "discovered from Windsurf model selector UI",
+  "_source": "discovered from Windsurf model selector UI via capture-with-crop.ps1",
   "models": [
-    { "name": "Claude 3.5 Sonnet",           "cost": "2x"   },
-    { "name": "Claude 3.7 Sonnet",           "cost": "3x"   },
-    { "name": "Claude 3.7 Sonnet (Thinking)", "cost": "3x"   }
+    { "name": "Claude 3.5 Sonnet", "cost": "2x" }
   ]
 }
 ```
 
-## Cascade Instructions
-
-When running this workflow:
-
-1. Use `run_command` to execute PowerShell scripts
-2. Use `read_file` to view screenshots
-3. Visually analyze each screenshot to extract model names and costs
-4. Keep track of all models seen to detect duplicates
-5. Output final JSON when complete
+No hardcoded coordinates in output - they are session-specific.

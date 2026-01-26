@@ -1,5 +1,29 @@
 # Session Failures
 
+## AMSW-FL-004: Hardcoded crop coordinates fail on resolution/window changes
+
+**Severity**: [CRITICAL]
+**When**: 2026-01-26 11:16
+**Where**: `DevSystemV3.2/skills/windsurf-auto-model-switcher/windsurf-model-registry.json:6-7`
+**What**: Stored fixed crop coordinates (X=1570, Y=1070) that only work for one specific screen/window position
+
+### Evidence
+- User explicitly stated: "coordinates are different each time"
+- Window can move, resolution can change
+- Hardcoded values defeat the purpose of dynamic discovery
+
+### Root Cause
+- Did not listen to user's original requirement
+- User said: "do first screenshot fullscreen then find position" - this means EVERY TIME
+- I stored coordinates as static metadata instead of detecting dynamically
+
+### Fix
+1. Phase 1 ALWAYS takes fullscreen screenshot
+2. Cascade analyzes and returns popup {x, y, width, height} as JSON
+3. Script receives coordinates as parameters for Phase 2
+4. NO hardcoded coordinates - always dynamic detection
+5. Remove `_crop_area` from JSON - it's session-specific, not reusable
+
 ## AMSW-FL-003: Fullscreen screenshots waste tokens, truncated popup misses models
 
 **Severity**: [HIGH]

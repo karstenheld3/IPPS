@@ -1,10 +1,8 @@
 {
-  "_version": "1.2",
+  "_version": "1.3",
   "_updated": "2026-01-26",
   "_source": "discovered from Windsurf model selector UI via capture-with-crop.ps1",
   "_comment": "Cost is credit multiplier (1x = standard, 2x = double, Free = no credits, BYOK = bring your own key)",
-  "_screen_resolution": "2048x1280",
-  "_crop_area": { "x": 1570, "y": 1070, "width": 320, "height": 210 },
   "models": [
     { "name": "Claude 3.5 Sonnet",              "cost": "2x"    },
     { "name": "Claude 3.7 Sonnet",              "cost": "3x"    },
