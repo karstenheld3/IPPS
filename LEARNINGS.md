@@ -1,5 +1,55 @@
 # Learnings Log
 
+## 2026-01-26 - UI Automation and Discovery Scripts
+
+### `AMSW-LN-001` Listen first, implement second - user requirements are specific for a reason
+
+**Linked failures**: `AMSW-FL-001` through `AMSW-FL-006`
+**Problem type**: BUILD / COMPLEXITY-MEDIUM (UI automation skill)
+
+**Context at decision time:**
+- User wanted to discover Windsurf models and costs programmatically
+- User specified two-phase approach: fullscreen first, then crop
+- User mentioned coordinates change each time
+
+**Assumptions made:**
+- `[CONTRADICTS]` Hardcoding model data is acceptable for "discovery"
+- `[CONTRADICTS]` Clipboard reading is reliable for UI scraping
+- `[CONTRADICTS]` LLM can accurately map scaled images to screen pixels
+- `[CONTRADICTS]` Crop coordinates can be stored and reused
+- `[UNVERIFIED]` Generic file names are acceptable
+- `[VERIFIED]` Keyboard simulation works for model selection
+
+**Actual outcome:**
+- 6 failures recorded in one session
+- Multiple rewrites of capture scripts
+- Final solution: simplified fullscreen capture (opposite of optimization attempt)
+
+**Problem dependency tree:**
+```
+[Root: Not pausing to fully understand user's specific requirements]
+├─> [Ignored "coordinates change each time"]
+│   ├─> [Hardcoded coordinates] -> FL-004
+│   └─> [Tried cropping optimization] -> FL-003
+├─> [Misunderstood "discovery" goal]
+│   ├─> [Hardcoded model mapping] -> FL-002
+│   └─> [Clipboard anti-pattern] -> FL-001
+└─> [Did not consider broader context]
+    ├─> [Committed temp files] -> FL-005
+    └─> [Generic file names] -> FL-006
+```
+
+**Root cause**: Rushing to implement before fully understanding WHY the user specified particular requirements. Each user constraint exists for a reason.
+
+**Counterfactual**: If we had asked "why do coordinates change each time?" we would have understood the window position issue immediately and never attempted to store fixed coordinates.
+
+**Prevention**:
+1. When user gives specific instructions, ask "why" if unclear before implementing
+2. User constraints are data - they exist because user encountered the problem before
+3. Simpler solutions often beat optimized ones (fullscreen > cropping)
+4. Consider reusability: will this work in different contexts?
+5. Generic names signal incomplete thinking about the file's purpose
+
 ## 2026-01-21 - MCP Server Compatibility
 
 ### `MCPS-LN-001` MCP servers must be verified compatible with specific AI clients
