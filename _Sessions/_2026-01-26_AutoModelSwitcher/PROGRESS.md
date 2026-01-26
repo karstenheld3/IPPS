@@ -43,6 +43,7 @@
 - [x] [TESTED] Fixed DPI scaling issue - use Win32 GetDeviceCaps for physical resolution
 - [x] Created `simple-screenshot.ps1` for passive screenshots (no UI interaction)
 - [x] Separated screenshot scripts: simple (passive) vs capture-with-crop (active)
+- [x] Created `windows-desktop-control` skill with `simple-screenshot.ps1`
 
 ## Tried But Not Used
 
