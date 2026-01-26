@@ -265,7 +265,7 @@ Agent skills in `DevSystemV3.2/skills/`. Each skill contains scripts, documentat
 
 Evaluate LLM output quality by generating questions, collecting answers, and scoring with a judge model.
 
-**Setup**: Run `SETUP.md` to install Python venv with OpenAI/Anthropic SDKs in `.tools/llm-eval-venv/`.
+**Setup**: Run `SETUP.md` to install Python venv with OpenAI/Anthropic SDKs in `.tools/llm-venv/`.
 
 **Scripts**:
 - `call-llm.py` - Single LLM call (image or text input)
@@ -277,7 +277,7 @@ Evaluate LLM output quality by generating questions, collecting answers, and sco
 
 **Quick examples**:
 ```powershell
-$venv = ".tools\llm-eval-venv\Scripts\python.exe"
+$venv = ".tools\llm-venv\Scripts\python.exe"
 $skill = "DevSystemV3.2\skills\llm-evaluation"
 
 # Transcribe images
