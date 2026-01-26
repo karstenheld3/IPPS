@@ -1,28 +1,37 @@
 # Cascade Model Switching
 
-Automatically switch model tier at the end of each response to optimize costs.
+Automatically switch AI models based on task type and STRUT hints.
 
-## Configuration
+## Model Hints
 
-Tier definitions and activity mappings are in workspace `!NOTES.md` under `## Cascade Model Tiers`.
-
-## Required Behavior
-
-At the END of every response:
-
-1. Assess what the NEXT user request will likely need
-2. Map to appropriate tier (HIGH/MID/CHORES)
-3. Call the model switcher script:
-
-```powershell
-& "[WORKSPACE]/DevSystemV3.2/skills/windsurf-auto-model-switcher/select-windsurf-model-in-ide.ps1" -Query "<model>"
+STRUT Strategy sections may include model hints:
 ```
-**If uncertain, default to HIGH.**
-
-## Example
-
-After completing a git commit (CHORES task), if the next task looks like code review:
-
-```powershell
-& "E:\Dev\IPPS\DevSystemV3.2\skills\windsurf-auto-model-switcher\select-windsurf-model-in-ide.ps1" -Query "sonnet 4.5"
+├─ Strategy: Analyze requirements, design solution
+│   - Opus for analysis, Sonnet for implementation
 ```
+
+Hints are recommendations - agent decides based on actual task.
+
+## Default Model Selection
+
+When no STRUT hint exists, use task-based selection:
+- **Planning/Analysis**: Claude Opus 4.5 (Thinking)
+- **Implementation/Bugfix**: Claude Sonnet 4.5
+- **Chores (git, files)**: Claude Haiku 4.5
+
+## Safety Conditions (ALL required)
+
+Before auto-switching, verify via screenshot:
+1. Windsurf window is foreground
+2. Cascade panel visible with our conversation
+3. User not actively typing in editor
+4. Cascade chat input is empty
+
+**If any condition fails: Skip switch silently.**
+
+## Switching Procedure
+
+1. Take screenshot using `@windows-desktop-control` skill
+2. Analyze screenshot for safety conditions
+3. If safe: Run `select-windsurf-model-in-ide.ps1 -Query "<model>"`
+4. If unsafe: Do not switch (user is busy)
