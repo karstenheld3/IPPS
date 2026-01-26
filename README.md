@@ -386,7 +386,7 @@ IPPS/
 │       ├── rename.md             # Global/local refactoring
 │       ├── research.md           # Structured research
 │       ├── session-archive.md    # Archive session folder
-│       ├── session-close.md      # Close and sync session
+│       ├── session-finalize.md   # Finalize and sync session
 │       ├── session-new.md        # Initialize session
 │       ├── session-load.md       # Resume session
 │       ├── session-save.md       # Save session progress
@@ -465,14 +465,14 @@ Located in session folder (e.g., `_2026-01-15_FixAuthBug/`):
     ↓
 /session-load    → Re-read session docs, continue work
     ↓
-/session-close   → Sync FAILS and LEARNINGS to workspace, prepare for archive
+/session-finalize → Sync FAILS and LEARNINGS to workspace, prepare for archive
     ↓
 /session-archive → Move session folder to _Archive/
 ```
 
-### Sync on Session Close
+### Sync on Session Finalize
 
-When [`/session-close`](.windsurf/workflows/session-close.md) runs:
+When [`/session-finalize`](.windsurf/workflows/session-finalize.md) runs:
 - **FAILS.md** - [MEDIUM] and [HIGH] severity entries sync to workspace `FAILS.md`
 - **LEARNINGS.md** - Patterns from [MEDIUM]/[HIGH] fails sync to workspace `LEARNINGS.md` or `!NOTES.md`
 - **PROBLEMS.md** - Open/deferred problems sync to workspace `!PROBLEMS.md`
@@ -517,7 +517,7 @@ Start a SOLVE workflow (research, analysis, decisions):
 
 ### Session Workflows
 
-**Workflows:** [`/session-new`](.windsurf/workflows/session-new.md), [`/session-save`](.windsurf/workflows/session-save.md), [`/session-load`](.windsurf/workflows/session-load.md), [`/session-close`](.windsurf/workflows/session-close.md)
+**Workflows:** [`/session-new`](.windsurf/workflows/session-new.md), [`/session-save`](.windsurf/workflows/session-save.md), [`/session-load`](.windsurf/workflows/session-load.md), [`/session-finalize`](.windsurf/workflows/session-finalize.md)
 
 Start a new work session:
 ```
@@ -535,9 +535,9 @@ Resume an existing session:
 /session-load
 ```
 
-Close session and sync findings:
+Finalize session and sync findings:
 ```
-/session-close
+/session-finalize
 ```
 
 ### Autonomous Execution

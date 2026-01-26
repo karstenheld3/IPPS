@@ -1,9 +1,9 @@
 ---
-description: Close a development session, sync findings, and archive
+description: Finalize a development session, sync findings, and prepare for archive
 auto_execution_mode: 1
 ---
 
-# Close Session Workflow
+# Finalize Session Workflow
 
 ## Required Skills
 

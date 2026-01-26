@@ -177,7 +177,7 @@ C:\Dev\Repo1
 C:\Dev\Repo2
   - Add: 41 files
       workflows\build.md, commit.md, critique.md, reconcile.md
-      workflows\session-close.md, session-new.md, solve.md, test.md
+      workflows\session-finalize.md, session-new.md, solve.md, test.md
       workflows\write-impl-plan.md, write-spec.md, write-test-plan.md
       ...
   - Delete: 1 deprecated file
@@ -189,7 +189,7 @@ C:\Dev\Repo3
 C:\Dev\Repo4
   - Add: 27 new files
       workflows\build.md, commit.md, critique.md, reconcile.md
-      workflows\session-close.md, session-new.md, solve.md, test.md
+      workflows\session-finalize.md, session-new.md, solve.md, test.md
       workflows\write-impl-plan.md, write-spec.md, write-test-plan.md
       ...
   - Overwrite: 13 older files

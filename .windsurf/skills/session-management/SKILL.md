@@ -16,8 +16,8 @@ Sessions track EDIRD phases:
 - Session folder location: `[DEFAULT_SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
 - Default: `[DEFAULT_SESSIONS_FOLDER]` = `[WORKSPACE_FOLDER]` (override in `!NOTES.md`)
 - Required files: NOTES.md, PROBLEMS.md, PROGRESS.md
-- Lifecycle: Init → Work → Save → Resume → Close → Archive
-- Sync session PROBLEMS.md to project on /session-close
+- Lifecycle: Init → Work → Save → Resume → Finalize → Archive
+- Sync session PROBLEMS.md to project on /session-finalize
 - Phase tracking: NOTES.md has current phase, PROGRESS.md has full phase plan
 
 ## Session Lifecycle
@@ -26,7 +26,7 @@ Sessions track EDIRD phases:
 2. **Work**: Create specs, plans, implement, track progress
 3. **Save** (`/session-save`): Document findings, commit changes
 4. **Resume** (`/session-load`): Re-read session documents, continue work
-5. **Close** (`/session-close`): Sync findings to project files, archive
+5. **Finalize** (`/session-finalize`): Sync findings to project files, prepare for archive
 
 ## Session Folder Location
 
@@ -72,7 +72,7 @@ Use templates from this skill folder:
    └── Agent primes from session files, executes workflows in Notes
    └── Continue with steps 2-3
 
-6. CLOSE: User closes session (`/session-close`)
+6. FINALIZE: User finalizes session (`/session-finalize`)
    └── Everything updated, committed, synced to project/workspace
 
 7. ARCHIVE: User archives session
