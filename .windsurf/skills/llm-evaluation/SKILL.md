@@ -129,6 +129,38 @@ python compare-transcription-runs.py --files run1/*.md run2/*.md --output-file c
 - Effort level control: temperature, reasoning_effort, output_length
 - Model-aware parameter building (temperature vs reasoning models)
 
+### find-workers-limit.py - Worker Limit Discovery
+
+```powershell
+python find-workers-limit.py --model gpt-5-nano --max-workers 120 --verbose
+python find-workers-limit.py --model claude-4-5-haiku-20251022 --max-workers 60
+```
+
+**Purpose:**
+Discovers maximum concurrent workers for LLM API burst capacity testing.
+
+**Parameters:**
+- `--model` - API model ID (required)
+- `--max-workers` - Maximum workers to test (default: 100)
+- `--prompt` - Custom prompt text (default: 500-word essay)
+- `--min-output-tokens` - Minimum output tokens (default: 500)
+- `--keys-file` - API keys file (default: .env)
+- `--output-file` - Output JSON file (default: {model}-limit.json)
+- `--verbose` - Show detailed progress
+
+**Algorithm:**
+1. Start at 3 workers, double twice (to 12)
+2. Scale by 1.5x up to max-workers
+3. On rate limit: scale back by 0.8 to find highest passing count
+4. Output recommended workers, max tested, runs, timestamp
+
+**Features:**
+- Progressive scaling (3 → 6 → 12 → 18 → 27...)
+- 120-second timeout per API call
+- ThreadPoolExecutor for concurrency
+- JSON output with detailed run history
+- Supports OpenAI and Anthropic providers
+
 ### llm-evaluation-selftest.py - Self-Test
 
 ```powershell

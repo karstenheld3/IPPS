@@ -31,6 +31,14 @@ Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
 **ID-REGISTRY.md** - Prevents term and ID collisions. Contains DevSystem constants and project TOPIC registry.
 
+## Karsten's Model Rate Limits (2026-01-26)
+
+- **gpt-5-nano**: 120+ workers. 120k tokens in 17.9s. TPM: ~402,000.
+- **gpt-5-mini**: 120+ workers. 120k tokens in 43.7s. TPM: ~164,000.
+- **claude-4-5-haiku**: 60+ workers. 60k tokens in 8s. TPM: ~450,000.
+- **claude-4-5-sonnet**: 60+ workers. 60k tokens in 7.7s. TPM: ~467,000.
+- **claude-4-5-opus**: 60+ workers. 60k tokens in 7.6s. TPM: ~473,000.
+
 ## DevSystem Source/Sync Rules
 
 **CRITICAL: [DEVSYSTEM_FOLDER] is the SOURCE. .windsurf is the SYNC TARGET.**
