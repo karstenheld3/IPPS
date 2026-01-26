@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "post_cascade_response": [
+      {
+        "command": "powershell -ExecutionPolicy Bypass -File E:/Dev/IPPS/_Sessions/_2026-01-26_AutoModelSwitcher/switch-model.ps1",
+        "show_output": true,
+        "working_directory": "E:/Dev/IPPS/_Sessions/_2026-01-26_AutoModelSwitcher"
+      }
+    ]
+  }
+}
