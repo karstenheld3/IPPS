@@ -65,21 +65,70 @@ File: `%APPDATA%/Windsurf/User/keybindings.json`
 | Ctrl+Shift+F9 | `windsurf.cascade.toggleModelSelector` | Open model selector |
 | Ctrl+Shift+F10 | `windsurf.cascade.switchToNextModel` | Cycle to next model |
 
-## Known Model Queries
+## Known Model Names (from UI)
 
-These search queries match models in the selector:
+Use these exact names or partial matches as `-Query` parameter:
 
-- `opus 4.5 thinking` - Claude Opus 4.5 (Thinking)
-- `opus 4.5` - Claude Opus 4.5
-- `sonnet 4.5` - Claude Sonnet 4.5
-- `sonnet 4` - Claude Sonnet 4
-- `gpt-5.2 low` - GPT-5.2 Low Reasoning
-- `gpt-5.2 medium` - GPT-5.2 Medium Reasoning
-- `o3` - O3
-- `gemini 2.5` - Gemini 2.5 Pro
-- `swe-1.5` - SWE-1.5
-- `deepseek` - DeepSeek R1
-- `grok` - Grok 3
+**Claude**
+- Claude Opus 4.5 (Thinking)
+- Claude Opus 4.5
+- Claude Opus 4.1 (Thinking)
+- Claude Opus 4.1
+- Claude Sonnet 4.5 Thinking
+- Claude Sonnet 4.5 (1M)
+- Claude Sonnet 4.5
+- Claude Sonnet 4 (Thinking)
+- Claude Sonnet 4
+- Claude Haiku 4.5
+- Claude 3.7 Sonnet (Thinking)
+- Claude 3.7 Sonnet
+- Claude 3.5 Sonnet
+
+**GPT-5.2**
+- GPT-5.2 X-High Reasoning Fast
+- GPT-5.2 X-High Reasoning
+- GPT-5.2 High Reasoning Fast
+- GPT-5.2 High Reasoning
+- GPT-5.2 Medium Reasoning Fast
+- GPT-5.2 Medium Reasoning
+- GPT-5.2 Low Reasoning Fast
+- GPT-5.2 Low Reasoning
+- GPT-5.2 No Reasoning Fast
+- GPT-5.2 No Reasoning
+
+**GPT-5.1 / GPT-5**
+- GPT-5.1 (high reasoning)
+- GPT-5.1 (medium reasoning)
+- GPT-5.1 (low reasoning)
+- GPT-5.1 (no reasoning)
+- GPT-5 (high reasoning)
+- GPT-5 (medium reasoning)
+- GPT-5 (low reasoning)
+
+**Gemini**
+- Gemini 2.5 Pro
+- Gemini 3 Pro High
+- Gemini 3 Pro Medium
+- Gemini 3 Pro Low
+- Gemini 3 Flash High
+- Gemini 3 Flash Medium
+- Gemini 3 Flash Low
+
+**Other**
+- o3 (high reasoning)
+- o3
+- SWE-1.5
+- SWE-1
+- xAI Grok-3
+- xAI Grok-3 mini (Thinking)
+- Grok Code Fast 1
+- DeepSeek R1 (0528)
+- DeepSeek V3 (0324)
+- Kimi K2
+- Minimax M2
+- Qwen3-Coder
+- GPT-4o
+- GPT-4.1
 
 ## Limitations
 
