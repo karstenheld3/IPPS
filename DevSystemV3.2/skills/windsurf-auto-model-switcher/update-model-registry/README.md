@@ -1,29 +1,11 @@
 # Screenshot Scripts
 
-Two scripts for different purposes:
+## For General Screenshots
 
-## simple-screenshot.ps1
-
-**Purpose:** Passive screenshot capture for testing and verification
-
-**Behavior:** Takes a screenshot WITHOUT any keyboard/mouse input
-
-**Use when:**
-- Testing the model switcher
-- Verifying UI state
-- General documentation screenshots
-- Any time you need a clean capture without UI interaction
-
-**Usage:**
+Use `windows-desktop-control` skill:
 ```powershell
-# Full screen
+# From DevSystemV3.2/skills/windows-desktop-control/
 .\simple-screenshot.ps1
-
-# Custom size/position
-.\simple-screenshot.ps1 -Width 1920 -Height 1080 -X 0 -Y 0
-
-# Custom output path
-.\simple-screenshot.ps1 -OutputPath "C:\temp\screenshot.jpg"
 ```
 
 ## capture-with-crop.ps1
