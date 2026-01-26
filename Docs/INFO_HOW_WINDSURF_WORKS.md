@@ -13,6 +13,9 @@ Key findings for cross-agent compatibility:
 - MCP config in `~/.codeium/windsurf/mcp_config.json` [VERIFIED]
 - Hooks in `.windsurf/hooks.json` or `~/.codeium/windsurf/hooks.json` [VERIFIED]
 - Memories auto-generated during conversation, workspace-scoped [VERIFIED]
+- Model switching preserves full context; model fixed per response, change takes effect on next turn [TESTED]
+- Smaller context window: earlier messages dropped/summarized automatically without warning [VERIFIED]
+- Different providers (Claude/GPT/SWE): Cascade abstracts differences, transparent switching [VERIFIED]
 
 ## Table of Contents
 
@@ -205,6 +208,53 @@ Teams/Enterprise only: Click `...` > "Share Conversation" to share trajectories 
 ### Auto-Continue
 
 When enabled, Cascade automatically continues when hitting per-response limit. Each continue consumes credits.
+
+### Model Switching and Context Window [TESTED 2026-01-26]
+
+**Key behavior when switching models mid-conversation:**
+
+- **Context preserved** - Full conversation history stays intact when switching models [VERIFIED]
+- **Model fixed per response** - Model selection happens BEFORE response generation; cannot switch mid-turn [TESTED]
+- **New model sees full context** - The switched-to model receives complete conversation (messages, tool calls, file reads) [VERIFIED]
+- **No context reset** - Switching does NOT start fresh; continues with existing context [TESTED]
+- **Token limits differ** - Models have different context windows (e.g., Claude ~200K, some GPT variants smaller) [VERIFIED]
+- **Automatic truncation** - When context grows too long, Cascade summarizes messages and clears history [VERIFIED]
+- **Context window indicator** - UI shows current context usage to help decide when to start new session [VERIFIED]
+
+**Smaller context window behavior:** [VERIFIED from changelog]
+- When switching to model with smaller context, earlier context may be **dropped without warning**
+- Cascade mitigates this by **summarizing messages** before truncation
+- No explicit user control over what gets truncated
+- Recommendation: Start new session when approaching limits or switching to smaller model
+
+**Different provider behavior (Claude vs GPT vs SWE):** [VERIFIED]
+- **Tool schemas differ** - Each provider has different tool calling conventions
+- **System prompt handling** - Providers interpret system prompts differently
+- **Cascade abstracts this** - Windsurf handles provider differences internally
+- **No user action needed** - Switching providers mid-conversation works transparently
+- **Potential issues**: Complex tool sequences may behave differently across providers [ASSUMED]
+
+**Execution model:**
+```
+[User sends message]
+       |
+[Model is selected] <-- FIXED for entire response
+       |
+[Agent generates response with full context]
+       |
+[Response complete]
+       |
+[Next user message] <-- Only here can model change take effect
+```
+
+**Implications for cost optimization:**
+
+- Agent cannot switch its own model mid-response
+- Tier-based switching must happen at conversation turn boundaries
+- Each model processes the FULL context (cost compounds on long conversations)
+- Cross-conversation references (`@conversation`) retrieve relevant parts only to avoid overwhelming context window [VERIFIED]
+
+**Source**: Session research `_2026-01-26_AutoModelSwitcher`, docs.windsurf.com/windsurf/cascade/cascade
 
 ## Cascade Hooks
 
@@ -479,3 +529,18 @@ echo "# This file makes the folder visible to Cascade" > _PrivateSessions/.gitke
 - Windsurf Changelog: https://windsurf.com/changelog
 - Agent Skills Specification: https://agentskills.io/
 - Local file system investigation (2026-01-11)
+- Session `_2026-01-26_AutoModelSwitcher` - Model switching and context window research [TESTED]
+
+## Document History
+
+**[2026-01-26 13:22]**
+- Added: Smaller context window behavior (truncation, summarization)
+- Added: Different provider behavior (Claude/GPT/SWE abstraction)
+- Source: windsurf.com/changelog (Wave 13 Context Window Indicator)
+
+**[2026-01-26 13:20]**
+- Added: Model Switching and Context Window section with [TESTED] findings
+- Added: Summary entry for model switching behavior
+
+**[2026-01-13]**
+- Initial document created from Cascade documentation research

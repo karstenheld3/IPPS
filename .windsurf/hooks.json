@@ -2,8 +2,8 @@
   "hooks": {
     "post_cascade_response": [
       {
-        "command": "powershell -Command \"[System.IO.File]::AppendAllText('E:/Dev/IPPS/_Sessions/_2026-01-26_AutoModelSwitcher/hook-log.txt', (Get-Date).ToString() + ' - Hook triggered`n')\"",
-        "show_output": true
+        "command": "powershell -ExecutionPolicy Bypass -File ./DevSystemV3.2/skills/windsurf-auto-model-switcher/auto-model-switch.ps1",
+        "show_output": false
       }
     ]
   }

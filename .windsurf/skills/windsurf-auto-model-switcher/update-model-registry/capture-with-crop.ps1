@@ -1,8 +1,3 @@
-# Model Registry Update - Captures Model Selector Screenshots
-# 
-# WARNING: This script OPENS the model selector popup and sends keystrokes.
-# DO NOT use for general screenshots - use simple-screenshot.ps1 instead.
-#
 # Two-phase model discovery:
 # Phase 1: Fullscreen screenshot to detect popup position (Cascade analyzes)
 # Phase 2: Cropped screenshots of popup area only

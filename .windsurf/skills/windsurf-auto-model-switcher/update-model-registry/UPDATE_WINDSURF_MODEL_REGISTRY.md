@@ -28,8 +28,6 @@ Update `windsurf-model-registry.json` with extracted data.
 
 Use when docs are outdated or don't match UI.
 
-**IMPORTANT:** Use `capture-with-crop.ps1` for model registry updates ONLY. For general screenshots, use `simple-screenshot.ps1` instead.
-
 ### Step 1: Capture All Sections
 
 ```powershell
@@ -37,8 +35,6 @@ Use when docs are outdated or don't match UI.
 ```
 
 Replace 2048x1280 with your screen resolution.
-
-**Note:** This script opens the model selector popup and sends keystrokes to navigate the list.
 
 ### Step 2: Cascade Reads Screenshots
 

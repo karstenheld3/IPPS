@@ -6,9 +6,9 @@
 
 ## Current Phase
 
-**Phase**: IMPLEMENT (in progress)
+**Phase**: IMPLEMENT (paused)
 **Workflow**: /solve (research-focused)
-**Assessment**: Model cycling works, model selection needs keybinding fix
+**Assessment**: Hooks approach dropped - too fragile. Manual model switching works. Need different solution for automation.
 
 ## Session Info
 
@@ -62,8 +62,8 @@ File: `%APPDATA%/Windsurf/User/keybindings.json`
 ### Tested Approaches
 
 1. **Keyboard simulation (cycling)** - [WORKS] `switch-model-v3.ps1` cycles models reliably
-2. **Keyboard simulation (selection)** - [WORKS] `select-model.ps1` with Ctrl+Shift+F9
-3. **Hooks** - [FAILED] `post_cascade_response` hook never triggered
+2. **Keyboard simulation (selection)** - [WORKS] `select-windsurf-model-in-ide.ps1` with Ctrl+Shift+F9
+3. **Hooks + auto-model-switch.ps1** - [DROPPED] Too fragile - requires Cascade restart to reload config, timing issues, popup interference
 4. **Ctrl+L focus** - [FAILED] Toggles panel closed instead of focusing
 5. **Ctrl+Shift+I focus** - [FAILED] Spawns new Cascade windows
 6. **Ctrl+Alt+M** - [FAILED] Produces µ on German keyboard (AltGr conflict)
@@ -84,29 +84,39 @@ File: `%APPDATA%/Windsurf/User/keybindings.json`
 
 ## Model Discovery Findings [TESTED]
 
-**Approach**: Fullscreen screenshot capture for all sections (no cropping)
+**Approach**: Fullscreen screenshot capture for all sections
 
-**Why no cropping**:
-- LLM sees scaled-down images, can't map to actual screen pixels
-- Popup position changes when window moves or resolution changes
-- Cropping complexity not worth the benefit
+**DPI Scaling Fix** [CRITICAL]:
+- Windows DPI scaling causes `.NET Screen.Bounds` to return logical pixels, not physical
+- Physical: 2560x1600, Logical: 2048x1280 (125% scaling)
+- Must use Win32 `GetDeviceCaps(DESKTOPHORZRES/DESKTOPVERTRES)` for actual resolution
+- Fixed in `simple-screenshot.ps1`
 
-**Working command**:
-```powershell
-.\capture-with-crop.ps1 -CropX 0 -CropY 0 -CropWidth 2048 -CropHeight 1280 -MaxSections 10
-```
+**Two screenshot scripts**:
+- `simple-screenshot.ps1` - Passive, no UI interaction, for testing/verification
+- `capture-with-crop.ps1` - Opens model selector, sends keystrokes, for registry updates
 
-**Screenshots saved to**: `[WORKSPACE]/.tools/_screenshots/YYYY-MM-DD_HH-MM-SS_section_NN.jpg`
-
-**Antivirus issue**: Modifying PowerShell scripts with keybd_event triggers false positive. Reverted to git version.
+**Screenshots saved to**: `[WORKSPACE]/.tools/_screenshots/`
 
 ## Document History
 
+**[2026-01-26 13:25]**
+- DROPPED hooks approach - too fragile (requires restart, timing issues)
+- Fixed DPI scaling in screenshot script (was capturing 2048x1280 instead of 2560x1600)
+- Created `simple-screenshot.ps1` for passive captures (no UI interaction)
+- Manual model switching works, need different automation approach
+
+**[2026-01-26 12:33]**
+- Auto-model-switcher TESTED and WORKING
+- Fixed popup close issue: Use Ctrl+Shift+F9 toggle instead of Escape
+- Agent can switch models mid-conversation (takes effect on next user message)
+- Verified with screenshots: Opus → Sonnet → Opus transitions work cleanly
+
 **[2026-01-26 11:43]**
 - Model discovery workflow simplified to fullscreen capture
-- Cropping abandoned - LLM cannot map scaled images to actual pixels
 - 55% JPEG compression blocked by antivirus (script modification triggers scan)
 - WORKFLOW.md updated with simplified approach
+- Note: Truncation issues at the time were actually DPI scaling, not LLM image scaling (see FL-011)
 
 **[2026-01-26 10:09]**
 - Model selection WORKING with `select-model.ps1` + `Ctrl+Shift+F9`

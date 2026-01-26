@@ -21,10 +21,6 @@ public class Win32 {
     public static extern bool SetForegroundWindow(IntPtr hWnd);
     [DllImport("user32.dll")]
     public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
-    [DllImport("user32.dll")]
-    public static extern bool SetCursorPos(int X, int Y);
-    [DllImport("user32.dll")]
-    public static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData, UIntPtr dwExtraInfo);
 
     public const byte VK_CONTROL = 0x11;
     public const byte VK_SHIFT = 0x10;
@@ -33,8 +29,6 @@ public class Win32 {
     public const byte VK_ESCAPE = 0x1B;
     public const byte VK_DOWN = 0x28;
     public const uint KEYEVENTF_KEYUP = 0x0002;
-    public const uint MOUSEEVENTF_LEFTDOWN = 0x0002;
-    public const uint MOUSEEVENTF_LEFTUP = 0x0004;
 
     public static void SendCtrlShiftF9() {
         keybd_event(VK_CONTROL, 0, 0, UIntPtr.Zero);
@@ -97,12 +91,10 @@ Start-Sleep -Milliseconds 150
 [Win32]::SendDown()
 Start-Sleep -Milliseconds 150
 [Win32]::SendEnter()
-Start-Sleep -Milliseconds 300
+Start-Sleep -Milliseconds 500
 
-# Close popup with 2x Escape
-[Win32]::SendEscape()
-Start-Sleep -Milliseconds 200
-[Win32]::SendEscape()
+# Close popup by toggling selector again (Escape doesn't work reliably)
+[Win32]::SendCtrlShiftF9()
 Start-Sleep -Milliseconds 100
 
 Write-Host "Done. Model should be: $Query"

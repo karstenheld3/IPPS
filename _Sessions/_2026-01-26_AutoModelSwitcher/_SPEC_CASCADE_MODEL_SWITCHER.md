@@ -114,7 +114,7 @@ HIGH > MID > IMAGE > LOW > CHORES
 | `/critique` | HIGH | Deep analysis |
 | `/reconcile` | HIGH | Decision making |
 | `/commit` | CHORES | Mechanical git operations |
-| `/transcribe` | MID | Text extraction |
+| `/transcribe` | IMAGE | Text extraction |
 | `/test` | MID | Running and analyzing tests |
 
 ## Integration Points
