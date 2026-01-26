@@ -4,7 +4,8 @@
 param(
     [string]$WindowTitle = "*Windsurf*",
     [string]$OutputFolder = "shots",
-    [int]$ScrollsPerSection = 4,
+    [int]$FirstScrollCount = 4,      # DOWN keys for first scroll (visible model count)
+    [int]$SubsequentScrollCount = 3, # DOWN keys for subsequent scrolls (visible - 1 for overlap detection)
     [int]$MaxSections = 25
 )
 
@@ -96,8 +97,9 @@ for ($section = 1; $section -le $MaxSections; $section++) {
     
     Write-Host "Captured section $section"
     
-    # Scroll down
-    for ($i = 0; $i -lt $ScrollsPerSection; $i++) {
+    # Scroll down (first scroll uses FirstScrollCount, subsequent use SubsequentScrollCount)
+    $scrollCount = if ($section -eq 1) { $FirstScrollCount } else { $SubsequentScrollCount }
+    for ($i = 0; $i -lt $scrollCount; $i++) {
         [Win32]::SendKey([Win32]::VK_DOWN)
     }
     Start-Sleep -Milliseconds 150
