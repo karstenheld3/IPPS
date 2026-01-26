@@ -17,10 +17,12 @@ param(
 
 # Default output folder if not specified
 if (-not $OutputFolder) {
-    $timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
     $workspaceRoot = (Get-Item $PSScriptRoot).Parent.Parent.Parent.Parent.FullName
-    $OutputFolder = Join-Path $workspaceRoot ".tools\_screenshots\$timestamp"
+    $OutputFolder = Join-Path $workspaceRoot ".tools\_screenshots"
 }
+
+# Timestamp prefix for filenames
+$filePrefix = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -95,7 +97,7 @@ if ($Phase1Only) {
     $bitmap = New-Object System.Drawing.Bitmap($screen.Width, $screen.Height)
     $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
     $graphics.CopyFromScreen(0, 0, 0, 0, $screen.Size)
-    $filename = Join-Path $OutputFolder "phase1_fullscreen.jpg"
+    $filename = Join-Path $OutputFolder "${filePrefix}_phase1_fullscreen.jpg"
     $bitmap.Save($filename, [System.Drawing.Imaging.ImageFormat]::Jpeg)
     $graphics.Dispose()
     $bitmap.Dispose()
@@ -126,7 +128,7 @@ for ($section = 1; $section -le $MaxSections; $section++) {
     $bitmap = New-Object System.Drawing.Bitmap($CropWidth, $CropHeight)
     $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
     $graphics.CopyFromScreen($CropX, $CropY, 0, 0, (New-Object System.Drawing.Size($CropWidth, $CropHeight)))
-    $filename = Join-Path $OutputFolder ("section_{0:D2}.jpg" -f $section)
+    $filename = Join-Path $OutputFolder ("${filePrefix}_section_{0:D2}.jpg" -f $section)
     $bitmap.Save($filename, [System.Drawing.Imaging.ImageFormat]::Jpeg)
     $graphics.Dispose()
     $bitmap.Dispose()
