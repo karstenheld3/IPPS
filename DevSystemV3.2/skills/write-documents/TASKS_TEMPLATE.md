@@ -67,7 +67,7 @@ Run before starting any implementation:
 
 Tasks may include model hints for auto model switching.
 
-**Source:** Model definitions and activity mappings are in `!NOTES.md` under `## Cascade Model Tiers`.
+**Source:** Model definitions and activity mappings are in `!NOTES.md` under `## Cascade Model Switching`.
 
 Model hints are recommendations - agent decides based on actual task.
 

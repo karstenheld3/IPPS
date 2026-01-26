@@ -4,7 +4,7 @@
 Current [DEVSYSTEM]: DevSystemV3.2
 Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
-## Cascade Model Tiers
+## Cascade Model Switching
 
 **Tier Definitions:**
 - **HIGH** = Claude Opus 4.5 (Thinking) [5x] - Complex reasoning, specs, architecture
