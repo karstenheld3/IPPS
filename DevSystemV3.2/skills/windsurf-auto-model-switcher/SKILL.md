@@ -12,6 +12,17 @@ Switch Windsurf Cascade AI models programmatically using keyboard simulation.
 - Requires custom keybindings (see SETUP.md)
 - German keyboards: Use F-keys, not Ctrl+Alt (AltGr conflict)
 - Model selector requires Windsurf window focus
+- Auto-switching requires safety check (screenshot verification)
+
+## Model Hints in STRUT
+
+STRUT Strategy sections may include model hints:
+```
+├─ Strategy: Analyze requirements, design solution
+│   - Opus for analysis, Sonnet for implementation
+```
+
+Model hints are recommendations - agent decides based on actual task.
 
 ## Prerequisites
 

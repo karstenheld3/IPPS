@@ -62,6 +62,8 @@
 
 **STRUT-FR-06: Strategy**
 - Free text, may include AWT estimates
+- May include model hints (e.g., "Opus for analysis, Sonnet for implementation")
+- Model hints are recommendations, not mandates - agent decides based on actual task
 
 **STRUT-FR-07: Deliverables**
 - Format: `[ ] P1-D1: Description` (uses checkbox states)
