@@ -31,7 +31,7 @@ Switch Windsurf Cascade AI models programmatically using keyboard simulation.
 .\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
 
 # Select Claude Opus 4.5 (Thinking)
-.\select-windsurf-model-in-ide.ps1 -Query "opus thinking"
+.\select-windsurf-model-in-ide.ps1 -Query "opus 4.5 thinking"
 
 # Select GPT-5.2 Low Reasoning
 .\select-windsurf-model-in-ide.ps1 -Query "gpt-5.2 low"
