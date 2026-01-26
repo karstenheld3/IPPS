@@ -1,5 +1,27 @@
 # Session Failures
 
+## AMSW-FL-005: Temporary screenshots committed to git
+
+**Severity**: [MEDIUM]
+**When**: 2026-01-26 11:18
+**Where**: `DevSystemV3.2/skills/windsurf-auto-model-switcher/{shots,shots2,final,debug}/`
+**What**: Committed ~40 temporary screenshot images to git instead of deleting after analysis
+
+### Evidence
+- 43 files changed in commit 26eb660
+- Images are session-specific, not reusable
+- Bloats repository unnecessarily
+
+### Root Cause
+- No cleanup step in workflow
+- Forgot to add temp folders to .gitignore
+- Did not delete images after extracting model data
+
+### Fix
+1. Delete all temp image folders from git
+2. Add to .gitignore: `shots/`, `shots2/`, `final/`, `debug/`
+3. Update script to auto-delete screenshots after successful extraction
+
 ## AMSW-FL-004: Hardcoded crop coordinates fail on resolution/window changes
 
 **Severity**: [CRITICAL]

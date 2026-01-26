@@ -1,0 +1,7 @@
+# Temporary screenshot folders - delete after analysis
+shots/
+shots2/
+final/
+debug/
+*.jpg
+*.png
