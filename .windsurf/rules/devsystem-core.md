@@ -208,7 +208,7 @@ Files starting with `.tmp` are temporary helper scripts created during operation
 - `/session-archive` - Move session folder to archive
 - `/session-close` - Close session, sync findings, archive
 - `/session-new` - Initialize new session
-- `/session-resume` - Resume existing session
+- `/session-load` - Resume existing session
 - `/session-save` - Save session progress
 - `/solve` - SOLVE workflow entry point (knowledge output)
 - `/sync` - Document synchronization

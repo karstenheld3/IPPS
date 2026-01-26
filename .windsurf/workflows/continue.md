@@ -53,7 +53,7 @@ Then build execution sequence:
 ```markdown
 ## Execution Sequence
 
-1. `/session-resume` - Session resumed, ready to continue
+1. `/session-load` - Session resumed, ready to continue
 2. [Next task from PROGRESS.md]
 3. ...
 ```

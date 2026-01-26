@@ -78,7 +78,7 @@ $targets = @(
 # Deprecated files from V1, V2, V3 migrations (only these can be deleted)
 $deprecatedFiles = @{
     "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md", "edird-core.md")
-    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md", "deliver.md", "design.md", "explore.md", "go-research.md", "refine.md")
+    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md", "deliver.md", "design.md", "explore.md", "go-research.md", "refine.md", "session-resume.md")
 }
 # Deprecated skill folders (entire folder can be deleted if renamed)
 $deprecatedSkillFolders = @("edird-phase-model")

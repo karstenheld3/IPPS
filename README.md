@@ -388,7 +388,7 @@ IPPS/
 │       ├── session-archive.md    # Archive session folder
 │       ├── session-close.md      # Close and sync session
 │       ├── session-new.md        # Initialize session
-│       ├── session-resume.md     # Resume session
+│       ├── session-load.md       # Resume session
 │       ├── session-save.md       # Save session progress
 │       ├── solve.md              # SOLVE workflow entry point
 │       ├── sync.md               # Document synchronization
@@ -463,7 +463,7 @@ Located in session folder (e.g., `_2026-01-15_FixAuthBug/`):
     ↓
 /session-save    → Document findings, commit changes
     ↓
-/session-resume  → Re-read session docs, continue work
+/session-load    → Re-read session docs, continue work
     ↓
 /session-close   → Sync FAILS and LEARNINGS to workspace, prepare for archive
     ↓
@@ -517,7 +517,7 @@ Start a SOLVE workflow (research, analysis, decisions):
 
 ### Session Workflows
 
-**Workflows:** [`/session-new`](.windsurf/workflows/session-new.md), [`/session-save`](.windsurf/workflows/session-save.md), [`/session-resume`](.windsurf/workflows/session-resume.md), [`/session-close`](.windsurf/workflows/session-close.md)
+**Workflows:** [`/session-new`](.windsurf/workflows/session-new.md), [`/session-save`](.windsurf/workflows/session-save.md), [`/session-load`](.windsurf/workflows/session-load.md), [`/session-close`](.windsurf/workflows/session-close.md)
 
 Start a new work session:
 ```
@@ -532,7 +532,7 @@ Save progress during work:
 
 Resume an existing session:
 ```
-/session-resume
+/session-load
 ```
 
 Close session and sync findings:

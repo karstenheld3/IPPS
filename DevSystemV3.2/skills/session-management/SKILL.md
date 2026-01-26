@@ -25,7 +25,7 @@ Sessions track EDIRD phases:
 1. **Init** (`/session-new`): Create session folder with tracking files
 2. **Work**: Create specs, plans, implement, track progress
 3. **Save** (`/session-save`): Document findings, commit changes
-4. **Resume** (`/session-resume`): Re-read session documents, continue work
+4. **Resume** (`/session-load`): Re-read session documents, continue work
 5. **Close** (`/session-close`): Sync findings to project files, archive
 
 ## Session Folder Location
@@ -68,7 +68,7 @@ Use templates from this skill folder:
 4. SAVE: User saves session for later (`/session-save`)
    └── Everything updated and committed
 
-5. RESUME: User resumes session (`/session-resume`)
+5. RESUME: User resumes session (`/session-load`)
    └── Agent primes from session files, executes workflows in Notes
    └── Continue with steps 2-3
 
