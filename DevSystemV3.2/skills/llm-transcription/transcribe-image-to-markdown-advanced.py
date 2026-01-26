@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-transcribe-image-pipeline.py - Ensemble transcription with judge and refinement.
+transcribe-image-to-markdown-advanced.py - Ensemble transcription with judge and refinement.
 
 Pipeline:
 1. Generate 3 transcriptions concurrently (same prompt)
@@ -9,8 +9,8 @@ Pipeline:
 4. Re-score refinement, take as final if higher
 
 Usage:
-  python transcribe-image-pipeline.py --input image.png --output result.md
-  python transcribe-image-pipeline.py --input-dir ./images --output-dir ./transcripts
+  python transcribe-image-to-markdown-advanced.py --input image.png --output result.md
+  python transcribe-image-to-markdown-advanced.py --input-dir ./images --output-dir ./transcripts
 """
 
 import os
@@ -450,8 +450,8 @@ Pipeline:
   3. If score < threshold, refine best and re-judge
 
 Examples:
-  python transcribe-image-pipeline.py --input doc.png --output doc.md
-  python transcribe-image-pipeline.py --input-dir ./images --output-dir ./out --verbose
+  python transcribe-image-to-markdown-advanced.py --input doc.png --output doc.md
+  python transcribe-image-to-markdown-advanced.py --input-dir ./images --output-dir ./out --verbose
         """
     )
     

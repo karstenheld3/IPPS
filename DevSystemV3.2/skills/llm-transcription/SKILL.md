@@ -19,14 +19,14 @@ Universal transcription tools using LLMs with optimized prompts for each purpose
 
 1. Run `SETUP.md` once to install dependencies
 2. Choose your script:
-   - **Image Pipeline** (recommended): `transcribe-image-pipeline.py` - Ensemble + judge + refinement
+   - **Image Pipeline** (recommended): `transcribe-image-to-markdown-advanced.py` - Ensemble + judge + refinement
    - **Image Simple**: `transcribe-image-to-markdown.py` - Single-shot transcription
    - **Audio to Markdown**: `transcribe-audio-to-markdown.py`
 
 ## Available Scripts
 
 **Image Transcription:**
-- `transcribe-image-pipeline.py` - Ensemble transcription with judge and refinement (recommended)
+- `transcribe-image-to-markdown-advanced.py` - Ensemble transcription with judge and refinement (recommended)
 - `transcribe-image-to-markdown.py` - Simple single-shot transcription
 
 **Audio Transcription:**
@@ -36,8 +36,8 @@ Universal transcription tools using LLMs with optimized prompts for each purpose
 
 **Image Pipeline (recommended):**
 ```bash
-python transcribe-image-pipeline.py --input doc.png --output doc.md --verbose
-python transcribe-image-pipeline.py --input-dir ./images --output-dir ./out --ensemble-size 3 --min-score 3.5
+python transcribe-image-to-markdown-advanced.py --input doc.png --output doc.md --verbose
+python transcribe-image-to-markdown-advanced.py --input-dir ./images --output-dir ./out --ensemble-size 3 --min-score 3.5
 ```
 
 **Image Simple:**
