@@ -30,6 +30,30 @@ This skill implements:
 
 - `select-model.ps1` - Select a specific model by search query
 - `switch-model.ps1` - Cycle to the next model in the list
+- `list-models.ps1` - Generate list of all available models and their costs
+
+### list-models.ps1
+
+Generates a markdown file with all available models and their credit costs:
+
+```powershell
+# Print to console
+.\list-models.ps1
+
+# Save to file (includes timestamp)
+.\list-models.ps1 -SaveToFile
+```
+
+Output format:
+```markdown
+## Claude
+- Claude Opus 4.5 (Thinking) - 4x
+- Claude Sonnet 4.5 - 2x
+
+## GPT-5.2
+- GPT-5.2 X-High Reasoning Fast - 8x
+- GPT-5.2 Medium Reasoning - 2x
+```
 
 ## Usage
 
