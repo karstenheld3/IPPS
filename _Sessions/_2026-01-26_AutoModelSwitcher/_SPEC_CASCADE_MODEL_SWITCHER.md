@@ -1,221 +1,204 @@
 # SPEC: Cascade Auto Model Switcher
 
 **Doc ID**: AMSW-SP01
-**Goal**: Switch Cascade models via `/switch-model` workflow to optimize cost while maintaining quality
-
-**Depends on:**
-- `windsurf-auto-model-switcher` skill for model switching mechanics
-- `switch-model.md` workflow for tier-based switching
-
-## MUST-NOT-FORGET
-
-- Model switch takes effect on user's NEXT message (not current)
-- Model switches add latency (~2s each) - batch similar activities
-- Default to MODEL-HIGH when uncertain
-- Never downgrade during critical paths (gate checks, error handling)
-- Tier definitions live in `!NOTES.md` and `switch-model.md` (not hardcoded here)
+**Goal**: Document the model switching system for Windsurf Cascade
 
 ## Table of Contents
 
-1. [Model Tiers](#model-tiers)
-2. [Activity Mapping](#activity-mapping)
-3. [Integration Points](#integration-points)
-4. [Cost Estimation](#cost-estimation)
-5. [Implementation Status](#implementation-status)
+1. [Components](#components)
+2. [Skill: windsurf-auto-model-switcher](#skill-windsurf-auto-model-switcher)
+3. [Workflow: switch-model](#workflow-switch-model)
+4. [Rule: cascade-model-switching](#rule-cascade-model-switching)
+5. [DevSystem Integration](#devsystem-integration)
+6. [Cost Estimation](#cost-estimation)
+7. [Implementation Status](#implementation-status)
 
-## Model Tiers
+## Components
+
+The model switching system consists of three DevSystem pieces:
+
+- **Skill** (`windsurf-auto-model-switcher`) - Scripts and registry for model switching mechanics
+- **Workflow** (`switch-model.md`) - User-facing workflow for manual tier switching
+- **Rule** (`cascade-model-switching.md`) - Guidelines for autonomous agent switching
+
+## Skill: windsurf-auto-model-switcher
+
+**Location**: `DevSystemV3.2/skills/windsurf-auto-model-switcher/`
+
+### Files
+
+- `SKILL.md` - Skill documentation and usage
+- `SETUP.md` - Keybinding installation (Ctrl+Shift+F9/F10)
+- `UNINSTALL.md` - Removal instructions
+- `select-windsurf-model-in-ide.ps1` - Main script for model selection
+- `windsurf-model-registry.json` - 68 models with costs
+- `update-model-registry/` - Workflow to refresh registry from UI
+
+### Script: select-windsurf-model-in-ide.ps1
+
+**Parameters:**
+- `-Query` (required) - Model name or partial match
+- `-DryRun` (optional) - Preview selection without execution
+- `-WindowTitle` (optional) - Target window pattern (default: "*Windsurf*")
+
+**Features:**
+- Fuzzy matching with cost prioritization (prefers cheaper when tied)
+- Default fallback to Claude Sonnet 4 if no match
+- Bulletproof refocus via `Ctrl+Shift+A`
+- German keyboard compatible (uses F-keys, not Ctrl+Alt)
+
+**Usage:**
+```powershell
+# Select by partial name
+.\select-windsurf-model-in-ide.ps1 -Query "opus 4.5 thinking"
+.\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
+.\select-windsurf-model-in-ide.ps1 -Query "gemini 3 flash medium"
+
+# Preview without executing
+.\select-windsurf-model-in-ide.ps1 -Query "haiku" -DryRun
+```
+
+### Prerequisites
+
+1. Run `SETUP.md` to install keybindings
+2. Restart Windsurf after setup
+3. Verify with `Ctrl+Shift+F9` (model selector should appear)
+
+## Workflow: switch-model
+
+**Location**: `DevSystemV3.2/workflows/switch-model.md`
+
+### Configuration (in workflow file)
+
+```
+MODEL-HIGH = "Claude Opus 4.5 (Thinking)"  [5x]
+MODEL-MID  = "Claude Sonnet 4.5"           [2x]
+MODEL-LOW  = "Gemini 3 Flash Medium"       [1x]
+```
+
+### Usage
+
+```
+/switch-model high   # or 'h' or 'MODEL-HIGH'
+/switch-model mid    # or 'm' or 'MODEL-MID'
+/switch-model low    # or 'l' or 'MODEL-LOW'
+```
+
+### Behavior
+
+1. Maps tier argument to configured model query
+2. Calls `select-windsurf-model-in-ide.ps1 -Query "[MODEL-*-QUERY]"`
+3. Reports: "Switched to [MODEL-*]. Takes effect on next message."
+
+## Rule: cascade-model-switching
+
+**Location**: `DevSystemV3.2/rules/cascade-model-switching.md`
+
+### Purpose
+
+Guidelines for autonomous agent model switching (not user-triggered).
+
+### Safety Conditions (ALL required for auto-switch)
+
+1. Windsurf instance in foreground
+2. Our conversation open in Cascade
+3. User NOT doing anything else (no typing, selecting, scrolling)
+4. Cascade chat input is empty
+
+**If ANY condition fails: Skip switch silently.**
+
+### Switch-Back Pattern
+
+After completing a task with different model, always switch back:
+```
+Start: Opus (planning) -> Switch: Sonnet (implementation) -> Switch back: Opus
+```
+
+### Model Hints in STRUT
+
+Strategy sections may include hints:
+```
+|- Strategy: Analyze requirements, design solution
+|   - Opus for analysis, Sonnet for implementation
+```
+
+Hints are recommendations - agent decides based on actual task.
+
+## DevSystem Integration
 
 ### Tier Definitions (from !NOTES.md)
 
-- **MODEL-HIGH** (Default)
-  - Model: Claude Opus 4.5 (Thinking)
-  - Cost: 5x
-  - Use: Complex reasoning, specs, architecture, gate evaluations
-
-- **MODEL-MID**
-  - Model: Claude Sonnet 4.5
-  - Cost: 2x
-  - Use: Code verification, bug fixes, refactoring, implementation
-
-- **MODEL-LOW**
-  - Model: Gemini 3 Flash Medium
-  - Cost: 1x
-  - Speed: 372 TPS, 78% SWE-Bench
-  - Use: Scripts, git operations, file reads, session archive
-
-### Tier Selection Priority
-
-When multiple activities overlap, use highest tier:
-```
-HIGH > MID > LOW
-```
-
-## Activity Mapping
-
-### Activity to Tier Matrix
-
-**HIGH (5x) - Complex Reasoning**
-- Writing documents (SPEC, IMPL, TEST, INFO)
-- Analyzing complex problems
-- Architecture decisions
-- Gate evaluations
-- `/critique`, `/reconcile`, `/build`, `/solve`
-
-**MID (2x) - Standard Tasks**
-- Verifying existing code
-- Fixing bugs (after root cause identified)
-- Code refactoring
-- Standard `/implement` steps
-- `/verify`, `/test`
-
-**LOW (1x) - Fast Tasks**
-- Running scripts
-- Git operations (commit, status)
-- File reads/writes
-- Session management
-- `/prime`, `/commit`, `/session-archive`, `/session-close`
+- **MODEL-HIGH** - Claude Opus 4.5 (Thinking) [5x] - Complex reasoning, specs, architecture
+- **MODEL-MID** - Claude Sonnet 4.5 [2x] - Code verification, bug fixes, refactoring
+- **MODEL-LOW** - Gemini 3 Flash Medium [1x] - Scripts, git, file ops (372 TPS, 78% SWE-Bench)
 
 ### Workflow to Tier Mapping
 
-- `/prime` - LOW (reading files, building context)
-- `/recap` - MID (analysis but not creation)
-- `/continue` - varies (depends on task type)
-- `/go` - varies (orchestration is LOW, tasks vary)
-- `/build` - HIGH (complex code creation)
-- `/solve` - HIGH (research and analysis)
-- `/implement` - MID (standard implementation)
-- `/verify` - MID (checking, not creating)
-- `/critique` - HIGH (deep analysis)
-- `/reconcile` - HIGH (decision making)
-- `/commit` - LOW (mechanical git operations)
-- `/test` - MID (running and analyzing tests)
-- `/session-*` - LOW (session management)
+- `/prime`, `/commit`, `/session-*` - LOW (mechanical operations)
+- `/recap`, `/verify`, `/test`, `/implement` - MID (standard tasks)
+- `/build`, `/solve`, `/critique`, `/reconcile` - HIGH (complex reasoning)
+- `/continue`, `/go` - varies (depends on task type)
 
-## Integration Points
+### Integration Points
 
-### 1. Manual Switching via Workflow
-
-User or agent invokes `/switch-model` workflow:
-
-```
-/switch-model high   # Switch to Claude Opus 4.5 (Thinking)
-/switch-model mid    # Switch to Claude Sonnet 4.5
-/switch-model low    # Switch to Gemini 3 Flash Medium
-```
-
-Aliases: `h`, `m`, `l` or `MODEL-HIGH`, `MODEL-MID`, `MODEL-LOW`
-
-### 2. Script Execution
-
-The workflow calls `select-windsurf-model-in-ide.ps1`:
-
-```powershell
-# With fuzzy matching
-.\select-windsurf-model-in-ide.ps1 -Query "opus 4.5 thinking"
-
-# Dry-run mode (preview only)
-.\select-windsurf-model-in-ide.ps1 -Query "sonnet" -DryRun
-```
-
-**Script features:**
-- Fuzzy matching with cost prioritization
-- `-DryRun` mode for safe preview
-- Default fallback to Claude Sonnet 4 if no match
-- Bulletproof refocus via `Ctrl+Shift+A`
-
-### 3. Batch Optimization (Advisory)
-
-Group consecutive same-tier steps to minimize switches:
-
-```markdown
-## Optimized Sequence
-
-/switch-model low
-1. Read session files
-2. Run git status
-3. List directory
-
-/switch-model high
-4. Analyze problem
-5. Write spec section
-
-/switch-model mid
-6. Implement fix
-7. Verify fix
-```
-
-**Recommendation**: Batch at least 3 same-tier operations before switching.
+1. **User invokes** `/switch-model` workflow -> calls skill script -> model changes
+2. **Agent follows** `cascade-model-switching.md` rule -> safety check -> calls script
+3. **STRUT plans** may include model hints in Strategy section
+4. **!NOTES.md** defines tier-to-model mapping (single source of truth)
 
 ## Cost Estimation
 
 ### Example Session Cost Comparison
 
-**Without switching (all HIGH):**
-```
-10 steps x 5x = 50 credits
-```
+**Without switching (all HIGH):** 10 steps x 5x = 50 credits
 
 **With tier switching:**
-```
-3 LOW steps x 1x = 3 credits
-2 HIGH steps x 5x = 10 credits
-5 MID steps x 2x = 10 credits
-Total: 23 credits (54% savings)
-```
+- 3 LOW steps x 1x = 3 credits
+- 2 HIGH steps x 5x = 10 credits
+- 5 MID steps x 2x = 10 credits
+- Total: 23 credits (54% savings)
 
 ### Switch Overhead
 
-Each model switch:
-- Time: ~2 seconds
-- No credit cost (switching is free)
-- Risk: Context may be slightly different between models
+- Time: ~2 seconds per switch
+- Cost: Free (switching has no credit cost)
+- Risk: Context may differ slightly between models
+- Recommendation: Batch at least 3 same-tier operations before switching
 
 ## Implementation Status
 
 ### Implemented [TESTED]
 
-- `/switch-model` workflow with HIGH/MID/LOW tiers
-- `select-windsurf-model-in-ide.ps1` with fuzzy matching and dry-run
-- `windsurf-model-registry.json` with 68 models and costs
-- Bulletproof refocus via `Ctrl+Shift+A`
-- German keyboard compatible keybindings (`Ctrl+Shift+F9/F10`)
+- Skill: `windsurf-auto-model-switcher` with fuzzy matching and dry-run
+- Workflow: `/switch-model` with HIGH/MID/LOW tiers
+- Rule: `cascade-model-switching.md` with safety conditions
+- Registry: `windsurf-model-registry.json` with 68 models and costs
+- Keybindings: `Ctrl+Shift+F9` (selector), `Ctrl+Shift+F10` (cycle)
+- Refocus: `Ctrl+Shift+A` (bulletproof method)
 
 ### Not Implemented
 
-- Automatic switching based on activity detection
-- STRUT plan annotations with `[MODEL:tier]`
+- Automatic switching based on activity detection (safety concerns)
 - Cascade hooks (unreliable - see AMSW-PR-006)
 
 ## Design Decisions
 
-### DD-01: Default to HIGH
-
-Rationale: Quality over cost. User explicitly opts into cost savings.
-
-### DD-02: Three-tier system (HIGH/MID/LOW)
-
-Rationale: Simplified from 5 tiers. CHORES and IMAGE merged into LOW. Easier to remember and use.
-
-### DD-03: No auto-switch during error handling
-
-Rationale: Errors need full reasoning capability. Never downgrade when things go wrong.
-
-### DD-04: Gemini 3 Flash Medium for LOW tier
-
-Rationale: Best balance of speed (372 TPS) and quality (78% SWE-Bench) at 1x cost.
-
-### DD-05: Fuzzy matching with cost prioritization
-
-Rationale: User can type partial model names. When multiple matches, prefer cheaper option.
+- **DD-01**: Default to HIGH - Quality over cost. User explicitly opts into savings.
+- **DD-02**: Three-tier system - Simplified from 5 tiers. Easier to remember.
+- **DD-03**: No auto-switch during errors - Errors need full reasoning capability.
+- **DD-04**: Gemini 3 Flash for LOW - Best speed (372 TPS) and quality (78% SWE-Bench) at 1x.
+- **DD-05**: Fuzzy matching + cost priority - Partial names work, prefer cheaper on tie.
 
 ## Document History
+
+**[2026-01-26 16:39]**
+- Restructured to document skill, workflow, rule, and DevSystem integration
+- Added component overview and file listings
+- Documented all integration points
 
 **[2026-01-26 16:36]**
 - Updated to match actual implementation
 - Simplified to 3 tiers (HIGH/MID/LOW)
-- Removed unimplemented features (CHORES, IMAGE, auto-annotations)
-- Added implementation status section
-- Updated DD-02, DD-04, DD-05
 
 **[2026-01-26 12:15]**
 - Initial specification created
