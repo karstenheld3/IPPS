@@ -41,7 +41,7 @@ if ($Height -eq 0) { $Height = $physHeight }
 # Default output path
 if (-not $OutputPath) {
     $workspaceRoot = (Get-Item $PSScriptRoot).Parent.Parent.Parent.Parent.FullName
-    $timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+    $timestamp = "simple-screenshot_" + (Get-Date -Format "yyyy-MM-dd_HH-mm-ss-fff")
     $screenshotDir = Join-Path $workspaceRoot ".tools\_screenshots"
     
     if (-not (Test-Path $screenshotDir)) {
