@@ -47,6 +47,14 @@
 - [x] Renamed `capture-with-crop.ps1` to `capture-model-selector.ps1` (no cropping)
 - [x] [TESTED] DPI-aware capture works with different resolutions (tested 1920x1080)
 - [x] Added script name and milliseconds to screenshot filenames for both scripts
+- [x] Created `cascade-model-switching.md` rule (now redesigning)
+- [x] Moved tier definitions to !NOTES.md (rule references only)
+
+## In Design
+
+- Model assignment in STRUT: Strategy section default + step suffix overrides
+- Safety checks before auto-switch via screenshot analysis
+- Configuration priority: Session NOTES.md > Workspace !NOTES.md
 
 ## Tried But Not Used
 

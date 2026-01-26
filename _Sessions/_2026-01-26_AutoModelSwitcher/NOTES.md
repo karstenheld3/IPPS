@@ -6,9 +6,9 @@
 
 ## Current Phase
 
-**Phase**: IMPLEMENT (paused)
+**Phase**: DESIGN (in progress)
 **Workflow**: /solve (research-focused)
-**Assessment**: Hooks approach dropped - too fragile. Manual model switching works. Need different solution for automation.
+**Assessment**: Redesigning model switching - explicit models in STRUT/TASKS, safety checks via screenshot before switching.
 
 ## Session Info
 
@@ -99,6 +99,12 @@ File: `%APPDATA%/Windsurf/User/keybindings.json`
 **Screenshots saved to**: `[WORKSPACE]/.tools/_screenshots/`
 
 ## Document History
+
+**[2026-01-26 13:49]**
+- REDESIGNING: Model switching approach
+- New direction: Explicit models in STRUT Strategy + step overrides (not tiers)
+- Safety checks via screenshot before switching (verify Windsurf foreground, Cascade open, user idle)
+- Configuration priority: Session NOTES.md > Workspace !NOTES.md
 
 **[2026-01-26 13:25]**
 - DROPPED hooks approach - too fragile (requires restart, timing issues)
