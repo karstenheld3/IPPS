@@ -361,7 +361,7 @@ def parse_judge_response(content: str) -> dict:
 ## 8. Pipeline Flow
 
 ```
-User runs: python transcribe-image-pipeline.py --input-file doc.png --output-file doc.md
+User runs: python transcribe-image-to-markdown-advanced.py --input-file doc.png --output-file doc.md
 
 ├─> Load API keys from .env or --keys-file
 ├─> Load prompts from prompts/ or --transcribe-prompt-file / --judge-prompt-file
@@ -389,12 +389,12 @@ User runs: python transcribe-image-pipeline.py --input-file doc.png --output-fil
 
 ## 9. Scripts Reference
 
-### transcribe-image-pipeline.py
+### transcribe-image-to-markdown-advanced.py
 
 ```powershell
-python transcribe-image-pipeline.py --input-file doc.png --output-file doc.md
-python transcribe-image-pipeline.py --input-folder images/ --output-folder out/ --workers 4
-python transcribe-image-pipeline.py --input-file doc.png --model claude-sonnet-4-20250514 --initial-candidates 5 --min-score 4.0
+python transcribe-image-to-markdown-advanced.py --input-file doc.png --output-file doc.md
+python transcribe-image-to-markdown-advanced.py --input-folder images/ --output-folder out/ --workers 4
+python transcribe-image-to-markdown-advanced.py --input-file doc.png --model claude-sonnet-4-20250514 --initial-candidates 5 --min-score 4.0
 ```
 
 **Parameters:**
