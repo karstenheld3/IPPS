@@ -647,6 +647,9 @@ Creates `_TASKS_*.md` from IMPL/TEST. **Mandatory before implementation.**
 
 - [Agent Comparison](Docs/FurtherResearch/_INFO_AGENT_COMPARISON.md) - Full feature comparison with detailed tables
 - [Fast and Cheap Models](Docs/FurtherResearch/_INFO_FAST_CHEAP_MODELS.md) - Speed and benchmark comparison for free and economical models
+- [Agent Skills](Docs/FurtherResearch/_INFO_AGENT_SKILLS.md) - Capabilities and tool usage of different agent types
+- [Using Cascade as Agent](Docs/FurtherResearch/_INFO_USE_CASCADE_AS_AGENT.md) - Best practices for agentic workflows in Windsurf
+- [Spec-Driven Development](Docs/FurtherResearch/_INFO_SPEC_DRIVEN_DEVELOPMENT.md) - The SDD methodology powering IPPS
 - [How Windsurf Works](Docs/INFO_HOW_WINDSURF_WORKS.md) - Windsurf IDE and Cascade assistant
 - [How Claude Code Works](Docs/FurtherResearch/_INFO_HOW_CLAUDE_CODE_WORKS.md) - Anthropic's terminal agent
 - [How Codex CLI Works](Docs/FurtherResearch/_INFO_HOW_CODEX_WORKS.md) - OpenAI's terminal agent
@@ -654,5 +657,6 @@ Creates `_TASKS_*.md` from IMPL/TEST. **Mandatory before implementation.**
 
 ### Technical Reference
 
+- [OpenAI and Anthropic Model Costs](Docs/FurtherResearch/_INFO_OPENAI_ANTHROPIC_MODEL_COSTS.md) - Token pricing and credit multiplier analysis
 - [ASCII Art Width Test](Docs/FurtherResearch/_TEST_ASCII_ART_WIDTH.md) - Unicode character width testing for monospace fonts
 - [ASCII Art Transcription Cost/Quality Eval](_Sessions/_Archive/_2026-01-23_JpgToAsciiArtTranscriptionCostQualityEval/INFO_ASCII_ART_TRANSCRIPTION_COST_QUALITY_EVAL.md) - LLM model comparison for image-to-ASCII transcription
