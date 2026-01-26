@@ -1,5 +1,43 @@
 # Session Failures
 
+## AMSW-FL-003: Fullscreen screenshots waste tokens, truncated popup misses models
+
+**Severity**: [HIGH]
+**When**: 2026-01-26 11:05
+**Where**: `DevSystemV3.2/skills/windsurf-auto-model-switcher/discover/capture-all-sections.ps1`
+**What**: All screenshots are fullscreen, popup area is small, lower models truncated
+
+### Evidence
+- Screenshots ~400KB each, 10 screenshots = 4MB wasted
+- Model selector popup is small area in corner, most of image is irrelevant
+- Popup bottom is cut off, missing models from list
+- User explicitly instructed: "first screenshot fullscreen to find position, then crop subsequent"
+
+### Root Cause
+- Did not implement user's two-phase approach
+- Assumed full screen capture would work
+- No detection of popup position/size
+- No cropping to relevant area
+
+### Fix
+1. First screenshot: fullscreen to detect popup position
+2. Cascade analyzes screenshot, returns {x, y, width, height} of popup
+3. Subsequent screenshots: crop to popup area only
+4. Smaller files, less tokens, complete model list
+
+### Root Cause Analysis (Step 4)
+**Problem**: Estimated coordinates based on scaled-down image display, not actual screen resolution.
+- Screen: 2048x1280 actual
+- Image displayed: ~1024x640 scaled
+- My estimates: X=770, Y=555 (for scaled image)
+- Actual needed: X=1570, Y=1070 (for real screen)
+
+**Solution applied**:
+1. Query screen resolution first: `[System.Windows.Forms.Screen]::PrimaryScreen.Bounds`
+2. Zoom out with large crop area to locate popup
+3. Progressively refine coordinates
+4. Store working coordinates in JSON metadata for reuse
+
 ## AMSW-FL-002: Hardcoded model mapping defeats discovery purpose
 
 **Severity**: [MEDIUM]
