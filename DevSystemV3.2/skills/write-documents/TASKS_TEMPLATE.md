@@ -46,6 +46,7 @@ Run before starting any implementation:
   - Guardrails: [must not change X]
   - Depends: none | TK-NNN
   - Parallel: [P] or blank
+  - Model: Sonnet | Opus | Haiku
   - Est: 0.5 HHW
 ```
 
@@ -60,6 +61,18 @@ Run before starting any implementation:
 - Guardrails (constraints)
 - Depends (dependencies)
 - Parallel marker
+- Model (for auto model switching)
+
+## Model Hints
+
+Tasks may include model hints for auto model switching:
+
+**Guidelines:**
+- **Opus**: Complex analysis, architecture decisions, spec writing
+- **Sonnet**: Implementation, bug fixes, refactoring
+- **Haiku**: File operations, git commits, simple scripts
+
+Model hints are recommendations - agent decides based on actual task.
 
 ## Task N - Final Verification (MANDATORY)
 

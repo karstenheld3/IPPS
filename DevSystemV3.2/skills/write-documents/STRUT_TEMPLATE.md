@@ -52,10 +52,26 @@ STRUT plans can be inserted into:
 ## Node Types
 
 1. **Objectives** - Success criteria linked to Deliverables (`← P1-Dx`), checkboxes, no IDs
-2. **Strategy** - Approach summary, may include AWT (Agentic Work Time) estimates
+2. **Strategy** - Approach summary, may include AWT estimates and model hints
 3. **Steps** - Actions using AGEN verbs (flat list with checkboxes and IDs)
 4. **Deliverables** - Expected outputs (checkboxes with IDs)
 5. **Transitions** - Flow control conditions at phase end
+
+## Model Hints
+
+Strategy sections may include model hints for auto model switching:
+
+```
+├─ Strategy: Analyze requirements, design solution
+│   - Opus for analysis, Sonnet for implementation
+```
+
+**Guidelines:**
+- Planning/Analysis phases: Claude Opus 4.5 (Thinking)
+- Implementation/Bugfix phases: Claude Sonnet 4.5
+- Chore phases (commits, file ops): Claude Haiku 4.5
+
+Model hints are recommendations - agent decides based on actual task.
 
 ## Checkbox States
 
