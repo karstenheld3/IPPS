@@ -143,12 +143,16 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **AMSW** - Auto Model SWitcher (Windsurf model switching automation)
 - **GLOB** - Global/project-wide items
 - **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
+- **LLMTR** - LLM Transcription Skill (image-to-markdown, audio-to-markdown)
 - **MCPS** - MCP server integrations
 - **MEPI** - MEPI/MCPI research depth principle
 - **SDDEV** - Spec-Driven Development (research topic)
 - **TRNGFX** - Transcription graphics/ASCII art optimization
 
 ## Document History
+
+**[2026-01-26 23:56]**
+- Added: LLMTR topic (LLM Transcription Skill)
 
 **[2026-01-26 16:33]**
 - Added: AMSW topic (Auto Model SWitcher)
