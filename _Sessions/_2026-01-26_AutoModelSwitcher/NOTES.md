@@ -100,6 +100,12 @@ File: `%APPDATA%/Windsurf/User/keybindings.json`
 
 ## Document History
 
+**[2026-01-26 14:05]**
+- TESTED: Screenshot-based safety check workflow [SUCCESS]
+- Agent successfully: took screenshot, verified 4 safety conditions, switched Opus→Sonnet
+- Added switch-back pattern to cascade-model-switching.md rule
+- Model switch takes effect on next user message (verified with before/after screenshots)
+
 **[2026-01-26 13:49]**
 - REDESIGNING: Model switching approach
 - New direction: Explicit models in STRUT Strategy + step overrides (not tiers)

@@ -50,7 +50,7 @@
 - [x] Created `cascade-model-switching.md` rule (now redesigning)
 - [x] Moved tier definitions to !NOTES.md (rule references only)
 
-## Completed Design
+## Completed Design & Testing
 
 - [x] Model hints in STRUT Strategy (recommendations, not mandates)
 - [x] Safety checks via screenshot before switching (4 conditions)
@@ -59,6 +59,8 @@
 - [x] Created `NOTES_TEMPLATE.md` with Cascade Model Switching section
 - [x] Updated STRUT_TEMPLATE.md and TASKS_TEMPLATE.md with model hints
 - [x] All templates reference `!NOTES.md` for model definitions (no hardcoding)
+- [x] [TESTED] Screenshot-based safety check workflow - agent verified conditions and switched models
+- [x] Added switch-back pattern to cascade-model-switching.md rule
 
 ## Tried But Not Used
 

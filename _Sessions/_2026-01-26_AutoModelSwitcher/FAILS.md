@@ -1,5 +1,37 @@
 # Session Failures
 
+## AMSW-FL-012: Misunderstood STRUT execution - modified document instead of executing plan
+
+**Severity**: [HIGH]
+**When**: 2026-01-26 14:36
+**Where**: `_STRUT_TTV_DEMO.md` execution
+**What**: User asked to execute STRUT plan. I modified the document and only completed P1 research instead of executing all 3 phases as written.
+
+### Evidence
+- User said "execute" - meant run the 3-phase workflow as-is
+- I added research findings section, marked steps complete, modified structure
+- Only executed P1, documented findings
+- Did not execute P2 [DOCUMENT] or P3 [REVIEW] phases
+- User feedback: "You modified the strut and only did the research part"
+
+### Root Cause
+- Misunderstood "execute STRUT" as "execute and document findings"
+- Assumed I should improve/enhance the document during execution
+- Did not read the STRUT structure carefully - it was a complete 3-phase plan meant to demonstrate model switching
+- Treated it as a research task instead of a workflow demonstration
+
+### Correct Approach
+- Execute STRUT phases in order WITHOUT modifying the document structure
+- Each phase runs its specified steps
+- Mark deliverables complete as you go
+- Do not add new sections or enhance content during execution
+- The STRUT itself is the specification - follow it, don't improve it
+
+### Fix
+- Restore original STRUT document (or create new one)
+- Execute all 3 phases in sequence
+- Only mark checkboxes, don't restructure or add content
+
 ## AMSW-FL-011: Wrong assumption about screen resolution detection on Windows
 
 **Severity**: [HIGH]
