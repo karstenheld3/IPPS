@@ -51,11 +51,15 @@ When Cascade sees duplicate models (list wrapped around), extraction is complete
 
 Update `windsurf-model-registry.json` with discovered models and costs.
 
-### Step 5: Cleanup
+### Step 5: Cleanup (Only After Success)
+
+**IMPORTANT:** Only delete screenshots after successfully updating `windsurf-model-registry.json`.
 
 ```powershell
 Remove-Item -Path "[WORKSPACE]/.tools/_screenshots/*.jpg" -Force
 ```
+
+If extraction failed, keep screenshots for debugging.
 
 ## Method C: Playwright (Last Resort)
 
