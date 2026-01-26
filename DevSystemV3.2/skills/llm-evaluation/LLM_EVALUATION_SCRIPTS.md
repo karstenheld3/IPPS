@@ -16,6 +16,11 @@ python call-llm.py --model claude-opus-4-20250514 --input-file doc.md --prompt-f
 - `--output-file` - Output file (default: stdout)
 - `--keys-file` - API keys file (default: .env)
 - `--write-json-metadata` - Write token usage to separate JSON file
+- `--temperature` - Temperature effort level (default: medium)
+- `--reasoning-effort` - Reasoning effort level (default: medium)
+- `--output-length` - Output length effort level (default: medium)
+- `--seed` - Random seed (OpenAI only)
+- `--response-format` - Output format: text, json (default: text)
 - `--use-prompt-caching` - Enable prompt caching (see Prompt Caching section)
 
 ## call-llm-batch.py - Batch Processing
@@ -32,6 +37,13 @@ python call-llm-batch.py --model gpt-4o --input-folder images/ --output-folder o
 - `--runs` - Runs per file (default: 1)
 - `--workers` - Parallel workers (default: 4)
 - `--keys-file` - API keys file (default: .env)
+- `--force` - Force reprocess existing files
+- `--clear-folder` - Clear output folder before processing
+- `--temperature` - Temperature effort level (default: medium)
+- `--reasoning-effort` - Reasoning effort level (default: medium)
+- `--output-length` - Output length effort level (default: medium)
+- `--seed` - Random seed (OpenAI only)
+- `--response-format` - Output format: text, json (default: text)
 - `--use-prompt-caching` - Enable prompt caching (see Prompt Caching section)
 
 **Features:**
