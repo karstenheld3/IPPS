@@ -22,13 +22,13 @@ The goal: Run [`/go`](.windsurf/workflows/go.md) and watch the agent execute a m
 
 IPPS is built on four integrated specifications that enable autonomous agent operation:
 
-- **[AGEN - Agentic English](docs/specs/SPEC_AGEN_AGENTIC_ENGLISH.md)** - Controlled vocabulary with verbs `[VERB]`, placeholders `[PLACEHOLDER]`, and states `STATE`. Eliminates ambiguity in agent instructions.
+- **[AGEN - Agentic English](Docs/Specs/SPEC_AGEN_AGENTIC_ENGLISH.md)** - Controlled vocabulary with verbs `[VERB]`, placeholders `[PLACEHOLDER]`, and states `STATE`. Eliminates ambiguity in agent instructions.
 
-- **[EDIRD - Phase Model](docs/specs/SPEC_EDIRD_PHASE_MODEL.md)** - Five-phase workflow (Explore, Design, Implement, Refine, Deliver) with gates and deterministic next-action logic. Supports BUILD (code) and SOLVE (knowledge) workflows.
+- **[EDIRD - Phase Model](Docs/Specs/SPEC_EDIRD_PHASE_MODEL.md)** - Five-phase workflow (Explore, Design, Implement, Refine, Deliver) with gates and deterministic next-action logic. Supports BUILD (code) and SOLVE (knowledge) workflows.
 
-- **[STRUT - Structured Thinking](docs/specs/SPEC_STRUT_STRUCTURED_THINKING.md)** - Tree notation for planning and tracking agent work. Uses unique IDs (`P1`, `P1-S1`, `P1-D1`), checkbox states (`[ ]`, `[x]`, `[N]`), and transitions for flow control.
+- **[STRUT - Structured Thinking](Docs/Specs/SPEC_STRUT_STRUCTURED_THINKING.md)** - Tree notation for planning and tracking agent work. Uses unique IDs (`P1`, `P1-S1`, `P1-D1`), checkbox states (`[ ]`, `[x]`, `[N]`), and transitions for flow control.
 
-- **[TRACTFUL - Document Framework](docs/specs/SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md)** - Document types (INFO, SPEC, IMPL, TEST, TASKS) with unique IDs and traceability. Defines how documents reference each other and track progress.
+- **[TRACTFUL - Document Framework](Docs/Specs/SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md)** - Document types (INFO, SPEC, IMPL, TEST, TASKS) with unique IDs and traceability. Defines how documents reference each other and track progress.
 
 **How they work together:**
 ```
@@ -111,7 +111,7 @@ your-project/
 
 A controlled vocabulary for agent-human communication. Provides consistent terminology across all workflows.
 
-**Full specification**: [SPEC_AGEN_AGENTIC_ENGLISH.md](docs/specs/SPEC_AGEN_AGENTIC_ENGLISH.md)
+**Full specification**: [SPEC_AGEN_AGENTIC_ENGLISH.md](Docs/Specs/SPEC_AGEN_AGENTIC_ENGLISH.md)
 
 **Goal**: Eliminate ambiguity in agent instructions by using bracketed verbs, placeholders, and labels.
 
@@ -138,7 +138,7 @@ A controlled vocabulary for agent-human communication. Provides consistent termi
 
 A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) work.
 
-**Full specification**: [SPEC_EDIRD_PHASE_MODEL.md](docs/specs/SPEC_EDIRD_PHASE_MODEL.md)
+**Full specification**: [SPEC_EDIRD_PHASE_MODEL.md](Docs/Specs/SPEC_EDIRD_PHASE_MODEL.md)
 
 **Goal**: Consistent phase structure for all development work with deterministic next-action logic. We want the agent to always do the right thing when the [`/go`](.windsurf/workflows/go.md) workflow is executed until the initial goal is reached.
 
@@ -173,7 +173,7 @@ A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) w
 
 Tree notation for planning and tracking complex autonomous work.
 
-**Full specification**: [SPEC_STRUT_STRUCTURED_THINKING.md](docs/specs/SPEC_STRUT_STRUCTURED_THINKING.md)
+**Full specification**: [SPEC_STRUT_STRUCTURED_THINKING.md](Docs/Specs/SPEC_STRUT_STRUCTURED_THINKING.md)
 
 **Goal**: Provide a notation for agent plans that supports progress tracking, hierarchical decomposition, and flow control.
 
@@ -212,7 +212,7 @@ Tree notation for planning and tracking complex autonomous work.
 
 Document types and templates that cover the entire development cycle from exploration of ideas to fixing issues.
 
-**Full specification**: [SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md](docs/specs/SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md)
+**Full specification**: [SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md](Docs/Specs/SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md)
 
 **Goal**: Ensure all development artifacts are uniquely identified, properly structured, and traceable from ideation to maintenance.
 
