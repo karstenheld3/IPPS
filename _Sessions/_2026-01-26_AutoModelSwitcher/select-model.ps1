@@ -24,20 +24,20 @@ public class Win32 {
     public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
     public const byte VK_CONTROL = 0x11;
-    public const byte VK_MENU = 0x12;   // Alt
-    public const byte VK_M = 0x4D;
+    public const byte VK_SHIFT = 0x10;
+    public const byte VK_F9 = 0x78;
     public const byte VK_RETURN = 0x0D;
     public const byte VK_ESCAPE = 0x1B;
     public const byte VK_DOWN = 0x28;
     public const uint KEYEVENTF_KEYUP = 0x0002;
 
-    public static void SendCtrlAltM() {
+    public static void SendCtrlShiftF9() {
         keybd_event(VK_CONTROL, 0, 0, UIntPtr.Zero);
-        keybd_event(VK_MENU, 0, 0, UIntPtr.Zero);
-        keybd_event(VK_M, 0, 0, UIntPtr.Zero);
+        keybd_event(VK_SHIFT, 0, 0, UIntPtr.Zero);
+        keybd_event(VK_F9, 0, 0, UIntPtr.Zero);
         System.Threading.Thread.Sleep(50);
-        keybd_event(VK_M, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
-        keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+        keybd_event(VK_F9, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+        keybd_event(VK_SHIFT, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
         keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
     }
 
@@ -82,8 +82,8 @@ Start-Sleep -Milliseconds 400
 [Win32]::SendEscape()
 Start-Sleep -Milliseconds 120
 
-# Open model selector
-[Win32]::SendCtrlAltM()
+# Open model selector (Ctrl+Shift+F9)
+[Win32]::SendCtrlShiftF9()
 Start-Sleep -Milliseconds $OpenDelayMs
 
 # Type query (assumes selector focuses a textbox)

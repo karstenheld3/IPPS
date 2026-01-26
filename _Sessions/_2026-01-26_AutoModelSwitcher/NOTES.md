@@ -54,16 +54,19 @@
 
 File: `%APPDATA%/Windsurf/User/keybindings.json`
 
-- `Ctrl+Alt+M` -> `windsurf.cascade.toggleModelSelector` (when: !terminalFocus)
-- `Ctrl+Alt+N` -> `windsurf.cascade.switchToNextModel` (when: !terminalFocus)
+- `Ctrl+Shift+F9` -> `windsurf.cascade.toggleModelSelector` (when: !terminalFocus) [TESTED]
+- `Ctrl+Shift+F10` -> `windsurf.cascade.switchToNextModel` (when: !terminalFocus) [TESTED]
+
+**Note**: `Ctrl+Alt+*` does NOT work on German keyboards (AltGr produces special chars like µ)
 
 ### Tested Approaches
 
 1. **Keyboard simulation (cycling)** - [WORKS] `switch-model-v3.ps1` cycles models reliably
-2. **Keyboard simulation (selection)** - [PARTIAL] `select-model.ps1` needs keybinding fix, typed into editor
+2. **Keyboard simulation (selection)** - [WORKS] `select-model.ps1` with Ctrl+Shift+F9
 3. **Hooks** - [FAILED] `post_cascade_response` hook never triggered
 4. **Ctrl+L focus** - [FAILED] Toggles panel closed instead of focusing
 5. **Ctrl+Shift+I focus** - [FAILED] Spawns new Cascade windows
+6. **Ctrl+Alt+M** - [FAILED] Produces µ on German keyboard (AltGr conflict)
 
 ## IMPORTANT: Cascade Agent Instructions
 
@@ -80,6 +83,10 @@ File: `%APPDATA%/Windsurf/User/keybindings.json`
 3. `/continue` - Execute next items
 
 ## Document History
+
+**[2026-01-26 10:09]**
+- Model selection WORKING with `select-model.ps1` + `Ctrl+Shift+F9`
+- Toggle between Opus Thinking and Sonnet 4.5 confirmed
 
 **[2026-01-26 10:01]**
 - Updated with tested findings and custom keybindings

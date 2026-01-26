@@ -12,13 +12,11 @@
 
 ## To Do
 
-- [ ] Restart Windsurf to test keybinding fix for model selector
-- [ ] Verify `select-model.ps1` opens model selector correctly
-- [ ] Test toggle between Claude Opus 4.5 Thinking and Claude Sonnet 4.5
+(none - POC complete)
 
 ## In Progress
 
-- [ ] Model selection via `select-model.ps1` [BLOCKED - needs restart]
+(none)
 
 ## Done
 
@@ -34,6 +32,9 @@
 - [x] [TESTED] Custom keybindings added to `keybindings.json`
 - [x] [TESTED] Extracted model list from `user_settings.pb`
 - [x] Fix keybinding focus requirement (removed `cascadePanel.focused`)
+- [x] [TESTED] Fix German keyboard - use Ctrl+Shift+F9 instead of Ctrl+Alt+M
+- [x] [TESTED] Model selection with `select-model.ps1` - confirmed working
+- [x] [TESTED] Toggle between Claude Opus 4.5 Thinking and Claude Sonnet 4.5
 
 ## Tried But Not Used
 
@@ -42,3 +43,4 @@
 - **post_cascade_response hook** - [TESTED] Never triggered
 - **switch-model.ps1 (v1)** - Superseded by v3
 - **switch-model-v2.ps1** - Superseded by v3
+- **Ctrl+Alt+M keybinding** - [TESTED] Produces µ on German keyboard (AltGr conflict)

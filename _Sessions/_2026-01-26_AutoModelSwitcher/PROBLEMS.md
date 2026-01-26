@@ -4,19 +4,16 @@
 
 ## Open
 
+(none)
+
+## Resolved
+
 ### AMSW-PR-005: Model selector script typed into editor
 - **Type**: Bug
 - **Description**: `select-model.ps1` typed query into editor instead of model selector search box
-- **Cause**: Keybinding `Ctrl+Alt+M` had `windsurf.cascadePanel.focused` requirement
-- **Fix Applied**: Removed focus requirement from keybinding
-- **Status**: Open - needs Windsurf restart to verify fix
-
-### AMSW-PR-006: Cascade hooks not triggering
-- **Type**: Bug
-- **Description**: `post_cascade_response` hook in `.windsurf/hooks.json` never fires
-- **Status**: Open - deferred, not critical for model switching
-
-## Resolved
+- **Cause**: Keybinding `Ctrl+Alt+M` had focus requirement AND AltGr conflict on German keyboard
+- **Fix Applied**: Changed to `Ctrl+Shift+F9` (F-keys avoid AltGr conflict)
+- **Status**: Resolved [TESTED]
 
 ### AMSW-PR-001: Locate Windsurf conversation state storage
 - **Type**: Research
