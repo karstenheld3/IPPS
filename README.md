@@ -645,13 +645,13 @@ Creates `_TASKS_*.md` from IMPL/TEST. **Mandatory before implementation.**
 
 ### Detailed Documentation
 
-- [Agent Comparison](docs/FurtherResearch/_INFO_AGENT_COMPARISON.md) - Full feature comparison with detailed tables
-- [How Windsurf Works](docs/INFO_HOW_WINDSURF_WORKS.md) - Windsurf IDE and Cascade assistant
-- [How Claude Code Works](docs/FurtherResearch/_INFO_HOW_CLAUDE_CODE_WORKS.md) - Anthropic's terminal agent
-- [How Codex CLI Works](docs/FurtherResearch/_INFO_HOW_CODEX_WORKS.md) - OpenAI's terminal agent
-- [How GitHub Copilot Works](docs/FurtherResearch/_INFO_HOW_COPILOT_WORKS.md) - GitHub's IDE extension
+- [Agent Comparison](Docs/FurtherResearch/_INFO_AGENT_COMPARISON.md) - Full feature comparison with detailed tables
+- [How Windsurf Works](Docs/INFO_HOW_WINDSURF_WORKS.md) - Windsurf IDE and Cascade assistant
+- [How Claude Code Works](Docs/FurtherResearch/_INFO_HOW_CLAUDE_CODE_WORKS.md) - Anthropic's terminal agent
+- [How Codex CLI Works](Docs/FurtherResearch/_INFO_HOW_CODEX_WORKS.md) - OpenAI's terminal agent
+- [How GitHub Copilot Works](Docs/FurtherResearch/_INFO_HOW_COPILOT_WORKS.md) - GitHub's IDE extension
 
 ### Technical Reference
 
-- [ASCII Art Width Test](docs/FurtherResearch/_TEST_ASCII_ART_WIDTH.md) - Unicode character width testing for monospace fonts
+- [ASCII Art Width Test](Docs/FurtherResearch/_TEST_ASCII_ART_WIDTH.md) - Unicode character width testing for monospace fonts
 - [ASCII Art Transcription Cost/Quality Eval](_Sessions/_Archive/_2026-01-23_JpgToAsciiArtTranscriptionCostQualityEval/INFO_ASCII_ART_TRANSCRIPTION_COST_QUALITY_EVAL.md) - LLM model comparison for image-to-ASCII transcription
