@@ -646,6 +646,7 @@ Creates `_TASKS_*.md` from IMPL/TEST. **Mandatory before implementation.**
 ### Detailed Documentation
 
 - [Agent Comparison](Docs/FurtherResearch/_INFO_AGENT_COMPARISON.md) - Full feature comparison with detailed tables
+- [Fast and Cheap Models](Docs/FurtherResearch/_INFO_FAST_CHEAP_MODELS.md) - Speed and benchmark comparison for free and economical models
 - [How Windsurf Works](Docs/INFO_HOW_WINDSURF_WORKS.md) - Windsurf IDE and Cascade assistant
 - [How Claude Code Works](Docs/FurtherResearch/_INFO_HOW_CLAUDE_CODE_WORKS.md) - Anthropic's terminal agent
 - [How Codex CLI Works](Docs/FurtherResearch/_INFO_HOW_CODEX_WORKS.md) - OpenAI's terminal agent
