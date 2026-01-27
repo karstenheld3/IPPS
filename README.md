@@ -384,6 +384,101 @@ GitHub CLI integration for repos, issues, PRs, releases.
 
 **Setup**: Run `SETUP.md` to install GitHub CLI in `.tools/gh/`.
 
+### git-conventions
+
+Commit message format, undo/recovery commands, .gitignore rules.
+
+**Files**:
+- `SKILL.md` - Conventional commit format, safe undo, .gitignore template
+
+**Key rules**:
+- Format: `<type>(<scope>): <description>`
+- Types: feat, fix, docs, refactor, test, chore, style, perf
+- Imperative mood, <72 chars, no period
+- Never commit secrets (.env, *.key, *.pem)
+
+### edird-phase-planning
+
+EDIRD phase model for long-running agentic tasks.
+
+**Phases**: EXPLORE → DESIGN → IMPLEMENT → REFINE → DELIVER
+
+**Files**:
+- `SKILL.md` - Phase gates, workflow examples, effort allocation
+
+**Usage**: Invoked automatically by `/build` and `/solve` workflows.
+
+### ms-playwright-mcp
+
+Browser automation via Microsoft Playwright MCP server.
+
+**Setup**: Requires Node.js 18+ with npx in PATH.
+
+**Key tools**:
+- `browser_navigate` - Go to URL
+- `browser_snapshot` - Get accessibility tree with element refs
+- `browser_click` - Click element by ref
+- `browser_type` - Type text into element
+
+**Usage**: Configure in `.windsurf/mcp.json`, use accessibility tree refs for element selection.
+
+### session-management
+
+Session lifecycle management: init, save, resume, finalize, archive.
+
+**Files**:
+- `NOTES_TEMPLATE.md` - Session notes template
+- `PROBLEMS_TEMPLATE.md` - Problem tracking template
+- `PROGRESS_TEMPLATE.md` - Progress tracking template
+
+**Usage**: Invoked by `/session-new`, `/session-load`, `/session-save`, `/session-finalize`.
+
+### windows-desktop-control
+
+Windows desktop automation utilities.
+
+**Scripts**:
+- `simple-screenshot.ps1` - DPI-aware screenshot capture
+
+**Quick examples**:
+```powershell
+# Full screen screenshot
+.\DevSystemV3.2\skills\windows-desktop-control\simple-screenshot.ps1
+
+# Custom output path
+.\DevSystemV3.2\skills\windows-desktop-control\simple-screenshot.ps1 -OutputPath "C:\temp\screenshot.jpg"
+```
+
+### windsurf-auto-model-switcher
+
+Switch Windsurf Cascade AI models programmatically.
+
+**Setup**: Run `SETUP.md` to install keybindings, restart Windsurf.
+
+**Scripts**:
+- `select-windsurf-model-in-ide.ps1` - Select model by search query
+- `windsurf-model-registry.json` - Available models and costs
+
+**Quick examples**:
+```powershell
+# Select Claude Sonnet 4.5
+.\DevSystemV3.2\skills\windsurf-auto-model-switcher\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
+```
+
+### write-documents
+
+Document templates for INFO, SPEC, IMPL, TEST, TASKS, and STRUT plans.
+
+**Templates**:
+- `INFO_TEMPLATE.md` - Research and analysis
+- `SPEC_TEMPLATE.md` - Technical specifications
+- `IMPL_TEMPLATE.md` - Implementation plans
+- `TEST_TEMPLATE.md` - Test plans
+- `TASKS_TEMPLATE.md` - Task plans
+- `STRUT_TEMPLATE.md` - STRUT plans
+
+**Usage**: Invoked by `/write-spec`, `/write-impl-plan`, `/write-test-plan`, `/write-tasks-plan`.
+
 ## Agent Tools
 
 Local tool installations in `.tools/` (gitignored). Run `SETUP.md` in each skill folder to install.
