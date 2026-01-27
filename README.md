@@ -310,6 +310,32 @@ $skill = "DevSystemV3.2\skills\llm-transcription"
 & $venv "$skill\transcribe-image-to-markdown-advanced.py" --input-file doc.png --output-file doc.md --keys-file .tools/.api-keys.txt --model gpt-5-mini --initial-candidates 3
 ```
 
+### llm-computer-use
+
+Desktop automation via LLM vision. The AI sees your screen, decides what to click/type, and executes actions.
+
+**Setup**: Uses shared venv from llm-evaluation (`.tools/llm-venv/`). Requires Anthropic API key.
+
+**Files**:
+- `llm_computer_use/core.py` - ScreenCapture, Actions, Session, Provider
+- `llm_computer_use/cli.py` - CLI entry point
+
+**Quick examples**:
+```powershell
+cd DevSystemV3.2\skills\llm-computer-use
+
+# Dry-run (safe, no actions executed)
+python -m llm_computer_use -k .tools/.api-keys.txt "Click the Start button"
+
+# Execute mode
+python -m llm_computer_use -x -k .tools/.api-keys.txt "Open Notepad and type Hello World"
+
+# Use cheaper model
+python -m llm_computer_use -x -m claude-haiku-4-5 "Open Calculator"
+```
+
+**Cost**: ~$0.01-0.02 per iteration (Sonnet), ~$0.003-0.005 (Haiku). Default max 10 iterations.
+
 ### pdf-tools
 
 Convert, compress, and analyze PDF files using local CLI tools.
