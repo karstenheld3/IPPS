@@ -19,18 +19,28 @@ Universal transcription tools using LLMs with optimized prompts for each purpose
 
 1. Run `SETUP.md` once to install dependencies
 2. Choose your script:
-   - **Image to Markdown**: `transcribe-image-to-markdown.py`
+   - **Image Pipeline** (recommended): `transcribe-image-to-markdown-advanced.py` - Ensemble + judge + refinement
+   - **Image Simple**: `transcribe-image-to-markdown.py` - Single-shot transcription
    - **Audio to Markdown**: `transcribe-audio-to-markdown.py`
 
 ## Available Scripts
 
-**Core Scripts:**
-- `transcribe-image-to-markdown.py` - Convert images to structured markdown
+**Image Transcription:**
+- `transcribe-image-to-markdown-advanced.py` - Ensemble transcription with judge and refinement (recommended)
+- `transcribe-image-to-markdown.py` - Simple single-shot transcription
+
+**Audio Transcription:**
 - `transcribe-audio-to-markdown.py` - Convert audio to markdown transcript
 
 ## Usage Examples
 
-**Image Transcription:**
+**Image Pipeline (recommended):**
+```bash
+python transcribe-image-to-markdown-advanced.py --input doc.png --output doc.md --verbose
+python transcribe-image-to-markdown-advanced.py --input-dir ./images --output-dir ./out --ensemble-size 3 --min-score 3.5
+```
+
+**Image Simple:**
 ```bash
 python transcribe-image-to-markdown.py --input screenshot.png --output result.md
 python transcribe-image-to-markdown.py --input document.jpg --model gpt-4o --output doc.md
