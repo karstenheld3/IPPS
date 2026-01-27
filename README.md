@@ -389,6 +389,7 @@ IPPS/
 │   │   ├── git/                  # Commit history navigation, file recovery
 │   │   ├── git-conventions/      # Commit message format
 │   │   ├── github/               # GitHub CLI operations
+│   │   ├── llm-computer-use/     # Desktop automation via LLM vision
 │   │   ├── llm-evaluation/       # LLM evaluation pipeline scripts
 │   │   ├── llm-transcription/    # Image/audio to markdown transcription
 │   │   ├── pdf-tools/            # PDF scripts and tools
