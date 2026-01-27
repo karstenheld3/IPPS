@@ -126,7 +126,8 @@ $skill = ".windsurf/skills/llm-transcription"
     --input-file ".tools/_pdf_to_jpg_converted/[NAME]/page_001.jpg" `
     --output-file "[SESSION_FOLDER]/[DocName]_page001.md" `
     --keys-file ".tools/.api-keys.txt" `
-    --model gpt-5-mini
+    --model gpt-5-mini `
+    --workers 4
 
 # Batch mode (entire folder)
 & $venv "$skill/transcribe-image-to-markdown-advanced.py" `
@@ -134,7 +135,7 @@ $skill = ".windsurf/skills/llm-transcription"
     --output-folder "[SESSION_FOLDER]/transcribed/" `
     --keys-file ".tools/.api-keys.txt" `
     --model gpt-5-mini `
-    --workers 4
+    --workers 12
 ```
 
 **Mode B: Built-in Transcription** (fallback - no skill or keys)
