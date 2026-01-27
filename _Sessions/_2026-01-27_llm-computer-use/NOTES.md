@@ -34,21 +34,33 @@ Collect all research topics and questions first, make a TOC and then research ea
 
 ## Key Decisions
 
-(None yet)
+**[2026-01-27 19:11] POC before SPEC**
+- Build POC first to validate research findings
+- Use existing `windows-desktop-control` skill as foundation
+- Start with Anthropic (recommended for desktop)
+
+**Resources**:
+- Screenshot tool: `DevSystemV3.2/skills/windows-desktop-control/simple-screenshot.ps1`
+- API keys: `e:\Dev\.api-keys.txt`
 
 ## Important Findings
 
-(To be populated during research)
+- Existing screenshot tool already handles DPI scaling via Win32 GetDeviceCaps
+- Physical resolution captured correctly (DESKTOPHORZRES/DESKTOPVERTRES)
+- JPEG output, configurable region capture
+- POC should add: Anthropic API integration, action execution, agent loop
+- **Windows Defender blocks .NET image compression in PowerShell** - need alternative approach
 
 ## Topic Registry
 
 - `ANTCU` - Anthropic Computer Use research
 - `OAICU` - OpenAI Computer Use research
-- `WINDC` - Windows Desktop Control (target skill)
+- `WINDC` - Windows Desktop Control (existing skill)
+- `LLMCU` - LLM Computer Use (new skill being specified)
 
 ## Current Phase
 
-**Phase**: EXPLORE (completed)
-**Workflow**: /research
-**Assessment**: Exploratory research completed - _INFO_ANTHROPIC_COMPUTER_USE.md [ANTCU-IN01] created
-**Next**: DESIGN phase - create SPEC for llm-computer-use skill
+**Phase**: IMPLEMENT (completed)
+**Workflow**: /go
+**Assessment**: Full llm_computer_use module created and tested
+**Next**: Test with actual Anthropic API, then move to DevSystemV3.2/skills/

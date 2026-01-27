@@ -4,9 +4,15 @@
 
 ## Open
 
-(None - research phase complete)
+(None)
 
 ## Resolved
+
+**LLMCU-PR-001: Windows Defender blocks PowerShell image compression**
+- **History**: Added 2026-01-27 19:35 | Resolved 2026-01-27 19:40
+- **Description**: Windows Defender blocks .NET System.Drawing image compression in PowerShell
+- **Solution**: Use Python + mss + Pillow instead of PowerShell
+- **Verification**: POC benchmark: 143ms avg (meets <150ms target)
 
 **ANTCU-PR-001: What Claude models support computer use?**
 - **History**: Added 2026-01-27 18:36 | Resolved 2026-01-27 19:00
