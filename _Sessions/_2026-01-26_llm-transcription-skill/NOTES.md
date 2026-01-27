@@ -12,7 +12,7 @@
 
 ## Current Phase
 
-**Phase**: EXPLORE
+**Phase**: REFINE
 **Workflow**: /build (BUILD workflow - creating new skill)
 **Assessment**: COMPLEXITY-MEDIUM (new skill with 2 scripts, prompt engineering)
 
@@ -33,10 +33,33 @@ User wants to add a new skill "llm-transcription" as a universal transcription t
 
 - **API Keys**: Use `--keys-file .tools/.api-keys.txt` for all LLM scripts
 - **Default models**: gpt-5-mini for both transcription and judge
+- **Shared venv**: `.tools/llm-venv/` shared between llm-evaluation and llm-transcription skills
 
 ## Important Findings
 
-(To be filled during EXPLORE phase)
+### gpt-5 and o-series API Parameter [TESTED]
+
+gpt-5 and o-series models require `max_completion_tokens` instead of `max_tokens` in API calls. Without this, API calls fail silently.
+
+```python
+uses_completion_tokens = any(x in model for x in ['gpt-5', 'o1-', 'o3-', 'o4-'])
+token_param = 'max_completion_tokens' if uses_completion_tokens else 'max_tokens'
+```
+
+### gpt-5-mini Effort Levels [TESTED]
+
+gpt-5-mini only supports `["minimal", "low", "medium", "high"]` reasoning effort - NOT "none".
+
+### Cost Comparison [TESTED]
+
+| Settings | Score | Time | Cost |
+|----------|-------|------|------|
+| gpt-4o (default) | 4.50 | 69s | $0.37 |
+| gpt-5-mini (medium) | 4.75 | 163s | $0.02 |
+| gpt-5-mini (minimal) | 4.15 | 63s | $0.0085 |
+
+**Best quality/cost**: gpt-5-mini + medium reasoning ($0.02, score 4.75)
+**Cheapest**: gpt-5-mini + minimal reasoning ($0.0085, 43x cheaper than gpt-4o)
 
 ## Topic Registry
 
