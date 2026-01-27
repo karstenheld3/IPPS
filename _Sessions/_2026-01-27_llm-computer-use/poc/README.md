@@ -1,4 +1,4 @@
-# LLM Computer Use v2
+# LLM Computer Use
 
 Desktop automation via LLM vision. Minimal 3-file package.
 
@@ -14,16 +14,16 @@ Desktop automation via LLM vision. Minimal 3-file package.
 pip install -r requirements.txt
 
 # Dry-run (safe)
-python -m llm_computer_use_v2 -k path/to/api-keys.txt "Click the Start button"
+python -m llm_computer_use -k path/to/api-keys.txt "Click the Start button"
 
 # Execute mode
-python -m llm_computer_use_v2 -x -k path/to/api-keys.txt "Open Notepad"
+python -m llm_computer_use -x -k path/to/api-keys.txt "Open Notepad"
 ```
 
 ## CLI Options
 
 ```
-python -m llm_computer_use_v2 [OPTIONS] TASK
+python -m llm_computer_use [OPTIONS] TASK
 
 Options:
   -x, --execute          Execute actions (default: dry-run)
@@ -44,7 +44,7 @@ Options:
 ## Files
 
 ```
-llm_computer_use_v2/
+llm_computer_use/
 ├── __init__.py   # Package exports
 ├── core.py       # ScreenCapture, Actions, Session, Provider
 └── cli.py        # CLI entry point
@@ -52,4 +52,4 @@ llm_computer_use_v2/
 
 ## Version
 
-0.4.0 - Minimal package (3 files, all tests pass)
+0.5.0 - Minimal package (3 files, all tests pass)

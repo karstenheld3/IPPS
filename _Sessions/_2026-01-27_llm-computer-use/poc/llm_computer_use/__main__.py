@@ -1,5 +1,3 @@
-"""Allow running as python -m llm_computer_use."""
+"""Allow running as python -m llm_computer_use_v2."""
 from .cli import main
-
-if __name__ == "__main__":
-    main()
+main()

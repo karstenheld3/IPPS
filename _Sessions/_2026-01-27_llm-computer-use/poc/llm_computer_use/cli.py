@@ -1,9 +1,9 @@
-"""CLI entry point for LLM Computer Use."""
+"""CLI entry point for LLM Computer Use v2."""
 import argparse
 import sys
 import os
 
-__version__ = "0.3.0"
+__version__ = "0.5.0"
 
 def load_api_key(keys_file: str = None) -> str:
     """Load API key from file or environment."""
@@ -20,34 +20,26 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Dry run (default) - preview actions without executing
-  python -m llm_computer_use "Open Notepad and type 'Hello World'"
-  
-  # Execute mode - actually perform actions
-  python -m llm_computer_use --execute "Open Calculator"
-  
-  # With custom settings
-  python -m llm_computer_use --max-iterations 10 --model claude-haiku-4-5 "Simple task"
+  python -m llm_computer_use_v2 "Click the Start button"
+  python -m llm_computer_use_v2 -x "Open Notepad"
+  python -m llm_computer_use_v2 -n 5 -k api-keys.txt "What time is it?"
         """
     )
     
-    parser.add_argument("task", help="Task description for the LLM")
-    parser.add_argument("--execute", "-x", action="store_true",
-                       help="Execute actions (default is dry-run)")
-    parser.add_argument("--max-iterations", "-n", type=int, default=10,
-                       help="Maximum iterations (default: 10, each ~$0.01)")
-    parser.add_argument("--model", "-m", default="claude-sonnet-4-5",
-                       help="Model to use (default: claude-sonnet-4-5)")
-    parser.add_argument("--keys-file", "-k",
-                       help="Path to API keys file")
-    parser.add_argument("--quiet", "-q", action="store_true",
-                       help="Minimal output")
-    parser.add_argument("--save-log", "-s", action="store_true",
-                       help="Save session log to JSON file")
-    parser.add_argument("--version", "-V", action="version",
-                       version=f"llm-computer-use {__version__}")
+    parser.add_argument("task", nargs="?", help="Task description")
+    parser.add_argument("--execute", "-x", action="store_true", help="Execute actions (default: dry-run)")
+    parser.add_argument("--max-iterations", "-n", type=int, default=10, help="Max iterations (default: 10)")
+    parser.add_argument("--model", "-m", default="claude-sonnet-4-5", help="Model (default: claude-sonnet-4-5)")
+    parser.add_argument("--keys-file", "-k", help="API keys file path")
+    parser.add_argument("--quiet", "-q", action="store_true", help="Minimal output")
+    parser.add_argument("--save-log", "-s", action="store_true", help="Save session log")
+    parser.add_argument("--version", "-V", action="version", version=f"llm-computer-use {__version__}")
     
     args = parser.parse_args()
+    
+    if not args.task:
+        parser.print_help()
+        sys.exit(0)
     
     api_key = load_api_key(args.keys_file)
     if api_key:
@@ -55,10 +47,10 @@ Examples:
     
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("Error: ANTHROPIC_API_KEY not found")
-        print("Set via environment variable or --keys-file")
+        print("Set via environment or --keys-file")
         sys.exit(1)
     
-    from .session import AgentSession
+    from .core import AgentSession
     
     session = AgentSession(
         task_prompt=args.task,
@@ -68,14 +60,14 @@ Examples:
     )
     
     def confirm_action(action):
-        """Prompt user for confirmation on high-risk actions."""
-        print(f"\n⚠️  HIGH-RISK ACTION DETECTED: {action.action_type.value}")
+        print(f"\nHIGH-RISK: {action.action_type.value}")
+        if action.coordinate:
+            print(f"  Coordinate: {action.coordinate}")
         if action.text:
-            print(f"    Text: {action.text}")
+            print(f"  Text: {action.text[:50]}...")
         if action.key:
-            print(f"    Key: {action.key}")
-        response = input("Allow this action? (y/N): ").strip().lower()
-        return response == "y"
+            print(f"  Key: {action.key}")
+        return input("Allow? (y/N): ").strip().lower() == "y"
     
     if args.execute:
         session.set_confirm_callback(confirm_action)
@@ -83,32 +75,26 @@ Examples:
     try:
         summary = session.run(verbose=not args.quiet)
     except KeyboardInterrupt:
-        print("\nSession interrupted by user")
+        print("\nInterrupted")
         summary = {"status": "cancelled", "error": "User interrupt"}
     
     if args.save_log:
-        log_path = session.save_log()
-        print(f"\nLog saved: {log_path}")
+        print(f"\nLog: {session.save_log()}")
     
     if not args.quiet:
-        print(f"\n{'='*60}")
-        print("SESSION SUMMARY")
-        print(f"{'='*60}")
+        print(f"\n{'='*60}\nSESSION SUMMARY\n{'='*60}")
         print(f"Status:      {summary.get('status', 'unknown')}")
         print(f"Model:       {summary.get('model', 'unknown')}")
         print(f"Iterations:  {summary.get('iterations', 0)}/{summary.get('max_iterations', 0)}")
         print(f"Actions:     {summary.get('actions_count', 0)}")
         print(f"Tokens:      {summary.get('total_input_tokens', 0)} in / {summary.get('total_output_tokens', 0)} out")
-        latency = summary.get('total_api_latency_ms', 0)
-        duration = summary.get('total_duration_ms', 0)
-        print(f"Duration:    {duration:.0f} ms (API: {latency:.0f} ms)")
-        cost = summary.get('estimated_cost_usd', 0)
-        print(f"Cost:        ${cost:.6f} USD")
+        print(f"Duration:    {summary.get('total_duration_ms', 0):.0f} ms (API: {summary.get('total_api_latency_ms', 0):.0f} ms)")
+        print(f"Cost:        ${summary.get('estimated_cost_usd', 0):.6f} USD")
         if summary.get("error"):
             print(f"Error:       {summary['error']}")
         print(f"{'='*60}")
     
-    sys.exit(0 if summary.get("status") in ["completed", "pending"] else 1)
+    sys.exit(0 if summary.get("status") == "completed" else 1)
 
 if __name__ == "__main__":
     main()

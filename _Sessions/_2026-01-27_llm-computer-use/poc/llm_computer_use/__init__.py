@@ -1,7 +1,6 @@
-"""LLM Computer Use - Desktop automation via LLM vision."""
-from .screen_capture import ScreenCapture
-from .session import AgentSession
-from .actions import execute_action
+"""LLM Computer Use v2 - Minimal package."""
+from .core import ScreenCapture, AgentSession, execute_action
+from .cli import main
 
-__version__ = "0.1.0"
-__all__ = ["ScreenCapture", "AgentSession", "execute_action"]
+__version__ = "0.5.0"
+__all__ = ["ScreenCapture", "AgentSession", "execute_action", "main"]
