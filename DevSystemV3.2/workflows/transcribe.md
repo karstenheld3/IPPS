@@ -121,15 +121,20 @@ For each chunk (pages 1-4, 5-8, 9-12, etc.):
 $venv = ".tools/llm-venv/Scripts/python.exe"
 $skill = ".windsurf/skills/llm-transcription"
 
-# Transcribe 4 pages at once
+# Single file transcription
 & $venv "$skill/transcribe-image-to-markdown-advanced.py" `
     --input-file ".tools/_pdf_to_jpg_converted/[NAME]/page_001.jpg" `
-    --input-file ".tools/_pdf_to_jpg_converted/[NAME]/page_002.jpg" `
-    --input-file ".tools/_pdf_to_jpg_converted/[NAME]/page_003.jpg" `
-    --input-file ".tools/_pdf_to_jpg_converted/[NAME]/page_004.jpg" `
-    --output-file "[SESSION_FOLDER]/[DocName]_chunk01.md" `
+    --output-file "[SESSION_FOLDER]/[DocName]_page001.md" `
     --keys-file ".tools/.api-keys.txt" `
-    --model gpt-4o
+    --model gpt-5-mini
+
+# Batch mode (entire folder)
+& $venv "$skill/transcribe-image-to-markdown-advanced.py" `
+    --input-folder ".tools/_pdf_to_jpg_converted/[NAME]/" `
+    --output-folder "[SESSION_FOLDER]/transcribed/" `
+    --keys-file ".tools/.api-keys.txt" `
+    --model gpt-5-mini `
+    --workers 4
 ```
 
 **Mode B: Built-in Transcription** (fallback - no skill or keys)
