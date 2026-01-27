@@ -13,7 +13,7 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 - @ms-playwright-mcp for web page screenshots
 - @llm-transcription (optional) for advanced LLM-based transcription
 
-## Step 0: Detect Transcription Mode
+## Step 1: Detect Transcription Mode
 
 Check if advanced LLM transcription is available:
 
@@ -51,7 +51,7 @@ if ($hasSkill -and $hasKeys) {
 | URL to PDF | URL ends in `.pdf` | Download first, then process |
 | Web page | URL to HTML | Screenshot, transcribe |
 
-## Step 1: Prepare Source
+## Step 2: Prepare Source
 
 ### For Local PDF
 ```powershell
@@ -77,7 +77,7 @@ mcp0_browser_evaluate(function: "window.scrollTo(0, 0)")
 mcp0_browser_take_screenshot(fullPage: true, filename: ".tools/_web_screenshots/[domain]/page-001.png")
 ```
 
-## Step 2: Count and Plan
+## Step 3: Count and Plan
 
 ```powershell
 $images = Get-ChildItem ".tools/_pdf_to_jpg_converted/[NAME]/" -Filter "*.jpg"
@@ -86,7 +86,7 @@ $chunks = [math]::Ceiling($totalPages / 2)
 Write-Host "Total pages: $totalPages, Chunks needed: $chunks"
 ```
 
-## Step 3: Determine Output Strategy
+## Step 4: Determine Output Strategy
 
 | Total Pages | Output Strategy |
 |-------------|-----------------|
@@ -95,7 +95,7 @@ Write-Host "Total pages: $totalPages, Chunks needed: $chunks"
 | 51-100 | Multiple section files + index, merge optional |
 | 100+ | Multiple chapter files + index |
 
-## Step 4: Create Output File with Header
+## Step 5: Create Output File with Header
 
 ```markdown
 # [Document Title]
@@ -109,13 +109,13 @@ Pages completed: 0 of [total]
 [Generate after first pass or from PDF Table of Contents (TOC)]
 ```
 
-## Step 5: Transcribe in 4-Page Chunks
+## Step 6: Transcribe in 4-Page Chunks
 
 For each chunk (pages 1-4, 5-8, 9-12, etc.):
 
-### 5a. Choose Transcription Method
+### 6a. Choose Transcription Method
 
-**Mode A: Advanced LLM Transcription** (if skill + keys detected in Step 0)
+**Mode A: Advanced LLM Transcription** (if skill + keys detected in Step 1)
 
 ```powershell
 $venv = ".tools/llm-venv/Scripts/python.exe"
@@ -148,7 +148,7 @@ read_file(file_path: "[path]_page003.jpg")
 read_file(file_path: "[path]_page004.jpg")
 ```
 
-### 5b. Extract ALL content from these pages (Mode B)
+### 6b. Extract ALL content from these pages (Mode B)
 - Every heading, paragraph, list, footnote
 - Every figure → See **Figure Transcription Protocol** below
 - Every table → Markdown table
@@ -347,10 +347,10 @@ Legend: === main flow  --- log output  [gear] = processing icon
 
 **Why wrapper tag?** Enables hybrid comparison: Levenshtein for text, LLM-as-a-judge for graphics.
 
-### 5c. Append to output file IMMEDIATELY
+### 6c. Append to output file IMMEDIATELY
 Do not wait until end. Write after each chunk.
 
-### 5d. Update progress marker
+### 6d. Update progress marker
 ```markdown
 <!-- TRANSCRIPTION PROGRESS
 Chunk: 2 of 5
@@ -358,10 +358,10 @@ Pages completed: 4 of 20
 -->
 ```
 
-### 5e. Continue with next chunk
+### 6e. Continue with next chunk
 Repeat until all pages processed.
 
-## Step 6: Finalize
+## Step 7: Finalize
 
 1. Remove progress markers
 2. Generate/verify Table of Contents
