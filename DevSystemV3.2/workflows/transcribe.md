@@ -11,6 +11,33 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 
 - @pdf-tools for PDF to image conversion
 - @ms-playwright-mcp for web page screenshots
+- @llm-transcription (optional) for advanced LLM-based transcription
+
+## Step 0: Detect Transcription Mode
+
+Check if advanced LLM transcription is available:
+
+```powershell
+# Check for llm-transcription skill
+$skillPath = ".windsurf/skills/llm-transcription/transcribe-image-to-markdown-advanced.py"
+$keysFile = ".tools/.api-keys.txt"
+$hasSkill = Test-Path $skillPath
+$hasKeys = Test-Path $keysFile
+
+if ($hasSkill -and $hasKeys) {
+    Write-Host "MODE: Advanced LLM Transcription (llm-transcription skill)"
+} else {
+    Write-Host "MODE: Built-in Transcription (workflow prompt)"
+    if (-not $hasSkill) { Write-Host "  - Missing: $skillPath" }
+    if (-not $hasKeys) { Write-Host "  - Missing: $keysFile" }
+}
+```
+
+**Mode A: Advanced LLM Transcription** (if skill + keys available)
+- Use `transcribe-image-to-markdown-advanced.py` with ensemble + judge + refinement
+
+**Mode B: Built-in Transcription** (fallback)
+- Use the built-in prompt in Step 5b below
 
 ## Core Principle
 
@@ -86,7 +113,29 @@ Pages completed: 0 of [total]
 
 For each chunk (pages 1-4, 5-8, 9-12, etc.):
 
-### 5a. Read exactly 4 page images (or fewer for final chunk)
+### 5a. Choose Transcription Method
+
+**Mode A: Advanced LLM Transcription** (if skill + keys detected in Step 0)
+
+```powershell
+$venv = ".tools/llm-venv/Scripts/python.exe"
+$skill = ".windsurf/skills/llm-transcription"
+
+# Transcribe 4 pages at once
+& $venv "$skill/transcribe-image-to-markdown-advanced.py" `
+    --input-file ".tools/_pdf_to_jpg_converted/[NAME]/page_001.jpg" `
+    --input-file ".tools/_pdf_to_jpg_converted/[NAME]/page_002.jpg" `
+    --input-file ".tools/_pdf_to_jpg_converted/[NAME]/page_003.jpg" `
+    --input-file ".tools/_pdf_to_jpg_converted/[NAME]/page_004.jpg" `
+    --output-file "[SESSION_FOLDER]/[DocName]_chunk01.md" `
+    --keys-file ".tools/.api-keys.txt" `
+    --model gpt-4o
+```
+
+**Mode B: Built-in Transcription** (fallback - no skill or keys)
+
+Read images and use the built-in prompt below:
+
 ```
 read_file(file_path: "[path]_page001.jpg")
 read_file(file_path: "[path]_page002.jpg")
@@ -94,7 +143,7 @@ read_file(file_path: "[path]_page003.jpg")
 read_file(file_path: "[path]_page004.jpg")
 ```
 
-### 5b. Extract ALL content from these pages
+### 5b. Extract ALL content from these pages (Mode B)
 - Every heading, paragraph, list, footnote
 - Every figure → See **Figure Transcription Protocol** below
 - Every table → Markdown table
@@ -367,3 +416,99 @@ After transcription, run `/verify` to:
 6. **No omissions** - Every piece of content must be transcribed
 7. **ASCII + XML for figures** - Every figure requires both ASCII art and `<transcription_notes>` XML block
 8. **Page boundaries** - Preserve headers/footers with `<transcription_page_header>` and `<transcription_page_footer>` tags
+
+## Appendix: Built-in Transcription Prompt (Mode B)
+
+Use this prompt when llm-transcription skill is not available:
+
+---
+
+**Transcription Prompt v1B**
+
+Transcribe this document page image to Markdown. **Accuracy over speed.**
+
+**Key Areas:**
+1. Graphics - Essential graphics with labeled ASCII art and data extraction
+2. Structure - Semantic hierarchy matching visual document outline
+3. Text - Character-level accuracy
+
+**CRITICAL RULES:**
+
+DO:
+- Label every node in diagrams: `[DATABASE]`, `[PROCESS]`, `(pending)`
+- Extract ALL data values from charts (numbers > visual fidelity)
+- Match header levels to visual hierarchy (H1=title, H2=sections, H3=subsections)
+- Use `[unclear]` for text you cannot read with confidence
+
+DON'T:
+- Don't transcribe UI chrome (toolbars, ribbons, browser elements)
+- Don't count decorative logos/separators as missed graphics
+- Don't use headers for formatting convenience - only for real sections
+- Don't guess numbers - mark as `[unclear: ~value?]` if uncertain
+
+**Graphics:**
+
+TRANSCRIBE (essential): Charts, diagrams, flowcharts, infographics, data visualizations, maps, technical illustrations
+
+SKIP (decorative): UI chrome, toolbars, logos, watermarks, separators, backgrounds - add only: `<!-- Decorative: [list] -->`
+
+Every essential graphic MUST have:
+
+```markdown
+<transcription_image>
+**Figure N: [Caption]**
+
+```ascii
+[TITLE - WHAT THIS SHOWS]
+[Visual with INLINE labels - every node named]
+Legend: [A]=Item1 [B]=Item2
+```
+
+<transcription_notes>
+- Data: [all numbers, percentages, values]
+- Colors: [color] = [meaning]
+- ASCII misses: [what couldn't be shown]
+</transcription_notes>
+</transcription_image>
+```
+
+**Structure:**
+
+Headers must match the VISUAL document structure:
+- H1 = Document title (one per page max)
+- H2 = Major sections visible in document
+- H3 = Subsections within sections
+
+Multi-column: Read top-to-bottom within each column, mark with `<!-- Column N -->`.
+
+**Text Accuracy:**
+
+- Every word exactly as shown
+- Numbers must match exactly
+- Mark unclear text: `[unclear]` or `[unclear: best guess?]`
+
+Special Characters:
+- Superscripts: use actual Unicode (not ^1 ^2 ^3)
+- Greek: use actual Unicode characters
+- Math: use LaTeX syntax
+- Symbols: use proper Unicode
+
+**Output Structure:**
+
+```markdown
+# [Document Title]
+
+<transcription_page_header> [if present] </transcription_page_header>
+
+## [Section]
+
+[Content...]
+
+<transcription_image>
+**Figure 1: [Caption]**
+[ASCII with inline labels]
+<transcription_notes>[Data, colors, misses]</transcription_notes>
+</transcription_image>
+
+<transcription_page_footer> [if present] </transcription_page_footer>
+```
