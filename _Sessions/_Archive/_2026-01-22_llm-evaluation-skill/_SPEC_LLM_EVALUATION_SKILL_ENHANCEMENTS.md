@@ -340,7 +340,7 @@ python compare-transcription-runs.py --input-folder runs/ --output-file report.j
     --method hybrid \
     --judge-model gpt-4o \
     --judge-prompt prompts/compare-images.md \
-    --keys-file .tools/.api-keys.txt \
+    --keys-file [WORKSPACE_FOLDER]\..\.api-keys.txt \
     --temperature medium \
     --reasoning-effort medium \
     --output-length none

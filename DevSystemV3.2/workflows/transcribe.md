@@ -20,7 +20,7 @@ Check if advanced LLM transcription is available:
 ```powershell
 # Check for llm-transcription skill
 $skillPath = ".windsurf/skills/llm-transcription/transcribe-image-to-markdown-advanced.py"
-$keysFile = ".tools/.api-keys.txt"
+$keysFile = "[WORKSPACE_FOLDER]\..\.api-keys.txt"
 $hasSkill = Test-Path $skillPath
 $hasKeys = Test-Path $keysFile
 
@@ -125,7 +125,7 @@ $skill = ".windsurf/skills/llm-transcription"
 & $venv "$skill/transcribe-image-to-markdown-advanced.py" `
     --input-file ".tools/_pdf_to_jpg_converted/[NAME]/page_001.jpg" `
     --output-file "[SESSION_FOLDER]/[DocName]_page001.md" `
-    --keys-file ".tools/.api-keys.txt" `
+    --keys-file "[WORKSPACE_FOLDER]\..\.api-keys.txt" `
     --model gpt-5-mini `
     --workers 4
 
@@ -133,7 +133,7 @@ $skill = ".windsurf/skills/llm-transcription"
 & $venv "$skill/transcribe-image-to-markdown-advanced.py" `
     --input-folder ".tools/_pdf_to_jpg_converted/[NAME]/" `
     --output-folder "[SESSION_FOLDER]/transcribed/" `
-    --keys-file ".tools/.api-keys.txt" `
+    --keys-file "[WORKSPACE_FOLDER]\..\.api-keys.txt" `
     --model gpt-5-mini `
     --workers 12
 ```

@@ -20,11 +20,10 @@ Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
 ## API Keys Location
 
-**API keys file**: `e:\Dev\.api-keys.txt` (workspace-external, shared across projects)
+**API keys file**: `[WORKSPACE_FOLDER]\..\.api-keys.txt` (workspace-external, shared across projects)
+Alternative: `[WORKSPACE_FOLDER]\.tools\.api-keys.txt` (project-local)
 
-Alternative: `.tools/.api-keys.txt` (project-local)
-
-Usage: `--keys-file e:\Dev\.api-keys.txt`
+Usage: `--keys-file [WORKSPACE_FOLDER]\..\.api-keys.txt`
 
 ## Prevention Rules (from session fails)
 

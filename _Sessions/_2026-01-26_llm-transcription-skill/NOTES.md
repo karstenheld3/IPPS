@@ -31,7 +31,7 @@ User wants to add a new skill "llm-transcription" as a universal transcription t
 
 ## Key Decisions
 
-- **API Keys**: Use `--keys-file .tools/.api-keys.txt` for all LLM scripts
+- **API Keys**: Use `--keys-file [WORKSPACE_FOLDER]\..\.api-keys.txt` for all LLM scripts
 - **Default models**: gpt-5-mini for both transcription and judge
 - **Shared venv**: `.tools/llm-venv/` shared between llm-evaluation and llm-transcription skills
 

@@ -304,10 +304,10 @@ $venv = ".tools\llm-venv\Scripts\python.exe"
 $skill = "DevSystemV3.2\skills\llm-transcription"
 
 # Simple transcription
-& $venv "$skill\transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file .tools/.api-keys.txt
+& $venv "$skill\transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]\..\.api-keys.txt
 
 # Advanced pipeline (ensemble + judge + refinement)
-& $venv "$skill\transcribe-image-to-markdown-advanced.py" --input-file doc.png --output-file doc.md --keys-file .tools/.api-keys.txt --model gpt-5-mini --initial-candidates 3
+& $venv "$skill\transcribe-image-to-markdown-advanced.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]\..\.api-keys.txt --model gpt-5-mini --initial-candidates 3
 ```
 
 ### llm-computer-use
@@ -325,10 +325,10 @@ Desktop automation via LLM vision. The AI sees your screen, decides what to clic
 cd DevSystemV3.2\skills\llm-computer-use
 
 # Dry-run (safe, no actions executed)
-python -m llm_computer_use -k .tools/.api-keys.txt "Click the Start button"
+python -m llm_computer_use -k [WORKSPACE_FOLDER]\..\.api-keys.txt "Click the Start button"
 
 # Execute mode
-python -m llm_computer_use -x -k .tools/.api-keys.txt "Open Notepad and type Hello World"
+python -m llm_computer_use -x -k [WORKSPACE_FOLDER]\..\.api-keys.txt "Open Notepad and type Hello World"
 
 # Use cheaper model
 python -m llm_computer_use -x -m claude-haiku-4-5 "Open Calculator"
