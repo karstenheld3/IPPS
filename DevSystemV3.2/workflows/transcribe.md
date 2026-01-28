@@ -19,7 +19,7 @@ Check if advanced LLM transcription is available:
 
 ```powershell
 # Check for llm-transcription skill
-$skillPath = ".windsurf/skills/llm-transcription/transcribe-image-to-markdown-advanced.py"
+$skillPath = ".windsurf/skills/llm-transcription/transcribe-image-to-markdown.py"
 $keysFile = "[WORKSPACE_FOLDER]\..\.api-keys.txt"
 $hasSkill = Test-Path $skillPath
 $hasKeys = Test-Path $keysFile
@@ -34,7 +34,7 @@ if ($hasSkill -and $hasKeys) {
 ```
 
 **Mode A: Advanced LLM Transcription** (if skill + keys available)
-- Use `transcribe-image-to-markdown-advanced.py` with ensemble + judge + refinement
+- Use `transcribe-image-to-markdown.py` with ensemble + judge + refinement
 
 **Mode B: Built-in Transcription** (fallback)
 - Use the built-in prompt in Step 5b below
@@ -122,7 +122,7 @@ $venv = ".tools/llm-venv/Scripts/python.exe"
 $skill = ".windsurf/skills/llm-transcription"
 
 # Single file transcription
-& $venv "$skill/transcribe-image-to-markdown-advanced.py" `
+& $venv "$skill/transcribe-image-to-markdown.py" `
     --input-file ".tools/_pdf_to_jpg_converted/[NAME]/page_001.jpg" `
     --output-file "[SESSION_FOLDER]/[DocName]_page001.md" `
     --keys-file "[WORKSPACE_FOLDER]\..\.api-keys.txt" `
@@ -130,7 +130,7 @@ $skill = ".windsurf/skills/llm-transcription"
     --workers 4
 
 # Batch mode (entire folder)
-& $venv "$skill/transcribe-image-to-markdown-advanced.py" `
+& $venv "$skill/transcribe-image-to-markdown.py" `
     --input-folder ".tools/_pdf_to_jpg_converted/[NAME]/" `
     --output-folder "[SESSION_FOLDER]/transcribed/" `
     --keys-file "[WORKSPACE_FOLDER]\..\.api-keys.txt" `

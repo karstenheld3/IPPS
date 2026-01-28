@@ -294,8 +294,7 @@ High-quality image-to-markdown transcription using ensemble generation, LLM judg
 **Setup**: Uses shared venv from llm-evaluation (`.tools/llm-venv/`).
 
 **Scripts**:
-- `transcribe-image-to-markdown.py` - Simple image transcription with OpenAI/Anthropic vision
-- `transcribe-image-to-markdown-advanced.py` - Ensemble pipeline with judge and refinement
+- `transcribe-image-to-markdown.py` - Ensemble pipeline with judge and refinement
 - `transcribe-audio-to-markdown.py` - Audio transcription with Whisper API
 
 **Quick examples**:
@@ -303,11 +302,11 @@ High-quality image-to-markdown transcription using ensemble generation, LLM judg
 $venv = ".tools\llm-venv\Scripts\python.exe"
 $skill = "DevSystemV3.2\skills\llm-transcription"
 
-# Simple transcription
+# Basic usage
 & $venv "$skill\transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]\..\.api-keys.txt
 
-# Advanced pipeline (ensemble + judge + refinement)
-& $venv "$skill\transcribe-image-to-markdown-advanced.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]\..\.api-keys.txt --model gpt-5-mini --initial-candidates 3
+# With custom model and ensemble size
+& $venv "$skill\transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]\..\.api-keys.txt --model gpt-5-mini --initial-candidates 3
 ```
 
 ### llm-computer-use
