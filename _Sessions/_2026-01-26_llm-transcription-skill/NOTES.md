@@ -12,7 +12,7 @@
 
 ## Current Phase
 
-**Phase**: REFINE
+**Phase**: DELIVER (ready for final verification)
 **Workflow**: /build (BUILD workflow - creating new skill)
 **Assessment**: COMPLEXITY-MEDIUM (new skill with 2 scripts, prompt engineering)
 
@@ -60,6 +60,14 @@ gpt-5-mini only supports `["minimal", "low", "medium", "high"]` reasoning effort
 
 **Best quality/cost**: gpt-5-mini + medium reasoning ($0.02, score 4.75)
 **Cheapest**: gpt-5-mini + minimal reasoning ($0.0085, 43x cheaper than gpt-4o)
+
+### PowerShell Path Navigation Bug [TESTED]
+
+Scripts using `.Parent.Parent...` chains can escape workspace if level count is wrong:
+- `simple-screenshot.ps1`: Was 4 levels, should be 3 (script -> skill -> skills -> .windsurf -> workspace)
+- `capture-model-selector.ps1`: Was 4 levels, should be 5 (extra subfolder)
+
+**Fix**: Add comment documenting the path chain, count levels carefully.
 
 ## Topic Registry
 

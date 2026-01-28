@@ -7,13 +7,12 @@
 - [x] **EXPLORE** - completed
 - [x] **DESIGN** - completed
 - [x] **IMPLEMENT** - completed
-- [ ] **REFINE** - pending
+- [x] **REFINE** - completed
 - [ ] **DELIVER** - pending
 
 ## To Do
 
-- [ ] Add llm-transcription SETUP.md (currently uses shared venv from llm-evaluation)
-- [ ] Sync transcription skill to .windsurf/
+- [ ] Final verification before DELIVER
 
 ## In Progress
 
@@ -37,12 +36,24 @@
 - [x] Tested gpt-5-mini cost savings (minimal: $0.0085, medium: $0.02)
 - [x] Renamed llm-eval-venv to llm-venv for shared use
 - [x] Updated workspace !NOTES.md with API keys location
+- [x] Updated SETUP.md to use standard API keys location
+- [x] Created UNINSTALL.md with interactive uninstall script
+- [x] Synced missing scripts from .windsurf to DevSystemV3.2 source
+- [x] Fixed path navigation bug in screenshot scripts (unrelated but discovered)
+- [x] Committed and pushed all changes
 
 ## Tried But Not Used
 
 (None yet)
 
 ## Progress Changes
+
+**[2026-01-28 09:28]**
+- Completed: SETUP.md updated with standard API keys location
+- Completed: UNINSTALL.md created
+- Completed: Synced missing scripts to DevSystemV3.2
+- Fixed: Path navigation in simple-screenshot.ps1, capture-model-selector.ps1
+- Committed: 3 commits pushed to GitHub
 
 **[2026-01-27 01:05]**
 - Completed: Advanced pipeline implementation and testing
