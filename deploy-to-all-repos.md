@@ -80,6 +80,7 @@ $targets = @(
 $deprecatedFiles = @{
     "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md", "edird-core.md")
     "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md", "deliver.md", "design.md", "explore.md", "go-research.md", "refine.md", "session-resume.md")
+    "skills\llm-transcription" = @("transcribe-image-to-markdown-advanced.py")
 }
 # Deprecated skill folders (entire folder can be deleted if renamed)
 $deprecatedSkillFolders = @("edird-phase-model")
@@ -247,6 +248,10 @@ Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `
 - `workflows/explore.md` → removed (phase-specific, use `/research` instead)
 - `workflows/go-research.md` → removed (use `/research` instead)
 - `workflows/refine.md` → removed (phase-specific, use `/verify` instead)
+
+### V3.2 Migration (Deprecated Skills Files)
+
+- `skills/llm-transcription/transcribe-image-to-markdown-advanced.py` → removed (consolidated into transcribe-image-to-markdown.py)
 
 ### V3.1 New Files
 
