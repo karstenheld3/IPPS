@@ -31,12 +31,20 @@
 - [x] Agent-Cascade MCP server built and configured
 - [x] MCP config updated with correct model name
 - [x] local_chat tool tested successfully [TESTED]
+- [x] World clock HTML app created with local Ministral model [TESTED]
 
 ## Tried But Not Used
 
 - llm-computer-use skill for starting LM Studio server - struggled with window focus, cost ~$0.57 without success
 
 ## Progress Changes
+
+**[2026-01-29 11:28]**
+- Created world-clock.html using local Ministral model via `local_chat` MCP tool
+- /verify found timezone bug: analog clocks showed wrong time due to flawed `Date` parsing
+- Fixed: Use `Intl.DateTimeFormat.formatToParts()` for proper timezone extraction
+- Fixed: Variable name conflict (`formatter` → `offsetFormatter`)
+- Verified: All 6 cities show correct times, analog matches digital [TESTED]
 
 **[2026-01-29 11:16]**
 - LM Studio server started with Ministral 3 3B model
