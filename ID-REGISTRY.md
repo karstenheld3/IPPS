@@ -148,8 +148,12 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **MEPI** - MEPI/MCPI research depth principle
 - **SDDEV** - Spec-Driven Development (research topic)
 - **TRNGFX** - Transcription graphics/ASCII art optimization
+- **LMWS** - LM Studio + Windsurf integration research
 
 ## Document History
+
+**[2026-01-29 10:38]**
+- Added: LMWS topic (LM Studio + Windsurf integration research)
 
 **[2026-01-26 23:56]**
 - Added: LLMTR topic (LLM Transcription Skill)
