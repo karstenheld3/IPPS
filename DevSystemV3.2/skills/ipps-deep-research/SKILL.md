@@ -187,6 +187,15 @@ Net research time: 4h 15m
 - Parallel tasks: Overlapping intervals count once, not doubled
 - Log start time when beginning task, end time when completing
 
+**Resource usage tracking (optional):**
+```
+## Resource Usage
+Model calls: HIGH=5, MID=12, LOW=8
+Estimated tokens: ~120k input, ~45k output
+Cascade Credits: [check dashboard after session]
+```
+Note: Cascade Credits not queryable via API - manual dashboard check required.
+
 ## Output Format
 
 Deep research outputs an INFO document. Key sections:
