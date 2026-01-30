@@ -54,6 +54,7 @@ Estimated credits: [pending]
 
 **Phase 2: TOC Creation (workflow: /verify > /critique > /reconcile /implement > /verify)**
 - Create `__[TOPIC]_TOC.md` with detailed structure
+- Header block includes: Doc ID, Goal, Version scope, Depends on, **Research stats** (added in P6)
 - TOC Summary section: 5-15 sentences covering all key facts, copy/paste ready
 - Topic Files list with clickable links: `[_INFO_[TOPIC]_[SUBTOPIC].md](#topic-details-subtopic)`
 - **Total topics: XX** count at start of Topic Files section
@@ -116,26 +117,9 @@ Estimated credits: [pending]
 - Sync summaries from topic files back into TOC Summary section
 - Verify all links work
 - Ensure community-sourced limitations are included in relevant sections
-- **Add Research Metadata section to TOC** (copy from STRUT Time Log and Credit Tracking):
+- **Add Research stats to TOC header block** (copy from STRUT):
   ```
-  ## Research Metadata
-  **Net research time**: [from STRUT Time Log]
-  **Estimated credits**: [total from STRUT Credit Tracking]
-  **Completed**: [YYYY-MM-DD HH:MM]
-  **Model usage**: [e.g., "Claude Opus 4.5 Thinking: all 6 phases"]
-
-  **Breakdown**:
-  - P1 Preflight: Xm (source collection)
-  - P2 TOC: Xm
-  - P3 Template: Xm
-  - P4 TASKS: Xm (XX tasks partitioned)
-  - P5 Research: Xm (XX INFO documents)
-  - P6 Verify: Xm
-
-  **Efficiency**:
-  - Documents: XX total (XX INFO + X core)
-  - Average: ~XX seconds per document
-  - Sources: XX collected
+  **Research stats**: 35m net | ~35 credits | 62 docs | 79 sources | Opus 4.5 Thinking
   ```
 - Run final `/verify`
 - **Done when**: All links work, all summaries synced, metadata added, final `/verify` passes
