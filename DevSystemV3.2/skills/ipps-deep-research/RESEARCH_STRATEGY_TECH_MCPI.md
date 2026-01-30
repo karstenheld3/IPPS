@@ -103,6 +103,7 @@ Estimated credits: [pending]
 - **Done when**: All tasks in TASKS plan completed and checked off
 
 **Phase 6: Final Verification and Sync**
+- **Verify against this document** (`RESEARCH_STRATEGY_TECH_MCPI.md`) - check all phase requirements met
 - Cross-verify all topic files against TOC checklist
 - Sync summaries from topic files back into TOC Summary section
 - Verify all links work
@@ -111,8 +112,8 @@ Estimated credits: [pending]
   ```
   **Research stats**: 35m net | ~35 credits | 62 docs | 79 sources | Opus 4.5 Thinking
   ```
-- Run final `/verify`
-- **Done when**: All links work, all summaries synced, metadata added, final `/verify` passes
+- Run final `/verify` with context: RESEARCH_STRATEGY_TECH_MCPI
+- **Done when**: All strategy requirements met, links work, summaries synced, metadata added
 
 **Rollback**: If any phase reveals fundamental error in earlier phase, document in PROBLEMS.md and consult user before rollback.
 
