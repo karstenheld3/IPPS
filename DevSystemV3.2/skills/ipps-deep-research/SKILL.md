@@ -57,6 +57,8 @@ Systematic research patterns for in-depth investigation of software development 
 - Create INFO document for findings
 - **Always create STRUT** for research session orchestration
 - **Track time** - log task start/end for net research time calculation
+- **Track credits** - detect model via screenshot, log switches, calculate usage
+- **Never auto-switch models** - respect user's model selection throughout research
 
 ## Global Patterns
 
@@ -187,14 +189,31 @@ Net research time: 4h 15m
 - Parallel tasks: Overlapping intervals count once, not doubled
 - Log start time when beginning task, end time when completing
 
-**Resource usage tracking (optional):**
+## Credit Tracking (Mandatory)
+
+**Workflow:**
+1. At phase start: `simple-screenshot.ps1` → detect model from Windsurf header
+2. Lookup cost in `windsurf-model-registry.json`
+3. Log model + timestamp in STRUT Credit Tracking section
+4. At session end: calculate total estimated credits
+
+**STRUT Credit Tracking format:**
 ```
-## Resource Usage
-Model calls: HIGH=5, MID=12, LOW=8
-Estimated tokens: ~120k input, ~45k output
-Cascade Credits: [check dashboard after session]
+## Credit Tracking
+Phase 1: Claude Opus 4.5 (Thinking) [5x] - 09:00
+Phase 2: Claude Opus 4.5 (Thinking) [5x] - 09:30
+Phase 4: Claude Sonnet 4.5 [2x] - 10:15 (user switched)
+Phase 5: Claude Sonnet 4.5 [2x] - 10:45
+Phase 6: Claude Sonnet 4.5 [2x] - 11:30
+
+Estimated credits: (2 phases × 5x) + (3 phases × 2x) = 16 units
 ```
-Note: Cascade Credits not queryable via API - manual dashboard check required.
+
+**Rules:**
+- **Never auto-switch models** - respect user's model selection
+- Detect via screenshot only - passive observation
+- Log when model changes (user-initiated)
+- Registry: `[DEVSYSTEM_FOLDER]/skills/windsurf-auto-model-switcher/windsurf-model-registry.json`
 
 ## Output Format
 

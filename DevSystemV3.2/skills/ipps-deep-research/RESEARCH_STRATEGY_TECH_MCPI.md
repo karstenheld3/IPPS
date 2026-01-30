@@ -2,7 +2,7 @@
 
 Research **[SUBJECT]** exhaustively using the MCPI (Most Complete Point of Information) approach.
 
-**Before starting**: Create `STRUT_[TOPIC].md` using `/write-strut` with Time Log section:
+**Before starting**: Create `STRUT_[TOPIC].md` using `/write-strut` with Time Log and Credit Tracking sections:
 ```
 ## Time Log
 Started: [YYYY-MM-DD HH:MM]
@@ -12,7 +12,19 @@ Active intervals:
 - [HH:MM-HH:MM] (Phase X-Y)
 
 Net research time: [pending]
+
+## Credit Tracking
+Phase 1: [model] [Xx] - [HH:MM]
+
+Estimated credits: [pending]
 ```
+
+**At each phase start**:
+1. Run `simple-screenshot.ps1` to capture Windsurf header
+2. Detect current model name from screenshot
+3. Lookup cost in `windsurf-model-registry.json`
+4. Log to Credit Tracking section
+5. **Never auto-switch models** - only observe and log
 
 **Phases:**
 
