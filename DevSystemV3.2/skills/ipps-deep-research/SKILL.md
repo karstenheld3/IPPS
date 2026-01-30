@@ -23,6 +23,10 @@ Systematic research patterns for in-depth investigation of software development 
 - [Technology/API Research (MCPI)](RESEARCH_STRATEGY_TECH_MCPI.md) - 6-phase exhaustive documentation
 - [Quick Research (MEPI)](#research-strategies) - Abbreviated approach for low-stakes
 
+**Planning & Tracking**
+- [Planning Structure](#planning-structure) - STRUT vs TASKS
+- [Time Tracking](#time-tracking) - Net research time calculation
+
 **Reference**
 - [Tool Reference](RESEARCH_TOOLS.md) - Source collection, PDF processing, transcription
 - [Source ID Format](#source-id-format) - How to cite sources
@@ -51,6 +55,8 @@ Systematic research patterns for in-depth investigation of software development 
 - Distinguish facts from opinions from assumptions
 - Version-match community sources to subject version
 - Create INFO document for findings
+- **Always create STRUT** for research session orchestration
+- **Track time** - log task start/end for net research time calculation
 
 ## Global Patterns
 
@@ -137,6 +143,49 @@ See [RESEARCH_TOOLS.md](RESEARCH_TOOLS.md) for:
 - Transcription tools (llm-transcription)
 - Tool selection flowchart
 - Common workflows
+
+## Planning Structure
+
+**STRUT** (high-level orchestration) - REQUIRED for all research:
+- Tracks phases, objectives, deliverables, transitions
+- Contains time log for net research time
+- Created at research start, updated at phase transitions
+- File: `STRUT_[TOPIC].md` in session folder
+
+**TASKS** (low-level execution) - Created in Phase 4:
+- Flat list of individual research tasks with durations
+- Each task: file to create, sources to use, done-when criteria
+- Tracks task timing: `[HH:MM-HH:MM]` per task
+- File: `TASKS.md` in session folder
+
+## Time Tracking
+
+**Net research time** = active work time, excluding pauses.
+
+**STRUT time log format:**
+```
+## Time Log
+Started: 2026-01-30 09:00
+Ended: 2026-01-30 14:30
+
+Active intervals:
+- 09:00-10:30 (Phase 1-3)
+- 11:00-12:15 (Phase 4-5)
+- 13:00-14:30 (Phase 5-6)
+
+Net research time: 4h 15m
+```
+
+**TASKS timing format:**
+```
+- [x] TK-01: Research auth [10:00-10:45] 45m
+- [x] TK-02: Research limits [10:15-11:00] 45m (parallel)
+```
+
+**Rules:**
+- Pause detection: Gap > 30min in file timestamps = pause (don't count)
+- Parallel tasks: Overlapping intervals count once, not doubled
+- Log start time when beginning task, end time when completing
 
 ## Output Format
 

@@ -1,7 +1,20 @@
 # Exhaustive API/Technology Research Strategy (MCPI Approach)
 
 Research **[SUBJECT]** exhaustively using the MCPI (Most Complete Point of Information) approach.
-Use `/write-strut` STRUT plan with the following phases:
+
+**Before starting**: Create `STRUT_[TOPIC].md` using `/write-strut` with Time Log section:
+```
+## Time Log
+Started: [YYYY-MM-DD HH:MM]
+Ended: [pending]
+
+Active intervals:
+- [HH:MM-HH:MM] (Phase X-Y)
+
+Net research time: [pending]
+```
+
+**Phases:**
 
 **Phase 1: Preflight - Assumptions & Source Collection**
 - **Assumptions Check**:
@@ -66,7 +79,11 @@ Use `/write-strut` STRUT plan with the following phases:
 - Create `TASKS_[TOPIC]_RESEARCH.md`
 - Partition TOC topics into discrete tasks
 - Each task: Status, Estimated effort, Sources (official + community), Items to document, Done-when criteria
-- Include Progress Summary table
+- **Task timing format**: `- [ ] TK-01: [Description] [HH:MM-HH:MM] Xm`
+  - Log start time when beginning task, end time when completing
+  - Mark parallel tasks with `(parallel)` suffix
+  - Example: `- [x] TK-02: Rate limits [10:15-11:00] 45m (parallel)`
+- Include Progress Summary section
 - **Done when**: All TOC topics have corresponding tasks, effort estimates assigned
 
 **Phase 5: File-by-File Research**
