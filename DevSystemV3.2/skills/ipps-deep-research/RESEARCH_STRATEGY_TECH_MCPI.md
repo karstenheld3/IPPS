@@ -56,13 +56,14 @@ Estimated credits: [pending]
 - Create `__[TOPIC]_TOC.md` with detailed structure
 - TOC Summary section: 5-15 sentences covering all key facts, copy/paste ready
 - Topic Files list with clickable links: `[_INFO_[TOPIC]_[SUBTOPIC].md](#topic-details-subtopic)`
+- **Total topics: XX** count at end of Topic Files section
 - Topic Details sections with:
   - Scope description
   - Contents as bullet list (no checkboxes)
   - Each item links to target file section: `[Item name](_INFO_[TOPIC]_[SUBTOPIC].md#section-name)`
   - Source IDs for that topic
 - Related APIs/Technologies section: List each with URL and why related/different
-- Progress Tracking section
+- **NO Progress Tracking in TOC** - progress checkboxes go in STRUT or TASKS, not TOC
 - Run `/verify` then `/critique` then `/reconcile /implement` findings then `/verify` again
 - **Done when**: TOC covers all major topics from sources, summary is 5-15 sentences, all links resolve
 
