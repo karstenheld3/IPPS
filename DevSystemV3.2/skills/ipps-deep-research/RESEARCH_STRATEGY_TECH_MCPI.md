@@ -115,8 +115,16 @@ Estimated credits: [pending]
 - Sync summaries from topic files back into TOC Summary section
 - Verify all links work
 - Ensure community-sourced limitations are included in relevant sections
+- **Add Research Metadata section to TOC** (copy from STRUT):
+  ```
+  ## Research Metadata
+  Net research time: [from STRUT Time Log]
+  Estimated credits: [from STRUT Credit Tracking]
+  Completed: [YYYY-MM-DD HH:MM]
+  Model usage: [summary, e.g., "Opus 4.5: 2 phases, Sonnet 4.5: 4 phases"]
+  ```
 - Run final `/verify`
-- **Done when**: All links work, all summaries synced, final `/verify` passes
+- **Done when**: All links work, all summaries synced, metadata added, final `/verify` passes
 
 **Rollback**: If any phase reveals fundamental error in earlier phase, document in PROBLEMS.md and consult user before rollback.
 
