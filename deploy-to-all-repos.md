@@ -81,6 +81,7 @@ $deprecatedFiles = @{
     "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md", "edird-core.md")
     "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md", "deliver.md", "design.md", "explore.md", "go-research.md", "refine.md", "session-resume.md")
     "skills\llm-transcription" = @("transcribe-image-to-markdown-advanced.py")
+    "skills\llm-transcription\prompts" = @("llm-image-to-markdown-transcription-v1b.md", "llm-image-to-markdown-judge-v1d.md")
 }
 # Deprecated skill folders (entire folder can be deleted if renamed)
 $deprecatedSkillFolders = @("edird-phase-model")
