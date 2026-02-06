@@ -1,0 +1,64 @@
+{
+  "variant_id": "v2_persistent_client",
+  "timestamp": "2026-02-06T05:26:26.747430+00:00",
+  "params": {
+    "model": "gpt-5-mini",
+    "judge_model": "gpt-5-mini",
+    "workers": 2,
+    "initial_candidates": 2,
+    "min_score": 3.5,
+    "images_count": 2
+  },
+  "results": {
+    "wall_clock_seconds": 274.75,
+    "avg_seconds_per_image": 137.37,
+    "total_input_tokens": 31136,
+    "total_output_tokens": 28930,
+    "total_cost_usd": 0.0656,
+    "avg_score": 5.0,
+    "images_processed": 2,
+    "images_failed": 0,
+    "images_skipped": 0,
+    "refinements_applied": 0
+  },
+  "per_image_results": [
+    {
+      "input": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\_input\\DEU_21_VA_page009.jpg",
+      "output": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\08_model_validation\\gpt-5-mini_c2\\DEU_21_VA_page009.md",
+      "model": "gpt-5-mini",
+      "judge_model": "gpt-5-mini",
+      "final_score": 5,
+      "candidates": 2,
+      "candidate_scores": [
+        4.75,
+        5
+      ],
+      "selected_candidate": 2,
+      "refinement_applied": false,
+      "total_input_tokens": 17746,
+      "total_output_tokens": 17524,
+      "total_cost_usd": 0.039485,
+      "elapsed_seconds": 175.11,
+      "timestamp": "2026-02-06T05:24:47.115275+00:00"
+    },
+    {
+      "input": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\_input\\edf-ddr-2017-accessible-version-en_page014.jpg",
+      "output": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\08_model_validation\\gpt-5-mini_c2\\edf-ddr-2017-accessible-version-en_page014.md",
+      "model": "gpt-5-mini",
+      "judge_model": "gpt-5-mini",
+      "final_score": 5.0,
+      "candidates": 2,
+      "candidate_scores": [
+        5.0,
+        5.0
+      ],
+      "selected_candidate": 1,
+      "refinement_applied": false,
+      "total_input_tokens": 13390,
+      "total_output_tokens": 11406,
+      "total_cost_usd": 0.026159,
+      "elapsed_seconds": 274.74,
+      "timestamp": "2026-02-06T05:26:26.746803+00:00"
+    }
+  ]
+}

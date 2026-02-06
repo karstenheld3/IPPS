@@ -1,0 +1,62 @@
+{
+  "variant_id": "v2_persistent_client",
+  "timestamp": "2026-02-06T05:16:38.732709+00:00",
+  "params": {
+    "model": "gpt-5",
+    "judge_model": "gpt-5-mini",
+    "workers": 2,
+    "initial_candidates": 1,
+    "min_score": 3.5,
+    "images_count": 2
+  },
+  "results": {
+    "wall_clock_seconds": 158.58,
+    "avg_seconds_per_image": 79.29,
+    "total_input_tokens": 12480,
+    "total_output_tokens": 16179,
+    "total_cost_usd": 0.1774,
+    "avg_score": 4.75,
+    "images_processed": 2,
+    "images_failed": 0,
+    "images_skipped": 0,
+    "refinements_applied": 0
+  },
+  "per_image_results": [
+    {
+      "input": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\_input\\edf-ddr-2017-accessible-version-en_page014.jpg",
+      "output": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\08_model_validation\\gpt-5_c1\\edf-ddr-2017-accessible-version-en_page014.md",
+      "model": "gpt-5",
+      "judge_model": "gpt-5-mini",
+      "final_score": 5.0,
+      "candidates": 1,
+      "candidate_scores": [
+        5.0
+      ],
+      "selected_candidate": 1,
+      "refinement_applied": false,
+      "total_input_tokens": 5638,
+      "total_output_tokens": 6875,
+      "total_cost_usd": 0.075798,
+      "elapsed_seconds": 118.23,
+      "timestamp": "2026-02-06T05:15:58.377831+00:00"
+    },
+    {
+      "input": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\_input\\DEU_21_VA_page009.jpg",
+      "output": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\08_model_validation\\gpt-5_c1\\DEU_21_VA_page009.md",
+      "model": "gpt-5",
+      "judge_model": "gpt-5-mini",
+      "final_score": 4.5,
+      "candidates": 1,
+      "candidate_scores": [
+        4.5
+      ],
+      "selected_candidate": 1,
+      "refinement_applied": false,
+      "total_input_tokens": 6842,
+      "total_output_tokens": 9304,
+      "total_cost_usd": 0.101593,
+      "elapsed_seconds": 158.58,
+      "timestamp": "2026-02-06T05:16:38.731284+00:00"
+    }
+  ]
+}

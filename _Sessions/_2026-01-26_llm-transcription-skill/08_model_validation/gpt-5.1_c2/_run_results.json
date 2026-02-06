@@ -1,0 +1,64 @@
+{
+  "variant_id": "v2_persistent_client",
+  "timestamp": "2026-02-06T05:13:59.841098+00:00",
+  "params": {
+    "model": "gpt-5.1",
+    "judge_model": "gpt-5-mini",
+    "workers": 2,
+    "initial_candidates": 2,
+    "min_score": 3.5,
+    "images_count": 2
+  },
+  "results": {
+    "wall_clock_seconds": 352.24,
+    "avg_seconds_per_image": 176.12,
+    "total_input_tokens": 26318,
+    "total_output_tokens": 35038,
+    "total_cost_usd": 0.3833,
+    "avg_score": 4.75,
+    "images_processed": 2,
+    "images_failed": 0,
+    "images_skipped": 0,
+    "refinements_applied": 0
+  },
+  "per_image_results": [
+    {
+      "input": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\_input\\edf-ddr-2017-accessible-version-en_page014.jpg",
+      "output": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\08_model_validation\\gpt-5.1_c2\\edf-ddr-2017-accessible-version-en_page014.md",
+      "model": "gpt-5.1",
+      "judge_model": "gpt-5-mini",
+      "final_score": 4.75,
+      "candidates": 2,
+      "candidate_scores": [
+        4.75,
+        4.75
+      ],
+      "selected_candidate": 1,
+      "refinement_applied": false,
+      "total_input_tokens": 11432,
+      "total_output_tokens": 15587,
+      "total_cost_usd": 0.17016,
+      "elapsed_seconds": 186.18,
+      "timestamp": "2026-02-06T05:11:13.785240+00:00"
+    },
+    {
+      "input": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\_input\\DEU_21_VA_page009.jpg",
+      "output": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\08_model_validation\\gpt-5.1_c2\\DEU_21_VA_page009.md",
+      "model": "gpt-5.1",
+      "judge_model": "gpt-5-mini",
+      "final_score": 4.75,
+      "candidates": 2,
+      "candidate_scores": [
+        4.75,
+        4.5
+      ],
+      "selected_candidate": 1,
+      "refinement_applied": false,
+      "total_input_tokens": 14886,
+      "total_output_tokens": 19451,
+      "total_cost_usd": 0.213117,
+      "elapsed_seconds": 352.23,
+      "timestamp": "2026-02-06T05:13:59.841098+00:00"
+    }
+  ]
+}

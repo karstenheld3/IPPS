@@ -1,0 +1,130 @@
+{
+  "timestamp": "2026-02-06T05:31:01.558362+00:00",
+  "total_tests": 11,
+  "passed": 11,
+  "failed": 0,
+  "total_time_seconds": 125.3,
+  "results": [
+    {
+      "model": "gpt-4.1",
+      "candidates": 2,
+      "status": "PASS",
+      "successful": 0,
+      "failed": 0,
+      "avg_score": 4.875,
+      "wall_clock": 124.7,
+      "cost": 0,
+      "exit_code": 0
+    },
+    {
+      "model": "gpt-4.1-mini",
+      "candidates": 2,
+      "status": "PASS",
+      "successful": 0,
+      "failed": 0,
+      "avg_score": 5.0,
+      "wall_clock": 118.4,
+      "cost": 0,
+      "exit_code": 0
+    },
+    {
+      "model": "gpt-4.1-nano",
+      "candidates": 2,
+      "status": "PASS",
+      "successful": 0,
+      "failed": 0,
+      "avg_score": 4.5,
+      "wall_clock": 68.0,
+      "cost": 0,
+      "exit_code": 0
+    },
+    {
+      "model": "gpt-4o",
+      "candidates": 2,
+      "status": "PASS",
+      "successful": 0,
+      "failed": 0,
+      "avg_score": 4.875,
+      "wall_clock": 100.8,
+      "cost": 0,
+      "exit_code": 0
+    },
+    {
+      "model": "gpt-4o-mini",
+      "candidates": 2,
+      "status": "PASS",
+      "successful": 0,
+      "failed": 0,
+      "avg_score": 4.375,
+      "wall_clock": 98.2,
+      "cost": 0,
+      "exit_code": 0
+    },
+    {
+      "model": "claude-opus-4-5-20251101",
+      "candidates": 2,
+      "status": "PASS",
+      "successful": 0,
+      "failed": 0,
+      "avg_score": 4.875,
+      "wall_clock": 121.2,
+      "cost": 0,
+      "exit_code": 0
+    },
+    {
+      "model": "claude-sonnet-4-5-20250929",
+      "candidates": 2,
+      "status": "PASS",
+      "successful": 0,
+      "failed": 0,
+      "avg_score": 4.75,
+      "wall_clock": 107.3,
+      "cost": 0,
+      "exit_code": 0
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "candidates": 2,
+      "status": "PASS",
+      "successful": 0,
+      "failed": 0,
+      "avg_score": 4.225,
+      "wall_clock": 71.6,
+      "cost": 0,
+      "exit_code": 0
+    },
+    {
+      "model": "claude-sonnet-4-20250514",
+      "candidates": 2,
+      "status": "PASS",
+      "successful": 0,
+      "failed": 0,
+      "avg_score": 4.625,
+      "wall_clock": 125.0,
+      "cost": 0,
+      "exit_code": 0
+    },
+    {
+      "model": "claude-3-7-sonnet-20250219",
+      "candidates": 2,
+      "status": "PASS",
+      "successful": 0,
+      "failed": 0,
+      "avg_score": 4.75,
+      "wall_clock": 87.0,
+      "cost": 0,
+      "exit_code": 0
+    },
+    {
+      "model": "claude-3-5-haiku-20241022",
+      "candidates": 2,
+      "status": "PASS",
+      "successful": 0,
+      "failed": 0,
+      "avg_score": 4.45,
+      "wall_clock": 88.9,
+      "cost": 0,
+      "exit_code": 0
+    }
+  ]
+}

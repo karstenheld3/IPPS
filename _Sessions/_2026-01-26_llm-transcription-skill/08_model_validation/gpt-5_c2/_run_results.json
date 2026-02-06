@@ -1,0 +1,64 @@
+{
+  "variant_id": "v2_persistent_client",
+  "timestamp": "2026-02-06T05:19:40.331935+00:00",
+  "params": {
+    "model": "gpt-5",
+    "judge_model": "gpt-5-mini",
+    "workers": 2,
+    "initial_candidates": 2,
+    "min_score": 3.5,
+    "images_count": 2
+  },
+  "results": {
+    "wall_clock_seconds": 181.3,
+    "avg_seconds_per_image": 90.65,
+    "total_input_tokens": 25604,
+    "total_output_tokens": 35999,
+    "total_cost_usd": 0.392,
+    "avg_score": 4.75,
+    "images_processed": 2,
+    "images_failed": 0,
+    "images_skipped": 0,
+    "refinements_applied": 0
+  },
+  "per_image_results": [
+    {
+      "input": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\_input\\edf-ddr-2017-accessible-version-en_page014.jpg",
+      "output": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\08_model_validation\\gpt-5_c2\\edf-ddr-2017-accessible-version-en_page014.md",
+      "model": "gpt-5",
+      "judge_model": "gpt-5-mini",
+      "final_score": 4.75,
+      "candidates": 2,
+      "candidate_scores": [
+        4.5,
+        4.75
+      ],
+      "selected_candidate": 2,
+      "refinement_applied": false,
+      "total_input_tokens": 11346,
+      "total_output_tokens": 16999,
+      "total_cost_usd": 0.184173,
+      "elapsed_seconds": 152.28,
+      "timestamp": "2026-02-06T05:19:11.315889+00:00"
+    },
+    {
+      "input": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\_input\\DEU_21_VA_page009.jpg",
+      "output": "E:\\Dev\\IPPS\\_Sessions\\_2026-01-26_llm-transcription-skill\\08_model_validation\\gpt-5_c2\\DEU_21_VA_page009.md",
+      "model": "gpt-5",
+      "judge_model": "gpt-5-mini",
+      "final_score": 4.75,
+      "candidates": 2,
+      "candidate_scores": [
+        4.5,
+        4.75
+      ],
+      "selected_candidate": 2,
+      "refinement_applied": false,
+      "total_input_tokens": 14258,
+      "total_output_tokens": 19000,
+      "total_cost_usd": 0.207822,
+      "elapsed_seconds": 181.3,
+      "timestamp": "2026-02-06T05:19:40.331935+00:00"
+    }
+  ]
+}
