@@ -362,7 +362,48 @@ Pages completed: 4 of 20
 ### 6e. Continue with next chunk
 Repeat until all pages processed.
 
-## Step 7: Finalize
+## Step 7: Stitch Transcribed Pages
+
+After batch transcription completes, merge individual page files into single output:
+
+```powershell
+$folder = "[OUTPUT_FOLDER]/02_transcribed_pages"
+$output = "[OUTPUT_FOLDER]/[DocName].md"  # No suffix like _COMPLETE
+$files = Get-ChildItem $folder -Filter "*.md" | Where-Object { $_.Name -notlike "_*" } | Sort-Object Name
+$content = @()
+$pageNum = 1
+foreach ($file in $files) {
+    # Page marker BEFORE content (first page gets marker too)
+    if ($pageNum -eq 1) {
+        $content += "<!-- Page {0:D3} -->`n`n" -f $pageNum
+    } else {
+        $content += "`n---`n<!-- Page {0:D3} -->`n`n" -f $pageNum
+    }
+    $content += (Get-Content $file.FullName -Raw).TrimEnd()
+    $pageNum++
+}
+$finalContent = ($content -join "").TrimEnd()
+$finalContent | Out-File $output -Encoding UTF8
+Write-Output "Merged $($files.Count) files to $output"
+```
+
+**Page marker format:**
+```markdown
+<!-- Page 001 -->
+
+[Page 1 content...]
+
+---
+<!-- Page 002 -->
+
+[Page 2 content...]
+```
+
+**Filename convention:** Use original document name without suffixes:
+- Correct: `Enel-Integrated-Annual-Report-2023.md`
+- Wrong: `Enel-Integrated-Annual-Report-2023_COMPLETE.md`
+
+## Step 8: Finalize
 
 1. Remove progress markers
 2. Generate/verify Table of Contents
@@ -370,9 +411,10 @@ Repeat until all pages processed.
 
 ## Output Locations
 
-- Converted images: `.tools/_pdf_to_jpg_converted/[PDF_FILENAME]/`
+- Converted images: `[OUTPUT_FOLDER]/01_source_images/`
+- Transcribed pages: `[OUTPUT_FOLDER]/02_transcribed_pages/`
+- Final merged output: `[OUTPUT_FOLDER]/[DocName].md`
 - Web screenshots: `.tools/_web_screenshots/[DOMAIN]/`
-- Markdown output: `[SESSION_FOLDER]/` or user-specified location
 
 ## Long Document Strategy (50+ pages)
 
