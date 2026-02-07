@@ -18,159 +18,151 @@
 
 ## Step 1: Capture Pricing Page Screenshots
 
-Use the playwriter MCP tool to capture full-page screenshots of both pricing pages. Pages may be long and contain lazy-loaded content, so scroll fully before capturing.
+Use the **Playwright MCP** tools to capture viewport-sized screenshot chunks of both pricing pages. Each provider gets its own subfolder under `[PRICING_SOURCES]`:
+
+- `[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing/` - Anthropic screenshots
+- `[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing/` - OpenAI screenshots
+
+Create these folders before capturing.
+
+### Common Steps (both providers)
+
+For each pricing page:
+
+1. `browser_navigate(url: "<pricing URL>")`
+2. `browser_wait_for(time: 2)`
+3. **Dismiss cookie popup** (see `@ms-playwright-mcp` PLAYWRIGHT_ADVANCED_WORKFLOWS.md Section 1):
+   - `browser_snapshot()` - Check for cookie consent banner
+   - Click "Accept" / "Accept All Cookies" button if found
+   - If no button, use JavaScript removal fallback:
+     ```
+     browser_evaluate(function: "(() => {
+       ['#cookie-banner','#cookieModal','.cookie-consent','[class*=\"cookie\"]',
+        '[id*=\"cookie\"]','.gdpr-banner','#onetrust-consent-sdk'].forEach(sel =>
+         document.querySelectorAll(sel).forEach(el => el.remove()));
+       document.querySelectorAll('.modal-backdrop,[class*=\"overlay\"]').forEach(el => el.remove());
+       document.body.style.overflow = 'auto';
+     })()")
+     ```
+4. Remove fixed/sticky headers:
+   ```
+   browser_evaluate(function: "() => {
+     document.querySelectorAll('header, nav, [class*=\"sticky\"], [class*=\"fixed\"]')
+       .forEach(el => { el.style.position = 'relative'; });
+   }")
+   ```
+5. Determine scrollable container and take viewport-chunk screenshots (see provider-specific sections below)
 
 ### 1a. Capture Anthropic Pricing
 
-Use the **Playwright MCP** tools (`browser_navigate`, `browser_snapshot`, `browser_click`, etc.).
+URL: `https://docs.anthropic.com/en/docs/about-claude/pricing`
 
-1. `browser_navigate(url: "https://docs.anthropic.com/en/docs/about-claude/pricing")`
-2. `browser_wait_for(time: 2)` - Wait for initial load
-
-**Dismiss cookie popup** (see `@ms-playwright-mcp` PLAYWRIGHT_ADVANCED_WORKFLOWS.md Section 1):
-
-3. `browser_snapshot()` - Check for cookie consent banner
-4. Look for "Accept All Cookies" or similar button in the snapshot
-5. `browser_click(element: "Accept All Cookies button", ref: "<ref from snapshot>")` - Click to dismiss
-6. `browser_snapshot()` - Verify popup dismissed
-
-**If no clickable button found**, fall back to JavaScript removal:
-```
-browser_evaluate(function: "(() => {
-  const selectors = ['#cookie-banner', '#cookieModal', '.cookie-consent',
-    '[class*=\"cookie\"]', '[id*=\"cookie\"]', '.gdpr-banner', '#onetrust-consent-sdk'];
-  selectors.forEach(sel => document.querySelectorAll(sel).forEach(el => el.remove()));
-  document.querySelectorAll('.modal-backdrop, [class*=\"overlay\"]').forEach(el => el.remove());
-  document.body.style.overflow = 'auto';
-})()")
-```
-
-Scroll to load all lazy content, then remove sticky headers:
-
-Scroll incrementally to trigger lazy loading (see `@ms-playwright-mcp` FULL_PAGE_SCREENSHOT.md):
-
-```
-browser_evaluate(function: "async () => {
-  const delay = ms => new Promise(r => setTimeout(r, ms));
-  let prevHeight = -1;
-  for (let i = 0; i < 50; i++) {
-    window.scrollBy(0, 500);
-    await delay(300);
-    const newHeight = document.body.scrollHeight;
-    if (newHeight === prevHeight) break;
-    prevHeight = newHeight;
-  }
-  window.scrollTo(0, 0);
-}")
-```
-
-Remove fixed/sticky headers to prevent repeating in screenshot:
-
-```
-browser_evaluate(function: "() => {
-  document.querySelectorAll('header, nav, [class*=\"sticky\"], [class*=\"fixed\"]')
-    .forEach(el => { el.style.position = 'relative'; });
-}")
-```
-
-Take full-page screenshot:
-
-```
-browser_screenshot(fullPage: true)
-```
-
-Save the screenshot to `[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing.jpg`.
-
-**If the page is very tall** (screenshot > 2MB or height > 16000px), split into viewport-sized chunks by scrolling and saving numbered files (`-01.jpg`, `-02.jpg`, etc.).
-
-### 1b. Capture OpenAI Pricing
-
-Repeat the same process for OpenAI:
-
-1. `browser_navigate(url: "https://platform.openai.com/docs/pricing")`
-2. `browser_wait_for(time: 2)`
-3. Dismiss cookie popup (same approach as 1a)
-4. Scroll for lazy content, remove sticky headers
-5. `browser_screenshot(fullPage: true)`
-6. Save to `[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing-Standard.jpg`
-
-Split into numbered files if too large (`[DATE]_OpenAI-ModelPricing-Standard-NN.jpg`).
-
-**IMPORTANT**: The OpenAI pricing page uses a scrollable inner container (`div.docs-scroll-container`), not the document body. `fullPage: true` will NOT capture the full content. Instead, scroll the inner container and take viewport-sized screenshots:
+The Anthropic page uses the document body for scrolling. Scroll to load lazy content, then take viewport chunks:
 
 ```
 browser_run_code(code: "async (page) => {
-  const container = await page.evaluate(() => {
+  // Scroll to load lazy content
+  await page.evaluate(async () => {
+    const delay = ms => new Promise(r => setTimeout(r, ms));
+    let prevHeight = -1;
+    for (let i = 0; i < 50; i++) {
+      window.scrollBy(0, 500); await delay(300);
+      if (document.body.scrollHeight === prevHeight) break;
+      prevHeight = document.body.scrollHeight;
+    }
+    window.scrollTo(0, 0);
+    // Remove sticky headers
+    document.querySelectorAll('header, nav, [class*=\"sticky\"], [class*=\"fixed\"]')
+      .forEach(el => { el.style.position = 'relative'; });
+  });
+  // Take viewport-chunk screenshots
+  const totalHeight = await page.evaluate(() => document.body.scrollHeight);
+  const viewportHeight = await page.evaluate(() => window.innerHeight);
+  const pages = Math.ceil(totalHeight / viewportHeight);
+  for (let i = 0; i < pages; i++) {
+    await page.evaluate(y => window.scrollTo(0, y), i * viewportHeight);
+    await page.waitForTimeout(500);
+    const suffix = String(i + 1).padStart(2, '0');
+    await page.screenshot({
+      path: '[SUBFOLDER_ANTHROPIC]/' + suffix + '.jpg',
+      scale: 'css', type: 'jpeg', quality: 90
+    });
+  }
+  return { pages };
+}")
+```
+
+Replace `[SUBFOLDER_ANTHROPIC]` with the actual path: `[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing`
+
+### 1b. Capture OpenAI Pricing
+
+URL: `https://platform.openai.com/docs/pricing`
+
+**IMPORTANT**: The OpenAI page uses a scrollable inner container (`div.docs-scroll-container`), not the document body. `fullPage: true` will NOT capture the full content. Scroll the inner container instead:
+
+```
+browser_run_code(code: "async (page) => {
+  // Scroll inner container to load lazy content
+  const container = await page.evaluate(async () => {
     const c = document.querySelector('.docs-scroll-container');
+    const delay = ms => new Promise(r => setTimeout(r, ms));
+    let prevHeight = -1;
+    for (let i = 0; i < 50; i++) {
+      c.scrollBy(0, 500); await delay(300);
+      if (c.scrollHeight === prevHeight) break;
+      prevHeight = c.scrollHeight;
+    }
+    c.scrollTo(0, 0);
+    // Remove sticky headers
+    document.querySelectorAll('header, nav, [class*=\"sticky\"], [class*=\"fixed\"]')
+      .forEach(el => { el.style.position = 'relative'; });
     return { totalHeight: c.scrollHeight, viewportHeight: c.clientHeight };
   });
   const pages = Math.ceil(container.totalHeight / container.viewportHeight);
   for (let i = 0; i < pages; i++) {
-    await page.evaluate((idx) => {
+    await page.evaluate(idx => {
       const c = document.querySelector('.docs-scroll-container');
       c.scrollTo(0, idx * c.clientHeight);
     }, i);
     await page.waitForTimeout(500);
     const suffix = String(i + 1).padStart(2, '0');
     await page.screenshot({
-      path: `[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing-Standard-${suffix}.jpg`,
+      path: '[SUBFOLDER_OPENAI]/' + suffix + '.jpg',
       scale: 'css', type: 'jpeg', quality: 90
     });
   }
+  return { pages };
 }")
 ```
 
+Replace `[SUBFOLDER_OPENAI]` with the actual path: `[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing`
+
 ## Step 2: Transcribe Screenshots to Markdown
 
-Use the `transcribe-image-to-markdown.py` script from the llm-transcription skill to transcribe each set of screenshots.
-
-**Important**: The transcription script processes folders of images. Create temporary input folders per source, or use `--input-file` for individual images.
+Use the `transcribe-image-to-markdown.py` script from the llm-transcription skill. Since each provider's screenshots are in their own subfolder, use `--input-folder` to transcribe all images in that folder at once. The output markdown files are placed in the same subfolder.
 
 ### 2a. Transcribe Anthropic Screenshots
 
 ```powershell
 & [VENV_PYTHON] [TRANSCRIPTION_SCRIPT] `
-  --input-folder "[PRICING_SOURCES]" `
-  --output-folder "[PRICING_SOURCES]" `
+  --input-folder "[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing" `
+  --output-folder "[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing" `
   --model gpt-5-mini `
-  --initial-candidates 3 `
+  --initial-candidates 2 `
   --keys-file [KEYS_FILE] `
   --force
-```
-
-**Note**: If using `--input-folder`, the script processes ALL images in the folder. To transcribe only today's Anthropic screenshots, either:
-- Use `--input-file` per image (for single files)
-- Create a temp subfolder with only the target images, transcribe, then move results back
-
-**Per-file approach** (recommended):
-
-```powershell
-# For each Anthropic screenshot file matching [DATE]_Anthropic-ModelPricing*.jpg
-Get-ChildItem "[PRICING_SOURCES]" -Filter "[DATE]_Anthropic-ModelPricing*.jpg" | ForEach-Object {
-  $outFile = $_.FullName -replace '\.jpg$', '.md'
-  & [VENV_PYTHON] [TRANSCRIPTION_SCRIPT] `
-    --input-file $_.FullName `
-    --output-file $outFile `
-    --model gpt-5-mini `
-    --initial-candidates 3 `
-    --keys-file [KEYS_FILE] `
-    --force
-}
 ```
 
 ### 2b. Transcribe OpenAI Screenshots
 
 ```powershell
-Get-ChildItem "[PRICING_SOURCES]" -Filter "[DATE]_OpenAI-ModelPricing-Standard*.jpg" | ForEach-Object {
-  $outFile = $_.FullName -replace '\.jpg$', '.md'
-  & [VENV_PYTHON] [TRANSCRIPTION_SCRIPT] `
-    --input-file $_.FullName `
-    --output-file $outFile `
-    --model gpt-5-mini `
-    --initial-candidates 3 `
-    --keys-file [KEYS_FILE] `
-    --force
-}
+& [VENV_PYTHON] [TRANSCRIPTION_SCRIPT] `
+  --input-folder "[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing" `
+  --output-folder "[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing" `
+  --model gpt-5-mini `
+  --initial-candidates 2 `
+  --keys-file [KEYS_FILE] `
+  --force
 ```
 
 ## Step 3: Read Transcriptions and Update model-pricing.json
