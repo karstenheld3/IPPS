@@ -1,5 +1,24 @@
 # Failure Log
 
+## 2026-02-06 - LLM Transcription Perf Optimization Session
+
+### [HIGH] `LLMTR-FL-016` Edited sync target instead of DevSystem source
+
+- **When**: 2026-02-06 06:30 UTC+01:00
+- **Where**: `.windsurf/skills/llm-transcription/transcribe-image-to-markdown.py`
+- **What**: Applied v2 persistent client optimizations directly to the `.windsurf` sync target instead of the DevSystem source at `DevSystemV3.2/skills/llm-transcription/transcribe-image-to-markdown.py`. Then committed and pushed, leaving source and target out of sync.
+- **Why it went wrong**:
+  - Agent had the rule loaded from `!NOTES.md`: "DevSystem is the source, `.windsurf` is the sync target"
+  - Despite knowing the rule, agent edited the sync target directly because the previous session checkpoint referenced the `.windsurf` path as the production script
+  - Did not verify source vs target before editing
+- **Evidence**: Commit `8c6dc9a` modifies `.windsurf/skills/llm-transcription/transcribe-image-to-markdown.py` while `DevSystemV3.2/skills/llm-transcription/transcribe-image-to-markdown.py` remains unchanged. `fc.exe` comparison confirms files differ.
+- **Suggested fix**: Apply same changes to DevSystem source, then sync to `.windsurf` to restore correct flow
+
+**Prevention rules**:
+1. ALWAYS check `!NOTES.md` source/sync rules before editing any file under `.windsurf/skills/`
+2. For skill files: edit `DevSystemV3.2/` first, then sync to `.windsurf/`
+3. Never trust checkpoint paths as authoritative - verify source location before editing
+
 ## 2026-01-26 - LLM Evaluation Skill Session
 
 ### [MEDIUM] `LLMEV-FL-014` Deleted content before creating reference files
