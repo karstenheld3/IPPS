@@ -112,3 +112,7 @@ Automatically push commits to GitHub.
   - Overwrite everything
   - Delete deprecated or renamed files from older DevSystem versions
   - Don't delete unreleated existing files
+-  e:\dev\USTVA
+  - Overwrite everything
+  - Delete deprecated or renamed files from older DevSystem versions
+  - Don't delete unreleated existing files
