@@ -165,11 +165,44 @@ Use the `transcribe-image-to-markdown.py` script from the llm-transcription skil
   --force
 ```
 
+### 2c. Stitch Page Transcriptions into Combined Markdowns
+
+The transcription tool produces one .md per screenshot. Concatenate them in sort order into single combined files at the `[PRICING_SOURCES]` level, then clean up:
+
+```powershell
+# Anthropic
+Get-ChildItem "[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing/*.md" |
+  Sort-Object Name |
+  ForEach-Object { Get-Content $_.FullName -Raw } |
+  Out-File "[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing.md" -Encoding utf8
+
+# OpenAI
+Get-ChildItem "[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing/*.md" |
+  Sort-Object Name |
+  ForEach-Object { Get-Content $_.FullName -Raw } |
+  Out-File "[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing-Standard.md" -Encoding utf8
+```
+
+Delete individual page .md files and batch summary from subfolders (keep JPGs as archival reference):
+
+```powershell
+Remove-Item "[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing/*.md" -Force
+Remove-Item "[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing/_batch_summary.json" -Force
+Remove-Item "[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing/*.md" -Force
+Remove-Item "[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing/_batch_summary.json" -Force
+```
+
+**Expected output files:**
+- `[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing.md`
+- `[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing-Standard.md`
+
 ## Step 3: Read Transcriptions and Update model-pricing.json
 
-### 3a. Read All Transcribed Markdown Files
+### 3a. Read Combined Markdown Files
 
-Read all `[DATE]_Anthropic-ModelPricing*.md` and `[DATE]_OpenAI-ModelPricing-Standard*.md` files from `[PRICING_SOURCES]`.
+Read the two combined transcription files from `[PRICING_SOURCES]`:
+- `[DATE]_Anthropic-ModelPricing.md`
+- `[DATE]_OpenAI-ModelPricing-Standard.md`
 
 ### 3b. Extract Pricing Data
 

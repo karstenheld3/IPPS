@@ -1,5 +1,23 @@
 # Failure Log
 
+## 2026-02-07 - Model Pricing Update Workflow
+
+### [MEDIUM] `LLMEV-FL-017` Workflow missing stitching step - individual page transcriptions instead of combined markdowns
+
+- **When**: 2026-02-07 13:50 UTC+01:00
+- **Where**: `DevSystemV3.2/skills/llm-evaluation/UPDATE_MODEL_PRICING.md` Step 2
+- **What**: Original requirement specified single stitched markdown files per provider (`YYYY-MM-DD_Anthropic-ModelPricing.md`, `YYYY-MM-DD_OpenAI-ModelPricing-Standard.md`). When page splitting was added for screenshots, the workflow was updated to transcribe each page chunk individually via `--input-folder`, but no step was added to concatenate the individual page .md files into the required single combined markdown per provider. Result: 13+9 individual page .md files instead of 2 combined files.
+- **Why it went wrong**:
+  - Focus was on making `--input-folder` work with subfolders, overlooking that the transcription tool produces per-image outputs
+  - Original requirement for single combined .md files was not carried forward when restructuring for page splitting
+  - No MNF list was created referencing the original output format requirements
+- **Evidence**: User asked "where have you put the stitched-together markdowns?" - combined files did not exist until manually concatenated after the fact
+
+**Prevention rules**:
+1. When adding intermediate steps (page splitting), trace through to final output format and verify it still matches requirements
+2. If a tool produces per-file output but requirement is a combined file, add an explicit concatenation/stitching step
+3. Create MNF list referencing original output format when modifying workflow steps
+
 ## 2026-02-06 - LLM Transcription Perf Optimization Session
 
 ### [HIGH] `LLMTR-FL-016` Edited sync target instead of DevSystem source
