@@ -6,6 +6,7 @@
 
 - `[SKILL_FOLDER]`: The folder containing this workflow file (e.g., `.windsurf/skills/llm-evaluation`)
 - `[PRICING_SOURCES]`: `[SKILL_FOLDER]/pricing-sources`
+- `[SCREENSHOTS]`: `[WORKSPACE_FOLDER]/.tools/_screenshots`
 - `[DATE]`: Current date in `YYYY-MM-DD` format
 - `[VENV_PYTHON]`: Path to the llm-transcription venv Python (e.g., `.tools/llm-venv/Scripts/python.exe`)
 - `[TRANSCRIPTION_SCRIPT]`: Path to `transcribe-image-to-markdown.py` in the llm-transcription skill folder
@@ -18,10 +19,10 @@
 
 ## Step 1: Capture Pricing Page Screenshots
 
-Use the **Playwright MCP** tools to capture viewport-sized screenshot chunks of both pricing pages. Each provider gets its own subfolder under `[PRICING_SOURCES]`:
+Use the **Playwright MCP** tools to capture viewport-sized screenshot chunks of both pricing pages. Each provider gets its own subfolder under `[SCREENSHOTS]`:
 
-- `[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing/` - Anthropic screenshots
-- `[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing/` - OpenAI screenshots
+- `[SCREENSHOTS]/[DATE]_Anthropic-ModelPricing/` - Anthropic screenshots
+- `[SCREENSHOTS]/[DATE]_OpenAI-ModelPricing/` - OpenAI screenshots
 
 Create these folders before capturing.
 
@@ -92,7 +93,7 @@ browser_run_code(code: "async (page) => {
 }")
 ```
 
-Replace `[SUBFOLDER_ANTHROPIC]` with the actual path: `[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing`
+Replace `[SUBFOLDER_ANTHROPIC]` with the actual path: `[SCREENSHOTS]/[DATE]_Anthropic-ModelPricing`
 
 ### 1b. Capture OpenAI Pricing
 
@@ -135,7 +136,7 @@ browser_run_code(code: "async (page) => {
 }")
 ```
 
-Replace `[SUBFOLDER_OPENAI]` with the actual path: `[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing`
+Replace `[SUBFOLDER_OPENAI]` with the actual path: `[SCREENSHOTS]/[DATE]_OpenAI-ModelPricing`
 
 ## Step 2: Transcribe Screenshots to Markdown
 
@@ -145,10 +146,10 @@ Use the `transcribe-image-to-markdown.py` script from the llm-transcription skil
 
 ```powershell
 & [VENV_PYTHON] [TRANSCRIPTION_SCRIPT] `
-  --input-folder "[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing" `
-  --output-folder "[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing" `
+  --input-folder "[SCREENSHOTS]/[DATE]_Anthropic-ModelPricing" `
+  --output-folder "[SCREENSHOTS]/[DATE]_Anthropic-ModelPricing" `
   --model gpt-5-mini `
-  --initial-candidates 2 `
+  --initial-candidates 1 `
   --keys-file [KEYS_FILE] `
   --force
 ```
@@ -157,10 +158,10 @@ Use the `transcribe-image-to-markdown.py` script from the llm-transcription skil
 
 ```powershell
 & [VENV_PYTHON] [TRANSCRIPTION_SCRIPT] `
-  --input-folder "[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing" `
-  --output-folder "[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing" `
+  --input-folder "[SCREENSHOTS]/[DATE]_OpenAI-ModelPricing" `
+  --output-folder "[SCREENSHOTS]/[DATE]_OpenAI-ModelPricing" `
   --model gpt-5-mini `
-  --initial-candidates 2 `
+  --initial-candidates 1 `
   --keys-file [KEYS_FILE] `
   --force
 ```
@@ -171,25 +172,25 @@ The transcription tool produces one .md per screenshot. Concatenate them in sort
 
 ```powershell
 # Anthropic
-Get-ChildItem "[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing/*.md" |
+Get-ChildItem "[SCREENSHOTS]/[DATE]_Anthropic-ModelPricing/*.md" |
   Sort-Object Name |
   ForEach-Object { Get-Content $_.FullName -Raw } |
   Out-File "[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing.md" -Encoding utf8
 
 # OpenAI
-Get-ChildItem "[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing/*.md" |
+Get-ChildItem "[SCREENSHOTS]/[DATE]_OpenAI-ModelPricing/*.md" |
   Sort-Object Name |
   ForEach-Object { Get-Content $_.FullName -Raw } |
   Out-File "[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing-Standard.md" -Encoding utf8
 ```
 
-Delete individual page .md files and batch summary from subfolders (keep JPGs as archival reference):
+Delete individual page .md files and batch summary from screenshot subfolders (keep JPGs as archival reference):
 
 ```powershell
-Remove-Item "[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing/*.md" -Force
-Remove-Item "[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing/_batch_summary.json" -Force
-Remove-Item "[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing/*.md" -Force
-Remove-Item "[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing/_batch_summary.json" -Force
+Remove-Item "[SCREENSHOTS]/[DATE]_Anthropic-ModelPricing/*.md" -Force
+Remove-Item "[SCREENSHOTS]/[DATE]_Anthropic-ModelPricing/_batch_summary.json" -Force
+Remove-Item "[SCREENSHOTS]/[DATE]_OpenAI-ModelPricing/*.md" -Force
+Remove-Item "[SCREENSHOTS]/[DATE]_OpenAI-ModelPricing/_batch_summary.json" -Force
 ```
 
 **Expected output files:**
