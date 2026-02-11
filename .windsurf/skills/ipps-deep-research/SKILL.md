@@ -102,19 +102,28 @@ Systematic research patterns for in-depth investigation of software development 
 ### Source ID Format
 
 ```
-[TOPIC]-IN01-SC-[SOURCE]-[DOCNAME]
+[SUBJECT]-SC-[SOURCE]-[DOCNAME]
 ```
 
 Examples:
-- `GRPH-IN01-SC-MSFT-APIOVERVIEW` - Microsoft Graph official docs
-- `GRPH-IN01-SC-SO-RATELIMIT` - Stack Overflow rate limit discussion
-- `GRPH-IN01-SC-GH-ISSUE1234` - GitHub issue #1234
+- `MSGRAPH-SC-MSFT-APIOVERVIEW` - Microsoft Graph official docs
+- `MSGRAPH-SC-SO-RATELIMIT` - Stack Overflow rate limit discussion
+- `MSGRAPH-SC-GH-ISSUE1234` - GitHub issue #1234
 
 ### File Naming Conventions
 
-- `__` prefix (double underscore): Master/index documents (SOURCES, TOC, TEMPLATE)
-- `_` prefix (single underscore): Topic content files (INFO documents)
+- `__[SUBJECT]_TOC.md`: Table of Contents (Doc ID: `[SUBJECT]-TOC`)
+- `__[SUBJECT]_SOURCES.md`: Source list (Doc ID: `[SUBJECT]-SOURCES`)
+- `_INFO_[SUBJECT]-IN[XX]_[TOPIC].md`: Content files with sequential Doc ID
+  - XX = two-digit number starting at 01 (01, 02, 03...)
+  - Ensures files sort in TOC order when listed alphabetically
+  - Example: `_INFO_MSGRAPH-IN05_SITES_LISTS.md`
 - No prefix: Tracking files (TASKS, NOTES, PROBLEMS, PROGRESS)
+
+**Doc ID Exceptions:**
+- TOC files use `[SUBJECT]-TOC` (not numbered)
+- SOURCES files use `[SUBJECT]-SOURCES` (not numbered)
+- Content files start at `[SUBJECT]-IN01`
 
 ### Information Currency
 
