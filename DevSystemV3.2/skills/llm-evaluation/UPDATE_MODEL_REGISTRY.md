@@ -6,9 +6,9 @@
 
 - `[SKILL_FOLDER]`: The folder containing this workflow file (e.g., `.windsurf/skills/llm-evaluation`)
 - `[REGISTRY_SOURCES]`: `[SKILL_FOLDER]/registry-sources`
-- `[SCREENSHOTS]`: `[WORKSPACE_FOLDER]/.tools/_screenshots`
+- `[SCREENSHOTS]`: `[WORKSPACE_FOLDER]/../.tools/_screenshots`
 - `[DATE]`: Current date in `YYYY-MM-DD` format
-- `[VENV_PYTHON]`: Path to the llm-transcription venv Python (e.g., `.tools/llm-venv/Scripts/python.exe`)
+- `[VENV_PYTHON]`: Path to the llm-transcription venv Python (e.g., `../.tools/llm-venv/Scripts/python.exe`)
 - `[TRANSCRIPTION_SCRIPT]`: Path to `transcribe-image-to-markdown.py` in the llm-transcription skill folder
 - `[KEYS_FILE]`: Path to API keys file
 

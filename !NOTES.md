@@ -18,12 +18,23 @@ Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
 **Default:** MODEL-HIGH (when uncertain)
 
-## API Keys Location
+## .tools Folder Location (2026-02-11)
 
-**API keys file**: `[WORKSPACE_FOLDER]\..\.api-keys.txt` (workspace-external, shared across projects)
-Alternative: `[WORKSPACE_FOLDER]\.tools\.api-keys.txt` (project-local)
+**MOVED**: `.tools` folder relocated from `[WORKSPACE_FOLDER]\.tools` to `[WORKSPACE_FOLDER]\..\.tools` (shared across workspaces).
 
-Usage: `--keys-file [WORKSPACE_FOLDER]\..\.api-keys.txt`
+Old path: `[WORKSPACE_FOLDER]\.tools\`
+New path: `[WORKSPACE_FOLDER]\..\.tools\`
+
+All SETUP.md, UNINSTALL.md, SKILL.md, scripts, and README.md references need updating. See `_TASKS_TOOLS.md` for full change list.
+
+## API Keys Location (2026-02-11)
+
+**API keys file**: `[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt` (in shared .tools folder)
+
+Old path: `[WORKSPACE_FOLDER]\..\.api-keys.txt`
+New path: `[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
+
+Usage: `--keys-file [WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
 
 ## Prevention Rules (from session fails)
 

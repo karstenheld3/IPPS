@@ -1,4 +1,5 @@
-# Tools binaries (large files, reinstallable)
+# Tools binaries moved to parent folder (../.tools/) - shared across workspaces
+# Kept as safety net in case .tools/ is accidentally created in workspace
 .tools/
 
 # Private sessions folder (contents ignored, folder tracked)

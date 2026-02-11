@@ -149,8 +149,12 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **SDDEV** - Spec-Driven Development (research topic)
 - **TRNGFX** - Transcription graphics/ASCII art optimization
 - **LMWS** - LM Studio + Windsurf integration research
+- **TOOLS** - .tools folder relocation and path updates
 
 ## Document History
+
+**[2026-02-11 10:28]**
+- Added: TOOLS topic (.tools folder relocation and path updates)
 
 **[2026-01-29 10:38]**
 - Added: LMWS topic (LM Studio + Windsurf integration research)

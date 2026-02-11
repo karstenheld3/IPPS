@@ -176,7 +176,7 @@ def get_temp_dir(temp_folder: Path | None = None) -> Path:
     if temp_folder:
         temp_dir = temp_folder
     else:
-        temp_dir = Path.cwd() / '.tools' / '_image_to_markdown'
+        temp_dir = Path.cwd().parent / '.tools' / '_image_to_markdown'
     temp_dir.mkdir(parents=True, exist_ok=True)
     return temp_dir
 

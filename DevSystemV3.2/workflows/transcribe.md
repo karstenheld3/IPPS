@@ -20,7 +20,7 @@ Check if advanced LLM transcription is available:
 ```powershell
 # Check for llm-transcription skill
 $skillPath = ".windsurf/skills/llm-transcription/transcribe-image-to-markdown.py"
-$keysFile = "[WORKSPACE_FOLDER]\..\.api-keys.txt"
+$keysFile = "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt"
 $hasSkill = Test-Path $skillPath
 $hasKeys = Test-Path $keysFile
 
@@ -74,13 +74,13 @@ mcp0_browser_navigate(url: "https://example.com/page")
 mcp0_browser_evaluate(function: "window.scrollTo(0, document.body.scrollHeight)")
 mcp0_browser_wait_for(time: 2)
 mcp0_browser_evaluate(function: "window.scrollTo(0, 0)")
-mcp0_browser_take_screenshot(fullPage: true, filename: ".tools/_web_screenshots/[domain]/page-001.png")
+mcp0_browser_take_screenshot(fullPage: true, filename: "../.tools/_web_screenshots/[domain]/page-001.png")
 ```
 
 ## Step 3: Count and Plan
 
 ```powershell
-$images = Get-ChildItem ".tools/_pdf_to_jpg_converted/[NAME]/" -Filter "*.jpg"
+$images = Get-ChildItem "../.tools/_pdf_to_jpg_converted/[NAME]/" -Filter "*.jpg"
 $totalPages = $images.Count
 $chunks = [math]::Ceiling($totalPages / 2)
 Write-Host "Total pages: $totalPages, Chunks needed: $chunks"
@@ -118,22 +118,22 @@ For each chunk (pages 1-4, 5-8, 9-12, etc.):
 **Mode A: Advanced LLM Transcription** (if skill + keys detected in Step 1)
 
 ```powershell
-$venv = ".tools/llm-venv/Scripts/python.exe"
+$venv = "../.tools/llm-venv/Scripts/python.exe"
 $skill = ".windsurf/skills/llm-transcription"
 
 # Single file transcription
 & $venv "$skill/transcribe-image-to-markdown.py" `
-    --input-file ".tools/_pdf_to_jpg_converted/[NAME]/page_001.jpg" `
+    --input-file "../.tools/_pdf_to_jpg_converted/[NAME]/page_001.jpg" `
     --output-file "[SESSION_FOLDER]/[DocName]_page001.md" `
-    --keys-file "[WORKSPACE_FOLDER]\..\.api-keys.txt" `
+    --keys-file "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt" `
     --model gpt-5-mini `
     --workers 4
 
 # Batch mode (entire folder)
 & $venv "$skill/transcribe-image-to-markdown.py" `
-    --input-folder ".tools/_pdf_to_jpg_converted/[NAME]/" `
+    --input-folder "../.tools/_pdf_to_jpg_converted/[NAME]/" `
     --output-folder "[SESSION_FOLDER]/transcribed/" `
-    --keys-file "[WORKSPACE_FOLDER]\..\.api-keys.txt" `
+    --keys-file "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt" `
     --model gpt-5-mini `
     --workers 12
 ```
@@ -414,7 +414,7 @@ Write-Output "Merged $($files.Count) files to $output"
 - Converted images: `[OUTPUT_FOLDER]/01_source_images/`
 - Transcribed pages: `[OUTPUT_FOLDER]/02_transcribed_pages/`
 - Final merged output: `[OUTPUT_FOLDER]/[DocName].md`
-- Web screenshots: `.tools/_web_screenshots/[DOMAIN]/`
+- Web screenshots: `../.tools/_web_screenshots/[DOMAIN]/`
 
 ## Long Document Strategy (50+ pages)
 

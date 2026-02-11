@@ -265,7 +265,7 @@ Agent skills in `DevSystemV3.2/skills/`. Each skill contains scripts, documentat
 
 Evaluate LLM output quality by generating questions, collecting answers, and scoring with a judge model.
 
-**Setup**: Run `SETUP.md` to install Python venv with OpenAI/Anthropic SDKs in `.tools/llm-venv/`.
+**Setup**: Run `SETUP.md` to install Python venv with OpenAI/Anthropic SDKs in `../.tools/llm-venv/`.
 
 **Scripts**:
 - `call-llm.py` - Single LLM call (image or text input)
@@ -277,7 +277,7 @@ Evaluate LLM output quality by generating questions, collecting answers, and sco
 
 **Quick examples**:
 ```powershell
-$venv = ".tools\llm-venv\Scripts\python.exe"
+$venv = "../.tools/llm-venv/Scripts/python.exe"
 $skill = "DevSystemV3.2\skills\llm-evaluation"
 
 # Transcribe images
@@ -291,7 +291,7 @@ $skill = "DevSystemV3.2\skills\llm-evaluation"
 
 High-quality image-to-markdown transcription using ensemble generation, LLM judging, and conditional refinement.
 
-**Setup**: Uses shared venv from llm-evaluation (`.tools/llm-venv/`).
+**Setup**: Uses shared venv from llm-evaluation (`../.tools/llm-venv/`).
 
 **Scripts**:
 - `transcribe-image-to-markdown.py` - Ensemble pipeline with judge and refinement
@@ -299,21 +299,21 @@ High-quality image-to-markdown transcription using ensemble generation, LLM judg
 
 **Quick examples**:
 ```powershell
-$venv = ".tools\llm-venv\Scripts\python.exe"
-$skill = "DevSystemV3.2\skills\llm-transcription"
+$venv = "../.tools/llm-venv/Scripts/python.exe"
+$skill = "DevSystemV3.2/skills/llm-transcription"
 
 # Basic usage
-& $venv "$skill\transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]\..\.api-keys.txt
+& $venv "$skill/transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]/../.tools/.api-keys.txt
 
 # With custom model and ensemble size
-& $venv "$skill\transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]\..\.api-keys.txt --model gpt-5-mini --initial-candidates 3
+& $venv "$skill/transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]/../.tools/.api-keys.txt --model gpt-5-mini --initial-candidates 3
 ```
 
 ### llm-computer-use
 
 Desktop automation via LLM vision. The AI sees your screen, decides what to click/type, and executes actions.
 
-**Setup**: Uses shared venv from llm-evaluation (`.tools/llm-venv/`). Requires Anthropic API key.
+**Setup**: Uses shared venv from llm-evaluation (`../.tools/llm-venv/`). Requires Anthropic API key.
 
 **Files**:
 - `llm_computer_use/core.py` - ScreenCapture, Actions, Session, Provider
@@ -321,13 +321,13 @@ Desktop automation via LLM vision. The AI sees your screen, decides what to clic
 
 **Quick examples**:
 ```powershell
-cd DevSystemV3.2\skills\llm-computer-use
+cd DevSystemV3.2/skills/llm-computer-use
 
 # Dry-run (safe, no actions executed)
-python -m llm_computer_use -k [WORKSPACE_FOLDER]\..\.api-keys.txt "Click the Start button"
+python -m llm_computer_use -k [WORKSPACE_FOLDER]/../.tools/.api-keys.txt "Click the Start button"
 
 # Execute mode
-python -m llm_computer_use -x -k [WORKSPACE_FOLDER]\..\.api-keys.txt "Open Notepad and type Hello World"
+python -m llm_computer_use -x -k [WORKSPACE_FOLDER]/../.tools/.api-keys.txt "Open Notepad and type Hello World"
 
 # Use cheaper model
 python -m llm_computer_use -x -m claude-haiku-4-5 "Open Calculator"
@@ -339,11 +339,11 @@ python -m llm_computer_use -x -m claude-haiku-4-5 "Open Calculator"
 
 Convert, compress, and analyze PDF files using local CLI tools.
 
-**Setup**: Run `SETUP.md` to install tools in `.tools/`:
-- **7-Zip** (`.tools/7z/`) - Archive extraction
-- **Poppler** (`.tools/poppler/`) - PDF to image, text extraction
-- **QPDF** (`.tools/qpdf/`) - PDF manipulation, optimization
-- **Ghostscript** (`.tools/gs/`) - PDF compression
+**Setup**: Run `SETUP.md` to install tools in `../.tools/`:
+- **7-Zip** (`../.tools/7z/`) - Archive extraction
+- **Poppler** (`../.tools/poppler/`) - PDF to image, text extraction
+- **QPDF** (`../.tools/qpdf/`) - PDF manipulation, optimization
+- **Ghostscript** (`../.tools/gs/`) - PDF compression
 
 **Scripts**:
 - `convert-pdf-to-jpg.py` - Convert PDF pages to JPG for vision analysis
@@ -352,7 +352,7 @@ Convert, compress, and analyze PDF files using local CLI tools.
 
 **Quick examples**:
 ```powershell
-# Convert PDF to JPG (output: .tools/_pdf_to_jpg_converted/)
+# Convert PDF to JPG (output: ../.tools/_pdf_to_jpg_converted/)
 python DevSystemV3.2\skills\pdf-tools\convert-pdf-to-jpg.py report.pdf --dpi 150
 
 # Compress PDF
@@ -381,7 +381,7 @@ python DevSystemV3.2\skills\coding-conventions\reindent.py folder/ --to 2 --recu
 
 GitHub CLI integration for repos, issues, PRs, releases.
 
-**Setup**: Run `SETUP.md` to install GitHub CLI in `.tools/gh/`.
+**Setup**: Run `SETUP.md` to install GitHub CLI in `../.tools/gh/`.
 
 ### git-conventions
 
@@ -480,13 +480,13 @@ Document templates for INFO, SPEC, IMPL, TEST, TASKS, and STRUT plans.
 
 ## Agent Tools
 
-Local tool installations in `.tools/` (gitignored). Run `SETUP.md` in each skill folder to install.
+Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.md` in each skill folder to install.
 
 ## Project Structure
 
 ```
 IPPS/
-├── .tools/                       # Local tool installations (gitignored)
+├── ../.tools/                    # Shared tool installations (parent folder)
 ├── .windsurf/                    # Active agent configuration (copied from DevSystemV3.2)
 │   ├── rules/
 │   ├── workflows/
