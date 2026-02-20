@@ -75,6 +75,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **SOCAS** - Signs Of Confusion And Sloppiness (10 criteria)
 - **MNF** - Must Not Forget. Technique for critical item tracking during task execution
 - **ASANAPAP** - As Short As Necessary, As Precise As Possible. Conciseness principle for workflows and documents
+- **VCRIV** - Verify, Critique, Reconcile, Implement, Verify. Standard quality control pipeline for document review cycles. Runs `/verify` → `/critique` → `/reconcile` → `/implement` → `/verify`
 
 ## States (no brackets)
 
