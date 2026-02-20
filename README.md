@@ -105,7 +105,8 @@ your-project/
 - **[DevSystemV2.1](DevSystemV2.1/)** - Previous version with refined workflows
 - **[DevSystemV3](DevSystemV3/)** - Previous version with EDIRD phase model and Agentic English
 - **[DevSystemV3.1](DevSystemV3.1/)** - Previous version with STRUT notation
-- **[DevSystemV3.2](DevSystemV3.2/)** - Current system with Concurrent blocks, effort allocation, planning guidance
+- **[DevSystemV3.2](DevSystemV3.2/)** - Previous version with Concurrent blocks, effort allocation, planning guidance
+- **[DevSystemV3.3](DevSystemV3.3/)** - Current system with deep-research skill, shared .tools folder
 
 ## Agentic English
 
@@ -248,18 +249,18 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 
 ## Key Conventions
 
-- [Core Conventions](DevSystemV3.2/rules/core-conventions.md) - Text formatting, document structure, header blocks
-- [DevSystem Core](DevSystemV3.2/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
-- [DevSystem IDs](DevSystemV3.2/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
-- [Agentic English](DevSystemV3.2/rules/agentic-english.md) - Controlled vocabulary for agent instructions
-- [EDIRD Phase Planning](DevSystemV3.2/rules/edird-phase-planning.md) - Phase model core rules
-- [Git Conventions](DevSystemV3.2/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
-- [Coding Conventions](DevSystemV3.2/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
-- [Workflow Rules](DevSystemV3.2/skills/coding-conventions/WORKFLOW-RULES.md) - ASANAPAP principle, workflow formatting
+- [Core Conventions](DevSystemV3.3/rules/core-conventions.md) - Text formatting, document structure, header blocks
+- [DevSystem Core](DevSystemV3.3/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
+- [DevSystem IDs](DevSystemV3.3/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
+- [Agentic English](DevSystemV3.3/rules/agentic-english.md) - Controlled vocabulary for agent instructions
+- [EDIRD Phase Planning](DevSystemV3.3/rules/edird-phase-planning.md) - Phase model core rules
+- [Git Conventions](DevSystemV3.3/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
+- [Coding Conventions](DevSystemV3.3/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
+- [Workflow Rules](DevSystemV3.3/skills/coding-conventions/WORKFLOW-RULES.md) - ASANAPAP principle, workflow formatting
 
 ## Skills
 
-Agent skills in `DevSystemV3.2/skills/`. Each skill contains scripts, documentation, and optional setup.
+Agent skills in `DevSystemV3.3/skills/`. Each skill contains scripts, documentation, and optional setup.
 
 ### llm-evaluation
 
@@ -278,7 +279,7 @@ Evaluate LLM output quality by generating questions, collecting answers, and sco
 **Quick examples**:
 ```powershell
 $venv = "../.tools/llm-venv/Scripts/python.exe"
-$skill = "DevSystemV3.2\skills\llm-evaluation"
+$skill = "DevSystemV3.3\skills\llm-evaluation"
 
 # Transcribe images
 & $venv "$skill\call-llm-batch.py" --model gpt-4o --input-folder images/ --output-folder out/ --prompt-file "$skill\prompts\transcribe-page.md"
@@ -300,7 +301,7 @@ High-quality image-to-markdown transcription using ensemble generation, LLM judg
 **Quick examples**:
 ```powershell
 $venv = "../.tools/llm-venv/Scripts/python.exe"
-$skill = "DevSystemV3.2/skills/llm-transcription"
+$skill = "DevSystemV3.3/skills/llm-transcription"
 
 # Basic usage
 & $venv "$skill/transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]/../.tools/.api-keys.txt
@@ -321,7 +322,7 @@ Desktop automation via LLM vision. The AI sees your screen, decides what to clic
 
 **Quick examples**:
 ```powershell
-cd DevSystemV3.2/skills/llm-computer-use
+cd DevSystemV3.3/skills/llm-computer-use
 
 # Dry-run (safe, no actions executed)
 python -m llm_computer_use -k [WORKSPACE_FOLDER]/../.tools/.api-keys.txt "Click the Start button"
@@ -353,10 +354,10 @@ Convert, compress, and analyze PDF files using local CLI tools.
 **Quick examples**:
 ```powershell
 # Convert PDF to JPG (output: ../.tools/_pdf_to_jpg_converted/)
-python DevSystemV3.2\skills\pdf-tools\convert-pdf-to-jpg.py report.pdf --dpi 150
+python DevSystemV3.3\skills\pdf-tools\convert-pdf-to-jpg.py report.pdf --dpi 150
 
 # Compress PDF
-python DevSystemV3.2\skills\pdf-tools\compress-pdf.py report.pdf --compression high
+python DevSystemV3.3\skills\pdf-tools\compress-pdf.py report.pdf --compression high
 ```
 
 ### coding-conventions
@@ -371,10 +372,10 @@ Python and workflow coding style rules with enforcement tools.
 **Quick examples**:
 ```powershell
 # Convert folder to 2-space indentation
-python DevSystemV3.2\skills\coding-conventions\reindent.py folder/ --to 2 --recursive
+python DevSystemV3.3\skills\coding-conventions\reindent.py folder/ --to 2 --recursive
 
 # Dry-run (preview only)
-python DevSystemV3.2\skills\coding-conventions\reindent.py folder/ --to 2 --recursive --dry-run
+python DevSystemV3.3\skills\coding-conventions\reindent.py folder/ --to 2 --recursive --dry-run
 ```
 
 ### github
@@ -442,10 +443,10 @@ Windows desktop automation utilities.
 **Quick examples**:
 ```powershell
 # Full screen screenshot
-.\DevSystemV3.2\skills\windows-desktop-control\simple-screenshot.ps1
+.\DevSystemV3.3\skills\windows-desktop-control\simple-screenshot.ps1
 
 # Custom output path
-.\DevSystemV3.2\skills\windows-desktop-control\simple-screenshot.ps1 -OutputPath "C:\temp\screenshot.jpg"
+.\DevSystemV3.3\skills\windows-desktop-control\simple-screenshot.ps1 -OutputPath "C:\temp\screenshot.jpg"
 ```
 
 ### windsurf-auto-model-switcher
@@ -461,7 +462,7 @@ Switch Windsurf Cascade AI models programmatically.
 **Quick examples**:
 ```powershell
 # Select Claude Sonnet 4.5
-.\DevSystemV3.2\skills\windsurf-auto-model-switcher\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
+.\DevSystemV3.3\skills\windsurf-auto-model-switcher\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
 ```
 
 ### write-documents
@@ -487,7 +488,7 @@ Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.
 ```
 IPPS/
 ├── ../.tools/                    # Shared tool installations (parent folder)
-├── .windsurf/                    # Active agent configuration (copied from DevSystemV3.2)
+├── .windsurf/                    # Active agent configuration (copied from DevSystemV3.3)
 │   ├── rules/
 │   ├── workflows/
 │   └── skills/
@@ -496,24 +497,31 @@ IPPS/
 ├── DevSystemV2.1/                # Legacy (deprecated)
 ├── DevSystemV3/                  # Previous version
 ├── DevSystemV3.1/                # Previous version
-├── DevSystemV3.2/                # Current system
+├── DevSystemV3.2/                # Previous version
+├── DevSystemV3.3/                # Current system
 │   ├── rules/
+│   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions
+│   │   ├── cascade-model-switching.md # Model tier definitions and switching
 │   │   ├── core-conventions.md   # Text formatting, document structure
 │   │   ├── devsystem-core.md     # Workspace scenarios, folder structure, operation modes
 │   │   ├── devsystem-ids.md      # Document and item ID conventions
-│   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions
-│   │   └── edird-phase-planning.md # EDIRD phase model core rules
+│   │   ├── edird-phase-planning.md # EDIRD phase model core rules
+│   │   ├── research-and-report-writing-rules.md # Research quality rules
+│   │   └── workspace-rules.md    # Workspace-specific overrides
 │   ├── skills/
 │   │   ├── coding-conventions/   # Python, PowerShell, workflow style rules
+│   │   ├── deep-research/        # Structured research with TOC, strategies, tools
 │   │   ├── edird-phase-planning/ # Phase gates, flows, planning
-│   │   ├── git/                  # Commit history navigation, file recovery
 │   │   ├── git-conventions/      # Commit message format
 │   │   ├── github/               # GitHub CLI operations
 │   │   ├── llm-computer-use/     # Desktop automation via LLM vision
 │   │   ├── llm-evaluation/       # LLM evaluation pipeline scripts
 │   │   ├── llm-transcription/    # Image/audio to markdown transcription
+│   │   ├── ms-playwright-mcp/    # Browser automation via Playwright MCP
 │   │   ├── pdf-tools/            # PDF scripts and tools
 │   │   ├── session-management/   # Session templates
+│   │   ├── windows-desktop-control/ # Screenshot capture, desktop automation
+│   │   ├── windsurf-auto-model-switcher/ # Programmatic model switching
 │   │   └── write-documents/      # Spec, impl, test templates
 │   └── workflows/
 │       ├── build.md              # BUILD workflow entry point
@@ -526,21 +534,24 @@ IPPS/
 │       ├── learn.md              # Extract learnings from failures
 │       ├── partition.md          # Split plans into testable chunks
 │       ├── prime.md              # Load workspace context
+│       ├── project-release.md    # Project release workflow
 │       ├── recap.md              # Analyze context, identify status
 │       ├── reconcile.md          # Pragmatic reconciliation
 │       ├── rename.md             # Global/local refactoring
 │       ├── research.md           # Structured research
 │       ├── session-archive.md    # Archive session folder
 │       ├── session-finalize.md   # Finalize and sync session
-│       ├── session-new.md        # Initialize session
 │       ├── session-load.md       # Resume session
+│       ├── session-new.md        # Initialize session
 │       ├── session-save.md       # Save session progress
 │       ├── solve.md              # SOLVE workflow entry point
+│       ├── switch-model.md       # Switch Cascade AI model tier
 │       ├── sync.md               # Document synchronization
 │       ├── test.md               # Run tests based on scope
 │       ├── transcribe.md         # PDF/web transcription
 │       ├── verify.md             # Verification against specs and rules
 │       ├── write-impl-plan.md    # Create implementation plan
+│       ├── write-info.md         # Create INFO document
 │       ├── write-spec.md         # Create specification
 │       ├── write-strut.md        # Create STRUT plans
 │       ├── write-tasks-plan.md   # Create tasks plan

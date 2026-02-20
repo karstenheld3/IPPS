@@ -84,7 +84,7 @@ $deprecatedFiles = @{
     "skills\llm-transcription\prompts" = @("llm-image-to-markdown-transcription-v1b.md", "llm-image-to-markdown-judge-v1d.md")
 }
 # Deprecated skill folders (entire folder can be deleted if renamed)
-$deprecatedSkillFolders = @("edird-phase-model")
+$deprecatedSkillFolders = @("edird-phase-model", "ipps-deep-research")
 
 # Get all source files (relative paths)
 $sourceFiles = Get-ChildItem -Path $source -Recurse -File | ForEach-Object {
@@ -253,6 +253,10 @@ Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `
 ### V3.2 Migration (Deprecated Skills Files)
 
 - `skills/llm-transcription/transcribe-image-to-markdown-advanced.py` → removed (consolidated into transcribe-image-to-markdown.py)
+
+### V3.2 → V3.3 Migration (Renamed Skills)
+
+- `skills/ipps-deep-research/` → renamed to `skills/deep-research/`
 
 ### V3.1 New Files
 
