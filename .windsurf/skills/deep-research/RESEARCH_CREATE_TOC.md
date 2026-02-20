@@ -24,7 +24,7 @@ Global workflow for creating Table of Contents in deep research. Used by all res
 7. **Add Related**: List related/competing technologies with URLs
 8. **Write Summary**: 5-15 sentences covering all key facts
 9. **Delete template instructions**: Remove the HTML comment block
-10. **Run verification**: `/verify` > `/critique` > `/reconcile /implement` > `/verify`
+10. **Run quality pipeline**: verify → critique → reconcile → implement → verify
 
 ## File Naming
 
