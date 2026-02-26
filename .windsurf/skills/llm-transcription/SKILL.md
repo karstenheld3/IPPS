@@ -41,7 +41,8 @@ python transcribe-image-to-markdown.py --input-folder ./images --output-folder .
 **Audio Transcription:**
 ```bash
 python transcribe-audio-to-markdown.py --input recording.mp3 --output transcript.md
-python transcribe-audio-to-markdown.py --input meeting.wav --model whisper-1 --output meeting.md
+python transcribe-audio-to-markdown.py --input-dir ./audio --output-dir ./transcripts --workers 8
+python transcribe-audio-to-markdown.py --input meeting.wav --format --output meeting.md
 ```
 
 ## Supported Formats
@@ -54,8 +55,55 @@ python transcribe-audio-to-markdown.py --input meeting.wav --model whisper-1 --o
 - **Optimized prompts** for each transcription type
 - **Structure preservation** - headings, lists, tables maintained
 - **Batch processing** support for multiple files
+- **Parallel workers** - configurable via `--workers` flag
+- **Skip existing** - safe to re-run after interruption
 - **Cost tracking** with token usage reports
 - **Multiple model support** - OpenAI and Anthropic
+- **Real-time progress logging** - `[ worker N ]` format visible in terminal
+
+## Audio Transcription Features
+
+- **Auto-chunking** - Files >24MB automatically split into 10-min chunks via ffmpeg
+- **Parallel workers** - `--workers N` for batch processing
+- **Skip existing** - Skips files with existing `.md` output
+- **LLM formatting** - `--format` cleans up transcript with speaker labels, paragraphs
+- **Language hint** - `--language de` for better accuracy
+
+**Requirements:** `ffmpeg` and `ffprobe` in PATH for chunking large files.
+
+## Terminal Output
+
+**IMPORTANT**: Never suppress script output with `| Out-Null` or `2>&1 | Out-Null`. The scripts provide real-time progress logging that must remain visible:
+
+```
+[ worker 1 ] [ 1 / 22 ] Processing: document_page001.jpg
+[ worker 1 ] [ 1 / 22 ] Transcribing (1 candidates)...
+[ worker 1 ] [ 1 / 22 ] Judging 1 candidates...
+[ worker 1 ] [ 1 / 22 ] Done: document_page001.md (5.00, 6230+4760 tokens, $0.0111, 90.2s)
+```
+
+## Parallel Batching (Large Jobs)
+
+For 50+ folders, split into N batches and run N parallel Cascade terminals:
+
+```powershell
+# 6 batches x 20 workers = 120 total workers
+$folders = Get-ChildItem -Path $baseDir -Filter "*.jpg" -Recurse | 
+    Group-Object DirectoryName | ForEach-Object { $_.Name }
+
+# Split into batches (run each as separate non-blocking Cascade command)
+$batch1 = $folders[0..12]   # Terminal 1: 13 folders
+$batch2 = $folders[13..25]  # Terminal 2: 13 folders
+# ... etc
+
+# Each batch command
+foreach ($f in $batchN) {
+    $out = Join-Path $f "transcripts"
+    & $venv $script --input-folder $f --output-folder $out --workers 20
+}
+```
+
+Script skips existing transcriptions, so safe to re-run after interruption.
 
 ## Model Recommendations for Legal Documents
 
