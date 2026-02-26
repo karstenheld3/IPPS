@@ -25,6 +25,14 @@ Universal formatting and writing conventions for all documents.
 - One empty line between sections
 - Most recent changes at top in changelog sections
 
+## Numbered Lists and Phase Models
+
+- Steps and phases MUST start at 1, not 0
+- Steps and phases MUST use +1 increments (1, 2, 3...), never fractional (1.5, 2.5)
+- When refactoring or inserting steps, renumber the entire sequence
+- BAD: Phase 0, Phase 0.5, Phase 1, Phase 2
+- GOOD: Phase 1, Phase 2, Phase 3, Phase 4
+
 ## Header Block
 
 All documents start with:
