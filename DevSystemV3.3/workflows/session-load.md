@@ -11,8 +11,12 @@ Invoke these skills before proceeding:
 ## Step 1: Identify Session
 
 Check if user provided a session path:
-- If path exists with NOTES.md, PROGRESS.md, PROBLEMS.md: Use that session
-- If no path provided: Ask user which session to resume
+- If path provided with NOTES.md, PROGRESS.md, PROBLEMS.md: Use that session
+- If no path provided: Find most recently modified session folder:
+
+```powershell
+Get-ChildItem -Path "[DEFAULT_SESSIONS_FOLDER]" -Directory -Filter "_*" | Where-Object { Test-Path "$($_.FullName)\NOTES.md" } | Sort-Object { (Get-ChildItem $_.FullName -File | Sort-Object LastWriteTime -Descending | Select-Object -First 1).LastWriteTime } -Descending | Select-Object -First 1 -ExpandProperty FullName
+```
 
 ## Step 2: Load Context
 
