@@ -40,11 +40,25 @@ verify → critique → reconcile → implement → verify
 - Store STRUT in session PROGRESS.md or research folder
 - Run `/verify` on STRUT plan
 
-**Phase 1: Preflight - Assumptions & Source Collection**
-- **Intent extraction** (before asking any question):
-  1. Parse prompt for: subject, scope boundaries, output expectations, decision context
+**Phase 1: Preflight - Decomposition & Source Collection**
+
+**Phase 1a: Prompt Decomposition (MANDATORY)**
+Before any source collection, answer these 6 questions:
+1. Q1 - Goal: What is the user's intent? (1-2 sentences)
+2. Q2 - Scope: NARROW (1 dim), FOCUSED (2-4 dim), or EXPLORATORY (5-9 dim)?
+3. Q3 - Dimensions: Which dimensions apply? (from standard list in SKILL.md + custom)
+4. Q4 - Topics: 3-5 topics per dimension
+5. Q5 - Strategy: MCPI (exhaustive) or MEPI (curated)?
+6. Q6 - Domain: Which domain profile? (or DEFAULT)
+
+Store PromptDecomposition in STRUT plan. Calculate effort estimate based on scope.
+- **Done when**: All 6 questions answered, PromptDecomposition in STRUT, effort estimated
+
+**Phase 1b: Source Collection**
+- **Subject parsing** (refine decomposition details):
+  1. Parse prompt for: subject details, scope boundaries, output expectations
   2. Check conversation history and NOTES.md for prior context
-  3. Document inferred intent as assumptions with [ASSUMED] label
+  3. Document inferred details as assumptions with [ASSUMED] label
   4. Proceed with best interpretation - do NOT ask unless genuinely ambiguous
 - **Assumptions Check**:
   1. Write down "Pre-research assumptions" about [SUBJECT]
@@ -125,6 +139,11 @@ verify → critique → reconcile → implement → verify
 
 **Phase 6: Final Verification and Sync**
 - **Verify against this document** (`RESEARCH_STRATEGY_MCPI.md`) - check all phase requirements met
+- **Dimension Coverage Check** (from Phase 1a decomposition):
+  - Each dimension MUST have: 3+ sources, 1+ topic file, verification labels
+  - Missing dimensions MUST have documented rationale in STRUT
+  - Calculate coverage percentage per dimension
+  - If any dimension has 0 sources, escalate to [CONSULT]
 - Cross-verify all topic files against TOC checklist
 - Sync summaries from topic files back into TOC Summary section
 - Verify all links work
@@ -144,7 +163,7 @@ verify → critique → reconcile → implement → verify
   7. Are findings properly linked in TOC?
 - **Done when**: All strategy requirements met, links work, summaries synced, metadata added
 
-**Phase 6.5: Completeness Verification**
+**Phase 6c: Completeness Verification**
 - Re-read official documentation structure (main navigation/sidebar)
 - Compare against TOC - identify any missed topics
 - For each gap:
