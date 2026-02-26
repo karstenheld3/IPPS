@@ -1,8 +1,8 @@
 # Curated Research Strategy (MEPI Approach)
 
-Research **[SUBJECT]** using the MEPI (Most Executable Point of Information) approach - curated 2-3 best options per topic.
+Research **[SUBJECT]** using the MEPI (Most Executable Point of Information) approach - curated best options per topic.
 
-**Before starting**: Create `STRUT_[TOPIC].md` using `/write-strut` with Time Log section and quality pipeline steps.
+This strategy follows the global Phase 1-4 model defined in SKILL.md.
 
 **When to use MEPI instead of MCPI:**
 - Reversible decisions (can change later)
@@ -10,83 +10,153 @@ Research **[SUBJECT]** using the MEPI (Most Executable Point of Information) app
 - Action-oriented (user will do something, not archive)
 - Low-to-medium stakes (not legal/financial/medical critical)
 
-**Domain identification** (during Phase 0 or Phase 1a):
-1. Determine research domain from prompt context
-2. Read corresponding `DOMAIN_*.md` profile (if available, otherwise use DOMAIN_DEFAULT.md)
-3. Incorporate domain-specific rules into STRUT plan
+## Phase 1: Preflight
 
-## Phases
+Decompose prompt, document assumptions, collect sources, verify/correct, create STRUT, run first VCRIV.
 
-**Phase 0: STRUT Plan Creation (MANDATORY)**
-- Same as MCPI - create STRUT before any research
-- Include quality pipeline steps and time log
+### Step 1: Create STRUT and Decompose Prompt
+
+- Create `STRUT_[TOPIC].md` using `/write-strut` workflow
+- STRUT defines: phases, objectives, steps, deliverables, transitions
+- STRUT enforces 3 VCRIV checkpoints as deliverables
+- STRUT MUST include quality pipeline steps and time log
+- **Domain identification**:
+  1. Determine research domain from prompt context
+  2. Read corresponding `DOMAIN_*.md` profile (if available)
+  3. Incorporate domain-specific rules
+  4. If no matching profile, use DOMAIN_DEFAULT.md and document in STRUT
+- STRUT MUST include the active domain profile and its rules
+- Answer 6 decomposition questions per SKILL.md, store PromptDecomposition in STRUT
+- At Q5: Confirm MEPI. Switch to MCPI if high-stakes discovered.
 - Run `/verify` on STRUT plan
+- **Done when**: STRUT created, all 6 questions answered, PromptDecomposition stored, effort estimated
 
-**Phase 1: Preflight - Decomposition & Source Collection**
+### Step 2: Document Assumptions
 
-**Phase 1a: Prompt Decomposition (MANDATORY)**
-Same as MCPI - answer 6 questions:
-1. Q1 - Goal: What is the user's intent?
-2. Q2 - Scope: NARROW, FOCUSED, or EXPLORATORY?
-3. Q3 - Dimensions: Which apply?
-4. Q4 - Topics: 3-5 per dimension
-5. Q5 - Strategy: Confirm MEPI (or switch to MCPI if high-stakes)
-6. Q6 - Domain: Which profile?
+- Write down "Pre-research assumptions" about [SUBJECT]
+- Parse prompt for: subject details, scope boundaries, output expectations
+- Check conversation history and NOTES.md for prior context
+- Document inferred details with [ASSUMED] label
+- Proceed with best interpretation - do NOT ask unless genuinely ambiguous
 
-**Phase 1b: Source Collection (Curated)**
-- Collect 5-10 sources per dimension (vs MCPI 15+)
-- Focus on top-tier sources first
+### Step 3: Collect Sources (Curated)
+
+- **Document version scope**: Explicitly state the [SUBJECT] version (e.g., `v2.1.0`, `API v3`). If not applicable, use date: `YYYY-MM-DD`
+- Create `__[TOPIC]_SOURCES.md`
+- Collect **5-10 sources per dimension** (focus on top-tier sources first)
 - Skip exhaustive community source collection
-- **Done when**: 5-10 quality sources per dimension collected
+- Use source tiers from active domain profile. Default: official documentation > vendor content > community/analyst sources.
+- Assign source IDs: `[TOPIC]-IN01-SC-[SOURCE]-[DOCNAME]`
+- Group sources by category (domain-specific)
+- Process all PDF sources through transcription pipeline
+- **Done when**: 5-10 quality sources per dimension, all with IDs, PDFs transcribed
 
-**Phase 2: TOC Creation**
-- Same as MCPI - create `__[TOPIC]_TOC.md`
-- Summary can be shorter (5-10 sentences vs MCPI 5-15)
-- **Quality gate**: Run quality pipeline
+### Step 4: Verify and Correct Assumptions
 
-**Phase 3: Template Creation**
-- Same structure as MCPI
-- **Quality gate**: Run quality pipeline
+- Verify assumptions against primary sources
+- If >30% wrong or outdated, re-run with corrected understanding (strikethrough originals). **Max 2 re-runs**, then proceed.
+- Document accuracy in `__[TOPIC]_SOURCES.md` header (e.g., "Preflight accuracy: 7/10 verified")
+- **Rubric**: CORRECT = matches exactly. PARTIAL = spirit correct, details differ (counts as wrong). WRONG = contradicted.
 
-**Phase 4: TASKS Plan**
-- Same as MCPI - partition into discrete tasks
-- Effort estimates typically lower (2-4 hours total vs MCPI 4-16)
+### Step 5: Run First VCRIV
 
-**Phase 5: File-by-File Research**
-- Focus on top 2-3 options per topic (vs MCPI exhaustive)
-- Include clear recommendation with rationale
-- **Quality gate**: Run quality pipeline per VCRIV granularity rules
-- **Done when**: All tasks completed with 2-3 curated recommendations each
+Run quality pipeline on Preflight deliverables (SOURCES, STRUT, PromptDecomposition).
+- **Done when**: Phase 1 deliverables verified, critique addressed
 
-**Phase 6: Final Verification and Sync**
-- Same as MCPI including dimension coverage check
-- **Quality gate**: Run quality pipeline on complete set
+## Phase 2: Planning
+
+Create TOC, topic template, TASKS plan, run second VCRIV.
+
+### Step 1: TOC Creation
+
+- Follow [RESEARCH_CREATE_TOC.md](RESEARCH_CREATE_TOC.md) workflow
+- Use [RESEARCH_TOC_TEMPLATE.md](RESEARCH_TOC_TEMPLATE.md) as base
+- Create `__[TOPIC]_TOC.md` with detailed structure
+- Summary can be shorter than MCPI (5-10 sentences)
+- **Done when**: TOC covers major topics from sources, all links resolve
+
+### Step 2: Template Creation
+
+- Create `__TEMPLATE_[TOPIC]_TOPIC.md`
+- Template structure (base + domain-specific additions from active profile):
+  - Header block (Doc ID, Goal, Dependencies, **Version/Date scope**)
+  - Summary (5-10 sentences)
+  - Key Facts with [VERIFIED] labels
+  - Use Cases, Quick Reference
+  - Main Sections (follow TOC structure)
+  - **Limitations and Known Issues**, **Gotchas and Quirks**
+  - Sources section, Document History
+- **Done when**: Template has all required sections
+
+### Step 3: TASKS Plan
+
+- Create `TASKS_[TOPIC]_RESEARCH.md` using `/write-tasks-plan` workflow
+- Partition TOC topics into discrete tasks
+- Each task: Status, Estimated effort, Sources, Done-when criteria
+- Effort estimates typically 2-4 hours total
+- **Done when**: All TOC topics have corresponding tasks
+
+### Step 4: Run Second VCRIV
+
+Run quality pipeline on Planning deliverables (TOC, template, TASKS).
+- **Done when**: Phase 2 deliverables verified, critique addressed
+
+## Phase 3: Topic-by-Topic, File-by-File Research
+
+Adhere to TASKS plan and STRUT. Run VCRIV per granularity rules.
+
+### Execution
+
+- For each topic file from TASKS:
+  1. Research using official source URLs first
+  2. Cross-reference with community sources for limitations, quirks
+  3. Create `_INFO_[TOPIC]-IN[XX]_[SUBTOPIC].md` using template
+  4. **Focus on curated best options** - recommend, don't just list
+  5. Include **clear recommendation with rationale** for each topic
+  6. **Mandatory inline citations**: `[VERIFICATION_LABEL] (SOURCE_ID | URL or filename)`
+  7. Update TASKS progress and TOC status
+- All claims must have verification labels
+
+### VCRIV per Granularity Rules
+
+Run quality pipeline as defined in STRUT (scope-based from SKILL.md):
+- NARROW: VCRIV per topic file
+- FOCUSED/EXPLORATORY: VCRIV per dimension
+- **Done when**: All tasks completed with curated recommendations each
+
+## Phase 4: Final Verification and Sync
+
+### Dimension Coverage Check
+
+- Each dimension MUST have: sources, topic file(s), verification labels
+- Missing dimensions MUST have documented rationale in STRUT
+- If any dimension has 0 sources, escalate to [CONSULT]
+
+### Sync and Metadata
+
+- Cross-verify topic files against TOC checklist
+- Sync summaries back into TOC
+- Verify all links work
+- **Add Research stats to TOC header block**: `**Research stats**: Xm net | Y docs | Z sources`
+
+### Run Final VCRIV
+
+Run quality pipeline on complete research set.
 - **Done when**: All requirements met, recommendations actionable
 
-## Key Differences from MCPI
+## Global Rules
 
-- **Sources per dimension**: MEPI 5-10, MCPI 15-30
-- **Output per topic**: MEPI 2-3 curated options, MCPI exhaustive coverage
-- **Effort estimate**: MEPI 2-4 hours, MCPI 4-16 hours
-- **VCRIV cycles**: MEPI single minimum, MCPI multi-cycle
-- **Community sources**: MEPI limited, MCPI exhaustive
+**Termination criteria**: Max 2 cycles per quality checkpoint. Escalate via [CONSULT] if issues persist.
 
-## Quality Pipeline
+**Autonomous operation**: After Phase 1, NO user interaction until delivery. [CONSULT] is the only exception.
 
-Same as MCPI: `verify → critique → reconcile → implement → verify`
-
-**VCRIV Granularity (Scope-Based):**
-- NARROW (1 dimension): VCRIV per topic file
-- FOCUSED/EXPLORATORY (2+ dimensions): VCRIV per dimension
-- Final VCRIV on synthesis document
-
-**Termination criteria**: Max 2 cycles per checkpoint. Escalate via [CONSULT] if issues persist.
+**Rollback**: If any phase reveals fundamental error in earlier phase, document in PROBLEMS.md and consult user.
 
 ## Output Format
 
 MEPI outputs an INFO document with:
 1. **Research Question** - What we investigated
-2. **Key Findings** - 2-3 curated recommendations with rationale
+2. **Key Findings** - Curated recommendations with rationale
 3. **Comparison** - Brief comparison of options (pros/cons)
 4. **Recommendation** - Clear "do this" guidance
 5. **Limitations** - What we didn't cover, caveats
@@ -95,6 +165,6 @@ MEPI outputs an INFO document with:
 ## Anti-patterns to Avoid
 
 - Treating MEPI as "skip quality" - VCRIV still runs
-- Missing decomposition phase - still mandatory
+- Missing decomposition - Phase 1 is still mandatory
 - No recommendation - MEPI must recommend, not just list
 - Shallow research - curated != minimal effort

@@ -11,11 +11,6 @@ Invoke before proceeding:
 
 ## Execution
 
-1. Read `@deep-research` SKILL.md
-2. Determine research mode from prompt:
-   - **MEPI** (default) - Curated recommendations, action-oriented
-   - **MCPI** (exception) - Exhaustive documentation, high-stakes
-3. Identify research domain and read corresponding `DOMAIN_*.md` profile
-4. Create STRUT plan (mandatory for all research)
-5. Execute strategy per skill instructions
-6. Run quality pipeline at checkpoints
+1. Read `@deep-research` SKILL.md for core principles and phase model
+2. Read the appropriate strategy file (MCPI or MEPI) based on user intent
+3. Execute Phases 1-4 per strategy file instructions

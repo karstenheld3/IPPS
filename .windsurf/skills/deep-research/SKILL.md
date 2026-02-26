@@ -84,7 +84,7 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 - **Inline citations** on critical conclusions: `[LABEL] (SOURCE_ID | URL or filename)`
 - **Identify domain** during Preflight, read corresponding DOMAIN_*.md profile
 - **Distinguish** facts from opinions from assumptions
-- **Autonomous after Preflight** - no user interaction until delivery (except [CONSULT])
+- **Autonomous after Phase 1** - no user interaction until delivery (except [CONSULT])
 
 ## Strategy Selection
 
@@ -129,10 +129,11 @@ verify → critique → reconcile → implement → verify
 - **I** - Implement: Apply findings, delete `*_REVIEW.md` (`/implement` workflow)
 - **V** - Verify (final): Confirm corrections complete
 
-**Three mandatory checkpoints:**
-1. TOC and template documents (before topic research begins)
-2. Each topic research output (before moving to next topic)
-3. Complete research set ex-post (after all topics complete)
+**Four mandatory checkpoints:**
+1. Preflight deliverables (STRUT, SOURCES, PromptDecomposition)
+2. Planning deliverables (TOC, template, TASKS)
+3. Each research output (per VCRIV granularity rules)
+4. Complete research set ex-post (after all topics complete)
 
 **Granularity** (scope-based):
 - NARROW: VCRIV per topic file
@@ -164,11 +165,13 @@ Read one profile per session based on Q6:
 
 INFO document with:
 1. Research Question
-2. Key Findings (2-3 points for MEPI, exhaustive for MCPI)
+2. Key Findings (curated for MEPI, exhaustive for MCPI)
 3. Detailed Analysis
 4. Limitations and Known Issues
 5. Sources (with verification labels)
 6. Recommendations
+
+MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison and Recommendation sections.
 
 ## Planning Structure
 

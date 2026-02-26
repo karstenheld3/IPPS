@@ -6,7 +6,7 @@ Generic research domain profile. Use when no specific domain profile matches (SO
 
 - Research topic doesn't fit existing domain profiles
 - Multi-domain research spanning several categories
-- Personal/lifestyle topics (recreation, vacation, health, pychology, relocation, life decisions)
+- Personal/lifestyle topics (recreation, vacation, health, psychology, relocation, life decisions)
 - General knowledge synthesis
 - Open-ended exploratory research
 
