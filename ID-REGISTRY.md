@@ -151,6 +151,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **TRNGFX** - Transcription graphics/ASCII art optimization
 - **LMWS** - LM Studio + Windsurf integration research
 - **TOOLS** - .tools folder relocation and path updates
+- **GCRU** - Global Coding Rules (universal coding conventions)
 
 ## Document History
 
