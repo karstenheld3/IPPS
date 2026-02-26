@@ -82,7 +82,7 @@ Systematic research patterns for in-depth investigation using the MCPI (Most Com
 ### MEPI vs MCPI
 
 **MEPI** (Most Executable Point of Information) - Default
-- Present 2-3 curated options
+- Present a few curated options
 - Filter and recommend
 - Use for: reversible decisions, time-constrained, action-oriented
 
@@ -323,7 +323,7 @@ Agent reads this config once before first source processing and uses values thro
 Deep research outputs an INFO document. Key sections:
 
 1. **Research Question** - What we're investigating
-2. **Key Findings** - MEPI-style summary (2-3 main points) or MCPI exhaustive list
+2. **Key Findings** - MEPI-style summary (a few main points) or MCPI exhaustive list
 3. **Detailed Analysis** - Full investigation results
 4. **Limitations and Known Issues** - From community sources
 5. **Sources** - All references with quality indicators

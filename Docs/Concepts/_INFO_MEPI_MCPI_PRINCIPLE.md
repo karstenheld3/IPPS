@@ -9,7 +9,7 @@
 **Origin:** Developed by Karsten Held 2003 while working for a Fintech startup in Munich 
 
 **Cognitive Science:**
-- MEPI (Most Executable Point of Information) presents 2-3 options aligned with implicit intentions, enabling cheap decisions [VERIFIED]
+- MEPI (Most Executable Point of Information) presents a few options aligned with implicit intentions, enabling cheap decisions [VERIFIED]
 - MCPI (Most Complete Point of Information) presents exhaustive options, forcing costly decision models [VERIFIED]
 - More options correlate with less satisfaction, more regret, and decision paralysis (Schwartz, 2002) [VERIFIED]
 - Maximizers report lower happiness, higher depression, more regret than satisficers (Schwartz et al., 2002) [VERIFIED]
@@ -39,14 +39,14 @@
 
 **MEPI** (Most Executable Point of Information) and **MCPI** (Most Complete Point of Information) are two research strategies with fundamentally different goals:
 
-- **MEPI**: Present 2-3 options that satisfy the decision-maker's implicit intentions. Optimize for action.
+- **MEPI**: Present a few options that satisfy the decision-maker's implicit intentions. Optimize for action.
 - **MCPI**: Present exhaustive options across all parameters. Optimize for completeness.
 
 The counterintuitive insight: **completeness is not always valuable**. In fact, it often produces worse outcomes than carefully curated incompleteness.
 
 ### Agentic Research Implication
 
-For AI agents doing research, effort, tokens, and compute are better spent on 2-3 well-researched options than on 10+ superficially researched options:
+For AI agents doing research, effort, tokens, and compute are better spent on a few well-researched options than on 10+ superficially researched options:
 - **Deep beats wide**: One thoroughly verified option with sources, edge cases, and caveats is worth more than five options with surface-level descriptions
 - **Verification is expensive**: Each additional option multiplies verification work
 - **Quality signals expertise**: Well-researched recommendations build trust; superficial lists signal uncertainty
@@ -102,7 +102,7 @@ Daniel Kahneman's "Thinking, Fast and Slow" (2011) describes two cognitive syste
 - **System 1**: Fast, automatic, intuitive. Low cognitive cost. Pattern-matching.
 - **System 2**: Slow, deliberate, analytical. High cognitive cost. Step-by-step reasoning.
 
-**MEPI leverages System 1**: With 2-3 well-curated options, the decision-maker can intuitively sense which option "feels right" based on their values and situation.
+**MEPI leverages System 1**: With a few well-curated options, the decision-maker can intuitively sense which option "feels right" based on their values and situation.
 
 **MCPI forces System 2**: With 20 options, intuition fails. The decision-maker must construct an explicit evaluation framework, assign weights, calculate scores. This is exhausting and error-prone.
 
