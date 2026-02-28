@@ -30,12 +30,15 @@ IPPS is built on four integrated specifications that enable autonomous agent ope
 
 - **[TRACTFUL - Document Framework](Docs/Specs/SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md)** - Document types (INFO, SPEC, IMPL, TEST, TASKS) with unique IDs and traceability. Defines how documents reference each other and track progress.
 
+- **[MNF - MUST-NOT-FORGET Technique](Docs/Concepts/_INFO_MNF_TECHNIQUE.md)** - Checklist technique preventing critical oversights. Workflows and documents declare MNF items; agent verifies compliance before completion.
+
 **How they work together:**
 ```
 AGEN provides the language    → Verbs, placeholders, outcomes (-OK, -FAIL, -SKIP)
 EDIRD provides the phases     → EXPLORE → DESIGN → IMPLEMENT → REFINE → DELIVER
 STRUT provides the notation   → Tree structure for plans with progress tracking
 TRACTFUL provides the docs    → INFO, SPEC, IMPL, TEST, TASKS with unique IDs
+MNF provides the safety net   → Critical items that must be verified before completion
 ```
 
 **Design principle:** Each spec has a single responsibility. AGEN defines vocabulary. EDIRD defines phases and gates. STRUT defines notation. TRACTFUL defines documents. Workflows orchestrate them without hardcoding phase knowledge.
@@ -242,7 +245,7 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - [**MEPI**](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Executable Point of Information. Present 2-3 curated options aligned with implicit intentions.
 - [**MCPI**](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Complete Point of Information. Present exhaustive options when thoroughness is explicitly required
 - **SOCAS** - Signs Of Confusion And Sloppiness. 10 criteria for detecting agent degradation
-- **MNF** - Must Not Forget. Technique for critical item tracking during task execution
+- [**MNF**](Docs/Concepts/_INFO_MNF_TECHNIQUE.md) - Must Not Forget. Technique for critical item tracking during task execution
 - **ASANAPAP** - As Short As Necessary, As Precise As Possible. Conciseness principle for workflows and documents
 
 **Full registry**: [ID-REGISTRY.md](ID-REGISTRY.md) - All acronyms, TOPICs, states, and named concepts
