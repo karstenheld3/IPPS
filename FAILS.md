@@ -1,5 +1,41 @@
 # Failure Log
 
+## 2026-02-28 - MNF Compliance Implementation
+
+### [MEDIUM] `MNF-FL-001` Added incorrect MNF item to session-finalize.md
+
+- **When**: 2026-02-28 13:15 UTC+01:00
+- **Where**: `DevSystemV3.3/workflows/session-finalize.md:15`
+- **What**: Added "Run `/session-archive` after finalization complete" to MNF section, but workflow explicitly states "Prepares for archiving but does NOT archive" (line 18) and only suggests user run archive (line 64).
+- **Why it went wrong**:
+  - IMPL plan IS-08 content was drafted without re-reading the actual workflow
+  - Assumed the workflow calls `/session-archive` based on workflow name
+  - Did not verify MNF content against actual workflow instructions
+- **Evidence**: Line 18: "Prepares for archiving but does NOT archive"
+
+**Prevention rules**:
+1. Before adding MNF items, re-read the target workflow completely
+2. MNF items must match ACTUAL workflow instructions, not assumptions
+3. Verify each MNF item against the workflow text before adding
+
+## 2026-02-28 - Deep Research Skill Improvement
+
+### [MEDIUM] `GLOB-FL-018` Implemented instead of proposing when user said "propose"
+
+- **When**: 2026-02-28 12:40 UTC+01:00
+- **Where**: Conversation about improving deep-research skill
+- **What**: User said "propose 2 modifications" but agent started executing `multi_edit` tool to implement changes immediately
+- **Why it went wrong**:
+  - Agent defaulted to action mode despite explicit "propose" verb
+  - Did not distinguish between "propose" (output plan) vs "implement" (execute changes)
+  - Existing rules say "implement rather than suggest" but don't handle explicit proposal requests
+- **Evidence**: User correction: "hey I said propose, not implement"
+
+**Prevention rules**:
+1. When user uses verbs like "propose", "suggest", "draft", "outline" - OUTPUT TEXT, do not execute tools
+2. Distinguish: "propose" = describe what you would do; "implement" = do it
+3. Only use edit tools when user says "do", "make", "implement", "fix", "change", "update"
+
 ## 2026-02-07 - Model Pricing Update Workflow
 
 ### [MEDIUM] `LLMEV-FL-017` Workflow missing stitching step - individual page transcriptions instead of combined markdowns
