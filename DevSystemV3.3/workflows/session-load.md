@@ -8,6 +8,11 @@ auto_execution_mode: 1
 Invoke these skills before proceeding:
 - @session-management for session file structure
 
+## MUST-NOT-FORGET
+
+- Run `/prime` workflow BEFORE reading session documents
+- `/prime` loads FAILS.md, ID-REGISTRY.md, !NOTES.md - critical workspace context
+
 ## Step 1: Identify Session
 
 Check if user provided a session path:
@@ -20,7 +25,7 @@ Get-ChildItem -Path "[DEFAULT_SESSIONS_FOLDER]" -Directory -Filter "_*" | Where-
 
 ## Step 2: Load Context
 
-Execute the /prime workflow but keep the answer for later.
+Run `/prime` workflow now.
 
 ## Step 3: Read Session Documents
 
@@ -38,3 +43,7 @@ Example: "Read 5 .md files (2 priority), 12 code files (10 .py, 2 .html). Mode: 
 Then:
 - Summarize findings and propose next steps.
 - Answer with max 20 short lines of text.
+
+## Step 5: Verify MUST-NOT-FORGET
+
+Review each MNF item above and confirm compliance.

@@ -161,18 +161,6 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Verify AGEN verb format: `[VERB](params)`
 - Read @coding-conventions `WORKFLOW-RULES.md` and verify against rules
 
-## Failure Log (FAILS.md)
-
-Verify FAILS.md entries for accuracy and effectiveness:
-
-- Verify entry follows FAILS_TEMPLATE.md structure (ID, When, Where, What, Why, Evidence)
-- Verify root cause correctly identified (not symptoms)
-- No fabrications: RE-READ any cited files/projects to verify claims
-- Evidence is real and verifiable (not invented). If citing conversation, quote accurately.
-- Prevention rules address actual root cause, are practical and enforceable
-- Fix assessment: suggested fix addresses root cause? Less invasive or more effective alternatives?
-- If issues found: document inaccuracies, propose corrections, revise entry
-
 ## Session Tracking (NOTES, PROBLEMS, PROGRESS)
 
 **Verify NOTES.md:**
@@ -197,32 +185,35 @@ Verify FAILS.md entries for accuracy and effectiveness:
 - **Sync check**: Which findings should move to project-level docs?
 
 **Session Close Sync Checklist:**
-- Resolved problems with project impact → sync to project PROBLEMS.md
-- Reusable patterns/decisions → sync to project NOTES.md
-- Discovered bugs in unrelated code → create issues or sync to PROBLEMS.md
-- New agent instructions → sync to project rules or NOTES.md
+- [ ] Resolved problems with project impact → sync to project PROBLEMS.md
+- [ ] Reusable patterns/decisions → sync to project NOTES.md
+- [ ] Discovered bugs in unrelated code → create issues or sync to PROBLEMS.md
+- [ ] New agent instructions → sync to project rules or NOTES.md
 
 ## STRUT Plans (Planning Phase)
 
 Verify when STRUT plan is created or updated:
 
-- Every Objective links to at least one Deliverable (`← P1-Dx`)
-- Unlinked Objectives flagged - require [ACTOR] confirmation at transition
-- All Deliverables have clear completion criteria
-- Transitions reference Deliverables (not Objectives)
-- Steps use valid AGEN verbs with `[VERB](params)` format
-- Problem/goal addressed by Objectives?
-- Strategy includes approach summary (AWT estimate optional)
+- [ ] Every Objective links to at least one Deliverable (`← P1-Dx`)
+- [ ] Unlinked Objectives flagged - require [ACTOR] confirmation at transition
+- [ ] All Deliverables have clear completion criteria
+- [ ] Transitions reference Deliverables (not Objectives)
+- [ ] Steps use valid AGEN verbs with `[VERB](params)` format
+- [ ] Problem/goal addressed by Objectives?
+- [ ] Strategy includes approach summary (AWT estimate optional)
 
 ## STRUT Plans (Transition Phase)
 
 Verify before phase transition (when evaluating Transitions):
 
-- All Deliverables in Transition condition checked?
-- For each Objective: ALL linked Deliverables checked?
-- Deliverable evidence supports Objective claim?
-- Unlinked Objectives: [ACTOR] confirmation obtained?
-- Transition target valid (`[PHASE-NAME]`, `[CONSULT]`, or `[END]`)?
+- [ ] All Deliverables in Transition condition are checked?
+- [ ] For each Objective: are ALL linked Deliverables checked?
+- [ ] Deliverable evidence supports Objective claim?
+- [ ] Unlinked Objectives: [ACTOR] confirmation obtained?
+- [ ] Transition target is valid (`[PHASE-NAME]`, `[CONSULT]`, or `[END]`)?
 
-**Objective Verification Rule**: Objective verified when ALL linked Deliverables checked. Unlinked Objectives require explicit [ACTOR] confirmation.
+**Objective Verification Rule:**
+- Objective is verified when ALL linked Deliverables are checked
+- Check Objective checkbox only after confirming linked Deliverables
+- If Objective has no links (`←`), require explicit [ACTOR] confirmation
 

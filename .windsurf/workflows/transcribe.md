@@ -13,6 +13,11 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 - @ms-playwright-mcp for web page screenshots
 - @llm-transcription (optional) for advanced LLM-based transcription
 
+## MUST-NOT-FORGET
+
+- Run `/verify` after transcription complete
+- Keep source images for verification
+
 ## Step 1: Detect Transcription Mode
 
 Check if advanced LLM transcription is available:
@@ -117,10 +122,8 @@ For each chunk (pages 1-4, 5-8, 9-12, etc.):
 
 **Mode A: Advanced LLM Transcription** (if skill + keys detected in Step 1)
 
-**IMPORTANT**: Never suppress output with `| Out-Null` or `2>&1 | Out-Null`. The script provides real-time progress logging (`[ worker N ]` format) that must remain visible in terminal.
-
 ```powershell
-$venv = "[WORKSPACE_FOLDER]\..\.tools\llm-eval-venv\Scripts\python.exe"
+$venv = "../.tools/llm-venv/Scripts/python.exe"
 $skill = ".windsurf/skills/llm-transcription"
 
 # Single file transcription
@@ -138,19 +141,6 @@ $skill = ".windsurf/skills/llm-transcription"
     --keys-file "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt" `
     --model gpt-5-mini `
     --workers 12
-
-# Parallel batching for large jobs (50+ folders)
-# Split into N batches, run N parallel Cascade terminals
-$folders = Get-ChildItem -Path $baseDir -Filter "*.jpg" -Recurse | 
-    Group-Object DirectoryName | ForEach-Object { $_.Name }
-$batch1 = $folders[0..12]   # Terminal 1: 13 folders, 20 workers
-$batch2 = $folders[13..25]  # Terminal 2: 13 folders, 20 workers
-# ... 6 batches x 20 workers = 120 total
-
-foreach ($f in $batchN) {
-    $out = Join-Path $f "transcripts"
-    & $venv $script --input-folder $f --output-folder $out --workers 20
-}
 ```
 
 **Mode B: Built-in Transcription** (fallback - no skill or keys)

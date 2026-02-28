@@ -11,6 +11,11 @@ Record failures to prevent repetition. Can be triggered explicitly or run analys
 
 - @write-documents for FAILS_TEMPLATE.md structure
 
+## MUST-NOT-FORGET
+
+- Suggest `/learn` after problem is resolved
+- Session entries sync to workspace on `/session-finalize`
+
 ## Trigger
 
 - [ACTOR] reports a failure: `/fail [description]`
@@ -115,25 +120,11 @@ Add entry to FAILS.md:
 
 4. Include code example if applicable (before/after)
 
-## Step 8: Verify Entry
-
-**MANDATORY**: Run `/verify` on the FAILS.md entry just created.
-
-The verify workflow will check:
-- Template structure followed correctly
-- Root cause analysis is accurate (no fabrications)
-- Evidence is real and verifiable
-- Prevention rules address the actual root cause
-- Fix suggestions are practical and effective
-
-If verification identifies issues, revise the entry before reporting.
-
-## Step 9: Report
+## Step 8: Report
 
 Confirm to [ACTOR]:
 - Created `[TOPIC]-FL-NNN` in FAILS.md
 - Brief summary of what was recorded
-- Verification status (passed/revised)
 - Suggest `/learn` after problem is resolved for deeper analysis
 
 ## Quality Gate
@@ -143,4 +134,3 @@ Before completing:
 - [ ] Evidence is concrete (not vague)
 - [ ] Location is specific (file:line when applicable)
 - [ ] Suggested fix is actionable
-- [ ] `/verify` passed on FAILS.md entry
