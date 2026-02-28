@@ -162,7 +162,11 @@ For each repo, report:
 - Files deleted (deprecated)
 - Errors encountered
 
-### 3. Summary
+### 3. Verify MNF Compliance
+
+Review each MNF item above and confirm compliance.
+
+### 4. Summary
 
 Provide final summary:
 - Total repos processed
