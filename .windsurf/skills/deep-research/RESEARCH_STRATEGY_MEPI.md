@@ -4,11 +4,10 @@ Research **[SUBJECT]** using the MEPI (Most Executable Point of Information) app
 
 This strategy follows the global Phase 1-4 model defined in SKILL.md.
 
-**When to use MEPI instead of MCPI:**
-- Reversible decisions (can change later)
-- Time-constrained (user needs answer quickly)
-- Action-oriented (user will do something, not archive)
-- Low-to-medium stakes (not legal/financial/medical critical)
+**When MEPI applies:**
+- User intention is "do, achieve, reach"
+- Goal-directed action: "help me accomplish X"
+- Example: "how to register with XYZ" = give me proven steps to reach the goal
 
 ## Phase 1: Preflight
 

@@ -142,10 +142,12 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 ## Project Topics
 
 - **AMSW** - Auto Model SWitcher (Windsurf model switching automation)
+- **AXCEL** - Agent Excel Skill (Excel automation from Cascade agent)
 - **GLOB** - Global/project-wide items
 - **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
 - **LLMTR** - LLM Transcription Skill (image-to-markdown, audio-to-markdown)
 - **MCPS** - MCP server integrations
+- **OCLAW** - OpenClaw exploration (remote agent interaction via WhatsApp/Cascade)
 - **MEPI** - MEPI/MCPI research depth principle
 - **SDDEV** - Spec-Driven Development (research topic)
 - **TRNGFX** - Transcription graphics/ASCII art optimization

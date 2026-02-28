@@ -4,6 +4,11 @@ Research **[SUBJECT]** exhaustively using the MCPI (Most Complete Point of Infor
 
 This strategy follows the global Phase 1-4 model defined in SKILL.md.
 
+**When MCPI applies:**
+- User intention is "collect, explore, understand"
+- Open-ended knowledge gathering: "tell me everything about X"
+- Example: "german emigration tips" = collect all tips you can find
+
 ## Phase 1: Preflight
 
 Decompose prompt, document assumptions, collect sources, verify/correct, create STRUT, run first VCRIV.
