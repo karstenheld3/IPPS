@@ -1,0 +1,807 @@
+# INFO: How OpenClaw Works
+
+**Doc ID**: OCLAW-IN03
+**Goal**: Deep analysis of OpenClaw's architecture, default prompts, workspace files, and way of working
+**Timeline**: Created 2026-02-28, Updated 6 times (2026-02-28)
+
+## Summary
+
+**Architecture** [VERIFIED]:
+- Gateway process runs on port 18789, manages agent runtime and channels
+- Agent uses workspace folder for all file operations and context injection
+- Bootstrap files (AGENTS.md, SOUL.md, USER.md, etc.) injected into system prompt each session
+- Tools provided via typed API (exec, browser, web_fetch, web_search, etc.)
+
+**Default Behavior** [VERIFIED]:
+- Agent reads SOUL.md, USER.md, and memory files at session start (mandatory)
+- Memory system: daily logs (`memory/YYYY-MM-DD.md`) + curated long-term (`MEMORY.md`)
+- Safety: no destructive commands without asking, prefer `trash` over `rm`
+- Heartbeat system for proactive background tasks
+
+**Key Design Philosophy** [VERIFIED]:
+- "You're not a chatbot. You're becoming someone." - agent develops personality
+- Agent maintains continuity through files, not context window
+- Agent should be resourceful before asking questions
+- Agent has opinions and preferences
+
+## Table of Contents
+
+1. [Folder Structure](#1-folder-structure)
+2. [System Prompt Structure](#2-system-prompt-structure)
+3. [Workspace Bootstrap Files](#3-workspace-bootstrap-files)
+4. [Tool Inventory](#4-tool-inventory)
+5. [Memory System](#5-memory-system)
+6. [Heartbeat and Proactive Behavior](#6-heartbeat-and-proactive-behavior)
+7. [Safety and Boundaries](#7-safety-and-boundaries)
+8. [Comparison with Windsurf Cascade](#8-comparison-with-windsurf-cascade)
+9. [Sources](#9-sources)
+
+## 1. Folder Structure
+
+### Config Folder (`~/.openclaw/`)
+
+```
+C:\Users\User\.openclaw\
+├── agents/           # Per-agent session data
+├── canvas/           # Canvas UI files
+├── credentials/      # Encrypted credentials
+├── cron/             # Cron job definitions
+├── devices/          # Device pairing data
+├── identity/         # Agent identity tokens
+├── logs/             # Gateway logs
+├── gateway.cmd       # Windows gateway launcher
+├── openclaw.json     # Main configuration
+└── update-check.json # Update tracking
+```
+
+### Workspace Folder (`agents.defaults.workspace`)
+
+Your install: `e:\Dev\openclaw\workspace`
+
+```
+e:\Dev\openclaw\workspace\
+├── .git/             # Git tracking (recommended)
+├── .openclaw/        # Workspace-specific config
+├── AGENTS.md         # Operating instructions (7.8 KB)
+├── BOOTSTRAP.md      # First-run ritual (1.5 KB)
+├── HEARTBEAT.md      # Heartbeat checklist (168 B)
+├── IDENTITY.md       # Agent name/vibe/emoji (636 B)
+├── SOUL.md           # Persona and boundaries (1.7 KB)
+├── TOOLS.md          # Local tool notes (860 B)
+├── USER.md           # Human profile (477 B)
+├── memory/           # Daily memory logs
+│   └── YYYY-MM-DD.md # One file per day
+├── MEMORY.md         # Curated long-term memory
+└── skills/           # Workspace-specific skills
+```
+
+## 2. System Prompt Structure
+
+OpenClaw assembles the system prompt dynamically. Sections in order:
+
+1. **Tooling** - Current tool list with short descriptions
+2. **Safety** - Guardrail reminder to avoid power-seeking behavior
+3. **Skills** - How to load skill instructions on demand
+4. **OpenClaw Self-Update** - How to run `config.apply` and `update.run`
+5. **Workspace** - Working directory path
+6. **Documentation** - Local path to OpenClaw docs
+7. **Workspace Files (injected)** - Bootstrap file contents
+8. **Sandbox** - Sandboxed runtime info (when enabled)
+9. **Current Date & Time** - User-local time, timezone, format
+10. **Reply Tags** - Reply tag syntax for supported providers
+11. **Heartbeats** - Heartbeat prompt and ack behavior
+12. **Runtime** - Host, OS, node, model, repo root, thinking level
+
+### Prompt Modes
+
+- **full** (default): All sections included
+- **minimal**: For sub-agents; omits Skills, Memory Recall, Self-Update, etc.
+- **none**: Only base identity line
+
+## 3. Workspace Bootstrap Files
+
+Files injected into system prompt at session start:
+
+### AGENTS.md - Operating Instructions
+
+**Purpose**: Defines how agent should behave, use memory, and interact
+
+**Key rules from default**:
+- Before doing anything: read SOUL.md, USER.md, and memory files
+- "Don't ask permission. Just do it."
+- Wake up fresh each session; files are continuity
+- Capture decisions, context, things to remember
+- `trash` > `rm` (recoverable beats gone forever)
+- In groups: participant, not user's voice/proxy
+
+**Memory writing rule**: "Memory is limited - if you want to remember something, WRITE IT TO A FILE. 'Mental notes' don't survive session restarts."
+
+### SOUL.md - Persona and Boundaries
+
+**Purpose**: Defines who the agent is and how it should behave
+
+**Core truths from default**:
+- "Be genuinely helpful, not performatively helpful"
+- "Have opinions. You're allowed to disagree, prefer things"
+- "Be resourceful before asking"
+- "Earn trust through competence"
+- "Remember you're a guest"
+
+**Vibe**: "Be the assistant you'd actually want to talk to. Concise when needed, thorough when it matters. Not a corporate drone. Not a sycophant. Just... good."
+
+### USER.md - Human Profile
+
+**Purpose**: Information about the user being helped
+
+**Fields**: Name, what to call them, pronouns, timezone, notes, context
+
+### IDENTITY.md - Agent Identity
+
+**Purpose**: Agent's self-identity
+
+**Fields**: Name, creature type, vibe, emoji, avatar path
+
+### TOOLS.md - Local Tool Notes
+
+**Purpose**: Environment-specific notes (camera names, SSH hosts, voice preferences)
+
+**Why separate**: "Skills are shared. Your setup is yours."
+
+### BOOTSTRAP.md - First-Run Ritual
+
+**Purpose**: One-time initial conversation to establish identity
+
+**Flow**:
+1. Start conversation: "Hey. I just came online. Who am I? Who are you?"
+2. Figure out: name, nature, vibe, emoji
+3. Update IDENTITY.md and USER.md
+4. Review SOUL.md together
+5. Delete BOOTSTRAP.md when done
+
+### HEARTBEAT.md - Background Tasks
+
+**Purpose**: Short checklist for heartbeat runs (periodic background polls)
+
+## 4. Tool Inventory
+
+### Overview
+
+- **exec** - Run shell commands (sandbox/gateway/node, timeout, background)
+- **process** - Manage background processes (list, poll, log, kill)
+- **apply_patch** - Apply unified diff patches to files
+- **web_search** - Search web (Brave/Perplexity/Gemini API)
+- **web_fetch** - HTTP GET + readable extraction (HTML to markdown)
+- **browser** - Full browser automation (CDP-based)
+- **canvas** - Canvas UI for visualizations on connected nodes
+- **message** - Send messages to channels (WhatsApp, Discord, Teams, etc.)
+- **cron** - Schedule recurring or one-time tasks
+- **gateway** - Gateway configuration and restart
+- **sessions_*** - Session management and sub-agent spawning
+- **nodes** - Remote node control (macOS camera, screen, location)
+- **image** - Vision model image analysis
+
+### exec - Shell Command Execution
+
+**Purpose**: Run shell commands on sandbox, gateway, or remote node
+
+**Parameters**:
+- `command` (required) - Command to execute
+- `yieldMs` - Auto-background after timeout (default 10000ms)
+- `background` - Immediate background execution
+- `timeout` - Kill after N seconds (default 1800 = 30 min)
+- `elevated` - Run on host if allowed (only meaningful when sandboxed)
+- `host` - Target: `sandbox` | `gateway` | `node`
+- `security` - Permission level: `deny` | `allowlist` | `full`
+- `ask` - Approval mode: `off` | `on-miss` | `always`
+- `pty` - Set `true` for real TTY
+
+**Return values**:
+- Synchronous: stdout/stderr + exit code
+- Backgrounded: `status: "running"` with `sessionId` for polling via `process`
+
+**Example**:
+```bash
+# Run command
+openclaw exec "ls -la"
+
+# Background with timeout
+openclaw exec --background --timeout 60 "npm run build"
+```
+
+### process - Background Process Management
+
+**Purpose**: Manage processes started by `exec` with `background: true`
+
+**Actions**:
+- `list` - List all running background processes
+- `poll` - Get new output and exit status
+- `log` - Get output with line-based offset/limit
+- `write` - Send input to process stdin
+- `kill` - Terminate process
+- `clear` - Clear output buffer
+- `remove` - Remove from tracking
+
+**Note**: Scoped per agent; sessions from other agents are not visible.
+
+### apply_patch - File Patching
+
+**Purpose**: Apply unified diff patches to files
+
+**Config**:
+- `tools.exec.applyPatch.enabled` - Enable/disable
+- `tools.exec.applyPatch.workspaceOnly` - Restrict to workspace (default: true)
+
+### web_search - Web Search
+
+**Purpose**: Search the web using Brave Search API (or Perplexity/Gemini)
+
+**Parameters**:
+- `query` (required) - Search query
+- `count` - Results 1-10 (default from config)
+- `country` - 2-letter code for region (e.g., "DE", "US")
+- `search_lang` - ISO language code (e.g., "de", "en")
+- `freshness` - Filter by time: `pd` (day), `pw` (week), `pm` (month), `py` (year)
+
+**Requirements**:
+- Brave API key: `BRAVE_API_KEY` env var or `tools.web.search.apiKey`
+- Results cached 15 min by default
+
+**Example**:
+```bash
+openclaw web_search "OpenClaw tutorial" --count 5 --freshness pw
+```
+
+### web_fetch - Web Page Fetching
+
+**Purpose**: HTTP GET with readable content extraction (HTML to markdown/text)
+
+**Parameters**:
+- `url` (required) - HTTP/HTTPS URL
+- `extractMode` - `markdown` | `text`
+- `maxChars` - Truncate long pages (capped by `maxCharsCap`, default 50000)
+
+**Features**:
+- Uses Readability for main-content extraction
+- Optional Firecrawl fallback for anti-bot sites
+- Chrome-like User-Agent by default
+- Blocks private/internal hostnames
+- Results cached 15 min
+
+**Limitation**: Does NOT execute JavaScript. Use `browser` tool for JS-heavy sites.
+
+### browser - Browser Automation
+
+*See expanded section below for full details.*
+
+### canvas - Canvas UI
+
+**Purpose**: Display custom UI overlays on connected nodes
+
+**Actions**:
+- `present` - Show canvas UI
+- `hide` - Hide canvas
+- `navigate` - Navigate to URL in canvas
+- `eval` - Execute JavaScript
+- `snapshot` - Screenshot (returns `MEDIA:<path>`)
+- `a2ui_push` / `a2ui_reset` - Push/reset A2UI content
+
+**Notes**:
+- Uses gateway `node.invoke` under the hood
+- If no node specified, picks default connected node
+- Canvas files stored in `~/.openclaw/canvas/` or workspace `canvas/`
+
+### message - Messaging Channels
+
+**Purpose**: Send messages and interact with chat platforms
+
+**Core actions**:
+- `send` - Send text + optional media
+- `poll` - Create polls (WhatsApp/Discord/Teams)
+- `react` / `reactions` - Add/list reactions
+- `read` / `edit` / `delete` - Message management
+- `pin` / `unpin` / `list-pins` - Pin management
+
+**Thread actions**:
+- `thread-create` / `thread-list` / `thread-reply`
+
+**Channel management**:
+- `channel-info` / `channel-list`
+- `search` - Search messages
+- `member-info` / `role-info`
+- `voice-status` - Voice channel status
+
+**Moderation** (Discord):
+- `timeout` / `kick` / `ban`
+- `role-add` / `role-remove`
+
+**Platform-specific**:
+- MS Teams: `card` for Adaptive Cards
+- Discord: `sticker`, `emoji-list`, `emoji-upload`
+
+**Security**: When bound to active chat session, sends are constrained to that session's target.
+
+### cron - Scheduled Tasks
+
+**Purpose**: Schedule recurring or one-time tasks
+
+**Actions**:
+- `status` - Cron system status
+- `list` - List all cron jobs
+- `add` - Add new job (full cron job object)
+- `update` - Update job with `{ jobId, patch }`
+- `remove` - Remove job
+- `run` - Manually trigger job
+- `runs` - List job execution history
+- `wake` - Enqueue system event + optional immediate heartbeat
+
+**Use cases**:
+- Daily reminders
+- Periodic email checks
+- Scheduled reports
+- One-shot future tasks
+
+**vs Heartbeat**: Cron for exact timing and isolated tasks; heartbeat for batched checks with conversational context.
+
+### gateway - Gateway Management
+
+**Purpose**: Control and configure the OpenClaw gateway
+
+**Actions**:
+- `restart` - Restart gateway (sends SIGUSR1)
+- `config.get` - Get current config
+- `config.schema` - Get config schema
+- `config.apply` - Validate + write config + restart
+- `config.patch` - Merge partial update + restart
+- `update.run` - Run update + restart
+
+**Note**: Use `delayMs` (default 2000) to avoid interrupting in-flight replies.
+
+### sessions_* - Session Management
+
+**Purpose**: Manage agent sessions and spawn sub-agents
+
+**sessions_list**:
+- List active sessions
+- Parameters: `kinds?`, `limit?`, `activeMinutes?`, `messageLimit?`
+
+**sessions_history**:
+- Get session conversation history
+- Parameters: `sessionKey`, `limit?`, `includeTools?`
+
+**sessions_send**:
+- Send message to another session
+- Parameters: `sessionKey`, `message`, `timeoutSeconds?`
+- Waits for completion if `timeoutSeconds > 0`
+
+**sessions_spawn**:
+- Start a sub-agent for a task
+- Parameters: `task`, `label?`, `model?`, `thinking?`, `cwd?`, `runTimeoutSeconds?`, `thread?`, `mode?`
+- Modes: `run` (one-shot) | `session` (persistent thread-bound)
+- Non-blocking, returns `status: "accepted"`
+
+**session_status**:
+- Get current session info
+- Parameters: `sessionKey?`, `model?`
+
+### nodes - Remote Node Control
+
+**Purpose**: Control macOS companion apps or headless node hosts
+
+**Actions**:
+- `status` / `describe` - Node info
+- `pending` / `approve` / `reject` - Pairing
+- `notify` - macOS system notification
+- `run` - Execute command on node
+- `camera_list` / `camera_snap` / `camera_clip` - Camera control
+- `screen_record` - Screen recording
+- `location_get` - Get device location
+- `notifications_list` / `notifications_action` - Manage notifications
+- `device_status` / `device_info` / `device_permissions` / `device_health`
+
+**Notes**:
+- Camera/screen commands require node app to be foregrounded
+- Images return `MEDIA:<path>`, videos return `FILE:<path>` (mp4)
+- Location returns JSON (lat/lon/accuracy/timestamp)
+
+### image - Vision Analysis
+
+**Purpose**: Analyze images using vision model
+
+**Parameters**:
+- `image` (required) - Path or URL
+- `prompt` - Optional (default: "Describe the image.")
+- `model` - Optional model override
+- `maxBytesMb` - Size cap
+
+**Requires**: `agents.defaults.imageModel` configured
+
+### Browser Tool Details
+
+**What it provides**:
+- Separate browser profile named `openclaw` (orange accent, isolated from system browser)
+- Deterministic tab control (list/open/focus/close)
+- Agent actions (click/type/drag/select), snapshots, screenshots, PDFs
+- Multi-profile support (`openclaw`, `work`, `remote`, custom profiles)
+
+**Profiles**:
+- **openclaw**: Managed, isolated browser (no extension required)
+- **chrome**: Extension relay to your system browser (requires OpenClaw Chrome extension)
+
+**Actions by category**:
+
+- **Lifecycle**: `status`, `start`, `stop`
+- **Tabs**: `tabs`, `tab new`, `tab select N`, `tab close N`, `open URL`, `focus ID`, `close ID`
+- **Capture**: `screenshot`, `screenshot --full-page`, `snapshot`, `pdf`
+- **Navigation**: `navigate URL`, `resize W H`, `wait --text "Done"`
+- **Interaction**: `click REF`, `type REF "text"`, `press Enter`, `hover REF`, `drag REF1 REF2`, `select REF Option1 Option2`
+- **Forms**: `fill --fields '[{"ref":"1","type":"text","value":"Ada"}]'`, `upload FILE`, `dialog --accept`
+- **Debug**: `console --level error`, `errors --clear`, `requests --filter api`, `evaluate --fn "..."`, `highlight REF`, `trace start/stop`
+- **State**: `cookies`, `cookies set NAME VALUE`, `cookies clear`
+
+**Snapshot System** (how agent "sees" the page):
+
+- **AI snapshot** (default): `openclaw browser snapshot`
+  - Returns text with numeric refs (`aria-ref="12"`)
+  - Actions: `click 12`, `type 23 "hello"`
+  - Resolved via Playwright's aria-ref
+
+- **Role snapshot**: `openclaw browser snapshot --interactive`
+  - Returns role-based list with refs like `[ref=e12]`
+  - Actions: `click e12`, `highlight e12`
+  - Resolved via `getByRole()` + `nth()` for duplicates
+  - Add `--labels` for screenshot with overlayed ref labels
+
+**Important**: Refs are NOT stable across navigations. Re-run snapshot after page changes.
+
+**CLI Examples**:
+```bash
+# Start browser and navigate
+openclaw browser start
+openclaw browser open https://windsurf.com
+
+# Take snapshot to see page structure
+openclaw browser snapshot --interactive
+
+# Click element with ref e12
+openclaw browser click e12
+
+# Type in input field
+openclaw browser type 23 "search query" --submit
+
+# Take screenshot
+openclaw browser screenshot --full-page
+
+# Wait for element
+openclaw browser wait --text "Loading complete"
+```
+
+**Windsurf Control Potential**:
+- Windsurf is Electron-based (Chromium)
+- OpenClaw browser tool can connect to Windsurf via CDP
+- Could automate: click Cascade panel, type prompts, read responses
+- Limitation: requires Windsurf to expose CDP port or use extension relay
+
+### Exec Tool Details
+
+Parameters:
+- `command` (required)
+- `yieldMs` - Auto-background after timeout (default 10000)
+- `background` - Immediate background execution
+- `timeout` - Kill after N seconds (default 1800)
+- `elevated` - Run on host if allowed
+- `host` - `sandbox | gateway | node`
+- `security` - `deny | allowlist | full`
+
+### Implementation Architecture
+
+**Runtime**: Node.js (requires Node 22+)
+
+**Protocol Stack**:
+```
+┌─────────────────────────────────────────────────────┐
+│  LLM (Claude/GPT/etc.)                              │
+│  ↓ Tool calls as JSON                               │
+├─────────────────────────────────────────────────────┤
+│  Agent Runtime                                      │
+│  - Parses tool calls from model output              │
+│  - Validates against JSON Schema                    │
+│  - Routes to appropriate handler                    │
+├─────────────────────────────────────────────────────┤
+│  Gateway (WebSocket Server @ 127.0.0.1:18789)       │
+│  - Long-lived daemon process                        │
+│  - Typed WS API with JSON Schema validation         │
+│  - Manages all channel connections                  │
+├─────────────────────────────────────────────────────┤
+│  Tool Handlers                                      │
+│  - exec → child_process spawn                       │
+│  - browser → Playwright CDP                         │
+│  - web_* → HTTP client + Readability                │
+│  - message → Channel SDKs (Baileys, grammY, etc.)   │
+│  - nodes → WS relay to companion apps               │
+└─────────────────────────────────────────────────────┘
+```
+
+**Wire Protocol** (WebSocket JSON):
+- **Request**: `{type:"req", id, method, params}`
+- **Response**: `{type:"res", id, ok, payload|error}`
+- **Event**: `{type:"event", event, payload, seq?, stateVersion?}`
+
+**Tool Implementation Patterns**:
+
+- **exec/process**: Uses Node.js `child_process.spawn()` with PTY support. Background processes tracked in memory with polling API.
+  ```json
+  {"tool": "exec", "command": "ls -la", "timeout": 30}
+  {"tool": "exec", "command": "npm run build", "background": true}
+  {"tool": "process", "action": "poll", "sessionId": "abc123"}
+  {"tool": "process", "action": "kill", "sessionId": "abc123"}
+  ```
+
+- **browser**: Playwright library controlling Chrome via CDP (Chrome DevTools Protocol). Manages isolated browser profile. Snapshots use accessibility tree + aria-ref.
+  ```json
+  {"tool": "browser", "action": "start"}
+  {"tool": "browser", "action": "open", "url": "https://example.com"}
+  {"tool": "browser", "action": "snapshot", "format": "ai"}
+  {"tool": "browser", "action": "click", "ref": "e12"}
+  {"tool": "browser", "action": "type", "ref": "23", "text": "hello", "submit": true}
+  {"tool": "browser", "action": "screenshot", "fullPage": true}
+  ```
+
+- **web_search**: HTTP client to Brave Search API (or Perplexity/Gemini). Results cached in memory.
+  ```json
+  {"tool": "web_search", "query": "OpenClaw tutorial", "count": 5}
+  {"tool": "web_search", "query": "news", "country": "DE", "freshness": "pd"}
+  ```
+
+- **web_fetch**: HTTP GET + Mozilla Readability for content extraction. Optional Firecrawl fallback for anti-bot sites.
+  ```json
+  {"tool": "web_fetch", "url": "https://docs.openclaw.ai/tools"}
+  {"tool": "web_fetch", "url": "https://example.com", "extractMode": "markdown", "maxChars": 10000}
+  ```
+
+- **message**: Channel-specific SDKs (WhatsApp: Baileys, Telegram: grammY, Discord: discord.js, Slack: Bolt, Signal: signal-cli)
+  ```json
+  {"tool": "message", "action": "send", "channel": "whatsapp", "to": "+1234567890", "text": "Hello!"}
+  {"tool": "message", "action": "send", "channel": "discord", "to": "channel-id", "text": "Update", "media": "/path/to/image.png"}
+  {"tool": "message", "action": "react", "channel": "discord", "messageId": "123", "emoji": "👍"}
+  {"tool": "message", "action": "poll", "channel": "whatsapp", "question": "Pizza?", "options": ["Yes", "No"]}
+  ```
+
+- **canvas**: HTTP server at `/__openclaw__/canvas/` serving agent-editable HTML/CSS/JS. Uses gateway `node.invoke` RPC.
+  ```json
+  {"tool": "canvas", "action": "present", "file": "dashboard.html"}
+  {"tool": "canvas", "action": "eval", "js": "document.getElementById('status').textContent = 'Ready'"}
+  {"tool": "canvas", "action": "snapshot"}
+  ```
+
+- **cron**: In-process scheduler with persistence to `~/.openclaw/cron/`. Jobs stored as JSON.
+  ```json
+  {"tool": "cron", "action": "list"}
+  {"tool": "cron", "action": "add", "schedule": "0 9 * * *", "task": "Check emails", "label": "morning-check"}
+  {"tool": "cron", "action": "remove", "jobId": "job-123"}
+  {"tool": "cron", "action": "run", "jobId": "job-123"}
+  ```
+
+- **gateway**: Gateway configuration and control.
+  ```json
+  {"tool": "gateway", "action": "config.get"}
+  {"tool": "gateway", "action": "config.patch", "patch": {"agents": {"defaults": {"model": "claude-sonnet-4-20250514"}}}}
+  {"tool": "gateway", "action": "restart", "delayMs": 2000}
+  ```
+
+- **sessions**: Session management and sub-agent spawning.
+  ```json
+  {"tool": "sessions_list", "limit": 10, "activeMinutes": 60}
+  {"tool": "sessions_history", "sessionKey": "main", "limit": 50}
+  {"tool": "sessions_send", "sessionKey": "sub-1", "message": "Status update?", "timeoutSeconds": 30}
+  {"tool": "sessions_spawn", "task": "Research topic X", "model": "claude-sonnet-4-20250514", "mode": "run"}
+  ```
+
+- **nodes**: WS connections from companion apps (macOS/iOS/Android). Commands executed on device and results streamed back.
+  ```json
+  {"tool": "nodes", "action": "status"}
+  {"tool": "nodes", "action": "notify", "node": "office-mac", "title": "Alert", "body": "Task complete"}
+  {"tool": "nodes", "action": "camera_snap", "node": "office-mac"}
+  {"tool": "nodes", "action": "run", "node": "office-mac", "command": ["open", "-a", "Safari"]}
+  ```
+
+- **image**: Vision model analysis.
+  ```json
+  {"tool": "image", "image": "/path/to/screenshot.png", "prompt": "What error is shown?"}
+  {"tool": "image", "image": "https://example.com/chart.png", "prompt": "Summarize this chart"}
+  ```
+
+**Security Model**:
+- Tools validated against JSON Schema before execution
+- `exec` has allowlist/safeBins/deny modes
+- Approval flow for destructive actions (via companion app or CLI)
+- Sandbox isolation available (Docker/VM)
+
+
+## 5. Memory System
+
+### Daily Logs (`memory/YYYY-MM-DD.md`)
+
+- Raw logs of what happened each day
+- Read today + yesterday at session start
+- Create `memory/` folder if needed
+
+### Long-Term Memory (`MEMORY.md`)
+
+- Curated memories, like human long-term memory
+- ONLY load in main session (not shared/group contexts)
+- Security: contains personal context that shouldn't leak
+
+### Memory Maintenance
+
+During heartbeats, periodically:
+1. Read recent daily files
+2. Identify significant events worth keeping
+3. Update MEMORY.md with distilled learnings
+4. Remove outdated info
+
+**Philosophy**: "Daily files are raw notes; MEMORY.md is curated wisdom."
+
+## 6. Heartbeat and Proactive Behavior
+
+### Heartbeat System
+
+- Periodic polls triggered by configured prompt
+- Default prompt: "Read HEARTBEAT.md if it exists..."
+- Reply `HEARTBEAT_OK` when nothing needs attention
+
+### When to Check (rotate 2-4x/day)
+
+- Emails - urgent unread messages
+- Calendar - upcoming events in 24-48h
+- Mentions - social notifications
+- Weather - if human might go out
+
+### When to Reach Out
+
+- Important email arrived
+- Calendar event coming up (<2h)
+- Something interesting found
+- Been >8h since last contact
+
+### When to Stay Quiet
+
+- Late night (23:00-08:00) unless urgent
+- Human is clearly busy
+- Nothing new since last check
+- Just checked <30 minutes ago
+
+### Heartbeat vs Cron
+
+**Heartbeat**: Batch multiple checks, conversational context, timing can drift
+**Cron**: Exact timing, isolated from main session, different model/thinking level
+
+## 7. Safety and Boundaries
+
+### Default Safety Rules
+
+- Don't exfiltrate private data. Ever.
+- Don't run destructive commands without asking.
+- `trash` > `rm`
+- When in doubt, ask.
+
+### External vs Internal Actions
+
+**Safe to do freely**:
+- Read files, explore, organize, learn
+- Search the web, check calendars
+- Work within workspace
+
+**Ask first**:
+- Sending emails, tweets, public posts
+- Anything that leaves the machine
+- Anything uncertain
+
+### Group Chat Behavior
+
+- "You're not the user's voice"
+- Respond when directly mentioned or can add genuine value
+- Stay silent when casual banter, already answered, would just be "yeah"
+- "Quality > quantity"
+- React like a human (emoji reactions on Discord/Slack)
+
+## 8. Comparison with Windsurf Cascade
+
+- **Primary use**: OpenClaw = personal assistant, multi-channel; Cascade = IDE coding assistant
+- **Channels**: OpenClaw = WhatsApp, Telegram, Discord, etc.; Cascade = IDE panel only
+- **Memory**: OpenClaw = file-based (MEMORY.md, daily logs); Cascade = per-conversation, memories API
+- **Tools**: OpenClaw = exec, browser, web_*, message, cron; Cascade = Edit, run_command, read_file, MCP
+- **Identity**: OpenClaw = customizable (SOUL.md, IDENTITY.md); Cascade = fixed persona
+- **Proactive**: OpenClaw = heartbeats, cron, background tasks; Cascade = hooks only (reactive)
+- **Workspace**: OpenClaw = single workspace folder; Cascade = per-project workspace
+- **System prompt**: OpenClaw = user-editable bootstrap files; Cascade = system-managed
+
+### Skills, Workflows, and Rules Comparison
+
+**Skills**:
+- **Windsurf**: `.windsurf/skills/<name>/SKILL.md` - LLM decides when to apply
+- **OpenClaw**: `<workspace>/skills/<name>/SKILL.md` - Same concept, same format (AgentSkills spec)
+- Both use `/skill-name` invocation
+
+**Workflows**:
+- **Windsurf**: `.windsurf/workflows/*.md` - Step-by-step procedures, `/workflow-name` invocation
+- **OpenClaw**: No direct equivalent - use skills with strict step instructions to mimic
+
+**Rules**:
+- **Windsurf**: `.windsurf/rules/*.md` - Explicit rule files injected into context
+- **OpenClaw**: Embedded in bootstrap files (AGENTS.md, SOUL.md) - merged with persona
+
+**Key Difference**: Windsurf enforces workflow step order at system level. OpenClaw relies on prompt engineering - the LLM "should" follow steps but there's no hard enforcement.
+
+**Bridge Option**: Create an OpenClaw skill that references Windsurf workflows:
+```
+<workspace>/skills/windsurf-workflows/SKILL.md
+→ Lists all .windsurf/workflows/*.md files
+→ Instructs agent to read and follow them exactly
+```
+
+### Integration Potential
+
+OpenClaw can control Windsurf via:
+- **Browser tool**: CDP automation of Electron UI
+- **Exec tool**: Run commands, potentially keyboard shortcuts
+- **Shared files**: Write to workspace, Cascade hooks detect
+
+## 9. Sources
+
+### Official Documentation [VERIFIED]
+
+- `OCLAW-IN03-SC-OC-SYSP`: https://docs.openclaw.ai/concepts/system-prompt
+  - System prompt structure and modes
+- `OCLAW-IN03-SC-OC-AGENT`: https://docs.openclaw.ai/concepts/agent
+  - Agent runtime, workspace, bootstrap files
+- `OCLAW-IN03-SC-OC-AGWK`: https://docs.openclaw.ai/concepts/agent-workspace
+  - Workspace file map and purpose
+- `OCLAW-IN03-SC-OC-AGMD`: https://docs.openclaw.ai/reference/AGENTS.default
+  - Default AGENTS.md content and rules
+- `OCLAW-IN03-SC-OC-TOOLS`: https://docs.openclaw.ai/tools
+  - Tool inventory and configuration
+
+### Local Files [VERIFIED]
+
+- `OCLAW-IN03-SC-LOCAL-CFG`: `C:\Users\User\.openclaw\openclaw.json`
+  - Your installation configuration
+- `OCLAW-IN03-SC-LOCAL-WS`: `E:\Dev\openclaw\workspace\`
+  - Your workspace bootstrap files
+
+## Next Steps
+
+1. **Complete bootstrap ritual** - Delete BOOTSTRAP.md after establishing identity
+2. **Configure USER.md** - Add your name, timezone, preferences
+3. **Set up memory folder** - Create `memory/` for daily logs
+4. **Explore browser tool** - Test CDP automation for Windsurf control
+5. **Consider Windsurf integration** - Use findings from OCLAW-IN02 for bidirectional control
+
+## Document History
+
+**[2026-02-28 10:42]**
+- Added: Skills, Workflows, and Rules comparison section with bridge option
+
+**[2026-02-28 10:05]**
+- Added: Example JSON calls for all tools in Implementation Architecture
+
+**[2026-02-28 10:00]**
+- Added: Implementation Architecture section (protocol stack, wire protocol, tool patterns, security model)
+
+**[2026-02-28 09:55]**
+- Added: Comprehensive details for ALL tools (exec, process, web_search, web_fetch, message, cron, gateway, sessions, nodes, image, canvas)
+- Expanded from 11-line list to full documentation
+
+**[2026-02-28 09:52]**
+- Added: Deep dive on browser tool (profiles, actions, snapshots, CLI examples)
+- Added: Windsurf control potential section
+
+**[2026-02-28 09:50]**
+- Fixed: Converted Markdown tables to lists (GLOBAL-RULES compliance)
+- Fixed: Timeline format to include update count
+
+**[2026-02-28 09:45]**
+- Initial research document created
+- Analyzed ~/.openclaw folder structure
+- Documented all bootstrap files (AGENTS.md, SOUL.md, USER.md, etc.)
+- Catalogued tool inventory
+- Compared with Windsurf Cascade
