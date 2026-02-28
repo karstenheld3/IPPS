@@ -773,18 +773,18 @@ Creates `_TASKS_*.md` from IMPL/TEST. **Mandatory before implementation.**
 
 ## Agent Compatibility
 
-| Feature | Windsurf | Claude Code | Codex CLI | GitHub Copilot |
-|---------|----------|-------------|-----------|----------------|
-| **Type** | IDE | Terminal | Terminal | IDE Extension |
-| **Platform** | Windows, macOS, Linux | Windows, macOS, Linux | macOS, Linux, Windows (WSL) | VS Code, Visual Studio, JetBrains |
-| **Instructions** | `.windsurf/rules/*.md` | `CLAUDE.md` | `AGENTS.md` | `.github/copilot-instructions.md` |
-| **Commands/Workflows** | `.windsurf/workflows/*.md` | `.claude/commands/*.md` | Custom prompts only | Prompt files only |
-| **Skills** | ✅ Yes | ✅ Yes | ❌ No | ❌ No |
-| **Subagents** | ❌ No | ✅ Yes | ❌ No | ✅ Yes (custom agents) |
-| **Hooks** | ✅ Yes | ✅ Yes | ❌ No | ❌ No |
-| **MCP Support** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
-| **Sandbox** | ❌ No | ❌ No | ✅ Yes (OS-level) | ❌ No |
-| **Config Format** | JSON + Protobuf | JSON | TOML | JSON |
+| Feature | Windsurf | Claude Code | Codex CLI | GitHub Copilot | OpenClaw |
+|---------|----------|-------------|-----------|----------------|----------|
+| **Type** | IDE | Terminal | Terminal | IDE Extension | Gateway + Multi-channel |
+| **Platform** | Windows, macOS, Linux | Windows, macOS, Linux | macOS, Linux, Windows (WSL) | VS Code, Visual Studio, JetBrains | Windows, macOS, Linux |
+| **Instructions** | `.windsurf/rules/*.md` | `CLAUDE.md` | `AGENTS.md` | `.github/copilot-instructions.md` | `AGENTS.md`, `SOUL.md` |
+| **Commands/Workflows** | `.windsurf/workflows/*.md` | `.claude/commands/*.md` | Custom prompts only | Prompt files only | Skills only |
+| **Skills** | ✅ Yes | ✅ Yes | ❌ No | ❌ No | ✅ Yes |
+| **Subagents** | ❌ No | ✅ Yes | ❌ No | ✅ Yes (custom agents) | ✅ Yes |
+| **Hooks** | ✅ Yes | ✅ Yes | ❌ No | ❌ No | ✅ Yes (webhooks) |
+| **MCP Support** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No (native tools) |
+| **Sandbox** | ❌ No | ❌ No | ✅ Yes (OS-level) | ❌ No | ✅ Yes (Docker) |
+| **Config Format** | JSON + Protobuf | JSON | TOML | JSON | JSON |
 
 ### Deploying to Other Agents
 
@@ -799,6 +799,11 @@ Creates `_TASKS_*.md` from IMPL/TEST. **Mandatory before implementation.**
 **GitHub Copilot:**
 - `.windsurf/rules/*.md` → `.github/copilot-instructions.md` (merge into single file)
 
+**OpenClaw:**
+- `.windsurf/rules/*.md` → `AGENTS.md` + `SOUL.md` (split behavioral and persona rules)
+- `.windsurf/workflows/*.md` → `skills/*/SKILL.md` (convert workflows to skills)
+- `.windsurf/skills/*/SKILL.md` → `skills/*/SKILL.md` (direct copy, same format)
+
 ### Detailed Documentation
 
 - [Agent Comparison](Docs/FurtherResearch/_INFO_AGENT_COMPARISON.md) - Full feature comparison with detailed tables
@@ -810,6 +815,8 @@ Creates `_TASKS_*.md` from IMPL/TEST. **Mandatory before implementation.**
 - [How Claude Code Works](Docs/FurtherResearch/_INFO_HOW_CLAUDE_CODE_WORKS.md) - Anthropic's terminal agent
 - [How Codex CLI Works](Docs/FurtherResearch/_INFO_HOW_CODEX_WORKS.md) - OpenAI's terminal agent
 - [How GitHub Copilot Works](Docs/FurtherResearch/_INFO_HOW_COPILOT_WORKS.md) - GitHub's IDE extension
+- [How OpenClaw Works](Docs/FurtherResearch/_INFO_HOW_OPENCLAW_WORKS.md) - Multi-channel personal AI assistant
+- [OpenClaw Overview](Docs/FurtherResearch/_INFO_OPENCLAW.md) - Setup and feature overview
 
 ### Technical Reference
 
