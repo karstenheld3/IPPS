@@ -1,7 +1,7 @@
 # INFO: OpenAI and Anthropic Model Costs
 
 **Doc ID**: LLMEV-IN02
-**Goal**: Document current API pricing for OpenAI and Anthropic models (January 2026)
+**Goal**: Document current API pricing for OpenAI and Anthropic models (February 2026)
 
 ## Copy-Paste Ready Pricing
 
@@ -32,6 +32,12 @@
 
 ### Anthropic (USD per 1M tokens)
 
+**Claude 4.5/4.6 Family (Latest):**
+- **claude-opus-4.6 / opus-4.5**: $5.00 input, $25.00 output
+- **claude-sonnet-4.5**: $3.00 input, $15.00 output
+- **claude-haiku-4.5**: $1.00 input, $5.00 output
+
+**Claude 4.x Family (Legacy):**
 - **claude-opus-4.1 / opus-4**: $15.00 input, $75.00 output
 - **claude-sonnet-4 / sonnet-3.7 / sonnet-3.5**: $3.00 input, $15.00 output
 - **claude-haiku-3.5**: $0.80 input, $4.00 output
@@ -71,15 +77,21 @@ Newer models (gpt-5, o1, o3) use `max_completion_tokens` parameter instead of `m
 
 ### Anthropic Pricing Structure
 
-Claude Opus 4 series:
-- **Claude Opus 4.1 / Opus 4**: $15.00/1M input, $75.00/1M output (most powerful)
+Claude 4.5/4.6 series (February 2026):
+- **Claude Opus 4.6 / Opus 4.5**: $5.00/1M input, $25.00/1M output (latest flagship, 3x cheaper than 4.1)
+- **Claude Sonnet 4.5**: $3.00/1M input, $15.00/1M output
+- **Claude Haiku 4.5**: $1.00/1M input, $5.00/1M output
+- Context: 200K standard, up to 1M beta
+
+Claude Opus 4 series (legacy):
+- **Claude Opus 4.1 / Opus 4**: $15.00/1M input, $75.00/1M output
 - Context: 200K standard, up to 1M beta
 
 Claude Sonnet series:
 - **Claude Sonnet 4 / 3.7 / 3.5**: $3.00/1M input, $15.00/1M output (mid-tier)
 
 Claude Haiku series:
-- **Claude Haiku 3.5**: $0.80/1M input, $4.00/1M output (latest small)
+- **Claude Haiku 3.5**: $0.80/1M input, $4.00/1M output
 - **Claude Haiku 3**: $0.25/1M input, $1.25/1M output (earlier)
 
 Long context (>200K tokens): 2x input cost beyond threshold.
@@ -109,6 +121,11 @@ For claude-opus-4-1 transcription test (83,020 input + 47,648 output tokens):
   - Finding: Cache reads 0.1x base, cache writes 1.25-2x base
 
 ## Document History
+
+**[2026-02-28 10:50]**
+- Added: Claude 4.5/4.6 family pricing ($5/$25 for Opus, $1/$5 for Haiku)
+- Verified: Against model-pricing.json (last updated 2026-02-07)
+- Updated: Goal date to February 2026
 
 **[2026-01-22 23:25]**
 - Initial research for LLM Evaluation skill cost analysis
