@@ -58,5 +58,12 @@
 - [x] Devil's Advocate review completed (11 findings)
 - [x] Pragmatic review reconciled, all findings implemented
 - [x] Updated spec: 13 FRs, 11 DDs, 7 IGs (lazy connection, timeout, ambiguity handling)
+- [x] Robustness critique completed (8 findings)
+- [x] Pragmatic review reconciled (4 confirmed, 2 dismissed, 2 disputed)
+- [x] Implemented: PID validation, force-kill, limitations docs, recovery workflow
+- [x] Created `_IMPL_XLWINGS_SKILL.md` - implementation plan (16 steps, 15 edge cases, 26 tests)
+- [x] Devil's Advocate review completed (8 findings)
+- [x] Pragmatic review reconciled (4 confirmed, 3 dismissed, 1 disputed)
+- [x] Applied fixes: shutdown endpoint, server logging, venv path consistency
 
 ## Tried But Not Used
