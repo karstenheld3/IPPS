@@ -137,6 +137,8 @@ A **VBAComponent** represents a VBA module, class, or form in a workbook's VBPro
 - Stop server with `stop-server.ps1` script
 - Store PID in `.server.pid` file for process tracking
 - Detect if server already running before starting
+- `start-server.ps1` validates PID is alive (not just file exists) - removes stale PID file
+- `stop-server.ps1` attempts graceful stop, force-kills after 5 seconds if still running
 - Health check endpoint at `/health` returns server version and Excel connection status
 - Server starts without Excel (lazy connection) - connects on first request
 - Request timeout: 30 seconds per request to prevent indefinite hangs
@@ -454,11 +456,17 @@ Agent calls: Invoke-RestMethod -Uri "http://localhost:5001/vba/export" -Method P
 ```
 .windsurf/skills/agent-excel/
 ├── SKILL.md                # Skill documentation for agent
+├── SETUP.md                # Installation and setup guide
 ├── excel_server.py         # Flask server with xlwings
 ├── start-server.ps1        # Start server script
 ├── stop-server.ps1         # Stop server script
+├── setup-venv.ps1          # Create venv and install dependencies
+├── requirements.txt        # Python dependencies
 ├── .server.pid             # PID file (created at runtime)
 └── README.md               # Human-readable usage guide
+
+[WORKSPACE_FOLDER]\..\tools\
+└── xlwings-venv/           # Shared Python virtual environment
 ```
 
 ### Server Endpoints Summary
@@ -481,6 +489,23 @@ Agent calls: Invoke-RestMethod -Uri "http://localhost:5001/vba/export" -Method P
 # requirements.txt
 xlwings>=0.30.0
 flask>=2.0.0
+```
+
+### Setup Process
+
+**Virtual environment location**: `[WORKSPACE_FOLDER]\..\tools\xlwings-venv`
+
+`setup-venv.ps1` performs:
+1. Check if Python 3.10+ available
+2. Create venv at shared `.tools` location (if not exists)
+3. Install dependencies from requirements.txt
+4. Verify xlwings and flask imports work
+
+`start-server.ps1` activates the venv before launching the server.
+
+**First-time setup**:
+```powershell
+& "$env:USERPROFILE\.windsurf\skills\agent-excel\setup-venv.ps1"
 ```
 
 ### Agent Usage Examples (SKILL.md content)
@@ -515,7 +540,45 @@ Invoke-RestMethod -Uri "http://localhost:5001/vba/export" -Method Post -Body $bo
 & "$env:USERPROFILE\.windsurf\skills\agent-excel\stop-server.ps1"
 ```
 
+### Known Limitations
+
+- **Sequential requests**: All requests are processed sequentially (xlwings is not thread-safe). Health check blocked during long operations.
+- **Modal dialog blocking**: If Excel shows a modal dialog (save prompt, error), COM calls block until user dismisses it. The 30-second timeout returns control to agent but does not cancel the operation.
+- **Excel restart**: If user closes and reopens Excel, server auto-reconnects to new instance on next request.
+
+### Agent Recovery Workflow
+
+When a request times out:
+
+```
+1. Request times out (30s)
+2. Wait 2s, call GET /health with 5s timeout
+3. If health responds:
+   - Server recovered, verify state with /read before retrying write
+4. If health times out:
+   - Server stuck on COM call
+   - Run stop-server.ps1 (force-kills after 5s)
+   - Run start-server.ps1
+   - Retry operation
+5. If still failing:
+   - Inform user: "Excel may be showing a dialog. Please check Excel window."
+```
+
+**Read-to-verify pattern**: After write timeout, read the target cell to check if write succeeded before retrying.
+
 ## 11. Document History
+
+**[2026-02-28 08:50]**
+- Added: SETUP.md to file structure
+- Added: setup-venv.ps1 script for venv creation
+- Added: Setup Process section (venv at .tools/xlwings-venv)
+- Added: requirements.txt to file structure
+
+**[2026-02-28 08:45]**
+- Added: Known Limitations section (sequential requests, modal blocking, Excel restart)
+- Added: Agent Recovery Workflow section (timeout handling, read-to-verify pattern)
+- Changed: AXCEL-FR-01 (PID validation, force-kill on stop)
+- Review: Robustness critique findings addressed (4 of 8 confirmed, implemented)
 
 **[2026-02-27 17:00]**
 - Added: AXCEL-FR-13 (VBA Trust Status endpoint)
