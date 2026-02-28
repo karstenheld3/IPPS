@@ -4,6 +4,10 @@ Research **[SUBJECT]** exhaustively using the MCPI (Most Complete Point of Infor
 
 This strategy follows the global Phase 1-4 model defined in SKILL.md.
 
+## MUST-NOT-FORGET
+
+- Run `/verify` on STRUT plan before proceeding
+
 ## Phase 1: Preflight
 
 Decompose prompt, document assumptions, collect sources, verify/correct, create STRUT, run first VCRIV.
@@ -28,9 +32,9 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
   3. Incorporate domain-specific rules (source tiers, document handling, template additions, quality criteria)
   4. If no matching profile, use DOMAIN_DEFAULT.md and document in STRUT
 - STRUT MUST include the active domain profile and its rules
-- Answer 6 decomposition questions per SKILL.md, store PromptDecomposition in STRUT
+- Answer 7 decomposition questions per SKILL.md, store PromptDecomposition in STRUT
 - Run `/verify` on STRUT plan
-- **Done when**: STRUT created, all 6 questions answered, PromptDecomposition stored, effort estimated
+- **Done when**: STRUT created, all 7 questions answered, PromptDecomposition stored, effort estimated
 
 ### Step 2: Document Assumptions
 
@@ -40,10 +44,20 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 - Document inferred details with [ASSUMED] label
 - Proceed with best interpretation - do NOT ask unless genuinely ambiguous
 
-### Step 3: Collect Sources
+### Step 3: Test Discovery Platforms
+
+Before collecting sources, test each discovery platform from Q7:
+- Query each platform with test search matching research criteria
+- Classify access: **FREE** (full results), **PAID** (paywall), **PARTIAL** (limited free tier)
+- Keep platforms with FREE or PARTIAL access
+- Document PAID platforms in `__SOURCES.md` for user follow-up
+- **Done when**: All platforms tested, access levels documented, selected platforms identified
+
+### Step 4: Collect Sources
 
 - **Document version scope**: Explicitly state the [SUBJECT] version (e.g., `v2.1.0`, `API v3`). If not applicable, use date: `YYYY-MM-DD`
 - Create `__[TOPIC]_SOURCES.md` (double underscore = master document)
+- **Query selected discovery platforms** from Step 3 first
 - Collect ALL official documentation URLs from vendor/project documentation
 - Collect community sources (secondary sources) for real-world insights:
   - Stack Overflow questions/answers with high votes
@@ -61,14 +75,14 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 - **Source processing**: Process all PDF sources through transcription pipeline. Read `deep-research-config.json` for settings.
 - **Done when**: (a) Official docs main TOC fully enumerated, (b) 15-30 sources collected (minimum 15), (c) All sources have IDs, (d) PDF sources transcribed
 
-### Step 4: Verify and Correct Assumptions
+### Step 5: Verify and Correct Assumptions
 
 - Verify assumptions against primary sources
 - If >30% wrong or outdated, re-run with corrected understanding, keep originals (strikethrough). **Max 2 re-runs**, then proceed.
 - Document accuracy in `__[TOPIC]_SOURCES.md` header (e.g., "Preflight accuracy: 7/10 assumptions verified")
 - **Rubric**: CORRECT = matches source exactly. PARTIAL = spirit correct but details differ (counts as wrong). WRONG = contradicted by source.
 
-### Step 5: Run First VCRIV
+### Step 6: Run First VCRIV
 
 Run quality pipeline on Preflight deliverables (SOURCES, STRUT, PromptDecomposition).
 - **Done when**: Phase 1 deliverables verified, critique addressed

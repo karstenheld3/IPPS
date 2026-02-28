@@ -4,10 +4,15 @@ Research **[SUBJECT]** using the MEPI (Most Executable Point of Information) app
 
 This strategy follows the global Phase 1-4 model defined in SKILL.md.
 
-**When MEPI applies:**
-- User intention is "do, achieve, reach"
-- Goal-directed action: "help me accomplish X"
-- Example: "how to register with XYZ" = give me proven steps to reach the goal
+## MUST-NOT-FORGET
+
+- Run `/verify` on STRUT plan before proceeding
+
+**When to use MEPI instead of MCPI:**
+- Reversible decisions (can change later)
+- Time-constrained (user needs answer quickly)
+- Action-oriented (user will do something, not archive)
+- Low-to-medium stakes (not legal/financial/medical critical)
 
 ## Phase 1: Preflight
 
@@ -25,10 +30,10 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
   3. Incorporate domain-specific rules
   4. If no matching profile, use DOMAIN_DEFAULT.md and document in STRUT
 - STRUT MUST include the active domain profile and its rules
-- Answer 6 decomposition questions per SKILL.md, store PromptDecomposition in STRUT
+- Answer 7 decomposition questions per SKILL.md, store PromptDecomposition in STRUT
 - At Q5: Confirm MEPI. Switch to MCPI if high-stakes discovered.
 - Run `/verify` on STRUT plan
-- **Done when**: STRUT created, all 6 questions answered, PromptDecomposition stored, effort estimated
+- **Done when**: STRUT created, all 7 questions answered, PromptDecomposition stored, effort estimated
 
 ### Step 2: Document Assumptions
 
@@ -42,6 +47,7 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 
 - **Document version scope**: Explicitly state the [SUBJECT] version (e.g., `v2.1.0`, `API v3`). If not applicable, use date: `YYYY-MM-DD`
 - Create `__[TOPIC]_SOURCES.md`
+- **Classify discovery platforms** from Q7 as FREE/PAID/PARTIAL; use FREE and PARTIAL, note PAID for user follow-up
 - Collect **5-10 sources per dimension** (focus on top-tier sources first)
 - Skip exhaustive community source collection
 - Use source tiers from active domain profile. Default: official documentation > vendor content > community/analyst sources.

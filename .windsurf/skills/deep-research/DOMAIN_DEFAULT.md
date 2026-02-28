@@ -85,6 +85,10 @@ Quality assurance cycle (runs per scope-based granularity):
 - `I` - Implement: Apply findings, delete `_REVIEW.md`
 - `V` - Verify (final): Confirm corrections complete
 
+## MUST-NOT-FORGET
+
+- Run full VCRIV pipeline: `/verify` -> `/critique` -> `/reconcile` -> implement -> `/verify`
+
 **Granularity:**
 - NARROW (1 dimension): VCRIV per topic file
 - FOCUSED/EXPLORATORY (2+ dimensions): VCRIV per dimension

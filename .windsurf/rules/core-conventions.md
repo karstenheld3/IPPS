@@ -25,13 +25,12 @@ Universal formatting and writing conventions for all documents.
 - One empty line between sections
 - Most recent changes at top in changelog sections
 
-## Numbered Lists and Phase Models
+## Agent Behavior
 
-- Steps and phases MUST start at 1, not 0
-- Steps and phases MUST use +1 increments (1, 2, 3...), never fractional (1.5, 2.5)
-- When refactoring or inserting steps, renumber the entire sequence
-- BAD: Phase 0, Phase 0.5, Phase 1, Phase 2
-- GOOD: Phase 1, Phase 2, Phase 3, Phase 4
+- Sacrifice grammar for clarity. ASANAP Principle: As short as possible, as precise as possible.
+- "Propose", "suggest", "draft", "outline" = talk ABOUT the object, don't modify it.
+- "Implement", "fix", "change", "update" = modify the object.
+- Question and verify training assumptions. They may be outdated or biased towards "what people usually do" vs. "what really solves the problem at hand".
 
 ## Header Block
 

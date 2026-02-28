@@ -39,16 +39,17 @@ Strategy files (MCPI/MEPI) define the details for each phase.
 
 ## Prompt Decomposition (Phase 1, Step 1)
 
-Answer these 6 questions before any source collection:
+Answer these 7 questions before any source collection:
 
 1. **Q1 - Goal**: What is the user's intent? (1-2 sentences)
 2. **Q2 - Scope**: NARROW (1 dim), FOCUSED (2-4 dim), or EXPLORATORY (5-9 dim)?
 3. **Q3 - Dimensions**: Which apply? (legal, financial, administrative, practical, technical, professional, medical, psychological, personal, organizational, strategic, security, cultural, educational, historical, or custom)
 4. **Q4 - Topics**: 3-5 topics per dimension
-5. **Q5 - Strategy**: MEPI (curated) or MCPI (exhaustive)? Based on reversibility, stakes, action vs archive.
+5. **Q5 - Strategy**: MCPI (exhaustive) or MEPI (curated)?
 6. **Q6 - Domain**: Which profile? (SOFTWARE, MARKET_INTEL, DOCUMENT_INTEL, LEGAL, or DEFAULT)
+7. **Q7 - Discovery Platforms**: What databases/platforms index this entity type? Test each, classify access level.
 
-Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection until all 6 questions are answered.
+Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection until all 7 questions are answered.
 
 ### PromptDecomposition Schema
 
@@ -61,7 +62,12 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
   "strategy": "MCPI | MEPI",
   "strategy_rationale": "string",
   "domain": "DEFAULT | SOFTWARE | MARKET_INTEL | DOCUMENT_INTEL | LEGAL",
-  "effort_estimate": "N hours minimum"
+  "effort_estimate": "N hours minimum",
+  "discovery_platforms": {
+    "identified": ["list of platforms that index this entity type"],
+    "tested": { "platform_name": "FREE | PAID | PARTIAL" },
+    "selected": ["platforms to use (FREE or PARTIAL only)"]
+  }
 }
 ```
 
@@ -75,6 +81,7 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 
 - **STRUT required** for all research sessions (include pipeline steps and time log)
 - **Assumptions check first** - write down what you think you know before researching
+- **Discovery platforms tested** - identify, test, classify (FREE/PAID/PARTIAL) before source collection
 - **Primary sources > secondary > community** - verify tier 1-3 before accepting tier 6-8
 - **Access dates required**: `Accessed: YYYY-MM-DD` on all sources
 - **Track time** - log task start/end for net research time calculation
@@ -88,19 +95,13 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 
 ## Strategy Selection
 
-**Identify user intention first:**
+**MEPI** (Default) - 2-3 curated options, filter and recommend
+- Use for: reversible decisions, time-constrained, action-oriented
+- Strategy file: [RESEARCH_STRATEGY_MEPI.md](RESEARCH_STRATEGY_MEPI.md)
 
-**MCPI** - "Collect, explore, understand"
-- Open-ended knowledge gathering: "tell me everything about X"
-- Example: "german emigration tips" = collect all tips you can find
-- [RESEARCH_STRATEGY_MCPI.md](RESEARCH_STRATEGY_MCPI.md)
-
-**MEPI** - "Do, achieve, reach"
-- Goal-directed action: "help me accomplish X"
-- Example: "how to register with XYZ" = give me proven steps to reach the goal
-- [RESEARCH_STRATEGY_MEPI.md](RESEARCH_STRATEGY_MEPI.md)
-
-**Default**: MEPI (most requests are goal-directed).
+**MCPI** (Exception) - exhaustive coverage, document everything
+- Use for: irreversible decisions, high-stakes, archival reference
+- Strategy file: [RESEARCH_STRATEGY_MCPI.md](RESEARCH_STRATEGY_MCPI.md)
 
 ## Source Hierarchy
 
