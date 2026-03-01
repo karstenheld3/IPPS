@@ -60,8 +60,9 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
   "dimensions": ["list of dimension names"],
   "topics_per_dimension": { "dimension": ["topics"] },
   "strategy": "MCPI | MEPI",
-  "strategy_rationale": "string",
+  "strategy_rationale": "string (WHY this strategy fits the prompt)",
   "domain": "DEFAULT | SOFTWARE | MARKET_INTEL | DOCUMENT_INTEL | LEGAL",
+  "domain_rationale": "string (WHY this domain profile applies)",
   "effort_estimate": "N hours minimum",
   "discovery_platforms": {
     "identified": ["list of platforms that index this entity type"],
@@ -90,17 +91,18 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 - **Download and store** all sources in session folder (web content changes)
 - **Inline citations** on critical conclusions: `[LABEL] (SOURCE_ID | URL or filename)`
 - **Identify domain** during Preflight, read corresponding DOMAIN_*.md profile
+- **Document strategy choice** - OUTPUT document must include strategy (MEPI/MCPI) + domain + rationale for both in header block
 - **Distinguish** facts from opinions from assumptions
 - **Autonomous after Phase 1** - no user interaction until delivery (except [CONSULT])
 
 ## Strategy Selection
 
-**MEPI** (Default) - 2-3 curated options, filter and recommend
-- Use for: reversible decisions, time-constrained, action-oriented
+**MEPI** (Default) - curated options, deeply researched, compare and recommend
+- Use for: User intent is specific, danger of analysis-paralysis and introducing irrelevant options
 - Strategy file: [RESEARCH_STRATEGY_MEPI.md](RESEARCH_STRATEGY_MEPI.md)
 
 **MCPI** (Exception) - exhaustive coverage, document everything
-- Use for: irreversible decisions, high-stakes, archival reference
+- Use for: User intent is broad, wants to see the whole picture
 - Strategy file: [RESEARCH_STRATEGY_MCPI.md](RESEARCH_STRATEGY_MCPI.md)
 
 ## Source Hierarchy
@@ -172,11 +174,12 @@ Read one profile per session based on Q6:
 
 INFO document with:
 1. Research Question
-2. Key Findings (curated for MEPI, exhaustive for MCPI)
-3. Detailed Analysis
-4. Limitations and Known Issues
-5. Sources (with verification labels)
-6. Recommendations
+2. **Strategy & Domain** (MEPI/MCPI + domain profile + rationale for each choice)
+3. Key Findings (curated for MEPI, exhaustive for MCPI)
+4. Detailed Analysis
+5. Limitations and Known Issues
+6. Sources (with verification labels)
+7. Recommendations
 
 MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison and Recommendation sections.
 

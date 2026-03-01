@@ -157,15 +157,42 @@ Run quality pipeline on complete research set.
 
 **Rollback**: If any phase reveals fundamental error in earlier phase, document in PROBLEMS.md and consult user.
 
+## Scoring Model (When Ranking Requested)
+
+If user intent includes ranking (e.g., "best", "top", "recommend", "which should I"):
+1. **Define scoring dimensions** - 3-5 criteria relevant to user's goal
+2. **Score ALL discovered options** - 0-3 per dimension, calculate total
+3. **Use scores to select curated options** - top N options become recommendations
+4. **Document selection rationale**:
+   - **Included options** - why they scored high, what makes them fit
+   - **Excluded options** - why they didn't make the cut (low score, poor fit, missing criteria)
+
+Example:
+```
+## Option Selection
+
+**Scoring Dimensions**: Thematic Fit (0-3), Reach (0-3), Accessibility (0-3)
+
+**Included** (score >= 7):
+- Option A (9/9): Perfect thematic fit, high reach, easy to contact
+- Option B (8/9): Strong fit, medium reach, responsive
+
+**Excluded** (score < 7):
+- Option X (4/9): High reach but no thematic fit - wrong audience
+- Option Y (5/9): Good fit but inactive account - no recent posts
+```
+
 ## Output Format
 
 MEPI outputs an INFO document with:
 1. **Research Question** - What we investigated
-2. **Key Findings** - Curated recommendations with rationale
-3. **Comparison** - Brief comparison of options (pros/cons)
-4. **Recommendation** - Clear "do this" guidance
-5. **Limitations** - What we didn't cover, caveats
-6. **Sources** - Quality sources with IDs
+2. **Strategy & Domain** - MEPI + domain profile + rationale for each choice
+3. **Scoring Model** (if ranking requested) - Dimensions, included/excluded rationale
+4. **Key Findings** - Curated recommendations with rationale
+5. **Comparison** - Brief comparison of options (pros/cons)
+6. **Recommendation** - Clear "do this" guidance
+7. **Limitations** - What we didn't cover, caveats
+8. **Sources** - Quality sources with IDs
 
 ## Anti-patterns to Avoid
 

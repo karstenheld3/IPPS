@@ -201,4 +201,31 @@ Run quality pipeline on complete research set.
 
 **Rollback**: If any phase reveals fundamental error in earlier phase, document in PROBLEMS.md and consult user before rollback.
 
+## Scoring Model (When Ranking Requested)
+
+If user intent includes ranking (e.g., "best", "top", "recommend", "which should I"):
+1. **Define scoring dimensions** - 3-5 criteria relevant to user's goal (document in output)
+2. **Score each option** - 0-3 per dimension, calculate total
+3. **Present results in ranked order** - most useful on top
+4. **Include scoring rationale** - brief explanation per option
+
+Example scoring table:
+```
+| Option | Dim1 | Dim2 | Dim3 | Total | Notes |
+|--------|------|------|------|-------|-------|
+| A      | 3    | 2    | 3    | 8     | Best overall fit |
+| B      | 2    | 3    | 2    | 7     | Strong in Dim2 |
+```
+
+## Output Format
+
+MCPI outputs an INFO document with:
+1. **Research Question** - What we investigated
+2. **Strategy & Domain** - MCPI + domain profile + rationale for each choice
+3. **Scoring Model** (if ranking requested) - Dimensions and weights
+4. **Key Findings** - Exhaustive coverage, ranked by score if applicable
+5. **Detailed Analysis** - Per-topic breakdowns
+6. **Limitations** - What we didn't cover, caveats
+7. **Sources** - All sources with IDs and verification labels
+
 See SKILL.md for file naming, verification labels, source hierarchy, and quality rules.
