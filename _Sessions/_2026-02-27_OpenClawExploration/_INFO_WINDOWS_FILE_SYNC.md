@@ -33,11 +33,14 @@
 
 | Use Case | Recommended Solution | Why |
 |----------|---------------------|-----|
-| Developer workflows | **Mutagen** | Real-time, three-way merge, `two-way-resolved` mode |
+| Developer workflows (LAN) | **Mutagen** | Real-time, three-way merge (LAN only - see note) |
+| Developer workflows (WAN) | **FreeFileSync + RealTimeSync** | VSS, SMB over Tailscale, handles 100k+ files |
 | General file sync | **FreeFileSync + RealTimeSync** | VSS for locked files, configurable conflict handling |
 | Commercial option | **GoodSync** | Easy GUI, configurable auto-resolve |
 | Enterprise multi-site | **SureSync MFT** | True file locking prevents conflicts |
 | Million+ files | **SyncBreeze** | Stream mode, enterprise scale |
+
+**NOTE [2026-03-01]**: Mutagen demoted for high-latency WAN (Azure VM). Initial scan of 342k files took 1+ hour over 1100ms latency. Use FreeFileSync over SMB/Tailscale instead for WAN with large dev folders.
 
 **Demoted** (fail one or more constraints):
 - **Box.com** - FAIL C1, C2, C4: Registry hack for folder; virtual drive; conflict copies
@@ -68,7 +71,7 @@ All solutions MUST meet these 4 constraints to be recommended:
 
 | Solution | C1 Custom Folder | C2 Physical Files | C3 Fast/Robust | C4 No Conflict Copies | Verdict |
 |----------|-----------------|-------------------|----------------|----------------------|--------|
-| **Mutagen** | YES - any path | YES | YES | YES (two-way-resolved) | PASS |
+| **Mutagen** | YES - any path | YES | PARTIAL (slow WAN) | YES (two-way-resolved) | PASS (LAN only) |
 | **FreeFileSync** | YES - any path | YES | YES | PARTIAL (configurable) | PASS |
 | **SureSync MFT** | YES - any path | YES | YES | YES (file locking) | PASS |
 | **Syncthing** | YES - any path | YES | PARTIAL (slow 100k+) | NO (creates .sync-conflict) | FAIL C4 |
@@ -84,8 +87,8 @@ All solutions MUST meet these 4 constraints to be recommended:
 
 ### Solutions That PASS All Constraints
 
-1. **Mutagen** - Best for developers (three-way merge, `two-way-resolved` mode auto-resolves conflicts)
-2. **FreeFileSync + RealTimeSync** - Best free solution (configure to overwrite, not create copies)
+1. **FreeFileSync + RealTimeSync** - Best free solution for WAN (VSS, SMB over Tailscale, handles 100k+ files)
+2. **Mutagen** - Best for LAN only (three-way merge; **demoted for high-latency WAN** - see Section 4.1)
 3. **SureSync MFT** - Best enterprise (file locking prevents conflicts)
 4. **GoodSync** - Good commercial option (configure conflict resolution to auto-resolve)
 5. **SyncBreeze** - Best for million+ files (stream mode, overwrite conflicts)
@@ -195,7 +198,13 @@ sync:
 - Less GUI, more CLI-focused
 - Not designed for non-technical users
 
-**Verdict**: Best for developers who need intelligent conflict resolution. Ideal for code sync between machines.
+**TESTED [2026-03-01] - CRITICAL LIMITATION FOUND**:
+- Initial scan of 342k files / 9GB over 1100ms latency (Azure VM via Tailscale): stuck on "Scanning files" for 1+ hour
+- Unusable for large dev folders over high-latency WAN without aggressive ignore patterns
+- Requires ignoring node_modules, .git, etc. - defeats purpose of full folder sync
+- **Recommendation changed**: Only use for LAN or small codebases; demote for high-latency WAN with 100k+ files
+
+**Verdict**: ~~Best for developers~~ **DEMOTED for high-latency WAN**. Works well on LAN or with heavy filtering. Not suitable for syncing full dev folders (with node_modules) over WAN.
 
 ### 4.3 FreeFileSync + RealTimeSync (Best Free Solution)
 
@@ -940,6 +949,13 @@ Local Machine <--Tailscale VPN--> Remote Machine (SMB share)
 **Key insight**: For physical file sync meeting all 4 constraints, only FreeFileSync, Mutagen, GoodSync, SyncBreeze, and SureSync qualify. Use Tailscale + SMB for remote access instead of cloud sync.
 
 ## Document History
+
+**[2026-03-01 16:40]**
+- Changed: Mutagen demoted for high-latency WAN - initial scan of 342k files took 1+ hour over 1100ms latency (Azure VM via Tailscale)
+- Changed: Mutagen C3 rating from YES to PARTIAL (slow WAN), verdict from PASS to PASS (LAN only)
+- Changed: FreeFileSync promoted to #1 recommendation for WAN with large dev folders
+- Added: TESTED note in Section 4.1 with real-world findings
+- Changed: Executive Summary table updated with LAN/WAN distinction
 
 **[2026-02-28 15:40]**
 - Added: Mandatory Constraints section (C1-C4) per user requirements
