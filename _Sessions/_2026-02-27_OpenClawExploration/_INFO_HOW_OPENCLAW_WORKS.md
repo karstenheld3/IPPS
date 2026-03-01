@@ -103,6 +103,30 @@ E:\Dev\openclaw\
 
 **Source**: [VERIFIED] (OCLAW-SC-DOCS-ENVVARS | https://docs.openclaw.ai/help/environment)
 
+### API Keys via .env File
+
+Store API keys in `$OPENCLAW_STATE_DIR/.env` (e.g., `E:\Dev\openclaw\.openclaw\.env`):
+
+```
+OPENAI_API_KEY=sk-proj-...
+OPENAI_ORGANIZATION=org-...
+ANTHROPIC_API_KEY=sk-ant-api03-...
+GOOGLE_PLACES_API_KEY=AIzaSy...
+GEMINI_API_KEY=AIzaSy...
+BRAVE_API_KEY=BSALly...
+OPENROUTER_API_KEY=sk-or-v1-...
+```
+
+**Supported keys:**
+- `OPENAI_API_KEY` + `OPENAI_ORGANIZATION` - OpenAI models
+- `ANTHROPIC_API_KEY` - Claude models
+- `BRAVE_API_KEY` - Brave Search (web_search tool)
+- `OPENROUTER_API_KEY` - OpenRouter (alternative for Perplexity, other models)
+- `GEMINI_API_KEY` - Google Gemini models
+- `GOOGLE_PLACES_API_KEY` - Google Places API (if using location tools)
+
+**Note**: Keys in `.env` take precedence over config file settings. Restart gateway after changes.
+
 ### Workspace Folder (`agents.defaults.workspace`)
 
 Your install: `e:\Dev\openclaw\workspace`
@@ -975,6 +999,9 @@ OpenClaw can control Windsurf via:
 5. **Consider Windsurf integration** - Use findings from OCLAW-IN02 for bidirectional control
 
 ## Document History
+
+**[2026-03-01 23:46]**
+- Added: API Keys via .env File section with supported environment variables
 
 **[2026-03-01 23:24]**
 - Added: Search Provider Architecture subsection (5 providers, no browser involvement, config-driven)
