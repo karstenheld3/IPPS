@@ -1,10 +1,34 @@
 # AGENTS.md - OpenClaw Workspace
 
-This folder is home. Treat it that way.
+This folder is home. We refer to it as `[WORKSPACE_FOLDER]`.
+
+## Workspace Settings
+
+[DEFAULT_SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_Sessions
+[SESSION_ARCHIVE_FOLDER]: [DEFAULT_SESSIONS_FOLDER]\_Archive
+
+[TOOLS_FOLDER]: [WORKSPACE_FOLDER]\..\..\.tools\ (Usually E:\Dev\.tools)
 
 ## Every Session
 
 Read WORKFLOWS.md to know available workflows.
+
+## Output Text Format when talking via WhatsApp
+
+WhatsApp has its own formatting syntax. Do NOT use Markdown.
+
+**WhatsApp Formatting:**
+- `*Bold*` - Surround with asterisks
+- `_Italic_` - Surround with underscores
+- `~Strikethrough~` - Surround with tildes
+- ``` `Monospace` ``` - Surround with backticks
+- `- ` or `* ` - Bullet points (hyphen or asterisk + space)
+- `1. ` - Numbered lists
+
+**Do NOT use:**
+- `**Bold**` (double asterisks)
+- `# Headers`
+- `[links](url)` - Just paste URLs directly
 
 ## Workflow Syntax
 
