@@ -375,7 +375,7 @@ openclaw exec --background --timeout 60 "npm run build"
 
 ### web_search - Web Search
 
-**Purpose**: Search the web using Brave Search API (or Perplexity/Gemini)
+**Purpose**: Search the web using Brave Search API (or Perplexity/Gemini/Grok/Kimi)
 
 **Parameters**:
 - `query` (required) - Search query
@@ -392,6 +392,43 @@ openclaw exec --background --timeout 60 "npm run build"
 ```bash
 openclaw web_search "OpenClaw tutorial" --count 5 --freshness pw
 ```
+
+#### Search Provider Architecture [VERIFIED - source code analysis 2026-03-01]
+
+**5 providers supported** (hardcoded in `src/agents/tools/web-search.ts`):
+- `brave` - Brave Search API (default)
+- `perplexity` - Perplexity Sonar via direct API or OpenRouter
+- `grok` - xAI Grok with web search
+- `gemini` - Google Gemini with Search grounding
+- `kimi` - Moonshot Kimi with native `$web_search`
+
+**How it works**:
+- Direct HTTP API calls to provider endpoints - **NO browser involved**
+- Results returned as JSON with title, URL, description, optional citations
+
+**When agent uses browser instead of web_search**:
+- JS-heavy sites (Instagram, Twitter, etc.) - need real browser to scrape content
+- Site-specific searches (`site:instagram.com`) - agent uses Google via browser
+- Follow-up navigation needed - agent wants to visit/interact with results
+- Brave API key not configured - falls back to browser Google search
+
+**Config-driven** via `openclaw.json`:
+```json
+{
+  "tools": {
+    "web": {
+      "search": {
+        "provider": "brave",
+        "apiKey": "...",
+        "maxResults": 5,
+        "cacheTtlMinutes": 15
+      }
+    }
+  }
+}
+```
+
+**Extensibility**: No plugin system - providers hardcoded. Adding new provider requires modifying `web-search.ts`.
 
 ### web_fetch - Web Page Fetching
 
@@ -410,6 +447,25 @@ openclaw web_search "OpenClaw tutorial" --count 5 --freshness pw
 - Results cached 15 min
 
 **Limitation**: Does NOT execute JavaScript. Use `browser` tool for JS-heavy sites.
+
+#### How HTML is Sent to LLM [VERIFIED - source code analysis 2026-03-01]
+
+**As cleaned Markdown text - NOT screenshots, NOT raw HTML.**
+
+**Processing pipeline** (from `src/agents/tools/web-fetch-utils.ts`):
+1. Fetch URL with Chrome-like User-Agent
+2. **@mozilla/readability** extracts main content (strips nav, ads, footer, scripts, styles)
+3. Convert HTML to Markdown (preserves links, headers, lists)
+4. Optionally convert Markdown to plain text
+5. Truncate to `maxChars` (default 50,000 chars)
+6. Wrap with security markers (`wrapWebContent`)
+
+**Key functions**:
+- `htmlToMarkdown(html)` - Strips scripts/styles, converts `<a>` to `[text](url)`, `<h1>` to `#`, etc.
+- `markdownToText(markdown)` - Removes markdown syntax for plain text mode
+- `truncateText(text, maxChars)` - Caps output length
+
+**Security**: External content wrapped with untrusted markers for LLM awareness.
 
 ### browser - Browser Automation
 
@@ -919,6 +975,11 @@ OpenClaw can control Windsurf via:
 5. **Consider Windsurf integration** - Use findings from OCLAW-IN02 for bidirectional control
 
 ## Document History
+
+**[2026-03-01 23:24]**
+- Added: Search Provider Architecture subsection (5 providers, no browser involvement, config-driven)
+- Added: How HTML is Sent to LLM subsection (Readability extraction, Markdown conversion, truncation pipeline)
+- Source: OpenClaw source code analysis (`src/agents/tools/web-search.ts`, `web-fetch-utils.ts`)
 
 **[2026-03-01 22:15]**
 - Added: Bootstrap File Configuration section with skipBootstrap, bootstrapMaxChars, bootstrapTotalMaxChars options
