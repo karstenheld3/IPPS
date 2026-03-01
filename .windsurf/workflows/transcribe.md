@@ -15,6 +15,7 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 
 ## MUST-NOT-FORGET
 
+- Ensure complete file is stitched together and file path is noted
 - Run `/verify` after transcription complete
 - Keep source images for verification
 
