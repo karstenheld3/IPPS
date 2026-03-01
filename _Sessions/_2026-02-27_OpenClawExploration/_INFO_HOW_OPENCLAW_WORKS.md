@@ -124,6 +124,31 @@ e:\Dev\openclaw\workspace\
 └── skills/           # Workspace-specific skills
 ```
 
+### Bootstrap File Configuration [VERIFIED]
+
+Control automatic creation and injection of bootstrap files via `agents.defaults`:
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `skipBootstrap` | `false` | Disables auto-creation of AGENTS.md, SOUL.md, TOOLS.md, IDENTITY.md, USER.md, HEARTBEAT.md, BOOTSTRAP.md |
+| `bootstrapMaxChars` | `20000` | Max characters per bootstrap file before truncation |
+| `bootstrapTotalMaxChars` | `150000` | Max total characters for all bootstrap files combined |
+
+**Example - Disable all scaffold files:**
+```json
+{
+  "agents": {
+    "defaults": {
+      "skipBootstrap": true
+    }
+  }
+}
+```
+
+**Use case**: When you want to manage workspace files manually (e.g., syncing from DevSystem) and prevent OpenClaw from recreating deleted files on restart.
+
+**Source**: [VERIFIED] (OCLAW-SC-DOCS-CFGREF | https://docs.openclaw.ai/gateway/configuration-reference)
+
 ### Skills Storage Locations [VERIFIED]
 
 Skills are loaded from multiple locations with precedence:
@@ -894,6 +919,9 @@ OpenClaw can control Windsurf via:
 5. **Consider Windsurf integration** - Use findings from OCLAW-IN02 for bidirectional control
 
 ## Document History
+
+**[2026-03-01 22:15]**
+- Added: Bootstrap File Configuration section with skipBootstrap, bootstrapMaxChars, bootstrapTotalMaxChars options
 
 **[2026-03-01 16:32]**
 - Added: Remote Access via Tailscale Serve section with setup steps, device pairing commands, and config examples
