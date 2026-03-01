@@ -184,47 +184,81 @@ Located in `E:\Dev\`:
 - **Conflicts**: Same file modified on both sides → flagged for manual resolution
 - **Identical files**: Compared by SHA-1 hash, skipped if same
 
-## RDP Security Configuration
-
-### Problem
-
-Azure VMs with public RDP ports (3389) are constantly scanned by bots attempting brute force attacks. This caused account lockouts overnight even when the VM was not in use.
-
-### Solution: Tailscale-Only RDP
-
-Removed the public RDP rule from Azure NSG. RDP access is now only possible via Tailscale private network.
-
-**Azure Portal configuration:**
-1. VM → Networking → Inbound port rules
-2. Deleted the RDP rule (Priority 300, Port 3389, Source: Any)
-
-**To connect via RDP:**
-- Use Tailscale IP: `100.98.20.25`
-- NOT the public IP: `135.225.105.115`
-
-**Benefits:**
-- Bots cannot reach the VM (Tailscale IPs are private)
-- No more account lockouts from brute force attempts
-- No need to manage IP allowlists
-
-**Recovery if locked out:**
-1. Azure Portal → VM → Help → Reset password
-2. Use a DIFFERENT password (same password won't clear lockout)
-3. Delete saved RDP credentials on laptop before reconnecting
-
 ## Issues Encountered
 
 1. **Mutagen not in winget** - Had to download from GitHub directly
 2. **SSH key auth failed initially** - Windows OpenSSH permissions issue; switched to Bitvise which handles keys via GUI import
 3. **High latency** - Tailscale connection ~1100ms (Azure location), but sync still works
-4. **Account lockout from brute force** - Overnight bot attacks locked accounts; resolved by removing public RDP access
+
+## OpenClaw Remote Access Configuration
+
+Added 2026-03-01. OpenClaw gateway on VM accessible from laptop via Tailscale Serve.
+
+### OpenClaw Paths (VM)
+
+- **OPENCLAW_HOME**: `E:\Dev\openclaw`
+- **OPENCLAW_STATE_DIR**: `E:\Dev\openclaw\.openclaw`
+- **OPENCLAW_CONFIG_PATH**: `E:\Dev\openclaw\.openclaw\openclaw.json`
+- **Workspace**: `E:\Dev\openclaw\workspace`
+- **Gateway port**: 18789
+
+### Tailscale Serve
+
+- **Access URL**: `https://wa-vm-01.tailaed0cc.ts.net/`
+- **Local gateway**: `ws://127.0.0.1:18789`
+
+### openclaw.json Gateway Config
+
+```json
+{
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "77e4feb0a2ffbf87762944de809b656f897b1a6f9db9b3c8"
+    },
+    "controlUi": {
+      "allowedOrigins": [
+        "https://wa-vm-01.tailaed0cc.ts.net"
+      ]
+    },
+    "trustedProxies": ["127.0.0.1", "::1"]
+  }
+}
+```
+
+### Setup Steps Performed
+
+1. Set environment variables for custom OpenClaw paths
+2. Moved OpenClaw data from `C:\Users\User\.openclaw` to `E:\Dev\openclaw\.openclaw`
+3. Updated `workspace` path in `openclaw.json`
+4. Enabled Tailscale Serve: `tailscale serve --bg 18789`
+5. Added `controlUi.allowedOrigins` with Tailscale URL
+6. Added `trustedProxies` for proxy header handling
+7. Approved laptop device pairing: `openclaw devices approve <request-id>`
+
+### Batch Files (VM)
+
+- `E:\Dev\openclaw-start.bat` - Start gateway (local or via SSH from laptop)
+- `E:\Dev\openclaw-stop.bat` - Stop gateway
+- `E:\Dev\openclaw-status.bat` - Check gateway status
+
+### Device Pairing
+
+Laptop paired and approved for remote dashboard access.
+
+Commands:
+```powershell
+openclaw devices list
+openclaw devices approve <id>
+```
 
 ## Document History
 
-**[2026-03-01 10:46]**
-- Added: RDP Security Configuration section
-- Added: Tailscale-only RDP rationale and recovery steps
-- Added: Issue #4 (account lockout from brute force)
+**[2026-03-01 16:35]**
+- Added: OpenClaw Remote Access Configuration section (paths, Tailscale Serve, gateway config, batch files, device pairing)
 
 **[2026-02-28 19:36]**
 - Rewrote: Changed from guide format to record of what was done

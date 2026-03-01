@@ -54,6 +54,55 @@ C:\Users\User\.openclaw\
 └── update-check.json # Update tracking
 ```
 
+### Path Environment Variables [VERIFIED]
+
+Override default paths using these environment variables:
+
+- **OPENCLAW_HOME** - Base for all paths, replaces `$HOME` (default: `~`)
+- **OPENCLAW_STATE_DIR** - Config, credentials, logs, devices (default: `~/.openclaw`)
+- **OPENCLAW_CONFIG_PATH** - Main config file (default: `~/.openclaw/openclaw.json`)
+
+**Precedence** (highest to lowest):
+1. Process environment (parent shell/daemon)
+2. `.env` in current working directory
+3. Global `.env` at `$OPENCLAW_STATE_DIR/.env`
+4. Config `env` block in `openclaw.json`
+5. Optional login-shell import (`OPENCLAW_LOAD_SHELL_ENV=1`)
+
+**Example: Move all data to custom path (Windows)**
+
+```powershell
+[Environment]::SetEnvironmentVariable("OPENCLAW_HOME", "E:\Dev\openclaw", "User")
+[Environment]::SetEnvironmentVariable("OPENCLAW_STATE_DIR", "E:\Dev\openclaw\.openclaw", "User")
+[Environment]::SetEnvironmentVariable("OPENCLAW_CONFIG_PATH", "E:\Dev\openclaw\.openclaw\openclaw.json", "User")
+```
+
+Then set workspace in config (`openclaw.json`):
+```json
+{
+  "agents": {
+    "defaults": {
+      "workspace": "E:\\Dev\\openclaw\\workspace"
+    }
+  }
+}
+```
+
+**Result:**
+```
+E:\Dev\openclaw\
+├── .openclaw\           # OPENCLAW_STATE_DIR
+│   ├── openclaw.json    # OPENCLAW_CONFIG_PATH
+│   ├── credentials\
+│   └── logs\
+└── workspace\           # agents.defaults.workspace
+    ├── skills\
+    ├── AGENTS.md
+    └── SOUL.md
+```
+
+**Source**: [VERIFIED] (OCLAW-SC-DOCS-ENVVARS | https://docs.openclaw.ai/help/environment)
+
 ### Workspace Folder (`agents.defaults.workspace`)
 
 Your install: `e:\Dev\openclaw\workspace`
@@ -74,6 +123,74 @@ e:\Dev\openclaw\workspace\
 ├── MEMORY.md         # Curated long-term memory
 └── skills/           # Workspace-specific skills
 ```
+
+### Skills Storage Locations [VERIFIED]
+
+Skills are loaded from multiple locations with precedence:
+
+1. **Bundled skills** - Shipped with npm package (highest priority)
+2. **Managed/local skills** - `~/.openclaw/skills` (shared across all agents)
+3. **Workspace skills** - `<workspace>/skills` (per-agent only)
+4. **Extra dirs** - `skills.load.extraDirs` in config (lowest priority)
+
+**With custom paths:**
+- Global/shared skills: `E:\Dev\openclaw\.openclaw\skills`
+- Workspace skills: `E:\Dev\openclaw\workspace\skills`
+
+**ClawHub commands:**
+```bash
+clawhub install <skill-slug>   # Install to workspace
+clawhub update --all           # Update all installed
+clawhub sync --all             # Scan + publish updates
+```
+
+**Security note**: Treat third-party skills as untrusted code. Read them before enabling.
+
+**Source**: [VERIFIED] (OCLAW-SC-DOCS-SKILLS | https://docs.openclaw.ai/skills)
+
+### Remote Access via Tailscale Serve [VERIFIED]
+
+Access OpenClaw dashboard and gateway from other devices on your Tailscale network.
+
+**Setup Steps:**
+
+1. **Enable Tailscale Serve:**
+```powershell
+tailscale serve --bg <gateway-port>
+```
+
+2. **Add allowed origins and trusted proxies to `openclaw.json`:**
+```json
+{
+  "gateway": {
+    "controlUi": {
+      "allowedOrigins": [
+        "https://<hostname>.<tailnet>.ts.net"
+      ]
+    },
+    "trustedProxies": ["127.0.0.1", "::1"]
+  }
+}
+```
+
+3. **Restart gateway** to apply config changes
+
+4. **Approve device pairing** from remote machine:
+```powershell
+openclaw devices list     # See pending requests
+openclaw devices approve <request-id>
+```
+
+**Access URL:** `https://<hostname>.<tailnet>.ts.net/`
+
+**Device Pairing Commands:**
+- `openclaw devices list` - Show pending and paired devices
+- `openclaw devices approve <id>` - Approve a pairing request
+- `openclaw devices reject <id>` - Reject a pairing request
+- `openclaw devices remove <id>` - Remove a paired device
+- `openclaw devices revoke <id>` - Revoke a device token
+
+**Source**: [VERIFIED] (OCLAW-SC-DOCS-GATEWAY | https://docs.openclaw.ai/gateway)
 
 ## 2. System Prompt Structure
 
@@ -777,6 +894,9 @@ OpenClaw can control Windsurf via:
 5. **Consider Windsurf integration** - Use findings from OCLAW-IN02 for bidirectional control
 
 ## Document History
+
+**[2026-03-01 16:32]**
+- Added: Remote Access via Tailscale Serve section with setup steps, device pairing commands, and config examples
 
 **[2026-02-28 10:42]**
 - Added: Skills, Workflows, and Rules comparison section with bridge option
