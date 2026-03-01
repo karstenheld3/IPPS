@@ -278,3 +278,13 @@ Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `
 - `workflows/learn.md` - Extract learnings from failures
 
 **If a file is NOT on the deprecated list:** Do NOT delete it. It is a custom repo-specific file.
+
+## OpenClaw-Specific Files
+
+For the OpenClaw workspace (`e:\Dev\openclaw\workspace`) only:
+
+**Additional files to sync from workspace root:**
+- `_OPENCLAW-AGENTS.md` → copy to `AGENTS.md` (one-time setup, or when updated)
+- `_OPENCLAW_WORKFLOWS.md` → copy to `WORKFLOWS.md` (sync every time workflows added/removed)
+
+**These files are NOT synced to other repos** - they are OpenClaw-specific.

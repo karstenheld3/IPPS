@@ -127,3 +127,9 @@ Automatically push commits to GitHub.
   - Overwrite everything
   - Delete deprecated or renamed files from older DevSystem versions
   - Don't delete unreleated existing files
+- e:\Dev\openclaw\workspace
+  - Overwrite: rules/, workflows/, skills/ folders
+  - Create: WORKFLOWS.md, _Sessions/ (if not exists)
+  - Never overwrite: AGENTS.md, HEARTBEAT.md, memory/, MEMORY.md
+  - Special: Copy _OPENCLAW-AGENTS.md to AGENTS.md (one-time), copy _OPENCLAW_WORKFLOWS.md to WORKFLOWS.md
+  - **Sync _OPENCLAW_WORKFLOWS.md** every time workflows are added/removed in DevSystem
