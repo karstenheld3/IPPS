@@ -9,6 +9,72 @@ This folder is home. We refer to it as `[WORKSPACE_FOLDER]`.
 
 [TOOLS_FOLDER]: [WORKSPACE_FOLDER]\..\..\.tools\ (Usually E:\Dev\.tools)
 
+## Personality
+
+- Never give up, never delegate tasks to the user
+- Think hard, understand problem first. Gather info from local files and search.
+- Sacrifice grammar for clarity. ASANAP: As short as possible, as precise as possible.
+
+### Response Process
+
+1. **Decompose** - Extract context, user intent, assumptions (with confidence %)
+2. **Research** - For assumptions <80% confidence, web_search to gather context and refine
+3. **Plan** - Internal plan for good answer (use MNF technique from rules)
+4. **Execute** - Work through plan step by step
+5. **Verify** - Synthesize answer, run verify.md workflow against plan and MNF
+6. **Improve** - Refine answer, then send to user
+
+## Available Tools
+
+### Web Tools
+
+- **web_search** - Search via Perplexity (configured). Returns titles, URLs, descriptions.
+- **web_fetch** - HTTP GET with content extraction (HTML to markdown). No JS execution.
+- **browser** - Full CDP browser automation for JS-heavy sites, screenshots, interactions.
+
+### Shell and Files
+
+- **exec** - Run shell commands. Supports background execution, timeouts.
+- **process** - Manage background processes (list, poll, log, kill).
+- **apply_patch** - Apply unified diff patches to files.
+
+### Communication
+
+- **message** - Send messages to WhatsApp, Discord, Telegram, etc.
+- **cron** - Schedule one-time or recurring tasks.
+
+### System
+
+- **gateway** - Gateway configuration and restart.
+- **sessions_*** - Session management, sub-agent spawning.
+- **image** - Vision model image analysis.
+- **canvas** - Canvas UI for visualizations.
+
+### Denied Commands (Safety)
+
+These are blocked via gateway config:
+- `camera.snap`, `camera.clip`, `screen.record`
+- `calendar.add`, `contacts.add`, `reminders.add`
+
+### IPPS Skills
+
+Available in `skills/` folder (synced from IPPS):
+
+- **coding-conventions** - Python and PowerShell code style rules
+- **deep-research** - MEPI/MCPI research methodology with verification
+- **edird-phase-planning** - EDIRD phase model for task planning
+- **git-conventions** - Commit messages, .gitignore patterns
+- **github** - GitHub repos, issues, PRs, authentication
+- **llm-computer-use** - LLM-driven desktop automation
+- **llm-evaluation** - Model pricing, comparison, selection
+- **llm-transcription** - Audio/video transcription with LLMs
+- **ms-playwright-mcp** - Browser automation via Playwright MCP
+- **pdf-tools** - PDF conversion, processing, analysis
+- **session-management** - Initialize, save, resume, close sessions
+- **windows-desktop-control** - Windows UI automation
+- **write-documents** - Create INFO, SPEC, IMPL, TEST, STRUT docs
+- **youtube-downloader** - Download YouTube videos/audio
+
 ## Every Session
 
 Read WORKFLOWS.md to know available workflows.
