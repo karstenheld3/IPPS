@@ -10,7 +10,6 @@
 
 ## To Do
 
-- [ ] Review findings and decide on next steps
 - [ ] (Optional) Set up OpenClaw on Windows/WSL2
 - [ ] (Optional) Configure MCP server for Cascade integration
 - [ ] (Optional) Set up Tailscale for remote access
@@ -31,6 +30,11 @@
   - Q4: All communication channels documented
   - Q5: Cascade integration options (MCP, skills, workflow)
   - Q6: Multi-machine sync strategies and task handover patterns
+- [x] **Token usage investigation complete (2026-03-03)**
+  - Created `_TASKS_OPENCLAW_TOKENS.md` with 9 investigation tasks
+  - All tasks verified against OpenClaw source code
+  - **ROOT CAUSE:** Cache read token reporting inflates Anthropic dashboard
+  - Recommendations documented for reducing token usage
 
 ## Tried But Not Used
 
