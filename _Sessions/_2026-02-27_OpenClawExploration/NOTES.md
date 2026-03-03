@@ -10,6 +10,10 @@
 **Workflow**: SOLVE (RESEARCH)
 **Assessment**: Exploratory research on OpenClaw capabilities, setup, and integration options
 
+## MUST READ
+
+- `_INFO_HOW_OPENCLAW_WORKS.md` - Comprehensive OpenClaw reference (architecture, config, tools, browser profiles)
+
 ## IMPORTANT: Cascade Agent Instructions
 
 - Sessions folder: `_PrivateSessions/`

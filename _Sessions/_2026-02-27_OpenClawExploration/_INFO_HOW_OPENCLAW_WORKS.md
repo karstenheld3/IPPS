@@ -241,6 +241,50 @@ openclaw devices approve <request-id>
 
 **Source**: [VERIFIED] (OCLAW-SC-DOCS-GATEWAY | https://docs.openclaw.ai/gateway)
 
+### Browser Profile Configuration [VERIFIED]
+
+Control which browser profile OpenClaw uses for automation:
+
+**Config (`openclaw.json`):**
+```json
+{
+  "browser": {
+    "enabled": true,
+    "defaultProfile": "chrome",
+    "profiles": {
+      "openclaw": { "cdpPort": 18800 },
+      "work": { "cdpPort": 18801, "color": "#0066CC" }
+    }
+  }
+}
+```
+
+**Profiles:**
+- `chrome` - Your existing Chrome tabs via extension relay (has your logins, cookies)
+- `openclaw` - Isolated OpenClaw-managed Chrome instance (clean slate, default)
+- Custom profiles can be created with `openclaw browser create-profile --name <name>`
+
+**Chrome Extension (for `chrome` profile):**
+```bash
+openclaw browser extension install
+openclaw browser extension path    # Get path for manual load
+```
+
+Load in Chrome: `chrome://extensions` → Developer mode → Load unpacked
+
+**Extension Settings:**
+- **Port:** `18792` (gateway port + 3, e.g., 18789 + 3 = 18792)
+- **Token:** Value from `gateway.auth.token` in `openclaw.json`
+
+**CLI Usage:**
+```bash
+openclaw browser --browser-profile chrome tabs
+openclaw browser --browser-profile openclaw start
+openclaw browser snapshot
+```
+
+**Source**: [VERIFIED] (OCLAW-SC-DOCS-BROWSER | https://docs.openclaw.ai/cli/browser)
+
 ## 2. System Prompt Structure
 
 OpenClaw assembles the system prompt dynamically. Sections in order:
@@ -999,6 +1043,12 @@ OpenClaw can control Windsurf via:
 5. **Consider Windsurf integration** - Use findings from OCLAW-IN02 for bidirectional control
 
 ## Document History
+
+**[2026-03-03 08:54]**
+- Added: Extension Settings (port 18792 = gateway+3, token from config)
+
+**[2026-03-02 17:09]**
+- Added: Browser Profile Configuration section with config example, profiles, extension install, CLI usage
 
 **[2026-03-01 23:46]**
 - Added: API Keys via .env File section with supported environment variables
