@@ -17,14 +17,14 @@ Invoke these skills based on context:
 
 ## Mandatory Re-read
 
-**SESSION-BASED mode** - Re-read session folder documents:
+**SESSION-MODE mode** - Re-read session folder documents:
 - NOTES.md
 - PROBLEMS.md
 - PROGRESS.md
 - FAILS.md
 - LEARNINGS.md (if exists)
 
-**PROJECT-WIDE mode** - Re-read workspace-level documents:
+**PROJECT-MODE mode** - Re-read workspace-level documents:
 - README.md
 - !NOTES.md or NOTES.md
 - !PROBLEMS.md or PROBLEMS.md (if exists)

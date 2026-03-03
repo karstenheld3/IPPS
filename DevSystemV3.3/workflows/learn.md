@@ -130,12 +130,12 @@ Add entry to LEARNINGS.md using LEARNINGS_TEMPLATE.md structure:
    
    Check current work mode using AGEN states:
    
-   **If SESSION-BASED** (working in `[SESSION_FOLDER]`):
+   **If SESSION-MODE** (working in `[SESSION_FOLDER]`):
    - Write to `[SESSION_FOLDER]/LEARNINGS.md`
    - Create file if it doesn't exist
    - Session entries sync to workspace on `/session-finalize`
    
-   **If PROJECT-WIDE** (no active session):
+   **If PROJECT-MODE** (no active session):
    - Write to `[WORKSPACE_FOLDER]/LEARNINGS.md`
 
 2. Assign ID: `[TOPIC]-LN-[NNN]`

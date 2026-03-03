@@ -148,8 +148,8 @@ No brackets for tokens in **conditions** - things the agent checks for branching
 
 - **SINGLE-PROJECT** - Workspace contains one project
 - **MONOREPO** - Workspace contains multiple independent projects
-- **SESSION-BASED** - Time-limited session with specific goals
-- **PROJECT-WIDE** - Work spans entire project without session boundaries
+- **SESSION-MODE** - Time-limited session with specific goals
+- **PROJECT-MODE** - Work spans entire project without session boundaries
 
 ### Complexity Assessment
 
