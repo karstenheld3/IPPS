@@ -4,19 +4,6 @@
 Current [DEVSYSTEM]: DevSystemV3.4
 Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
-## Cascade Model Switching
-
-**Tier Definitions:**
-- **MODEL-HIGH** = Claude Opus 4.5 (Thinking) [5x] - Complex reasoning, specs, architecture
-- **MODEL-MID** = Claude Sonnet 4.5 [2x] - Code verification, bug fixes, refactoring
-- **MODEL-LOW** = Gemini 3 Flash Medium [1x] - Scripts, git, file ops, monitoring (78% SWE-Bench, 372 TPS)
-
-**Activity Mapping:**
-- MODEL-HIGH: Writing docs, analyzing problems, architecture, gates
-- MODEL-MID: Code verification, bug fixes, refactoring, implementation
-- MODEL-LOW: Running scripts, git commit, file reads, session archive
-
-**Default:** MODEL-HIGH (when uncertain)
 
 ## .tools Folder Location (2026-02-11)
 
