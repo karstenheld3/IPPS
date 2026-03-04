@@ -35,7 +35,7 @@ Universal transcription tools using LLMs with optimized prompts for each purpose
 **Image Transcription:**
 ```bash
 python transcribe-image-to-markdown.py --input-file doc.png --output-file doc.md --verbose
-python transcribe-image-to-markdown.py --input-folder ./images --output-folder ./out --initial-candidates 3 --min-score 3.5
+python transcribe-image-to-markdown.py --input-folder ./images --output-folder ./out --candidates 3 --min-score 3.5
 ```
 
 **Audio Transcription:**

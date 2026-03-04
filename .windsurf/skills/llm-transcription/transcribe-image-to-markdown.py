@@ -29,7 +29,7 @@ EFFORT_LEVELS = ['none', 'minimal', 'low', 'medium', 'high', 'xhigh']
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
 DEFAULT_MODEL = 'gpt-5-mini'
 DEFAULT_JUDGE_MODEL = 'gpt-5-mini'
-DEFAULT_INITIAL_CANDIDATES = 3
+DEFAULT_CANDIDATES = 3
 DEFAULT_MIN_SCORE = 3.5
 DEFAULT_MAX_REFINEMENTS = 1
 DEFAULT_WORKERS = 4
@@ -559,7 +559,7 @@ def process_single_image(worker_id: int, file_idx: int, total_files: int,
         
         result = asyncio.run(process_image_ensemble(
             image_data, media_type, transcribe_prompt, judge_prompt,
-            args.model, args.judge_model, args.initial_candidates,
+            args.model, args.judge_model, args.candidates,
             api_keys, api_params, judge_api_params, provider, judge_provider,
             args.min_score, args.max_refinements,
             worker_id, file_idx, total_files
@@ -589,7 +589,7 @@ def process_single_image(worker_id: int, file_idx: int, total_files: int,
             'model': args.model,
             'judge_model': args.judge_model,
             'final_score': result['final_score'],
-            'candidates': args.initial_candidates,
+            'candidates': args.candidates,
             'candidate_scores': result['candidate_scores'],
             'selected_candidate': result['selected_candidate'],
             'refinement_applied': result['refinement_applied'],
@@ -638,8 +638,8 @@ Examples:
     parser.add_argument('--transcribe-prompt-file', type=Path, help='Transcription prompt file')
     parser.add_argument('--judge-prompt-file', type=Path, help='Judge prompt file')
     
-    parser.add_argument('--initial-candidates', type=int, default=DEFAULT_INITIAL_CANDIDATES,
-                        help=f'Candidates to generate (default: {DEFAULT_INITIAL_CANDIDATES})')
+    parser.add_argument('--candidates', type=int, default=DEFAULT_CANDIDATES,
+                        help=f'Candidates to generate (default: {DEFAULT_CANDIDATES})')
     parser.add_argument('--min-score', type=float, default=DEFAULT_MIN_SCORE,
                         help=f'Threshold for refinement (default: {DEFAULT_MIN_SCORE})')
     parser.add_argument('--max-refinements', type=int, default=DEFAULT_MAX_REFINEMENTS,
