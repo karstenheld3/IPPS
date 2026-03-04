@@ -9,11 +9,12 @@ Run this script and answer with a single character:
 ```powershell
 # === LLM Evaluation Skill Uninstall ===
 
-# Define what can be removed
+# Define paths using Join-Path for consistency
+# .tools is sibling to workspace: [WORKSPACE]/../.tools/
 $workspaceFolder = (Get-Location).Path
-$venvDir = "$workspaceFolder\..\.tools\llm-venv"
-$envFile = "$workspaceFolder\.env"
-$toolsDir = "$workspaceFolder\..\.tools"
+$toolsDir = Join-Path (Split-Path $workspaceFolder -Parent) ".tools"
+$venvDir = Join-Path $toolsDir "llm-venv"
+$envFile = Join-Path $workspaceFolder ".env"
 
 # Check current state
 $hasVenv = Test-Path $venvDir
