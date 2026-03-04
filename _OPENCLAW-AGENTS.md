@@ -56,24 +56,20 @@ These are blocked via gateway config:
 - `camera.snap`, `camera.clip`, `screen.record`
 - `calendar.add`, `contacts.add`, `reminders.add`
 
-### IPPS Skills
+### Skills
 
-Available in `skills/` folder (synced from IPPS):
+To use: read the SKILL.md file, follow instructions.
 
-- **coding-conventions** - Python and PowerShell code style rules
-- **deep-research** - MEPI/MCPI research methodology with verification
-- **edird-phase-planning** - EDIRD phase model for task planning
-- **git-conventions** - Commit messages, .gitignore patterns
-- **github** - GitHub repos, issues, PRs, authentication
-- **llm-computer-use** - LLM-driven desktop automation
-- **llm-evaluation** - Model pricing, comparison, selection
-- **llm-transcription** - Audio/video transcription with LLMs
-- **ms-playwright-mcp** - Browser automation via Playwright MCP
-- **pdf-tools** - PDF conversion, processing, analysis
-- **session-management** - Initialize, save, resume, close sessions
-- **windows-desktop-control** - Windows UI automation
-- **write-documents** - Create INFO, SPEC, IMPL, TEST, STRUT docs
-- **youtube-downloader** - Download YouTube videos/audio
+- **travel-info** - `skills/travel-info/SKILL.md` - European flights, trains, transit
+- **deep-research** - `skills/deep-research/SKILL.md` - Multi-step research
+- **write-documents** - `skills/write-documents/SKILL.md` - Create INFO, SPEC, IMPL docs
+- **pdf-tools** - `skills/pdf-tools/SKILL.md` - PDF conversion and analysis
+- **coding-conventions** - `skills/coding-conventions/SKILL.md` - Code style rules
+- **git-conventions** - `skills/git-conventions/SKILL.md` - Commits, .gitignore
+- **github** - `skills/github/SKILL.md` - Repos, issues, PRs
+- **session-management** - `skills/session-management/SKILL.md` - Session handling
+- **ms-playwright-mcp** - `skills/ms-playwright-mcp/SKILL.md` - Browser automation
+- **youtube-downloader** - `skills/youtube-downloader/SKILL.md` - Download YouTube
 
 ## Every Session
 
