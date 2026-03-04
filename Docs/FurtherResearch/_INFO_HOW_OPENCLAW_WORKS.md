@@ -35,6 +35,7 @@
 7. [Safety and Boundaries](#7-safety-and-boundaries)
 8. [Comparison with Windsurf Cascade](#8-comparison-with-windsurf-cascade)
 9. [Sources](#9-sources)
+10. [Token Usage Investigation](#10-token-usage-investigation)
 
 ## 1. Folder Structure
 
@@ -53,6 +54,79 @@ C:\Users\User\.openclaw\
 ├── openclaw.json     # Main configuration
 └── update-check.json # Update tracking
 ```
+
+### Path Environment Variables [VERIFIED]
+
+Override default paths using these environment variables:
+
+- **OPENCLAW_HOME** - Base for all paths, replaces `$HOME` (default: `~`)
+- **OPENCLAW_STATE_DIR** - Config, credentials, logs, devices (default: `~/.openclaw`)
+- **OPENCLAW_CONFIG_PATH** - Main config file (default: `~/.openclaw/openclaw.json`)
+
+**Precedence** (highest to lowest):
+1. Process environment (parent shell/daemon)
+2. `.env` in current working directory
+3. Global `.env` at `$OPENCLAW_STATE_DIR/.env`
+4. Config `env` block in `openclaw.json`
+5. Optional login-shell import (`OPENCLAW_LOAD_SHELL_ENV=1`)
+
+**Example: Move all data to custom path (Windows)**
+
+```powershell
+[Environment]::SetEnvironmentVariable("OPENCLAW_HOME", "E:\Dev\openclaw", "User")
+[Environment]::SetEnvironmentVariable("OPENCLAW_STATE_DIR", "E:\Dev\openclaw\.openclaw", "User")
+[Environment]::SetEnvironmentVariable("OPENCLAW_CONFIG_PATH", "E:\Dev\openclaw\.openclaw\openclaw.json", "User")
+```
+
+Then set workspace in config (`openclaw.json`):
+```json
+{
+  "agents": {
+    "defaults": {
+      "workspace": "E:\\Dev\\openclaw\\workspace"
+    }
+  }
+}
+```
+
+**Result:**
+```
+E:\Dev\openclaw\
+├── .openclaw\           # OPENCLAW_STATE_DIR
+│   ├── openclaw.json    # OPENCLAW_CONFIG_PATH
+│   ├── credentials\
+│   └── logs\
+└── workspace\           # agents.defaults.workspace
+    ├── skills\
+    ├── AGENTS.md
+    └── SOUL.md
+```
+
+**Source**: [VERIFIED] (OCLAW-SC-DOCS-ENVVARS | https://docs.openclaw.ai/help/environment)
+
+### API Keys via .env File
+
+Store API keys in `$OPENCLAW_STATE_DIR/.env` (e.g., `E:\Dev\openclaw\.openclaw\.env`):
+
+```
+OPENAI_API_KEY=sk-proj-...
+OPENAI_ORGANIZATION=org-...
+ANTHROPIC_API_KEY=sk-ant-api03-...
+GOOGLE_PLACES_API_KEY=AIzaSy...
+GEMINI_API_KEY=AIzaSy...
+BRAVE_API_KEY=BSALly...
+OPENROUTER_API_KEY=sk-or-v1-...
+```
+
+**Supported keys:**
+- `OPENAI_API_KEY` + `OPENAI_ORGANIZATION` - OpenAI models
+- `ANTHROPIC_API_KEY` - Claude models
+- `BRAVE_API_KEY` - Brave Search (web_search tool)
+- `OPENROUTER_API_KEY` - OpenRouter (alternative for Perplexity, other models)
+- `GEMINI_API_KEY` - Google Gemini models
+- `GOOGLE_PLACES_API_KEY` - Google Places API (if using location tools)
+
+**Note**: Keys in `.env` take precedence over config file settings. Restart gateway after changes.
 
 ### Workspace Folder (`agents.defaults.workspace`)
 
@@ -74,6 +148,143 @@ e:\Dev\openclaw\workspace\
 ├── MEMORY.md         # Curated long-term memory
 └── skills/           # Workspace-specific skills
 ```
+
+### Bootstrap File Configuration [VERIFIED]
+
+Control automatic creation and injection of bootstrap files via `agents.defaults`:
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `skipBootstrap` | `false` | Disables auto-creation of AGENTS.md, SOUL.md, TOOLS.md, IDENTITY.md, USER.md, HEARTBEAT.md, BOOTSTRAP.md |
+| `bootstrapMaxChars` | `20000` | Max characters per bootstrap file before truncation |
+| `bootstrapTotalMaxChars` | `150000` | Max total characters for all bootstrap files combined |
+
+**Example - Disable all scaffold files:**
+```json
+{
+  "agents": {
+    "defaults": {
+      "skipBootstrap": true
+    }
+  }
+}
+```
+
+**Use case**: When you want to manage workspace files manually (e.g., syncing from DevSystem) and prevent OpenClaw from recreating deleted files on restart.
+
+**Source**: [VERIFIED] (OCLAW-SC-DOCS-CFGREF | https://docs.openclaw.ai/gateway/configuration-reference)
+
+### Skills Storage Locations [VERIFIED]
+
+Skills are loaded from multiple locations with precedence:
+
+1. **Bundled skills** - Shipped with npm package (highest priority)
+2. **Managed/local skills** - `~/.openclaw/skills` (shared across all agents)
+3. **Workspace skills** - `<workspace>/skills` (per-agent only)
+4. **Extra dirs** - `skills.load.extraDirs` in config (lowest priority)
+
+**With custom paths:**
+- Global/shared skills: `E:\Dev\openclaw\.openclaw\skills`
+- Workspace skills: `E:\Dev\openclaw\workspace\skills`
+
+**ClawHub commands:**
+```bash
+clawhub install <skill-slug>   # Install to workspace
+clawhub update --all           # Update all installed
+clawhub sync --all             # Scan + publish updates
+```
+
+**Security note**: Treat third-party skills as untrusted code. Read them before enabling.
+
+**Source**: [VERIFIED] (OCLAW-SC-DOCS-SKILLS | https://docs.openclaw.ai/skills)
+
+### Remote Access via Tailscale Serve [VERIFIED]
+
+Access OpenClaw dashboard and gateway from other devices on your Tailscale network.
+
+**Setup Steps:**
+
+1. **Enable Tailscale Serve:**
+```powershell
+tailscale serve --bg <gateway-port>
+```
+
+2. **Add allowed origins and trusted proxies to `openclaw.json`:**
+```json
+{
+  "gateway": {
+    "controlUi": {
+      "allowedOrigins": [
+        "https://<hostname>.<tailnet>.ts.net"
+      ]
+    },
+    "trustedProxies": ["127.0.0.1", "::1"]
+  }
+}
+```
+
+3. **Restart gateway** to apply config changes
+
+4. **Approve device pairing** from remote machine:
+```powershell
+openclaw devices list     # See pending requests
+openclaw devices approve <request-id>
+```
+
+**Access URL:** `https://<hostname>.<tailnet>.ts.net/`
+
+**Device Pairing Commands:**
+- `openclaw devices list` - Show pending and paired devices
+- `openclaw devices approve <id>` - Approve a pairing request
+- `openclaw devices reject <id>` - Reject a pairing request
+- `openclaw devices remove <id>` - Remove a paired device
+- `openclaw devices revoke <id>` - Revoke a device token
+
+**Source**: [VERIFIED] (OCLAW-SC-DOCS-GATEWAY | https://docs.openclaw.ai/gateway)
+
+### Browser Profile Configuration [VERIFIED]
+
+Control which browser profile OpenClaw uses for automation:
+
+**Config (`openclaw.json`):**
+```json
+{
+  "browser": {
+    "enabled": true,
+    "defaultProfile": "chrome",
+    "profiles": {
+      "openclaw": { "cdpPort": 18800 },
+      "work": { "cdpPort": 18801, "color": "#0066CC" }
+    }
+  }
+}
+```
+
+**Profiles:**
+- `chrome` - Your existing Chrome tabs via extension relay (has your logins, cookies)
+- `openclaw` - Isolated OpenClaw-managed Chrome instance (clean slate, default)
+- Custom profiles can be created with `openclaw browser create-profile --name <name>`
+
+**Chrome Extension (for `chrome` profile):**
+```bash
+openclaw browser extension install
+openclaw browser extension path    # Get path for manual load
+```
+
+Load in Chrome: `chrome://extensions` → Developer mode → Load unpacked
+
+**Extension Settings:**
+- **Port:** `18792` (gateway port + 3, e.g., 18789 + 3 = 18792)
+- **Token:** Value from `gateway.auth.token` in `openclaw.json`
+
+**CLI Usage:**
+```bash
+openclaw browser --browser-profile chrome tabs
+openclaw browser --browser-profile openclaw start
+openclaw browser snapshot
+```
+
+**Source**: [VERIFIED] (OCLAW-SC-DOCS-BROWSER | https://docs.openclaw.ai/cli/browser)
 
 ## 2. System Prompt Structure
 
@@ -233,7 +444,7 @@ openclaw exec --background --timeout 60 "npm run build"
 
 ### web_search - Web Search
 
-**Purpose**: Search the web using Brave Search API (or Perplexity/Gemini)
+**Purpose**: Search the web using Brave Search API (or Perplexity/Gemini/Grok/Kimi)
 
 **Parameters**:
 - `query` (required) - Search query
@@ -250,6 +461,43 @@ openclaw exec --background --timeout 60 "npm run build"
 ```bash
 openclaw web_search "OpenClaw tutorial" --count 5 --freshness pw
 ```
+
+#### Search Provider Architecture [VERIFIED - source code analysis 2026-03-01]
+
+**5 providers supported** (hardcoded in `src/agents/tools/web-search.ts`):
+- `brave` - Brave Search API (default)
+- `perplexity` - Perplexity Sonar via direct API or OpenRouter
+- `grok` - xAI Grok with web search
+- `gemini` - Google Gemini with Search grounding
+- `kimi` - Moonshot Kimi with native `$web_search`
+
+**How it works**:
+- Direct HTTP API calls to provider endpoints - **NO browser involved**
+- Results returned as JSON with title, URL, description, optional citations
+
+**When agent uses browser instead of web_search**:
+- JS-heavy sites (Instagram, Twitter, etc.) - need real browser to scrape content
+- Site-specific searches (`site:instagram.com`) - agent uses Google via browser
+- Follow-up navigation needed - agent wants to visit/interact with results
+- Brave API key not configured - falls back to browser Google search
+
+**Config-driven** via `openclaw.json`:
+```json
+{
+  "tools": {
+    "web": {
+      "search": {
+        "provider": "brave",
+        "apiKey": "...",
+        "maxResults": 5,
+        "cacheTtlMinutes": 15
+      }
+    }
+  }
+}
+```
+
+**Extensibility**: No plugin system - providers hardcoded. Adding new provider requires modifying `web-search.ts`.
 
 ### web_fetch - Web Page Fetching
 
@@ -268,6 +516,25 @@ openclaw web_search "OpenClaw tutorial" --count 5 --freshness pw
 - Results cached 15 min
 
 **Limitation**: Does NOT execute JavaScript. Use `browser` tool for JS-heavy sites.
+
+#### How HTML is Sent to LLM [VERIFIED - source code analysis 2026-03-01]
+
+**As cleaned Markdown text - NOT screenshots, NOT raw HTML.**
+
+**Processing pipeline** (from `src/agents/tools/web-fetch-utils.ts`):
+1. Fetch URL with Chrome-like User-Agent
+2. **@mozilla/readability** extracts main content (strips nav, ads, footer, scripts, styles)
+3. Convert HTML to Markdown (preserves links, headers, lists)
+4. Optionally convert Markdown to plain text
+5. Truncate to `maxChars` (default 50,000 chars)
+6. Wrap with security markers (`wrapWebContent`)
+
+**Key functions**:
+- `htmlToMarkdown(html)` - Strips scripts/styles, converts `<a>` to `[text](url)`, `<h1>` to `#`, etc.
+- `markdownToText(markdown)` - Removes markdown syntax for plain text mode
+- `truncateText(text, maxChars)` - Caps output length
+
+**Security**: External content wrapped with untrusted markers for LLM awareness.
 
 ### browser - Browser Automation
 
@@ -768,6 +1035,129 @@ OpenClaw can control Windsurf via:
 - `OCLAW-IN03-SC-LOCAL-WS`: `E:\Dev\openclaw\workspace\`
   - Your workspace bootstrap files
 
+## 10. Token Usage Investigation
+
+### Understanding Token Costs [VERIFIED]
+
+OpenClaw with Anthropic models can consume significant input tokens due to:
+
+- **Extended thinking** - `thinkingDefault` setting controls thinking budget (1K-32K+ tokens per turn)
+- **Interleaved thinking with tools** - Thinking blocks preserved across tool calls, resent as INPUT
+- **Bootstrap files** - AGENTS.md, SOUL.md, etc. injected each session (up to 150K chars)
+- **Conversation history** - Each turn resends all previous messages
+
+**Key insight**: With `thinkingDefault: "medium"` and 10 tool calls, thinking tokens alone can reach 320K+ INPUT tokens per request.
+
+### Enable Payload Logging [VERIFIED]
+
+**Source**: `src/agents/anthropic-payload-log.ts`
+
+**Environment variables:**
+
+- `OPENCLAW_ANTHROPIC_PAYLOAD_LOG=true` - Enable detailed logging
+- `OPENCLAW_ANTHROPIC_PAYLOAD_LOG_FILE` - Custom log path (optional)
+
+**Default log location:**
+
+- Standard: `%LOCALAPPDATA%\openclaw\logs\anthropic-payload.jsonl`
+- Custom state dir: `$OPENCLAW_STATE_DIR/logs/anthropic-payload.jsonl`
+- Your install: `E:\Dev\openclaw\.openclaw\logs\anthropic-payload.jsonl`
+
+**Enable logging (PowerShell):**
+
+```powershell
+# Temporary (current session)
+$env:OPENCLAW_ANTHROPIC_PAYLOAD_LOG = "true"
+openclaw start
+
+# Persistent (user environment)
+[Environment]::SetEnvironmentVariable("OPENCLAW_ANTHROPIC_PAYLOAD_LOG", "true", "User")
+```
+
+### Log Format
+
+The log file is JSONL (one JSON object per line) with two stage types:
+
+**Request stage** - Full payload sent to Anthropic:
+```json
+{"ts":"2026-03-03T08:00:00.000Z","stage":"request","runId":"...","payload":{...}}
+```
+
+**Usage stage** - Token counts from response:
+```json
+{"ts":"2026-03-03T08:00:00.000Z","stage":"usage","usage":{"input_tokens":5000,"output_tokens":1000,"cache_read_input_tokens":3000}}
+```
+
+### PowerShell Analysis Scripts [TESTED]
+
+**View recent usage entries:**
+
+```powershell
+$logPath = "E:\Dev\openclaw\.openclaw\logs\anthropic-payload.jsonl"
+Get-Content $logPath | ForEach-Object { $_ | ConvertFrom-Json } |
+  Where-Object { $_.stage -eq "usage" } |
+  Select-Object ts, @{N='input';E={$_.usage.input_tokens}}, @{N='output';E={$_.usage.output_tokens}}, @{N='cache';E={$_.usage.cache_read_input_tokens}} |
+  Format-Table -AutoSize
+```
+
+**Calculate totals and input/output ratio:**
+
+```powershell
+$logPath = "E:\Dev\openclaw\.openclaw\logs\anthropic-payload.jsonl"
+$entries = Get-Content $logPath | ForEach-Object { $_ | ConvertFrom-Json }
+$usage = $entries | Where-Object { $_.stage -eq "usage" }
+$totalIn = ($usage | Measure-Object -Property { $_.usage.input_tokens } -Sum).Sum
+$totalOut = ($usage | Measure-Object -Property { $_.usage.output_tokens } -Sum).Sum
+Write-Host "Total Input: $totalIn, Total Output: $totalOut, Ratio: $([math]::Round($totalIn / $totalOut, 1)):1"
+```
+
+**Filter by time range (last hour):**
+
+```powershell
+$logPath = "E:\Dev\openclaw\.openclaw\logs\anthropic-payload.jsonl"
+$cutoff = (Get-Date).AddHours(-1).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss")
+Get-Content $logPath | ForEach-Object { $_ | ConvertFrom-Json } |
+  Where-Object { $_.stage -eq "usage" -and $_.ts -gt $cutoff } |
+  Select-Object ts, @{N='input';E={$_.usage.input_tokens}}, @{N='output';E={$_.usage.output_tokens}} |
+  Format-Table -AutoSize
+```
+
+### Thinking Level Configuration [VERIFIED]
+
+Control thinking token budget in `openclaw.json`:
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "thinkingDefault": "low"
+    }
+  }
+}
+```
+
+**Available levels:**
+
+- `off` - No thinking tokens (0)
+- `minimal` - Light reasoning (~1,024 tokens)
+- `low` - Standard tasks (~4K tokens)
+- `medium` - Complex reasoning (~10K-32K tokens)
+- `high` - Very complex tasks (~32K+ tokens)
+- `xhigh` - Maximum (select models only)
+
+**Impact**: With `medium` and 10 tool calls, thinking tokens multiply to ~320K INPUT per request. Switching to `low` reduces this by ~8x.
+
+### Anthropic Billing vs Dashboard [VERIFIED]
+
+**Source**: https://platform.claude.com/docs/en/build-with-claude/extended-thinking
+
+Anthropic bills thinking tokens as:
+
+- **Output tokens** - When Claude generates thinking
+- **Input tokens** - When thinking blocks from previous turns are resent (tool use)
+
+**Key finding**: With interleaved thinking and tool use, thinking blocks are preserved across tool calls and counted as INPUT on subsequent API calls. This explains high input/output ratios (e.g., 220:1).
+
 ## Next Steps
 
 1. **Complete bootstrap ritual** - Delete BOOTSTRAP.md after establishing identity
@@ -777,6 +1167,29 @@ OpenClaw can control Windsurf via:
 5. **Consider Windsurf integration** - Use findings from OCLAW-IN02 for bidirectional control
 
 ## Document History
+
+**[2026-03-03 09:10]**
+- Added: Token Usage Investigation section (logging, PowerShell scripts, thinking levels, billing)
+
+**[2026-03-03 08:54]**
+- Added: Extension Settings (port 18792 = gateway+3, token from config)
+
+**[2026-03-02 17:09]**
+- Added: Browser Profile Configuration section with config example, profiles, extension install, CLI usage
+
+**[2026-03-01 23:46]**
+- Added: API Keys via .env File section with supported environment variables
+
+**[2026-03-01 23:24]**
+- Added: Search Provider Architecture subsection (5 providers, no browser involvement, config-driven)
+- Added: How HTML is Sent to LLM subsection (Readability extraction, Markdown conversion, truncation pipeline)
+- Source: OpenClaw source code analysis (`src/agents/tools/web-search.ts`, `web-fetch-utils.ts`)
+
+**[2026-03-01 22:15]**
+- Added: Bootstrap File Configuration section with skipBootstrap, bootstrapMaxChars, bootstrapTotalMaxChars options
+
+**[2026-03-01 16:32]**
+- Added: Remote Access via Tailscale Serve section with setup steps, device pairing commands, and config examples
 
 **[2026-02-28 10:42]**
 - Added: Skills, Workflows, and Rules comparison section with bridge option
