@@ -128,7 +128,7 @@ Add entry to LEARNINGS.md using LEARNINGS_TEMPLATE.md structure:
 
 1. **Determine location (SESSION-FIRST rule)**:
    
-   Check current work mode using AGEN states:
+   Check current work mode:
    
    **If SESSION-MODE** (working in `[SESSION_FOLDER]`):
    - Write to `[SESSION_FOLDER]/LEARNINGS.md`
