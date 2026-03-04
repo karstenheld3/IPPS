@@ -1,59 +1,17 @@
-# Flights (Global Flight Tracking)
+# Flights (Global)
+Keywords: flight, airport, delay, cancellation, airline, arrivals, departures
 
-Flight tracking, delays, and cancellations.
-
-## When to Use This File
-
-- Query mentions: flight, airport, delay, cancellation, airline
-- Query is about: Flight status, arrivals, departures
-- No specific country mentioned
-
-## Live Flight Tracking
-
-### Flightradar24
-- **URL:** https://www.flightradar24.com
-- **Coverage:** Global
-- **Best for:** Live aircraft positions, flight paths
-- **Example:** "Track LH123" -> search on site
-
-### FlightAware
-- **URL:** https://www.flightaware.com
-- **Best for:** Flight tracking with predictions
-- **Example:** "UA456 status"
-
-### ADS-B Exchange
-- **URL:** https://globe.adsbexchange.com
-- **Best for:** Free flight tracking, no rate limits
+## Live Tracking
+Flightradar24: https://www.flightradar24.com (global live positions)
+FlightAware: https://www.flightaware.com (tracking with predictions)
+ADS-B Exchange: https://globe.adsbexchange.com (free, no limits)
 
 ## Cancellations and Delays
+FlightAware Cancellations: https://www.flightaware.com/live/cancelled/
+FlightStats Delays: https://www.flightstats.com/v2/airport-delays
+FlightStats Tracker: https://www.flightstats.com/v2/flight-tracker/search
 
-### FlightAware Cancellations
-- **URL:** https://www.flightaware.com/live/cancelled/
-- **Best for:** See all cancelled flights by airline/airport
-- **Example:** "Lufthansa cancellations today"
-
-### FlightStats Airport Delays
-- **URL:** https://www.flightstats.com/v2/airport-delays
-- **Best for:** Airport-wide delay overview
-- **Example:** "Which European airports have delays?"
-
-### FlightStats Flight Tracker
-- **URL:** https://www.flightstats.com/v2/flight-tracker/search
-- **Best for:** Search by flight number
-
-## Free Flight APIs
-
-### ADS-B Exchange API
-- **URL:** https://www.adsbexchange.com/data/
-- **Cost:** Free, no rate limits
-- **Data:** Real-time aircraft positions
-
-### OpenSky Network API
-- **URL:** https://opensky-network.org/api/states/all
-- **Cost:** Free (100 req/day anonymous, 4000/day registered)
-- **Data:** Live ADS-B aircraft data
-
-### Aviationstack
-- **URL:** https://aviationstack.com
-- **Cost:** 100 requests/month free
-- **Data:** Flight status, airports, airlines
+## APIs
+ADS-B Exchange: https://www.adsbexchange.com/data/ (free, unlimited)
+OpenSky: https://opensky-network.org/api/states/all (free, 100/day anon)
+Aviationstack: https://aviationstack.com (100/month free)
