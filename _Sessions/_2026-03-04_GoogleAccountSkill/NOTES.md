@@ -6,9 +6,9 @@
 
 ## Current Phase
 
-**Phase**: EXPLORE
-**Workflow**: (pending assessment)
-**Assessment**: (pending)
+**Phase**: IMPLEMENT (completed)
+**Workflow**: /implement
+**Assessment**: Skill created, awaiting user OAuth setup
 
 ## User Prompts
 
@@ -45,12 +45,13 @@ Read to understand strategy: ms-playwright-mcp/UNINSTALL.md
 
 ## IMPORTANT: Cascade Agent Instructions
 
-- **WSL Integration**: `gop` CLI runs in WSL only; all commands must be wrapped with `wsl` invocation
-- **Passwordless sudo**: Default WSL user must have no password for agent automation
-- **SETUP.md**: Must guide agent through complete installation (WSL, gop, OAuth setup)
-- **UNINSTALL.md**: Conservative approach - show current state, offer tiered removal options (like ms-playwright-mcp pattern)
-- **Attachments**: Download to `[TOOLS_FOLDER]\_downloaded_attachments`
-- **Reference**: Use `ms-playwright-mcp` skill structure as template
+- **Tool name**: `gogcli` (command: `gog`), NOT `gop`
+- **WSL Integration**: Optional - native Windows build also possible
+- **Passwordless sudo**: NOT needed - gogcli runs in userspace
+- **SETUP.md**: Guides user through OAuth setup (manual step required)
+- **UNINSTALL.md**: Conservative tiered removal (4 options, WSL removal requires confirmation)
+- **Attachments**: Download to `[TOOLS_FOLDER]/_downloaded_attachments`
+- **Skill location**: `.windsurf/skills/google-account/`
 
 ## Workflows to Run on Resume
 
@@ -59,6 +60,10 @@ Read to understand strategy: ms-playwright-mcp/UNINSTALL.md
 3. Continue with current phase
 
 ## Document History
+
+**[2026-03-04 22:20]**
+- Skill implementation complete
+- Created: SKILL.md, SETUP.md, UNINSTALL.md
 
 **[2026-03-04 15:48]**
 - Initial session created
