@@ -9,11 +9,12 @@ Copies DevSystem files from this repo's `.windsurf` folder to all linked reposit
 ## MUST-NOT-FORGET
 
 1. **Check DevSystem version FIRST** - Read `!NOTES.md` to get `[DEVSYSTEM]` (e.g., `DevSystemV3.1`) before ANY other action
-2. **Sync before deploy** - Copy from `[DEVSYSTEM]\*` to `.windsurf\` BEFORE running preview
-3. **Clean deprecated files** - Remove deprecated files from `.windsurf/` after sync (edird-core.md, go-autonomous.md, next.md, edird-phase-model/)
-4. **Output format** - ALWAYS use the exact text format in "Output Format" section (NO tables, NO markdown tables)
-5. **List filenames** - ALWAYS list explicit filenames after each category (Add, Overwrite, Delete), not just counts
-6. **PowerShell execution** - Run PowerShell code directly (pwsh IS PowerShell Core). Do NOT wrap in `powershell -Command "..."` - that causes `$` escaping conflicts
+2. **Read target repo NOTES.md** - For each repo in `[LINKED_REPOS]`, read its `!NOTES.md` or `NOTES.md` to check for special deployment rules (e.g., OpenClaw has no `.windsurf/` folder)
+3. **Sync before deploy** - Copy from `[DEVSYSTEM]\*` to `.windsurf\` BEFORE running preview
+4. **Clean deprecated files** - Remove deprecated files from `.windsurf/` after sync (edird-core.md, go-autonomous.md, next.md, edird-phase-model/)
+5. **Output format** - ALWAYS use the exact text format in "Output Format" section (NO tables, NO markdown tables)
+6. **List filenames** - ALWAYS list explicit filenames after each category (Add, Overwrite, Delete), not just counts
+7. **PowerShell execution** - Run PowerShell code directly (pwsh IS PowerShell Core). Do NOT wrap in `powershell -Command "..."` - that causes `$` escaping conflicts
 
 **WHY:** `.windsurf/` may contain stale files from older DevSystem versions. Deploying without syncing first will propagate deprecated files to all linked repos.
 
