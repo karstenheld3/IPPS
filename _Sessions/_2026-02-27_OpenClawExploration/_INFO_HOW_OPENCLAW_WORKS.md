@@ -35,6 +35,7 @@
 7. [Safety and Boundaries](#7-safety-and-boundaries)
 8. [Comparison with Windsurf Cascade](#8-comparison-with-windsurf-cascade)
 9. [Sources](#9-sources)
+10. [Token Usage Investigation](#10-token-usage-investigation)
 
 ## 1. Folder Structure
 
@@ -1034,6 +1035,129 @@ OpenClaw can control Windsurf via:
 - `OCLAW-IN03-SC-LOCAL-WS`: `E:\Dev\openclaw\workspace\`
   - Your workspace bootstrap files
 
+## 10. Token Usage Investigation
+
+### Understanding Token Costs [VERIFIED]
+
+OpenClaw with Anthropic models can consume significant input tokens due to:
+
+- **Extended thinking** - `thinkingDefault` setting controls thinking budget (1K-32K+ tokens per turn)
+- **Interleaved thinking with tools** - Thinking blocks preserved across tool calls, resent as INPUT
+- **Bootstrap files** - AGENTS.md, SOUL.md, etc. injected each session (up to 150K chars)
+- **Conversation history** - Each turn resends all previous messages
+
+**Key insight**: With `thinkingDefault: "medium"` and 10 tool calls, thinking tokens alone can reach 320K+ INPUT tokens per request.
+
+### Enable Payload Logging [VERIFIED]
+
+**Source**: `src/agents/anthropic-payload-log.ts`
+
+**Environment variables:**
+
+- `OPENCLAW_ANTHROPIC_PAYLOAD_LOG=true` - Enable detailed logging
+- `OPENCLAW_ANTHROPIC_PAYLOAD_LOG_FILE` - Custom log path (optional)
+
+**Default log location:**
+
+- Standard: `%LOCALAPPDATA%\openclaw\logs\anthropic-payload.jsonl`
+- Custom state dir: `$OPENCLAW_STATE_DIR/logs/anthropic-payload.jsonl`
+- Your install: `E:\Dev\openclaw\.openclaw\logs\anthropic-payload.jsonl`
+
+**Enable logging (PowerShell):**
+
+```powershell
+# Temporary (current session)
+$env:OPENCLAW_ANTHROPIC_PAYLOAD_LOG = "true"
+openclaw start
+
+# Persistent (user environment)
+[Environment]::SetEnvironmentVariable("OPENCLAW_ANTHROPIC_PAYLOAD_LOG", "true", "User")
+```
+
+### Log Format
+
+The log file is JSONL (one JSON object per line) with two stage types:
+
+**Request stage** - Full payload sent to Anthropic:
+```json
+{"ts":"2026-03-03T08:00:00.000Z","stage":"request","runId":"...","payload":{...}}
+```
+
+**Usage stage** - Token counts from response:
+```json
+{"ts":"2026-03-03T08:00:00.000Z","stage":"usage","usage":{"input_tokens":5000,"output_tokens":1000,"cache_read_input_tokens":3000}}
+```
+
+### PowerShell Analysis Scripts [TESTED]
+
+**View recent usage entries:**
+
+```powershell
+$logPath = "E:\Dev\openclaw\.openclaw\logs\anthropic-payload.jsonl"
+Get-Content $logPath | ForEach-Object { $_ | ConvertFrom-Json } |
+  Where-Object { $_.stage -eq "usage" } |
+  Select-Object ts, @{N='input';E={$_.usage.input_tokens}}, @{N='output';E={$_.usage.output_tokens}}, @{N='cache';E={$_.usage.cache_read_input_tokens}} |
+  Format-Table -AutoSize
+```
+
+**Calculate totals and input/output ratio:**
+
+```powershell
+$logPath = "E:\Dev\openclaw\.openclaw\logs\anthropic-payload.jsonl"
+$entries = Get-Content $logPath | ForEach-Object { $_ | ConvertFrom-Json }
+$usage = $entries | Where-Object { $_.stage -eq "usage" }
+$totalIn = ($usage | Measure-Object -Property { $_.usage.input_tokens } -Sum).Sum
+$totalOut = ($usage | Measure-Object -Property { $_.usage.output_tokens } -Sum).Sum
+Write-Host "Total Input: $totalIn, Total Output: $totalOut, Ratio: $([math]::Round($totalIn / $totalOut, 1)):1"
+```
+
+**Filter by time range (last hour):**
+
+```powershell
+$logPath = "E:\Dev\openclaw\.openclaw\logs\anthropic-payload.jsonl"
+$cutoff = (Get-Date).AddHours(-1).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss")
+Get-Content $logPath | ForEach-Object { $_ | ConvertFrom-Json } |
+  Where-Object { $_.stage -eq "usage" -and $_.ts -gt $cutoff } |
+  Select-Object ts, @{N='input';E={$_.usage.input_tokens}}, @{N='output';E={$_.usage.output_tokens}} |
+  Format-Table -AutoSize
+```
+
+### Thinking Level Configuration [VERIFIED]
+
+Control thinking token budget in `openclaw.json`:
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "thinkingDefault": "low"
+    }
+  }
+}
+```
+
+**Available levels:**
+
+- `off` - No thinking tokens (0)
+- `minimal` - Light reasoning (~1,024 tokens)
+- `low` - Standard tasks (~4K tokens)
+- `medium` - Complex reasoning (~10K-32K tokens)
+- `high` - Very complex tasks (~32K+ tokens)
+- `xhigh` - Maximum (select models only)
+
+**Impact**: With `medium` and 10 tool calls, thinking tokens multiply to ~320K INPUT per request. Switching to `low` reduces this by ~8x.
+
+### Anthropic Billing vs Dashboard [VERIFIED]
+
+**Source**: https://platform.claude.com/docs/en/build-with-claude/extended-thinking
+
+Anthropic bills thinking tokens as:
+
+- **Output tokens** - When Claude generates thinking
+- **Input tokens** - When thinking blocks from previous turns are resent (tool use)
+
+**Key finding**: With interleaved thinking and tool use, thinking blocks are preserved across tool calls and counted as INPUT on subsequent API calls. This explains high input/output ratios (e.g., 220:1).
+
 ## Next Steps
 
 1. **Complete bootstrap ritual** - Delete BOOTSTRAP.md after establishing identity
@@ -1043,6 +1167,9 @@ OpenClaw can control Windsurf via:
 5. **Consider Windsurf integration** - Use findings from OCLAW-IN02 for bidirectional control
 
 ## Document History
+
+**[2026-03-03 09:10]**
+- Added: Token Usage Investigation section (logging, PowerShell scripts, thinking levels, billing)
 
 **[2026-03-03 08:54]**
 - Added: Extension Settings (port 18792 = gateway+3, token from config)
