@@ -42,6 +42,7 @@
   - Categories: flights, trains, public transport, journey planners, APIs
   - All resources tested for accessibility (no login/paywall)
   - Scoring model with 5 dimensions, quick reference card included
+  - **MOVED to `_2026-03-04_TravelInfoSkill/` session (2026-03-04)**
 
 ## Tried But Not Used
 

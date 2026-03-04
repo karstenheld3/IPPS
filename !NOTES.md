@@ -41,21 +41,6 @@ Usage: `--keys-file [WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
 - **Model Accuracy**: Read model requests literally. Version numbers matter (e.g., Sonnet 4 != Sonnet 4.5).
 - **Safety First**: UI automation scripts MUST have a `-DryRun` mode. Preview changes before sending irreversible keyboard events.
 
-## Model Switching Findings (2026-01-26)
-
-- **Bulletproof Refocus**: Use `Ctrl+Shift+A` to reliably focus the Cascade chat panel in VS Code/Windsurf.
-- **German Keyboards**: Avoid `Ctrl+Alt` shortcuts; they conflict with `AltGr`. Use `Ctrl+Shift+F9/F10` for reliable model selection automation.
-- **Fast & Cheap Models**: Gemini 3 Flash Medium (372 TPS, 78% SWE-Bench) is the current best performer for MODEL-LOW tasks. Grok Code Fast 1 (236 TPS, 70.8% SWE-Bench) is the best free option in Windsurf for speed.
-
-**ID-REGISTRY.md** - Prevents term and ID collisions. Contains DevSystem constants and project TOPIC registry.
-
-## Karsten's Model Rate Limits (2026-01-26)
-
-- **gpt-5-nano**: 120+ workers. 120k tokens in 17.9s. TPM: ~402,000.
-- **gpt-5-mini**: 120+ workers. 120k tokens in 43.7s. TPM: ~164,000.
-- **claude-4-5-haiku**: 60+ workers. 60k tokens in 8s. TPM: ~450,000.
-- **claude-4-5-sonnet**: 60+ workers. 60k tokens in 7.7s. TPM: ~467,000.
-- **claude-4-5-opus**: 60+ workers. 60k tokens in 7.6s. TPM: ~473,000.
 
 ## DevSystem Source/Sync Rules
 
