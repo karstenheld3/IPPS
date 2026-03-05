@@ -130,6 +130,21 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Can we do quick one-off tests to verify we did not break things?
 - Read @coding-conventions skill again and verify against rules.
 
+**Logging Verification (automatic, language-agnostic):**
+
+If code contains logging, output, or print statements:
+
+1. Read @coding-conventions `LOGGING-RULES.md` (general rules)
+2. Identify logging type and read corresponding rules file:
+   - User-facing (console, SSE) → `LOGGING-RULES-USER-FACING.md`
+     - Goal: Users always know what is happening
+   - App-level (server logs, debug) → `LOGGING-RULES-APP-LEVEL.md`
+     - Goal: Human-readable AND machine-parseable
+   - Script-level (test/QA output) → `LOGGING-RULES-SCRIPT-LEVEL.md`
+     - Goal: All failure info in logs alone
+3. Verify against core principles: ASANAPAP, Announce > Track > Report, Full Disclosure
+4. Verify code against all applicable LOG-* rules
+
 ## Testing (TEST)
 
 - Verify Timeline field is present and accurate (Created date, update count, date range)
