@@ -123,6 +123,11 @@ and can log additional
 - BAD: `OK. Extracted 5 correct...` - which run?
 - GOOD: `[ 1 / 2 ] OK. Extracted 5 correct...` - run 1 result
 
+**Worker/process prefix rule:** Scripts with multiple workers or apps with multiple processes MUST prefix all log lines with their identity.
+- Workers: `[ worker 1 ] [ 1 / 5 ] Processing 'file.pdf'...`
+- Processes: `[timestamp,process 12345,request 1] START: function_name...`
+- This enables log filtering and correlation when output is interleaved
+
 **Not used for status:** `DONE`, `FINISHED`, `INFO`, `DEBUG`, etc.
 
 ```
