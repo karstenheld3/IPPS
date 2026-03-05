@@ -15,6 +15,7 @@ Copies DevSystem files from this repo's `.windsurf` folder to all linked reposit
 5. **Output format** - ALWAYS use the exact text format in "Output Format" section (NO tables, NO markdown tables)
 6. **List filenames** - ALWAYS list explicit filenames after each category (Add, Overwrite, Delete), not just counts
 7. **PowerShell execution** - Run PowerShell code directly (pwsh IS PowerShell Core). Do NOT wrap in `powershell -Command "..."` - that causes `$` escaping conflicts
+8. **Skill categories** - Each repo has a `Skills:` assignment (All, Development, Personal). Only deploy skills matching that category
 
 **WHY:** `.windsurf/` may contain stale files from older DevSystem versions. Deploying without syncing first will propagate deprecated files to all linked repos.
 
@@ -39,8 +40,9 @@ ALWAYS show preview and ask for explicit confirmation first.
 
 ## Prerequisites
 
-Read `[LINKED_REPOS]` section from `*NOTES.md` to get:
-- List of target repositories
+Read `[SKILL_CATEGORIES]` and `[LINKED_REPOS]` sections from `!NOTES.md` to get:
+- Skill category definitions (Development, Personal, All)
+- List of target repositories with their assigned skill category
 - Copy/overwrite rules for each repo
 - Files to preserve (if any)
 
@@ -63,78 +65,103 @@ Execute the following for each repo in `[LINKED_REPOS]`:
 
 Check that the target repo path exists. Skip if not found (warn user).
 
-#### 2.2 Compare Source and Target Files (Parallel)
+#### 2.2 Compare Source and Target Files (JSON Output)
 
-Use this PowerShell snippet to analyze all target repos **in parallel**:
+Run this PowerShell script. It outputs JSON for consistent parsing:
 
 ```powershell
-# Compare DevSystem files between source and multiple target repos (PARALLEL)
-$source = "[WORKSPACE_FOLDER]\.windsurf"  # This repo's .windsurf folder
+# Compare DevSystem files - outputs JSON
+$source = "[WORKSPACE_FOLDER]\.windsurf"
+
+# Skill categories (from [SKILL_CATEGORIES] in !NOTES.md)
+$skillCategories = @{
+    "Development" = @("coding-conventions", "deep-research", "edird-phase-planning", "git-conventions", "github", "llm-computer-use", "llm-evaluation", "llm-transcription", "ms-playwright-mcp", "pdf-tools", "session-management", "windows-desktop-control", "windsurf-auto-model-switcher", "write-documents", "youtube-downloader")
+    "Personal" = @("google-account", "travel-info")
+}
+$skillCategories["All"] = $skillCategories["Development"] + $skillCategories["Personal"]
+
+# Target repos (from [LINKED_REPOS] in !NOTES.md)
 $targets = @(
-    # Populate from [LINKED_REPOS] in !NOTES.md
+    @{ Path = "e:\Dev\KarstensWorkspace\.windsurf"; Skills = "All" }
+    @{ Path = "e:\Dev\OpenAI-BackendTools\.windsurf"; Skills = "Development" }
+    @{ Path = "e:\Dev\PRXL\src\.windsurf"; Skills = "Development" }
+    @{ Path = "e:\Dev\SharePoint-GPT-Middleware\.windsurf"; Skills = "Development" }
+    @{ Path = "e:\Dev\USTVA\.windsurf"; Skills = "Development" }
+    @{ Path = "e:\Dev\openclaw\workspace"; Skills = "All" }
+    @{ Path = "e:\Dev\LLM-Research\.windsurf"; Skills = "Development" }
 )
 
-# NOTE: Run comparisons in parallel for faster analysis
-# $targets | ForEach-Object -Parallel { ... } -ThrottleLimit 4
-
-# Deprecated files from V1, V2, V3 migrations (only these can be deleted)
+# Deprecated files allowlist
 $deprecatedFiles = @{
     "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md", "edird-core.md")
     "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md", "deliver.md", "design.md", "explore.md", "go-research.md", "refine.md", "session-resume.md")
-    "skills\llm-transcription" = @("transcribe-image-to-markdown-advanced.py")
-    "skills\llm-transcription\prompts" = @("llm-image-to-markdown-transcription-v1b.md", "llm-image-to-markdown-judge-v1d.md")
 }
-# Deprecated skill folders (entire folder can be deleted if renamed)
 $deprecatedSkillFolders = @("edird-phase-model", "ipps-deep-research")
 
-# Get all source files (relative paths)
-$sourceFiles = Get-ChildItem -Path $source -Recurse -File | ForEach-Object {
-    $_.FullName.Substring($source.Length + 1)
-} | Where-Object { $_ }
+function Test-SkillIncluded {
+    param([string]$RelPath, [string]$Category)
+    if (-not $RelPath.StartsWith("skills\")) { return $true }
+    $skillName = ($RelPath.Split('\'))[1]
+    return $skillCategories[$Category] -contains $skillName
+}
 
-foreach ($target in $targets) {
-    $repoName = (Split-Path (Split-Path $target -Parent) -Leaf)
-    Write-Host "`n=== $repoName ===" -ForegroundColor Cyan
+$sourceFiles = Get-ChildItem -Path $source -Recurse -File | ForEach-Object { $_.FullName.Substring($source.Length + 1) } | Where-Object { $_ }
+
+# Collect results as objects
+$results = @()
+foreach ($t in $targets) {
+    $target = $t.Path; $cat = $t.Skills
+    $filtered = $sourceFiles | Where-Object { Test-SkillIncluded $_ $cat }
+    $excluded = $sourceFiles | Where-Object { -not (Test-SkillIncluded $_ $cat) } | ForEach-Object { ($_ -split '\\')[1] } | Select-Object -Unique
+    
+    $r = @{ Path = $target; Skills = $cat; IsNew = $false; Add = @(); Overwrite = @(); Unchanged = 0; Delete = @(); ExcludedSkills = @($excluded) }
     
     if (-not (Test-Path $target)) {
-        Write-Host "  [NEW REPO] .windsurf folder does not exist - will create with $($sourceFiles.Count) files" -ForegroundColor Green
-        continue
-    }
-    
-    $new = @(); $modified = @(); $unchanged = @()
-    foreach ($rel in $sourceFiles) {
-        $srcFile = Join-Path $source $rel
-        $tgtFile = Join-Path $target $rel
-        if (-not (Test-Path $tgtFile)) { $new += $rel }
-        else {
-            $srcHash = (Get-FileHash $srcFile -Algorithm MD5).Hash
-            $tgtHash = (Get-FileHash $tgtFile -Algorithm MD5).Hash
-            if ($srcHash -ne $tgtHash) { $modified += $rel } else { $unchanged += $rel }
-        }
-    }
-    
-    # Find deprecated files in rules and workflows
-    $deprecated = @()
-    foreach ($folder in $deprecatedFiles.Keys) {
-        $deprecated += Get-ChildItem -Path "$target\$folder" -File -ErrorAction SilentlyContinue | 
-            Where-Object { $deprecatedFiles[$folder] -contains $_.Name } | 
-            ForEach-Object { "$folder\$($_.Name)" }
-    }
-    
-    # Output summary
-    if ($new.Count -eq 0 -and $modified.Count -eq 0 -and $deprecated.Count -eq 0) {
-        Write-Host "  [UP TO DATE] $($unchanged.Count) files unchanged" -ForegroundColor Gray
+        $r.IsNew = $true; $r.Add = @($filtered)
     } else {
-        if ($new.Count -gt 0) { Write-Host "  NEW: $($new.Count)" -ForegroundColor Green; $new | ForEach-Object { Write-Host "    $_" -ForegroundColor Green } }
-        if ($modified.Count -gt 0) { Write-Host "  MODIFIED: $($modified.Count)" -ForegroundColor Yellow; $modified | ForEach-Object { Write-Host "    $_" -ForegroundColor Yellow } }
-        if ($deprecated.Count -gt 0) { Write-Host "  DELETE: $($deprecated.Count)" -ForegroundColor Red; $deprecated | ForEach-Object { Write-Host "    $_" -ForegroundColor Red } }
-        if ($unchanged.Count -gt 0) { Write-Host "  UNCHANGED: $($unchanged.Count)" -ForegroundColor Gray }
+        foreach ($rel in $filtered) {
+            $src = Join-Path $source $rel; $tgt = Join-Path $target $rel
+            if (-not (Test-Path $tgt)) { $r.Add += $rel }
+            elseif ((Get-FileHash $src -Algorithm MD5).Hash -ne (Get-FileHash $tgt -Algorithm MD5).Hash) { $r.Overwrite += $rel }
+            else { $r.Unchanged++ }
+        }
+        foreach ($folder in $deprecatedFiles.Keys) {
+            Get-ChildItem -Path "$target\$folder" -File -EA SilentlyContinue | Where-Object { $deprecatedFiles[$folder] -contains $_.Name } | ForEach-Object { $r.Delete += "$folder\$($_.Name)" }
+        }
+        foreach ($sf in $deprecatedSkillFolders) { if (Test-Path "$target\skills\$sf") { $r.Delete += "skills\$sf" } }
     }
-    
+    $results += [PSCustomObject]$r
 }
+
+# Output JSON
+$results | ConvertTo-Json -Depth 3
 ```
 
-#### 2.3 Apply Copy Rules
+#### 2.3 Format JSON Output
+
+Parse the JSON and format as text. **CRITICAL:** Use this exact format:
+
+```
+[Path]
+  [UP TO DATE] N files unchanged
+
+[Path]
+  - Add: N files
+      file1, file2, file3
+  - Overwrite: N files
+      file1, file2
+  - Delete: N deprecated files
+      file1, file2
+  - Excluded skills: skill1, skill2
+
+[Path]
+  [NEW REPO] .windsurf folder does not exist - will create with N files
+  - Excluded skills: skill1, skill2
+
+Summary: X repos to process, Y files to deploy, Z files to delete.
+```
+
+#### 2.4 Apply Copy Rules
 
 For each source file, apply the repo-specific rules:
 

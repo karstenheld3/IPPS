@@ -78,29 +78,45 @@ Automatically push commits to GitHub.
 
 **CRITICAL: NEVER auto-deploy to [LINKED_REPOS]**. Always ask user before deploying to linked repos. Deployment to linked repos is a separate, explicit action.
 
+**[SKILL_CATEGORIES]**:
+- **Development**: coding-conventions, deep-research, edird-phase-planning, git-conventions, github, llm-computer-use, llm-evaluation, llm-transcription, ms-playwright-mcp, pdf-tools, session-management, windows-desktop-control, windsurf-auto-model-switcher, write-documents, youtube-downloader
+- **Personal**: google-account, travel-info
+- **All**: Development + Personal (all skills)
+
 **[LINKED_REPOS]**:
 - e:\Dev\KarstensWorkspace
+  - Skills: All
   - Overwrite everything
   - Delete deprecated or renamed files from older DevSystem versions
-  - Don't delete unreleated existing files
+  - Don't delete unrelated existing files
 - e:\Dev\OpenAI-BackendTools
+  - Skills: Development
   - Overwrite everything
   - Delete deprecated or renamed files from older DevSystem versions
-  - Don't delete unreleated existing files
+  - Don't delete unrelated existing files
 - e:\Dev\PRXL\src
+  - Skills: Development
   - Overwrite everything
   - Delete deprecated or renamed files from older DevSystem versions
-  - Don't delete unreleated existing files
+  - Don't delete unrelated existing files
 - e:\Dev\SharePoint-GPT-Middleware
+  - Skills: Development
   - Overwrite everything
   - Delete deprecated or renamed files from older DevSystem versions
-  - Don't delete unreleated existing files
--  e:\dev\USTVA
+  - Don't delete unrelated existing files
+- e:\Dev\USTVA
+  - Skills: Development
   - Overwrite everything
   - Delete deprecated or renamed files from older DevSystem versions
-  - Don't delete unreleated existing files
+  - Don't delete unrelated existing files
 - e:\Dev\openclaw\workspace
+  - Skills: All
   - Overwrite: rules/, workflows/, skills/ folders
   - Create: WORKFLOWS.md, _Sessions/ (if not exists)
   - Never overwrite: AGENTS.md, HEARTBEAT.md, memory/, MEMORY.md
   - Special: Copy _OPENCLAW-AGENTS.md to AGENTS.md, copy _OPENCLAW_WORKFLOWS.md to WORKFLOWS.md (always sync both)
+- e:\Dev\LLM-Research
+  - Skills: Development
+  - Overwrite everything
+  - Delete deprecated or renamed files from older DevSystem versions
+  - Don't delete unrelated existing files
