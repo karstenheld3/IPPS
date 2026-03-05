@@ -5,11 +5,9 @@ Setup for LLM (Large Language Model) evaluation pipelines. Run once to install P
 ## 1. Set Workspace Folder
 
 ```powershell
-# Define paths using Join-Path for consistency
-# .tools is sibling to workspace: [WORKSPACE]/../.tools/
 $workspaceFolder = (Get-Location).Path  # or set explicitly: $workspaceFolder = "C:\Projects\MyProject"
-$toolsDir = Join-Path (Split-Path $workspaceFolder -Parent) ".tools"
-$venvDir = Join-Path $toolsDir "llm-venv"
+$toolsDir = "$workspaceFolder\..\.tools"
+$venvDir = "$toolsDir\llm-venv"
 
 # Create .tools folder if needed
 if (-not (Test-Path $toolsDir)) { New-Item -ItemType Directory -Path $toolsDir }
