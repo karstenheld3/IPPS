@@ -109,7 +109,8 @@ your-project/
 - **[DevSystemV3](DevSystemV3/)** - Previous version with EDIRD phase model and Agentic English
 - **[DevSystemV3.1](DevSystemV3.1/)** - Previous version with STRUT notation
 - **[DevSystemV3.2](DevSystemV3.2/)** - Previous version with Concurrent blocks, effort allocation, planning guidance
-- **[DevSystemV3.3](DevSystemV3.3/)** - Current system with deep-research skill, shared .tools folder
+- **[DevSystemV3.3](DevSystemV3.3/)** - Previous version with deep-research skill, shared .tools folder
+- **[DevSystemV3.4](DevSystemV3.4/)** - Current system with enhanced logging rules, table formatting
 
 ## Agentic English
 
@@ -244,7 +245,7 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - **AWT** - Agentic Work Time. Agent time estimate for planning and capacity
 - [**MEPI**](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Executable Point of Information. Present 2-3 curated options aligned with implicit intentions.
 - [**MCPI**](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Complete Point of Information. Present exhaustive options when thoroughness is explicitly required
-- **SOCAS** - Signs Of Confusion And Sloppiness. 10 criteria for detecting agent degradation
+- [**SOCAS**](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md) - Signs Of Confusion And Sloppiness. 12 criteria for detecting agent degradation
 - [**MNF**](Docs/Concepts/_INFO_MNF_TECHNIQUE.md) - Must Not Forget. Technique for critical item tracking during task execution
 - **ASANAPAP** - As Short As Necessary, As Precise As Possible. Conciseness principle for workflows and documents
 
@@ -252,18 +253,18 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 
 ## Key Conventions
 
-- [Core Conventions](DevSystemV3.3/rules/core-conventions.md) - Text formatting, document structure, header blocks
-- [DevSystem Core](DevSystemV3.3/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
-- [DevSystem IDs](DevSystemV3.3/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
-- [Agentic English](DevSystemV3.3/rules/agentic-english.md) - Controlled vocabulary for agent instructions
-- [EDIRD Phase Planning](DevSystemV3.3/rules/edird-phase-planning.md) - Phase model core rules
-- [Git Conventions](DevSystemV3.3/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
-- [Coding Conventions](DevSystemV3.3/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
-- [Workflow Rules](DevSystemV3.3/skills/coding-conventions/WORKFLOW-RULES.md) - ASANAPAP principle, workflow formatting
+- [Core Conventions](DevSystemV3.4/rules/core-conventions.md) - Text formatting, document structure, header blocks
+- [DevSystem Core](DevSystemV3.4/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
+- [DevSystem IDs](DevSystemV3.4/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
+- [Agentic English](DevSystemV3.4/rules/agentic-english.md) - Controlled vocabulary for agent instructions
+- [EDIRD Phase Planning](DevSystemV3.4/rules/edird-phase-planning.md) - Phase model core rules
+- [Git Conventions](DevSystemV3.4/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
+- [Coding Conventions](DevSystemV3.4/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
+- [Workflow Rules](DevSystemV3.4/skills/coding-conventions/WORKFLOW-RULES.md) - ASANAPAP principle, workflow formatting
 
 ## Skills
 
-Agent skills in `DevSystemV3.3/skills/`. Each skill contains scripts, documentation, and optional setup.
+Agent skills in `DevSystemV3.4/skills/`. Each skill contains scripts, documentation, and optional setup.
 
 ### llm-evaluation
 
@@ -282,7 +283,7 @@ Evaluate LLM output quality by generating questions, collecting answers, and sco
 **Quick examples**:
 ```powershell
 $venv = "../.tools/llm-venv/Scripts/python.exe"
-$skill = "DevSystemV3.3\skills\llm-evaluation"
+$skill = "DevSystemV3.4\skills\llm-evaluation"
 
 # Transcribe images
 & $venv "$skill\call-llm-batch.py" --model gpt-4o --input-folder images/ --output-folder out/ --prompt-file "$skill\prompts\transcribe-page.md"
@@ -304,7 +305,7 @@ High-quality image-to-markdown transcription using ensemble generation, LLM judg
 **Quick examples**:
 ```powershell
 $venv = "../.tools/llm-venv/Scripts/python.exe"
-$skill = "DevSystemV3.3/skills/llm-transcription"
+$skill = "DevSystemV3.4/skills/llm-transcription"
 
 # Basic usage
 & $venv "$skill/transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]/../.tools/.api-keys.txt
@@ -325,7 +326,7 @@ Desktop automation via LLM vision. The AI sees your screen, decides what to clic
 
 **Quick examples**:
 ```powershell
-cd DevSystemV3.3/skills/llm-computer-use
+cd DevSystemV3.4/skills/llm-computer-use
 
 # Dry-run (safe, no actions executed)
 python -m llm_computer_use -k [WORKSPACE_FOLDER]/../.tools/.api-keys.txt "Click the Start button"
@@ -357,10 +358,10 @@ Convert, compress, and analyze PDF files using local CLI tools.
 **Quick examples**:
 ```powershell
 # Convert PDF to JPG (output: ../.tools/_pdf_to_jpg_converted/)
-python DevSystemV3.3\skills\pdf-tools\convert-pdf-to-jpg.py report.pdf --dpi 150
+python DevSystemV3.4\skills\pdf-tools\convert-pdf-to-jpg.py report.pdf --dpi 150
 
 # Compress PDF
-python DevSystemV3.3\skills\pdf-tools\compress-pdf.py report.pdf --compression high
+python DevSystemV3.4\skills\pdf-tools\compress-pdf.py report.pdf --compression high
 ```
 
 ### coding-conventions
@@ -375,10 +376,10 @@ Python and workflow coding style rules with enforcement tools.
 **Quick examples**:
 ```powershell
 # Convert folder to 2-space indentation
-python DevSystemV3.3\skills\coding-conventions\reindent.py folder/ --to 2 --recursive
+python DevSystemV3.4\skills\coding-conventions\reindent.py folder/ --to 2 --recursive
 
 # Dry-run (preview only)
-python DevSystemV3.3\skills\coding-conventions\reindent.py folder/ --to 2 --recursive --dry-run
+python DevSystemV3.4\skills\coding-conventions\reindent.py folder/ --to 2 --recursive --dry-run
 ```
 
 ### github
@@ -446,10 +447,10 @@ Windows desktop automation utilities.
 **Quick examples**:
 ```powershell
 # Full screen screenshot
-.\DevSystemV3.3\skills\windows-desktop-control\simple-screenshot.ps1
+.\DevSystemV3.4\skills\windows-desktop-control\simple-screenshot.ps1
 
 # Custom output path
-.\DevSystemV3.3\skills\windows-desktop-control\simple-screenshot.ps1 -OutputPath "C:\temp\screenshot.jpg"
+.\DevSystemV3.4\skills\windows-desktop-control\simple-screenshot.ps1 -OutputPath "C:\temp\screenshot.jpg"
 ```
 
 ### windsurf-auto-model-switcher
@@ -465,7 +466,7 @@ Switch Windsurf Cascade AI models programmatically.
 **Quick examples**:
 ```powershell
 # Select Claude Sonnet 4.5
-.\DevSystemV3.3\skills\windsurf-auto-model-switcher\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
+.\DevSystemV3.4\skills\windsurf-auto-model-switcher\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
 ```
 
 ### write-documents
@@ -491,7 +492,7 @@ Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.
 ```
 IPPS/
 ├── ../.tools/                    # Shared tool installations (parent folder)
-├── .windsurf/                    # Active agent configuration (copied from DevSystemV3.3)
+├── .windsurf/                    # Active agent configuration (copied from DevSystemV3.4)
 │   ├── rules/
 │   ├── workflows/
 │   └── skills/
@@ -501,7 +502,7 @@ IPPS/
 ├── DevSystemV3/                  # Previous version
 ├── DevSystemV3.1/                # Previous version
 ├── DevSystemV3.2/                # Previous version
-├── DevSystemV3.3/                # Current system
+├── DevSystemV3.4/                # Current system
 │   ├── rules/
 │   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions
 │   │   ├── cascade-model-switching.md # Model tier definitions and switching
