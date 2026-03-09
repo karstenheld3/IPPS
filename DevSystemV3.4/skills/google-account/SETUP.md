@@ -2,6 +2,129 @@
 
 Setup guide for gogcli - Google services CLI for agent automation.
 
+## Agent Invocation (from PowerShell)
+
+**CRITICAL**: WSL PATH is often broken. Always use this pattern:
+
+```powershell
+wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; gog <command>"
+```
+
+**Examples:**
+```powershell
+# Check version
+wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; gog --version"
+
+# List unread emails
+wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; export GOG_ACCOUNT='you@gmail.com'; export GOG_KEYRING_PASSWORD='pass'; gog --json gmail search 'is:unread' --max 5"
+
+# Download attachment
+wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; export GOG_ACCOUNT='you@gmail.com'; export GOG_KEYRING_PASSWORD='pass'; gog gmail thread get <threadId> --download --out-dir /mnt/e/Dev/USTVA/_Input"
+```
+
+**Current status**:
+- [x] gogcli installed: v0.11.0 at `/home/linuxbrew/.linuxbrew/bin/gog`
+- [ ] OAuth credentials configured
+- [ ] Account authorized
+
+## Quick OAuth Setup (Agent-Assisted via Playwright MCP)
+
+Agent navigates Google Cloud Console, user approves OAuth. Full automation possible.
+
+### Step 1: Create Project
+```
+https://console.cloud.google.com/projectcreate
+```
+- Set name: `gogcli-personal`
+- Click Create
+- Note PROJECT_ID from URL (e.g., `gogcli-personal-123456`)
+
+### Step 2: Enable APIs
+Navigate to each and click Enable:
+```
+https://console.cloud.google.com/apis/library/gmail.googleapis.com?project={PROJECT_ID}
+https://console.cloud.google.com/apis/library/calendar-json.googleapis.com?project={PROJECT_ID}
+https://console.cloud.google.com/apis/library/drive.googleapis.com?project={PROJECT_ID}
+https://console.cloud.google.com/apis/library/tasks.googleapis.com?project={PROJECT_ID}
+https://console.cloud.google.com/apis/library/people.googleapis.com?project={PROJECT_ID}
+```
+
+### Step 3: Configure OAuth Consent
+```
+https://console.cloud.google.com/apis/credentials/consent?project={PROJECT_ID}
+```
+- Click "Get started"
+- App name: `gogcli`
+- User support email: select your email
+- Audience: **External**
+- Developer contact: your email
+- Agree to terms, Create
+
+### Step 4: Add Test User (CRITICAL)
+```
+https://console.cloud.google.com/auth/audience?project={PROJECT_ID}
+```
+- Click "Add users"
+- Enter your email address
+- Save
+
+**Without this step, OAuth will fail with "Error 403: access_denied"**
+
+### Step 5: Create OAuth Client
+```
+https://console.cloud.google.com/auth/clients/create?project={PROJECT_ID}
+```
+- Application type: Desktop app
+- Name: `gogcli-desktop`
+- Create
+- Download JSON (or use Playwright to capture from temp folder)
+
+### Step 6: Store Credentials
+```powershell
+# If downloaded via Playwright MCP, file is in temp folder:
+Copy-Item "$env:TEMP\playwright-mcp-output\*\client-secret-*.json" -Destination "$env:USERPROFILE\.gogcli\client-secret.json"
+
+# Store in gogcli (adjust path to match where you saved the JSON)
+wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; gog auth credentials /mnt/c/Users/\$USER/.gogcli/client-secret.json"
+```
+
+### Step 7: Authorize Account (Agent-Assisted)
+
+**Method A: Fully automated with Playwright MCP**
+
+1. Start gogcli auth command (non-blocking):
+```powershell
+wsl bash -c "export PATH='...'; export GOG_KEYRING_PASSWORD='gogcli'; gog auth add your@gmail.com --services gmail --manual" | head -30
+```
+
+2. Agent navigates to auth URL via Playwright MCP
+3. Agent clicks through account selection and consent screens
+4. Browser redirects to localhost (fails with ERR_CONNECTION_REFUSED)
+5. Agent captures redirect URL from `mcp1_browser_network_requests`
+6. Pipe redirect URL to new gogcli command:
+```powershell
+echo "http://127.0.0.1:PORT/oauth2/callback?state=...&code=..." | wsl bash -c "export PATH='...'; export GOG_KEYRING_PASSWORD='gogcli'; gog auth add your@gmail.com --services gmail --manual"
+```
+
+**Method B: Manual in WSL terminal**
+```bash
+export PATH='/home/linuxbrew/.linuxbrew/bin:$PATH'
+export GOG_KEYRING_PASSWORD='gogcli'
+gog auth add your@gmail.com --manual
+# Visit URL, approve, paste redirect URL back
+```
+
+### Verify Authorization
+```powershell
+wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; export GOG_KEYRING_PASSWORD='gogcli'; gog auth status"
+```
+
+Expected output includes:
+```
+account your@gmail.com
+credentials_exists      true
+```
+
 ## Pre-Installation Verification
 
 Complete ALL verification steps before modifying your system.
