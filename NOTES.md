@@ -105,7 +105,7 @@ Automatically push commits to GitHub.
   - Delete deprecated or renamed files from older DevSystem versions
   - Don't delete unrelated existing files
 - e:\Dev\USTVA
-  - Skills: Development
+  - Skills: All
   - Overwrite everything
   - Delete deprecated or renamed files from older DevSystem versions
   - Don't delete unrelated existing files
