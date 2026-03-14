@@ -93,7 +93,7 @@ $targets = @(
 
 # Deprecated files allowlist
 $deprecatedFiles = @{
-    "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md", "edird-core.md")
+    "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md", "edird-core.md", "cascade-model-switching.md", "research-and-report-writing-rules.md", "implementation-specification-rules.md")
     "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md", "deliver.md", "design.md", "explore.md", "go-research.md", "refine.md", "session-resume.md")
 }
 $deprecatedSkillFolders = @("edird-phase-model", "ipps-deep-research")
@@ -289,6 +289,12 @@ Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `
 ### V3.2 → V3.3 Migration (Renamed Skills)
 
 - `skills/ipps-deep-research/` → renamed to `skills/deep-research/`
+
+### V3.3 → V3.4 Migration (Deprecated Rules)
+
+- `rules/cascade-model-switching.md` → removed (moved to `skills/windsurf-auto-model-switcher/`)
+- `rules/research-and-report-writing-rules.md` → removed (consolidated into `skills/write-documents/`)
+- `rules/implementation-specification-rules.md` → removed (consolidated into `skills/write-documents/`)
 
 ### V3.1 New Files
 
