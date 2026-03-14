@@ -88,7 +88,7 @@ MNF provides the safety net   → Critical items that must be verified before co
 
 ## Overview
 
-IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V3.2) introduces the EDIRD phase model, Agentic English vocabulary, and STRUT notation for deterministic agent behavior.
+IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V3.4) features the EDIRD phase model, Agentic English vocabulary, STRUT notation, and enhanced logging/formatting rules for deterministic agent behavior.
 
 ## How to Add to Your Project
 
@@ -110,7 +110,7 @@ your-project/
 - **[DevSystemV3.1](DevSystemV3.1/)** - Previous version with STRUT notation
 - **[DevSystemV3.2](DevSystemV3.2/)** - Previous version with Concurrent blocks, effort allocation, planning guidance
 - **[DevSystemV3.3](DevSystemV3.3/)** - Previous version with deep-research skill, shared .tools folder
-- **[DevSystemV3.4](DevSystemV3.4/)** - Current system with enhanced logging rules, table formatting
+- **[DevSystemV3.4](DevSystemV3.4/)** - Current system with enhanced logging rules, table formatting, character rules cleanup
 
 ## Agentic English
 
@@ -502,15 +502,15 @@ IPPS/
 ├── DevSystemV3/                  # Previous version
 ├── DevSystemV3.1/                # Previous version
 ├── DevSystemV3.2/                # Previous version
+├── DevSystemV3.3/                # Previous version
 ├── DevSystemV3.4/                # Current system
 │   ├── rules/
+│   │   ├── agent-behavior.md     # Agent execution patterns and communication
 │   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions
-│   │   ├── cascade-model-switching.md # Model tier definitions and switching
-│   │   ├── core-conventions.md   # Text formatting, document structure
+│   │   ├── core-conventions.md   # Text formatting, document structure, character rules
 │   │   ├── devsystem-core.md     # Workspace scenarios, folder structure, operation modes
 │   │   ├── devsystem-ids.md      # Document and item ID conventions
 │   │   ├── edird-phase-planning.md # EDIRD phase model core rules
-│   │   ├── research-and-report-writing-rules.md # Research quality rules
 │   │   └── workspace-rules.md    # Workspace-specific overrides
 │   ├── skills/
 │   │   ├── coding-conventions/   # Python, PowerShell, workflow style rules
