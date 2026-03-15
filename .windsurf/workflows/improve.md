@@ -16,8 +16,9 @@ Autonomous self-improvement. Find issues, fix immediately. No user consultation.
 6. Incorrect/unverified assumptions
 7. Flawed logic/thinking
 8. Unnecessary complexity
-9. Concept overlap
-10. Broken rules
+9. new solutions for already solved problems
+10. Concept overlap
+11. Broken rules
 
 ## Workflow
 

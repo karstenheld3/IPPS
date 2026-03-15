@@ -64,14 +64,16 @@ Apply to ALL document types and contexts:
   - Exception: README.md may use emojis without `<DevSystem>` tag
   - Only [ACTOR] may add `<DevSystem EmojisAllowed=true />` exception to other files
 
-## Goal Alignment (minimal WHAT)
+## Conceptual verification
 
-Before detailed verification, confirm work aligns with stated goal:
-- Does this solve the stated problem?
-- Is scope creep happening?
-- Are we solving the right problem?
-
-For deep issue detection (contradictions, flawed logic, complexity), use `/improve`.
+When reviewing architechture, design and solution strategy, look for:
+- inconsistencies
+- new solutions for already solved problems
+- ambiguities
+- underspeced behavior
+- unverified assumptions
+- over-engineering and introduction of unwanted complexity
+- flawed thinking and underestimated complexity
 
 ## Verification Labels
 
