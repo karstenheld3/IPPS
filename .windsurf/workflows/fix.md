@@ -36,10 +36,10 @@ SESSION-MODE (bug found during active session):
 
 PROJECT-MODE (bug found after session closed):
 - Folder: `[BUGFIXES_FOLDER]/` = `[DEFAULT_SESSIONS_FOLDER]/_BugFixes/`
-- Bug ID: `BG-NNNN` (4-digit, project-global)
-- Bug Folder: `[BUGFIXES_FOLDER]/BG-NNNN_IssueDescription/`
+- Bug ID: `GLOB-BG-NNN` (uses GLOB prefix, cross-cutting)
+- Bug Folder: `[BUGFIXES_FOLDER]/GLOB-BG-NNN_IssueDescription/`
 - Docs: SPEC, IMPL, TEST + `*_FIXES.md`
-- Commit: `fix(BG-NNNN): description`
+- Commit: `fix(GLOB-BG-NNN): description`
 
 ## Step 1: Determine Context
 
@@ -119,7 +119,7 @@ If no description provided (discovery mode):
 Record in PROBLEMS.md (no subfolder for problems):
 
 - SESSION-MODE: `[SESSION_FOLDER]/PROBLEMS.md`, ID format `[SESSION_TOPIC]-PR-NNN` (use session's TOPIC, no new topics)
-- PROJECT-MODE: `[BUGFIXES_FOLDER]/PROBLEMS.md`, ID format `PR-NNN` (no TOPIC prefix, _BugFixes implied)
+- PROJECT-MODE: `[BUGFIXES_FOLDER]/PROBLEMS.md`, ID format `GLOB-PR-NNN` (uses GLOB for cross-cutting)
 
 Entry format:
 ```markdown
@@ -152,13 +152,13 @@ Create [BUG_FOLDER] (only when problem confirmed as bug):
 
 - SESSION-MODE: `[SESSION_FOLDER]/[TOPIC]-BG-NNN_IssueDescription/` (3-digit, session-local)
   - Get next BG number from `[SESSION_FOLDER]/NOTES.md` "Bug List" section (count existing entries + 1)
-- PROJECT-MODE: `[BUGFIXES_FOLDER]/BG-NNNN_IssueDescription/` (4-digit, project-global)
+- PROJECT-MODE: `[BUGFIXES_FOLDER]/GLOB-BG-NNN_IssueDescription/` (uses GLOB prefix)
   - Get next BG number from `[BUGFIXES_FOLDER]/NOTES.md` (single source of truth)
 
 Inside [BUG_FOLDER], create:
 - `PROBLEMS.md` - Full detail problem tracking
 
-Update parent PROBLEMS.md PR entry with note: "→ Now tracked as [TOPIC]-BG-NNN" (or "→ Now tracked as BG-NNNN" for PROJECT-MODE).
+Update parent PROBLEMS.md PR entry with note: "→ Now tracked as [TOPIC]-BG-NNN" (or "→ Now tracked as GLOB-BG-NNN" for PROJECT-MODE).
 
 ## Step 5: Reproduce Bug
 
@@ -233,7 +233,7 @@ PROJECT-MODE only:
 
 ### 10.3 Commit
 
-Run `/commit` with format: `fix(BG-NNNN): description` (PROJECT-MODE) or `fix([TOPIC]-BG-NNN): description` (SESSION-MODE)
+Run `/commit` with format: `fix(GLOB-BG-NNN): description` (PROJECT-MODE) or `fix([TOPIC]-BG-NNN): description` (SESSION-MODE)
 
 ### 10.4 Mark Resolved
 

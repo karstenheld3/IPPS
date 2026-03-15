@@ -20,10 +20,13 @@ All documents and items must have unique IDs for traceability.
 
 **GLOB Usage:**
 
-Use `GLOB` for **tracking IDs only** (workspace-level failures, problems, tasks):
+Use `GLOB` for **tracking IDs only** (workspace-level failures, problems, tasks, bugs):
+- `GLOB-BG-*` - Bugs in `_BugFixes` session (PROJECT-MODE, cross-cutting)
 - `GLOB-FL-*` - DevSystem failures (sync errors, gate bypasses, tool issues)
 - `GLOB-PR-*` - Cross-cutting problems affecting multiple components
 - `GLOB-TK-*` - Workspace-wide tasks (deployments, refactoring)
+
+**_BugFixes Session:** Uses `GLOB` prefix for all tracking IDs because bugs there span multiple components. See `/fix` workflow for details.
 
 Do NOT use `GLOB` for **document IDs** (IN, SP, IP, TP, TK):
 - Named concepts get their own TOPIC: `MEPI-IN01`, `EDIRD-SP01`, `STRUT-SP01`
