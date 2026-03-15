@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # EDIRD Phase Model (Core)
 
 For full model with gates, flows, and planning: invoke @edird-phase-planning skill

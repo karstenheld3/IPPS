@@ -47,7 +47,7 @@ Used in IMPL/TEST documents. Format: `[TOPIC]-[DOC][NN]-[TYPE]-[NN]`
 
 ## Tracking Item IDs
 
-Used in PROBLEMS.md, FAILS.md, REVIEW.md. Format: `[TOPIC]-[TYPE]-[NNN]`
+Used in PROBLEMS.md, FAILS.md, REVIEW.md. Format: `[TOPIC]-[TYPE]-[NNNN]`
 
 - **BG** - Bug (defect in existing code)
 - **FT** - Feature (new functionality request)
@@ -104,8 +104,8 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **MONOREPO** - Workspace contains multiple projects
 - **SINGLE-VERSION** - One active version
 - **MULTI-VERSION** - Side-by-side versions
-- **SESSION-BASED** - Time-limited session with specific goals
-- **PROJECT-WIDE** - Work spans entire project
+- **SESSION-MODE** - Time-limited session with specific goals
+- **PROJECT-MODE** - Work spans entire project
 
 ### Operation Modes
 - **IMPL-CODEBASE** - Output to project source folders (default)
@@ -157,6 +157,10 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **GCRU** - Global Coding Rules (universal coding conventions)
 
 ## Document History
+
+**[2026-03-15 21:05]**
+- Fixed: Tracking Item IDs format `[NNN]` → `[NNNN]` (align with devsystem-ids.md)
+- Fixed: States `SESSION-BASED`/`PROJECT-WIDE` → `SESSION-MODE`/`PROJECT-MODE` (align with rules)
 
 **[2026-03-15 14:55]**
 - Added: PLWR topic (Playwriter MCP)
