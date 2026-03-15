@@ -12,14 +12,13 @@ All documents and items must have unique IDs for traceability.
 - Document IDs: `AUTH-SP01`, `CRWL-IP01`
 - Review IDs: `AUTH-SP01-RV01`
 - Spec items (FR, DD, IG, AC): `CRWL-FR-01`
-- Plan items (EC, IS, VC, TC): `CRWL-IP01-EC-01`
+- Plan items (EC, IS, VC, TC, TK): `CRWL-IP01-EC-01`, `AUTH-TK01-TK-05`
 - Review findings (RF): `AUTH-SP01-RV01-RF-01`
 
 **4-digit `[NNNN]`** - For tracking IDs (unbounded, accumulate over time):
 - Bugs: `SAP-BG-0001`, `GLOB-BG-0001`
 - Problems: `AUTH-PR-0001`
 - Features: `UI-FT-0001`
-- Tasks: `GLOB-TK-0015`
 - Fixes: `CRWL-FX-0002`
 - Failures: `GLOB-FL-0019`
 
@@ -130,9 +129,9 @@ Defined in SPECs, referenced across IMPL and TEST plans.
 - `CRWL-DD-03` - Crawler Design Decision 3
 - `AUTH-IG-02` - Authentication Implementation Guarantee 2
 
-## Plan-Level Item IDs (EC, IS, VC, TC)
+## Plan-Level Item IDs (EC, IS, VC, TC, TK)
 
-Local to IMPL and TEST plans. Do NOT use in SPECs.
+Local to IMPL, TEST, and TASKS plans. Do NOT use in SPECs.
 
 **Format:** `[TOPIC]-[DOC][NN]-[TYPE]-[NUMBER]`
 
@@ -141,11 +140,13 @@ Local to IMPL and TEST plans. Do NOT use in SPECs.
 - `IS` - Implementation Step
 - `VC` - Verification Checklist item
 - `TC` - Test Case
+- `TK` - Task (work item in TASKS document)
 
 **Examples:**
 - `CRWL-IP01-EC-01` - Crawler Plan 01, Edge Case 1
 - `CRWL-IP01-IS-05` - Crawler Plan 01, Implementation Step 5
 - `AUTH-TP01-TC-03` - Authentication Test Plan 01, Test Case 3
+- `AUTH-TK01-TK-05` - Authentication Tasks 01, Task 5
 
 ## INFO Document Source IDs
 
@@ -178,7 +179,7 @@ Session tracking documents use date-based IDs instead of TOPIC-based IDs.
 - `2026-01-15_FixAuthenticationBug-PROBLEMS`
 - `2026-01-15_FixAuthenticationBug-PROGRESS`
 
-## Tracking IDs (BG, FT, PR, FX, TK, FL)
+## Tracking IDs (BG, FT, PR, FX, FL)
 
 For session and project tracking in PROBLEMS.md, FAILS.md, _REVIEW.md, and backlog documents.
 
@@ -189,15 +190,14 @@ For session and project tracking in PROBLEMS.md, FAILS.md, _REVIEW.md, and backl
 - `FT` - Feature (new functionality request)
 - `PR` - Problem (issue discovered during session)
 - `FX` - Fix (documented fix for a problem)
-- `TK` - Task (general work item)
 - `FL` - Failure log entry (actual failure in FAILS.md)
 
 **Examples:**
-- `SAP-BG-0001` - SAP-related bug 1
+- `SAP-BG-0001` - SAP-related bug 1 (SESSION-MODE)
 - `AUTH-FT-0001` - Authentication feature request 1
-- `GLOB-PR-0003` - Project-wide problem 3
+- `GLOB-PR-0003` - Project-wide problem 3 (PROJECT-MODE)
+- `GLOB-BG-0002` - Project-wide bug 2 (PROJECT-MODE)
 - `CRWL-FX-0002` - Crawler fix 2
-- `UI-TK-0015` - UI task 15
 - `CRWL-FL-0001` - Crawler failure log entry 1
 
 **Note:** The `[TOPIC]` links together related SPEC, IMPL, TEST, INFO, FAILS, and REVIEW documents.
