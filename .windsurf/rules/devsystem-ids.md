@@ -6,6 +6,23 @@ trigger: always_on
 
 All documents and items must have unique IDs for traceability.
 
+## Number Formats (2-digit vs 4-digit)
+
+**2-digit `[NN]` or `[NUMBER]`** - For document-scoped items (bounded, rarely exceed 99):
+- Document IDs: `AUTH-SP01`, `CRWL-IP01`
+- Review IDs: `AUTH-SP01-RV01`
+- Spec items (FR, DD, IG, AC): `CRWL-FR-01`
+- Plan items (EC, IS, VC, TC): `CRWL-IP01-EC-01`
+
+**4-digit `[NNNN]`** - For tracking IDs (unbounded, accumulate over time):
+- Bugs: `SAP-BG-0001`, `GLOB-BG-0001`
+- Problems: `AUTH-PR-0001`
+- Features: `UI-FT-0001`
+- Tasks: `GLOB-TK-0015`
+- Fixes: `CRWL-FX-0002`
+- Reviews: `AUTH-RV-0001`
+- Failures: `GLOB-FL-0019`
+
 ## Topic Registry
 
 **Topic:** 2-6 uppercase letters describing component (e.g., `CRWL` for Crawler, `AUTH` for Authentication, `EDIRD` for EDIRD Phase Model)
