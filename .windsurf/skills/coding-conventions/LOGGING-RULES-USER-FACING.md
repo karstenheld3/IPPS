@@ -24,7 +24,7 @@ User-facing logs are self-explanatory and explorative. By reading the logs, user
 - Plain language that non-technical users can follow
 - **Full Disclosure:** Every log section must be self-contained. Include filenames, URLs, and identifiers so readers don't need to scroll up for context.
 
-**MUST NOT use log levels:** Never use `INFO`, `DEBUG`, `WARN`, `ERROR` prefixes. These are for App-Level logging only. User-facing logs use plain language with status keywords: `OK`, `FAIL`, `PARTIAL FAIL`, `SKIP`, `ERROR:`, `WARNING:`.
+**MUST NOT use log levels:** Never use `INFO`, `DEBUG`, `WARN` prefixes. These are for App-Level logging only. User-facing logs use plain language with status keywords: `OK`, `FAIL`, `PARTIAL FAIL`, `SKIP` or `SKIPPED`, `ERROR:`, `WARNING:`, `HINT:`.
 
 **This goal drives all rules in this document:**
 - Simple timestamps without technical noise ([LOG-UF-01](#log-uf-01-timestamp-format))
