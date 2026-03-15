@@ -165,7 +165,7 @@ Session tracking documents use date-based IDs instead of TOPIC-based IDs.
 
 For session and project tracking in PROBLEMS.md, FAILS.md, _REVIEW.md, and backlog documents.
 
-**Format:** `[TOPIC]-[TYPE]-[NNN]` (3-digit number)
+**Format:** `[TOPIC]-[TYPE]-[NNNN]` (4-digit number)
 
 **Types:**
 - `BG` - Bug (defect in existing code)
@@ -177,12 +177,12 @@ For session and project tracking in PROBLEMS.md, FAILS.md, _REVIEW.md, and backl
 - `FL` - Failure log entry (actual failure in FAILS.md)
 
 **Examples:**
-- `SAP-BG-001` - SAP-related bug 1
-- `AUTH-FT-001` - Authentication feature request 1
-- `GLOB-PR-003` - Project-wide problem 3
-- `CRWL-FX-002` - Crawler fix 2
-- `UI-TK-015` - UI task 15
-- `AUTH-RV-001` - Authentication review finding 1
-- `CRWL-FL-001` - Crawler failure log entry 1
+- `SAP-BG-0001` - SAP-related bug 1
+- `AUTH-FT-0001` - Authentication feature request 1
+- `GLOB-PR-0003` - Project-wide problem 3
+- `CRWL-FX-0002` - Crawler fix 2
+- `UI-TK-0015` - UI task 15
+- `AUTH-RV-0001` - Authentication review finding 1
+- `CRWL-FL-0001` - Crawler failure log entry 1
 
 **Note:** The `[TOPIC]` links together related SPEC, IMPL, TEST, INFO, FAILS, and REVIEW documents.
