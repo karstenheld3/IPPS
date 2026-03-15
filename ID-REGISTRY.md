@@ -147,6 +147,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
 - **LLMTR** - LLM Transcription Skill (image-to-markdown, audio-to-markdown)
 - **MCPS** - MCP server integrations
+- **PLWR** - Playwriter MCP (Chrome extension browser automation)
 - **OCLAW** - OpenClaw exploration (remote agent interaction via WhatsApp/Cascade)
 - **MEPI** - MEPI/MCPI research depth principle
 - **SDDEV** - Spec-Driven Development (research topic)
@@ -156,6 +157,9 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **GCRU** - Global Coding Rules (universal coding conventions)
 
 ## Document History
+
+**[2026-03-15 14:55]**
+- Added: PLWR topic (Playwriter MCP)
 
 **[2026-02-11 10:28]**
 - Added: TOOLS topic (.tools folder relocation and path updates)

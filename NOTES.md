@@ -27,7 +27,7 @@ Usage: `--keys-file [WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
 
 - **Model Accuracy**: Read model requests literally. Version numbers matter (e.g., Sonnet 4 != Sonnet 4.5).
 - **Safety First**: UI automation scripts MUST have a `-DryRun` mode. Preview changes before sending irreversible keyboard events.
-
+- **Playwriter Timeouts**: ALWAYS pass `timeout: 1500` (default is 20000ms!). Lower to 500ms when fast.
 
 ## DevSystem Source/Sync Rules
 

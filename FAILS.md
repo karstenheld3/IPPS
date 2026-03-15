@@ -1,5 +1,19 @@
 # Failure Log
 
+## 2026-03-15 - Playwriter MCP Session
+
+### [LOW] `PLWR-FL-001` Used 20000ms timeout immediately after adding rule against it
+
+- **When**: 2026-03-15 15:07 UTC
+- **Where**: Playwriter MCP execute call
+- **What**: Used `timeout: 20000` for `screenshotWithAccessibilityLabels` immediately after user instructed to add "Never use long timeouts - default 1500ms" to MUST-NOT-FORGET
+- **Why it went wrong**: Copied pattern from system prompt example without checking against just-added rules
+
+**Prevention rules**:
+1. After adding a rule, immediately apply it to next action
+2. Default timeout should be omitted (uses 10000ms) or set to 1500ms max
+3. Lower to 500ms when responses come quickly
+
 ## 2026-03-15 - DevSystem Deployment
 
 ### [HIGH] `GLOB-FL-019` Deployed Personal skills to Development-only repos
@@ -256,7 +270,7 @@
 1. Check MCP server compatibility list - if Windsurf not listed, expect issues
 2. Test in isolation is NOT sufficient - `--help` works but MCP handshake may fail
 3. Have rollback plan before adding new MCP servers to config
-4. For desktop automation with Windsurf, use playwriter (verified working)
+4. For desktop automation with Windsurf, use Playwright MCP (verified working)
 
 **Root cause**: UNKNOWN - likely MCP protocol incompatibility, NOT Windows/nut.js issue
 
