@@ -1,7 +1,3 @@
----
-trigger: always_on
----
-
 # Agentic English (AGEN)
 
 High-level vocabulary for problem-solving strategy and planning.
@@ -18,7 +14,7 @@ Used in:
 
 NOT used in:
 - Workflow step instructions (use plain English or `/workflow` refs)
-- Agent skills (except when explicitly referencing AGEN)
+- Agent skills (except when explicitly referncing AGEN)
 - Code comments or implementation details
 - User-facing documentation
 
@@ -86,7 +82,6 @@ No brackets for tokens in **conditions** - things the agent checks for branching
 - **[FRAME]** - Structure the problem or approach
 - **[PLAN]** - Create structured approach with steps
 - **[PARTITION]** - Break large plan into small testable steps (TASKS document)
-- **[DECOMPOSE]** - Break complex element into constituent parts
 - **[DECIDE]** - Make a choice between options
 - **[ASSESS]** - Assess effort, time, risk, or complexity
 - **[PRIORITIZE]** - Order by importance or urgency
@@ -107,7 +102,6 @@ No brackets for tokens in **conditions** - things the agent checks for branching
 - **[REVIEW]** - Inspect work (open-minded)
 - **[CRITIQUE]** - Find flaws in logic, strategy, and goal alignment (disregards formal rules)
 - **[RECONCILE]** - Bridge gap between ideal and feasible, balance trade-offs (disregards formal rules)
-- **[VALIDATE]** - Confirm deliverables meet acceptance criteria before handoff
 
 ### Documentation
 
