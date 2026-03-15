@@ -13,6 +13,7 @@ All documents and items must have unique IDs for traceability.
 - Review IDs: `AUTH-SP01-RV01`
 - Spec items (FR, DD, IG, AC): `CRWL-FR-01`
 - Plan items (EC, IS, VC, TC): `CRWL-IP01-EC-01`
+- Review findings (RF): `AUTH-SP01-RV01-RF-01`
 
 **4-digit `[NNNN]`** - For tracking IDs (unbounded, accumulate over time):
 - Bugs: `SAP-BG-0001`, `GLOB-BG-0001`
@@ -20,7 +21,6 @@ All documents and items must have unique IDs for traceability.
 - Features: `UI-FT-0001`
 - Tasks: `GLOB-TK-0015`
 - Fixes: `CRWL-FX-0002`
-- Reviews: `AUTH-RV-0001`
 - Failures: `GLOB-FL-0019`
 
 ## Topic Registry
@@ -178,7 +178,7 @@ Session tracking documents use date-based IDs instead of TOPIC-based IDs.
 - `2026-01-15_FixAuthenticationBug-PROBLEMS`
 - `2026-01-15_FixAuthenticationBug-PROGRESS`
 
-## Tracking IDs (BG, FT, PR, FX, TK, RV, FL)
+## Tracking IDs (BG, FT, PR, FX, TK, FL)
 
 For session and project tracking in PROBLEMS.md, FAILS.md, _REVIEW.md, and backlog documents.
 
@@ -190,7 +190,6 @@ For session and project tracking in PROBLEMS.md, FAILS.md, _REVIEW.md, and backl
 - `PR` - Problem (issue discovered during session)
 - `FX` - Fix (documented fix for a problem)
 - `TK` - Task (general work item)
-- `RV` - Review finding (potential issue in _REVIEW.md)
 - `FL` - Failure log entry (actual failure in FAILS.md)
 
 **Examples:**
@@ -199,7 +198,6 @@ For session and project tracking in PROBLEMS.md, FAILS.md, _REVIEW.md, and backl
 - `GLOB-PR-0003` - Project-wide problem 3
 - `CRWL-FX-0002` - Crawler fix 2
 - `UI-TK-0015` - UI task 15
-- `AUTH-RV-0001` - Authentication review finding 1
 - `CRWL-FL-0001` - Crawler failure log entry 1
 
 **Note:** The `[TOPIC]` links together related SPEC, IMPL, TEST, INFO, FAILS, and REVIEW documents.
