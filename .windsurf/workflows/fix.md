@@ -77,13 +77,13 @@ Characteristics:
 - Bug found AFTER implementation is done
 - Confirmed defect in existing code
 - Fix happens in persistent `_BugFixes` session
-- Uses BG (Bug) tracking ID (4-digit: NNNN, globally unique across project)
+- Uses BG (Bug) tracking ID (`GLOB-BG-NNN`, cross-cutting)
 
 Folder structure:
 ```
 [BUGFIXES_FOLDER]/              <- Permanent session (never archived)
 ├── NOTES.md, PROBLEMS.md, PROGRESS.md
-└── BG-NNNN_IssueDescription/           <- [BUG_FOLDER] (4-digit, project-global)
+└── GLOB-BG-NNN_IssueDescription/       <- [BUG_FOLDER] (uses GLOB prefix)
     ├── PROBLEMS.md                      <- Full detail
     ├── _INFO_*.md, _STRUT_*.md
     ├── backup/, poc/, test/
@@ -264,7 +264,7 @@ Run `/learn` to reflect on mistakes and extract lessons from this fix.
 Created for PROJECT-MODE only. One file per component.
 
 ```markdown
-### BG-NNNN IssueDescription
+### GLOB-BG-NNN IssueDescription
 
 **Problem**: Single sentence describing the bug
 **Solution**: Single sentence describing the fix
