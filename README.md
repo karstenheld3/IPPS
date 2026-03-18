@@ -590,26 +590,26 @@ IPPS uses a two-level tracking system: **workspace-level** files for project-wid
 
 Located in workspace root (or project root in monorepos):
 
-| File | Required | Purpose |
-|------|----------|---------|
-| `!NOTES.md` | ✅ Yes | Critical project info, agent instructions, key patterns |
-| `!PROBLEMS.md` | Optional | Known issues across the project |
-| `!PROGRESS.md` | Optional | Overall project progress |
-| `FAILS.md` | Auto-created | Lessons learned from past mistakes (via [`/fail`](.windsurf/workflows/fail.md) workflow, synced from sessions) |
-| `LEARNINGS.md` | Auto-created | Reusable patterns (via [`/learn`](.windsurf/workflows/learn.md) workflow analyzing fails) |
-| `ID-REGISTRY.md` | ✅ Yes | Authoritative source for TOPICs, acronyms, and IDs |
+| File             | Required     | Purpose                                                    |
+|------------------|--------------|-----------------------------------------------------------|
+| `!NOTES.md`      | Yes          | Critical project info, agent instructions, key patterns    |
+| `!PROBLEMS.md`   | Optional     | Known issues across the project                            |
+| `!PROGRESS.md`   | Optional     | Overall project progress                                   |
+| `FAILS.md`       | Auto-created | Lessons learned from past mistakes (via `/fail` workflow)  |
+| `LEARNINGS.md`   | Auto-created | Reusable patterns (via `/learn` workflow analyzing fails)  |
+| `ID-REGISTRY.md` | Yes          | Authoritative source for TOPICs, acronyms, and IDs         |
 
 ### Session Files
 
 Located in session folder (e.g., `_2026-01-15_FixAuthBug/`):
 
-| File | Required | Purpose |
-|------|----------|---------|
-| `NOTES.md` | ✅ Yes | Session goal, key decisions, findings, resume instructions |
-| `PROBLEMS.md` | ✅ Yes | Problems discovered during session (Open/Resolved/Deferred) |
-| `PROGRESS.md` | ✅ Yes | To-do list, in-progress, done, tried-but-not-used |
-| `FAILS.md` | Auto-created | Session-specific failures (run [`/fail`](.windsurf/workflows/fail.md) to record) |
-| `LEARNINGS.md` | Auto-created | Lessons from failures (run [`/learn`](.windsurf/workflows/learn.md) to analyze fails) |
+| File           | Required     | Purpose                                                       |
+|----------------|--------------|---------------------------------------------------------------|
+| `NOTES.md`     | Yes          | Session goal, key decisions, findings, resume instructions    |
+| `PROBLEMS.md`  | Yes          | Problems discovered during session (Open/Resolved/Deferred)   |
+| `PROGRESS.md`  | Yes          | To-do list, in-progress, done, tried-but-not-used             |
+| `FAILS.md`     | Auto-created | Session-specific failures (run `/fail` to record)             |
+| `LEARNINGS.md` | Auto-created | Lessons from failures (run `/learn` to analyze fails)         |
 
 ### Session Lifecycle
 
@@ -889,18 +889,18 @@ Release a project version:
 
 ## Agent Compatibility
 
-| Feature | Windsurf | Claude Code | Codex CLI | GitHub Copilot | OpenClaw |
-|---------|----------|-------------|-----------|----------------|----------|
-| **Type** | IDE | Terminal | Terminal | IDE Extension | Gateway + Multi-channel |
-| **Platform** | Windows, macOS, Linux | Windows, macOS, Linux | macOS, Linux, Windows (WSL) | VS Code, Visual Studio, JetBrains | Windows, macOS, Linux |
-| **Instructions** | `.windsurf/rules/*.md` | `CLAUDE.md` | `AGENTS.md` | `.github/copilot-instructions.md` | `AGENTS.md`, `SOUL.md` |
-| **Commands/Workflows** | `.windsurf/workflows/*.md` | `.claude/commands/*.md` | Custom prompts only | Prompt files only | Skills only |
-| **Skills** | ✅ Yes | ✅ Yes | ❌ No | ❌ No | ✅ Yes |
-| **Subagents** | ❌ No | ✅ Yes | ❌ No | ✅ Yes (custom agents) | ✅ Yes |
-| **Hooks** | ✅ Yes | ✅ Yes | ❌ No | ❌ No | ✅ Yes (webhooks) |
-| **MCP Support** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No (native tools) |
-| **Sandbox** | ❌ No | ❌ No | ✅ Yes (OS-level) | ❌ No | ✅ Yes (Docker) |
-| **Config Format** | JSON + Protobuf | JSON | TOML | JSON | JSON |
+| Feature            | Windsurf               | Claude Code            | Codex CLI              | GitHub Copilot                    | OpenClaw                |
+|--------------------|------------------------|------------------------|------------------------|-----------------------------------|-------------------------|
+| Type               | IDE                    | Terminal               | Terminal               | IDE Extension                     | Gateway + Multi-channel |
+| Platform           | Windows, macOS, Linux  | Windows, macOS, Linux  | macOS, Linux, Win WSL  | VS Code, VS, JetBrains            | Windows, macOS, Linux   |
+| Instructions       | `.windsurf/rules/*.md` | `CLAUDE.md`            | `AGENTS.md`            | `.github/copilot-instructions.md` | `AGENTS.md`, `SOUL.md`  |
+| Commands/Workflows | `.windsurf/workflows/` | `.claude/commands/`    | Custom prompts only    | Prompt files only                 | Skills only             |
+| Skills             | Yes                    | Yes                    | No                     | No                                | Yes                     |
+| Subagents          | No                     | Yes                    | No                     | Yes (custom agents)               | Yes                     |
+| Hooks              | Yes                    | Yes                    | No                     | No                                | Yes (webhooks)          |
+| MCP Support        | Yes                    | Yes                    | Yes                    | Yes                               | No (native tools)       |
+| Sandbox            | No                     | No                     | Yes (OS-level)         | No                                | Yes (Docker)            |
+| Config Format      | JSON + Protobuf        | JSON                   | TOML                   | JSON                              | JSON                    |
 
 ### Deploying to Other Agents
 
