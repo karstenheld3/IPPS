@@ -110,7 +110,8 @@ your-project/
 - **[DevSystemV3.1](DevSystemV3.1/)** - Previous version with STRUT notation
 - **[DevSystemV3.2](DevSystemV3.2/)** - Previous version with Concurrent blocks, effort allocation, planning guidance
 - **[DevSystemV3.3](DevSystemV3.3/)** - Previous version with deep-research skill, shared .tools folder
-- **[DevSystemV3.4](DevSystemV3.4/)** - Current system with enhanced logging rules, table formatting, character rules cleanup
+- **[DevSystemV3.4](DevSystemV3.4/)** - Previous version with enhanced logging rules, table formatting, character rules cleanup
+- **[DevSystemV3.5](DevSystemV3.5/)** - Current system with generic /fix workflow, improved /implement and /go workflows
 
 ## Agentic English
 
