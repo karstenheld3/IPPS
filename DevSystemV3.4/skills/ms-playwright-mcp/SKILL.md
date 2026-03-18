@@ -7,6 +7,13 @@ description: Apply when automating browser interactions, web scraping, or UI tes
 
 Rules and usage for Microsoft Playwright MCP server.
 
+## Quick Reference
+
+- [PLAYWRIGHT_ADVANCED_WORKFLOWS.md](PLAYWRIGHT_ADVANCED_WORKFLOWS.md) - Cookie popups, scrolling, expanding items
+- [PLAYWRIGHT_AUTHENTICATION.md](PLAYWRIGHT_AUTHENTICATION.md) - Persistent profiles, storage state
+- [PLAYWRIGHT_FULL_PAGE_SCREENSHOT.md](PLAYWRIGHT_FULL_PAGE_SCREENSHOT.md) - Complete page capture workflow
+- [PLAYWRIGHT_TROUBLESHOOTING.md](PLAYWRIGHT_TROUBLESHOOTING.md) - Common issues, debugging
+
 ## Table of Contents
 
 **Core**
@@ -59,9 +66,10 @@ Rules and usage for Microsoft Playwright MCP server.
 - Use accessibility tree (not screenshots) for element selection
 - Reference elements via `ref=e5` format from `browser_snapshot`
 - Always call `browser_snapshot` before clicking to get current refs
-- Use `browser_close` when done to free resources
+- **NEVER auto-close browser**: Only user may close browser - sessions preserve authentication state (banking, email, etc.)
 - For logged-in sessions: Use persistent user profile or storage state
 - Always use `type: "jpeg"` for screenshots (default is png, which produces unnecessarily large files)
+- **Downloads go to temp folder**: `$env:TEMP\playwright-mcp-output\[session]\` - NOT user Downloads folder. Copy files to destination after download completes.
 
 ## Configuration
 

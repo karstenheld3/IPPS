@@ -296,6 +296,11 @@ Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `
 - `rules/research-and-report-writing-rules.md` → removed (consolidated into `skills/write-documents/`)
 - `rules/implementation-specification-rules.md` → removed (consolidated into `skills/write-documents/`)
 
+### V3.4 Migration (Renamed/New Workflows)
+
+- `workflows/fix.md` - NEW generic problem-fixing workflow (reads DevSystem knowledge)
+- `workflows/bugfix.md` - Code bug fixing (was fix.md, now separate)
+
 ### V3.1 New Files
 
 **Renamed Rules:**

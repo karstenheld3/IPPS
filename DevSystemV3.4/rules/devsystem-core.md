@@ -192,6 +192,7 @@ Files starting with `.tmp` are temporary helper scripts created during operation
 ## Workflow Reference
 
 - `/build` - BUILD workflow entry point (code output)
+- `/bugfix` - Record and fix bugs (SESSION-MODE or PROJECT-MODE)
 - `/commit` - Create conventional commits
 - `/continue` - Execute next items on plan
 - `/critique` - Devil's Advocate review

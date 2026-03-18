@@ -19,6 +19,8 @@ Interact with Google services using the `gogcli` CLI tool.
 - [Drive Operations](#drive-operations)
 - [Configuration](#configuration)
 - [Limitations](#limitations)
+- [Token Expiry Re-Auth Flow](#token-expiry-re-auth-flow)
+- [Common Mistakes](#common-mistakes-lessons-learned)
 - [Setup](SETUP.md)
 - [Uninstall](UNINSTALL.md)
 
@@ -27,23 +29,32 @@ Interact with Google services using the `gogcli` CLI tool.
 Before using this skill, verify `gog` is installed:
 
 ```powershell
-wsl bash -c "which gog && gog --version"
+wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; gog --version"
 ```
 
 **If command fails or `gog` not found**: Stop and follow [SETUP.md](SETUP.md) workflow completely. Do NOT improvise installation steps.
 
-**If `gog` found but auth fails**: Follow SETUP.md "Step 5: Authenticate" section.
+**If `gog` found but auth fails**: Follow [Token Expiry Re-Auth Flow](#token-expiry-re-auth-flow) below.
 
 ## MUST-NOT-FORGET
 
 - Tool is `gog` (from gogcli package), NOT `gop`
+- **WSL PATH is broken by default** - Always include full PATH export (see command template below)
 - **If `gog` not installed**: Follow SETUP.md, do NOT improvise installation
-- Requires user to complete OAuth setup first (see SETUP.md)
+- **If token expired**: Follow [Token Expiry Re-Auth Flow](#token-expiry-re-auth-flow)
 - Use `--json` flag for all commands to enable parsing
 - Set `GOG_ACCOUNT` environment variable for non-interactive use
 - Use `GOG_KEYRING_PASSWORD` with file backend for automation
 - Google Meet links cannot be created via CLI (API limitation)
 - Attachments download to specified `--out-dir`, default is current directory
+
+### Command Template (ALWAYS USE)
+
+```powershell
+wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; export GOG_KEYRING_PASSWORD='<PASSWORD>'; export GOG_ACCOUNT='<EMAIL>'; gog <command>"
+```
+
+**Get config from `[WORKSPACE_FOLDER]/!NOTES.md`** - Look for "gogcli" section with account and keyring password.
 
 ## Intent Lookup
 
@@ -280,7 +291,11 @@ export GOG_ENABLE_COMMANDS='gmail,calendar,tasks,drive'
 ### WSL Invocation (from PowerShell)
 
 ```powershell
-wsl bash -c 'export GOG_ACCOUNT="you@gmail.com" && export GOG_KEYRING_PASSWORD="pass" && gog gmail search "is:unread" --max 5'
+# CORRECT - with full PATH (get EMAIL and PASSWORD from [WORKSPACE_FOLDER]/!NOTES.md)
+wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; export GOG_ACCOUNT='<EMAIL>'; export GOG_KEYRING_PASSWORD='<PASSWORD>'; gog --json gmail search 'is:unread' --max 5"
+
+# WRONG - PATH not set, will fail with 'gog: command not found'
+wsl bash -c 'export GOG_ACCOUNT="you@gmail.com" && gog gmail search "is:unread" --max 5'
 ```
 
 ## Limitations
@@ -290,6 +305,85 @@ wsl bash -c 'export GOG_ACCOUNT="you@gmail.com" && export GOG_KEYRING_PASSWORD="
 3. OAuth consent - User must manually complete initial OAuth flow in browser
 4. Token refresh - Tokens auto-refresh, but initial auth requires browser
 5. Headless auth - Use `--manual` flag for servers without browser
+
+## Token Expiry Re-Auth Flow
+
+When you see `"invalid_grant" "Token has been expired or revoked"`, follow this flow:
+
+### Step 1: Start Auth (Non-Blocking)
+
+```powershell
+wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; export GOG_KEYRING_PASSWORD='<PASSWORD>'; gog auth add <EMAIL> --manual --force" 2>&1 | Select-String -Pattern 'state=' | ForEach-Object { $_.Line }
+```
+
+This outputs an OAuth URL. Note the `state=` parameter value.
+
+### Step 2: Navigate with Playwright MCP
+
+```js
+// Navigate to the OAuth URL from Step 1
+await page.goto('<OAUTH_URL_FROM_STEP_1>');
+```
+
+### Step 3: Click Through Consent
+
+1. Click your account
+2. If "Google hasn't verified this app" appears, click "Continue"
+3. Click "Continue" on consent screen
+4. Browser redirects to localhost (shows ERR_CONNECTION_REFUSED - this is expected)
+
+### Step 4: Capture Redirect URL
+
+```js
+// Get redirect URL from network requests
+await mcp1_browser_network_requests({ includeStatic: false })
+// Look for: http://127.0.0.1:<PORT>/oauth2/callback?state=...&code=...
+```
+
+### Step 5: Complete Auth
+
+```powershell
+# Pipe the redirect URL to gogcli (must match state from Step 1)
+wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; export GOG_KEYRING_PASSWORD='<PASSWORD>'; echo '<REDIRECT_URL>' | gog auth add <EMAIL> --manual --force"
+```
+
+### Step 6: Verify
+
+```powershell
+wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; export GOG_KEYRING_PASSWORD='<PASSWORD>'; export GOG_ACCOUNT='<EMAIL>'; gog --json gmail search 'is:unread' --max 3"
+```
+
+## Common Mistakes (Lessons Learned)
+
+### 1. WSL PATH Not Set
+**Symptom**: `gog: command not found`
+**Fix**: Always use full PATH export in command:
+```bash
+export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'
+```
+
+### 2. State Mismatch
+**Symptom**: `state mismatch` error when pasting redirect URL
+**Cause**: Using redirect URL from a different auth session
+**Fix**: The `state=` parameter in redirect URL must match the auth session. Start fresh auth and use that session's redirect URL.
+
+### 3. Invalid Client ID
+**Symptom**: `Error 401: invalid_client` / "The OAuth client was not found"
+**Cause**: Using wrong client_id in OAuth URL
+**Fix**: Get correct client_id from your client secret file:
+```powershell
+Get-Content "<CLIENT_SECRET_PATH>" | ConvertFrom-Json | Select-Object -ExpandProperty installed | Select-Object client_id
+# Client secret path is in [WORKSPACE_FOLDER]/!NOTES.md under "gogcli" section
+```
+
+### 4. Terminal Truncates OAuth URL
+**Symptom**: Cannot copy full OAuth URL from terminal
+**Fix**: Use Playwright MCP to navigate directly - read client_id from JSON, construct URL with correct scopes.
+
+### 5. Port Mismatch in Redirect URI
+**Symptom**: Auth fails silently
+**Cause**: gogcli uses random port each session (e.g., 8085, 45111)
+**Fix**: Always capture redirect URL from same auth session via `mcp1_browser_network_requests`.
 
 ## Sources
 

@@ -68,6 +68,8 @@ Usage: `--keys-file [WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
 Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination ".windsurf\" -Recurse -Force
 ```
 
+**"deploy" keyword:** When user says "deploy", sync [DEVSYSTEM_FOLDER] to `.windsurf/` using the command above.
+
 Automatically push commits to GitHub.
 
 **2026-01-21**: Workflow Reference in devsystem-core.md was outdated (`GLOB-FL-006`). Updated to flat list of all 28 workflows.

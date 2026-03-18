@@ -775,6 +775,118 @@ Creates `_TASKS_*.md` from IMPL/TEST. **Mandatory before implementation.**
 /commit
 ```
 
+### Problem Fixing
+
+**Workflows:** [`/fix`](.windsurf/workflows/fix.md), [`/bugfix`](.windsurf/workflows/bugfix.md)
+
+Fix any problem by reading relevant DevSystem knowledge:
+```
+/fix
+```
+
+Classifies problem (CODE, DOCUMENT, DESIGN, UNDERSTANDING, PROCESS, CONFIG), reads context-specific workflows and rules, then applies that knowledge.
+
+Fix code bugs with full traceability:
+```
+/bugfix "Login fails when session expires"
+```
+
+Creates `[BUG_FOLDER]` with PROBLEMS.md, runs impact assessment, and documents fix.
+
+### Quality Review
+
+**Workflows:** [`/critique`](.windsurf/workflows/critique.md), [`/reconcile`](.windsurf/workflows/reconcile.md), [`/improve`](.windsurf/workflows/improve.md)
+
+Devil's Advocate review (find flaws):
+```
+/critique
+```
+
+Pragmatic review of critique findings:
+```
+/reconcile
+```
+
+Find and fix contradictions and improvements:
+```
+/improve
+```
+
+### Learning from Failures
+
+**Workflows:** [`/fail`](.windsurf/workflows/fail.md), [`/learn`](.windsurf/workflows/learn.md)
+
+Record a failure to FAILS.md:
+```
+/fail "Deployed without running tests"
+```
+
+Extract learnings from resolved problems:
+```
+/learn
+```
+
+### Testing
+
+**Workflows:** [`/test`](.windsurf/workflows/test.md)
+
+Run tests based on scope and context:
+```
+/test
+```
+
+### Planning Tools
+
+**Workflows:** [`/partition`](.windsurf/workflows/partition.md), [`/write-strut`](.windsurf/workflows/write-strut.md), [`/write-info`](.windsurf/workflows/write-info.md)
+
+Split plans into discrete tasks:
+```
+/partition
+```
+
+Create STRUT plan with proper format:
+```
+/write-strut
+```
+
+Create INFO document from research:
+```
+/write-info
+```
+
+### Research
+
+**Workflows:** [`/deep-research`](.windsurf/workflows/deep-research.md), [`/transcribe`](.windsurf/workflows/transcribe.md)
+
+Execute deep research (MEPI or MCPI):
+```
+/deep-research "Compare vector databases for RAG"
+```
+
+Transcribe PDFs and web pages to markdown:
+```
+/transcribe path/to/document.pdf
+```
+
+### Utility Workflows
+
+**Workflows:** [`/session-archive`](.windsurf/workflows/session-archive.md), [`/switch-model`](.windsurf/workflows/switch-model.md), [`/project-release`](.windsurf/workflows/project-release.md)
+
+Archive a completed session:
+```
+/session-archive
+```
+
+Switch Cascade AI model tier:
+```
+/switch-model HIGH
+```
+
+Release a project version:
+```
+/project-release
+```
+
 ## Agent Compatibility
 
 | Feature | Windsurf | Claude Code | Codex CLI | GitHub Copilot | OpenClaw |
