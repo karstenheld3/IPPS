@@ -61,7 +61,7 @@ if ($hasSkill -and $hasKeys) {
 
 ### For Local PDF
 ```powershell
-python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "path/to/document.pdf" --dpi 150  # 150 DPI - optimal for transcription
+python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "path/to/document.pdf" --dpi 120  # 120 DPI - optimal for transcription
 ```
 
 ### For URL to PDF
@@ -71,7 +71,7 @@ $filename = [System.IO.Path]::GetFileName($url)
 # Download to: [SESSION_FOLDER] > [WORKSPACE_FOLDER]
 Invoke-WebRequest -Uri $url -OutFile "[SESSION_FOLDER]/$filename"
 # Then convert to JPG
-python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "[SESSION_FOLDER]/$filename" --dpi 150
+python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "[SESSION_FOLDER]/$filename" --dpi 120
 ```
 
 ### For Web Page
@@ -141,6 +141,7 @@ $skill = ".windsurf/skills/llm-transcription"
     --output-folder "[SESSION_FOLDER]/transcribed/" `
     --keys-file "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt" `
     --model gpt-5-mini `
+    --initial-candidates 1 `
     --workers 12
 ```
 
@@ -417,9 +418,9 @@ Write-Output "Merged $($files.Count) files to $output"
 
 ## Output Locations
 
-- Converted images: `[OUTPUT_FOLDER]/01_source_images/`
-- Transcribed pages: `[OUTPUT_FOLDER]/02_transcribed_pages/`
-- Final merged output: `[OUTPUT_FOLDER]/[DocName].md`
+- Converted images: `../.tools/_pdf_to_jpg_converted/[NAME]/` (default from convert-pdf-to-jpg.py, do NOT override)
+- Transcribed pages: `[SESSION_FOLDER]/02_transcribed_pages/`
+- Final merged output: `[SESSION_FOLDER]/[DocName].md`
 - Web screenshots: `../.tools/_web_screenshots/[DOMAIN]/`
 
 ## Long Document Strategy (50+ pages)
@@ -465,7 +466,7 @@ After transcription, run `/verify` to:
 1. **4 pages max per call** - Prevents context overflow and ensures quality
 2. **Write immediately** - Append to file after each chunk
 3. **Track progress** - Use progress markers for resumability
-4. **150 DPI for PDFs** - Optimal balance of quality and processing speed for transcription
+4. **120 DPI for PDFs** - Optimal balance of quality and processing speed for transcription
 5. **Keep source images** - Required for `/verify`
 6. **No omissions** - Every piece of content must be transcribed
 7. **ASCII + XML for figures** - Every figure requires both ASCII art and `<transcription_notes>` XML block

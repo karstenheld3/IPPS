@@ -155,6 +155,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **LMWS** - LM Studio + Windsurf integration research
 - **TOOLS** - .tools folder relocation and path updates
 - **GCRU** - Global Coding Rules (universal coding conventions)
+- **WSTKTRAC** - Windsurf Token Logging (token usage tracking via hooks)
 
 ## Document History
 
