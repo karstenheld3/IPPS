@@ -74,7 +74,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **MCPI** - Most Complete Point of Information (used for research)
 - **SOCAS** - Signs Of Confusion And Sloppiness (10 criteria)
 - **MNF** - Must Not Forget. Technique for critical item tracking during task execution
-- **ASANAPAP** - As Short As Necessary, As Precise As Possible. Conciseness principle for workflows and documents
+- **APAPALAN** - As Precise As Possible, As Little As Necessary. Conciseness principle for workflows and documents
 - **VCRIV** - Verify, Critique, Reconcile, Implement, Verify. Standard quality control pipeline for document review cycles. Runs `/verify` → `/critique` → `/reconcile` → `/implement` → `/verify`
 
 ## States (no brackets)
@@ -147,6 +147,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
 - **LLMTR** - LLM Transcription Skill (image-to-markdown, audio-to-markdown)
 - **MCPS** - MCP server integrations
+- **MECT** - Minimal Explicit Consistent Terminology (communication design principle)
 - **PLWR** - Playwriter MCP (Chrome extension browser automation)
 - **OCLAW** - OpenClaw exploration (remote agent interaction via WhatsApp/Cascade)
 - **MEPI** - MEPI/MCPI research depth principle

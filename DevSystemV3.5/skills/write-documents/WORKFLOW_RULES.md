@@ -30,7 +30,7 @@ Content (CT)
 - WF-CT-03: Avoid Markdown tables - use lists
 - WF-CT-04: Avoid emojis - use text equivalents
 - WF-CT-05: Product names spelled correctly
-- WF-CT-06: ASANAPAP requires examples - precision over brevity
+- WF-CT-06: APAPALAN requires examples - precision over brevity
 - WF-CT-07: No Document History section in rule files
 
 Branching (BR)

@@ -248,7 +248,7 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - [**MCPI**](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Complete Point of Information. Present exhaustive options when thoroughness is explicitly required
 - [**SOCAS**](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md) - Signs Of Confusion And Sloppiness. 12 criteria for detecting agent degradation
 - [**MNF**](Docs/Concepts/_INFO_MNF_TECHNIQUE.md) - Must Not Forget. Technique for critical item tracking during task execution
-- **ASANAPAP** - As Short As Necessary, As Precise As Possible. Conciseness principle for workflows and documents
+- **APAPALAN** - As Precise As Possible, As Little As Necessary. Conciseness principle for workflows and documents
 
 **Full registry**: [ID-REGISTRY.md](ID-REGISTRY.md) - All acronyms, TOPICs, states, and named concepts
 
@@ -261,7 +261,7 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - [EDIRD Phase Planning](DevSystemV3.4/rules/edird-phase-planning.md) - Phase model core rules
 - [Git Conventions](DevSystemV3.4/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
 - [Coding Conventions](DevSystemV3.4/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
-- [Workflow Rules](DevSystemV3.4/skills/coding-conventions/WORKFLOW-RULES.md) - ASANAPAP principle, workflow formatting
+- [Workflow Rules](DevSystemV3.4/skills/coding-conventions/WORKFLOW-RULES.md) - APAPALAN principle, workflow formatting
 
 ## Skills
 

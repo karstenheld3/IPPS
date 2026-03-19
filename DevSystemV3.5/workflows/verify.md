@@ -155,7 +155,7 @@ If code contains logging, output, or print statements:
    - Script-level (test/QA output) → `LOGGING-RULES-SCRIPT-LEVEL.md`
      - Goal: All failure info in logs alone
 3. Verify against core principles:
-   - ASANAPAP (as short as necessary, as precise as possible)
+   - APAPALAN (as precise as possible, as little as necessary)
    - Least Surprise (predictable patterns across solutions)
    - Full Disclosure (each line understandable without context, provides enough to assess complexity + processing time)
    - Visible Structure (logs reveal workflow, not just progress)

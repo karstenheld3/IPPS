@@ -39,9 +39,9 @@ Four logging types serve distinct audiences with specific patterns.
 
 Each logging type has a specific goal that drives its rules.
 
-### ASANAPAP Principle
+### APAPALAN Principle
 
-**As short as necessary, as precise as possible.**
+**As precise as possible, as little as necessary.**
 
 Every log line should convey maximum information with minimum words. Avoid verbosity, filler words, and redundant phrases. Be concise but never ambiguous.
 
