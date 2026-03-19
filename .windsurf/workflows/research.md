@@ -7,6 +7,7 @@ auto_execution_mode: 1
 Read these before proceeding:
 - `[AGENT_FOLDER]/rules/research-and-report-writing-rules.md` for MEPI/MCPI research depth
 - @write-documents for INFO document structure
+- @write-documents `APAPALAN_RULES.md` for writing quality (precision, brevity, structure, naming)
 
 ## MUST-NOT-FORGET
 

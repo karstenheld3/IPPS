@@ -315,6 +315,7 @@ Words that sound similar but differ in meaning. Using the wrong one corrupts the
 
 - **Music** - Note system (F#-3, Ab-1): precise, universal, minimal
 - **Electronics** - Resistor names, part naming schemes: standardized across industry
+- **Unix commands** - `grep` = "global regular expression print". Name describes function: searches globally using regex and prints matches. Easy to remember because acronym encodes behavior.
 - **Japanese craftsmanship** - "Sashimono" (joining wood without nails), "Hozo" (hidden notch-and-groove technique), "Hukiurushi-shiage" (10+ coats of wiped lacquer). Each word compresses an entire technique into a reusable term that can be applied and taught in new contexts. This is language as a "wisdom compression and transport protocol."
 
 ### 5.5 Bad: Automotive Software
@@ -380,6 +381,9 @@ Every word is from daily life. No interpretation needed. The question format mak
 - `MECT-IN01-SC-FOWLR-BCTX`: Martin Fowler on Bounded Context and polysemes
 
 ## 7. Document History
+
+**[2026-03-19 22:13]**
+- Added: Unix `grep` example - acronym that encodes behavior (5.4)
 
 **[2026-03-19 19:55]**
 - Added: APAPALAN distillation "As precise as possible. As little as necessary." (Summary, 2.5)

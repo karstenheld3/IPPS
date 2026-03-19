@@ -6,7 +6,10 @@ description: Find and fix contradictions, inconsistencies, and improvement oppor
 
 Autonomous self-improvement. Find issues, fix immediately. No user consultation.
 
-**Mandatory read:** `APAPALAN_RULES.md` (@skills:write-documents) before improving any written content.
+**Mandatory reads before improving:**
+- `APAPALAN_RULES.md` (@skills:write-documents) - precision, brevity, structure, naming
+- `MECT_WRITING_RULES.md` (@skills:write-documents) - voice, word choice, terminology, headings, lists
+- `MECT_CODING_RULES.md` (@skills:coding-conventions) - naming, functions, types, comments, logs, errors
 
 ## APAPALAN Quality Check
 
@@ -17,6 +20,29 @@ Apply to ALL written documents and communications in scope:
 - **AP-NM-01**: One name per concept - find and fix synonyms and polysemy
 - **AP-NM-05**: Use standard terms - replace invented jargon with established terminology
 - **AP-ST-01**: Goal first - ensure reader knows WHY before HOW
+
+## MECT Writing Quality Check
+
+Apply to written documents in scope:
+- **MW-VO-01**: Active voice - actor before action, no hidden responsibility
+- **MW-VO-03**: Simplest verb - "review" not "carry out a review"
+- **MW-VO-04**: Obligation words - must/must not/should/may, never "shall"
+- **MW-WC-01**: Word-level precision - accuracy != precision, simple != simplistic
+- **MW-TD-01**: Naming structure - explicit name -> specifiers -> states -> mnemonics
+- **MW-HS-01**: Informative headings - state content, not topic
+- **MW-DT-01**: Four description lenses - intentional/functional/technical/contextual
+
+## MECT Coding Quality Check
+
+Apply to code in scope:
+- **MC-PR-01**: One name per concept across codebase - no synonyms across layers
+- **MC-PR-03**: No meta-words without qualifier - qualify Manager, Service, Handler
+- **MC-PR-05**: Error messages state what failed, why, and recovery action
+- **MC-PR-06**: Log messages self-contained - each line understandable alone
+- **MC-BR-04**: Boolean functions use predicate prefix (is_/has_/can_), not "check_"
+- **MC-CO-01**: Corresponding pairs use same word stem (open/close, encode/decode)
+- **MC-CO-03**: Convergent naming - same term in URL, payload, variable, log, docs
+- **MC-ND-06**: Disambiguate by qualifying, not renaming
 
 ## Issue Categories
 
@@ -31,14 +57,15 @@ Apply to ALL written documents and communications in scope:
 9. New solutions for already solved problems
 10. Concept overlap
 11. Broken rules
-12. APAPALAN violations (vague writing, synonyms, missing examples, inconsistent patterns)
+12. APAPALAN/MECT violations (vague writing, synonyms, missing examples, inconsistent patterns, wrong voice, meta-words)
 
 ## Workflow
 
 1. Scope: file path → that file; folder → all .md/code; none → conversation context
 2. Re-read dependencies before assessing:
    - Rules: `[AGENT_FOLDER]/rules/*.md`
-   - Writing quality: `APAPALAN_RULES.md` (@skills:write-documents)
+   - Writing quality: `APAPALAN_RULES.md` + `MECT_WRITING_RULES.md` (@skills:write-documents)
+   - Code quality: `MECT_CODING_RULES.md` (@skills:coding-conventions)
    - Workspace: README, NOTES, ID-REGISTRY, FAILS, LEARNINGS
    - Scope-specific: SPEC→INFO, IMPL→SPEC, TEST→SPEC+IMPL, workflow→`WORKFLOW-RULES.md`
    - Session: NOTES, PROBLEMS, PROGRESS (if SESSION-MODE)
@@ -52,4 +79,5 @@ Apply to ALL written documents and communications in scope:
 - Preserve IDs (FR-XX, DD-XX)
 - Pick simplest fix when multiple valid options
 - Remove broken refs or add missing targets
-- Apply APAPALAN to all text changes (precision first, then brevity)
+- Apply APAPALAN + MECT to all text changes (precision first, then brevity)
+- Apply MECT_CODING_RULES to all code changes (naming, logs, errors)
