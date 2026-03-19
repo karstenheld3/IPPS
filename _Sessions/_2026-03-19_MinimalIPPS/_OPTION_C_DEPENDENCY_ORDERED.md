@@ -22,6 +22,11 @@ Build semantic dependency graph. Compress in topological order: roots first (rul
 - JSON configs: 9 json (skip)
 - **Compressible: 75 files** | Non-compressible: 29 files (copy as-is)
 
+**Exclusion criteria** (skip compression):
+- Files < 100 lines AND rarely loaded → copy as-is
+- Applies to: infrequently-invoked workflows, supporting skill docs (SETUP.md, UNINSTALL.md)
+- Reduces compression scope by ~20-30%
+
 ## Why Higher Quality Than Option A
 
 Option A compresses files independently. File A drops concept X. File B references concept X and keeps the reference - broken link. Option C prevents this: when compressing File B, the Transformer sees compressed File A and knows concept X is gone.
@@ -283,7 +288,7 @@ Refinement (~20% across all layers): 15 files × $0.33 = ~$4.95
 - Re-compresses that layer + all downstream layers
 - Example: if Layer 0 compression broke references in Layer 3, re-compress Layer 0, then cascade to Layers 1-3
 
-**First iteration: ~$96.00**
+**First iteration: ~$96.00** (±50% - thinking tokens estimated)
 **Subsequent iterations: ~$20-40** (only re-compress affected layers)
 
 ## Cost Optimization Levers

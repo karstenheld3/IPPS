@@ -20,6 +20,11 @@
 **Compressible** (markdown agent instructions): ~75 files (rules + workflows + skill docs + prompts)
 **Non-compressible** (copy as-is): ~29 files (Python scripts + JSON configs)
 
+**Exclusion criteria** (skip compression):
+- Files < 100 lines AND rarely loaded → copy as-is
+- Applies to: infrequently-invoked workflows, supporting skill docs (SETUP.md, UNINSTALL.md)
+- Reduces compression scope by ~20-30%
+
 ## Step-to-Output Mapping
 
 Aligned with NOTES.md Steps 1-7:
@@ -181,7 +186,7 @@ This prevents errors from propagating to the compression strategy.
 
 **Iteration (Mother, cached): ~$2.50** (review report + update strategy)
 
-**First iteration total: ~$16.50**
+**First iteration total: ~$16.50** (±50% - thinking tokens estimated)
 **Subsequent iterations: ~$8.30** (skip Steps 2-4, only re-run 6-7 + iterate)
 
 **With GPT-5.4 as Transformer:**

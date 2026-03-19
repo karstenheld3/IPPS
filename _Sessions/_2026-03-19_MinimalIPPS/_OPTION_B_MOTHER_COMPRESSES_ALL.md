@@ -22,6 +22,11 @@ Mother compresses every file with all 104 files in cached context. Zero cross-fi
 - JSON configs: 9 json (skip)
 - **Compressible: 75 files** | Non-compressible: 29 files (copy as-is)
 
+**Exclusion criteria** (skip compression):
+- Files < 100 lines AND rarely loaded → copy as-is
+- Applies to: infrequently-invoked workflows, supporting skill docs (SETUP.md, UNINSTALL.md)
+- Reduces compression scope by ~20-30%
+
 ## Why Higher Quality Than Option A
 
 Option A's Transformer compresses `build.md` without seeing that `edird-phase-planning.md` and `devsystem-core.md` reference concepts defined in it. Mother has the entire system in context - it knows every cross-file dependency while compressing.
@@ -169,7 +174,7 @@ Per NOTES.md, 5 lines per file:
 - Re-compresses only failed files (typically 5-10)
 - Re-runs verification for changed files
 
-**First iteration: ~$50.25**
+**First iteration: ~$50.25** (±50% - thinking tokens estimated)
 **Subsequent iterations: ~$39.20** (skip Steps 2-4, re-compress only failed files)
 
 ## Cost Optimization Levers

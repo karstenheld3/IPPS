@@ -22,6 +22,11 @@ Define what "works with a cheap LLM" means before compressing. Create functional
 - JSON configs: 9 json (skip)
 - **Compressible: 75 files** | Non-compressible: 29 files (copy as-is)
 
+**Exclusion criteria** (skip compression):
+- Files < 100 lines AND rarely loaded → copy as-is
+- Applies to: infrequently-invoked workflows, supporting skill docs (SETUP.md, UNINSTALL.md)
+- Reduces compression scope by ~20-30%
+
 ## Why Higher Quality Than Options A-C
 
 Options A-C measure structural quality: "did the compressed file keep the right sections?" Option D measures functional quality: "does the compressed system make the agent behave correctly?"
@@ -32,6 +37,7 @@ Structural quality is a proxy metric. An agent may produce correct behavior with
 
 Aligned with NOTES.md Steps 1-7, with added Steps 0 and 8:
 
+- **Step -1**: Baseline test → test FULL DevSystem on target LLM, document failures (prerequisite)
 - **Step 0**: Design test suite → `_00_FUNCTIONAL_TEST_SUITE.md` + `tests/test_suite.json` (Mother, implicitly bundles first)
 - **Step 1**: Bundle verified → `context/all_files_bundle.md` (already created in Step 0)
 - **Step 2**: Analyze call tree → `_01_FILE_CALL_TREE.md` (Mother)
@@ -280,7 +286,7 @@ Per NOTES.md, 5 lines per file, plus functional test results:
 
 **Iteration**: Re-compress 3-5 files × $0.01 + re-test 25 × $0.02 = ~$0.55
 
-**First iteration: ~$16.50**
+**First iteration: ~$17.50** (±50% - thinking tokens estimated)
 **Subsequent iterations: ~$4.25** (re-compress failures + re-test only)
 
 ## Cost Optimization Levers
