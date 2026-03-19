@@ -8,7 +8,7 @@
 Key findings for cross-agent compatibility:
 - Windsurf uses `.windsurf/rules/*.md` for instructions (always-on or trigger-based) [VERIFIED]
 - Workflows stored in `.windsurf/workflows/*.md`, invoked as `/workflow-name` [VERIFIED]
-- Skills in `.windsurf/skills/<name>/SKILL.md` using Agent Skills format [VERIFIED]
+- Skills in `.windsurf/skills/<name>/SKILL.md` or `.agents/skills/` using Agent Skills format [VERIFIED]
 - Cascade settings in protobuf binary (`user_settings.pb`), not editable by hand [TESTED]
 - MCP config in `~/.codeium/windsurf/mcp_config.json` [VERIFIED]
 - Hooks in `.windsurf/hooks.json` or `~/.codeium/windsurf/hooks.json` [VERIFIED]
@@ -16,6 +16,9 @@ Key findings for cross-agent compatibility:
 - Model switching preserves full context; model fixed per response, change takes effect on next turn [TESTED]
 - Smaller context window: earlier messages dropped/summarized automatically without warning [VERIFIED]
 - Different providers (Claude/GPT/SWE): Cascade abstracts differences, transparent switching [VERIFIED]
+- Arena Mode: side-by-side model comparison with battle groups and leaderboards [VERIFIED 2026-03]
+- Plan Mode: dedicated mode for implementation planning before coding [VERIFIED 2026-03]
+- New model picker with family grouping, variant toggles, and pin feature [VERIFIED 2026-03]
 
 ## Table of Contents
 
@@ -31,7 +34,8 @@ Key findings for cross-agent compatibility:
 10. [Terminal and CLI](#terminal-features)
 11. [Other Features](#other-features)
 12. [Key Files Reference](#key-files-reference)
-13. [Sources](#sources)
+13. [Available Models](#available-models-updated-2026-03)
+14. [Sources](#sources)
 
 ## Overview
 
@@ -145,6 +149,8 @@ Open Cascade: `Cmd/Ctrl+L` or click Cascade icon (top right). Selected text in e
 
 - **Code Mode**: Create and modify codebase files
 - **Chat Mode**: Questions about codebase or coding principles (proposes code you can accept/insert)
+- **Plan Mode**: Create detailed implementation plans before coding. Type `megaplan` for advanced form with clarifying questions [NEW 2026-01-30]
+- **Arena Mode**: Side-by-side model comparison with hidden identities. Select via Arena tab in model picker [NEW 2026-01-30]
 
 ### Capabilities
 
@@ -157,6 +163,9 @@ Open Cascade: `Cmd/Ctrl+L` or click Cascade icon (top right). Selected text in e
 - **Plans and Todo Lists** - Built-in planning agent for complex tasks
 - **Queued Messages** - Queue new messages while Cascade works
 - **Linter integration** - Auto-fix linting errors (free, no credit charge)
+- **Git Worktree Support** - Spawn multiple sessions in same repo without conflicts [NEW Wave 13]
+- **Multi-Cascade Panes & Tabs** - View sessions side-by-side or as dashboard [NEW Wave 13]
+- **Cascade Dedicated Terminal** - Reliable zsh shell for agent commands (Beta, opt-in) [NEW Wave 13]
 
 ### Checkpoints and Reverts
 
@@ -208,6 +217,31 @@ Teams/Enterprise only: Click `...` > "Share Conversation" to share trajectories 
 ### Auto-Continue
 
 When enabled, Cascade automatically continues when hitting per-response limit. Each continue consumes credits.
+
+### Arena Mode [NEW 2026-01-30]
+
+Side-by-side model comparison with hidden identities:
+
+- **Battle Groups** - Choose specific models or let Windsurf select from curated groups ("fast models" vs "smart models")
+- **Personal & Global Leaderboards** - Votes contribute to both personal preferences and global rankings
+- **Sync or Branch** - Send followups to both agents simultaneously, or branch to explore different paths
+- **Free Trial** - Battle groups free for first week for paid users
+
+Access via Arena tab in model picker.
+
+### Plan Mode [NEW 2026-01-30]
+
+Dedicated mode for implementation planning:
+
+- Create detailed plans before diving into code
+- Type `megaplan` in input box for advanced form with clarifying questions
+- Auto-switches back to Code Mode when you start implementing
+
+### New Model Picker [NEW 2026-03]
+
+- Groups models by family with hovercards
+- Toggles for variants (reasoning effort, speed)
+- Pin favorite models for quick access
 
 ### Model Switching and Context Window [TESTED 2026-01-26]
 
@@ -273,8 +307,13 @@ Execute custom shell commands at key points in Cascade's workflow for logging, s
 - `pre_run_command` / `post_run_command` - Before/after terminal command
 - `pre_mcp_tool_use` / `post_mcp_tool_use` - Before/after MCP tool
 - `pre_user_prompt` / `post_cascade_response` - Before/after user interaction
+- `post_cascade_response_with_transcript` - Response with full transcript [NEW 2026-03]
+- `post_setup_worktree` - After worktree initialization [NEW 2026-02]
 
 **Pre-hooks can block actions** by exiting with code 2.
+
+**New fields in `post_cascade_response`:**
+- `rules_applied` - Tracks which rules were triggered [NEW 2026-02]
 
 ### Configuration Example
 
@@ -298,6 +337,13 @@ Execute custom shell commands at key points in Cascade's workflow for logging, s
 - Blocking access to sensitive files
 - Running formatters/linters after edits
 - Blocking dangerous commands
+
+### Enterprise Hook Features [NEW 2026-02]
+
+- **Cloud configuration** - Configure hooks via cloud dashboard for enterprise teams
+- **Organization-wide allow/deny lists** - Admins set command auto-execution policies
+- **Windows Group Policy** - Manage Windsurf restrictions via GPO
+- **System-level Rules & Workflows** - Deploy via MDM policies
 
 ## MCP Integration
 
@@ -334,6 +380,12 @@ Cascade has limit of 100 total MCP tools. Toggle individual tools in MCP setting
 ### Adding MCPs
 
 Cascade panel > MCPs icon (top right) > MCP Marketplace, or edit `mcp_config.json` manually.
+
+### MCP Improvements [NEW 2026-03]
+
+- **Refresh button** - Manually refresh MCP server connections
+- **Auto OAuth** - Automatic OAuth login when adding HTTP/SSE MCP servers
+- **Improved context management** - Better handling of MCP server context
 
 ## Workflows and Rules
 
@@ -392,7 +444,9 @@ Skills bundle complex multi-step tasks with supporting resources into folders th
 ### Skill Locations
 
 - **Workspace**: `.windsurf/skills/<skill-name>/SKILL.md`
+- **Workspace (alt)**: `.agents/skills/<skill-name>/SKILL.md` [NEW 2026-02]
 - **Global**: `~/.codeium/windsurf/skills/<skill-name>/SKILL.md`
+- **System (Enterprise)**: MDM-managed configs for organization-wide skills [NEW 2026-03]
 
 ### SKILL.md Format
 
@@ -512,6 +566,35 @@ echo "# This file makes the folder visible to Cascade" > _PrivateSessions/.gitke
 - `.windsurf/hooks.json` - Workspace-level Cascade hooks
 - `AGENTS.md` - Directory-scoped instructions
 
+## Available Models [Updated 2026-03]
+
+Models available in Cascade, grouped by provider:
+
+**OpenAI:**
+- GPT-5.4, GPT-5.4 Mini (latest)
+- GPT-5.3-Codex-Spark
+- GPT-5.2-Codex (with reasoning efforts: low, medium, high, xhigh)
+- GPT-5.1, GPT-5.1-Codex
+
+**Anthropic:**
+- Claude Opus 4.6 (with/without thinking, fast mode available)
+- Claude Sonnet 4.6 (with/without thinking)
+- Claude Sonnet 4.5
+
+**Google:**
+- Gemini 3.1 Pro (low/high thinking)
+- Gemini 3 Pro, Gemini 3 Flash
+
+**Codeium:**
+- SWE-1.5 (free for all users, default model)
+- SWE-1, SWE-1-lite, SWE-1-mini
+
+**Other:**
+- GLM-5 (Zhipu AI)
+- Minimax M2.5
+
+**Reasoning Effort:** Many models support configurable reasoning effort (none, low, medium, high, xhigh) affecting speed and cost.
+
 ## Sources
 
 **Cascade Documentation:** [TESTED 2026-01-13]
@@ -530,8 +613,23 @@ echo "# This file makes the folder visible to Cascade" > _PrivateSessions/.gitke
 - Agent Skills Specification: https://agentskills.io/
 - Local file system investigation (2026-01-11)
 - Session `_2026-01-26_AutoModelSwitcher` - Model switching and context window research [TESTED]
+- https://docs.windsurf.com/windsurf/cascade/worktrees - Git worktree support [NEW 2026-02]
+- https://docs.windsurf.com/windsurf/cascade/skills - Skills (system-level support) [UPDATED 2026-03]
 
 ## Document History
+
+**[2026-03-19 10:33]**
+- Added: Arena Mode section with battle groups, leaderboards, sync/branch
+- Added: Plan Mode section with megaplan command
+- Added: New Model Picker section (family grouping, variant toggles, pin)
+- Added: Git Worktree Support, Multi-Cascade Panes & Tabs, Dedicated Terminal to Capabilities
+- Added: New hooks (post_cascade_response_with_transcript, post_setup_worktree, rules_applied field)
+- Added: .agents/skills/ as alternate skill location
+- Added: MCP Improvements section (refresh button, auto OAuth)
+- Added: Enterprise Hook Features (cloud config, org-wide policies, GPO, MDM)
+- Added: System-level Skills for Enterprise
+- Updated: Summary with Arena Mode, Plan Mode, New Model Picker findings
+- Source: windsurf.com/changelog (Wave 13-14, Feb-Mar 2026 updates)
 
 **[2026-01-26 13:22]**
 - Added: Smaller context window behavior (truncation, summarization)
