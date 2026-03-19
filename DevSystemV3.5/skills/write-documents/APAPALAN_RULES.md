@@ -64,7 +64,15 @@ Naming (NM)
 
 ### AP-PR-01: Standardized Datetime Format
 
-Use `YYYY-MM-DD HH:MM` everywhere. Exception: logging timestamps use `YYYY-MM-DD HH:MM:SS`.
+Use `YYYY-MM-DD HH:MM` everywhere. Context-specific variations:
+
+- **In documents**: `YYYY-MM-DD HH:MM` - Example: `2026-03-19 14:30`
+- **In logging**: `YYYY-MM-DD HH:MM:SS` - Example: `2026-03-19 14:30:23`
+- **In filenames**: `YYYY-MM-DD` prefix - Example: `2026-03-19_ServerMigration.md`, `2026-03-19_14-30_MeetingNotes.md`
+- **In session folders**: `YYYY-MM-DD` prefix - Example: `_2026-03-19_FixAuthBug/`
+- **In Document History**: `[YYYY-MM-DD HH:MM]` - Example: `**[2026-03-19 14:30]**`
+
+Never use locale-dependent formats (`03/19/2026`, `19.03.2026`, `March 19, 2026`).
 
 **BAD:**
 ```
@@ -78,6 +86,7 @@ last Tuesday
 ```
 2026-03-17 14:30
 [2026-03-17 14:30:23]  (logging only)
+2026-03-17_StatusReport.md  (filename)
 ```
 
 ### AP-PR-02: Standardized Attribute/Property Format

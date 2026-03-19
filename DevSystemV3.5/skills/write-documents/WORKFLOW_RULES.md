@@ -2,6 +2,8 @@
 
 Rules for writing workflow documents with GOOD/BAD examples.
 
+**Writing quality:** Apply `APAPALAN_RULES.md` to all workflow content. Key rules for workflows: AP-PR-07 (be specific), AP-BR-02 (sacrifice grammar for brevity), AP-ST-01 (goal first), AP-NM-01 (one name per concept).
+
 ## Rule Index
 
 Header (HD)
@@ -20,7 +22,7 @@ Structure (ST)
 
 References (RF)
 - WF-RF-01: Workflow references use inline code: `/verify`
-- WF-RF-02: Skill references use @ format: `@skill-name`
+- WF-RF-02: Skill references use @skills: format: `@skills:skill-name`
 - WF-RF-03: No hardcoded paths - use placeholders
 - WF-RF-04: Cross-references use relative paths from `[AGENT_FOLDER]`
 

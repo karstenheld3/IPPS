@@ -2,6 +2,8 @@
 
 Rules for writing specification documents with GOOD/BAD examples.
 
+**Writing quality:** Apply `APAPALAN_RULES.md` to all spec content. Key rules for specs: AP-PR-07 (be specific), AP-PR-08 (examples for every rule), AP-NM-01 (one name per concept), AP-PR-09 (consistent patterns).
+
 ## Rule Index
 
 **Requirements (RQ)**

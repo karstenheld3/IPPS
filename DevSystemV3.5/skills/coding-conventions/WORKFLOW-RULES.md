@@ -33,7 +33,7 @@ This forces the LLM to commit to a decision before acting, reducing errors in me
 1. Frontmatter: only `description` field. No `phase:` or other extras.
 2. References:
    - Workflow refs as inline code: `/verify`, `/research`
-   - Skill refs with at-prefix: `@skill-name`
+   - Skill refs with @skills: prefix: `@skills:skill-name`
 3. Steps: numbered, actionable verbs
 4. No hardcoded paths. Use placeholders: `[WORKSPACE_FOLDER]`, `[SESSION_FOLDER]`
 5. No `## Usage` sections that just show the workflow command. Only add if showing parameters.
@@ -98,6 +98,6 @@ When verifying workflows:
 
 Cross-reference checklist:
 - [ ] All `/workflow` refs exist in workflows folder
-- [ ] All `@skill` refs exist in skills folder
+- [ ] All `@skills:` refs exist in skills folder
 - [ ] All `[STATE]` refs defined in ID-REGISTRY.md
 - [ ] All document refs use correct naming conventions

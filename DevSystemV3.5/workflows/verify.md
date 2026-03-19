@@ -112,6 +112,8 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Verify Timeline field is present and accurate (Created date, update count, date range)
 - Verify Document History section exists and is up to date
 - Read `[AGENT_FOLDER]/workflows/research.md` again and verify against instructions.
+- Verify against @write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
+- Verify against @write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
 
 ## Specifications (SPEC)
 
@@ -125,6 +127,8 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Verify Document History section exists and is up to date
 - Read @write-documents skill again and verify against rules.
 - Verify against @write-documents `SPEC_RULES.md` (required for all SPEC documents)
+- Verify against @write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
+- Verify against @write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
 
 ## Implementation Plans (IMPL)
 
@@ -134,6 +138,8 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Anything forgotten or not implemented as in SPEC?
 - Verify Document History section exists and is up to date
 - Read @coding-conventions skill again and verify against rules.
+- Verify against @write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
+- Verify against @write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
 
 ## Implementations (Code)
 
@@ -141,6 +147,7 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Are there existing tests that we can run to verify?
 - Can we do quick one-off tests to verify we did not break things?
 - Read @coding-conventions skill again and verify against rules.
+- Verify against @coding-conventions `MECT_CODING_RULES.md` (precision, brevity, consistency, naming design, documentation)
 
 **Logging Verification (automatic, language-agnostic):**
 
@@ -167,6 +174,8 @@ If code contains logging, output, or print statements:
 - Verify Timeline field is present and accurate (Created date, update count, date range)
 - Verify MUST-NOT-FORGET section exists and rules are followed
 - Verify test strategy matches spec requirements
+- Verify against @write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
+- Verify against @write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
 - Check test priority matrix:
   - MUST TEST: Critical business logic covered?
   - SHOULD TEST: Important workflows included?
@@ -193,7 +202,9 @@ If code contains logging, output, or print statements:
 - Verify workflow references use inline code format: `/verify`, `/research`
 - Verify frontmatter has `description` field
 - Verify steps are numbered and actionable
-- Verify skill references use `@skill-name` format
+- Verify skill references use `@skills:skill-name` format
+- Verify against @write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
+- Verify against @write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
 - Verify no hardcoded paths (use placeholders like `[WORKSPACE_FOLDER]`)
 
 ## Skills

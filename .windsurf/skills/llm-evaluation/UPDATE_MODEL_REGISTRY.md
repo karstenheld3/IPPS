@@ -34,7 +34,7 @@ For each page:
 
 1. `browser_navigate(url: "<URL>")`
 2. `browser_wait_for(time: 2)`
-3. **Dismiss cookie popup** (see `@ms-playwright-mcp` PLAYWRIGHT_ADVANCED_WORKFLOWS.md Section 1):
+3. **Dismiss cookie popup** (see `@skills:ms-playwright-mcp` PLAYWRIGHT_ADVANCED_WORKFLOWS.md Section 1):
    - `browser_snapshot()` - Check for cookie consent banner
    - Click "Accept" / "Accept All Cookies" button if found
    - If no button, use JavaScript removal fallback:

@@ -183,7 +183,7 @@ How-Tos, Plans,     transactions & reversibility,       Operational Data, View
 Processes,          detect & validate states            Models, Update Mechanisms
 Workflows
                     ───────────────────────────────────────────────────────────
-        Audits, Assessments, Revisions    |    Tests, Code Reviews, Releases
+                  Audits, Assessments, Revisions    |    Tests, Code Reviews, Releases
 ```
 
 ### 3.2 Naming Structure Method

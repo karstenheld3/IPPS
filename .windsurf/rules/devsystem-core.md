@@ -226,7 +226,7 @@ Files starting with `.tmp` are temporary helper scripts created during operation
 
 STRUT plans use structured notation for progress tracking.
 
-**Creating STRUTs**: Use `/write-strut` workflow or invoke `@write-documents` skill with `STRUT_TEMPLATE.md`.
+**Creating STRUTs**: Use `/write-strut` workflow or invoke `@skills:write-documents` with `STRUT_TEMPLATE.md`.
 
 Execution follows these rules:
 

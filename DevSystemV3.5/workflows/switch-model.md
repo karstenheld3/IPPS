@@ -21,7 +21,7 @@ MODEL-LOW-QUERY = "gemini 3 flash medium"
 
 ## Required Skills
 
-- `@windsurf-auto-model-switcher` for model switching
+- `@skills:windsurf-auto-model-switcher` for model switching
 
 ## Usage
 
@@ -50,7 +50,7 @@ Based on tier argument, run from `.windsurf/skills/windsurf-auto-model-switcher/
 .\select-windsurf-model-in-ide.ps1 -Query "[MODEL-LOW-QUERY]"
 ```
 
-See `@windsurf-auto-model-switcher` skill for script details.
+See `@skills:windsurf-auto-model-switcher` for script details.
 
 ## Confirm
 
