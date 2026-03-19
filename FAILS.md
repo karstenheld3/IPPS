@@ -1,5 +1,33 @@
 # Failure Log
 
+## 2026-03-19 - Python Logging Rules Refactoring
+
+### [HIGH] `GLOB-FL-020` Complex terminal commands that stall or break in PowerShell
+
+- **When**: 2026-03-19 12:30-13:24 UTC+01:00
+- **Where**: Multiple `run_command` calls during Python script refactoring session
+- **What**: Repeatedly created complex terminal commands that either stalled, errored, or were misinterpreted by PowerShell. Three distinct patterns:
+  1. Python one-liners with f-strings containing `{variable}` - PowerShell interprets `{` as script blocks or cmdlet names, producing errors like `f{s}: argparse={has_help}: The term is not recognized`
+  2. Multi-pipe PowerShell chains (`git diff | Select-String | Select-String | Select-Object`) that hang waiting for input or produce no output
+  3. Complex Python `-c` scripts with nested quotes, regex, and f-strings that exceed safe one-liner complexity
+- **Evidence**:
+  - Screenshot shows `has_help: The term 'has_help' is not recognized` - PowerShell parsed Python f-string `f'{s}: argparse={has_help}'` as cmdlet invocations
+  - `git diff ... | Select-String -Pattern ... | Select-String -NotMatch ...` command stalled, user reported "it hangs" and canceled
+  - Previous session: complex Python one-liner caused `SyntaxError: '(' was never closed`
+- **Why it went wrong**:
+  - Defaulted to inline terminal commands instead of writing temporary scripts
+  - Did not account for PowerShell's interpretation of `{}`, `$`, backticks in Python code
+  - Pipe chains with `git diff` on large diffs produce massive output that downstream commands choke on
+  - Tried to avoid creating temp files, but the "shortcut" cost more time than the "proper" approach
+- **Suggested fix**: Follow the rules below strictly
+
+**Prevention rules**:
+1. **Never** run Python code with f-strings or `{}` via `python -c` in PowerShell - write a `.tmp_*.py` file instead
+2. **Never** pipe `git diff` output through multiple `Select-String` filters - use `git diff --name-only` or write a script
+3. If a command has more than ~80 characters or contains nested quotes, write it as a temp script file
+4. For data collection across multiple files, always use a Python script, not a one-liner
+5. Delete temp scripts after use (`.tmp` prefix ensures gitignore coverage)
+
 ## 2026-03-15 - Playwriter MCP Session
 
 ### [LOW] `PLWR-FL-001` Used 20000ms timeout immediately after adding rule against it
