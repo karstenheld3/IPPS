@@ -134,6 +134,17 @@ Use minimal explicit consistent terminology within a defined field of interactio
 
 **Words → mental models → predictions → actions.** "Words represent concepts and their association fields define the mental models we build to predict the outcome of our actions." Once people incorporate mental models they are very unlikely to change them. Incompatible models coexist undetected until they collide.
 
+**Signal vs Noise.** Every design choice in terminology, formatting, naming, and structure is either signal or noise. A signal is a purposeful choice that carries information the reader needs - a consistent name, a deliberate format, a meaningful distinction. Noise is an arbitrary choice that carries no information, yet the reader interprets it as if it does - an inconsistent spelling, a random format change, a redundant label. Because readers treat all variation as intentional, noise actively misleads. The three MECT properties work together to maximize signal and minimize noise: Minimal removes redundant terms (noise), Explicit ensures every term teaches its meaning (signal), and Consistent guarantees that identical patterns always mean the same thing (turning potential noise into reliable signal). See `_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]` section 2.2 for how APAPALAN enforces this through concrete rules.
+
+**General design principles.** The following principles from Don Norman's "The Design of Everyday Things" and cognitive science apply to all design - products, interfaces, documents, terminology, and communication. MECT builds on these because good communication design follows the same laws as good product design.
+
+- **Proximity** - Information that is needed together must be placed close together. A function name and its parameters belong in the same view. An error message and its recovery action belong in the same line. When related information is scattered, the reader must hold fragments in working memory and reassemble them - a process that fails under cognitive load.
+- **Sequence** - If people expect things to happen in a particular order, communication must reflect that order. Chronological events appear chronologically. Triggered actions are documented in processing order. A build-then-test workflow is described build-first, test-second. Violating expected sequence forces the reader to mentally reorder, introducing confusion and errors.
+- **Topology** - Things have their place and must not change it. Once a sequence or arrangement of items is established, it must remain stable. Recipients build reliable mental maps that allow them to locate and compare items across sources quickly. Moving items between positions destroys these maps and forces relearning.
+- **Signifiers** - Visual or structural cues that communicate affordances to the reader. A raised button signifies "clickable." An underlined blue text signifies "link." A bold heading signifies "section boundary." A code block signifies "literal content." When signifiers are used inconsistently (bold sometimes means emphasis, sometimes means label), the reader cannot predict what interaction or interpretation is expected.
+- **Mapping** - The arrangement of information in the reader's mental model must map to the arrangement in the document or interface. If a process flows left-to-right in the reader's mind, the diagram must flow left-to-right. If a configuration has three layers (network, application, database), the documentation must present them in the same spatial relationship. A 1:1 mapping between mental model and presentation eliminates the translation step that causes errors.
+- **Cognitive Load Limit** - People can hold roughly 5 to 7 separate items in working memory at once (Miller's Law). Beyond that, mental exhaustion and cognitive strain set in. An email with more than 5 action points, a function with more than 7 parameters, a list with more than 8 items without grouping - all exceed the reader's capacity. When this limit is reached, group items into meaningful clusters, split documents into focused sections, or reduce the number of concurrent concepts the reader must track.
+
 **"Gardener of communication."** The role of someone applying MECT: shape language and let it grow into a stable and efficient communication platform. If everything feels like being in the right place and having the right name, people will adopt your terminology and your ideas will spread. Growth becomes easier and the field of interaction attracts productive people and sharp minds.
 
 ### 2.4 Goals and Outcomes
@@ -169,7 +180,7 @@ Symbols, IDs,       referenceability, enable            Representation Primitive
 Mnemonics, Icons    composability
                     ───────────────────────────────────────────────────────────
 Lists [Group]       remove redundancies & duplicates,   Master Data & Views
-Glossaries, Dicts,    ensure exhaustiveness,              Table & Column Names,
+Glossaries, Dicts,  ensure exhaustiveness,              Table & Column Names,
 Tables, References, ensure consistency,                 Column Types
 Enumerations        synonyms & translations
                     ───────────────────────────────────────────────────────────

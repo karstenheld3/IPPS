@@ -67,13 +67,22 @@ Every formatting choice, structural pattern, and word in a document shapes the r
 - An LLM reading a prompt and generating the wrong output
 - A manager reading a status report and making the wrong decision
 
-### 2.2 Style Deviation as Unintentional Signal
+### 2.2 Signal vs Noise
 
-Readers interpret ALL formatting changes as intentional. If a document uses `- **Key**: Value` for properties and one property suddenly appears as `- Key = Value`, the reader asks: "Why is this different? Is this property special? Is it from a different source? Is it less important?"
+Every design choice in a document or codebase is either **Signal** or **Noise**:
 
-If the deviation was unintentional - the writer just varied their style - the reader's questions lead to wrong assumptions. They might skip the property, treat it as metadata, or assume it's a different category of information.
+- **Signal** = Purposeful design that carries information the reader needs. A bold label on a concept being introduced for the first time. A consistent date format. A function name that describes its output.
+- **Noise** = Arbitrary design that carries no information, but the reader interprets as if it does. Bold on every list label. Inconsistent date formats. A comment restating what the code already says.
 
-This problem is amplified with LLMs. LLMs have natural output variance - they don't reproduce the same formatting consistently across long outputs. Every unintentional style change becomes a false signal to the reader. APAPALAN rule AP-PR-10 (Consistent Patterns) exists specifically to counter this.
+The core problem: readers interpret ALL variation as intentional signal. If a document uses `- **Key**: Value` for properties and one property suddenly appears as `- Key = Value`, the reader asks: "Why is this different? Is this property special? Is it from a different source?" If the deviation was unintentional, the reader's questions lead to wrong assumptions.
+
+This is amplified with LLMs. LLMs have natural output variance - they don't reproduce formatting consistently across long outputs. Every unintentional style change becomes noise that the reader misreads as signal.
+
+**The MECT/APAPALAN response:**
+- MECT principles guide judgment: "strengthen signals, eliminate noise" (MW-LT-04, MC-BR-05)
+- APAPALAN rules enforce specific patterns: AP-PR-09 (consistent patterns), AP-BR-07 (no redundant bold)
+
+All APAPALAN rules serve one of two goals: strengthen a signal (Precision rules) or eliminate noise (Brevity rules).
 
 ### 2.3 The Compounding Cost of Inconsistency
 
