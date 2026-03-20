@@ -42,10 +42,20 @@ def compress_file(
     max_attempts = config["thresholds"]["max_refinement_attempts"]
     original_tokens = count_tokens(file_content)
 
-    # Build compression prompt
-    prompt = transform_prompt.replace("{file_path}", str(file_path))
-    prompt = prompt.replace("{file_content}", file_content)
-    prompt = prompt.replace("{file_type}", _get_file_type(str(file_path), config))
+    # Build compression prompt: embed file content + type-specific instructions
+    file_type = _get_file_type(str(file_path), config)
+    prompt = (
+        f"Compress this DevSystem file. Output ONLY the compressed markdown "
+        f"content - no explanations, no wrapping, no commentary.\n\n"
+        f"**Path**: {file_path}\n**Type**: {file_type}\n\n"
+        f"## Original Content\n\n{file_content}\n\n"
+        f"## Type-Specific Compression Instructions\n\n{transform_prompt}\n\n"
+        f"## Output Rules\n\n"
+        f"1. Output ONLY the compressed file - nothing else\n"
+        f"2. Output must be SHORTER than original ({original_tokens} tokens)\n"
+        f"3. Preserve all functional content: rules, conditions, steps\n"
+        f"4. Valid markdown that an agent can parse and follow"
+    )
 
     compressed_text, comp_usage = client.call_with_cache(bundle, prompt)
     compressed_tokens = count_tokens(compressed_text)
@@ -270,10 +280,11 @@ def _judge_compression(
         f"{eval_prompt}\n\n"
         f"## Original ({file_path}):\n```\n{original[:3000]}\n```\n\n"
         f"## Compressed:\n```\n{compressed[:3000]}\n```\n\n"
-        f"Score this compression 1-5 and explain. "
-        f"First line must be: Score: N.N/5"
+        f"Respond with EXACTLY this format on the first line:\n"
+        f"Score: N.N/5\n"
+        f"Then explain your scoring briefly."
     )
-    text, usage = verifier.call(prompt, max_tokens=500)
+    text, usage = verifier.call(prompt, max_tokens=4096)
 
     # Parse score from response
     score = _parse_score(text)
@@ -282,16 +293,23 @@ def _judge_compression(
 
 def _parse_score(text: str) -> float:
     """Extract score from judge response. EC-14: invalid score treated as 1.0."""
-    match = re.search(r"Score:\s*([\d.]+)", text, re.IGNORECASE)
-    if match:
-        try:
-            score = float(match.group(1))
-            if 1.0 <= score <= 5.0:
-                return score
-            log.warning("Score %.1f outside 1-5 range, treating as 1.0", score)
-            return 1.0
-        except ValueError:
-            pass
+    # Try multiple patterns: "Score: 4.2/5", "Final score = 3.8", "4.2/5", standalone decimals
+    patterns = [
+        r"Score:\s*([\d.]+)",
+        r"Final\s+score[=:]\s*([\d.]+)",
+        r"([\d.]+)\s*/\s*5",
+        r"(?<![/\d.])([1-5](?:\.[0-9])?)(?![/\d])",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            try:
+                score = float(match.group(1))
+                if 1.0 <= score <= 5.0:
+                    return score
+                log.warning("Score %.1f outside 1-5 range, treating as 1.0", score)
+            except ValueError:
+                pass
     log.warning("Could not parse score from judge response, treating as 1.0")
     return 1.0
 

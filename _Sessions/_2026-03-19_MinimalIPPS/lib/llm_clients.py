@@ -158,7 +158,7 @@ class OpenAIClient:
                 response = self.client.chat.completions.create(
                     model=self.model,
                     messages=[{"role": "user", "content": prompt}],
-                    max_tokens=max_tokens,
+                    max_completion_tokens=max_tokens,
                 )
                 text = response.choices[0].message.content
                 usage = {
