@@ -456,18 +456,18 @@ def main():
 ### Module Structure
 
 ```
-mipps_pipeline.py              (entry point, CLI)
+mipps_pipeline.py                      (entry point, CLI)
 ├─> lib/
-│   ├─> bundler.py             (Step 1: file scanning, concatenation)
-│   ├─> analyzer.py            (Steps 2-4: Mother analysis calls)
-│   ├─> checker.py             (Verification spot-checks)
-│   ├─> generator.py           (Step 5: compression prompt generation)
-│   ├─> compressor.py          (Step 6: compression + judge loop)
-│   ├─> verifier.py            (Step 7: report generation)
-│   ├─> iterator.py            (Iteration: review + re-compress)
-│   ├─> api_client.py          (API calls: Anthropic + OpenAI)
-│   ├─> cost_tracker.py        (Per-call cost tracking, budget guard)
-│   └─> state.py               (pipeline_state.json read/write)
+│   ├─> file_bundle_builder.py         (Step 1: file scanning, concatenation)
+│   ├─> mother_analyzer.py             (Steps 2-4: Mother analysis calls)
+│   ├─> mother_output_checker.py       (Verification spot-checks)
+│   ├─> compression_prompt_builder.py  (Step 5: compression prompt generation)
+│   ├─> file_compressor.py             (Step 6: compression + judge loop)
+│   ├─> compression_report_builder.py  (Step 7: report generation)
+│   ├─> compression_refiner.py         (Iteration: review + re-compress)
+│   ├─> llm_clients.py                 (API calls: Anthropic + OpenAI)
+│   ├─> api_cost_tracker.py            (Per-call cost tracking, budget guard)
+│   └─> pipeline_state.py              (pipeline_state.json read/write)
 ```
 
 ### API Client Requirements
@@ -489,6 +489,9 @@ mipps_pipeline.py              (entry point, CLI)
 - `pathlib`, `json`, `argparse`, `datetime` (stdlib)
 
 ## 11. Document History
+
+**[2026-03-20 03:55]**
+- Changed: Module names made more descriptive per MC-PR-03 (no meta-words without qualifier), synced with IMPL
 
 **[2026-03-20 03:30]**
 - Added: MIPPS-DD-10 documenting Chat Completions API choice over Responses API for verification (per OAIAPI-IN05)

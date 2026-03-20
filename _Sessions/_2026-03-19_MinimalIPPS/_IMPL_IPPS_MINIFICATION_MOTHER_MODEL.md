@@ -7,16 +7,16 @@
 
 **Target files**:
 - `mipps_pipeline.py` (NEW ~150 lines)
-- `lib/bundler.py` (NEW ~80 lines)
-- `lib/analyzer.py` (NEW ~120 lines)
-- `lib/checker.py` (NEW ~60 lines)
-- `lib/generator.py` (NEW ~80 lines)
-- `lib/compressor.py` (NEW ~150 lines)
-- `lib/verifier.py` (NEW ~100 lines)
-- `lib/iterator.py` (NEW ~80 lines)
-- `lib/api_client.py` (NEW ~120 lines)
-- `lib/cost_tracker.py` (NEW ~60 lines)
-- `lib/state.py` (NEW ~50 lines)
+- `lib/file_bundle_builder.py` (NEW ~80 lines)
+- `lib/mother_analyzer.py` (NEW ~120 lines)
+- `lib/mother_output_checker.py` (NEW ~60 lines)
+- `lib/compression_prompt_builder.py` (NEW ~80 lines)
+- `lib/file_compressor.py` (NEW ~150 lines)
+- `lib/compression_report_builder.py` (NEW ~100 lines)
+- `lib/compression_refiner.py` (NEW ~80 lines)
+- `lib/llm_clients.py` (NEW ~120 lines)
+- `lib/api_cost_tracker.py` (NEW ~60 lines)
+- `lib/pipeline_state.py` (NEW ~50 lines)
 - `pipeline_config.json` (NEW ~40 lines)
 - `prompts/step/*.md` (NEW 6 files, ~50 lines each)
 
@@ -52,17 +52,17 @@
 ├── pipeline_config.json        # Configuration (~40 lines) [NEW]
 ├── pipeline_state.json         # Auto-generated state [NEW]
 ├── lib/
-│   ├── __init__.py             # Package init [NEW]
-│   ├── bundler.py              # Step 1: file scanning, bundle (~80 lines) [NEW]
-│   ├── analyzer.py             # Steps 2-4: Mother analysis (~120 lines) [NEW]
-│   ├── checker.py              # Spot-check Mother outputs (~60 lines) [NEW]
-│   ├── generator.py            # Step 5: prompt generation (~80 lines) [NEW]
-│   ├── compressor.py           # Step 6: compression loop (~150 lines) [NEW]
-│   ├── verifier.py             # Step 7: report generation (~100 lines) [NEW]
-│   ├── iterator.py             # Iteration: review + re-compress (~80 lines) [NEW]
-│   ├── api_client.py           # Anthropic + OpenAI clients (~120 lines) [NEW]
-│   ├── cost_tracker.py         # Cost tracking, budget guard (~60 lines) [NEW]
-│   └── state.py                # State read/write (~50 lines) [NEW]
+│   ├── __init__.py                    # Package init [NEW]
+│   ├── file_bundle_builder.py         # Step 1: file scanning, bundle (~80 lines) [NEW]
+│   ├── mother_analyzer.py             # Steps 2-4: Mother analysis (~120 lines) [NEW]
+│   ├── mother_output_checker.py       # Spot-check Mother outputs (~60 lines) [NEW]
+│   ├── compression_prompt_builder.py  # Step 5: prompt generation (~80 lines) [NEW]
+│   ├── file_compressor.py             # Step 6: compression loop (~150 lines) [NEW]
+│   ├── compression_report_builder.py  # Step 7: report generation (~100 lines) [NEW]
+│   ├── compression_refiner.py         # Iteration: review + re-compress (~80 lines) [NEW]
+│   ├── llm_clients.py                 # Anthropic + OpenAI clients (~120 lines) [NEW]
+│   ├── api_cost_tracker.py            # Cost tracking, budget guard (~60 lines) [NEW]
+│   └── pipeline_state.py              # State read/write (~50 lines) [NEW]
 ├── prompts/
 │   ├── step/
 │   │   ├── s2_call_tree.md     # Prompt for Step 2 [NEW]
@@ -144,15 +144,15 @@
 
 **Note**: Copy exact structure from SPEC section 9
 
-#### MIPPS-IP01-IS-02: Create lib/__init__.py and lib/state.py
+#### MIPPS-IP01-IS-02: Create lib/__init__.py and lib/pipeline_state.py
 
-**Location**: `lib/__init__.py`, `lib/state.py`
+**Location**: `lib/__init__.py`, `lib/pipeline_state.py`
 
 **Action**: Create package init (empty) and state module
 
-#### MIPPS-IP01-IS-03: Implement lib/state.py
+#### MIPPS-IP01-IS-03: Implement lib/pipeline_state.py
 
-**Location**: `lib/state.py`
+**Location**: `lib/pipeline_state.py`
 
 **Action**: Add state management functions
 
@@ -168,9 +168,9 @@ def update_cost(state: dict, model: str, input_tokens: int, output_tokens: int) 
 
 **Note**: Handle EC-08 (corrupted state) with try/except and backup. Use atomic write pattern: write to `pipeline_state.tmp`, then rename to `pipeline_state.json`
 
-#### MIPPS-IP01-IS-04: Implement lib/cost_tracker.py
+#### MIPPS-IP01-IS-04: Implement lib/api_cost_tracker.py
 
-**Location**: `lib/cost_tracker.py`
+**Location**: `lib/api_cost_tracker.py`
 
 **Action**: Add cost tracking with budget guard
 
@@ -187,9 +187,9 @@ def check_budget(state: dict, config: dict) -> tuple[bool, str]: ...
 
 **Note**: Return warning message at 80%, halt at 100% of budget. OpenAI usage returns `prompt_tokens`/`completion_tokens`; Anthropic returns `input_tokens`/`output_tokens` - callers must map provider-specific field names to `calculate_cost` parameters
 
-#### MIPPS-IP01-IS-05: Implement lib/api_client.py
+#### MIPPS-IP01-IS-05: Implement lib/llm_clients.py
 
-**Location**: `lib/api_client.py`
+**Location**: `lib/llm_clients.py`
 
 **Action**: Add Anthropic and OpenAI clients with retry logic
 
@@ -208,9 +208,9 @@ class OpenAIClient:
 
 ### Phase 2: Bundle and Analysis (IS-06 to IS-09)
 
-#### MIPPS-IP01-IS-06: Implement lib/bundler.py
+#### MIPPS-IP01-IS-06: Implement lib/file_bundle_builder.py
 
-**Location**: `lib/bundler.py`
+**Location**: `lib/file_bundle_builder.py`
 
 **Action**: Add file scanning and bundle generation
 
@@ -223,9 +223,9 @@ def count_tokens(text: str) -> int: ...
 
 **Note**: Categorize files per FileInventory domain object; handle EC-01, EC-03
 
-#### MIPPS-IP01-IS-07: Implement lib/analyzer.py - Step 2 (Call Tree)
+#### MIPPS-IP01-IS-07: Implement lib/mother_analyzer.py - Step 2 (Call Tree)
 
-**Location**: `lib/analyzer.py`
+**Location**: `lib/mother_analyzer.py`
 
 **Action**: Add Mother call for call tree analysis
 
@@ -237,9 +237,9 @@ def parse_load_frequencies(call_tree: str) -> dict[str, int]: ...
 
 **Note**: Output to `_01_FILE_CALL_TREE.md`
 
-#### MIPPS-IP01-IS-08: Implement lib/analyzer.py - Step 3 (Complexity Map)
+#### MIPPS-IP01-IS-08: Implement lib/mother_analyzer.py - Step 3 (Complexity Map)
 
-**Location**: `lib/analyzer.py`
+**Location**: `lib/mother_analyzer.py`
 
 **Action**: Add Mother call for complexity analysis
 
@@ -251,9 +251,9 @@ def identify_excluded_files(complexity_map: str, config: dict) -> list[str]: ...
 
 **Note**: Apply exclusion criteria: `exclusion_max_lines` AND `exclusion_max_references` from config
 
-#### MIPPS-IP01-IS-09: Implement lib/analyzer.py - Step 4 (Strategy)
+#### MIPPS-IP01-IS-09: Implement lib/mother_analyzer.py - Step 4 (Strategy)
 
-**Location**: `lib/analyzer.py`
+**Location**: `lib/mother_analyzer.py`
 
 **Action**: Add Mother call for compression strategy
 
@@ -274,9 +274,9 @@ def generate_strategy(client: AnthropicClient, bundle: str, prompt: str, exclude
 
 **Note**: Prompts should reference SPEC FR-02 through FR-07 requirements
 
-#### MIPPS-IP01-IS-11: Implement lib/generator.py
+#### MIPPS-IP01-IS-11: Implement lib/compression_prompt_builder.py
 
-**Location**: `lib/generator.py`
+**Location**: `lib/compression_prompt_builder.py`
 
 **Action**: Add Step 5 prompt generation
 
@@ -288,9 +288,9 @@ def save_prompts(prompts: dict, transform_dir: Path, eval_dir: Path) -> None: ..
 
 **Note**: Generate one prompt per file type plus compress_other fallback
 
-#### MIPPS-IP01-IS-12: Implement lib/compressor.py - Main Loop
+#### MIPPS-IP01-IS-12: Implement lib/file_compressor.py - Main Loop
 
-**Location**: `lib/compressor.py`
+**Location**: `lib/file_compressor.py`
 
 **Action**: Add Step 6 compression loop
 
@@ -303,9 +303,9 @@ def run_compression_step(config: dict, state: dict) -> dict: ...
 
 **Note**: Handle EC-13, EC-14, EC-16; track files_completed for resume (EC-06). Log progress: "Compressing file N/M: [path]"
 
-#### MIPPS-IP01-IS-13: Implement lib/checker.py
+#### MIPPS-IP01-IS-13: Implement lib/mother_output_checker.py
 
-**Location**: `lib/checker.py`
+**Location**: `lib/mother_output_checker.py`
 
 **Action**: Add spot-check verification for Steps 2-4
 
@@ -319,9 +319,9 @@ def report_issues(issues: list) -> str: ...
 
 ### Phase 4: Verification and Iteration (IS-14 to IS-16)
 
-#### MIPPS-IP01-IS-14: Implement lib/verifier.py
+#### MIPPS-IP01-IS-14: Implement lib/compression_report_builder.py
 
-**Location**: `lib/verifier.py`
+**Location**: `lib/compression_report_builder.py`
 
 **Action**: Add Step 7 verification report generation
 
@@ -334,9 +334,9 @@ def generate_report(results: list, cross_ref_issues: list) -> str: ...
 
 **Note**: Per FR-07, exactly 5 lines per file; check broken references (EC-15)
 
-#### MIPPS-IP01-IS-15: Implement lib/iterator.py
+#### MIPPS-IP01-IS-15: Implement lib/compression_refiner.py
 
-**Location**: `lib/iterator.py`
+**Location**: `lib/compression_refiner.py`
 
 **Action**: Add iteration logic
 
@@ -430,33 +430,33 @@ def cmd_compress(args): ...
 ### Phase 1: Core Infrastructure
 
 - [ ] **MIPPS-IP01-VC-05**: IS-01 completed (pipeline_config.json)
-- [ ] **MIPPS-IP01-VC-06**: IS-02, IS-03 completed (lib/__init__.py, lib/state.py)
-- [ ] **MIPPS-IP01-VC-07**: IS-04 completed (lib/cost_tracker.py)
-- [ ] **MIPPS-IP01-VC-08**: IS-05 completed (lib/api_client.py)
+- [ ] **MIPPS-IP01-VC-06**: IS-02, IS-03 completed (lib/__init__.py, lib/pipeline_state.py)
+- [ ] **MIPPS-IP01-VC-07**: IS-04 completed (lib/api_cost_tracker.py)
+- [ ] **MIPPS-IP01-VC-08**: IS-05 completed (lib/llm_clients.py)
 - [ ] **MIPPS-IP01-VC-09**: TC-06 through TC-09 pass (state management)
 - [ ] **MIPPS-IP01-VC-10**: TC-10 through TC-14 pass (API client)
 
 ### Phase 2: Bundle and Analysis
 
-- [ ] **MIPPS-IP01-VC-11**: IS-06 completed (lib/bundler.py)
-- [ ] **MIPPS-IP01-VC-12**: IS-07 completed (analyzer.py - Step 2)
-- [ ] **MIPPS-IP01-VC-13**: IS-08 completed (analyzer.py - Step 3)
-- [ ] **MIPPS-IP01-VC-14**: IS-09 completed (analyzer.py - Step 4)
+- [ ] **MIPPS-IP01-VC-11**: IS-06 completed (lib/file_bundle_builder.py)
+- [ ] **MIPPS-IP01-VC-12**: IS-07 completed (mother_analyzer.py - Step 2)
+- [ ] **MIPPS-IP01-VC-13**: IS-08 completed (mother_analyzer.py - Step 3)
+- [ ] **MIPPS-IP01-VC-14**: IS-09 completed (mother_analyzer.py - Step 4)
 - [ ] **MIPPS-IP01-VC-15**: TC-01 through TC-05 pass (bundler)
 - [ ] **MIPPS-IP01-VC-16**: `bundle` command produces valid bundle
 
 ### Phase 3: Prompts and Compression
 
 - [ ] **MIPPS-IP01-VC-17**: IS-10 completed (step prompts)
-- [ ] **MIPPS-IP01-VC-18**: IS-11 completed (lib/generator.py)
-- [ ] **MIPPS-IP01-VC-19**: IS-12 completed (lib/compressor.py)
-- [ ] **MIPPS-IP01-VC-20**: IS-13 completed (lib/checker.py)
+- [ ] **MIPPS-IP01-VC-18**: IS-11 completed (lib/compression_prompt_builder.py)
+- [ ] **MIPPS-IP01-VC-19**: IS-12 completed (lib/file_compressor.py)
+- [ ] **MIPPS-IP01-VC-20**: IS-13 completed (lib/mother_output_checker.py)
 - [ ] **MIPPS-IP01-VC-21**: TC-15 through TC-20 pass (compression loop)
 
 ### Phase 4: Verification and Iteration
 
-- [ ] **MIPPS-IP01-VC-22**: IS-14 completed (lib/verifier.py)
-- [ ] **MIPPS-IP01-VC-23**: IS-15 completed (lib/iterator.py)
+- [ ] **MIPPS-IP01-VC-22**: IS-14 completed (lib/compression_report_builder.py)
+- [ ] **MIPPS-IP01-VC-23**: IS-15 completed (lib/compression_refiner.py)
 - [ ] **MIPPS-IP01-VC-24**: IS-16 completed (mipps_pipeline.py CLI)
 - [ ] **MIPPS-IP01-VC-25**: TC-21 through TC-24 pass (verification)
 - [ ] **MIPPS-IP01-VC-26**: TC-25 through TC-28 pass (CLI)
@@ -471,6 +471,19 @@ def cmd_compress(args): ...
 - [ ] **MIPPS-IP01-VC-32**: Total cost within budget
 
 ## 6. Document History
+
+**[2026-03-20 03:55]**
+- Changed: Module names made more descriptive per MC-PR-03 (no meta-words without qualifier):
+  - `bundler.py` -> `file_bundle_builder.py`
+  - `analyzer.py` -> `mother_analyzer.py`
+  - `checker.py` -> `mother_output_checker.py`
+  - `generator.py` -> `compression_prompt_builder.py`
+  - `compressor.py` -> `file_compressor.py`
+  - `verifier.py` -> `compression_report_builder.py`
+  - `iterator.py` -> `compression_refiner.py`
+  - `api_client.py` -> `llm_clients.py`
+  - `cost_tracker.py` -> `api_cost_tracker.py`
+  - `state.py` -> `pipeline_state.py`
 
 **[2026-03-20 03:30]**
 - Fixed: EC-11 now distinguishes retryable (429, 5xx) from non-retryable (400, 401, 403, 404) OpenAI errors (per OAIAPI-IN60)
