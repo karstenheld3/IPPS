@@ -1,0 +1,429 @@
+# IMPL: MinimalIPPS V2 Gap Fixes
+
+**Doc ID**: MIPPS-IP03
+**Feature**: MIPPS-V2-GAPFIX
+**Goal**: Fix bug and missing implementations identified during MIPPS-SP03 verification against code
+**Timeline**: Created 2026-03-20, Updated 2 times (2026-03-20)
+
+**Target files**:
+- `lib/file_compressor.py` (MODIFY - wire cost_tracker, add non-.md copying)
+- `lib/compression_report_builder.py` (MODIFY - add usage to verify_file return, add compression ratio to summary)
+- `lib/cost_tracker.py` (MODIFY - accept pipeline_state cost format in check_budget)
+- `mipps_pipeline.py` (MODIFY - Mother feedback loop in cmd_check, partial re-verification in cmd_verify)
+
+**Depends on:**
+- `_SPEC_IPPS_MINIFICATION_MOTHER_MODEL_V2.md [MIPPS-SP03]` for all requirements and Known Gaps
+
+**Does not depend on:**
+- `_IMPL_IPPS_MINIFICATION_MOTHER_MODEL_V1.md [MIPPS-IP01]` (V1 plan, fully implemented)
+- `_IMPL_IPPS_MINIFICATION_MOTHER_MODEL_CHANGES.md [MIPPS-IP02]` (V2 changes, fully implemented)
+
+## MUST-NOT-FORGET
+
+- `check_budget` reads `total_cost` but `state["cost"]` uses `total` - budget guard is non-functional until fixed
+- `cost_tracker.track_call()` and `save_costs()` exist but are never called from compression loop
+- Non-.md files are never copied to output - output is incomplete without this
+- `_call_anthropic_with_cache` checks `cache_creation_input_tokens == 0` (wrong condition); correct check (`cache_read_input_tokens == 0` on non-first calls) is in `cost_tracker.track_call()` but unwired
+- All lib/ modifications are to existing files. Test files `test_file_compressor.py` and `test_compression_report.py` are new
+- Preserve all existing test compatibility - changes must not break existing 57 tests
+- Budget fix is critical path - must be IS-01
+
+## Table of Contents
+
+1. [File Structure](#1-file-structure)
+2. [Edge Cases](#2-edge-cases)
+3. [Implementation Steps](#3-implementation-steps)
+4. [Test Cases](#4-test-cases)
+5. [Verification Checklist](#5-verification-checklist)
+6. [Document History](#6-document-history)
+
+## 1. File Structure
+
+```
+_run_templateV2/
+├── mipps_pipeline.py                      # CLI orchestrator [MODIFY]
+├── lib/
+│   ├── file_compressor.py                 # Step 6 compression loop [MODIFY]
+│   ├── compression_report_builder.py      # Step 7 report generation [MODIFY]
+│   └── cost_tracker.py                    # Budget checking [MODIFY]
+└── tests/
+    ├── test_cost_tracker.py               # Budget + cost wiring tests [EXTEND +20 lines]
+    ├── test_file_compressor.py            # Non-.md copying + cost wiring tests (~50 lines) [NEW]
+    └── test_compression_report.py         # Report summary field tests (~30 lines) [NEW]
+```
+
+## 2. Edge Cases
+
+### Bug Fix
+
+- **MIPPS-IP03-EC-01**: `state["cost"]` has no `total_cost` key -> `check_budget` returns ok=True (current bug). After fix: reads `total` key correctly.
+- **MIPPS-IP03-EC-02**: `check_budget` called with RunCosts format (has `total_cost`) -> must still work after fix (backward compat)
+
+### Cost Tracking Wiring
+
+- **MIPPS-IP03-EC-03**: `save_costs` fails (disk full, permissions) -> log error, continue compression (don't halt pipeline for tracking failure)
+- **MIPPS-IP03-EC-04**: `track_call` receives empty usage dict -> accumulate zeros, don't crash
+
+### Non-.md File Copying
+
+- **MIPPS-IP03-EC-05**: Non-.md file in nested subdirectory -> create parent dirs before copy
+- **MIPPS-IP03-EC-06**: Binary file (image, compiled) -> copy as bytes, not text
+- **MIPPS-IP03-EC-07**: Symlink in source -> copy target file content (don't preserve symlink)
+- **MIPPS-IP03-EC-08**: `__pycache__` nested at any depth -> skip (matches existing `skip_patterns`)
+
+### Report Improvements
+
+- **MIPPS-IP03-EC-09**: Zero files verified -> compression ratio "N/A", no division by zero
+
+### Mother Feedback Loop
+
+- **MIPPS-IP03-EC-10**: Spot-check finds 0 issues -> skip feedback loop, proceed
+- **MIPPS-IP03-EC-11**: Mother correction produces new errors -> limit correction to 1 iteration, then warn
+
+### Partial Re-verification
+
+- **MIPPS-IP03-EC-12**: No files changed since last verification -> skip verification, print message
+
+## 3. Implementation Steps
+
+### Phase 1: Bug Fix (IS-01)
+
+#### MIPPS-IP03-IS-01: Fix check_budget key mismatch
+
+**Location**: `lib/cost_tracker.py` > `check_budget()`
+
+**Action**: Modify to accept both RunCosts format (`total_cost`) and PipelineState format (`total`)
+
+**Code**:
+```python
+# In check_budget(), line 132:
+total = costs.get("total_cost", costs.get("total", 0.0))
+```
+
+**Note**: Single-line fix. Backward compatible: RunCosts dicts with `total_cost` still work. PipelineState dicts with `total` now work too. This is the critical bug - budget guard is non-functional without it.
+
+### Phase 2: Cost Tracking Wiring (IS-02 to IS-04)
+
+#### MIPPS-IP03-IS-02: Wire cost_tracker into run_compression_step
+
+**Location**: `lib/file_compressor.py` > `run_compression_step()`
+
+**Action**: Add `cost_tracker.track_call()` after each Mother compression call and each judge call. Add `cost_tracker.save_costs()` after each file completes.
+
+**Code**:
+```python
+# Extend existing import at line 8 (currently: from lib.cost_tracker import check_budget):
+from lib.cost_tracker import check_budget, init_costs, track_call, save_costs
+
+# Add costs parameter to run_compression_step:
+def run_compression_step(..., costs: dict = None) -> dict:
+    if costs is None:
+        costs = init_costs()
+
+# After each compress_file() call (after line 237), track Mother + judge costs:
+    track_call(costs, "compress", rel, result["usage"], mother_model, 
+               cache_hit=result["usage"].get("cache_read_input_tokens", 0) > 0)
+    judge_usage = result["usage"].get("judge", {})
+    if judge_usage:
+        track_call(costs, "verify", rel, judge_usage, verif_model, cache_hit=False)
+    save_costs(costs, Path(state.get("run_dir", ".")))
+```
+
+**Note**: `costs` dict passed in from `cmd_compress`. `save_costs` is fault-tolerant (returns None on failure per EC-03). Existing `pipeline_state.update_cost()` calls remain unchanged for backward compat. Variables `mother_model` and `verif_model` already exist at lines 246-247.
+
+#### MIPPS-IP03-IS-03: Pass costs dict from cmd_compress
+
+**Location**: `mipps_pipeline.py` > `cmd_compress()`
+
+**Action**: Initialize RunCosts via `init_costs()`, pass to `run_compression_step()`, save final costs.
+
+**Code**:
+```python
+from lib.cost_tracker import init_costs, save_costs
+
+# Before run_compression_step:
+costs = init_costs()
+
+# Pass to run_compression_step:
+state = run_compression_step(client, verifier, bundle, source_dir, output_dir, config, state, prompts, costs=costs)
+
+# After compression complete:
+save_costs(costs, run_dir)
+```
+
+#### MIPPS-IP03-IS-04: Wire cost_tracker into cmd_verify
+
+**Location**: `mipps_pipeline.py` > `cmd_verify()`
+
+**Action**: Load existing costs from run_dir, track verification API calls, save updated costs.
+
+**Code**:
+```python
+from lib.cost_tracker import load_costs, track_call, save_costs
+
+costs = load_costs(run_dir)
+# After each verify_file() call:
+#   track_call(costs, "verify", rel, result.get("usage", {}), verif_model)
+# After loop:
+save_costs(costs, run_dir)
+```
+
+**Prerequisite change** in `lib/compression_report_builder.py` > `verify_file()`: Add `"usage": result["usage"]` to the return dict (line 52). Currently discards usage data from LLM call.
+
+### Phase 3: Non-.md File Copying (IS-05)
+
+#### MIPPS-IP03-IS-05: Add non-.md file copying to run_compression_step
+
+**Location**: `lib/file_compressor.py` > `run_compression_step()`
+
+**Action**: After .md compression loop, iterate all non-.md files in source_dir and copy to output_dir preserving directory structure. Skip `__pycache__` directories.
+
+**Code**:
+```python
+# After .md compression loop, before return:
+for file_path in sorted(source_dir.rglob("*")):
+    if not file_path.is_file():
+        continue
+    rel = file_path.relative_to(source_dir).as_posix()
+    # Skip __pycache__
+    if "__pycache__" in rel:
+        continue
+    # Skip .md files (already handled above)
+    if file_path.suffix == ".md":
+        continue
+    # Skip patterns from config
+    if any(fnmatch.fnmatch(rel, pat) for pat in skip_patterns):
+        continue
+    dest = output_dir / rel
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(file_path, dest)  # Binary-safe copy (EC-06)
+    copied_count += 1
+log.info("Copied %d non-.md files to output", copied_count)
+```
+
+**Note**: Initialize `copied_count = 0` before loop. Uses `shutil.copy2` for binary-safe copy with metadata preservation (EC-06). `shutil.copy2` follows symlinks by default (EC-07). Add `import shutil` at top of file.
+
+### Phase 4: Report Improvements (IS-06)
+
+#### MIPPS-IP03-IS-06: Add compression ratio and files-needing-attention to report summary
+
+**Location**: `lib/compression_report_builder.py` > `generate_report()`
+
+**Action**: Accept `compression_stats` parameter with original/compressed token counts. Add compression ratio and attention count to summary section.
+
+**Code**:
+```python
+def generate_report(results, cross_ref_issues, output_path=None, compression_stats=None):
+    # In summary section, after broken_references line:
+    if compression_stats:
+        orig = compression_stats.get("original_tokens", 0)
+        comp = compression_stats.get("compressed_tokens", 0)
+        if orig > 0:
+            ratio = (orig - comp) / orig * 100
+            lines.append(f"- **Compression ratio**: {ratio:.1f}%")
+        else:
+            lines.append("- **Compression ratio**: N/A")
+    attention = sum(1 for r in results if r["broken_refs"])
+    lines.append(f"- **Files needing attention**: {attention}")
+```
+
+**Note**: `compression_stats` passed from `cmd_verify` after summing token counts across all files. EC-09: `orig == 0` outputs "N/A" (no division by zero).
+
+### Phase 5: Mother Feedback Loop (IS-07)
+
+#### MIPPS-IP03-IS-07: Add correction loop to cmd_check
+
+**Location**: `mipps_pipeline.py` > `cmd_check()`
+
+**Action**: After spot-check, if issues found, feed them back to Mother with cached bundle for correction. Limit to 1 correction iteration (EC-11).
+
+**Code**:
+```python
+# Prerequisites: load bundle and create Mother client (not in current cmd_check):
+bundle_path = BASE_DIR / "context" / "all_files_bundle.md"
+bundle = bundle_path.read_text(encoding="utf-8")
+mother_client = LLMClient(config["models"]["mother"],
+                          reasoning_effort=config.get("reasoning_effort", "high"),
+                          timeout=config.get("api_timeout_seconds", 120))
+
+# After spot_check_document returns issues:
+if result["issues"] and correction_enabled:
+    correction_prompt = (
+        f"These inaccuracies were found in {doc_name}:\n"
+        + report_issues(result["issues"])
+        + f"\n\n## Current Document\n\n{doc}\n\n"
+        + "Correct the inaccuracies. Output the full corrected document."
+    )
+    corrected = mother_client.call_with_cache(bundle, correction_prompt)
+    doc_path.write_text(corrected["text"], encoding="utf-8")
+    print(f"  {doc_name}: Corrected {len(result['issues'])} issues")
+```
+
+**Note**: Add `--no-correct` Command-Line Interface (CLI) flag to `cmd_check` to disable feedback loop. Default: correction enabled. Only 1 correction pass per document (EC-11). Bundle and Mother client must be created before the document loop (currently not in `cmd_check`).
+
+### Phase 6: Partial Re-verification (IS-08)
+
+#### MIPPS-IP03-IS-08a: Save recompressed file list in cmd_iterate
+
+**Location**: `mipps_pipeline.py` > `cmd_iterate()`
+
+**Action**: Before removing files from `files_completed`, save the list of files to recompress into `state["_recompressed_files"]`.
+
+**Code**:
+```python
+# After get_files_to_recompress returns the list:
+state["_recompressed_files"] = files_to_recompress
+# Then remove them from files_completed as before
+```
+
+**Note**: `_recompressed_files` is an internal state field (underscore prefix), not in PipelineState domain object. Enables IS-08b partial re-verification.
+
+#### MIPPS-IP03-IS-08b: Filter cmd_verify to recompressed files only
+
+**Location**: `mipps_pipeline.py` > `cmd_verify()`
+
+**Action**: If `state["iteration"] > 1`, only verify files listed in `state["_recompressed_files"]`.
+
+**Code**:
+```python
+# After collecting compressed_files dict:
+if state.get("iteration", 1) > 1:
+    recompressed = set(state.get("_recompressed_files", []))
+    if not recompressed:
+        print("No files changed since last verification.")
+        return  # EC-12
+    compressed_files = {k: v for k, v in compressed_files.items() if k in recompressed}
+```
+
+**Note**: Depends on IS-08a saving `_recompressed_files` in `cmd_iterate`.
+
+### Phase 7: Cache Expiry Detection (IS-09)
+
+#### MIPPS-IP03-IS-09: Wire cache miss detection via cost_tracker
+
+**Location**: `lib/file_compressor.py` > `run_compression_step()`
+
+**Action**: Already wired by IS-02 (`track_call` receives `cache_hit` parameter). `cost_tracker.track_call()` line 67-76 already logs warning on cache miss for non-first calls. No additional code needed beyond IS-02.
+
+**Note**: The `_call_anthropic_with_cache` check for `cache_creation_input_tokens == 0` (detects "too small to cache") remains as-is. The `cost_tracker.track_call` check (detects "cache expired") activates once IS-02 wires it.
+
+## 4. Test Cases
+
+### Category 1: Budget Fix (3 tests)
+
+- **MIPPS-IP03-TC-01**: `check_budget` with `{"total": 50.0}` and max_total_usd=100 -> ok=True, empty message
+- **MIPPS-IP03-TC-02**: `check_budget` with `{"total": 101.0}` and max_total_usd=100 -> ok=False, "exceeded" in message
+- **MIPPS-IP03-TC-03**: `check_budget` with `{"total_cost": 50.0}` (RunCosts format) -> ok=True (backward compat)
+
+### Category 2: Cost Tracking Wiring (4 tests)
+
+- **MIPPS-IP03-TC-04**: `run_compression_step` with costs param -> `costs["per_file"]` has entries after compression
+- **MIPPS-IP03-TC-05**: `run_compression_step` produces `run_costs.json` in run_dir -> file exists, valid JSON
+- **MIPPS-IP03-TC-06**: `track_call` with empty usage `{}` -> accumulates zeros, no exception (EC-04)
+- **MIPPS-IP03-TC-07**: `save_costs` to read-only dir -> returns None, logs error, no exception (EC-03)
+
+### Category 3: Non-.md File Copying (4 tests)
+
+- **MIPPS-IP03-TC-08**: Source with .py and .json files -> all copied to output preserving structure
+- **MIPPS-IP03-TC-09**: Source with `__pycache__/` at nested depth -> not copied (EC-08)
+- **MIPPS-IP03-TC-10**: Source with binary .png file -> copied as bytes, identical to original (EC-06)
+- **MIPPS-IP03-TC-11**: Source with nested dirs `a/b/c/file.py` -> parent dirs created (EC-05)
+
+### Category 4: Report Improvements (2 tests)
+
+- **MIPPS-IP03-TC-12**: `generate_report` with compression_stats -> summary contains "Compression ratio" line
+- **MIPPS-IP03-TC-13**: `generate_report` with zero original tokens -> "N/A" ratio (EC-09)
+
+### Category 5: Mother Feedback (2 tests)
+
+- **MIPPS-IP03-TC-14**: `cmd_check` with issues found -> overwrites document with corrected version
+- **MIPPS-IP03-TC-15**: `cmd_check` with `--no-correct` flag -> prints issues but doesn't modify documents
+
+### Category 6: Partial Re-verification (2 tests)
+
+- **MIPPS-IP03-TC-16**: `cmd_verify` with iteration > 1 and recompressed files -> only recompressed files verified
+- **MIPPS-IP03-TC-17**: `cmd_verify` with iteration > 1 and no changes -> prints "No files changed", returns early (EC-12)
+
+## 5. Verification Checklist
+
+### Prerequisites
+
+- [ ] **MIPPS-IP03-VC-01**: MIPPS-SP03 read and Known Gaps understood
+- [ ] **MIPPS-IP03-VC-02**: Existing 57 tests pass before changes
+- [ ] **MIPPS-IP03-VC-03**: All target files backed up or under version control
+
+### Phase 1: Bug Fix
+
+- [ ] **MIPPS-IP03-VC-04**: IS-01 completed (check_budget key fix)
+- [ ] **MIPPS-IP03-VC-05**: TC-01 through TC-03 pass (budget fix)
+- [ ] **MIPPS-IP03-VC-06**: Existing `test_cost_tracker.py` tests still pass
+
+### Phase 2: Cost Tracking
+
+- [ ] **MIPPS-IP03-VC-07**: IS-02 completed (track_call wired in file_compressor)
+- [ ] **MIPPS-IP03-VC-08**: IS-03 completed (costs init in cmd_compress)
+- [ ] **MIPPS-IP03-VC-09**: IS-04 completed (costs tracking in cmd_verify)
+- [ ] **MIPPS-IP03-VC-10**: TC-04 through TC-07 pass (cost wiring)
+- [ ] **MIPPS-IP03-VC-11**: `run_costs.json` created in run_dir after `cmd_compress`
+
+### Phase 3: Non-.md Copying
+
+- [ ] **MIPPS-IP03-VC-12**: IS-05 completed (non-.md file copying)
+- [ ] **MIPPS-IP03-VC-13**: TC-08 through TC-11 pass (non-.md copying)
+- [ ] **MIPPS-IP03-VC-14**: Output dir contains both .md and non-.md files after compression
+
+### Phase 4: Report
+
+- [ ] **MIPPS-IP03-VC-15**: IS-06 completed (report summary fields)
+- [ ] **MIPPS-IP03-VC-16**: TC-12, TC-13 pass (report improvements)
+
+### Phase 5: Mother Feedback
+
+- [ ] **MIPPS-IP03-VC-17**: IS-07 completed (correction loop in cmd_check)
+- [ ] **MIPPS-IP03-VC-18**: TC-14, TC-15 pass (Mother feedback)
+
+### Phase 6: Partial Re-verification
+
+- [ ] **MIPPS-IP03-VC-19**: IS-08 completed (filtered cmd_verify)
+- [ ] **MIPPS-IP03-VC-20**: TC-16, TC-17 pass (partial re-verification)
+
+### Phase 7: Cache Detection
+
+- [ ] **MIPPS-IP03-VC-21**: IS-09 confirmed (wired via IS-02)
+
+### Validation
+
+- [ ] **MIPPS-IP03-VC-22**: All 17 new test cases pass
+- [ ] **MIPPS-IP03-VC-23**: All 57 existing tests still pass (no regressions)
+- [ ] **MIPPS-IP03-VC-24**: `cmd_compress` produces `run_costs.json` with per-file entries
+- [ ] **MIPPS-IP03-VC-25**: `cmd_compress` output dir contains non-.md files
+- [ ] **MIPPS-IP03-VC-26**: `cmd_status` shows correct total cost (budget check functional)
+
+## 6. Document History
+
+**[2026-03-20 23:15]**
+- Added: IS-08a for cmd_iterate `_recompressed_files` save (was only in IS-08 Note, no IS step)
+- Changed: IS-08 split into IS-08a (cmd_iterate save) and IS-08b (cmd_verify filter)
+- Fixed: IS-08 Action text updated to match `_recompressed_files` approach (was: stale "files NOT in previous snapshot")
+- Fixed: IS-04 Note restructured as "Prerequisite change" with explicit file reference (was: buried dependency)
+- Added: IS-05 logging (`log.info` for copied count) per MC-PR-06 (self-contained log messages)
+- Added: IS-05 Note mentions `shutil.copy2` follows symlinks (EC-07 specificity per AP-PR-07)
+- Fixed: EC section "Budget Fix" renamed to "Bug Fix" (AP-NM-01: align with Phase 1 name)
+- Fixed: EC section "Mother Feedback" renamed to "Mother Feedback Loop" (AP-NM-01: align with Phase 5 name)
+
+**[2026-03-20 23:00]**
+- Fixed: Target files description for file_compressor.py (removed incorrect "fix budget key")
+- Fixed: Target files description for compression_report_builder.py (added IS-04 verify_file usage change)
+- Fixed: IS-02 imports moved from function body to file-level import extension (line 8)
+- Fixed: IS-07 added bundle loading and Mother client creation prerequisites to cmd_check
+- Fixed: IS-07 correction prompt now includes original document content for Mother
+- Fixed: IS-08 replaced flawed set-difference logic with explicit `_recompressed_files` tracking
+- Fixed: IS-06 code outputs "N/A" for zero-token case (was: ratio=0, contradicted TC-13/EC-09)
+- Changed: "Supersedes" to "Follows from" in initial entry (this plan extends, not replaces)
+
+**[2026-03-20 22:30]**
+- Initial V2 implementation plan created from MIPPS-SP03 Known Gaps
+- 1 bug fix, 6 missing implementations, 1 wiring confirmation across 7 phases
+- 12 edge cases, 9 implementation steps, 17 test cases, 26 verification items
+- Test files: test_cost_tracker.py [EXTEND], test_file_compressor.py [NEW], test_compression_report.py [NEW]
+- Follows from: MIPPS-IP01 (V1, fully implemented), MIPPS-IP02 (V2 changes, fully implemented)
