@@ -58,17 +58,17 @@ class TestPipelineConfigV2Schema:
 
 
 class TestConfigLoading:
-    """TK-002: Config loading from configs/ directory."""
+    """TK-002: Config loading from lib/ directory (co-located with Python modules)."""
 
-    def test_config_loading_from_configs_dir(self):
-        """TC-01: All 3 JSON config files load successfully."""
+    def test_config_loading_from_lib_dir(self):
+        """TC-01: All 3 JSON config files load successfully from lib/."""
         from lib.llm_client import _MODEL_REGISTRY, _PARAMETER_MAPPING, _MODEL_PRICING
         assert len(_MODEL_REGISTRY.get("model_id_startswith", [])) > 0
         assert "effort_levels" in _PARAMETER_MAPPING or "effort_mapping" in _PARAMETER_MAPPING
         assert "pricing" in _MODEL_PRICING
 
     def test_config_missing_dir(self, tmp_path, monkeypatch):
-        """TC-24: FileNotFoundError includes path when configs/ dir missing."""
+        """TC-24: FileNotFoundError includes path when config dir missing."""
         import lib.llm_client as mod
         monkeypatch.setattr(mod, "_CONFIGS_DIR", tmp_path / "nonexistent")
         with pytest.raises(FileNotFoundError, match="nonexistent"):
@@ -76,8 +76,8 @@ class TestConfigLoading:
 
     def test_pricing_standard_tier(self):
         """Pricing tier is standard; opus-4-6 input >= $10/MTok."""
-        configs_dir = PROJECT_ROOT / "configs"
-        with open(configs_dir / "model-pricing.json", "r", encoding="utf-8") as f:
+        lib_dir = PROJECT_ROOT / "lib"
+        with open(lib_dir / "model-pricing.json", "r", encoding="utf-8") as f:
             pricing = json.load(f)
         assert pricing["_pricing_tier"] == "standard"
         opus = pricing["pricing"]["anthropic"]["claude-opus-4-6-20260204"]

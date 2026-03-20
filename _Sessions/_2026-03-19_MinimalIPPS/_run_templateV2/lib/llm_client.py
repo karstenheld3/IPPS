@@ -15,11 +15,11 @@ import os, sys, json, time
 from pathlib import Path
 
 
-# Load JSON config files from configs/ directory (sibling of lib/)
-_CONFIGS_DIR = Path(__file__).parent.parent / "configs"
+# Load JSON config files from same directory as this module
+_CONFIGS_DIR = Path(__file__).parent
 
 def _load_json_config(filename: str) -> dict:
-  """Load JSON config from configs/ directory."""
+  """Load JSON config from lib/ directory (co-located with Python modules)."""
   config_path = _CONFIGS_DIR / filename
   if not config_path.exists():
     raise FileNotFoundError(f"Config file not found: {config_path}")
