@@ -18,7 +18,7 @@ def verify_file(
     Produces exactly 5 lines per file per SPEC Step 7 report format.
 
     Args:
-        client: OpenAIClient instance
+        client: LLMClient instance (OpenAI)
         original: Original file content
         compressed: Compressed file content
         prompt: Step 7 verification prompt template
@@ -31,7 +31,8 @@ def verify_file(
     filled_prompt = filled_prompt.replace("{original_content}", original[:4000])
     filled_prompt = filled_prompt.replace("{compressed_content}", compressed[:4000])
 
-    text, _usage = client.call(filled_prompt, max_tokens=500)
+    result = client.call(filled_prompt, max_tokens=500)
+    text = result["text"]
 
     # Parse 5-line report and broken refs
     lines = [l.strip() for l in text.strip().split("\n") if l.strip()]

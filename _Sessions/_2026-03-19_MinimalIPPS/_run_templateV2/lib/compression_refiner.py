@@ -10,7 +10,7 @@ def review_report(client, bundle: str, report: str) -> dict:
     """Send compression report to Mother for review with cached context.
 
     Args:
-        client: AnthropicClient instance
+        client: LLMClient instance (Anthropic)
         bundle: Full file bundle content (cached)
         report: Content of _04_FILE_COMPRESSION_REPORT.md
 
@@ -30,7 +30,8 @@ def review_report(client, bundle: str, report: str) -> dict:
         "- [file_path]\n\n"
         f"## Report\n{report}"
     )
-    text, usage = client.call_with_cache(bundle, prompt)
+    result = client.call_with_cache(bundle, prompt)
+    text, usage = result["text"], result["usage"]
     log.info("Report review complete (%d output tokens)", usage["output_tokens"])
 
     # Parse response

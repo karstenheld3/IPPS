@@ -11,7 +11,7 @@ def analyze_call_tree(client, bundle: str, prompt: str, output_dir: Path) -> str
     """Step 2: Call Mother to analyze file call tree (FR-02).
 
     Args:
-        client: AnthropicClient instance
+        client: LLMClient instance (Anthropic)
         bundle: Full file bundle content
         prompt: Step 2 prompt content
         output_dir: Directory to write _01_FILE_CALL_TREE.md
@@ -19,7 +19,8 @@ def analyze_call_tree(client, bundle: str, prompt: str, output_dir: Path) -> str
     Returns:
         Call tree document content
     """
-    text, usage = client.call_with_cache(bundle, prompt)
+    result = client.call_with_cache(bundle, prompt)
+    text, usage = result["text"], result["usage"]
     output_path = output_dir / "_01_FILE_CALL_TREE.md"
     output_path.write_text(text, encoding="utf-8")
     log.info("Call tree written to '%s' (%d tokens output)", output_path, usage["output_tokens"])
@@ -62,7 +63,7 @@ def analyze_complexity(client, bundle: str, prompt: str, output_dir: Path) -> st
     """Step 3: Call Mother to create complexity map (FR-03).
 
     Args:
-        client: AnthropicClient instance
+        client: LLMClient instance (Anthropic)
         bundle: Full file bundle content
         prompt: Step 3 prompt content
         output_dir: Directory to write _02_FILE_COMPLEXITY_MAP.md
@@ -70,7 +71,8 @@ def analyze_complexity(client, bundle: str, prompt: str, output_dir: Path) -> st
     Returns:
         Complexity map document content
     """
-    text, usage = client.call_with_cache(bundle, prompt)
+    result = client.call_with_cache(bundle, prompt)
+    text, usage = result["text"], result["usage"]
     output_path = output_dir / "_02_FILE_COMPLEXITY_MAP.md"
     output_path.write_text(text, encoding="utf-8")
     log.info("Complexity map written to '%s' (%d tokens output)", output_path, usage["output_tokens"])
@@ -157,7 +159,7 @@ def generate_strategy(
     """Step 4: Call Mother to create compression strategy (FR-04).
 
     Args:
-        client: AnthropicClient instance
+        client: LLMClient instance (Anthropic)
         bundle: Full file bundle content
         prompt: Step 4 prompt content
         excluded: List of excluded file paths
@@ -171,7 +173,8 @@ def generate_strategy(
         f"## Excluded Files (do not include in compression scope)\n\n"
         + "\n".join(f"- {f}" for f in excluded)
     )
-    text, usage = client.call_with_cache(bundle, full_prompt)
+    result = client.call_with_cache(bundle, full_prompt)
+    text, usage = result["text"], result["usage"]
     output_path = output_dir / "_03_FILE_COMPRESSION_STRATEGY.md"
     output_path.write_text(text, encoding="utf-8")
     log.info("Strategy written to '%s' (%d tokens output)", output_path, usage["output_tokens"])

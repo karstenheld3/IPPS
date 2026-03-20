@@ -17,7 +17,7 @@ def spot_check_document(
     check if claims about those files in the document are accurate.
 
     Args:
-        client: OpenAIClient instance
+        client: LLMClient instance (OpenAI)
         document: Content of Mother-generated document to verify
         source_files: List of (path, content) tuples for source files
         sample_size: Number of files to check (default 15)
@@ -42,7 +42,8 @@ def spot_check_document(
             f"Reply with 'ACCURATE' if correct, or describe any inaccuracies found. "
             f"Be specific about what is wrong."
         )
-        response_text, _usage = client.call(prompt, max_tokens=300)
+        result = client.call(prompt, max_tokens=300)
+        response_text = result["text"]
 
         if "ACCURATE" not in response_text.upper().split("\n")[0]:
             issues.append({

@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from lib.pipeline_state import init_state, load_state, save_state, update_step
+from lib.run_manager import create_run, snapshot_config
 
 log = logging.getLogger("mipps")
 
@@ -20,18 +21,17 @@ def _load_config(config_path: Path = None) -> dict:
         log.warning("Config not found at '%s', creating default", config_path)
         default = {
             "source_dir": ".windsurf/",
-            "output_dir": "output/",
             "models": {
-                "mother": {"provider": "anthropic", "model": "claude-opus-4-6",
-                           "max_context": 1000000, "thinking": True},
-                "verification": {"provider": "openai", "model": "gpt-5-mini",
-                                 "max_context": 128000},
+                "mother": "claude-opus-4-6-20260204",
+                "verifier": "gpt-5-mini",
             },
+            "reasoning_effort": "high",
+            "output_length": "high",
             "thresholds": {"judge_min_score": 3.5, "max_refinement_attempts": 1,
                            "exclusion_max_lines": 100, "exclusion_max_references": 2,
                            "target_compression_percent": 40, "max_manual_review_files": 5},
             "cache": {"ttl": "1h"},
-            "budget": {"max_total_usd": 100.0, "warn_at_percent": 80},
+            "budget": {"max_total_usd": 100.0, "warning_threshold": 0.8},
             "file_type_map": {"*": "compress_other"},
             "include_patterns": ["*.md"],
             "skip_patterns": [],
@@ -84,7 +84,7 @@ def cmd_bundle(args):
 
 def cmd_analyze(args):
     """Steps 2-4: Mother analysis (call tree, complexity, strategy)."""
-    from lib.llm_clients import AnthropicClient
+    from lib.llm_client import LLMClient
     from lib.mother_analyzer import (
         analyze_call_tree, analyze_complexity, generate_strategy,
         identify_excluded_files, parse_load_frequencies,
@@ -100,7 +100,10 @@ def cmd_analyze(args):
         sys.exit(1)
     bundle = bundle_path.read_text(encoding="utf-8")
 
-    client = AnthropicClient(config)
+    mother_model = config["models"]["mother"]
+    effort = config.get("reasoning_effort", "high")
+    client = LLMClient(mother_model, reasoning_effort=effort,
+                       timeout=config.get("api_timeout_seconds", 120))
     prompts_dir = BASE_DIR / "prompts" / "step"
 
     # Step 2: Call tree
@@ -147,7 +150,7 @@ def cmd_analyze(args):
 
 def cmd_check(args):
     """Verify Mother output using spot-check."""
-    from lib.llm_clients import OpenAIClient
+    from lib.llm_client import LLMClient
     from lib.mother_output_checker import spot_check_document, report_issues
     from lib.file_bundle_builder import scan_source_dir
 
@@ -155,7 +158,8 @@ def cmd_check(args):
     state = load_state(_state_path())
     _require_step(state, 4, "analyze")
 
-    verifier = OpenAIClient(config)
+    verifier = LLMClient(config["models"]["verifier"],
+                          timeout=config.get("api_timeout_seconds", 120))
     source_dir = Path(config["source_dir"])
     if not source_dir.is_absolute():
         source_dir = BASE_DIR / source_dir
@@ -185,7 +189,7 @@ def cmd_check(args):
 
 def cmd_generate(args):
     """Step 5: Generate compression and evaluation prompts."""
-    from lib.llm_clients import AnthropicClient
+    from lib.llm_client import LLMClient
     from lib.compression_prompt_builder import generate_compression_prompts, save_prompts
 
     config = _load_config()
@@ -198,7 +202,10 @@ def cmd_generate(args):
     strategy_path = BASE_DIR / "_03_FILE_COMPRESSION_STRATEGY.md"
     strategy = strategy_path.read_text(encoding="utf-8")
 
-    client = AnthropicClient(config)
+    mother_model = config["models"]["mother"]
+    effort = config.get("reasoning_effort", "high")
+    client = LLMClient(mother_model, reasoning_effort=effort,
+                       timeout=config.get("api_timeout_seconds", 120))
     file_types = list(set(config.get("file_type_map", {}).values()))
     s5_prompt = (BASE_DIR / "prompts" / "step" / "s5_generate_prompts.md").read_text(encoding="utf-8")
 
@@ -217,7 +224,7 @@ def cmd_generate(args):
 
 def cmd_compress(args):
     """Step 6: Compress files using generated prompts."""
-    from lib.llm_clients import AnthropicClient, OpenAIClient
+    from lib.llm_client import LLMClient
     from lib.file_compressor import run_compression_step
 
     config = _load_config()
@@ -246,14 +253,24 @@ def cmd_compress(args):
     source_dir = Path(config["source_dir"])
     if not source_dir.is_absolute():
         source_dir = BASE_DIR / source_dir
-    output_dir = Path(config["output_dir"])
-    if not output_dir.is_absolute():
-        output_dir = BASE_DIR / output_dir
 
-    client = AnthropicClient(config)
-    verifier = OpenAIClient(config)
+    # Create isolated run folder
+    run_dir, run_id = create_run(BASE_DIR, label="compress")
+    output_dir = run_dir / "output"
+    output_dir.mkdir(exist_ok=True)
+    snapshot_config(config, run_dir, run_id)
 
-    print("Starting compression...")
+    mother_model = config["models"]["mother"]
+    effort = config.get("reasoning_effort", "high")
+    client = LLMClient(mother_model, reasoning_effort=effort,
+                       timeout=config.get("api_timeout_seconds", 120))
+    verifier = LLMClient(config["models"]["verifier"],
+                         timeout=config.get("api_timeout_seconds", 120))
+
+    state["run_id"] = run_id
+    state["run_dir"] = str(run_dir)
+
+    print(f"Starting compression (run: {run_id})...")
     state = run_compression_step(
         client, verifier, bundle, source_dir, output_dir, config, state, prompts,
     )
@@ -265,7 +282,7 @@ def cmd_compress(args):
 
 def cmd_verify(args):
     """Step 7: Generate verification report."""
-    from lib.llm_clients import OpenAIClient
+    from lib.llm_client import LLMClient
     from lib.compression_report_builder import verify_file, check_cross_references, generate_report
 
     config = _load_config()
@@ -275,12 +292,14 @@ def cmd_verify(args):
     source_dir = Path(config["source_dir"])
     if not source_dir.is_absolute():
         source_dir = BASE_DIR / source_dir
-    output_dir = Path(config["output_dir"])
-    if not output_dir.is_absolute():
-        output_dir = BASE_DIR / output_dir
+
+    # Use run_dir from state if available, else fallback
+    run_dir = Path(state["run_dir"]) if state.get("run_dir") else BASE_DIR / "runs" / "latest"
+    output_dir = run_dir / "output"
 
     s7_prompt = (BASE_DIR / "prompts" / "step" / "s7_verify_file.md").read_text(encoding="utf-8")
-    verifier = OpenAIClient(config)
+    verifier = LLMClient(config["models"]["verifier"],
+                         timeout=config.get("api_timeout_seconds", 120))
 
     # Collect compressed files
     compressed_files = {}
@@ -303,22 +322,29 @@ def cmd_verify(args):
     state["broken_references"] = len(cross_issues)
 
     # Generate report
-    report = generate_report(results, cross_issues, BASE_DIR / "_04_FILE_COMPRESSION_REPORT.md")
+    report = generate_report(results, cross_issues, run_dir / "verification" / "_04_FILE_COMPRESSION_REPORT.md")
     update_step(state, 7)
     save_state(_state_path(), state)
 
+    # Generate run summary (TK-014)
+    from lib.run_manager import generate_run_summary
+    from lib.cost_tracker import load_costs
+    costs = load_costs(run_dir)
+    summary_path = generate_run_summary(run_dir, state, costs)
     print(f"Report generated: {len(results)} files verified, {len(cross_issues)} broken references.")
+    print(f"Run summary: {summary_path}")
 
 
 def cmd_iterate(args):
     """Review report and re-compress flagged files."""
-    from lib.llm_clients import AnthropicClient
+    from lib.llm_client import LLMClient
     from lib.compression_refiner import review_report, update_strategy, get_files_to_recompress
 
     config = _load_config()
     state = load_state(_state_path())
 
-    report_path = BASE_DIR / "_04_FILE_COMPRESSION_REPORT.md"
+    run_dir = Path(state["run_dir"]) if state.get("run_dir") else BASE_DIR / "runs" / "latest"
+    report_path = run_dir / "verification" / "_04_FILE_COMPRESSION_REPORT.md"
     if not report_path.exists():
         # EC-07: Run verify first
         print("No report found. Running 'verify' first...")
@@ -328,7 +354,10 @@ def cmd_iterate(args):
     bundle_path = BASE_DIR / "context" / "all_files_bundle.md"
     bundle = bundle_path.read_text(encoding="utf-8")
 
-    client = AnthropicClient(config)
+    mother_model = config["models"]["mother"]
+    effort = config.get("reasoning_effort", "high")
+    client = LLMClient(mother_model, reasoning_effort=effort,
+                       timeout=config.get("api_timeout_seconds", 120))
 
     print("Reviewing report...")
     review = review_report(client, bundle, report)
@@ -363,6 +392,8 @@ def cmd_status(args):
         6: "Compression done", 7: "Verification done",
     }
     step = state.get("current_step", 0)
+    if state.get("run_id"):
+        print(f"Run: {state['run_id']}")
     print(f"Step: {step} - {step_names.get(step, 'Unknown')}")
     print(f"Iteration: {state.get('iteration', 1)}")
     print(f"Files: {state.get('files_compressed', 0)}/{state.get('files_total', 0)} compressed")
@@ -370,9 +401,11 @@ def cmd_status(args):
     print(f"  Failed: {state.get('files_failed', 0)}")
     print(f"  Excluded: {state.get('files_excluded', 0)}")
     cost = state.get("cost", {})
-    print(f"Cost: ${cost.get('total', 0):.2f}")
-    print(f"  Mother: ${cost.get('mother_input', 0) + cost.get('mother_output', 0):.2f}")
-    print(f"  Verification: ${cost.get('verification_input', 0) + cost.get('verification_output', 0):.2f}")
+    print(f"Cost: ${cost.get('total', 0):.4f}")
+    print(f"  Mother: ${cost.get('mother_input', 0) + cost.get('mother_output', 0):.4f}")
+    print(f"  Verification: ${cost.get('verification_input', 0) + cost.get('verification_output', 0):.4f}")
+    print(f"  Cache read: ${cost.get('cache_read', 0):.4f}")
+    print(f"  Cache write: ${cost.get('cache_write', 0):.4f}")
     if state.get("broken_references", 0) > 0:
         print(f"Broken references: {state['broken_references']}")
 

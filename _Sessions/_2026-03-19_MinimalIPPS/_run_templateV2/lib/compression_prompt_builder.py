@@ -16,7 +16,7 @@ def generate_compression_prompts(
     """Call Mother to generate transform + eval prompt pairs per file type.
 
     Args:
-        client: AnthropicClient instance
+        client: LLMClient instance (Anthropic)
         bundle: Full file bundle content (cached)
         strategy: Content of _03_FILE_COMPRESSION_STRATEGY.md
         file_types: List of file type names from config file_type_map values
@@ -31,7 +31,8 @@ def generate_compression_prompts(
         f"## Compression Strategy\n\n{strategy}\n\n"
     ).replace("{file_types_list}", types_list)
 
-    text, usage = client.call_with_cache(bundle, prompt)
+    result = client.call_with_cache(bundle, prompt)
+    text, usage = result["text"], result["usage"]
     log.info(
         "Generated prompts for %d file types (%d output tokens)",
         len(file_types), usage["output_tokens"],

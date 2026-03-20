@@ -5,7 +5,7 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
-from lib.api_cost_tracker import calculate_cost, check_budget
+from lib.cost_tracker import check_budget
 from lib.file_bundle_builder import count_tokens
 from lib.pipeline_state import update_cost
 
@@ -25,8 +25,8 @@ def compress_file(
     """Compress a single file, judge with verifier, refine once if needed.
 
     Args:
-        client: AnthropicClient (Mother)
-        verifier: OpenAIClient (Verification)
+        client: LLMClient (Mother, Anthropic)
+        verifier: LLMClient (Verification, OpenAI)
         file_path: Relative path of the file
         file_content: Original file content
         bundle: Full bundle content (cached)
@@ -57,7 +57,8 @@ def compress_file(
         f"4. Valid markdown that an agent can parse and follow"
     )
 
-    compressed_text, comp_usage = client.call_with_cache(bundle, prompt)
+    comp_result = client.call_with_cache(bundle, prompt)
+    compressed_text, comp_usage = comp_result["text"], comp_result["usage"]
     compressed_tokens = count_tokens(compressed_text)
 
     # EC-16: Token increase check
@@ -102,7 +103,8 @@ def compress_file(
             f"Improve the compression based on this feedback. "
             f"Output ONLY the improved compressed content."
         )
-        compressed_text, refine_usage = client.call_with_cache(bundle, refine_prompt)
+        refine_result = client.call_with_cache(bundle, refine_prompt)
+        compressed_text, refine_usage = refine_result["text"], refine_result["usage"]
         compressed_tokens = count_tokens(compressed_text)
 
         # EC-16 recheck
@@ -160,8 +162,8 @@ def run_compression_step(
     Handles resume via files_completed in state. Copies excluded .md files as-is.
 
     Args:
-        client: AnthropicClient (Mother)
-        verifier: OpenAIClient (Verification)
+        client: LLMClient (Mother, Anthropic)
+        verifier: LLMClient (Verification, OpenAI)
         bundle: Full bundle content (cached)
         source_dir: Source directory path
         output_dir: Output directory path
@@ -217,8 +219,8 @@ def run_compression_step(
             continue
 
         # Budget check
-        halt, msg = check_budget(state, config)
-        if halt:
+        ok, msg = check_budget(state.get("cost", {}), config)
+        if not ok:
             log.warning("Budget exceeded, halting compression: %s", msg)
             break
 
@@ -241,8 +243,8 @@ def run_compression_step(
 
         # Accumulate API costs into state (FR-10)
         usage = result.get("usage", {})
-        mother_model = config["models"]["mother"]["model"]
-        verif_model = config["models"]["verification"]["model"]
+        mother_model = config["models"]["mother"]
+        verif_model = config["models"]["verifier"]
         if usage:
             update_cost(
                 state, mother_model,
@@ -295,7 +297,8 @@ def _judge_compression(
         f"Score: N.N/5\n"
         f"Then explain your scoring briefly."
     )
-    text, usage = verifier.call(prompt, max_tokens=4096)
+    result = verifier.call(prompt, max_tokens=4096)
+    text, usage = result["text"], result["usage"]
 
     # Parse score from response
     score = _parse_score(text)
