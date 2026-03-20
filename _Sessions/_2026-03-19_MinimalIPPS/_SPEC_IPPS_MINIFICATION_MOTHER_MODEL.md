@@ -2,6 +2,7 @@
 
 **Doc ID**: MIPPS-SP01
 **Goal**: Specify a pipeline that compresses the ~1MB DevSystem into a smaller version usable by cheaper LLMs, using Mother model (Claude Opus 4.6 1M context) for all compression with full cross-file awareness
+**Timeline**: Created 2026-03-19, Updated 8 times (last: 2026-03-20)
 **Target file**: `mipps_pipeline.py` (orchestrator script)
 
 **Depends on:**
@@ -24,7 +25,7 @@
 - Verification model judges EVERY compressed file - no self-evaluation by Mother
 - Step 7 report format: exactly 5 lines per file (structural, removed, simplified, sacrificed, impact)
 - Target: reduce total token count by >= 40%, max 5 files in manual review queue
-- 1-hour cache TTL recommended for V1 (eliminates cache warming complexity)
+- 1-hour cache Time To Live (TTL) recommended for V1 (eliminates cache warming complexity)
 
 ## Table of Contents
 
@@ -435,7 +436,7 @@ User runs: mipps_pipeline.py iterate --update-strategy
 
 ### Script Architecture
 
-`mipps_pipeline.py` uses subcommand pattern via `argparse` (Command-Line Interface):
+`mipps_pipeline.py` uses subcommand pattern via `argparse` for the Command-Line Interface (CLI):
 
 ```python
 def main():
@@ -489,6 +490,11 @@ mipps_pipeline.py                      (entry point, CLI)
 - `pathlib`, `json`, `argparse`, `datetime` (stdlib)
 
 ## 11. Document History
+
+**[2026-03-20 04:05]**
+- Added: Timeline field (required per /verify workflow)
+- Fixed: TTL expanded to "Time To Live (TTL)" in MNF (AP-PR-06)
+- Fixed: CLI format corrected to "Command-Line Interface (CLI)" (AP-PR-06)
 
 **[2026-03-20 03:55]**
 - Changed: Module names made more descriptive per MC-PR-03 (no meta-words without qualifier), synced with IMPL

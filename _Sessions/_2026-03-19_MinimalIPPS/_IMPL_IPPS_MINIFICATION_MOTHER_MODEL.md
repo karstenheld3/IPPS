@@ -3,7 +3,7 @@
 **Doc ID**: MIPPS-IP01
 **Feature**: MIPPS-PIPELINE
 **Goal**: Implement Python pipeline script that compresses DevSystem using Mother model with cached context
-**Timeline**: Created 2026-03-20, Updated 0 times
+**Timeline**: Created 2026-03-20, Updated 6 times
 
 **Target files**:
 - `mipps_pipeline.py` (NEW ~150 lines)
@@ -25,7 +25,7 @@
 
 ## MUST-NOT-FORGET
 
-- Use 1-hour cache TTL for V1 (simplicity over cost optimization)
+- Use 1-hour cache Time To Live (TTL) for V1 (simplicity over cost optimization)
 - Exclusion threshold: < 100 lines AND <= 2 references
 - Judge threshold: 3.5/5.0, one refinement attempt, then manual review
 - Track per-file completion for resume capability
@@ -472,6 +472,11 @@ def cmd_compress(args): ...
 
 ## 6. Document History
 
+**[2026-03-20 04:05]**
+- Fixed: Timeline "Updated 0 times" corrected to "Updated 6 times" (AP-PR-07)
+- Fixed: TTL expanded to "Time To Live (TTL)" in MNF (AP-PR-06)
+- Fixed: Document History chronology - merged 00:55/00:56 sync entries into 01:00 Initial entry
+
 **[2026-03-20 03:55]**
 - Changed: Module names made more descriptive per MC-PR-03 (no meta-words without qualifier):
   - `bundler.py` -> `file_bundle_builder.py`
@@ -523,11 +528,4 @@ def cmd_compress(args): ...
 - 16 edge cases identified
 - 28 test cases defined
 - 32 verification checklist items
-
-**[2026-03-20 00:56]**
-- Synced: Source directory configurable via `source_dir` (per SPEC DD-07 change)
-
-**[2026-03-20 00:55]**
-- Synced: Only .md files minified; non-.md files excluded from output (per SPEC change)
-- Changed: MNF updated with .md-only rule
-- Changed: pipeline_config.json uses `include_patterns: ["*.md"]`
+- Includes SPEC changes from 00:55-00:56: configurable `source_dir`, .md-only output, `include_patterns`
