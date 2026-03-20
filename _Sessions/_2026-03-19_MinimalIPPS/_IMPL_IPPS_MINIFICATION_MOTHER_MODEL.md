@@ -3,7 +3,7 @@
 **Doc ID**: MIPPS-IP01
 **Feature**: MIPPS-PIPELINE
 **Goal**: Implement Python pipeline script that compresses DevSystem using Mother model with cached context
-**Timeline**: Created 2026-03-20, Updated 8 times
+**Timeline**: Created 2026-03-20, Updated 9 times
 
 **Target files**:
 - `mipps_pipeline.py` (NEW ~150 lines)
@@ -33,7 +33,8 @@
 - Target: >= 40% compression, <= 5 files in manual review
 - All output to `output_dir`, never modify source directory
 - Source directory configurable via `source_dir` config (default: `.windsurf/`)
-- Only .md files are minified; non-.md files (*.py, *.json) are excluded from output
+- Only .md files are compressed; all other files (.py, .json, .ps1, .png, etc.) copied as-is to output
+- Excluded from output: __pycache__ folders only
 - Files matching `never_compress` patterns are copied as-is (specialized prompts)
 
 ## Table of Contents
@@ -138,7 +139,7 @@
   "budget": { ... },
   "file_type_map": { ... },
   "include_patterns": ["*.md"],
-  "skip_patterns": ["pricing-sources/*"],
+  "skip_patterns": ["__pycache__/*", "**/__pycache__/*"],
   "never_compress": ["skills/llm-evaluation/prompts/*", "skills/llm-transcription/prompts/*", "skills/deep-research/prompts/*"],
   "api_timeout_seconds": 120
 }
@@ -224,7 +225,7 @@ def generate_bundle(files: dict, output_path: Path) -> dict: ...
 def count_tokens(text: str) -> int: ...
 ```
 
-**Note**: Categorize files per FileInventory domain object; handle EC-01, EC-03
+**Note**: Categorize .md files per FileInventory domain object; handle EC-01, EC-03. Scan ALL files for copying to output (non-.md files tracked separately for direct copy in Step 6)
 
 #### MIPPS-IP01-IS-07: Implement lib/mother_analyzer.py - Step 2 (Call Tree)
 
@@ -305,7 +306,7 @@ def compress_file(client: AnthropicClient, verifier: OpenAIClient, file_path: Pa
 def run_compression_step(config: dict, state: dict) -> dict: ...
 ```
 
-**Note**: Handle EC-13, EC-14, EC-16; track files_completed for resume (EC-06). Log progress: "Compressing file N/M: [path]"
+**Note**: Handle EC-13, EC-14, EC-16; track files_completed for resume (EC-06). Log progress: "Compressing file N/M: [path]". After compression loop, copy all non-.md files (except __pycache__) to output preserving directory structure. Copy never_compress .md files and excluded .md files as-is.
 
 #### MIPPS-IP01-IS-13: Implement lib/mother_output_checker.py
 
@@ -475,6 +476,15 @@ def cmd_compress(args): ...
 - [ ] **MIPPS-IP01-VC-32**: Total cost within budget
 
 ## 6. Document History
+
+**[2026-03-20 14:06]**
+- Changed: All non-.md files now copied to output as-is (was: excluded from output)
+- Changed: Only __pycache__ folders excluded from output (was: all non-.md excluded)
+- Changed: IS-06 note updated to scan ALL files for output copying
+- Changed: IS-12 note updated to include non-.md file copying in Step 6
+- Changed: skip_patterns updated to __pycache__ only
+- Changed: MNF updated to reflect complete drop-in replacement output
+- Rationale: Output must be complete replacement of source directory for deployment
 
 **[2026-03-20 10:30]**
 - Fixed: MNF cache entry corrected from "1-hour TTL" to "5 minutes" with monitoring requirement

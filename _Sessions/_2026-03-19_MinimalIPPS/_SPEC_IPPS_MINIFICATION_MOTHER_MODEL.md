@@ -2,7 +2,7 @@
 
 **Doc ID**: MIPPS-SP01
 **Goal**: Specify a pipeline that compresses the ~1MB DevSystem into a smaller version usable by cheaper LLMs, using Mother model (Claude Opus 4.6 1M context) for all compression with full cross-file awareness
-**Timeline**: Created 2026-03-19, Updated 9 times (last: 2026-03-20)
+**Timeline**: Created 2026-03-19, Updated 10 times (last: 2026-03-20)
 **Target file**: `mipps_pipeline.py` (orchestrator script)
 
 **Depends on:**
@@ -17,9 +17,10 @@
 
 ## MUST-NOT-FORGET
 
-- Mother model compresses ALL files - no delegation to cheaper Transformers
-- File exclusion: files < 100 lines AND rarely loaded -> copy as-is, do not compress
-- Only .md files are minified; all other files (*.py, *.json, etc.) are excluded from output
+- Mother model compresses ALL .md files - no delegation to cheaper Transformers
+- File exclusion: .md files < 100 lines AND rarely loaded -> copy as-is, do not compress
+- Only .md files are compressed; all other files (.py, .json, .ps1, .png, etc.) are copied as-is to output
+- Excluded from output: __pycache__ folders and contents only
 - Source directory is configurable via `source_dir` in pipeline_config.json (default: `.windsurf/`)
 - Cost estimates are +/-50% due to estimated thinking tokens
 - Verification model judges EVERY compressed file - no self-evaluation by Mother
@@ -93,7 +94,8 @@ A **FileInventory** categorizes all source files by type and compressibility.
   - `skill_docs` - 24 md files (compressible unless excluded)
   - `skill_prompts` - 7 md files (compressible unless excluded)
 - **Total**: ~75 .md files (compressible)
-- **Excluded**: All non-.md files (*.py, *.json, etc.) - not copied to output
+- **Non-.md files**: All copied to output as-is (scripts, configs, images, etc.)
+- **Excluded from output**: __pycache__ folders only
 
 ### ExclusionCriteria
 
@@ -157,10 +159,11 @@ A **CompressedFile** is the output of Mother's compression for a single source f
 ## 4. Functional Requirements
 
 **MIPPS-FR-01: Bundle Generation**
-- Read all files from `.windsurf/` directory recursively
+- Read all .md files from `.windsurf/` directory recursively
 - Concatenate into single `context/all_files_bundle.md` with file path headers
 - Include file metadata: path, line count, token estimate
-- Skip binary files and files matching `skip_patterns` (*.py, *.json, pricing-sources/*)
+- Skip files matching `skip_patterns` (__pycache__/*)
+- Non-.md files are not included in bundle (not needed for Mother's compression context)
 
 **MIPPS-FR-02: Call Tree Analysis (Step 2)**
 - Mother analyzes bundle to produce `_01_FILE_CALL_TREE.md`
@@ -208,12 +211,13 @@ A **CompressedFile** is the output of Mother's compression for a single source f
 - Re-compresses only files flagged in report
 - Re-runs verification for changed files only
 
-**MIPPS-FR-09: Excluded File Handling**
-- Non-.md files (*.py, *.json, etc.) are NOT copied to output - minified DevSystem contains only .md files
-- Files matching `never_compress` patterns are copied to `output/` as-is (specialized prompts, templates)
+**MIPPS-FR-09: Non-.md File Handling**
+- All non-.md files (.py, .json, .ps1, .png, .jpg, .txt, etc.) are copied to `output/` as-is, preserving directory structure
+- Files matching `never_compress` .md patterns are copied to `output/` as-is (specialized prompts, templates)
 - Excluded .md files (< 100 lines AND rarely loaded) are copied to `output/` as-is
-- Evaluation order: `skip_patterns` (exclude) → `never_compress` (copy as-is) → ExclusionCriteria (copy as-is) → compress
-- Rationale: Scripts and configs are not instruction content; specialized prompts must not be altered
+- Files/folders matching `skip_patterns` (__pycache__/*) are NOT copied to output
+- Evaluation order for .md files: `skip_patterns` (exclude) → `never_compress` (copy as-is) → ExclusionCriteria (copy as-is) → compress
+- Rationale: Output is a complete drop-in replacement for source directory, with only .md files compressed
 
 **MIPPS-FR-10: Pipeline State Tracking**
 - Track progress in `pipeline_state.json` after each step
@@ -413,7 +417,7 @@ User runs: mipps_pipeline.py iterate --update-strategy
     "*": "compress_other"
   },
   "include_patterns": ["*.md"],
-  "skip_patterns": ["pricing-sources/*"],
+  "skip_patterns": ["__pycache__/*", "**/__pycache__/*"],
   "never_compress": [
     "skills/llm-evaluation/prompts/*",
     "skills/llm-transcription/prompts/*",
@@ -517,6 +521,15 @@ mipps_pipeline.py                      (entry point, CLI)
 - `pathlib`, `json`, `argparse`, `datetime` (stdlib)
 
 ## 11. Document History
+
+**[2026-03-20 14:06]**
+- Changed: All non-.md files now copied to output as-is (was: excluded from output)
+- Changed: Only __pycache__ folders excluded from output (was: all non-.md excluded)
+- Changed: FR-09 renamed from "Excluded File Handling" to "Non-.md File Handling"
+- Changed: FR-01 clarified that only .md files included in bundle
+- Changed: skip_patterns updated to __pycache__ only (was: pricing-sources, scripts, configs)
+- Changed: MNF updated to reflect complete drop-in replacement output
+- Rationale: Output must be complete replacement of source directory for deployment
 
 **[2026-03-20 10:30]**
 - Fixed: Cache TTL corrected from "1-hour" to "5 minutes" (Anthropic ephemeral cache reality)
