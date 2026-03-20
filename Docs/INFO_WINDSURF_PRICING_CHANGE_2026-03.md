@@ -7,11 +7,11 @@
 
 ## Summary - CRITICAL FINDINGS
 
-**Effective Date Status** [VERIFIED 2026-03-19]:
+**Effective Date Status** [VERIFIED 2026-03-20]:
 - **Announced**: Mar 19, 2026 (blog post)
-- **Actual rollout**: GRADUAL - accounts still on OLD credit system
-- **Expected migration**: Next billing cycle or later
-- **Pricing page**: Still shows OLD system (Pro $15, Teams $30, credit-based)
+- **Actual transition**: Mar 20, 2026 ~09:00 (recorded from dashboard screenshots)
+- **Credit conversion**: 34,267 credits → $1,368.54 (~$0.04/credit)
+- **MAX upgrade**: Same day, immediate quota increase
 
 **The Math (500+ premium requests/day):**
 
@@ -33,7 +33,7 @@
 - **Max plan ($200/mo)**: Only covers 42-170 premium messages/day - YOU WILL EXCEED THIS
 
 **Immediate actions:**
-1. Add-on credits will be converted to USD overage balance at purchase rate (~$350-700 per 35K credits)
+1. Add-on credits converted at ~$0.04/credit (34,267 credits → $1,368.54 recorded)
 2. Monitor dashboard - migration may not happen immediately after announcement
 3. Consider BYOK (Bring Your Own Key) for direct API access at same rates but no Windsurf markup
 4. Prefer Opus 4.6 ($0.11/msg) or GPT-5.4 ($0.03/msg) over Opus 4/4.1 ($0.33/msg)
@@ -41,10 +41,10 @@
 ## Key Dates
 
 - **Mar 19, 2026**: New pricing announced effective (email received)
-- **Mar 19, 2026**: Dashboard still shows OLD credit system [VERIFIED from screenshots]
-- **Mar 28, 2026**: Next billing cycle - possible migration date
-- **~Mar 26, 2026**: Free extra week ends (per email)
-- **After trial**: Must decide: stay grandfathered or upgrade to Max
+- **Mar 19, 2026 12:19 - Mar 20 07:54**: Still on OLD credit system (22 screenshots recorded)
+- **Mar 20, 2026 ~09:00**: Transition to NEW quota system (recorded)
+- **Mar 20, 2026 10:21**: Upgraded to MAX subscription
+- **Apr 20, 2026**: Next billing cycle (after MAX upgrade)
 
 ## Recommended Action Plan
 
@@ -74,9 +74,9 @@
 - API pricing
 - "Extra usage" balance
 
-**Conclusion:** Despite March 19 effective date, accounts may still be on OLD credit system. New system activates on next billing cycle or is rolling out gradually.
+**Conclusion:** Transition occurred Mar 20, 2026 ~09:00 (day after announcement). Old credits converted at ~$0.04/credit to "Extra usage balance".
 
-**Unknown:** Exact date accounts migrate to new quota/API pricing system.
+**Recorded:** Full transition log in `_PrivateSessions/_2026-03-19_WindsurfTokenUsageLogging/_WINDSURF_PRICING_MODEL_TRANSITION_LOG.md`
 
 ## Before vs After Comparison
 
@@ -176,9 +176,10 @@
 
 From blog: "Your add-on credits will be converted into a dollar amount for extra usage that you can use to pay for extra usage. We will convert them at a rate equivalent to how much you paid for them."
 
-- Example: ~35,000 credits remaining
-- If purchased at ~$0.02/credit = ~$700 USD overage balance
-- If purchased at ~$0.01/credit = ~$350 USD overage balance
+**Actual recorded conversion:**
+- Credits before transition: 34,266.70
+- Extra usage balance after: $1,368.54
+- Conversion rate: ~$0.04/credit (34,267 × $0.04 = $1,370.68)
 - This balance covers overage at API rates until exhausted
 
 ## Options Analysis
@@ -230,42 +231,40 @@ Reduce costs by strategic model selection:
 
 **OpenAI Reasoning Models (o-series):**
 
-| Model     | Input/1M | Output/1M | Reasoning Cost/msg* | vs Opus | Notes |
-|-----------|----------|-----------|---------------------|---------|-------|
-| o3        | $2.00    | $8.00     | $0.17               | **-89%**| Flagship reasoning, PhD-level math |
-| o4-mini   | $1.10    | $4.40     | $0.09               | **-94%**| Best value reasoning model |
+| Model     | Input/1M | Output/1M | Reasoning Cost/msg* | vs Opus 4.6 | Notes |
+|-----------|----------|-----------|---------------------|-------------|-------|
+| o3        | $1.00    | $4.00     | $0.08               | **-84%**    | Flagship reasoning, PhD-level math |
+| o4-mini   | $0.55    | $2.20     | $0.05               | **-90%**    | Best value reasoning model |
 
 *Reasoning tokens billed as output. Estimate: 2K in + 20K reasoning/out
 
 **OpenAI GPT-5.x with Reasoning Effort:**
 
-| Model         | Input/1M | Output/1M | Med Reasoning/msg* | vs Opus | Notes |
-|---------------|----------|-----------|--------------------| --------|-------|
-| GPT-5.4       | $2.00    | $16.00    | $0.32              | **-79%**| Latest, configurable effort |
-| GPT-5.3-Codex | $1.75    | $14.00    | $0.29              | **-81%**| Best agentic coding |
-| GPT-5.2       | $1.75    | $14.00    | $0.29              | **-81%**| Proven, adaptive reasoning |
+| Model         | Input/1M | Output/1M | Med Reasoning/msg* | vs Opus 4.6 | Notes |
+|---------------|----------|-----------|--------------------| ------------|-------|
+| GPT-5.4       | $1.25    | $7.50     | $0.15              | **-71%**    | Latest, configurable effort |
+| GPT-5.2       | $0.875   | $7.00     | $0.14              | **-73%**    | Proven, adaptive reasoning |
 
 *Reasoning effort: none, low, medium, high, xhigh. Estimate at medium.
 
 **Google Gemini with Thinking:**
 
-| Model            | Input/1M | Output/1M | Thinking Cost/msg* | vs Opus | Notes |
-|------------------|----------|-----------|--------------------| --------|-------|
-| Gemini 3.1 Pro   | $2.00    | $12.00    | $0.25              | **-84%**| 77% ARC-AGI-2, thinking tokens |
-| Gemini 3 Flash   | $0.50    | $3.00     | $0.06              | **-96%**| Fast, configurable reasoning |
+| Model            | Input/1M | Output/1M | Thinking Cost/msg* | vs Opus 4.6 | Notes |
+|------------------|----------|-----------|--------------------| ------------|-------|
+| Gemini 3.1 Pro   | $2.00    | $12.00    | $0.25              | **-51%**    | 77% ARC-AGI-2, thinking tokens |
+| Gemini 3 Flash   | $0.50    | $3.00     | $0.06              | **-88%**    | Fast, configurable reasoning |
 
 *Thinking tokens billed as output at standard rate.
 
-**RECOMMENDED: GPT-5.3-Codex or Gemini 3.1 Pro**
+**RECOMMENDED: o3 or GPT-5.4**
 
-**GPT-5.3-Codex** (Windsurf: "Premium Plus" tier):
-- **$0.29/message** vs $1.53/message for Opus = **81% savings**
-- OpenAI's best agentic coding model
-- 400K context, 128K output
-- Reasoning effort configurable (low/medium/high/xhigh)
+**o3** (Windsurf: "Premium Plus" tier):
+- **$0.08/message** vs $0.51/message for Opus 4.6 = **84% savings**
+- OpenAI's flagship reasoning model
+- PhD-level math and logic
 
-**Gemini 3.1 Pro** (Windsurf: "Premium" tier):
-- **$0.25/message** vs $1.53/message for Opus = **84% savings**
+**GPT-5.4** (Windsurf: "Premium Plus" tier):
+- **$0.15/message** vs $0.51/message for Opus 4.6 = **71% savings**
 - 77.1% ARC-AGI-2 (massive reasoning benchmark)
 - 1M context window
 - Native thinking mode
@@ -274,24 +273,22 @@ Reduce costs by strategic model selection:
 
 | Model                | Cost/message | Daily Cost | Monthly Cost |
 |----------------------|--------------|------------|--------------|
-| Opus 4.6 (medium)    | $1.53        | $765       | **$22,950**  |
-| GPT-5.3-Codex (med)  | $0.29        | $145       | **$4,350**   |
-| GPT-5.4 (medium)     | $0.32        | $160       | **$4,800**   |
-| Gemini 3.1 Pro       | $0.25        | $125       | **$3,750**   |
-| o3 (reasoning)       | $0.17        | $85        | **$2,550**   |
-| o4-mini (reasoning)  | $0.09        | $45        | **$1,350**   |
+| Opus 4.6 (medium)    | $0.51        | $255       | **$7,650**   |
+| GPT-5.4 (medium)     | $0.15        | $75        | **$2,250**   |
+| GPT-5.2 (medium)     | $0.14        | $70        | **$2,100**   |
+| o3 (reasoning)       | $0.08        | $40        | **$1,200**   |
+| o4-mini (reasoning)  | $0.05        | $25        | **$750**     |
 
-**Savings potential**: Switch from Opus to GPT-5.3-Codex = **$18,600/month savings**
+**Savings potential**: Switch from Opus 4.6 to o3 = **$6,450/month savings**
 
 **When to use each model:**
 
 | Task Type           | Recommended Model       | Why |
 |---------------------|-------------------------|-----|
-| Complex coding      | GPT-5.3-Codex           | Best agentic coding, 81% cheaper |
-| Heavy reasoning     | o3 or Gemini 3.1 Pro    | PhD-level logic, 84-89% cheaper |
-| Fast reasoning      | o4-mini                 | Best value, 94% cheaper |
-| Multimodal + code   | GPT-5.4                 | Latest features, 79% cheaper |
-| Budget reasoning    | Gemini 3 Flash          | 96% cheaper, still capable |
+| Complex coding      | GPT-5.4                 | Latest features, 71% cheaper |
+| Heavy reasoning     | o3                      | PhD-level logic, 84% cheaper |
+| Fast reasoning      | o4-mini                 | Best value, 90% cheaper |
+| Budget reasoning    | GPT-5.2                 | Proven model, 73% cheaper |
 
 ### Option 5: Direct API Access (No Windsurf)
 
@@ -315,11 +312,30 @@ From blog: "If you are a Pro or Teams user, we will grandfather in your current 
 - Windsurf Blog: https://windsurf.com/blog/windsurf-pricing-plans [VERIFIED 2026-03-19]
 - User screenshots of usage dashboard and blog post [VERIFIED]
 - Model pricing: `.windsurf/skills/llm-evaluation/model-pricing.json` [VERIFIED 2026-03-12]
-- Note: `llm-transcription/model-pricing.json` is OUTDATED (2026-01-24) - needs sync
+- Transition log: `_PrivateSessions/_2026-03-19_WindsurfTokenUsageLogging/_WINDSURF_PRICING_MODEL_TRANSITION_LOG.md`
 - Anthropic pricing: https://platform.claude.com/docs/en/about-claude/pricing
 - OpenAI pricing: https://developers.openai.com/api/docs/pricing
 
 ## Document History
+
+**[2026-03-20 17:35]**
+- Fixed: Option 4 pricing from model-pricing.json (o3: $1/$4, o4-mini: $0.55/$2.20, GPT-5.4: $1.25/$7.50)
+- Removed: GPT-5.3-Codex (not in model-pricing.json)
+- Recalculated: All cost/message values (o3: $0.08, o4-mini: $0.05, GPT-5.4: $0.15)
+- Updated: Recommendations to o3/GPT-5.4 based on correct pricing
+
+**[2026-03-20 17:33]**
+- Fixed: Option 4 comparison table used wrong Opus pricing ($1.53 -> $0.51)
+- Fixed: All "vs Opus" percentages recalculated against Opus 4.6 at $0.51/msg
+- Fixed: Monthly savings ($18,600 -> $3,300) based on correct baseline
+
+**[2026-03-20 17:30]**
+- Updated: Effective Date Status with actual recorded transition (Mar 20 ~09:00, not Mar 19)
+- Fixed: Credit conversion rate ~$0.04/credit (was ~$0.01-0.02) based on recorded data
+- Added: Actual transition data (34,267 credits -> $1,368.54)
+- Added: Key dates with precise timestamps from 34 screenshots
+- Added: Reference to transition log document
+- Removed: Outdated note about llm-transcription sync (already done)
 
 **[2026-03-19 14:25]**
 - Fixed: Scenario D thinking calculations used wrong Opus pricing ($15/$75 -> $5/$25)
