@@ -583,7 +583,7 @@ IPPS/
 
 ## Tools
 
-- **[MinifyIPPS](Docs/Concepts/_INFO_HOW_TO_MINIFY_IPPS.md)** - LLM-based compression pipeline for DevSystem markdown files. Reduces token count while preserving meaning. Pipeline: bundle → analyze → compress → verify. Config: `_Sessions/_2026-03-19_MinifyIPPS/_run_templateV2/pipeline_config.json`
+- **[MinifyIPPS](Docs/_INFO_HOW_TO_MINIFY_IPPS.md)** - LLM-based compression pipeline for DevSystem markdown files. Reduces token count while preserving meaning. Pipeline: bundle → analyze → compress → verify. Config: `_Sessions/_2026-03-19_MinifyIPPS/_run_templateV2/pipeline_config.json`
 
 ## File Naming Conventions
 
