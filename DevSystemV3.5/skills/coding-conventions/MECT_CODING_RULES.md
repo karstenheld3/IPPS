@@ -1,11 +1,15 @@
 # MECT Coding Rules
 
-Applies MECT and APAPALAN principles to code quality. Target audience: coding agents writing or reviewing code.
+Applies MECT and APAPALAN to code quality. Target audience: coding agents writing or reviewing code.
 
-**MECT** = Minimal Explicit Consistent Terminology
-**APAPALAN** = As Precise As Possible (Priority 1), As Little As Necessary (Priority 2)
+**Abstraction levels:**
+- **MECT** = General principles that guide judgment. Answers: "What makes good code?"
+- **APAPALAN** = Concrete enforceable rules with measurable criteria. Answers: "How do I check compliance?"
 
-This document merges both into actionable rules for identifiers, functions, types, comments, logs, errors, and APIs.
+This document merges both into actionable rules for identifiers, functions, types, comments, logs, errors, and APIs. Each rule states the principle (MECT) and the enforcement pattern (APAPALAN).
+
+**Core concept - Signal vs Noise:**
+Every design choice in code is either **Signal** (purposeful, carries information the reader needs) or **Noise** (arbitrary, carries no information but the reader interprets as if it does). MECT strengthens signals and eliminates noise. APAPALAN enforces specific patterns to achieve this.
 
 ## Rule Index
 
@@ -23,6 +27,7 @@ Brevity (BR) - Minimal without losing meaning
 - MC-BR-02: Comments: drop filler, be direct
 - MC-BR-03: Function names describe output, not mechanism
 - MC-BR-04: Boolean functions: is_/has_/can_ prefix, no "check_"
+- MC-BR-05: Every code artifact must carry information
 
 Consistency (CO) - Same pattern everywhere
 - MC-CO-01: Corresponding pairs use same word stem
@@ -311,6 +316,38 @@ def validate(order):            # Raises on invalid (action, not predicate)
 ```
 
 **Rule:** `is_/has_/can_` = returns bool, never raises. Action verbs (`validate`, `ensure`, `require`) = may raise.
+
+### MC-BR-05: Every Code Artifact Must Carry Information
+
+Applies the Signal vs Noise principle to code. Every artifact (comment, type hint, decorator, docstring, log prefix, wrapper) must add meaning the reader cannot get from the code structure alone. If the code already communicates something, restating it is noise. See MW-LT-04 for the writing equivalent.
+
+**Test:** Remove the artifact. If the reader loses no information, delete it.
+
+**BAD:**
+```python
+i += 1  # increment i
+x: int = 42  # type is obvious from literal
+def get_name(self) -> str:
+    """Get the name."""  # restates signature
+    return self.name
+logger.info(f"get_orders: Getting orders...")  # function name in log = noise
+```
+
+**GOOD:**
+```python
+i += 1  # compensate for 0-based index from API
+def get_name(self) -> str:
+    return self.name
+logger.info(f"Getting orders for customer_id='{cid}'")
+```
+
+**Applies to:**
+- Comments restating what code already says
+- Type hints obvious from the literal or return expression
+- Docstrings that restate the function signature without adding context
+- Log messages repeating the function name (stack trace already provides it)
+- Decorators/wrappers that add no behavior
+- Variable name prefixes that restate the type (`str_name`, `list_items`)
 
 ## Consistency Rules (CO)
 

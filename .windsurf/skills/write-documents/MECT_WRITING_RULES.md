@@ -1,11 +1,19 @@
 # MECT Writing Rules
 
-Writing craft rules derived from MECT (Minimal Explicit Consistent Terminology). Complement to `APAPALAN_RULES.md` which covers formatting, structure, and naming.
+Writing principles derived from MECT (Minimal Explicit Consistent Terminology). Complement to `APAPALAN_RULES.md`.
 
-**MECT_WRITING_RULES** covers: voice, word choice, heading design, list construction, and description types.
-**APAPALAN_RULES** covers: precision formatting, brevity, document structure, naming conventions.
+**Abstraction levels:**
+- **MECT** (this file) = General principles that guide judgment. Answers: "What makes good writing?" Examples illustrate the principle, not enforce a specific format.
+- **APAPALAN** = Concrete enforceable rules with measurable criteria. Answers: "How do I check compliance?" BAD/GOOD examples define the exact pattern to follow.
+
+**Topic split:**
+- **MECT_WRITING_RULES** covers: voice, word choice, terminology design, heading design, list construction, description types
+- **APAPALAN_RULES** covers: precision formatting, brevity patterns, document structure, naming conventions
 
 No overlap. Both apply simultaneously. When writing documents, read both.
+
+**Core concept - Signal vs Noise:**
+Every design choice in a document is either **Signal** (purposeful, carries information the reader needs) or **Noise** (arbitrary, carries no information but the reader interprets as if it does). MECT strengthens signals and eliminates noise. APAPALAN enforces specific patterns to achieve this.
 
 ## Rule Index
 
@@ -34,6 +42,7 @@ Lists and Tables (LT)
 - MW-LT-01: Two identifiers per row (index AND key)
 - MW-LT-02: Group by topology - related items cluster
 - MW-LT-03: Index groups as they gain importance
+- MW-LT-04: Every formatting signal must carry information
 
 Description Types (DT)
 - MW-DT-01: Four description lenses (intentional, functional, technical, contextual)
@@ -114,11 +123,11 @@ Determine which endpoints require authentication.
 
 Use precise modal verbs. Never use "shall" - it creates ambiguity between obligation and future tense.
 
-- **must** - obligation (no choice)
-- **must not** - prohibition
-- **should** - recommendation (choice exists)
-- **may** - permission/discretion
-- **can** - capability/ability
+- must - obligation (no choice)
+- must not - prohibition
+- should - recommendation (choice exists)
+- may - permission/discretion
+- can - capability/ability
 
 **BAD:**
 ```
@@ -141,16 +150,16 @@ The API must return JSON.
 Words that sound similar but differ in meaning. Using the wrong one corrupts the mental model.
 
 **Commonly confused pairs:**
-- **Accuracy** (closeness to true value) != **Precision** (consistency of repeated measurements)
-- **Simple** (uncomplicated) != **Simplistic** (oversimplified, missing important detail)
-- **Development** (increase in capacity/capability) != **Growth** (increase in size/quantity)
-- **Affect** (verb: influence) != **Effect** (noun: result)
-- **Receiver** (device/person receiving) != **Recipient** (intended addressee)
+- 'Accuracy' (closeness to true value) != 'Precision' (consistency of repeated measurements)
+- 'Simple' (uncomplicated) != 'Simplistic' (oversimplified, missing important detail)
+- 'Development' (increase in capacity/capability) != 'Growth' (increase in size/quantity)
+- 'Affect' (verb: influence) != 'Effect' (noun: result)
+- 'Receiver' (device/person receiving) != 'Recipient' (intended addressee)
 
 **Word order creates opposite meanings:**
-- **Travel Time** (duration of journey) != **Time Travel** (moving through time)
-- **Having judgement** (wisdom) != **Being judgemental** (critical)
-- **Account Issue** (problem with account) != **Issue Account** (create an account)
+- 'Travel Time' (duration of journey) != 'Time Travel' (moving through time)
+- 'Having judgement' (wisdom) != 'Being judgemental' (critical)
+- 'Account Issue' (problem with account) != 'Issue Account' (create an account)
 
 **Action:** When two terms seem interchangeable, look up the distinction. If the distinction matters in context, use the precise term. If it doesn't matter, pick one and use it consistently (AP-NM-01).
 
@@ -419,6 +428,12 @@ Americas: us-east-1, us-west-2
 
 Now "region group RG-EU" is a valid reference target.
 
+### MW-LT-04: Every Formatting Signal Must Carry Information
+
+Applies the Signal vs Noise principle to formatting. Formatting (bold, italic, indentation, separators) is a communication channel. Each signal must add meaning the reader cannot get from structure alone. When structure already provides distinction (indent, dash, colon, heading), adding formatting on top is noise - it consumes visual weight without increasing information.
+
+**Test:** Remove the formatting. Can the reader still distinguish the elements? If yes, the formatting is noise. See AP-BR-07 for concrete enforcement patterns.
+
 ## Description Type Rules (DT)
 
 ### MW-DT-01: Four Description Lenses
@@ -432,20 +447,20 @@ Any object can be described from four perspectives. Choose based on what the rea
 
 **Example - describing a rate limiter:**
 
-**Intentional:** "Prevents API abuse by limiting request frequency per client."
+Intentional: "Prevents API abuse by limiting request frequency per client."
 
-**Functional:** "Accepts requests, counts per client IP within sliding window, returns 429 when limit exceeded."
+Functional: "Accepts requests, counts per client IP within sliding window, returns 429 when limit exceeded."
 
-**Technical:** "Redis sorted set per IP. Score = timestamp. ZRANGEBYSCORE to count window. ZADD + EXPIRE on each request. 100 requests/minute default."
+Technical: "Redis sorted set per IP. Score = timestamp. ZRANGEBYSCORE to count window. ZADD + EXPIRE on each request. 100 requests/minute default."
 
-**Contextual:** "Sits between API gateway and application handlers. Depends on Redis. Bypassed for health check endpoints. Configured per route in `rate_limits.yaml`."
+Contextual: "Sits between API gateway and application handlers. Depends on Redis. Bypassed for health check endpoints. Configured per route in `rate_limits.yaml`."
 
 ### MW-DT-02: Match Description Type to Audience
 
-- **Stakeholders** need intentional (why) + functional (what)
-- **Developers** need functional (what) + technical (how)
-- **Operations** need technical (how) + contextual (where)
-- **New team members** need all four, in order: intentional → functional → technical → contextual
+- Stakeholders need intentional (why) + functional (what)
+- Developers need functional (what) + technical (how)
+- Operations need technical (how) + contextual (where)
+- New team members need all four, in order: intentional → functional → technical → contextual
 
 **BAD** (technical description for stakeholders):
 ```

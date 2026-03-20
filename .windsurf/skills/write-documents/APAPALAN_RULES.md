@@ -1,8 +1,12 @@
 # APAPALAN Writing Rules
 
-Rules for applying the APAPALAN principle across all document types, code, logging, and communication.
+Concrete enforceable rules for applying the APAPALAN principle across all document types, code, logging, and communication.
 
 **APAPALAN** = As Precise As Possible (Priority 1), As Little As Necessary (Priority 2)
+
+**Abstraction levels:**
+- **MECT** = General principles that guide judgment. Answers: "What makes good writing?"
+- **APAPALAN** (this file) = Concrete enforceable rules with measurable criteria. Answers: "How do I check compliance?" BAD/GOOD examples define the exact pattern to follow.
 
 ## Rule Index
 
@@ -24,6 +28,7 @@ Brevity (BR) - Priority 2
 - AP-BR-04: Compact object and list definitions
 - AP-BR-05: Show format over describing format
 - AP-BR-06: Pipe-delimited property lines for multi-attribute items
+- AP-BR-07: No redundant bold in structured lists
 
 Structure (ST)
 - AP-ST-01: Goal or intention captured first
@@ -32,6 +37,7 @@ Structure (ST)
 - AP-ST-04: Anti-DRY for delegation (inline 100% for action requests)
 - AP-ST-05: Hierarchical information ordering (general to specific)
 - AP-ST-06: Visual thought grouping (cluster related, separate distinct)
+- AP-ST-07: Cognitive load limit (max 7 ungrouped items)
 
 Naming (NM)
 - AP-NM-01: One name per concept (no polysemy, no synonyms)
@@ -60,17 +66,19 @@ Naming (NM)
 
 **Anti-pattern**: Verbose writing sacrifices brevity without adding precision. (See AP-BR-02 for full examples.)
 
+**Signal vs Noise:** Every design choice is either **Signal** (purposeful, carries information) or **Noise** (arbitrary, the reader interprets as meaningful when it isn't). Precision strengthens signals. Brevity eliminates noise. All APAPALAN rules serve one of these two goals.
+
 ## Precision Rules (PR)
 
 ### AP-PR-01: Standardized Datetime Format
 
 Use `YYYY-MM-DD HH:MM` everywhere. Context-specific variations:
 
-- **In documents**: `YYYY-MM-DD HH:MM` - Example: `2026-03-19 14:30`
-- **In logging**: `YYYY-MM-DD HH:MM:SS` - Example: `2026-03-19 14:30:23`
-- **In filenames**: `YYYY-MM-DD` prefix - Example: `2026-03-19_ServerMigration.md`, `2026-03-19_14-30_MeetingNotes.md`
-- **In session folders**: `YYYY-MM-DD` prefix - Example: `_2026-03-19_FixAuthBug/`
-- **In Document History**: `[YYYY-MM-DD HH:MM]` - Example: `**[2026-03-19 14:30]**`
+- In documents: `YYYY-MM-DD HH:MM` - Example: `2026-03-19 14:30`
+- In logging: `YYYY-MM-DD HH:MM:SS` - Example: `2026-03-19 14:30:23`
+- In filenames: `YYYY-MM-DD` prefix - Example: `2026-03-19_ServerMigration.md`, `2026-03-19_14-30_MeetingNotes.md`
+- In session folders: `YYYY-MM-DD` prefix - Example: `_2026-03-19_FixAuthBug/`
+- In Document History: `[YYYY-MM-DD HH:MM]` - Example: `**[2026-03-19 14:30]**`
 
 Never use locale-dependent formats (`03/19/2026`, `19.03.2026`, `March 19, 2026`).
 
@@ -98,10 +106,10 @@ Context determines format. Consistency within each context is mandatory.
 Processing library 'Documents' (id='045229b3', size=342)...
 ```
 
-**Documents**: `**Key**: Value` or `- **Key**: Value`
+Documents: `Key: Value` or `- Key: Value`
 ```
-- **Started**: 2026-03-17
-- **Goal**: Fix authentication
+- Started: 2026-03-17
+- Goal: Fix authentication
 ```
 
 **Code**: Follow language conventions (Python: snake_case, JS: camelCase)
@@ -149,10 +157,10 @@ John from Acme Corp, email john@acme.com, call him at +1 555 1234
 - Plan nodes (P1, P1-S1, P1-D1)
 
 **ID formats by scope:**
-- **Document-scoped** (2-digit): `CRWL-FR-01`, `AUTH-DD-03`
-- **Tracking** (4-digit): `AUTH-PR-0001`, `GLOB-BG-0002`
-- **Plan-scoped** (ephemeral): `P1-S1`, `P2-D1`
-- **Headings** (implicit): `## 3. Implementation` → "section 3"
+- Document-scoped (2-digit): `CRWL-FR-01`, `AUTH-DD-03`
+- Tracking (4-digit): `AUTH-PR-0001`, `GLOB-BG-0002`
+- Plan-scoped (ephemeral): `P1-S1`, `P2-D1`
+- Headings (implicit): `## 3. Implementation` → "section 3"
 
 **Valid ID systems:**
 - Document IDs: `[TOPIC]-[TYPE][NN]` (e.g., `CRWL-SP01`)
@@ -187,9 +195,9 @@ Now "section 2.1" is a valid reference target.
 ### AP-PR-04: Standardized Link and Reference Format
 
 **Depends on AP-PR-05.** A reference is only as good as the ID system it points to. Three steps:
-1. **Define** a consistent ID system (AP-PR-05)
-2. **Apply** IDs to all information that should be referenced
-3. **Use** the IDs to reference within and across documents
+1. Define a consistent ID system (AP-PR-05)
+2. Apply IDs to all information that should be referenced
+3. Use the IDs to reference within and across documents
 
 **Reference formats:**
 - Document: `_SPEC_CRAWLER.md [CRWL-SP01]` (filename AND Doc ID)
@@ -276,10 +284,10 @@ Repeat established structures. Do not invent new forms for similar content.
 - Overlapping forms for same purpose
 
 **BAD/GOOD:**
-- **List markers**: `- * +` mixed → `- - -` one form
-- **Headings**: `## 1.` `## Design` `## IV.` → `## 1.` `## 2.` `## 3.`
-- **Properties**: `Key:` `**Key** -` `Key =` → `**Key**:` throughout
-- **Functions**: `get_` `fetch_` `load_` (same purpose) → `get_` everywhere
+- List markers: `- * +` mixed → `- - -` one form
+- Headings: `## 1.` `## Design` `## IV.` → `## 1.` `## 2.` `## 3.`
+- Properties: `Key:` `**Key** -` `Key =` → `Key:` throughout
+- Functions: `get_` `fetch_` `load_` (same purpose) → `get_` everywhere
 
 ## Brevity Rules (BR)
 
@@ -362,9 +370,9 @@ Use lists. No empty lines between properties. No Markdown tables (unless opted-i
 ```
 ### EXPLORE
 
-- **Purpose**: Understand the situation before acting
-- **BUILD**: What feature? What constraints?
-- **Entry**: Start of workflow
+- Purpose: Understand the situation before acting
+- BUILD: What feature? What constraints?
+- Entry: Start of workflow
 ```
 
 ### AP-BR-05: Show Format Over Describing Format
@@ -454,6 +462,54 @@ PRD-007 - Widget Pro v2.1, costs $49.99, in stock
 - Bold ID on header line
 - `?` for unknown values in documents (`[UNKNOWN]` is for logs)
 - Group by concern: identity/metrics, physical attributes, terms/status
+
+### AP-BR-07: No Redundant Bold in Structured Lists
+
+Implements MECT principle MW-LT-04 (every formatting signal must carry information).
+
+Bold is a signal. It must introduce something the reader encounters for the first time or mark a context switch. When structure (indent, dash, colon) already provides visual distinction, bold on labels is noise.
+
+**Decision: bold or not?**
+
+```
+Is the label a NEW CONCEPT being defined here for the first time?
+├─ Yes -> Bold. Reader must notice and remember this term.
+└─ No
+   Is the label a CONTEXT SWITCH (BAD/GOOD, "In code:", "In email:")?
+   ├─ Yes -> Bold. Reader must notice the boundary.
+   └─ No
+      Is the label an ACTION STEP in a procedure (the bold IS the instruction)?
+      ├─ Yes -> Bold. Reader must know what to DO.
+      └─ No -> No bold. Structure provides distinction.
+```
+
+**Examples where bold IS appropriate:**
+- Concept definitions: `- **Intentional** - WHY it was introduced`
+- Context switches: `**BAD:**`, `**In code:**`, `**In email:**`
+- Procedure steps: `1. **Start with most explicit name**: ...`
+- Rule indexes and section labels
+
+**Examples where bold is NOT appropriate:**
+- Uniform key-value lists: `- In documents: ...`, `- In logging: ...`
+- Classification lists: `- Stakeholders need ...`, `- Developers need ...`
+- Dictionary entries: `- must - obligation`, `- should - recommendation`
+- Examples applying an already-defined concept: `Intentional: "Prevents..."`
+
+**BAD** (redundant bold on every label):
+```
+**Contacts:**
+- **South Office**: 289 897 380 (Mon-Fri 9-13h, 14-17h)
+- **Head Office**: +351 21 842 53 00 (Mon-Fri 9-18h)
+- **Contact Person**: Maria Silva (Customer Service)
+```
+
+**GOOD** (structure provides distinction):
+```
+**Contacts:**
+- South Office: 289 897 380 (Mon-Fri 9-13h, 14-17h)
+- Head Office: +351 21 842 53 00 (Mon-Fri 9-18h)
+- Contact Person: Maria Silva (Customer Service)
+```
 
 ## Structure Rules (ST)
 
@@ -664,6 +720,62 @@ Let me know if you have questions.
 
 Thanks
 ```
+
+### AP-ST-07: Cognitive Load Limit
+
+People can hold roughly 5 to 7 separate items in working memory at once (Miller's Law). Lists, parameters, or sections that exceed this limit without grouping cause readers to skip, re-read, or abandon the content.
+
+**Rule:** When a flat list exceeds 7 items, group into named clusters. When a section addresses more than 5 distinct concerns, split into subsections.
+
+**BAD** (9 ungrouped action points - reader stops after 5):
+```
+Hi John,
+
+Before the release on Friday, please:
+- Update the API documentation for the new endpoints
+- Run the integration tests on staging
+- Fix the failing auth test in CI
+- Review Maria's PR for the rate limiter
+- Notify the QA team that staging is ready
+- Update the changelog with all merged PRs
+- Check that SSL certificates are renewed before April
+- Send the release notes draft to stakeholders
+- Schedule the deployment window with ops
+```
+
+**GOOD** (grouped by concern - reader processes 3 clusters of 3):
+```
+Hi John,
+
+Before the release on Friday, please:
+
+Code:
+- Fix the failing auth test in CI
+- Review Maria's PR for the rate limiter
+- Run the integration tests on staging
+
+Documentation:
+- Update the API documentation for the new endpoints
+- Update the changelog with all merged PRs
+- Send the release notes draft to stakeholders
+
+Coordination:
+- Notify the QA team that staging is ready
+- Check that SSL certificates are renewed before April
+- Schedule the deployment window with ops
+```
+
+**Applies to:**
+- Document lists and bullet points
+- Email action items (>5 points = readers stop reading)
+- Function parameters (>5 = use options object or config struct)
+- Menu items, navigation tabs, dashboard panels
+- Spec requirements per section
+
+**When grouping is not needed:**
+- Ordered steps (sequence provides structure: step 1, 2, 3... up to ~10)
+- Exhaustive lookup lists where completeness is key (e.g., all country codes, all error codes, all supported file types). Grouping these adds noise because the reader needs to scan quickly, not memorize. Keep existing sequence or topology if one exists; if none, sort alphabetically.
+- Rule indexes (this document - grouped by category)
 
 ## Naming Rules (NM)
 
