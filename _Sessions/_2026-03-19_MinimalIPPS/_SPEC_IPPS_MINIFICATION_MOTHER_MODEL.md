@@ -507,7 +507,7 @@ mipps_pipeline.py                      (entry point, CLI)
 - Fixed: Prompt Caching section rewritten with correct `cache_control` API parameter, cache write/read cost structure, breakeven analysis (per Anthropic API IN18)
 - Fixed: Model ID `claude-opus-4-6-thinking` replaced with `claude-opus-4-6` + `"thinking": true` config (thinking enabled via parameter, not model name per IN13)
 - Fixed: "Anthropic Software Development Kit (SDK)" simplified to "Anthropic SDK"
-- Fixed: Removed `cache_manager.py` from module structure (unnecessary with 1h TTL, cache control handled in api_client.py)
+- Fixed: Removed `cache_manager.py` from module structure (unnecessary with 1h TTL, cache control handled in llm_clients.py)
 - Added: `files_excluded_md` field to PipelineState domain object (was in state JSON but undocumented)
 - Added: `api_timeout_seconds: 120` to pipeline_config.json (synced from IMPL)
 - Added: Extended thinking parameter documentation in API Client Requirements
