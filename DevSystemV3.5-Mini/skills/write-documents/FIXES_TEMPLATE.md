@@ -1,7 +1,7 @@
 # FIX: [Issue Description]
 
-**Goal**: [Single sentence describing fix purpose]
-**Target files**:
+Goal: [Single sentence describing fix purpose]
+Target files:
 - `[path/to/file1.py]`
 - `[path/to/file2.py]`
 
@@ -27,27 +27,27 @@
 
 ### Fix 1: [Description]
 
-**Location**: `filename.py:123`
+Location: `filename.py:123`
 
-**BEFORE:**
+BEFORE:
 ```python
 old_code_here
 ```
 
-**AFTER:**
+AFTER:
 ```python
 new_code_here
 ```
 
-**Reason**: [Why this change is needed]
+Reason: [Why this change is needed]
 
 ### Fix 2: [Description]
 
-**Location**: `filename.py:456`
+Location: `filename.py:456`
 
-**BEFORE/AFTER**: Same pattern as Fix 1.
+BEFORE/AFTER: Same pattern as Fix 1.
 
-**Reason**: [Why this change is needed]
+Reason: [Why this change is needed]
 
 ## 4. TODO Checklist
 
@@ -65,5 +65,5 @@ new_code_here
 
 ## 5. Document History
 
-**[YYYY-MM-DD HH:MM]**
+[YYYY-MM-DD HH:MM]
 - Initial fix plan created

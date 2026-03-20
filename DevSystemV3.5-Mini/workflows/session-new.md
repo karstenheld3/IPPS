@@ -30,17 +30,17 @@ Add to NOTES.md:
 ```markdown
 ## Current Phase
 
-**Phase**: EXPLORE
-**Workflow**: (pending assessment)
-**Assessment**: (pending)
+Phase: EXPLORE
+Workflow: (pending assessment)
+Assessment: (pending)
 ```
 
 Add to PROGRESS.md:
 ```markdown
 ## Phase Plan
 
-- [ ] **EXPLORE** - in_progress
-- [ ] **DESIGN** - pending
+- [ ] EXPLORE - in_progress
+- [ ] DESIGN - pending
 ```
 
 ## Step 5: Document Agent Instructions
@@ -49,4 +49,4 @@ Read rules in windsurf rules folder, write key instructions into NOTES.md under 
 
 See `devsystem-core.md` sections "Document Types" and "Tracking Documents" for full list.
 
-**Acronym expansion rule**: Always spell out acronyms fully in NOTES.md. Example: "APAPALAN: As Precise As Possible, As Little As Necessary" not just "APAPALAN principle".
+Acronym expansion rule: Always spell out acronyms fully in NOTES.md. Example: "APAPALAN: As Precise As Possible, As Little As Necessary" not just "APAPALAN principle".

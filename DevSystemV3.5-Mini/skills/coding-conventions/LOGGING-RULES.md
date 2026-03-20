@@ -5,10 +5,10 @@ Language-agnostic output rules for Python, PowerShell, and future languages.
 ## Overview
 
 Four logging types serve distinct audiences:
-- **General (GN)** - Rules applying to all output types
-- **User-Facing (UF)** - End users via console or SSE stream
-- **App-Level (AP)** - Technical staff debugging via server logs
-- **Script-Level (SC)** - QA verifying correctness via selftest output
+- General (GN) - Rules applying to all output types
+- User-Facing (UF) - End users via console or SSE stream
+- App-Level (AP) - Technical staff debugging via server logs
+- Script-Level (SC) - QA verifying correctness via selftest output
 
 ## Related Documents
 
@@ -20,7 +20,7 @@ Four logging types serve distinct audiences:
 
 ### APAPALAN Principle
 
-**As precise as possible, as little as necessary.** Maximum information, minimum words. Never ambiguous.
+As precise as possible, as little as necessary. Maximum information, minimum words. Never ambiguous.
 
 - BAD: `P=1`, `F1=1`
 - GOOD: `Precision=1.00`, `F1-Score=1.00`
@@ -43,26 +43,26 @@ Break operations into numbered steps `[ x / n ]` so readers can assess progress,
 ### Principle of Announce > Track > Report
 
 Every activity follows three phases:
-1. **Announce** - State what will happen with full disclosure
-2. **Track** - Log progress with intermediate results as nested lines
-3. **Report** - State final status and results
+1. Announce - State what will happen with full disclosure
+2. Track - Log progress with intermediate results as nested lines
+3. Report - State final status and results
 
-**Item-level status** (individual operations):
+Item-level status (individual operations):
 - `OK.` or `OK: <details>` | `SKIP: <why>` | `ERROR: <what> -> <system error>` | `WARNING: <problem>`
 
-**Activity-level status** (whole activity):
+Activity-level status (whole activity):
 - `OK.` or `OK: <results>` | `SKIP: <why>` | `FAIL: <summary>` | `PARTIAL FAIL: <summary>` | `WARNING: <problem>` | `HINT: <advice>`
 
-**Final line rule:** Last line of any activity MUST contain a status keyword (`OK.`, `FAIL:`, `PARTIAL FAIL:`, `SKIP:`).
+Final line rule: Last line of any activity MUST contain a status keyword (`OK.`, `FAIL:`, `PARTIAL FAIL:`, `SKIP:`).
 
-**Parallel execution rule:** Report lines MUST carry the same identifier as their Announce line.
+Parallel execution rule: Report lines MUST carry the same identifier as their Announce line.
 - GOOD: `[ 1 / 2 ] OK. Extracted 5 correct...`
 
-**Worker/process prefix rule:** Multiple workers/processes MUST prefix all lines with identity.
+Worker/process prefix rule: Multiple workers/processes MUST prefix all lines with identity.
 - Workers: `[ worker 1 ] [ 1 / 5 ] Processing 'file.pdf'...`
 - Processes: `[timestamp,process 12345,request 1] START: function_name...`
 
-**Not used for status:** `DONE`, `FINISHED`, `INFO`, `DEBUG`.
+Not used for status: `DONE`, `FINISHED`, `INFO`, `DEBUG`.
 
 ```
 Connecting to 'https://contoso.sharepoint.com/sites/ProjectA'...
@@ -80,7 +80,7 @@ Processing 3 libraries...
 
 ### Principle of Two-Level Errors (User-Facing)
 
-**Format:** `<what failed> -> <system error>`
+Format: `<what failed> -> <system error>`
 
 "What failed" is neutral (no blame). "System error" is exact from system.
 
@@ -107,11 +107,11 @@ Users must always know what is happening. Drives: simple timestamps, `[ x / n ]`
 
 ## Philosophy-to-Rules Mapping
 
-**Script-Level:** LOG-SC-01 (no timestamps), LOG-SC-04 (status markers), LOG-SC-03 (test case IDs), LOG-SC-07 (summary)
+Script-Level: LOG-SC-01 (no timestamps), LOG-SC-04 (status markers), LOG-SC-03 (test case IDs), LOG-SC-07 (summary)
 
-**App-Level:** LOG-AP-01 (extended timestamp), LOG-AP-04 (START/END), LOG-GN-02 (`key='value'`), LOG-AP-05 (error chains)
+App-Level: LOG-AP-01 (extended timestamp), LOG-AP-04 (START/END), LOG-GN-02 (`key='value'`), LOG-AP-05 (error chains)
 
-**User-Facing:** LOG-UF-02 (iteration counters), LOG-UF-04 (emit every ~10s), LOG-UF-03 (plain language), LOG-UF-06 (100-char headers)
+User-Facing: LOG-UF-02 (iteration counters), LOG-UF-04 (emit every ~10s), LOG-UF-03 (plain language), LOG-UF-06 (100-char headers)
 
 ## General Rules (LOG-GN)
 
@@ -146,7 +146,7 @@ Results start with count. Iteration counters at line start.
 ( 50 / 127 ) Processing broken items...
 ```
 
-**Exception:** Activity announcements describe action first: `Processing 5 items...`
+Exception: Activity announcements describe action first: `Processing 5 items...`
 
 ### LOG-GN-04: Duration Format
 

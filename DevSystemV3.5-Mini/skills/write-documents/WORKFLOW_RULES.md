@@ -57,9 +57,9 @@ Only `description` field. No `name:`, `type:`, or extras.
 
 Verify work against specs, rules, and quality standards.
 
-**Goal**: Validated work with all issues identified and labeled
+Goal: Validated work with all issues identified and labeled
 
-**Why**: Prevents shipping bugs, spec violations, and rule breaks
+Why: Prevents shipping bugs, spec violations, and rule breaks
 ```
 
 ## MUST-NOT-FORGET Section

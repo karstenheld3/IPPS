@@ -1,4 +1,4 @@
-# IMPL: MinimalIPPS Compression Pipeline
+# IMPL: MinifyIPPS Compression Pipeline
 
 **Doc ID**: MIPPS-IP01
 **Feature**: MIPPS-PIPELINE

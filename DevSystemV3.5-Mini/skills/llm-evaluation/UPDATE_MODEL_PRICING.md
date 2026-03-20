@@ -1,6 +1,6 @@
 # Update Model Pricing Workflow
 
-**Goal**: Capture current pricing pages, transcribe to markdown, and update `model-pricing.json`
+Goal: Capture current pricing pages, transcribe to markdown, and update `model-pricing.json`
 
 ## Placeholders
 
@@ -93,7 +93,7 @@ Replace `[SUBFOLDER_ANTHROPIC]` with: `[SCREENSHOTS]/[DATE]_Anthropic-ModelPrici
 
 URL: `https://developers.openai.com/api/docs/pricing?latest-pricing=batch`
 
-**IMPORTANT**: URL includes `?latest-pricing=batch` for Batch pricing tier. "All models" table is collapsed - must click "View more". Page uses scrollable inner container `.docs-scroll-container`, not document body.
+IMPORTANT: URL includes `?latest-pricing=batch` for Batch pricing tier. "All models" table is collapsed - must click "View more". Page uses scrollable inner container `.docs-scroll-container`, not document body.
 
 ```
 browser_run_code(code: "async (page) => {
@@ -188,7 +188,7 @@ Remove-Item "[SCREENSHOTS]/[DATE]_OpenAI-ModelPricing/*.md" -Force
 Remove-Item "[SCREENSHOTS]/[DATE]_OpenAI-ModelPricing/_batch_summary.json" -Force
 ```
 
-**Expected output**: `[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing.md`, `[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing-Batch.md`
+Expected output: `[PRICING_SOURCES]/[DATE]_Anthropic-ModelPricing.md`, `[PRICING_SOURCES]/[DATE]_OpenAI-ModelPricing-Batch.md`
 
 ## Step 3: Read Transcriptions and Update model-pricing.json
 
@@ -200,7 +200,7 @@ Read both files from `[PRICING_SOURCES]`: `[DATE]_Anthropic-ModelPricing.md` and
 
 For each model extract: Model ID, Input price per 1M tokens, Output price per 1M tokens.
 
-**Rules:**
+Rules:
 - Anthropic: full API model ID with date suffix (e.g., `claude-opus-4-6-20260204`)
 - OpenAI: short model name (e.g., `gpt-5-mini`)
 - Only models with clear per-token pricing (skip batch-only or special tiers)
@@ -210,11 +210,11 @@ For each model extract: Model ID, Input price per 1M tokens, Output price per 1M
 
 Read existing `[SKILL_FOLDER]/model-pricing.json` and:
 
-1. **Add** new models (top of provider section, newest first)
-2. **Update** changed prices
-3. **NEVER remove** existing models
-4. **Update** `last_updated` to `[DATE]`
-5. **Update** `sources` URLs if changed
+1. Add new models (top of provider section, newest first)
+2. Update changed prices
+3. NEVER remove existing models
+4. Update `last_updated` to `[DATE]`
+5. Update `sources` URLs if changed
 6. Maintain existing JSON structure and formatting
 
 ### 3d. Verify
@@ -231,6 +231,6 @@ Summarize: models added (with prices), price changes (old vs new), unchanged mod
 ## Notes
 
 - Read ALL numbered screenshot files per source before extracting prices
-- OpenAI URL uses `?latest-pricing=batch` for **batch** tier pricing (50% of standard)
-- If model has different pricing tiers (e.g., long context), use **standard** tier
+- OpenAI URL uses `?latest-pricing=batch` for batch tier pricing (50% of standard)
+- If model has different pricing tiers (e.g., long context), use standard tier
 - Anthropic uses full model IDs with date suffixes - always use the full ID as it appears in the API

@@ -23,21 +23,21 @@ Create research/analysis documents following INFO_TEMPLATE.md structure.
 
 ## Steps
 
-1. **Create INFO File** - `_INFO_[TOPIC].md` in session folder. Header: Doc ID (`[TOPIC]-IN[NN]`), Goal, Timeline. Empty Summary (fill last).
+1. Create INFO File - `_INFO_[TOPIC].md` in session folder. Header: Doc ID (`[TOPIC]-IN[NN]`), Goal, Timeline. Empty Summary (fill last).
 
-2. **Make Research Plan** - Identify 3-5 key questions. List sources (docs, code, web, APIs). Estimate scope: narrow vs broad.
+2. Make Research Plan - Identify 3-5 key questions. List sources (docs, code, web, APIs). Estimate scope: narrow vs broad.
 
-3. **Research Step-by-Step** - Add sections incrementally. After each section ask: Need further verification? Duplicates? Unverified/contradicting findings? Actually helpful? Review new sections against existing ones - remove overload, redundancies, ambiguities.
+3. Research Step-by-Step - Add sections incrementally. After each section ask: Need further verification? Duplicates? Unverified/contradicting findings? Actually helpful? Review new sections against existing ones - remove overload, redundancies, ambiguities.
 
-4. **Think Outside the Box** - No verified solution? Reconsider problem. Missing perspectives? Clever alternatives? Never pollute with non-working solutions.
+4. Think Outside the Box - No verified solution? Reconsider problem. Missing perspectives? Clever alternatives? Never pollute with non-working solutions.
 
-5. **Document Sources** - IDs: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`. List URL + primary finding. Mark `[VERIFIED]`.
+5. Document Sources - IDs: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`. List URL + primary finding. Mark `[VERIFIED]`.
 
-6. **Write Summary** - Copy/paste ready list at top. Label: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`. Most important first.
+6. Write Summary - Copy/paste ready list at top. Label: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`. Most important first.
 
-7. **Add Next Steps** - Actionable items. Link to follow-up (SPEC, IMPL, decision needed).
+7. Add Next Steps - Actionable items. Link to follow-up (SPEC, IMPL, decision needed).
 
-8. **Verify** - Run `/verify`. Check: All questions answered? Sources documented? Summary accurate?
+8. Verify - Run `/verify`. Check: All questions answered? Sources documented? Summary accurate?
 
 ## Document Structure
 
@@ -46,9 +46,9 @@ See `INFO_TEMPLATE.md` in @write-documents skill.
 ```markdown
 # INFO: [Topic]
 
-**Doc ID**: [TOPIC]-IN[NN]
-**Goal**: [Single sentence]
-**Timeline**: Created YYYY-MM-DD
+Doc ID: [TOPIC]-IN[NN]
+Goal: [Single sentence]
+Timeline: Created YYYY-MM-DD
 
 ## Summary
 - [Key finding 1] [VERIFIED]
@@ -64,6 +64,6 @@ See `INFO_TEMPLATE.md` in @write-documents skill.
 1. [Action]
 
 ## Document History
-**[YYYY-MM-DD HH:MM]**
+[YYYY-MM-DD HH:MM]
 - Initial research document created
 ```

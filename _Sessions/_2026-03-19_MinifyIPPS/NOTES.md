@@ -1,11 +1,11 @@
 # Session Notes
 
-**Doc ID**: 2026-03-19_MinimalIPPS-NOTES
+**Doc ID**: 2026-03-19_MinifyIPPS-NOTES
 
 ## Initial Request
 
 ````text
-@[/session-new] MinimalIPPS
+@[/session-new] MinifyIPPS
 
 The goal of this session is to create a set of prompts that can reduce the complexity of IPPS to be usable by less expensive LLMs.
 

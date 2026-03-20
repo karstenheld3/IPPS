@@ -27,7 +27,7 @@ auto_execution_mode: 1
 
 ## SOLVE-Specific Rules
 
-- **Problem types**: RESEARCH, ANALYSIS, EVALUATION, WRITING, DECISION
-- **Research**: Must cite sources, not training data
-- **Primary output**: INFO document with findings/recommendations
-- **HOTFIX/BUGFIX**: Start as SOLVE (root cause), switch to BUILD for fix
+- Problem types: RESEARCH, ANALYSIS, EVALUATION, WRITING, DECISION
+- Research: Must cite sources, not training data
+- Primary output: INFO document with findings/recommendations
+- HOTFIX/BUGFIX: Start as SOLVE (root cause), switch to BUILD for fix

@@ -2,7 +2,7 @@
 
 # Pricing Changes: 2026-02-07 to 2026-03-10
 
-**OpenAI**: ~50% price reduction across all models. **Anthropic**: No changes.
+OpenAI: ~50% price reduction across all models. Anthropic: No changes.
 
 ## OpenAI Price Changes (per 1M tokens)
 
@@ -60,12 +60,12 @@
 
 ## New Models Added
 
-**OpenAI**: gpt-5.4 (flagship), gpt-5.4-pro, o3, o3-pro, o4-mini-deep-research
-**Anthropic**: Claude Sonnet 4.6 (at $3/$15 tier)
+OpenAI: gpt-5.4 (flagship), gpt-5.4-pro, o3, o3-pro, o4-mini-deep-research
+Anthropic: Claude Sonnet 4.6 (at $3/$15 tier)
 
 ## Key Takeaways
 
-1. **OpenAI halved all prices** - 50% reduction on all existing models
-2. **GPT-5.4 launched** - New flagship at $1.25/$7.50 (cheaper than old GPT-5.2)
-3. **Anthropic prices stable** - No changes
-4. **New Sonnet 4.6** - Same $3/$15 tier
+1. OpenAI halved all prices - 50% reduction on all existing models
+2. GPT-5.4 launched - New flagship at $1.25/$7.50 (cheaper than old GPT-5.2)
+3. Anthropic prices stable - No changes
+4. New Sonnet 4.6 - Same $3/$15 tier

@@ -41,7 +41,7 @@ Description Types (DT)
 
 Actor before action. Passive voice hides responsibility.
 
-**GOOD:**
+GOOD:
 ```
 The administrator updated the configuration.
 We will withhold your bond.
@@ -49,7 +49,7 @@ We will withhold your bond.
 
 ### MW-VO-02: Address Reader as "You"
 
-**GOOD:**
+GOOD:
 ```
 You must provide your address.
 Ensure your configuration is correct.
@@ -63,28 +63,28 @@ Replace verbose verb phrases: "carry out a review" → "review", "make a determi
 
 Never use "shall" - ambiguous between obligation and future tense.
 
-- **must** - obligation (no choice)
-- **must not** - prohibition
-- **should** - recommendation (choice exists)
-- **may** - permission/discretion
-- **can** - capability/ability
+- must - obligation (no choice)
+- must not - prohibition
+- should - recommendation (choice exists)
+- may - permission/discretion
+- can - capability/ability
 
 ## Word Choice Rules (WC)
 
 ### MW-WC-01: Word-Level Precision
 
-**Commonly confused pairs:**
-- **Accuracy** (closeness to true value) != **Precision** (consistency of repeated measurements)
-- **Simple** (uncomplicated) != **Simplistic** (oversimplified)
-- **Affect** (verb: influence) != **Effect** (noun: result)
+Commonly confused pairs:
+- Accuracy (closeness to true value) != Precision (consistency of repeated measurements)
+- Simple (uncomplicated) != Simplistic (oversimplified)
+- Affect (verb: influence) != Effect (noun: result)
 
-**Word order creates opposite meanings:** "Travel Time" != "Time Travel", "Account Issue" != "Issue Account"
+Word order creates opposite meanings: "Travel Time" != "Time Travel", "Account Issue" != "Issue Account"
 
 When two terms seem interchangeable, look up the distinction. If it matters, use the precise term. If not, pick one consistently (AP-NM-01).
 
 ### MW-WC-02: Plain Language Over Academic
 
-**Test:** "Would my reader use this word in conversation?" If not, replace it.
+Test: "Would my reader use this word in conversation?" If not, replace it.
 
 - BAD: "The determinants of the infant mortality rate"
 - GOOD: "How many babies died and what were the main causes?"
@@ -106,7 +106,7 @@ Avoid naming concepts with words common in their domain.
 - BAD: "The 'Service' component manages all services."
 - GOOD: "The 'ServiceHub' component manages all services."
 
-**Test:** Can you write a sentence using the name AND the domain term without confusion?
+Test: Can you write a sentence using the name AND the domain term without confusion?
 
 ## Terminology Design Rules (TD)
 
@@ -137,7 +137,7 @@ State what the section contains, not the generic topic.
 - BAD: "Background", "Results"
 - GOOD: "Why We Changed the Authentication Flow", "3 Libraries Failed Due to Permission Errors"
 
-**Test:** Can a reader decide whether to read the section from the heading alone?
+Test: Can a reader decide whether to read the section from the heading alone?
 
 ### MW-HS-02: Limit Heading Depth to Three Levels
 
@@ -157,8 +157,8 @@ State who reads the document. Don't mix audiences in one section.
 Every item needs position index (ordering) AND semantic key (referencing).
 
 ```
-1. **EU-WEST** - eu-west-1 (Frankfurt)
-2. **US-EAST** - us-east-1 (Virginia)
+1. EU-WEST - eu-west-1 (Frankfurt)
+2. US-EAST - us-east-1 (Virginia)
 ```
 
 Index enables "the third region." Key enables "the EU-WEST region."
@@ -169,12 +169,12 @@ Group reflects real relationships, not alphabetical order.
 
 ```
 Europe:
-1. **EU-WEST** - eu-west-1 (Frankfurt)
-2. **EU-CENTRAL** - eu-central-1 (Ireland)
+1. EU-WEST - eu-west-1 (Frankfurt)
+2. EU-CENTRAL - eu-central-1 (Ireland)
 
 Americas:
-3. **US-EAST** - us-east-1 (Virginia)
-4. **US-WEST** - us-west-2 (Oregon)
+3. US-EAST - us-east-1 (Virginia)
+4. US-WEST - us-west-2 (Oregon)
 ```
 
 ### MW-LT-03: Index Groups as They Gain Importance
@@ -182,9 +182,9 @@ Americas:
 When groups grow beyond simple clusters, give them IDs too.
 
 ```
-**RG-EU** Europe
-1. **EU-WEST** - eu-west-1 (Frankfurt)
-2. **EU-CENTRAL** - eu-central-1 (Ireland)
+RG-EU Europe
+1. EU-WEST - eu-west-1 (Frankfurt)
+2. EU-CENTRAL - eu-central-1 (Ireland)
 ```
 
 Now "region group RG-EU" is a valid reference target.
@@ -193,12 +193,12 @@ Now "region group RG-EU" is a valid reference target.
 
 ### MW-DT-01: Four Description Lenses
 
-- **Intentional** - WHY (the problem it solves)
-- **Functional** - WHAT (black-box: inputs/outputs)
-- **Technical** - HOW (implementation details)
-- **Contextual** - WHERE (dependencies, relationships, constraints)
+- Intentional - WHY (the problem it solves)
+- Functional - WHAT (black-box: inputs/outputs)
+- Technical - HOW (implementation details)
+- Contextual - WHERE (dependencies, relationships, constraints)
 
-**Example - rate limiter:**
+Example - rate limiter:
 - Intentional: "Prevents API abuse by limiting request frequency per client."
 - Functional: "Counts per client IP in sliding window, returns 429 when exceeded."
 - Technical: "Redis sorted set per IP. ZRANGEBYSCORE to count. 100 req/min default."
@@ -206,10 +206,10 @@ Now "region group RG-EU" is a valid reference target.
 
 ### MW-DT-02: Match Description Type to Audience
 
-- **Stakeholders**: intentional + functional
-- **Developers**: functional + technical
-- **Operations**: technical + contextual
-- **New team members**: all four, in order: intentional → functional → technical → contextual
+- Stakeholders: intentional + functional
+- Developers: functional + technical
+- Operations: technical + contextual
+- New team members: all four, in order: intentional → functional → technical → contextual
 
 ### MW-DT-03: Canonical Form for Matchable/Sortable Data
 
@@ -222,7 +222,7 @@ All variants convertible:
 - "Call on Dow Jones EStoxx 50, strike 4400, expires Feb 2008" -> CALL-DJESTOXX50@4400EX2008-02
 ```
 
-**When to apply:**
+When to apply:
 - IDs across documents (Doc ID system: `CRWL-SP01`)
 - Dates (use `YYYY-MM-DD` per AP-PR-01)
 - Status values (define enum: `TODO`, `IN_PROGRESS`, `DONE` - not free text)

@@ -5,7 +5,7 @@ description: Provides coding style rules for Python and PowerShell. Apply when w
 
 # Coding Conventions
 
-**Code quality standard:** All code MUST follow:
+Code quality standard: All code MUST follow:
 - `MECT_CODING_RULES.md` - Precision, brevity, consistency, naming design, documentation (MECT + APAPALAN for code)
 
 Read before writing or reviewing any code.

@@ -28,10 +28,10 @@ Doc ID: `[SUBJECT]-TOC` (not numbered)
 
 ## Structure Rules
 
-- **Topic Files section**: Links only, no checkboxes
-- **Topic Details section**: Scope + Contents + Sources for each topic
-- **NO Progress Tracking**: Progress goes in STRUT or TASKS, not TOC
-- **Research stats**: Added in final phase, not during TOC creation
+- Topic Files section: Links only, no checkboxes
+- Topic Details section: Scope + Contents + Sources for each topic
+- NO Progress Tracking: Progress goes in STRUT or TASKS, not TOC
+- Research stats: Added in final phase, not during TOC creation
 
 ## Quality Gates
 

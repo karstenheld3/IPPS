@@ -7,9 +7,9 @@ description: Universal transcription tools using LLMs with optimized prompts for
 
 ## When to Use
 
-**Apply when:** Converting images/audio to structured markdown, batch transcription, preserving document structure.
+Apply when: Converting images/audio to structured markdown, batch transcription, preserving document structure.
 
-**Do NOT apply when:** Evaluating LLM performance (use @llm-evaluation), simple text extraction, real-time transcription.
+Do NOT apply when: Evaluating LLM performance (use @llm-evaluation), simple text extraction, real-time transcription.
 
 ## Scripts
 
@@ -24,8 +24,8 @@ python transcribe-audio-to-markdown.py --input recording.mp3 --output transcript
 
 ## Supported Formats
 
-**Images:** `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`
-**Audio:** `.mp3`, `.wav`, `.m4a`, `.ogg`, `.flac`
+Images: `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`
+Audio: `.mp3`, `.wav`, `.m4a`, `.ogg`, `.flac`
 
 ## Key Features
 
@@ -39,11 +39,11 @@ python transcribe-audio-to-markdown.py --input recording.mp3 --output transcript
 
 Tested on EU AI Act (144 pages, German legal text):
 
-**gpt-5-mini** (recommended for legal/regulatory): 4.87 avg score, ~99.5% accuracy, $3.89. Verbatim transcription, correct regulation numbers, 0 critical errors in 144 pages.
+gpt-5-mini (recommended for legal/regulatory): 4.87 avg score, ~99.5% accuracy, $3.89. Verbatim transcription, correct regulation numbers, 0 critical errors in 144 pages.
 
-**gpt-5-nano** (informal notes only): 4.17 avg score, ~92% accuracy, $1.23. Rewrites instead of transcribing, wrong regulation numbers, wrong terminology with legal implications, 50+ [unclear] markers.
+gpt-5-nano (informal notes only): 4.17 avg score, ~92% accuracy, $1.23. Rewrites instead of transcribing, wrong regulation numbers, wrong terminology with legal implications, 50+ [unclear] markers.
 
-**For legal documents**: Use `--model gpt-5-mini --dpi 120` to avoid factual errors with regulatory consequences.
+For legal documents: Use `--model gpt-5-mini --dpi 120` to avoid factual errors with regulatory consequences.
 
 ## Configuration
 

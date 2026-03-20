@@ -2,7 +2,7 @@
 
 ## 1. Close Cookie Popups
 
-**Strategy A: Click accept button (preferred)**
+Strategy A: Click accept button (preferred)
 ```
 1. browser_snapshot()
 2. // Look for: "Accept", "OK", "I agree", "Accept all"
@@ -10,7 +10,7 @@
 4. browser_snapshot()  // Verify dismissed
 ```
 
-**Strategy B: Remove via JavaScript**
+Strategy B: Remove via JavaScript
 ```
 1. browser_evaluate(expression: "(() => {
      const selectors = [
@@ -31,14 +31,14 @@ Try clicking first (sets cookie to prevent reappearance), fall back to JS remova
 
 ## 2. Scroll Page for Lazy-Loaded Content
 
-**Scroll to bottom (simple):**
+Scroll to bottom (simple):
 ```
 1. browser_evaluate(expression: "window.scrollTo(0, document.body.scrollHeight)")
 2. browser_wait_for(time: 1)
 3. browser_snapshot()
 ```
 
-**Scroll incrementally (for lazy-load images):**
+Scroll incrementally (for lazy-load images):
 ```
 1. browser_evaluate(expression: "(async () => {
      const delay = ms => new Promise(r => setTimeout(r, ms));
@@ -53,18 +53,18 @@ Try clicking first (sets cookie to prevent reappearance), fall back to JS remova
    })()")
 ```
 
-**Using keyboard:**
+Using keyboard:
 ```
 1. browser_press_key(key: "End")
 2. browser_wait_for(time: 1)
 3. browser_press_key(key: "Home")
 ```
 
-**Using mouse wheel:** `browser_evaluate(expression: "window.scrollBy(0, 400)")` + `browser_wait_for(time: 0.3)`, repeat until bottom.
+Using mouse wheel: `browser_evaluate(expression: "window.scrollBy(0, 400)")` + `browser_wait_for(time: 0.3)`, repeat until bottom.
 
 ## 3. Expand Collapsed Items
 
-**Find and click expand buttons:**
+Find and click expand buttons:
 ```
 1. browser_snapshot()
 2. // Look for: "+", "Show more", "Expand", chevron icons
@@ -72,7 +72,7 @@ Try clicking first (sets cookie to prevent reappearance), fall back to JS remova
 4. browser_snapshot()  // Repeat for remaining collapsed items
 ```
 
-**Expand all via JavaScript:**
+Expand all via JavaScript:
 ```
 1. browser_evaluate(expression: "(() => {
      document.querySelectorAll('[aria-expanded=\"false\"]')
@@ -86,7 +86,7 @@ Try clicking first (sets cookie to prevent reappearance), fall back to JS remova
 3. browser_snapshot()
 ```
 
-**Patterns to look for:** `[aria-expanded="false"]`, `details` without `[open]`, buttons with "+"/"Show"/"Expand" text, elements with `collapsed` or `accordion` classes.
+Patterns to look for: `[aria-expanded="false"]`, `details` without `[open]`, buttons with "+"/"Show"/"Expand" text, elements with `collapsed` or `accordion` classes.
 
 ## 4. Full Page Screenshot (Complete Workflow)
 
@@ -111,7 +111,7 @@ Try clicking first (sets cookie to prevent reappearance), fall back to JS remova
 7. browser_screenshot(fullPage: true, type: "jpeg")
 ```
 
-**Remove fixed/sticky headers** (prevents repeating in screenshot):
+Remove fixed/sticky headers (prevents repeating in screenshot):
 ```
 1. browser_evaluate(expression: "document.querySelectorAll('header, nav, [class*=\"sticky\"], [class*=\"fixed\"]').forEach(el => el.style.position = 'relative')")
 2. browser_screenshot(fullPage: true, type: "jpeg")
@@ -119,27 +119,27 @@ Try clicking first (sets cookie to prevent reappearance), fall back to JS remova
 
 ## 5. Find and Extract Links
 
-**Find all PDFs:**
+Find all PDFs:
 ```
 browser_evaluate(expression: "Array.from(document.querySelectorAll('a[href$=\".pdf\"], a[href*=\".pdf?\"]')).map(a => ({text: a.textContent.trim(), url: a.href}))")
 ```
 
-**Find all videos:**
+Find all videos:
 ```
 browser_evaluate(expression: "Array.from(document.querySelectorAll('a[href$=\".mp4\"], a[href$=\".webm\"], a[href$=\".mov\"], video source, iframe[src*=\"youtube\"], iframe[src*=\"vimeo\"]')).map(el => ({type: el.tagName, url: el.href || el.src}))")
 ```
 
-**Find all downloadable files:**
+Find all downloadable files:
 ```
 browser_evaluate(expression: "Array.from(document.querySelectorAll('a[download], a[href$=\".pdf\"], a[href$=\".zip\"], a[href$=\".doc\"], a[href$=\".docx\"], a[href$=\".xls\"], a[href$=\".xlsx\"]')).map(a => ({text: a.textContent.trim(), url: a.href, filename: a.download || a.href.split('/').pop()}))")
 ```
 
-**Find links by text pattern:**
+Find links by text pattern:
 ```
 browser_evaluate(expression: "Array.from(document.querySelectorAll('a')).filter(a => /download|attachment|pdf|document/i.test(a.textContent)).map(a => ({text: a.textContent.trim(), url: a.href}))")
 ```
 
-**Complete download workflow:**
+Complete download workflow:
 ```
 1. browser_navigate(url: "https://example.com/resources")
 2. browser_wait_for(time: 2)
@@ -150,7 +150,7 @@ browser_evaluate(expression: "Array.from(document.querySelectorAll('a')).filter(
 7. // Returns JSON array of {text, url} objects
 ```
 
-**Download a specific file:**
+Download a specific file:
 ```
 1. browser_snapshot()
 2. // Find download link by text or ref

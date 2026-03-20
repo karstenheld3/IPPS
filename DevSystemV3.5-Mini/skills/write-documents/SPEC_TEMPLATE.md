@@ -1,15 +1,15 @@
 # SPEC: [Component Name]
 
-**Doc ID (TDID)**: [TOPIC]-SP[NN]
-**Feature**: [FEATURE_SLUG]
-**Goal**: [Single sentence]
-**Timeline**: Created YYYY-MM-DD, Updated N times (YYYY-MM-DD - YYYY-MM-DD)
-**Target file**: `[path/to/file.py]`
+Doc ID (TDID): [TOPIC]-SP[NN]
+Feature: [FEATURE_SLUG]
+Goal: [Single sentence]
+Timeline: Created YYYY-MM-DD, Updated N times (YYYY-MM-DD - YYYY-MM-DD)
+Target file: `[path/to/file.py]`
 
-**Depends on:**
+Depends on:
 - `_SPEC_[X].md [TOPIC-SP01]` for [what it provides]
 
-**Does not depend on:**
+Does not depend on:
 - `_SPEC_[Y].md [TOPIC-SP02]` (explicitly exclude if might seem related)
 
 ## MUST-NOT-FORGET
@@ -19,12 +19,12 @@
 
 ## 1. Scenario
 
-**Problem:** [Real-world problem description]
+Problem: [Real-world problem description]
 
-**Solution:**
+Solution:
 - [Approach point 1]
 
-**What we don't want:**
+What we don't want:
 - [Anti-pattern 1]
 
 ## 2. Context
@@ -35,32 +35,32 @@
 
 ### [ObjectName]
 
-A **[ObjectName]** represents [description].
+A [ObjectName] represents [description].
 
-**Storage:** `path/to/storage/`
-**Definition:** `config.json`
+Storage: `path/to/storage/`
+Definition: `config.json`
 
-**Key properties:**
+Key properties:
 - `property_1` - [description]
 
-**Schema:**
+Schema:
 ```json
 {"field1": "value", "field2": 123}
 ```
 
 ## 4. Functional Requirements
 
-**[PREFIX]-FR-01: [Requirement Title]**
+[PREFIX]-FR-01: [Requirement Title]
 - [Requirement detail 1]
 - [Requirement detail 2]
 
 ## 5. Design Decisions
 
-**[PREFIX]-DD-01:** [Decision description]. Rationale: [Why].
+[PREFIX]-DD-01: [Decision description]. Rationale: [Why].
 
 ## 6. Implementation Guarantees
 
-**[PREFIX]-IG-01:** [What the implementation must guarantee]
+[PREFIX]-IG-01: [What the implementation must guarantee]
 
 ## 7. Key Mechanisms
 
@@ -92,7 +92,7 @@ User clicks [Button]
 
 *(UI specs only)*
 
-- **[Action Name]**: [Description of user interaction and expected result]
+- [Action Name]: [Description of user interaction and expected result]
 
 ## 11. UX Design
 
@@ -116,5 +116,5 @@ User clicks [Button]
 
 ## 13. Document History
 
-**[YYYY-MM-DD HH:MM]**
+[YYYY-MM-DD HH:MM]
 - Initial specification created

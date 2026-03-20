@@ -1,8 +1,8 @@
-# SPEC: MinimalIPPS V2 Compression Pipeline
+# SPEC: MinifyIPPS V2 Compression Pipeline
 
 **Doc ID**: MIPPS-SP03
 **Feature**: MIPPS-V2-PIPELINE
-**Goal**: Consolidated specification for MinimalIPPS (Intelligent Prompt and Pipeline System) V2 compression pipeline with run isolation, unified Large Language Model (LLM) client, and config-based model settings
+**Goal**: Consolidated specification for MinifyIPPS (Intelligent Prompt and Pipeline System) V2 compression pipeline with run isolation, unified Large Language Model (LLM) client, and config-based model settings
 **Timeline**: Created 2026-03-20
 **Target file**: `_run_templateV2/mipps_pipeline.py` (orchestrator script)
 
@@ -47,7 +47,7 @@
 
 ## 1. Scenario
 
-**Problem:** The IPPS DevSystem (~1MB, ~104 files) exceeds what cheaper LLMs can process effectively. Rules, workflows, and skills loaded into context consume ~300K tokens. Cheaper models (GPT-5-mini, Claude Haiku 4.5) cannot follow the full instruction set reliably. V1 MinimalIPPS had additional architectural limitations:
+**Problem:** The IPPS DevSystem (~1MB, ~104 files) exceeds what cheaper LLMs can process effectively. Rules, workflows, and skills loaded into context consume ~300K tokens. Cheaper models (GPT-5-mini, Claude Haiku 4.5) cannot follow the full instruction set reliably. V1 MinifyIPPS had additional architectural limitations:
 - Run artifacts overwrite each other (no history, no comparison)
 - Cost data lost on state reset
 - Hardcoded model configs scattered across code
@@ -215,7 +215,7 @@ A **RunCosts** tracks detailed cost breakdown per file and step.
 
 ### LLMClient
 
-The **LLMClient** class provides unified LLM access for MinimalIPPS.
+The **LLMClient** class provides unified LLM access for MinifyIPPS.
 
 - **Source**: `lib/llm_client.py` (adapted from LLM-Research, extended with cache support)
 - **Config loading**: `lib/model-registry.json`, `lib/model-pricing.json`, `lib/model-parameter-mapping.json` (co-located with Python modules)
@@ -382,7 +382,7 @@ The **LLMClient** class provides unified LLM access for MinimalIPPS.
 
 **MIPPS-DD-13:** Run ID uses timestamp, not UUID. Rationale: human-readable, sortable, identifies when run occurred.
 
-**MIPPS-DD-14:** `llm_client.py` adapted (vendored), not imported from LLM-Research. Rationale: MinimalIPPS needs `call_with_cache(bundle, prompt)` method for Anthropic prompt caching not present in source.
+**MIPPS-DD-14:** `llm_client.py` adapted (vendored), not imported from LLM-Research. Rationale: MinifyIPPS needs `call_with_cache(bundle, prompt)` method for Anthropic prompt caching not present in source.
 
 **MIPPS-DD-15:** Per-file cost tracking stored in `run_costs.json`, not `pipeline_state.json`. Rationale: separate concerns; state tracks progress, costs track spending.
 
@@ -629,7 +629,7 @@ User runs: mipps_pipeline.py iterate
 ```json
 {
   "run_id": "20260320-1430-compress",
-  "run_dir": "E:/Dev/IPPS/_Sessions/_2026-03-19_MinimalIPPS/_run_templateV2/runs/20260320-1430-compress",
+  "run_dir": "E:/Dev/IPPS/_Sessions/_2026-03-19_MinifyIPPS/_run_templateV2/runs/20260320-1430-compress",
   "current_step": 7,
   "iteration": 1,
   "files_total": 104,
@@ -748,7 +748,7 @@ _run_templateV2/
 
 ```python
 def main():
-    parser = argparse.ArgumentParser(description="MinimalIPPS Compression Pipeline")
+    parser = argparse.ArgumentParser(description="MinifyIPPS Compression Pipeline")
     subparsers = parser.add_subparsers(dest="command")
 
     sub_bundle = subparsers.add_parser("bundle")     # Step 1 (--source-dir override)

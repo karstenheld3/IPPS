@@ -37,7 +37,7 @@ git diff <commit1> <commit2> --name-status         # Compare two commits
 
 ```powershell
 git log --diff-filter=D --summary                          # All deleted files
-git log --diff-filter=D --summary -- "**/filename.ext"     # Specific file
+git log --diff-filter=D --summary -- "/filename.ext"     # Specific file
 git log --diff-filter=D -1 -- path/to/file.ext             # Exact commit
 git log --all -- path/to/deleted/file.ext                  # Last commit file existed
 ```
@@ -51,7 +51,7 @@ git show <commit>:path/to/file.ext > recovered_file.ext     # Via show + redirec
 git checkout HEAD@{n} -- path/to/file.ext                   # From reflog
 ```
 
-**Note:** If file was renamed (not deleted), use `git log --follow -- oldname` to track renames.
+Note:** If file was renamed (not deleted), use `git log --follow -- oldname` to track renames.
 
 ### Batch Recovery
 

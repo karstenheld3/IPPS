@@ -1,6 +1,6 @@
 # OpenAI Platform Pricing - Standard Tier
 
-Source: OpenAI Platform Pricing page. Tab: **Standard** selected. All prices USD per 1M tokens unless noted.
+Source: OpenAI Platform Pricing page. Tab: Standard selected. All prices USD per 1M tokens unless noted.
 
 ## Text Tokens
 

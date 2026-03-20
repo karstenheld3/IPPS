@@ -1,8 +1,8 @@
-# SPEC: MinimalIPPS V2 Architecture Changes
+# SPEC: MinifyIPPS V2 Architecture Changes
 
 **Doc ID**: MIPPS-SP02
 **Feature**: MIPPS-V2-ARCHITECTURE
-**Goal**: Specify run-based isolation, unified Large Language Model (LLM) client, and standardized model configs for MinimalIPPS V2
+**Goal**: Specify run-based isolation, unified Large Language Model (LLM) client, and standardized model configs for MinifyIPPS V2
 **Timeline**: Created 2026-03-20
 
 **Depends on:**
@@ -37,7 +37,7 @@
 
 ## 1. Scenario
 
-**Problem:** V1 MinimalIPPS has architectural limitations:
+**Problem:** V1 MinifyIPPS has architectural limitations:
 - Run artifacts overwrite each other (no history, no comparison)
 - Cost data lost on state reset (manually rebuilt `pipeline_state.json` shows $0.00)
 - Hardcoded model configs scattered across code
@@ -163,7 +163,7 @@ A **RunCosts** tracks detailed cost breakdown per file and step.
 
 ### LLMClient
 
-The **LLMClient** class provides unified LLM access for MinimalIPPS.
+The **LLMClient** class provides unified LLM access for MinifyIPPS.
 
 - **Source**: `lib/llm_client.py` (adapted from LLM-Research, extended with cache support)
 - **Config loading**: `configs/model-registry.json`, `configs/model-pricing.json`, `configs/model-parameter-mapping.json`
@@ -227,7 +227,7 @@ The **LLMClient** class provides unified LLM access for MinimalIPPS.
 
 **MIPPS-DD-13:** Run ID uses timestamp, not UUID. Rationale: human-readable, sortable, identifies when run occurred.
 
-**MIPPS-DD-14:** `llm_client.py` adapted, not imported. Rationale: MinimalIPPS needs `call_with_cache(bundle, prompt)` method for Anthropic prompt caching; vendored copy allows adding this method.
+**MIPPS-DD-14:** `llm_client.py` adapted, not imported. Rationale: MinifyIPPS needs `call_with_cache(bundle, prompt)` method for Anthropic prompt caching; vendored copy allows adding this method.
 
 **MIPPS-DD-15:** Per-file cost tracking stored in `run_costs.json`, not `pipeline_state.json`. Rationale: separate concerns; state tracks progress, costs track spending.
 
@@ -432,6 +432,6 @@ _run_templateV2/
 - Added: `call_with_cache` noted as NEW method in LLMClient
 
 **[2026-03-20 14:34]**
-- Initial CHANGES specification for MinimalIPPS V2 (Option C)
+- Initial CHANGES specification for MinifyIPPS V2 (Option C)
 - Defines run isolation, unified LLM client, config-based model settings
 - Added FR-12 through FR-18, DD-12 through DD-16, IG-06 through IG-09

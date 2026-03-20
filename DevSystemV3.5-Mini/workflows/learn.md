@@ -33,9 +33,9 @@ Read resolved problem entry: ID, description, solution, linked FAILS.md entries.
 
 ## Step 2: Classify Problem Type
 
-**BUILD:** COMPLEXITY-LOW / COMPLEXITY-MEDIUM / COMPLEXITY-HIGH
+BUILD: COMPLEXITY-LOW / COMPLEXITY-MEDIUM / COMPLEXITY-HIGH
 
-**SOLVE:** RESEARCH / ANALYSIS / EVALUATION / WRITING / DECISION / HOTFIX / BUGFIX / CHORE / MIGRATION
+SOLVE: RESEARCH / ANALYSIS / EVALUATION / WRITING / DECISION / HOTFIX / BUGFIX / CHORE / MIGRATION
 
 ## Step 3: Reconstruct Context
 
@@ -79,13 +79,13 @@ Work backwards from symptoms to root cause.
 
 ## Step 9: Identify Root Cause and Prevention
 
-1. **Root cause**: Single sentence identifying fundamental issue
-2. **Counterfactual**: "If we had [X], then [Y]"
-3. **Prevention**: "Next time, we should [actionable guidance]"
+1. Root cause: Single sentence identifying fundamental issue
+2. Counterfactual: "If we had [X], then [Y]"
+3. Prevention: "Next time, we should [actionable guidance]"
 
 ## Step 10: Create Learning Entry
 
-1. **Location (SESSION-FIRST rule)**:
+1. Location (SESSION-FIRST rule):
    - SESSION-MODE → `[SESSION_FOLDER]/LEARNINGS.md` (create if needed, syncs on `/session-finalize`)
    - PROJECT-MODE → `[WORKSPACE_FOLDER]/LEARNINGS.md`
 2. Assign ID: `[TOPIC]-LN-[NNN]`

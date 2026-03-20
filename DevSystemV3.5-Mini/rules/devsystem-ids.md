@@ -8,14 +8,14 @@ All documents and items must have unique IDs for traceability.
 
 ## Number Formats (2-digit vs 4-digit)
 
-**2-digit `[NN]`** - Document-scoped items (bounded):
+2-digit `[NN]` - Document-scoped items (bounded):
 - Document IDs: `AUTH-SP01`, `CRWL-IP01`
 - Review IDs: `AUTH-SP01-RV01`
 - Spec items (FR, DD, IG, AC): `CRWL-FR-01`
 - Plan items (EC, IS, VC, TC, TK): `CRWL-IP01-EC-01`, `AUTH-TK01-TK-05`
 - Review findings (RF): `AUTH-SP01-RV01-RF-01`
 
-**4-digit `[NNNN]`** - Tracking IDs (unbounded, accumulate over time):
+4-digit `[NNNN]` - Tracking IDs (unbounded, accumulate over time):
 - Bugs: `SAP-BG-0001`, `GLOB-BG-0001`
 - Problems: `AUTH-PR-0001`
 - Features: `UI-FT-0001`
@@ -24,32 +24,32 @@ All documents and items must have unique IDs for traceability.
 
 ## Topic Registry
 
-**Topic:** 2-6 uppercase letters describing component (e.g., `CRWL` for Crawler, `AUTH` for Authentication, `EDIRD` for EDIRD Phase Model)
+Topic: 2-6 uppercase letters describing component (e.g., `CRWL` for Crawler, `AUTH` for Authentication, `EDIRD` for EDIRD Phase Model)
 
-**REQUIREMENT:** Workspace must have an `ID-REGISTRY.md` file as the authoritative source for all TOPICs, acronyms, and states to avoid conflicting topic ids. Topic ids must be unique.
+REQUIREMENT: Workspace must have an `ID-REGISTRY.md` file as the authoritative source for all TOPICs, acronyms, and states to avoid conflicting topic ids. Topic ids must be unique.
 
-**Before creating a new TOPIC or acronym:**
+Before creating a new TOPIC or acronym:
 1. Read `ID-REGISTRY.md` to check for existing TOPICs
 2. If new, add to `ID-REGISTRY.md` with description
 3. Use consistent TOPIC across all related documents
 4. Never create duplicate or conflicting TOPICs
 
-**GLOB Usage:**
+GLOB Usage:
 
-Use `GLOB` for **tracking IDs only** (workspace-level failures, problems, tasks, bugs):
+Use `GLOB` for tracking IDs only (workspace-level failures, problems, tasks, bugs):
 - `GLOB-BG-*` - Bugs in `_BugFixes` session (PROJECT-MODE, cross-cutting)
 - `GLOB-FL-*` - DevSystem failures (sync errors, gate bypasses, tool issues)
 - `GLOB-PR-*` - Cross-cutting problems affecting multiple components
 - `GLOB-TK-*` - Workspace-wide tasks (deployments, refactoring)
 
-**_BugFixes Session:** Uses `GLOB` prefix for all tracking IDs because bugs there span multiple components. See `/bugfix` workflow for details.
+_BugFixes Session: Uses `GLOB` prefix for all tracking IDs because bugs there span multiple components. See `/bugfix` workflow for details.
 
-Do NOT use `GLOB` for **document IDs** (IN, SP, IP, TP, TK):
+Do NOT use `GLOB` for document IDs (IN, SP, IP, TP, TK):
 - Named concepts get their own TOPIC: `MEPI-IN01`, `EDIRD-SP01`, `STRUT-SP01`
 - Features get their own TOPIC: `AUTH-SP01`, `CRWL-IP01`
 - If a document has a name, it has a TOPIC
 
-**Example: SINGLE-PROJECT-MODE**
+Example: SINGLE-PROJECT-MODE
 ```
 ## Topic Registry
 - `GLOB` - Project-mode (main spec, architecture)
@@ -59,7 +59,7 @@ Do NOT use `GLOB` for **document IDs** (IN, SP, IP, TP, TK):
 - `CSPF` - Common SharePoint Functions
 ```
 
-**Example: MONOREPO** (first 2 letters = repo prefix)
+Example: MONOREPO (first 2 letters = repo prefix)
 ```
 ## Topic Registry
 - `CRCORE` - CR: Crawler Core (shared libraries)
@@ -73,11 +73,11 @@ Do NOT use `GLOB` for **document IDs** (IN, SP, IP, TP, TK):
 
 Every document MUST have an ID in its header block.
 
-**Format:** `[TOPIC]-[DOC][NN]`
+Format: `[TOPIC]-[DOC][NN]`
 
-**Document Types:** `IN` (INFO), `SP` (SPEC), `IP` (Implementation Plan), `TP` (Test Plan), `TK` (TASKS), `RV` (REVIEW), `LN` (LEARNINGS)
+Document Types: `IN` (INFO), `SP` (SPEC), `IP` (Implementation Plan), `TP` (Test Plan), `TK` (TASKS), `RV` (REVIEW), `LN` (LEARNINGS)
 
-**Examples:** `AUTH-IN01`, `CRWL-SP01`, `V2CR-IP01`, `V2CR-TP01`
+Examples: `AUTH-IN01`, `CRWL-SP01`, `V2CR-IP01`, `V2CR-TP01`
 
 We use IMPL/TEST instead of generic "PLAN" to avoid term collision with project plan, sprint plan, release plan, etc. IMPL = "how to build it", TEST = "how to verify it".
 
@@ -129,11 +129,11 @@ Examples: `2026-01-15_FixAuthenticationBug-NOTES`, `2026-01-15_FixAuthentication
 
 For session and project tracking in PROBLEMS.md, FAILS.md, _REVIEW.md, and backlog documents.
 
-**Format:** `[TOPIC]-[TYPE]-[NNNN]` (4-digit number)
+Format: `[TOPIC]-[TYPE]-[NNNN]` (4-digit number)
 
 Types: `BG` (Bug), `FT` (Feature), `PR` (Problem), `FX` (Fix), `FL` (Failure log entry)
 
-**Examples:**
+Examples:
 - `SAP-BG-0001` - SAP-related bug 1 (SESSION-MODE)
 - `AUTH-FT-0001` - Authentication feature request 1
 - `GLOB-PR-0003` - Project-wide problem 3 (PROJECT-MODE)

@@ -9,9 +9,9 @@ Backward-looking assessment of current state.
 
 ## Step 1: Read All Tracking Documents
 
-**SESSION-MODE** - Re-read: NOTES.md, PROBLEMS.md, PROGRESS.md, FAILS.md, LEARNINGS.md (if exists)
+SESSION-MODE - Re-read: NOTES.md, PROBLEMS.md, PROGRESS.md, FAILS.md, LEARNINGS.md (if exists)
 
-**PROJECT-MODE** - Re-read: README.md, !NOTES.md or NOTES.md, !PROBLEMS.md or PROBLEMS.md (if exists), !PROGRESS.md or PROGRESS.md (if exists), FAILS.md, LEARNINGS.md (if exists)
+PROJECT-MODE - Re-read: README.md, !NOTES.md or NOTES.md, !PROBLEMS.md or PROBLEMS.md (if exists), !PROGRESS.md or PROGRESS.md (if exists), FAILS.md, LEARNINGS.md (if exists)
 
 Then read plan documents (improvise if missing):
 1. NOTES.md - Current phase, constraints, decisions
@@ -25,19 +25,19 @@ Then read plan documents (improvise if missing):
 
 ## Step 2: Determine Exact Position
 
-1. **Current phase** - Which of the 5 phases?
-2. **Current document** - Which plan are we executing?
-3. **Current task** - Which item in TASKS (or IMPL step)?
-4. **Task status** - Checked or unchecked?
+1. Current phase - Which of the 5 phases?
+2. Current document - Which plan are we executing?
+3. Current task - Which item in TASKS (or IMPL step)?
+4. Task status - Checked or unchecked?
 
 ## Step 3: Output Status
 
 ```markdown
 ## Recap
 
-**Phase**: [EXPLORE/DESIGN/IMPLEMENT/REFINE/DELIVER]
-**Document**: [TASKS/IMPL filename]
-**Current task**: [task ID and description]
-**Status**: [done/in_progress/pending]
-**Next**: [next unchecked item]
+Phase: [EXPLORE/DESIGN/IMPLEMENT/REFINE/DELIVER]
+Document: [TASKS/IMPL filename]
+Current task: [task ID and description]
+Status: [done/in_progress/pending]
+Next: [next unchecked item]
 ```

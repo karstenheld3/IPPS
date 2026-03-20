@@ -10,7 +10,7 @@ Design principles:
 1. Maximum clarity - one interpretation per instruction
 2. Numbered steps - LLMs follow sequences better than prose
 3. MUST-NOT-FORGET technique for complex skills with verification
-4. No `**bold**` in LLM-consumed files - adds tokens without improving comprehension
+4. No `bold` in LLM-consumed files - adds tokens without improving comprehension
 5. `#`/`##` headers as parsing boundaries
 6. Compact format for lookups - one line per resource
 7. Verbose only when justified - multi-step reasoning, troubleshooting, code with explanation
@@ -36,7 +36,7 @@ Complex workflows: separate GLOBAL-RULES and CONTEXT-SPECIFIC sections. See `/ve
 
 ## Token Optimization
 
-Remove: `**Bold**` markup, filler prose, prose restating headings, unnecessary blank lines between list items.
+Remove: `Bold` markup, filler prose, prose restating headings, unnecessary blank lines between list items.
 
 Keep: `#`/`##` headers, parenthetical notes with critical context, all technical detail/URLs/parameters, concrete BAD/GOOD examples.
 

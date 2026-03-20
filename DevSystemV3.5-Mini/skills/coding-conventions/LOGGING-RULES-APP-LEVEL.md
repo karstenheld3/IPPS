@@ -12,11 +12,11 @@ Rules for system/debug logging used by technical staff for debugging and auditin
 
 ## Philosophy
 
-**Goal: Logs must be human-readable AND machine-parseable.**
+Goal: Logs must be human-readable AND machine-parseable.
 
 A developer unfamiliar with the codebase should understand what happened by reading the logs. Scripts should be able to parse logs with reasonable effort.
 
-**This goal drives all rules in this document:**
+This goal drives all rules in this document:
 - Extended timestamps with process ID and request correlation ([LOG-AP-01](#log-ap-01-extended-timestamp-format))
 - Standard log levels ([LOG-AP-02](#log-ap-02-log-levels))
 - Consistent execution pattern ([LOG-AP-03](#log-ap-03-execution-pattern))
@@ -35,7 +35,7 @@ A developer unfamiliar with the codebase should understand what happened by read
 
 Include date, time with milliseconds, process ID, and request correlation.
 
-**Format:** `YYYY-MM-DD HH:MM:SS.mmm [PID:XXXX] [request N]`
+Format: `YYYY-MM-DD HH:MM:SS.mmm [PID:XXXX] [request N]`
 
 *BAD*:
 ```
@@ -51,7 +51,7 @@ INFO: Processing started
 2026-03-04 10:15:23.502 [PID:1234] [request 1] 3 items loaded.
 ```
 
-**Python server format:**
+Python server format:
 ```
 [2026-03-04 14:30:00,process 12345,request 1,crawl_site()] START: crawl_site()...
 [2026-03-04 14:30:04,process 12345,request 1,crawl_site()] END: crawl_site() (4.2 secs).
@@ -59,11 +59,11 @@ INFO: Processing started
 
 ### LOG-AP-02: Log Levels
 
-- **DEBUG** - Detailed technical information for debugging
-- **INFO** - Normal operational messages
-- **WARN** - Potential issues that don't stop execution
-- **ERROR** - Failures that affect functionality
-- **FATAL** - Critical failures requiring immediate attention
+- DEBUG - Detailed technical information for debugging
+- INFO - Normal operational messages
+- WARN - Potential issues that don't stop execution
+- ERROR - Failures that affect functionality
+- FATAL - Critical failures requiring immediate attention
 
 ```
 2026-03-04 10:15:23.456 [PID:1234] [DEBUG] Cache lookup for key='user_prefs'
@@ -77,7 +77,7 @@ INFO: Processing started
 
 Log the action BEFORE executing, then log the result on a 2-space indented line.
 
-**Keywords:**
+Keywords:
 - `OK.` - Succeeded (no details) | `OK:` - Succeeded with details
 - `ERROR:` - Item-level error | `WARNING:` - Non-fatal issue
 - `FAIL:` - Activity-level failure | `PARTIAL FAIL:` - Some succeeded, some failed
@@ -102,11 +102,11 @@ Processing batch...
 
 Mark function/script entry/exit with START/END markers.
 
-**Format:** `START: function()...` / `END: function() [duration]`
+Format: `START: function()...` / `END: function() [duration]`
 
-**Note:** App-Level uses simple `START:` / `END:` markers. For standalone scripts with user-facing output, use 100-char headers/footers per LOG-UF-06.
+Note: App-Level uses simple `START:` / `END:` markers. For standalone scripts with user-facing output, use 100-char headers/footers per LOG-UF-06.
 
-**Nesting:** +2 spaces per nesting level.
+Nesting: +2 spaces per nesting level.
 
 ```
 START: process_site()...
@@ -124,15 +124,15 @@ START: process_site()...
 END: process_site() (4.2 secs).
 ```
 
-**Duration formats:** `245 ms` | `1.5 secs` | `2 mins 30 secs` | `1 hour 15 mins`
+Duration formats: `245 ms` | `1.5 secs` | `2 mins 30 secs` | `1 hour 15 mins`
 
-**Requirement:** Measure and report duration for any process >30 seconds.
+Requirement: Measure and report duration for any process >30 seconds.
 
 ### LOG-AP-05: Error Context
 
 Include all identifiers in error messages to trace individual items. Use arrow chain format for nested errors.
 
-**Chain format:** `context -> nested error`
+Chain format: `context -> nested error`
 
 *BAD*:
 ```
@@ -147,12 +147,12 @@ ERROR: Upload failed for file 'report.pdf' (path='C:\exports\', size=2.4MB) -> C
 ERROR: Crawl failed for site 'ProjectA' -> HTTPError: 401 Unauthorized -> Token expired
 ```
 
-**Multi-level chain:**
+Multi-level chain:
 ```
 ERROR: Batch processing failed -> Item 'doc_123' failed -> File not found -> '/sites/docs/missing.pdf'
 ```
 
-**With recovery info:**
+With recovery info:
 ```
 Processing file 'report.pdf'...
   ERROR: Connection timeout -> Retrying in 5 seconds...

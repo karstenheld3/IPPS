@@ -11,20 +11,20 @@ Generic profile. Use when no specific domain profile matches (SOFTWARE, MARKET_I
 
 ## Source Tiers
 
-1. **Tier 1 - Official/Authoritative**: Government, legislation, official publications, academic papers
-2. **Tier 2 - Professional**: Industry reports, established news, professional associations
-3. **Tier 3 - Expert**: Technical blogs by recognized experts, conference talks
-4. **Tier 4 - Community Quality**: Stack Overflow (high votes), GitHub issues (many reactions), Reddit (top posts)
-5. **Tier 5 - Community General**: Forums, Discord, personal blogs, social media
+1. Tier 1 - Official/Authoritative: Government, legislation, official publications, academic papers
+2. Tier 2 - Professional: Industry reports, established news, professional associations
+3. Tier 3 - Expert: Technical blogs by recognized experts, conference talks
+4. Tier 4 - Community Quality: Stack Overflow (high votes), GitHub issues (many reactions), Reddit (top posts)
+5. Tier 5 - Community General: Forums, Discord, personal blogs, social media
 
 Verify Tier 4-5 claims against Tier 1-3 when possible. Label Tier 4-5 with `[COMMUNITY]`.
 
 ## Document Handling
 
-- **PDFs**: Full transcription via `@skills:pdf-tools` + `@skills:llm-transcription`
-- **Web pages**: `read_url_content` or Playwright MCP
-- **Media**: Podcast/video transcription when relevant
-- **Large documents**: Process completely (no agent-selected chunks)
+- PDFs: Full transcription via `@skills:pdf-tools` + `@skills:llm-transcription`
+- Web pages: `read_url_content` or Playwright MCP
+- Media: Podcast/video transcription when relevant
+- Large documents: Process completely (no agent-selected chunks)
 
 ## Available QA Tools
 
@@ -47,9 +47,9 @@ Verify Tier 4-5 claims against Tier 1-3 when possible. Label Tier 4-5 with `[COM
 
 ## Template Additions
 
-- **Limitations and Known Issues** - What we couldn't verify, caveats
-- **Recommendations** - Clear actionable guidance
-- **Source Access Dates** - When each source was accessed
+- Limitations and Known Issues - What we couldn't verify, caveats
+- Recommendations - Clear actionable guidance
+- Source Access Dates - When each source was accessed
 
 ## Quality Criteria
 

@@ -5,11 +5,11 @@ auto_execution_mode: 1
 
 # Devil's Advocate
 
-**Profile**: Senior engineer hunting flawed assumptions, design and logic errors. Not formatting or conventions.
+Profile: Senior engineer hunting flawed assumptions, design and logic errors. Not formatting or conventions.
 
-**Golden Rule**: NEVER touch originals. Create/update `_REVIEW` suffix files only.
+Golden Rule: NEVER touch originals. Create/update `_REVIEW` suffix files only.
 
-**Scope**: Assumptions and logic/design flaws only. `/verify` handles rule violations. Zero overlap.
+Scope: Assumptions and logic/design flaws only. `/verify` handles rule violations. Zero overlap.
 
 ## Required Skills
 
@@ -17,9 +17,9 @@ auto_execution_mode: 1
 
 ## Output Files
 
-- **`[filename]_REVIEW.md`** - Problems in specific document/code (risks, edge cases, hypothetical failures, questions). Created fresh each review.
-- **`_PROBLEMS_REVIEW.md`** - Problems from conversation/logs review (no specific file). General issues spanning multiple files.
-- **`FAILS.md`** - Actual failures: wrong assumptions, suboptimal designs, spec problems found after coding, untested behavior that broke. Lessons-learned memory read during `/prime`. Never delete, only append.
+- `[filename]_REVIEW.md` - Problems in specific document/code (risks, edge cases, hypothetical failures, questions). Created fresh each review.
+- `_PROBLEMS_REVIEW.md` - Problems from conversation/logs review (no specific file). General issues spanning multiple files.
+- `FAILS.md` - Actual failures: wrong assumptions, suboptimal designs, spec problems found after coding, untested behavior that broke. Lessons-learned memory read during `/prime`. Never delete, only append.
 
 ## Workflow
 
@@ -27,50 +27,50 @@ auto_execution_mode: 1
 2. Read `FAILS.md` first (if exists)
 3. Read GLOBAL-RULES
 4. Read relevant Context-Specific section
-5. **Create internal MUST-NOT-FORGET list** - constraints, user requirements, critical rules
-6. **Create MUST-RESEARCH list** - 5 topics for industry research
-7. **Execute research** - industry patterns, alternatives, known pitfalls
+5. Create internal MUST-NOT-FORGET list - constraints, user requirements, critical rules
+6. Create MUST-RESEARCH list - 5 topics for industry research
+7. Execute research - industry patterns, alternatives, known pitfalls
 8. Create Devil's Advocate task list (informed by research)
 9. Work through task list:
    - Update `_PROBLEMS_REVIEW.md` with potential issues
    - Update `FAILS.md` with actual failures discovered
-   - **Check MUST-NOT-FORGET list after each major finding**
-   - **Include research findings** in analysis
+   - Check MUST-NOT-FORGET list after each major finding
+   - Include research findings in analysis
 10. Run Final Checklist
-11. **Verify against MUST-NOT-FORGET list**
+11. Verify against MUST-NOT-FORGET list
 
 ## GLOBAL-RULES
 
-**Mindset**: Assume every assumption is wrong. Prove the logic is sound.
+Mindset: Assume every assumption is wrong. Prove the logic is sound.
 
-**DO focus on**:
+DO focus on:
 - Flawed assumptions about data, environment, behavior
 - Logic errors and incorrect reasoning
 - Hidden complexity and edge cases
 - What happens when things fail unexpectedly
 - Contradictions between stated intent and actual behavior
 
-**DO NOT focus on** (use `/verify`):
+DO NOT focus on (use `/verify`):
 - Rule violations, formatting, style, naming conventions, missing doc sections
 
-**Working Rules**:
-- **Never edit originals** - `_REVIEW` suffix copies only
-- **Research before assuming** - web searches to verify claims, find failure examples
-- **Question assumptions** - what are we taking for granted?
-- **Be specific** - cite line numbers, exact scenarios
-- **Prioritize by impact** - critical logic flaws first
+Working Rules:
+- Never edit originals - `_REVIEW` suffix copies only
+- Research before assuming - web searches to verify claims, find failure examples
+- Question assumptions - what are we taking for granted?
+- Be specific - cite line numbers, exact scenarios
+- Prioritize by impact - critical logic flaws first
 
-**Categories/Labels**: See FAILS_TEMPLATE.md and REVIEW_TEMPLATE.md in @write-documents.
+Categories/Labels: See FAILS_TEMPLATE.md and REVIEW_TEMPLATE.md in @write-documents.
 
 ## Research Phase
 
 After MUST-NOT-FORGET list, identify 5 topics:
 
-1. **Core pattern/approach** - industry pattern used? Better alternatives?
-2. **Known failure modes** - what breaks in production?
-3. **Security considerations** - attack vectors?
-4. **Scalability patterns** - how do others handle growth?
-5. **Testing strategies** - what approaches work?
+1. Core pattern/approach - industry pattern used? Better alternatives?
+2. Known failure modes - what breaks in production?
+3. Security considerations - attack vectors?
+4. Scalability patterns - how do others handle growth?
+5. Testing strategies - what approaches work?
 
 For each topic: web search for patterns/post-mortems, find alternatives, note sources. Add "Industry Research Findings" section to `_REVIEW.md`.
 
@@ -91,13 +91,13 @@ For each topic: web search for patterns/post-mortems, find alternatives, note so
 
 ### Document Review
 
-**INFO**:
+INFO:
 - Sources still accessible? Try accessing them
 - Findings actually supported by sources, or extrapolated?
 - Contradictory information? Search for it
 - What changed since written? Version numbers and dates still accurate?
 
-**SPEC**:
+SPEC:
 - What happens when [X] fails? (every external dependency)
 - Invalid input? Empty input? Huge input?
 - Concurrent access scenarios?
@@ -105,14 +105,14 @@ For each topic: web search for patterns/post-mortems, find alternatives, note so
 - What would a malicious user try?
 - Success criteria measurable and testable?
 
-**IMPL**:
+IMPL:
 - Plan match spec exactly? Mental diff
 - Steps that could fail silently?
 - Cleanup needed if step N fails after N-1 succeeds?
 - Rollback scenarios defined?
 - What if interrupted mid-way?
 
-**TEST**:
+TEST:
 - What's NOT being tested?
 - Edge cases from SPEC all covered?
 - Integration points assumed to work?
@@ -121,29 +121,29 @@ For each topic: web search for patterns/post-mortems, find alternatives, note so
 
 ### Code Review
 
-**Meta-principle**: Where is complexity hiding, and who pays long-term?
+Meta-principle: Where is complexity hiding, and who pays long-term?
 
 Create `[filename]_REVIEW.md`.
 
-**Architectural questions first:**
+Architectural questions first:
 
-1. **Explicit invariants** - where enforced? Unenforced → latent bugs, silent corruption
-2. **Single source of truth** - how is divergence detected/prevented? Multiple authorities drift
-3. **Failure strategy** - fail fast or degrade gracefully? Does choice preserve guarantees?
-4. **Unnecessary dimensions** - extra code paths, modes, abstractions to eliminate? Each multiplies complexity
-5. **Testability** - core logic testable without mocks, global state, time? Reflects separation of concerns
+1. Explicit invariants - where enforced? Unenforced → latent bugs, silent corruption
+2. Single source of truth - how is divergence detected/prevented? Multiple authorities drift
+3. Failure strategy - fail fast or degrade gracefully? Does choice preserve guarantees?
+4. Unnecessary dimensions - extra code paths, modes, abstractions to eliminate? Each multiplies complexity
+5. Testability - core logic testable without mocks, global state, time? Reflects separation of concerns
 
-**Implementation details:**
+Implementation details:
 
-**Error Handling**: Every try/catch - what specific errors? Every async call - timeout/reject/unexpected shape? Every file op - missing/permissions/disk full? Every network call - DNS/reset/partial response?
+Error Handling: Every try/catch - what specific errors? Every async call - timeout/reject/unexpected shape? Every file op - missing/permissions/disk full? Every network call - DNS/reset/partial response?
 
-**State Management**: Global state corruption? Called twice rapidly? Stale data? Memory leaks (listeners, timers, closures)?
+State Management: Global state corruption? Called twice rapidly? Stale data? Memory leaks (listeners, timers, closures)?
 
-**Dependencies**: Version assumptions? Breaking changes in newer versions? Unavailable at runtime? Circular?
+Dependencies: Version assumptions? Breaking changes in newer versions? Unavailable at runtime? Circular?
 
-**Security**: Input validation (SQLi, XSS, path traversal)? Auth bypass? All paths authorized? Secrets externalized?
+Security: Input validation (SQLi, XSS, path traversal)? Auth bypass? All paths authorized? Secrets externalized?
 
-**Performance**: Worst-case complexity? Data grows 100x? N+1 queries? Unbounded loops/recursion?
+Performance: Worst-case complexity? Data grows 100x? N+1 queries? Unbounded loops/recursion?
 
 ### Logs/Console Output Review
 
@@ -172,43 +172,43 @@ Create `[filename]_REVIEW.md`.
 - [ ] Each finding has: What, Where, Why it went wrong, Suggested fix
 - [ ] Critical issues highlighted at top
 - [ ] Questions needing answers listed
-- [ ] **MUST-RESEARCH list created** - 5 topics researched
-- [ ] **Industry Research Findings section** added to review file
+- [ ] MUST-RESEARCH list created - 5 topics researched
+- [ ] Industry Research Findings section added to review file
 - [ ] Research done for uncertain claims
-- [ ] **MUST-NOT-FORGET list verified** - all constraints checked
+- [ ] MUST-NOT-FORGET list verified - all constraints checked
 
 ## Output Format
 
 ```
 ## Devil's Advocate Summary
 
-**Reviewed**: [What was reviewed]
-**Time spent**: [Duration]
+Reviewed: [What was reviewed]
+Time spent: [Duration]
 
-**Research Topics Investigated**:
+Research Topics Investigated:
 1. [Topic 1] - [Key finding]
 2. [Topic 2] - [Key finding]
 3. [Topic 3] - [Key finding]
 4. [Topic 4] - [Key finding]
 5. [Topic 5] - [Key finding]
 
-**Findings**:
+Findings:
 - CRITICAL: [count]
 - HIGH: [count]
 - MEDIUM: [count]
 - LOW: [count]
 
-**Top 3 Risks**:
+Top 3 Risks:
 1. [Most critical issue - one line]
 2. [Second most critical - one line]
 3. [Third most critical - one line]
 
-**Industry Alternatives Identified**:
+Industry Alternatives Identified:
 - [Alternative approach worth considering]
 
-**Files Created/Updated**:
+Files Created/Updated:
 - `FAILS.md` - [X] new entries
 - `[filename]_REVIEW.md` - Detailed findings + Industry Research
 
-**Recommendation**: [PROCEED / PROCEED WITH CAUTION / STOP AND FIX]
+Recommendation: [PROCEED / PROCEED WITH CAUTION / STOP AND FIX]
 ```

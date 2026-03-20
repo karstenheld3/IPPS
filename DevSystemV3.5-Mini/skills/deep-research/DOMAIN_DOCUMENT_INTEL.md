@@ -11,13 +11,13 @@ Research domain for extracting structured data, tables, and key information from
 
 ## Source Tiers
 
-- **Tier 1 (official/primary)**: Original source documents (contracts, reports, datasets, standards, specifications)
-- **Tier 2 (vendor/issuer)**: Annotated/summarized versions, metadata, companion documents
-- **Tier 3 (community/analyst)**: Commentary, analysis, implementation guides
+- Tier 1 (official/primary): Original source documents (contracts, reports, datasets, standards, specifications)
+- Tier 2 (vendor/issuer): Annotated/summarized versions, metadata, companion documents
+- Tier 3 (community/analyst): Commentary, analysis, implementation guides
 
 ## Document Handling
 
-- **Transcribe ALL documents fully** - No partial reads, no summarization
+- Transcribe ALL documents fully - No partial reads, no summarization
 - Extract tables via `<transcription_json>` tags (automatic from transcription pipeline)
 - For already-transcribed docs: Grep `<transcription_json>` and `<transcription_table>` tags
 - Create cross-reference matrices when comparing multiple documents
@@ -30,14 +30,14 @@ Research domain for extracting structured data, tables, and key information from
   ├── document_transcribed/           # Individual pages
   └── cross_reference.json            # Cross-reference matrix (if applicable)
   ```
-- **Model selection**: `gpt-5-mini` for all document transcription (accuracy critical)
+- Model selection: `gpt-5-mini` for all document transcription (accuracy critical)
 
 ## Template Additions
 
-- **Data Extraction Summary** - Overview of extracted data types and counts
-- **Table Index** - All extracted tables with page references and JSON file locations
-- **Cross-Reference Matrix** - Mapping between related data points across documents
-- **Data Quality Notes** - Confidence levels, unclear values, reconciliation issues
+- Data Extraction Summary - Overview of extracted data types and counts
+- Table Index - All extracted tables with page references and JSON file locations
+- Cross-Reference Matrix - Mapping between related data points across documents
+- Data Quality Notes - Confidence levels, unclear values, reconciliation issues
 
 ## Quality Criteria
 

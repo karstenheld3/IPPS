@@ -75,9 +75,9 @@ python DevSystemV2/skills/pdf-tools/compress-pdf.py report.pdf --compression hig
 ```
 
 Compression levels:
-- **high**: Target 50%+ reduction, aggressive (72 DPI)
-- **medium**: Target 25%+ reduction, balanced (150 DPI)
-- **low**: Target 10%+ reduction, preserve quality (300 DPI)
+- high: Target 50%+ reduction, aggressive (72 DPI)
+- medium: Target 25%+ reduction, balanced (150 DPI)
+- low: Target 10%+ reduction, preserve quality (300 DPI)
 
 Analyzes PDF structure, predicts compression potential, escalates strategies if target not met, reverts if insufficient improvement. Output: `../.tools/_pdf_output/[PDF_FILENAME]_compressed.pdf`
 

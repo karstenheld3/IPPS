@@ -1,4 +1,4 @@
-# Devil's Advocate Review - MinimalIPPS Session
+# Devil's Advocate Review - MinifyIPPS Session
 
 **Doc ID**: MIPPS-RV01
 **Reviewed**: 2026-03-19 23:45

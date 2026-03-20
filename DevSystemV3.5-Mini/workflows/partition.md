@@ -13,7 +13,7 @@ Split implementation plans into discrete, testable tasks.
 
 ## Rules
 
-- **Output to PROGRESS.md only** - never create separate TASKS document
+- Output to PROGRESS.md only - never create separate TASKS document
 - For TASKS_[TOPIC].md, use `/write-tasks-plan` instead
 
 ## Step 1: Determine Strategy
@@ -31,13 +31,13 @@ Read in order: SPEC (FR, DD) → IMPL (steps, edge cases) → TEST (test cases)
 
 ## Step 3: Apply Strategy
 
-**DEFAULT** - Estimate HHW per item, chunk into max 0.5 HHW, preserve document order
+DEFAULT - Estimate HHW per item, chunk into max 0.5 HHW, preserve document order
 
-**DEPENDENCY** - Build dependency graph, topological sort (leaves first), group independent as parallel
+DEPENDENCY - Build dependency graph, topological sort (leaves first), group independent as parallel
 
-**SLICE** - Map each AC/FR to components, one task per vertical slice, order by value/risk
+SLICE - Map each AC/FR to components, one task per vertical slice, order by value/risk
 
-**RISK** - Rate by uncertainty, unknowns before knowns, front-load integration points
+RISK - Rate by uncertainty, unknowns before knowns, front-load integration points
 
 ## Step 4: Output to PROGRESS.md
 
@@ -48,14 +48,14 @@ Update "To Do" section:
 
 ### [Phase] Phase
 
-- [ ] **[TOPIC]-TK-001** - Task description (0.5 HHW)
-- [ ] **[TOPIC]-TK-002** - Task description (0.25 HHW)
+- [ ] [TOPIC]-TK-001 - Task description (0.5 HHW)
+- [ ] [TOPIC]-TK-002 - Task description (0.25 HHW)
 ```
 
 ## Task Properties
 
 Each task must be:
-- **Atomic** - One edit session between commits
-- **Testable** - Defined test cases or temp script verification
-- **Scoped** - Does one thing only
-- **Estimated** - HHW estimate (max 0.5 HHW)
+- Atomic - One edit session between commits
+- Testable - Defined test cases or temp script verification
+- Scoped - Does one thing only
+- Estimated - HHW estimate (max 0.5 HHW)

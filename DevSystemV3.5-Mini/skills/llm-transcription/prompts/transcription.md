@@ -1,55 +1,55 @@
 # Transcription Prompt v14 - Tables as Markdown
 
-Transcribe this document page image to Markdown. **Accuracy over speed.**
+Transcribe this document page image to Markdown. Accuracy over speed.
 
-**CRITICAL: Output raw markdown directly. Do NOT wrap your entire output in ```markdown code fences.**
+CRITICAL: Output raw markdown directly. Do NOT wrap your entire output in ```markdown code fences.
 
 ## Key Areas
 
-1. **Graphics** - Essential graphics with labeled ASCII art and data extraction
-2. **Structure** - Semantic hierarchy matching visual document outline
-3. **Text** - Character-level accuracy
+1. Graphics - Essential graphics with labeled ASCII art and data extraction
+2. Structure - Semantic hierarchy matching visual document outline
+3. Text - Character-level accuracy
 
 All three matter equally.
 
 ## CRITICAL RULES
 
-**DO:**
+DO:
 - Label every node in diagrams: `[DATABASE]`, `[PROCESS]`, `(pending)`
 - Extract ALL data values from charts (numbers > visual fidelity)
 - Match header levels to visual hierarchy (H1=title, H2=sections, H3=subsections)
 - Use `[unclear]` for text you cannot read with confidence
 - Use `<!-- Section N -->` and nested `<!-- Column N -->` for multi-column text-only layouts (no transcriptions, minimal markdown)
 - For graphical or colorized layouts, figures and tables, keep detailed `<transcription_notes>` with colors, visual details, and context
-- **Figures/charts**: use `<transcription_image>` with ````ascii` + `<transcription_json>`
-- **Tables**: use `<transcription_table>` with markdown table + `<transcription_json>`
+- Figures/charts: use `<transcription_image>` with ````ascii` + `<transcription_json>`
+- Tables: use `<transcription_table>` with markdown table + `<transcription_json>`
 
-**DON'T:**
-- **Don't wrap your entire output in ```markdown code fences**
-- **Don't use HTML tags** (`<span>`, `<div>`, `&nbsp;`, etc.) - pure markdown only
+DON'T:
+- Don't wrap your entire output in ```markdown code fences
+- Don't use HTML tags (`<span>`, `<div>`, `&nbsp;`, etc.) - pure markdown only
 - Don't use ````ascii` or `<transcription_json>` for text-only pages.
 - Don't transcribe UI chrome (toolbars, ribbons, browser elements)
 - Don't count decorative logos/separators as missed graphics
 - Don't use headers for formatting convenience - only for real sections
 - Don't guess numbers - mark as `[unclear: ~value?]` if uncertain
-- **Don't duplicate data** - if a chart's data appears in surrounding text, don't repeat it in both places
-- **Don't skip ASCII art** - every chart/graph needs BOTH ASCII representation AND JSON data
-- **Don't use ASCII for tables** - tables use markdown format, not ASCII
+- Don't duplicate data - if a chart's data appears in surrounding text, don't repeat it in both places
+- Don't skip ASCII art - every chart/graph needs BOTH ASCII representation AND JSON data
+- Don't use ASCII for tables - tables use markdown format, not ASCII
 
-**FORBIDDEN TAGS (break markdown rendering):**
+FORBIDDEN TAGS (break markdown rendering):
 - Never use `<content>`, `<data>`, `<section>` or similar custom tags outside code blocks
 - Only allowed tags: `<transcription_image>`, `<transcription_table>`, `<transcription_json>`, `<transcription_notes>`, `<transcription_page_header>`, `<transcription_page_footer>`
 
 ## 1. Graphics
 
-**TRANSCRIBE:** Charts, diagrams, flowcharts, infographics, data visualizations
+TRANSCRIBE: Charts, diagrams, flowcharts, infographics, data visualizations
 
-**SKIP:** UI chrome, toolbars, logos, watermarks → `<!-- Decorative: [list] -->`
+SKIP: UI chrome, toolbars, logos, watermarks → `<!-- Decorative: [list] -->`
 
 ### ASCII Art Format
 
 <transcription_image>
-**Figure N: [Caption]**
+Figure N: [Caption]
 
 ```ascii
 [CHART TYPE - TITLE]
@@ -70,7 +70,7 @@ Total: $4,700.50M | YoY: +12.5%
 </transcription_notes>
 </transcription_image>
 
-**BOTH ASCII AND JSON are MANDATORY** for all figures and tables:
+BOTH ASCII AND JSON are MANDATORY for all figures and tables:
 - ````ascii` block for visual representation
 - `<transcription_json>` for structured data extraction
 
@@ -79,7 +79,7 @@ JSON contains: chart_type or table_type, title, data array with all values, tota
 ### Table Example
 
 <transcription_table>
-**Table 1: Quarterly Revenue**
+Table 1: Quarterly Revenue
 
 | Region | Q1 | Q2 | Q3 | Q4 |
 |--------|---------|---------|---------|----------|
@@ -99,7 +99,7 @@ JSON contains: chart_type or table_type, title, data array with all values, tota
 
 ### ANTI-DUPLICATION RULE
 
-**Only suppress data that appears BOTH in surrounding text AND in graphics.** Include value in ASCII art (primary source) and in notes. DON'T repeat in plain text if just restating the chart. If data appears ONLY in graphics, include fully in both ASCII and notes.
+Only suppress data that appears BOTH in surrounding text AND in graphics. Include value in ASCII art (primary source) and in notes. DON'T repeat in plain text if just restating the chart. If data appears ONLY in graphics, include fully in both ASCII and notes.
 
 ## 2. Structure
 
@@ -118,7 +118,7 @@ JSON contains: chart_type or table_type, title, data array with all values, tota
 
 ### Sidebars
 
-> **Sidebar: [Title]**
+> Sidebar: [Title]
 > [Content...]
 
 ### Sections and Columns
@@ -145,10 +145,10 @@ Use `<!-- Section N -->` to mark visual sections, with nested `<!-- Column N -->
 
 ## 4. Tables
 
-**Always use markdown tables** (never ASCII) wrapped in `<transcription_table>`:
+Always use markdown tables (never ASCII) wrapped in `<transcription_table>`:
 
 <transcription_table>
-**Table N: [Title]**
+Table N: [Title]
 
 | Column A | Column B |
 |----------|----------|

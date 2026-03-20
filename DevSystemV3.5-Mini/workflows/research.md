@@ -27,4 +27,4 @@ auto_execution_mode: 1
 6. List all sources with URL and primary findings at document end
 7. Summarize findings as copy/paste ready list at document top
 
-**Source Retention Rule:** ALL sources must be kept. Never discard - document what was checked to avoid re-checking.
+Source Retention Rule: ALL sources must be kept. Never discard - document what was checked to avoid re-checking.

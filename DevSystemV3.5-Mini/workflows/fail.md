@@ -39,21 +39,21 @@ If nothing found: report "No failures detected in current context" and exit.
 
 ## Step 3: Classify Severity
 
-- **[CRITICAL]** - Will definitely cause production failure
-- **[HIGH]** - Likely failure under normal conditions
-- **[MEDIUM]** - Possible failure under specific conditions
-- **[LOW]** - Minor, unlikely to cause failure
+- [CRITICAL] - Will definitely cause production failure
+- [HIGH] - Likely failure under normal conditions
+- [MEDIUM] - Possible failure under specific conditions
+- [LOW] - Minor, unlikely to cause failure
 
 ## Step 4: Collect Evidence
 
-- **When**: Current timestamp
-- **Where**: File/function/line or document section
-- **What**: Exact problem description
-- **Evidence**: Link, test output, or example proving the issue
+- When: Current timestamp
+- Where: File/function/line or document section
+- What: Exact problem description
+- Evidence: Link, test output, or example proving the issue
 
 ## Step 5: Re-read Failed Workflow/Rules
 
-**CRITICAL**: Before root cause analysis, re-read what SHOULD have happened:
+CRITICAL: Before root cause analysis, re-read what SHOULD have happened:
 
 1. Workflow failure → re-read workflow file completely, note MNF/rules/constraints/scripts, follow references to other docs
 2. Rule violation → re-read relevant rule files, note specific violated requirements
@@ -80,7 +80,7 @@ Brief, actionable recommendation for resolution.
 
 ## Step 8: Create FAILS Entry
 
-1. **Determine location**:
+1. Determine location:
    - SESSION-MODE → `[SESSION_FOLDER]/FAILS.md` (create if needed)
    - PROJECT-MODE → `[WORKSPACE_FOLDER]/FAILS.md` or `[PROJECT_FOLDER]/FAILS.md`
 

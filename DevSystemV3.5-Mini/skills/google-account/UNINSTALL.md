@@ -4,22 +4,22 @@ Remove gogcli and associated configuration.
 
 ## Removal Options
 
-- **Option 1 (Minimal)**: Config only - WSL `~/.config/gogcli/`, Windows `%AppData%\gogcli\`
-- **Option 2 (Standard)**: Option 1 + gogcli binary (Homebrew or manual)
-- **Option 3 (Full)**: Option 2 + OAuth client secret files (`client_secret*.json`)
-- **Option 4 (Complete)**: Option 3 + WSL distributions (extra confirmation required)
+- Option 1 (Minimal): Config only - WSL `~/.config/gogcli/`, Windows `%AppData%\gogcli\`
+- Option 2 (Standard): Option 1 + gogcli binary (Homebrew or manual)
+- Option 3 (Full): Option 2 + OAuth client secret files (`client_secret*.json`)
+- Option 4 (Complete): Option 3 + WSL distributions (extra confirmation required)
 
-**WARNING**: Option 4 removes WSL which may be used by Docker Desktop, VS Code Remote, other Linux tools.
+WARNING: Option 4 removes WSL which may be used by Docker Desktop, VS Code Remote, other Linux tools.
 
 ## Detection and Paths
 
 Key variables and locations the uninstall checks:
 
-- **WSL installed**: `wsl --list --quiet`
-- **gogcli installed**: `wsl bash -c 'command -v gog'`
-- **WSL config**: `wsl bash -c 'test -d ~/.config/gogcli && echo "exists"'`
-- **Windows config**: `$env:APPDATA\gogcli`
-- **Credential files** (checked in order):
+- WSL installed: `wsl --list --quiet`
+- gogcli installed: `wsl bash -c 'command -v gog'`
+- WSL config: `wsl bash -c 'test -d ~/.config/gogcli && echo "exists"'`
+- Windows config: `$env:APPDATA\gogcli`
+- Credential files (checked in order):
   - `[WORKSPACE]/../.tools/gogcli-client-secret.json` (.tools sibling to workspace)
   - `$env:USERPROFILE\client_secret.json`
   - `$env:USERPROFILE\.client_secret.json`

@@ -10,9 +10,9 @@ Research domain for software APIs, frameworks, libraries, SDKs, and developer to
 
 ## Source Tiers
 
-- **Tier 1 (official/primary)**: Official documentation, API references, SDK source code, official PDFs/specs
-- **Tier 2 (vendor/issuer)**: Official blog, GitHub repo, release notes, changelog, conference talks by maintainers
-- **Tier 3 (community/analyst)**: Stack Overflow, expert blogs, GitHub issues/discussions, Reddit, Discord
+- Tier 1 (official/primary): Official documentation, API references, SDK source code, official PDFs/specs
+- Tier 2 (vendor/issuer): Official blog, GitHub repo, release notes, changelog, conference talks by maintainers
+- Tier 3 (community/analyst): Stack Overflow, expert blogs, GitHub issues/discussions, Reddit, Discord
 
 ## Document Handling
 
@@ -24,11 +24,11 @@ Research domain for software APIs, frameworks, libraries, SDKs, and developer to
 
 ## Template Additions
 
-- **SDK Examples** - Adapt to relevant languages (C#, Python, TypeScript, PowerShell, JavaScript, Go, etc.)
-- **Error Responses** - Error codes with descriptions and resolution
-- **Rate Limiting / Throttling** - Limits, headers, retry strategies
-- **Authentication** - Auth methods, token lifecycle, scopes
-- **Gotchas and Quirks** - Undocumented behavior, edge cases from community sources
+- SDK Examples - Adapt to relevant languages (C#, Python, TypeScript, PowerShell, JavaScript, Go, etc.)
+- Error Responses - Error codes with descriptions and resolution
+- Rate Limiting / Throttling - Limits, headers, retry strategies
+- Authentication - Auth methods, token lifecycle, scopes
+- Gotchas and Quirks - Undocumented behavior, edge cases from community sources
 
 ## Quality Criteria
 

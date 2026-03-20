@@ -5,11 +5,11 @@
 ```markdown
 # TASKS: [TOPIC] Tasks Plan
 
-**Doc ID (TDID)**: [TOPIC]-TK01
-**Feature**: [FEATURE_SLUG]
-**Goal**: Partitioned tasks for [TOPIC] implementation
-**Source**: `IMPL_[TOPIC].md [TOPIC-IP01]`, `TEST_[TOPIC].md [TOPIC-TP01]`
-**Strategy**: PARTITION-[STRATEGY]
+Doc ID (TDID): [TOPIC]-TK01
+Feature: [FEATURE_SLUG]
+Goal: Partitioned tasks for [TOPIC] implementation
+Source: `IMPL_[TOPIC].md [TOPIC-IP01]`, `TEST_[TOPIC].md [TOPIC-TP01]`
+Strategy: PARTITION-[STRATEGY]
 ```
 
 ## Task Overview Section
@@ -35,7 +35,7 @@ Run before starting any implementation:
 ## Task Item Structure
 
 ```markdown
-- [ ] **[TOPIC]-TK-001** - Description
+- [ ] [TOPIC]-TK-001 - Description
   - Files: [files affected]
   - Done when: [specific completion criteria]
   - Verify: [commands to run]
@@ -46,8 +46,8 @@ Run before starting any implementation:
   - Est: 0.5 HHW
 ```
 
-**Required:** Task ID + description, Files, Done when, Est
-**Optional:** Verify, Guardrails, Depends, Parallel, Model
+Required: Task ID + description, Files, Done when, Est
+Optional: Verify, Guardrails, Depends, Parallel, Model
 
 Model hints are recommendations from `!NOTES.md` `## Cascade Model Switching` - agent decides based on actual task.
 
@@ -78,6 +78,6 @@ TK-003 ─> TK-004
 ```markdown
 ## Document History
 
-**[YYYY-MM-DD HH:MM]**
+[YYYY-MM-DD HH:MM]
 - Initial tasks plan created from IMPL/TEST
 ```

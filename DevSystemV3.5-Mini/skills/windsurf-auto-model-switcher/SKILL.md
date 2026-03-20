@@ -48,5 +48,5 @@ STRUT Strategy sections may include model hints (recommendations only - agent de
 
 ## Troubleshooting
 
-**Script types into editor**: Run SETUP.md and restart Windsurf.
-**Model doesn't change**: Ensure Cascade panel is visible.
+Script types into editor: Run SETUP.md and restart Windsurf.
+Model doesn't change: Ensure Cascade panel is visible.

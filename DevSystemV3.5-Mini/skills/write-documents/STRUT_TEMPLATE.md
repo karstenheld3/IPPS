@@ -1,6 +1,6 @@
 # STRUT Template
 
-**Source**: `docs/specs/SPEC_STRUT_STRUCTURED_THINKING.md [STRUT-SP01]`
+Source: `docs/specs/SPEC_STRUT_STRUCTURED_THINKING.md [STRUT-SP01]`
 
 Embed in: PROGRESS.md, IMPL documents, TASKS documents, NOTES.md, or any document needing structured planning with progress tracking.
 
@@ -9,7 +9,7 @@ Embed in: PROGRESS.md, IMPL documents, TASKS documents, NOTES.md, or any documen
 - Every phase, step, deliverable has unique ID: `P1`, `P1-S1`, `P1-D1`
 - Steps use AGEN verbs: `[ ] P1-S1 [VERB](params)`
 - Checkbox states: `[ ]` pending, `[x]` done, `[N]` done N times (retry count)
-- **Objectives link to Deliverables**: `[ ] Goal ← P1-D1, P1-D2`
+- Objectives link to Deliverables: `[ ] Goal ← P1-D1, P1-D2`
 - Use box-drawing characters: `├─` `└─` `│` `└─>`
 - IDs are unique within a STRUT plan (ephemeral, session-scoped)
 - Verify STRUT plans via /verify workflow (Planning + Transition contexts)
@@ -37,17 +37,17 @@ Embed in: PROGRESS.md, IMPL documents, TASKS documents, NOTES.md, or any documen
 
 ## ID Formats
 
-- **Phase ID**: `P1`, `P2`, `P3`...
-- **Step ID**: `P1-S1`, `P1-S2`, `P2-S1`...
-- **Deliverable ID**: `P1-D1`, `P1-D2`, `P2-D1`...
+- Phase ID: `P1`, `P2`, `P3`...
+- Step ID: `P1-S1`, `P1-S2`, `P2-S1`...
+- Deliverable ID: `P1-D1`, `P1-D2`, `P2-D1`...
 
 ## Node Types
 
-1. **Objectives** - Success criteria linked to Deliverables (`← P1-Dx`), checkboxes, no IDs
-2. **Strategy** - Approach summary, may include AWT estimates and model hints
-3. **Steps** - Actions using AGEN verbs (flat list with checkboxes and IDs)
-4. **Deliverables** - Expected outputs (checkboxes with IDs)
-5. **Transitions** - Flow control conditions at phase end
+1. Objectives - Success criteria linked to Deliverables (`← P1-Dx`), checkboxes, no IDs
+2. Strategy - Approach summary, may include AWT estimates and model hints
+3. Steps - Actions using AGEN verbs (flat list with checkboxes and IDs)
+4. Deliverables - Expected outputs (checkboxes with IDs)
+5. Transitions - Flow control conditions at phase end
 
 ## Model Hints
 
@@ -165,11 +165,11 @@ Use `← Px-Sy` suffix for explicit dependencies.
 
 ## Usage
 
-**Creating:** Phase header → Objectives → Strategy → Steps → Deliverables → Transitions
+Creating: Phase header → Objectives → Strategy → Steps → Deliverables → Transitions
 
-**Executing:** Start at P1-S1, execute steps, check Deliverables, follow Transitions until `[END]`
+Executing: Start at P1-S1, execute steps, check Deliverables, follow Transitions until `[END]`
 
-**Resuming:** Find first unchecked Deliverable, read Strategy, continue
+Resuming: Find first unchecked Deliverable, read Strategy, continue
 
 ## Embedding in Documents
 

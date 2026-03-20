@@ -1,4 +1,4 @@
-# IMPL: MinimalIPPS V2 Gap Fixes
+# IMPL: MinifyIPPS V2 Gap Fixes
 
 **Doc ID**: MIPPS-IP03
 **Feature**: MIPPS-V2-GAPFIX

@@ -1,11 +1,11 @@
 # [SUBJECT] - Table of Contents
 
-**Doc ID**: [SUBJECT]-TOC
-**Goal**: Master index for all [SUBJECT] documentation files
-**Version scope**: [VERSION or Documentation date YYYY-MM-DD]
-**Research stats**: [pending - added in final phase]
+Doc ID: [SUBJECT]-TOC
+Goal: Master index for all [SUBJECT] documentation files
+Version scope: [VERSION or Documentation date YYYY-MM-DD]
+Research stats: [pending - added in final phase]
 
-**Depends on:**
+Depends on:
 - `__[SUBJECT]_SOURCES.md [[SUBJECT]-SOURCES]` for source references
 
 ## Summary
@@ -28,25 +28,25 @@
 
 ## Topic Count
 
-- **Total Topics**: XX
-- **[Category 1]**: X
-- **[Category N]**: X
+- Total Topics: XX
+- [Category 1]: X
+- [Category N]: X
 
 ## Topic Details
 
 ### Topic: [Subtopic1]
-**Scope**: What this topic covers
-**Contents**:
+Scope: What this topic covers
+Contents:
 - Key item 1
-**Sources**: [TOPIC]-IN01-SC-[SOURCE]-[DOCNAME]
+Sources: [TOPIC]-IN01-SC-[SOURCE]-[DOCNAME]
 
 ## Related APIs/Technologies
 
-- **[Related Technology 1]**
+- [Related Technology 1]
   - URL: [documentation URL]
   - Relation: [why related or easily confused]
 
 ## Document History
 
-**[YYYY-MM-DD HH:MM]**
+[YYYY-MM-DD HH:MM]
 - Initial TOC created with XX topics

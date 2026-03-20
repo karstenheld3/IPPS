@@ -51,5 +51,3 @@ Add to PROGRESS.md:
 **Session documents**: See `devsystem-core.md` sections "Document Types" and "Tracking Documents" for full list and usage.
 
 Read the rules in the windsurf rules folder and write key instructions into NOTES.md under "IMPORTANT: Cascade Agent Instructions".
-
-**Acronym expansion rule**: When referencing acronyms or named principles in NOTES.md, always spell them out fully so the agent can understand them without external context. Example: "APAPALAN: As Precise As Possible, As Little As Necessary" not "APAPALAN principle".

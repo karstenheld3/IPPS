@@ -581,6 +581,10 @@ IPPS/
 - **session-management** - Session init, save, resume, close workflows
 - **write-documents** - Spec, impl, test, info, tasks document templates
 
+## Tools
+
+- **[MinifyIPPS](Docs/Concepts/_INFO_HOW_TO_MINIFY_IPPS.md)** - LLM-based compression pipeline for DevSystem markdown files. Reduces token count while preserving meaning. Pipeline: bundle → analyze → compress → verify. Config: `_Sessions/_2026-03-19_MinifyIPPS/_run_templateV2/pipeline_config.json`
+
 ## File Naming Conventions
 
 IPPS uses special prefixes to control how files are processed:

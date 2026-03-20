@@ -103,10 +103,10 @@ Write-Host "`n=== Done === Restart Windsurf to apply changes" -ForegroundColor C
 
 ## What Gets Removed
 
-- **Option 1** - Config entry in `mcp_config.json`
-- **Option 2** - Config + Profile (`[USER_PROFILE_PATH]\.ms-playwright-mcp-profile`) + Auth files (`auth.json`, `.auth.json`)
-- **Option 3** - Option 2 + Browsers at `[LOCALAPPDATA]\ms-playwright` (~500MB-2GB)
-- **Option 4** - Option 3 + NPM cache at `[LOCALAPPDATA]\npm-cache\_npx`
+- Option 1 - Config entry in `mcp_config.json`
+- Option 2 - Config + Profile (`[USER_PROFILE_PATH]\.ms-playwright-mcp-profile`) + Auth files (`auth.json`, `.auth.json`)
+- Option 3 - Option 2 + Browsers at `[LOCALAPPDATA]\ms-playwright` (~500MB-2GB)
+- Option 4 - Option 3 + NPM cache at `[LOCALAPPDATA]\npm-cache\_npx`
 
 ## Manual Removal
 

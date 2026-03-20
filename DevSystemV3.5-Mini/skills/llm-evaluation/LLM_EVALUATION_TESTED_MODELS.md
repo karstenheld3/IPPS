@@ -6,11 +6,11 @@ Testing period: 2026-01-22 to 2026-01-26.
 
 All passed 15/15 API integration tests via `llm-evaluation-selftest.py`:
 
-**OpenAI Reasoning:** `gpt-5.2`, `gpt-5.1`, `gpt-5`, `gpt-5-mini`, `gpt-5-nano`
+OpenAI Reasoning: `gpt-5.2`, `gpt-5.1`, `gpt-5`, `gpt-5-mini`, `gpt-5-nano`
 
-**OpenAI Temperature:** `gpt-4.1` (multi-modal), `gpt-4.1-mini` (multi-modal), `gpt-4.1-nano` (multi-modal), `gpt-4o`, `gpt-4o-mini`
+OpenAI Temperature: `gpt-4.1` (multi-modal), `gpt-4.1-mini` (multi-modal), `gpt-4.1-nano` (multi-modal), `gpt-4o`, `gpt-4o-mini`
 
-**Anthropic:** `claude-opus-4-5-20251101`, `claude-sonnet-4-5-20250929`, `claude-haiku-4-5-20251001`, `claude-sonnet-4-20250514`, `claude-3-7-sonnet-20250219`, `claude-3-5-haiku-20241022`
+Anthropic: `claude-opus-4-5-20251101`, `claude-sonnet-4-5-20250929`, `claude-haiku-4-5-20251001`, `claude-sonnet-4-20250514`, `claude-3-7-sonnet-20250219`, `claude-3-5-haiku-20241022`
 
 ## Pipeline Tested
 

@@ -7,9 +7,9 @@ description: Apply when evaluating LLM performance through structured testing pi
 
 ## When to Use
 
-**Apply when:** Testing LLM transcription accuracy, comparing LLM outputs, LLM-as-judge scoring, API cost analysis, finding optimal concurrency limits, batch evaluations with parallel workers.
+Apply when: Testing LLM transcription accuracy, comparing LLM outputs, LLM-as-judge scoring, API cost analysis, finding optimal concurrency limits, batch evaluations with parallel workers.
 
-**Do NOT apply when:** Single ad-hoc LLM calls (use API directly), testing non-LLM systems, simple file processing without LLM involvement.
+Do NOT apply when: Single ad-hoc LLM calls (use API directly), testing non-LLM systems, simple file processing without LLM involvement.
 
 ## Quick Start
 
@@ -18,16 +18,16 @@ description: Apply when evaluating LLM performance through structured testing pi
 
 ## Scripts
 
-**Core:** `call-llm.py` (single call), `call-llm-batch.py` (batch + parallel), `find-workers-limit.py` (max workers)
+Core: `call-llm.py` (single call), `call-llm-batch.py` (batch + parallel), `find-workers-limit.py` (max workers)
 
-**Pipeline:** `generate-questions.py`, `generate-answers.py`, `evaluate-answers.py`, `compare-transcription-runs.py` (Levenshtein/semantic)
+Pipeline: `generate-questions.py`, `generate-answers.py`, `evaluate-answers.py`, `compare-transcription-runs.py` (Levenshtein/semantic)
 
-**Analysis:** `analyze-costs.py`, `llm-evaluation-selftest.py`
+Analysis: `analyze-costs.py`, `llm-evaluation-selftest.py`
 
-**Details:** See `LLM_EVALUATION_SCRIPTS.md`
+Details: See `LLM_EVALUATION_SCRIPTS.md`
 
 ## Key Findings
 
-- **Judge model:** `gpt-5-mini` recommended (best calibration)
-- **Claude model IDs:** Use exact release dates (e.g., `claude-opus-4-5-20251101`). See `LLM_EVALUATION_CLAUDE_MODELS.md`.
-- **Tested models:** 16+ validated. See `LLM_EVALUATION_TESTED_MODELS.md`.
+- Judge model: `gpt-5-mini` recommended (best calibration)
+- Claude model IDs: Use exact release dates (e.g., `claude-opus-4-5-20251101`). See `LLM_EVALUATION_CLAUDE_MODELS.md`.
+- Tested models: 16+ validated. See `LLM_EVALUATION_TESTED_MODELS.md`.

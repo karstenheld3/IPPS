@@ -9,8 +9,8 @@ Prerequisites: PowerShell 5.1+, Internet connection (auto-downloads yt-dlp and f
 
 ## Scripts
 
-- **Download-Youtube-To-Mp3.ps1** - Extract audio as MP3
-- **Download-Youtube-To-Video.ps1** - Download video files
+- Download-Youtube-To-Mp3.ps1 - Extract audio as MP3
+- Download-Youtube-To-Video.ps1 - Download video files
 
 ## MP3 Download
 
@@ -20,13 +20,13 @@ Prerequisites: PowerShell 5.1+, Internet connection (auto-downloads yt-dlp and f
 
 ### MP3 Parameters
 
-- **-Urls** (required) - YouTube URLs
-- **-OutputFolder** - Default: `[WORKSPACE]/../.tools/_downloaded_audio`
-- **-Quality** - `128k`, `192k`, `256k`, `320k` (default: `192k`)
-- **-Playlist** - Download entire playlist (switch)
-- **-UseCookies** - Use Chrome cookies (default: `$true`)
-- **-ChromeProfile** - Chrome profile name (auto-detected)
-- **-ToolsFolder** - Binaries location (default: `[WORKSPACE]/../.tools/youtube-downloader`)
+- -Urls (required) - YouTube URLs
+- -OutputFolder - Default: `[WORKSPACE]/../.tools/_downloaded_audio`
+- -Quality - `128k`, `192k`, `256k`, `320k` (default: `192k`)
+- -Playlist - Download entire playlist (switch)
+- -UseCookies - Use Chrome cookies (default: `$true`)
+- -ChromeProfile - Chrome profile name (auto-detected)
+- -ToolsFolder - Binaries location (default: `[WORKSPACE]/../.tools/youtube-downloader`)
 
 ## Video Download
 
@@ -36,14 +36,14 @@ Prerequisites: PowerShell 5.1+, Internet connection (auto-downloads yt-dlp and f
 
 ### Video Parameters
 
-- **-Urls** (required) - YouTube URLs
-- **-OutputFolder** - Default: `[WORKSPACE]/../.tools/_downloaded_video`
-- **-Format** - `best`, `mp4`, `webm`, `mkv` (default: `best`)
-- **-Quality** - `best`, `1080p`, `720p`, `480p`, `360p` (default: `best`)
-- **-Playlist** - Download entire playlist (switch)
-- **-UseCookies** - Use Chrome cookies (default: `$true`)
-- **-ChromeProfile** - Chrome profile name (auto-detected)
-- **-ToolsFolder** - Binaries location (default: `[WORKSPACE]/../.tools/youtube-downloader`)
+- -Urls (required) - YouTube URLs
+- -OutputFolder - Default: `[WORKSPACE]/../.tools/_downloaded_video`
+- -Format - `best`, `mp4`, `webm`, `mkv` (default: `best`)
+- -Quality - `best`, `1080p`, `720p`, `480p`, `360p` (default: `best`)
+- -Playlist - Download entire playlist (switch)
+- -UseCookies - Use Chrome cookies (default: `$true`)
+- -ChromeProfile - Chrome profile name (auto-detected)
+- -ToolsFolder - Binaries location (default: `[WORKSPACE]/../.tools/youtube-downloader`)
 
 ## Shared Features
 
@@ -59,6 +59,6 @@ Multiple URLs: Cascade spawns terminals (max 10), splits URLs evenly, runs with 
 
 ## Output Locations
 
-- **Audio**: `[WORKSPACE]/../.tools/_downloaded_audio/`
-- **Video**: `[WORKSPACE]/../.tools/_downloaded_video/`
-- **Binaries**: `[WORKSPACE]/../.tools/youtube-downloader/`
+- Audio: `[WORKSPACE]/../.tools/_downloaded_audio/`
+- Video: `[WORKSPACE]/../.tools/_downloaded_video/`
+- Binaries: `[WORKSPACE]/../.tools/youtube-downloader/`

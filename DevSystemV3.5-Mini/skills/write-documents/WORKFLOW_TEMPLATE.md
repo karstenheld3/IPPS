@@ -12,9 +12,9 @@ auto_execution_mode: 1
 
 [Brief description in plain English - no AGEN verb references]
 
-**Goal**: [What this workflow produces - the expected outcome]
+Goal: [What this workflow produces - the expected outcome]
 
-**Why**: [Problem this workflow solves - why it exists]
+Why: [Problem this workflow solves - why it exists]
 
 ## Required Skills
 
@@ -28,10 +28,10 @@ auto_execution_mode: 1
 
 ## Mandatory Re-read
 
-**SESSION-MODE**:
+SESSION-MODE:
 - NOTES.md, PROBLEMS.md, PROGRESS.md, FAILS.md
 
-**PROJECT-MODE**:
+PROJECT-MODE:
 - README.md, !NOTES.md or NOTES.md, FAILS.md
 
 ## Prerequisites
@@ -101,22 +101,22 @@ Run `/verify` to check:
 
 Include based on complexity:
 
-- **Required Skills** - Workflow uses skills
-- **MUST-NOT-FORGET** - Always include
-- **Mandatory Re-read** - Modifies docs/code, makes decisions
-- **Prerequisites** - Has entry conditions
-- **GLOBAL-RULES** - Universal rules across contexts
-- **CONTEXT-SPECIFIC** - Behavior varies by context
-- **Gate Check** - Multi-phase workflow
-- **Stuck Detection** - Has retry loops
-- **Verification** - Always include
-- **Output** - Has specific output locations
+- Required Skills - Workflow uses skills
+- MUST-NOT-FORGET - Always include
+- Mandatory Re-read - Modifies docs/code, makes decisions
+- Prerequisites - Has entry conditions
+- GLOBAL-RULES - Universal rules across contexts
+- CONTEXT-SPECIFIC - Behavior varies by context
+- Gate Check - Multi-phase workflow
+- Stuck Detection - Has retry loops
+- Verification - Always include
+- Output - Has specific output locations
 
 ## Complexity Tiers
 
-**Tier 1: Simple** (30-50 lines): Header, MNF, Steps, Verification
-**Tier 2: Standard** (50-100 lines): + Prerequisites, GLOBAL-RULES
-**Tier 3: Complex** (100-300 lines): All sections as needed
+Tier 1: Simple (30-50 lines): Header, MNF, Steps, Verification
+Tier 2: Standard (50-100 lines): + Prerequisites, GLOBAL-RULES
+Tier 3: Complex (100-300 lines): All sections as needed
 
 ## Anti-Patterns
 

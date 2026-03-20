@@ -1,8 +1,8 @@
-# TEST: MinimalIPPS Compression Pipeline
+# TEST: MinifyIPPS Compression Pipeline
 
 **Doc ID (TDID)**: MIPPS-TP01
 **Feature**: MIPPS-PIPELINE
-**Goal**: Verify all MinimalIPPS pipeline modules against SPEC requirements using mocked APIs
+**Goal**: Verify all MinifyIPPS pipeline modules against SPEC requirements using mocked APIs
 **Timeline**: Created 2026-03-20, Updated 3 times
 **Target file**: `tests/` directory (11 test files)
 
@@ -36,7 +36,7 @@
 
 ## 1. Overview
 
-This test plan covers 52 test cases across 12 categories for the MinimalIPPS compression pipeline. It extends the 28 baseline test cases defined in `_IMPL_IPPS_MINIFICATION_MOTHER_MODEL.md [MIPPS-IP01]` with 24 additional test cases covering modules that had no IMPL-level TCs: api_cost_tracker, mother_analyzer, mother_output_checker, compression_prompt_builder, compression_refiner, and integration.
+This test plan covers 52 test cases across 12 categories for the MinifyIPPS compression pipeline. It extends the 28 baseline test cases defined in `_IMPL_IPPS_MINIFICATION_MOTHER_MODEL.md [MIPPS-IP01]` with 24 additional test cases covering modules that had no IMPL-level TCs: api_cost_tracker, mother_analyzer, mother_output_checker, compression_prompt_builder, compression_refiner, and integration.
 
 All tests run with mocked Large Language Model (LLM) APIs. No real API calls. No file writes outside `tmp_path`.
 

@@ -34,7 +34,7 @@ git reset HEAD~1          # Undo commit, keep UNSTAGED
 git reset --hard HEAD~1   # DESTRUCTIVE - undo commit AND DELETE changes
 ```
 
-**WARNING**: `--hard` deletes uncommitted files permanently.
+WARNING: `--hard` deletes uncommitted files permanently.
 
 Recovery from reflog: `git reflog` then `git checkout <hash> -- path/to/file`
 Recovery from remote: `git fetch origin` then `git checkout origin/master -- path/to/file`
@@ -43,7 +43,7 @@ Force push: `git push --force-with-lease` (fails if remote changed)
 
 ## .gitignore Rules
 
-1. **NEVER commit secrets**: .env, certificates, API keys
+1. NEVER commit secrets: .env, certificates, API keys
 2. Exclude reinstallable binaries (node_modules, .venv/)
 3. Exclude build artifacts (dist/, __pycache__/)
 4. Track shared config (.vscode/)

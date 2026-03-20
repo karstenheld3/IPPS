@@ -4,15 +4,15 @@ Rules for end-user visible output via console or Server-Sent Events (SSE) stream
 
 ## Philosophy
 
-**Goal: Users must always know what is happening.**
+Goal: Users must always know what is happening.
 
 - Numbered steps `[ x / n ]` reveal workflow structure
 - Progress indication via iteration counters and running totals
 - Feedback every ~10 seconds for long operations
 - Plain language non-technical users can follow
-- **Full Disclosure:** Every log section self-contained - include filenames, URLs, identifiers
+- Full Disclosure: Every log section self-contained - include filenames, URLs, identifiers
 
-**MUST NOT use log levels:** Never use `INFO`, `DEBUG`, `WARN` prefixes. User-facing logs use plain language with status keywords: `OK`, `FAIL`, `PARTIAL FAIL`, `SKIP`/`SKIPPED`, `ERROR:`, `WARNING:`, `HINT:`.
+MUST NOT use log levels: Never use `INFO`, `DEBUG`, `WARN` prefixes. User-facing logs use plain language with status keywords: `OK`, `FAIL`, `PARTIAL FAIL`, `SKIP`/`SKIPPED`, `ERROR:`, `WARNING:`, `HINT:`.
 
 ## Related Documents
 
@@ -34,14 +34,14 @@ Use `[YYYY-MM-DD HH:MM:SS]`. Always include date AND time. No process ID, no mil
 
 ### LOG-UF-02: Progress Indicators
 
-**Iteration:** `[ x / n ]` with spaces, at line start.
+Iteration: `[ x / n ]` with spaces, at line start.
 
 ```
 [ 1 / 5 ] Processing 'Document A'...
 [ 2 / 5 ] Processing 'Document B'...
 ```
 
-**Retry:** `( x / n )` inline or indented subitem.
+Retry: `( x / n )` inline or indented subitem.
 
 ```
 Uploading file 'report.pdf'...
@@ -50,7 +50,7 @@ Uploading file 'report.pdf'...
   ( 3 / 3 ) Upload successful.
 ```
 
-**Running count:** `( x / n )` for long retrievals.
+Running count: `( x / n )` for long retrievals.
 
 ```
 ( 100 / 342 ) items retrieved...
@@ -58,7 +58,7 @@ Uploading file 'report.pdf'...
 342 files retrieved.
 ```
 
-**Waiting:** Show delay reason and attempt count.
+Waiting: Show delay reason and attempt count.
 
 ```
 ( 1 / 3 ) Waiting 30 seconds for rate limit...
@@ -68,7 +68,7 @@ Resuming upload...
 
 ### LOG-UF-03: Messages and Results
 
-**Plain language.** No technical jargon.
+Plain language. No technical jargon.
 
 ```
 Scan complete: 156 users found.
@@ -76,7 +76,7 @@ Could not save user -> A user with this email already exists.
 Request queued -> Server busy, retrying in 30 seconds.
 ```
 
-**Actionable errors:** Two-level format - defensive summary + exact error.
+Actionable errors: Two-level format - defensive summary + exact error.
 
 ```
 Could not connect to server -> Connection refused
@@ -84,21 +84,21 @@ File not found -> ENOENT - No such file or directory
 Access denied to resource -> (403) Forbidden
 ```
 
-**Skipping:** Always explain why.
+Skipping: Always explain why.
 
 ```
 SKIP: 12 files not embeddable.
 SKIP: 1 file exceeds size limit (>100MB).
 ```
 
-**File operations:** Show what is being written.
+File operations: Show what is being written.
 
 ```
 Writing 152 lines to '01_SiteContents.csv'...
   OK: File '01_SiteContents.csv' written.
 ```
 
-**Summary:** Always end with counts using activity-level status keywords.
+Summary: Always end with counts using activity-level status keywords.
 
 ```
 OK. 3 libraries processed. 56 added, 3 changed.
@@ -106,7 +106,7 @@ PARTIAL FAIL: 2 libraries processed, 1 failed.
 FAIL: Could not complete export -> Connection lost.
 ```
 
-**Destructive operations:** Multi-line warning with details.
+Destructive operations: Multi-line warning with details.
 
 ```
 IMPORTANT: This script will permanently DELETE all versions
@@ -141,7 +141,7 @@ Site: 'https://contoso.sharepoint.com/sites/ProjectA'
       Processing 42 files...
 ```
 
-**With iteration:**
+With iteration:
 ```
 Job [ 1 / 5 ] 'https://contoso.sharepoint.com/sites/ProjectA'
   Connecting to site...
@@ -167,7 +167,7 @@ All user-facing output and standalone scripts MUST use 100-character START/END h
 
 Simple operations within scripts use indentation and status keywords, no additional markers.
 
-**Note:** App-Level logging uses simple `START:` / `END:` markers per LOG-AP-04.
+Note: App-Level logging uses simple `START:` / `END:` markers per LOG-AP-04.
 
 ## Complete Examples
 

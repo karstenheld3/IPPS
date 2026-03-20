@@ -15,16 +15,16 @@ Sessions track EDIRD phases: NOTES.md has "Current Phase" (phase, last verb, gat
 - Lifecycle: Init → Work → Save → Resume → Finalize → Archive
 - Sync session PROBLEMS.md to project on /session-finalize
 - Phase tracking: NOTES.md has current phase, PROGRESS.md has full phase plan
-- **Acronyms/principles in NOTES.md**: Always spell out acronyms and principles fully so agents can understand them without external context. Example: "APAPALAN: As Precise As Possible, As Little As Necessary" not just "APAPALAN principle"
-- **STOP after session init**: After creating session files, STOP and wait for user review. Do NOT implement session goal until explicitly requested. User must review and refine goals before work begins.
+- Acronyms/principles in NOTES.md: Always spell out acronyms and principles fully so agents can understand them without external context. Example: "APAPALAN: As Precise As Possible, As Little As Necessary" not just "APAPALAN principle"
+- STOP after session init: After creating session files, STOP and wait for user review. Do NOT implement session goal until explicitly requested. User must review and refine goals before work begins.
 
 ## Session Lifecycle
 
-1. **Init** (`/session-new`): Create session folder with tracking files
-2. **Work**: Create specs, plans, implement, track progress
-3. **Save** (`/session-save`): Document findings, commit changes
-4. **Resume** (`/session-load`): Re-read session documents, continue work
-5. **Finalize** (`/session-finalize`): Sync findings to project files, prepare for archive
+1. Init (`/session-new`): Create session folder with tracking files
+2. Work: Create specs, plans, implement, track progress
+3. Save (`/session-save`): Document findings, commit changes
+4. Resume (`/session-load`): Re-read session documents, continue work
+5. Finalize (`/session-finalize`): Sync findings to project files, prepare for archive
 
 ## Session Folder Location
 
@@ -35,9 +35,9 @@ Format: `[DEFAULT_SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
 
 Templates from this skill folder:
 
-- **NOTES.md** (`NOTES_TEMPLATE.md`): Context, agent instructions, working patterns, large initial prompts (>120 tokens). Static knowledge.
-- **PROBLEMS.md** (`PROBLEMS_TEMPLATE.md`): All problems - prompts, questions, features, bugs, investigations. Each gets unique ID, tracks status (Open/Resolved/Deferred). Dynamic problem list.
-- **PROGRESS.md** (`PROGRESS_TEMPLATE.md`): To-do, done, tried-but-not-used. Task execution status.
+- NOTES.md (`NOTES_TEMPLATE.md`): Context, agent instructions, working patterns, large initial prompts (>120 tokens). Static knowledge.
+- PROBLEMS.md (`PROBLEMS_TEMPLATE.md`): All problems - prompts, questions, features, bugs, investigations. Each gets unique ID, tracks status (Open/Resolved/Deferred). Dynamic problem list.
+- PROGRESS.md (`PROGRESS_TEMPLATE.md`): To-do, done, tried-but-not-used. Task execution status.
 
 ## Assumed Workflow
 
@@ -65,8 +65,8 @@ See `[AGENT_FOLDER]/rules/devsystem-ids.md` for complete system.
 ```markdown
 # Session Notes
 ## Session Info
-- **Started**: [DATE]
-- **Goal**: [Brief description]
+- Started: [DATE]
+- Goal: [Brief description]
 ## Key Decisions
 ## Important Findings
 ## Workflows to Run on Resume

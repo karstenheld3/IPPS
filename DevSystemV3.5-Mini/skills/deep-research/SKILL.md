@@ -24,13 +24,13 @@ Systematic research using MCPI (Most Complete Point of Information) or MEPI (Mos
 
 ## Phase Model (Global)
 
-**Phase 1 - Preflight**: Decompose prompt, document assumptions, collect sources, verify/correct, create STRUT with QA pipelines, run first VCRIV
+Phase 1 - Preflight: Decompose prompt, document assumptions, collect sources, verify/correct, create STRUT with QA pipelines, run first VCRIV
 
-**Phase 2 - Planning**: Create TOC, topic template, TASKS plan, run second VCRIV
+Phase 2 - Planning: Create TOC, topic template, TASKS plan, run second VCRIV
 
-**Phase 3 - Research**: Topic-by-topic file-by-file per TASKS/STRUT, run VCRIV per granularity rules
+Phase 3 - Research: Topic-by-topic file-by-file per TASKS/STRUT, run VCRIV per granularity rules
 
-**Phase 4 - Final Verification and Sync**: Dimension coverage, completeness check, metadata, final VCRIV
+Phase 4 - Final Verification and Sync: Dimension coverage, completeness check, metadata, final VCRIV
 
 Strategy files (MCPI/MEPI) define details for each phase.
 
@@ -38,13 +38,13 @@ Strategy files (MCPI/MEPI) define details for each phase.
 
 Answer 7 questions before any source collection:
 
-1. **Q1 - Goal**: User's intent (1-2 sentences)
-2. **Q2 - Scope**: NARROW (1 dim), FOCUSED (2-4 dim), EXPLORATORY (5-9 dim)
-3. **Q3 - Dimensions**: legal, financial, administrative, practical, technical, professional, medical, psychological, personal, organizational, strategic, security, cultural, educational, historical, or custom
-4. **Q4 - Topics**: 3-5 topics per dimension
-5. **Q5 - Strategy**: MCPI (exhaustive) or MEPI (curated)
-6. **Q6 - Domain**: SOFTWARE, MARKET_INTEL, DOCUMENT_INTEL, LEGAL, or DEFAULT
-7. **Q7 - Discovery Platforms**: What databases/platforms index this entity type? Test each, classify access level.
+1. Q1 - Goal: User's intent (1-2 sentences)
+2. Q2 - Scope: NARROW (1 dim), FOCUSED (2-4 dim), EXPLORATORY (5-9 dim)
+3. Q3 - Dimensions: legal, financial, administrative, practical, technical, professional, medical, psychological, personal, organizational, strategic, security, cultural, educational, historical, or custom
+4. Q4 - Topics: 3-5 topics per dimension
+5. Q5 - Strategy: MCPI (exhaustive) or MEPI (curated)
+6. Q6 - Domain: SOFTWARE, MARKET_INTEL, DOCUMENT_INTEL, LEGAL, or DEFAULT
+7. Q7 - Discovery Platforms: What databases/platforms index this entity type? Test each, classify access level.
 
 Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection until all 7 answered.
 
@@ -77,28 +77,28 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 
 ## MUST-NOT-FORGET
 
-- **STRUT required** for all research sessions (include pipeline steps and time log)
-- **Assumptions check first** - write down what you think you know before researching
-- **Discovery platforms tested** - identify, test, classify (FREE/PAID/PARTIAL) before source collection
-- **Primary sources > secondary > community** - verify tier 1-3 before accepting tier 6-8
-- **Access dates required**: `Accessed: YYYY-MM-DD` on all sources
-- **Track time** - log task start/end for net research time calculation
-- **Quality pipeline 3x** (not optional): TOC+template, each topic, complete set
-- **Source completeness**: Full PDF transcription via pipeline, no agent-selected chunks
-- **Download and store** all sources in session folder (web content changes)
-- **Inline citations** on critical conclusions: `[LABEL] (SOURCE_ID | URL or filename)`
-- **Identify domain** during Preflight, read corresponding DOMAIN_*.md profile
-- **Document strategy choice** - OUTPUT document must include strategy (MEPI/MCPI) + domain + rationale for both in header block
-- **Distinguish** facts from opinions from assumptions
-- **Autonomous after Phase 1** - no user interaction until delivery (except [CONSULT])
+- STRUT required for all research sessions (include pipeline steps and time log)
+- Assumptions check first - write down what you think you know before researching
+- Discovery platforms tested - identify, test, classify (FREE/PAID/PARTIAL) before source collection
+- Primary sources > secondary > community - verify tier 1-3 before accepting tier 6-8
+- Access dates required: `Accessed: YYYY-MM-DD` on all sources
+- Track time - log task start/end for net research time calculation
+- Quality pipeline 3x (not optional): TOC+template, each topic, complete set
+- Source completeness: Full PDF transcription via pipeline, no agent-selected chunks
+- Download and store all sources in session folder (web content changes)
+- Inline citations on critical conclusions: `[LABEL] (SOURCE_ID | URL or filename)`
+- Identify domain during Preflight, read corresponding DOMAIN_*.md profile
+- Document strategy choice - OUTPUT document must include strategy (MEPI/MCPI) + domain + rationale for both in header block
+- Distinguish facts from opinions from assumptions
+- Autonomous after Phase 1 - no user interaction until delivery (except [CONSULT])
 
 ## Strategy Selection
 
-**MEPI** (Default) - curated options, deeply researched, compare and recommend
+MEPI (Default) - curated options, deeply researched, compare and recommend
 - Use for: specific intent, danger of analysis-paralysis
 - File: [RESEARCH_STRATEGY_MEPI.md](RESEARCH_STRATEGY_MEPI.md)
 
-**MCPI** (Exception) - exhaustive coverage, document everything
+MCPI (Exception) - exhaustive coverage, document everything
 - Use for: broad intent, wants whole picture
 - File: [RESEARCH_STRATEGY_MCPI.md](RESEARCH_STRATEGY_MCPI.md)
 
@@ -113,7 +113,7 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 7. Stack Overflow
 8. Community forums/Discord
 
-**Enforcement** (legal/financial/medical): MUST cite tier 1-3 for critical claims. Label tier 6-8 as `[COMMUNITY]`. Violation triggers `[CONSULT]`.
+Enforcement (legal/financial/medical): MUST cite tier 1-3 for critical claims. Label tier 6-8 as `[COMMUNITY]`. Violation triggers `[CONSULT]`.
 
 ## Verification Labels
 
@@ -127,21 +127,21 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 
 `verify → critique → reconcile → implement → verify`
 
-- **V** - `/verify` formal correctness
-- **C** - `/critique` find gaps, produces `*_REVIEW.md`
-- **R** - `/reconcile` prioritize findings
-- **I** - `/implement` apply findings, delete `*_REVIEW.md`
-- **V** - Final verify
+- V - `/verify` formal correctness
+- C - `/critique` find gaps, produces `*_REVIEW.md`
+- R - `/reconcile` prioritize findings
+- I - `/implement` apply findings, delete `*_REVIEW.md`
+- V - Final verify
 
-**Four mandatory checkpoints:**
+Four mandatory checkpoints:
 1. Preflight deliverables (STRUT, SOURCES, PromptDecomposition)
 2. Planning deliverables (TOC, template, TASKS)
 3. Each research output (per granularity rules)
 4. Complete research set ex-post
 
-**Granularity** (scope-based): NARROW: per topic file | FOCUSED/EXPLORATORY: per dimension | Final VCRIV on synthesis document
+Granularity (scope-based): NARROW: per topic file | FOCUSED/EXPLORATORY: per dimension | Final VCRIV on synthesis document
 
-**Termination**: Max 2 cycles per checkpoint, then [CONSULT].
+Termination: Max 2 cycles per checkpoint, then [CONSULT].
 
 ## Inline Citations
 
@@ -168,9 +168,9 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 
 ## Planning Structure
 
-**STRUT** (high-level, REQUIRED): Phases, objectives, deliverables, transitions, time log. File: `STRUT_[TOPIC].md`
+STRUT (high-level, REQUIRED): Phases, objectives, deliverables, transitions, time log. File: `STRUT_[TOPIC].md`
 
-**TASKS** (low-level, Phase 2): Flat task list with durations and done-when criteria. File: `TASKS.md`
+TASKS (low-level, Phase 2): Flat task list with durations and done-when criteria. File: `TASKS.md`
 
 ## Reference Files
 
@@ -178,6 +178,6 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 - [RESEARCH_TOC_TEMPLATE.md](RESEARCH_TOC_TEMPLATE.md) - TOC structure
 - [RESEARCH_CREATE_TOC.md](RESEARCH_CREATE_TOC.md) - TOC creation workflow
 
-**File naming**: `__[SUBJECT]_TOC.md`, `__[SUBJECT]_SOURCES.md`, `_INFO_[SUBJECT]-IN[XX]_[TOPIC].md`
+File naming: `__[SUBJECT]_TOC.md`, `__[SUBJECT]_SOURCES.md`, `_INFO_[SUBJECT]-IN[XX]_[TOPIC].md`
 
-**Source ID format**: `[SUBJECT]-SC-[SOURCE]-[DOCNAME]`
+Source ID format: `[SUBJECT]-SC-[SOURCE]-[DOCNAME]`

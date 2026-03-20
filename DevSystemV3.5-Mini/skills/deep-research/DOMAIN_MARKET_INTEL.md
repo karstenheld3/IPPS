@@ -10,26 +10,26 @@ Research domain for companies, financial reports, competitive analysis, market t
 
 ## Source Tiers
 
-- **Tier 1 (official/primary)**: SEC filings (10-K, 10-Q, 8-K), annual reports, investor presentations, official press releases
-- **Tier 2 (vendor/issuer)**: Earnings call transcripts, company blog, official product pages, regulatory filings
-- **Tier 3 (community/analyst)**: Analyst reports, industry publications, news articles, financial databases
+- Tier 1 (official/primary): SEC filings (10-K, 10-Q, 8-K), annual reports, investor presentations, official press releases
+- Tier 2 (vendor/issuer): Earnings call transcripts, company blog, official product pages, regulatory filings
+- Tier 3 (community/analyst): Analyst reports, industry publications, news articles, financial databases
 
 ## Document Handling
 
-- **Mandatory PDF download**: Quarterly and annual reports MUST be downloaded and transcribed via source processing pipeline
+- Mandatory PDF download: Quarterly and annual reports MUST be downloaded and transcribed via source processing pipeline
 - Reports >50 pages: Transcribe fully via `@skills:llm-transcription` (batch mode, 12 workers). Use `<transcription_json>` tags to extract financial tables without additional LLM calls.
 - Extract key data as structured JSON via grep of `<transcription_json>` tags: revenue, margins, guidance, segment breakdown
 - Store full transcription (`report.md`) and extracted data (`report_data.jsonl`) in `_SOURCES/`
-- **Model selection**: `gpt-5-mini` for financial documents (99.5% accuracy on numerical data)
+- Model selection: `gpt-5-mini` for financial documents (99.5% accuracy on numerical data)
 - Press releases and news: `read_url_content` or `@skills:ms-playwright-mcp` screenshot + transcribe
 
 ## Template Additions
 
-- **Financial Summary** - Key metrics (revenue, margins, growth rates, guidance)
-- **Competitive Position** - Market share, key competitors, differentiation
-- **Key Metrics** - KPIs specific to the industry/company
-- **Risk Factors** - From official filings and analyst reports
-- **Timeline** - Key dates (earnings, product launches, regulatory milestones)
+- Financial Summary - Key metrics (revenue, margins, growth rates, guidance)
+- Competitive Position - Market share, key competitors, differentiation
+- Key Metrics - KPIs specific to the industry/company
+- Risk Factors - From official filings and analyst reports
+- Timeline - Key dates (earnings, product launches, regulatory milestones)
 
 ## Quality Criteria
 

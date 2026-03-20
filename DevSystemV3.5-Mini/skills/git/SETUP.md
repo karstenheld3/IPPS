@@ -14,7 +14,7 @@ If version returned, skip to Configuration.
 
 ## Installation
 
-**Winget (Recommended):**
+Winget (Recommended):
 ```powershell
 winget install --id Git.Git -e --source winget
 ```
@@ -24,9 +24,9 @@ Refresh PATH after install:
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 ```
 
-**Chocolatey:** `choco install git -y`
+Chocolatey: `choco install git -y`
 
-**Manual:** https://git-scm.com/download/win - run installer with defaults, restart terminal.
+Manual: https://git-scm.com/download/win - run installer with defaults, restart terminal.
 
 ## Configuration
 
@@ -43,9 +43,9 @@ Verify: `git config --global --list`
 
 ## Troubleshooting
 
-**Permission denied:** Run PowerShell as Administrator.
+Permission denied: Run PowerShell as Administrator.
 
-**SSL certificate problems:**
+SSL certificate problems:
 ```powershell
 git config --global http.sslBackend schannel
 ```

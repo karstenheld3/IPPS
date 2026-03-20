@@ -121,10 +121,10 @@ Remove-Item "$installerDir\*" -Force -ErrorAction SilentlyContinue
 
 ## Tool Locations
 
-- **7-Zip**: `[WORKSPACE_FOLDER]/../.tools/7z/`
-- **Poppler**: `[WORKSPACE_FOLDER]/../.tools/poppler/`
-- **QPDF**: `[WORKSPACE_FOLDER]/../.tools/qpdf/`
-- **Ghostscript**: `[WORKSPACE_FOLDER]/../.tools/gs/`
-- **uv/uvx**: `%USERPROFILE%\.local\bin\`
-- **Installers**: `[WORKSPACE_FOLDER]/../.tools/_installer/`
-- **JPG output**: `[WORKSPACE_FOLDER]/../.tools/_pdf_to_jpg_converted/`
+- 7-Zip: `[WORKSPACE_FOLDER]/../.tools/7z/`
+- Poppler: `[WORKSPACE_FOLDER]/../.tools/poppler/`
+- QPDF: `[WORKSPACE_FOLDER]/../.tools/qpdf/`
+- Ghostscript: `[WORKSPACE_FOLDER]/../.tools/gs/`
+- uv/uvx: `%USERPROFILE%\.local\bin\`
+- Installers: `[WORKSPACE_FOLDER]/../.tools/_installer/`
+- JPG output: `[WORKSPACE_FOLDER]/../.tools/_pdf_to_jpg_converted/`

@@ -7,7 +7,7 @@ All prices are in USD. For the most current pricing information, please visit cl
 ## Model pricing
 
 <transcription_table>
-**Model pricing**
+Model pricing
 
 | Model | Base Input Tokens | 5m Cache Writes | 1h Cache Writes | Cache Hits & Refreshes | Output Tokens |
 |-------|-------------------:|----------------:|----------------:|-----------------------:|--------------:|
@@ -57,7 +57,7 @@ For Claude Opus 4.6 and newer models, specifying US-only inference via the `infe
 The Batch API allows asynchronous processing with a 50% discount on both input and output tokens.
 
 <transcription_table>
-**Table: Batch processing**
+Table: Batch processing
 
 | Model | Batch input | Batch output |
 |-------|-------------:|-------------:|
@@ -87,7 +87,7 @@ When using Claude Opus 4.6, Sonnet 4.5, or Sonnet 4 with the 1M token context wi
 The 1M token context window is currently in beta for organizations in usage tier 4 and organizations with custom rate limits. Only available for Claude Opus 4.6, Sonnet 4.5, and Sonnet 4.
 
 <transcription_table>
-**Table 1: Long context pricing by model**
+Table 1: Long context pricing by model
 
 | Model | ≤ 200K input tokens | > 200K input tokens |
 |-------|---------------------|----------------------|
@@ -120,7 +120,7 @@ Tool use requests are priced based on:
 The additional tokens from tool use come from the `tools` parameter, `tool_use` content blocks, and `tool_result` content blocks. A special system prompt is automatically included when using tools.
 
 <transcription_table>
-**Table: Model token counts**
+Table: Model token counts
 
 | Model | Mode | Tokens |
 |-------|------|--------|
@@ -171,7 +171,7 @@ Tracked separately from token usage. Execution time minimum 5 minutes. Files inc
 Standard input/output token pricing plus additional input tokens:
 
 <transcription_table>
-**Table 1: Text editor tool — additional input tokens**
+Table 1: Text editor tool — additional input tokens
 
 | Tool | Additional input tokens |
 |------|-------------------------|
@@ -211,7 +211,7 @@ Example token usage for typical content:
 Standard tool use pricing. System prompt overhead: 466-499 tokens.
 
 <transcription_table>
-**Computer use tool token usage**
+Computer use tool token usage
 
 | Model | Input tokens per tool definition |
 |-------|----------------------------------|
@@ -235,26 +235,26 @@ Note: Bash or text editor tools alongside computer use have their own token cost
 
 ### General agent workflow pricing
 
-1. **Initial request processing** - 500-1,000 tokens input, ~$0.003 per request
-2. **Memory and context retrieval** - 2,000-5,000 tokens, ~$0.015 per operation
-3. **Action planning and execution** - 1,000-2,000 planning + 500-1,000 feedback, ~$0.045 per action
+1. Initial request processing - 500-1,000 tokens input, ~$0.003 per request
+2. Memory and context retrieval - 2,000-5,000 tokens, ~$0.015 per operation
+3. Action planning and execution - 1,000-2,000 planning + 500-1,000 feedback, ~$0.045 per action
 
 ## Cost optimization strategies
 
-1. **Use appropriate models:** Haiku for simple tasks, Sonnet for complex reasoning
-2. **Implement prompt caching:** Reduce costs for repeated context
-3. **Batch operations:** Use Batch API for non-time-sensitive tasks
-4. **Monitor usage patterns:** Track token consumption for optimization
+1. Use appropriate models: Haiku for simple tasks, Sonnet for complex reasoning
+2. Implement prompt caching: Reduce costs for repeated context
+3. Batch operations: Use Batch API for non-time-sensitive tasks
+4. Monitor usage patterns: Track token consumption for optimization
 
 # Additional pricing considerations
 
 ## Rate limits
 
-- **Tier 1:** Entry-level usage with basic limits
-- **Tier 2:** Increased limits for growing applications
-- **Tier 3:** Higher limits for established applications
-- **Tier 4:** Maximum standard limits
-- **Enterprise:** Custom limits available
+- Tier 1: Entry-level usage with basic limits
+- Tier 2: Increased limits for growing applications
+- Tier 3: Higher limits for established applications
+- Tier 4: Maximum standard limits
+- Enterprise: Custom limits available
 
 ## Volume discounts
 
@@ -272,12 +272,12 @@ Custom rate limits, volume discounts, dedicated support, custom terms. Contact s
 
 ## Frequently asked questions
 
-**How is token usage calculated?** ~1 token is approximately 4 characters or 0.75 words in English.
+How is token usage calculated? ~1 token is approximately 4 characters or 0.75 words in English.
 
-**Are there free tiers or trials?** New users receive free credits. Contact sales for extended enterprise trials.
+Are there free tiers or trials? New users receive free credits. Contact sales for extended enterprise trials.
 
-**How do discounts stack?** Batch API and prompt caching discounts can be combined.
+How do discounts stack? Batch API and prompt caching discounts can be combined.
 
-**What payment methods are accepted?** Major credit cards for standard accounts. Enterprise customers can arrange invoicing.
+What payment methods are accepted? Major credit cards for standard accounts. Enterprise customers can arrange invoicing.
 
 For additional questions: support@anthropic.com.

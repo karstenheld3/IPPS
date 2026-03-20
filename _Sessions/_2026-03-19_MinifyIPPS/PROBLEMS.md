@@ -1,6 +1,6 @@
 # Session Problems
 
-**Doc ID**: 2026-03-19_MinimalIPPS-PROBLEMS
+**Doc ID**: 2026-03-19_MinifyIPPS-PROBLEMS
 
 ## Open
 

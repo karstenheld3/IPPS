@@ -5,7 +5,7 @@ auto_execution_mode: 1
 
 # Transcribe Workflow
 
-Convert PDF files and web pages to complete markdown. **Nothing may be omitted.**
+Convert PDF files and web pages to complete markdown. Nothing may be omitted.
 
 ## Required Skills
 
@@ -30,12 +30,12 @@ if ($hasSkill -and $hasKeys) { Write-Host "MODE: Advanced LLM Transcription" }
 else { Write-Host "MODE: Built-in Transcription (workflow prompt)" }
 ```
 
-**Mode A**: skill + keys available → `transcribe-image-to-markdown.py` with ensemble + judge + refinement
-**Mode B**: fallback → built-in prompt in Appendix
+Mode A: skill + keys available → `transcribe-image-to-markdown.py` with ensemble + judge + refinement
+Mode B: fallback → built-in prompt in Appendix
 
 ## Core Principle
 
-**Maximum 4 pages per transcription call.** Write output to file immediately after each chunk.
+Maximum 4 pages per transcription call. Write output to file immediately after each chunk.
 
 ## Source Types
 
@@ -103,7 +103,7 @@ For each chunk (pages 1-4, 5-8, 9-12, etc.):
 
 ### 6a. Choose Transcription Method
 
-**Mode A: Advanced LLM Transcription**
+Mode A: Advanced LLM Transcription
 
 ```powershell
 $venv = "../.tools/llm-venv/Scripts/python.exe"
@@ -127,7 +127,7 @@ $skill = ".windsurf/skills/llm-transcription"
     --workers 12
 ```
 
-**Mode B: Built-in Transcription** (no skill or keys)
+Mode B: Built-in Transcription (no skill or keys)
 
 Read up to 4 images per call, apply built-in prompt from Appendix.
 
@@ -135,7 +135,7 @@ Read up to 4 images per call, apply built-in prompt from Appendix.
 
 Extract ALL content: headings, paragraphs, lists, footnotes, figures (see Figure Protocol), tables (markdown), captions, labels, references.
 
-**Special Characters:**
+Special Characters:
 - Superscripts/subscripts: Unicode (¹ ² ³, ₁ ₂ ₃) not ASCII
 - Greek letters: actual Unicode (α β γ)
 - Math: LaTeX syntax (`$E = mc^2$`)
@@ -143,8 +143,8 @@ Extract ALL content: headings, paragraphs, lists, footnotes, figures (see Figure
 
 ### Page Boundary Markers
 
-**Footer** BEFORE `---`: `<transcription_page_footer> Page 5 | Company Name | Confidential </transcription_page_footer>`
-**Header** AFTER `---`: `<transcription_page_header> Annual Report 2024 | Section 3 </transcription_page_header>`
+Footer BEFORE `---`: `<transcription_page_footer> Page 5 | Company Name | Confidential </transcription_page_footer>`
+Header AFTER `---`: `<transcription_page_header> Annual Report 2024 | Section 3 </transcription_page_header>`
 
 Single-line or multi-line format both acceptable. Capture: page numbers, doc title, company name, classification, version/date, navigation text. Omit tag if absent in source.
 
@@ -162,26 +162,26 @@ Pages completed: 4 of 20
 
 ## Figure Transcription Protocol
 
-**MANDATORY**: Every figure MUST have BOTH ASCII art AND `<transcription_notes>`.
+MANDATORY: Every figure MUST have BOTH ASCII art AND `<transcription_notes>`.
 
 ### F0: Analyze Before Drawing
-1. **Subject**: diagram type, subject matter
-2. **Elements**: 3-7 main components
-3. **Relationships**: spatial, logical, flow
-4. **Priority**: what matters most
+1. Subject: diagram type, subject matter
+2. Elements: 3-7 main components
+3. Relationships: spatial, logical, flow
+4. Priority: what matters most
 
 ### F1: Create ASCII Art
 
-**Mode A: Structural** (flowcharts, diagrams, architecture, UI): `+ - | / \ _ [ ] ( ) { } < > -> <- v ^`
-**Mode B: Shading** (photographs, complex graphics): `@#%&8BWM*oahkbd=+-:.`
+Mode A: Structural (flowcharts, diagrams, architecture, UI): `+ - | / \ _ [ ] ( ) { } < > -> <- v ^`
+Mode B: Shading (photographs, complex graphics): `@#%&8BWM*oahkbd=+-:.`
 
-**Maximize semantics**: title header, inline legends, semantic labels on every node, state annotations, result summaries. LLMs understand labels better than visual patterns.
+Maximize semantics: title header, inline legends, semantic labels on every node, state annotations, result summaries. LLMs understand labels better than visual patterns.
 
-**Layout**: 80-120 chars wide (max 180), double horizontal spacing for aspect ratio. **PURE ASCII ONLY** - no Unicode box-drawing.
+Layout: 80-120 chars wide (max 180), double horizontal spacing for aspect ratio. PURE ASCII ONLY - no Unicode box-drawing.
 
 ````
 <transcription_image>
-**Figure [N]: [Caption from original]**
+Figure [N]: [Caption from original]
 
 ```ascii
 [ASCII art representation here]
@@ -277,25 +277,25 @@ Run `/verify`:
 
 ## Appendix: Built-in Transcription Prompt (Mode B)
 
-**Transcription Prompt v1B**
+Transcription Prompt v1B
 
-Transcribe this document page image to Markdown. **Accuracy over speed.**
+Transcribe this document page image to Markdown. Accuracy over speed.
 
-**Key Areas:** Graphics (labeled ASCII + data extraction), Structure (semantic hierarchy), Text (character-level accuracy)
+Key Areas: Graphics (labeled ASCII + data extraction), Structure (semantic hierarchy), Text (character-level accuracy)
 
-**DO:**
+DO:
 - Label every node: `[DATABASE]`, `[PROCESS]`, `(pending)`
 - Extract ALL data values from charts (numbers > visual fidelity)
 - Match header levels to visual hierarchy (H1=title, H2=sections, H3=subsections)
 - Use `[unclear]` for unreadable text
 
-**DON'T:**
+DON'T:
 - Don't transcribe UI chrome (toolbars, ribbons, browser elements)
 - Don't count decorative logos/separators as missed graphics
 - Don't use headers for formatting convenience - only for real sections
 - Don't guess numbers - mark as `[unclear: ~value?]`
 
-**Graphics:**
+Graphics:
 
 TRANSCRIBE: Charts, diagrams, flowcharts, infographics, data visualizations, maps, technical illustrations
 SKIP: UI chrome, toolbars, logos, watermarks → `<!-- Decorative: [list] -->`
@@ -304,7 +304,7 @@ Every essential graphic MUST have:
 
 ```markdown
 <transcription_image>
-**Figure N: [Caption]**
+Figure N: [Caption]
 
 ```ascii
 [TITLE - WHAT THIS SHOWS]
@@ -320,18 +320,18 @@ Legend: [A]=Item1 [B]=Item2
 </transcription_image>
 ```
 
-**Structure:**
+Structure:
 - H1 = Document title (one per page max)
 - H2 = Major sections
 - H3 = Subsections
 - Multi-column: top-to-bottom per column, mark with `<!-- Column N -->`
 
-**Text Accuracy:**
+Text Accuracy:
 - Every word exactly as shown, numbers exact
 - Mark unclear: `[unclear]` or `[unclear: best guess?]`
 - Superscripts: Unicode. Greek: Unicode. Math: LaTeX. Symbols: Unicode.
 
-**Output Structure:**
+Output Structure:
 
 ```markdown
 # [Document Title]
@@ -343,7 +343,7 @@ Legend: [A]=Item1 [B]=Item2
 [Content...]
 
 <transcription_image>
-**Figure 1: [Caption]**
+Figure 1: [Caption]
 [ASCII with inline labels]
 <transcription_notes>[Data, colors, misses]</transcription_notes>
 </transcription_image>

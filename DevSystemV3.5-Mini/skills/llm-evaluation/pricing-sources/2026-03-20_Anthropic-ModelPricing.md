@@ -4,8 +4,8 @@
 
 ## Sources
 
-- **Primary**: https://platform.claude.com/docs/en/about-claude/pricing
-- **Screenshots**: Captured 2026-03-20 from Claude API Docs (3 screenshots covering model pricing, tools, agent examples)
+- Primary: https://platform.claude.com/docs/en/about-claude/pricing
+- Screenshots: Captured 2026-03-20 from Claude API Docs (3 screenshots covering model pricing, tools, agent examples)
 
 ## Model Pricing (per 1M tokens)
 
@@ -30,7 +30,7 @@ MTok = Million tokens. All prices USD.
 
 Cache multipliers: 5-min write = 1.25x base input, 1-hour write = 2x base input, cache hit = 0.1x base input. Pays off after 1 read (5-min) or 2 reads (1-hour). Multipliers stack with Batch API, long context, and data residency.
 
-Two modes: **Automatic** (`cache_control` at top level, recommended) or **Explicit breakpoints** (per content block).
+Two modes: Automatic (`cache_control` at top level, recommended) or Explicit breakpoints (per content block).
 
 ## Batch Processing (50% discount)
 
@@ -77,7 +77,7 @@ Adds 245 input tokens. Additional tokens from command outputs, errors, file cont
 
 ## Code Execution Tool
 
-**Free** when used with `web_search_20250305` or `web_fetch_preview`. Otherwise billed by execution time (5-min minimum). 1,500 free hours/month/org, then $0.05/hour/container. Files written = time billed even if tool unused.
+Free when used with `web_search_20250305` or `web_fetch_preview`. Otherwise billed by execution time (5-min minimum). 1,500 free hours/month/org, then $0.05/hour/container. Files written = time billed even if tool unused.
 
 ## Text Editor Tool
 
@@ -88,11 +88,11 @@ Adds 245 input tokens. Additional tokens from command outputs, errors, file cont
 
 ## Web Search Tool
 
-**$10 per 1,000 searches** + standard token costs. Search results count as input tokens. Not billed on error.
+$10 per 1,000 searches + standard token costs. Search results count as input tokens. Not billed on error.
 
 ## Web Fetch Tool
 
-**No additional charges** beyond standard token costs. Use `max_content_tokens` to limit size.
+No additional charges beyond standard token costs. Use `max_content_tokens` to limit size.
 
 Typical content: web page ~10K tokens, large docs 70-100K, research PDF ~125K tokens.
 
@@ -102,8 +102,8 @@ System prompt overhead: 466-499 tokens. Tool definition: 735 tokens (Claude 4.x 
 
 ## Agent Pricing Examples
 
-- **Customer support**: ~3,700 tokens/conversation, ~$7,000 for 10,000 tickets (Opus 4.5)
-- **General agent workflow**: ~$0.02/request + ~$0.05/retrieval + ~$0.04/action
+- Customer support: ~3,700 tokens/conversation, ~$7,000 for 10,000 tickets (Opus 4.5)
+- General agent workflow: ~$0.02/request + ~$0.05/retrieval + ~$0.04/action
 
 ## Cost Optimization
 

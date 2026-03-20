@@ -10,15 +10,15 @@ UNKNOWN = '[UNKNOWN]'
 
 ## Rule Index
 
-**Formatting (FT)**: FT-01 Indent 2 spaces | FT-02 Single line ≤220 chars | FT-03 Signature on one line | FT-04 One empty line between functions/classes | FT-05 Topic markers (127 chars)
+Formatting (FT): FT-01 Indent 2 spaces | FT-02 Single line ≤220 chars | FT-03 Signature on one line | FT-04 One empty line between functions/classes | FT-05 Topic markers (127 chars)
 
-**Imports (IM)**: IM-01 Top of file | IM-02 Core imports single line | IM-03 No local imports | IM-04 Group: stdlib, third-party, internal | IM-05 Single-line multi-name
+Imports (IM): IM-01 Top of file | IM-02 Core imports single line | IM-03 No local imports | IM-04 Group: stdlib, third-party, internal | IM-05 Single-line multi-name
 
-**Code Generation (CG)**: CG-01 No symbol renaming | CG-02 Re-use patterns | CG-03 Check existing helpers | CG-04 Least Surprise | CG-05 Explicit loops | CG-06 Stdlib first | CG-07 No emojis | CG-08 Timezone-aware datetime | CG-09 Singular/plural
+Code Generation (CG): CG-01 No symbol renaming | CG-02 Re-use patterns | CG-03 Check existing helpers | CG-04 Least Surprise | CG-05 Explicit loops | CG-06 Stdlib first | CG-07 No emojis | CG-08 Timezone-aware datetime | CG-09 Singular/plural
 
-**Naming (NM)**: NM-01 Clear names | NM-02 Follow patterns | NM-03 No abbreviations | NM-04 Corresponding pairs | NM-05 No misleading concepts | NM-06 Specific over generic | NM-07 Origin/destination not source/target | NM-08 Don't rename established APIs
+Naming (NM): NM-01 Clear names | NM-02 Follow patterns | NM-03 No abbreviations | NM-04 Corresponding pairs | NM-05 No misleading concepts | NM-06 Specific over generic | NM-07 Origin/destination not source/target | NM-08 Don't rename established APIs
 
-**Comments (CM)**: CM-01 Comment intent | CM-02 No docstrings for small functions | CM-03 Docstrings for complex functions | CM-04 ASCII quotes | CM-05 Tree characters for hierarchies
+Comments (CM): CM-01 Comment intent | CM-02 No docstrings for small functions | CM-03 Docstrings for complex functions | CM-04 ASCII quotes | CM-05 Tree characters for hierarchies
 
 ## Formatting Rules (FT)
 
@@ -81,11 +81,11 @@ import asyncio, datetime, json, random
 
 ### PYTHON-CG-04: Prefer simple, idiomatic Python. Optimize readability over micro-optimizations.
 
-### PYTHON-CG-05: Avoid `lambda`, `map`, `filter`, `reduce` for control flow; use explicit `for` loops. **Exception**: string/list joins.
+### PYTHON-CG-05: Avoid `lambda`, `map`, `filter`, `reduce` for control flow; use explicit `for` loops. Exception: string/list joins.
 
 ### PYTHON-CG-06: Prefer standard library; add dependencies only if helper would be unreasonably complex.
 
-### PYTHON-CG-07: No emojis in code/logging. **Exception**: UI may use ✅❌⚠️★☆⯪
+### PYTHON-CG-07: No emojis in code/logging. Exception: UI may use ✅❌⚠️★☆⯪
 
 ### PYTHON-CG-08: Use `datetime.datetime.now(datetime.timezone.utc)` not deprecated `utcnow()`.
 
@@ -102,8 +102,8 @@ import asyncio, datetime, json, random
 
 ### PYTHON-NM-04: Corresponding Pairs
 Use same word stem for opposites.
-- **Verbs**: send/receive, pack/unpack, accept/reject, enable/disable, visible/hidden, show/hide, do/undo, open/close, check/uncheck, validate/invalidate, include/exclude, existant/nonExistant, empty/filled, expand/shrink
-- **Entities**: Input/Output, Addition/Removal, Activation/Deactivation, Source/Target, Current/Target, Origin/Destination, Departure/Arrival, Prefix/Suffix
+- Verbs: send/receive, pack/unpack, accept/reject, enable/disable, visible/hidden, show/hide, do/undo, open/close, check/uncheck, validate/invalidate, include/exclude, existant/nonExistant, empty/filled, expand/shrink
+- Entities: Input/Output, Addition/Removal, Activation/Deactivation, Source/Target, Current/Target, Origin/Destination, Departure/Arrival, Prefix/Suffix
 
 ### PYTHON-NM-05: `visible/invisible` implies object occupies space. Use `visible/hidden` if hidden means "not there at all".
 

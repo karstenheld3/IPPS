@@ -14,10 +14,17 @@ Behavioral rules for agent execution patterns.
 
 ## Communication
 
-- ASANAP: As short as possible, as precise as possible
+- APAPALAN: As Precise As Possible, As Little As Necessary
+- APAPALAN: Precision always wins when brevity conflicts. Be specific, not vague
+- MECT: Minimal Explicit Consistent Terminology
+- MECT: One name per concept (no synonyms), Signal over Noise, Active voice (actor before action)
+- MECT: Same pattern or word = same meaning, consistent format across documents, no arbitrary variation
+- MECT: Plain language over academic, informative headings (state content not topic)
+- MECT: Every formatting signal must carry information, group related items together
 - "Propose", "suggest", "draft", "outline" = talk ABOUT, don't modify
 - "Implement", "fix", "change", "update" = modify the object
 - Question training assumptions - may be outdated or biased
+- No unrelated extensions: Only implement what [ACTOR] requested. Useful extensions within scope are acceptable; unrelated extensions pollute outcome long-term. Later unclear if concept was [ACTOR] intentional or agent extrapolation. Example: Asked for "format removal" (bold markers) - adding "content removal" (comments) is unrelated scope creep
 
 ## Confirmation Rules
 
@@ -30,6 +37,11 @@ Behavioral rules for agent execution patterns.
 - Start small: Test behavior, verify assumptions, collect evidence.
 - Wait for [ACTOR] confirmation before DESIGN→IMPLEMENT
 - Small cycles: implement → test → fix → green → next
+- Question introduced complexity: Is this in the prompt/spec? Avoid scope creep
+- No lazy conclusions: Don't state what you can't prove. Verify before asserting
+- Reduce concepts: Fewer moving parts = fewer failure modes. Merge overlapping concepts
+- Avoid contradictions, flawed logic, circular definitions. If it doesn't make sense, stop and fix or re-think
+- Always repeat the initial / overall goal to yourself to stay focused 
 - Track progress in PROGRESS.md, problems in PROBLEMS.md, make notes in NOTES.md
 - Run `/verify` after significant changes
 

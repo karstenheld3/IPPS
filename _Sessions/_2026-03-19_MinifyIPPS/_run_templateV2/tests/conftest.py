@@ -1,4 +1,4 @@
-"""Shared test fixtures for MinimalIPPS V2 tests."""
+"""Shared test fixtures for MinifyIPPS V2 tests."""
 import json
 import shutil
 import tempfile

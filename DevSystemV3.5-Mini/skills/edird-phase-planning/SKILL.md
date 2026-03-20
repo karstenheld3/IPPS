@@ -11,7 +11,7 @@ description: Apply when doing planning for long-running tasks in sessions on top
 - [PLAN] - creating high-level plans to achieve goals
 - Planning for long agentic runs for features, fixes, or research
 
-**NOT for document writing** - Use `/write-spec`, `/write-impl-plan`, `/write-test-plan`, `/write-tasks-plan` instead.
+NOT for document writing - Use `/write-spec`, `/write-impl-plan`, `/write-test-plan`, `/write-tasks-plan` instead.
 
 ## MUST-NOT-FORGET
 
@@ -21,11 +21,11 @@ description: Apply when doing planning for long-running tasks in sessions on top
 
 ## Quick Reference
 
-**Phases:** EXPLORE → DESIGN → IMPLEMENT → REFINE → DELIVER
+Phases: EXPLORE → DESIGN → IMPLEMENT → REFINE → DELIVER
 
-**Workflow types:** BUILD (code output) | SOLVE (knowledge/decision output)
+Workflow types: BUILD (code output) | SOLVE (knowledge/decision output)
 
-**Assessment:** COMPLEXITY-LOW/MEDIUM/HIGH | PROBLEM-TYPE (RESEARCH/ANALYSIS/EVALUATION/WRITING/DECISION)
+Assessment: COMPLEXITY-LOW/MEDIUM/HIGH | PROBLEM-TYPE (RESEARCH/ANALYSIS/EVALUATION/WRITING/DECISION)
 
 ## Phase Gates
 
@@ -77,30 +77,30 @@ description: Apply when doing planning for long-running tasks in sessions on top
 [DELIVER] → [CONCLUDE] → [RECOMMEND] → [VALIDATE] → [ARCHIVE]
 ```
 
-**Note:** COMPLEXITY-LOW skips [PROVE], [CRITIQUE], [RECONCILE].
+Note: COMPLEXITY-LOW skips [PROVE], [CRITIQUE], [RECONCILE].
 
 ## Phase Plan Requirements
 
 Plans via [PLAN] must define:
-- **Objectives** - What success looks like
-- **Strategy** - How to achieve objectives
-- **Deliverables** - Concrete outputs with checkboxes
-- **Transitions** - When to move to next phase
+- Objectives - What success looks like
+- Strategy - How to achieve objectives
+- Deliverables - Concrete outputs with checkboxes
+- Transitions - When to move to next phase
 
-**Planning Horizon:** Plan EXPLORE, DESIGN, DELIVER now. IMPLEMENT after DESIGN gate. REFINE after IMPLEMENT gate.
+Planning Horizon: Plan EXPLORE, DESIGN, DELIVER now. IMPLEMENT after DESIGN gate. REFINE after IMPLEMENT gate.
 
 ## How to Plan Well
 
-**Goal Decomposition:** Start with outcome → identify dependencies → find parallel opportunities → size steps for testability.
+Goal Decomposition: Start with outcome → identify dependencies → find parallel opportunities → size steps for testability.
 
-**Scope Calibration:**
+Scope Calibration:
 - Too big: >30min AWT or >3 files → decompose
 - Too small: <2min AWT → combine
 - Right size: verifiable outcome, clear done criteria, single responsibility
 
-**Dependency Mapping** - per step ask: What inputs needed? What outputs produced? Can this run concurrently?
+Dependency Mapping - per step ask: What inputs needed? What outputs produced? Can this run concurrently?
 
-**Common Mistakes:** Vague objectives → define specific criteria. Missing dependencies → explicit `← Px-Sy`. Over-sequencing → parallelize. No AWT estimates → add time budget. No verification step → add [TEST]/[VERIFY].
+Common Mistakes: Vague objectives → define specific criteria. Missing dependencies → explicit `← Px-Sy`. Over-sequencing → parallelize. No AWT estimates → add time budget. No verification step → add [TEST]/[VERIFY].
 
 ## Next Action Logic
 
@@ -110,27 +110,27 @@ Plans via [PLAN] must define:
 4. No more verbs? → Re-evaluate gate
 5. [DELIVER] done? → [CLOSE] and [ARCHIVE] if session-based
 
-**Failure handlers:** -FAIL on [RESEARCH]/[ASSESS]/[PLAN] → [CONSULT] or more [RESEARCH]. -FAIL on [TEST]/[VERIFY] → [FIX] → retry.
+Failure handlers: -FAIL on [RESEARCH]/[ASSESS]/[PLAN] → [CONSULT] or more [RESEARCH]. -FAIL on [TEST]/[VERIFY] → [FIX] → retry.
 
 ## Effort Allocation
 
-**Time Units:** AWT (Agentic Work Time) - agent processing, excludes user wait. HHW (Human-Hour Work) - human equivalent for sizing.
+Time Units: AWT (Agentic Work Time) - agent processing, excludes user wait. HHW (Human-Hour Work) - human equivalent for sizing.
 
-**Phase Budgets (AWT):** EXPLORE: 5/15/30min. DESIGN: 5/30/60min. IMPLEMENT: varies. REFINE: 5/15/30min. DELIVER: 2/5/10min (LOW/MEDIUM/HIGH).
+Phase Budgets (AWT): EXPLORE: 5/15/30min. DESIGN: 5/30/60min. IMPLEMENT: varies. REFINE: 5/15/30min. DELIVER: 2/5/10min (LOW/MEDIUM/HIGH).
 
-**Diminishing Returns:** Phase at 2x budget without progress → [CONSULT]. Step retried 3x without improvement → [CONSULT]. Research yields nothing after 3 sources → move on.
+Diminishing Returns: Phase at 2x budget without progress → [CONSULT]. Step retried 3x without improvement → [CONSULT]. Research yields nothing after 3 sources → move on.
 
-**Retry Limits:** COMPLEXITY-LOW: infinite. COMPLEXITY-MEDIUM/HIGH: max 5 per phase, then [CONSULT].
+Retry Limits: COMPLEXITY-LOW: infinite. COMPLEXITY-MEDIUM/HIGH: max 5 per phase, then [CONSULT].
 
 ## Mandatory Gate Output
 
 ```markdown
 ## Gate: [CURRENT_PHASE] → [NEXT_PHASE]
 
-**Complexity**: [LOW/MEDIUM/HIGH] | **Artifacts**: [list created docs]
+Complexity: [LOW/MEDIUM/HIGH] | Artifacts: [list created docs]
 
 - [x] Item - Evidence: [specific evidence]
 - [ ] Item - BLOCKED: [what's missing]
 
-**Gate status**: PASS | FAIL
+Gate status: PASS | FAIL
 ```

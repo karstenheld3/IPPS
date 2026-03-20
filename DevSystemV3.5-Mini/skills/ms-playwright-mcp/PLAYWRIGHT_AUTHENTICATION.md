@@ -19,4 +19,4 @@ Connect to existing browser: `"args": ["@playwright/mcp@latest", "--extension"]`
 
 Start Chrome with debugging: `& "[PROGRAM_FILES]\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222`
 
-**Note:** Known issue (GitHub #921) - may launch new Chrome instead of connecting.
+Note: Known issue (GitHub #921) - may launch new Chrome instead of connecting.

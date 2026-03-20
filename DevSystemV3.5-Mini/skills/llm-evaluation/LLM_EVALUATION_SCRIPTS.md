@@ -7,7 +7,7 @@ python call-llm.py --model gpt-4o --input-file photo.jpg --prompt-file prompts/t
 python call-llm.py --model claude-opus-4-20250514 --input-file doc.md --prompt-file prompts/summarize-text.md
 ```
 
-**Parameters:**
+Parameters:
 - `--model` - API model ID (required)
 - `--input-file` - Input file: image or text
 - `--prompt-file` - Prompt file (.md)
@@ -27,7 +27,7 @@ python call-llm.py --model claude-opus-4-20250514 --input-file doc.md --prompt-f
 python call-llm-batch.py --model gpt-4o --input-folder images/ --output-folder out/ --prompt-file prompts/transcribe-page.md --runs 3 --workers 4
 ```
 
-**Parameters:**
+Parameters:
 - `--model` - API model ID (required)
 - `--input-folder` - Folder with input files
 - `--output-folder` - Folder for output files
@@ -44,7 +44,7 @@ python call-llm-batch.py --model gpt-4o --input-folder images/ --output-folder o
 - `--response-format` - Output format: text, json (default: text)
 - `--use-prompt-caching` - Enable prompt caching (see Prompt Caching section)
 
-**Features:** Parallel processing, resume (skips existing), incremental save, token tracking per model, cache warm-up (first file before parallel workers, Anthropic only).
+Features: Parallel processing, resume (skips existing), incremental save, token tracking per model, cache warm-up (first file before parallel workers, Anthropic only).
 
 ## find-workers-limit.py - Worker Limit Discovery
 
@@ -53,7 +53,7 @@ python find-workers-limit.py --model gpt-5-nano --max-workers 120 --verbose
 python find-workers-limit.py --model claude-4-5-haiku-20251022 --max-workers 60
 ```
 
-**Parameters:**
+Parameters:
 - `--model` - API model ID (required)
 - `--max-workers` - Maximum workers to test (default: 100)
 - `--prompt` - Custom prompt text (default: 500-word essay)
@@ -62,7 +62,7 @@ python find-workers-limit.py --model claude-4-5-haiku-20251022 --max-workers 60
 - `--output-file` - Output JSON file (default: {model}-limit.json)
 - `--verbose` - Show detailed progress
 
-**Algorithm:**
+Algorithm:
 1. Start at 3 workers, double twice (to 12)
 2. Scale by 1.5x up to max-workers
 3. On rate limit: scale back by 0.8 to find highest passing count
@@ -74,7 +74,7 @@ python find-workers-limit.py --model claude-4-5-haiku-20251022 --max-workers 60
 python generate-questions.py --model claude-opus-4-20250514 --input-folder images/ --output-file questions.json
 ```
 
-**Parameters:**
+Parameters:
 - `--model` - API model ID (required)
 - `--input-folder` - Folder with source files
 - `--output-file` - Output JSON file
@@ -87,7 +87,7 @@ python generate-questions.py --model claude-opus-4-20250514 --input-folder image
 python generate-answers.py --model gpt-5-mini --input-folder transcriptions/ --output-folder answers/ --questions-file questions.json
 ```
 
-**Parameters:**
+Parameters:
 - `--model` - API model ID (required)
 - `--input-folder` - Folder with processed text files
 - `--output-folder` - Folder for answer JSON files
@@ -100,7 +100,7 @@ python generate-answers.py --model gpt-5-mini --input-folder transcriptions/ --o
 python evaluate-answers.py --model gpt-5 --input-folder answers/ --output-folder scores/
 ```
 
-**Parameters:**
+Parameters:
 - `--model` - Judge model ID (required)
 - `--input-folder` - Folder with answer JSON files
 - `--output-folder` - Folder for score JSON files
@@ -115,7 +115,7 @@ python evaluate-answers.py --model gpt-5 --input-folder answers/ --output-folder
 python analyze-costs.py --input-folder transcriptions/ --output-file costs.json
 ```
 
-**Parameters:**
+Parameters:
 - `--input-folder` - Folder with _token_usage__.json files
 - `--output-file` - Output JSON file
 - `--pricing` - Custom pricing file (default: model-pricing.json)
@@ -126,7 +126,7 @@ python analyze-costs.py --input-folder transcriptions/ --output-file costs.json
 python compare-transcription-runs.py --files run1/*.md run2/*.md --output-file comparison.json --method hybrid --judge-model gpt-5-mini --judge-prompt prompts/compare-image-transcription.md
 ```
 
-**Parameters:**
+Parameters:
 - `--files` - List of files to compare (2+ files)
 - `--input-folder` - Folder with files (alternative to --files)
 - `--output-file` - Output JSON file (required)
@@ -140,7 +140,7 @@ python compare-transcription-runs.py --files run1/*.md run2/*.md --output-file c
 - `--grouped` - Group files by source name
 - `--keys-file` - API keys file (default: .env)
 
-**Features:** Hybrid comparison (Levenshtein for text, LLM judge for images), section parsing by `<transcription_image>` tags, effort level control, model-aware parameter building (temperature vs reasoning models).
+Features: Hybrid comparison (Levenshtein for text, LLM judge for images), section parsing by `<transcription_image>` tags, effort level control, model-aware parameter building (temperature vs reasoning models).
 
 ## llm-evaluation-selftest.py - Self-Test
 
@@ -148,9 +148,9 @@ python compare-transcription-runs.py --files run1/*.md run2/*.md --output-file c
 python llm-evaluation-selftest.py [--skip-api-calls]
 ```
 
-**Tests:** Config file loading (model-registry.json, model-pricing.json, model-parameter-mapping.json), script help text, file type detection, JSON schema validation, API integration (optional).
+Tests: Config file loading (model-registry.json, model-pricing.json, model-parameter-mapping.json), script help text, file type detection, JSON schema validation, API integration (optional).
 
-**Exit codes:** 0 = passed, 1 = failed
+Exit codes: 0 = passed, 1 = failed
 
 ## Configuration Files
 
@@ -182,10 +182,10 @@ $skill = ".windsurf\skills\llm-evaluation"
 
 ## Key Patterns
 
-- **Retry:** 3 retries with exponential backoff (1s, 2s, 4s). Skip item after all fail.
-- **Atomic writes:** Write to `.tmp` first, rename on success. Enables reliable resume.
-- **Logging format:** `[ worker_id ] [ x / n ] action...`
-- **File type detection:** Auto-detect by suffix only. Image: `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`. Text: `.txt`, `.md`, `.json`, `.py`, `.html`, `.xml`, `.csv`.
+- Retry: 3 retries with exponential backoff (1s, 2s, 4s). Skip item after all fail.
+- Atomic writes: Write to `.tmp` first, rename on success. Enables reliable resume.
+- Logging format: `[ worker_id ] [ x / n ] action...`
+- File type detection: Auto-detect by suffix only. Image: `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`. Text: `.txt`, `.md`, `.json`, `.py`, `.html`, `.xml`, `.csv`.
 
 ## Prompt Caching
 
@@ -194,10 +194,10 @@ python call-llm.py --model claude-sonnet-4-20250514 --prompt-file large_prompt.m
 python call-llm-batch.py --model claude-sonnet-4-20250514 --input-folder images/ --output-folder out/ --prompt-file prompts/transcribe.md --use-prompt-caching
 ```
 
-**Provider behavior:**
-- **OpenAI** - Automatic caching, no API changes needed. Prompts >1024 tokens eligible. 50% discount on cached tokens.
-- **Anthropic** - Explicit `cache_control` on system blocks. Minimum 1024-4096 tokens depending on model. 90% read discount, 25% write premium.
+Provider behavior:
+- OpenAI - Automatic caching, no API changes needed. Prompts >1024 tokens eligible. 50% discount on cached tokens.
+- Anthropic - Explicit `cache_control` on system blocks. Minimum 1024-4096 tokens depending on model. 90% read discount, 25% write premium.
 
-**Batch cache warm-up (Anthropic):** First file processes synchronously to populate cache, then remaining files process in parallel.
+Batch cache warm-up (Anthropic): First file processes synchronously to populate cache, then remaining files process in parallel.
 
-**Cache metrics in metadata:** `cached_tokens` (OpenAI), `cache_write_tokens` (Anthropic creation), `cache_read_tokens` (Anthropic hits).
+Cache metrics in metadata: `cached_tokens` (OpenAI), `cache_write_tokens` (Anthropic creation), `cache_read_tokens` (Anthropic hits).

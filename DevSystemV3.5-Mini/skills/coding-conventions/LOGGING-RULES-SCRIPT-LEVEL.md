@@ -2,7 +2,7 @@
 
 Rules for script output used by Quality Assurance (QA) to verify correctness.
 
-**Goal: All failure information must be in the logs.** QA must understand what failed and why from log output alone.
+Goal: All failure information must be in the logs. QA must understand what failed and why from log output alone.
 
 ## Related Documents
 
@@ -22,14 +22,14 @@ Running test_user_creation...
 Test 'test_user_creation' completed.
 ```
 
-**Exception:** Selftest endpoints streaming to users may include timestamps for progress, but test logic must not depend on them.
+Exception: Selftest endpoints streaming to users may include timestamps for progress, but test logic must not depend on them.
 
 ### LOG-SC-02: Section Structure
 
-**All test output MUST use 100-char START/END headers/footers** (matches LOG-UF-06).
+All test output MUST use 100-char START/END headers/footers (matches LOG-UF-06).
 
-- **Test header/footer** (REQUIRED) - 100 chars total, wraps entire test run
-- **Phase header** - `===== Phase N: Name =====` (5 `=` each side) for sub-phases
+- Test header/footer (REQUIRED) - 100 chars total, wraps entire test run
+- Phase header - `===== Phase N: Name =====` (5 `=` each side) for sub-phases
 
 ```
 ======================================== START: SHAREPOINT SELFTEST ========================================
@@ -62,13 +62,13 @@ Use prefix format for traceability: `TC-01:`, `M1:`, etc.
 
 Explicit markers for comparison and assertion results.
 
-**Comparison:** `[equal]`, `[different]`
+Comparison: `[equal]`, `[different]`
 ```
   [equal] Row count  Expected=14  Actual=14
   [different] Column count  Expected=5  Actual=4
 ```
 
-**Assertion:** `[ok]`, `[fail]`
+Assertion: `[ok]`, `[fail]`
 ```
   [ok] All required fields present
   [fail] Missing 'created_date' column
@@ -78,25 +78,25 @@ Explicit markers for comparison and assertion results.
 
 Consistent status keyword patterns:
 
-- **Success:** `OK.` or `OK. 12 members resolved.`
-- **Failure:** `FAIL: Validation failed -> Expected 5, got 4`
-- **Partial:** `PARTIAL FAIL: 2 of 3 items processed, 1 failed.`
-- **Warning:** `WARNING: 2 items skipped due to missing data.`
-- **Expected failure:** `EXPECTED FAIL: (401) Unauthorized`
-- **Skip:** `SKIP: Test requires database connection.`
+- Success: `OK.` or `OK. 12 members resolved.`
+- Failure: `FAIL: Validation failed -> Expected 5, got 4`
+- Partial: `PARTIAL FAIL: 2 of 3 items processed, 1 failed.`
+- Warning: `WARNING: 2 items skipped due to missing data.`
+- Expected failure: `EXPECTED FAIL: (401) Unauthorized`
+- Skip: `SKIP: Test requires database connection.`
 
 ### LOG-SC-06: Output Details
 
 Enough detail to understand failures without additional investigation.
 
-**Item lists with references:**
+Item lists with references:
 ```
   3 items missing from output:
     Line 8: 'user_alpha@example.com'
     Line 15: 'user_beta@example.com'
 ```
 
-**Comparison details:**
+Comparison details:
 ```
   [different] Column 'date_created' format
     Expected: 'YYYY-MM-DD'
@@ -104,7 +104,7 @@ Enough detail to understand failures without additional investigation.
     Line 1: '03/04/2026' should be '2026-03-04'
 ```
 
-**Row/column counts:**
+Row/column counts:
 ```
   [equal] Row count: 523
   [different] Column count: Expected=8, Actual=7
@@ -115,16 +115,16 @@ Enough detail to understand failures without additional investigation.
 
 Always end with summary counts and final result.
 
-**Summary formats:**
+Summary formats:
 ```
 OK: X, FAIL: Y
 OK: X, SKIP: Y, FAIL: Z
 OK: X, EXPECTED FAIL: Y, SKIP: Z, FAIL: W
 ```
 
-**Final result:** `RESULT: PASSED` | `RESULT: PASSED WITH WARNINGS` | `RESULT: FAILED`
+Final result: `RESULT: PASSED` | `RESULT: PASSED WITH WARNINGS` | `RESULT: FAILED`
 
-**Complete summary block:**
+Complete summary block:
 ```
 ===== SELFTEST COMPLETE =====
 OK: 10, EXPECTED FAIL: 1, FAIL: 0
@@ -132,7 +132,7 @@ Test execution completed.
 END: sites_security_scan_selftest() (12.0 secs).
 ```
 
-**Extended summary:** Summary line before END footer, RESULT on final line before footer.
+Extended summary: Summary line before END footer, RESULT on final line before footer.
 
 ## Complete Examples
 

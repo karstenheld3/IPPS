@@ -15,7 +15,7 @@ Forward-looking execution of next steps in a plan.
 
 ## Step 1: Build Execution Sequence
 
-**Mandatory re-read:**
+Mandatory re-read:
 
 SESSION-MODE: NOTES.md, PROBLEMS.md, PROGRESS.md, FAILS.md, LEARNINGS.md (if exists)
 
@@ -23,31 +23,31 @@ PROJECT-MODE: README.md, !NOTES.md or NOTES.md, !PROBLEMS.md or PROBLEMS.md (if 
 
 Then build sequence:
 
-1. **Conversation context** - Scan for workflow suggestions, successor workflows, explicit user instructions
-2. **Session lifecycle** (SESSION-MODE) - Check lifecycle state (Init→Work→Save→Resume→Finalize→Archive), check NOTES.md "Workflows to Run on Resume". Lifecycle workflows require `[CONFIRM]` (see Step 2)
-3. **Progress/tasks** - Read PROGRESS.md unchecked items, TASKS doc next unchecked task, else IMPL next step
-4. **Merge** - Workflow succession before task execution
+1. Conversation context - Scan for workflow suggestions, successor workflows, explicit user instructions
+2. Session lifecycle (SESSION-MODE) - Check lifecycle state (Init→Work→Save→Resume→Finalize→Archive), check NOTES.md "Workflows to Run on Resume". Lifecycle workflows require `[CONFIRM]` (see Step 2)
+3. Progress/tasks - Read PROGRESS.md unchecked items, TASKS doc next unchecked task, else IMPL next step
+4. Merge - Workflow succession before task execution
 
-**If sequence empty:** Report "No pending work" and STOP.
+If sequence empty: Report "No pending work" and STOP.
 
 ## Step 2: Execute First Item
 
-**If session lifecycle workflow** (`/session-finalize`, `/session-archive`):
+If session lifecycle workflow (`/session-finalize`, `/session-archive`):
 - Output sequence with `[CONFIRM]` - do NOT auto-execute
 - Wait for user to confirm with `/continue` or `/go`
 
-**If other workflow** (starts with `/`):
+If other workflow (starts with `/`):
 - Execute, remove from sequence when complete
 
-**If task**:
+If task:
 - Execute, update PROGRESS.md / TASKS (mark Done)
 
 ## Step 3: Loop or Stop
 
-- **More items?** Return to Step 2
-- **Phase gate reached?** Run gate check
-- **Sequence empty?** Report completion
-- **Blocker?** Report and wait for user
+- More items? Return to Step 2
+- Phase gate reached? Run gate check
+- Sequence empty? Report completion
+- Blocker? Report and wait for user
 
 ## Output
 

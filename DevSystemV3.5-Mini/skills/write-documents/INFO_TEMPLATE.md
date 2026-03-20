@@ -1,8 +1,8 @@
 # INFO: [Topic]
 
-**Doc ID**: [TOPIC]-IN[NN]
-**Goal**: [Single sentence]
-**Timeline**: Created YYYY-MM-DD, Updated N times (YYYY-MM-DD - YYYY-MM-DD)
+Doc ID: [TOPIC]-IN[NN]
+Goal: [Single sentence]
+Timeline: Created YYYY-MM-DD, Updated N times (YYYY-MM-DD - YYYY-MM-DD)
 
 ## MUST-NOT-FORGET
 
@@ -31,5 +31,5 @@
 
 ## 5. Document History
 
-**[YYYY-MM-DD HH:MM]**
+[YYYY-MM-DD HH:MM]
 - Initial research document created

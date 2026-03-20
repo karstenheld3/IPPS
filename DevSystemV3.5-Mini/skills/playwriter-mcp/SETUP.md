@@ -118,9 +118,9 @@ npx -y traforo -p 19988 -t my-machine -- npx -y playwriter serve --token <secret
 
 ## Quick Reference
 
-- **Extension**: Click icon on tab (green = active)
-- **CLI**: `playwriter -s <id> -e '<code>'`
-- **Session**: `playwriter session new` / `list` / `reset`
-- **Logs**: `playwriter logfile`
-- **WebSocket**: `localhost:19988`
-- **Remote**: Set `PLAYWRITER_HOST` and `PLAYWRITER_TOKEN`
+- Extension: Click icon on tab (green = active)
+- CLI: `playwriter -s <id> -e '<code>'`
+- Session: `playwriter session new` / `list` / `reset`
+- Logs: `playwriter logfile`
+- WebSocket: `localhost:19988`
+- Remote: Set `PLAYWRITER_HOST` and `PLAYWRITER_TOKEN`

@@ -12,13 +12,13 @@ Verify work against specs, rules, and quality standards.
 - @write-documents for document verification
 - @coding-conventions for code verification
 
-**CRITICAL**: Also read supporting files from skill output (e.g., `PYTHON-RULES.md`, `WORKFLOW-RULES.md`).
+CRITICAL: Also read supporting files from skill output (e.g., `PYTHON-RULES.md`, `WORKFLOW-RULES.md`).
 
 ## Mandatory Re-read
 
-**SESSION-MODE**: NOTES.md, PROBLEMS.md, PROGRESS.md, FAILS.md, LEARNINGS.md (if exists)
+SESSION-MODE: NOTES.md, PROBLEMS.md, PROGRESS.md, FAILS.md, LEARNINGS.md (if exists)
 
-**PROJECT-MODE**: README.md, !NOTES.md or NOTES.md, !PROBLEMS.md or PROBLEMS.md (if exists), !PROGRESS.md or PROGRESS.md (if exists), FAILS.md, LEARNINGS.md (if exists)
+PROJECT-MODE: README.md, !NOTES.md or NOTES.md, !PROBLEMS.md or PROBLEMS.md (if exists), !PROGRESS.md or PROGRESS.md (if exists), FAILS.md, LEARNINGS.md (if exists)
 
 ## Workflow
 
@@ -38,11 +38,11 @@ Apply to ALL contexts:
 - Re-read relevant rules and session files before verifying
 - Make internal MNF list, check after each step
 - Verify product name spelling (web research if needed): `SharePoint` not `Sharepoint`
-- **Avoid Markdown tables** - convert to lists with bold labels
+- Avoid Markdown tables - convert to lists with bold labels
   - Exception: README.md may use tables without `<DevSystem>` tag
   - Only [ACTOR] may add `<DevSystem MarkdownTablesAllowed=true />` to other files
   - If tables allowed: verify formatting per `core-conventions.md`
-- **Avoid emojis** - replace with text equivalents
+- Avoid emojis - replace with text equivalents
   - Exception: README.md may use emojis without `<DevSystem>` tag
   - Only [ACTOR] may add `<DevSystem EmojisAllowed=true />` to other files
 
@@ -57,9 +57,9 @@ Look for: inconsistencies, new solutions for solved problems, ambiguities, under
 - `[TESTED]` - Tested in POC or script
 - `[PROVEN]` - Works in actual implementation
 
-**By doc type:** INFO=findings/claims, SPEC=decisions/assumptions, IMPL=edge cases/choices, TEST=behaviors/assertions
+By doc type: INFO=findings/claims, SPEC=decisions/assumptions, IMPL=edge cases/choices, TEST=behaviors/assertions
 
-**Progression:** `[ASSUMED]` → `[VERIFIED]` → `[TESTED]` → `[PROVEN]`
+Progression: `[ASSUMED]` → `[VERIFIED]` → `[TESTED]` → `[PROVEN]`
 
 ## Final Steps
 
@@ -107,7 +107,7 @@ Look for: inconsistencies, new solutions for solved problems, ambiguities, under
 - Re-read @coding-conventions, verify against rules
 - Verify against `MECT_CODING_RULES.md`
 
-**Logging Verification (if code contains logging/output/print):**
+Logging Verification (if code contains logging/output/print):
 
 1. Read @coding-conventions `LOGGING-RULES.md`
 2. Identify type, read corresponding file:
@@ -142,19 +142,19 @@ Look for: inconsistencies, new solutions for solved problems, ambiguities, under
 - Read @coding-conventions `AGENT-SKILL-RULES.md`, verify all sections
 - SKILL.md exists with required content (Section 2.1)
 - SETUP.md exists → UNINSTALL.md must exist, pre-installation verification present
-- Token optimization (Section 8): no `**bold**` in LLM resource files, no verbose prefixes where compact works, no redundant prose, keywords/trigger present, all URLs preserved. Test: "Remove token → LLM loses info?" No → flag.
+- Token optimization (Section 8): no `bold` in LLM resource files, no verbose prefixes where compact works, no redundant prose, keywords/trigger present, all URLs preserved. Test: "Remove token → LLM loses info?" No → flag.
 - File format matches type: resource=compact, instructional=rich, SETUP/UNINSTALL=verbose
 - Run Section 9 Review Checklist
 
 ## Session Tracking (NOTES, PROBLEMS, PROGRESS)
 
-**NOTES.md:** Session Info complete? Key Decisions documented? Important Findings recorded? Workflows to Run on Resume listed? Agent instructions valid?
+NOTES.md: Session Info complete? Key Decisions documented? Important Findings recorded? Workflows to Run on Resume listed? Agent instructions valid?
 
-**PROBLEMS.md:** All issues documented? Status marked (Open/Resolved/Deferred)? Root cause for resolved? Deferred justified? **Sync check**: problems for project-level?
+PROBLEMS.md: All issues documented? Status marked (Open/Resolved/Deferred)? Root cause for resolved? Deferred justified? Sync check: problems for project-level?
 
-**PROGRESS.md:** To Do current? Done marked [x]? Tried But Not Used documented? Test coverage current? **Sync check**: findings for project-level?
+PROGRESS.md: To Do current? Done marked [x]? Tried But Not Used documented? Test coverage current? Sync check: findings for project-level?
 
-**Session Close Sync:**
+Session Close Sync:
 - [ ] Resolved problems with project impact → project PROBLEMS.md
 - [ ] Reusable patterns/decisions → project NOTES.md
 - [ ] Bugs in unrelated code → issues or PROBLEMS.md
@@ -178,4 +178,4 @@ Look for: inconsistencies, new solutions for solved problems, ambiguities, under
 - [ ] Unlinked Objectives: [ACTOR] confirmation obtained?
 - [ ] Transition target valid (`[PHASE-NAME]`, `[CONSULT]`, or `[END]`)?
 
-**Objective Verification Rule:** Objective verified when ALL linked Deliverables checked. No links (`←`) → require explicit [ACTOR] confirmation.
+Objective Verification Rule: Objective verified when ALL linked Deliverables checked. No links (`←`) → require explicit [ACTOR] confirmation.

@@ -69,14 +69,14 @@ Major Project Changes
 
 Detect: Compare behavior vs SPEC, approach vs IMPL. Note deviations.
 
-- **IMPL**: Update changed steps, add EC-XX discovered, mark completed in checklist
-- **SPEC**: Update FR-XX if interpretation changed, add DD-XX for new decisions, update IG-XX
-- **TEST**: Update TC-XX results if behavior changed, add TC-XX for new edge cases
+- IMPL: Update changed steps, add EC-XX discovered, mark completed in checklist
+- SPEC: Update FR-XX if interpretation changed, add DD-XX for new decisions, update IG-XX
+- TEST: Update TC-XX results if behavior changed, add TC-XX for new edge cases
 
 ## SPEC→Downstream
 
-- **IMPL**: Add steps for new FR-XX, update affected steps, add edge case handling
-- **TEST**: Add TC-XX per new FR-XX, update for changed requirements, remove/mark obsolete TC-XX
+- IMPL: Add steps for new FR-XX, update affected steps, add edge case handling
+- TEST: Add TC-XX per new FR-XX, update for changed requirements, remove/mark obsolete TC-XX
 
 ## IMPL→TEST
 
@@ -86,11 +86,11 @@ Detect: Compare behavior vs SPEC, approach vs IMPL. Note deviations.
 
 ## Session→Project
 
-**NOTES.md**: Key Decisions → Project NOTES.md; Agent Instructions → rules/NOTES.md; Findings → relevant SPEC/INFO
+NOTES.md: Key Decisions → Project NOTES.md; Agent Instructions → rules/NOTES.md; Findings → relevant SPEC/INFO
 
-**PROBLEMS.md**: Resolved with impact → Project PROBLEMS.md; Unrelated bugs → PROBLEMS.md or issues; Deferred → PROBLEMS.md with priority
+PROBLEMS.md: Resolved with impact → Project PROBLEMS.md; Unrelated bugs → PROBLEMS.md or issues; Deferred → PROBLEMS.md with priority
 
-**PROGRESS.md**: Completed milestones → Project PROGRESS.md; Tried But Not Used → Project NOTES.md; Coverage changes → TEST documents
+PROGRESS.md: Completed milestones → Project PROGRESS.md; Tried But Not Used → Project NOTES.md; Coverage changes → TEST documents
 
 ## Verification Label Updates
 

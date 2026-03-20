@@ -8,63 +8,63 @@ trigger: always_on
 
 ### Core Concepts
 
-- **[WORKSPACE]**: Windsurf/VSCode workspace root folder
-- **[PROJECT]**: Monorepo: project subfolder. No Monorepo: Workspace = Project
-- **[SESSION]**: All context for a work session - folder, files, conversations, commits, tracking files
+- [WORKSPACE]: Windsurf/VSCode workspace root folder
+- [PROJECT]: Monorepo: project subfolder. No Monorepo: Workspace = Project
+- [SESSION]: All context for a work session - folder, files, conversations, commits, tracking files
 
 ### Agent Folder
 
-**[AGENT_FOLDER]**: Windsurf: `.windsurf/` | Claude Code: `.claude/`
+[AGENT_FOLDER]: Windsurf: `.windsurf/` | Claude Code: `.claude/`
 
 ### Configuration
 
-- **[RULES]**: `[AGENT_FOLDER]/rules/`
-- **[WORKFLOWS]**: `[AGENT_FOLDER]/workflows/`
-- **[SKILLS]**: `[AGENT_FOLDER]/skills/`
+- [RULES]: `[AGENT_FOLDER]/rules/`
+- [WORKFLOWS]: `[AGENT_FOLDER]/workflows/`
+- [SKILLS]: `[AGENT_FOLDER]/skills/`
 
 ### Document Types
 
-- **[INFO]** (IN): Research, analysis. Example: `AUTH-IN01`
-- **[SPEC]** (SP): Specification, reverse-updated from verified code. Example: `CRWL-SP01`
-- **[IMPL]** (IP): Implementation plan, reverse-updated from verified code. Example: `CRWL-IP01`
-- **[TEST]** (TP): Test plans for SPEC/IMPL. Example: `CRWL-TP01`
-- **[TASKS]** (TK): Partitioned task lists from IMPL/TEST. Example: `CRWL-TK01`. Created via `/write-tasks-plan` or `/partition`
+- [INFO] (IN): Research, analysis. Example: `AUTH-IN01`
+- [SPEC] (SP): Specification, reverse-updated from verified code. Example: `CRWL-SP01`
+- [IMPL] (IP): Implementation plan, reverse-updated from verified code. Example: `CRWL-IP01`
+- [TEST] (TP): Test plans for SPEC/IMPL. Example: `CRWL-TP01`
+- [TASKS] (TK): Partitioned task lists from IMPL/TEST. Example: `CRWL-TK01`. Created via `/write-tasks-plan` or `/partition`
 
 ### Tracking Documents
 
 One of each type per scope (workspace, project, or session).
 
-- **[NOTES]**: Agent MUST read to avoid unintentional behavior
-- **[PROGRESS]**: Agent MUST read to avoid unintentional behavior
-- **[PROBLEMS]**: Per-session tracking. On `/session-finalize`, sync to project
-- **[FAILS]**: Lessons learned. Agent MUST read during `/prime` (except `_` prefix files). Never delete entries unconfirmed, only append or mark resolved.
+- [NOTES]: Agent MUST read to avoid unintentional behavior
+- [PROGRESS]: Agent MUST read to avoid unintentional behavior
+- [PROBLEMS]: Per-session tracking. On `/session-finalize`, sync to project
+- [FAILS]: Lessons learned. Agent MUST read during `/prime` (except `_` prefix files). Never delete entries unconfirmed, only append or mark resolved.
 
 ### Placeholders
 
-- **[ACTOR]**: Decision-making entity (default: user, in /go-autonomous: agent)
+- [ACTOR]: Decision-making entity (default: user, in /go-autonomous: agent)
 
 ### MNF (MUST-NOT-FORGET) Technique
 
-**Planning**: Create `MUST-NOT-FORGET` list (5-15 items, name unchanged for grep). Collect from FAILS.md, learnings, rules, specs, user instructions. Include in plan or document top.
+Planning: Create `MUST-NOT-FORGET` list (5-15 items, name unchanged for grep). Collect from FAILS.md, learnings, rules, specs, user instructions. Include in plan or document top.
 
-**Completion**: Review each MNF item before marking done. Verify compliance or document why N/A. Update FAILS.md if violated.
+Completion: Review each MNF item before marking done. Verify compliance or document why N/A. Update FAILS.md if violated.
 
 ### Complexity Levels
 
-- **COMPLEXITY-LOW**: Single file, clear scope, no dependencies → patch
-- **COMPLEXITY-MEDIUM**: Multiple files, some dependencies, backward compatible → minor
-- **COMPLEXITY-HIGH**: Breaking changes, new patterns, external APIs, architecture → major
+- COMPLEXITY-LOW: Single file, clear scope, no dependencies → patch
+- COMPLEXITY-MEDIUM: Multiple files, some dependencies, backward compatible → minor
+- COMPLEXITY-HIGH: Breaking changes, new patterns, external APIs, architecture → major
 
 ### Operation Modes
 
-- **IMPL-CODEBASE** (default): Output to project source folders. For SPEC, IMPL, TEST, [IMPLEMENT], HOTFIX, BUGFIX.
-- **IMPL-ISOLATED**: Output to `[SESSION_FOLDER]/` or `[SESSION_FOLDER]/poc/`. For [PROVE], POCs, prototypes. Existing code/config/runtime MUST NOT be affected. NEVER create folders in workspace root. **REQUIRES SESSION**: run `/session-new` first if none exists.
+- IMPL-CODEBASE (default): Output to project source folders. For SPEC, IMPL, TEST, [IMPLEMENT], HOTFIX, BUGFIX.
+- IMPL-ISOLATED: Output to `[SESSION_FOLDER]/` or `[SESSION_FOLDER]/poc/`. For [PROVE], POCs, prototypes. Existing code/config/runtime MUST NOT be affected. NEVER create folders in workspace root. REQUIRES SESSION: run `/session-new` first if none exists.
 
 ## Workspace Scenarios
 
-- **Project Structure**: SINGLE-PROJECT | MONOREPO
-- **Version Strategy**: SINGLE-VERSION | MULTI-VERSION
-- **Work Mode**: SESSION-MODE | PROJECT-MODE
+- Project Structure: SINGLE-PROJECT | MONOREPO
+- Version Strategy: SINGLE-VERSION | MULTI-VERSION
+- Work Mode: SESSION-MODE | PROJECT-MODE
 
 ## Folder Structure
 
@@ -105,19 +105,19 @@ One of each type per scope (workspace, project, or session).
 
 ## File Naming Conventions
 
-- **! prefix**: High relevance, extra attention during `/prime`
-- **_ prefix**: Skipped by auto-priming. Session-specific, WIP, archived content.
-- **. prefix**: Hidden (Unix convention)
-- **.tmp prefix**: Temporary scripts, delete after use
+- ! prefix: High relevance, extra attention during `/prime`
+- _ prefix: Skipped by auto-priming. Session-specific, WIP, archived content.
+- . prefix: Hidden (Unix convention)
+- .tmp prefix: Temporary scripts, delete after use
 
 ## Placeholders
 
-- **[WORKSPACE_FOLDER]**: Absolute path of workspace root
-- **[PROJECT_FOLDER]**: Project root (same as workspace if no monorepo)
-- **[SRC_FOLDER]**: Source folder absolute path
-- **[DEFAULT_SESSIONS_FOLDER]**: Session base folder (default: `[WORKSPACE_FOLDER]`, override in `!NOTES.md`)
-- **[SESSION_ARCHIVE_FOLDER]**: Default: `[SESSION_FOLDER]/../_Archive`
-- **[SESSION_FOLDER]**: Active session folder absolute path
+- [WORKSPACE_FOLDER]: Absolute path of workspace root
+- [PROJECT_FOLDER]: Project root (same as workspace if no monorepo)
+- [SRC_FOLDER]: Source folder absolute path
+- [DEFAULT_SESSIONS_FOLDER]: Session base folder (default: `[WORKSPACE_FOLDER]`, override in `!NOTES.md`)
+- [SESSION_ARCHIVE_FOLDER]: Default: `[SESSION_FOLDER]/../_Archive`
+- [SESSION_FOLDER]: Active session folder absolute path
 
 ## Workflow Reference
 

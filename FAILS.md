@@ -1,5 +1,24 @@
 # Failure Log
 
+## 2026-03-20 - Deploy to All Repos
+
+### [MEDIUM] `GLOB-FL-021` Ignored workflow comparison script, wrote buggy one-liner instead
+
+- **When**: 2026-03-20 19:24 UTC+01:00
+- **Where**: `deploy-to-all-repos` workflow execution
+- **What**: Workflow has a 60-line PowerShell comparison script (lines 68-130) that properly compares file hashes and handles skill category filtering. Agent ignored it and wrote a buggy one-liner that compared file lists instead of content, showing "0 files changed" when files actually differed.
+- **Why it went wrong**:
+  - Tried to shortcut the workflow instead of reading and executing step by step
+  - Wrote own comparison logic instead of using documented script
+  - Same pattern as `GLOB-FL-019` - inventing deployment code instead of following workflow
+- **Evidence**: Agent reported "0 files changed" for all repos, but hash comparison showed `agent-behavior.md` DIFFERS in all 6 repos
+
+**Prevention rules**:
+1. When workflow has code blocks, USE THEM - don't invent alternatives
+2. If workflow script is complex, run it exactly as written before simplifying
+3. "0 changes" in deploy workflow should trigger suspicion - verify with hash comparison
+4. Follow workflow step by step, not "get the gist and improvise"
+
 ## 2026-03-19 - Python Logging Rules Refactoring
 
 ### [HIGH] `GLOB-FL-020` Complex terminal commands that stall or break in PowerShell

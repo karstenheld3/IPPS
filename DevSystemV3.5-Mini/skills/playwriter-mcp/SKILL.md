@@ -5,23 +5,23 @@ description: ONLY apply when user EXPLICITLY mentions "Playwriter". Default brow
 
 # Playwriter MCP Guide
 
-**ACTIVATION**: Only use when user explicitly says "Playwriter". Default browser MCP is `ms-playwright-mcp`.
+ACTIVATION: Only use when user explicitly says "Playwriter". Default browser MCP is `ms-playwright-mcp`.
 
 ## When to Use Playwriter (vs Playwright MCP)
 
-**Use Playwriter when**: existing logged-in sessions (bank, email, social media), ad blockers/password managers/extensions needed, avoiding bot detection, real-time AI collaboration
+Use Playwriter when: existing logged-in sessions (bank, email, social media), ad blockers/password managers/extensions needed, avoiding bot detection, real-time AI collaboration
 
-**Use Playwright MCP when**: clean isolated sessions, testing without user state, standard automation
+Use Playwright MCP when: clean isolated sessions, testing without user state, standard automation
 
 ## Intent Lookup
 
-- **Bank/bills/email/social/gov forms/authenticated scraping** -> Existing session, cookies, extensions
-- **Debug web app** -> `getCDPSession`, `createDebugger`, breakpoints
-- **Record demo** -> `startRecording` / `stopRecording`
-- **Get element refs** -> `snapshot({ page })` or `screenshotWithAccessibilityLabels({ page })`
-- **Click by ref** -> `page.locator('aria-ref=e5').click()`
-- **Persist data** -> `state.varName = ...`
-- **Intercept API** -> `page.on('response', ...)`
+- Bank/bills/email/social/gov forms/authenticated scraping -> Existing session, cookies, extensions
+- Debug web app -> `getCDPSession`, `createDebugger`, breakpoints
+- Record demo -> `startRecording` / `stopRecording`
+- Get element refs -> `snapshot({ page })` or `screenshotWithAccessibilityLabels({ page })`
+- Click by ref -> `page.locator('aria-ref=e5').click()`
+- Persist data -> `state.varName = ...`
+- Intercept API -> `page.on('response', ...)`
 
 ## MUST-NOT-FORGET
 
@@ -31,12 +31,12 @@ description: ONLY apply when user EXPLICITLY mentions "Playwriter". Default brow
 - Never call `browser.close()` - it closes YOUR Chrome
 - Use `state.varName` to persist data between calls
 - Green icon = connected, gray = not controlled
-- **TIMEOUTS**: ALWAYS pass timeout (default 20000ms is too long!). Use `1500` for simple ops, `3000` for screenshots.
-- **NO waitForTimeout inside code** - causes stalls. Use proper waits like `waitForSelector` instead.
-- **goto() stalls on SPAs** - default `waitUntil: 'load'` never fires on SharePoint/dynamic sites. Use `{ waitUntil: 'domcontentloaded' }`.
-- **click() can stall** - if element triggers animation/loading that blocks. Don't click multiple elements in one call.
-- **After any cancellation** - always check connection before proceeding with more operations.
-- **If stalled, reset won't work** - user must restart Chrome or click extension icon again.
+- TIMEOUTS: ALWAYS pass timeout (default 20000ms is too long!). Use `1500` for simple ops, `3000` for screenshots.
+- NO waitForTimeout inside code - causes stalls. Use proper waits like `waitForSelector` instead.
+- goto() stalls on SPAs - default `waitUntil: 'load'` never fires on SharePoint/dynamic sites. Use `{ waitUntil: 'domcontentloaded' }`.
+- click() can stall - if element triggers animation/loading that blocks. Don't click multiple elements in one call.
+- After any cancellation - always check connection before proceeding with more operations.
+- If stalled, reset won't work - user must restart Chrome or click extension icon again.
 
 ## CLI Commands
 
@@ -74,7 +74,7 @@ playwriter -s 1 -e 'await startRecording({ page, outputPath: "./recording.mp4", 
 playwriter -s 1 -e 'await stopRecording({ page })'
 ```
 
-**Visual label colors**: Yellow=links, Orange=buttons, Coral=inputs, Pink=checkboxes, Peach=sliders, Salmon=menus, Amber=tabs
+Visual label colors: Yellow=links, Orange=buttons, Coral=inputs, Pink=checkboxes, Peach=sliders, Salmon=menus, Amber=tabs
 
 ## MCP Configuration
 
@@ -91,9 +91,9 @@ playwriter -s 1 -e 'await stopRecording({ page })'
 
 ## Troubleshooting
 
-- **All pages return about:blank** -> Restart Chrome (known `chrome.debugger` bug)
-- **Extension not turning green** -> Click directly on icon (not right-click), try `playwriter session reset <id>`
-- **View logs** -> `playwriter logfile` (path to `~/.playwriter/relay-server.log`)
+- All pages return about:blank -> Restart Chrome (known `chrome.debugger` bug)
+- Extension not turning green -> Click directly on icon (not right-click), try `playwriter session reset <id>`
+- View logs -> `playwriter logfile` (path to `~/.playwriter/relay-server.log`)
 
 ## Security
 

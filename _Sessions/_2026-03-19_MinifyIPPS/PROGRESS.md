@@ -1,6 +1,6 @@
 # Session Progress
 
-**Doc ID**: 2026-03-19_MinimalIPPS-PROGRESS
+**Doc ID**: 2026-03-19_MinifyIPPS-PROGRESS
 
 ## Phase Plan
 
@@ -50,7 +50,7 @@ Summary by phase:
 **[2026-03-20 06:20]**
 - DELIVER phase complete. All 5 EDIRD phases done.
 - Final state: 11 modules, 6 prompts, 57/57 tests, 4 commits pushed
-- Session goal achieved: MinimalIPPS compression pipeline fully implemented
+- Session goal achieved: MinifyIPPS compression pipeline fully implemented
 
 **[2026-03-20 06:15]**
 - REFINE phase: /verify found 2 gaps vs SPEC

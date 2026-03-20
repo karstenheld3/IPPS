@@ -1,4 +1,4 @@
-"""MinimalIPPS Compression Pipeline - Entry point (IS-16)."""
+"""MinifyIPPS Compression Pipeline - Entry point (IS-16)."""
 import argparse
 import json
 import logging
@@ -392,7 +392,7 @@ COMMANDS = {
 def main():
     logging.basicConfig(level=logging.INFO, format="%(name)s: %(message)s")
 
-    parser = argparse.ArgumentParser(description="MinimalIPPS Compression Pipeline")
+    parser = argparse.ArgumentParser(description="MinifyIPPS Compression Pipeline")
     subparsers = parser.add_subparsers(dest="command")
 
     sub_bundle = subparsers.add_parser("bundle", help="Step 1: Scan and bundle source files")

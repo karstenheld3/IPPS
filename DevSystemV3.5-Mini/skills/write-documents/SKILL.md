@@ -5,7 +5,7 @@ description: Apply when creating or editing INFO, SPEC, IMPL, TEST, FIX document
 
 # Document Writing Guide
 
-**Writing quality standard:** All documents MUST follow:
+Writing quality standard: All documents MUST follow:
 - `APAPALAN_RULES.md` - Precision formatting, brevity, document structure, naming conventions
 - `MECT_WRITING_RULES.md` - Voice, word choice, terminology design, heading/list construction, description types
 
@@ -39,24 +39,24 @@ Read both before writing any document.
 
 ## Document Types and When to Use
 
-**Research and Knowledge:**
-- **INFO** (`_INFO_[TOPIC].md`) - Research, analysis, option evaluation. Use when gathering information before making decisions.
-- **REVIEW** (`_REVIEW_[TOPIC].md`) - Structured review of existing documents. Use for `/critique` and `/reconcile` outputs.
+Research and Knowledge:
+- INFO (`_INFO_[TOPIC].md`) - Research, analysis, option evaluation. Use when gathering information before making decisions.
+- REVIEW (`_REVIEW_[TOPIC].md`) - Structured review of existing documents. Use for `/critique` and `/reconcile` outputs.
 
-**Planning:**
-- **SPEC** (`_SPEC_[COMPONENT].md`) - Technical specifications. Define WHAT to build before building it. Rules: `SPEC_RULES.md`
-- **IMPL** (`_IMPL_[COMPONENT].md`) - Implementation plans. Define HOW to build what SPEC describes.
-- **TEST** (`_TEST_[COMPONENT].md`) - Test plans. Define how to VERIFY what SPEC requires.
-- **TASKS** (`TASKS_[TOPIC].md`) - Partitioned task lists from IMPL/TEST plans. Break plans into discrete work items.
+Planning:
+- SPEC (`_SPEC_[COMPONENT].md`) - Technical specifications. Define WHAT to build before building it. Rules: `SPEC_RULES.md`
+- IMPL (`_IMPL_[COMPONENT].md`) - Implementation plans. Define HOW to build what SPEC describes.
+- TEST (`_TEST_[COMPONENT].md`) - Test plans. Define how to VERIFY what SPEC requires.
+- TASKS (`TASKS_[TOPIC].md`) - Partitioned task lists from IMPL/TEST plans. Break plans into discrete work items.
 
-**Execution Tracking:**
-- **STRUT** (embedded in any document) - Structured execution plans with checkboxes for phased work with verification gates.
-- **FIXES** (`_IMPL_[COMPONENT]_FIXES.md`) - Fix tracking during implementation.
-- **FAILS** (`FAILS.md`) - Failure log, lessons learned to prevent repetition.
+Execution Tracking:
+- STRUT (embedded in any document) - Structured execution plans with checkboxes for phased work with verification gates.
+- FIXES (`_IMPL_[COMPONENT]_FIXES.md`) - Fix tracking during implementation.
+- FAILS (`FAILS.md`) - Failure log, lessons learned to prevent repetition.
 
-**Session Tracking** (templates from @skills:session-management): NOTES.md, PROBLEMS.md, PROGRESS.md
+Session Tracking (templates from @skills:session-management): NOTES.md, PROBLEMS.md, PROGRESS.md
 
-**Workflow Documents:** `.md` in workflows/. Rules: `WORKFLOW_RULES.md`
+Workflow Documents: `.md` in workflows/. Rules: `WORKFLOW_RULES.md`
 
 ## Document Dependency Chain
 

@@ -34,7 +34,7 @@ OPENAI_API_KEY=sk-proj-your-key-here
 ANTHROPIC_API_KEY=sk-ant-api03-your-key-here
 ```
 
-**IMPORTANT:** Add `.env` to `.gitignore`.
+IMPORTANT: Add `.env` to `.gitignore`.
 
 ## 5. Running Scripts
 

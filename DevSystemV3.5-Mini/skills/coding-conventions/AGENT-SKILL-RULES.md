@@ -10,7 +10,7 @@ Design principles:
 1. Maximum clarity - one interpretation per instruction
 2. Numbered steps - LLMs follow sequences better than prose
 3. MUST-NOT-FORGET technique for complex skills with verification
-4. No `**bold**` in LLM-consumed files - adds tokens without improving comprehension
+4. No `bold` in LLM-consumed files - adds tokens without improving comprehension
 5. `#` and `##` headers are parsing boundaries LLMs rely on
 6. Compact format for lookups - one line per resource
 7. Verbose format only when justified (multi-step reasoning, troubleshooting, code with explanation)
@@ -197,8 +197,8 @@ Never sacrifice clarity for brevity. Never add formatting that only helps human 
 
 ### 8.2 What to Remove
 
-- `**Bold**` markup, unnecessary bullet prefixes, sub-sub-headers when labels suffice
-- Blank lines between list items, verbose prefixes (`- **URL:** `)
+- `Bold` markup, unnecessary bullet prefixes, sub-sub-headers when labels suffice
+- Blank lines between list items, verbose prefixes (`- URL: `)
 - Sections restating the Keywords line, descriptions restating headings
 - Filler phrases: "This section covers", "The following resources"
 

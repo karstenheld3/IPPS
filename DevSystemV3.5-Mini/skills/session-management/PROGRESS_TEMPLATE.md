@@ -2,7 +2,7 @@
 
 Populated by `/session-new` workflow. Tracks implementation progress and task completion.
 
-**Doc ID**: YYYY-MM-DD_[SessionTopicCamelCase]-PROGRESS
+Doc ID: YYYY-MM-DD_[SessionTopicCamelCase]-PROGRESS
 
 ## To Do
 
@@ -31,7 +31,7 @@ Populated by `/session-new` workflow. Tracks implementation progress and task co
 
 ## Progress Changes
 
-**[YYYY-MM-DD HH:MM]**
+[YYYY-MM-DD HH:MM]
 - Added: [ID] to [Section] ([context])
 - Moved: [Item] to Done
 - Added: [Section name] with [content description]

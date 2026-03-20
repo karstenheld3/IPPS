@@ -1,4 +1,4 @@
-# IMPL: MinimalIPPS V2 Architecture Changes
+# IMPL: MinifyIPPS V2 Architecture Changes
 
 **Doc ID**: MIPPS-IP02
 **Feature**: MIPPS-V2-ARCHITECTURE
@@ -590,7 +590,7 @@ def main(): ...  # CLI: generate_report.py --run <id>
 - Changed: IS renumbered (Phase 2: IS-05 to IS-07, Phase 3: IS-08 to IS-14)
 
 **[2026-03-20 14:55]**
-- Initial implementation plan for MinimalIPPS V2 architecture changes
+- Initial implementation plan for MinifyIPPS V2 architecture changes
 - 18 implementation steps across 4 phases
 - 10 edge cases identified
 - 26 test cases defined

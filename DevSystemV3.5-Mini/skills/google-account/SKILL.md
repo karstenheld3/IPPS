@@ -11,15 +11,15 @@ description: Apply when interacting with Google services (Gmail, Calendar, Drive
 wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; gog --version"
 ```
 
-**If `gog` not found**: Follow [SETUP.md](SETUP.md) completely. Do NOT improvise.
-**If auth fails**: Follow [Token Expiry Re-Auth Flow](#token-expiry-re-auth-flow).
+If `gog` not found: Follow [SETUP.md](SETUP.md) completely. Do NOT improvise.
+If auth fails: Follow [Token Expiry Re-Auth Flow](#token-expiry-re-auth-flow).
 
 ## MUST-NOT-FORGET
 
 - Tool is `gog` (from gogcli package), NOT `gop`
-- **WSL PATH is broken by default** - Always include full PATH export (see command template below)
-- **If `gog` not installed**: Follow SETUP.md, do NOT improvise installation
-- **If token expired**: Follow [Token Expiry Re-Auth Flow](#token-expiry-re-auth-flow)
+- WSL PATH is broken by default - Always include full PATH export (see command template below)
+- If `gog` not installed: Follow SETUP.md, do NOT improvise installation
+- If token expired: Follow [Token Expiry Re-Auth Flow](#token-expiry-re-auth-flow)
 - Use `--json` flag for all commands to enable parsing
 - Set `GOG_ACCOUNT` environment variable for non-interactive use
 - Use `GOG_KEYRING_PASSWORD` with file backend for automation
@@ -32,24 +32,24 @@ wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbi
 wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; export GOG_KEYRING_PASSWORD='<PASSWORD>'; export GOG_ACCOUNT='<EMAIL>'; gog <command>"
 ```
 
-**Get config from `[WORKSPACE_FOLDER]/!NOTES.md`** - Look for "gogcli" section with account and keyring password.
+Get config from `[WORKSPACE_FOLDER]/!NOTES.md` - Look for "gogcli" section with account and keyring password.
 
 ## Intent Lookup
 
-- **Check unread emails** -> `gog gmail search 'is:unread' --max 20`
-- **Read specific email** -> `gog gmail thread get <threadId>`
-- **Download attachments** -> `gog gmail thread get <threadId> --download --out-dir ./attachments`
-- **Send email** -> `gog gmail send --to <email> --subject "..." --body "..."`
-- **Create draft** -> `gog gmail drafts create --to <email> --subject "..." --body "..."`
-- **See today's calendar** -> `gog calendar events primary --today`
-- **Create calendar event** -> `gog calendar create primary --summary "..." --from <datetime> --to <datetime>`
-- **Add attendees** -> Include `--attendees "email1,email2" --send-updates all`
-- **Check availability** -> `gog calendar freebusy --calendars "primary" --from <start> --to <end>`
-- **List tasks** -> `gog tasks lists` then `gog tasks list <tasklistId>`
-- **Add task** -> `gog tasks add <tasklistId> --title "..." --due <date>`
-- **Mark task done** -> `gog tasks done <tasklistId> <taskId>`
-- **Download from Drive** -> `gog drive download <fileId> --out ./file.bin`
-- **Search Drive** -> `gog drive search "query" --max 20`
+- Check unread emails -> `gog gmail search 'is:unread' --max 20`
+- Read specific email -> `gog gmail thread get <threadId>`
+- Download attachments -> `gog gmail thread get <threadId> --download --out-dir ./attachments`
+- Send email -> `gog gmail send --to <email> --subject "..." --body "..."`
+- Create draft -> `gog gmail drafts create --to <email> --subject "..." --body "..."`
+- See today's calendar -> `gog calendar events primary --today`
+- Create calendar event -> `gog calendar create primary --summary "..." --from <datetime> --to <datetime>`
+- Add attendees -> Include `--attendees "email1,email2" --send-updates all`
+- Check availability -> `gog calendar freebusy --calendars "primary" --from <start> --to <end>`
+- List tasks -> `gog tasks lists` then `gog tasks list <tasklistId>`
+- Add task -> `gog tasks add <tasklistId> --title "..." --due <date>`
+- Mark task done -> `gog tasks done <tasklistId> <taskId>`
+- Download from Drive -> `gog drive download <fileId> --out ./file.bin`
+- Search Drive -> `gog drive search "query" --max 20`
 
 ## Tool: gogcli
 
@@ -132,32 +132,32 @@ Config locations: Linux/WSL `~/.config/gogcli/config.json` | Windows `%AppData%\
 
 When `"invalid_grant" "Token has been expired or revoked"`:
 
-**Step 1**: Start auth, capture OAuth URL:
+Step 1: Start auth, capture OAuth URL:
 ```powershell
 wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; export GOG_KEYRING_PASSWORD='<PASSWORD>'; gog auth add <EMAIL> --manual --force" 2>&1 | Select-String -Pattern 'state=' | ForEach-Object { $_.Line }
 ```
 
-**Step 2**: Navigate to OAuth URL with Playwright MCP
+Step 2: Navigate to OAuth URL with Playwright MCP
 
-**Step 3**: Click through consent (account > "Continue" if unverified app > "Continue" on consent > localhost redirect with ERR_CONNECTION_REFUSED is expected)
+Step 3: Click through consent (account > "Continue" if unverified app > "Continue" on consent > localhost redirect with ERR_CONNECTION_REFUSED is expected)
 
-**Step 4**: Capture redirect URL via `mcp1_browser_network_requests({ includeStatic: false })` - look for `http://127.0.0.1:<PORT>/oauth2/callback?state=...&code=...`
+Step 4: Capture redirect URL via `mcp1_browser_network_requests({ includeStatic: false })` - look for `http://127.0.0.1:<PORT>/oauth2/callback?state=...&code=...`
 
-**Step 5**: Complete auth:
+Step 5: Complete auth:
 ```powershell
 wsl bash -c "export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/linuxbrew/.linuxbrew/bin'; export GOG_KEYRING_PASSWORD='<PASSWORD>'; echo '<REDIRECT_URL>' | gog auth add <EMAIL> --manual --force"
 ```
 
-**Step 6**: Verify with `gog --json gmail search 'is:unread' --max 3`
+Step 6: Verify with `gog --json gmail search 'is:unread' --max 3`
 
 ## Common Mistakes
 
-1. **WSL PATH Not Set** (`gog: command not found`): Always use full PATH export
-2. **State Mismatch**: Redirect URL `state=` must match current auth session. Start fresh if mismatched.
-3. **Invalid Client ID** (`Error 401: invalid_client`): Get correct client_id from client secret file:
+1. WSL PATH Not Set (`gog: command not found`): Always use full PATH export
+2. State Mismatch: Redirect URL `state=` must match current auth session. Start fresh if mismatched.
+3. Invalid Client ID (`Error 401: invalid_client`): Get correct client_id from client secret file:
    ```powershell
    Get-Content "<CLIENT_SECRET_PATH>" | ConvertFrom-Json | Select-Object -ExpandProperty installed | Select-Object client_id
    ```
    Client secret path in `[WORKSPACE_FOLDER]/!NOTES.md` under "gogcli" section.
-4. **Terminal Truncates OAuth URL**: Use Playwright MCP to navigate directly with client_id from JSON.
-5. **Port Mismatch**: gogcli uses random port each session. Always capture redirect URL from same auth session via `mcp1_browser_network_requests`.
+4. Terminal Truncates OAuth URL: Use Playwright MCP to navigate directly with client_id from JSON.
+5. Port Mismatch: gogcli uses random port each session. Always capture redirect URL from same auth session via `mcp1_browser_network_requests`.

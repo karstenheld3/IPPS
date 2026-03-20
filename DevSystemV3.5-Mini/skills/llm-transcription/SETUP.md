@@ -47,6 +47,6 @@ winget install ffmpeg
 
 ## Troubleshooting
 
-- **"API key not found"**: Ensure keys file exists at standard location, pass correct `--keys-file` path
-- **"Unsupported file format"**: Check SKILL.md for supported formats; ensure ffmpeg installed for audio
-- **"Rate limit exceeded"**: Wait and retry; use batch mode with lower concurrency
+- "API key not found": Ensure keys file exists at standard location, pass correct `--keys-file` path
+- "Unsupported file format": Check SKILL.md for supported formats; ensure ffmpeg installed for audio
+- "Rate limit exceeded": Wait and retry; use batch mode with lower concurrency

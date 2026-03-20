@@ -2,7 +2,7 @@
 
 Populated by `/fail` workflow. Records mistakes and lessons learned to prevent repetition.
 
-**Goal**: Document failures, mistakes, and lessons learned to prevent repetition
+Goal: Document failures, mistakes, and lessons learned to prevent repetition
 
 ## Active Issues
 
@@ -10,14 +10,14 @@ Populated by `/fail` workflow. Records mistakes and lessons learned to prevent r
 
 #### [CRITICAL] `[TOPIC]-FL-001` Issue Title
 
-- **When**: [YYYY-MM-DD HH:MM]
-- **Where**: File/function/line or document section
-- **What**: Exact problem description
-- **Why it went wrong**: Root cause analysis
-- **Evidence**: Link, test, or example proving the issue
-- **Suggested fix**: Brief recommendation
+- When: [YYYY-MM-DD HH:MM]
+- Where: File/function/line or document section
+- What: Exact problem description
+- Why it went wrong: Root cause analysis
+- Evidence: Link, test, or example proving the issue
+- Suggested fix: Brief recommendation
 
-**Code example** (if applicable):
+Code example (if applicable):
 ```
 // Before (wrong)
 ...
@@ -31,10 +31,10 @@ Populated by `/fail` workflow. Records mistakes and lessons learned to prevent r
 
 #### [RESOLVED] `[TOPIC]-FL-001` Issue Title
 
-- **Original severity**: [CRITICAL/HIGH/MEDIUM/LOW]
-- **Resolved**: [YYYY-MM-DD]
-- **Solution**: [What was done to fix it]
-- **Link**: [Reference to commit, PR, or document]
+- Original severity: [CRITICAL/HIGH/MEDIUM/LOW]
+- Resolved: [YYYY-MM-DD]
+- Solution: [What was done to fix it]
+- Link: [Reference to commit, PR, or document]
 
 ## Failure Categories
 
@@ -52,9 +52,9 @@ Populated by `/fail` workflow. Records mistakes and lessons learned to prevent r
 
 ## Location Rules
 
-- **SESSION-MODE**: `[SESSION_FOLDER]/FAILS.md`
-- **PROJECT-MODE + SINGLE-PROJECT**: `[WORKSPACE_FOLDER]/FAILS.md`
-- **PROJECT-MODE + MONOREPO**: `[PROJECT_FOLDER]/FAILS.md`
+- SESSION-MODE: `[SESSION_FOLDER]/FAILS.md`
+- PROJECT-MODE + SINGLE-PROJECT: `[WORKSPACE_FOLDER]/FAILS.md`
+- PROJECT-MODE + MONOREPO: `[PROJECT_FOLDER]/FAILS.md`
 
 ## Management Rules
 
@@ -65,5 +65,5 @@ Populated by `/fail` workflow. Records mistakes and lessons learned to prevent r
 
 ## Document History
 
-**[YYYY-MM-DD HH:MM]**
+[YYYY-MM-DD HH:MM]
 - Initial failure log created

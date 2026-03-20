@@ -1,6 +1,6 @@
 # Claude Model ID Reference
 
-Format: `{model-family}-{version}-{YYYYMMDD}`. Date suffix is the **release date**, NOT a predictable pattern.
+Format: `{model-family}-{version}-{YYYYMMDD}`. Date suffix is the release date, NOT a predictable pattern.
 
 ## Common Mistakes
 
@@ -10,9 +10,9 @@ Format: `{model-family}-{version}-{YYYYMMDD}`. Date suffix is the **release date
 
 ## Verified Model IDs (2026-01-25)
 
-**Claude 4.5:** `claude-opus-4-5-20251101`, `claude-sonnet-4-5-20250929`, `claude-haiku-4-5-20251001`
-**Claude 4:** `claude-opus-4-20250514`, `claude-sonnet-4-20250514`
-**Claude 3.x:** `claude-3-7-sonnet-20250219`, `claude-3-5-haiku-20241022`
+Claude 4.5: `claude-opus-4-5-20251101`, `claude-sonnet-4-5-20250929`, `claude-haiku-4-5-20251001`
+Claude 4: `claude-opus-4-20250514`, `claude-sonnet-4-20250514`
+Claude 3.x: `claude-3-7-sonnet-20250219`, `claude-3-5-haiku-20241022`
 
 ## Wrong IDs That Return 404
 

@@ -10,16 +10,16 @@ Research domain for legislation, case law, regulatory frameworks, and legal anal
 
 ## Source Tiers
 
-- **Tier 1 (official/primary)**: Full legislation text, court decisions, official gazettes, regulatory body publications
-- **Tier 2 (vendor/issuer)**: Legal commentary from law firms, regulatory guidance documents, official FAQs
-- **Tier 3 (community/analyst)**: Legal blogs, academic papers, conference presentations, industry compliance guides
+- Tier 1 (official/primary): Full legislation text, court decisions, official gazettes, regulatory body publications
+- Tier 2 (vendor/issuer): Legal commentary from law firms, regulatory guidance documents, official FAQs
+- Tier 3 (community/analyst): Legal blogs, academic papers, conference presentations, industry compliance guides
 
 ## Document Handling
 
-- **Download and transcribe FULL legislation texts** - No summarization, no excerpts. Complete text MUST be in `_SOURCES/`.
+- Download and transcribe FULL legislation texts - No summarization, no excerpts. Complete text MUST be in `_SOURCES/`.
 - EU/national legislation: Download official PDF from EUR-Lex or national gazette, transcribe fully
 - Court decisions: Download full text, transcribe fully
-- **Model selection**: `gpt-5-mini` exclusively (99.5% accuracy). Wrong article numbers or terminology have regulatory consequences.
+- Model selection: `gpt-5-mini` exclusively (99.5% accuracy). Wrong article numbers or terminology have regulatory consequences.
 - Cross-reference between statutes and case law
 - Storage structure:
   ```
@@ -33,11 +33,11 @@ Research domain for legislation, case law, regulatory frameworks, and legal anal
 
 ## Template Additions
 
-- **Statutory References** - Exact article/section numbers with full quoted text
-- **Case Law Summary** - Relevant court decisions with citations
-- **Regulatory Timeline** - Effective dates, transition periods, deadlines
-- **Compliance Requirements** - Actionable obligations derived from legislation
-- **Definitions** - Legal definitions as stated in legislation (verbatim)
+- Statutory References - Exact article/section numbers with full quoted text
+- Case Law Summary - Relevant court decisions with citations
+- Regulatory Timeline - Effective dates, transition periods, deadlines
+- Compliance Requirements - Actionable obligations derived from legislation
+- Definitions - Legal definitions as stated in legislation (verbatim)
 
 ## Quality Criteria
 

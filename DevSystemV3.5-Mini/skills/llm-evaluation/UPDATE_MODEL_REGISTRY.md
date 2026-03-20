@@ -1,6 +1,6 @@
 # Update Model Registry Workflow
 
-**Goal**: Capture model overview pages, transcribe to markdown, update `model-registry.json` with current models, context windows, deprecation status
+Goal: Capture model overview pages, transcribe to markdown, update `model-registry.json` with current models, context windows, deprecation status
 
 ## Placeholders
 
@@ -31,7 +31,7 @@ For each page:
 
 1. `browser_navigate(url: "<URL>")`
 2. `browser_wait_for(time: 2)`
-3. **Dismiss cookie popup**:
+3. Dismiss cookie popup:
    - `browser_snapshot()` - check for cookie consent banner
    - If accept button found: click "Accept" / "Accept All Cookies"
    - If no button found, use JavaScript removal fallback:
@@ -100,9 +100,9 @@ Same viewport-chunk technique as 1a. Replace `[SUBFOLDER]` with: `[SCREENSHOTS]/
 
 URL: `https://platform.openai.com/docs/models/compare`
 
-**IMPORTANT**: Page shows comparison table for up to 3 models. Capture all models via interactive batched loop.
+IMPORTANT: Page shows comparison table for up to 3 models. Capture all models via interactive batched loop.
 
-**IMPORTANT**: OpenAI docs use scrollable inner container (`div.docs-scroll-container`), not document body.
+IMPORTANT: OpenAI docs use scrollable inner container (`div.docs-scroll-container`), not document body.
 
 #### Step 1c-i: Get full model list
 
@@ -206,16 +206,16 @@ Rules:
 
 ### 3c. Update `models[]`
 
-1. **Add** new models with `"enabled": false, "status": "untested"`
-2. **Update** `context_window` for existing models if now known
-3. **Update** `status` to `"deprecated"` + `"enabled": false` for deprecated models
-4. **NEVER remove** existing models
+1. Add new models with `"enabled": false, "status": "untested"`
+2. Update `context_window` for existing models if now known
+3. Update `status` to `"deprecated"` + `"enabled": false` for deprecated models
+4. NEVER remove existing models
 5. Insert new models at top of provider group, newest first
 
 ### 3d. Update `model_id_startswith[]`
 
-1. **Update** `max_input` based on context window data
-2. If new model doesn't match any prefix, **report** it (do NOT auto-add - requires manual config)
+1. Update `max_input` based on context window data
+2. If new model doesn't match any prefix, report it (do NOT auto-add - requires manual config)
 
 ### 3e. Update metadata
 

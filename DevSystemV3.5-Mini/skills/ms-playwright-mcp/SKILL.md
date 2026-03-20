@@ -33,17 +33,17 @@ Reference files:
 - Use accessibility tree (not screenshots) for element selection
 - Reference elements via `ref=e5` format from `browser_snapshot`
 - Always call `browser_snapshot` before clicking to get current refs
-- **NEVER auto-close browser**: Only user may close browser - sessions preserve authentication state (banking, email, etc.)
+- NEVER auto-close browser: Only user may close browser - sessions preserve authentication state (banking, email, etc.)
 - For logged-in sessions: Use persistent user profile or storage state
 - Always use `type: "jpeg"` for screenshots (default is png, which produces unnecessarily large files)
-- **Downloads go to temp folder**: `$env:TEMP\playwright-mcp-output\[session]\` - NOT user Downloads folder. Copy files to destination after download completes.
+- Downloads go to temp folder: `$env:TEMP\playwright-mcp-output\[session]\` - NOT user Downloads folder. Copy files to destination after download completes.
 
 ## Configuration
 
-**Repository**: https://github.com/microsoft/playwright-mcp
-**Package**: `@playwright/mcp`
+Repository: https://github.com/microsoft/playwright-mcp
+Package: `@playwright/mcp`
 
-**Basic (isolated session):**
+Basic (isolated session):
 ```json
 {
   "mcpServers": {
@@ -55,42 +55,42 @@ Reference files:
 }
 ```
 
-**Persistent profile (remembers logins):**
+Persistent profile (remembers logins):
 ```json
 {
   "args": ["@playwright/mcp@latest", "--user-data-dir", "[USER_PROFILE_PATH]/.ms-playwright-mcp-profile"]
 }
 ```
 
-**Headless:** Add `"--headless"` to args.
+Headless: Add `"--headless"` to args.
 
-**Timeouts:** Add `"--timeout-action", "10000", "--timeout-navigation", "120000"` for slow pages.
+Timeouts: Add `"--timeout-action", "10000", "--timeout-navigation", "120000"` for slow pages.
 
 ## Available Tools
 
 ### Navigation
-- **browser_navigate** - `browser_navigate(url: "https://example.com")`
+- browser_navigate - `browser_navigate(url: "https://example.com")`
 
 ### Element Interaction
-- **browser_snapshot** - Get accessibility tree with element refs
-- **browser_click** - `browser_click(element: "Button", ref: "e12")`
-- **browser_type** - `browser_type(element: "Input", ref: "e8", text: "query")`
-- **browser_fill** - `browser_fill(element: "Email", ref: "e3", value: "user@example.com")`
-- **browser_select** - `browser_select(element: "Country", ref: "e15", values: ["USA"])`
-- **browser_hover** - `browser_hover(element: "Menu", ref: "e5")`
-- **browser_drag** - Drag and drop between elements
-- **browser_press_key** - `browser_press_key(key: "Enter")` or `browser_press_key(key: "Control+A")`
+- browser_snapshot - Get accessibility tree with element refs
+- browser_click - `browser_click(element: "Button", ref: "e12")`
+- browser_type - `browser_type(element: "Input", ref: "e8", text: "query")`
+- browser_fill - `browser_fill(element: "Email", ref: "e3", value: "user@example.com")`
+- browser_select - `browser_select(element: "Country", ref: "e15", values: ["USA"])`
+- browser_hover - `browser_hover(element: "Menu", ref: "e5")`
+- browser_drag - Drag and drop between elements
+- browser_press_key - `browser_press_key(key: "Enter")` or `browser_press_key(key: "Control+A")`
 
 ### Inspection
-- **browser_screenshot** - `browser_screenshot(type: "jpeg")` or `browser_screenshot(fullPage: true, type: "jpeg")`
-- **browser_console_messages** - Get console logs
-- **browser_evaluate** - `browser_evaluate(expression: "document.title")`
+- browser_screenshot - `browser_screenshot(type: "jpeg")` or `browser_screenshot(fullPage: true, type: "jpeg")`
+- browser_console_messages - Get console logs
+- browser_evaluate - `browser_evaluate(expression: "document.title")`
 
 ### Timing
-- **browser_wait_for** - `browser_wait_for(time: 2)` wait seconds, or `browser_wait_for(text: "Loading")` wait for text
+- browser_wait_for - `browser_wait_for(time: 2)` wait seconds, or `browser_wait_for(text: "Loading")` wait for text
 
 ### Session
-- **browser_close** - Close browser and free resources
+- browser_close - Close browser and free resources
 
 ## Common Workflows
 
@@ -119,7 +119,7 @@ For cookie popups, lazy-load scrolling, expanding collapsed items: see [PLAYWRIG
 2. Find element in returned accessibility tree
 3. Use the `ref` value in subsequent commands
 
-**Selector priority** (when refs unavailable):
+Selector priority (when refs unavailable):
 1. `[data-testid="submit"]` - Best
 2. `getByRole('button', { name: 'Save' })` - Semantic
 3. `getByText('Sign in')` - User-facing

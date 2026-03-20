@@ -9,8 +9,8 @@
 - SEND EMAILS VIA PLAYWRIGHT GMAIL UI - NEVER CLI (encoding fails)
 - Email header: `From: | To: | CC: | BCC: | Subject: | Reply-To: | Thread: | Message-ID:`
 - History heading: `### YYYY-MM-DD HH:MM - Summary`
-- Log entry: `- **YYYY-MM-DD HH:MM** - Main topic`
-- Todo: `- **YYYY-MM-DD HH:MM** - Item - Deadline: YYYY-MM-DD, Status: TODO:[ACTION]/DONE`
+- Log entry: `- YYYY-MM-DD HH:MM - Main topic`
+- Todo: `- YYYY-MM-DD HH:MM - Item - Deadline: YYYY-MM-DD, Status: TODO:[ACTION]/DONE`
 - Todo actions: `TODO:REPLY`, `TODO:REVIEW`, `TODO:PAY`, `TODO:PLAN`, `TODO:SCHEDULE_CALL`, `TODO:SCHEDULE_TRIP`, `TODO:SCHEDULE_MEETING`
 - Attachments: `Attachments/YYYY-MM-DD_HH-MM_[Topic]/`
 - All URLs as `[Title](https://...)`
@@ -22,37 +22,37 @@
 
 ## Status
 
-**Current**: [ACTIVE / AWAITING_RESPONSE / ON_HOLD / COMPLETED]
+Current: [ACTIVE / AWAITING_RESPONSE / ON_HOLD / COMPLETED]
 
 ### Todos and Deliverables
 
-- **YYYY-MM-DD HH:MM** - [Item] - Deadline: YYYY-MM-DD, Status: TODO:[ACTION]/DONE
+- YYYY-MM-DD HH:MM - [Item] - Deadline: YYYY-MM-DD, Status: TODO:[ACTION]/DONE
 
 ## Links and shared documents
 
-- **YYYY-MM-DD HH:MM** - [Description]
+- YYYY-MM-DD HH:MM - [Description]
   - [Title](https://...)
 
 ## Conversation Context
 
 ### Persons Involved
 
-**[Contact Name]** (email)
+[Contact Name] (email)
 - Role: [Role at Organization]
 - Phone: [+XX XXX XXX XXXX]
 - Timezone: [TZ]
 - Notes: [Communication preferences]
 
-**[Your Name]** (your@email.com)
+[Your Name] (your@email.com)
 - Role: Me
 
 ### Topics
 
-- **Topic 1** - Brief description
+- Topic 1 - Brief description
 
 ## Log
 
-- **YYYY-MM-DD HH:MM** - [Main topic]
+- YYYY-MM-DD HH:MM - [Main topic]
   - Decision: [decision]
   - Action: [action]
   - Attachment: [File.pdf](Attachments/YYYY-MM-DD_HH-MM_Topic/File.pdf)
@@ -73,10 +73,10 @@ Subject: [Subject] | Reply-To: - | Thread: [Thread] | Message-ID: [id]
 
 Platform: WhatsApp | Participants: [Your Name], [Contact Name]
 
-**HH:MM [Person]**: [Message text]
+HH:MM [Person]: [Message text]
 
-**HH:MM [Person]**: [Non-English text]
+HH:MM [Person]: [Non-English text]
 > [English translation]
 
-**Key outcomes:**
+Key outcomes:
 - [Outcome]

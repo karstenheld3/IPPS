@@ -1,4 +1,4 @@
-# SPEC: MinimalIPPS Compression Pipeline
+# SPEC: MinifyIPPS Compression Pipeline
 
 **Doc ID**: MIPPS-SP01
 **Goal**: Specify a pipeline that compresses the ~1MB DevSystem into a smaller version usable by cheaper LLMs, using Mother model (Claude Opus 4.6 1M context) for all compression with full cross-file awareness
@@ -8,7 +8,7 @@
 **Depends on:**
 - `_OPTION_B_MOTHER_COMPRESSES_ALL.md [MIPPS-OPT-B]` for architecture decisions
 - `_OPTION_ABCD_COMPARISON.md [MIPPS-COMP-01]` for option selection rationale
-- `NOTES.md [2026-03-19_MinimalIPPS-NOTES]` for original 7-step process
+- `NOTES.md [2026-03-19_MinifyIPPS-NOTES]` for original 7-step process
 
 **Does not depend on:**
 - `_OPTION_A_PIPELINE_WITH_PROMPTS.md [MIPPS-OPT-A]` (rejected: no cross-file awareness)
@@ -471,7 +471,7 @@ User runs: mipps_pipeline.py iterate --update-strategy
 
 ```python
 def main():
-    parser = argparse.ArgumentParser(description="MinimalIPPS Compression Pipeline")
+    parser = argparse.ArgumentParser(description="MinifyIPPS Compression Pipeline")
     subparsers = parser.add_subparsers(dest="command")
 
     # Subcommands

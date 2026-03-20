@@ -69,7 +69,7 @@ Entry: ID, Status: Open, Reported timestamp, verbatim prompt, initial assessment
 ## Step 4: Analyze and Create [BUG_FOLDER]
 
 1. Make assumptions about causes, search code, verify each
-2. Confirm as **bug** when deviation from desired behavior prevents goal
+2. Confirm as bug when deviation from desired behavior prevents goal
 
 Bug = flaw in code, IMPL design, library behavior assessment, or SPEC assumption.
 
@@ -140,9 +140,9 @@ Run `/learn` to extract lessons from this fix.
 ```markdown
 ### GLOB-BG-NNNN IssueDescription
 
-**Problem**: Single sentence
-**Solution**: Single sentence
+Problem: Single sentence
+Solution: Single sentence
 
-**Changed or added files**:
+Changed or added files:
 - `path/to/file.py` - What was changed
 ```

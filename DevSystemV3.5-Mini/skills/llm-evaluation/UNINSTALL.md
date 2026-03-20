@@ -94,12 +94,12 @@ Write-Host "To completely remove the skill, delete that folder manually." -Foreg
 
 ## What Gets Removed
 
-- **Option 1 (Minimal)** - Virtual environment only
-- **Option 2 (Complete)** - Virtual environment + .env file
+- Option 1 (Minimal) - Virtual environment only
+- Option 2 (Complete) - Virtual environment + .env file
 
-**Components:**
-- **Virtual environment**: `../.tools/llm-venv/` (~100-200 MB). Contains openai, anthropic. Recreatable via SETUP.md.
-- **.env file**: API keys at workspace root (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`). **Warning**: Backup created before removal.
+Components:
+- Virtual environment: `../.tools/llm-venv/` (~100-200 MB). Contains openai, anthropic. Recreatable via SETUP.md.
+- .env file: API keys at workspace root (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`). Warning: Backup created before removal.
 
 ## What Is NOT Removed
 

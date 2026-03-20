@@ -1,6 +1,6 @@
 # Research Tools Reference
 
-**Goal**: Document available tools for research workflows
+Goal: Document available tools for research workflows
 
 ## Source Collection Tools
 
@@ -51,16 +51,16 @@ START: Need to collect source
 
 ## When to Escalate to Playwright
 
-**ms-playwright-mcp** is DEFAULT browser tool (public content). **playwriter MCP** is EXCEPTION (user credentials/MFA required).
+ms-playwright-mcp is DEFAULT browser tool (public content). playwriter MCP is EXCEPTION (user credentials/MFA required).
 
 Escalate when:
 - `read_url_content` returns empty/garbled (JS-heavy, SPA, lazy load)
 - Site requires login, cookie consent, CAPTCHA, form submission, age verification
 - Need full-page visual capture or document downloads behind interaction
 
-**Debugging fallback:** If Playwright fails, use `& "[DEVSYSTEM_FOLDER]/skills/windows-desktop-control/simple-screenshot.ps1"` to diagnose popups/blockers.
+Debugging fallback: If Playwright fails, use `& "[DEVSYSTEM_FOLDER]/skills/windows-desktop-control/simple-screenshot.ps1"` to diagnose popups/blockers.
 
-**Source access failure handling** (after 2 retries of both tools):
+Source access failure handling (after 2 retries of both tools):
 1. Document as `[INACCESSIBLE]` in `__[TOPIC]_SOURCES.md` with reason
 2. Search for alternative (mirror, archive.org, cache)
 3. If no alternative, proceed without - document gap
@@ -77,11 +77,11 @@ Escalate when:
 6. ARCHIVE: compress-pdf.py, store .md + compressed PDF (preserve timestamps)
 ```
 
-**Decision criteria:**
+Decision criteria:
 - 0-5 small images OR native digital → text path (`pdftotext`)
 - Many large images (>100KB) OR scanned OR garbled/whitespace output → image path (`convert-pdf-to-jpg`)
 
-**Commands:**
+Commands:
 ```powershell
 pdfinfo.exe "source.pdf"
 pdfimages -list "source.pdf"
@@ -91,7 +91,7 @@ python transcribe-image-to-markdown.py --input-folder "[SESSION]/pdf_images/" --
 python compress-pdf.py "source.pdf" --output "[SESSION]/compressed/"
 ```
 
-**Session folder structure:**
+Session folder structure:
 ```
 [SESSION]/
 ├── pdf_sources/       [original PDFs]
@@ -114,6 +114,6 @@ python compress-pdf.py "source.pdf" --output "[SESSION]/compressed/"
 
 ## Tool Locations
 
-- **pdf-tools** - `../.tools/` (binaries), `[DEVSYSTEM_FOLDER]/skills/pdf-tools/` (scripts)
-- **llm-transcription** - `[DEVSYSTEM_FOLDER]/skills/llm-transcription/`
-- **ms-playwright-mcp** - MCP server (configured in mcp_config.json)
+- pdf-tools - `../.tools/` (binaries), `[DEVSYSTEM_FOLDER]/skills/pdf-tools/` (scripts)
+- llm-transcription - `[DEVSYSTEM_FOLDER]/skills/llm-transcription/`
+- ms-playwright-mcp - MCP server (configured in mcp_config.json)

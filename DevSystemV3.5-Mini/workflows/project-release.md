@@ -39,11 +39,11 @@ This release covers [N] sessions from [date range], focusing on [themes].
 
 ## Sessions Overview
 ### [N]. [Session_Name]
-**Goal**: [from NOTES.md]
-**Outcome**: [summary]
-**Artifacts:**
+Goal: [from NOTES.md]
+Outcome: [summary]
+Artifacts:
 - `[filename]` - [description]
-**Key Findings:** (if any)
+Key Findings: (if any)
 - [finding]
 ---
 [Repeat for each session]
@@ -52,11 +52,11 @@ This release covers [N] sessions from [date range], focusing on [themes].
 ## New Workflows
 ## Workspace Files
 ## Statistics
-- **Total Sessions**: [N]
-- **Total Documents Created**: [N]
+- Total Sessions: [N]
+- Total Documents Created: [N]
 
 ## Document History
-**[YYYY-MM-DD HH:MM]**
+[YYYY-MM-DD HH:MM]
 - Initial release notes created
 ```
 

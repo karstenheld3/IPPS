@@ -143,7 +143,7 @@ sudo sysctl -p /etc/sysctl.d/99-playwright.conf
 ## 6. Security
 
 - Use `--user-data-dir` for persistent sessions, `--storage-state` for pre-saved auth
-- **NEVER** commit auth.json or profile directories to git
+- NEVER commit auth.json or profile directories to git
 
 ```gitignore
 .ms-playwright-mcp-profile/
@@ -153,8 +153,8 @@ auth.json
 
 ## Quick Reference
 
-- **Default** - Clean isolated sessions
-- **`--user-data-dir`** - Persistent logins
-- **`--headless`** - Background automation
-- **`--isolated --storage-state`** - Pre-authenticated
-- **`--extension`** - Connect to existing browser
+- Default - Clean isolated sessions
+- `--user-data-dir` - Persistent logins
+- `--headless` - Background automation
+- `--isolated --storage-state` - Pre-authenticated
+- `--extension` - Connect to existing browser

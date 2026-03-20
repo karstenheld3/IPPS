@@ -1,7 +1,7 @@
 # MECT Coding Rules
 
-**MECT** = Minimal Explicit Consistent Terminology
-**APAPALAN** = As Precise As Possible (Priority 1), As Little As Necessary (Priority 2)
+MECT = Minimal Explicit Consistent Terminology
+APAPALAN = As Precise As Possible (Priority 1), As Little As Necessary (Priority 2)
 
 Actionable rules for identifiers, functions, types, comments, logs, errors, and APIs.
 
@@ -49,7 +49,7 @@ Documentation (DC) - Code-adjacent writing
 
 One concept = one name everywhere: variables, functions, classes, database columns, API fields, log messages, documentation. No synonyms, no polysemy.
 
-**GOOD:**
+GOOD:
 ```python
 def get_workshop(id): ...  # One name everywhere
 
@@ -58,7 +58,7 @@ class MeterDevice:     # physical device
 class MeterContract:   # customer relationship
 ```
 
-**Cross-boundary rule:** If the database column is `workshop_id`, the API field, variable, and log all use `workshop_id`. Never translate between layers.
+Cross-boundary rule: If the database column is `workshop_id`, the API field, variable, and log all use `workshop_id`. Never translate between layers.
 
 ### MC-PR-02: Unambiguous Compound Names
 
@@ -67,7 +67,7 @@ If a compound name has multiple readings, restructure it.
 - BAD: `empty_collection_key` -> GOOD: `key_of_empty_collection`
 - BAD: `invalid_user_input` -> GOOD: `input_from_invalid_user`
 
-**Test:** If a colleague could reasonably interpret it two ways, restructure.
+Test: If a colleague could reasonably interpret it two ways, restructure.
 
 ### MC-PR-03: No Dangerous Meta-Words Without Qualifier
 
@@ -76,7 +76,7 @@ Dangerous words: Module, Service, Manager, Handler, Helper, Utility, Provider, P
 - BAD: `ProductModule`, `UserService`, `check(order)`, `DataProcessor`
 - GOOD: `ProductCatalog`, `UserAuthProvider`, `validate_order(order)`, `CsvRowParser`
 
-**Rule:** Qualify until the name answers "what does it contain/do/provide?"
+Rule: Qualify until the name answers "what does it contain/do/provide?"
 
 ### MC-PR-04: Be Specific in Comments
 
@@ -85,7 +85,7 @@ Every comment must add concrete, verifiable information the code doesn't express
 - BAD: `# Handle errors appropriately`
 - GOOD: `# Retry 3 times with exponential backoff (1s, 2s, 4s), then raise TimeoutError`
 
-**Test:** Delete the comment. If nothing is lost, it was useless.
+Test: Delete the comment. If nothing is lost, it was useless.
 
 ### MC-PR-05: Error Messages State What Failed, Why, and Recovery
 
@@ -137,7 +137,7 @@ Each log line understandable without reading other lines. Include operation, dat
 - BAD: `iterate_and_filter_orders`, `apply_regex_to_extract_emails`
 - GOOD: `active_orders`, `extract_emails`
 
-**Exception:** When mechanism IS the distinguishing factor (`sort_by_merge` vs `sort_by_quick`).
+Exception: When mechanism IS the distinguishing factor (`sort_by_merge` vs `sort_by_quick`).
 
 ### MC-BR-04: Boolean Functions Use Predicate Prefix
 
@@ -231,10 +231,10 @@ Renaming to unrelated term breaks the association field. Qualifying preserves th
 
 ### MC-DC-01: Four Description Types
 
-- **Intentional** - WHY: What problem does this solve?
-- **Functional** - WHAT: What does it accept, return, and guarantee?
-- **Technical** - HOW: What algorithms, data structures, trade-offs?
-- **Contextual** - WHERE: What depends on this? What does this depend on?
+- Intentional - WHY: What problem does this solve?
+- Functional - WHAT: What does it accept, return, and guarantee?
+- Technical - HOW: What algorithms, data structures, trade-offs?
+- Contextual - WHERE: What depends on this? What does this depend on?
 
 ```python
 """
@@ -249,10 +249,10 @@ WHERE: Between API gateway and application handlers. Depends on Redis. Bypassed 
 
 ### MC-DC-02: Match Description Type to Audience
 
-- **README** - intentional + functional (why + what)
-- **Docstrings** - functional + technical (what + how)
-- **Architecture docs** - intentional + contextual (why + where)
-- **Onboarding** - all four: why -> what -> how -> where
+- README - intentional + functional (why + what)
+- Docstrings - functional + technical (what + how)
+- Architecture docs - intentional + contextual (why + where)
+- Onboarding - all four: why -> what -> how -> where
 
 ### MC-DC-03: Plain Language in User-Facing Messages
 
