@@ -32,7 +32,7 @@
     "*": "compress_other"
   },
   "include_patterns": ["*.md"],
-  "skip_patterns": ["pricing-sources/*"],
+  "skip_patterns": ["__pycache__/*", "**/__pycache__/*"],
   "never_compress": [
     "skills/llm-evaluation/prompts/*",
     "skills/llm-transcription/prompts/*"
