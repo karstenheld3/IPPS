@@ -148,6 +148,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **LLMTR** - LLM Transcription Skill (image-to-markdown, audio-to-markdown)
 - **MCPS** - MCP server integrations
 - **MECT** - Minimal Explicit Consistent Terminology (communication design principle)
+- **MIPPS** - Minimal IPPS (DevSystem compression pipeline)
 - **PLWR** - Playwriter MCP (Chrome extension browser automation)
 - **OCLAW** - OpenClaw exploration (remote agent interaction via WhatsApp/Cascade)
 - **MEPI** - MEPI/MCPI research depth principle
@@ -159,6 +160,9 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **WSTKTRAC** - Windsurf Token Logging (token usage tracking via hooks)
 
 ## Document History
+
+**[2026-03-20 04:20]**
+- Added: MIPPS topic (Minimal IPPS - DevSystem compression pipeline)
 
 **[2026-03-15 21:05]**
 - Fixed: Tracking Item IDs format `[NNN]` → `[NNNN]` (align with devsystem-ids.md)

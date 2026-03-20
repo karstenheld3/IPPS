@@ -243,7 +243,7 @@ Run before starting any implementation:
   - Files: `mipps_pipeline.py`
   - Done when: 8 subcommands work (bundle, analyze, check, generate, compress, verify, iterate, status). Handles EC-04 (missing config), EC-05 (resume prerequisites). Each command loads config, state, calls appropriate module, updates state
   - Verify: `python mipps_pipeline.py --help`
-  - Depends: TK-002, TK-008, TK-012, TK-013, TK-016, TK-018, TK-020, TK-022
+  - Depends: TK-002, TK-004, TK-006, TK-008, TK-012, TK-013, TK-016, TK-018, TK-020, TK-022
   - Source: IS-16, EC-04, EC-05
   - Est: 0.75 HHW
 
@@ -282,23 +282,25 @@ Run after all tasks complete:
 
 ```
 TK-001 ─> TK-002 ─> TK-003
-  │          │
-  │          └──────────────────> TK-024
+  │          └───────────────────────────────> TK-024
   ├─> TK-004 ─> TK-005
-  │     │
   │     └─> TK-006 ─> TK-007
-  │           │
-  │           ├─> TK-011 ─> TK-012 ─> TK-014 ─> TK-024
-  │           ├─> TK-013 ──────────────┘
+  │           ├───────────────────────────────> TK-024
+  │           ├─> TK-011 ─> TK-012 ─> TK-014
+  │           │     └────────────────────────> TK-024
+  │           ├─> TK-013 ───────────> TK-014
+  │           │     └────────────────────────> TK-024
   │           ├─> TK-016 ─> TK-017
-  │           │     └─> TK-018 ─> TK-019 ─────> TK-024
-  │           ├─> TK-020 ─> TK-021 ───────────> TK-024
-  │           └─> TK-022 ─> TK-023 ───────────> TK-024
-  │
-  ├─> TK-008 ─> TK-009 ───────────────────────> TK-024
-  │
-  └─> TK-010 ─> TK-011
-      TK-015 ─> TK-016
+  │           │     └─> TK-018 ─> TK-019
+  │           │           └──────────────────> TK-024
+  │           ├─> TK-020 ─> TK-021
+  │           │     └────────────────────────> TK-024
+  │           └─> TK-022 ─> TK-023
+  │                 └────────────────────────> TK-024
+  ├─> TK-008 ─> TK-009
+  │     └────────────────────────────────────> TK-024
+  ├─> TK-010 ─> TK-011
+  └─> TK-015 ─> TK-016
 
 TK-024 ─> TK-025 ─> TK-026
 ```
@@ -311,6 +313,11 @@ TK-024 ─> TK-025 ─> TK-026
 - Group E: TK-016, TK-020, TK-022 (all need TK-006, independent of each other)
 
 ## Document History
+
+**[2026-03-20 04:20]**
+- Fixed: TK-024 Depends missing TK-004 (api_cost_tracker) and TK-006 (llm_clients)
+- Fixed: Dependency graph showed test tasks feeding into TK-024 instead of impl tasks
+- Fixed: Dependency graph TK-010/TK-015 now connected to TK-001
 
 **[2026-03-20 04:15]**
 - Initial tasks plan created from MIPPS-IP01 and MIPPS-SP01

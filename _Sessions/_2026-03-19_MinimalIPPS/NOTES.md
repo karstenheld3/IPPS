@@ -38,9 +38,9 @@ note but do nothing
 
 ## Current Phase
 
-**Phase**: EXPLORE
-**Workflow**: (pending assessment)
-**Assessment**: (pending)
+**Phase**: IMPLEMENT (pending start)
+**Workflow**: `/implement` via `_TASKS_IPPS_MINIFICATION_MOTHER_MODEL.md [MIPPS-TK01]`
+**Assessment**: SPEC, IMPL, TASKS complete and verified. Awaiting confirmation to begin implementation.
 
 ## Agent Instructions
 
