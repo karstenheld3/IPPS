@@ -54,7 +54,17 @@ note but do nothing
 
 ## Important Findings
 
-(none yet)
+### Anthropic Pricing Reference (2026-03-20)
+
+Pricing data available in `.windsurf/skills/llm-evaluation/`:
+- **Source doc**: `pricing-sources/2026-03-20_Anthropic-ModelPricing.md`
+- **JSON data**: `model-pricing.json` (batch tier pricing)
+
+Key rates for MIPPS pipeline (per 1M tokens, batch pricing):
+- **Claude Opus 4.6** (Mother): $7.50 input, $0.75 cached, $37.50 output
+- **GPT-5-mini** (Verification): $0.125 input, $1.00 output
+
+Note: `model-pricing.json` uses batch tier (50% discount). Standard API rates are 2x.
 
 ## Topic Registry
 
