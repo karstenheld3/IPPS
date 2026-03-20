@@ -3,7 +3,7 @@
 **Doc ID (TDID)**: MIPPS-TP01
 **Feature**: MIPPS-PIPELINE
 **Goal**: Verify all MinimalIPPS pipeline modules against SPEC requirements using mocked APIs
-**Timeline**: Created 2026-03-20, Updated 0 times
+**Timeline**: Created 2026-03-20, Updated 3 times
 **Target file**: `tests/` directory (11 test files)
 
 **Depends on:**
@@ -38,7 +38,7 @@
 
 This test plan covers 52 test cases across 12 categories for the MinimalIPPS compression pipeline. It extends the 28 baseline test cases defined in `_IMPL_IPPS_MINIFICATION_MOTHER_MODEL.md [MIPPS-IP01]` with 24 additional test cases covering modules that had no IMPL-level TCs: api_cost_tracker, mother_analyzer, mother_output_checker, compression_prompt_builder, compression_refiner, and integration.
 
-All tests run with mocked LLM APIs. No real API calls. No file writes outside `tmp_path`.
+All tests run with mocked Large Language Model (LLM) APIs. No real API calls. No file writes outside `tmp_path`.
 
 ## 2. Scenario
 
@@ -213,14 +213,14 @@ pytest `tmp_path` fixture handles cleanup automatically. No manual teardown need
 - **MIPPS-TP01-TC-13**: check_budget at 100% -> ok=true, returns (True, "halt: budget exceeded...") tuple
 - **MIPPS-TP01-TC-14**: calculate_cost with unknown model -> ok=false, raises KeyError or ValueError with model name in message
 
-### Category 4: LLM Clients (5 tests)
+### Category 4: LLM Clients (6 tests)
 
 - **MIPPS-TP01-TC-15**: Anthropic call_with_cache returns cache hit -> ok=true, usage includes cache_read_input_tokens > 0. Maps to MIPPS-IP01-TC-10
 - **MIPPS-TP01-TC-16**: Anthropic timeout -> ok=true, retries 3x with backoff, succeeds on 3rd attempt. Maps to MIPPS-IP01-TC-11
 - **MIPPS-TP01-TC-17**: Anthropic rate limit (429) -> ok=true, waits and retries per Retry-After. Maps to MIPPS-IP01-TC-12
 - **MIPPS-TP01-TC-18**: OpenAI call success -> ok=true, returns response text and usage dict with prompt_tokens/completion_tokens. Maps to MIPPS-IP01-TC-13
 - **MIPPS-TP01-TC-19**: API failure after 3 retries -> ok=false, raises APIError with retry count and last error. Maps to MIPPS-IP01-TC-14
-- **MIPPS-TP01-TC-52**: Anthropic call with cache miss (expired TTL) -> ok=true, usage shows cache_creation_input_tokens > 0 and cache_read_input_tokens = 0, cost_tracker records cache write cost. Verifies IG-05
+- **MIPPS-TP01-TC-52**: Anthropic call with cache miss (expired Time To Live (TTL)) -> ok=true, usage shows cache_creation_input_tokens > 0 and cache_read_input_tokens = 0, cost_tracker records cache write cost. Verifies IG-05
 
 ### Category 5: Mother Analyzer (5 tests)
 
@@ -260,7 +260,7 @@ pytest `tmp_path` fixture handles cleanup automatically. No manual teardown need
 ### Category 10: Compression Refiner (4 tests)
 
 - **MIPPS-TP01-TC-40**: review_report returns strategy updates -> ok=true, dict contains specific file-level guidance changes
-- **MIPPS-TP01-TC-41**: update_strategy modifies strategy content -> ok=true, strategy file content differs from original
+- **MIPPS-TP01-TC-41**: update_strategy modifies strategy content -> ok=true, at least one file's compression guidance changed in strategy file
 - **MIPPS-TP01-TC-42**: get_files_to_recompress parses flagged files -> ok=true, returns list of file paths from report's flagged entries
 - **MIPPS-TP01-TC-43**: No report exists -> ok=false, raises FileNotFoundError with report path in message (EC-07)
 
@@ -273,7 +273,7 @@ pytest `tmp_path` fixture handles cleanup automatically. No manual teardown need
 
 ### Category 12: Integration (4 tests)
 
-- **MIPPS-TP01-TC-48**: Full pipeline run (bundle -> analyze -> check -> generate -> compress -> verify) completes -> ok=true, all steps recorded in state
+- **MIPPS-TP01-TC-48**: Full pipeline run (bundle -> analyze -> check -> generate -> compress -> verify) completes -> ok=true, state["current_step"] == 7 and all 7 steps recorded
 - **MIPPS-TP01-TC-49**: State tracks all steps correctly -> ok=true, state["current_step"] == 7 after full run, files_compressed matches expected count
 - **MIPPS-TP01-TC-50**: Output directory contains compressed files -> ok=true, output/ has files matching non-excluded .md files from source
 - **MIPPS-TP01-TC-51**: Cost stays within budget -> ok=true, state["cost"]["total"] < config["budget"]["max_total_usd"]
@@ -409,8 +409,8 @@ def assert_file_contains(path, expected_substring: str):
 - [ ] **MIPPS-TP01-VC-13**: IG-02 (No source modification) verified by TC-48 (integration checks source untouched)
 - [ ] **MIPPS-TP01-VC-14**: IG-03 (Resume without data loss) verified by TC-07, TC-33
 - [ ] **MIPPS-TP01-VC-15**: IG-04 (Excluded files identical) verified by TC-50 (output matches source for excluded)
-- [ ] **MIPPS-TP01-VC-16**: IG-06 (Budget guard) verified by TC-12, TC-13, TC-35, TC-51
-- [ ] **MIPPS-TP01-VC-17**: IG-05 (Cache re-send on expiry) verified by TC-52
+- [ ] **MIPPS-TP01-VC-16**: IG-05 (Cache re-send on expiry) verified by TC-52
+- [ ] **MIPPS-TP01-VC-17**: IG-06 (Budget guard) verified by TC-12, TC-13, TC-35, TC-51
 - [ ] **MIPPS-TP01-VC-18**: IG-07 (Excluded files never sent to Mother) verified by TC-23, TC-33
 
 ### Edge Cases
@@ -469,6 +469,17 @@ def assert_file_contains(path, expected_substring: str):
 - [ ] **MIPPS-TP01-VC-64**: IP01-TC-28 -> TP01-TC-47
 
 ## 11. Document History
+
+**[2026-03-20 05:05]**
+- Fixed: TTL expanded to "Time To Live (TTL)" on first use in TC-52 (AP-PR-06)
+- Fixed: PROGRESS.md test case counts corrected from 51/23 to 52/24
+
+**[2026-03-20 05:00]**
+- Fixed: Category 4 heading "5 tests" corrected to "6 tests" (TC-52 was added but count not updated)
+- Fixed: IG ordering in VC section - IG-05 before IG-06 (was reversed)
+- Fixed: LLM expanded to "Large Language Model (LLM)" on first use (AP-PR-06)
+- Fixed: TC-41 and TC-48 descriptions made more specific (AP-PR-07)
+- Fixed: Timeline "Updated 0 times" corrected to "Updated 2 times"
 
 **[2026-03-20 04:50]**
 - Fixed: Added TC-52 for IG-05 (cache miss/re-send) - was missing from initial plan
