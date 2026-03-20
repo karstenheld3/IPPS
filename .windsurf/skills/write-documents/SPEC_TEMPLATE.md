@@ -30,8 +30,9 @@
 9. [Data Structures](#9-data-structures)
 10. [User Actions](#10-user-actions) *(UI specs only)*
 11. [UX Design](#11-ux-design) *(UI specs only)*
-12. [Implementation Details](#12-implementation-details)
-13. [Document History](#13-document-history)
+12. [Logging Requirements](#12-logging-requirements)
+13. [Implementation Details](#13-implementation-details)
+14. [Document History](#14-document-history)
 
 ## 1. Scenario
 
@@ -159,11 +160,32 @@ Use ASCII box diagrams. Show ALL buttons and actions:
 +-----------------------------------------------------------------------+
 ```
 
-## 12. Implementation Details
+## 12. Logging Requirements
+
+*(If implementation produces no output, state: "N/A: [reason, e.g., pure library with no console output]")*
+
+Use decision tree from SPEC-LG-01 (@skills:write-documents `SPEC_RULES.md`) to identify applicable types. Reference @skills:coding-conventions logging rules.
+
+**Applicable logging types:**
+- [ ] User-Facing (UF) - `LOGGING-RULES-USER-FACING.md`
+- [ ] App-Level (AP) - `LOGGING-RULES-APP-LEVEL.md`
+- [ ] Script-Level (SC) - `LOGGING-RULES-SCRIPT-LEVEL.md`
+
+**[Type] logging:**
+- **Audience**: [Who reads this output]
+- **Goal**: [What the reader must learn]
+- **Key operations**: [Which operations produce logged output]
+
+**Expected output for [key operation]:**
+```
+[Log output example following Announce > Track > Report pattern]
+```
+
+## 13. Implementation Details
 
 [Code organization, function signatures, module structure]
 
-## 13. Document History
+## 14. Document History
 
 **[YYYY-MM-DD HH:MM]**
 - Initial specification created

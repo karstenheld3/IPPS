@@ -25,6 +25,11 @@ Rules for writing specification documents with GOOD/BAD examples.
 - **SPEC-CT-06**: Compact object definitions - use lists, no empty lines between properties
 - **SPEC-CT-07**: Compact gate checklists - use simple lists, not ASCII box diagrams
 
+**Logging (LG)**
+- **SPEC-LG-01**: Identify logging types applicable to the implementation
+- **SPEC-LG-02**: Define logging audience and goal per type
+- **SPEC-LG-03**: Provide log output examples for key operations
+
 **Format (FT)**
 - **SPEC-FT-01**: Use timestamped changelog, reverse chronological
 - **SPEC-FT-02**: No Markdown tables in changelogs
@@ -33,6 +38,7 @@ Rules for writing specification documents with GOOD/BAD examples.
 ## Table of Contents
 
 - [Requirements Format](#requirements-format)
+- [Logging Requirements](#logging-requirements)
 - [UI Diagrams](#ui-diagrams)
 - [Layer Architecture Diagrams](#layer-architecture-diagrams)
 - [Summarize Styling](#summarize-styling)
@@ -72,6 +78,92 @@ Rules for writing specification documents with GOOD/BAD examples.
 ```
 **CRWL-EC-01:** Empty input list -> Return empty result, log warning
 **CRWL-EC-02:** Network timeout -> Retry 3 times, then fail with error
+```
+
+## Logging Requirements
+
+When an implementation produces output (console, logs, test results), the SPEC must define logging requirements. If logging is not applicable, state why in the section.
+
+**Reference documents** (@skills:coding-conventions):
+- `LOGGING-RULES.md` - General rules (LOG-GN-01 to LOG-GN-12), philosophy, and patterns
+- `LOGGING-RULES-USER-FACING.md` - End-user console/SSE output (LOG-UF-01 to LOG-UF-06)
+- `LOGGING-RULES-APP-LEVEL.md` - Server/debug logging (LOG-AP-01 to LOG-AP-05)
+- `LOGGING-RULES-SCRIPT-LEVEL.md` - QA/selftest output (LOG-SC-01 to LOG-SC-07)
+
+### SPEC-LG-01: Identify Applicable Logging Types
+
+**Decision tree - which logging types apply:**
+
+```
+Does the implementation produce console output for end users?
+├─ Yes -> User-Facing (UF) applies
+│         Goal: Users always know what is happening
+│         Rules: LOG-UF-01 to LOG-UF-06
+└─ No
+
+Does the implementation run as a server/service with debug logging?
+├─ Yes -> App-Level (AP) applies
+│         Goal: Human-readable AND machine-parseable
+│         Rules: LOG-AP-01 to LOG-AP-05
+└─ No
+
+Does the implementation include selftest/verification scripts?
+├─ Yes -> Script-Level (SC) applies
+│         Goal: All failure info in logs alone
+│         Rules: LOG-SC-01 to LOG-SC-07
+└─ No
+
+None of the above -> Logging section states "N/A: [reason]"
+```
+
+General rules (LOG-GN) apply to ALL types when any type is selected.
+
+### SPEC-LG-02: Define Audience and Goal Per Type
+
+For each applicable logging type, state:
+- **Audience** - Who reads this output (end users, developers, QA)
+- **Goal** - What the reader must learn from the output
+- **Key operations** - Which operations produce logged output
+
+**BAD:**
+```
+The system should log operations.
+```
+
+**GOOD:**
+```
+**User-Facing (UF):**
+- Audience: Admin users monitoring crawl progress via console
+- Goal: Know which site is being crawled, how many files processed, errors
+- Key operations: site connection, library scanning, file processing
+
+**App-Level (AP):**
+- Audience: Developers debugging failed crawls via server logs
+- Goal: Trace request flow, identify failure point with full error chain
+- Key operations: API calls, authentication, file operations
+```
+
+### SPEC-LG-03: Provide Log Output Examples
+
+Show expected log output for key operations. Use the Announce > Track > Report pattern from `LOGGING-RULES.md`.
+
+**BAD:**
+```
+Log the crawl progress.
+```
+
+**GOOD:**
+```
+**Expected user-facing output for crawl operation:**
+Crawling site 'https://contoso.sharepoint.com/sites/ProjectA'...
+  3 libraries found.
+  [ 1 / 3 ] Processing library 'Documents'...
+    342 files retrieved.
+    12 added, 3 changed, 0 removed.
+    OK.
+  [ 2 / 3 ] Processing library 'Reports'...
+    ERROR: Access denied -> (403) Forbidden
+  PARTIAL FAIL: 2 libraries processed, 1 failed.
 ```
 
 ## UI Diagrams
