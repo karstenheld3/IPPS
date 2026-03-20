@@ -18,6 +18,7 @@
 2. [Pipeline Steps](#2-pipeline-steps)
 3. [Configuration Reference](#3-configuration-reference)
 4. [File Structure](#4-file-structure)
+5. [Post-Pipeline: Copy Functional Files](#5-post-pipeline-copy-functional-files)
 
 ## 1. Quick Start
 
@@ -164,7 +165,61 @@ _run_templateV2/
 └── tests/                     # Unit tests
 ```
 
+## 5. Post-Pipeline: Copy Functional Files
+
+The pipeline only compresses `.md` files. Functional files (scripts, configs) must be copied separately to make the output usable.
+
+### Identify Missing Files
+
+```powershell
+$src = "E:\Dev\IPPS\DevSystemV3.5"
+$dst = "E:\Dev\IPPS\DevSystemV3.5-Mini"
+
+# Find files in source but not in destination (excluding cache/temp)
+$srcFiles = Get-ChildItem -Path $src -Recurse -File |
+    Where-Object { $_.FullName -notmatch "__pycache__|\. tmp_|pricing-sources|registry-sources" } |
+    ForEach-Object { $_.FullName.Substring($src.Length + 1) }
+
+$dstFiles = Get-ChildItem -Path $dst -Recurse -File |
+    ForEach-Object { $_.FullName.Substring($dst.Length + 1) }
+
+$missing = $srcFiles | Where-Object { $_ -notin $dstFiles }
+Write-Host "Missing files: $($missing.Count)"
+$missing
+```
+
+### Copy Functional Files
+
+```powershell
+# Copy each missing file, creating directories as needed
+foreach ($f in $missing) {
+    $s = Join-Path $src $f
+    $d = Join-Path $dst $f
+    $dir = Split-Path $d
+    if (!(Test-Path $dir)) {
+        New-Item -ItemType Directory -Path $dir -Force | Out-Null
+    }
+    Copy-Item $s $d -Force
+    Write-Host "Copied: $f"
+}
+```
+
+### What to Copy
+
+| Type | Examples | Action |
+|------|----------|--------|
+| Python scripts | `*.py` | Copy as-is |
+| PowerShell scripts | `*.ps1` | Copy as-is |
+| JSON configs | `model-registry.json`, `model-pricing.json` | Copy as-is |
+| `__pycache__/` | Compiled Python | Skip |
+| `pricing-sources/` | Reference images | Skip |
+| `registry-sources/` | Transcription cache | Skip |
+| `.tmp_*` files | Temporary scripts | Skip |
+
 ## Document History
+
+**[2026-03-20 20:19]**
+- Added: Section 5 "Post-Pipeline: Copy Functional Files" with PowerShell scripts and file type table
 
 **[2026-03-20 19:33]**
 - Initial document created

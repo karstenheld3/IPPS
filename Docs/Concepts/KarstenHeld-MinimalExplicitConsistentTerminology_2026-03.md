@@ -48,6 +48,23 @@ The described MECT principle will help you detect where things go wrong. You can
 
 ## Hall of Fail
 
+### The Apartment That Was Both C and D
+
+In March 2026, a tenant signed a rental contract for an apartment in Portugal. The contract clearly stated: "Fração C, 1º Andar Direito" (Fraction C, 1st Floor Right). The tenant used this address to register with four utility providers: electricity, water, gas, and internet. Everything seemed clear.
+
+Weeks later, the tenant noticed mail wasn't arriving. After investigation, the landlord clarified: "Fração C is only for property registry purposes. The correct postal address is 1º D." It turned out that Portuguese buildings use two overlapping letter systems:
+
+- **Fração (A, B, C...)** = Legal property registry designation (for deeds, taxes, contracts)
+- **Floor position (D, E, F...)** = Physical location indicator (D=Direito/Right, E=Esquerdo/Left, F=Frente/Front)
+
+So "Fração C" and "1º D" both correctly described the same apartment - using different systems for different purposes. The letter "C" identified which legal unit it was; the letter "D" identified which side of the floor it was on. Two valid identifiers, same namespace (single uppercase letters), completely different meanings.
+
+The tenant now had to contact all four utility providers to update the address. The confusion cost time, caused missed deliveries, and created administrative overhead - all because a single letter in an address could mean two different things depending on context.
+
+**MECT violation:** Using the same symbol space (letters A-Z) for two unrelated classification systems (legal fractions vs floor positions) without explicit disambiguation. A better design would use distinct namespaces: "FR-C" for fraction, "1D" for floor position, or simply spell out "Fração C, Lado Direito" to make both systems explicit.
+
+---
+
 Emails do not have titles, they have subjects
 People do not have emails, they get emails and have email addresses.
 Flights do not have targets, they have destinations
