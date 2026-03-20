@@ -35,6 +35,7 @@ def _load_config(config_path: Path = None) -> dict:
             "file_type_map": {"*": "compress_other"},
             "include_patterns": ["*.md"],
             "skip_patterns": [],
+            "never_compress": [],
             "api_timeout_seconds": 120,
         }
         config_path.write_text(json.dumps(default, indent=2), encoding="utf-8")
@@ -117,9 +118,21 @@ def cmd_analyze(args):
     update_step(state, 3)
     save_state(_state_path(), state)
 
-    # Identify excluded files
+    # Identify never_compress files
+    from lib.mother_analyzer import get_never_compress_files
+    from lib.file_bundle_builder import scan_source_dir as _scan
+    source_dir = Path(config["source_dir"])
+    if not source_dir.is_absolute():
+        source_dir = BASE_DIR / source_dir
+    categories = _scan(source_dir, config.get("include_patterns", ["*.md"]), config.get("skip_patterns", []))
+    all_rel = [f.relative_to(source_dir).as_posix() for files in categories.values() for f in files]
+    never_compress_files = get_never_compress_files(all_rel, config.get("never_compress", []))
+    state["_never_compress_files"] = never_compress_files
+
+    # Identify excluded files (never_compress files removed from exclusion candidates)
     excluded = identify_excluded_files(complexity, freqs, config)
-    state["files_excluded"] = len(excluded)
+    excluded = [f for f in excluded if f not in never_compress_files]
+    state["files_excluded"] = len(excluded) + len(never_compress_files)
     state["_excluded_files"] = excluded
 
     # Step 4: Strategy

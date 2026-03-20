@@ -203,6 +203,98 @@ class TestRunCompressionStep:
         assert mother.call_with_cache.call_count == 0
 
 
+class TestNeverCompress:
+    """Tests for never_compress handling in run_compression_step."""
+
+    def test_never_compress_copied_as_is(self, tmp_path, base_config):
+        """never_compress files are copied to output with identical content."""
+        source = tmp_path / "source"
+        output = tmp_path / "output"
+        prompts_dir = source / "skills" / "llm-eval" / "prompts"
+        prompts_dir.mkdir(parents=True)
+        original_content = "# Eval Prompt\nScore 1-5.\n"
+        (prompts_dir / "score.md").write_text(original_content, encoding="utf-8")
+
+        base_config["never_compress"] = ["skills/llm-eval/prompts/*"]
+        state = {
+            "current_step": 6, "files_completed": [],
+            "files_compressed": 0, "files_passed": 0, "files_failed": 0,
+            "cost": {"total": 0.0, "mother_input": 0.0, "mother_output": 0.0,
+                     "verification_input": 0.0, "verification_output": 0.0},
+        }
+
+        mother = _mock_mother()
+        verifier = _mock_verifier()
+
+        run_compression_step(
+            mother, verifier, "bundle", source, output,
+            base_config, state, {},
+        )
+
+        dest = output / "skills" / "llm-eval" / "prompts" / "score.md"
+        assert dest.exists()
+        assert dest.read_text(encoding="utf-8") == original_content
+
+    def test_never_compress_not_sent_to_mother(self, tmp_path, base_config):
+        """Mother API is not called for never_compress files."""
+        source = tmp_path / "source"
+        output = tmp_path / "output"
+        prompts_dir = source / "skills" / "llm-eval" / "prompts"
+        prompts_dir.mkdir(parents=True)
+        (prompts_dir / "score.md").write_text("# Prompt\n", encoding="utf-8")
+
+        base_config["never_compress"] = ["skills/llm-eval/prompts/*"]
+        state = {
+            "current_step": 6, "files_completed": [],
+            "files_compressed": 0, "files_passed": 0, "files_failed": 0,
+            "cost": {"total": 0.0, "mother_input": 0.0, "mother_output": 0.0,
+                     "verification_input": 0.0, "verification_output": 0.0},
+        }
+
+        mother = _mock_mother()
+        verifier = _mock_verifier()
+
+        run_compression_step(
+            mother, verifier, "bundle", source, output,
+            base_config, state, {},
+        )
+
+        assert mother.call_with_cache.call_count == 0
+
+    def test_never_compress_before_exclusion_criteria(self, tmp_path, base_config):
+        """never_compress is checked before exclusion criteria: a file matching
+        never_compress is copied as-is even if it also meets exclusion criteria."""
+        source = tmp_path / "source"
+        output = tmp_path / "output"
+        prompts_dir = source / "skills" / "llm-eval" / "prompts"
+        prompts_dir.mkdir(parents=True)
+        # Small file (< 100 lines) that would meet exclusion criteria
+        (prompts_dir / "score.md").write_text("# Short\n", encoding="utf-8")
+
+        base_config["never_compress"] = ["skills/llm-eval/prompts/*"]
+        state = {
+            "current_step": 6, "files_completed": [],
+            "_excluded_files": ["skills/llm-eval/prompts/score.md"],  # Also in exclusion list
+            "files_compressed": 0, "files_passed": 0, "files_failed": 0,
+            "cost": {"total": 0.0, "mother_input": 0.0, "mother_output": 0.0,
+                     "verification_input": 0.0, "verification_output": 0.0},
+        }
+
+        mother = _mock_mother()
+        verifier = _mock_verifier()
+
+        run_compression_step(
+            mother, verifier, "bundle", source, output,
+            base_config, state, {},
+        )
+
+        dest = output / "skills" / "llm-eval" / "prompts" / "score.md"
+        assert dest.exists()
+        assert dest.read_text(encoding="utf-8") == "# Short\n"
+        # Mother not called - never_compress took precedence
+        assert mother.call_with_cache.call_count == 0
+
+
 class TestParseScore:
     """Tests for score parsing edge cases."""
 

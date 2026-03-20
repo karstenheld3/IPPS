@@ -1,6 +1,6 @@
 {
-  "source_dir": "test_source/",
-  "output_dir": "E:/Dev/IPPS/MiniDevSystemV3.5-Test/",
+  "source_dir": "E:/Dev/IPPS/.windsurf/",
+  "output_dir": "E:/Dev/IPPS/MiniDevSystemV3.5/",
   "models": {
     "mother": {"provider": "anthropic", "model": "claude-opus-4-6", "max_context": 1000000, "thinking": true},
     "verification": {"provider": "openai", "model": "gpt-5-mini", "max_context": 128000}
@@ -33,5 +33,9 @@
   },
   "include_patterns": ["*.md"],
   "skip_patterns": ["pricing-sources/*"],
+  "never_compress": [
+    "skills/llm-evaluation/prompts/*",
+    "skills/llm-transcription/prompts/*"
+  ],
   "api_timeout_seconds": 600
 }

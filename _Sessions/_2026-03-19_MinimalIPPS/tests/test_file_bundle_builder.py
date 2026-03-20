@@ -5,6 +5,7 @@ from lib.file_bundle_builder import (
     EmptySourceError,
     count_tokens,
     generate_bundle,
+    is_never_compress,
     scan_source_dir,
 )
 
@@ -72,3 +73,20 @@ def test_token_count_estimation():
 
     # Must be within 10% (in practice should be exact since we use same encoding)
     assert abs(actual - expected) / max(expected, 1) < 0.10
+
+
+def test_is_never_compress_matches_pattern():
+    """is_never_compress returns True for paths matching never_compress glob patterns."""
+    patterns = ["skills/llm-evaluation/prompts/*", "skills/deep-research/prompts/*"]
+
+    assert is_never_compress("skills/llm-evaluation/prompts/score.md", patterns) is True
+    assert is_never_compress("skills/deep-research/prompts/query.md", patterns) is True
+
+
+def test_is_never_compress_no_match():
+    """is_never_compress returns False for paths not matching any pattern."""
+    patterns = ["skills/llm-evaluation/prompts/*"]
+
+    assert is_never_compress("rules/core.md", patterns) is False
+    assert is_never_compress("workflows/build.md", patterns) is False
+    assert is_never_compress("skills/coding/SKILL.md", patterns) is False

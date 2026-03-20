@@ -1,4 +1,5 @@
 """Mother analysis: call tree (Step 2), complexity map (Step 3), compression strategy (Step 4)."""
+import fnmatch
 import logging
 import re
 from pathlib import Path
@@ -128,6 +129,22 @@ def identify_excluded_files(
 
     log.info("Identified %d files for exclusion", len(excluded))
     return excluded
+
+
+def get_never_compress_files(all_files: list[str], patterns: list[str]) -> list[str]:
+    """Return file paths matching any never_compress glob pattern.
+
+    Args:
+        all_files: List of relative file paths (forward slashes)
+        patterns: Glob patterns from pipeline_config.json never_compress
+
+    Returns:
+        List of file paths that should be copied as-is
+    """
+    matched = [f for f in all_files if any(fnmatch.fnmatch(f, p) for p in patterns)]
+    if matched:
+        log.info("Never-compress: %d files match patterns", len(matched))
+    return matched
 
 
 def generate_strategy(

@@ -138,6 +138,19 @@ def generate_bundle(
     }
 
 
+def is_never_compress(rel_path: str, patterns: list[str]) -> bool:
+    """Check if a file path matches any never_compress glob pattern.
+
+    Args:
+        rel_path: File path relative to source_dir (forward slashes)
+        patterns: List of glob patterns from pipeline_config.json never_compress
+
+    Returns:
+        True if file matches any pattern and should be copied as-is
+    """
+    return any(fnmatch.fnmatch(rel_path, pat) for pat in patterns)
+
+
 def count_tokens(text: str) -> int:
     """Count tokens using tiktoken cl100k_base encoding."""
     enc = tiktoken.get_encoding("cl100k_base")

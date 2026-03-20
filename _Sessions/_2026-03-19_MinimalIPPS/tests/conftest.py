@@ -38,6 +38,7 @@ def sample_config(tmp_path):
         "file_type_map": {"rules/*.md": "compress_rules", "*": "compress_other"},
         "include_patterns": ["*.md"],
         "skip_patterns": ["pricing-sources/*"],
+        "never_compress": ["skills/llm-evaluation/prompts/*"],
         "api_timeout_seconds": 120,
     }
     return config
@@ -82,6 +83,17 @@ def mock_source_dir(tmp_path):
     # Binary file
     (source / "image.png").write_bytes(b"\x89PNG\r\n\x1a\n")
     return source
+
+
+@pytest.fixture
+def mock_source_dir_with_prompts(mock_source_dir):
+    """Extends mock_source_dir with a never-compress prompt file."""
+    prompts_dir = mock_source_dir / "skills" / "llm-eval" / "prompts"
+    prompts_dir.mkdir(parents=True)
+    (prompts_dir / "score.md").write_text(
+        "# Eval Prompt\nScore 1-5.\n", encoding="utf-8"
+    )
+    return mock_source_dir
 
 
 @pytest.fixture

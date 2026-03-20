@@ -3,7 +3,7 @@
 **Doc ID**: MIPPS-IP01
 **Feature**: MIPPS-PIPELINE
 **Goal**: Implement Python pipeline script that compresses DevSystem using Mother model with cached context
-**Timeline**: Created 2026-03-20, Updated 7 times
+**Timeline**: Created 2026-03-20, Updated 8 times
 
 **Target files**:
 - `mipps_pipeline.py` (NEW ~150 lines)
@@ -25,7 +25,7 @@
 
 ## MUST-NOT-FORGET
 
-- Use 1-hour cache Time To Live (TTL) for V1 (simplicity over cost optimization)
+- Anthropic cache TTL is 5 minutes (ephemeral). Monitor `cache_read_input_tokens == 0` on non-first calls to detect expiration and log cost impact (EC-12, IG-05)
 - Exclusion threshold: < 100 lines AND <= 2 references
 - Judge threshold: 3.5/5.0, one refinement attempt, then manual review
 - Track per-file completion for resume capability
@@ -34,6 +34,7 @@
 - All output to `output_dir`, never modify source directory
 - Source directory configurable via `source_dir` config (default: `.windsurf/`)
 - Only .md files are minified; non-.md files (*.py, *.json) are excluded from output
+- Files matching `never_compress` patterns are copied as-is (specialized prompts)
 
 ## Table of Contents
 
@@ -107,7 +108,7 @@
 - **MIPPS-IP01-EC-09**: Anthropic API timeout -> Retry 3x with exponential backoff (2/4/8s)
 - **MIPPS-IP01-EC-10**: Anthropic API rate limit (429) -> Wait for Retry-After header, then retry
 - **MIPPS-IP01-EC-11**: OpenAI API failure -> Retry retryable errors (429, 500, 502, 503, 504) 3x with backoff; non-retryable errors (400, 401, 403, 404) fail immediately. After 3 retries, mark file for manual review
-- **MIPPS-IP01-EC-12**: Cache expired mid-step -> Re-send bundle, log cache miss cost
+- **MIPPS-IP01-EC-12**: Cache expired mid-step (detected via `cache_read_input_tokens == 0` on non-first call) -> Log warning with cost delta (cache write ~1.25x vs cache read ~0.1x input price). No re-warming action needed: bundle re-sent every call by design. Track cache miss count in state for cost reporting
 
 ### Data Anomalies
 
@@ -138,6 +139,7 @@
   "file_type_map": { ... },
   "include_patterns": ["*.md"],
   "skip_patterns": ["pricing-sources/*"],
+  "never_compress": ["skills/llm-evaluation/prompts/*", "skills/llm-transcription/prompts/*", "skills/deep-research/prompts/*"],
   "api_timeout_seconds": 120
 }
 ```
@@ -216,7 +218,8 @@ class OpenAIClient:
 
 **Code**:
 ```python
-def scan_source_dir(source_dir: Path, skip_patterns: list) -> dict[str, list[Path]]: ...
+def scan_source_dir(source_dir: Path, include_patterns: list[str], skip_patterns: list[str] = []) -> dict[str, list[Path]]: ...
+def is_never_compress(rel_path: str, patterns: list[str]) -> bool: ...
 def generate_bundle(files: dict, output_path: Path) -> dict: ...
 def count_tokens(text: str) -> int: ...
 ```
@@ -247,9 +250,10 @@ def parse_load_frequencies(call_tree: str) -> dict[str, int]: ...
 ```python
 def analyze_complexity(client: AnthropicClient, bundle: str, prompt: str) -> str: ...
 def identify_excluded_files(complexity_map: str, config: dict) -> list[str]: ...
+def get_never_compress_files(all_files: list[str], patterns: list[str]) -> list[str]: ...
 ```
 
-**Note**: Apply exclusion criteria: `exclusion_max_lines` AND `exclusion_max_references` from config
+**Note**: Apply exclusion criteria: `exclusion_max_lines` AND `exclusion_max_references` from config. Check `never_compress` patterns first (copy as-is before exclusion check).
 
 #### MIPPS-IP01-IS-09: Implement lib/mother_analyzer.py - Step 4 (Strategy)
 
@@ -471,6 +475,18 @@ def cmd_compress(args): ...
 - [ ] **MIPPS-IP01-VC-32**: Total cost within budget
 
 ## 6. Document History
+
+**[2026-03-20 10:30]**
+- Fixed: MNF cache entry corrected from "1-hour TTL" to "5 minutes" with monitoring requirement
+- Fixed: EC-12 expanded with concrete detection mechanism (`cache_read_input_tokens == 0`)
+- Fixed: IS-06 `scan_source_dir` signature matches implementation (`include_patterns`, not `never_compress`)
+- Fixed: IS-08 `get_never_compress_files` signature matches implementation (`list[str]`, not `list[Path]`)
+- Fixed: Document History reordered to reverse chronological
+
+**[2026-03-20 09:57]**
+- Added: `never_compress` config array to MNF and pipeline_config.json example
+- Added: `is_never_compress()` and `get_never_compress_files()` functions to IS-06, IS-08
+- Changed: IS-08 note updated with evaluation order (never_compress before exclusion criteria)
 
 **[2026-03-20 04:30]**
 - Fixed: CLI expanded to "Command-Line Interface (CLI)" on first use in IS-16 heading (AP-PR-06)

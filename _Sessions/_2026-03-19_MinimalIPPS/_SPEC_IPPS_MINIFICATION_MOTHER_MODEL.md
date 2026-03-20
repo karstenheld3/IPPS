@@ -25,7 +25,7 @@
 - Verification model judges EVERY compressed file - no self-evaluation by Mother
 - Step 7 report format: exactly 5 lines per file (structural, removed, simplified, sacrificed, impact)
 - Target: reduce total token count by >= 40%, max 5 files in manual review queue
-- 1-hour cache Time To Live (TTL) recommended for V1 (eliminates cache warming complexity)
+- Anthropic cache TTL is 5 minutes (ephemeral). For 75 sequential calls (~38 min), cache will expire multiple times. Monitor `cache_read_input_tokens == 0` on non-first calls to detect expiration and log cost impact (IG-05)
 
 ## Table of Contents
 
@@ -104,6 +104,18 @@ An **ExclusionCriteria** defines which compressible files should be skipped.
 - **Effect**: file is copied as-is to output, not sent to Mother for compression
 - **Expected reduction**: ~20-30% fewer files to compress (~50-55 files instead of 75)
 
+### NeverCompress
+
+A **NeverCompress** list defines paths that are always copied as-is, regardless of size or reference count.
+
+- **Config**: `never_compress` array in pipeline_config.json
+- **Format**: glob patterns relative to source_dir (e.g., `skills/llm-evaluation/prompts/*`)
+- **Use case**: specialized prompts, templates, or content where compression would break functionality
+- **Bundle**: included in all_files_bundle.md (Mother sees full context), but NOT sent to Mother for compression
+- **Evaluation order**: `skip_patterns` (exclude entirely) -> `never_compress` (copy as-is) -> ExclusionCriteria (copy as-is) -> compress
+- **Overlap rule**: file matching both `skip_patterns` AND `never_compress` is excluded entirely (`skip_patterns` wins per evaluation order)
+- **Distinction from skip_patterns**: `skip_patterns` excludes from output entirely; `never_compress` copies to output as-is
+
 ### CompressionStrategy
 
 A **CompressionStrategy** classifies every concept, rule, and feature across the system.
@@ -124,10 +136,11 @@ A **PipelineState** tracks progress across pipeline steps.
   - `files_compressed` - count of files processed in Step 6
   - `files_passed` - count passing verification threshold
   - `files_failed` - count below threshold, needing refinement
-  - `files_excluded_md` - count of excluded .md files (copied as-is)
+  - `files_excluded_md` - count of excluded .md files (copied as-is, includes never_compress + ExclusionCriteria)
+  - `_never_compress_files` - list of file paths matching never_compress patterns
+  - `_excluded_files` - list of file paths matching ExclusionCriteria (excludes never_compress files)
   - `iteration` - current iteration number (1 = first pass)
   - `total_cost` - accumulated API cost in USD
-  - `cache_last_used` - timestamp of last Mother call (for TTL monitoring)
 
 ### CompressedFile
 
@@ -197,8 +210,10 @@ A **CompressedFile** is the output of Mother's compression for a single source f
 
 **MIPPS-FR-09: Excluded File Handling**
 - Non-.md files (*.py, *.json, etc.) are NOT copied to output - minified DevSystem contains only .md files
+- Files matching `never_compress` patterns are copied to `output/` as-is (specialized prompts, templates)
 - Excluded .md files (< 100 lines AND rarely loaded) are copied to `output/` as-is
-- Rationale: Scripts and configs are not instruction content; they belong in separate deployment
+- Evaluation order: `skip_patterns` (exclude) → `never_compress` (copy as-is) → ExclusionCriteria (copy as-is) → compress
+- Rationale: Scripts and configs are not instruction content; specialized prompts must not be altered
 
 **MIPPS-FR-10: Pipeline State Tracking**
 - Track progress in `pipeline_state.json` after each step
@@ -246,7 +261,7 @@ A **CompressedFile** is the output of Mother's compression for a single source f
 
 **MIPPS-IG-04:** Non-compressible files appear in output with identical content to source.
 
-**MIPPS-IG-05:** If cache expires mid-pipeline, the bundle is re-sent automatically before the next Mother call.
+**MIPPS-IG-05:** Bundle is re-sent with every Mother call (Anthropic caches automatically). If cache expires (5-min TTL), the next call triggers cache write at ~1.25x input cost. Pipeline must detect expiration via `cache_read_input_tokens == 0` on non-first calls and log cost impact.
 
 **MIPPS-IG-06:** Total cost never exceeds 2x the estimated budget without explicit user confirmation.
 
@@ -256,14 +271,20 @@ A **CompressedFile** is the output of Mother's compression for a single source f
 
 ### Prompt Caching
 
-Mother's ~300K token bundle is sent as system prompt content with `cache_control: {"type": "ephemeral", "ttl": "1h"}`. First call pays cache write cost (higher than standard input). Subsequent calls hit cache read at ~0.1x base input price. See NOTES.md Anthropic Pricing Reference for exact per-model rates.
+Mother's ~300K token bundle is sent as system prompt content with `cache_control: {"type": "ephemeral"}`. First call pays cache write cost (higher than standard input). Subsequent calls within TTL hit cache read at ~0.1x base input price. See NOTES.md Anthropic Pricing Reference for exact per-model rates.
 
 **Cost structure per cached bundle call:**
-- **Cache write** (first call only): ~1.25x input price (5-min TTL) or ~2x input price (1-hour TTL)
-- **Cache read** (subsequent calls): ~0.1x input price
+- **Cache write** (first or post-expiry call): ~1.25x input price
+- **Cache read** (subsequent calls within 5-min TTL): ~0.1x input price
 - **Breakeven**: After ~2 cache reads, caching saves money vs re-sending full bundle each time
 
-**V1 TTL**: 1-hour. Eliminates cache expiration risk for 75 sequential calls (~38 min total). Higher write cost offset by guaranteed cache hits.
+**V1 TTL**: 5 minutes (Anthropic ephemeral cache). For 75 sequential calls at ~30s each (~38 min total), cache will expire ~7 times. Each expiration triggers a cache write (~1.25x input price for ~300K tokens). Budget must account for ~8 cache writes instead of 1.
+
+**Cache monitoring (MIPPS-IG-05):**
+- After each Mother call, check `cache_read_input_tokens` in usage response
+- On non-first calls: `cache_read_input_tokens == 0` indicates cache expired -> log warning with cost impact
+- Track cache miss count in state for cost reporting
+- No re-warming action needed: bundle is re-sent every call by design (Anthropic caches automatically)
 
 ### Compression-then-Verify Loop
 
@@ -335,7 +356,8 @@ User runs: mipps_pipeline.py compress --step 6
 │   ├─> If score < 3.5: Mother refines, re-judge
 │   ├─> Save to output/
 │   └─> Update state (files_compressed++)
-├─> Copy excluded .md files to output/ (small + rarely loaded)
+├─> Copy never_compress .md files to output/ as-is (specialized prompts)
+├─> Copy excluded .md files to output/ as-is (small + rarely loaded)
 ├─> Non-.md files are NOT copied (scripts/configs excluded)
 └─> Update state (step: 6)
 
@@ -392,6 +414,11 @@ User runs: mipps_pipeline.py iterate --update-strategy
   },
   "include_patterns": ["*.md"],
   "skip_patterns": ["pricing-sources/*"],
+  "never_compress": [
+    "skills/llm-evaluation/prompts/*",
+    "skills/llm-transcription/prompts/*",
+    "skills/deep-research/prompts/*"
+  ],
   "api_timeout_seconds": 120
 }
 ```
@@ -475,7 +502,7 @@ mipps_pipeline.py                      (entry point, CLI)
 
 - Anthropic SDK for Mother (Claude Opus 4.6) with extended thinking via `thinking: {"type": "enabled", "budget_tokens": N}` (thinking tokens billed as output)
 - OpenAI SDK for Verification (GPT-5-mini) via Chat Completions API (`client.chat.completions.create`)
-- Prompt caching via `cache_control: {"type": "ephemeral", "ttl": "1h"}` on system prompt content block
+- Prompt caching via `cache_control: {"type": "ephemeral"}` on system prompt content block (5-min TTL)
 - Both SDKs have built-in retry with `max_retries` parameter; configure to avoid double-retry with custom backoff
 - OpenAI SDK: `OpenAI(timeout=T, max_retries=N)` reads `OPENAI_API_KEY` env var
 - Anthropic SDK: `Anthropic(timeout=T, max_retries=N)` reads `ANTHROPIC_API_KEY` env var
@@ -490,6 +517,22 @@ mipps_pipeline.py                      (entry point, CLI)
 - `pathlib`, `json`, `argparse`, `datetime` (stdlib)
 
 ## 11. Document History
+
+**[2026-03-20 10:30]**
+- Fixed: Cache TTL corrected from "1-hour" to "5 minutes" (Anthropic ephemeral cache reality)
+- Fixed: IG-05 rewritten with concrete cache monitoring mechanism (`cache_read_input_tokens == 0`)
+- Fixed: Prompt Caching section rewritten for 5-min TTL with cache miss budget (~8 writes)
+- Fixed: MNF cache entry updated with expiration risk and monitoring requirement
+- Fixed: NeverCompress domain object: added bundle inclusion, skip_patterns overlap rule
+- Fixed: PipelineState: added `_never_compress_files`, `_excluded_files`; removed `cache_last_used` (unimplemented)
+- Fixed: Action Flow compress step: added never_compress copy line
+- Fixed: Document History reordered to reverse chronological
+
+**[2026-03-20 09:57]**
+- Added: NeverCompress domain object for specialized prompts that must not be compressed
+- Added: `never_compress` config array to pipeline_config.json (glob patterns)
+- Changed: FR-09 updated with evaluation order: skip_patterns -> never_compress -> ExclusionCriteria -> compress
+- Added: Default never_compress patterns for llm-evaluation, llm-transcription, deep-research prompts
 
 **[2026-03-20 04:30]**
 - Fixed: API logging simplified from `logs/` directory to stdout for V1 (no IMPL IS existed for logs/)

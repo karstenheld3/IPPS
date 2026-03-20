@@ -19,6 +19,7 @@ Sessions track EDIRD phases:
 - Lifecycle: Init → Work → Save → Resume → Finalize → Archive
 - Sync session PROBLEMS.md to project on /session-finalize
 - Phase tracking: NOTES.md has current phase, PROGRESS.md has full phase plan
+- **Acronyms/principles in NOTES.md**: Always spell out acronyms and principles fully so agents can understand them without external context. Example: "APAPALAN: As Precise As Possible, As Little As Necessary" not just "APAPALAN principle"
 - **STOP after session init**: After creating session files, STOP and wait for user review. Do NOT implement session goal until explicitly requested. User must review and refine goals before work begins.
 
 ## Session Lifecycle

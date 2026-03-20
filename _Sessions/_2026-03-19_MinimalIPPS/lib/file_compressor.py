@@ -181,6 +181,7 @@ def run_compression_step(
     # Collect .md files to compress
     all_md = sorted(source_dir.rglob("*.md"))
     skip_patterns = config.get("skip_patterns", [])
+    never_compress = config.get("never_compress", [])
     excluded_files = state.get("_excluded_files", [])
 
     manual_review = []
@@ -189,8 +190,18 @@ def run_compression_step(
     for i, file_path in enumerate(all_md, 1):
         rel = file_path.relative_to(source_dir).as_posix()
 
-        # Skip non-include files
+        # Evaluation order: skip → never_compress → exclusion → compress
+
+        # Skip non-include files (exclude from output entirely)
         if any(fnmatch.fnmatch(rel, pat) for pat in skip_patterns):
+            continue
+
+        # Copy never_compress files as-is (before exclusion criteria)
+        if any(fnmatch.fnmatch(rel, pat) for pat in never_compress):
+            dest = output_dir / rel
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_text(file_path.read_text(encoding="utf-8"), encoding="utf-8")
+            log.info("Never-compress copied as-is: '%s'", rel)
             continue
 
         # Copy excluded files as-is

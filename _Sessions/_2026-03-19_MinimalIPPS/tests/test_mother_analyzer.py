@@ -5,6 +5,7 @@ from lib.mother_analyzer import (
     analyze_call_tree,
     analyze_complexity,
     generate_strategy,
+    get_never_compress_files,
     identify_excluded_files,
     parse_load_frequencies,
 )
@@ -100,3 +101,22 @@ def test_generate_strategy_excludes_files(tmp_path):
     call_args = client.call_with_cache.call_args
     assert "small_file.md" in call_args[0][1]  # prompt argument
     assert "Strategy" in result
+
+
+def test_get_never_compress_files():
+    """get_never_compress_files returns file paths matching never_compress patterns."""
+    all_files = [
+        "rules/core.md",
+        "workflows/build.md",
+        "skills/llm-evaluation/prompts/score.md",
+        "skills/llm-evaluation/prompts/rubric.md",
+        "skills/coding/SKILL.md",
+    ]
+    patterns = ["skills/llm-evaluation/prompts/*"]
+
+    result = get_never_compress_files(all_files, patterns)
+
+    assert "skills/llm-evaluation/prompts/score.md" in result
+    assert "skills/llm-evaluation/prompts/rubric.md" in result
+    assert len(result) == 2
+    assert "rules/core.md" not in result

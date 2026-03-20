@@ -269,6 +269,83 @@ def test_output_directory_contains_compressed_files(integration_env):
     assert "workflows/build.md" in output_files
 
 
+def test_never_compress_files_copied_not_compressed(tmp_path):
+    """Integration: never_compress files are included in bundle/analysis but copied
+    as-is during compression. Mother is not called for these files."""
+    # Setup: source with 1 compressible file + 1 never_compress file
+    source = tmp_path / "source"
+    (source / "rules").mkdir(parents=True)
+    prompts_dir = source / "skills" / "eval" / "prompts"
+    prompts_dir.mkdir(parents=True)
+
+    (source / "rules" / "core.md").write_text(
+        "# Core Rules\n" + "Rule line.\n" * 40, encoding="utf-8",
+    )
+    prompt_content = "# Eval Prompt\nScore the compression 1-5.\nBe specific.\n"
+    (prompts_dir / "score.md").write_text(prompt_content, encoding="utf-8")
+
+    config = {
+        "source_dir": str(source),
+        "output_dir": str(tmp_path / "output"),
+        "models": {
+            "mother": {"provider": "anthropic", "model": "claude-opus-4-6",
+                       "max_context": 1000000, "thinking": False},
+            "verification": {"provider": "openai", "model": "gpt-5-mini",
+                             "max_context": 128000},
+        },
+        "thresholds": {"judge_min_score": 3.5, "max_refinement_attempts": 1,
+                       "exclusion_max_lines": 100, "exclusion_max_references": 2,
+                       "target_compression_percent": 40, "max_manual_review_files": 5},
+        "cache": {"ttl": "1h"},
+        "budget": {"max_total_usd": 100.0, "warn_at_percent": 80},
+        "file_type_map": {"rules/*.md": "compress_rules", "*": "compress_other"},
+        "include_patterns": ["*.md"],
+        "skip_patterns": [],
+        "never_compress": ["skills/eval/prompts/*"],
+        "api_timeout_seconds": 10,
+    }
+
+    # Step 1: Bundle - both files should be in bundle
+    categories = scan_source_dir(
+        Path(config["source_dir"]),
+        include_patterns=config["include_patterns"],
+    )
+    bundle_result = generate_bundle(categories, Path(config["source_dir"]))
+    bundle = bundle_result["content"]
+    assert bundle_result["file_count"] == 2  # Both files bundled
+    assert "skills/eval/prompts/score.md" in bundle
+
+    # Step 6: Compress - only core.md should be sent to Mother
+    state = init_state()
+    state["files_total"] = 2
+
+    mother = _mock_anthropic(["# Compressed\nShort rules.\n"])  # 1 call for core.md
+    verifier = _mock_openai(["Score: 4.5/5\nGood."])
+
+    prompts = {"compress_other": {"transform": "t {file_path} {file_content} {file_type}", "eval": "e"}}
+
+    run_compression_step(
+        mother, verifier, bundle,
+        Path(config["source_dir"]), Path(config["output_dir"]),
+        config, state, prompts,
+    )
+
+    output = Path(config["output_dir"])
+
+    # never_compress file: copied as-is with identical content
+    nc_dest = output / "skills" / "eval" / "prompts" / "score.md"
+    assert nc_dest.exists()
+    assert nc_dest.read_text(encoding="utf-8") == prompt_content
+
+    # compressible file: compressed by Mother
+    comp_dest = output / "rules" / "core.md"
+    assert comp_dest.exists()
+    assert comp_dest.read_text(encoding="utf-8") == "# Compressed\nShort rules.\n"
+
+    # Mother called exactly once (for core.md, not for score.md)
+    assert mother.call_with_cache.call_count == 1
+
+
 def test_cost_stays_within_budget(integration_env):
     """TC-51: Cost stays within budget -> state['cost']['total'] < config budget."""
     env = integration_env
