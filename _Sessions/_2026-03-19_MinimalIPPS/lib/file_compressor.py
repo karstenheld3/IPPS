@@ -2,10 +2,12 @@
 import fnmatch
 import logging
 import re
+from datetime import datetime, timezone
 from pathlib import Path
 
 from lib.api_cost_tracker import calculate_cost, check_budget
 from lib.file_bundle_builder import count_tokens
+from lib.pipeline_state import update_cost
 
 log = logging.getLogger(__name__)
 
@@ -215,6 +217,27 @@ def run_compression_step(
         dest = output_dir / rel
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(result["compressed"], encoding="utf-8")
+
+        # Accumulate API costs into state (FR-10)
+        usage = result.get("usage", {})
+        mother_model = config["models"]["mother"]["model"]
+        verif_model = config["models"]["verification"]["model"]
+        if usage:
+            update_cost(
+                state, mother_model,
+                usage.get("input_tokens", 0),
+                usage.get("output_tokens", 0),
+                usage.get("cache_read_input_tokens", 0),
+                usage.get("cache_creation_input_tokens", 0),
+            )
+            judge_usage = usage.get("judge", {})
+            if judge_usage:
+                update_cost(
+                    state, verif_model,
+                    judge_usage.get("prompt_tokens", 0),
+                    judge_usage.get("completion_tokens", 0),
+                )
+        state["cache_last_used"] = datetime.now(timezone.utc).isoformat()
 
         # Update state
         add_completed_file(state, rel)

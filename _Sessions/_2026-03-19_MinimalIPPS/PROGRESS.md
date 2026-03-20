@@ -7,8 +7,8 @@
 - [x] **EXPLORE** - done
 - [x] **DESIGN** - done
 - [x] **IMPLEMENT** - done (11 modules, 57 tests, all green)
-- [ ] **REFINE** - pending
-- [ ] **DELIVER** - pending
+- [x] **REFINE** - done (2 fixes: cost tracking, cache_last_used)
+- [ ] **DELIVER** - in progress
 
 ## To Do
 
@@ -44,6 +44,13 @@ Summary by phase:
 (none yet)
 
 ## Progress Changes
+
+**[2026-03-20 06:15]**
+- REFINE phase: /verify found 2 gaps vs SPEC
+- Fix 1: `update_cost` now called in `run_compression_step` (FR-10, IG-06 - budget guard was ineffective)
+- Fix 2: `cache_last_used` field added to `init_state()` (SPEC section 3)
+- Updated test fixture `base_config` with `models` key
+- 57/57 tests still green after fixes
 
 **[2026-03-20 06:00]**
 - Implementation complete: all 26 tasks (TK-001 to TK-026) across 8 phases

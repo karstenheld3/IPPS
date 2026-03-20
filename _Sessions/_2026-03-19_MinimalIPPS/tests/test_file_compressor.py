@@ -19,6 +19,12 @@ def base_config():
             "max_manual_review_files": 5,
         },
         "budget": {"max_total_usd": 100.0, "warn_at_percent": 80},
+        "models": {
+            "mother": {"provider": "anthropic", "model": "claude-opus-4-6",
+                       "max_context": 1000000, "thinking": False},
+            "verification": {"provider": "openai", "model": "gpt-5-mini",
+                             "max_context": 128000},
+        },
         "file_type_map": {"*": "compress_other"},
         "skip_patterns": [],
     }

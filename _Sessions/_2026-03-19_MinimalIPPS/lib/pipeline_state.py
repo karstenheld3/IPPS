@@ -21,6 +21,7 @@ def init_state() -> dict:
         "files_excluded_md": 0,
         "files_completed": [],
         "broken_references": 0,
+        "cache_last_used": None,
         "cost": {
             "mother_input": 0.0,
             "mother_output": 0.0,
