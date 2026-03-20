@@ -31,7 +31,9 @@
 - Track per-file completion for resume capability
 - Cross-file reference check in Step 7
 - Target: >= 40% compression, <= 5 files in manual review
-- All output to session folder, never modify source `.windsurf/`
+- All output to `output_dir`, never modify source directory
+- Source directory configurable via `source_dir` config (default: `.windsurf/`)
+- Only .md files are minified; non-.md files (*.py, *.json) are excluded from output
 
 ## Table of Contents
 
@@ -104,7 +106,7 @@
 
 - **MIPPS-IP01-EC-09**: Anthropic API timeout -> Retry 3x with exponential backoff (2/4/8s)
 - **MIPPS-IP01-EC-10**: Anthropic API rate limit (429) -> Wait for Retry-After header, then retry
-- **MIPPS-IP01-EC-11**: OpenAI API failure -> Retry 3x, then mark file for manual review
+- **MIPPS-IP01-EC-11**: OpenAI API failure -> Retry retryable errors (429, 500, 502, 503, 504) 3x with backoff; non-retryable errors (400, 401, 403, 404) fail immediately. After 3 retries, mark file for manual review
 - **MIPPS-IP01-EC-12**: Cache expired mid-step -> Re-send bundle, log cache miss cost
 
 ### Data Anomalies
@@ -116,7 +118,7 @@
 
 ## 3. Implementation Steps
 
-### Phase 1: Core Infrastructure (IS-01 to IS-04)
+### Phase 1: Core Infrastructure (IS-01 to IS-05)
 
 #### MIPPS-IP01-IS-01: Create pipeline_config.json
 
@@ -134,7 +136,8 @@
   "cache": { "ttl": "1h" },
   "budget": { ... },
   "file_type_map": { ... },
-  "skip_patterns": ["*.py", "*.json", "pricing-sources/*"],
+  "include_patterns": ["*.md"],
+  "skip_patterns": ["pricing-sources/*"],
   "api_timeout_seconds": 120
 }
 ```
@@ -146,8 +149,6 @@
 **Location**: `lib/__init__.py`, `lib/state.py`
 
 **Action**: Create package init (empty) and state module
-
----
 
 #### MIPPS-IP01-IS-03: Implement lib/state.py
 
@@ -176,14 +177,15 @@ def update_cost(state: dict, model: str, input_tokens: int, output_tokens: int) 
 **Code**:
 ```python
 PRICING = {
-    "claude-opus-4-6-thinking": {"input": 5.00, "cached": 0.50, "output": 25.00},
-    "gpt-5-mini": {"input": 0.15, "output": 0.60}
+    # Standard API rates (2x batch). See NOTES.md Anthropic Pricing Reference.
+    "claude-opus-4-6": {"input": 15.00, "cached_read": 1.50, "cached_write": 30.00, "output": 75.00},
+    "gpt-5-mini": {"input": 0.25, "output": 2.00}
 }
-def calculate_cost(model: str, input_tokens: int, output_tokens: int, cached: bool) -> float: ...
+def calculate_cost(model: str, input_tokens: int, output_tokens: int, cache_read_tokens: int = 0, cache_write_tokens: int = 0) -> float: ...
 def check_budget(state: dict, config: dict) -> tuple[bool, str]: ...
 ```
 
-**Note**: Return warning message at 80%, halt at 100% of budget
+**Note**: Return warning message at 80%, halt at 100% of budget. OpenAI usage returns `prompt_tokens`/`completion_tokens`; Anthropic returns `input_tokens`/`output_tokens` - callers must map provider-specific field names to `calculate_cost` parameters
 
 #### MIPPS-IP01-IS-05: Implement lib/api_client.py
 
@@ -199,10 +201,10 @@ class AnthropicClient:
     
 class OpenAIClient:
     def __init__(self, config: dict): ...
-    def call(self, prompt: str) -> tuple[str, dict]: ...
+    def call(self, prompt: str, max_tokens: int = 500) -> tuple[str, dict]: ...
 ```
 
-**Note**: Handle EC-09, EC-10, EC-11 with exponential backoff + jitter (delay * (1 + random(0, 0.5))) to avoid thundering herd. Use `api_timeout_seconds` from config.
+**Note**: Handle EC-09, EC-10, EC-11 with exponential backoff + jitter (delay * (1 + random(0, 0.5))) to avoid thundering herd. Use `api_timeout_seconds` from config. Both SDKs accept `timeout` and `max_retries` in constructor - set `max_retries=0` to disable built-in retry when using custom backoff. OpenAI: `OpenAI(timeout=config["api_timeout_seconds"], max_retries=0)`. Set `max_tokens` on verification calls to cap output cost (500 tokens sufficient for score + feedback). Log `response._request_id` from OpenAI responses for debugging.
 
 ### Phase 2: Bundle and Analysis (IS-06 to IS-09)
 
@@ -428,34 +430,34 @@ def cmd_compress(args): ...
 ### Phase 1: Core Infrastructure
 
 - [ ] **MIPPS-IP01-VC-05**: IS-01 completed (pipeline_config.json)
-- [ ] **MIPPS-IP01-VC-06**: IS-02 completed (lib/state.py)
-- [ ] **MIPPS-IP01-VC-07**: IS-03 completed (lib/cost_tracker.py)
-- [ ] **MIPPS-IP01-VC-08**: IS-04 completed (lib/api_client.py)
+- [ ] **MIPPS-IP01-VC-06**: IS-02, IS-03 completed (lib/__init__.py, lib/state.py)
+- [ ] **MIPPS-IP01-VC-07**: IS-04 completed (lib/cost_tracker.py)
+- [ ] **MIPPS-IP01-VC-08**: IS-05 completed (lib/api_client.py)
 - [ ] **MIPPS-IP01-VC-09**: TC-06 through TC-09 pass (state management)
 - [ ] **MIPPS-IP01-VC-10**: TC-10 through TC-14 pass (API client)
 
 ### Phase 2: Bundle and Analysis
 
-- [ ] **MIPPS-IP01-VC-11**: IS-05 completed (lib/bundler.py)
-- [ ] **MIPPS-IP01-VC-12**: IS-06 completed (analyzer.py - Step 2)
-- [ ] **MIPPS-IP01-VC-13**: IS-07 completed (analyzer.py - Step 3)
-- [ ] **MIPPS-IP01-VC-14**: IS-08 completed (analyzer.py - Step 4)
+- [ ] **MIPPS-IP01-VC-11**: IS-06 completed (lib/bundler.py)
+- [ ] **MIPPS-IP01-VC-12**: IS-07 completed (analyzer.py - Step 2)
+- [ ] **MIPPS-IP01-VC-13**: IS-08 completed (analyzer.py - Step 3)
+- [ ] **MIPPS-IP01-VC-14**: IS-09 completed (analyzer.py - Step 4)
 - [ ] **MIPPS-IP01-VC-15**: TC-01 through TC-05 pass (bundler)
 - [ ] **MIPPS-IP01-VC-16**: `bundle` command produces valid bundle
 
 ### Phase 3: Prompts and Compression
 
-- [ ] **MIPPS-IP01-VC-17**: IS-09 completed (step prompts)
-- [ ] **MIPPS-IP01-VC-18**: IS-10 completed (lib/generator.py)
-- [ ] **MIPPS-IP01-VC-19**: IS-11 completed (lib/compressor.py)
-- [ ] **MIPPS-IP01-VC-20**: IS-12 completed (lib/checker.py)
+- [ ] **MIPPS-IP01-VC-17**: IS-10 completed (step prompts)
+- [ ] **MIPPS-IP01-VC-18**: IS-11 completed (lib/generator.py)
+- [ ] **MIPPS-IP01-VC-19**: IS-12 completed (lib/compressor.py)
+- [ ] **MIPPS-IP01-VC-20**: IS-13 completed (lib/checker.py)
 - [ ] **MIPPS-IP01-VC-21**: TC-15 through TC-20 pass (compression loop)
 
 ### Phase 4: Verification and Iteration
 
-- [ ] **MIPPS-IP01-VC-22**: IS-13 completed (lib/verifier.py)
-- [ ] **MIPPS-IP01-VC-23**: IS-14 completed (lib/iterator.py)
-- [ ] **MIPPS-IP01-VC-24**: IS-15 completed (mipps_pipeline.py CLI)
+- [ ] **MIPPS-IP01-VC-22**: IS-14 completed (lib/verifier.py)
+- [ ] **MIPPS-IP01-VC-23**: IS-15 completed (lib/iterator.py)
+- [ ] **MIPPS-IP01-VC-24**: IS-16 completed (mipps_pipeline.py CLI)
 - [ ] **MIPPS-IP01-VC-25**: TC-21 through TC-24 pass (verification)
 - [ ] **MIPPS-IP01-VC-26**: TC-25 through TC-28 pass (CLI)
 
@@ -469,6 +471,23 @@ def cmd_compress(args): ...
 - [ ] **MIPPS-IP01-VC-32**: Total cost within budget
 
 ## 6. Document History
+
+**[2026-03-20 03:30]**
+- Fixed: EC-11 now distinguishes retryable (429, 5xx) from non-retryable (400, 401, 403, 404) OpenAI errors (per OAIAPI-IN60)
+- Added: OpenAI usage field mapping note to IS-04 (`prompt_tokens`/`completion_tokens` vs `input_tokens`/`output_tokens`)
+- Added: OpenAI client configuration (`timeout`, `max_retries=0`) to IS-05 (per OAIAPI-IN62)
+- Added: `max_tokens` parameter (default 500) to `OpenAIClient.call` to cap verification output cost (per OAIAPI-IN61)
+- Added: `response._request_id` logging note for OpenAI debugging (per OAIAPI-IN03)
+
+**[2026-03-20 02:35]**
+- Fixed: VC-IS numbering mismatch (14 VC items referenced wrong IS numbers after IS-02/IS-03 split)
+- Fixed: Phase 1 header "IS-01 to IS-04" corrected to "IS-01 to IS-05"
+- Fixed: Removed `---` separator between IS-02 and IS-03 (violates core-conventions)
+- Fixed: PRICING dict aligned with NOTES.md standard API rates (was $5/$0.50/$25, now $15/$1.50/$75)
+- Fixed: Model ID `claude-opus-4-6-thinking` corrected to `claude-opus-4-6` (thinking enabled via parameter)
+- Fixed: Document History reordered to reverse chronological
+- Added: `cached_write` cost to PRICING dict (cache write costs ~2x input for 1h TTL per IN18)
+- Changed: `calculate_cost` signature: `cached: bool` replaced with `cache_read_tokens`, `cache_write_tokens` (matches Anthropic API usage response)
 
 **[2026-03-20 01:12]**
 - Added: H1 jitter in retry backoff (IS-05)
@@ -491,3 +510,11 @@ def cmd_compress(args): ...
 - 16 edge cases identified
 - 28 test cases defined
 - 32 verification checklist items
+
+**[2026-03-20 00:56]**
+- Synced: Source directory configurable via `source_dir` (per SPEC DD-07 change)
+
+**[2026-03-20 00:55]**
+- Synced: Only .md files minified; non-.md files excluded from output (per SPEC change)
+- Changed: MNF updated with .md-only rule
+- Changed: pipeline_config.json uses `include_patterns: ["*.md"]`

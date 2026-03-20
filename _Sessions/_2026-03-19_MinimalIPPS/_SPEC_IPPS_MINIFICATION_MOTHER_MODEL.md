@@ -17,10 +17,9 @@
 ## MUST-NOT-FORGET
 
 - Mother model compresses ALL files - no delegation to cheaper Transformers
-- Cache Time-To-Live (TTL) is 5 minutes - monitor expiration, re-warm if needed
 - File exclusion: files < 100 lines AND rarely loaded -> copy as-is, do not compress
-- Non-compressible files (*.py, *.json) are copied verbatim, never modified
-- Source directory is `.windsurf/` (active DevSystem), NOT archived versions
+- Only .md files are minified; all other files (*.py, *.json, etc.) are excluded from output
+- Source directory is configurable via `source_dir` in pipeline_config.json (default: `.windsurf/`)
 - Cost estimates are +/-50% due to estimated thinking tokens
 - Verification model judges EVERY compressed file - no self-evaluation by Mother
 - Step 7 report format: exactly 5 lines per file (structural, removed, simplified, sacrificed, impact)
@@ -92,9 +91,8 @@ A **FileInventory** categorizes all source files by type and compressibility.
   - `workflows` - 36 md files (compressible unless excluded)
   - `skill_docs` - 24 md files (compressible unless excluded)
   - `skill_prompts` - 7 md files (compressible unless excluded)
-  - `scripts` - 20 py files (non-compressible, copy as-is)
-  - `configs` - 9 json files (non-compressible, copy as-is)
-- **Total**: ~104 files (75 compressible, 29 non-compressible)
+- **Total**: ~75 .md files (compressible)
+- **Excluded**: All non-.md files (*.py, *.json, etc.) - not copied to output
 
 ### ExclusionCriteria
 
@@ -125,6 +123,7 @@ A **PipelineState** tracks progress across pipeline steps.
   - `files_compressed` - count of files processed in Step 6
   - `files_passed` - count passing verification threshold
   - `files_failed` - count below threshold, needing refinement
+  - `files_excluded_md` - count of excluded .md files (copied as-is)
   - `iteration` - current iteration number (1 = first pass)
   - `total_cost` - accumulated API cost in USD
   - `cache_last_used` - timestamp of last Mother call (for TTL monitoring)
@@ -195,10 +194,10 @@ A **CompressedFile** is the output of Mother's compression for a single source f
 - Re-compresses only files flagged in report
 - Re-runs verification for changed files only
 
-**MIPPS-FR-09: Non-Compressible File Handling**
-- Copy all *.py and *.json files to `output/` preserving directory structure
-- Copy excluded files (< 100 lines AND rarely loaded) to `output/` as-is
-- No modification to these files
+**MIPPS-FR-09: Excluded File Handling**
+- Non-.md files (*.py, *.json, etc.) are NOT copied to output - minified DevSystem contains only .md files
+- Excluded .md files (< 100 lines AND rarely loaded) are copied to `output/` as-is
+- Rationale: Scripts and configs are not instruction content; they belong in separate deployment
 
 **MIPPS-FR-10: Pipeline State Tracking**
 - Track progress in `pipeline_state.json` after each step
@@ -216,7 +215,7 @@ A **CompressedFile** is the output of Mother's compression for a single source f
 
 **MIPPS-DD-01:** Mother compresses all files, no delegation to cheaper models. Rationale: cross-file awareness is the primary quality requirement; only a model with full system context can guarantee reference integrity.
 
-**MIPPS-DD-02:** Verification model is independent from compression model. Rationale: self-evaluation is unreliable; GPT-5-mini provides cheap, independent judgment.
+**MIPPS-DD-02:** Verification model is independent from Mother. Rationale: self-evaluation is unreliable; GPT-5-mini provides cheap, independent judgment.
 
 **MIPPS-DD-03:** Single compressed version per file (no ensemble). Rationale: Mother with full context produces higher quality than multiple cheap candidates. Ensemble adds cost without proportional quality gain when the compressor already has full context.
 
@@ -226,11 +225,15 @@ A **CompressedFile** is the output of Mother's compression for a single source f
 
 **MIPPS-DD-06:** Judge threshold is 3.5/5.0. Rationale: below 3.5 indicates significant quality issues. One refinement attempt; if still below, flag for manual review rather than infinite retry.
 
-**MIPPS-DD-07:** Source directory is `.windsurf/` not `DevSystemV3.5/`. Rationale: `.windsurf/` is the active deployed system, always up to date. Archived versions may be stale.
+**MIPPS-DD-07:** Source directory is configurable via `source_dir` config. Default `.windsurf/` (active deployed system). Rationale: allows minifying any DevSystem version, not just the active one.
 
 **MIPPS-DD-08:** Cost tracking per API call. Rationale: thinking token costs are estimated at +/-50%. Actual cost tracking enables budget monitoring and early termination if costs exceed 2x estimate.
 
 **MIPPS-DD-09:** Verification model cannot validate behavioral correctness. Rationale: GPT-5-mini can judge structural preservation but lacks domain knowledge to verify that compressed rules produce correct agent behavior. This is a known limitation; functional testing (Option D) addresses it and is planned as future work.
+
+**MIPPS-DD-10:** Verification uses OpenAI Chat Completions API, not Responses API. Rationale: OpenAI recommends Responses API for new projects (per OAIAPI-IN05), but verification calls are stateless single-turn requests with no need for conversation state, tools, or background processing. Chat Completions is simpler and sufficient.
+
+**MIPPS-DD-11:** V1 uses unversioned model IDs (`gpt-5-mini`, `claude-opus-4-6`). Rationale: OpenAI recommends pinned model versions for production (per OAIAPI-IN04/IN61), but V1 is an experimental pipeline. Model pinning deferred to V2 when output quality baselines are established.
 
 ## 6. Implementation Guarantees
 
@@ -252,13 +255,14 @@ A **CompressedFile** is the output of Mother's compression for a single source f
 
 ### Prompt Caching
 
-Mother's ~300K token bundle is sent as the first message, becoming a cached input. Subsequent calls reference this cache at $0.50/1M instead of $5.00/1M.
+Mother's ~300K token bundle is sent as system prompt content with `cache_control: {"type": "ephemeral", "ttl": "1h"}`. First call pays cache write cost (higher than standard input). Subsequent calls hit cache read at ~0.1x base input price. See NOTES.md Anthropic Pricing Reference for exact per-model rates.
 
-**TTL options:**
-- **5-minute (default)**: Lower cost, requires cache warming strategy
-- **1-hour (`"ttl": "1h"`)**: Higher cost, eliminates cache expiration risk for 75 sequential calls (~38 min)
+**Cost structure per cached bundle call:**
+- **Cache write** (first call only): ~1.25x input price (5-min TTL) or ~2x input price (1-hour TTL)
+- **Cache read** (subsequent calls): ~0.1x input price
+- **Breakeven**: After ~2 cache reads, caching saves money vs re-sending full bundle each time
 
-**Recommendation**: Use 1-hour TTL for V1 (simplicity). Downgrade to 5-min if cost optimization needed later.
+**V1 TTL**: 1-hour. Eliminates cache expiration risk for 75 sequential calls (~38 min total). Higher write cost offset by guaranteed cache hits.
 
 ### Compression-then-Verify Loop
 
@@ -330,8 +334,8 @@ User runs: mipps_pipeline.py compress --step 6
 │   ├─> If score < 3.5: Mother refines, re-judge
 │   ├─> Save to output/
 │   └─> Update state (files_compressed++)
-├─> Copy non-compressible files to output/
-├─> Copy excluded files to output/
+├─> Copy excluded .md files to output/ (small + rarely loaded)
+├─> Non-.md files are NOT copied (scripts/configs excluded)
 └─> Update state (step: 6)
 
 User runs: mipps_pipeline.py verify --step 7
@@ -356,7 +360,7 @@ User runs: mipps_pipeline.py iterate --update-strategy
   "source_dir": ".windsurf/",
   "output_dir": "output/",
   "models": {
-    "mother": {"provider": "anthropic", "model": "claude-opus-4-6-thinking", "max_context": 1000000},
+    "mother": {"provider": "anthropic", "model": "claude-opus-4-6", "max_context": 1000000, "thinking": true},
     "verification": {"provider": "openai", "model": "gpt-5-mini", "max_context": 128000}
   },
   "thresholds": {
@@ -385,7 +389,9 @@ User runs: mipps_pipeline.py iterate --update-strategy
     "skills/*/*_TEMPLATE.md": "compress_templates",
     "*": "compress_other"
   },
-  "skip_patterns": ["*.py", "*.json", "pricing-sources/*"]
+  "include_patterns": ["*.md"],
+  "skip_patterns": ["pricing-sources/*"],
+  "api_timeout_seconds": 120
 }
 ```
 
@@ -401,7 +407,7 @@ User runs: mipps_pipeline.py iterate --update-strategy
   "files_compressed": 55,
   "files_passed": 48,
   "files_failed": 7,
-  "files_copied": 29,
+  "files_excluded_md": 20,
   "files_completed": ["rules/core-conventions.md", "rules/devsystem-core.md"],
   "broken_references": 0,
   "cost": {
@@ -460,27 +466,60 @@ mipps_pipeline.py              (entry point, CLI)
 │   ├─> verifier.py            (Step 7: report generation)
 │   ├─> iterator.py            (Iteration: review + re-compress)
 │   ├─> api_client.py          (API calls: Anthropic + OpenAI)
-│   ├─> cache_manager.py       (Cache TTL configuration)
 │   ├─> cost_tracker.py        (Per-call cost tracking, budget guard)
 │   └─> state.py               (pipeline_state.json read/write)
 ```
 
 ### API Client Requirements
 
-- Anthropic Software Development Kit (SDK) for Mother (Claude Opus 4.6)
-- OpenAI SDK for Verification (GPT-5-mini)
-- Prompt caching via Anthropic's `cache_control` parameter
-- Retry with exponential backoff (3 retries, 2/4/8 second delays)
-- Response logging to `logs/` directory for debugging
+- Anthropic SDK for Mother (Claude Opus 4.6) with extended thinking via `thinking: {"type": "enabled", "budget_tokens": N}` (thinking tokens billed as output)
+- OpenAI SDK for Verification (GPT-5-mini) via Chat Completions API (`client.chat.completions.create`)
+- Prompt caching via `cache_control: {"type": "ephemeral", "ttl": "1h"}` on system prompt content block
+- Both SDKs have built-in retry with `max_retries` parameter; configure to avoid double-retry with custom backoff
+- OpenAI SDK: `OpenAI(timeout=T, max_retries=N)` reads `OPENAI_API_KEY` env var
+- Anthropic SDK: `Anthropic(timeout=T, max_retries=N)` reads `ANTHROPIC_API_KEY` env var
+- Response logging to `logs/` directory (include `x-request-id` from OpenAI responses for debugging)
+- OpenAI usage response uses `prompt_tokens`/`completion_tokens`; Anthropic uses `input_tokens`/`output_tokens` - cost_tracker must map both
 
 ### Dependencies
 
 - `anthropic` (Anthropic Python SDK)
 - `openai` (OpenAI Python SDK)
-- `tiktoken` (token counting for cost estimation)
+- `tiktoken` (approximate token counting; OpenAI tokenizer, ~10% variance for Anthropic models)
 - `pathlib`, `json`, `argparse`, `datetime` (stdlib)
 
 ## 11. Document History
+
+**[2026-03-20 03:30]**
+- Added: MIPPS-DD-10 documenting Chat Completions API choice over Responses API for verification (per OAIAPI-IN05)
+- Added: MIPPS-DD-11 documenting V1 unversioned model IDs, pinning deferred to V2 (per OAIAPI-IN04/IN61)
+- Added: OpenAI SDK configuration details (`timeout`, `max_retries`, `OPENAI_API_KEY` env var) to API Client Requirements
+- Added: Both SDKs built-in retry note (was Anthropic-only, now covers OpenAI SDK per OAIAPI-IN62)
+- Added: `x-request-id` logging for OpenAI responses (per OAIAPI-IN03/IN61)
+- Added: Provider-specific usage field mapping note (`prompt_tokens`/`completion_tokens` vs `input_tokens`/`output_tokens`)
+
+**[2026-03-20 02:35]**
+- Fixed: MNF contradictory TTL (removed "5 minutes" line, kept "1-hour for V1")
+- Fixed: DD-02 AP-NM-01 synonym "compression model" replaced with "Mother"
+- Fixed: Prompt Caching section rewritten with correct `cache_control` API parameter, cache write/read cost structure, breakeven analysis (per Anthropic API IN18)
+- Fixed: Model ID `claude-opus-4-6-thinking` replaced with `claude-opus-4-6` + `"thinking": true` config (thinking enabled via parameter, not model name per IN13)
+- Fixed: "Anthropic Software Development Kit (SDK)" simplified to "Anthropic SDK"
+- Fixed: Removed `cache_manager.py` from module structure (unnecessary with 1h TTL, cache control handled in api_client.py)
+- Added: `files_excluded_md` field to PipelineState domain object (was in state JSON but undocumented)
+- Added: `api_timeout_seconds: 120` to pipeline_config.json (synced from IMPL)
+- Added: Extended thinking parameter documentation in API Client Requirements
+- Added: SDK built-in retry note to avoid double-retry
+- Added: tiktoken accuracy note (~10% variance for Anthropic models)
+
+**[2026-03-20 00:56]**
+- Changed: Source directory now configurable via `source_dir` (not hardcoded)
+- Changed: DD-07 updated to reflect configurable source
+
+**[2026-03-20 00:55]**
+- Changed: Only .md files are minified; non-.md files (*.py, *.json) excluded from output entirely
+- Changed: FR-09 updated to reflect .md-only output
+- Changed: FileInventory simplified to .md files only
+- Changed: pipeline_config.json uses `include_patterns: ["*.md"]` instead of `skip_patterns` for non-.md
 
 **[2026-03-20 00:52]**
 - Added: MIPPS-DD-09 acknowledging verification model limitation (behavioral correctness)
