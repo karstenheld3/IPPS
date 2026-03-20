@@ -15,12 +15,12 @@ import os, sys, json, time
 from pathlib import Path
 
 
-# Load JSON config files from same directory as this script
-_SCRIPT_DIR = Path(__file__).parent
+# Load JSON config files from configs/ directory (sibling of lib/)
+_CONFIGS_DIR = Path(__file__).parent.parent / "configs"
 
 def _load_json_config(filename: str) -> dict:
-  """Load JSON config from script directory."""
-  config_path = _SCRIPT_DIR / filename
+  """Load JSON config from configs/ directory."""
+  config_path = _CONFIGS_DIR / filename
   if not config_path.exists():
     raise FileNotFoundError(f"Config file not found: {config_path}")
   with open(config_path, "r", encoding="utf-8") as f:
@@ -112,8 +112,11 @@ def get_model_pricing(model: str, provider: str = None) -> dict:
   Returns: {"input_per_1m": float, "output_per_1m": float, "currency": str} or None
   """
   if provider is None:
-    config = get_model_config(model)
-    provider = config.get("provider", "openai")
+    try:
+      config = get_model_config(model)
+      provider = config.get("provider", "openai")
+    except ValueError:
+      return None
   
   provider_pricing = MODEL_PRICING.get(provider, {})
   
@@ -140,13 +143,16 @@ def calculate_cost(usage: dict, model: str, provider: str = None) -> dict:
   Calculate cost in USD based on token usage and model pricing.
   
   Args:
-    usage: {"input_tokens": int, "output_tokens": int}
+    usage: {"input_tokens": int, "output_tokens": int,
+            "cache_read_input_tokens": int, "cache_creation_input_tokens": int}
     model: Model ID
     provider: Provider name (auto-detected if None)
   
   Returns: {
     "input_cost": float,
-    "output_cost": float, 
+    "output_cost": float,
+    "cache_read_cost": float,
+    "cache_write_cost": float,
     "total_cost": float,
     "currency": str,
     "pricing_found": bool
@@ -158,6 +164,8 @@ def calculate_cost(usage: dict, model: str, provider: str = None) -> dict:
     return {
       "input_cost": 0.0,
       "output_cost": 0.0,
+      "cache_read_cost": 0.0,
+      "cache_write_cost": 0.0,
       "total_cost": 0.0,
       "currency": "USD",
       "pricing_found": False
@@ -165,14 +173,27 @@ def calculate_cost(usage: dict, model: str, provider: str = None) -> dict:
   
   input_tokens = usage.get("input_tokens", 0)
   output_tokens = usage.get("output_tokens", 0)
+  cache_read_tokens = usage.get("cache_read_input_tokens", 0)
+  cache_creation_tokens = usage.get("cache_creation_input_tokens", 0)
   
-  input_cost = (input_tokens / 1_000_000) * pricing.get("input_per_1m", 0)
+  # Non-cached input = total input minus cache-read tokens
+  non_cached_input = max(0, input_tokens - cache_read_tokens)
+  input_cost = (non_cached_input / 1_000_000) * pricing.get("input_per_1m", 0)
   output_cost = (output_tokens / 1_000_000) * pricing.get("output_per_1m", 0)
+  
+  # Cache costs: read uses cached_per_1m, write uses input_per_1m * 1.25
+  cached_per_1m = pricing.get("cached_per_1m", 0)
+  cache_read_cost = (cache_read_tokens / 1_000_000) * cached_per_1m
+  cache_write_cost = (cache_creation_tokens / 1_000_000) * pricing.get("input_per_1m", 0) * 1.25
+  
+  total = input_cost + output_cost + cache_read_cost + cache_write_cost
   
   return {
     "input_cost": round(input_cost, 6),
     "output_cost": round(output_cost, 6),
-    "total_cost": round(input_cost + output_cost, 6),
+    "cache_read_cost": round(cache_read_cost, 6),
+    "cache_write_cost": round(cache_write_cost, 6),
+    "total_cost": round(total, 6),
     "currency": pricing.get("currency", "USD"),
     "pricing_found": True
   }
@@ -403,6 +424,57 @@ def _call_anthropic(client, model: str, prompt: str, api_params: dict) -> dict:
   }
 
 
+def _call_anthropic_with_cache(client, model: str, system_prompt: str, user_prompt: str, api_params: dict) -> dict:
+  """Call Anthropic API with prompt caching on the system prompt.
+  
+  System prompt is sent as array of content blocks with cache_control.
+  Text extraction joins ALL text blocks (not just first).
+  """
+  import logging
+  log = logging.getLogger(__name__)
+
+  call_params = {
+    'model': model,
+    'max_tokens': api_params.get('max_tokens', 8192),
+    'system': [
+      {
+        "type": "text",
+        "text": system_prompt,
+        "cache_control": {"type": "ephemeral"},
+      }
+    ],
+    'messages': [{"role": "user", "content": user_prompt}],
+  }
+
+  if 'thinking' in api_params and api_params['thinking'].get('budget_tokens', 0) > 0:
+    call_params['thinking'] = api_params['thinking']
+
+  response = client.messages.create(**call_params)
+
+  # Join ALL text blocks, skip thinking blocks
+  text_parts = []
+  for block in response.content:
+    if hasattr(block, 'text') and not getattr(block, 'thinking', None):
+      text_parts.append(block.text)
+
+  # Warn if cache_creation_input_tokens == 0 on first call (EC-11)
+  cache_creation = getattr(response.usage, 'cache_creation_input_tokens', 0)
+  if cache_creation == 0:
+    log.warning("cache_creation_input_tokens==0: system prompt may be below 1024-token minimum for caching")
+
+  return {
+    "text": "\n".join(text_parts),
+    "usage": {
+      "input_tokens": response.usage.input_tokens,
+      "output_tokens": response.usage.output_tokens,
+      "cache_creation_input_tokens": getattr(response.usage, 'cache_creation_input_tokens', 0),
+      "cache_read_input_tokens": getattr(response.usage, 'cache_read_input_tokens', 0),
+    },
+    "model": response.model,
+    "finish_reason": response.stop_reason,
+  }
+
+
 class LLMClient:
   """
   High-level LLM client with automatic model detection and parameter handling.
@@ -436,6 +508,18 @@ class LLMClient:
       lambda: call_llm(self.client, self.model, prompt, params, self.provider)
     )
   
+  def call_with_cache(self, bundle: str, prompt: str) -> dict:
+    """
+    Call with prompt caching: bundle as cached system prompt, prompt as user message.
+    
+    Only supported for Anthropic models. Raises ValueError for other providers.
+    """
+    if self.provider != 'anthropic':
+      raise ValueError(f"call_with_cache only supports Anthropic models, got provider '{self.provider}' for model '{self.model}'")
+    return retry_with_backoff(
+      lambda: _call_anthropic_with_cache(self.client, self.model, bundle, prompt, self.api_params)
+    )
+
   def check_context(self, prompt: str, expected_output_tokens: int = 0) -> dict:
     """Check if prompt fits in context window."""
     return check_context_fit(self.model, prompt, expected_output_tokens)

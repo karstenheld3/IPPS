@@ -7,9 +7,11 @@ from pathlib import Path
 log = logging.getLogger(__name__)
 
 
-def init_state() -> dict:
+def init_state(run_id: str = None, run_dir: str = None) -> dict:
     """Create fresh pipeline state with all required fields."""
     return {
+        "run_id": run_id,
+        "run_dir": run_dir,
         "current_step": 0,
         "iteration": 1,
         "files_total": 0,
@@ -27,6 +29,8 @@ def init_state() -> dict:
             "mother_output": 0.0,
             "verification_input": 0.0,
             "verification_output": 0.0,
+            "cache_read": 0.0,
+            "cache_write": 0.0,
             "total": 0.0,
         },
     }
@@ -79,15 +83,25 @@ def update_cost(
     cache_read_tokens: int = 0,
     cache_write_tokens: int = 0,
 ) -> dict:
-    """Update cost tracking in state using api_cost_tracker."""
-    from lib.api_cost_tracker import calculate_cost
+    """Update cost tracking in state using llm_client.calculate_cost."""
+    from lib.llm_client import calculate_cost
 
-    cost = calculate_cost(model, input_tokens, output_tokens, cache_read_tokens, cache_write_tokens)
-    if "anthropic" in model or "claude" in model:
-        state["cost"]["mother_input"] += calculate_cost(model, input_tokens, 0, cache_read_tokens, cache_write_tokens)
-        state["cost"]["mother_output"] += calculate_cost(model, 0, output_tokens)
+    usage = {
+        "input_tokens": input_tokens,
+        "output_tokens": output_tokens,
+        "cache_read_input_tokens": cache_read_tokens,
+        "cache_creation_input_tokens": cache_write_tokens,
+    }
+    result = calculate_cost(usage, model)
+
+    if "claude" in model:
+        state["cost"]["mother_input"] += result["input_cost"]
+        state["cost"]["mother_output"] += result["output_cost"]
     else:
-        state["cost"]["verification_input"] += calculate_cost(model, input_tokens, 0)
-        state["cost"]["verification_output"] += calculate_cost(model, 0, output_tokens)
-    state["cost"]["total"] += cost
+        state["cost"]["verification_input"] += result["input_cost"]
+        state["cost"]["verification_output"] += result["output_cost"]
+
+    state["cost"]["cache_read"] = state["cost"].get("cache_read", 0.0) + result.get("cache_read_cost", 0.0)
+    state["cost"]["cache_write"] = state["cost"].get("cache_write", 0.0) + result.get("cache_write_cost", 0.0)
+    state["cost"]["total"] += result["total_cost"]
     return state
