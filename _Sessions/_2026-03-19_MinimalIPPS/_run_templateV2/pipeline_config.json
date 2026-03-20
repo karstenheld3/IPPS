@@ -34,6 +34,9 @@
   },
   "include_patterns": ["*.md"],
   "skip_patterns": ["__pycache__/*", "**/__pycache__/*"],
+  "minify": {
+    "strip_bold": true
+  },
   "never_compress": [
     "skills/llm-evaluation/prompts/*",
     "skills/llm-transcription/prompts/*"

@@ -12,6 +12,13 @@ from lib.pipeline_state import update_cost
 log = logging.getLogger(__name__)
 
 
+def minify_content(content: str, config: dict) -> str:
+    """Apply minification based on config.minify.strip_bold."""
+    if config.get("minify", {}).get("strip_bold", False):
+        return re.sub(r'\*\*([^*]+)\*\*', r'\1', content)
+    return content
+
+
 def compress_file(
     client,
     verifier,
@@ -236,10 +243,11 @@ def run_compression_step(
             config,
         )
 
-        # Write compressed output
+        # Write compressed output (with optional minification)
         dest = output_dir / rel
         dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_text(result["compressed"], encoding="utf-8")
+        output_content = minify_content(result["compressed"], config)
+        dest.write_text(output_content, encoding="utf-8")
 
         # Accumulate API costs into state (FR-10)
         usage = result.get("usage", {})
