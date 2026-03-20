@@ -2,7 +2,7 @@
 
 **Doc ID**: MIPPS-SP01
 **Goal**: Specify a pipeline that compresses the ~1MB DevSystem into a smaller version usable by cheaper LLMs, using Mother model (Claude Opus 4.6 1M context) for all compression with full cross-file awareness
-**Timeline**: Created 2026-03-19, Updated 8 times (last: 2026-03-20)
+**Timeline**: Created 2026-03-19, Updated 9 times (last: 2026-03-20)
 **Target file**: `mipps_pipeline.py` (orchestrator script)
 
 **Depends on:**
@@ -479,7 +479,7 @@ mipps_pipeline.py                      (entry point, CLI)
 - Both SDKs have built-in retry with `max_retries` parameter; configure to avoid double-retry with custom backoff
 - OpenAI SDK: `OpenAI(timeout=T, max_retries=N)` reads `OPENAI_API_KEY` env var
 - Anthropic SDK: `Anthropic(timeout=T, max_retries=N)` reads `ANTHROPIC_API_KEY` env var
-- Response logging to `logs/` directory (include `x-request-id` from OpenAI responses for debugging)
+- Log API responses to stdout (include `x-request-id` from OpenAI responses for debugging)
 - OpenAI usage response uses `prompt_tokens`/`completion_tokens`; Anthropic uses `input_tokens`/`output_tokens` - cost_tracker must map both
 
 ### Dependencies
@@ -490,6 +490,9 @@ mipps_pipeline.py                      (entry point, CLI)
 - `pathlib`, `json`, `argparse`, `datetime` (stdlib)
 
 ## 11. Document History
+
+**[2026-03-20 04:30]**
+- Fixed: API logging simplified from `logs/` directory to stdout for V1 (no IMPL IS existed for logs/)
 
 **[2026-03-20 04:05]**
 - Added: Timeline field (required per /verify workflow)

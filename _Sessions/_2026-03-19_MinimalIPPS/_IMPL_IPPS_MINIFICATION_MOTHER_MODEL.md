@@ -3,7 +3,7 @@
 **Doc ID**: MIPPS-IP01
 **Feature**: MIPPS-PIPELINE
 **Goal**: Implement Python pipeline script that compresses DevSystem using Mother model with cached context
-**Timeline**: Created 2026-03-20, Updated 6 times
+**Timeline**: Created 2026-03-20, Updated 7 times
 
 **Target files**:
 - `mipps_pipeline.py` (NEW ~150 lines)
@@ -349,7 +349,7 @@ def get_files_to_recompress(report: str) -> list: ...
 
 **Note**: Handle EC-07 (no report exists)
 
-#### MIPPS-IP01-IS-16: Implement mipps_pipeline.py CLI
+#### MIPPS-IP01-IS-16: Implement mipps_pipeline.py Command-Line Interface (CLI)
 
 **Location**: `mipps_pipeline.py`
 
@@ -471,6 +471,9 @@ def cmd_compress(args): ...
 - [ ] **MIPPS-IP01-VC-32**: Total cost within budget
 
 ## 6. Document History
+
+**[2026-03-20 04:30]**
+- Fixed: CLI expanded to "Command-Line Interface (CLI)" on first use in IS-16 heading (AP-PR-06)
 
 **[2026-03-20 04:05]**
 - Fixed: Timeline "Updated 0 times" corrected to "Updated 6 times" (AP-PR-07)

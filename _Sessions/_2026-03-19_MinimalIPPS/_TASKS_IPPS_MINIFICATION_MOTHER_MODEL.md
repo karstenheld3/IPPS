@@ -9,7 +9,7 @@
 ## Task Overview
 
 - Total tasks: 26
-- Estimated total: 14.5 HHW
+- Estimated total: 14.5 Human-Hours Work (HHW)
 - Parallelizable: 10 tasks (marked [P])
 
 ## Task 0 - Baseline (MANDATORY)
@@ -313,6 +313,9 @@ TK-024 ─> TK-025 ─> TK-026
 - Group E: TK-016, TK-020, TK-022 (all need TK-006, independent of each other)
 
 ## Document History
+
+**[2026-03-20 04:30]**
+- Fixed: HHW expanded to "Human-Hours Work (HHW)" on first use (AP-PR-06)
 
 **[2026-03-20 04:20]**
 - Fixed: TK-024 Depends missing TK-004 (api_cost_tracker) and TK-006 (llm_clients)
