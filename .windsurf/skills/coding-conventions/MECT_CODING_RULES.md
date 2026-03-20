@@ -648,6 +648,17 @@ config = {
 }
 ```
 
+**Inverted semantics** - name suggests opposite direction of the value:
+```python
+# BAD: "compression_percent: 40" reads as "compress by 40%"
+# but means "output is 40% of original" (= 60% compression)
+config = {"target_compression_percent": 40}
+
+# GOOD: rename + fix value direction
+# "reduce by 60%" = output is 40% of original
+config = {"target_reduction_percent": 60}
+```
+
 **Standard opposites:** start/end, min/max, first/last, source/target, input/output, request/response, before/after, current/previous, local/remote, internal/external, public/private
 
 ## Documentation Rules (DC)

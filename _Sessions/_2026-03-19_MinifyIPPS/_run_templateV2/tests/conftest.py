@@ -84,7 +84,7 @@ def sample_config():
             "max_refinement_attempts": 1,
             "exclusion_max_lines": 100,
             "exclusion_max_references": 2,
-            "target_compression_percent": 40,
+            "target_reduction_percent": 60,
             "max_manual_review_files": 5,
         },
         "budget": {

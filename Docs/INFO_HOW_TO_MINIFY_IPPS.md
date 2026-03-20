@@ -2,14 +2,41 @@
 
 **Doc ID**: MIPPS-IN01
 **Goal**: Document the MinifyIPPS pipeline for compressing DevSystem markdown files
-**Timeline**: Created 2026-03-20
+
+## How to Run
+
+**1. Configure** `_run_templateV2/pipeline_config.json`:
+
+- `source_dir` - Folder to compress (e.g., `"E:/Dev/IPPS/.windsurf/"`)
+- `thresholds.target_reduction_percent` - How much to reduce (60 = output is 40% of original)
+- `models.mother` - Compression model (e.g., `"claude-opus-4-6-20260204"`)
+- `models.verifier` - Quality judge model (e.g., `"gpt-5-mini"`)
+- `budget.max_total_usd` - Cost limit (e.g., `100.0`)
+
+**2. Run pipeline:**
+```powershell
+cd E:\Dev\IPPS\_Sessions\_2026-03-19_MinifyIPPS\_run_templateV2
+python mipps_pipeline.py bundle    # Create file bundle
+python mipps_pipeline.py analyze   # Mother model analyzes
+python mipps_pipeline.py check     # Spot-check outputs
+python mipps_pipeline.py generate  # Create prompts
+python mipps_pipeline.py compress  # Compress files
+python mipps_pipeline.py verify    # Verify quality
+python mipps_pipeline.py status    # Check progress anytime
+```
+
+**3. Output location:** `_run_templateV2/runs/run_[DATE]_[NAME]/output/`
+- Compressed `.md` files mirror `source_dir` structure
+- Copy this folder to your target location (e.g., `DevSystemV3.5-Mini/`)
+
+**4. Copy functional files** (scripts, JSON configs) - see [Section 5](#5-post-pipeline-copy-functional-files)
 
 ## Summary
 
 - MinifyIPPS compresses `.windsurf/` markdown files using LLM-based compression with quality verification
 - Pipeline location: `_Sessions/_2026-03-19_MinifyIPPS/_run_templateV2/`
 - 7-step workflow: bundle -> analyze -> check -> generate -> compress -> verify -> iterate
-- Configuration via `pipeline_config.json` - key setting: `target_compression_percent`
+- Configuration via `pipeline_config.json` - key setting: `target_reduction_percent` (60 = reduce by 60%)
 - Post-processing minification: `strip_bold` removes `**bold**` markers via regex
 
 ## Table of Contents
@@ -39,15 +66,13 @@ python mipps_pipeline.py status
 
 ## 2. Pipeline Steps
 
-| Step | Command | Description |
-|------|---------|-------------|
-| 1 | `bundle` | Scan source_dir, create `all_files_bundle.md` |
-| 2 | `analyze` | Mother model builds call tree, complexity map, compression strategy |
-| 3 | `check` | Spot-check Mother outputs for accuracy |
-| 4 | `generate` | Create per-file transform/eval prompts |
-| 5 | `compress` | Compress each file, judge quality, refine if needed |
-| 6 | `verify` | Verify compressed files, check cross-references |
-| 7 | `iterate` | Review failures, recompress problem files |
+1. `bundle` - Scan source_dir, create `all_files_bundle.md`
+2. `analyze` - Mother model builds call tree, complexity map, compression strategy
+3. `check` - Spot-check Mother outputs for accuracy
+4. `generate` - Create per-file transform/eval prompts
+5. `compress` - Compress each file, judge quality, refine if needed
+6. `verify` - Verify compressed files, check cross-references
+7. `iterate` - Review failures, recompress problem files
 
 ## 3. Configuration Reference
 
@@ -81,14 +106,14 @@ File: `pipeline_config.json`
   "max_refinement_attempts": 1,
   "exclusion_max_lines": 100,
   "exclusion_max_references": 2,
-  "target_compression_percent": 40,
+  "target_reduction_percent": 60,
   "max_manual_review_files": 5
 }
 ```
 
 - `judge_min_score` - Minimum quality score (1-5) to accept compression
 - `max_refinement_attempts` - Retries if judge rejects
-- `target_compression_percent` - Target output size as % of original (40 = 60% reduction)
+- `target_reduction_percent` - How much to reduce (60 = output is 40% of original)
 - `exclusion_max_lines` - Files under this size may be excluded
 - `max_manual_review_files` - Cap on files sent to manual review queue
 
@@ -206,17 +231,21 @@ foreach ($f in $missing) {
 
 ### What to Copy
 
-| Type | Examples | Action |
-|------|----------|--------|
-| Python scripts | `*.py` | Copy as-is |
-| PowerShell scripts | `*.ps1` | Copy as-is |
-| JSON configs | `model-registry.json`, `model-pricing.json` | Copy as-is |
-| `__pycache__/` | Compiled Python | Skip |
-| `pricing-sources/` | Reference images | Skip |
-| `registry-sources/` | Transcription cache | Skip |
-| `.tmp_*` files | Temporary scripts | Skip |
+**Copy as-is:**
+- `*.py` - Python scripts
+- `*.ps1` - PowerShell scripts
+- `*.json` - JSON configs (model-registry, model-pricing, etc.)
+
+**Skip:**
+- `__pycache__/` - Compiled Python
+- `pricing-sources/` - Reference images
+- `registry-sources/` - Transcription cache
+- `.tmp_*` - Temporary scripts
 
 ## Document History
+
+**[2026-03-20 20:21]**
+- Changed: Added "How to Run" section at top (APAPALAN - goal first)
 
 **[2026-03-20 20:19]**
 - Added: Section 5 "Post-Pipeline: Copy Functional Files" with PowerShell scripts and file type table

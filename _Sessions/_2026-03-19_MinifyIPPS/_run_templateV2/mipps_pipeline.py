@@ -29,7 +29,7 @@ def _load_config(config_path: Path = None) -> dict:
             "output_length": "high",
             "thresholds": {"judge_min_score": 3.5, "max_refinement_attempts": 1,
                            "exclusion_max_lines": 100, "exclusion_max_references": 2,
-                           "target_compression_percent": 40, "max_manual_review_files": 5},
+                           "target_reduction_percent": 60, "max_manual_review_files": 5},
             "cache": {"ttl": "1h"},
             "budget": {"max_total_usd": 100.0, "warning_threshold": 0.8},
             "file_type_map": {"*": "compress_other"},

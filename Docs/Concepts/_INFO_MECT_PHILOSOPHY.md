@@ -70,6 +70,10 @@
   - PowerShell `Compare-Object` uses `-ReferenceObject` and `-DifferenceObject` instead of intuitive `Current/Target` or `Before/After`
   - Users must memorize arbitrary names instead of predicting from pattern
 
+- **Inverted semantics** - Name suggests opposite direction of the value
+  - `target_compression_percent: 40` - name says "compression" (how much to remove) but value means "output size" (how much to keep). User reads 40% compression, actual meaning is 40% remaining = 60% compression
+  - Fix: rename to `target_reduction_percent: 60` - "reduce by 60%" can only mean one thing
+
 - **Incorrect word pairs** - Functions that break expected naming conventions
   - Power Platform has `EncodeUrl()` and `PlainText()` - overgeneralized. Users search for `DecodeUrl()` and `UnescapeHTML()` and fail to find them
   - Should be: `EncodeUrl/DecodeUrl`, `EscapeHtml/UnescapeHtml`

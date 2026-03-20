@@ -22,7 +22,7 @@
 - File exclusion: .md files < 100 lines AND rarely loaded -> copy as-is, do not compress
 - Source directory configurable via `source_dir` in `pipeline_config.json`
 - Step 7 report: exactly 5 lines per file (structural, removed, simplified, sacrificed, impact)
-- Target: reduce total token count by >= 40%, max 5 files in manual review queue
+- Target: reduce total token count by >= 60%, max 5 files in manual review queue
 - Anthropic cache Time To Live (TTL) is 5 minutes (ephemeral). Cache expiry detection exists in `cost_tracker.track_call()` but is not wired up (Known Gap)
 - Each compression run creates isolated subfolder under `runs/` (currently only `cmd_compress` creates run folders)
 - V2 unified `LLMClient` from `lib/llm_client.py` replaces V1 `llm_clients.py` + `api_cost_tracker.py`
@@ -585,7 +585,7 @@ User runs: mipps_pipeline.py iterate
     "max_refinement_attempts": 1,
     "exclusion_max_lines": 100,
     "exclusion_max_references": 2,
-    "target_compression_percent": 40,
+    "target_reduction_percent": 60,
     "max_manual_review_files": 5
   },
   "cache": {
