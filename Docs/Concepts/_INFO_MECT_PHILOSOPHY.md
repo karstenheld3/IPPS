@@ -35,10 +35,16 @@
   - "Cardinality" = data modeling relationship vs mathematical set size
   - "Meter" in utilities = connection point vs physical device vs customer relationship
 
-- **Inconsistent naming** - Same thing with multiple names
+- **Inconsistent naming / Terminological synonymy** - Multiple official names for the same concept create a "distinction without a difference". Users assume different words = different things, constructing phantom entities in their mental model. The more authoritative the source, the stronger this false assumption. Violates the terminological ideal of univocity (one term = one concept)
   - "garage" / "service" / "workshop" for same concept
   - "car tickets" (UI) vs "service events" (internal) vs "service tickets" (nested)
   - Software with 4 different names across organization
+  - Azure Entra ID identity system - 2 objects, 1 GUID, 1 product, 14+ official names:
+    - **Application Object** (the definition of an app): found under "App registrations" (portal blade name), called "Application" (Graph API entity). Microsoft's own docs call it "a template or blueprint to create service principal objects" - but the portal blade is named after the action of registering, not the object itself
+    - **Service Principal** (the per-tenant instance): called "Enterprise Application" (portal blade name), "Enterprise App" (shorthand). The blade name "Enterprise applications" sounds like a category of apps (enterprise-grade vs regular) - it's not, it's just where Service Principals are listed. Every registered app gets one, not just "enterprise" ones
+    - **The GUID**: "Application ID", "App ID", "Client ID", "Application (client) ID" (portal hedges with parentheses)
+    - **The product**: "Azure AD", "Azure Active Directory", "Microsoft Entra ID", "AAD"
+    - The two portal blades ("App registrations" and "Enterprise applications") are so similar that people conflate them into "Enterprise App Registrations" - a blade that does not exist
 
 - **Ambiguous meta-words** - Generic terms hiding specifics
   - "Welcome screen", "Data Center", "Customer Screen" - unpredictable content
@@ -346,7 +352,149 @@ Words that sound similar but differ in meaning. Using the wrong one corrupts the
 
 **Impact:** Tower of Babel - teams couldn't integrate, productivity dropped. New teams understandably refused to adopt the confusing terminology, creating even more fragmentation.
 
-### 5.6 Bad: Request Examples
+### 5.6 Bad: Azure Entra ID - Phantom Entities from Concurrent Synonyms
+
+Microsoft's Entra ID identity system has two objects for application identity:
+- **Application Object** - the global definition of an app (one per app, lives in the home tenant)
+- **Service Principal** - the per-tenant instance (one per tenant where the app is used)
+
+Registering an app via the portal automatically creates both an Application Object and a Service Principal. They share the same Application ID (GUID) but have different Object IDs. Via the Graph API, the Service Principal must be created separately. Microsoft's own documentation describes the Application Object as "a template or blueprint to create one or more service principal objects."
+
+**The actual architecture:**
+
+```
+┌────────────────────────────────────────────────────────────────────────────┐
+│  Entra ID - Application Identity Architecture                              │
+│                                                                            │
+│  ┌─────────────────────────────┐  creates (auto   ┌──────────────────────┐ │
+│  │  Application Object         │ ─ via portal, ─> │  Service Principal   │ │
+│  │  (the definition)           │  manual via API) │  (the instance)      │ │
+│  │                             │                  │                      │ │
+│  │  Lives in: home tenant      │                  │  Lives in: each      │ │
+│  │  Scope: global, one per app │                  │  tenant that uses    │ │
+│  │                             │                  │  the app             │ │
+│  │  Has: Object ID (unique)    │                  │  Has: Object ID      │ │
+│  │       Application ID ───────│─── same GUID ────│────── Application ID │ │
+│  └─────────────────────────────┘                  └──────────────────────┘ │
+│                                                                            │
+│  1 Application Object  ──>  N Service Principals (one per tenant)          │
+└────────────────────────────────────────────────────────────────────────────┘
+"Application ID" = "Client ID" = "App ID" - three names for the same GUID.
+
+Example: "Contoso Reporting Tool" registered in Tenant A, used by Tenant A and Tenant B:
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│  Tenant A (home tenant - contoso.com)                                    │
+│                                                                          │
+│  ┌────────────────────────────────┐  ┌─────────────────────────────────┐ │
+│  │  Application Object            │  │  Service Principal              │ │
+│  │  "Contoso Reporting Tool"      │  │  "Contoso Reporting Tool"       │ │
+│  │                                │  │                                 │ │
+│  │  Application ID: 1111...1111   │  │  Application ID: 1111...1111    │ │
+│  │  Object ID:      2222...2222   │  │  Object ID:      3333...3333    │ │
+│  └────────────────────────────────┘  └─────────────────────────────────┘ │
+│  Found under: "App registrations"    Found under: "Enterprise            │
+│                                      applications"                       │
+├──────────────────────────────────────────────────────────────────────────┤
+│  Tenant B (partner tenant - fabrikam.com)                                │
+│                                                                          │
+│  No Application Object here          ┌─────────────────────────────────┐ │
+│  (definition lives in Tenant A)      │  Service Principal              │ │
+│                                      │  "Contoso Reporting Tool"       │ │
+│                                      │                                 │ │
+│                                      │  Application ID: 1111...1111    │ │
+│                                      │  Object ID:      4444...4444    │ │
+│                                      └─────────────────────────────────┘ │
+│  "App registrations": empty          Found under: "Enterprise            │
+│  (nothing to see)                    applications"                       │
+└──────────────────────────────────────────────────────────────────────────┘
+
+Same Application ID (1111...1111) appears 3 times across 3 objects in 2 tenants.
+Each object has a different Object ID. The portal shows no link between them.
+"Application ID" = "Client ID" = "App ID" - three names for the same GUID (1111...1111).
+```
+
+**The naming problem - same two objects, different name per surface:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  Surface          │  Application Object       │  Service Principal      │
+├───────────────────┼───────────────────────────┼─────────────────────────┤
+│  Portal blade     │  "App registrations"      │  "Enterprise            │
+│                   │                           │   applications"         │
+│  Portal counter   │  "Applications: 19"  (ambiguous - which ones?)      │
+│  API (Graph)      │  Application entity       │  ServicePrincipal       │
+│                   │                           │   entity                │
+│  CLI (az ad)      │  az ad app                │  az ad sp               │
+│  Docs (various)   │  "application object"     │  "Enterprise App"       │
+│  Informal         │  "Application"            │  "SP"                   │
+│  MS docs concept  │  "template / blueprint"   │  "instance"             │
+├───────────────────┼───────────────────────────┼─────────────────────────┤
+│  The GUID         │  "Application ID" / "App ID" / "Client ID" /        │
+│  (shared)         │  "Application (client) ID"                          │
+├───────────────────┼─────────────────────────────────────────────────────┤
+│  The product      │  "Azure AD" / "Azure Active Directory" /            │
+│  (renamed 3x)     │  "Microsoft Entra ID" / "AAD"                       │
+└───────────────────┴─────────────────────────────────────────────────────┘
+```
+
+**What the portal shows:** The Azure portal's Entra ID section has a left sidebar with a "Manage" group. In that group, two menu items sit near each other at the same hierarchy level:
+
+```
+v Manage
+    Users
+    Groups
+    External Identities
+    Roles and administrators
+    Administrative units
+    Delegated admin partners
+  > Enterprise applications    <--
+    Devices
+  > App registrations          <--
+    Identity Governance
+    ...
+```
+
+"Enterprise applications" opens a list of Service Principals. "App registrations" opens a list of Application Objects. Nothing in the portal indicates that these two blades show two sides of the same coin. They appear as independent categories of different things.
+
+**Why the blade names mislead:**
+- "Enterprise applications" sounds like a category of apps - enterprise-grade vs regular. It's not. Every registered app gets a Service Principal here, including a simple PowerShell script. The word "Enterprise" is decoration.
+- "App registrations" is named after an action (the act of registering) but shows objects (Application Objects). The blade should logically be called "Applications" or "Application definitions."
+- The two names are similar enough that people mentally merge them into "Enterprise App Registrations" - a blade that does not exist.
+- The overview page shows a counter "Applications: 19" which could refer to either blade or both. A third ambiguous term.
+- No cross-reference exists. Nothing in "App registrations" says "the corresponding Service Principal is under Enterprise applications." Nothing in "Enterprise applications" says "the definition is under App registrations."
+
+**Beyond the portal:** The API, CLI, docs, and shorthand each add more synonyms. The Application Object is called "Application" in the Graph API and "application object" in documentation. The Service Principal is also called "Enterprise App" in shorthand. The single identifier GUID is called "Application ID", "App ID", "Client ID", and "Application (client) ID" (the portal hedges with parentheses). The product itself was renamed from "Azure AD" to "Azure Active Directory" to "Microsoft Entra ID."
+
+A developer encountering this system for the first time sees 14+ distinct terms across portal, API, CLI, and docs. No single page lists the synonyms. The reasonable assumption - different official names from an authoritative source mean different things - leads to a mental model with phantom entities that don't exist.
+
+**The problem:** Each surface (portal, API, CLI, docs) introduced its own names independently. The portal blade names were chosen for approachability ("Enterprise Application" instead of "Service Principal"), but approachability that creates false distinctions is worse than technical accuracy. A Microsoft Q&A answer confirmed: "Enterprise application is the friendly name for service principal." The word "friendly" reveals the intent, but friendly names that mislead are not friendly.
+
+**The cost:** Days of wasted onboarding time per developer. Damaged trust in the documentation and architecture. Once a developer discovers that the naming was inconsistent, they start second-guessing correct information too. Trust damage compounds beyond the initial time loss.
+
+**Mitigation:** When encountering 3+ unfamiliar terms in a new system, search "X vs Y" before assuming distinct concepts. Build a synonym map early. In Azure specifically, look at the underlying API object types (Microsoft Graph `Application` entity and `ServicePrincipal` entity) rather than portal blade names. Treat naming inconsistency as a documentation defect, not a personal knowledge gap.
+
+### 5.7 Bad: Azure AI Foundry - Phantom Entities from Serial Renaming
+
+Microsoft renamed its AI development platform twice in two years, producing three successive names. The prebuilt AI services collection was also renamed twice, producing three names. The underlying Azure resource for the services collection (`Microsoft.CognitiveServices/accounts`, `kind: "AIServices"`) remained unchanged throughout - only the marketing name on top of it changed.
+
+**Chain of events:**
+- **Pre-Jul 2023:** Prebuilt AI capabilities sold as "Azure Cognitive Services"
+- **Jul 2023:** Renamed to "Azure AI Services". Same product, same resource type
+- **Nov 2023:** New AI development portal launched as "Azure AI Studio" (Public Preview). Deploys `Microsoft.MachineLearningServices/workspaces` with Hub + Project structure
+- **Nov 2024:** "Azure AI Studio" renamed to "Azure AI Foundry". Same portal, same URL, same resources
+- **May 2025:** New resource type introduced under the same "Azure AI Foundry" name, now deploying `Microsoft.CognitiveServices/accounts` instead. Old Hub-based resources still work. Two different resource types coexist under one product name. "Azure AI Services" absorbed into "Azure AI Foundry"
+- **Nov 2025:** "Azure AI Foundry" renamed to "Microsoft Foundry". "Azure AI Services" renamed to "Foundry Tools" / "Foundry Prebuilt Tools". Portal splits into "Foundry" and "Foundry (classic)" with version switcher
+
+**Result:** The platform had 3 names in 2 years. The prebuilt services had 3 names in 2 years. Each rename left behind tutorials, blog posts, and Stack Overflow answers using the old name. Search engines index all of them without distinguishing current from obsolete. A developer searching today finds content using "Azure AI Studio" (2024), "Azure AI Foundry" (early 2025), and "Microsoft Foundry" (late 2025) - with no indication that these are the same product.
+
+**The problem:** Unlike the Entra ID case (concurrent synonyms), this is serial renaming: the same product gets a new marketing name at each annual conference (Ignite, Build), while previous documentation persists indefinitely. The effect is identical - phantom complexity - but the mechanism is different. The developer cannot distinguish "old name for current product" from "name of a different product" from "name of a discontinued product."
+
+**The cost:** Every rename invalidates existing knowledge. Tutorials become misleading. Internal wikis go stale. Developers waste time confirming that the thing they're reading about still exists under a different name.
+
+**Mitigation:** Look for the underlying resource type (ARM resource provider + `kind` value) rather than the marketing name. Check the publication date of any tutorial - in the Azure AI space, anything older than 12 months likely uses a defunct name.
+
+### 5.8 Bad: Request Examples
 
 **Ambiguous request:**
 > "I noticed that for 'Samsung Battery Charger' the availability date '10/11/2017' had a typo."
@@ -356,7 +504,7 @@ Problems: Missing identifier, non-ISO date, no explicit state change, no call to
 **Clear request:**
 > "Please change the availability date for article number 87568752 'Samsung Battery Charger' from 2017-10-11 to 2017-11-10."
 
-### 5.7 Hall of Fail - Semantic Precision
+### 5.9 Hall of Fail - Semantic Precision
 
 - Emails do not have "titles", they have **subjects**
 - People do not "have emails", they **receive emails** and have **email addresses**
@@ -371,7 +519,7 @@ Problems: Missing identifier, non-ISO date, no explicit state change, no call to
 - Bad: "Comma-separated list of all emails for mailing that will be sent out on a monthly basis to those customers who have ordered more than $1m over the last 2 years."
 - Good: "Email addresses for Monthly Very Important Customers Mailing (MVIC) in comma-separated format. VIC = customer who has generated more than USD 1 million turnover within the last 2 years."
 
-### 5.8 Academic Language vs Plain Language
+### 5.10 Academic Language vs Plain Language
 
 **Bad:** "The Determinants of the infant mortality rate in the United States."
 
