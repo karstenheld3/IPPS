@@ -7,7 +7,7 @@ Writing principles derived from MECT (Minimal Explicit Consistent Terminology). 
 - **APAPALAN** = Concrete enforceable rules with measurable criteria. Answers: "How do I check compliance?" BAD/GOOD examples define the exact pattern to follow.
 
 **Topic split:**
-- **MECT_WRITING_RULES** covers: voice, word choice, terminology design, heading design, list construction, description types
+- **MECT_WRITING_RULES** covers: voice, word choice, terminology design, heading design, list construction, description types, visual representation
 - **APAPALAN_RULES** covers: precision formatting, brevity patterns, document structure, naming conventions
 
 No overlap. Both apply simultaneously. When writing documents, read both.
@@ -28,10 +28,13 @@ Word Choice (WC)
 - MW-WC-02: Plain language over academic - daily words, question format
 - MW-WC-03: No recursive/implicit naming - no self-referential definitions
 - MW-WC-04: No product-as-term collision - avoid domain-common words as names
+- MW-WC-05: No terminological synonymy - one concept = one name, no phantom entities
+- MW-WC-06: No inverted semantics - name direction must match value direction
 
 Terminology Design (TD)
 - MW-TD-01: Naming structure method (explicit -> specifiers -> states -> mnemonics)
 - MW-TD-02: Procedure/process names describe output, not mechanism
+- MW-TD-03: Stable naming over time - avoid serial renaming, ghost documentation
 
 Headings and Sections (HS)
 - MW-HS-01: Informative headings - state content, not topic
@@ -43,11 +46,17 @@ Lists and Tables (LT)
 - MW-LT-02: Group by topology - related items cluster
 - MW-LT-03: Index groups as they gain importance
 - MW-LT-04: Every formatting signal must carry information
+- MW-LT-05: Adjacent comparison - place BEFORE/AFTER states next to each other
 
 Description Types (DT)
 - MW-DT-01: Four description lenses (intentional, functional, technical, contextual)
 - MW-DT-02: Match description type to audience need
 - MW-DT-03: Canonical form for matchable/sortable data
+
+Visual Representation (VR)
+- MW-VR-01: Visual concepts require visual previews - text alone is insufficient
+- MW-VR-02: Structural diagrams for flows and architecture - clarify chronology, concurrency, orthogonality, mental model
+- MW-VR-03: Five categories that MUST have diagrams - file structure, architecture, branching, process, data flow
 
 ## Table of Contents
 
@@ -57,6 +66,7 @@ Description Types (DT)
 - [Heading and Section Rules (HS)](#heading-and-section-rules-hs)
 - [List and Table Rules (LT)](#list-and-table-rules-lt)
 - [Description Type Rules (DT)](#description-type-rules-dt)
+- [Visual Representation Rules (VR)](#visual-representation-rules-vr)
 
 ## Voice Rules (VO)
 
@@ -231,6 +241,51 @@ The "WorkTracker" feature tracks tasks across projects.
 
 **Test:** Can you write a sentence using the name AND the domain term without confusion? If not, rename.
 
+### MW-WC-05: No Terminological Synonymy
+
+One concept = one name. Multiple official names for the same thing create phantom entities in the reader's mental model.
+
+**Why:** When readers encounter different names from an authoritative source, they reasonably assume different names = different things. Each synonym becomes a phantom entity the reader tries to understand, wasting time and eroding trust.
+
+**BAD:**
+```
+Azure Entra ID identity system:
+- "App Registration" / "Application Object" / "Registered App" (same thing)
+- "Enterprise Application" / "Service Principal" / "Enterprise App" (same thing)
+- "Application ID" / "Client ID" / "App ID" (same GUID)
+```
+(14+ names for 2 objects + 1 GUID. Reader constructs 14 phantom entities.)
+
+**GOOD:**
+```
+Use ONE canonical name per object:
+- "Application Object" (the definition) - always this term
+- "Service Principal" (the instance) - always this term
+- "Application ID" (the GUID) - always this term
+
+Other names appear only in synonym tables, not in running text.
+```
+
+**Test:** Count how many names you use for the same concept across portal, API, docs, and informal usage. If > 1, create a synonym table and pick ONE canonical name for all new writing.
+
+### MW-WC-06: No Inverted Semantics
+
+Parameter or field names must suggest the correct direction of the value. If the name implies one direction but the value means the opposite, rename.
+
+**BAD:**
+```
+target_compression_percent: 40
+```
+(Name says "compression" = how much to remove. But value 40 means "40% output size" = 60% removed. Reader interprets backwards.)
+
+**GOOD:**
+```
+target_reduction_percent: 60
+```
+("Reduce by 60%" can only mean one thing. No inversion possible.)
+
+**Test:** Read the name and value aloud as a sentence. "Target compression is 40 percent" - does this match the actual behavior? If not, rename until the sentence matches reality.
+
 ## Terminology Design Rules (TD)
 
 ### MW-TD-01: Naming Structure Method
@@ -288,6 +343,35 @@ Name procedures, workflows, and process sections by what they produce - not by w
 - **Name by mechanism** when the process itself is the distinguishing factor: "Manual Review" vs "Automated Review"
 
 Default: name by output.
+
+### MW-TD-03: Stable Naming Over Time
+
+Avoid serial renaming. Each rename creates ghost documentation that misleads future readers.
+
+**Why:** When a product or concept is renamed, previous documentation, tutorials, blog posts, and Stack Overflow answers persist indefinitely. Search engines index all versions. A reader encounters multiple names simultaneously with no way to know which is current, which is obsolete, and which refers to a different product entirely.
+
+**BAD:**
+```
+Azure AI development platform naming history:
+- Nov 2023: "Azure AI Studio" (launched)
+- Nov 2024: "Azure AI Foundry" (renamed)
+- Nov 2025: "Microsoft Foundry" (renamed again)
+
+Result: 3 names in 2 years. Tutorials from 2024 say "Azure AI Studio."
+Stack Overflow answers say "Azure AI Foundry." Current docs say
+"Microsoft Foundry." Reader cannot distinguish current from obsolete.
+```
+
+**GOOD:**
+```
+Pick a name. Keep it. If you must rename:
+1. Maintain redirects from old names indefinitely
+2. Add "formerly known as X" to all current docs
+3. Update search metadata so old names find current docs
+4. Never rename more than once per 5 years
+```
+
+**Test:** Search for your product name. If the first page of results contains multiple names for the same thing without clear "this is the old name" markers, your naming is creating phantom complexity.
 
 ## Heading and Section Rules (HS)
 
@@ -434,6 +518,44 @@ Applies the Signal vs Noise principle to formatting. Formatting (bold, italic, i
 
 **Test:** Remove the formatting. Can the reader still distinguish the elements? If yes, the formatting is noise. See AP-BR-07 for concrete enforcement patterns.
 
+### MW-LT-05: Adjacent Comparison
+
+When comparing two states (old vs new, before vs after, option A vs option B), place them adjacent in the document. The reader should not scroll or search to perform the comparison.
+
+**Principle:** Comparison requires holding both states in working memory. Distance increases cognitive load. Proximity reduces it.
+
+**BAD:**
+```
+## Current State
+[Description of how it works now]
+
+... 15 sections of other content ...
+
+## Proposed State
+[Description of how it will work - reader must scroll back to compare]
+```
+
+**GOOD:**
+```
+## Current State (BEFORE)
+[Description of how it works now]
+
+## Proposed State (AFTER)
+[Description of how it will work - immediately follows, easy comparison]
+
+Key changes: [brief summary of delta]
+```
+
+**Apply when:**
+- Proposing UI changes (BEFORE/AFTER wireframes)
+- Comparing design options (Option A / Option B)
+- Documenting schema migrations (old schema / new schema)
+- Showing refactored code (old pattern / new pattern)
+
+**Label clearly:** Use "(BEFORE)" / "(AFTER)", "Current" / "Proposed", or "Option A" / "Option B" in headings.
+
+See also SPEC-DG-04 in `SPEC_RULES.md` for spec-specific application.
+
 ## Description Type Rules (DT)
 
 ### MW-DT-01: Four Description Lenses
@@ -502,3 +624,210 @@ All variants must be convertible to this form:
 - Any data that appears in more than one place and must be matchable
 
 **Principle:** "If you can express information in a canonical form, you unlock automated matching across systems - even when sources use completely different wording."
+
+## Visual Representation Rules (VR)
+
+### MW-VR-01: Visual Concepts Require Visual Previews
+
+When describing something visual (UI layout, page structure, component arrangement), show a diagram or wireframe. Text descriptions of visual things force the reader to mentally reconstruct the image - slow, error-prone, and different for every reader.
+
+**Principle:** People anchor complex things visually. A diagram creates a shared mental image. Text creates N different mental images for N readers.
+
+**BAD:**
+```
+The page has a header at the top with the title and a reload button.
+Below that is a navigation bar. Then the toolbar with action buttons.
+The main content area contains a data table. At the bottom there is
+a resizable console panel.
+```
+(Reader must mentally stack 5 elements. Order ambiguous. Relative sizes unknown.)
+
+**GOOD:**
+```
+┌─────────────────────────────────────────────────────────┐
+│  PAGE HEADER: Title (count)              [Reload]       │
+├─────────────────────────────────────────────────────────┤
+│  < Back to Main Page                                    │
+├─────────────────────────────────────────────────────────┤
+│  TOOLBAR: [New Item]  [Run Selftest]  [Delete (N)]      │
+├─────────────────────────────────────────────────────────┤
+│  DATA TABLE                                             │
+│  │ x │ ID   │ Name   │ Status │ Actions       │         │
+│  │ o │ it_1 │ First  │ OK     │ [Edit] [Del]  │         │
+├─────────────────────────────────────────────────────────┤
+│  CONSOLE PANEL (bottom, resizable)                      │
+│  > streaming output...                                  │
+└─────────────────────────────────────────────────────────┘
+```
+(Instant understanding. No mental reconstruction needed.)
+
+**When to apply:**
+- UI layouts and page structure
+- Component arrangements and nesting
+- Screen states (empty, loading, error, populated)
+- Any concept where spatial relationships matter
+
+**Label ownership:** When documenting shared vs custom elements, annotate each area with who provides it (e.g., LIBRARY / YOU, SHARED / CUSTOM, FRAMEWORK / APP).
+
+### MW-VR-02: Structural Diagrams for Flows and Architecture
+
+Flows, processes, and architectural relationships must be presented as diagrams. The diagram's structure must clarify five dimensions:
+
+- **Chronology** - What happens first, second, third (top-to-bottom or left-to-right flow)
+- **Concurrency** - What happens in parallel vs sequentially (side-by-side branches)
+- **Orthogonality** - Which elements are independent of each other (separate boxes, no connecting lines)
+- **Mental model** - How the reader should think about the system (layers, pipelines, trees, cycles)
+- **Naming and association** - Which elements belong together (shared labels, grouping boxes, consistent prefixes)
+
+**Principle:** Textual descriptions of flows hide structure. "A calls B, then B calls C, but D runs in parallel" requires the reader to build a graph in their head. A diagram IS the graph.
+
+**BAD:**
+```
+When the user clicks the button, callEndpoint reads the data
+attributes. If the format is stream, it calls connectStream.
+Otherwise it uses fetch. On success, if closeOnSuccess is set,
+the modal closes. If the method was DELETE, the row is removed.
+Otherwise the table reloads. On error, if a modal is open, the
+error shows there. Otherwise a toast appears.
+```
+(Reader must trace 4 branch points from linear text. Easy to miss a path.)
+
+**GOOD:**
+```
+callEndpoint(btn, itemId, bodyData)
+        │
+   ┌────┴────┐
+   v         v
+STREAM     JSON (fetch)
+   │         │
+   v    ┌────┴────┐
+   ..   v         v
+     SUCCESS    ERROR
+     │    │     │    │
+     v    v     v    v
+   close  DEL  modal toast
+   modal  row  error error
+```
+(All paths visible at once. Branch points explicit. No path hidden.)
+
+**Test:** If you describe a flow in text and it contains more than one "if/then/else" or "while/until", it needs a diagram.
+
+**Diagram types by mental model:**
+- **Sequence** (chronology) - Top-to-bottom flow with numbered steps
+- **Branch** (decision) - Diamond or fork showing alternatives
+- **Layer** (architecture) - Stacked boxes showing abstraction levels
+- **Pipeline** (data flow) - Left-to-right transformation chain
+- **Anatomy** (composition) - Nested boxes showing what contains what
+
+### MW-VR-03: Five Categories That MUST Have Diagrams
+
+The following categories must always be documented with a visual diagram. Text-only descriptions are insufficient regardless of how detailed they are.
+
+**1. File and folder structure** - Annotated tree showing what each file does and whether it is new, modified, or extended.
+
+```
+src/
+├── app.py                                # EXTEND: auth summary, status endpoint
+├── routers_v2/
+│   ├── common_ui_functions_v2.py         # EXTEND: auth buttons, dialog JS
+│   ├── common_sharepoint_auth_v2.py      # EXTEND: get_auth_status()
+│   ├── jobs.py                           # MODIFY: inject auth buttons
+│   ├── crawler.py                        # MODIFY: pass request
+│   ├── domains.py                        # MODIFY: pass request
+│   └── sites.py                          # MODIFY: pass request
+└── html_javascript_static_files/
+    └── css/
+        └── routers_v2.css                # EXTEND: auth styles
+```
+
+**2. Code architecture** - Layered boxes showing callers, abstractions, and dependencies.
+
+```
+┌───────────────────────────────────────────────────────────────────┐
+│  Callers (unchanged signatures)                                   │
+│  ├─> crawler.py        -> get_sharepoint_context(site_url, req)   │
+│  ├─> sites.py          -> get_sharepoint_context(site_url, req)   │
+│  └─> common_security_scan_functions_v2.py -> get_sharepoint_...   │
+├───────────────────────────────────────────────────────────────────┤
+│  Auth Layer (common_sharepoint_functions_v2.py)                   │
+│  ├─> AuthenticationFactory                                        │
+│  │   ├─> CertificateProvider     -> with_client_certificate()     │
+│  │   ├─> ManagedIdentityProvider -> with_access_token()           │
+│  │   └─> InteractiveBrowserProvider -> with_access_token()        │
+│  └─> AuthStateManager (override file + default config)            │
+├───────────────────────────────────────────────────────────────────┤
+│  Library (office365-rest-python-client)                           │
+│  └─> ClientContext -> AuthenticationContext -> HTTP               │
+└───────────────────────────────────────────────────────────────────┘
+```
+
+**3. Case branching** - All valid/invalid options, grouped with outcomes.
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│ Override File: Valid Methods (System Auth only)                  │
+│                                                                  │
+│  Default method set via env var (CRAWLER_USE_MANAGED_IDENTITY)   │
+│  Override file changes effective method WITHOUT restart          │
+│                                                                  │
+│  Valid override values:                                          │
+│  ┌─────────────────────────────────────────────────────────────┐ │
+│  │ 1. certificate       (app-only, any environment)            │ │
+│  │ 2. managed_identity  (app-only, Azure-hosted)               │ │
+│  │ 3. device_code       (admin-delegated, emergency fallback)  │ │
+│  └─────────────────────────────────────────────────────────────┘ │
+│                                                                  │
+│  NOT valid (per-session, not system-wide):                       │
+│  ├─> interactive_browser (User Auth, per-session overlay)        │
+│  └─> on_behalf_of        (automatic, per-request)                │
+│                                                                  │
+│  Flow: Admin clicks [Use This] in UI                             │
+│  ├─> POST /v2/auth/override { "method": "certificate" }          │
+│  ├─> Backend tests auth against SharePoint                       │
+│  ├─> On success: writes override file                            │
+│  └─> DELETE /v2/auth/override reverts to env var default         │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+**4. Process organization** - Setup steps, per-request flow, and UI/override impact in one box.
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│ Interactive Browser Authentication Process                       │
+│                                                                  │
+│  Setup (one-time, by Azure admin):                               │
+│  ├─> Register app in Azure AD with redirect URI                  │
+│  ├─> Grant delegated permissions (Sites.Read.All)                │
+│  ├─> Set env vars: CLIENT_ID, TENANT_ID, CLIENT_SECRET           │
+│  └─> No interactive UI required for setup                        │
+│                                                                  │
+│  Per-request flow (automatic for authenticated sessions):        │
+│  ├─> AuthenticationFactory checks request.session                │
+│  ├─> Session token found -> InteractiveBrowserProvider           │
+│  ├─> No session -> falls through to System Auth                  │
+│  └─> Other callers unaffected (System Auth continues)            │
+│                                                                  │
+│  UI: Interactive login initiation and status display             │
+│  Override: NOT a valid override target (per-session only)        │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+**5. Actions and data flow** - Numbered steps showing where data is stored, read, and transformed.
+
+```
+1. STORAGE: Session cookie in user's browser
+   ├─> Encrypted by SESSION_SECRET_KEY
+   └─> Contains: { access_token, refresh_token, expires_at }
+
+2. SERVER READS: FastAPI session middleware
+   ├─> Request arrives with session cookie
+   └─> Session data available via request.session["sharepoint_token"]
+
+3. INTO HEADER: via with_access_token()
+   ├─> InteractiveBrowserProvider.get_context(site_url)
+   │   └─> token_func = lambda: TokenResponse(session token)
+   ├─> ClientContext(site_url).with_access_token(token_func)
+   └─> Library internally sets: Authorization: Bearer <token>
+```
+
+**Test:** If your document describes any of these 5 categories using only prose, add a diagram. The diagram is the primary communication; text provides supplementary explanation.

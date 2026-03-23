@@ -44,6 +44,8 @@ Naming Design (ND) - Structure for scalable naming
 - MC-ND-05: Type name = domain concept, not implementation detail
 - MC-ND-06: Disambiguate by qualifying, not renaming
 - MC-ND-07: Intuitive opposites for paired parameters
+- MC-ND-08: No terminological synonymy - one name per concept across codebase
+- MC-ND-09: No inverted semantics - name direction must match value direction
 
 Documentation (DC) - Code-adjacent writing
 - MC-DC-01: Four description types (what/why/how/where)
@@ -649,6 +651,71 @@ config = {
 ```
 
 **Standard opposites:** start/end, min/max, first/last, source/target, input/output, request/response, before/after, current/previous, local/remote, internal/external, public/private
+
+### MC-ND-08: No Terminological Synonymy
+
+One concept = one name across the entire codebase. Multiple names for the same thing create phantom entities in the developer's mental model.
+
+**BAD:**
+```python
+# Three names for the same object across layers
+def get_workshop(id): ...      # in service layer
+def fetch_garage(id): ...      # in repository layer
+def load_service_center(id): ...  # in API layer
+
+# SDK uses different names than API
+api_response = {"app_id": "123"}
+sdk_object.client_id = "123"     # same GUID, different name
+sdk_object.application_id = "123"  # third name for same thing
+```
+
+**GOOD:**
+```python
+# Same name everywhere
+def get_workshop(id): ...   # service
+def get_workshop(id): ...   # repository (or uses service)
+workshop_id = "123"         # variable
+api_response = {"workshop_id": "123"}
+
+# SDK matches API naming
+api_response = {"application_id": "123"}
+sdk_object.application_id = "123"  # matches API
+```
+
+**Test:** Grep your codebase for all names referring to one concept. If you find synonyms across layers (API, SDK, database, logs), unify them to one canonical name.
+
+### MC-ND-09: No Inverted Semantics
+
+Parameter and field names must suggest the correct direction of the value. If the name implies one direction but the value means the opposite, rename.
+
+**BAD:**
+```python
+# Name says "compression" (how much to remove)
+# Value 40 means "40% output size" = 60% removed
+config = {
+    "target_compression_percent": 40  # Inverted: reader expects 40% removed
+}
+
+# Name says "timeout" (how long to wait)
+# Value means "speed" (higher = faster response expected)
+config = {
+    "request_timeout": 5  # Is this 5 seconds to wait, or level 5 urgency?
+}
+```
+
+**GOOD:**
+```python
+# Name matches value direction
+config = {
+    "target_reduction_percent": 60  # "Reduce by 60%" - unambiguous
+}
+
+config = {
+    "request_timeout_seconds": 5  # Unit in name, direction clear
+}
+```
+
+**Test:** Read the name and value aloud as a sentence: "Target compression is 40 percent." Does this sentence match the actual behavior? If not, rename until the sentence matches reality.
 
 ## Documentation Rules (DC)
 
