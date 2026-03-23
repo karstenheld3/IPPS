@@ -20,6 +20,7 @@ Precision (PR) - Priority 1
 - AP-PR-07: Be specific - no generic or abstract writing
 - AP-PR-08: Every non-obvious rule or format needs examples
 - AP-PR-09: Consistent patterns (repeat established structures)
+- AP-PR-10: Never abbreviate keys and references (use single quotes for literals)
 
 Brevity (BR) - Priority 2
 - AP-BR-01: Single line for single statements
@@ -288,6 +289,37 @@ Repeat established structures. Do not invent new forms for similar content.
 - Headings: `## 1.` `## Design` `## IV.` → `## 1.` `## 2.` `## 3.`
 - Properties: `Key:` `**Key** -` `Key =` → `Key:` throughout
 - Functions: `get_` `fetch_` `load_` (same purpose) → `get_` everywhere
+
+### AP-PR-10: Never Abbreviate Keys and References
+
+Keys, variable names, file paths, and other referenceable identifiers must appear in full. Use single quotes to mark literal strings that can be copied or searched.
+
+**Why:** Abbreviations force readers to mentally expand them, risking misinterpretation. Single quotes signal "this is a literal value you can copy/paste or grep for."
+
+**Applies to:**
+- Environment variable names
+- Configuration keys
+- File paths and filenames
+- Function/method names when referenced in prose
+- Database / CSV column names and JSON properties
+- Any identifier the reader might need to find elsewhere
+
+**BAD:**
+```
+Priority: Checked when KEY_AUTH is false.
+Used when both flags above are false.
+See the auth config for details.
+```
+
+**GOOD:**
+```
+Priority: Checked when 'AZURE_OPENAI_USE_KEY_AUTHENTICATION' is false.
+Used when 'AZURE_OPENAI_USE_KEY_AUTHENTICATION'=false
+and 'AZURE_OPENAI_USE_MANAGED_IDENTITY'=false.
+See 'config/auth.yaml' for details.
+```
+
+**Exception:** Code blocks and monospace formatting (`backticks`) already signal literal values - single quotes are not needed inside code blocks.
 
 ## Brevity Rules (BR)
 
