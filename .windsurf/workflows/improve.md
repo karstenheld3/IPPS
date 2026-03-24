@@ -6,6 +6,13 @@ description: Find and fix contradictions, inconsistencies, and improvement oppor
 
 Autonomous self-improvement. Find issues, fix immediately. No user consultation.
 
+## MUST-NOT-FORGET
+
+1. Apply fixes immediately without asking for permission - this workflow has authority to correct issues
+2. Re-read dependencies before assessing (rules, specs, session docs)
+3. CRITICAL severity first, then HIGH, group related fixes
+4. Preserve existing IDs (FR-XX, DD-XX, etc.)
+
 **Mandatory reads before improving:**
 - `APAPALAN_RULES.md` (@skills:write-documents) - precision, brevity, structure, naming
 - `MECT_WRITING_RULES.md` (@skills:write-documents) - voice, word choice, terminology, headings, lists

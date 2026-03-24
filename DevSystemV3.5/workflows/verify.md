@@ -15,6 +15,12 @@ Invoke these skills based on context:
 
 **CRITICAL**: Skill invocation returns instructions only. You MUST also read the supporting files listed in skill output (e.g., `PYTHON-RULES.md`, `WORKFLOW-RULES.md`) to get actual verification rules.
 
+## MUST-NOT-FORGET
+
+1. Apply fixes immediately without asking for permission - this workflow has authority to correct issues
+2. Re-read session/project documents before verifying (see Mandatory Re-read)
+3. Create internal MNF checklist and verify against it in Final Steps
+
 ## Mandatory Re-read
 
 **SESSION-MODE mode** - Re-read session folder documents:

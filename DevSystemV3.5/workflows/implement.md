@@ -12,7 +12,8 @@ auto_execution_mode: 1
 
 ## MUST-NOT-FORGET
 
-Phase flow: Prerequisites → GLOBAL-RULES → Impact Assessment → Execution
+1. Apply changes immediately without asking for permission - this workflow has authority to implement
+2. Phase flow: Prerequisites → GLOBAL-RULES → Impact Assessment → Execution
 
 - Prerequisites ensure required documents (SPEC, IMPL, TEST) exist
 - GLOBAL-RULES apply BEFORE any code change

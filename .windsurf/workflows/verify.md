@@ -15,6 +15,12 @@ Invoke these skills based on context:
 
 **CRITICAL**: Skill invocation returns instructions only. You MUST also read the supporting files listed in skill output (e.g., `PYTHON-RULES.md`, `WORKFLOW-RULES.md`) to get actual verification rules.
 
+## MUST-NOT-FORGET
+
+1. Apply fixes immediately without asking for permission - this workflow has authority to correct issues
+2. Re-read session/project documents before verifying (see Mandatory Re-read)
+3. Create internal MNF checklist and verify against it in Final Steps
+
 ## Mandatory Re-read
 
 **SESSION-MODE mode** - Re-read session folder documents:
@@ -125,6 +131,7 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Ensure detailed changes/additions plan exists.
 - Ensure exhaustive implementation verification checklist at end.
 - Verify Document History section exists and is up to date
+- Verify UI mockups use Unicode box-drawing characters (SPEC-DG-06: `┌ ├ └ │ ─` not `+ - |`)
 - Read @write-documents skill again and verify against rules.
 - Verify against @write-documents `SPEC_RULES.md` (required for all SPEC documents)
 - Verify against @write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
