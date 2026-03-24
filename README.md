@@ -94,7 +94,7 @@ MECT provides consistency     → Voice, terminology, naming across documents an
 
 ## Overview
 
-IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V3.4) features the EDIRD phase model, Agentic English vocabulary, STRUT notation, and enhanced logging/formatting rules for deterministic agent behavior.
+IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V3.6) features the EDIRD phase model, Agentic English vocabulary, STRUT notation, and enhanced logging/formatting rules for deterministic agent behavior.
 
 ## How to Add to Your Project
 
@@ -109,15 +109,16 @@ your-project/
 
 ## DevSystem Versions
 
-- **[DevSystemV1](DevSystemV1/)** - Legacy system using rules and workflows
-- **[DevSystemV2](DevSystemV2/)** - Previous version with modular skills and workflows
-- **[DevSystemV2.1](DevSystemV2.1/)** - Previous version with refined workflows
-- **[DevSystemV3](DevSystemV3/)** - Previous version with EDIRD phase model and Agentic English
-- **[DevSystemV3.1](DevSystemV3.1/)** - Previous version with STRUT notation
-- **[DevSystemV3.2](DevSystemV3.2/)** - Previous version with Concurrent blocks, effort allocation, planning guidance
-- **[DevSystemV3.3](DevSystemV3.3/)** - Previous version with deep-research skill, shared .tools folder
-- **[DevSystemV3.4](DevSystemV3.4/)** - Previous version with enhanced logging rules, table formatting, character rules cleanup
-- **[DevSystemV3.5](DevSystemV3.5/)** - Current system with generic /fix workflow, improved /implement and /go workflows
+- **[DevSystemV3.6](DevSystemV3.6/)** - Current system with workflow MNF sections, improved /implement and /go workflows
+
+Older versions in [`_OldDevSystemVersions/`](_OldDevSystemVersions/):
+- DevSystemV3.5 - Generic /fix workflow, improved /implement and /go workflows
+- DevSystemV3.4 - Enhanced logging rules, table formatting, character rules cleanup
+- DevSystemV3.3 - Deep-research skill, shared .tools folder
+- DevSystemV3.2 - Concurrent blocks, effort allocation, planning guidance
+- DevSystemV3.1 - STRUT notation
+- DevSystemV3 - EDIRD phase model and Agentic English
+- DevSystemV2.1, V2, V1 - Legacy versions
 
 ## Agentic English
 
@@ -260,18 +261,18 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 
 ## Key Conventions
 
-- [Core Conventions](DevSystemV3.4/rules/core-conventions.md) - Text formatting, document structure, header blocks
-- [DevSystem Core](DevSystemV3.4/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
-- [DevSystem IDs](DevSystemV3.4/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
-- [Agentic English](DevSystemV3.4/rules/agentic-english.md) - Controlled vocabulary for agent instructions
-- [EDIRD Phase Planning](DevSystemV3.4/rules/edird-phase-planning.md) - Phase model core rules
-- [Git Conventions](DevSystemV3.4/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
-- [Coding Conventions](DevSystemV3.4/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
-- [Workflow Rules](DevSystemV3.4/skills/coding-conventions/WORKFLOW-RULES.md) - APAPALAN principle, workflow formatting
+- [Core Conventions](.windsurf/rules/core-conventions.md) - Text formatting, document structure, header blocks
+- [DevSystem Core](.windsurf/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
+- [DevSystem IDs](.windsurf/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
+- [Agentic English](.windsurf/rules/agentic-english.md) - Controlled vocabulary for agent instructions
+- [EDIRD Phase Planning](.windsurf/rules/edird-phase-planning.md) - Phase model core rules
+- [Git Conventions](.windsurf/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
+- [Coding Conventions](.windsurf/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
+- [Workflow Rules](.windsurf/skills/coding-conventions/WORKFLOW-RULES.md) - APAPALAN principle, workflow formatting
 
 ## Skills
 
-Agent skills in `DevSystemV3.4/skills/`. Each skill contains scripts, documentation, and optional setup.
+Agent skills in `.windsurf/skills/`. Each skill contains scripts, documentation, and optional setup.
 
 ### llm-evaluation
 
@@ -290,7 +291,7 @@ Evaluate LLM output quality by generating questions, collecting answers, and sco
 **Quick examples**:
 ```powershell
 $venv = "../.tools/llm-venv/Scripts/python.exe"
-$skill = "DevSystemV3.4\skills\llm-evaluation"
+$skill = ".windsurf\skills\llm-evaluation"
 
 # Transcribe images
 & $venv "$skill\call-llm-batch.py" --model gpt-4o --input-folder images/ --output-folder out/ --prompt-file "$skill\prompts\transcribe-page.md"
@@ -312,7 +313,7 @@ High-quality image-to-markdown transcription using ensemble generation, LLM judg
 **Quick examples**:
 ```powershell
 $venv = "../.tools/llm-venv/Scripts/python.exe"
-$skill = "DevSystemV3.4/skills/llm-transcription"
+$skill = ".windsurf/skills/llm-transcription"
 
 # Basic usage
 & $venv "$skill/transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]/../.tools/.api-keys.txt
@@ -333,7 +334,7 @@ Desktop automation via LLM vision. The AI sees your screen, decides what to clic
 
 **Quick examples**:
 ```powershell
-cd DevSystemV3.4/skills/llm-computer-use
+cd .windsurf/skills/llm-computer-use
 
 # Dry-run (safe, no actions executed)
 python -m llm_computer_use -k [WORKSPACE_FOLDER]/../.tools/.api-keys.txt "Click the Start button"
@@ -365,10 +366,10 @@ Convert, compress, and analyze PDF files using local CLI tools.
 **Quick examples**:
 ```powershell
 # Convert PDF to JPG (output: ../.tools/_pdf_to_jpg_converted/)
-python DevSystemV3.4\skills\pdf-tools\convert-pdf-to-jpg.py report.pdf --dpi 150
+python .windsurf\skills\pdf-tools\convert-pdf-to-jpg.py report.pdf --dpi 150
 
 # Compress PDF
-python DevSystemV3.4\skills\pdf-tools\compress-pdf.py report.pdf --compression high
+python .windsurf\skills\pdf-tools\compress-pdf.py report.pdf --compression high
 ```
 
 ### coding-conventions
@@ -383,10 +384,10 @@ Python and workflow coding style rules with enforcement tools.
 **Quick examples**:
 ```powershell
 # Convert folder to 2-space indentation
-python DevSystemV3.4\skills\coding-conventions\reindent.py folder/ --to 2 --recursive
+python .windsurf\skills\coding-conventions\reindent.py folder/ --to 2 --recursive
 
 # Dry-run (preview only)
-python DevSystemV3.4\skills\coding-conventions\reindent.py folder/ --to 2 --recursive --dry-run
+python .windsurf\skills\coding-conventions\reindent.py folder/ --to 2 --recursive --dry-run
 ```
 
 ### github
@@ -454,10 +455,10 @@ Windows desktop automation utilities.
 **Quick examples**:
 ```powershell
 # Full screen screenshot
-.\DevSystemV3.4\skills\windows-desktop-control\simple-screenshot.ps1
+.\.windsurf\skills\windows-desktop-control\simple-screenshot.ps1
 
 # Custom output path
-.\DevSystemV3.4\skills\windows-desktop-control\simple-screenshot.ps1 -OutputPath "C:\temp\screenshot.jpg"
+.\.windsurf\skills\windows-desktop-control\simple-screenshot.ps1 -OutputPath "C:\temp\screenshot.jpg"
 ```
 
 ### windsurf-auto-model-switcher
@@ -473,7 +474,7 @@ Switch Windsurf Cascade AI models programmatically.
 **Quick examples**:
 ```powershell
 # Select Claude Sonnet 4.5
-.\DevSystemV3.4\skills\windsurf-auto-model-switcher\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
+.\.windsurf\skills\windsurf-auto-model-switcher\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
 ```
 
 ### write-documents
@@ -499,18 +500,12 @@ Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.
 ```
 IPPS/
 ├── ../.tools/                    # Shared tool installations (parent folder)
-├── .windsurf/                    # Active agent configuration (copied from DevSystemV3.4)
+├── .windsurf/                    # Active agent configuration (synced from DevSystemV3.6)
 │   ├── rules/
 │   ├── workflows/
 │   └── skills/
-├── DevSystemV1/                  # Legacy (deprecated)
-├── DevSystemV2/                  # Legacy (deprecated)
-├── DevSystemV2.1/                # Legacy (deprecated)
-├── DevSystemV3/                  # Previous version
-├── DevSystemV3.1/                # Previous version
-├── DevSystemV3.2/                # Previous version
-├── DevSystemV3.3/                # Previous version
-├── DevSystemV3.4/                # Current system
+├── _OldDevSystemVersions/        # Previous DevSystem versions (V1 through V3.5)
+├── DevSystemV3.6/                # Current system (source of truth)
 │   ├── rules/
 │   │   ├── agent-behavior.md     # Agent execution patterns and communication
 │   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions
@@ -519,54 +514,8 @@ IPPS/
 │   │   ├── devsystem-ids.md      # Document and item ID conventions
 │   │   ├── edird-phase-planning.md # EDIRD phase model core rules
 │   │   └── workspace-rules.md    # Workspace-specific overrides
-│   ├── skills/
-│   │   ├── coding-conventions/   # Python, PowerShell, workflow style rules
-│   │   ├── deep-research/        # Structured research with TOC, strategies, tools
-│   │   ├── edird-phase-planning/ # Phase gates, flows, planning
-│   │   ├── git-conventions/      # Commit message format
-│   │   ├── github/               # GitHub CLI operations
-│   │   ├── llm-computer-use/     # Desktop automation via LLM vision
-│   │   ├── llm-evaluation/       # LLM evaluation pipeline scripts
-│   │   ├── llm-transcription/    # Image/audio to markdown transcription
-│   │   ├── ms-playwright-mcp/    # Browser automation via Playwright MCP
-│   │   ├── pdf-tools/            # PDF scripts and tools
-│   │   ├── session-management/   # Session templates
-│   │   ├── windows-desktop-control/ # Screenshot capture, desktop automation
-│   │   ├── windsurf-auto-model-switcher/ # Programmatic model switching
-│   │   └── write-documents/      # Spec, impl, test templates
-│   └── workflows/
-│       ├── build.md              # BUILD workflow entry point
-│       ├── commit.md             # Git conventional commits
-│       ├── continue.md           # Execute next items on plan
-│       ├── critique.md           # Devil's Advocate review
-│       ├── fail.md               # Record failures
-│       ├── go.md                 # Autonomous loop (recap + continue)
-│       ├── implement.md          # IMPLEMENT phase
-│       ├── learn.md              # Extract learnings from failures
-│       ├── partition.md          # Split plans into testable chunks
-│       ├── prime.md              # Load workspace context
-│       ├── project-release.md    # Project release workflow
-│       ├── recap.md              # Analyze context, identify status
-│       ├── reconcile.md          # Pragmatic reconciliation
-│       ├── rename.md             # Global/local refactoring
-│       ├── research.md           # Structured research
-│       ├── session-archive.md    # Archive session folder
-│       ├── session-finalize.md   # Finalize and sync session
-│       ├── session-load.md       # Resume session
-│       ├── session-new.md        # Initialize session
-│       ├── session-save.md       # Save session progress
-│       ├── solve.md              # SOLVE workflow entry point
-│       ├── switch-model.md       # Switch Cascade AI model tier
-│       ├── sync.md               # Document synchronization
-│       ├── test.md               # Run tests based on scope
-│       ├── transcribe.md         # PDF/web transcription
-│       ├── verify.md             # Verification against specs and rules
-│       ├── write-impl-plan.md    # Create implementation plan
-│       ├── write-info.md         # Create INFO document
-│       ├── write-spec.md         # Create specification
-│       ├── write-strut.md        # Create STRUT plans
-│       ├── write-tasks-plan.md   # Create tasks plan
-│       └── write-test-plan.md    # Create test plan
+│   ├── skills/                   # See Skills section for details
+│   └── workflows/                # See .windsurf/workflows/ for file list
 ├── ID-REGISTRY.md                # Prevents term/ID collisions (DevSystem constants + project topics)
 └── README.md
 ```

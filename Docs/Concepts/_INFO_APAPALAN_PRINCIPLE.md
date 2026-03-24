@@ -284,11 +284,11 @@ The DRY tension (AP-BR-03 vs AP-ST-04) is intentional: within your own document,
 
 **Primary Sources:**
 - `APAPALAN-IN01-SC-MECT-IN01`: `_INFO_MECT_PHILOSOPHY.md [MECT-IN01]` - MECT communication design philosophy [VERIFIED]
-- `APAPALAN-IN01-SC-APAP-RULES`: `APAPALAN_RULES.md` in DevSystemV3.5/skills/write-documents/ - Full rule set with BAD/GOOD examples [VERIFIED]
+- `APAPALAN-IN01-SC-APAP-RULES`: `APAPALAN_RULES.md` in DevSystemV3.6/skills/write-documents/ - Full rule set with BAD/GOOD examples [VERIFIED]
 
 **Related Documents:**
 - `APAPALAN-IN01-SC-DSYS-IDS`: `devsystem-ids.md` - ID system referenced by AP-PR-04 and AP-PR-05 [VERIFIED]
-- `APAPALAN-IN01-SC-LOG-RULES`: `LOGGING-RULES.md` in DevSystemV3.5/skills/coding-conventions/ - Logging rules implementing APAPALAN for output [VERIFIED]
+- `APAPALAN-IN01-SC-LOG-RULES`: `LOGGING-RULES.md` in DevSystemV3.6/skills/coding-conventions/ - Logging rules implementing APAPALAN for output [VERIFIED]
 
 ## 6. Document History
 

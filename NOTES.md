@@ -1,7 +1,7 @@
 [DEFAULT_SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
 [SESSION_ARCHIVE_FOLDER]: [SESSION_FOLDER]\..\Archive
 
-Current [DEVSYSTEM]: DevSystemV3.5
+Current [DEVSYSTEM]: DevSystemV3.6
 Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
 
@@ -45,9 +45,9 @@ Usage: `--keys-file [WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
 **Exception:** If user edits .windsurf directly, sync BACK to [DEVSYSTEM_FOLDER] first.
 
 **README.md Link Convention (2026-03-19):**
-- **ALWAYS use `.windsurf/` paths in README.md** - Never reference `DevSystemV3.5/` or any version folder
+- **ALWAYS use `.windsurf/` paths in README.md** - Never reference `DevSystemV3.6/` or any version folder
 - Example: `.windsurf/skills/write-documents/APAPALAN_RULES.md` (GOOD)
-- Example: `DevSystemV3.5/skills/write-documents/APAPALAN_RULES.md` (BAD)
+- Example: `DevSystemV3.6/skills/write-documents/APAPALAN_RULES.md` (BAD)
 - Reason: README is user-facing, users interact with `.windsurf/`, not version folders
 
 ## Workflow Design Rules

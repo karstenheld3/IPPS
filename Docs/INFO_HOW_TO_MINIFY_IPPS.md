@@ -27,7 +27,7 @@ python mipps_pipeline.py status    # Check progress anytime
 
 **3. Output location:** `_run_templateV2/runs/run_[DATE]_[NAME]/output/`
 - Compressed `.md` files mirror `source_dir` structure
-- Copy this folder to your target location (e.g., `DevSystemV3.5-Mini/`)
+- Copy this folder to your target location (e.g., `DevSystemV3.6-Mini/`)
 
 **4. Copy functional files** (scripts, JSON configs) - see [Section 5](#5-post-pipeline-copy-functional-files)
 
@@ -197,8 +197,8 @@ The pipeline only compresses `.md` files. Functional files (scripts, configs) mu
 ### Identify Missing Files
 
 ```powershell
-$src = "E:\Dev\IPPS\DevSystemV3.5"
-$dst = "E:\Dev\IPPS\DevSystemV3.5-Mini"
+$src = "E:\Dev\IPPS\DevSystemV3.6"
+$dst = "E:\Dev\IPPS\DevSystemV3.6-Mini"
 
 # Find files in source but not in destination (excluding cache/temp)
 $srcFiles = Get-ChildItem -Path $src -Recurse -File |
