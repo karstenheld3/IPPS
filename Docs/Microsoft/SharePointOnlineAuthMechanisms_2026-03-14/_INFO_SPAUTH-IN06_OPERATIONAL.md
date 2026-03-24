@@ -41,6 +41,8 @@ acquire_token_*()
 
 ## 1. Token Caching Strategies
 
+**Note**: Examples in this document use `ConfidentialClientApplication` but the caching, retry, refresh, and debugging patterns apply equally to `PublicClientApplication`. Choose client type based on whether app identity proof is needed (see IN04, AM04).
+
 ### In-Memory Cache (Default)
 
 MSAL uses in-memory cache by default. Tokens are lost when the process exits.
@@ -512,6 +514,10 @@ token = token_manager.get_token(["https://graph.microsoft.com/.default"])
 - SPAUTH-SC-DEV-MSALCACHE: Python MSAL Token Cache for Confidential Clients
 
 ## Document History
+
+**[2026-03-23 23:15]**
+- Added: Note that all operational patterns apply to both ConfidentialClient and PublicClient
+- Reason: All examples used ConfidentialClient, which could mislead into thinking PublicClient has different operational behavior
 
 **[2026-03-14 17:15]**
 - Initial document created

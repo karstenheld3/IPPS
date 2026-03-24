@@ -49,19 +49,18 @@ Authorization code flow is the **standard OAuth 2.0 flow** for web applications:
 
 ### Authorization Code vs Interactive Browser
 
-| Aspect           | Authorization Code                     | Interactive Browser                 |
-|------------------|----------------------------------------|-------------------------------------|
-| Use case         | Web applications with backend          | Desktop and command-line apps       |
-| Token exchange   | Server-side                            | Client-side                         |
-| Security         | Higher (uses code_verifier)            | Good                                |
-| Refresh tokens   | Yes                                    | Yes                                 |
-| Implementation   | More complex                           | Simpler                             |
+Both use the authorization code flow with PKCE. The difference is the MSAL client type:
+
+- **Authorization Code (Confidential)** - `ConfidentialClientApplication` with client secret or certificate. App proves its identity during token exchange. App registration: **Web** platform. Use when: billing-tracked APIs, app impersonation risk, or compliance requires app identity proof.
+- **Interactive Browser (Public)** - `PublicClientApplication` with PKCE only. No client credential needed. App registration: **SPA** platform. Use when: internal admin tools where user identity (not app identity) determines access. This is what PnP PowerShell does.
+
+Both perform server-side token exchange. Both support refresh tokens. The choice depends on whether you need to prove the app's identity independently of the user.
 
 ### When NOT to Use
 
 - **Background services** - No user present (use app-only)
 - **Simple CLI tools** - Use device code instead
-- **Desktop apps** - Interactive browser is simpler
+- **Internal admin tools** - PublicClient + PKCE is sufficient (see AM04)
 
 ### Recommendation Level
 
@@ -445,7 +444,9 @@ async def get_valid_token(request: Request) -> str:
 
 ## 5. Code Examples
 
-### Basic MSAL Flow
+### Basic MSAL Flow (Confidential Client)
+
+This example uses `ConfidentialClientApplication` (requires secret or certificate). For interactive user login without app credential, use `PublicClientApplication` with `initiate_auth_code_flow()` instead (see AM04).
 
 ```python
 from msal import ConfidentialClientApplication
@@ -499,11 +500,13 @@ auth_url = (
 )
 
 # When exchanging code, include code_verifier
+# Note: client_secret is only needed for ConfidentialClient (Web platform).
+# For PublicClient (SPA platform), omit client_secret - PKCE alone protects the exchange.
 token_response = requests.post(
     f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token",
     data={
         "client_id": client_id,
-        "client_secret": client_secret,
+        "client_secret": client_secret,  # Omit for PublicClient + SPA platform
         "code": auth_code,
         "redirect_uri": redirect_uri,
         "grant_type": "authorization_code",
@@ -620,6 +623,12 @@ async def callback(
 - SPAUTH-SC-RFC-6749: OAuth 2.0 specification
 
 ## Document History
+
+**[2026-03-23 23:15]**
+- Changed: Authorization Code vs Interactive Browser comparison - both use auth code + PKCE, differ in client type (Confidential vs Public)
+- Added: Note on Basic MSAL Flow example about PublicClient alternative
+- Added: Comment in PKCE manual example about client_secret being optional for SPA platform
+- Reason: PublicClientApplication + PKCE is sufficient for interactive user login (see AM04)
 
 **[2026-03-14 17:25]**
 - Initial document created

@@ -113,7 +113,7 @@ As of Azure Identity 1.14.0, the chain continues trying developer credentials ev
 
 ### PublicClientApplication
 
-For applications that cannot securely store secrets (desktop, mobile, CLI):
+For applications that do not need to prove app identity (desktop, mobile, CLI, **server-side web apps using SPA platform + PKCE**):
 
 ```python
 from msal import PublicClientApplication
@@ -127,12 +127,15 @@ app = PublicClientApplication(
 # - acquire_token_interactive()
 # - acquire_token_by_device_flow()
 # - acquire_token_silent()
+# - initiate_auth_code_flow() + acquire_token_by_auth_code_flow()  [server-side PKCE]
 # - acquire_token_by_username_password() [deprecated]
 ```
 
+**Note**: Server-side web apps can use `PublicClientApplication` with `initiate_auth_code_flow()` for interactive user login when app identity proof is not required. The app registration must use **SPA** platform (not Web). This is how PnP PowerShell handles interactive auth. See AM04.
+
 ### ConfidentialClientApplication
 
-For server-side applications with secrets or certificates:
+For server-side applications that must prove app identity (secrets or certificates):
 
 ```python
 from msal import ConfidentialClientApplication
@@ -440,7 +443,10 @@ def create_sharepoint_credential(config):
             certificate_path=config["cert_path"]
         ))
     
-    # Development: interactive browser
+    # Development: interactive browser (azure.identity approach)
+    # NOTE: InteractiveBrowserCredential opens a browser ON THE SERVER.
+    # For web apps where the USER's browser does the login, use MSAL's
+    # PublicClientApplication.initiate_auth_code_flow() instead (see AM04).
     if config.get("allow_interactive"):
         credentials.append(InteractiveBrowserCredential(
             tenant_id=config["tenant_id"],
@@ -507,8 +513,9 @@ token_cache.save()
 ## Gotchas and Quirks
 
 - PublicClientApplication requires `accounts` for silent token acquisition
-- ConfidentialClientApplication doesn't track accounts (app-only)
+- ConfidentialClientApplication tracks accounts when used with auth code flow, but not for client_credentials (app-only)
 - Refresh tokens are not returned for client credentials flow
+- `azure.identity.InteractiveBrowserCredential` opens a browser on the server machine - not suitable for web apps. Use MSAL `initiate_auth_code_flow()` for OAuth redirect in the user's browser.
 
 ## Sources
 
@@ -523,6 +530,13 @@ token_cache.save()
 - SPAUTH-SC-DEV-MSALCACHE: Python MSAL Token Cache for Confidential Clients
 
 ## Document History
+
+**[2026-03-23 23:15]**
+- Changed: PublicClientApplication description - includes server-side web apps with SPA platform + PKCE
+- Added: Note about `initiate_auth_code_flow()` for server-side PKCE (AM04 cross-reference)
+- Added: Warning on `InteractiveBrowserCredential` vs MSAL auth code flow in credential chain example
+- Fixed: ConfidentialClient Gotcha - tracks accounts when used with auth code flow
+- Added: Gotcha about azure.identity.InteractiveBrowserCredential opening browser on server
 
 **[2026-03-14 21:52]**
 - Added: Token Callback Contract section

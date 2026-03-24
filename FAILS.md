@@ -1,5 +1,29 @@
 # Failure Log
 
+## 2026-03-23 - YouTube Download
+
+### [MEDIUM] `GLOB-FL-022` Tried PATH lookup instead of reading skill documentation first
+
+- **When**: 2026-03-23 19:50 UTC+01:00
+- **Where**: YouTube download task execution
+- **What**: User said "You have a skill for that" but agent ran `yt-dlp` directly, got "not recognized" error. Then ran `where.exe yt-dlp` to find it. Meanwhile SKILL.md lines 37 and 61 clearly document: `-ToolsFolder` defaults to `[WORKSPACE]/../.tools/youtube-downloader`
+- **Why it went wrong**:
+  - User explicitly mentioned "a skill" but agent did not invoke the skill
+  - Tried direct command execution before reading skill documentation
+  - Assumed yt-dlp would be in PATH instead of checking skill-documented location
+- **Evidence**: `yt-dlp: The term 'yt-dlp' is not recognized` error, followed by unnecessary `where.exe` lookup
+
+**Workflow re-read findings**:
+- SKILL.md line 37: `-ToolsFolder - Binaries location (default: [WORKSPACE]/../.tools/youtube-downloader)`
+- SKILL.md line 61: Same parameter documented for video script
+- SKILL.md line 18-20: Shows exact PowerShell command syntax to use
+
+**Prevention rules**:
+1. When user says "you have a skill for that" - READ THE SKILL FIRST
+2. Skills define tool locations - don't assume PATH availability
+3. Use skill's documented scripts/commands, not raw tool invocations
+4. Pattern: Skill mentioned → Read SKILL.md → Use documented command
+
 ## 2026-03-20 - Deploy to All Repos
 
 ### [MEDIUM] `GLOB-FL-021` Ignored workflow comparison script, wrote buggy one-liner instead

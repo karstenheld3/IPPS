@@ -274,6 +274,8 @@ AZURE_CLIENT_SECRET=your-client-secret
 SHAREPOINT_URL=https://contoso.sharepoint.com
 ```
 
+**Middleware-specific note**: The `AZURE_*` env vars above are generic OBO examples. In our middleware (V2AUTH-SP01 Phase 4), OBO will use the **Crawler app registration** (`CRAWLER_CLIENT_ID`, `CRAWLER_TENANT_ID`) with certificate as client credential - not `AZURE_CLIENT_ID`/`AZURE_CLIENT_SECRET`. The `AZURE_*` vars (without `OPENAI` in the name) are reserved for Azure OpenAI service principal auth. See README.md "Authentication Architecture" section.
+
 ## 3. Prerequisites
 
 ### Azure AD App Registration (Middle-Tier API)
@@ -551,6 +553,10 @@ Testing OBO requires a valid user token. Options:
 - SPAUTH-SC-MSFT-MSALPYTHON: MSAL for Python
 
 ## Document History
+
+**[2026-03-23 23:15]**
+- Added: Middleware-specific note about env var naming (CRAWLER_* vs AZURE_*) to prevent confusion with OpenAI auth
+- Reason: AZURE_CLIENT_ID/AZURE_CLIENT_SECRET are for Azure OpenAI, not SharePoint. OBO Phase 4 will use Crawler app registration.
 
 **[2026-03-14 17:35]**
 - Initial document created
