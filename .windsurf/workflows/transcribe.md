@@ -51,11 +51,9 @@ if ($hasSkill -and $hasKeys) {
 
 ## Source Types
 
-| Source | Detection | Processing |
-|--------|-----------|------------|
-| Local PDF | File path ends in `.pdf` | Convert to JPG, transcribe |
-| URL to PDF | URL ends in `.pdf` | Download first, then process |
-| Web page | URL to HTML | Screenshot, transcribe |
+- **Local PDF** - File path ends in `.pdf` → Convert to JPG, transcribe
+- **URL to PDF** - URL ends in `.pdf` → Download first, then process
+- **Web page** - URL to HTML → Screenshot, transcribe
 
 ## Step 2: Prepare Source
 
@@ -94,12 +92,10 @@ Write-Host "Total pages: $totalPages, Chunks needed: $chunks"
 
 ## Step 4: Determine Output Strategy
 
-| Total Pages | Output Strategy |
-|-------------|-----------------|
-| 1-20 | Single markdown file |
-| 21-50 | Single file, write after each 4-page chunk |
-| 51-100 | Multiple section files + index, merge optional |
-| 100+ | Multiple chapter files + index |
+- **1-20 pages** - Single markdown file
+- **21-50 pages** - Single file, write after each 4-page chunk
+- **51-100 pages** - Multiple section files + index, merge optional
+- **100+ pages** - Multiple chapter files + index
 
 ## Step 5: Create Output File with Header
 

@@ -3,9 +3,10 @@ description: Initialize a new development session
 auto_execution_mode: 1
 ---
 
+# New Session Workflow
+
 ## Required Skills
 
-Invoke these skills before proceeding:
 - @session-management for session folder structure and tracking files
 
 ## Step 1: Check for Existing Session

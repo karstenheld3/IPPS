@@ -1,3 +1,8 @@
+---
+description: Create a dated release with comprehensive release notes
+auto_execution_mode: 1
+---
+
 # Project Release Workflow
 
 Create a dated release with comprehensive release notes.

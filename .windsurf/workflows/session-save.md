@@ -1,10 +1,12 @@
 ---
+description: Save session progress
 auto_execution_mode: 1
 ---
 
+# Save Session Workflow
+
 ## Required Skills
 
-Invoke these skills before proceeding:
 - @session-management for session file structure
 - @git-conventions for commit format
 

@@ -9,7 +9,7 @@ Verify work against specs, rules, and quality standards.
 
 ## Required Skills
 
-Invoke these skills based on context:
+Invoke based on context:
 - @write-documents for document verification
 - @coding-conventions for code verification
 
@@ -23,14 +23,14 @@ Invoke these skills based on context:
 
 ## Mandatory Re-read
 
-**SESSION-MODE mode** - Re-read session folder documents:
+**SESSION-MODE** - Re-read session folder documents:
 - NOTES.md
 - PROBLEMS.md
 - PROGRESS.md
 - FAILS.md
 - LEARNINGS.md (if exists)
 
-**PROJECT-MODE mode** - Re-read workspace-level documents:
+**PROJECT-MODE** - Re-read workspace-level documents:
 - README.md
 - !NOTES.md or NOTES.md
 - !PROBLEMS.md or PROBLEMS.md (if exists)
@@ -72,11 +72,11 @@ Apply to ALL document types and contexts:
 
 ## Conceptual verification
 
-When reviewing architechture, design and solution strategy, look for:
+When reviewing architecture, design and solution strategy, look for:
 - inconsistencies
 - new solutions for already solved problems
 - ambiguities
-- underspeced behavior
+- underspecified behavior
 - unverified assumptions
 - over-engineering and introduction of unwanted complexity
 - flawed thinking and underestimated complexity
@@ -126,7 +126,7 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Verify Timeline field is present and accurate (Created date, update count, date range)
 - Verify MUST-NOT-FORGET section exists and rules are followed
 - Verify against spec requirements and existing code.
-- Look for bugs, inconsistencies, contradictions, ambiguities, underspeced behavior.
+- Look for bugs, inconsistencies, contradictions, ambiguities, underspecified behavior.
 - Think of corner cases we haven't covered yet.
 - Ensure detailed changes/additions plan exists.
 - Ensure exhaustive implementation verification checklist at end.
@@ -288,4 +288,3 @@ Verify before phase transition (when evaluating Transitions):
 - Objective is verified when ALL linked Deliverables are checked
 - Check Objective checkbox only after confirming linked Deliverables
 - If Objective has no links (`←`), require explicit [ACTOR] confirmation
-

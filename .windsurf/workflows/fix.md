@@ -65,4 +65,3 @@ Using principles from read files:
 3. Plan the fix (minimal change)
 4. Execute the fix
 5. Verify against read principles
-

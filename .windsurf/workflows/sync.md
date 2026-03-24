@@ -7,7 +7,7 @@ auto_execution_mode: 1
 
 ## Required Skills
 
-Invoke these skills based on context:
+Invoke based on context:
 - @write-documents for document formatting rules
 - @coding-conventions for code-related sync
 

@@ -3,9 +3,10 @@ description: Resume a development session
 auto_execution_mode: 1
 ---
 
+# Load Session Workflow
+
 ## Required Skills
 
-Invoke these skills before proceeding:
 - @session-management for session file structure
 
 ## MUST-NOT-FORGET

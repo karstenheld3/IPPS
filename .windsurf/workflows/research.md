@@ -1,8 +1,13 @@
 ---
+description: Structured research with verification labels and source retention
 auto_execution_mode: 1
 ---
 
-## Required Rules and Skills
+# Research Workflow
+
+Structured research about a topic with step-by-step findings and source documentation.
+
+## Required Skills
 
 Read these before proceeding:
 - `[AGENT_FOLDER]/rules/research-and-report-writing-rules.md` for MEPI/MCPI research depth
