@@ -548,6 +548,20 @@ echo "# This file makes the folder visible to Cascade" > _PrivateSessions/.gitke
 - `!_PrivateSessions/.gitkeep` - Negation pattern, tracks this specific file
 - Result: Folder appears in workspace, contents stay private
 
+### Telemetry and Privacy
+
+Windsurf collects non-essential telemetry data by default. Opt out via Codeium account settings.
+
+**Disable Telemetry:**
+1. Open https://windsurf.com/account (or Codeium account page)
+2. Scroll to **Privacy** section
+3. Toggle **Disable Telemetry** to on
+
+**What it controls:**
+- Non-essential data collection used to improve the product
+- Does NOT affect prompt caching, autocomplete, or Cascade functionality
+- Stored server-side (account setting), not in local config files
+
 ## Key Files Reference
 
 **User Config:**
@@ -617,6 +631,9 @@ Models available in Cascade, grouped by provider:
 - https://docs.windsurf.com/windsurf/cascade/skills - Skills (system-level support) [UPDATED 2026-03]
 
 ## Document History
+
+**[2026-03-30 19:48]**
+- Added: Telemetry and Privacy subsection under Other Features [VERIFIED]
 
 **[2026-03-19 10:33]**
 - Added: Arena Mode section with battle groups, leaderboards, sync/branch
