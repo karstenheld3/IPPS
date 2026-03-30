@@ -83,12 +83,14 @@ Documents may opt-in to use Markdown tables or emojis by adding a DevSystem tag 
 
 **Syntax:**
 ```html
-<DevSystem MarkdownTablesAllowed=true EmojisAllowed=true />
+<DevSystem MarkdownTablesAllowed=true EmojisAllowed=true APAPALAN=true MECT=true />
 ```
 
 **Attributes:**
 - `MarkdownTablesAllowed=true` - Allow Markdown tables in this document
 - `EmojisAllowed=true` - Allow emojis in this document
+- `APAPALAN=true` - APAPALAN rules apply ("As Precise As Possible, As Little As Necessary"). Defined in `@skills:write-documents` and `@skills:coding-conventions`
+- `MECT=true` - MECT rules apply ("Minimal Explicit Consistent Terminology"). Defined in `@skills:write-documents` and `@skills:coding-conventions`
 
 **Table formatting rule:** When tables are allowed, format with aligned columns using spaces for human readability. No bold, italic, or other formatting inside table cells.
 ```markdown
