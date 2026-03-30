@@ -110,6 +110,7 @@ Automatically push commits to GitHub.
 - e:\Dev\SharePoint-GPT-Middleware
   - Skills: Development
   - Overwrite everything
+  - Never overwrite: workflows/project-release.md (project-specific)
   - Delete deprecated or renamed files from older DevSystem versions
   - Don't delete unrelated existing files
 - e:\Dev\USTVA
