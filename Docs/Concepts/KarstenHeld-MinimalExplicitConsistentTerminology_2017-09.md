@@ -1,3 +1,5 @@
+<DevSystem APAPALAN=false />
+
 # Minimal Explicit Consistent Terminology
 
 Karsten Held, September 2017
