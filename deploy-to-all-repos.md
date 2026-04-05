@@ -98,11 +98,20 @@ $deprecatedFiles = @{
 }
 $deprecatedSkillFolders = @("edird-phase-model", "ipps-deep-research")
 
-function Test-SkillIncluded {
+# Personal workflows (from [PERSONAL_WORKFLOWS] in !NOTES.md) - excluded from Development-only repos
+$personalWorkflows = @("start-conversation.md")
+
+function Test-FileIncluded {
     param([string]$RelPath, [string]$Category)
-    if (-not $RelPath.StartsWith("skills\")) { return $true }
-    $skillName = ($RelPath.Split('\'))[1]
-    return $skillCategories[$Category] -contains $skillName
+    if ($RelPath.StartsWith("skills\")) {
+        $skillName = ($RelPath.Split('\'))[1]
+        return $skillCategories[$Category] -contains $skillName
+    }
+    if ($Category -ne "All" -and $RelPath.StartsWith("workflows\")) {
+        $fileName = Split-Path $RelPath -Leaf
+        if ($personalWorkflows -contains $fileName) { return $false }
+    }
+    return $true
 }
 
 $sourceFiles = Get-ChildItem -Path $source -Recurse -File | ForEach-Object { $_.FullName.Substring($source.Length + 1) } | Where-Object { $_ }
@@ -111,8 +120,8 @@ $sourceFiles = Get-ChildItem -Path $source -Recurse -File | ForEach-Object { $_.
 $results = @()
 foreach ($t in $targets) {
     $target = $t.Path; $cat = $t.Skills
-    $filtered = $sourceFiles | Where-Object { Test-SkillIncluded $_ $cat }
-    $excluded = $sourceFiles | Where-Object { -not (Test-SkillIncluded $_ $cat) } | ForEach-Object { ($_ -split '\\')[1] } | Select-Object -Unique
+    $filtered = $sourceFiles | Where-Object { Test-FileIncluded $_ $cat }
+    $excluded = $sourceFiles | Where-Object { -not (Test-FileIncluded $_ $cat) } | ForEach-Object { ($_ -split '\\')[1] } | Select-Object -Unique
     
     $r = @{ Path = $target; Skills = $cat; IsNew = $false; Add = @(); Overwrite = @(); Unchanged = 0; Delete = @(); ExcludedSkills = @($excluded) }
     

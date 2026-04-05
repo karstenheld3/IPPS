@@ -91,6 +91,9 @@ Automatically push commits to GitHub.
 - **Personal**: google-account, travel-info
 - **All**: Development + Personal (all skills)
 
+**[PERSONAL_WORKFLOWS]** (excluded from Development-only repos, deployed only to "All" repos):
+- start-conversation.md
+
 **[LINKED_REPOS]**:
 - e:\Dev\KarstensWorkspace
   - Skills: All
