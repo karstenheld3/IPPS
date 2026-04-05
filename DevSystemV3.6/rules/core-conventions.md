@@ -20,6 +20,16 @@ Universal formatting and writing conventions for all documents.
 - Try to fit single statements/decisions/objects on a single line
 - Format workflow references as inline code: `/verify`, `/go`, `/recap`
 
+## Encoding
+
+- Always assume UTF-8 encoding.
+- When writing in non-English languages, use native special characters (e.g., German Umlaute: ae → ä, oe → ö, ue → ü, ss → ß). Never substitute with ASCII approximations.
+- When non-UTF-8 encoding is detected, document in workspace or session NOTES.md:
+  1. File path
+  2. Detected encoding (e.g., ISO-8859-1, Windows-1252)
+  3. How to preserve encoding (e.g., which PowerShell `[System.IO.File]::` encoding parameters)
+- Test and verify PowerShell snippets to correctly read and write file (use copy of file for testing) before recording 3. in NOTES.md.
+
 ## Date and Time Format
 
 - **In documents**: `YYYY-MM-DD HH:MM` - Example: `2026-03-19 14:30`
