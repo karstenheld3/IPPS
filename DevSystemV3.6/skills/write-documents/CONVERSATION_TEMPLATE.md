@@ -12,6 +12,7 @@
     **Person (11:49)**: Non-English text here.
     > English translation here.
     ```
+- NATIVE CHARACTERS: Non-English text must use native special characters (e.g., ä, ö, ü, ß for German). Never substitute with ASCII approximations (ae, oe, ue, ss)
 - No markdown tables except when sent in emails
 - SEND EMAILS VIA PLAYWRIGHT GMAIL UI - NEVER use CLI tools to send (body encoding fails)
 - Email header format: `From: | To: | CC: | BCC: | Subject: | Reply-To: | Thread: | Message-ID:`

@@ -12,6 +12,7 @@ Datetime (DT)
 Translation (TR)
 - CV-TR-01: Non-English text MUST have English translation
 - CV-TR-02: Translation uses quote block on next line
+- CV-TR-03: Use native special characters for non-English languages, never ASCII substitutes
 
 Email (EM)
 - CV-EM-01: Email header format with all fields on one line
@@ -47,6 +48,7 @@ Links (LN)
 - [Datetime Format](#datetime-format)
 - [Reverse Chronological Order](#reverse-chronological-order)
 - [Translation Format](#translation-format)
+- [Native Characters](#native-characters)
 - [Email Header Format](#email-header-format)
 - [Email Sending](#email-sending)
 - [Draft Emails](#draft-emails)
@@ -120,6 +122,22 @@ Person: Here is the last invoice.
 ```
 **Person (11:49)**: Aqui vai a última fatura.
 > Here is the last invoice.
+```
+
+## Native Characters
+
+Non-English text must use native special characters. Never substitute with ASCII approximations.
+
+**BAD:**
+```
+**14:30 Contact**: Vielen Dank fuer die Rueckmeldung, wir koennen das Gespraech morgen fuehren.
+> Thanks for the response, we can have the conversation tomorrow.
+```
+
+**GOOD:**
+```
+**14:30 Contact**: Vielen Dank für die Rückmeldung, wir können das Gespräch morgen führen.
+> Thanks for the response, we can have the conversation tomorrow.
 ```
 
 ## Email Header Format
