@@ -1,4 +1,4 @@
-<DevSystem APAPALAN=false />
+<DevSystem APAPALAN=false/>
 
 # Minimal Explicit Consistent Terminology
 

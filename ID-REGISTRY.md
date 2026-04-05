@@ -143,6 +143,9 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 
 - **AMSW** - Auto Model SWitcher (Windsurf model switching automation)
 - **AXCEL** - Agent Excel Skill (Excel automation from Cascade agent)
+- **EDIGA** - Energie Digitalisierung A (digitalization in energy sector research)
+- **ENDIG** - Energie Digitalisierung (digitalization in energy sector research)
+- **ENDSY** - Energie Digital Synthese (consolidated INFO from EnergieDigitalA + B)
 - **GLOB** - Global/project-wide items
 - **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
 - **LLMTR** - LLM Transcription Skill (image-to-markdown, audio-to-markdown)
@@ -160,6 +163,9 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **WSTKTRAC** - Windsurf Token Logging (token usage tracking via hooks)
 
 ## Document History
+
+**[2026-04-04 12:22]**
+- Added: ENDIG topic description updated for EnergieDigitalB session
 
 **[2026-03-20 04:20]**
 - Added: MIPPS topic (Minimal IPPS - DevSystem compression pipeline)

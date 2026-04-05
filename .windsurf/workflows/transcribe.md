@@ -7,6 +7,10 @@ auto_execution_mode: 1
 
 Convert Portable Document Format (PDF) files and web pages to complete markdown files. **Nothing may be omitted.**
 
+**Goal**: Complete markdown transcription with 100% content preservation
+
+**Why**: Downstream analysis requires full text access without PDF rendering dependencies
+
 ## Required Skills
 
 - @pdf-tools for PDF to image conversion
@@ -15,13 +19,161 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 
 ## MUST-NOT-FORGET
 
+- GLOBAL-RULES apply to ALL transcription contexts
+- Content Rules (Special Characters, Page Boundaries, Figure Protocol) apply to ALL output
 - Ensure complete file is stitched together and file path is noted
-- Run `/verify` after transcription complete
 - Keep source images for verification
+- Run `/verify` after transcription complete
 
-## Step 1: Detect Transcription Mode
+## Prerequisites
 
-Check if advanced LLM transcription is available:
+- @pdf-tools available for PDF to JPG conversion
+- For TRANSCRIBE_SCRIPT: @llm-transcription skill + API keys file required
+- For TRANSCRIBE_PROMPT: No additional prerequisites
+
+## GLOBAL-RULES
+
+Apply to ALL contexts before any context-specific steps.
+
+1. **120 DPI** for PDF to JPG conversion - optimal balance of quality and processing speed
+2. **Write output immediately** after each chunk - do not wait until end
+3. **No omissions** - every piece of content must be transcribed
+4. **Keep source images** - required for `/verify`
+5. **All Content Rules apply** - Special Characters, Page Boundary Markers, Figure Transcription Protocol (see CONTENT RULES section)
+
+## Source Types
+
+- **Local PDF** - File path ends in `.pdf` → Convert to JPG, transcribe
+- **URL to PDF** - URL ends in `.pdf` → Download first, then process
+- **Web page** - URL to HTML → Screenshot, transcribe
+
+# CONTEXT-SPECIFIC
+
+Two dimensions determine the execution path:
+
+**Method** (detected in Step 1):
+- **TRANSCRIBE_SCRIPT** - `transcribe-image-to-markdown.py` with ensemble + judge + refinement. Requires @llm-transcription skill + API keys.
+- **TRANSCRIBE_PROMPT** - Built-in transcription prompt (see Appendix). Fallback when skill or keys unavailable.
+
+**Scope** (determined by input):
+- **TRANSCRIBE_SINGLE** - One PDF or web page
+- **TRANSCRIBE_MULTI** - Multiple independent PDFs
+
+## TRANSCRIBE_SCRIPT + TRANSCRIBE_SINGLE
+
+Script handles page parallelism internally via `--workers`.
+
+```powershell
+$venv = "../.tools/llm-venv/Scripts/python.exe"
+$skill = ".windsurf/skills/llm-transcription"
+
+# Single page transcription
+& $venv "$skill/transcribe-image-to-markdown.py" `
+    --input-file "../.tools/_pdf_to_jpg_converted/[NAME]/page_001.jpg" `
+    --output-file "[SESSION_FOLDER]/[DocName]_page001.md" `
+    --keys-file "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt" `
+    --model gpt-5-mini `
+    --workers 4
+
+# Batch mode (entire folder, multiple pages)
+& $venv "$skill/transcribe-image-to-markdown.py" `
+    --input-folder "../.tools/_pdf_to_jpg_converted/[NAME]/" `
+    --output-folder "[SESSION_FOLDER]/transcribed/" `
+    --keys-file "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt" `
+    --model gpt-5-mini `
+    --initial-candidates 1 `
+    --workers 12
+```
+
+After script completes, proceed to Step 5 (Stitch).
+
+## TRANSCRIBE_SCRIPT + TRANSCRIBE_MULTI
+
+Process multiple independent PDFs in parallel across Cascade terminals.
+
+**Limits**: Max 4 concurrent Cascade terminals. Each runs `--workers 30`.
+
+### Process
+
+1. Convert ALL PDFs to JPG first (single terminal, sequential - fast I/O-bound step)
+2. Count pages per PDF. Sort by page count descending.
+3. Launch first 4 PDFs in 4 terminals (`run_command`, `Blocking: false`, `WaitMsBeforeAsync: 2000`)
+4. Monitor with `command_status`. When a terminal finishes:
+   - Stitch that PDF's pages into final .md file (Step 5)
+   - If unprocessed PDFs remain, launch the next one in that terminal
+5. Repeat until all PDFs are transcribed and stitched
+
+### Rules
+
+- One PDF per terminal at a time (script handles page parallelism internally)
+- Start with the largest PDFs first so small ones fill gaps at the end
+- No aggregation scripts - each `run_command` processes exactly one PDF
+- Monitor and react: stitch immediately, then reuse freed terminal
+- All 4 initial `run_command` calls in one tool call block (parallel launch)
+
+## TRANSCRIBE_PROMPT + TRANSCRIBE_SINGLE
+
+Manual 4-page chunk process. **Maximum 4 pages per transcription call.**
+
+### Create Output File
+
+```markdown
+# [Document Title]
+
+<!-- TRANSCRIPTION PROGRESS
+Chunk: 1 of [total_chunks]
+Pages completed: 0 of [total]
+-->
+
+## Table of Contents
+[Generate after first pass or from PDF Table of Contents (TOC)]
+```
+
+### For Each Chunk (pages 1-4, 5-8, 9-12, etc.)
+
+1. Read up to 4 page images:
+```
+read_file(file_path: "[path]_page001.jpg")
+read_file(file_path: "[path]_page002.jpg")
+read_file(file_path: "[path]_page003.jpg")
+read_file(file_path: "[path]_page004.jpg")
+```
+
+2. Extract ALL content from these pages:
+   - Every heading, paragraph, list, footnote
+   - Every figure → See **Figure Transcription Protocol** in CONTENT RULES
+   - Every table → Markdown table
+   - Every caption, label, reference
+
+3. Append to output file IMMEDIATELY - do not wait until end
+
+4. Update progress marker:
+```markdown
+<!-- TRANSCRIPTION PROGRESS
+Chunk: 2 of 5
+Pages completed: 4 of 20
+-->
+```
+
+5. Continue with next chunk until all pages processed
+
+After all chunks complete, proceed to Step 5 (Stitch).
+
+## TRANSCRIBE_PROMPT + TRANSCRIBE_MULTI
+
+Process each PDF sequentially using the TRANSCRIBE_PROMPT + TRANSCRIBE_SINGLE process above. No terminal parallelism (agent transcribes inline).
+
+## No Context Match
+
+If method or scope is unclear, ask user:
+1. Is `transcribe-image-to-markdown.py` available with API keys?
+2. How many documents need transcription?
+
+# EXECUTION
+
+## Step 1: Detect Method and Scope
+
+### Method Detection
 
 ```powershell
 # Check for llm-transcription skill
@@ -31,29 +183,18 @@ $hasSkill = Test-Path $skillPath
 $hasKeys = Test-Path $keysFile
 
 if ($hasSkill -and $hasKeys) {
-    Write-Host "MODE: Advanced LLM Transcription (llm-transcription skill)"
+    Write-Host "METHOD: TRANSCRIBE_SCRIPT (llm-transcription skill)"
 } else {
-    Write-Host "MODE: Built-in Transcription (workflow prompt)"
+    Write-Host "METHOD: TRANSCRIBE_PROMPT (built-in)"
     if (-not $hasSkill) { Write-Host "  - Missing: $skillPath" }
     if (-not $hasKeys) { Write-Host "  - Missing: $keysFile" }
 }
 ```
 
-**Mode A: Advanced LLM Transcription** (if skill + keys available)
-- Use `transcribe-image-to-markdown.py` with ensemble + judge + refinement
+### Scope Detection
 
-**Mode B: Built-in Transcription** (fallback)
-- Use the built-in prompt in Step 5b below
-
-## Core Principle
-
-**Maximum 4 pages per transcription call.** Write output to file immediately after each chunk.
-
-## Source Types
-
-- **Local PDF** - File path ends in `.pdf` → Convert to JPG, transcribe
-- **URL to PDF** - URL ends in `.pdf` → Download first, then process
-- **Web page** - URL to HTML → Screenshot, transcribe
+- **TRANSCRIBE_SINGLE**: User provides one PDF or web page
+- **TRANSCRIBE_MULTI**: User provides multiple PDFs or a folder of PDFs
 
 ## Step 2: Prepare Source
 
@@ -90,82 +231,108 @@ $chunks = [math]::Ceiling($totalPages / 2)
 Write-Host "Total pages: $totalPages, Chunks needed: $chunks"
 ```
 
-## Step 4: Determine Output Strategy
+### Output Strategy
 
 - **1-20 pages** - Single markdown file
 - **21-50 pages** - Single file, write after each 4-page chunk
 - **51-100 pages** - Multiple section files + index, merge optional
 - **100+ pages** - Multiple chapter files + index
 
-## Step 5: Create Output File with Header
+## Step 4: Transcribe
 
-```markdown
-# [Document Title]
+Route to the matching section in CONTEXT-SPECIFIC based on detected method and scope.
 
-<!-- TRANSCRIPTION PROGRESS
-Chunk: 1 of [total_chunks]
-Pages completed: 0 of [total]
--->
+## Step 5: Stitch Transcribed Pages
 
-## Table of Contents
-[Generate after first pass or from PDF Table of Contents (TOC)]
-```
+After batch transcription completes, merge individual page files into single output.
 
-## Step 6: Transcribe in 4-Page Chunks
-
-For each chunk (pages 1-4, 5-8, 9-12, etc.):
-
-### 6a. Choose Transcription Method
-
-**Mode A: Advanced LLM Transcription** (if skill + keys detected in Step 1)
+For TRANSCRIBE_SCRIPT + TRANSCRIBE_MULTI, stitching happens during Step 4 (see context section).
 
 ```powershell
-$venv = "../.tools/llm-venv/Scripts/python.exe"
-$skill = ".windsurf/skills/llm-transcription"
-
-# Single file transcription
-& $venv "$skill/transcribe-image-to-markdown.py" `
-    --input-file "../.tools/_pdf_to_jpg_converted/[NAME]/page_001.jpg" `
-    --output-file "[SESSION_FOLDER]/[DocName]_page001.md" `
-    --keys-file "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt" `
-    --model gpt-5-mini `
-    --workers 4
-
-# Batch mode (entire folder)
-& $venv "$skill/transcribe-image-to-markdown.py" `
-    --input-folder "../.tools/_pdf_to_jpg_converted/[NAME]/" `
-    --output-folder "[SESSION_FOLDER]/transcribed/" `
-    --keys-file "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt" `
-    --model gpt-5-mini `
-    --initial-candidates 1 `
-    --workers 12
+$folder = "[OUTPUT_FOLDER]/02_transcribed_pages"
+$output = "[OUTPUT_FOLDER]/[DocName].md"  # No suffix like _COMPLETE
+$files = Get-ChildItem $folder -Filter "*.md" | Where-Object { $_.Name -notlike "_*" } | Sort-Object Name
+$content = @()
+$pageNum = 1
+foreach ($file in $files) {
+    # Page marker BEFORE content (first page gets marker too)
+    if ($pageNum -eq 1) {
+        $content += "<!-- Page {0:D3} -->`n`n" -f $pageNum
+    } else {
+        $content += "`n---`n<!-- Page {0:D3} -->`n`n" -f $pageNum
+    }
+    $content += (Get-Content $file.FullName -Raw).TrimEnd()
+    $pageNum++
+}
+$finalContent = ($content -join "").TrimEnd()
+$finalContent | Out-File $output -Encoding UTF8
+Write-Output "Merged $($files.Count) files to $output"
 ```
 
-**Mode B: Built-in Transcription** (fallback - no skill or keys)
+**Page marker format:**
+```markdown
+<!-- Page 001 -->
 
-Read images and use the built-in prompt below:
+[Page 1 content...]
 
+---
+<!-- Page 002 -->
+
+[Page 2 content...]
 ```
-read_file(file_path: "[path]_page001.jpg")
-read_file(file_path: "[path]_page002.jpg")
-read_file(file_path: "[path]_page003.jpg")
-read_file(file_path: "[path]_page004.jpg")
-```
 
-### 6b. Extract ALL content from these pages (Mode B)
-- Every heading, paragraph, list, footnote
-- Every figure → See **Figure Transcription Protocol** below
-- Every table → Markdown table
-- Every caption, label, reference
+**Filename convention:** Use original document name without suffixes:
+- Correct: `Enel-Integrated-Annual-Report-2023.md`
+- Wrong: `Enel-Integrated-Annual-Report-2023_COMPLETE.md`
 
-### Special Characters for Accurate Transcription
+## Step 6: Finalize
+
+1. Remove progress markers
+2. Generate/verify Table of Contents
+3. Log metadata to session NOTES.md (source, pages, figures, date) per core-conventions.md
+
+## Stuck Detection
+
+If 3 consecutive attempts fail on a page or chunk:
+1. Document in PROBLEMS.md with page number and error
+2. Mark page as `[TRANSCRIPTION FAILED: page N]` in output
+3. Ask user for guidance
+
+# FINALIZATION
+
+## Verification
+
+Run `/verify` to check:
+1. Compare page count
+2. Check all sections present
+3. Verify all figures have BOTH:
+   - ASCII art block (` ```ascii `)
+   - XML description block (`<transcription_notes>`)
+4. Verify page boundary markers:
+   - `<transcription_page_header>` after each `---` (if header exists in source)
+   - `<transcription_page_footer>` before each `---` (if footer exists in source)
+5. Cross-check text accuracy
+6. Validate XML tags are well-formed
+
+## Output
+
+- Converted images: `../.tools/_pdf_to_jpg_converted/[NAME]/` (default from convert-pdf-to-jpg.py, do NOT override)
+- Transcribed pages: `[SESSION_FOLDER]/02_transcribed_pages/`
+- Final merged output: `[SESSION_FOLDER]/[DocName].md`
+- Web screenshots: `../.tools/_web_screenshots/[DOMAIN]/`
+
+# CONTENT RULES
+
+Apply to ALL transcription output regardless of method or scope.
+
+## Special Characters for Accurate Transcription
 
 - **Superscripts/subscripts**: Use Unicode (¹ ² ³, ₁ ₂ ₃) not ASCII (^1 ^2 ^3)
 - **Greek letters**: Use actual Unicode characters (α β γ)
 - **Math formulas**: Use LaTeX syntax (`$E = mc^2$`) not Unicode operators
 - **Symbols**: Use proper Unicode (© ® ™ § † ‡ °)
 
-### Page Boundary Markers
+## Page Boundary Markers
 
 Preserve exact page structure with headers and footers from original document.
 
@@ -351,73 +518,7 @@ Legend: === main flow  --- log output  [gear] = processing icon
 
 **Why wrapper tag?** Enables hybrid comparison: Levenshtein for text, LLM-as-a-judge for graphics.
 
-### 6c. Append to output file IMMEDIATELY
-Do not wait until end. Write after each chunk.
-
-### 6d. Update progress marker
-```markdown
-<!-- TRANSCRIPTION PROGRESS
-Chunk: 2 of 5
-Pages completed: 4 of 20
--->
-```
-
-### 6e. Continue with next chunk
-Repeat until all pages processed.
-
-## Step 7: Stitch Transcribed Pages
-
-After batch transcription completes, merge individual page files into single output:
-
-```powershell
-$folder = "[OUTPUT_FOLDER]/02_transcribed_pages"
-$output = "[OUTPUT_FOLDER]/[DocName].md"  # No suffix like _COMPLETE
-$files = Get-ChildItem $folder -Filter "*.md" | Where-Object { $_.Name -notlike "_*" } | Sort-Object Name
-$content = @()
-$pageNum = 1
-foreach ($file in $files) {
-    # Page marker BEFORE content (first page gets marker too)
-    if ($pageNum -eq 1) {
-        $content += "<!-- Page {0:D3} -->`n`n" -f $pageNum
-    } else {
-        $content += "`n---`n<!-- Page {0:D3} -->`n`n" -f $pageNum
-    }
-    $content += (Get-Content $file.FullName -Raw).TrimEnd()
-    $pageNum++
-}
-$finalContent = ($content -join "").TrimEnd()
-$finalContent | Out-File $output -Encoding UTF8
-Write-Output "Merged $($files.Count) files to $output"
-```
-
-**Page marker format:**
-```markdown
-<!-- Page 001 -->
-
-[Page 1 content...]
-
----
-<!-- Page 002 -->
-
-[Page 2 content...]
-```
-
-**Filename convention:** Use original document name without suffixes:
-- Correct: `Enel-Integrated-Annual-Report-2023.md`
-- Wrong: `Enel-Integrated-Annual-Report-2023_COMPLETE.md`
-
-## Step 8: Finalize
-
-1. Remove progress markers
-2. Generate/verify Table of Contents
-3. Log metadata to session NOTES.md (source, pages, figures, date) per core-conventions.md
-
-## Output Locations
-
-- Converted images: `../.tools/_pdf_to_jpg_converted/[NAME]/` (default from convert-pdf-to-jpg.py, do NOT override)
-- Transcribed pages: `[SESSION_FOLDER]/02_transcribed_pages/`
-- Final merged output: `[SESSION_FOLDER]/[DocName].md`
-- Web screenshots: `../.tools/_web_screenshots/[DOMAIN]/`
+# REFERENCE
 
 ## Long Document Strategy (50+ pages)
 
@@ -443,32 +544,20 @@ Index file format:
 ...
 ```
 
-## Verification
-
-After transcription, run `/verify` to:
-1. Compare page count
-2. Check all sections present
-3. Verify all figures have BOTH:
-   - ASCII art block (` ```ascii `)
-   - XML description block (`<transcription_notes>`)
-4. Verify page boundary markers:
-   - `<transcription_page_header>` after each `---` (if header exists in source)
-   - `<transcription_page_footer>` before each `---` (if footer exists in source)
-5. Cross-check text accuracy
-6. Validate XML tags are well-formed
-
 ## Best Practices
 
-1. **4 pages max per call** - Prevents context overflow and ensures quality
+1. **4 pages max per call** - Prevents context overflow and ensures quality (TRANSCRIBE_PROMPT)
 2. **Write immediately** - Append to file after each chunk
-3. **Track progress** - Use progress markers for resumability
+3. **Track progress** - Use progress markers for resumability (TRANSCRIBE_PROMPT)
 4. **120 DPI for PDFs** - Optimal balance of quality and processing speed for transcription
 5. **Keep source images** - Required for `/verify`
 6. **No omissions** - Every piece of content must be transcribed
 7. **ASCII + XML for figures** - Every figure requires both ASCII art and `<transcription_notes>` XML block
 8. **Page boundaries** - Preserve headers/footers with `<transcription_page_header>` and `<transcription_page_footer>` tags
 
-## Appendix: Built-in Transcription Prompt (Mode B)
+# APPENDIX
+
+## Built-in Transcription Prompt (TRANSCRIBE_PROMPT)
 
 Use this prompt when llm-transcription skill is not available:
 
