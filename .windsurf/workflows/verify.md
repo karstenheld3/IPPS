@@ -69,6 +69,11 @@ Apply to ALL document types and contexts:
   - Emojis found? → Replace with text equivalents (Yes/No/Warning)
   - Exception: README.md may use emojis without `<DevSystem>` tag
   - Only [ACTOR] may add `<DevSystem EmojisAllowed=true />` exception to other files
+- **Labels decodable at point of use (AP-PR-11)** - Scan for bracket labels with 1-2 characters:
+  - Exempt: `[x]`/`[ ]` checkboxes, `[N]` retry counts
+  - Exempt: Established system labels: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`
+  - Short label found? Check: Is a legend visible at every usage point (no scrolling)? If yes: pass. If no: replace with full word or add legend.
+  - For labels 3+ characters: apply Reconstruction Test - can the full term be recovered from the short form? If not, flag as opaque abbreviation
 
 ## Conceptual verification
 

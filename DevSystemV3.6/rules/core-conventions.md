@@ -19,6 +19,7 @@ Universal formatting and writing conventions for all documents.
 - Never use `▼` (U+25BC); use `v` instead
 - Try to fit single statements/decisions/objects on a single line
 - Format workflow references as inline code: `/verify`, `/go`, `/recap`
+- Inline enumerations use `N)` format, not `(N)`: `1) first, 2) second, 3) third`
 
 ## Encoding
 

@@ -61,7 +61,7 @@ Two dimensions determine the execution path:
 
 ## TRANSCRIBE_SCRIPT + TRANSCRIBE_SINGLE
 
-Script handles page parallelism internally via `--workers`.
+Prepare source first (see Source Preparation Reference), then run script. Script handles page parallelism internally via `--workers`.
 
 ```powershell
 $venv = "../.tools/llm-venv/Scripts/python.exe"
@@ -85,7 +85,7 @@ $skill = ".windsurf/skills/llm-transcription"
     --workers 12
 ```
 
-After script completes, proceed to Step 5 (Stitch).
+After script completes, proceed to Step 3 (Stitch).
 
 ## TRANSCRIBE_SCRIPT + TRANSCRIBE_MULTI
 
@@ -99,7 +99,7 @@ Process multiple independent PDFs in parallel across Cascade terminals.
 2. Count pages per PDF. Sort by page count descending.
 3. Launch first 4 PDFs in 4 terminals (`run_command`, `Blocking: false`, `WaitMsBeforeAsync: 2000`)
 4. Monitor with `command_status`. When a terminal finishes:
-   - Stitch that PDF's pages into final .md file (Step 5)
+   - Stitch that PDF's pages into final .md file (Step 3)
    - If unprocessed PDFs remain, launch the next one in that terminal
 5. Repeat until all PDFs are transcribed and stitched
 
@@ -113,7 +113,7 @@ Process multiple independent PDFs in parallel across Cascade terminals.
 
 ## TRANSCRIBE_PROMPT + TRANSCRIBE_SINGLE
 
-Manual 4-page chunk process. **Maximum 4 pages per transcription call.**
+Prepare source first (see Source Preparation Reference), then process in 4-page chunks. **Maximum 4 pages per transcription call.**
 
 ### Create Output File
 
@@ -157,7 +157,7 @@ Pages completed: 4 of 20
 
 5. Continue with next chunk until all pages processed
 
-After all chunks complete, proceed to Step 5 (Stitch).
+After all chunks complete, proceed to Step 3 (Stitch).
 
 ## TRANSCRIBE_PROMPT + TRANSCRIBE_MULTI
 
@@ -196,57 +196,23 @@ if ($hasSkill -and $hasKeys) {
 - **TRANSCRIBE_SINGLE**: User provides one PDF or web page
 - **TRANSCRIBE_MULTI**: User provides multiple PDFs or a folder of PDFs
 
-## Step 2: Prepare Source
+## Step 2: Route to Context-Specific Process
 
-### For Local PDF
-```powershell
-python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "path/to/document.pdf" --dpi 120  # 120 DPI - optimal for transcription
-```
+**STOP - Do NOT prepare sources or convert PDFs here.** Each context-specific section handles its own preparation, conversion, counting, and transcription.
 
-### For URL to PDF
-```powershell
-$url = "https://example.com/document.pdf"
-$filename = [System.IO.Path]::GetFileName($url)
-# Download to: [SESSION_FOLDER] > [WORKSPACE_FOLDER]
-Invoke-WebRequest -Uri $url -OutFile "[SESSION_FOLDER]/$filename"
-# Then convert to JPG
-python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "[SESSION_FOLDER]/$filename" --dpi 120
-```
+Based on method and scope detected in Step 1, jump to:
+- **TRANSCRIBE_SCRIPT + TRANSCRIBE_SINGLE** - Single PDF, script handles page parallelism
+- **TRANSCRIBE_SCRIPT + TRANSCRIBE_MULTI** - Multiple PDFs, 4 parallel terminals
+- **TRANSCRIBE_PROMPT + TRANSCRIBE_SINGLE** - Single PDF, manual 4-page chunks
+- **TRANSCRIBE_PROMPT + TRANSCRIBE_MULTI** - Multiple PDFs, sequential inline
 
-### For Web Page
-```
-mcp0_browser_navigate(url: "https://example.com/page")
-mcp0_browser_evaluate(function: "window.scrollTo(0, document.body.scrollHeight)")
-mcp0_browser_wait_for(time: 2)
-mcp0_browser_evaluate(function: "window.scrollTo(0, 0)")
-mcp0_browser_take_screenshot(fullPage: true, filename: "../.tools/_web_screenshots/[domain]/page-001.png")
-```
+After the context-specific process completes, return here and continue with Step 3 (Stitch).
 
-## Step 3: Count and Plan
-
-```powershell
-$images = Get-ChildItem "../.tools/_pdf_to_jpg_converted/[NAME]/" -Filter "*.jpg"
-$totalPages = $images.Count
-$chunks = [math]::Ceiling($totalPages / 2)
-Write-Host "Total pages: $totalPages, Chunks needed: $chunks"
-```
-
-### Output Strategy
-
-- **1-20 pages** - Single markdown file
-- **21-50 pages** - Single file, write after each 4-page chunk
-- **51-100 pages** - Multiple section files + index, merge optional
-- **100+ pages** - Multiple chapter files + index
-
-## Step 4: Transcribe
-
-Route to the matching section in CONTEXT-SPECIFIC based on detected method and scope.
-
-## Step 5: Stitch Transcribed Pages
+## Step 3: Stitch Transcribed Pages
 
 After batch transcription completes, merge individual page files into single output.
 
-For TRANSCRIBE_SCRIPT + TRANSCRIBE_MULTI, stitching happens during Step 4 (see context section).
+For TRANSCRIBE_SCRIPT + TRANSCRIBE_MULTI, stitching happens inline during the context-specific process.
 
 ```powershell
 $folder = "[OUTPUT_FOLDER]/02_transcribed_pages"
@@ -285,7 +251,7 @@ Write-Output "Merged $($files.Count) files to $output"
 - Correct: `Enel-Integrated-Annual-Report-2023.md`
 - Wrong: `Enel-Integrated-Annual-Report-2023_COMPLETE.md`
 
-## Step 6: Finalize
+## Step 4: Finalize
 
 1. Remove progress markers
 2. Generate/verify Table of Contents
@@ -519,6 +485,50 @@ Legend: === main flow  --- log output  [gear] = processing icon
 **Why wrapper tag?** Enables hybrid comparison: Levenshtein for text, LLM-as-a-judge for graphics.
 
 # REFERENCE
+
+## Source Preparation Reference
+
+Conversion and download commands used by context-specific sections.
+
+### For Local PDF
+```powershell
+python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "path/to/document.pdf" --dpi 120  # 120 DPI - optimal for transcription
+```
+
+### For URL to PDF
+```powershell
+$url = "https://example.com/document.pdf"
+$filename = [System.IO.Path]::GetFileName($url)
+# Download to: [SESSION_FOLDER] > [WORKSPACE_FOLDER]
+Invoke-WebRequest -Uri $url -OutFile "[SESSION_FOLDER]/$filename"
+# Then convert to JPG
+python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "[SESSION_FOLDER]/$filename" --dpi 120
+```
+
+### For Web Page
+```
+mcp0_browser_navigate(url: "https://example.com/page")
+mcp0_browser_evaluate(function: "window.scrollTo(0, document.body.scrollHeight)")
+mcp0_browser_wait_for(time: 2)
+mcp0_browser_evaluate(function: "window.scrollTo(0, 0)")
+mcp0_browser_take_screenshot(fullPage: true, filename: "../.tools/_web_screenshots/[domain]/page-001.png")
+```
+
+### Count and Plan
+
+```powershell
+$images = Get-ChildItem "../.tools/_pdf_to_jpg_converted/[NAME]/" -Filter "*.jpg"
+$totalPages = $images.Count
+$chunks = [math]::Ceiling($totalPages / 2)
+Write-Host "Total pages: $totalPages, Chunks needed: $chunks"
+```
+
+### Output Strategy (page count)
+
+- **1-20 pages** - Single markdown file
+- **21-50 pages** - Single file, write after each 4-page chunk
+- **51-100 pages** - Multiple section files + index, merge optional
+- **100+ pages** - Multiple chapter files + index
 
 ## Long Document Strategy (50+ pages)
 
