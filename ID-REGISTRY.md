@@ -153,6 +153,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **MCPS** - MCP server integrations
 - **MECE** - Mutually Exclusive, Collectively Exhaustive (grouping/decomposition quality principle)
 - **MECT** - Minimal Explicit Consistent Terminology (communication design principle)
+- **MINTO** - Minto Pyramid Principle (communication framework research and reference)
 - **MIPPS** - Minimal IPPS (DevSystem compression pipeline)
 - **PLWR** - Playwriter MCP (Chrome extension browser automation)
 - **OCLAW** - OpenClaw exploration (remote agent interaction via WhatsApp/Cascade)

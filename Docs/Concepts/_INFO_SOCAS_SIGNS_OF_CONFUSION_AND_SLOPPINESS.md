@@ -6,7 +6,7 @@
 
 ## Summary
 
-SOCAS is a quality evaluation heuristic with 12 criteria for detecting degradation in:
+SOCAS is a quality evaluation heuristic with 14 criteria for detecting degradation in:
 - Agent outputs (research, code, specifications)
 - Human documents (specs, plans, communications)
 - Organizational outputs (websites, policies, processes)
@@ -16,7 +16,7 @@ Use during `/verify`, `/critique`, and `/research` workflows.
 ## Table of Contents
 
 1. [Purpose](#1-purpose)
-2. [The 12 SOCAS Criteria](#2-the-12-socas-criteria)
+2. [The 14 SOCAS Criteria](#2-the-14-socas-criteria)
 3. [Application Contexts](#3-application-contexts)
 4. [Sources](#4-sources)
 5. [Next Steps](#5-next-steps)
@@ -32,7 +32,7 @@ SOCAS detects early warning signs that indicate:
 
 When multiple SOCAS criteria are present, the output likely needs rework or the source is unreliable.
 
-## 2. The 12 SOCAS Criteria
+## 2. The 14 SOCAS Criteria
 
 ### SOCAS-01: Inconsistencies
 
@@ -57,6 +57,7 @@ Redundancy with deviation indicates poor design:
 - Concept overlap without clear boundaries
 - Responsibilities split inconsistently
 - Duplicate mechanisms with slight variations
+- Items in same grouping at wildly different levels of detail ("Revenue trends" next to "Johnson account")
 
 ### SOCAS-04: Undisclosed Contact Information
 
@@ -114,6 +115,7 @@ Logical inconsistencies:
 - Missing steps in explanations
 - Assumptions presented as facts
 - No explicit tradeoffs or alternatives discussed
+- Selection not justified ("Three problems..." - why these three and no others?)
 
 ### SOCAS-11: Unnecessary Complexity
 
@@ -130,6 +132,21 @@ Surface-level quality issues:
 - Stale or broken references
 - Inconsistent formatting
 - Outdated information mixed with current
+
+### SOCAS-13: Empty Structure
+
+Structure present but hollow - author organized without synthesizing:
+- Headings label categories instead of stating ideas ("Background", "Analysis", "Results")
+- Main point buried at end or absent entirely
+- Section summaries describe what the section covers, not what was found
+- No stated purpose - reader cannot tell why the document exists
+
+### SOCAS-14: Arbitrary Sequencing
+
+Items dumped without analyzing relationships:
+- Items in lists appear in no discernible order
+- No logical, chronological, structural, or importance-based sequence
+- Reader cannot determine why item 2 follows item 1
 
 ## 3. Application Contexts
 
@@ -179,6 +196,7 @@ Apply when evaluating user interfaces:
 
 - `SOCAS-IN01-SC-IPPS-NOTES`: `_Sessions/_Archive/_2026-01-17_STRUT-TRACTFUL-TDID/NOTES.md` - Original 10 criteria [VERIFIED]
 - `SOCAS-IN01-SC-IPPS-README`: `README.md` - SOCAS acronym definition [VERIFIED]
+- `SOCAS-IN01-SC-MINTO-RULES`: `_INFO_MINTO_CORE_RULES.md [MINTO-IN15]` - Minto Core Rules: VL-01, VL-02, VL-03, OR-05, OR-06, MC-06, DG-04 [VERIFIED]
 
 ## 5. Next Steps
 
@@ -187,6 +205,12 @@ Apply when evaluating user interfaces:
 3. Create SOCAS scoring rubric (0-3 per criterion)
 
 ## 6. Document History
+
+**[2026-04-12 20:17]**
+- Added: SOCAS-13 (Empty Structure) and SOCAS-14 (Arbitrary Sequencing) from Minto Core Rules analysis
+- Changed: SOCAS-03 enriched with granularity mismatch indicator (from MNT-VL-02, MNT-MC-06)
+- Changed: SOCAS-10 enriched with unjustified selection indicator (from MNT-DG-04)
+- Added: Minto Core Rules source reference
 
 **[2026-03-06 11:48]**
 - Added: UX Design Review section with 8 criteria
