@@ -143,6 +143,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 
 - **AMSW** - Auto Model SWitcher (Windsurf model switching automation)
 - **AXCEL** - Agent Excel Skill (Excel automation from Cascade agent)
+- **DOCWRITEFW** - Document Writing Frameworks (analytical/communication frameworks for IPPS document quality)
 - **EDIGA** - Energie Digitalisierung A (digitalization in energy sector research)
 - **ENDIG** - Energie Digitalisierung (digitalization in energy sector research)
 - **ENDSY** - Energie Digital Synthese (consolidated INFO from EnergieDigitalA + B)
@@ -150,12 +151,14 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
 - **LLMTR** - LLM Transcription Skill (image-to-markdown, audio-to-markdown)
 - **MCPS** - MCP server integrations
+- **MECE** - Mutually Exclusive, Collectively Exhaustive (grouping/decomposition quality principle)
 - **MECT** - Minimal Explicit Consistent Terminology (communication design principle)
 - **MIPPS** - Minimal IPPS (DevSystem compression pipeline)
 - **PLWR** - Playwriter MCP (Chrome extension browser automation)
 - **OCLAW** - OpenClaw exploration (remote agent interaction via WhatsApp/Cascade)
 - **MEPI** - MEPI/MCPI research depth principle
 - **SDDEV** - Spec-Driven Development (research topic)
+- **SUMQR** - Summary Quality Rules (improving enforcement and quality of summaries)
 - **TRNGFX** - Transcription graphics/ASCII art optimization
 - **LMWS** - LM Studio + Windsurf integration research
 - **TOOLS** - .tools folder relocation and path updates
@@ -163,6 +166,13 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **WSTKTRAC** - Windsurf Token Logging (token usage tracking via hooks)
 
 ## Document History
+
+**[2026-04-12 15:57]**
+- Added: DOCWRITEFW topic (Document Writing Frameworks)
+
+**[2026-04-12 15:35]**
+- Added: MECE topic (Mutually Exclusive, Collectively Exhaustive)
+- Added: SUMQR topic (Summary Quality Rules)
 
 **[2026-04-04 12:22]**
 - Added: ENDIG topic description updated for EnergieDigitalB session
