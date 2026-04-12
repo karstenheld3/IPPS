@@ -21,6 +21,7 @@ Precision (PR) - Priority 1
 - AP-PR-08: Every non-obvious rule or format needs examples
 - AP-PR-09: Consistent patterns (repeat established structures)
 - AP-PR-10: Never abbreviate keys and references (use single quotes for literals)
+- AP-PR-11: Labels decodable at point of use (full word, legend, or mnemonic)
 
 Brevity (BR) - Priority 2
 - AP-BR-01: Single line for single statements
@@ -287,6 +288,7 @@ Repeat established structures. Do not invent new forms for similar content.
 **BAD/GOOD:**
 - List markers: `- * +` mixed → `- - -` one form
 - Headings: `## 1.` `## Design` `## IV.` → `## 1.` `## 2.` `## 3.`
+- Inline enumerations: `(1) first, (2) second` → `1) first, 2) second`
 - Properties: `Key:` `**Key** -` `Key =` → `Key:` throughout
 - Functions: `get_` `fetch_` `load_` (same purpose) → `get_` everywhere
 
@@ -320,6 +322,43 @@ See 'config/auth.yaml' for details.
 ```
 
 **Exception:** Code blocks and monospace formatting (`backticks`) already signal literal values - single quotes are not needed inside code blocks.
+
+### AP-PR-11: Labels Decodable at Point of Use
+
+Every label, marker, and status indicator must be decodable where it appears - without scrolling to a definition elsewhere in the document.
+
+**Strategies (pick one per label set):**
+- **Full word** - `[SUPPORTED]`, `[ASSUMED]`, `(PASS)`. Always works.
+- **Legend** - Define all short labels in a legend visible at every usage point (no scrolling). Short labels permitted under legend.
+- **Mnemonic** - Designed short form where the full term is recoverable: `CMDTY` → Commodity. No legend needed.
+
+**BAD** (opaque, no legend, no mnemonic):
+```
+1. [S] Team has React experience
+2. [C] Dashboard is read-heavy
+```
+
+**GOOD** (full word):
+```
+1. [SUPPORTED] Team has React experience
+2. [CAVEATED] Dashboard is read-heavy
+```
+
+**GOOD** (legend in sight):
+```
+S=Supported | C=Caveated | U=Unsupported
+1. [S] Team has React experience - confirmed
+2. [C] Dashboard is read-heavy - Q3 will shift
+```
+
+**Legend limit:** If content under one legend exceeds ~20 items or spans multiple screens, switch to full words. A legend the reader cannot see is not a legend.
+
+**Reconstruction Test** (for mnemonics): Can the reader recover the full term from the short form alone? `CMDTY` → yes. `[S]` → no.
+
+**Does NOT apply to:**
+- Established system labels: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`
+- Plan node IDs: `P1-S1`, `P2-D1` (positional, not classification)
+- Checkbox states: `[x]`, `[ ]`, `[N]` (STRUT system)
 
 ## Brevity Rules (BR)
 

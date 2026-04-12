@@ -30,6 +30,7 @@ Word Choice (WC)
 - MW-WC-04: No product-as-term collision - avoid domain-common words as names
 - MW-WC-05: No terminological synonymy - one concept = one name, no phantom entities
 - MW-WC-06: No inverted semantics - name direction must match value direction
+- MW-WC-07: No premature label compression - short labels require legend in sight, mnemonic, or establishment
 
 Terminology Design (TD)
 - MW-TD-01: Naming structure method (explicit -> specifiers -> states -> mnemonics)
@@ -286,6 +287,41 @@ target_reduction_percent: 60
 
 **Test:** Read the name and value aloud as a sentence. "Target compression is 40 percent" - does this match the actual behavior? If not, rename until the sentence matches reality.
 
+### MW-WC-07: No Premature Label Compression
+
+Short labels are permitted only when the reader can decode them at point of use without scrolling. Three mechanisms satisfy this (see AP-PR-11 for enforcement):
+
+1. **Full word** - Always safe: `[SUPPORTED]`, `[ASSUMED]`, `(PASS)`
+2. **Legend in sight** - Short labels with visible legend (no scrolling from any usage point)
+3. **Mnemonic** - Designed short form passing the Reconstruction Test: `CMDTY` → Commodity
+
+**Why:** "Minimal" targets term proliferation, not character count. Compressing "Supported" to "S" does not reduce terminology - it introduces an opaque symbol. But if a legend resolves the symbol within visual proximity, the reader pays zero lookup cost. The principle is decodability at point of use, not full words everywhere.
+
+**Mnemonics vs Abbreviations:**
+- Mnemonic: designed compression, full term recoverable (`CMDTY`, `grep`, `APSD`)
+- Abbreviation: arbitrary compression, full term NOT recoverable (`[S]`, `P=1`, `SC`)
+
+**The Bloomberg pattern:** Short labels work in convergent systems (Bloomberg's `OMON`, `FXR`) because daily repetition + instant lookup. Documents lack both. A legend provides the "instant lookup" equivalent for documents.
+
+**BAD** (no legend, no mnemonic):
+```
+1. [S] Database handles our query patterns
+2. [C] Write volume stays within limits
+```
+
+**GOOD** (legend in sight):
+```
+S=Supported | C=Caveated | U=Unsupported
+1. [S] Database handles our query patterns
+2. [C] Write volume stays within limits - peaks may exceed
+```
+
+**GOOD** (full word, no legend needed):
+```
+1. [SUPPORTED] Database handles our query patterns
+2. [CAVEATED] Write volume stays within limits - peaks may exceed
+```
+
 ## Terminology Design Rules (TD)
 
 ### MW-TD-01: Naming Structure Method
@@ -297,6 +333,7 @@ Build terminology by progressive qualification. Start explicit, add specifiers, 
 2. **Add specifiers BEFORE the name**: "Planned Project Start Date", "Actual Project Start Date"
 3. **Add states AFTER the name**: "Planned Project Start Date Accepted"
 4. **Define short/long mnemonics**: external `ACTUAL_PROJECT_START_DATE` (`APSD`), internal `start_date` (`sd`)
+   - **WARNING**: Step 4 requires DESIGNED short forms where the full term is recoverable. First-letter extraction (`S` for Supported) is abbreviation, not mnemonic design. If the short form fails the Reconstruction Test (see MW-WC-07), stay at step 1 and use the explicit name.
 5. **Document naming and spelling rules** per domain
 
 **BAD:**

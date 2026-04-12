@@ -56,6 +56,8 @@ Precision before brevity is not a suggestion - it's a strict ordering. When the 
 
 Brevity only applies AFTER precision is satisfied. Then you cut aggressively: drop articles, filler words, verbose constructions. "The system should automatically process the incoming files on a regular basis" becomes "Auto-process incoming files on schedule." Same precision, half the words.
 
+The distinction between mnemonics and abbreviations clarifies the boundary. A mnemonic (`CMDTY` for Commodity) is designed compression where the short form evokes the full term - it passes the reconstruction test (see `_INFO_MECT_PHILOSOPHY.md [MECT-IN01]` section 3.2). An abbreviation (`P=1` for Precision=1.00, `[S]` for Supported) is arbitrary compression where the short form is opaque - the reader must look up the meaning. Mnemonics serve precision (the short form teaches). Abbreviations sacrifice precision for brevity (the short form hides). APAPALAN permits mnemonics after establishment. APAPALAN prohibits abbreviations that fail the reconstruction test.
+
 ## 2. Why This Matters
 
 ### 2.1 The Mental Model Chain
@@ -153,6 +155,20 @@ P=1, F1=1, R=0.95
 - Reader asks: "What is P? Precision? Probability? Priority? Is F1 the F1-Score or Field 1?"
 - Wrong assumption: Reader guesses wrong meaning. Reports wrong metric to stakeholder.
 
+**FAIL: Premature label compression**
+```
+Categories: Supported (S), Caveated (C), Unsupported (U)
+
+## Assumption Status
+1. [S] Team has React experience
+2. [C] Dashboard is read-heavy
+3. [U] Bundle size is primary bottleneck
+```
+- Reader asks: "What is [S]? What is [C]? I see [ASSUMED] and [VERIFIED] elsewhere - are [S] and [C] part of the same system or something different?"
+- Wrong assumption: Reader confuses author-invented shorthand with established labels. The "Categories" line is a definition, not a legend visible at every usage point - once the list grows, it scrolls off screen.
+- Fix: Use full words (`[SUPPORTED]`, `[CAVEATED]`, `[UNSUPPORTED]`), OR add a compact legend (`S=Supported | C=Caveated | U=Unsupported`) visible at every usage point without scrolling. See AP-PR-11.
+- Note: `CMDTY` for "Commodity" would NOT be a fail - it is a designed mnemonic where the full term is phonetically recoverable (Reconstruction Test: pass). `[S]` for "Supported" fails the Reconstruction Test.
+
 **FAIL: Over-compressed instructions**
 ```
 Fix auth, deploy, notify.
@@ -232,7 +248,7 @@ APAPALAN rules are organized in three categories matching the priority order.
 
 ### 4.1 Precision (PR): Making Every Statement Unambiguous
 
-9 rules ensuring every piece of writing can be understood without guessing.
+10 rules ensuring every piece of writing can be understood without guessing.
 
 - **AP-PR-01**: Standardized datetime format - `YYYY-MM-DD HH:MM` everywhere
 - **AP-PR-02**: Standardized attribute/property format - context-specific but consistent within context
@@ -243,6 +259,7 @@ APAPALAN rules are organized in three categories matching the priority order.
 - **AP-PR-07**: Be specific - no generic or abstract writing; concrete, verifiable statements
 - **AP-PR-08**: Every non-obvious rule needs examples - BAD/GOOD pairs for format rules and conventions
 - **AP-PR-09**: Consistent patterns - repeat established structures; style deviation = false signal
+- **AP-PR-11**: Labels decodable at point of use - full word, legend in sight, or mnemonic (Reconstruction Test)
 
 The referenceability chain (AP-PR-05 -> AP-PR-04) deserves emphasis: you cannot build a useful reference system unless the referenced information has IDs in the first place. Create IDs first, then reference.
 
@@ -291,6 +308,12 @@ The DRY tension (AP-BR-03 vs AP-ST-04) is intentional: within your own document,
 - `APAPALAN-IN01-SC-LOG-RULES`: `LOGGING-RULES.md` in DevSystemV3.6/skills/coding-conventions/ - Logging rules implementing APAPALAN for output [VERIFIED]
 
 ## 6. Document History
+
+**[2026-04-12 14:50]**
+- Added: Mnemonic vs abbreviation distinction in section 1.3 (reconstruction test boundary)
+- Added: "FAIL: Premature label compression" in section 3.2 (Brevity Fails)
+- Added: AP-PR-11 (Labels decodable at point of use) to section 4.1 rule list
+- Changed: PR rule count 9 -> 10
 
 **[2026-03-19 21:14]**
 - Moved: AP-PR-09 (Pipe-delimited) -> AP-BR-06 (brevity rule, not precision)

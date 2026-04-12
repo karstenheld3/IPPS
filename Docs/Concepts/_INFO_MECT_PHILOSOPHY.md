@@ -121,6 +121,7 @@ Use minimal explicit consistent terminology within a defined field of interactio
 - Stable over time and across contexts
 - Efficiency in understanding > technical correctness
 - "If it's horsepower, then it's horsepower"
+- **Fewer TERMS, not fewer CHARACTERS**: "Minimal" targets term proliferation (multiple names for one concept). It does NOT mean "use fewest characters." Compressing "Supported" to "S" does not reduce terminology - it introduces a new opaque symbol that must be decoded. Minimal is satisfied when one concept has one name; the name's length is irrelevant
 
 **Explicit**
 - No reliance on implicit knowledge ("Humans are born with zero implicit knowledge")
@@ -128,6 +129,7 @@ Use minimal explicit consistent terminology within a defined field of interactio
 - Words that evoke correct association fields: "button" beats "actiontrigger" or "on-off-provider" because everyone knows what a button is
 - Choose words from daily life, not obscure technical jargon
 - Build on shared experiences and common knowledge
+- **Premature compression trap**: Authors define a term then immediately abbreviate it, treating the definition as license to compress. But "Explicit" means decodable at EVERY point of use, not just at the point of definition. Short labels are acceptable when a legend is visible without scrolling (the legend makes them explicit). Without a legend, use the full word. The principle is decodability at point of use, not full words everywhere. Same economics as terminology debt (section 1.2): cheap to prevent, expensive to decode later
 
 **Consistent**
 - Same terminology everywhere within field
@@ -214,6 +216,23 @@ Workflows
 3. **Add states/conditions AFTER the name** - "Project Start Date Status", "Planned Project Start Date Accepted"
 4. **Define short/long mnemonics** - external: `ACTUAL_PROJECT_START_DATE`, `APSD`; internal: `START_DATE`, `SD`
 5. **Document naming and spelling rules** per domain coding style
+
+**Mnemonics vs Abbreviations - step 4 requires DESIGNED compression:**
+
+A mnemonic is designed compression that encodes the concept. The short form evokes the full form through phonetic similarity, structural mapping, or domain convention:
+- `CMDTY` → Commodity (phonetic: "commodity" is audible in "CMDTY")
+- `OMON` → Option Monitor (structural: first letters of each word)
+- `APAPALAN` → As Precise As Possible, As Little As Necessary (structural)
+- `grep` → Global Regular Expression Print (structural, became a verb)
+
+An abbreviation is arbitrary compression that removes information. The short form does NOT evoke the full form. The reader must memorize or look up every occurrence:
+- `[S]` → Supported? Stable? Strong? Skipped? (opaque)
+- `P=1` → Precision? Probability? Priority? (opaque)
+- `SC` → Source? Scanner? Security? (opaque)
+
+**Test (Reconstruction Test)**: Can someone unfamiliar with this document reconstruct the full term from the short form alone? If yes: mnemonic. If no: abbreviation.
+
+Step 4 produces mnemonics, not abbreviations. If the short form fails the reconstruction test, it is not a mnemonic - it is an abbreviation disguised as one. Go back to step 1 and design a better short form, or use the full term.
 
 ### 3.3 Description Types
 
@@ -544,6 +563,11 @@ Every word is from daily life. No interpretation needed. The question format mak
 - `MECT-IN01-SC-FOWLR-BCTX`: Martin Fowler on Bounded Context and polysemes
 
 ## 7. Document History
+
+**[2026-04-12 14:50]**
+- Added: "Fewer TERMS, not fewer CHARACTERS" to Minimal property (2.2)
+- Added: "Premature compression trap" to Explicit property (2.2)
+- Added: "Mnemonics vs Abbreviations" distinction to Naming Structure Method (3.2) with Reconstruction Test
 
 **[2026-03-19 22:13]**
 - Added: Unix `grep` example - acronym that encodes behavior (5.4)
