@@ -33,10 +33,10 @@ Estimated credits: [pending]
   1. Write down "Pre-research assumptions" about [SUBJECT]
   2. Verify assumptions against primary sources during preflight
   3. If >30% of assumptions are wrong or outdated, re-run preflight with corrected understanding, keep original assumptions (strikethrough). **Max 2 re-runs**, then proceed with corrected assumptions.
-  4. Document assumption accuracy in `__[TOPIC]_SOURCES.md` header (e.g., "Preflight accuracy: 7/10 assumptions verified")
+  4. Document assumption accuracy in `_INFO_[TOPIC]_02-SOURCES.md` header (e.g., "Preflight accuracy: 7/10 assumptions verified")
   5. **Assumption verification rubric**: CORRECT = matches source exactly. PARTIAL = spirit correct but details differ (counts as wrong for threshold). WRONG = contradicted by source.
 - **Document version scope**: Explicitly state the [SUBJECT] version being documented (e.g., `v2.1.0`, `API v3`). If versioning not applicable, use documentation date: `YYYY-MM-DD`
-- Create `__[TOPIC]_SOURCES.md` (double underscore = master document)
+- Create `_INFO_[TOPIC]_02-SOURCES.md`
 - Collect ALL official documentation URLs from vendor/project documentation
 - Collect community sources (secondary sources) for real-world insights:
   - Stack Overflow questions/answers with high votes
@@ -50,19 +50,19 @@ Estimated credits: [pending]
   - Community sources: `[TOPIC]-IN01-SC-[PLATFORM]-[DOCNAME]` (e.g., `GRPH-IN01-SC-SO-RATELIMIT`, `GRPH-IN01-SC-GH-ISSUE1234`)
 - Group sources by category: Core Docs, SDK/Libraries, Resource Types, Licensing, Related APIs/Technologies, Community Sources
 - Include "Related APIs/Technologies" section listing similar or easily confused alternatives
-- **Done when**: (a) Official docs main TOC fully enumerated, (b) 10-20 community sources collected, (c) All sources have IDs assigned
+- **Done when**: (a) Official docs main navigation fully enumerated, (b) 10-20 community sources collected, (c) All sources have IDs assigned
 
-**Phase 2: TOC Creation (workflow: /verify > /critique > /reconcile /implement > /verify)**
-- Follow [RESEARCH_CREATE_TOC.md](RESEARCH_CREATE_TOC.md) workflow
-- Use [RESEARCH_TOC_TEMPLATE.md](RESEARCH_TOC_TEMPLATE.md) as base
-- Create `__[TOPIC]_TOC.md` with detailed structure
-- **Done when**: TOC covers all major topics from sources, summary is 5-15 sentences, all links resolve
+**Phase 2: Summary File Creation (workflow: /verify > /critique > /reconcile /implement > /verify)**
+- Follow [RESEARCH_CREATE_SUMMARY.md](RESEARCH_CREATE_SUMMARY.md) workflow
+- Use [RESEARCH_SUMMARY_TEMPLATE.md](RESEARCH_SUMMARY_TEMPLATE.md) as base
+- Create `_INFO_[TOPIC]_01-SUMMARY.md` with skeletal structure
+- **Done when**: Summary file covers all major topics from sources, skeletal summary present, all topic file links resolve
 
 **Phase 3: Template Creation (verify > critique > reconcile > verify)**
-- Create `__TEMPLATE_[TOPIC]_TOPIC.md` (double underscore = master template)
+- Create `__TEMPLATE_[TOPIC]_TOPIC.md` (working template, deleted after research)
 - Template structure:
   - Header block (Doc ID, Goal, Dependencies, **Version/Date scope**)
-  - Summary: **5-15 sentences** (scale with topic complexity, match TOC Summary)
+  - Summary: **5-15 sentences** (scale with topic complexity)
   - Key Facts with [VERIFIED] labels
   - Use Cases
   - Quick Reference (one-screen lookup)
@@ -72,46 +72,46 @@ Estimated credits: [pending]
   - SDK Examples (adapt to relevant languages: C#, Python, TypeScript, PowerShell, JavaScript, Go, etc.)
   - Error Responses with codes
   - Rate Limiting / Throttling Considerations
-  - Sources section with **same IDs as `__[TOPIC]_SOURCES.md`**
+  - Sources section with **same IDs as `_INFO_[TOPIC]_02-SOURCES.md`**
   - Document History
 - Include "Template Instructions" section (to be deleted when using)
 - Run `/verify` then `/critique` then `/reconcile /implement` findings then `/verify` again
 - **Done when**: Template has all required sections, instructions are clear
-- **USER APPROVAL GATE**: Present TOC + Template to user before proceeding to Phase 4
+- **USER APPROVAL GATE**: Present Summary file + Template to user before proceeding to Phase 4
 
 **Phase 4: TASKS Plan**
 - Create `TASKS_[TOPIC]_RESEARCH.md`
-- Partition TOC topics into discrete tasks
+- Partition topics from Summary file into discrete tasks
 - Each task: Status, Estimated effort, Sources (official + community), Items to document, Done-when criteria
 - **Task timing format**: `- [ ] TK-01: [Description] [HH:MM-HH:MM] Xm`
   - Log start time when beginning task, end time when completing
   - Mark parallel tasks with `(parallel)` suffix
   - Example: `- [x] TK-02: Rate limits [10:15-11:00] 45m (parallel)`
 - Include Progress Summary section
-- **Done when**: All TOC topics have corresponding tasks, effort estimates assigned
+- **Done when**: All topics have corresponding tasks, effort estimates assigned
 
 **Phase 5: File-by-File Research**
 - For each topic file from TASKS:
   1. Research using official source URLs first
   2. Cross-reference with community sources for limitations, bugs, quirks
-  3. Create `_INFO_[TOPIC]-IN[XX]_[SUBTOPIC].md` using template
-     - XX = sequential Doc ID number (01, 02, 03...)
-     - Files sort alphabetically in TOC order
-     - Example: `_INFO_OASDKP-IN01_INTRODUCTION.md`
+  3. Create `_INFO_[TOPIC]_[NN]-[NAME].md` using template
+     - NN = sequential number starting at 03 (01=Summary, 02=Sources)
+     - Files sort alphabetically
+     - Example: `_INFO_OASDKP_03-INTRODUCTION.md`
   4. Include "Limitations and Known Issues" section with community source citations
   5. Run `/verify` then `/critique` then `/reconcile /implement` findings then `/verify` again
   6. Update TASKS progress
-  7. Update TOC status
+  7. Update Summary file status
 - All claims must have verification labels: [VERIFIED], [ASSUMED], [TESTED], [PROVEN], [COMMUNITY]
 - **Done when**: All tasks in TASKS plan completed and checked off
 
 **Phase 6: Final Verification and Sync**
 - **Verify against this document** (`RESEARCH_STRATEGY_TECH_MCPI.md`) - check all phase requirements met
-- Cross-verify all topic files against TOC checklist
-- Sync summaries from topic files back into TOC Summary section
+- Cross-verify all topic files against Summary file checklist
+- Finalize Summary section with cross-document synthesis from completed topic files
 - Verify all links work
 - Ensure community-sourced limitations are included in relevant sections
-- **Add Research stats to TOC header block** (copy from STRUT):
+- **Add Research stats to Summary file header block** (copy from STRUT):
   ```
   **Research stats**: 35m net | ~35 credits | 62 docs | 79 sources | Opus 4.5 Thinking
   ```
@@ -120,23 +120,21 @@ Estimated credits: [pending]
 
 **Phase 6.5: Completeness Verification**
 - Re-read official documentation structure (main navigation/sidebar)
-- Compare against TOC - identify any missed topics
+- Compare against Summary file - identify any missed topics
 - For each gap:
   1. Assess priority (High: core feature, Medium: useful, Low: niche)
   2. Create INFO files for High/Medium priority gaps
-  3. Update TOC with new topics
-- Document coverage percentage in TOC header
+  3. Update Summary file with new topics
+- Document coverage percentage in Summary file header
 - **Done when**: All High/Medium priority topics documented, gaps acknowledged
 
 **Rollback**: If any phase reveals fundamental error in earlier phase, document in PROBLEMS.md and consult user before rollback.
 
-**File Naming Conventions:**
-- `__[SUBJECT]_TOC.md`: Table of Contents (Doc ID: `[SUBJECT]-TOC`)
-- `__[SUBJECT]_SOURCES.md`: Source list (Doc ID: `[SUBJECT]-SOURCES`)
-- `_INFO_[SUBJECT]-IN[XX]_[TOPIC].md`: Content files (Doc ID: `[SUBJECT]-IN01`, `IN02`, etc.)
+**File Naming** (numbered scheme):
+- `_INFO_[TOPIC]_01-SUMMARY.md` - Summary file with cross-document synthesis + Topic Files section (Doc ID: `[TOPIC]-IN01`)
+- `_INFO_[TOPIC]_02-SOURCES.md` - Collected sources with IDs and verification labels (Doc ID: `[TOPIC]-IN02`)
+- `_INFO_[TOPIC]_03-[NAME].md` through `_INFO_[TOPIC]_[NN]-[NAME].md` - Individual topic files (Doc ID: `[TOPIC]-IN03+`)
 - No prefix: Tracking files (TASKS, NOTES, PROBLEMS, PROGRESS)
-
-**Doc ID Exceptions:** TOC and SOURCES use `-TOC` and `-SOURCES` suffixes (not numbered). Content starts at `-IN01`.
 
 **Verification Labels:**
 - `[VERIFIED]` - Confirmed from official documentation
@@ -150,16 +148,15 @@ Estimated credits: [pending]
 - **Secondary (Community)**: Stack Overflow, GitHub issues, expert blogs, forums, conference talks
 
 **Anti-patterns to Avoid:**
-- Checkboxes in TOC content lists (use links instead)
+- Checkboxes in Summary file topic lists (use links instead)
 - Short summaries (2-3 sentences) for complex topics
 - Missing Related APIs/Technologies section
 - Source IDs not matching between SOURCES and topic files
-- Single underscore for master documents
-- Non-clickable references in TOC
+- Non-clickable references in Summary file
 - Ignoring community sources for known issues
 - Treating community reports as verified without citation
-- Non-sequential file numbering (files should sort in TOC order)
-- Plain text file references in TOC (use markdown links)
+- Non-sequential file numbering (files should sort in topic order)
+- Plain text file references in Summary file (use markdown links)
 - Skipping completeness verification against source docs
 
 **Quality Gates:**

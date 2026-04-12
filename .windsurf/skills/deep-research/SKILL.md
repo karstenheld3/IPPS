@@ -29,11 +29,11 @@ All research (MCPI and MEPI) follows these 4 phases:
 
 **Phase 1 - Preflight**: Decompose prompt, document assumptions, collect sources, verify/correct assumptions, create STRUT with QA pipelines, run first VCRIV
 
-**Phase 2 - Planning**: Create TOC, topic template, TASKS plan, run second VCRIV
+**Phase 2 - Planning**: Create Summary file (skeletal), topic template, TASKS plan, run second VCRIV
 
 **Phase 3 - Research**: Topic-by-topic file-by-file research per TASKS/STRUT, run VCRIV per granularity rules
 
-**Phase 4 - Final Verification and Sync**: Dimension coverage, completeness check, metadata, final VCRIV
+**Phase 4 - Final Verification and Sync**: Dimension coverage, completeness check, finalize Summary (cross-document synthesis), metadata, final VCRIV
 
 Strategy files (MCPI/MEPI) define the details for each phase.
 
@@ -86,7 +86,7 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 - **Primary sources > secondary > community** - verify tier 1-3 before accepting tier 6-8
 - **Access dates required**: `Accessed: YYYY-MM-DD` on all sources
 - **Track time** - log task start/end for net research time calculation
-- **Quality pipeline 3x** (not optional): TOC+template, each topic, complete set
+- **Quality pipeline 3x** (not optional): Summary+template, each topic, complete set
 - **Source completeness**: Full PDF transcription via pipeline, no agent-selected chunks
 - **Download and store** all sources in session folder (web content changes)
 - **Inline citations** on critical conclusions: `[LABEL] (SOURCE_ID | URL or filename)`
@@ -140,14 +140,14 @@ verify → critique → reconcile → implement → verify
 
 **Four mandatory checkpoints:**
 1. Preflight deliverables (STRUT, SOURCES, PromptDecomposition)
-2. Planning deliverables (TOC, template, TASKS)
+2. Planning deliverables (Summary file, template, TASKS)
 3. Each research output (per VCRIV granularity rules)
 4. Complete research set ex-post (after all topics complete)
 
 **Granularity** (scope-based):
 - NARROW: VCRIV per topic file
 - FOCUSED/EXPLORATORY: VCRIV per dimension
-- Final VCRIV on synthesis document
+- Final VCRIV on Summary file
 
 **Termination**: Max 2 cycles per checkpoint, then [CONSULT].
 
@@ -192,9 +192,14 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 ## Reference Files
 
 - [RESEARCH_TOOLS.md](RESEARCH_TOOLS.md) - Tools, source processing, configuration
-- [RESEARCH_TOC_TEMPLATE.md](RESEARCH_TOC_TEMPLATE.md) - TOC structure
-- [RESEARCH_CREATE_TOC.md](RESEARCH_CREATE_TOC.md) - TOC creation workflow
+- [RESEARCH_SUMMARY_TEMPLATE.md](RESEARCH_SUMMARY_TEMPLATE.md) - Summary file template
+- [RESEARCH_CREATE_SUMMARY.md](RESEARCH_CREATE_SUMMARY.md) - Summary creation workflow
 
-**File naming**: `__[SUBJECT]_TOC.md`, `__[SUBJECT]_SOURCES.md`, `_INFO_[SUBJECT]-IN[XX]_[TOPIC].md`
+**File naming** (numbered scheme):
+- `_INFO_[TOPIC]_01-SUMMARY.md` - Summary file with cross-document synthesis + Topic Files section
+- `_INFO_[TOPIC]_02-SOURCES.md` - Collected sources with IDs and verification labels
+- `_INFO_[TOPIC]_03-[NAME].md` through `_INFO_[TOPIC]_[NN]-[NAME].md` - Individual topic files
 
-**Source ID format**: `[SUBJECT]-SC-[SOURCE]-[DOCNAME]`
+**Decomposition rule**: Both MCPI and MEPI decompose topics into individually researched files. No monolithic single-file research. The Summary file is finalized in Phase 4 with cross-document synthesis after all topic files are complete.
+
+**Source ID format**: `[TOPIC]-SC-[SOURCE]-[DOCNAME]`
