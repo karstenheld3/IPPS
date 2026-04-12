@@ -165,8 +165,12 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **TOOLS** - .tools folder relocation and path updates
 - **GCRU** - Global Coding Rules (universal coding conventions)
 - **WSTKTRAC** - Windsurf Token Logging (token usage tracking via hooks)
+- **WSWN** - What? So What? Now What? (reflective framework deep research, Borton/Driscoll/Rolfe)
 
 ## Document History
+
+**[2026-04-12 22:40]**
+- Added: WSWN topic (What? So What? Now What? reflective framework deep research)
 
 **[2026-04-12 15:57]**
 - Added: DOCWRITEFW topic (Document Writing Frameworks)
