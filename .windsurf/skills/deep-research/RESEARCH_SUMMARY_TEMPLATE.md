@@ -18,7 +18,6 @@
 
 - [`_INFO_[TOPIC]_03-[NAME1].md`](./_INFO_[TOPIC]_03-[NAME1].md) [[TOPIC]-IN03]
   - Brief description of contents
-
 - [`_INFO_[TOPIC]_04-[NAME2].md`](./_INFO_[TOPIC]_04-[NAME2].md) [[TOPIC]-IN04]
   - Brief description of contents
 

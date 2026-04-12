@@ -69,6 +69,10 @@ Apply to ALL document types and contexts:
   - Emojis found? → Replace with text equivalents (Yes/No/Warning)
   - Exception: README.md may use emojis without `<DevSystem>` tag
   - Only [ACTOR] may add `<DevSystem EmojisAllowed=true />` exception to other files
+- **Preserve human-readable formatting** in INFO, SPEC, IMPL documents:
+  - Bold for emphasis on key terms, framework names, or important concepts is acceptable
+  - The "no bold" rule applies only to LLM-consumed skill resource files (see Skills section)
+  - Do not strip formatting that aids human scanning and comprehension
 - **Labels decodable at point of use (AP-PR-11)** - Scan for bracket labels with 1-2 characters:
   - Exempt: `[x]`/`[ ]` checkboxes, `[N]` retry counts
   - Exempt: Established system labels: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`
