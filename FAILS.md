@@ -1,5 +1,77 @@
 # Failure Log
 
+## 2026-04-20 - Deploy to All Repos (2)
+
+### [HIGH] `GLOB-FL-024` Ignored CRITICAL output format spec and used compact table-style summary
+
+- **When**: 2026-04-20 13:20 UTC+02:00
+- **Where**: `deploy-to-all-repos` workflow, step 2.3 "Format JSON Output"
+- **What**: Workflow file has an explicit "Output Format" section (lines 213-247) labeled **CRITICAL: Use the exact format below. Do NOT use tables or other formats** — showing per-repo blocks with `- Add: N files` followed by indented filename lists, `- Overwrite: N files` etc. Agent instead emitted compact aligned-column summaries (`Path Add=10 Overwrite=18 Delete=0 Unchanged=183`) for both preview attempts, including after `GLOB-FL-023` was recorded in the same session.
+- **Why it went wrong**:
+  - Defaulted to condensed summary format (agent habit: minimize output)
+  - Aligned-column output is functionally a table, violating "Do NOT use tables" even without pipe characters
+  - Prior `GLOB-FL-023` only addressed output channel (chat vs tmp file), not the format content — so agent assumed format was fine
+  - User had to quote the spec twice (first `L213-L248`, then again) before correction
+  - Spec was explicitly labeled CRITICAL and agent had seen it in the same session
+- **Evidence**:
+  - `deploy-to-all-repos.md:213` — literal text "CRITICAL: Use the exact format below. Do NOT use tables or other formats."
+  - Agent output: `e:\Dev\KarstensWorkspace\.windsurf            Add= 10 Overwrite= 18 Delete=  0 Unchanged=183` (column-aligned, not spec format)
+  - Spec expects:
+    ```
+    e:\Dev\KarstensWorkspace\.windsurf
+      - Add: 10 new files
+          skills\deep-research\RESEARCH_CREATE_SUMMARY.md, ...
+      - Overwrite: 18 older files
+          rules\agentic-english.md, ...
+    ```
+  - User message: "Again you failed to output the preview in the correct format. Even if this was marked CRITICAL"
+
+**Workflow re-read findings**:
+- `deploy-to-all-repos.md:149-151` — step 2.3 says "Parse the JSON and format as text. **CRITICAL:** Use this exact format:" (two CRITICAL markers, section and step)
+- `deploy-to-all-repos.md:213-247` — full output template showing required structure per repo
+- The template uses: `Path` on line 1, `  - Add: N [new ]files` indented, `      file1, file2, ...` further indented, optional `- Overwrite:`, `- Delete:`, `- Skipped:`, ending with `Summary: X repos to process, Y files to deploy, Z files to delete.`
+- Summary line format: `Summary: X repos, Y files to deploy, Z files to delete` (not `Summary: X add, Y overwrite, Z delete`)
+
+**Root cause**: Agent optimizes for token brevity by default. When a spec conflicts with the brevity default, the spec must win — but only wins if agent re-reads the spec at the moment of output, not just at invocation. Writing the preview as aligned columns "felt efficient" and agent did not cross-check the previous CRITICAL template before emitting.
+
+**Prevention rules**:
+1. Before emitting ANY output for a workflow with an explicit "Output Format" section, re-read that section and template the output against it line-by-line
+2. "CRITICAL: Do NOT use tables" includes aligned-column plain-text tables, not just pipe-delimited ones. Any 2D grid = table
+3. Summary line must match the template's exact wording (`Summary: X repos to process, Y files to deploy, Z files to delete.`) — do not restructure
+4. When user says "do it again", verify the command meaning (re-run previous command vs. confirm) before acting. Ask if ambiguous.
+5. If a spec mandates a format: never substitute a "better" or "more compact" version
+
+## 2026-04-20 - Deploy to All Repos
+
+### [MEDIUM] `GLOB-FL-023` Wrote preview output to tmp file instead of chat
+
+- **When**: 2026-04-20 12:50 UTC+02:00
+- **Where**: `deploy-to-all-repos` workflow, step 2.3 "Format JSON Output"
+- **What**: After parsing comparison JSON, agent piped formatted text into `E:\Dev\IPPS\.tmp_deploy_preview.txt` via `Out-File` instead of returning it in chat. User had to open the tmp file manually to review. Chat reply only showed a summarized/collapsed version, not the spec-mandated format.
+- **Why it went wrong**:
+  - Terminal output was truncating long lines, so agent "solved" it by writing to disk
+  - Workaround bypassed the real requirement (preview must be visible in chat for review)
+  - Ignored that chat is the primary review surface for preview-before-confirm workflows
+  - Created a `.tmp` artifact without need
+- **Evidence**: 
+  - `.tmp_deploy_preview.txt` written at `E:\Dev\IPPS\` (now cleaned up)
+  - User message: "should have gone into chat not tmp file"
+  - `deploy-to-all-repos.md` line 149-151: "Parse the JSON and format as text. CRITICAL: Use this exact format" (implies inline chat output)
+
+**Workflow re-read findings**:
+- `deploy-to-all-repos.md` step 2.3 specifies formatted text output for review, no tmp file involved
+- `deploy-to-all-repos.md` "Output Format" section (lines 213-247) shows the exact chat-ready format the preview must match
+- Core convention: `.tmp` files are for temporary helper scripts, not for shuttling data the agent can render inline
+- Preview-before-confirm pattern (workflow "Execution Modes" section) assumes preview is visible in the conversation itself
+
+**Root cause**: Agent hit terminal line-wrap / truncation, chose file-write as workaround instead of chunking output into multiple `run_command` calls or rendering the preview directly as a Markdown code block in the chat reply.
+
+**Prevention rules**:
+1. Preview output for confirmation workflows ALWAYS goes in chat, never to a `.tmp` file
+2. If terminal truncates, split into multiple `run_command` calls (e.g., one per repo) or format the preview in the assistant's Markdown response, not via `Out-File`
+3. `.tmp_*` artifacts are only for multi-step helper scripts, never for data the agent itself formats
+4. When user says "should have gone into chat not tmp file" in future sessions, re-read this entry
+
 ## 2026-03-23 - YouTube Download
 
 ### [MEDIUM] `GLOB-FL-022` Tried PATH lookup instead of reading skill documentation first

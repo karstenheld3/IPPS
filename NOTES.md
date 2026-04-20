@@ -67,14 +67,9 @@ Usage: `--keys-file [WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
 
 ## Platform Notes
 
-**Windows:** No symlinks. `.windsurf/` is a copy of `[DEVSYSTEM_FOLDER]`, not a symlink.
+**Windows:** No symlinks. `.windsurf/` is a copy of `[DEVSYSTEM_FOLDER]`. Sync command and procedures: see `SOPS.md`.
 
-**Sync command** (run after editing [DEVSYSTEM_FOLDER]):
-```powershell
-Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination ".windsurf\" -Recurse -Force
-```
-
-**"deploy" keyword:** When user says "deploy", sync [DEVSYSTEM_FOLDER] to `.windsurf/` using the command above.
+**"deploy" keyword:** When user says "deploy", sync `[DEVSYSTEM_FOLDER]` to `.windsurf/` per `SOPS.md` → Quick Reference: Sync Command.
 
 Automatically push commits to GitHub.
 
@@ -82,12 +77,12 @@ Automatically push commits to GitHub.
 
 ## Special Workflows (Workspace Root)
 
-**`deploy-to-all-repos.md`** - Deploys DevSystem files to all linked repos. Located in workspace root (not `.windsurf/workflows/`) to prevent it from being copied to other repos. Run manually by reading the file and following the instructions.
+**`deploy-to-all-repos.md`** — deploys to linked repos. Lives at workspace root (not `.windsurf/workflows/`) so it's not propagated. Procedures: `SOPS.md` SOP 4.
 
 **CRITICAL: NEVER auto-deploy to [LINKED_REPOS]**. Always ask user before deploying to linked repos. Deployment to linked repos is a separate, explicit action.
 
 **[SKILL_CATEGORIES]**:
-- **Development**: coding-conventions, deep-research, edird-phase-planning, git-conventions, github, llm-computer-use, llm-evaluation, llm-transcription, ms-playwright-mcp, pdf-tools, session-management, windows-desktop-control, windsurf-auto-model-switcher, write-documents, youtube-downloader
+- **Development**: coding-conventions, deep-research, edird-phase-planning, git, git-conventions, github, llm-computer-use, llm-evaluation, llm-transcription, ms-playwright-mcp, ms-playwright-mcp-v2, pdf-tools, playwriter-mcp, session-management, windows-desktop-control, windsurf-auto-model-switcher, write-documents, youtube-downloader
 - **Personal**: google-account, travel-info
 - **All**: Development + Personal (all skills)
 

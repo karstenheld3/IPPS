@@ -75,7 +75,7 @@ $source = "[WORKSPACE_FOLDER]\.windsurf"
 
 # Skill categories (from [SKILL_CATEGORIES] in !NOTES.md)
 $skillCategories = @{
-    "Development" = @("coding-conventions", "deep-research", "edird-phase-planning", "git-conventions", "github", "llm-computer-use", "llm-evaluation", "llm-transcription", "ms-playwright-mcp", "pdf-tools", "session-management", "windows-desktop-control", "windsurf-auto-model-switcher", "write-documents", "youtube-downloader")
+    "Development" = @("coding-conventions", "deep-research", "edird-phase-planning", "git", "git-conventions", "github", "llm-computer-use", "llm-evaluation", "llm-transcription", "ms-playwright-mcp", "ms-playwright-mcp-v2", "pdf-tools", "playwriter-mcp", "session-management", "windows-desktop-control", "windsurf-auto-model-switcher", "write-documents", "youtube-downloader")
     "Personal" = @("google-account", "travel-info")
 }
 $skillCategories["All"] = $skillCategories["Development"] + $skillCategories["Personal"]
@@ -142,33 +142,117 @@ foreach ($t in $targets) {
     $results += [PSCustomObject]$r
 }
 
-# Output JSON
-$results | ConvertTo-Json -Depth 3
+# Format deterministically — do NOT hand-write preview output
+function Format-DeployPreview {
+    param($Results)
+    $lines = @()
+    foreach ($r in $Results) {
+        $lines += ""
+        $lines += $r.Path
+        if ($r.IsNew) {
+            $lines += "  [NEW REPO] .windsurf folder does not exist - will create with $($r.Add.Count) files"
+        } elseif ($r.Add.Count -eq 0 -and $r.Overwrite.Count -eq 0 -and $r.Delete.Count -eq 0) {
+            $lines += "  [UP TO DATE] $($r.Unchanged) files unchanged"
+        } else {
+            if ($r.Add.Count -gt 0) {
+                $lines += "  - Add: $($r.Add.Count) new files"
+                $lines += ($r.Add | ForEach-Object { "      $_" })
+            }
+            if ($r.Overwrite.Count -gt 0) {
+                $lines += "  - Overwrite: $($r.Overwrite.Count) older files"
+                $lines += ($r.Overwrite | ForEach-Object { "      $_" })
+            }
+            if ($r.Delete.Count -gt 0) {
+                $lines += "  - Delete: $($r.Delete.Count) deprecated files"
+                $lines += ($r.Delete | ForEach-Object { "      $_" })
+            }
+            if ($r.Skipped) { $lines += "  - Skipped: $($r.Skipped)" }
+        }
+        if ($r.ExcludedSkills -and $r.ExcludedSkills.Count -gt 0) {
+            $lines += "  - Excluded skills: " + ($r.ExcludedSkills -join ', ')
+        }
+    }
+    $lines += ""
+    $add = ($Results | ForEach-Object { $_.Add.Count } | Measure-Object -Sum).Sum
+    $ow  = ($Results | ForEach-Object { $_.Overwrite.Count } | Measure-Object -Sum).Sum
+    $del = ($Results | ForEach-Object { $_.Delete.Count } | Measure-Object -Sum).Sum
+    $lines += "Summary: $($Results.Count) repos to process, $($add + $ow) files to deploy, $del files to delete."
+    return ($lines -join "`n")
+}
+
+# Emit JSON (for inspection) AND formatted text
+$json = $results | ConvertTo-Json -Depth 3
+$preview = Format-DeployPreview $results
+Write-Output $preview
 ```
 
-#### 2.3 Format JSON Output
+#### 2.3 Emit Preview to Chat
 
-Parse the JSON and format as text. **CRITICAL:** Use this exact format:
+**CRITICAL:** Preview goes in chat, NOT to a `.tmp` file. Use the `Format-DeployPreview` function from step 2.2 — do NOT hand-format.
+
+**Required format** (emitted by `Format-DeployPreview`):
 
 ```
-[Path]
+<RepoPath>
   [UP TO DATE] N files unchanged
 
-[Path]
-  - Add: N files
-      file1, file2, file3
-  - Overwrite: N files
-      file1, file2
+<RepoPath>
+  - Add: N new files
+      skills\<skill>\<file>.md
+      workflows\<file>.md
+  - Overwrite: N older files
+      rules\<file>.md
+      skills\<skill>\<file>.md
   - Delete: N deprecated files
-      file1, file2
+      rules\<old-file>.md
+  - Skipped: <reason>
   - Excluded skills: skill1, skill2
 
-[Path]
+<RepoPath>
   [NEW REPO] .windsurf folder does not exist - will create with N files
-  - Excluded skills: skill1, skill2
 
 Summary: X repos to process, Y files to deploy, Z files to delete.
 ```
+
+**GOOD example**:
+
+```
+e:\Dev\KarstensWorkspace\.windsurf
+  - Add: 10 new files
+      skills\deep-research\RESEARCH_CREATE_SUMMARY.md
+      skills\deep-research\RESEARCH_SUMMARY_TEMPLATE.md
+      skills\ms-playwright-mcp-v2\SKILL.md
+  - Overwrite: 18 older files
+      rules\agentic-english.md
+      rules\core-conventions.md
+      workflows\verify.md
+
+Summary: 7 repos to process, 202 files to deploy, 0 files to delete.
+```
+
+**BAD examples** (reject ALL of these):
+
+Aligned-column / 2D grid (also counts as a table even without pipes):
+
+```
+e:\Dev\KarstensWorkspace\.windsurf            Add=10  Overwrite=18  Delete=0
+e:\Dev\OpenAI-BackendTools\.windsurf          Add=10  Overwrite=19  Delete=0
+```
+
+Bullet summary without filenames:
+
+```
+- **KarstensWorkspace** (All): 10 add, 18 overwrite
+- **OpenAI-BackendTools** (Dev): 10 add, 19 overwrite
+```
+
+Reworded Summary line:
+
+```
+Summary: 7 repos, 70 add, 132 overwrite, 0 delete
+```
+
+Missing filenames, "..." truncation, abbreviated paths (`sk\` instead of `skills\`), or any manual rewriting of what `Format-DeployPreview` returns.
 
 #### 2.4 Apply Copy Rules
 
@@ -212,39 +296,9 @@ Provide final summary:
 
 ## Output Format
 
-**CRITICAL:** Use the exact format below. Do NOT use tables or other formats.
+Format is defined in step 2.3 and enforced by the `Format-DeployPreview` function in step 2.2. Do NOT hand-write preview output — run the function and emit its return value verbatim.
 
-```
-C:\Dev\Repo1
-  [UP TO DATE] 41 files unchanged
-
-C:\Dev\Repo2
-  - Add: 41 files
-      workflows\build.md, commit.md, critique.md, reconcile.md
-      workflows\session-finalize.md, session-new.md, solve.md, test.md
-      workflows\write-impl-plan.md, write-spec.md, write-test-plan.md
-      ...
-  - Delete: 1 deprecated file
-      rules/old-file.md
-
-C:\Dev\Repo3
-  [NEW REPO] .windsurf folder does not exist - will create with 41 files
-
-C:\Dev\Repo4
-  - Add: 27 new files
-      workflows\build.md, commit.md, critique.md, reconcile.md
-      workflows\session-finalize.md, session-new.md, solve.md, test.md
-      workflows\write-impl-plan.md, write-spec.md, write-test-plan.md
-      ...
-  - Overwrite: 13 older files
-      skills/file28.md, file29.md
-      ...
-  - Delete: 7 deprecated files
-      full/path/to/file/old1.md, old2.md
-  - Skipped: session*.md files (per repo rules)
-
-Summary: X repos to process, Y files to deploy, Z files to delete.
-```
+See GLOB-FL-023 and GLOB-FL-024 in FAILS.md for the failure history that motivated this enforcement.
 
 ## Files to Exclude
 
