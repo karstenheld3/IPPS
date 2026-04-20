@@ -156,6 +156,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **MINTO** - Minto Pyramid Principle (communication framework research and reference)
 - **MIPPS** - Minimal IPPS (DevSystem compression pipeline)
 - **PLWR** - Playwriter MCP (Chrome extension browser automation)
+- **REPRT** - Report Writing (DevSystem capability for Minto Pyramid-based high-quality reports)
 - **OCLAW** - OpenClaw exploration (remote agent interaction via WhatsApp/Cascade)
 - **MEPI** - MEPI/MCPI research depth principle
 - **SDDEV** - Spec-Driven Development (research topic)
@@ -165,9 +166,13 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **TOOLS** - .tools folder relocation and path updates
 - **GCRU** - Global Coding Rules (universal coding conventions)
 - **WSTKTRAC** - Windsurf Token Logging (token usage tracking via hooks)
+- **WS2DV** - Windsurf 2.0 and Devin (deep research on Windsurf 2.0 release features and Devin integration)
 - **WSWN** - What? So What? Now What? (reflective framework deep research, Borton/Driscoll/Rolfe)
 
 ## Document History
+
+**[2026-04-16 13:26]**
+- Added: REPRT topic (Report Writing - Minto Pyramid-based reports)
 
 **[2026-04-12 22:40]**
 - Added: WSWN topic (What? So What? Now What? reflective framework deep research)
