@@ -1,5 +1,26 @@
 # Failure Log
 
+## 2026-04-20 - Sequential run_command Approval Causes Perceived Hang
+
+### [MEDIUM] `GLOB-FL-025` Sequential run_command calls hang waiting for approval clicks
+
+- **When**: 2026-04-20 14:55 UTC+02:00
+- **Where**: `/commit` workflow, git add/commit/push sequence
+- **What**: When agent issues multiple sequential `run_command` calls (git add, git commit, git push), each non-safe command waits for user approval. Between commands there is no visible progress indicator - workflow appears frozen/hung. User canceled and reported hang twice in same session.
+- **Why it went wrong**:
+  - Agent issued commands one-by-one, each requiring separate approval click
+  - No indication to user that a command is waiting for approval vs actually stuck
+  - Agent did not warn user that multiple approval steps would follow
+- **Evidence**:
+  - First hang: `git add` for skill writing docs - user canceled
+  - Second hang: same pattern after 3rd commit completed
+- **Workaround**:
+  - Combine multiple git operations into single commands where possible: `git add -A && git commit -m "..." && git push`
+  - Or use semicolons in PowerShell: `git add -A; git commit -m "..."; git push`
+  - Alert user before multi-step approval sequences: "Next steps require N approvals"
+  - For `/commit` with multiple logical commits: warn user upfront about number of commits planned
+- **Prevention rule**: When executing multi-step command sequences (especially git), prefer single compound commands over sequential individual commands. If sequential commands are unavoidable, state upfront: "This requires N command approvals."
+
 ## 2026-04-20 - Deploy to All Repos (2)
 
 ### [HIGH] `GLOB-FL-024` Ignored CRITICAL output format spec and used compact table-style summary
