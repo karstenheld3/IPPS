@@ -19,6 +19,7 @@ Structure (ST)
 - WF-ST-04: Include Verification section
 - WF-ST-05: Include Output format with expected structure
 - WF-ST-06: Use Quality Gate for final checklist
+- WF-ST-07: Phase and step enumeration starts at 1 with no gaps
 
 References (RF)
 - WF-RF-01: Workflow references use inline code: `/verify`
@@ -50,6 +51,7 @@ Branching (BR)
 - [GLOBAL-RULES Section](#global-rules-section)
 - [CONTEXT-SPECIFIC Section](#context-specific-section)
 - [Steps Format](#steps-format)
+- [Phase and Step Enumeration](#phase-and-step-enumeration)
 - [Gate Checks](#gate-checks)
 - [Stuck Detection](#stuck-detection)
 - [Verification Section](#verification-section)
@@ -239,6 +241,50 @@ Finally, write the output to the appropriate location.
 3. Read relevant CONTEXT-SPECIFIC section
 4. Execute steps
 5. Run `/verify`
+```
+
+## Phase and Step Enumeration
+
+Phases and top-level steps start at `1` and increase by `1` with no gaps. Do not use `Phase 0` / `Step 0` to mean "pre-flight" — pre-flight work is Phase 1. Do not skip numbers when reordering.
+
+**BAD:**
+```markdown
+## Phase 0: Pre-Flight Checks
+...
+## Phase 1: Capture
+...
+## Phase 3: Update
+```
+
+**GOOD:**
+```markdown
+## Phase 1: Pre-Flight Checks
+...
+## Phase 2: Capture
+...
+## Phase 3: Update
+```
+
+Same rule applies to `Step N`, `Stage N`, `Part N` and any other numbered top-level section type.
+
+**Sub-numbering must be numeric only** (`1.1`, `1.2`, `1.3`). Alphabetic sub-numbering (`1a`, `1b`, `1c`) is **not allowed** because it breaks sortability, does not nest further (no `1a.i`), and mixes numeric and alphabetic scales in one identifier. Sub-numbering starts at `.1` under its parent and increments by 1 with no gaps.
+
+**BAD:**
+```markdown
+## Phase 2: DOM Extraction
+
+### 2a. Anthropic
+### 2b. OpenAI Standard
+### 2d. Model ID Resolution
+```
+
+**GOOD:**
+```markdown
+## Phase 2: DOM Extraction
+
+### 2.1 Anthropic
+### 2.2 OpenAI Standard
+### 2.3 Model ID Resolution
 ```
 
 ## Gate Checks
