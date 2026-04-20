@@ -225,22 +225,29 @@ If code contains logging, output, or print statements:
 
 ## Skills
 
-- Read @coding-conventions `AGENT-SKILL-RULES.md` and verify against all sections
-- Verify SKILL.md exists with required content (Section 2.1 of AGENT-SKILL-RULES.md)
+- Read @write-documents `SKILL_RULES.md` and verify against all SK-* rules
+- Verify SKILL.md exists with YAML frontmatter: `name`, `description`, `compatibility` (SK-HD-01 to SK-HD-03)
+- Verify SKILL.md is self-contained for common use cases (SK-ST-01)
+- Verify MUST-NOT-FORGET section present with 3-10 items (SK-ST-02)
+- Verify file layout:
+  - Flat layout, no subdirectories for fewer than 12 files (SK-FL-01)
+  - Standard files unprefixed: `SETUP.md`, `UNINSTALL.md` (SK-FL-02)
+  - Skill-specific files use uppercase prefix: `PLAYWRIGHT_TOOLS.md` (SK-FL-03)
+  - Config/data files use lowercase: `playwright_config_examples.json` (SK-FL-04)
+  - All files referenced from SKILL.md References section (SK-FL-05)
 - If SETUP.md exists: verify UNINSTALL.md also exists
-- If SETUP.md exists: verify pre-installation verification section present
-- Verify token optimization (Section 8 of AGENT-SKILL-RULES.md):
-  - No `**bold**` markup in LLM-consumed resource files
-  - No verbose prefixes (`- **URL:** `, `- **Best for:** `) where compact format works
-  - No redundant prose restating headings
-  - Keywords/trigger line present for lookup skills
-  - All URLs and technical detail preserved
-  - Ask: "If I remove this token, does the LLM lose information?" If no, flag it.
-- Verify skill files match their type:
-  - Resource/lookup skills: compact format (one line per resource)
-  - Instructional skills: richer format justified for multi-step reasoning
-  - SETUP/UNINSTALL: verbose format with verification steps
-- Run Section 9 Review Checklist from AGENT-SKILL-RULES.md
+- If SETUP.md exists:
+  - Pre-installation verification section with checklist present (SK-ST-05)
+  - Installation is idempotent with backup-before-modify (SK-ST-06)
+- If UNINSTALL.md exists:
+  - Pre-uninstall verification section present (SK-ST-07)
+- Verify content rules:
+  - Procedures and decision logic, not parameter documentation (SK-CT-01)
+  - No duplicated tool parameter docs from MCP handshake or `--help` (SK-CT-02)
+  - Gotchas section for non-obvious behavior (SK-CT-03)
+  - No visual-only formatting in LLM-consumed reference files (SK-CT-05)
+- Verify against @write-documents `APAPALAN_RULES.md` (precision, brevity)
+- Verify against @write-documents `MECT_WRITING_RULES.md` (voice, terminology)
 
 ## Session Tracking (NOTES, PROBLEMS, PROGRESS)
 

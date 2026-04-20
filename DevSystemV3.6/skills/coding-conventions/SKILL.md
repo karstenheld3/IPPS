@@ -16,7 +16,6 @@ MECT_CODING_RULES.md - Code quality (precision, brevity, consistency, naming, do
 PYTHON-RULES.md - Python (formatting, imports, naming, comments)
 JSON-RULES.md - JSON (field naming, 2-space indent)
 WORKFLOW-RULES.md - Workflow documents (structure, token optimization)
-AGENT-SKILL-RULES.md - Agent skill development (structure, setup, token optimization)
 
 ## Logging Files (read when writing or reviewing logging/output code)
 

@@ -25,6 +25,7 @@ This skill implements:
 - [WRITE-REVIEW] - Create _REVIEW.md documents (use `REVIEW_TEMPLATE.md`)
 - [WRITE-TASKS-PLAN] - Create TASKS documents (use `TASKS_TEMPLATE.md`)
 - [WRITE-STRUT] - Create/insert STRUT plans (use `STRUT_TEMPLATE.md`)
+- [WRITE-SKILL] - Create/update skill folders (use `SKILL_TEMPLATE.md`, read `SKILL_RULES.md`)
 
 ## MUST-NOT-FORGET
 
@@ -65,6 +66,9 @@ This skill implements:
 **Workflow Documents:**
 - **WORKFLOW** (`.md` in workflows/) - Agent workflow definitions. Read template: `WORKFLOW_TEMPLATE.md`, rules: `WORKFLOW_RULES.md`
 
+**Skill Documents:**
+- **SKILL** (`SKILL.md` in skills/[name]/) - Agent skill definitions. Read template: `SKILL_TEMPLATE.md`, rules: `SKILL_RULES.md`
+
 ## Document Dependency Chain
 
 ```
@@ -83,7 +87,8 @@ Each document type builds on the previous. INFO informs SPEC decisions. SPEC def
 4. Read the template for your document type (required)
 5. For SPEC documents: also read `SPEC_RULES.md` (required)
 6. For WORKFLOW documents: also read `WORKFLOW_RULES.md` (required)
-7. Follow the template structure exactly, except when user requests exceptions
+7. For SKILL documents: also read `SKILL_RULES.md` (required)
+8. Follow the template structure exactly, except when user requests exceptions
 
 ## Document Writing Rules
 
