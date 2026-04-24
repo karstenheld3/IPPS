@@ -51,7 +51,7 @@ Skills are in `[AGENT_FOLDER]/skills/`. Each has a `SKILL.md` with usage instruc
 - **@travel-info** - Travel lookups: flights, trains, transit, country-specific info
 - **@windows-desktop-control** - Windows screenshots, window management, keyboard/mouse
 - **@windsurf-auto-model-switcher** - Switch Cascade AI model tier programmatically
-- **@write-documents** - Create/edit INFO, SPEC, IMPL, TEST, FIX documents, STRUT plans
+- **@write-documents** - Create/edit INFO, SPEC, IMPL, TEST, FIX documents, STRUT plans, CONVERSATION files
 - **@youtube-downloader** - Download YouTube content as MP3 or video via yt-dlp
 
 ## Tool Locations

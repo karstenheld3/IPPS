@@ -40,7 +40,7 @@ Invoke based on context:
 
 ## Workflow
 
-1. First find out what the context is (INFO, SPEC, IMPL, Code, TEST, Session, Workflow, Skill)
+1. First find out what the context is (INFO, SPEC, IMPL, Code, TEST, Session, Workflow, Skill, Conversation)
 2. Read GLOBAL-RULES and Verification Labels
 3. Read the relevant Context-Specific section
 4. Create a verification task list
@@ -277,6 +277,42 @@ If code contains logging, output, or print statements:
 - [ ] Reusable patterns/decisions → sync to project NOTES.md
 - [ ] Discovered bugs in unrelated code → create issues or sync to PROBLEMS.md
 - [ ] New agent instructions → sync to project rules or NOTES.md
+
+## Conversations
+
+- Read @write-documents `CONVERSATION_RULES.md` and verify against all CV-* rules
+- Verify filename is `CONVERSATION_[COUNTERPARTY].md`, never plain `CONVERSATION.md` (CV-FL-01)
+- Verify required sections in order: MNF, Ignore Files, Translation Settings, Status, Links, Context, Log, History (CV-ST-01)
+- Verify Translation Settings section present with all 4 variables (CV-VR-01)
+- Verify Translation Settings values match SESSION or WORKSPACE NOTES.md (CV-VR-02)
+- Verify missing NOTES.md variables were added with `=true` default (CV-VR-03)
+- Verify datetime format `YYYY-MM-DD HH:MM` everywhere (CV-DT-01)
+- Verify History and Log in reverse chronological order (CV-DT-02)
+- Verify attachment folder datetime format `YYYY-MM-DD_HH-MM_[Topic]/` (CV-DT-03)
+- Verify Persons Involved in Context section, not separate Contacts section (CV-ST-02)
+- Verify Log entries link to History sections via anchors (CV-ST-03)
+- Verify History entries separated by `---` (CV-ST-04)
+- Verify non-English/German text has English translation in quote block (CV-TR-01, CV-TR-02)
+- Verify native special characters used, no ASCII substitutes (CV-TR-03)
+- Verify auto-translate applied to all languages except do-not-translate list (CV-TR-04)
+- Verify term pairs used consistently across conversation (CV-TR-05)
+- Verify double language `[ENGLISH] / [LOCAL]` in log summaries, key outcomes, todos (CV-TR-06)
+- Verify email header format complete with all fields (CV-EM-01)
+- Verify emails sent via Playwright Gmail UI, never CLI tools (CV-EM-02)
+- Verify email signature included only on first occurrence per sender (CV-EM-03)
+- Verify draft emails marked with `**STATUS: DRAFT - NOT SENT**` (CV-EM-04)
+- Verify WhatsApp message format `**HH:MM Person**: message` (CV-WA-01)
+- Verify WhatsApp section heading includes time range and platform (CV-WA-02)
+- Verify WhatsApp sections end with `**Key outcomes:**` summary (CV-WA-03)
+- Verify downloaded images cleaned of email garbage (CV-AT-01)
+- Verify Ignore Files pattern maintained (CV-AT-02)
+- If `CONVERSATION_AUTO_TRANSCRIBE_ATTACHMENTS=true`: verify `.md` transcription exists for each attachment (CV-AT-03)
+- Verify attachments in `[ConversationFolder]/Attachments/YYYY-MM-DD_HH-MM_[Topic]/` (CV-AT-04)
+- Verify all URLs as clickable Markdown links (CV-LN-01)
+- Verify Links section groups by date (CV-LN-02)
+- Verify all attachments, transcriptions, translations recorded in Links section (CV-LN-03)
+- Verify todo format with timestamp, item, deadline, status (CV-TD-01)
+- Verify todo actions use standard values: TODO:REPLY, TODO:REVIEW, TODO:PAY, TODO:PLAN, TODO:SCHEDULE_CALL, TODO:SCHEDULE_TRIP, TODO:SCHEDULE_MEETING (CV-TD-02)
 
 ## STRUT Plans (Planning Phase)
 
