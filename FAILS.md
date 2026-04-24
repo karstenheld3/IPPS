@@ -1,5 +1,24 @@
 # Failure Log
 
+## 2026-04-24 - Invented Syntax Not in AGEN, Incomplete Grep Fix
+
+### [MEDIUM] `GLOB-FL-026` Invented `(CV-XX-NN)` parenthetical prefix syntax, then incomplete fix
+
+- **When**: 2026-04-24 12:52 UTC+02:00
+- **Where**: `CONVERSATION_TEMPLATE.md`, `conversation-start.md`, `conversation-update.md` - MNF, Verification, Quality Gate sections
+- **What**: Two compounding errors:
+  1. Invented `(CV-FL-01)` parenthetical prefix syntax for rule IDs. This format does not exist in Agentic English (AGEN). AGEN defines `[BRACKETS]` for instructions and no-brackets for states. Parenthetical constants are not part of the vocabulary.
+  2. When told to fix, grepped only for prefix pattern `^- \(CV-` which found MNF lines but missed Verification, Quality Gate, and inline occurrences in the same files. Required a second pass to catch all 70 remaining instances.
+- **Why it went wrong**:
+  - Fabricated syntax without checking `agentic-english.md` first
+  - Grep pattern was too narrow: `^- \(CV-` only matches lines starting with `- (CV-`, missing numbered lists `1. ... (CV-*)` and inline `(CV-*)` in prose
+  - Did not verify fix completeness before reporting "done"
+- **Evidence**:
+  - User flagged `(CV-FL-01)` prefix as non-AGEN syntax
+  - After first fix, user pointed at lines 203-213 of `conversation-start.md` still containing `(CV-*)` parenthetical format
+- **Workflow re-read findings**: `agentic-english.md` lines 24-38 define exactly two token types: `[BRACKETS]` for instructions and no-brackets for states. No parenthetical format exists.
+- **Prevention rule**: 1) Before introducing syntax in documents, verify it exists in the governing vocabulary (`agentic-english.md`). 2) When fixing a pattern across files, use a broad grep (e.g., `\(CV-[A-Z]{2}-\d{2}`) without anchoring, verify zero matches remain before reporting done.
+
 ## 2026-04-20 - Sequential run_command Approval Causes Perceived Hang
 
 ### [MEDIUM] `GLOB-FL-025` Sequential run_command calls hang waiting for approval clicks

@@ -99,7 +99,7 @@ $deprecatedFiles = @{
 $deprecatedSkillFolders = @("edird-phase-model", "ipps-deep-research")
 
 # Personal workflows (from [PERSONAL_WORKFLOWS] in !NOTES.md) - excluded from Development-only repos
-$personalWorkflows = @("start-conversation.md")
+$personalWorkflows = @("conversation-start.md", "conversation-update.md")
 
 function Test-FileIncluded {
     param([string]$RelPath, [string]$Category)

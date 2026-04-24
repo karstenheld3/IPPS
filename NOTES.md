@@ -87,7 +87,8 @@ Automatically push commits to GitHub.
 - **All**: Development + Personal (all skills)
 
 **[PERSONAL_WORKFLOWS]** (excluded from Development-only repos, deployed only to "All" repos):
-- start-conversation.md
+- conversation-start.md
+- conversation-update.md
 
 **[LINKED_REPOS]**:
 - e:\Dev\KarstensWorkspace
