@@ -167,6 +167,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **GCRU** - Global Coding Rules (universal coding conventions)
 - **WSTKTRAC** - Windsurf Token Logging (token usage tracking via hooks)
 - **WS2DV** - Windsurf 2.0 and Devin (deep research on Windsurf 2.0 release features and Devin integration)
+- **FLCOR** - Fail Correction (cross-repo fails collection and analysis)
 - **WSWN** - What? So What? Now What? (reflective framework deep research, Borton/Driscoll/Rolfe)
 
 ## Document History
