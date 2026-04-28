@@ -176,10 +176,6 @@ Files starting with `_` are skipped by automatic priming workflows. Use for sess
 
 Files starting with `.` follow Unix convention - hidden from directory listings.
 
-### Temporary Files (.tmp prefix)
-
-Files starting with `.tmp` are temporary helper scripts created during operations. They should be deleted after use. Example: `.tmp_fix_quotes.ps1`
-
 ## Placeholders
 
 - **[WORKSPACE_FOLDER]**: Absolute path of root folder where Windsurf operates
@@ -195,6 +191,8 @@ Files starting with `.tmp` are temporary helper scripts created during operation
 - `/bugfix` - Record and fix bugs (SESSION-MODE or PROJECT-MODE)
 - `/commit` - Create conventional commits
 - `/continue` - Execute next items on plan
+- `/conversation-start` - Create new conversation tracking file
+- `/conversation-update` - Update existing conversation tracking file
 - `/critique` - Devil's Advocate review
 - `/fail` - Record failures to FAILS.md
 - `/go` - Autonomous loop (recap + continue until done)

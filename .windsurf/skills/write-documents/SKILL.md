@@ -1,6 +1,6 @@
 ---
 name: write-documents
-description: Apply when creating or editing INFO, SPEC, IMPL, TEST, FIX documents, or STRUT plans
+description: Apply when creating or editing INFO, SPEC, IMPL, TEST, FIX documents, STRUT plans, or CONVERSATION files
 ---
 
 # Document Writing Guide
@@ -26,6 +26,8 @@ This skill implements:
 - [WRITE-TASKS-PLAN] - Create TASKS documents (use `TASKS_TEMPLATE.md`)
 - [WRITE-STRUT] - Create/insert STRUT plans (use `STRUT_TEMPLATE.md`)
 - [WRITE-SKILL] - Create/update skill folders (use `SKILL_TEMPLATE.md`, read `SKILL_RULES.md`)
+- [WRITE-CONVERSATION] - Create conversation files (use `CONVERSATION_TEMPLATE.md`, read `CONVERSATION_RULES.md`)
+- [UPDATE-CONVERSATION] - Update existing conversation files (read `CONVERSATION_RULES.md`)
 
 ## MUST-NOT-FORGET
 
@@ -63,6 +65,9 @@ This skill implements:
 - **PROBLEMS** (`PROBLEMS.md`) - Problem tracking
 - **PROGRESS** (`PROGRESS.md`) - Progress tracking
 
+**Conversation Tracking:**
+- **CONVERSATION** (`CONVERSATION_[COUNTERPARTY].md`) - Email/WhatsApp conversation tracking. Read template: `CONVERSATION_TEMPLATE.md`, rules: `CONVERSATION_RULES.md`
+
 **Workflow Documents:**
 - **WORKFLOW** (`.md` in workflows/) - Agent workflow definitions. Read template: `WORKFLOW_TEMPLATE.md`, rules: `WORKFLOW_RULES.md`
 
@@ -88,7 +93,8 @@ Each document type builds on the previous. INFO informs SPEC decisions. SPEC def
 5. For SPEC documents: also read `SPEC_RULES.md` (required)
 6. For WORKFLOW documents: also read `WORKFLOW_RULES.md` (required)
 7. For SKILL documents: also read `SKILL_RULES.md` (required)
-8. Follow the template structure exactly, except when user requests exceptions
+8. For CONVERSATION documents: also read `CONVERSATION_RULES.md` (required)
+9. Follow the template structure exactly, except when user requests exceptions
 
 ## Document Writing Rules
 
@@ -107,6 +113,7 @@ Each document type builds on the previous. INFO informs SPEC decisions. SPEC def
 - `SPEC_[COMPONENT]_TEST.md` - Test plan for specification
 - `IMPL_[COMPONENT]_TEST.md` - Test plan for implementation
 - `TASKS_[TOPIC].md` - Task plans (partitioned work items)
+- `CONVERSATION_[COUNTERPARTY].md` - Conversation tracking (never plain `CONVERSATION.md`)
 - `!` prefix for priority docs that must be read first
 
 ## Agent Behavior

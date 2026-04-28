@@ -162,10 +162,6 @@ All written output - documents, code comments, log messages, commit messages, co
 - **AP-NM-05**: Use standard terms - don't invent new names for known concepts
 - **AP-ST-01**: Goal first - reader knows WHY before HOW
 
-## Temporary Files (.tmp prefix)
-
-Files starting with `.tmp` are temporary helper scripts created during operations. They should be deleted after use. Example: `.tmp_fix_quotes.ps1`
-
 ## Transcription Output
 
 Transcribed content MUST contain only the original document's content. No processing metadata, agent annotations, or workflow artifacts.

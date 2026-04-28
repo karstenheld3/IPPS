@@ -45,6 +45,21 @@ Behavioral rules for agent execution patterns.
 - Track progress in PROGRESS.md, problems in PROBLEMS.md, make notes in NOTES.md
 - Run `/verify` after significant changes
 
+## File Placement
+
+Agent-created files (helper scripts, intermediate data, temp artifacts) MUST reside in context-appropriate locations:
+
+- **`[DOWNLOAD_FOLDER]`** - Helper scripts for download operations (enrichment, conversion, renaming)
+- **`[SESSION_FOLDER]`** - Helper scripts in SESSION-MODE (POCs, test scripts, analysis)
+- **`[WORKSPACE_FOLDER]`** - Helper scripts in PROJECT-MODE
+- **`[SRC_FOLDER]`** - Only production code, never temp artifacts
+
+**Forbidden**: System temp (`%TEMP%`, `$env:TEMP`, `/tmp/`), user home, Program Files, or any location outside workspace/session/target scope. No exceptions.
+
+**Naming**: `.tmp_` prefix. Example: `.tmp_fix_quotes.ps1`
+
+**Lifecycle**: Commit `.tmp` files along with task or session files. Only delete after the final goal is reached. Until then, they serve as reproducible artifacts.
+
 ## Before Ending Session
 
 1. Run `/session-save` to document findings
