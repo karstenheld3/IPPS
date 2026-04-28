@@ -1,5 +1,16 @@
 # Failure Log
 
+## 2026-04-24 - Deploy Preview Not Emitted in Chat
+
+### [LOW] `GLOB-FL-027` Deploy preview left in command output, not shown in chat
+
+- **When**: 2026-04-24 13:27 UTC+02:00
+- **Where**: `deploy-to-all-repos.md` step 2.3
+- **What**: After running the preview PowerShell script, said "Preview above" referring to the command output instead of emitting the `Format-DeployPreview` output as formatted text in the chat message. User could not see the preview.
+- **Why it went wrong**: Assumed command output was visible enough; did not re-read step 2.3 which says "**CRITICAL:** Preview goes in chat, NOT to a `.tmp` file."
+- **Workflow re-read findings**: Step 2.3 explicitly says preview must go in chat. The `Format-DeployPreview` function output must be reproduced verbatim in the chat message.
+- **Prevention rule**: After running the deploy preview script, always copy the `Format-DeployPreview` output into the chat response as a code block.
+
 ## 2026-04-24 - Invented Syntax Not in AGEN, Incomplete Grep Fix
 
 ### [MEDIUM] `GLOB-FL-026` Invented `(CV-XX-NN)` parenthetical prefix syntax, then incomplete fix
