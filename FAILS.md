@@ -1,5 +1,17 @@
 # Failure Log
 
+## 2026-04-30 - Overwrote Existing Workflow Instead of Creating New File
+
+### [MEDIUM] `GLOB-FL-028` Overwrote `improve.md` instead of creating new workflow file
+
+- **When**: 2026-04-30 19:24 UTC+02:00
+- **Where**: `e:\Dev\IPPS\DevSystemV3.6\workflows\improve.md`
+- **What**: User said "create new workflow" - agent replaced the entire existing `improve.md` (91 lines) with the new 317-line version using the edit tool. Original file contents were destroyed. Recovered via `git checkout HEAD`.
+- **Why it went wrong**: Interpreted "create new workflow" as "rewrite the existing improve.md with new content" instead of "create a new file alongside the existing one". Used `edit` with full file replacement instead of `write_to_file` for a new file. Did not ask for clarification on target filename.
+- **Evidence**: User flagged "I dont think you created a new workflow" and invoked `/fail`.
+- **Workflow re-read findings**: Agent behavior rule "No unrelated extensions: Only implement what [ACTOR] requested." - user requested creation, agent performed replacement. The `write_to_file` tool description says "Use this tool to create new files" which was the correct tool for this task.
+- **Suggested fix**: When user says "create new workflow", always use `write_to_file` with a new filename. Ask for the target filename if ambiguous. Never overwrite existing files when the instruction says "create".
+
 ## 2026-04-24 - Deploy Preview Not Emitted in Chat
 
 ### [LOW] `GLOB-FL-027` Deploy preview left in command output, not shown in chat
