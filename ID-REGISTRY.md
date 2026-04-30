@@ -34,6 +34,7 @@ Used in SPEC documents. Format: `[TOPIC]-[TYPE]-[NN]`
 - **FR** - Functional Requirement
 - **DD** - Design Decision
 - **IG** - Implementation Guarantee
+- **NFR** - Non-Functional Requirement
 - **AC** - Acceptance Criterion
 
 ## Plan-Level Item IDs
@@ -171,6 +172,9 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **WSWN** - What? So What? Now What? (reflective framework deep research, Borton/Driscoll/Rolfe)
 
 ## Document History
+
+**[2026-04-30 20:21]**
+- Added: NFR (Non-Functional Requirement) to Spec-Level Item IDs
 
 **[2026-04-16 13:26]**
 - Added: REPRT topic (Report Writing - Minto Pyramid-based reports)
