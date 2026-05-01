@@ -9,14 +9,14 @@ Switch to a different AI model tier. Direct execution - no file reads.
 ## Configuration
 
 ```
-MODEL-HIGH = "Claude Opus 4.5 (Thinking)"
-MODEL-HIGH-QUERY = "opus 4.5 thinking"
+MODEL-HIGH = "Claude Opus 4.6 Thinking"
+MODEL-HIGH-QUERY = "opus 4.6 thinking"
 
-MODEL-MID = "Claude Sonnet 4.5"
-MODEL-MID-QUERY = "sonnet 4.5"
+MODEL-MID = "Claude Sonnet 4.6 Thinking"
+MODEL-MID-QUERY = "sonnet 4.6 thinking"
 
-MODEL-LOW = "Gemini 3 Flash Medium"
-MODEL-LOW-QUERY = "gemini 3 flash medium"
+MODEL-LOW = "Gemini 3 Flash High"
+MODEL-LOW-QUERY = "gemini 3 flash high"
 ```
 
 ## Required Skills
