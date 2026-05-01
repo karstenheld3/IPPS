@@ -7,7 +7,7 @@ Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
 ## Release Notes Location (2026-05-01)
 
-Release notes go in `Docs/ReleaseNotes/`. Filename: `RELEASE_NOTES_YYYY-MM-DD.md`.
+Release notes go in `Docs/ReleaseNotes/`. Filename: `RELEASE_NOTES_v[VERSION]_YYYY-MM-DD.md`.
 
 ## .tools Folder Location (2026-02-11)
 
