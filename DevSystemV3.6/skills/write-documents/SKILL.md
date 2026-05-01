@@ -11,7 +11,9 @@ This skill contains document templates, formatting rules, and writing quality st
 - `APAPALAN_RULES.md` - Precision formatting, brevity, document structure, naming conventions
 - `MECT_WRITING_RULES.md` - Voice, word choice, terminology design, heading/list construction, description types
 
-Read both before writing any document.
+**Quality evaluation:** `SOCAS_RULES.md` - Signs of Confusion and Sloppiness (15 criteria). Used by `/verify`, `/critique`, `/improve`, `/research`.
+
+Read APAPALAN and MECT before writing any document. Read SOCAS when evaluating quality.
 
 ## Verb Mapping
 

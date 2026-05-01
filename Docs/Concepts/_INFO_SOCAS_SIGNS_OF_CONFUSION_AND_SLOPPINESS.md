@@ -6,17 +6,18 @@
 
 ## Summary
 
-SOCAS is a quality evaluation heuristic with 14 criteria for detecting degradation in:
+SOCAS is a quality evaluation heuristic with 15 criteria for detecting degradation in:
 - Agent outputs (research, code, specifications)
 - Human documents (specs, plans, communications)
 - Organizational outputs (websites, policies, processes)
+- Researched sources (libraries, frameworks, APIs, tools)
 
-Use during `/verify`, `/critique`, and `/research` workflows.
+Use during `/verify`, `/critique`, `/improve`, and `/research` workflows.
 
 ## Table of Contents
 
 1. [Purpose](#1-purpose)
-2. [The 14 SOCAS Criteria](#2-the-14-socas-criteria)
+2. [The 15 SOCAS Criteria](#2-the-15-socas-criteria)
 3. [Application Contexts](#3-application-contexts)
 4. [Sources](#4-sources)
 5. [Next Steps](#5-next-steps)
@@ -32,7 +33,7 @@ SOCAS detects early warning signs that indicate:
 
 When multiple SOCAS criteria are present, the output likely needs rework or the source is unreliable.
 
-## 2. The 14 SOCAS Criteria
+## 2. The 15 SOCAS Criteria
 
 ### SOCAS-01: Inconsistencies
 
@@ -132,6 +133,7 @@ Surface-level quality issues:
 - Stale or broken references
 - Inconsistent formatting
 - Outdated information mixed with current
+- Outdated, abandoned, or unsupported code (deprecated with no successor, unresolved issues, no maintainer response)
 
 ### SOCAS-13: Empty Structure
 
@@ -148,11 +150,19 @@ Items dumped without analyzing relationships:
 - No logical, chronological, structural, or importance-based sequence
 - Reader cannot determine why item 2 follows item 1
 
+### SOCAS-15: Net-Negative Adoption
+
+Solution introduces more problems than it solves - detectable through community research:
+- GitHub issues dominated by workarounds for the tool's own limitations
+- Community forums show recurring migration-away discussions
+- Known problems acknowledged by maintainers but unresolved across major versions
+- Adopters report increased complexity, debugging time, or breaking changes disproportionate to value gained
+
 ## 3. Application Contexts
 
 ### Agent Output Review
 
-Use during `/verify` and `/critique`:
+Use during `/verify`, `/critique`, and `/improve`:
 - Check generated specs against SOCAS criteria
 - Flag research documents with high SOCAS score
 - Require rework when 3+ criteria violated
@@ -192,30 +202,3 @@ Apply when evaluating user interfaces:
 - Application deletes or loses data without user confirmation
 - Users can accidentally close dialogs with entered data by clicking outside
 
-## 4. Sources
-
-- `SOCAS-IN01-SC-IPPS-NOTES`: `_Sessions/_Archive/_2026-01-17_STRUT-TRACTFUL-TDID/NOTES.md` - Original 10 criteria [VERIFIED]
-- `SOCAS-IN01-SC-IPPS-README`: `README.md` - SOCAS acronym definition [VERIFIED]
-- `SOCAS-IN01-SC-MINTO-RULES`: `_INFO_MINTO_CORE_RULES.md [MINTO-IN15]` - Minto Core Rules: VL-01, VL-02, VL-03, OR-05, OR-06, MC-06, DG-04 [VERIFIED]
-
-## 5. Next Steps
-
-1. Reference this document from `/verify` and `/critique` workflows
-2. Add SOCAS checklist to `_REVIEW.md` template
-3. Create SOCAS scoring rubric (0-3 per criterion)
-
-## 6. Document History
-
-**[2026-04-12 20:17]**
-- Added: SOCAS-13 (Empty Structure) and SOCAS-14 (Arbitrary Sequencing) from Minto Core Rules analysis
-- Changed: SOCAS-03 enriched with granularity mismatch indicator (from MNT-VL-02, MNT-MC-06)
-- Changed: SOCAS-10 enriched with unjustified selection indicator (from MNT-DG-04)
-- Added: Minto Core Rules source reference
-
-**[2026-03-06 11:48]**
-- Added: UX Design Review section with 8 criteria
-
-**[2026-03-06 11:43]**
-- Initial document created
-- Consolidated 10 original criteria with user-provided organizational criteria
-- Expanded to 12 criteria covering agent, document, and organizational contexts
