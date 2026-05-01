@@ -20,7 +20,7 @@ The goal: Run [`/go`](.windsurf/workflows/go.md) and watch the agent execute a m
 
 ## Core Concepts
 
-IPPS is built on seven integrated specifications that enable autonomous agent operation:
+IPPS is built on eight integrated specifications that enable autonomous agent operation:
 
 - **[AGEN - Agentic English](Docs/Specs/SPEC_AGEN_AGENTIC_ENGLISH.md)** - Controlled vocabulary with verbs `[VERB]`, placeholders `[PLACEHOLDER]`, and states `STATE`. Eliminates ambiguity in agent instructions.
 
@@ -36,6 +36,8 @@ IPPS is built on seven integrated specifications that enable autonomous agent op
 
 - **[MECT - Minimal Explicit Consistent Terminology](Docs/Concepts/_INFO_MECT_PHILOSOPHY.md)** - Writing quality philosophy. Rules in [`MECT_WRITING_RULES.md`](.windsurf/skills/write-documents/MECT_WRITING_RULES.md) (voice, word choice, terminology, headings, lists) and [`MECT_CODING_RULES.md`](.windsurf/skills/coding-conventions/MECT_CODING_RULES.md) (naming, functions, comments, logs, errors).
 
+- **[SOCAS - Signs of Confusion and Sloppiness](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md)** - 15 criteria for detecting agent degradation in documents, code, and workflows. Rules in [`SOCAS_RULES.md`](.windsurf/skills/write-documents/SOCAS_RULES.md). Used by `/improve` and `/verify` for quality evaluation.
+
 **How they work together:**
 ```
 AGEN provides the language    → Verbs, placeholders, outcomes (-OK, -FAIL, -SKIP)
@@ -45,9 +47,10 @@ TRACTFUL provides the docs    → INFO, SPEC, IMPL, TEST, TASKS with unique IDs
 MNF provides the safety net   → Critical items that must be verified before completion
 APAPALAN provides precision   → Precision first, brevity second (26 enforceable rules)
 MECT provides consistency     → Voice, terminology, naming across documents and code
+SOCAS provides quality gates  → 15 criteria detecting confusion and sloppiness
 ```
 
-**Design principle:** Each spec has a single responsibility. AGEN defines vocabulary. EDIRD defines phases and gates. STRUT defines notation. TRACTFUL defines documents. MNF prevents oversights. APAPALAN enforces precision and brevity. MECT ensures consistent terminology. Workflows orchestrate them without hardcoding phase knowledge.
+**Design principle:** Each spec has a single responsibility. AGEN defines vocabulary. EDIRD defines phases and gates. STRUT defines notation. TRACTFUL defines documents. MNF prevents oversights. APAPALAN enforces precision and brevity. MECT ensures consistent terminology. SOCAS detects quality degradation. Workflows orchestrate them without hardcoding phase knowledge.
 
 **Example** - A hotfix plan in STRUT notation:
 ```
