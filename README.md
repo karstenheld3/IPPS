@@ -618,7 +618,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ## Workflows Reference
 
-38 workflows in `.windsurf/workflows/`:
+39 workflows in `.windsurf/workflows/`:
 
 **Entry Points**
 - [`/build`](.windsurf/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
@@ -673,6 +673,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 - [`/commit`](.windsurf/workflows/commit.md) - Create conventional commits
 - [`/switch-model`](.windsurf/workflows/switch-model.md) - Switch Cascade AI model tier (HIGH, MID, LOW)
 - [`/project-release`](.windsurf/workflows/project-release.md) - Create a dated release with comprehensive release notes
+- [`/cleanup`](.windsurf/workflows/cleanup.md) - Delete temporary files and artifacts left by workflows and skills
 
 ## Usage Examples
 
