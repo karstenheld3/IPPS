@@ -36,7 +36,7 @@ IPPS is built on eight integrated specifications that enable autonomous agent op
 
 - **[MECT - Minimal Explicit Consistent Terminology](Docs/Concepts/_INFO_MECT_PHILOSOPHY.md)** - Writing quality philosophy. Rules in [`MECT_WRITING_RULES.md`](.windsurf/skills/write-documents/MECT_WRITING_RULES.md) (voice, word choice, terminology, headings, lists) and [`MECT_CODING_RULES.md`](.windsurf/skills/coding-conventions/MECT_CODING_RULES.md) (naming, functions, comments, logs, errors).
 
-- **[SOCAS - Signs of Confusion and Sloppiness](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md)** - 15 criteria for detecting agent degradation in documents, code, and workflows. Rules in [`SOCAS_RULES.md`](.windsurf/skills/write-documents/SOCAS_RULES.md). Used by `/improve` and `/verify` for quality evaluation.
+- **[SOCAS - Signs of Confusion and Sloppiness](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md)** - 15 criteria for ranking web search results and evaluating agent output quality. Rules in [`SOCAS_RULES.md`](.windsurf/skills/write-documents/SOCAS_RULES.md). Used by `/deep-research`, `/improve`, and `/verify`.
 
 **How they work together:**
 ```
