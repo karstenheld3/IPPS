@@ -80,7 +80,7 @@ Extract from previous messages in the current chat:
 - **Reference numbers** (contract IDs, user numbers, NIF, etc.)
 - **Language** used in communication
 
-Present extracted data to user for confirmation before proceeding.
+Proceed directly to file creation. User can review and edit after.
 
 ## Step 3: Check for Existing Conversation Files
 
@@ -114,7 +114,7 @@ Read SESSION NOTES.md (if SESSION-MODE) or WORKSPACE NOTES.md (if PROJECT-MODE).
 - `CONVERSATION_DO_NOT_TRANSLATE_LIST`
 - `TRANSLATION_TERM_PAIRS`
 
-If any variable is missing from NOTES.md, add it with default `=true` (for booleans) or empty (for lists). Present the values to the user for confirmation.
+If any variable is missing from NOTES.md, add it with default `=true` (for booleans) or empty (for lists).
 
 These values populate the Translation Settings section in the new conversation file.
 

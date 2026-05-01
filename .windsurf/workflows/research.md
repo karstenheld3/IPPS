@@ -16,6 +16,7 @@ Read these before proceeding:
 
 ## MUST-NOT-FORGET
 
+- **Evaluate sources with SOCAS** - Apply @write-documents `SOCAS_RULES.md` Source Evaluation subset to rank source reliability
 - **Summary section is mandatory** - Copy/paste ready list at document top
 - **Label ALL findings** with verification status:
   - `[ASSUMED]` - Unverified, needs validation

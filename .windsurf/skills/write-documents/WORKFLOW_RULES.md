@@ -36,6 +36,9 @@ Content (CT)
 - WF-CT-06: APAPALAN requires examples - precision over brevity
 - WF-CT-07: No Document History section in rule files
 
+Execution (EX)
+- WF-EX-01: Optimize for autonomous execution - no confirmation gates unless destructive
+
 Branching (BR)
 - WF-BR-01: Context branching by document type or mode
 - WF-BR-02: Include "No Context Match" fallback
@@ -63,6 +66,7 @@ Branching (BR)
 - [Output Format](#output-format)
 - [Trigger](#trigger)
 - [Quality Gate](#quality-gate)
+- [Autonomous Execution](#autonomous-execution)
 
 ## Frontmatter Format
 
@@ -505,4 +509,50 @@ Before completing, you should verify that:
 - [ ] Rules re-read
 - [ ] Findings documented
 - [ ] Severity classified
+```
+
+## Autonomous Execution
+
+Workflows must execute without unnecessary pauses. Only request confirmation for destructive or ambiguous actions.
+
+**Destructive** (confirmation required): renaming files, deleting content, overwriting user data, sending emails.
+
+**Ambiguous** (confirmation required): multiple candidates and no way to determine correct one.
+
+**Non-destructive** (no confirmation): creating new files, extracting data, reading context, populating templates, setting defaults. User can review and edit output after.
+
+**BAD:**
+```markdown
+## Step 2: Extract Data
+
+Extract contact information from chat context.
+
+Present extracted data to user for confirmation before proceeding.
+
+## Step 3: Read Variables
+
+Read translation settings from NOTES.md.
+
+Present the values to the user for confirmation.
+
+## Step 4: Create File
+
+Create the output file.
+```
+
+**GOOD:**
+```markdown
+## Step 2: Extract Data
+
+Extract contact information from chat context.
+Proceed directly to file creation. User can review and edit after.
+
+## Step 3: Read Variables
+
+Read translation settings from NOTES.md.
+If missing, add with defaults.
+
+## Step 4: Create File
+
+Create the output file.
 ```

@@ -10,8 +10,8 @@ Verify work against specs, rules, and quality standards.
 ## Required Skills
 
 Invoke based on context:
-- @write-documents for document verification
-- @coding-conventions for code verification
+- @skills:write-documents for document verification
+- @skills:coding-conventions for code verification
 
 **CRITICAL**: Skill invocation returns instructions only. You MUST also read the supporting files listed in skill output (e.g., `PYTHON-RULES.md`, `WORKFLOW-RULES.md`) to get actual verification rules.
 
@@ -81,14 +81,15 @@ Apply to ALL document types and contexts:
 
 ## Conceptual verification
 
-When reviewing architecture, design and solution strategy, look for:
-- inconsistencies
-- new solutions for already solved problems
-- ambiguities
-- underspecified behavior
-- unverified assumptions
-- over-engineering and introduction of unwanted complexity
-- flawed thinking and underestimated complexity
+When reviewing architecture, design and solution strategy, apply @skills:write-documents `SOCAS_RULES.md` with the Agent Output Review subset. Look for:
+- inconsistencies (SOCAS-01)
+- ambiguities (SOCAS-02)
+- new solutions for already solved problems (SOCAS-03)
+- overlapping concerns (SOCAS-03)
+- underspecified behavior (SOCAS-06)
+- unverified assumptions (SOCAS-10)
+- flawed thinking and underestimated complexity (SOCAS-10)
+- over-engineering and introduction of unwanted complexity (SOCAS-11)
 
 ## Verification Labels
 
@@ -127,8 +128,8 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Verify Timeline field is present and accurate (Created date, update count, date range)
 - Verify Document History section exists and is up to date
 - Read `[AGENT_FOLDER]/workflows/research.md` again and verify against instructions.
-- Verify against @write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
-- Verify against @write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
+- Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
+- Verify against @skills:write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
 
 ## Specifications (SPEC)
 
@@ -141,10 +142,10 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Ensure exhaustive implementation verification checklist at end.
 - Verify Document History section exists and is up to date
 - Verify UI mockups use Unicode box-drawing characters (SPEC-DG-06: `┌ ├ └ │ ─` not `+ - |`)
-- Read @write-documents skill again and verify against rules.
-- Verify against @write-documents `SPEC_RULES.md` (required for all SPEC documents)
-- Verify against @write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
-- Verify against @write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
+- Read @skills:write-documents skill again and verify against rules.
+- Verify against @skills:write-documents `SPEC_RULES.md` (required for all SPEC documents)
+- Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
+- Verify against @skills:write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
 
 ## Implementation Plans (IMPL)
 
@@ -153,23 +154,23 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Read spec again and verify against spec.
 - Anything forgotten or not implemented as in SPEC?
 - Verify Document History section exists and is up to date
-- Read @coding-conventions skill again and verify against rules.
-- Verify against @write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
-- Verify against @write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
+- Read @skills:coding-conventions skill again and verify against rules.
+- Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
+- Verify against @skills:write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
 
 ## Implementations (Code)
 
 - Read specs and plans again and verify against specs.
 - Are there existing tests that we can run to verify?
 - Can we do quick one-off tests to verify we did not break things?
-- Read @coding-conventions skill again and verify against rules.
-- Verify against @coding-conventions `MECT_CODING_RULES.md` (precision, brevity, consistency, naming design, documentation)
+- Read @skills:coding-conventions skill again and verify against rules.
+- Verify against @skills:coding-conventions `MECT_CODING_RULES.md` (precision, brevity, consistency, naming design, documentation)
 
 **Logging Verification (automatic, language-agnostic):**
 
 If code contains logging, output, or print statements:
 
-1. Read @coding-conventions `LOGGING-RULES.md` (general rules)
+1. Read @skills:coding-conventions `LOGGING-RULES.md` (general rules)
 2. Identify logging type and read corresponding rules file:
    - User-facing (console, SSE) → `LOGGING-RULES-USER-FACING.md`
      - Goal: Users always know what is happening
@@ -190,8 +191,8 @@ If code contains logging, output, or print statements:
 - Verify Timeline field is present and accurate (Created date, update count, date range)
 - Verify MUST-NOT-FORGET section exists and rules are followed
 - Verify test strategy matches spec requirements
-- Verify against @write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
-- Verify against @write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
+- Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
+- Verify against @skills:write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
 - Check test priority matrix:
   - MUST TEST: Critical business logic covered?
   - SHOULD TEST: Important workflows included?
@@ -213,19 +214,19 @@ If code contains logging, output, or print statements:
 
 ## Workflows
 
-- Read @coding-conventions `WORKFLOW-RULES.md` and verify against rules
+- Read @skills:coding-conventions `WORKFLOW-RULES.md` and verify against rules
 - Verify structure follows GLOBAL-RULES + CONTEXT-SPECIFIC pattern (recommended)
 - Verify workflow references use inline code format: `/verify`, `/research`
 - Verify frontmatter has `description` field
 - Verify steps are numbered and actionable
 - Verify skill references use `@skills:skill-name` format
-- Verify against @write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
-- Verify against @write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
+- Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
+- Verify against @skills:write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
 - Verify no hardcoded paths (use placeholders like `[WORKSPACE_FOLDER]`)
 
 ## Skills
 
-- Read @write-documents `SKILL_RULES.md` and verify against all SK-* rules
+- Read @skills:write-documents `SKILL_RULES.md` and verify against all SK-* rules
 - Verify SKILL.md exists with YAML frontmatter: `name`, `description`, `compatibility` (SK-HD-01 to SK-HD-03)
 - Verify SKILL.md is self-contained for common use cases (SK-ST-01)
 - Verify MUST-NOT-FORGET section present with 3-10 items (SK-ST-02)
@@ -246,8 +247,8 @@ If code contains logging, output, or print statements:
   - No duplicated tool parameter docs from MCP handshake or `--help` (SK-CT-02)
   - Gotchas section for non-obvious behavior (SK-CT-03)
   - No visual-only formatting in LLM-consumed reference files (SK-CT-05)
-- Verify against @write-documents `APAPALAN_RULES.md` (precision, brevity)
-- Verify against @write-documents `MECT_WRITING_RULES.md` (voice, terminology)
+- Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity)
+- Verify against @skills:write-documents `MECT_WRITING_RULES.md` (voice, terminology)
 
 ## Session Tracking (NOTES, PROBLEMS, PROGRESS)
 
@@ -280,7 +281,7 @@ If code contains logging, output, or print statements:
 
 ## Conversations
 
-- Read @write-documents `CONVERSATION_RULES.md` and verify against all CV-* rules
+- Read @skills:write-documents `CONVERSATION_RULES.md` and verify against all CV-* rules
 - Verify filename is `CONVERSATION_[COUNTERPARTY].md`, never plain `CONVERSATION.md` (CV-FL-01)
 - Verify required sections in order: MNF, Ignore Files, Translation Settings, Status, Links, Context, Log, History (CV-ST-01)
 - Verify Translation Settings section present with all 4 variables (CV-VR-01)

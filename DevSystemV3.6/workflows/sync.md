@@ -8,17 +8,18 @@ auto_execution_mode: 1
 ## Required Skills
 
 Invoke based on context:
-- @write-documents for document formatting rules
-- @coding-conventions for code-related sync
+- @skills:write-documents for document formatting rules
+- @skills:coding-conventions for code-related sync
 
 ## Workflow
 
-1. First find out what the sync context is (Conversation→Docs, Code→Docs, Session→Project, etc.)
-2. Read GLOBAL-RULES
-3. Read the relevant Context-Specific section
-4. Create a sync task list
-5. Work through sync task list
-6. Run Final Steps
+1. **Determine scope** - If user specifies "sync A with B", sync ONLY between A and B. Do NOT cascade to other documents.
+2. If no explicit targets given, detect sync context (Code→Docs, Session→Project, etc.) and use full context-specific section
+3. Read GLOBAL-RULES
+4. Read the relevant Context-Specific section
+5. Create a sync task list (scoped to determined targets only)
+6. Work through sync task list
+7. Run Final Steps
 
 ## GLOBAL-RULES
 
