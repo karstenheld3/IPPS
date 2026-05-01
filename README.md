@@ -112,7 +112,7 @@ your-project/
 
 ## DevSystem Versions
 
-- **[DevSystemV3.6](DevSystemV3.6/)** - Current system with workflow MNF sections, improved /implement and /go workflows
+- **[DevSystemV3.6](DevSystemV3.6/)** - Current system with SOCAS quality criteria, 4-phase /improve workflow, NFR in SPEC, STRUT self-tracking
 
 Older versions in [`_OldDevSystemVersions/`](_OldDevSystemVersions/):
 - DevSystemV3.5 - Generic /fix workflow, improved /implement and /go workflows
@@ -271,7 +271,7 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - [EDIRD Phase Planning](.windsurf/rules/edird-phase-planning.md) - Phase model core rules
 - [Git Conventions](.windsurf/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
 - [Coding Conventions](.windsurf/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
-- [Workflow Rules](.windsurf/skills/coding-conventions/WORKFLOW-RULES.md) - APAPALAN principle, workflow formatting
+- [Workflow Rules](.windsurf/skills/write-documents/WORKFLOW_RULES.md) - Workflow document structure and formatting
 
 ## Skills
 
