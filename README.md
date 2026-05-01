@@ -253,7 +253,7 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - **AWT** - Agentic Work Time. Agent time estimate for planning and capacity
 - [**MEPI**](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Executable Point of Information. Present 2-3 curated options aligned with implicit intentions.
 - [**MCPI**](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Complete Point of Information. Present exhaustive options when thoroughness is explicitly required
-- [**SOCAS**](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md) - Signs Of Confusion And Sloppiness. 12 criteria for detecting agent degradation
+- [**SOCAS**](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md) - Signs Of Confusion And Sloppiness. 15 criteria for detecting agent degradation
 - [**MNF**](Docs/Concepts/_INFO_MNF_TECHNIQUE.md) - Must Not Forget. Technique for critical item tracking during task execution
 - **APAPALAN** - As Precise As Possible, As Little As Necessary. Conciseness principle for workflows and documents
 
@@ -767,7 +767,7 @@ Pragmatic review of critique findings:
 /reconcile
 ```
 
-Find and fix contradictions and improvements:
+Depth-first improvement (one proven change per run, versioned backups):
 ```
 /improve
 ```

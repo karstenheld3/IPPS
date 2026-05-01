@@ -1,5 +1,17 @@
 # Failure Log
 
+## 2026-05-01 - Edited File When User Said "Propose"
+
+### [MEDIUM] `GLOB-FL-029` Started editing improve.md when user said "propose ideas"
+
+- **When**: 2026-05-01 14:42 UTC+02:00
+- **Where**: `e:\Dev\IPPS\DevSystemV3.6\workflows\improve.md`
+- **What**: User said "propose ideas where an additional web or local research could help improve the output quality". Agent correctly proposed 7 research ideas in chat. User then clarified they meant adding research instructions to the workflow itself. Agent proposed the concept in chat, then immediately started editing the file with `edit` tool - user had to cancel the tool call.
+- **Why it went wrong**: User said "propose" both times. Agent treated the clarification as implicit permission to implement. The verb "propose" means "talk ABOUT, don't modify" per agent-behavior.md L24.
+- **Evidence**: User canceled the edit tool call and invoked `/fail` with "I said propose not implement".
+- **Workflow re-read findings**: `agent-behavior.md` L24: `"Propose", "suggest", "draft", "outline" = talk ABOUT, don't modify`. The user never switched to an implement verb ("implement", "fix", "change", "update", "add").
+- **Suggested fix**: After proposing in chat, STOP. Wait for user to use an implement verb before touching files. The clarification "I mean in the agent instructions" refined WHAT to propose, not a command to implement.
+
 ## 2026-04-30 - Overwrote Existing Workflow Instead of Creating New File
 
 ### [MEDIUM] `GLOB-FL-028` Overwrote `improve.md` instead of creating new workflow file
