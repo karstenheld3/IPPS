@@ -35,6 +35,7 @@ Content (CT)
 - WF-CT-05: Product names spelled correctly
 - WF-CT-06: APAPALAN requires examples - precision over brevity
 - WF-CT-07: No Document History section in rule files
+- WF-CT-08: Examples use generic placeholders, never real project filenames or failure references
 
 Execution (EX)
 - WF-EX-01: Optimize for autonomous execution - no confirmation gates unless destructive
@@ -509,6 +510,20 @@ Before completing, you should verify that:
 - [ ] Rules re-read
 - [ ] Findings documented
 - [ ] Severity classified
+```
+
+## Generic Examples
+
+Examples in workflows must use generic placeholders or fictional names. Never reference real project filenames, session names, failure IDs, or user-specific content. Workflows are reusable across projects.
+
+**BAD:**
+```markdown
+- Example: scope `_INFO_DIGLDR_10-BENCHMARKS.md` → `_INFO_DIGLDR_10-BENCHMARKS_DEFERRED_IMPROVEMENTS.md`
+```
+
+**GOOD:**
+```markdown
+- Example: scope `_INFO_CRAWLER_SOURCES.md` → `_INFO_CRAWLER_SOURCES_DEFERRED_IMPROVEMENTS.md`
 ```
 
 ## Autonomous Execution

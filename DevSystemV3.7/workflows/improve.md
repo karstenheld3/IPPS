@@ -70,9 +70,9 @@ The selected improvement must pass this filter before applying. Answer:
 
 **Decision**:
 - **APPLY** - passes all 6 questions → apply the improvement
-- **DEFER** - fails any question → append to `_DEFERRED_IMPROVEMENTS.md` with assessment rationale, select next candidate
+- **DEFER** - fails any question → append to `[DEFERRED_FILE]` with assessment rationale, select next candidate
 
-`_DEFERRED_IMPROVEMENTS.md` is additive - each run appends, never overwrites. Use reconcile's findings format. Run `/reconcile` on `_DEFERRED_IMPROVEMENTS.md` for pragmatic review.
+`[DEFERRED_FILE]` is additive - each run appends, never overwrites. Use reconcile's findings format. Run `/reconcile` on `[DEFERRED_FILE]` for pragmatic review.
 
 ### Quality Polish (Phase 4, all contexts)
 
@@ -363,8 +363,13 @@ Detection: determine context from file naming and content, then apply matching s
    - Code quality: `MECT_CODING_RULES.md` (@skills:coding-conventions)
    - Workspace: README, NOTES, ID-REGISTRY, FAILS, LEARNINGS
    - Session: NOTES, PROBLEMS, PROGRESS (if SESSION-MODE)
-4. **Create STRUT plan** via `/write-strut` - Track phases 1-4 with checkboxes. Save as `.tmp_STRUT_IMPROVE_<YYYY-MM-DD_HH-MM>.md` in scope folder (or session folder in SESSION-MODE).
-5. **Backup scoped files** - Before any modification, create versioned backups:
+4. **Derive `[DEFERRED_FILE]`** - Unique per improve chain to enable parallel runs:
+   - **Single file**: `<filename_without_ext>_DEFERRED_IMPROVEMENTS.md` in same directory
+   - **Folder**: `<foldername>_DEFERRED_IMPROVEMENTS.md` in that folder
+   - **Conversation context**: `<session_topic_or_timestamp>_DEFERRED_IMPROVEMENTS.md` in session folder
+   - Example: scope `_INFO_CRAWLER_SOURCES.md` → `_INFO_CRAWLER_SOURCES_DEFERRED_IMPROVEMENTS.md`
+5. **Create STRUT plan** via `/write-strut` - Track phases 1-4 with checkboxes. Save as `.tmp_STRUT_IMPROVE_<YYYY-MM-DD_HH-MM>.md` in scope folder (or session folder in SESSION-MODE).
+6. **Backup scoped files** - Before any modification, create versioned backups:
    - **Detect version**: Find highest existing `_vN` backup for each file. No backups → N=0.
    - **Backup**: Copy each scoped file to `<name>_vN.<ext>` in same directory.
    - Documents: `_SPEC_CRAWLER.md` → `_SPEC_CRAWLER_v0.md`
@@ -414,13 +419,13 @@ Pass: Proceed to Phase 3 | Fail: Continue Phase 2
 
 Select ONE improvement. Research exhaustively. Prove justification. Apply or defer.
 
-1. **Select** - Pick highest-ranked candidate from Phase 1. If previous `_DEFERRED_IMPROVEMENTS.md` exists, check it to avoid re-proposing deferred items.
+1. **Select** - Pick highest-ranked candidate from Phase 1. If previous `[DEFERRED_FILE]` exists, check it to avoid re-proposing deferred items.
 2. **Deep research** - Execute context-specific Adversarial Collaborator techniques for the selected improvement only. Gather evidence: web research, local codebase analysis, examples, tests.
 3. **Pragmatic filter** - Run the 6 pragmatic questions (see GLOBAL-RULES). Requires evidence for question 6 (Proven?).
 4. **Decision**:
    - **APPLY** - passes all 6 questions → apply the improvement, update Document History
-   - **DEFER** - fails any question → append to `_DEFERRED_IMPROVEMENTS.md` with assessment rationale, select next candidate (repeat from step 1)
-5. **Log remaining** - Unprocessed candidates → append to `_DEFERRED_IMPROVEMENTS.md` for next run
+   - **DEFER** - fails any question → append to `[DEFERRED_FILE]` with assessment rationale, select next candidate (repeat from step 1)
+5. **Log remaining** - Unprocessed candidates → append to `[DEFERRED_FILE]` for next run
 
 ### Gate: Phase 3 → Phase 4
 
@@ -444,7 +449,7 @@ Apply APAPALAN + MECT to all changes made in Phase 2 and Phase 3.
 After Phase 4, compare working file against its `_vN` backup:
 - **Documents**: Diff working file vs `_vN`. Run SOCAS on both. Improved version must not score worse.
 - **Code**: Run tests on working file. Compare results against `_vN`. No new failures allowed.
-- **If degraded**: Revert by copying `_vN` back to working filename. Log failed improvement to `_DEFERRED_IMPROVEMENTS.md` with "caused regression" rationale.
+- **If degraded**: Revert by copying `_vN` back to working filename. Log failed improvement to `[DEFERRED_FILE]` with "caused regression" rationale.
 
 ## Stuck Detection
 
@@ -468,14 +473,14 @@ If 3 consecutive fix attempts cause regressions:
 
 1. Delete `.tmp_STRUT_IMPROVE_<timestamp>.md` - plan is complete
 2. Keep all `_vN` backups - only user may delete them
-3. If `_DEFERRED_IMPROVEMENTS.md` has entries, suggest `/reconcile` for pragmatic review
+3. If `[DEFERRED_FILE]` has entries, suggest `/reconcile` for pragmatic review
 
 ## Output
 
 - Modified files in place (original filenames, newest version)
 - `_vN` backups preserved for comparison and rollback
 - Document History updated with improvement summary
-- `_DEFERRED_IMPROVEMENTS.md` with remaining candidates (if any)
+- `[DEFERRED_FILE]` with remaining candidates (if any)
 - PROBLEMS.md updated if stuck or regression occurred
 
 ## Verification

@@ -44,6 +44,7 @@ Behavioral rules for agent execution patterns.
 - Always repeat the initial / overall goal to yourself to stay focused 
 - Track progress in PROGRESS.md, problems in PROBLEMS.md, make notes in NOTES.md
 - Run `/verify` after significant changes
+- Never leak project-specific or private data into workflows, skills, or rules. These are reusable across projects. Use generic examples and placeholders only
 
 ## File Placement
 

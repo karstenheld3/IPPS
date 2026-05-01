@@ -1,5 +1,17 @@
 # Failure Log
 
+## 2026-05-01 - Deploy Preview Not Visible in Chat
+
+### [MEDIUM] `GLOB-FL-030` Deploy preview buried in command output, not emitted as chat text
+
+- **When**: 2026-05-01 17:06 UTC+02:00
+- **Where**: `deploy-to-all-repos` workflow execution
+- **What**: Ran the comparison script via `run_command`. Preview was returned in the command output block. User reported "again I dont see the preview". The preview existed but was not visible in the Windsurf chat UI (collapsed/truncated command output).
+- **Why it went wrong**: Workflow step 2.3 says "Preview goes in chat, NOT to a `.tmp` file." Agent relied on command output being visible instead of explicitly quoting the preview text in the response message.
+- **Evidence**: User invoked `/fail` saying "again I dont see the preview". References GLOB-FL-023 and GLOB-FL-024.
+- **Workflow re-read findings**: `deploy-to-all-repos.md` step 2.3: "CRITICAL: Preview goes in chat". The `Format-DeployPreview` output must be copy-pasted into the agent's response text, not left in a tool call output block.
+- **Suggested fix**: After running the comparison script, extract the preview string and include it verbatim in the response message as a fenced code block.
+
 ## 2026-05-01 - Edited File When User Said "Propose"
 
 ### [MEDIUM] `GLOB-FL-029` Started editing improve.md when user said "propose ideas"

@@ -36,6 +36,7 @@ Usage: `--keys-file [WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
 ## DevSystem Source/Sync Rules
 
 **CRITICAL: [DEVSYSTEM_FOLDER] is the SOURCE. .windsurf is the SYNC TARGET.**
+**CRITICAL: Never leak project-specific or private data into workflows, skills, or rules.** These are reusable across projects. Use generic examples and placeholders only.
 
 - **Creating new rules, workflows, skills** -> Create in [DEVSYSTEM_FOLDER] first, then sync
 - **Editing existing content** -> Edit in [DEVSYSTEM_FOLDER] first, then sync

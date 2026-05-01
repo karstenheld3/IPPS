@@ -153,6 +153,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **LLMTR** - LLM Transcription Skill (image-to-markdown, audio-to-markdown)
 - **MCPS** - MCP server integrations
 - **MECE** - Mutually Exclusive, Collectively Exhaustive (grouping/decomposition quality principle)
+- **MDPDF** - Markdown to PDF Renderer (Python tool with theme.json and settings.json)
 - **MECT** - Minimal Explicit Consistent Terminology (communication design principle)
 - **MINTO** - Minto Pyramid Principle (communication framework research and reference)
 - **MIPPS** - Minimal IPPS (DevSystem compression pipeline)
@@ -172,6 +173,9 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **WSWN** - What? So What? Now What? (reflective framework deep research, Borton/Driscoll/Rolfe)
 
 ## Document History
+
+**[2026-05-01 17:39]**
+- Added: MDPDF topic (Markdown to PDF Renderer)
 
 **[2026-04-30 20:21]**
 - Added: NFR (Non-Functional Requirement) to Spec-Level Item IDs
