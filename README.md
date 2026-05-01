@@ -89,9 +89,10 @@ SOCAS provides quality gates  → 15 criteria detecting confusion and sloppiness
 - [Key Conventions](#key-conventions)
 - [Agent Tools](#agent-tools)
 - [Project Structure](#project-structure)
-- [Skills](#skills)
+- [Skills Reference](#skills-reference)
 - [File Naming Conventions](#file-naming-conventions)
 - [Workspaces and Sessions](#workspaces-and-sessions)
+- [Workflows Reference](#workflows-reference)
 - [Usage Examples](#usage-examples)
 - [Agent Compatibility](#agent-compatibility)
 
@@ -525,15 +526,29 @@ IPPS/
 └── README.md
 ```
 
-## Skills Summary
+## Skills Reference
 
-- **edird-phase-planning** - High-level phase planning with effort allocation, planning guidance, gates
+19 skills in `.windsurf/skills/`:
+
+- **coding-conventions** - Python, PowerShell coding style rules, MECT coding rules
+- **deep-research** - Deep research strategies (MEPI/MCPI), domain-specific patterns
+- **edird-phase-planning** - EDIRD phase model with effort allocation, planning guidance, gates
 - **git** - Commit history navigation, file recovery from previous commits
-- **github** - GitHub CLI operations (repos, issues, PRs)
-- **llm-evaluation** - Generic LLM evaluation pipeline (process, questions, answers, scoring)
+- **git-conventions** - Commit message format, .gitignore rules
+- **github** - GitHub CLI operations (repos, issues, PRs, releases)
+- **google-account** - Google services (Gmail, Calendar, Drive, Tasks) via gogcli CLI
+- **llm-computer-use** - Desktop automation via LLM vision (click, type, navigate)
+- **llm-evaluation** - LLM evaluation pipeline (questions, answers, scoring, cost analysis)
+- **llm-transcription** - Image/audio to markdown transcription (ensemble + judge + refinement)
+- **ms-playwright-mcp** - Browser automation via Microsoft Playwright MCP server
 - **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF
-- **session-management** - Session init, save, resume, close workflows
-- **write-documents** - Spec, impl, test, info, tasks document templates
+- **playwriter-mcp** - Real browser automation with existing logins via Playwriter extension
+- **session-management** - Session init, save, resume, finalize, archive
+- **travel-info** - Travel lookups: flights, trains, transit, country-specific info
+- **windows-desktop-control** - Windows screenshots, window management, keyboard/mouse
+- **windsurf-auto-model-switcher** - Switch Cascade AI model tier programmatically
+- **write-documents** - Document templates (INFO, SPEC, IMPL, TEST, TASKS, STRUT), writing rules (APAPALAN, MECT, SOCAS)
+- **youtube-downloader** - Download YouTube content as MP3 or video, extract metadata
 
 ## File Naming Conventions
 
@@ -599,6 +614,64 @@ When [`/session-finalize`](.windsurf/workflows/session-finalize.md) runs:
 - **PROBLEMS.md** - Open/deferred problems sync to workspace `!PROBLEMS.md`
 
 This ensures lessons learned survive session boundaries and prevent repeated mistakes.
+
+## Workflows Reference
+
+38 workflows in `.windsurf/workflows/`:
+
+**Entry Points**
+- [`/build`](.windsurf/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
+- [`/solve`](.windsurf/workflows/solve.md) - Explore problems, evaluate ideas, make decisions (auto-creates session)
+- [`/go`](.windsurf/workflows/go.md) - Autonomous loop until goal reached
+- [`/continue`](.windsurf/workflows/continue.md) - Forward-looking assessment, execute next items on plan
+- [`/recap`](.windsurf/workflows/recap.md) - Analyze context, revisit plan, identify current status
+- [`/prime`](.windsurf/workflows/prime.md) - Prime context with workspace files
+
+**Document Cycle**
+- [`/research`](.windsurf/workflows/research.md) - Structured research with verification labels and source retention
+- [`/deep-research`](.windsurf/workflows/deep-research.md) - Deep research (MEPI or MCPI) with domain-specific patterns
+- [`/write-info`](.windsurf/workflows/write-info.md) - Create INFO document from research
+- [`/write-spec`](.windsurf/workflows/write-spec.md) - Create specification from requirements
+- [`/write-impl-plan`](.windsurf/workflows/write-impl-plan.md) - Create implementation plan from spec
+- [`/write-test-plan`](.windsurf/workflows/write-test-plan.md) - Create test plan from spec
+- [`/write-tasks-plan`](.windsurf/workflows/write-tasks-plan.md) - Create tasks plan from IMPL/TEST
+- [`/write-strut`](.windsurf/workflows/write-strut.md) - Create STRUT plans with proper format
+- [`/implement`](.windsurf/workflows/implement.md) - Execute implementation from context, INFO, SPEC or IMPL documents
+- [`/test`](.windsurf/workflows/test.md) - Run tests based on scope and context
+- [`/partition`](.windsurf/workflows/partition.md) - Partition plans into discrete tasks
+
+**Quality**
+- [`/verify`](.windsurf/workflows/verify.md) - Verify work against specs and rules
+- [`/critique`](.windsurf/workflows/critique.md) - Find flawed assumptions, logic errors, hidden risks
+- [`/reconcile`](.windsurf/workflows/reconcile.md) - Pragmatic review of critique findings
+- [`/improve`](.windsurf/workflows/improve.md) - Depth-first improvement (one proven change per run, versioned backups)
+- [`/sync`](.windsurf/workflows/sync.md) - Document synchronization
+- [`/rename`](.windsurf/workflows/rename.md) - Global and local refactoring with exhaustive search
+
+**Problem Fixing**
+- [`/fix`](.windsurf/workflows/fix.md) - Fix any problem by reading relevant DevSystem knowledge
+- [`/bugfix`](.windsurf/workflows/bugfix.md) - Fix bugs with full traceability (record, investigate, test, commit)
+
+**Learning**
+- [`/fail`](.windsurf/workflows/fail.md) - Record a failure in FAILS.md
+- [`/learn`](.windsurf/workflows/learn.md) - Extract lessons from resolved problems
+
+**Sessions**
+- [`/session-new`](.windsurf/workflows/session-new.md) - Initialize a new development session
+- [`/session-save`](.windsurf/workflows/session-save.md) - Save session progress
+- [`/session-load`](.windsurf/workflows/session-load.md) - Resume a development session
+- [`/session-finalize`](.windsurf/workflows/session-finalize.md) - Finalize session, sync findings, prepare for archive
+- [`/session-archive`](.windsurf/workflows/session-archive.md) - Archive a completed session folder
+
+**Communication**
+- [`/conversation-start`](.windsurf/workflows/conversation-start.md) - Create new conversation tracking file from chat context
+- [`/conversation-update`](.windsurf/workflows/conversation-update.md) - Update existing conversation with new emails or messages
+- [`/transcribe`](.windsurf/workflows/transcribe.md) - Transcribe PDFs and web pages to markdown
+
+**Utility**
+- [`/commit`](.windsurf/workflows/commit.md) - Create conventional commits
+- [`/switch-model`](.windsurf/workflows/switch-model.md) - Switch Cascade AI model tier (HIGH, MID, LOW)
+- [`/project-release`](.windsurf/workflows/project-release.md) - Create a dated release with comprehensive release notes
 
 ## Usage Examples
 
