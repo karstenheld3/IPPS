@@ -10,6 +10,7 @@ Rules for writing specification documents with GOOD/BAD examples.
 - **SPEC-RQ-01**: Use numbered IDs for functional requirements (XXXX-FR-01)
 - **SPEC-RQ-02**: Use numbered IDs for design decisions (XXXX-DD-01)
 - **SPEC-RQ-03**: Use numbered IDs for implementation guarantees (XXXX-IG-01)
+- **SPEC-RQ-04**: Use numbered IDs for non-functional requirements (XXXX-NFR-01)
 
 **Diagrams (DG)**
 - **SPEC-DG-01**: Use Unicode box diagrams with component boundaries
