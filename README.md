@@ -87,7 +87,7 @@ SOCAS provides quality gates  → 15 criteria detecting confusion and sloppiness
 - [TRACTFUL - Document Framework](#tractful---document-framework)
 - [Agentic Concepts and Strategies](#agentic-concepts-and-strategies)
 - [Key Conventions](#key-conventions)
-- [Agent Tools](#agent-tools-installed-automatically-by-skill)
+- [Agent Tools](#agent-tools)
 - [Project Structure](#project-structure)
 - [Skills](#skills)
 - [File Naming Conventions](#file-naming-conventions)
@@ -97,7 +97,7 @@ SOCAS provides quality gates  → 15 criteria detecting confusion and sloppiness
 
 ## Overview
 
-IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V3.6) features the EDIRD phase model, Agentic English vocabulary, STRUT notation, and enhanced logging/formatting rules for deterministic agent behavior.
+IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V3.6) features eight integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT consistency, and SOCAS quality criteria.
 
 ## How to Add to Your Project
 
@@ -498,6 +498,8 @@ Document templates for INFO, SPEC, IMPL, TEST, TASKS, and STRUT plans.
 
 Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.md` in each skill folder to install.
 
+- **[MinifyIPPS](Docs/INFO_HOW_TO_MINIFY_IPPS.md)** - LLM-based compression pipeline for DevSystem markdown files. Reduces token count while preserving meaning. Pipeline: bundle → analyze → compress → verify.
+
 ## Project Structure
 
 ```
@@ -523,7 +525,7 @@ IPPS/
 └── README.md
 ```
 
-## Skills
+## Skills Summary
 
 - **edird-phase-planning** - High-level phase planning with effort allocation, planning guidance, gates
 - **git** - Commit history navigation, file recovery from previous commits
@@ -532,10 +534,6 @@ IPPS/
 - **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF
 - **session-management** - Session init, save, resume, close workflows
 - **write-documents** - Spec, impl, test, info, tasks document templates
-
-## Tools
-
-- **[MinifyIPPS](Docs/INFO_HOW_TO_MINIFY_IPPS.md)** - LLM-based compression pipeline for DevSystem markdown files. Reduces token count while preserving meaning. Pipeline: bundle → analyze → compress → verify. Config: `_Sessions/_2026-03-19_MinifyIPPS/_run_templateV2/pipeline_config.json`
 
 ## File Naming Conventions
 
