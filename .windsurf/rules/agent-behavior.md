@@ -57,9 +57,14 @@ Agent-created files (helper scripts, intermediate data, temp artifacts) MUST res
 
 **Forbidden**: System temp (`%TEMP%`, `$env:TEMP`, `/tmp/`), user home, Program Files, or any location outside workspace/session/target scope. No exceptions.
 
-**Naming**: `.tmp_` prefix. Example: `.tmp_fix_quotes.ps1`
+**Naming**:
+- `.tmp_` prefix for scripts and temp data. Example: `.tmp_fix_quotes.ps1`
+- `__` prefix for scaffolding documents (STRUTs, TASKS, templates auto-created by workflows). Example: `__STRUT_DIGLDR.md`
 
-**Lifecycle**: Commit `.tmp` files along with task or session files. Only delete after the final goal is reached. Until then, they serve as reproducible artifacts.
+**Lifecycle**:
+- `.tmp_` = single-run temp. Deleted within same workflow or by `/cleanup`
+- `__` = multi-run scaffolding. Persists during active work, deleted by `/cleanup` after goal reached
+- Commit both along with task or session files. Only delete after final goal is reached.
 
 ## Before Ending Session
 

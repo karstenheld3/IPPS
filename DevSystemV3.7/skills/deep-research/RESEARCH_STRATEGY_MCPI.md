@@ -14,7 +14,7 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 
 ### Step 1: Create STRUT and Decompose Prompt
 
-- Create `STRUT_[TOPIC].md` using `/write-strut` workflow
+- Create `__STRUT_[TOPIC].md` using `/write-strut` workflow
 - STRUT defines: phases, objectives, steps, deliverables, transitions
 - STRUT enforces 3 VCRIV checkpoints as deliverables
 - STRUT MUST include quality pipeline steps and time log:
@@ -117,7 +117,7 @@ Create Summary file (skeletal), topic template, TASKS plan, run second VCRIV.
 
 ### Step 3: TASKS Plan
 
-- Create `TASKS_[TOPIC]_RESEARCH.md` using `/write-tasks-plan` workflow
+- Create `__TASKS_[TOPIC]_RESEARCH.md` using `/write-tasks-plan` workflow
 - Partition topics from Summary file into discrete tasks
 - Each task: Status, Estimated effort, Sources (official + community), Items to document, Done-when criteria
 - **Task timing format**: `- [ ] TK-01: [Description] [HH:MM-HH:MM] Xm`

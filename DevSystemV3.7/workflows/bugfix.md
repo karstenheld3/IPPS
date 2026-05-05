@@ -61,7 +61,7 @@ Folder structure:
 ├── NOTES.md, PROBLEMS.md, PROGRESS.md
 └── [TOPIC]-BG-NNNN_IssueDescription/    <- [BUG_FOLDER]
     ├── PROBLEMS.md                      <- Full detail
-    ├── _INFO_*.md, _STRUT_*.md
+    ├── _INFO_*.md, __STRUT_*.md
     ├── backup/, poc/, test/
 ```
 
@@ -85,7 +85,7 @@ Folder structure:
 ├── NOTES.md, PROBLEMS.md, PROGRESS.md
 └── GLOB-BG-NNNN_IssueDescription/      <- [BUG_FOLDER] (uses GLOB prefix)
     ├── PROBLEMS.md                      <- Full detail
-    ├── _INFO_*.md, _STRUT_*.md
+    ├── _INFO_*.md, __STRUT_*.md
     ├── backup/, poc/, test/
 ```
 

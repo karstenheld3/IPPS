@@ -185,9 +185,9 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 
 ## Planning Structure
 
-**STRUT** (high-level, REQUIRED): Phases, objectives, deliverables, transitions, time log. File: `STRUT_[TOPIC].md`
+**STRUT** (high-level, REQUIRED): Phases, objectives, deliverables, transitions, time log. File: `__STRUT_[TOPIC].md`
 
-**TASKS** (low-level, Phase 2): Flat task list with durations and done-when criteria. File: `TASKS.md`
+**TASKS** (low-level, Phase 2): Flat task list with durations and done-when criteria. File: `__TASKS_[TOPIC]_RESEARCH.md`
 
 ## Reference Files
 

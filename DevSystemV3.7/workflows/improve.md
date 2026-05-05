@@ -350,7 +350,7 @@ Detection: determine context from file naming and content, then apply matching s
    - `_SPEC_*` or FR-XX/DD-XX IDs → SPEC Document
    - `_IMPL_*` or IS-XX IDs → IMPL Plan
    - `_TEST_*` or TC-XX IDs → TEST Plan
-   - `_TASKS_*` or TK-XX IDs → TASKS Plan
+   - `_TASKS_*` / `__TASKS_*` or TK-XX IDs → TASKS Plan
    - `.py`, `.ps1`, `.js`, `.ts` etc. → Code
    - Workflow folder `.md` files → Workflow
    - Skill folder files → Skill

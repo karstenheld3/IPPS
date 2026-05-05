@@ -170,11 +170,33 @@ Files starting with `!` indicate high relevance. Must be treated with extra atte
 
 ### Ignored Files (_ prefix)
 
-Files starting with `_` are skipped by automatic priming workflows. Use for session-specific, WIP, or archived content.
+Files starting with `_` are skipped by automatic priming workflows. Use for session-specific, WIP, or archived content. Single `_` prefix files are deliverables (INFO, SPEC, IMPL, TEST, TASKS).
+
+### Scaffolding Files (__ prefix)
+
+Files starting with `__` (double underscore) are workflow/skill-generated process artifacts. Distinction:
+
+- **User-explicit = deliverable** (no `__`): Documents the user explicitly creates via `/write-tasks-plan`, `/write-strut`, `/write-spec`, etc.
+- **Workflow/skill-implicit = scaffolding** (`__`): Documents that workflows auto-create during execution (STRUTs, TASKS, templates for self-tracking)
+
+Scaffolding has no value after the goal is reached. Deleted by `/cleanup` category 6.
+
+**Lifecycle tiers:**
+- `.tmp_` = single-run temp (scripts, metadata). Deleted within same workflow or by `/cleanup` category 1
+- `__` = multi-run scaffolding (execution plans, task tracking, templates). Persists during active work, deleted by `/cleanup` after goal reached
+- `_` = deliverable (findings, specs, plans). Never auto-deleted
 
 ### Hidden Files (. prefix)
 
 Files starting with `.` follow Unix convention - hidden from directory listings.
+
+### Git Exclusion Suffix (_gitignore)
+
+Append `_gitignore` before the extension to exclude any file or folder from git without editing `.gitignore`:
+- `data_gitignore.json` - excluded file
+- `scratch_gitignore/` - excluded folder
+
+Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 
 ## Placeholders
 

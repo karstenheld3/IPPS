@@ -12,6 +12,13 @@ _PrivateSessions/*
 .tmp_*
 *.tmp
 
+# Workflow scaffolding (auto-created process artifacts, not deliverables)
+__*.md
+
+# Suffix-based gitignore (append _gitignore before extension to exclude any file/folder)
+*_gitignore.*
+*_gitignore/
+
 # IDE (keep .vscode/ - shared config)
 .vs/
 

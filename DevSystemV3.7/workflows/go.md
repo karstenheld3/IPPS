@@ -38,9 +38,9 @@ When facing choices, the agent MUST NOT ask the user. Instead:
 
 Log autonomous decisions to the main progress tracking document:
 
-- If `_TASKS_*.md` exists and tracks progress → log decisions there
+- If `__TASKS_*.md` exists and tracks progress → log decisions there
 - If `PROGRESS.md` is the main tracking document → log decisions there
-- If neither exists → create `_TASKS_[TOPIC].md` using @skills:write-documents, log there
+- If neither exists → create `__TASKS_[TOPIC].md` using @skills:write-documents, log there
 
 Format: `[DECISION] <what was decided> - <rationale> - <rules consulted>`
 
@@ -73,7 +73,7 @@ Backups and zips created during `/go` MUST NOT be deleted by the agent, includin
 
 Check ALL layers, not just STRUT:
 
-1. **TASKS layer**: Read `_TASKS_*.md` - any unchecked `[ ]` items?
+1. **TASKS layer**: Read `__TASKS_*.md` - any unchecked `[ ]` items?
 2. **IMPL layer**: Read `_IMPL_*.md` - any unchecked IS-XX steps?
 3. **TEST layer**: Read `_TEST_*.md` - any unchecked TC-XX?
 4. **STRUT layer**: All Deliverables checked? Final Transition = `[END]`?

@@ -556,8 +556,26 @@ IPPS/
 IPPS uses special prefixes to control how files are processed:
 
 - **`!` prefix** - Priority files (e.g., `!NOTES.md`). Read first during [`/prime`](.windsurf/workflows/prime.md). Contains critical project information.
-- **`_` prefix** - Ignored by automatic workflows (e.g., `_SPEC_*.md`, `_PrivateSessions/`). Used for session-specific, WIP, or archived content.
+- **`_` prefix** - Deliverables ignored by automatic priming (e.g., `_SPEC_*.md`, `_INFO_*.md`). Session-specific, WIP, or archived content. Single `_` = user-created deliverable.
+- **`__` prefix** - Workflow scaffolding (e.g., `__STRUT_TOPIC.md`, `__TASKS_TOPIC.md`). Auto-created by workflows for self-tracking. Deleted by [`/cleanup`](.windsurf/workflows/cleanup.md) after goal reached. Gitignored.
+- **`.tmp_` prefix** - Single-run temp files (e.g., `.tmp_fix_quotes.ps1`). Deleted within same workflow or by `/cleanup`. Gitignored.
 - **`.` prefix** - Hidden files following Unix convention (e.g., `.windsurf/`, `.gitignore`).
+
+### Lifecycle Tiers
+
+```
+.tmp_  = single-run temp (scripts, metadata) → deleted within workflow or by /cleanup
+__     = multi-run scaffolding (STRUTs, TASKS, templates) → deleted by /cleanup after goal
+_      = deliverable (INFO, SPEC, IMPL, TEST, TASKS) → never auto-deleted
+```
+
+**Key distinction**: User-explicit = deliverable (no `__`). Workflow/skill-implicit = scaffolding (`__`).
+- `/write-tasks-plan` output → `TASKS_[TOPIC].md` (user asked for it, deliverable)
+- `/deep-research` auto-creates → `__TASKS_[TOPIC]_RESEARCH.md` (scaffolding, deletable)
+
+### Suffix Conventions
+
+- **`_gitignore` suffix** - Append before extension to exclude any file or folder from git (e.g., `data_gitignore.json`, `scratch_gitignore/`). Useful for per-file exclusion without editing `.gitignore`.
 
 ## Workspaces and Sessions
 
@@ -784,7 +802,7 @@ Creates `_TEST_*.md` from spec.
 ```
 /write-tasks-plan
 ```
-Creates `_TASKS_*.md` from IMPL/TEST. **Mandatory before implementation.**
+Creates `TASKS_[TOPIC].md` from IMPL/TEST. **Mandatory before implementation.**
 
 6. **Implement** - Execute the tasks:
 ```

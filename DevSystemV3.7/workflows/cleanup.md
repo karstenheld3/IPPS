@@ -15,15 +15,17 @@ Scope: File deletion only. Does NOT uninstall tools, remove sessions, or modify 
 
 ## MUST-NOT-FORGET
 
+- **When in doubt, ASK the user** - never assume scope, never assume intent
 - Scan BEFORE deleting - always preview first, never delete without showing what will be removed
 - NEVER delete `../.tools/` output folders (see Protected Locations)
 - NEVER delete `/bugfix` `backup/` folders or `/go` backups/zips
 - Confirmation required before any deletion (destructive workflow)
+- NEVER run workspace-wide cleanup during an active session without explicit user confirmation
 
 ## Trigger
 
-- `/cleanup` - scan entire workspace and known locations
-- `/cleanup [path]` - scan only specified path
+- `/cleanup` - ask user for scope, then scan
+- `/cleanup [path]` - scan only specified path (still confirm scope)
 
 ## GLOBAL-RULES
 
@@ -69,6 +71,19 @@ Delete files and directories matching these patterns:
 - **Location**: MCP config directory (resolve from Windsurf/Codeium config path)
 - **Source**: MCP server install/uninstall scripts (ms-playwright-mcp, playwriter-mcp)
 
+### 5. Critique Review Files
+
+- **Pattern**: `*_REVIEW.md`, `_PROBLEMS_REVIEW.md`
+- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSION_FOLDER]` recursive, excluding `_Archive/` and `_OldDevSystemVersions/`
+- **Source**: `/critique` workflow creates these per review run. Intended to be discarded after findings are addressed.
+
+### 6. Workflow Scaffolding
+
+- **Pattern**: `__*.md` files (double underscore prefix). Also legacy patterns: `STRUT_*.md` (not `STRUT_TEMPLATE.md`), `_TASKS_*.md` (files auto-created by `/go` before convention change)
+- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSION_FOLDER]` recursive, excluding `_Archive/`, `_OldDevSystemVersions/`, and skill folders
+- **Source**: `/deep-research` (STRUTs, TASKS, templates), `/go` (TASKS), `/bugfix` (STRUTs). These are process-tracking files auto-created by workflows. User-invoked outputs (`TASKS_[TOPIC].md` from `/write-tasks-plan`, `STRUT_[TOPIC].md` from `/write-strut`) are deliverables and MUST NOT be matched.
+- **Transition note**: Legacy patterns (`STRUT_*.md` without `__`, `_TASKS_*.md`) exist in older sessions. Match both old and new conventions. Exclude `STRUT_TEMPLATE.md` and `TASKS_TEMPLATE.md` (skill resources).
+
 ## INFO Document Cleanup
 
 **Applies**: When `_INFO_*.md` files exist in scope (excluding `_Archive/` and `_OldDevSystemVersions/`)
@@ -100,10 +115,34 @@ These folders and their contents are EXCLUDED from all cleanup operations:
 
 ## Step 1: Determine Scope and Context
 
-- No args → scan `[WORKSPACE_FOLDER]` and all known locations
-- Path arg → scan only that path
-
 Read NOTES.md to resolve `[DEFAULT_SESSIONS_FOLDER]` and `[DEVSYSTEM_FOLDER]`.
+
+**Scope resolution** (MANDATORY - confirm scope before scanning):
+
+Six cleanup scopes exist, from narrowest to widest:
+
+1. **Markers** - strip labels within document content (e.g., `[VERIFIED]`, `[IMPROVED]` from INFO docs)
+2. **Document** - artifacts of a single document (its `_vN` backups, related temp files)
+3. **Workflow/Skill** - artifacts from a specific workflow or skill execution (e.g., all `/improve` backups from one run)
+4. **Folder** - everything in a specific directory matching cleanup patterns (e.g., a working subfolder in a session)
+5. **Session** - everything in `[SESSION_FOLDER]` matching cleanup patterns
+6. **Workspace** - everything in `[WORKSPACE_FOLDER]` and all known locations
+
+**Resolution rules (ONE question only):**
+- Infer scope from conversation context, path args, and active session
+- Present inferred scope to user for confirmation in a SINGLE question
+- If path arg provided: infer scope from path type (file → document, directory → folder/session)
+- If conversation just finished a `/critique` or `/improve` run: suggest workflow scope
+- If ambiguous: ask "Cleanup scope? (markers / document / workflow / folder / session / workspace)" - omit session if not in SESSION-MODE
+- Do NOT ask follow-up questions about which files or folders - scan first, let user exclude in Step 4
+
+**After scope is confirmed, scan immediately:**
+- **Markers** → all INFO docs in scope
+- **Document** → infer from conversation or current file, scan its directory
+- **Workflow/Skill** → infer from conversation context, scan for its artifacts
+- **Folder** → use provided path or ask which folder (one question)
+- **Session** → scan `[SESSION_FOLDER]`
+- **Workspace** → scan `[WORKSPACE_FOLDER]` and all known locations
 
 Detect applicable contexts:
 - File Cleanup: always active
@@ -129,12 +168,20 @@ Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "*_DEFERRED_IMPROVEMENTS.md
 
 # 4. MCP config backups (resolve MCP config directory first)
 Get-ChildItem -Path "[MCP_CONFIG_DIR]" -File | Where-Object { $_.Name -match '^mcp_config\.json\._' }
+
+# 5. Critique review files
+Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "*_REVIEW.md" | Where-Object { $_.DirectoryName -notmatch '_Archive|_OldDevSystemVersions' }
+
+# 6. Workflow scaffolding (__ prefix + legacy patterns)
+Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "__*.md" | Where-Object { $_.DirectoryName -notmatch '_Archive|_OldDevSystemVersions|skills' }
+# Legacy: standalone STRUT files (not STRUT_TEMPLATE.md, not in skill folders)
+Get-ChildItem -Path "[SCOPE]" -Recurse -File | Where-Object { $_.Name -match '^STRUT_' -and $_.Name -ne 'STRUT_TEMPLATE.md' -and $_.DirectoryName -notmatch '_Archive|_OldDevSystemVersions|skills' }
 ```
 
 **INFO Document Cleanup scan:**
 
 ```powershell
-# 5. INFO verification markers (count files and occurrences)
+# 7. INFO verification markers (count files and occurrences)
 Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "_INFO_*.md" | Where-Object {
     $_.DirectoryName -notmatch '_Archive|_OldDevSystemVersions' -and
     (Select-String -Path $_.FullName -Pattern '\[VERIFIED\]|VERIFIED, ' -Quiet)
@@ -165,6 +212,14 @@ Improve Workflow Artifacts (N files):
 
 MCP Config Backups (N files):
   [full path 1]
+
+Critique Review Files (N files):
+  [full path 1]
+  [full path 2]
+
+Workflow Scaffolding (N files):
+  [full path 1] (__STRUT_*)
+  [full path 2] (__TASKS_*)
 
 INFO Verification Markers (N files to modify):
   [full path 1] (M occurrences)
@@ -208,6 +263,8 @@ Deleted:
   Python Build Artifacts: N items
   Improve Workflow Artifacts: N files
   MCP Config Backups: N files
+  Critique Review Files: N files
+  Workflow Scaffolding: N files
   INFO Markers Stripped: N files
 
 Total: N items deleted, N files modified

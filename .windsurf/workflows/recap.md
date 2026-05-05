@@ -35,7 +35,7 @@ Then read plan documents (improvise if missing):
 5. **_SPEC_*.md** - What we're building (requirements, FRs)
 6. **_IMPL_*.md** - How we're building (implementation steps)
 7. **_TEST_*.md** - How we verify (test cases)
-8. **_TASKS_*.md** - Partitioned work items with checkboxes
+8. **_TASKS_*.md** / **__TASKS_*.md** - Partitioned work items with checkboxes
 
 ## Step 2: Determine Exact Position
 

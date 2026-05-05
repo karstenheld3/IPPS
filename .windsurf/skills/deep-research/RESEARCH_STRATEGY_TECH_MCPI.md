@@ -2,7 +2,7 @@
 
 Research **[SUBJECT]** exhaustively using the MCPI (Most Complete Point of Information) approach.
 
-**Before starting**: Create `STRUT_[TOPIC].md` using `/write-strut` with Time Log and Credit Tracking sections:
+**Before starting**: Create `__STRUT_[TOPIC].md` using `/write-strut` with Time Log and Credit Tracking sections:
 ```
 ## Time Log
 Started: [YYYY-MM-DD HH:MM]
@@ -80,7 +80,7 @@ Estimated credits: [pending]
 - **USER APPROVAL GATE**: Present Summary file + Template to user before proceeding to Phase 4
 
 **Phase 4: TASKS Plan**
-- Create `TASKS_[TOPIC]_RESEARCH.md`
+- Create `__TASKS_[TOPIC]_RESEARCH.md`
 - Partition topics from Summary file into discrete tasks
 - Each task: Status, Estimated effort, Sources (official + community), Items to document, Done-when criteria
 - **Task timing format**: `- [ ] TK-01: [Description] [HH:MM-HH:MM] Xm`
