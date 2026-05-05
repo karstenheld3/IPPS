@@ -10,7 +10,7 @@ Complete bug-fixing workflow from problem discovery to verified fix and document
 
 - @write-documents for INFO, STRUT, and FIXES templates
 - @coding-conventions for code changes
-- @session-management for session setup (PROJECT-MODE only)
+- @skills:session-management for session setup (PROJECT-MODE only)
 
 ## MUST-NOT-FORGET
 

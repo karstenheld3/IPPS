@@ -114,7 +114,7 @@ function Test-FileIncluded {
     return $true
 }
 
-$sourceFiles = Get-ChildItem -Path $source -Recurse -File | ForEach-Object { $_.FullName.Substring($source.Length + 1) } | Where-Object { $_ }
+$sourceFiles = Get-ChildItem -Path $source -Recurse -File | Where-Object { $_.DirectoryName -notmatch '__pycache__' -and $_.Extension -ne '.pyc' } | ForEach-Object { $_.FullName.Substring($source.Length + 1) } | Where-Object { $_ }
 
 # Collect results as objects
 $results = @()
@@ -303,6 +303,7 @@ See GLOB-FL-023 and GLOB-FL-024 in FAILS.md for the failure history that motivat
 ## Files to Exclude
 
 Always exclude from deployment:
+- `__pycache__/` directories and `*.pyc` files (never deploy compiled Python bytecode)
 - Any files matching repo-specific "Never overwrite" patterns
 
 Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `.windsurf/`, so it is automatically excluded from deployment.

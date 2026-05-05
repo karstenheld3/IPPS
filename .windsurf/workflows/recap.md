@@ -9,6 +9,8 @@ Backward-looking assessment of current state.
 
 ## Step 1: Read All Tracking Documents
 
+**Topic Folder Detection:** Run @skills:session-management **Topic Folder Detection** procedure first. If in `T##_*` folder, read both parent and topic folder tracking docs below.
+
 **Mandatory re-read before recap:**
 
 **SESSION-MODE** - Re-read session folder documents:

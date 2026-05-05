@@ -59,7 +59,7 @@ Agent-created files (helper scripts, intermediate data, temp artifacts) MUST res
 
 **Naming**:
 - `.tmp_` prefix for scripts and temp data. Example: `.tmp_fix_quotes.ps1`
-- `__` prefix for scaffolding documents (STRUTs, TASKS, templates auto-created by workflows). Example: `__STRUT_DIGLDR.md`
+- `__` prefix for scaffolding documents (STRUTs, TASKS, templates auto-created by workflows). Example: `__STRUT_TOPIC.md`
 
 **Lifecycle**:
 - `.tmp_` = single-run temp. Deleted within same workflow or by `/cleanup`

@@ -32,6 +32,13 @@ Track implementation progress and decisions.
 - JWT expiration extension via sliding window
   - Reason: Server doesn't support sliding sessions, requires backend changes
 
+## Topic Folders
+
+Populated when session uses independent work streams (see @skills:session-management Topic Folders).
+
+- [ ] T01_TopicDescription: Pending
+- [ ] T02_TopicDescription: Pending
+
 ## Test Coverage
 
 - [x] Unit tests for token expiration calculation

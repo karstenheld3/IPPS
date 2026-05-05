@@ -20,6 +20,7 @@ Invoke based on context:
 1. Apply fixes immediately without asking for permission - this workflow has authority to correct issues
 2. Re-read session/project documents before verifying (see Mandatory Re-read)
 3. Create internal MNF checklist and verify against it in Final Steps
+4. Do not verify from memory. Search for applicable rule files, re-read them (mandatory: `core-conventions.md`), and build checklist from source before checking items. Never accept "matches existing style" as passing.
 
 ## Mandatory Re-read
 
@@ -29,6 +30,7 @@ Invoke based on context:
 - PROGRESS.md
 - FAILS.md
 - LEARNINGS.md (if exists)
+- If verifying within a `T##_*` topic folder: also read its tracking files
 
 **PROJECT-MODE** - Re-read workspace-level documents:
 - README.md

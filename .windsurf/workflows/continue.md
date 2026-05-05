@@ -15,6 +15,8 @@ Forward-looking execution of next steps in a plan.
 
 ## Step 1: Build Execution Sequence
 
+**Topic Folder Detection:** Run @skills:session-management **Topic Folder Detection** procedure first. If in `T##_*` folder, read both parent and topic folder tracking docs below.
+
 Construct an ordered list of next actions by analyzing multiple sources:
 
 **Mandatory re-read before continuing:**

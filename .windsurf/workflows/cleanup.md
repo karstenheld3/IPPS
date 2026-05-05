@@ -110,6 +110,7 @@ These folders and their contents are EXCLUDED from all cleanup operations:
 - `[WORKSPACE_FOLDER]/../.tools/_installer/` - Downloaded tool installers
 - `*/backup/` inside `_BugFixes/` session folders - `/bugfix` recovery data
 - Any `.zip` or backup created by `/go` workflow
+- `T##_*/` topic folders inside sessions - these are session subfolders, not temp artifacts
 
 # EXECUTION
 

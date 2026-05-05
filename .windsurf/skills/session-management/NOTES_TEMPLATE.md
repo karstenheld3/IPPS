@@ -54,6 +54,13 @@ Example: AUTH-BG-0001 - Token refresh race condition - Resolved
 
 - (none yet)
 
+## Topic Folders
+
+Populated when session uses independent work streams (see @skills:session-management Topic Folders).
+
+- **T01_TopicDescription** - Purpose of this work stream
+- **T02_TopicDescription** - Purpose of this work stream
+
 ## Significant Prompts Log
 
 **Agent rule**: Record prompts that change direction, add requirements, or clarify intent. Use 4-backtick fence with `text` language tag.
