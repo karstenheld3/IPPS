@@ -20,6 +20,7 @@ Invoke based on context:
 1. Apply fixes immediately without asking for permission - this workflow has authority to correct issues
 2. Re-read session/project documents before verifying (see Mandatory Re-read)
 3. Create internal MNF checklist and verify against it in Final Steps
+4. Do not verify from memory. Search for applicable rule files, re-read them (mandatory: `core-conventions.md`), and build checklist from source before checking items. Never accept "matches existing style" as passing.
 
 ## Mandatory Re-read
 
@@ -29,6 +30,7 @@ Invoke based on context:
 - PROGRESS.md
 - FAILS.md
 - LEARNINGS.md (if exists)
+- If verifying within a `T##_*` topic folder: also read its tracking files
 
 **PROJECT-MODE** - Re-read workspace-level documents:
 - README.md
@@ -126,6 +128,7 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Drop all sources that can't be found.
 - Ask questions that a reader might ask and clarify them.
 - Verify Timeline field is present and accurate (Created date, update count, date range)
+- Verify Table of Contents exists with numbered sections (per INFO_TEMPLATE.md)
 - Verify Document History section exists and is up to date
 - Read `[AGENT_FOLDER]/workflows/research.md` again and verify against instructions.
 - Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)

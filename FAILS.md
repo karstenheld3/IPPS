@@ -1,5 +1,18 @@
 # Failure Log
 
+## 2026-05-05 - Verify Workflow Missed Skill Reference Syntax
+
+### [MEDIUM] `GLOB-FL-031` /verify accepted wrong `@session-management` syntax as correct
+
+- **When**: 2026-05-05 08:56 UTC+02:00
+- **Where**: All session-related workflows (`session-load.md`, `session-save.md`, `session-new.md`, `session-finalize.md`, `recap.md`, `continue.md`, `build.md`, `solve.md`, `bugfix.md`, `session-archive.md`)
+- **What**: Agent ran `/verify` on touched workflows and passed them. The `@session-management` references (missing `@skills:` prefix) existed in all files for multiple versions but were never flagged.
+- **Why it went wrong**: Agent verified consistency with existing patterns ("matches existing pattern in these files") instead of checking against the authoritative rule source. Pre-existing violations normalized the wrong syntax. Agent did not re-read `WORKFLOW-RULES.md` line by line during verification - only checked from memory.
+- **Evidence**: 13 files contained `@session-management` instead of `@skills:session-management`. Rule at `verify.md:224` explicitly says "Verify skill references use `@skills:skill-name` format". Rule at `WORKFLOW-RULES.md:37` says "Skill refs with @skills: prefix: `@skills:skill-name`".
+- **Workflow re-read findings**: `verify.md` Workflows section line 219 says "Read @skills:coding-conventions `WORKFLOW-RULES.md` and verify against rules" and line 224 says "Verify skill references use `@skills:skill-name` format". Both rules are explicit. The agent skipped the actual re-read of WORKFLOW-RULES.md during verification, relying on prior knowledge instead of re-reading the source file.
+- **Root cause**: Normalization bias - when wrong patterns are widespread, agent treats them as correct. The `/verify` checklist item exists but the agent must ACTUALLY re-read the rule file, not trust cached understanding.
+- **Suggested fix**: During `/verify` of workflows, always `read_file` WORKFLOW-RULES.md fresh. Never trust "it matches existing style" as passing criteria - always compare against rule source.
+
 ## 2026-05-01 - Deploy Preview Not Visible in Chat
 
 ### [MEDIUM] `GLOB-FL-030` Deploy preview buried in command output, not emitted as chat text
