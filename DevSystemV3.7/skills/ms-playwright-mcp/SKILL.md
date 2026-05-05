@@ -26,7 +26,7 @@ Workflow guidance for Microsoft Playwright MCP server. Tool parameters are deliv
 6. `browser_fill_form` takes `fields` array (NOT `browser_fill`). `browser_take_screenshot` (NOT `browser_screenshot`)
 7. Opt-in tools need `--caps` flag. Cookie read needs `--caps=storage`. Route mocking needs `--caps=network`
 8. `browser_evaluate` runs in browser (no Node.js APIs). `browser_run_code` runs server-side with Playwright `page` object
-9. Downloads go to `--output-dir` path (default: inline in response). Set `--output-dir` explicitly if file output needed
+9. Downloads go to `--output-dir` path. Default: `.playwright-mcp/` under the IDE user data folder (NOT the system Downloads folder). Use `find_by_name` in the IDE data dir to locate downloaded files if path unknown
 10. Extension mode: Chrome/Edge only, uses Chrome Web Store extension, NOT `--remote-debugging-port`
 
 ## Intent Lookup
