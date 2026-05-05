@@ -171,8 +171,12 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **WS2DV** - Windsurf 2.0 and Devin (deep research on Windsurf 2.0 release features and Devin integration)
 - **FLCOR** - Fail Correction (cross-repo fails collection and analysis)
 - **WSWN** - What? So What? Now What? (reflective framework deep research, Borton/Driscoll/Rolfe)
+- **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 
 ## Document History
+
+**[2026-05-05 10:19]**
+- Added: XLATE topic (Translation quality improvement methods)
 
 **[2026-05-01 17:39]**
 - Added: MDPDF topic (Markdown to PDF Renderer)

@@ -234,6 +234,7 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 - `/solve` - SOLVE workflow entry point (knowledge output)
 - `/sync` - Document synchronization
 - `/test` - Run tests based on scope
+- `/translate` - Translate markdown or PDF files to target languages
 - `/transcribe` - PDF/web to markdown transcription
 - `/verify` - Verify work against specs and rules
 - `/write-impl-plan` - Create implementation plan from spec

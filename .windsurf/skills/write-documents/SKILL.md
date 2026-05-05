@@ -13,6 +13,8 @@ This skill contains document templates, formatting rules, and writing quality st
 
 **Quality evaluation:** `SOCAS_RULES.md` - Signs of Confusion and Sloppiness (15 criteria). Used by `/verify`, `/critique`, `/improve`, `/research`.
 
+**Translation quality:** `TRANSLATION_RULES.md` - Quality dimensions, term pairs, prompt templates, improvement cycle. Used by `/translate`, `/verify`, `/improve`.
+
 Read APAPALAN and MECT before writing any document. Read SOCAS when evaluating quality.
 
 ## Verb Mapping
