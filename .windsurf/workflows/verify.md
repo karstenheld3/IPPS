@@ -42,7 +42,7 @@ Invoke based on context:
 
 ## Workflow
 
-1. First find out what the context is (INFO, SPEC, IMPL, Code, TEST, Session, Workflow, Skill, Conversation)
+1. First find out what the context is (INFO, SPEC, IMPL, Code, TEST, Session, Workflow, Skill, Conversation, Translation Output)
 2. Read GLOBAL-RULES and Verification Labels
 3. Read the relevant Context-Specific section
 4. Create a verification task list
@@ -226,6 +226,20 @@ If code contains logging, output, or print statements:
 - Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
 - Verify against @skills:write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
 - Verify no hardcoded paths (use placeholders like `[WORKSPACE_FOLDER]`)
+
+## Translation Output
+
+Detect by: file has `_[LANG]` suffix (e.g., `report_DE.md`, `video_DE.srt`) and a corresponding source file exists, or context indicates this is `/translate` output.
+
+- Read @skills:write-documents `TRANSLATION_RULES.md` and verify against all TR-* rules
+- Run Step 5 Phase 1 checks from `/translate` workflow:
+  - Term consistency (TR-TP-03) - grep each TRANSLATION_TERM_PAIR
+  - Native characters (TR-NC-02) - grep for ASCII approximations
+  - Addressing form (TR-AF-03) - consistent throughout
+  - Structure match (TR-SP-01..06) - heading/list/code block counts equal source
+  - CJK checks if JA/ZH (TR-CJ-06) - script consistency, fullwidth punctuation
+- Compare source and target: paragraph count, heading count, code block count
+- Verify no source language fragments in translated prose (outside code/URLs)
 
 ## Skills
 
