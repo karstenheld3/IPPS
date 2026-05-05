@@ -311,6 +311,25 @@ Detection: determine context from file naming and content, then apply matching s
 
 **Integration**: New findings marked `[IMPROVED]`, challenged claims marked `[CHALLENGED]`. Update Sources section and Document History.
 
+## Translation Output
+
+**Lens**: Back-Translation Critic (Brislin) - evaluate translation quality by checking if meaning survives a round-trip back to source language.
+
+**Phase 1 reads**: `TRANSLATION_RULES.md` (@skills:write-documents), source file (remove `_[LANG]` suffix to find it), NOTES.md for TRANSLATION_TERM_PAIRS
+
+**Phase 1 research**: Evaluate against the 4 quality dimensions (TR-QD-01): accuracy, fluency, style, terminology. Search for domain-specific terminology standards in target language.
+
+**Specialized issues** (in addition to GLOBAL):
+- Translationese - source language word order or calques that sound unnatural to native speakers (TR-QD-03)
+- Semantic drift - translation says something subtly different from source (TR-QD-02)
+- Register inconsistency - formal/informal mixing across sections (TR-QD-04)
+
+**Adversarial Collaborator techniques** (execute in order, skip if not applicable):
+
+1. **Back-Translation Spot Check** - Select 3-5 key passages. Mentally back-translate to source language. If back-translation diverges from original, propose more faithful phrasing.
+2. **Native Expression Improvement** - Read as native speaker of target language. Identify translationese (calques, non-idiomatic constructions). Propose natural phrasing preserving meaning.
+3. **Term Consistency Audit** - Grep each TRANSLATION_TERM_PAIR across document. Flag inconsistent translations of same source term.
+
 ## Problem Solving Approaches
 
 **Phase 1 reads**: PROBLEMS.md, FAILS.md, LEARNINGS.md
@@ -352,6 +371,7 @@ Detection: determine context from file naming and content, then apply matching s
    - `_TEST_*` or TC-XX IDs → TEST Plan
    - `_TASKS_*` / `__TASKS_*` or TK-XX IDs → TASKS Plan
    - `.py`, `.ps1`, `.js`, `.ts` etc. → Code
+   - `*_[LANG].md` or `*_[LANG].srt` with corresponding source file → Translation Output
    - Workflow folder `.md` files → Workflow
    - Skill folder files → Skill
    - Solution approaches in tracking docs → Problem Solving
