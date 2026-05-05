@@ -9,7 +9,7 @@ Key findings for cross-agent compatibility:
 - Windsurf uses `.windsurf/rules/*.md` for instructions (always-on or trigger-based) [VERIFIED]
 - Workflows stored in `.windsurf/workflows/*.md`, invoked as `/workflow-name` [VERIFIED]
 - Skills in `.windsurf/skills/<name>/SKILL.md` or `.agents/skills/` using Agent Skills format [VERIFIED]
-- Cascade settings in protobuf binary (`user_settings.pb`), not editable by hand [TESTED]
+- Cascade settings: many now in `settings.json` as `windsurf.*` keys (portable); some remain UI-only in `user_settings.pb` [UPDATED 2026-05-05]
 - MCP config in `~/.codeium/windsurf/mcp_config.json` [VERIFIED]
 - Hooks in `.windsurf/hooks.json` or `~/.codeium/windsurf/hooks.json` [VERIFIED]
 - Memories auto-generated during conversation, workspace-scoped [VERIFIED]
@@ -82,54 +82,66 @@ Windsurf uses **two different systems** for storing settings:
   - Format: JSON
   - Location: `%APPDATA%\Windsurf\User\settings.json`
   - Editable: Yes, text editor
-- **Cascade settings**
+- **Cascade settings** (UI-only subset)
   - Format: Protobuf binary
   - Location: `%USERPROFILE%\.codeium\windsurf\user_settings.pb`
   - Editable: No, UI only
+  - Note: Many Cascade settings now also writable via `windsurf.*` keys in `settings.json`
 
 ### Editor Settings (settings.json)
 
-Standard VS Code settings in JSON format:
-- Theme, font, tab size
-- Extension settings
-- Git integration
-- Terminal preferences
+Standard VS Code settings in JSON format, plus many `windsurf.*` Cascade settings.
 
 **Location:** `C:\Users\<User>\AppData\Roaming\Windsurf\User\settings.json`
 
-Example keys:
+**Standard editor keys:** theme, font, tab size, extension settings, git, terminal preferences.
+
+**Windsurf/Cascade keys confirmed in settings.json** (updated 2026-05-05):
 ```json
 {
-  "workbench.colorTheme": "KarstenIse",
-  "editor.fontFamily": "'JetBrains Mono', Consolas",
-  "editor.tabSize": 2,
-  "windsurf.enableSupercomplete": false,
-  "windsurf.autocompleteSpeed": "fast",
-  "windsurf.autoExecutionPolicy": "off"
+  "windsurf.autoExecutionPolicy": "turbo",
+  "windsurf.autoWebRequestPolicy": "turbo",
+  "windsurf.autoContinue": true,
+  "windsurf.completionMode": "autocomplete",
+  "windsurf.chatFontSize": "default",
+  "windsurf.rememberLastModelSelection": true,
+  "windsurf.openRecentConversation": true,
+  "windsurf.explainAndFixInCurrentConversation": false,
+  "windsurf.allowCascadeAccessGitignoreFiles": true,
+  "windsurf.acp.enabledAgents": { "devin-cli": true }
 }
 ```
 
+**Deprecated keys** (superseded by `windsurf.completionMode`):
+- `windsurf.autocompleteEnabled`
+- `windsurf.enableSupercomplete`
+- `windsurf.autocompleteSpeed`
+
 ### Cascade Settings (user_settings.pb)
 
-**IMPORTANT DISCOVERY (2026-01-11):**
-
-The Cascade-specific settings visible in the Windsurf Settings panel are stored in a **Protocol Buffers binary file**, not in `settings.json`.
+**UPDATE (2026-05-05):** Many settings previously believed to be protobuf-only are now also available as `windsurf.*` keys in `settings.json` (see above). The protobuf file still exists and stores additional state.
 
 **Location:** `C:\Users\<User>\.codeium\windsurf\user_settings.pb`
 
-Settings stored here include:
+**Settings confirmed as UI-only** (no `settings.json` key found):
 - **Allow Cascade in Background** - Whether Cascade runs when switching conversations
-- **Auto Execution** - Terminal command auto-execution policy (Disabled/Allowlist/Auto/Turbo)
-- **Auto Web Requests** - Web request auto-fetch policy
-- **Auto-Continue** - Automatically continue when hitting per-response limit
 - **Auto-Generate Memories** - Autonomously create memories
 - **Auto-Open Edited Files** - Open files in background when Cascade edits them
+- **Cascade Auto-Fix Lints** - Auto-fix lint errors from Cascade edits
+- **Disable Fast Context Agent** - Disable parallel search subagent
+- **Enable Cascade Web Tools** - Web search capability
+- **Read Claude Code Config** - Read .claude/skills/ directories
+- **Windsurf Preview** - Browser previews for dev servers
+- **Cascade Completion Notifications** - Background completion notifications
+- **Search Max Workspace File Count** - Embedding file count limit (default 5000)
+- **Detect Proxy** - Automatic proxy detection
+
+**Also stored:** model configurations, conversation IDs, allow/deny lists for auto-execution.
 
 **Implications:**
-- These settings cannot be edited by hand
-- Not portable via batch scripts copying settings.json
-- Must be configured through Windsurf UI (Settings panel)
-- The `.pb` file also contains model configurations and conversation IDs
+- UI-only settings must be configured through Windsurf Settings panel
+- The `windsurf.*` keys in `settings.json` ARE portable via file copy
+- The `.pb` file contains both redundant copies and exclusive settings
 
 ### State Database (state.vscdb)
 

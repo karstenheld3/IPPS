@@ -586,7 +586,7 @@ IPPS uses a two-level tracking system: **workspace-level** files for project-wid
 Located in workspace root (or project root in monorepos):
 
 | File             | Required     | Purpose                                                    |
-|------------------|--------------|-----------------------------------------------------------|
+|------------------|--------------|------------------------------------------------------------|
 | `!NOTES.md`      | Yes          | Critical project info, agent instructions, key patterns    |
 | `!PROBLEMS.md`   | Optional     | Known issues across the project                            |
 | `!PROGRESS.md`   | Optional     | Overall project progress                                   |
@@ -636,7 +636,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ## Workflows Reference
 
-39 workflows in `.windsurf/workflows/`:
+40 workflows in `.windsurf/workflows/`:
 
 **Entry Points**
 - [`/build`](.windsurf/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
@@ -686,6 +686,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 - [`/conversation-start`](.windsurf/workflows/conversation-start.md) - Create new conversation tracking file from chat context
 - [`/conversation-update`](.windsurf/workflows/conversation-update.md) - Update existing conversation with new emails or messages
 - [`/transcribe`](.windsurf/workflows/transcribe.md) - Transcribe PDFs and web pages to markdown
+- [`/translate`](.windsurf/workflows/translate.md) - Translate markdown, PDF, or subtitle files to target languages
 
 **Utility**
 - [`/commit`](.windsurf/workflows/commit.md) - Create conventional commits
