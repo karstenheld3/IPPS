@@ -46,7 +46,7 @@ Answer these 7 questions before any source collection:
 3. **Q3 - Dimensions**: Which apply? (legal, financial, administrative, practical, technical, professional, medical, psychological, personal, organizational, strategic, security, cultural, educational, historical, or custom)
 4. **Q4 - Topics**: 3-5 topics per dimension
 5. **Q5 - Strategy**: MCPI (exhaustive) or MEPI (curated)?
-6. **Q6 - Domain**: Which profile? (SOFTWARE, MARKET_INTEL, DOCUMENT_INTEL, LEGAL, or DEFAULT)
+6. **Q6 - Domain**: Which profile? (SOFTWARE, MARKET_INTEL, LEGAL, or DEFAULT)
 7. **Q7 - Discovery Platforms**: What databases/platforms index this entity type? Test each, classify access level.
 
 Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection until all 7 questions are answered.
@@ -61,7 +61,7 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
   "topics_per_dimension": { "dimension": ["topics"] },
   "strategy": "MCPI | MEPI",
   "strategy_rationale": "string (WHY this strategy fits the prompt)",
-  "domain": "DEFAULT | SOFTWARE | MARKET_INTEL | DOCUMENT_INTEL | LEGAL",
+  "domain": "DEFAULT | SOFTWARE | MARKET_INTEL | LEGAL",
   "domain_rationale": "string (WHY this domain profile applies)",
   "effort_estimate": "N hours minimum",
   "discovery_platforms": {
@@ -88,7 +88,8 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 - **Track time** - log task start/end for net research time calculation
 - **Quality pipeline 3x** (not optional): Summary+template, each topic, complete set
 - **Source completeness**: Full PDF transcription via pipeline, no agent-selected chunks
-- **Download and store** all sources in session folder (web content changes)
+- **Download** source files (PDFs, images) to `_DOWNLOADS_gitignore/` subfolder (not checked in)
+- **Transcribe** downloaded sources to `_SOURCES/` subfolder (checked in, web content changes)
 - **Inline citations** on critical conclusions: `[LABEL] (SOURCE_ID | URL or filename)`
 - **Identify domain** during Preflight, read corresponding DOMAIN_*.md profile
 - **Document strategy choice** - OUTPUT document must include strategy (MEPI/MCPI) + domain + rationale for both in header block
@@ -157,16 +158,15 @@ Critical conclusions MUST have: `[VERIFICATION_LABEL] (SOURCE_ID | URL or filena
 
 Examples:
 - `[VERIFIED] (GRPH-SC-MSFT-RATELMT | https://learn.microsoft.com/graph/throttling)`
-- `[VERIFIED] (ANTH-SC-ANTH-MDLCRD | _SOURCES/anthropic-model-card-2025.pdf)`
+- `[VERIFIED] (ANTH-SC-ANTH-MDLCRD | _SOURCES/anthropic-model-card-2025.md)`
 
-Referenced files MUST exist in `_SOURCES/` subfolder.
+Referenced files MUST exist in `_SOURCES/` subfolder (transcribed markdown).
 
 ## Domain Profiles
 
 Read one profile per session based on Q6:
 - [DOMAIN_SOFTWARE.md](DOMAIN_SOFTWARE.md) - APIs, frameworks, libraries
 - [DOMAIN_MARKET_INTEL.md](DOMAIN_MARKET_INTEL.md) - Companies, financials
-- [DOMAIN_DOCUMENT_INTEL.md](DOMAIN_DOCUMENT_INTEL.md) - Table extraction
 - [DOMAIN_LEGAL.md](DOMAIN_LEGAL.md) - Legislation, case law
 - [DOMAIN_DEFAULT.md](DOMAIN_DEFAULT.md) - Generic (use when none match)
 

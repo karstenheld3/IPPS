@@ -499,10 +499,11 @@ python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "path/to/document.pdf" -
 ```powershell
 $url = "https://example.com/document.pdf"
 $filename = [System.IO.Path]::GetFileName($url)
-# Download to: [SESSION_FOLDER] > [WORKSPACE_FOLDER]
-Invoke-WebRequest -Uri $url -OutFile "[SESSION_FOLDER]/$filename"
+# Download to _DOWNLOADS_gitignore (not checked in)
+New-Item -ItemType Directory -Path "[SESSION_FOLDER]/_DOWNLOADS_gitignore" -Force | Out-Null
+Invoke-WebRequest -Uri $url -OutFile "[SESSION_FOLDER]/_DOWNLOADS_gitignore/$filename"
 # Then convert to JPG
-python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "[SESSION_FOLDER]/$filename" --dpi 120
+python .windsurf/skills/pdf-tools/convert-pdf-to-jpg.py "[SESSION_FOLDER]/_DOWNLOADS_gitignore/$filename" --dpi 120
 ```
 
 ### For Web Page

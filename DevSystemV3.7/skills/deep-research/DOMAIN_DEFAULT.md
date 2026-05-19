@@ -1,6 +1,6 @@
 # Domain Profile: DEFAULT
 
-Generic research domain profile. Use when no specific domain profile matches (SOFTWARE, MARKET_INTEL, DOCUMENT_INTEL, LEGAL).
+Generic research domain profile. Use when no specific domain profile matches (SOFTWARE, MARKET_INTEL, LEGAL).
 
 ## When to Use
 
@@ -46,7 +46,7 @@ Generic research domain profile. Use when no specific domain profile matches (SO
 - Audio transcription via Whisper or similar
 
 ### Source Handling
-- **Primary sources**: Download and store locally in `_SOURCES/`
+- **Primary sources**: Download to `_DOWNLOADS_gitignore/`, transcribe to `_SOURCES/`
 - **Source IDs**: Assign in format `[TOPIC]-SC-[SOURCE]-[DOCNAME]`
 - **Secondary sources**: Cite with `[COMMUNITY]` label and access date
 - **Access dates**: All sources MUST include `Accessed: YYYY-MM-DD`

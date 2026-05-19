@@ -181,20 +181,19 @@ python compress-pdf.py "source.pdf" --output "[SESSION]/compressed/"
 
 ```
 [SESSION]/
-├── pdf_sources/
-│   └── [original PDFs - reference only]
-├── pdf_images/
-│   └── [PDF_NAME]/
-│       ├── page_001.jpg
-│       ├── page_002.jpg
-│       └── ...
-├── transcribed/
-│   └── [PDF_NAME]/
-│       ├── page_001.md
-│       ├── page_002.md
-│       └── ...
-└── compressed/
-    └── [PDF_NAME]_compressed.pdf
+├── _DOWNLOADS_gitignore/
+│   ├── [original PDFs - not checked in]
+│   ├── pdf_images/
+│   │   └── [PDF_NAME]/
+│   │       ├── page_001.jpg
+│   │       └── ...
+│   └── compressed/
+│       └── [PDF_NAME]_compressed.pdf
+└── _SOURCES/
+    └── [PDF_NAME]/
+        ├── page_001.md
+        ├── page_002.md
+        └── ...
 ```
 
 **Decision criteria:**
