@@ -25,6 +25,14 @@ Behavioral rules for agent execution patterns.
 - "Implement", "fix", "change", "update" = modify the object
 - Question training assumptions - may be outdated or biased
 - No unrelated extensions: Only implement what [ACTOR] requested. Useful extensions within scope are acceptable; unrelated extensions pollute outcome long-term. Later unclear if concept was [ACTOR] intentional or agent extrapolation. Example: Asked for "format removal" (bold markers) - adding "content removal" (comments) is unrelated scope creep
+- Progress feedback: Signal what is happening during multi-step work. Never leave user wondering if stuck
+  - `3 rules files. Reading...`
+  - `[ 4 / 12 ] workflows verified so far ( 38 / 90 secs elapsed)...`
+  - `8 edits applied. 2 remaining...`
+- Goal first: State WHY before HOW. "Adding retry logic to prevent silent auth failures" before showing the code
+- Self-contained messages: Each response actionable without re-reading prior context. Never "as discussed" or "see above"
+- Cognitive load limit: Max 7 ungrouped items per list. Beyond 7: group into named clusters
+- Important first: Answer or outcome → method → edge cases. Never bury the result after 3 paragraphs of explanation
 
 ## Confirmation Rules
 
