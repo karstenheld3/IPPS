@@ -2,6 +2,12 @@
 
 Research **[SUBJECT]** exhaustively using the MCPI (Most Complete Point of Information) approach.
 
+## Prerequisites
+
+- Output folder created per SKILL.md "Output Folder" section
+- Topic ID registered in ID-REGISTRY.md
+- All file paths below are relative to the output folder
+
 **Before starting**: Create `__STRUT_[TOPIC].md` using `/write-strut` with Time Log and Credit Tracking sections:
 ```
 ## Time Log

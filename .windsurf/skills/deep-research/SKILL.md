@@ -19,9 +19,32 @@ Systematic research using MCPI (Most Complete Point of Information) or MEPI (Mos
 ## Quick Start
 
 1. Read this SKILL.md for core principles
-2. Read the appropriate strategy file (MCPI or MEPI)
-3. Follow Phases 1-4 systematically
-4. Output findings as INFO document
+2. Detect Work Mode and create output folder (see "Output Folder" section below)
+3. Read the appropriate strategy file (MCPI or MEPI)
+4. Follow Phases 1-4 systematically
+5. Output findings as INFO document
+
+## Output Folder (Pre-Phase 1)
+
+Deep research creates a Topic Folder for its outputs by default.
+
+### Step 1.1: Detect Work Mode
+
+1. Read workspace NOTES.md for `[DEFAULT_SESSIONS_FOLDER]`
+2. Check from conversation: Is there an active session?
+   - Active session exists -> SESSION-MODE
+   - No active session -> PROJECT-MODE
+3. If already working inside a `T##_` or `S##_` or other session subfolder -> create output folder here (Step 1.2)
+
+### Step 1.2: Create Output Folder
+
+**PROJECT-MODE:** Run `/session-new` first, then create Topic Folder inside.
+
+**SESSION-MODE (default):** Create Topic Folder per @skills:session-management Topic Folder Creation procedure. Folder name: `T##_[TOPIC]-[PascalCaseName]_YYYY-MM-DD/`
+
+**SESSION-MODE as Step (only if user explicitly requests):** Create Step Folder per @skills:session-management Step Folder naming. Folder name: `S##_[TOPIC]-[PascalCaseName]_YYYY-MM-DD/`
+
+All deep-research output files go in this folder. Each folder has independent numbering namespace per @skills:session-management.
 
 ## Phase Model (Global)
 
@@ -36,6 +59,14 @@ All research (MCPI and MEPI) follows these 4 phases:
 **Phase 4 - Final Verification and Sync**: Dimension coverage, completeness check, finalize Summary (cross-document synthesis), metadata, final VCRIV
 
 Strategy files (MCPI/MEPI) define the details for each phase.
+
+## Topic ID Registration (Phase 1, after Prompt Decomposition)
+
+Before proceeding to source collection, ensure Topic ID uniqueness:
+1. Read ID-REGISTRY.md in workspace root
+2. Check for collision with existing Topic IDs per Topic Registry rules in devsystem-ids.md
+3. If collision: narrow abbreviation to specific subtopic
+4. Register new Topic ID immediately in ID-REGISTRY.md
 
 ## Prompt Decomposition (Phase 1, Step 1)
 

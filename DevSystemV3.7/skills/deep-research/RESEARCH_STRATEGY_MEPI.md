@@ -4,6 +4,12 @@ Research **[SUBJECT]** using the MEPI (Most Executable Point of Information) app
 
 This strategy follows the global Phase 1-4 model defined in SKILL.md.
 
+## Prerequisites
+
+- Output folder created per SKILL.md "Output Folder" section
+- Topic ID registered in ID-REGISTRY.md
+- All file paths below are relative to the output folder
+
 ## MUST-NOT-FORGET
 
 - Run `/verify` on STRUT plan before proceeding
