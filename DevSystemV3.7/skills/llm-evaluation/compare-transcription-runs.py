@@ -71,9 +71,7 @@ def build_judge_api_params(model: str, mapping: dict, registry: dict,
     params['reasoning_effort'] = effort_map[reasoning_effort].get('openai_reasoning_effort', 'medium')
   elif method == 'adaptive_thinking' and reasoning_effort in effort_map:
     params['thinking'] = {'type': 'adaptive'}
-    effort_value = effort_map[reasoning_effort].get('openai_reasoning_effort', 'medium')
-    effort_remap = {'none': 'low', 'minimal': 'low', 'xhigh': 'max'}
-    params['anthropic_effort'] = effort_remap.get(effort_value, effort_value)
+    params['anthropic_effort'] = effort_map[reasoning_effort]['anthropic_adaptive_effort']
   elif method == 'thinking' and reasoning_effort in effort_map:
     factor = effort_map[reasoning_effort].get('anthropic_thinking_factor', 0.0)
     thinking_max = model_config.get('thinking_max', 100000)
