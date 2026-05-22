@@ -34,10 +34,13 @@ Track implementation progress and decisions.
 
 ## Topic Folders
 
-Populated when session uses independent work streams (see @skills:session-management Topic Folders).
-
 - [ ] T01_TopicDescription: Pending
 - [ ] T02_TopicDescription: Pending
+
+## Step Folders
+
+- [x] S01_Description: Done
+- [ ] S02_Description: In progress
 
 ## Test Coverage
 

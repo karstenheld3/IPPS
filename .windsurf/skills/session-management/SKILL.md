@@ -19,7 +19,7 @@ Sessions track EDIRD phases:
 - Lifecycle: Init → Work → Save → Resume → Finalize → Archive
 - Sync session PROBLEMS.md to project on /session-finalize
 - Phase tracking: NOTES.md has current phase, PROGRESS.md has full phase plan
-- **Topic Folders**: `T##_TopicDescription/` for independent work streams. Max 1 level. Run detection procedure on session entry.
+- **Topic Folders**: `T##_TopicDescription_YYYY-MM-DD/` for independent work streams. Max 1 level. Run detection procedure on session entry.
 - **STOP after session init**: After creating session files, STOP and wait for user review. Do NOT implement session goal until explicitly requested. User must review and refine goals before work begins.
 
 ## Session Lifecycle
@@ -69,29 +69,7 @@ Each step folder has its own independent numbering namespace:
 
 ### Example
 
-```
-_YYYY-MM-DD_SessionTopic/
-├── NOTES.md
-├── PROGRESS.md
-├── PROBLEMS.md
-├── S01_CollectData_YYYY-MM-DD_gitignore/
-│   └── (large source files, local only)
-├── S01_CollectData_STEPLOG.md
-├── S02_ProcessData_YYYY-MM-DD/
-│   └── (processed output files)
-├── S02_ProcessData_STEPLOG.md
-├── S03_MYTPC-AnalyzeResults_YYYY-MM-DD/
-│   ├── STRUT_MYTPC.md
-│   ├── _INFO_MYTPC_01-SUMMARY.md
-│   ├── _INFO_MYTPC_02-SOURCES.md
-│   └── _INFO_MYTPC_03-CATEGORY_A.md
-├── S03_MYTPC-AnalyzeResults_STEPLOG.md
-├── S04_OTHRTPC-DeepDive_YYYY-MM-DD/
-│   ├── STRUT_OTHRTPC.md
-│   ├── _INFO_OTHRTPC_01-SUMMARY.md
-│   └── _INFO_OTHRTPC_02-SOURCES.md
-└── S04_OTHRTPC-DeepDive_STEPLOG.md
-```
+See "Structure" example under Topic Folders section for a complete session layout including Step Folders, Topic Folders, and Bug Folders.
 
 ### When to Use Step Folders
 
@@ -107,32 +85,45 @@ When a session contains multiple independent work streams, each stream gets its 
 
 ### Naming
 
-**Pattern:** `T##_TopicDescription/`
+**Pattern:** `T##_TopicDescription_YYYY-MM-DD/`
 
 - `T##` - 2-digit sequence number with `T` prefix (T01, T02, ...). Sequence = creation order, not dependency
-- `TopicDescription` - CamelCase description of the work stream
+- `TopicDescription` - CamelCase description; optionally prefixed with `TOPIC-` if topic belongs to a research track (e.g., `T01_XLREF-TranslationReflection_2026-05-22/`)
+- `YYYY-MM-DD` - date the topic folder was created
 
 ### Structure
 
 ```
 _YYYY-MM-DD_SessionName/
-├── NOTES.md                        (parent - has ## Topic Folders registry)
-├── PROBLEMS.md                     (parent)
-├── PROGRESS.md                     (parent - has ## Topic Folders section)
-├── T01_DatabaseOptions/
+├── NOTES.md                        (Topic Registry, Topic/Step Folders, Bug List)
+├── PROBLEMS.md
+├── PROGRESS.md                     (Topic/Step Folders progress)
+│
+│   Topic Folders (independent work streams)
+├── T01_DatabaseOptions_2026-01-15/
 │   ├── NOTES.md
 │   ├── PROBLEMS.md
 │   ├── PROGRESS.md
 │   └── _INFO_DBOPT_01.md
-├── T02_APIDesign/
+├── T02_APID-APIDesign_2026-01-15/
 │   ├── NOTES.md
 │   ├── PROBLEMS.md
 │   ├── PROGRESS.md
 │   └── _SPEC_APID_01.md
-└── T03_AuthIntegration/
-    ├── NOTES.md
+│
+│   Step Folders (sequential pipeline)
+├── S01_CollectData_2026-01-15_gitignore/
+│   └── (large source files, local only)
+├── S01_CollectData_STEPLOG.md
+├── S02_MYTPC-AnalyzeResults_2026-01-16/
+│   ├── _INFO_MYTPC_01-SUMMARY.md
+│   └── _INFO_MYTPC_02-SOURCES.md
+├── S02_MYTPC-AnalyzeResults_STEPLOG.md
+│
+│   Bug Folders (AUTH = session TOPIC ID, see /bugfix workflow)
+└── AUTH-BG-0001_TokenRaceCondition/
     ├── PROBLEMS.md
-    └── PROGRESS.md
+    └── _INFO_*.md
 ```
 
 ### When to Use Topic Folders
@@ -161,7 +152,7 @@ Execute at end of `/session-save` when working in a `T##_*` folder:
 
 1. Save to topic folder tracking files (NOTES.md, PROBLEMS.md, PROGRESS.md)
 2. Update parent PROGRESS.md `## Topic Folders` section (create section if not present):
-   - Format: `- [ ] T##_Description: [one-line status summary]`
+   - Format: `- [ ] T##_Description_YYYY-MM-DD: [one-line status summary]`
    - Mark `[x]` when topic folder work is complete
 3. If new cross-cutting problems found: add to parent PROBLEMS.md with cross-reference to topic folder
 
@@ -184,7 +175,7 @@ Execute when `/session-finalize` is invoked:
 When creating a new topic folder inside an existing session:
 
 1. Determine next `T##` number (find highest existing `T##` number + 1)
-2. Create `T##_TopicDescription/` inside the session folder
+2. Create `T##_TopicDescription_YYYY-MM-DD/` inside the session folder
 3. Create tracking files from templates (NOTES.md, PROBLEMS.md, PROGRESS.md)
 4. Register in parent NOTES.md `## Topic Folders` section
 5. Add entry to parent PROGRESS.md `## Topic Folders` section
@@ -249,45 +240,12 @@ See `[AGENT_FOLDER]/rules/devsystem-ids.md` rule (always-on) for complete ID sys
   - Example: `CRWL-SP01`, `AUTH-IP01`
 - Tracking: `[TOPIC]-[TYPE]-[NNNN]` (BG = Bug, FT = Feature, PR = Problem, FX = Fix, TK = Task)
   - Example: `SAP-BG-0001`, `UI-PR-0003`, `GLOB-TK-0015`
-- Topic Registry: Maintained in project NOTES.md
+- Topic Registry: Session-level in session NOTES.md, project-level in ID-REGISTRY.md
 
-## Session Init Template
+## Session Init Templates
 
-### NOTES.md
-```markdown
-# Session Notes
+Use the full templates from this skill folder (not the minimal snippets below):
 
-## Session Info
-- **Started**: [DATE]
-- **Goal**: [Brief description]
-
-## Key Decisions
-
-## Important Findings
-
-## Workflows to Run on Resume
-```
-
-### PROBLEMS.md
-```markdown
-# Session Problems
-
-## Open
-
-## Resolved
-
-## Deferred
-```
-
-### PROGRESS.md
-```markdown
-# Session Progress
-
-## To Do
-
-## In Progress
-
-## Done
-
-## Tried But Not Used
-```
+- `NOTES_TEMPLATE.md` - Includes Topic Registry, Topic/Step Folders, Bug List, Significant Prompts Log
+- `PROBLEMS_TEMPLATE.md` - Open/Resolved/Deferred sections with ID format
+- `PROGRESS_TEMPLATE.md` - To Do/In Progress/Done, Topic/Step Folders progress
