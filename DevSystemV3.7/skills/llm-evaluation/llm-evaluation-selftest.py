@@ -172,6 +172,20 @@ def test_config_loading(skill_dir: Path, results: TestResult):
         results.add_pass("Model pricing valid")
       else:
         results.add_fail("Model pricing valid", "Missing pricing structure")
+      # Validate long_context entries have required fields
+      lc_valid = True
+      for provider_data in pricing.get("pricing", {}).values():
+        for model_id, model_data in provider_data.items():
+          if not isinstance(model_data, dict): continue
+          if "long_context" in model_data:
+            missing = [k for k in ["input_per_1m", "output_per_1m", "threshold_k"] if k not in model_data["long_context"]]
+            if missing:
+              results.add_fail("Long context schema", f"{model_id}: missing {missing}")
+              lc_valid = False
+              break
+        if not lc_valid: break
+      if lc_valid:
+        results.add_pass("Long context schema")
     except json.JSONDecodeError as e:
       results.add_fail("Model pricing valid", f"Invalid JSON: {e}")
   else:

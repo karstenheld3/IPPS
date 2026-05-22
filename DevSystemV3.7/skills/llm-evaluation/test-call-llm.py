@@ -47,6 +47,12 @@ OPENAI_TESTS = [
   ("gpt-5.4", "low", "none", None, "reasoning_effort"),
   ("gpt-5.4", "high", "low", None, "reasoning_effort"),
   ("gpt-5.4", "xhigh", "none", None, "reasoning_effort"),
+    
+  # Reasoning models - gpt-5.5 family
+  ("gpt-5.5", "none", "none", None, "reasoning_effort"),
+  ("gpt-5.5", "low", "none", None, "reasoning_effort"),
+  ("gpt-5.5", "high", "none", None, "reasoning_effort"),
+  ("gpt-5.5-pro", "high", "none", None, "reasoning_effort"),
 ]
 
 ANTHROPIC_TESTS = [

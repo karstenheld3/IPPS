@@ -14,6 +14,12 @@ UNKNOWN = '[UNKNOWN]'
 
 DEFAULT_PRICING = {
   "openai": {
+    "gpt-5.5": {"input_per_1m": 5.00, "output_per_1m": 30.00, "long_context": {"input_per_1m": 10.00, "output_per_1m": 45.00, "threshold_k": None}, "currency": "USD"},
+    "gpt-5.5-pro": {"input_per_1m": 30.00, "output_per_1m": 180.00, "long_context": {"input_per_1m": 60.00, "output_per_1m": 270.00, "threshold_k": None}, "currency": "USD"},
+    "gpt-5.4": {"input_per_1m": 2.50, "output_per_1m": 15.00, "long_context": {"input_per_1m": 5.00, "output_per_1m": 22.50, "threshold_k": None}, "currency": "USD"},
+    "gpt-5.4-mini": {"input_per_1m": 0.75, "output_per_1m": 4.50, "currency": "USD"},
+    "gpt-5.4-nano": {"input_per_1m": 0.20, "output_per_1m": 1.25, "currency": "USD"},
+    "gpt-5.4-pro": {"input_per_1m": 30.00, "output_per_1m": 180.00, "long_context": {"input_per_1m": 60.00, "output_per_1m": 270.00, "threshold_k": None}, "currency": "USD"},
     "gpt-5.2": {"input_per_1m": 1.75, "output_per_1m": 14.00, "currency": "USD"},
     "gpt-5.1": {"input_per_1m": 1.25, "output_per_1m": 10.00, "currency": "USD"},
     "gpt-5": {"input_per_1m": 1.25, "output_per_1m": 10.00, "currency": "USD"},
@@ -27,7 +33,9 @@ DEFAULT_PRICING = {
     "gpt-4o": {"input_per_1m": 2.50, "output_per_1m": 10.00, "currency": "USD"},
     "gpt-4o-mini": {"input_per_1m": 0.15, "output_per_1m": 0.60, "currency": "USD"},
     "o4-mini": {"input_per_1m": 1.10, "output_per_1m": 4.40, "currency": "USD"},
+    "o3": {"input_per_1m": 2.00, "output_per_1m": 8.00, "currency": "USD"},
     "o3-mini": {"input_per_1m": 1.10, "output_per_1m": 4.40, "currency": "USD"},
+    "o3-pro": {"input_per_1m": 20.00, "output_per_1m": 80.00, "currency": "USD"},
     "o3-deep-research": {"input_per_1m": 10.00, "output_per_1m": 40.00, "currency": "USD"},
     "o1": {"input_per_1m": 15.00, "output_per_1m": 60.00, "currency": "USD"},
     "o1-mini": {"input_per_1m": 1.10, "output_per_1m": 4.40, "currency": "USD"},
@@ -60,8 +68,8 @@ def detect_provider(model_id: str) -> str:
     return 'anthropic'
   return 'unknown'
 
-def calculate_cost(model: str, input_tokens: int, output_tokens: int, pricing: dict) -> dict:
-  """Calculate cost for token usage."""
+def calculate_cost(model: str, input_tokens: int, output_tokens: int, pricing: dict, calls: int = 1) -> dict:
+  """Calculate cost for token usage. Uses long_context prices when avg tokens/call exceeds threshold."""
   provider = detect_provider(model)
   provider_pricing = pricing.get(provider, {})
   model_pricing = provider_pricing.get(model)
@@ -78,18 +86,34 @@ def calculate_cost(model: str, input_tokens: int, output_tokens: int, pricing: d
       "output_cost": 0,
       "total_cost": 0,
       "currency": "USD",
-      "pricing_found": False
+      "pricing_found": False,
+      "long_context_applied": False
     }
     
-  input_cost = (input_tokens / 1_000_000) * model_pricing["input_per_1m"]
-  output_cost = (output_tokens / 1_000_000) * model_pricing["output_per_1m"]
+  long_context = model_pricing.get("long_context")
+  threshold = long_context.get("threshold_k") if long_context else None
+  use_long = False
+  if threshold is not None and calls > 0:
+    avg_tokens_per_call = (input_tokens + output_tokens) / calls
+    use_long = avg_tokens_per_call > threshold * 1000
+    
+  if use_long:
+    input_rate = long_context.get("input_per_1m", model_pricing["input_per_1m"])
+    output_rate = long_context.get("output_per_1m", model_pricing["output_per_1m"])
+  else:
+    input_rate = model_pricing["input_per_1m"]
+    output_rate = model_pricing["output_per_1m"]
+    
+  input_cost = (input_tokens / 1_000_000) * input_rate
+  output_cost = (output_tokens / 1_000_000) * output_rate
     
   return {
     "input_cost": round(input_cost, 6),
     "output_cost": round(output_cost, 6),
     "total_cost": round(input_cost + output_cost, 6),
     "currency": model_pricing.get("currency", "USD"),
-    "pricing_found": True
+    "pricing_found": True,
+    "long_context_applied": use_long
   }
 
 def find_token_usage_files(input_folder: Path) -> list:
@@ -133,7 +157,7 @@ def main():
       output_tokens = data.get("total_output_tokens", 0)
       calls = data.get("calls", 0)
             
-      cost_info = calculate_cost(model, input_tokens, output_tokens, pricing)
+      cost_info = calculate_cost(model, input_tokens, output_tokens, pricing, calls=max(calls, 1))
             
       if model not in model_costs:
         model_costs[model] = {
