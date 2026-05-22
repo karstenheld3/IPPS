@@ -66,6 +66,11 @@ ANTHROPIC_TESTS = [
   ("claude-sonnet-4-20250514", "medium", "none", None, "thinking"),
   ("claude-sonnet-4-5-20250929", "low", "none", None, "thinking"),
   ("claude-sonnet-4-5-20250929", "medium", "low", None, "thinking"),
+    
+  # Adaptive thinking models
+  ("claude-opus-4-7", "low", "none", None, "adaptive_thinking"),
+  ("claude-opus-4-7", "medium", "none", None, "adaptive_thinking"),
+  ("claude-opus-4-7", "high", "none", None, "adaptive_thinking"),
 ]
 
 # Fallback tests - verify fallback mapping works
