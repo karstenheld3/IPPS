@@ -237,6 +237,7 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 
 ## Reference Files
 
+- [RESEARCH_RULES.md](RESEARCH_RULES.md) - Verification and improvement rules for research output (used by `/verify` and `/improve`)
 - [RESEARCH_TOOLS.md](RESEARCH_TOOLS.md) - Tools, source processing, configuration
 - [RESEARCH_TOC_TEMPLATE.md](RESEARCH_TOC_TEMPLATE.md) - TOC template (MUST use when >1 topic files)
 - [RESEARCH_CREATE_TOC.md](RESEARCH_CREATE_TOC.md) - TOC creation workflow

@@ -115,6 +115,7 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 
 - **STRUT required** for all research sessions (include pipeline steps and time log)
 - **Assumptions check first** - write down what you think you know before researching
+- **Google search via Playwright** - MANDATORY for all research. Use ms-playwright-mcp to search google.com with targeted queries (filetype:pdf, site:, exact phrases). Discovers PDFs, whitepapers, and public documents that `search_web` misses.
 - **Discovery platforms tested** - identify, test, classify (FREE/PAID/PARTIAL) before source collection
 - **Primary sources > secondary > community** - verify tier 1-3 before accepting tier 6-8
 - **Access dates required**: `Accessed: YYYY-MM-DD` on all sources
@@ -236,6 +237,7 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 
 ## Reference Files
 
+- [RESEARCH_RULES.md](RESEARCH_RULES.md) - Verification and improvement rules for research output (used by `/verify` and `/improve`)
 - [RESEARCH_TOOLS.md](RESEARCH_TOOLS.md) - Tools, source processing, configuration
 - [RESEARCH_TOC_TEMPLATE.md](RESEARCH_TOC_TEMPLATE.md) - TOC template (MUST use when >1 topic files)
 - [RESEARCH_CREATE_TOC.md](RESEARCH_CREATE_TOC.md) - TOC creation workflow
