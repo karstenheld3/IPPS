@@ -4,6 +4,12 @@ Rules for writing and verifying company profile INFO documents with GOOD/BAD exa
 
 ## Rule Index
 
+Quality (QA) - cross-cutting, applies to ALL sections
+- CP-QA-01: Every factual claim backed by source or labeled `[ASSUMED]`
+- CP-QA-02: Specific over vague - quantify, name, date instead of generalizing
+- CP-QA-03: Same entity = same name throughout (no synonyms, no abbreviation drift)
+- CP-QA-04: One fact per bullet - no compound statements hiding multiple claims
+
 Header (HD)
 - CP-HD-01: All sections filled (standalone profiles are always FULL)
 - CP-HD-02: Relation to research context states why this company matters
@@ -27,9 +33,17 @@ Leadership (LD)
 - CP-LD-01: Each person entry has name, title, tenure start, and 1-line background
 - CP-LD-02: Reference personal profiles via `(see [TOPIC]-IN[NN])` when they exist
 
+Market (MK)
+- CP-MK-01: Competitor entries include basis for comparison (same segment, same geography, same customer)
+- CP-MK-02: Market claims cite source - no unsourced market share percentages
+
 Timeline (TL)
 - CP-TL-01: Reverse chronological, major milestones only
 - CP-TL-02: Funding rounds include amount, lead investor, and date
+
+Risk (RK)
+- CP-RK-01: Each risk factor states likelihood and potential impact, not just the risk category
+- CP-RK-02: Risks derived from evidence in earlier sections, not speculative
 
 Assessment (AS)
 - CP-AS-01: SWOT entries are specific, not generic platitudes
@@ -39,6 +53,10 @@ Engagement (EN)
 - CP-EN-01: Key contacts include name, role, and rationale for why they are the entry point
 - CP-EN-02: Conversation angles reference company's public statements or recent news
 - CP-EN-03: At least one concrete, actionable recommendation in Recommended approach
+
+Research Gaps (RG)
+- CP-RG-01: Each gap states what is missing AND why it matters
+- CP-RG-02: Suggested next steps are actionable (specific source or action to check)
 
 Sensitivity (SN)
 - CP-SN-01: Sensitive topics flagged with `[SENSITIVE: reason. Safe angle: ...]`

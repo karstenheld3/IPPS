@@ -4,6 +4,12 @@ Rules for writing and verifying network profile INFO documents with GOOD/BAD exa
 
 ## Rule Index
 
+Quality (QA) - cross-cutting, applies to ALL sections
+- NP-QA-01: Every factual claim backed by source or labeled `[ASSUMED]`
+- NP-QA-02: Specific over vague - quantify, name, date instead of generalizing
+- NP-QA-03: Same entity = same name throughout (no synonyms, no abbreviation drift)
+- NP-QA-04: One fact per bullet - no compound statements hiding multiple claims
+
 Header (HD)
 - NP-HD-01: All sections filled (standalone profiles are always FULL)
 - NP-HD-02: Network type and formality level clearly identified
@@ -32,6 +38,10 @@ Structure (ST)
 - NP-ST-02: Sub-clusters have binding topic, members, and bridge persons identified
 - NP-ST-03: Communication channels include frequency and rhythm
 
+Events (EV)
+- NP-EV-01: Each event includes date/frequency, format, attendance scale, and entry mechanism
+- NP-EV-02: Networking value rated (who attends, what access it provides)
+
 Entry (EN)
 - NP-EN-01: Explicit and implicit barriers separated
 - NP-EN-02: Recommended entry path specific to requester's position
@@ -51,6 +61,10 @@ Strategic (SA)
 - NP-SA-01: Entry feasibility realistic (not aspirational)
 - NP-SA-02: Alternative networks named when access is difficult
 - NP-SA-03: Risks of engagement explicitly stated
+
+Research Gaps (RG)
+- NP-RG-01: Each gap states what is missing AND why it matters
+- NP-RG-02: Suggested next steps are actionable (specific source or action to check)
 
 Sensitivity (SN)
 - NP-SN-01: Hidden dynamics labeled `[ASSUMED]` with confidence level

@@ -4,6 +4,12 @@ Rules for writing and verifying organization profile INFO documents with GOOD/BA
 
 ## Rule Index
 
+Quality (QA) - cross-cutting, applies to ALL sections
+- OP-QA-01: Every factual claim backed by source or labeled `[ASSUMED]`
+- OP-QA-02: Specific over vague - quantify, name, date instead of generalizing
+- OP-QA-03: Same entity = same name throughout (no synonyms, no abbreviation drift)
+- OP-QA-04: One fact per bullet - no compound statements hiding multiple claims
+
 Header (HD)
 - OP-HD-01: All sections filled (standalone profiles are always FULL)
 - OP-HD-02: Organization type clearly identified (university, industry body, NGO, etc.)
@@ -32,10 +38,18 @@ Programs (PG)
 - OP-PG-01: Each program entry includes audience, format, frequency, scale
 - OP-PG-02: Events include date/frequency, not just name
 
+Assessment (AS)
+- OP-AS-01: Relevance assessment tied to specific research context, not generic value statements
+- OP-AS-02: Influence scope quantified (reach, budget, member count) not described vaguely
+
 Engagement (EN)
 - OP-EN-01: Entry points are specific paths (application, event, committee), not vague
 - OP-EN-02: Timing tied to org's calendar (membership cycles, annual events)
 - OP-EN-03: At least one concrete, actionable recommendation
+
+Research Gaps (RG)
+- OP-RG-01: Each gap states what is missing AND why it matters
+- OP-RG-02: Suggested next steps are actionable (specific source or action to check)
 
 Sensitivity (SN)
 - OP-SN-01: Political/ideological orientation stated only when discernible from evidence

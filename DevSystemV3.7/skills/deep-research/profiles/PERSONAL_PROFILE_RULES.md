@@ -4,6 +4,12 @@ Rules for writing and verifying personal profile INFO documents with GOOD/BAD ex
 
 ## Rule Index
 
+Quality (QA) - cross-cutting, applies to ALL sections
+- PP-QA-01: Every factual claim backed by source or labeled `[ASSUMED]`
+- PP-QA-02: Specific over vague - quantify, name, date instead of generalizing
+- PP-QA-03: Same entity = same name throughout (no synonyms, no abbreviation drift)
+- PP-QA-04: One fact per bullet - no compound statements hiding multiple claims
+
 Header (HD)
 - PP-HD-01: All sections filled (standalone profiles are always FULL)
 - PP-HD-02: Related profiles field links to existing profile Doc IDs
@@ -12,6 +18,14 @@ Header (HD)
 Summary (SM)
 - PP-SM-01: 3-5 sentences covering role, location, arc, distinguishing feature, relevance
 - PP-SM-02: No claims without source backing in body sections
+
+Personal Data (PD)
+- PP-PD-01: Inferred fields marked `[ASSUMED]` with reasoning
+- PP-PD-02: Connection count includes date (decays rapidly)
+
+Current Occupation (OC)
+- PP-OC-01: Key figures quantified (team size, revenue, portfolio) not described vaguely
+- PP-OC-02: Activity timeline contains at least 2 dated milestones
 
 Timeline (TL)
 - PP-TL-01: Career timeline reverse chronological, no gaps >2 years without explanation
@@ -22,13 +36,26 @@ Topics (TP)
 - PP-TP-01: Each topic has status and qualifier in heading
 - PP-TP-02: Conversation angle ends each topic with a concrete question
 
+Additional Activities (AC)
+- PP-AC-01: Each entry dated - no undated items
+- PP-AC-02: Omit subsections with no findings (do not leave empty subsections)
+
+Social Media (MA)
+- PP-MA-01: Capture date stated in section heading
+- PP-MA-02: Pattern summary distinguishes original content from reposts/reactions
+
 Character (CH)
 - PP-CH-01: Self-description uses actual quotes from LinkedIn/bio
 - PP-CH-02: Career pattern uses arrow notation with spaces
+- PP-CH-03: Assessments distinguish observation from inference - label inferences `[ASSUMED]`
 
 Networking (NW)
 - PP-NW-01: Engagement Strategy has at least one concrete, actionable recommendation
 - PP-NW-02: Touchpoints reference specific events, not vague categories
+
+Research Gaps (RG)
+- PP-RG-01: Each gap states what is missing AND why it matters
+- PP-RG-02: Suggested next steps are actionable (specific source, person, or event to check)
 
 Sensitivity (SN)
 - PP-SN-01: Sensitive topics flagged with `[SENSITIVE: reason. Safe angle: ...]`
@@ -257,4 +284,227 @@ When a separate profile exists, reference it. Do not duplicate content.
 - **Description**: [Industry] company, [City] (see [TOPIC]-IN[NN])
 - **Person's role**: [Title] and co-founder since [year]
 - **Key projects**: [Project 1], [Project 2]
+```
+
+## Quality Rules (Cross-Cutting)
+
+### PP-QA-01: Evidence Backing
+
+Every factual claim must cite a source or be labeled `[ASSUMED]`.
+
+**BAD:**
+```
+- **Domain expertise**: Expert in digital transformation
+- **Core thesis**: Believes in AI-first approaches
+```
+
+**GOOD:**
+```
+- **Domain expertise**: Digital transformation strategy (keynote at [Event], [year]; 3 publications on topic)
+- **Core thesis**: "AI will replace 80% of routine compliance work within 5 years" (LinkedIn post, [date]) [VERIFIED]
+```
+
+### PP-QA-02: Specific Over Vague
+
+Quantify, name, date. Never generalize when specifics are available.
+
+**BAD:**
+```
+- **Key figures**: Large team, significant revenue
+- **Role scope**: Responsible for strategy and operations
+```
+
+**GOOD:**
+```
+- **Key figures**: 45 employees, EUR 8.2M ARR (2024)
+- **Role scope**: Leads product strategy for B2B segment (3 product lines, 12 enterprise clients)
+```
+
+### PP-QA-03: Naming Consistency
+
+Same entity = same name throughout the document.
+
+**BAD:**
+```
+## Career Timeline
+- **Since 2020**: CEO at TechCorp Solutions GmbH
+
+## Current Occupation
+### TCS (CEO, since 2020)
+```
+
+**GOOD:**
+```
+## Career Timeline
+- **Since 2020**: CEO at TechCorp Solutions GmbH, [City]
+
+## Current Occupation
+### TechCorp Solutions GmbH (CEO, since 2020)
+```
+
+### PP-QA-04: One Fact Per Bullet
+
+No compound statements. Each bullet = one verifiable claim.
+
+**BAD:**
+```
+- **2018-2020**: VP Product at [Company A] where she led the platform rebuild and also served on the board of [Association] and published a book on API design
+```
+
+**GOOD:**
+```
+- **2018-2020**: VP Product at [Company A], [City] (led platform rebuild, team of 30)
+```
+
+## Personal Data Rules
+
+### PP-PD-01: Inferred Fields Labeled
+
+Mark inferred data explicitly with reasoning.
+
+**BAD:**
+```
+- **Nationality**: German
+- **Languages**: German, English
+```
+
+**GOOD:**
+```
+- **Nationality**: German [ASSUMED - LinkedIn location and education both in Germany]
+- **Languages**: German (native) [ASSUMED], English (professional) [VERIFIED - LinkedIn set to English, English-language posts]
+```
+
+## Current Occupation Rules
+
+### PP-OC-01: Quantified Key Figures
+
+Key figures must be numbers, not adjectives.
+
+**BAD:**
+```
+- **Key figures**: Growing team, strong revenue
+```
+
+**GOOD:**
+```
+- **Key figures**: 120 employees (LinkedIn, [date]), Series B funded (EUR 15M, [year])
+```
+
+### PP-OC-02: Activity Timeline Depth
+
+At least 2 dated milestones per active role.
+
+**BAD:**
+```
+- **Activity timeline**:
+  - Founded the company
+```
+
+**GOOD:**
+```
+- **Activity timeline**:
+  - 2023-06: Closed Series A (EUR 5M, led by [Investor])
+  - 2024-01: Launched product in [market] (press release [date])
+  - 2024-09: Expanded to 3 new markets (LinkedIn announcement)
+```
+
+## Additional Activities Rules
+
+### PP-AC-01: Dated Entries
+
+Every entry must have a date or date range.
+
+**BAD:**
+```
+### Board Memberships and Advisory Roles
+- Advisory Board, [Industry Association]
+- Mentor at [Accelerator]
+```
+
+**GOOD:**
+```
+### Board Memberships and Advisory Roles
+- **2021-present**: Advisory Board, [Industry Association] (invited member)
+- **2023-present**: Mentor, [Accelerator] (2 cohorts per year)
+```
+
+## Social Media Rules
+
+### PP-MA-01: Capture Date Required
+
+Section heading must state when social media was captured.
+
+**BAD:**
+```
+## Latest Social Media Activity
+```
+
+**GOOD:**
+```
+## Latest Social Media Activity (as of 2025-01-15)
+```
+
+### PP-MA-02: Original vs Repost
+
+Pattern summary must distinguish content creation from curation.
+
+**BAD:**
+```
+**Pattern**: Active on LinkedIn, posts about technology.
+```
+
+**GOOD:**
+```
+**Pattern**: Posts 2-3x/week. ~60% reposts of industry news with brief commentary, ~40% original thought leadership (long-form, English). Topics: AI regulation, enterprise adoption. Engagement: 50-200 reactions on original posts.
+```
+
+## Character Assessment Rules
+
+### PP-CH-03: Observation vs Inference
+
+Distinguish what is observed from what is interpreted.
+
+**BAD:**
+```
+- **Values indicators**: She values innovation and disruption
+```
+
+**GOOD:**
+```
+- **Values indicators**: Left established consulting career for early-stage startup (risk tolerance) [ASSUMED]. Publicly advocates for open-source contributions (3 LinkedIn posts in 2024) [VERIFIED].
+```
+
+## Research Gaps Rules
+
+### PP-RG-01: Gap Impact Stated
+
+Each gap explains what is missing AND why it matters for the profile's purpose.
+
+**BAD:**
+```
+- Education details unknown
+- No information about hobbies
+```
+
+**GOOD:**
+```
+- Education history: No university or degree information found. Matters: Cannot assess academic network, alumni connections, or domain training depth.
+- Pre-2015 career: No public data before current company. Matters: Career pattern and industry experience unclear.
+```
+
+### PP-RG-02: Actionable Next Steps
+
+Suggested steps must name a specific action, not a category.
+
+**BAD:**
+```
+- **Suggested next steps**: Research more about education. Check social media.
+```
+
+**GOOD:**
+```
+- **Suggested next steps**:
+  - Check XING profile (often contains education data not on LinkedIn)
+  - Ask [Mutual Connection] about shared tenure at [Company] (2015-2018)
+  - Monitor [Event Name] speaker list ([month] [year]) - confirmed attendee
 ```
