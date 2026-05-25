@@ -5,7 +5,7 @@ Rules for writing and verifying organization profile INFO documents with GOOD/BA
 ## Rule Index
 
 Header (HD)
-- OP-HD-01: Depth tier set and sections match tier
+- OP-HD-01: All sections filled (standalone profiles are always FULL)
 - OP-HD-02: Organization type clearly identified (university, industry body, NGO, etc.)
 - OP-HD-03: Related profiles link to person/company profiles of key members
 
@@ -51,43 +51,26 @@ Cross-Reference (XR)
 
 ## Header Rules
 
-### OP-HD-01: Depth Tier Compliance
+### OP-HD-01: Section Completeness
 
-Sections must match tier:
-- BRIEF: Summary + Organization Data + Mission and Purpose + Engagement Strategy only
-- STANDARD: Skip Funding Model, detailed Programs subsections
-- FULL: All sections filled
+Standalone profiles are always FULL. All sections must be filled. When no data found, document in Research Gaps section instead of leaving empty sections.
 
 **BAD:**
 ```
-**Depth tier**: BRIEF
-
-## Summary
-[filled]
-## Organization Data
-[filled]
-## Mission and Purpose
-[filled]
 ## Governance Structure
-[filled - should not appear in BRIEF]
+[empty - no data found]
 ## Membership and Constituency
-[filled - should not appear in BRIEF]
+[empty]
 ```
 
 **GOOD:**
 ```
-**Depth tier**: BRIEF
+## Governance Structure
+- No publicly available governance information identified beyond website leadership page.
 
-## Summary
-[filled]
-## Organization Data
-[filled]
-## Mission and Purpose
-[filled]
-## Engagement Strategy
-[filled]
-## Sources
-[filled]
+## Research Gaps
+- Governance: Decision-making process, appointment mechanism, and accountability unknown
+- Membership: Entry criteria and member count not publicly disclosed
 ```
 
 ## Mission Rules

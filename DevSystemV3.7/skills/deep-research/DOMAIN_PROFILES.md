@@ -26,7 +26,7 @@ Common failures a fresh agent will encounter:
 2. **Common name disambiguation** - "Thomas Mueller" returns hundreds of profiles. Use company + location + tenure dates to confirm identity. When uncertain, mark `[ASSUMED - based on company match]`.
 3. **Source decay** - Social media posts, company pages, and news articles disappear. Screenshot critical sources immediately. Store in `_SOURCES/` with access date.
 4. **Research order for multi-profile sets** - Research companies/organizations BEFORE people. Company context helps interpret career moves, role significance, and reporting structures.
-5. **Tier selection timing** - Decide depth tier during Preflight (Phase 1) based on subject's relationship to research requester: direct relationship = FULL, relevant connection = STANDARD, mentioned in passing = BRIEF.
+5. **Standalone decision** - Decide during Preflight (Phase 1): only primary research subjects get standalone FULL profiles. All other entities (connections, employers, organizations) are inlined in the parent profile.
 6. **GDPR for EU subjects** - Only use publicly available information. Do not attempt to access private databases, leaked data, or non-public social media content.
 7. **Profile information half-life** - Career data decays within months (job changes, title changes). Always note data capture date. Flag any profile where newest source is >6 months old.
 
@@ -54,10 +54,7 @@ Each profile type has a rules file with GOOD/BAD examples. Read the applicable r
 - Organization → [ORGA_PROFILE_RULES.md](profiles/ORGA_PROFILE_RULES.md)
 - Network → [NETWORK_PROFILE_RULES.md](profiles/NETWORK_PROFILE_RULES.md)
 
-**Depth tier selection** (set in template header):
-- **FULL**: Primary research subject, standalone analysis
-- **STANDARD**: Supporting profile within a larger research set
-- **BRIEF**: Peripheral mention, minimal detail needed
+**Standalone vs inlined**: Only FULL profiles become standalone documents. Supporting entities (relevant connections, past employers, peripheral mentions) are inlined within the parent profile's sections (e.g., Related Company Factsheets, Inner Circle, Career Timeline). Never create a standalone document for an entity that is not the primary research subject.
 
 ## Quality Criteria
 

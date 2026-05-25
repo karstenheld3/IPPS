@@ -9,10 +9,7 @@
 
 **Relation to research context**: [How this organization connects to the broader research - is it a subject's alma mater, industry body, funding source, etc.]
 
-**Depth tier**: FULL | STANDARD | BRIEF
-- **FULL**: Standalone organization analysis (membership evaluation, partnership). Fill all sections.
-- **STANDARD**: Organization within a network or personal profile context. Skip Funding Model, detailed Programs subsections.
-- **BRIEF**: Peripheral mention. Summary + Organization Data + Mission and Purpose + Engagement Strategy only.
+**Depth**: FULL (standalone profile - fill all sections). Non-primary organizations are inlined in the parent profile, not given standalone documents.
 
 **Conventions**: Mark sensitive topics inline with `[SENSITIVE: reason. Safe angle: ...]`. When a separate profile exists for a referenced person or organization, use `(see [TOPIC]-IN[NN])` instead of duplicating.
 

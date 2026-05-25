@@ -9,10 +9,7 @@
 
 **Relation to research context**: [How this network connects to the broader research - is it the subject's primary network, a target for entry, a competitive ecosystem, etc.]
 
-**Depth tier**: FULL | STANDARD | BRIEF
-- **FULL**: Primary network analysis. Fill all sections. Full Member Analysis for inner circle, 1-line format for peripherals.
-- **STANDARD**: Secondary or adjacent network. Skip Value Flow Analysis, detailed Sub-Clusters.
-- **BRIEF**: Peripheral network mention. Summary + Network Identity + Inner Circle + Strategic Assessment only.
+**Depth**: FULL (standalone profile - fill all sections). Full Member Analysis for inner circle, 1-line format for peripherals. Non-primary networks are inlined in the parent profile, not given standalone documents.
 
 **Conventions**: Mark sensitive topics inline with `[SENSITIVE: reason. Safe angle: ...]`. When separate personal profiles exist for members, use `(see [TOPIC]-IN[NN])` instead of duplicating biographical detail.
 

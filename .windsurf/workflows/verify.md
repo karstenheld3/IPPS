@@ -147,7 +147,7 @@ Apply these labels to findings, requirements, and decisions in all document type
   - Network: `NETWORK_PROFILE_RULES.md` (NP-* rules)
 - Verify against ALL rules in the applicable file
 - Key checks (common across all profile types):
-  - Depth tier set and sections match tier
+  - All sections filled (standalone profiles are always FULL, no empty sections - document gaps in Research Gaps)
   - `[SENSITIVE]` tags include safe alternative angle
   - Cross-references use `(see [TOPIC]-IN[NN])` format, not duplicated content
   - Dates consistent across sections

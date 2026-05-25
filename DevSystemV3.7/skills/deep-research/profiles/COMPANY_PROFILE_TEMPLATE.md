@@ -9,10 +9,7 @@
 
 **Relation to research context**: [How this company connects to the broader research - is it a subject's employer, a competitor, a portfolio company, a partner, etc.]
 
-**Depth tier**: FULL | STANDARD | BRIEF
-- **FULL**: Standalone company analysis (investment, partnership, employment evaluation). Fill all sections.
-- **STANDARD**: Company within a network or personal profile context. Skip Market Size and Dynamics, Risk Factors, Culture and Employer Profile.
-- **BRIEF**: Peripheral company mention. Summary + Company Data + Business Model + Engagement Strategy only.
+**Depth**: FULL (standalone profile - fill all sections). Non-primary companies are inlined in the parent profile (Related Company Factsheets section), not given standalone documents.
 
 **Conventions**: Mark sensitive topics inline with `[SENSITIVE: reason. Safe angle: ...]`. When a separate profile exists for a referenced person or company, use `(see [TOPIC]-IN[NN])` instead of duplicating.
 

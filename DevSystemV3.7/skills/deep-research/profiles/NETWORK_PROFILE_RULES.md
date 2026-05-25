@@ -5,7 +5,7 @@ Rules for writing and verifying network profile INFO documents with GOOD/BAD exa
 ## Rule Index
 
 Header (HD)
-- NP-HD-01: Depth tier set and sections match tier
+- NP-HD-01: All sections filled (standalone profiles are always FULL)
 - NP-HD-02: Network type and formality level clearly identified
 - NP-HD-03: Related profiles link to member personal profiles
 
@@ -63,45 +63,27 @@ Sources (SC)
 
 ## Header Rules
 
-### NP-HD-01: Depth Tier Compliance
+### NP-HD-01: Section Completeness
 
-Sections must match tier:
-- BRIEF: Summary + Network Identity + Inner Circle + Strategic Assessment only
-- STANDARD: Skip Value Flow Analysis, detailed Sub-Clusters
-- FULL: All sections filled. Full Member Analysis for inner circle, 1-line for peripherals.
+Standalone profiles are always FULL. All sections must be filled. Full Member Analysis for inner circle, 1-line format for peripherals. When no data found, document in Research Gaps section instead of leaving empty sections.
 
 **BAD:**
 ```
-**Depth tier**: BRIEF
-
-## Summary
-[filled]
-## Network Identity
-[filled]
-## Focus and Purpose
-[filled - should not appear in BRIEF]
-## Inner Circle
-[filled]
+## Value Flow Analysis
+[empty - no data found]
 ## Network Structure
-[filled - should not appear in BRIEF]
-## Member Analysis
-[filled - should not appear in BRIEF]
+### Sub-Clusters
+[empty]
 ```
 
 **GOOD:**
 ```
-**Depth tier**: BRIEF
+## Value Flow Analysis
+- Insufficient data to map value flows. Network interactions not publicly observable beyond event attendance.
 
-## Summary
-[filled]
-## Network Identity
-[filled]
-## Inner Circle
-[filled]
-## Strategic Assessment
-[filled]
-## Sources
-[filled]
+## Research Gaps
+- Value flow: No public deal announcements or collaboration outputs traceable to network
+- Sub-clusters: Member interactions not observable from public sources alone
 ```
 
 ## Focus Rules

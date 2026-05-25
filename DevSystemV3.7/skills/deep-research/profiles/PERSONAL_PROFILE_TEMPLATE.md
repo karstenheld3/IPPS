@@ -9,10 +9,7 @@
 
 **Connection to [Requester/Subject]**: [How this person relates to the research requester or primary subject - direct/indirect, shared history, mutual contacts, overlapping tenure dates]
 
-**Depth tier**: FULL | STANDARD | BRIEF
-- **FULL**: Primary subject or inner circle member. Fill all sections.
-- **STANDARD**: Relevant connection. Skip Education Timeline, Additional Activities subsections with no findings, Related Company Factsheets (reference company profile instead).
-- **BRIEF**: Peripheral mention. Summary + Career Timeline + Networking Relevance only.
+**Depth**: FULL (standalone profile - fill all sections). Non-primary entities are inlined in the parent profile, not given standalone documents.
 
 **Conventions**: Mark sensitive topics inline with `[SENSITIVE: reason. Safe angle: ...]`. When a separate profile exists for a referenced person or company, use `(see [TOPIC]-IN[NN])` instead of duplicating.
 

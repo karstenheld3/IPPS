@@ -5,7 +5,7 @@ Rules for writing and verifying company profile INFO documents with GOOD/BAD exa
 ## Rule Index
 
 Header (HD)
-- CP-HD-01: Depth tier set and sections match tier
+- CP-HD-01: All sections filled (standalone profiles are always FULL)
 - CP-HD-02: Relation to research context states why this company matters
 - CP-HD-03: Related profiles link to existing person/org profile Doc IDs
 
@@ -54,43 +54,26 @@ Cross-Reference (XR)
 
 ## Header Rules
 
-### CP-HD-01: Depth Tier Compliance
+### CP-HD-01: Section Completeness
 
-Sections must match tier:
-- BRIEF: Summary + Company Data + Business Model + Engagement Strategy only
-- STANDARD: Skip Market Size and Dynamics, Risk Factors, Culture and Employer Profile
-- FULL: All sections filled
+Standalone profiles are always FULL. All sections must be filled. When no data found, document in Research Gaps section instead of leaving empty sections.
 
 **BAD:**
 ```
-**Depth tier**: BRIEF
-
-## Summary
-[filled]
-## Company Data
-[filled]
-## Business Model
-[filled]
-## Leadership and Governance
-[filled - should not be here for BRIEF]
 ## Market and Competitive Landscape
-[filled - should not be here for BRIEF]
+[empty - no data found]
+## Risk Factors
+[empty]
 ```
 
 **GOOD:**
 ```
-**Depth tier**: BRIEF
+## Market and Competitive Landscape
+- No publicly available market data identified for this segment.
 
-## Summary
-[filled]
-## Company Data
-[filled]
-## Business Model
-[filled]
-## Engagement Strategy
-[filled]
-## Sources
-[filled]
+## Research Gaps
+- Market size: No analyst reports or industry data found for [segment]
+- Risk factors: Insufficient public disclosure to assess
 ```
 
 ### CP-HD-02: Research Context Relation

@@ -5,7 +5,7 @@ Rules for writing and verifying personal profile INFO documents with GOOD/BAD ex
 ## Rule Index
 
 Header (HD)
-- PP-HD-01: Depth tier set and sections match tier
+- PP-HD-01: All sections filled (standalone profiles are always FULL)
 - PP-HD-02: Related profiles field links to existing profile Doc IDs
 - PP-HD-03: Connection to requester states relationship type and evidence
 
@@ -44,21 +44,12 @@ Cross-Reference (XR)
 
 ## Header Rules
 
-### PP-HD-01: Depth Tier Compliance
+### PP-HD-01: Section Completeness
 
-Depth tier must be set. Sections must match:
-- BRIEF profiles contain only Summary + Career Timeline + Networking Relevance
-- STANDARD profiles skip Education Timeline, empty Additional Activities subsections, Company Factsheets
-- FULL profiles fill all applicable sections
+Standalone profiles are always FULL. All sections must be filled. When no data found, document in Research Gaps section instead of leaving empty sections.
 
 **BAD:**
 ```
-**Depth tier**: FULL
-
-## Summary
-[filled]
-## Career Timeline
-[filled]
 ## Education Timeline
 [empty - no data found]
 ## Additional Activities
@@ -66,21 +57,16 @@ Depth tier must be set. Sections must match:
 [empty]
 ### Speaking Engagements
 [empty]
-### Board Memberships
-[empty]
 ```
 
 **GOOD:**
 ```
-**Depth tier**: STANDARD
+## Education Timeline
+- No public education data found. [ASSUMED - profile may predate LinkedIn education fields]
 
-## Summary
-[filled]
-## Career Timeline
-[filled]
-## Additional Activities
-### Board Memberships
-- **2019-present**: Advisory Board, [Industry Association] (invited member)
+## Research Gaps
+- Education history: No university or degree information found across LinkedIn, company bio, or press mentions
+- Publications: No academic or industry publications identified
 ```
 
 ### PP-HD-03: Connection Statement
