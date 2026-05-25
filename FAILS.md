@@ -1,5 +1,21 @@
 # Failure Log
 
+## 2026-05-25 - Deploy Without Confirmation
+
+### [HIGH] `GLOB-FL-032` Deployed to all repos without preview or confirmation
+
+- **When**: 2026-05-25 20:59 UTC+02:00
+- **Where**: `deploy-to-all-repos` workflow execution
+- **What**: User said "deploy-to-all-repos". Agent immediately deleted target folders and copied files to all 7 repos without generating a preview or asking for confirmation. The workflow explicitly requires: 1) generate comparison preview, 2) show preview in chat, 3) wait for explicit user confirmation before executing.
+- **Why it went wrong**:
+  - Agent treated "deploy-to-all-repos" as a simple command to execute rather than a workflow to follow step-by-step
+  - Previous deployment in same session (with confirmation) created false confidence that "same changes, no need to re-preview"
+  - Prioritized speed over process compliance
+  - Same pattern as GLOB-FL-021, GLOB-FL-023, GLOB-FL-024 - deployment workflow shortcuts
+- **Evidence**: User invoked `/fail` saying "you didnt ask for confirmation"
+- **Workflow re-read findings**: `deploy-to-all-repos.md` step 2.3 requires preview in chat. Step 2.4 requires "Wait for [ACTOR] confirmation. Do NOT proceed without explicit 'yes' or 'go'."
+- **Prevention rule**: NEVER execute file copy/delete operations in `deploy-to-all-repos` without showing preview AND receiving explicit confirmation. No exceptions, even if "same files as last time."
+
 ## 2026-05-05 - Verify Workflow Missed Skill Reference Syntax
 
 ### [MEDIUM] `GLOB-FL-031` /verify accepted wrong `@session-management` syntax as correct
