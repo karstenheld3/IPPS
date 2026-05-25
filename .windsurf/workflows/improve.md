@@ -311,6 +311,13 @@ Detection: determine context from file naming and content, then apply matching s
 
 **Integration**: New findings marked `[IMPROVED]`, challenged claims marked `[CHALLENGED]`. Update Sources section and Document History.
 
+**Profile-specific enrichment** (when Domain is PROFILE, in addition to above):
+1. **Mutual connection mapping** - Search for shared contacts, overlapping tenures, common event attendance between subject and requester
+2. **Career pattern analysis** - Identify moves revealing strategy (upward, lateral, entrepreneurial, returning)
+3. **Publication/speaking trail** - Find talks, papers, podcasts revealing current thinking and interests
+4. **Network gap analysis** - Who is conspicuously absent? What expected connections don't exist?
+5. **Temporal correlation** - Job changes coinciding with events (funding rounds, company crises, policy changes)
+
 ## Translation Output
 
 **Lens**: Back-Translation Critic (Brislin) - evaluate translation quality by checking if meaning survives a round-trip back to source language.

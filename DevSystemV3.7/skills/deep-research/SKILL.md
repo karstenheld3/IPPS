@@ -1,6 +1,6 @@
 ---
 name: deep-research
-description: Apply when conducting deep research on technologies, APIs, frameworks, or other software development topics requiring systematic investigation
+description: Apply when conducting deep research on technologies, APIs, frameworks, people, companies, organizations, networks, or other topics requiring systematic investigation
 ---
 
 # Deep Research Skill
@@ -77,7 +77,7 @@ Answer these 7 questions before any source collection:
 3. **Q3 - Dimensions**: Which apply? (legal, financial, administrative, practical, technical, professional, medical, psychological, personal, organizational, strategic, security, cultural, educational, historical, or custom)
 4. **Q4 - Topics**: 3-5 topics per dimension
 5. **Q5 - Strategy**: MCPI (exhaustive) or MEPI (curated)?
-6. **Q6 - Domain**: Which profile? (SOFTWARE, MARKET_INTEL, LEGAL, or DEFAULT)
+6. **Q6 - Domain**: Which profile? (SOFTWARE, MARKET_INTEL, LEGAL, PROFILE, or DEFAULT)
 7. **Q7 - Discovery Platforms**: What databases/platforms index this entity type? Test each, classify access level.
 
 Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection until all 7 questions are answered.
@@ -92,7 +92,7 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
   "topics_per_dimension": { "dimension": ["topics"] },
   "strategy": "MCPI | MEPI",
   "strategy_rationale": "string (WHY this strategy fits the prompt)",
-  "domain": "DEFAULT | SOFTWARE | MARKET_INTEL | LEGAL",
+  "domain": "DEFAULT | SOFTWARE | MARKET_INTEL | LEGAL | PROFILE",
   "domain_rationale": "string (WHY this domain profile applies)",
   "effort_estimate": "N hours minimum",
   "discovery_platforms": {
@@ -199,6 +199,7 @@ Read one profile per session based on Q6:
 - [DOMAIN_SOFTWARE.md](DOMAIN_SOFTWARE.md) - APIs, frameworks, libraries
 - [DOMAIN_MARKET_INTEL.md](DOMAIN_MARKET_INTEL.md) - Companies, financials
 - [DOMAIN_LEGAL.md](DOMAIN_LEGAL.md) - Legislation, case law
+- [DOMAIN_PROFILE.md](DOMAIN_PROFILE.md) - People, companies, organizations, networks
 - [DOMAIN_DEFAULT.md](DOMAIN_DEFAULT.md) - Generic (use when none match)
 
 ## Output Format
@@ -225,6 +226,12 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 - [RESEARCH_TOOLS.md](RESEARCH_TOOLS.md) - Tools, source processing, configuration
 - [RESEARCH_SUMMARY_TEMPLATE.md](RESEARCH_SUMMARY_TEMPLATE.md) - Summary file template
 - [RESEARCH_CREATE_SUMMARY.md](RESEARCH_CREATE_SUMMARY.md) - Summary creation workflow
+
+**Profile Templates** (DOMAIN_PROFILE output formats):
+- [RESEARCH_PERSONAL_PROFILE_TEMPLATE.md](RESEARCH_PERSONAL_PROFILE_TEMPLATE.md) - Individual person profile
+- [RESEARCH_COMPANY_PROFILE_TEMPLATE.md](RESEARCH_COMPANY_PROFILE_TEMPLATE.md) - Company profile
+- [RESEARCH_ORGA_PROFILE_TEMPLATE.md](RESEARCH_ORGA_PROFILE_TEMPLATE.md) - Organization profile (universities, industry bodies, NGOs)
+- [RESEARCH_NETWORK_PROFILE_TEMPLATE.md](RESEARCH_NETWORK_PROFILE_TEMPLATE.md) - Network analysis (professional, social, academic networks)
 
 **File naming** (numbered scheme):
 - `_INFO_[TOPIC]_01-SUMMARY.md` - Summary file with cross-document synthesis + Topic Files section

@@ -145,6 +145,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **AMSW** - Auto Model SWitcher (Windsurf model switching automation)
 - **AXCEL** - Agent Excel Skill (Excel automation from Cascade agent)
 - **DOCWRITEFW** - Document Writing Frameworks (analytical/communication frameworks for IPPS document quality)
+- **DRPRF** - Deep Research Profile Templates (personal, company, organization, network profile research)
 - **EDIGA** - Energie Digitalisierung A (digitalization in energy sector research)
 - **ENDIG** - Energie Digitalisierung (digitalization in energy sector research)
 - **ENDSY** - Energie Digital Synthese (consolidated INFO from EnergieDigitalA + B)
@@ -174,6 +175,9 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 
 ## Document History
+
+**[2026-05-25 14:44]**
+- Added: DRPRF topic (Deep Research Profile Templates)
 
 **[2026-05-05 10:19]**
 - Added: XLATE topic (Translation quality improvement methods)

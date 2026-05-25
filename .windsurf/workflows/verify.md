@@ -134,6 +134,14 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
 - Verify against @skills:write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
 
+**Profile-specific checks** (when Domain is PROFILE):
+- Verify depth tier is set and sections match tier (BRIEF profiles should not have all sections filled)
+- Verify `[SENSITIVE]` tags include safe alternative angle
+- Verify cross-references use `(see [TOPIC]-IN[NN])` format, not duplicated content
+- Verify career/timeline dates are consistent across sections (Career Timeline vs Current Occupation vs Company Factsheets)
+- Verify Engagement Strategy contains at least one concrete, actionable recommendation
+- Verify source recency - flag profiles where all sources are older than 12 months
+
 ## Specifications (SPEC)
 
 - Verify Timeline field is present and accurate (Created date, update count, date range)
