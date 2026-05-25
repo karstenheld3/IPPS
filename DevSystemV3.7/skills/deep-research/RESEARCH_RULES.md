@@ -74,6 +74,7 @@ Quality (QA) - Cross-cutting quality
 - QA-08: No emojis (unless `<DevSystem EmojisAllowed=true />` present)
 - QA-09: Verification labels used consistently across all files
 - QA-10: Strategy and domain documented in Summary header with rationale
+- QA-11: Native special characters used when writing in non-English languages (e.g., ae → ä, oe → ö, ue → ü, ss → ß). Never ASCII approximations.
 
 ## Verification Procedure (`/verify`)
 
@@ -162,7 +163,8 @@ Cross-cutting pass over all files:
 ├─> No tables? (QA-07)
 ├─> No emojis? (QA-08)
 ├─> Labels consistent? (QA-09)
-└─> Strategy + domain documented? (QA-10)
+├─> Strategy + domain documented? (QA-10)
+└─> Native characters used (no ASCII substitutes)? (QA-11)
 ```
 
 ## Improvement Procedure (`/improve`)
