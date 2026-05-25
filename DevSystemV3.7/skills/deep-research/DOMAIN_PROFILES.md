@@ -72,12 +72,11 @@ Additional checks for profile domain quality pipeline:
 
 ## Decomposition Rules
 
-Profile research decomposes differently from topic-based research:
+Profile research decomposes differently from topic-based research. No Summary or Sources files - each profile template has its own Sources section.
 
-- **Single person**: One file per person (no further decomposition needed)
-- **Network analysis**: 1 network profile + N personal profiles (inner circle) + M company/org profiles (referenced entities)
-- **Company set**: 1 company profile per entity, cross-referenced
-- **File naming**: `_INFO_[TOPIC]-[NN]_[SubjectName].md`
+- **Single profile**: One file only. No numbered scheme needed. Filename fits session/conversation context: `_INFO_[TOPIC]-01_[SubjectName].md`
+- **Network analysis**: 1 network profile + N personal profiles (inner circle) + M company/org profiles (referenced entities). Numbered: `_INFO_[TOPIC]-[NN]_[SubjectName].md`
+- **Company set**: 1 company profile per entity, cross-referenced. Numbered: `_INFO_[TOPIC]-[NN]_[CompanyName].md`
 
 ## Enrichment
 
