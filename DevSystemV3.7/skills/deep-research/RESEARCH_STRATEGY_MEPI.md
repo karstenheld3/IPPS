@@ -52,7 +52,7 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 ### Step 3: Collect Sources (Curated)
 
 - **Document version scope**: Explicitly state the [SUBJECT] version (e.g., `v2.1.0`, `API v3`). If not applicable, use date: `YYYY-MM-DD`
-- Create `_INFO_[TOPIC]_02-SOURCES.md`
+- Create `_INFO_[TOPIC]-02_Sources.md`
 - **Classify discovery platforms** from Q7 as FREE/PAID/PARTIAL; use FREE and PARTIAL, note PAID for user follow-up
 - Collect **5-10 sources per dimension** (focus on top-tier sources first)
 - Skip exhaustive community source collection
@@ -66,7 +66,7 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 
 - Verify assumptions against primary sources
 - If >30% wrong or outdated, re-run with corrected understanding (strikethrough originals). **Max 2 re-runs**, then proceed.
-- Document accuracy in `_INFO_[TOPIC]_02-SOURCES.md` header (e.g., "Preflight accuracy: 7/10 verified")
+- Document accuracy in `_INFO_[TOPIC]-02_Sources.md` header (e.g., "Preflight accuracy: 7/10 verified")
 - **Rubric**: CORRECT = matches exactly. PARTIAL = spirit correct, details differ (counts as wrong). WRONG = contradicted.
 
 ### Step 5: Run First VCRIV
@@ -82,7 +82,7 @@ Create Summary file (skeletal), topic template, TASKS plan, run second VCRIV.
 
 - Follow [RESEARCH_CREATE_SUMMARY.md](RESEARCH_CREATE_SUMMARY.md) workflow
 - Use [RESEARCH_SUMMARY_TEMPLATE.md](RESEARCH_SUMMARY_TEMPLATE.md) as base
-- Create `_INFO_[TOPIC]_01-SUMMARY.md` with skeletal structure
+- Create `_INFO_[TOPIC]-01_Summary.md` with skeletal structure
 - Summary can be shorter than MCPI (5-10 sentences)
 - **Done when**: Summary file covers major topics from sources, all topic file links resolve
 
@@ -121,7 +121,7 @@ Adhere to TASKS plan and STRUT. Run VCRIV per granularity rules.
 - For each topic file from TASKS:
   1. Research using official source URLs first
   2. Cross-reference with community sources for limitations, quirks
-  3. Create `_INFO_[TOPIC]_[NN]-[NAME].md` using template (NN starts at 03)
+  3. Create `_INFO_[TOPIC]-[NN]_[Name].md` using template (NN starts at 03)
   4. **Focus on curated best options** - recommend, don't just list
   5. Include **clear recommendation with rationale** for each topic
   6. **Mandatory inline citations**: `[VERIFICATION_LABEL] (SOURCE_ID | URL or filename)`

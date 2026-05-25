@@ -234,9 +234,9 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 - [NETWORK_PROFILE_TEMPLATE.md](profiles/NETWORK_PROFILE_TEMPLATE.md) + [NETWORK_PROFILE_RULES.md](profiles/NETWORK_PROFILE_RULES.md)
 
 **File naming** (numbered scheme):
-- `_INFO_[TOPIC]_01-SUMMARY.md` - Summary file with cross-document synthesis + Topic Files section
-- `_INFO_[TOPIC]_02-SOURCES.md` - Collected sources with IDs and verification labels
-- `_INFO_[TOPIC]_03-[NAME].md` through `_INFO_[TOPIC]_[NN]-[NAME].md` - Individual topic files
+- `_INFO_[TOPIC]-01_Summary.md` - Summary file with cross-document synthesis + Topic Files section
+- `_INFO_[TOPIC]-02_Sources.md` - Collected sources with IDs and verification labels
+- `_INFO_[TOPIC]-03_[Name].md` through `_INFO_[TOPIC]-[NN]_[Name].md` - Individual topic files (PascalCase)
 
 **Decomposition rule**: Both MCPI and MEPI decompose topics into individually researched files. No monolithic single-file research. The Summary file is finalized in Phase 4 with cross-document synthesis after all topic files are complete.
 

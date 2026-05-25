@@ -39,10 +39,10 @@ Estimated credits: [pending]
   1. Write down "Pre-research assumptions" about [SUBJECT]
   2. Verify assumptions against primary sources during preflight
   3. If >30% of assumptions are wrong or outdated, re-run preflight with corrected understanding, keep original assumptions (strikethrough). **Max 2 re-runs**, then proceed with corrected assumptions.
-  4. Document assumption accuracy in `_INFO_[TOPIC]_02-SOURCES.md` header (e.g., "Preflight accuracy: 7/10 assumptions verified")
+  4. Document assumption accuracy in `_INFO_[TOPIC]-02_Sources.md` header (e.g., "Preflight accuracy: 7/10 assumptions verified")
   5. **Assumption verification rubric**: CORRECT = matches source exactly. PARTIAL = spirit correct but details differ (counts as wrong for threshold). WRONG = contradicted by source.
 - **Document version scope**: Explicitly state the [SUBJECT] version being documented (e.g., `v2.1.0`, `API v3`). If versioning not applicable, use documentation date: `YYYY-MM-DD`
-- Create `_INFO_[TOPIC]_02-SOURCES.md`
+- Create `_INFO_[TOPIC]-02_Sources.md`
 - Collect ALL official documentation URLs from vendor/project documentation
 - Collect community sources (secondary sources) for real-world insights:
   - Stack Overflow questions/answers with high votes
@@ -61,7 +61,7 @@ Estimated credits: [pending]
 **Phase 2: Summary File Creation (workflow: /verify > /critique > /reconcile /implement > /verify)**
 - Follow [RESEARCH_CREATE_SUMMARY.md](RESEARCH_CREATE_SUMMARY.md) workflow
 - Use [RESEARCH_SUMMARY_TEMPLATE.md](RESEARCH_SUMMARY_TEMPLATE.md) as base
-- Create `_INFO_[TOPIC]_01-SUMMARY.md` with skeletal structure
+- Create `_INFO_[TOPIC]-01_Summary.md` with skeletal structure
 - **Done when**: Summary file covers all major topics from sources, skeletal summary present, all topic file links resolve
 
 **Phase 3: Template Creation (verify > critique > reconcile > verify)**
@@ -78,7 +78,7 @@ Estimated credits: [pending]
   - SDK Examples (adapt to relevant languages: C#, Python, TypeScript, PowerShell, JavaScript, Go, etc.)
   - Error Responses with codes
   - Rate Limiting / Throttling Considerations
-  - Sources section with **same IDs as `_INFO_[TOPIC]_02-SOURCES.md`**
+  - Sources section with **same IDs as `_INFO_[TOPIC]-02_Sources.md`**
   - Document History
 - Include "Template Instructions" section (to be deleted when using)
 - Run `/verify` then `/critique` then `/reconcile /implement` findings then `/verify` again
@@ -100,10 +100,10 @@ Estimated credits: [pending]
 - For each topic file from TASKS:
   1. Research using official source URLs first
   2. Cross-reference with community sources for limitations, bugs, quirks
-  3. Create `_INFO_[TOPIC]_[NN]-[NAME].md` using template
+  3. Create `_INFO_[TOPIC]-[NN]_[Name].md` using template
      - NN = sequential number starting at 03 (01=Summary, 02=Sources)
-     - Files sort alphabetically
-     - Example: `_INFO_OASDKP_03-INTRODUCTION.md`
+     - PascalCase for [Name]
+     - Example: `_INFO_OASDKP-03_Introduction.md`
   4. Include "Limitations and Known Issues" section with community source citations
   5. Run `/verify` then `/critique` then `/reconcile /implement` findings then `/verify` again
   6. Update TASKS progress
@@ -137,9 +137,9 @@ Estimated credits: [pending]
 **Rollback**: If any phase reveals fundamental error in earlier phase, document in PROBLEMS.md and consult user before rollback.
 
 **File Naming** (numbered scheme):
-- `_INFO_[TOPIC]_01-SUMMARY.md` - Summary file with cross-document synthesis + Topic Files section (Doc ID: `[TOPIC]-IN01`)
-- `_INFO_[TOPIC]_02-SOURCES.md` - Collected sources with IDs and verification labels (Doc ID: `[TOPIC]-IN02`)
-- `_INFO_[TOPIC]_03-[NAME].md` through `_INFO_[TOPIC]_[NN]-[NAME].md` - Individual topic files (Doc ID: `[TOPIC]-IN03+`)
+- `_INFO_[TOPIC]-01_Summary.md` - Summary file with cross-document synthesis + Topic Files section (Doc ID: `[TOPIC]-IN01`)
+- `_INFO_[TOPIC]-02_Sources.md` - Collected sources with IDs and verification labels (Doc ID: `[TOPIC]-IN02`)
+- `_INFO_[TOPIC]-03_[Name].md` through `_INFO_[TOPIC]-[NN]_[Name].md` - Individual topic files (Doc ID: `[TOPIC]-IN03+`)
 - No prefix: Tracking files (TASKS, NOTES, PROBLEMS, PROGRESS)
 
 **Verification Labels:**

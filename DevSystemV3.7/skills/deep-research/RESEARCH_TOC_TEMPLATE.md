@@ -16,23 +16,23 @@
 
 ### [Category 1] (X files)
 
-- [`_INFO_[TOPIC]-IN01_[SUBTOPIC1].md`](./_INFO_[TOPIC]-IN01_[SUBTOPIC1].md) [TOPIC-IN01]
+- [`_INFO_[TOPIC]-01_[Subtopic1].md`](./_INFO_[TOPIC]-01_[Subtopic1].md) [TOPIC-IN01]
   - Brief description of contents
   - Sources: [TOPIC]-SC-[SOURCE]-[DOCNAME]
 
-- [`_INFO_[TOPIC]-IN02_[SUBTOPIC2].md`](./_INFO_[TOPIC]-IN02_[SUBTOPIC2].md) [TOPIC-IN02]
+- [`_INFO_[TOPIC]-02_[Subtopic2].md`](./_INFO_[TOPIC]-02_[Subtopic2].md) [TOPIC-IN02]
   - Brief description of contents
   - Sources: [TOPIC]-SC-[SOURCE]-[DOCNAME]
 
 ### [Category 2] (X files)
 
-- [`_INFO_[TOPIC]-IN03_[SUBTOPIC3].md`](./_INFO_[TOPIC]-IN03_[SUBTOPIC3].md) [TOPIC-IN03]
+- [`_INFO_[TOPIC]-03_[Subtopic3].md`](./_INFO_[TOPIC]-03_[Subtopic3].md) [TOPIC-IN03]
   - Brief description of contents
   - Sources: [TOPIC]-SC-[SOURCE]-[DOCNAME]
 
 ### [Category N] (X files)
 
-- [`_INFO_[TOPIC]-IN[XX]_[SUBTOPICN].md`](./_INFO_[TOPIC]-IN[XX]_[SUBTOPICN].md) [TOPIC-IN[XX]]
+- [`_INFO_[TOPIC]-[NN]_[SubtopicN].md`](./_INFO_[TOPIC]-[NN]_[SubtopicN].md) [TOPIC-IN[NN]]
   - Brief description of contents
   - Sources: [TOPIC]-SC-[SOURCE]-[DOCNAME]
 
@@ -79,8 +79,8 @@
 2. [TOPIC] = 2-6 char uppercase identifier (e.g., OAIAPI, GRPH, AUTH)
 3. [SUBJECT] = Full name (e.g., "OpenAI API", "Microsoft Graph API")
 4. Categories should group related topics logically
-5. Each topic file link format: [`_INFO_[TOPIC]-IN[XX]_[SUBTOPIC].md`](./_INFO_[TOPIC]-IN[XX]_[SUBTOPIC].md) [TOPIC-IN[XX]]
-6. XX = sequential number (01, 02, 03...) - files sort alphabetically in TOC order
+5. Each topic file link format: [`_INFO_[TOPIC]-[NN]_[Name].md`](./_INFO_[TOPIC]-[NN]_[Name].md) [TOPIC-IN[NN]]
+6. NN = sequential number (01, 02, 03...), PascalCase for [Name]
 7. Topic Details provide scope, contents preview, and source IDs
 8. Research stats added in final phase from STRUT
 9. NO Progress Tracking section - that goes in STRUT/TASKS

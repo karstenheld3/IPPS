@@ -56,13 +56,13 @@ Before collecting sources, test each discovery platform from Q7:
 - Query each platform with test search matching research criteria
 - Classify access: **FREE** (full results), **PAID** (paywall), **PARTIAL** (limited free tier)
 - Keep platforms with FREE or PARTIAL access
-- Document PAID platforms in `_INFO_[TOPIC]_02-SOURCES.md` for user follow-up
+- Document PAID platforms in `_INFO_[TOPIC]-02_Sources.md` for user follow-up
 - **Done when**: All platforms tested, access levels documented, selected platforms identified
 
 ### Step 4: Collect Sources
 
 - **Document version scope**: Explicitly state the [SUBJECT] version (e.g., `v2.1.0`, `API v3`). If not applicable, use date: `YYYY-MM-DD`
-- Create `_INFO_[TOPIC]_02-SOURCES.md`
+- Create `_INFO_[TOPIC]-02_Sources.md`
 - **Query selected discovery platforms** from Step 3 first
 - Collect ALL official documentation URLs from vendor/project documentation
 - Collect community sources (secondary sources) for real-world insights:
@@ -85,7 +85,7 @@ Before collecting sources, test each discovery platform from Q7:
 
 - Verify assumptions against primary sources
 - If >30% wrong or outdated, re-run with corrected understanding, keep originals (strikethrough). **Max 2 re-runs**, then proceed.
-- Document accuracy in `_INFO_[TOPIC]_02-SOURCES.md` header (e.g., "Preflight accuracy: 7/10 assumptions verified")
+- Document accuracy in `_INFO_[TOPIC]-02_Sources.md` header (e.g., "Preflight accuracy: 7/10 assumptions verified")
 - **Rubric**: CORRECT = matches source exactly. PARTIAL = spirit correct but details differ (counts as wrong). WRONG = contradicted by source.
 
 ### Step 6: Run First VCRIV
@@ -101,7 +101,7 @@ Create Summary file (skeletal), topic template, TASKS plan, run second VCRIV.
 
 - Follow [RESEARCH_CREATE_SUMMARY.md](RESEARCH_CREATE_SUMMARY.md) workflow
 - Use [RESEARCH_SUMMARY_TEMPLATE.md](RESEARCH_SUMMARY_TEMPLATE.md) as base
-- Create `_INFO_[TOPIC]_01-SUMMARY.md` with skeletal structure (summary placeholder, topic file links, topic count)
+- Create `_INFO_[TOPIC]-01_Summary.md` with skeletal structure (summary placeholder, topic file links, topic count)
 - **Done when**: Summary file covers all major topics from sources, skeletal summary present, all topic file links resolve
 
 ### Step 2: Template Creation
@@ -116,7 +116,7 @@ Create Summary file (skeletal), topic template, TASKS plan, run second VCRIV.
   - Main Sections (follow TOC structure)
   - **Limitations and Known Issues** (from community sources)
   - **Gotchas and Quirks** (undocumented behavior, edge cases)
-  - Sources section with **same IDs as `_INFO_[TOPIC]_02-SOURCES.md`**
+  - Sources section with **same IDs as `_INFO_[TOPIC]-02_Sources.md`**
   - Document History
 - Include "Template Instructions" section (to be deleted when using)
 - **Done when**: Template has all required sections, instructions clear
@@ -145,9 +145,9 @@ Adhere to TASKS plan and STRUT. Run VCRIV per granularity rules.
   1. Research using official source URLs first
   2. Cross-reference with community sources for limitations, bugs, quirks
   3. Process sources per domain profile document handling rules
-  4. Create `_INFO_[TOPIC]_[NN]-[NAME].md` using template
+  4. Create `_INFO_[TOPIC]-[NN]_[Name].md` using template
      - NN = sequential number starting at 03 (01=Summary, 02=Sources)
-     - Files sort alphabetically
+     - PascalCase for [Name]
   5. Include "Limitations and Known Issues" with community source citations
   6. **Mandatory inline citations**: Critical conclusions MUST include `[VERIFICATION_LABEL] (SOURCE_ID | URL or filename)`. Referenced files MUST exist in `_SOURCES/`.
   7. Update TASKS progress and Summary file status

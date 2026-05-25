@@ -41,6 +41,12 @@ Universal formatting and writing conventions for all documents.
 
 Never use locale-dependent formats (`03/19/2026`, `19.03.2026`, `March 19, 2026`).
 
+## Filename Separators
+
+- `_` (underscore) separates main pieces of information: `_INFO_CRWL-01_SourceCollection.md`
+- `-` (hyphen) is a sub-separator within IDs and compound words: `CRWL-01`, `OAIAPI-03`
+- PascalCase for descriptive name segments: `SourceCollection`, `NetworkAnalysis`
+
 ## Document Structure
 
 - Place Table of Contents after header block (or after MUST-NOT-FORGET if present)

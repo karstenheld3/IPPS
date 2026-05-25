@@ -17,8 +17,8 @@ Global workflow for creating Table of Contents in deep research. Used by all res
    - `[VERSION]` → version or documentation date
 3. **Create categories**: Group topics logically from sources
 4. **List topic files**: One entry per topic with clickable link, Doc ID, and brief description
-   - Format: `[\`_INFO_[TOPIC]-IN[XX]_[SUBTOPIC].md\`](./_INFO_[TOPIC]-IN[XX]_[SUBTOPIC].md) [TOPIC-IN[XX]]`
-   - XX = sequential number (01, 02, 03...) - files sort alphabetically in TOC order
+   - Format: `[\`_INFO_[TOPIC]-[NN]_[Name].md\`](./_INFO_[TOPIC]-[NN]_[Name].md) [TOPIC-IN[NN]]`
+   - NN = sequential number (01, 02, 03...), PascalCase for [Name]
 5. **Add Topic Count section**: Summary of total and per-category counts
 6. **Write Topic Details**: For each topic add Scope, Contents, Sources
 7. **Add Related**: List related/competing technologies with URLs
@@ -44,7 +44,7 @@ Doc ID: `[SUBJECT]-TOC` (not numbered)
 - All sources from `__[SUBJECT]_SOURCES.md` covered
 - Doc ID is `[SUBJECT]-TOC` (not numbered)
 - Summary is 5-15 sentences
-- All topic links follow format: `[\`_INFO_[TOPIC]-IN[XX]_[SUBTOPIC].md\`](./_INFO_[TOPIC]-IN[XX]_[SUBTOPIC].md) [TOPIC-IN[XX]]`
+- All topic links follow format: `[\`_INFO_[TOPIC]-[NN]_[Name].md\`](./_INFO_[TOPIC]-[NN]_[Name].md) [TOPIC-IN[NN]]`
 - Topic Count section present with per-category breakdown
 - Related technologies section complete
 - `/verify` passes

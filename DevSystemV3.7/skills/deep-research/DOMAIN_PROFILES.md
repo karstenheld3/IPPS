@@ -77,7 +77,7 @@ Profile research decomposes differently from topic-based research:
 - **Single person**: One file per person (no further decomposition needed)
 - **Network analysis**: 1 network profile + N personal profiles (inner circle) + M company/org profiles (referenced entities)
 - **Company set**: 1 company profile per entity, cross-referenced
-- **File naming**: `_INFO_[TOPIC]-IN[NN]_[SubjectName].md`
+- **File naming**: `_INFO_[TOPIC]-[NN]_[SubjectName].md`
 
 ## Enrichment
 
