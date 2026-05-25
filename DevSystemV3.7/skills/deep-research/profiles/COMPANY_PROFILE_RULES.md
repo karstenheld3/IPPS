@@ -104,7 +104,7 @@ Must explain WHY this company is being researched.
 
 **GOOD:**
 ```
-**Relation to research context**: Portfolio company of Thomas Mueller (MVNET-IN02). Primary revenue generator for network's deal flow. Potential partnership target for compliance automation.
+**Relation to research context**: Portfolio company of [Person A] ([TOPIC]-IN[NN]). Primary revenue generator for network's deal flow. Potential partnership target for [collaboration area].
 ```
 
 ## Financial Rules
@@ -122,7 +122,7 @@ Every number needs currency, period, and source attribution.
 **GOOD:**
 ```
 - **Revenue**: EUR 15M (FY2025, company website investor page)
-- **Valuation**: EUR 120M post-money (Series B, 2024-09, TechCrunch report)
+- **Valuation**: EUR 120M post-money (Series B, 2024-09, [publication] report)
 ```
 
 ### CP-FN-02: Inferred Financials Labeled
@@ -136,7 +136,7 @@ When financial data is estimated from indirect signals, mark clearly.
 
 **GOOD:**
 ```
-- **Revenue**: EUR 8-12M [ASSUMED - estimated from 85 employees x EUR 100-140K revenue per employee for B2B SaaS]
+- **Revenue**: EUR 8-12M [ASSUMED - estimated from 85 employees x EUR 100-140K revenue per employee for [industry segment]]
 ```
 
 ## Leadership Rules
@@ -147,14 +147,14 @@ Name, title, tenure, and context in one structured entry.
 
 **BAD:**
 ```
-- John Smith - CEO
-- Maria Garcia - runs marketing
+- [Person A] - CEO
+- [Person B] - runs marketing
 ```
 
 **GOOD:**
 ```
-- **John Smith** - CEO (since 2019). Previously VP Product at SAP. Founded two prior startups.
-- **Maria Garcia** - CMO (since 2022). Ex-HubSpot, 15 years B2B SaaS marketing.
+- **[Person A]** - CEO (since 2019). Previously VP Product at [Company X]. Founded two prior startups.
+- **[Person B]** - CMO (since 2022). Ex-[Company Y], 15 years [industry] marketing.
 ```
 
 ### CP-LD-02: Cross-Reference to Person Profile
@@ -163,13 +163,13 @@ When a personal profile exists, reference instead of duplicating bio.
 
 **BAD:**
 ```
-- **John Smith** - CEO (since 2019). Born in Munich, studied at TU Munich, worked at McKinsey 2005-2010, then SAP 2010-2018, VP Product...
+- **[Person A]** - CEO (since 2019). Born in [City], studied at [University], worked at [Company X] 2005-2010, then [Company Y] 2010-2018, VP Product...
   [full career history duplicated here]
 ```
 
 **GOOD:**
 ```
-- **John Smith** - CEO (since 2019). (see MVNET-IN05 for full profile)
+- **[Person A]** - CEO (since 2019). (see [TOPIC]-IN[NN] for full profile)
 ```
 
 ## Assessment Rules
@@ -186,8 +186,8 @@ Generic statements add no value. Be precise.
 
 **GOOD:**
 ```
-- **Strengths**: Patent-pending NLP engine for German regulatory text (only German-language compliance AI). Team combines regulatory (ex-BaFin) and tech (ex-SAP) expertise.
-- **Weaknesses**: Single-market dependency (Germany only). No English-language product roadmap visible. Key-person risk on CTO (sole architect of ML pipeline).
+- **Strengths**: Patent-pending [technology] for [market niche] (only [language]-language [product category]). Team combines [domain] (ex-[regulator]) and tech (ex-[Company X]) expertise.
+- **Weaknesses**: Single-market dependency ([country] only). No [expansion market] product roadmap visible. Key-person risk on CTO (sole architect of [core system]).
 ```
 
 ## Engagement Rules
@@ -204,8 +204,8 @@ Name who to contact AND why they are the right person.
 **GOOD:**
 ```
 - **Key people to contact**:
-  - Maria Garcia (CMO) - Owns partnership decisions. Publicly stated interest in channel partners at SaaS Europe 2025.
-  - Thomas Mueller (Board) - Warm path via shared SAP alumni network.
+  - [Person B] (CMO) - Owns partnership decisions. Publicly stated interest in channel partners at [Event Name] [year].
+  - [Person C] (Board) - Warm path via shared [Company X] alumni network.
 ```
 
 ### CP-EN-02: Evidence-Based Conversation Angles
@@ -220,8 +220,8 @@ Reference actual public statements or events.
 **GOOD:**
 ```
 - **Conversation angles**:
-  - Their CEO's keynote at RegTech Summit (2025-11) focused on "compliance automation for Mittelstand" - align with your SME digitalization thesis
-  - Recent Series B press release mentions expansion to Austria/Switzerland - offer local network introductions
+  - Their CEO's keynote at [Event Name] (YYYY-MM) focused on "[topic]" - align with your [related thesis]
+  - Recent [funding round] press release mentions expansion to [region] - offer local network introductions
 ```
 
 ## Sensitivity Rules

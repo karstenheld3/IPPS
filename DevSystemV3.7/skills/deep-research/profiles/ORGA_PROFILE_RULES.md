@@ -100,7 +100,7 @@ Distinguish between official narrative and observable behavior.
 ```
 ## Mission and Purpose
 
-- **Official mission**: Advancing digital innovation in financial services
+- **Official mission**: Advancing digital innovation in [industry]
 - **Actual focus**: Same as above
 ```
 
@@ -108,10 +108,10 @@ Distinguish between official narrative and observable behavior.
 ```
 ## Mission and Purpose
 
-- **Official mission**: "Advancing digital innovation in financial services for sustainable growth" (charter, 2018)
-- **Actual focus**: Lobbying platform for incumbent banks against fintech regulation. 80% of published position papers defend existing banking regulations. [ASSUMED - based on publication analysis]
-- **Target constituency**: C-level executives at banks with >EUR 10B assets
-- **Value proposition**: Regulatory early-warning system and peer networking among non-competing institutions
+- **Official mission**: "[Actual mission statement quote]" (charter, [year])
+- **Actual focus**: Lobbying platform for [incumbent segment] against [disruptor] regulation. 80% of published position papers defend existing [industry] regulations. [ASSUMED - based on publication analysis]
+- **Target constituency**: C-level executives at [member type] with >[threshold]
+- **Value proposition**: [Core service 1] and peer networking among non-competing institutions
 ```
 
 ## Governance Rules
@@ -123,13 +123,13 @@ How leaders got there matters for understanding power dynamics.
 **BAD:**
 ```
 ### Leadership
-- **Dr. Hans Mueller** - President (since 2021)
+- **[Person A]** - President (since 2021)
 ```
 
 **GOOD:**
 ```
 ### Leadership
-- **Dr. Hans Mueller** - President (since 2021). Elected by general assembly for 3-year term. Previously board member (2018-2021). CEO of Deutsche FinanzBank.
+- **[Person A]** - President (since 2021). Elected by general assembly for 3-year term. Previously board member (2018-2021). CEO of [Company X].
 ```
 
 ### OP-GV-02: Decision-Making Clarity
@@ -154,12 +154,12 @@ Separate formal requirements from unspoken ones.
 
 **BAD:**
 ```
-- **Membership criteria**: Companies in financial services can join
+- **Membership criteria**: Companies in [industry] can join
 ```
 
 **GOOD:**
 ```
-- **Membership criteria**: Formal: registered financial institution in DACH region, annual revenue >EUR 100M, nomination by existing member. Implicit: traditional banking background preferred - fintech/neobank applications reportedly deprioritized [ASSUMED - based on member composition analysis showing 0 neobanks among 45 members]
+- **Membership criteria**: Formal: registered [institution type] in [region], annual revenue >EUR [amount], nomination by existing member. Implicit: [established segment] background preferred - [disruptor segment] applications reportedly deprioritized [ASSUMED - based on member composition analysis showing 0 [disruptor type] among [N] members]
 ```
 
 ## Program Rules
@@ -176,8 +176,8 @@ Each program needs enough detail to evaluate attendance value.
 
 **GOOD:**
 ```
-- **Annual Banking Summit**: Purpose: Peer networking and regulatory briefing. Audience: C-level from member institutions (120-150 attendees). Format: 2-day conference, invitation-only dinners. Frequency: Annual (November). Scale: EUR 800K budget, 30 speakers.
-- **RegTech Working Group**: Purpose: Joint position papers on fintech regulation. Audience: Compliance heads and legal counsel. Format: Monthly virtual meetings + quarterly in-person. Frequency: 12x/year. Scale: 25 active participants from 18 institutions.
+- **[Annual Event Name]**: Purpose: Peer networking and [domain] briefing. Audience: C-level from member institutions (120-150 attendees). Format: 2-day conference, invitation-only dinners. Frequency: Annual (November). Scale: EUR 800K budget, 30 speakers.
+- **[Working Group Name]**: Purpose: Joint position papers on [topic]. Audience: [Role] heads and legal counsel. Format: Monthly virtual meetings + quarterly in-person. Frequency: 12x/year. Scale: 25 active participants from 18 institutions.
 ```
 
 ## Engagement Rules
@@ -194,9 +194,9 @@ Name the actual path in, not categories.
 **GOOD:**
 ```
 - **Entry points**:
-  - Guest attendance at Annual Banking Summit (apply via website by August, EUR 2,500 non-member fee, requires member recommendation)
-  - RegTech Working Group observer status (request via Dr. Mueller's office, no fee, 3-month trial)
-  - Associate membership (EUR 25K/year, simplified application for technology vendors, limited voting rights)
+  - Guest attendance at [Annual Event] (apply via website by [month], EUR [amount] non-member fee, requires member recommendation)
+  - [Working Group] observer status (request via [contact], no fee, 3-month trial)
+  - Associate membership (EUR [amount]/year, simplified application for technology vendors, limited voting rights)
 ```
 
 ### OP-EN-02: Calendar-Aligned Timing
@@ -230,5 +230,5 @@ Only state when supported by observable indicators.
 
 **GOOD:**
 ```
-- **Political/ideological orientation**: Pro-incumbent banking regulation. Evidence: 8 of 10 recent position papers oppose open banking mandates. Board composition 100% traditional banking. No fintech representation despite stated "innovation" mission. [ASSUMED - inferred from publication and membership patterns]
+- **Political/ideological orientation**: Pro-[incumbent segment] regulation. Evidence: [N] of [M] recent position papers oppose [reform type]. Board composition 100% [established segment]. No [disruptor segment] representation despite stated "innovation" mission. [ASSUMED - inferred from publication and membership patterns]
 ```

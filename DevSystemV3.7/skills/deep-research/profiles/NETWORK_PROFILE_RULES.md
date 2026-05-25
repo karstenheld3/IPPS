@@ -120,8 +120,8 @@ Claims about the network's stated purpose need citations.
 **GOOD:**
 ```
 ### Stated Focus (Open Value Analysis)
-- **Official mission**: "Connecting leaders shaping the future of European financial services" (website header, accessed 2026-05-20)
-- **Stated goals**: 1) Cross-pollinate ideas between banking and tech, 2) Create deal flow for members, 3) Influence EU fintech regulation (annual report 2025, p.3)
+- **Official mission**: "[Actual mission statement quote]" (website header, accessed YYYY-MM-DD)
+- **Stated goals**: 1) [Goal 1], 2) [Goal 2], 3) [Goal 3] (annual report [year], p.[N])
 - **Key claims**:
   - "50+ deals facilitated in 2025" - Evidence: 12 verifiable from press releases, remainder [ASSUMED]
   - "Non-hierarchical peer network" - Evidence: Contradicted by inner circle analysis below
@@ -141,12 +141,12 @@ Hidden value analysis requires explicit confidence assessment.
 **GOOD:**
 ```
 ### Hidden Focus (Hidden Value Analysis)
-- **Actual binding mechanism**: Shared exit from Deutsche FinanzBank 2015 restructuring. 8 of 12 inner circle members were DVPs+ at DFB before 2016. Maintained deal-flow relationships post-exit.
-- **Unstated value exchange**: Pre-market deal flow (members see investment opportunities before public announcement). Talent pipeline (junior hires rotate between member companies).
-- **Common characteristics of members**: Male (11/12 inner circle), 45-55 age range, MBA from INSEAD or St. Gallen, German-speaking, minimum EUR 5M personal net worth [ASSUMED]
-- **Exclusion patterns**: No women in inner circle despite 3 qualified female executives in broader network. No members from neobanks/fintechs despite stated "innovation" mission.
+- **Actual binding mechanism**: Shared exit from [Company X] [year] restructuring. [N] of [M] inner circle members were [level]+ at [Company X] before [year]. Maintained deal-flow relationships post-exit.
+- **Unstated value exchange**: Pre-market deal flow (members see opportunities before public announcement). Talent pipeline (junior hires rotate between member companies).
+- **Common characteristics of members**: [Gender] ([ratio] inner circle), [age range], [education pattern], [language], minimum EUR [amount] personal net worth [ASSUMED]
+- **Exclusion patterns**: [Observed pattern] despite [N] qualified [group] in broader network. No members from [excluded segment] despite stated "[related mission]".
 
-**Assessment confidence**: MEDIUM - based on 4 confirmed data points (career histories, event attendance, deal announcements) + 3 inferred patterns
+**Assessment confidence**: MEDIUM - based on [N] confirmed data points ([types]) + [N] inferred patterns
 ```
 
 ## Inner Circle Rules
@@ -157,14 +157,14 @@ Each inner circle member needs role, function, and mechanism.
 
 **BAD:**
 ```
-- **Thomas Mueller** (CEO of FinCo). Important member.
-- **Anna Schmidt** (Investor). Very connected.
+- **[Person A]** (CEO of [Company]). Important member.
+- **[Person B]** (Investor). Very connected.
 ```
 
 **GOOD:**
 ```
-- **Thomas Mueller** (CEO, FinCo GmbH). Network role: Convener. Influence: Hosts quarterly dinners, controls guest list. Only person with direct relationships to all other inner circle members.
-- **Anna Schmidt** (Partner, Capital Partners AG). Network role: Gatekeeper. Influence: Controls deal flow access. Her "no" excludes companies from syndicate rounds.
+- **[Person A]** (CEO, [Company A]). Network role: Convener. Influence: Hosts quarterly dinners, controls guest list. Only person with direct relationships to all other inner circle members.
+- **[Person B]** (Partner, [Company B]). Network role: Gatekeeper. Influence: Controls deal flow access. Their "no" excludes companies from syndicate rounds.
 ```
 
 ### NP-IC-03: Succession Risk
@@ -178,7 +178,7 @@ Assess what happens when key nodes depart.
 
 **GOOD:**
 ```
-- **Succession risk**: HIGH for Thomas Mueller (sole convener, only full-mesh node). Network likely fragments into 3 sub-clusters without him. LOW for any single peripheral member. MEDIUM for Anna Schmidt (deal flow would redirect to competitor syndicate within 6 months).
+- **Succession risk**: HIGH for [Person A] (sole convener, only full-mesh node). Network likely fragments into [N] sub-clusters without them. LOW for any single peripheral member. MEDIUM for [Person B] (deal flow would redirect to competitor syndicate within 6 months).
 ```
 
 ## Entry Barrier Rules
@@ -210,7 +210,7 @@ Tailor the entry recommendation.
 
 **GOOD:**
 ```
-- **Recommended entry path**: 1) Warm introduction via Thomas Mueller (2nd-degree via shared SAP tenure). 2) Attend FinTech Association annual dinner (November) where 6 inner circle members are confirmed. 3) Position as AI/compliance expert - fills a gap in network's capability set (currently no deep tech expertise among members).
+- **Recommended entry path**: 1) Warm introduction via [Person A] (2nd-degree via shared [Company X] tenure). 2) Attend [Event Name] (November) where [N] inner circle members are confirmed. 3) Position as [expertise] expert - fills a gap in network's capability set (currently no [skill area] expertise among members).
 ```
 
 ## Member Analysis Rules
@@ -221,26 +221,26 @@ Inner circle gets full analysis. Peripherals get one line.
 
 **BAD:**
 ```
-### Thomas Mueller (CEO)
+### [Person A] (CEO)
 [full analysis]
 
-### Random Attendee #1 (Unknown)
+### [Peripheral Person] (Unknown)
 [full analysis - wastes space for peripheral member]
 ```
 
 **GOOD:**
 ```
-### Thomas Mueller (CEO, FinCo GmbH)
+### [Person A] (CEO, [Company A])
 - **Network role**: Convener / Core
-- **Joined/Connected since**: 2016 (founding member)
-- **Contributions to network**: Deal flow origination (3-4 opportunities/quarter), event hosting, introductions to institutional LPs
-- **Extractions from network**: Co-investment capital for FinCo portfolio, talent referrals, board member recruitment
+- **Joined/Connected since**: [year] (founding member)
+- **Contributions to network**: Deal flow origination ([N] opportunities/quarter), event hosting, introductions to institutional LPs
+- **Extractions from network**: Co-investment capital for [Company A] portfolio, talent referrals, board member recruitment
 - **Influence score**: HIGH
-- **Bridge function**: Connects to London VC scene via Capital Partners relationship
+- **Bridge function**: Connects to [external network] via [Person B] relationship
 
 **Peripheral members:**
-- **Klaus Weber** (CFO, MidBank AG) - Contributes: Due diligence expertise. Extracts: Deal flow. Bridge: None.
-- **Stefan Gross** (Partner, LawFirm) - Contributes: Legal structuring. Extracts: Client referrals. Bridge: Regulatory network.
+- **[Person C]** (CFO, [Company C]) - Contributes: Due diligence expertise. Extracts: Deal flow. Bridge: None.
+- **[Person D]** (Partner, [Company D]) - Contributes: Legal structuring. Extracts: Client referrals. Bridge: [Adjacent network].
 ```
 
 ## Value Flow Rules
@@ -256,9 +256,9 @@ Who gets more than they give?
 
 **GOOD:**
 ```
-- **Who benefits most**: Thomas Mueller (FinCo received EUR 8M in co-investment from network members in 2024-2025, while contributing primarily social capital/hosting). Anna Schmidt (uses network for proprietary deal sourcing, estimated 40% of her fund's pipeline originates here).
-- **Who contributes most**: Klaus Weber (provides 15-20 hours/quarter of pro-bono due diligence for network deals, extracts only 1-2 co-investment slots/year).
-- **Free riders**: Stefan Gross - attended 8 of 12 dinners in 2025, contributed 0 deals, extracted 3 client mandates. [ASSUMED - based on event attendance and no visible deal contribution]
+- **Who benefits most**: [Person A] ([Company A] received EUR [amount] in co-investment from network members in [period], while contributing primarily social capital/hosting). [Person B] (uses network for proprietary deal sourcing, estimated [N]% of fund pipeline originates here).
+- **Who contributes most**: [Person C] (provides [N] hours/quarter of pro-bono [expertise] for network deals, extracts only [N] slots/year).
+- **Free riders**: [Person D] - attended [N] of [M] events in [year], contributed 0 deals, extracted [N] client mandates. [ASSUMED - based on event attendance and no visible deal contribution]
 ```
 
 ## Strategic Assessment Rules
@@ -274,7 +274,7 @@ Don't overstate access potential.
 
 **GOOD:**
 ```
-- **Entry feasibility**: MEDIUM. Path exists via Thomas Mueller (warm 2nd-degree connection). Barrier: Current investment capacity below network norm (EUR 1M+). Mitigant: AI/compliance expertise fills genuine gap. Timeline: 3-6 months from first dinner to deal flow inclusion.
+- **Entry feasibility**: MEDIUM. Path exists via [Person A] (warm 2nd-degree connection). Barrier: Current [resource] below network norm (EUR [amount]+). Mitigant: [Expertise] fills genuine gap. Timeline: [N] months from first [event type] to [inclusion milestone].
 ```
 
 ### NP-SA-02: Alternatives When Access is Difficult
@@ -289,7 +289,7 @@ Name backup options.
 **GOOD:**
 ```
 - **Alternative networks**:
-  - FinTech Association DACH (formal, easier entry via membership application, EUR 5K/year, less exclusive deal flow)
-  - Munich Angel Network (open applications quarterly, lower ticket sizes EUR 25-250K, broader tech focus)
-  - RegTech Founders Circle (WhatsApp group, introduction via any existing member, purely operational/product focus, no investment component)
+  - [Alternative Network 1] (formal, easier entry via membership application, EUR [amount]/year, less exclusive deal flow)
+  - [Alternative Network 2] (open applications quarterly, lower ticket sizes EUR [range], broader [domain] focus)
+  - [Alternative Network 3] (messaging group, introduction via any existing member, purely operational/product focus, no investment component)
 ```

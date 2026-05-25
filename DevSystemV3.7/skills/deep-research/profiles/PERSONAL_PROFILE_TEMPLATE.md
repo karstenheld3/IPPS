@@ -21,9 +21,9 @@
 1. [Summary](#summary)
 2. [Relevant Topics](#relevant-topics)
 3. [Personal Data](#personal-data)
-4. [Education Timeline](#education-timeline)
+4. [Current Occupation](#current-occupation)
 5. [Career Timeline](#career-timeline)
-6. [Current Occupation](#current-occupation)
+6. [Education Timeline](#education-timeline)
 7. [Additional Activities](#additional-activities)
 8. [Related Company Factsheets](#related-company-factsheets)
 9. [Latest Social Media Activity](#latest-social-media-activity)
@@ -69,22 +69,6 @@ Conversation angle: "[specific question one could ask]"
 - **Connections**: [N] LinkedIn connections, [N] followers
 - **Mutual connections**: [Names], +[N] others
 
-## Education Timeline
-
-[Reverse chronological. Format:]
-
-- **[Year-Year]**: [Degree], [Institution], [Location] ([field/specialization])
-- **[Year-Year]**: [Degree], [Institution], [Location] ([thesis title if PhD, advisor if known])
-
-[Include: publications from academic career (full citation with Digital Object Identifier (DOI) if available)]
-
-## Career Timeline
-
-[Reverse chronological. Format:]
-
-- **[Year-Year]**: [Title] at [Company], [Location] ([1-line context/description])
-- **Since [Year]**: [Title] at [Company], [Location] ([1-line context/description])
-
 ## Current Occupation
 
 [One ### subsection per active role/venture. Include:]
@@ -99,6 +83,22 @@ Conversation angle: "[specific question one could ask]"
 - **Activity timeline**:
   - [YYYY-MM]: [Milestone or event]
   - [YYYY-MM]: [Milestone or event]
+
+## Career Timeline
+
+[Reverse chronological. Format:]
+
+- **[Year-Year]**: [Title] at [Company], [Location] ([1-line context/description])
+- **Since [Year]**: [Title] at [Company], [Location] ([1-line context/description])
+
+## Education Timeline
+
+[Reverse chronological. Format:]
+
+- **[Year-Year]**: [Degree], [Institution], [Location] ([field/specialization])
+- **[Year-Year]**: [Degree], [Institution], [Location] ([thesis title if PhD, advisor if known])
+
+[Include: publications from academic career (full citation with Digital Object Identifier (DOI) if available)]
 
 ## Additional Activities
 
@@ -136,11 +136,12 @@ Conversation angle: "[specific question one could ask]"
 ### [Company Name]
 
 - **Description**: [1-2 sentences]
+- **Business focus**: [What the company does, primary industry]
 - **Person's role**: [Title, tenure, responsibilities]
 - **Key projects**: [Projects this person was involved in]
 - **Related colleagues**: [People who worked with the subject at this company]
 - **Reporting line**: [Manager/direct reports if known]
-- **Company timeline** (during person's tenure):
+- **Company timeline** (complete, including acquisitions, etc.):
   - [YYYY]: [Relevant milestone]
 
 ## Latest Social Media Activity (as of [YYYY-MM-DD])
@@ -153,12 +154,12 @@ Conversation angle: "[specific question one could ask]"
 
 ## Key Characteristics / Character Assessment
 
+**Summary**: [3-5 sentences describing role, skills, archievements, personality - as if for recruitment profile]
+
 - **Self-description**: [LinkedIn headline, bio, or about section quote]
-- **Described by others as**: [How colleagues, media, or profiles describe them]
 - **Core thesis / worldview**: [Central professional belief or approach in 1-2 sentences]
 - **Domain expertise**: [Primary area of expertise in 1 sentence]
 - **Career pattern**: [Condensed arc using → arrows with spaces]
-- **Communication style**: [Formal/informal, language preference, public vs private]
 - **Values indicators**: [What their choices and statements reveal about values]
 
 ## Networking Relevance

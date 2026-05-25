@@ -80,7 +80,7 @@ Depth tier must be set. Sections must match:
 [filled]
 ## Additional Activities
 ### Board Memberships
-- **2019-present**: Advisory Board, FinTech Association Germany (invited member)
+- **2019-present**: Advisory Board, [Industry Association] (invited member)
 ```
 
 ### PP-HD-03: Connection Statement
@@ -89,12 +89,12 @@ Connection must state relationship type and basis.
 
 **BAD:**
 ```
-**Connection to Karsten Held**: Connected on LinkedIn.
+**Connection to [Requester Name]**: Connected on LinkedIn.
 ```
 
 **GOOD:**
 ```
-**Connection to Karsten Held**: 2nd-degree via Thomas Mueller (shared tenure at SAP 2015-2018). Overlapping interest in AI-driven due diligence.
+**Connection to [Requester Name]**: 2nd-degree via [Person B] (shared tenure at [Company X] 2015-2018). Overlapping interest in [shared domain].
 ```
 
 ## Timeline Rules
@@ -107,17 +107,17 @@ Reverse chronological. Gaps >2 years require explanation.
 ```
 ## Career Timeline
 
-- **2020-present**: CEO at NewCo, Berlin
-- **2012-2015**: VP Engineering at OldCorp, Munich
+- **2020-present**: CEO at [Company B], [City]
+- **2012-2015**: VP Engineering at [Company A], [City]
 ```
 
 **GOOD:**
 ```
 ## Career Timeline
 
-- **Since 2020**: CEO at NewCo, Berlin (AI-powered compliance platform)
+- **Since 2020**: CEO at [Company B], [City] ([1-line product description])
 - **2015-2020**: Sabbatical and angel investing [ASSUMED - no public role found]
-- **2012-2015**: VP Engineering at OldCorp, Munich (led team of 45)
+- **2012-2015**: VP Engineering at [Company A], [City] (led team of 45)
 ```
 
 ### PP-TL-02: Date Consistency
@@ -127,19 +127,19 @@ Dates must match across sections.
 **BAD:**
 ```
 ## Career Timeline
-- **Since 2019**: CEO at FinCo
+- **Since 2019**: CEO at [Company]
 
 ## Current Occupation
-### FinCo (CEO, since 2020)
+### [Company] (CEO, since 2020)
 ```
 
 **GOOD:**
 ```
 ## Career Timeline
-- **Since 2019**: CEO at FinCo, Frankfurt (regulatory technology)
+- **Since 2019**: CEO at [Company], [City] ([industry])
 
 ## Current Occupation
-### FinCo (CEO, since 2019)
+### [Company] (CEO, since 2019)
 ```
 
 ## Topic Rules
@@ -155,7 +155,7 @@ Every topic heading needs status and qualifier.
 
 **GOOD:**
 ```
-### Artificial Intelligence (primary, via FinCo product)
+### [Topic Name] (primary, via [Company] product)
 ```
 
 ### PP-TP-02: Conversation Angle
@@ -169,7 +169,7 @@ Conversation angle: "Ask about AI"
 
 **GOOD:**
 ```
-Conversation angle: "How did you decide to build the compliance engine on LLMs rather than rule-based systems?"
+Conversation angle: "How did you decide to [specific technical/strategic choice they made]?"
 ```
 
 ## Character Assessment Rules
@@ -185,7 +185,7 @@ Use actual quotes, not paraphrases.
 
 **GOOD:**
 ```
-- **Self-description**: "Building the future of regulatory intelligence | Ex-SAP, Ex-McKinsey | Board Member @FinTechDE"
+- **Self-description**: "[Actual LinkedIn headline or bio quote from the subject's profile]"
 ```
 
 ### PP-CH-02: Career Pattern Arrow Notation
@@ -199,7 +199,7 @@ Use `->` arrows with spaces for career arc.
 
 **GOOD:**
 ```
-- **Career pattern**: Management consulting (McKinsey) -> Corporate tech leadership (SAP) -> Founder/CEO (FinCo)
+- **Career pattern**: [Phase 1 descriptor] ([Company A]) -> [Phase 2 descriptor] ([Company B]) -> [Phase 3 descriptor] ([Company C])
 ```
 
 ## Networking Rules
@@ -215,7 +215,7 @@ Recommendations must be specific enough to execute.
 
 **GOOD:**
 ```
-- **Recommended approach**: Request introduction via Thomas Mueller (shared SAP tenure). Reference the FinTech Association panel on AI regulation (2026-03-15) where she spoke. Opening angle: compare notes on LLM-based compliance approaches.
+- **Recommended approach**: Request introduction via [Person B] (shared [Company X] tenure). Reference the [Event Name] panel on [topic] (YYYY-MM-DD) where they spoke. Opening angle: [specific shared interest].
 ```
 
 ### PP-NW-02: Specific Touchpoints
@@ -232,8 +232,8 @@ Reference actual events, publications, or shared connections.
 **GOOD:**
 ```
 - **Potential touchpoints for reconnection**:
-  - FinTech Association annual dinner (2026-06, Frankfurt): She is confirmed speaker on "AI in RegTech"
-  - Thomas Mueller introduction: Shared 3-year tenure at SAP Innovation Lab (2015-2018)
+  - [Event Name] (YYYY-MM, [City]): Confirmed speaker on "[talk topic]"
+  - [Person B] introduction: Shared [N]-year tenure at [Company X] ([year range])
 ```
 
 ## Sensitivity Rules
@@ -244,12 +244,12 @@ Mark with reason AND safe alternative angle.
 
 **BAD:**
 ```
-- Was terminated from previous role at MegaCorp in 2019.
+- Was terminated from previous role at [Company] in [year].
 ```
 
 **GOOD:**
 ```
-- Left MegaCorp in 2019 under unclear circumstances. [SENSITIVE: Possible involuntary departure. Safe angle: Ask about the transition to entrepreneurship and what motivated the founding of FinCo.]
+- Left [Company] in [year] under unclear circumstances. [SENSITIVE: Possible involuntary departure. Safe angle: Ask about the transition to entrepreneurship and what motivated the career change.]
 ```
 
 ## Cross-Reference Rules
@@ -260,15 +260,15 @@ When a separate profile exists, reference it. Do not duplicate content.
 
 **BAD:**
 ```
-### FinCo
-- **Description**: FinCo is a Frankfurt-based regulatory technology company founded in 2019...
+### [Company]
+- **Description**: [Company] is a [City]-based [industry] company founded in [year]...
   [200 words of company description]
 ```
 
 **GOOD:**
 ```
-### FinCo
-- **Description**: Regulatory technology company, Frankfurt (see MVNET-IN03)
-- **Person's role**: CEO and co-founder since 2019
-- **Key projects**: Led Series A fundraising, built ML compliance engine
+### [Company]
+- **Description**: [Industry] company, [City] (see [TOPIC]-IN[NN])
+- **Person's role**: [Title] and co-founder since [year]
+- **Key projects**: [Project 1], [Project 2]
 ```
