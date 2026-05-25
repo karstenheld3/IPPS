@@ -4,7 +4,6 @@
 **Goal**: Network analysis of [Network Name] for [stated purpose]
 **Research date**: [YYYY-MM-DD]
 **Timeline**: Created YYYY-MM-DD, Updated N times (YYYY-MM-DD - YYYY-MM-DD)
-**Strategy**: MCPI | MEPI
 **Domain**: PROFILE (Network)
 **Related profiles**: [TOPIC]-IN[NN], [TOPIC]-IN[NN]
 
