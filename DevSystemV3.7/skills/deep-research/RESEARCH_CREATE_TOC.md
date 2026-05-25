@@ -2,6 +2,8 @@
 
 Global workflow for creating Table of Contents in deep research. Used by all research strategies.
 
+**MUST use when**: Research produces more than 1 topic file. The TOC is a working document (`__` prefix) that becomes the skeletal Summary file in Phase 4.
+
 ## Prerequisites
 
 - `__[SUBJECT]_SOURCES.md` exists with all sources collected and IDs assigned

@@ -71,12 +71,6 @@ Additional checks for DEFAULT domain quality pipeline:
 - Recommendations section exists (even if brief)
 - Tier 4-5 sources labeled with `[COMMUNITY]` and limitations noted
 
-## Effort Validation
-
-- Decomposition MUST estimate minimum research hours
-- If actual time < 50% of estimate, agent MUST justify or expand research
-- Goal: outperform 2 days (16 hours) of human research for EXPLORATORY scope
-
 ## VCRIV Pipeline
 
 Quality assurance cycle (runs per scope-based granularity):

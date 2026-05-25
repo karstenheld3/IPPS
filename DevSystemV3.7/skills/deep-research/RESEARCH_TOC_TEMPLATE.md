@@ -51,14 +51,14 @@
 - Key item 1
 - Key item 2
 - Key item 3
-**Sources**: [TOPIC]-IN01-SC-[SOURCE]-[DOCNAME]
+**Sources**: [TOPIC]-SC-[SOURCE]-[DOCNAME]
 
 ### Topic: [Subtopic2]
 **Scope**: What this topic covers
 **Contents**:
 - Key item 1
 - Key item 2
-**Sources**: [TOPIC]-IN01-SC-[SOURCE]-[DOCNAME]
+**Sources**: [TOPIC]-SC-[SOURCE]-[DOCNAME]
 
 ## Related APIs/Technologies
 

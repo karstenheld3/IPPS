@@ -73,9 +73,9 @@ Before collecting sources, test each discovery platform from Q7:
   - Release notes and changelogs for version-specific behavior
 - **Community source rule**: Community sources supplement official docs, not replace. Use for limitations, quirks, gotchas. **Filter to match [SUBJECT] version** - discard outdated issues.
 - **Source collection using domain-specific tiers**: Use tiers from the active domain profile. Default: official documentation > vendor content > community/analyst sources.
-- Assign source IDs: `[SUBJECT]-SC-[SOURCE]-[DOCNAME]` (per SKILL.md format)
-  - Official: `[SUBJECT]-SC-[VENDOR]-[DOCNAME]`
-  - Community: `[SUBJECT]-SC-[PLATFORM]-[DOCNAME]` (e.g., `GRPH-SC-SO-RATELIMIT`)
+- Assign source IDs: `[TOPIC]-SC-[SOURCE]-[DOCNAME]` (per SKILL.md format)
+  - Official: `[TOPIC]-SC-[VENDOR]-[DOCNAME]`
+  - Community: `[TOPIC]-SC-[PLATFORM]-[DOCNAME]` (e.g., `GRPH-SC-SO-RATELIMIT`)
 - Group sources by category (domain-specific)
 - Include "Related" section listing similar or easily confused alternatives
 - **Source processing**: Process all PDF sources through transcription pipeline. Read `deep-research-config.json` for settings.

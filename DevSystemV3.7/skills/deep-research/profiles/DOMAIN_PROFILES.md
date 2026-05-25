@@ -40,7 +40,7 @@ Common failures a fresh agent will encounter:
 
 ## Output Templates (Shared Module)
 
-The `profiles/` subfolder is a shared module used by ANY domain when researching entities (people, companies, organizations, networks). Select template based on subject type:
+This folder is a shared module used by ANY domain when researching entities (people, companies, organizations, networks). Select template based on subject type:
 - Person → [PERSONAL_PROFILE_TEMPLATE.md](PERSONAL_PROFILE_TEMPLATE.md)
 - Company → [COMPANY_PROFILE_TEMPLATE.md](COMPANY_PROFILE_TEMPLATE.md)
 - Organization → [ORGA_PROFILE_TEMPLATE.md](ORGA_PROFILE_TEMPLATE.md)
@@ -69,6 +69,13 @@ Additional checks for profile domain quality pipeline:
 - Hidden value analysis (network profiles) clearly labeled with assessment confidence level
 - No personal data beyond what is publicly available (General Data Protection Regulation (GDPR) consideration for European subjects)
 - Engagement Strategy section includes at least one concrete, actionable recommendation
+
+## Process Requirements
+
+Profile research follows the same STRUT + VCRIV discipline as all deep-research:
+
+- **STRUT required**: Always create `__STRUT_[TOPIC].md`. For single profiles this is lightweight (1 phase, 1 deliverable) but ensures planning and time tracking.
+- **VCRIV required**: Run on every standalone profile document. For single profiles, VCRIV can be executed in 1 consolidated step (verify + critique + reconcile + implement + verify in one pass). For multi-profile sets, run VCRIV per profile.
 
 ## Decomposition Rules
 

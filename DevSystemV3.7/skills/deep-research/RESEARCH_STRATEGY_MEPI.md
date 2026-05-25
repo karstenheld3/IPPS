@@ -57,7 +57,7 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 - Collect **5-10 sources per dimension** (focus on top-tier sources first)
 - Skip exhaustive community source collection
 - Use source tiers from active domain profile. Default: official documentation > vendor content > community/analyst sources.
-- Assign source IDs: `[TOPIC]-IN01-SC-[SOURCE]-[DOCNAME]`
+- Assign source IDs: `[TOPIC]-SC-[SOURCE]-[DOCNAME]`
 - Group sources by category (domain-specific)
 - Process all PDF sources through transcription pipeline
 - **Done when**: 5-10 quality sources per dimension, all with IDs, PDFs transcribed

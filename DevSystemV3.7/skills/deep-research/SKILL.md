@@ -26,7 +26,7 @@ Systematic research using MCPI (Most Complete Point of Information) or MEPI (Mos
 
 ## Output Folder (Pre-Phase 1)
 
-Deep research creates a Topic Folder for its outputs by default.
+Deep research ALWAYS creates a dedicated subfolder for its outputs. This ensures parallel researches on the same topic cannot have filename or ID conflicts - each folder has an independent numbering namespace.
 
 ### Step 1.1: Detect Work Mode
 
@@ -45,6 +45,8 @@ Deep research creates a Topic Folder for its outputs by default.
 **SESSION-MODE as Step (only if user explicitly requests):** Create Step Folder per @skills:session-management Step Folder naming. Folder name: `S##_[TOPIC]-[PascalCaseName]_YYYY-MM-DD/`
 
 All deep-research output files go in this folder. Each folder has independent numbering namespace per @skills:session-management.
+
+**Parallel research isolation**: Multiple deep-researches for the same TOPIC are safe because each gets its own `T##_` subfolder with independent file numbering. Topic IDs are unique per ID-REGISTRY.md, but folder-level isolation prevents file conflicts even when the same TOPIC is researched from different angles.
 
 ## Phase Model (Global)
 
@@ -77,7 +79,7 @@ Answer these 7 questions before any source collection:
 3. **Q3 - Dimensions**: Which apply? (legal, financial, administrative, practical, technical, professional, medical, psychological, personal, organizational, strategic, security, cultural, educational, historical, or custom)
 4. **Q4 - Topics**: 3-5 topics per dimension
 5. **Q5 - Strategy**: MCPI (exhaustive) or MEPI (curated)?
-6. **Q6 - Domain**: Which profile? (SOFTWARE, MARKET_INTEL, LEGAL, PROFILE, or DEFAULT)
+6. **Q6 - Domain**: Which profile? (SOFTWARE, MARKET_INTEL, LEGAL, PROFILES, or DEFAULT)
 7. **Q7 - Discovery Platforms**: What databases/platforms index this entity type? Test each, classify access level.
 
 Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection until all 7 questions are answered.
@@ -92,7 +94,7 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
   "topics_per_dimension": { "dimension": ["topics"] },
   "strategy": "MCPI | MEPI",
   "strategy_rationale": "string (WHY this strategy fits the prompt)",
-  "domain": "DEFAULT | SOFTWARE | MARKET_INTEL | LEGAL | PROFILE",
+  "domain": "DEFAULT | SOFTWARE | MARKET_INTEL | LEGAL | PROFILES",
   "domain_rationale": "string (WHY this domain profile applies)",
   "effort_estimate": "N hours minimum",
   "discovery_platforms": {
@@ -126,6 +128,12 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 - **Document strategy choice** - OUTPUT document must include strategy (MEPI/MCPI) + domain + rationale for both in header block
 - **Distinguish** facts from opinions from assumptions
 - **Autonomous after Phase 1** - no user interaction until delivery (except [CONSULT])
+
+## Effort Validation
+
+- Decomposition MUST estimate minimum research hours in STRUT
+- If actual time < 50% of estimate, agent MUST justify or expand research
+- Goal: outperform equivalent human research time for the given scope
 
 ## Strategy Selection
 
@@ -176,10 +184,15 @@ verify → critique → reconcile → implement → verify
 3. Each research output (per VCRIV granularity rules)
 4. Complete research set ex-post (after all topics complete)
 
+**Execution modes:**
+- **Full VCRIV** (5 steps): verify → critique → reconcile → implement → verify. Use for planning deliverables and final ex-post review.
+- **Consolidated VCRIV** (1 step): All 5 steps executed in a single pass without separate review files. Use for individual topic files and single-profile research.
+
 **Granularity** (scope-based):
-- NARROW: VCRIV per topic file
-- FOCUSED/EXPLORATORY: VCRIV per dimension
-- Final VCRIV on Summary file
+- NARROW: VCRIV per topic file (consolidated)
+- FOCUSED/EXPLORATORY: VCRIV per dimension (consolidated)
+- Final VCRIV on Summary file (full)
+- Profile research: VCRIV per standalone profile document (consolidated for single, full for network sets)
 
 **Termination**: Max 2 cycles per checkpoint, then [CONSULT].
 
@@ -224,6 +237,8 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 ## Reference Files
 
 - [RESEARCH_TOOLS.md](RESEARCH_TOOLS.md) - Tools, source processing, configuration
+- [RESEARCH_TOC_TEMPLATE.md](RESEARCH_TOC_TEMPLATE.md) - TOC template (MUST use when >1 topic files)
+- [RESEARCH_CREATE_TOC.md](RESEARCH_CREATE_TOC.md) - TOC creation workflow
 - [RESEARCH_SUMMARY_TEMPLATE.md](RESEARCH_SUMMARY_TEMPLATE.md) - Summary file template
 - [RESEARCH_CREATE_SUMMARY.md](RESEARCH_CREATE_SUMMARY.md) - Summary creation workflow
 
