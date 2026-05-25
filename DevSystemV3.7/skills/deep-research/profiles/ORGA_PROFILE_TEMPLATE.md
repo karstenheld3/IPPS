@@ -9,8 +9,6 @@
 
 **Relation to research context**: [How this organization connects to the broader research - is it a subject's alma mater, industry body, funding source, etc.]
 
-**Depth**: FULL (standalone profile - fill all sections). Non-primary organizations are inlined in the parent profile, not given standalone documents.
-
 **Conventions**: Mark sensitive topics inline with `[SENSITIVE: reason. Safe angle: ...]`. When a separate profile exists for a referenced person or organization, use `(see [TOPIC]-IN[NN])` instead of duplicating.
 
 ## Table of Contents

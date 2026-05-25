@@ -9,8 +9,6 @@
 
 **Relation to research context**: [How this network connects to the broader research - is it the subject's primary network, a target for entry, a competitive ecosystem, etc.]
 
-**Depth**: FULL (standalone profile - fill all sections). Full Member Analysis for inner circle, 1-line format for peripherals. Non-primary networks are inlined in the parent profile, not given standalone documents.
-
 **Conventions**: Mark sensitive topics inline with `[SENSITIVE: reason. Safe angle: ...]`. When separate personal profiles exist for members, use `(see [TOPIC]-IN[NN])` instead of duplicating biographical detail.
 
 ## Table of Contents
@@ -74,7 +72,7 @@
 
 ## Inner Circle
 
-[The core group that drives the network. 5-15 people who wield disproportionate influence.]
+[The core group that drives the network. 5-15 people or companies or organizations who wield disproportionate influence.]
 
 ### Core Members
 
@@ -126,6 +124,15 @@
 - **Primary channels**: [How members interact - events, WhatsApp groups, email lists, Slack, dinners, conferences]
 - **Frequency**: [How often the network activates]
 - **Rhythm**: [Annual conference, quarterly dinners, ad-hoc, continuous]
+
+### Events
+
+[Self-organized events and external events where the network is represented or active.]
+
+- **[Event Name]** ([frequency]): [Format, audience size, purpose, next date if known]
+- **[Event Name]** ([frequency]): [Format, audience size, purpose, next date if known]
+
+**Pattern**: [Self-organized vs external representation. Invite-only vs open. Consistency of attendance.]
 
 ## Entry Barriers
 

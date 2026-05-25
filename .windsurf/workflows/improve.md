@@ -311,7 +311,7 @@ Detection: determine context from file naming and content, then apply matching s
 
 **Integration**: New findings marked `[IMPROVED]`, challenged claims marked `[CHALLENGED]`. Update Sources section and Document History.
 
-**Profile-specific enrichment** (when Domain is PROFILE, in addition to above):
+**Profile-specific enrichment** (when output uses a profile template from `profiles/` - any domain, in addition to above):
 
 Read the applicable rules file from @skills:deep-research `profiles/` subfolder for focused improvement targets:
 - Person: `PERSONAL_PROFILE_RULES.md` (PP-* rules) - focus on PP-NW (networking), PP-TP (topics), PP-CH (character)

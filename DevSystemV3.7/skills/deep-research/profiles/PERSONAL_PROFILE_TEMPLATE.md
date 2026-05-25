@@ -9,8 +9,6 @@
 
 **Connection to [Requester/Subject]**: [How this person relates to the research requester or primary subject - direct/indirect, shared history, mutual contacts, overlapping tenure dates]
 
-**Depth**: FULL (standalone profile - fill all sections). Non-primary entities are inlined in the parent profile, not given standalone documents.
-
 **Conventions**: Mark sensitive topics inline with `[SENSITIVE: reason. Safe angle: ...]`. When a separate profile exists for a referenced person or company, use `(see [TOPIC]-IN[NN])` instead of duplicating.
 
 ## Table of Contents
@@ -74,7 +72,7 @@ Conversation angle: "[specific question one could ask]"
 
 - **What**: [1-2 sentences describing the company/organization]
 - **Role scope**: [What this person specifically does]
-- **Key figures**: [Revenue, AuM, team size, portfolio size - whatever is relevant]
+- **Key figures**: [Revenue, team size, portfolio size - whatever is relevant]
 - **Key people**: [Co-founders, direct reports, board members relevant to this person]
 - **Website**: [URL]
 - **Activity timeline**:
@@ -94,8 +92,6 @@ Conversation angle: "[specific question one could ask]"
 
 - **[Year-Year]**: [Degree], [Institution], [Location] ([field/specialization])
 - **[Year-Year]**: [Degree], [Institution], [Location] ([thesis title if PhD, advisor if known])
-
-[Include: publications from academic career (full citation with Digital Object Identifier (DOI) if available)]
 
 ## Additional Activities
 

@@ -38,13 +38,15 @@ Common failures a fresh agent will encounter:
 - **Academic sources**: Google Scholar for publications. University websites for academic roles
 - **No PDF pipeline required**: Profile research is primarily web-based, not document-based
 
-## Output Templates
+## Output Templates (Shared Module)
 
-All templates in `profiles/` subfolder. Select based on subject type:
+The `profiles/` subfolder is a shared module used by ANY domain when researching entities (people, companies, organizations, networks). Select template based on subject type:
 - Person → [PERSONAL_PROFILE_TEMPLATE.md](profiles/PERSONAL_PROFILE_TEMPLATE.md)
 - Company → [COMPANY_PROFILE_TEMPLATE.md](profiles/COMPANY_PROFILE_TEMPLATE.md)
 - Organization → [ORGA_PROFILE_TEMPLATE.md](profiles/ORGA_PROFILE_TEMPLATE.md)
 - Network → [NETWORK_PROFILE_TEMPLATE.md](profiles/NETWORK_PROFILE_TEMPLATE.md)
+
+**Cross-domain usage**: MARKET_INTEL researching a company, DEFAULT researching a person, LEGAL researching a regulatory body - all use these templates for entity-focused output.
 
 ## Rules
 
@@ -77,12 +79,6 @@ Profile research decomposes differently from topic-based research:
 - **Company set**: 1 company profile per entity, cross-referenced
 - **File naming**: `_INFO_[TOPIC]-IN[NN]_[SubjectName].md`
 
-## Enrichment Techniques
+## Enrichment
 
-During `/improve` passes on profile research:
-
-1. **Mutual connection mapping** - Search for shared contacts, overlapping tenures, common event attendance
-2. **Career pattern analysis** - Identify career moves that reveal strategy (upward, lateral, entrepreneurial, returning)
-3. **Publication/speaking trail** - Find talks, papers, podcasts that reveal current thinking and interests
-4. **Network gap analysis** - Who is conspicuously absent? What connections would be expected but don't exist?
-5. **Temporal correlation** - Job changes that coincide with events (funding rounds, company crises, policy changes)
+Profile enrichment techniques are defined in the `/improve` workflow (Research Output → Profile-specific enrichment section). Run `/improve` on profile documents to apply them.

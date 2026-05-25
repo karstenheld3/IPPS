@@ -9,8 +9,6 @@
 
 **Relation to research context**: [How this company connects to the broader research - is it a subject's employer, a competitor, a portfolio company, a partner, etc.]
 
-**Depth**: FULL (standalone profile - fill all sections). Non-primary companies are inlined in the parent profile (Related Company Factsheets section), not given standalone documents.
-
 **Conventions**: Mark sensitive topics inline with `[SENSITIVE: reason. Safe angle: ...]`. When a separate profile exists for a referenced person or company, use `(see [TOPIC]-IN[NN])` instead of duplicating.
 
 ## Table of Contents
@@ -23,15 +21,14 @@
 6. [Products and Technology](#products-and-technology)
 7. [Financial Overview](#financial-overview)
 8. [Company Timeline](#company-timeline)
-9. [Culture and Employer Profile](#culture-and-employer-profile)
-10. [Partnerships and Ecosystem](#partnerships-and-ecosystem)
-11. [Risk Factors](#risk-factors)
-12. [Recent News and Activity](#recent-news-and-activity)
-13. [Assessment](#assessment)
-14. [Engagement Strategy](#engagement-strategy)
-15. [Research Gaps](#research-gaps)
-16. [Sources](#sources)
-17. [Document History](#document-history)
+9. [Partnerships and Ecosystem](#partnerships-and-ecosystem)
+10. [Risk Factors](#risk-factors)
+11. [Recent News and Activity](#recent-news-and-activity)
+12. [Assessment](#assessment)
+13. [Engagement Strategy](#engagement-strategy)
+14. [Research Gaps](#research-gaps)
+15. [Sources](#sources)
+16. [Document History](#document-history)
 
 ## Summary
 
@@ -136,15 +133,6 @@
 
 - **[YYYY-MM]**: [Milestone - founding, funding, product launch, acquisition, leadership change, crisis]
 - **[YYYY-MM]**: [Milestone]
-
-## Culture and Employer Profile
-
-- **Mission/Vision statement**: [Official statement if available]
-- **Company values**: [Stated values]
-- **Work model**: [Remote/hybrid/on-site, locations]
-- **Compensation philosophy**: [If known]
-- **Glassdoor/Kununu rating**: [Score, review count, date]
-- **Notable employer characteristics**: [What makes them distinctive as an employer]
 
 ## Partnerships and Ecosystem
 
