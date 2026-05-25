@@ -248,12 +248,16 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 - [ORGA_PROFILE_TEMPLATE.md](profiles/ORGA_PROFILE_TEMPLATE.md) + [ORGA_PROFILE_RULES.md](profiles/ORGA_PROFILE_RULES.md)
 - [NETWORK_PROFILE_TEMPLATE.md](profiles/NETWORK_PROFILE_TEMPLATE.md) + [NETWORK_PROFILE_RULES.md](profiles/NETWORK_PROFILE_RULES.md)
 
-**File naming** (numbered scheme):
-- `_INFO_[TOPIC]-01_Summary.md` - Summary file with cross-document synthesis + Topic Files section
-- `_INFO_[TOPIC]-02_Sources.md` - Collected sources with IDs and verification labels
-- `_INFO_[TOPIC]-03_[Name].md` through `_INFO_[TOPIC]-[NN]_[Name].md` - Individual topic files (PascalCase)
+**Output Rules** (global invariant):
 
-**Decomposition rule**: Both MCPI and MEPI decompose topics into individually researched files. No monolithic single-file research. The Summary file is finalized in Phase 4 with cross-document synthesis after all topic files are complete.
+- **Always create subfolder** per "Output Folder" section above. No exceptions.
+- **Single-file output** (e.g., single profile): Apply naming convention from context (session, conversation, step, topic). File name does NOT use numbered scheme. Example: `_INFO_[TOPIC]_[SubjectName].md`
+- **Multi-file output** (multiple sub-topics): Use numbered scheme with reserved slots:
+  - `_INFO_[TOPIC]-01_Summary.md` - **RESERVED**. Mandatory. Stub created in Phase 2, finalized in Phase 4 with cross-document synthesis.
+  - `_INFO_[TOPIC]-02_Sources.md` - **RESERVED**. Mandatory. Created in Phase 1, populated during Phases 1, 2, and 3.
+  - `_INFO_[TOPIC]-03_[Name].md` through `_INFO_[TOPIC]-[NN]_[Name].md` - Individual topic files (PascalCase)
+
+**Decomposition rule**: Both MCPI and MEPI decompose topics into individually researched files. No monolithic single-file research.
 
 **Source ID format**: `[TOPIC]-SC-[SOURCE]-[DOCREF]`
 - `[SOURCE]` = site mnemonic 2-6 chars (e.g., `MSFT`, `SO`, `GH`)

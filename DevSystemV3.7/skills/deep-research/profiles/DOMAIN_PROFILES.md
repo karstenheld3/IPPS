@@ -79,11 +79,11 @@ Profile research follows the same STRUT + VCRIV discipline as all deep-research:
 
 ## Decomposition Rules
 
-Profile research decomposes differently from topic-based research. No Summary or Sources files - each profile template has its own Sources section.
+Profile research follows SKILL.md Output Rules:
 
-- **Single profile**: One file only. No numbered scheme needed. Filename fits session/conversation context: `_INFO_[TOPIC]-01_[SubjectName].md`
-- **Network analysis**: 1 network profile + N personal profiles (inner circle) + M company/org profiles (referenced entities). Numbered: `_INFO_[TOPIC]-[NN]_[SubjectName].md`
-- **Company set**: 1 company profile per entity, cross-referenced. Numbered: `_INFO_[TOPIC]-[NN]_[CompanyName].md`
+- **Single profile** (single-file output): No numbered scheme. Filename from context: `_INFO_[TOPIC]_[SubjectName].md`. Each profile template has its own Sources section inline.
+- **Network analysis** (multi-file output): Mandatory `_INFO_[TOPIC]-01_Summary.md` + `_INFO_[TOPIC]-02_Sources.md` + numbered profiles starting at 03. Example: 1 network profile + N personal profiles + M company/org profiles.
+- **Company set** (multi-file output): Mandatory `_INFO_[TOPIC]-01_Summary.md` + `_INFO_[TOPIC]-02_Sources.md` + 1 company profile per entity starting at 03, cross-referenced.
 
 ## Enrichment
 
