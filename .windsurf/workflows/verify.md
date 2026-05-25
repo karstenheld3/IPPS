@@ -75,6 +75,11 @@ Apply to ALL document types and contexts:
   - Bold for emphasis on key terms, framework names, or important concepts is acceptable
   - The "no bold" rule applies only to LLM-consumed skill resource files (see Skills section)
   - Do not strip formatting that aids human scanning and comprehension
+- **No project-specific data in reusable files** - Skills, workflows, rules, and templates are reused across projects:
+  - Scan for person names, company names, city names, industry-specific terms in examples and placeholders
+  - Found? → Replace with generic placeholders: `[Person A]`, `[Company X]`, `[City]`, `[industry]`
+  - Domain-neutral terms (SaaS, WhatsApp, LinkedIn) are acceptable as generic examples
+  - Applies to: `[AGENT_FOLDER]/skills/` (including templates), `[AGENT_FOLDER]/workflows/`, `[AGENT_FOLDER]/rules/`
 - **Labels decodable at point of use (AP-PR-11)** - Scan for bracket labels with 1-2 characters:
   - Exempt: `[x]`/`[ ]` checkboxes, `[N]` retry counts
   - Exempt: Established system labels: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`
