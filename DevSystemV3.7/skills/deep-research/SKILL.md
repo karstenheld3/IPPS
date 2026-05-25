@@ -199,7 +199,7 @@ Read one profile per session based on Q6:
 - [DOMAIN_SOFTWARE.md](DOMAIN_SOFTWARE.md) - APIs, frameworks, libraries
 - [DOMAIN_MARKET_INTEL.md](DOMAIN_MARKET_INTEL.md) - Companies, financials
 - [DOMAIN_LEGAL.md](DOMAIN_LEGAL.md) - Legislation, case law
-- [DOMAIN_PROFILE.md](DOMAIN_PROFILE.md) - People, companies, organizations, networks
+- [DOMAIN_PROFILES.md](DOMAIN_PROFILES.md) - People, companies, organizations, networks
 - [DOMAIN_DEFAULT.md](DOMAIN_DEFAULT.md) - Generic (use when none match)
 
 ## Output Format
@@ -227,11 +227,11 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 - [RESEARCH_SUMMARY_TEMPLATE.md](RESEARCH_SUMMARY_TEMPLATE.md) - Summary file template
 - [RESEARCH_CREATE_SUMMARY.md](RESEARCH_CREATE_SUMMARY.md) - Summary creation workflow
 
-**Profile Templates** (DOMAIN_PROFILE output formats):
-- [RESEARCH_PERSONAL_PROFILE_TEMPLATE.md](RESEARCH_PERSONAL_PROFILE_TEMPLATE.md) - Individual person profile
-- [RESEARCH_COMPANY_PROFILE_TEMPLATE.md](RESEARCH_COMPANY_PROFILE_TEMPLATE.md) - Company profile
-- [RESEARCH_ORGA_PROFILE_TEMPLATE.md](RESEARCH_ORGA_PROFILE_TEMPLATE.md) - Organization profile (universities, industry bodies, NGOs)
-- [RESEARCH_NETWORK_PROFILE_TEMPLATE.md](RESEARCH_NETWORK_PROFILE_TEMPLATE.md) - Network analysis (professional, social, academic networks)
+**Profile Templates and Rules** (in `profiles/` subfolder, see [DOMAIN_PROFILES.md](DOMAIN_PROFILES.md) for full instructions):
+- [PERSONAL_PROFILE_TEMPLATE.md](profiles/PERSONAL_PROFILE_TEMPLATE.md) + [PERSONAL_PROFILE_RULES.md](profiles/PERSONAL_PROFILE_RULES.md)
+- [COMPANY_PROFILE_TEMPLATE.md](profiles/COMPANY_PROFILE_TEMPLATE.md) + [COMPANY_PROFILE_RULES.md](profiles/COMPANY_PROFILE_RULES.md)
+- [ORGA_PROFILE_TEMPLATE.md](profiles/ORGA_PROFILE_TEMPLATE.md) + [ORGA_PROFILE_RULES.md](profiles/ORGA_PROFILE_RULES.md)
+- [NETWORK_PROFILE_TEMPLATE.md](profiles/NETWORK_PROFILE_TEMPLATE.md) + [NETWORK_PROFILE_RULES.md](profiles/NETWORK_PROFILE_RULES.md)
 
 **File naming** (numbered scheme):
 - `_INFO_[TOPIC]_01-SUMMARY.md` - Summary file with cross-document synthesis + Topic Files section

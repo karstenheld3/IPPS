@@ -1,4 +1,4 @@
-# Domain Profile: Profile Research
+# Domain Profiles: Profile Research
 
 Research domain for people, companies, organizations, and networks. Produces structured intelligence for relationship building, networking strategy, and due diligence.
 
@@ -28,11 +28,19 @@ Research domain for people, companies, organizations, and networks. Produces str
 
 ## Output Templates
 
-Select template based on subject type:
-- Person → [RESEARCH_PERSONAL_PROFILE_TEMPLATE.md](RESEARCH_PERSONAL_PROFILE_TEMPLATE.md)
-- Company → [RESEARCH_COMPANY_PROFILE_TEMPLATE.md](RESEARCH_COMPANY_PROFILE_TEMPLATE.md)
-- Organization → [RESEARCH_ORGA_PROFILE_TEMPLATE.md](RESEARCH_ORGA_PROFILE_TEMPLATE.md)
-- Network → [RESEARCH_NETWORK_PROFILE_TEMPLATE.md](RESEARCH_NETWORK_PROFILE_TEMPLATE.md)
+All templates in `profiles/` subfolder. Select based on subject type:
+- Person → [PERSONAL_PROFILE_TEMPLATE.md](profiles/PERSONAL_PROFILE_TEMPLATE.md)
+- Company → [COMPANY_PROFILE_TEMPLATE.md](profiles/COMPANY_PROFILE_TEMPLATE.md)
+- Organization → [ORGA_PROFILE_TEMPLATE.md](profiles/ORGA_PROFILE_TEMPLATE.md)
+- Network → [NETWORK_PROFILE_TEMPLATE.md](profiles/NETWORK_PROFILE_TEMPLATE.md)
+
+## Rules
+
+Each profile type has a rules file with GOOD/BAD examples. Read the applicable rules file during `/verify` and `/improve`:
+- Person → [PERSONAL_PROFILE_RULES.md](profiles/PERSONAL_PROFILE_RULES.md)
+- Company → [COMPANY_PROFILE_RULES.md](profiles/COMPANY_PROFILE_RULES.md)
+- Organization → [ORGA_PROFILE_RULES.md](profiles/ORGA_PROFILE_RULES.md)
+- Network → [NETWORK_PROFILE_RULES.md](profiles/NETWORK_PROFILE_RULES.md)
 
 **Depth tier selection** (set in template header):
 - **FULL**: Primary research subject, standalone analysis

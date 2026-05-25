@@ -135,12 +135,19 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Verify against @skills:write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
 
 **Profile-specific checks** (when Domain is PROFILE):
-- Verify depth tier is set and sections match tier (BRIEF profiles should not have all sections filled)
-- Verify `[SENSITIVE]` tags include safe alternative angle
-- Verify cross-references use `(see [TOPIC]-IN[NN])` format, not duplicated content
-- Verify career/timeline dates are consistent across sections (Career Timeline vs Current Occupation vs Company Factsheets)
-- Verify Engagement Strategy contains at least one concrete, actionable recommendation
-- Verify source recency - flag profiles where all sources are older than 12 months
+- Read the applicable rules file from @skills:deep-research `profiles/` subfolder:
+  - Person: `PERSONAL_PROFILE_RULES.md` (PP-* rules)
+  - Company: `COMPANY_PROFILE_RULES.md` (CP-* rules)
+  - Organization: `ORGA_PROFILE_RULES.md` (OP-* rules)
+  - Network: `NETWORK_PROFILE_RULES.md` (NP-* rules)
+- Verify against ALL rules in the applicable file
+- Key checks (common across all profile types):
+  - Depth tier set and sections match tier
+  - `[SENSITIVE]` tags include safe alternative angle
+  - Cross-references use `(see [TOPIC]-IN[NN])` format, not duplicated content
+  - Dates consistent across sections
+  - Engagement Strategy contains at least one concrete, actionable recommendation
+  - Source recency - flag profiles where all sources are older than 12 months
 
 ## Specifications (SPEC)
 

@@ -312,6 +312,14 @@ Detection: determine context from file naming and content, then apply matching s
 **Integration**: New findings marked `[IMPROVED]`, challenged claims marked `[CHALLENGED]`. Update Sources section and Document History.
 
 **Profile-specific enrichment** (when Domain is PROFILE, in addition to above):
+
+Read the applicable rules file from @skills:deep-research `profiles/` subfolder for focused improvement targets:
+- Person: `PERSONAL_PROFILE_RULES.md` (PP-* rules) - focus on PP-NW (networking), PP-TP (topics), PP-CH (character)
+- Company: `COMPANY_PROFILE_RULES.md` (CP-* rules) - focus on CP-EN (engagement), CP-AS (assessment), CP-FN (financial)
+- Organization: `ORGA_PROFILE_RULES.md` (OP-* rules) - focus on OP-EN (engagement), OP-MB (membership), OP-PG (programs)
+- Network: `NETWORK_PROFILE_RULES.md` (NP-* rules) - focus on NP-FC (focus), NP-VF (value flow), NP-EN (entry)
+
+Enrichment techniques:
 1. **Mutual connection mapping** - Search for shared contacts, overlapping tenures, common event attendance between subject and requester
 2. **Career pattern analysis** - Identify moves revealing strategy (upward, lateral, entrepreneurial, returning)
 3. **Publication/speaking trail** - Find talks, papers, podcasts revealing current thinking and interests
