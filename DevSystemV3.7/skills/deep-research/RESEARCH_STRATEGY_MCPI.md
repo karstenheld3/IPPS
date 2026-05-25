@@ -22,7 +22,7 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 
 - Create `__STRUT_[TOPIC].md` using `/write-strut` workflow
 - STRUT defines: phases, objectives, steps, deliverables, transitions
-- STRUT enforces 3 VCRIV checkpoints as deliverables
+- STRUT enforces 3 VCRIV gate deliverables (Preflight, Planning, Final) + per-file VCRIV during research = 4 checkpoints total per SKILL.md
 - STRUT MUST include quality pipeline steps and time log:
   ```
   ## Time Log
@@ -73,9 +73,9 @@ Before collecting sources, test each discovery platform from Q7:
   - Release notes and changelogs for version-specific behavior
 - **Community source rule**: Community sources supplement official docs, not replace. Use for limitations, quirks, gotchas. **Filter to match [SUBJECT] version** - discard outdated issues.
 - **Source collection using domain-specific tiers**: Use tiers from the active domain profile. Default: official documentation > vendor content > community/analyst sources.
-- Assign source IDs: `[TOPIC]-SC-[SOURCE]-[DOCNAME]` (per SKILL.md format)
-  - Official: `[TOPIC]-SC-[VENDOR]-[DOCNAME]`
-  - Community: `[TOPIC]-SC-[PLATFORM]-[DOCNAME]` (e.g., `GRPH-SC-SO-RATELIMIT`)
+- Assign source IDs: `[TOPIC]-SC-[SOURCE]-[DOCREF]` (per SKILL.md format)
+  - Official: `[TOPIC]-SC-[VENDOR]-[DOCREF]`
+  - Community: `[TOPIC]-SC-[PLATFORM]-[DOCREF]` (e.g., `GRPH-SC-SO-RATELMT`)
 - Group sources by category (domain-specific)
 - Include "Related" section listing similar or easily confused alternatives
 - **Source processing**: Process all PDF sources through transcription pipeline. Read `deep-research-config.json` for settings.

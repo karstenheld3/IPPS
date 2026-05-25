@@ -46,14 +46,14 @@
 - Key item 1
 - Key item 2
 - Key item 3
-**Sources**: [TOPIC]-IN03-SC-[SOURCE]-[DOCNAME]
+**Sources**: [TOPIC]-SC-[SOURCE]-[DOCREF]
 
 ### Topic: [Name2]
 **Scope**: What this topic covers
 **Contents**:
 - Key item 1
 - Key item 2
-**Sources**: [TOPIC]-IN04-SC-[SOURCE]-[DOCNAME]
+**Sources**: [TOPIC]-SC-[SOURCE]-[DOCREF]
 
 ## Document History
 

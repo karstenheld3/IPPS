@@ -28,7 +28,7 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 
 - Create `__STRUT_[TOPIC].md` using `/write-strut` workflow
 - STRUT defines: phases, objectives, steps, deliverables, transitions
-- STRUT enforces 3 VCRIV checkpoints as deliverables
+- STRUT enforces 3 VCRIV gate deliverables (Preflight, Planning, Final) + per-file VCRIV during research = 4 checkpoints total per SKILL.md
 - STRUT MUST include quality pipeline steps and time log
 - **Domain identification**:
   1. Determine research domain from prompt context
@@ -57,7 +57,7 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 - Collect **5-10 sources per dimension** (focus on top-tier sources first)
 - Skip exhaustive community source collection
 - Use source tiers from active domain profile. Default: official documentation > vendor content > community/analyst sources.
-- Assign source IDs: `[TOPIC]-SC-[SOURCE]-[DOCNAME]`
+- Assign source IDs: `[TOPIC]-SC-[SOURCE]-[DOCREF]`
 - Group sources by category (domain-specific)
 - Process all PDF sources through transcription pipeline
 - **Done when**: 5-10 quality sources per dimension, all with IDs, PDFs transcribed

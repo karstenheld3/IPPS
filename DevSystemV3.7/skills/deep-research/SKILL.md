@@ -255,4 +255,7 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 
 **Decomposition rule**: Both MCPI and MEPI decompose topics into individually researched files. No monolithic single-file research. The Summary file is finalized in Phase 4 with cross-document synthesis after all topic files are complete.
 
-**Source ID format**: `[TOPIC]-SC-[SOURCE]-[DOCNAME]`
+**Source ID format**: `[TOPIC]-SC-[SOURCE]-[DOCREF]`
+- `[SOURCE]` = site mnemonic 2-6 chars (e.g., `MSFT`, `SO`, `GH`)
+- `[DOCREF]` = page/section 2-12 chars, omit vowels (e.g., `RATELMT`, `ISSUE1234`)
+- Note: Simplified from devsystem-ids.md `[TOPIC]-[DOC]-SC-...` format. The `[DOC]` segment is omitted because all sources are defined in `_INFO_[TOPIC]-02_Sources.md` (always IN02).

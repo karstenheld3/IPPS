@@ -2,12 +2,12 @@
 
 Global workflow for creating Table of Contents in deep research. Used by all research strategies.
 
-**MUST use when**: Research produces more than 1 topic file. The TOC is a working document (`__` prefix) that becomes the skeletal Summary file in Phase 4.
+**MUST use when**: Research produces more than 1 topic file. The TOC is a working document (`__` prefix) used during Phase 2 planning to structure topics before research begins. It is consumed by RESEARCH_CREATE_SUMMARY.md to build the final Summary file.
 
 ## Prerequisites
 
-- `__[SUBJECT]_SOURCES.md` exists with all sources collected and IDs assigned
-- [SUBJECT] identifier defined (2-6 uppercase chars, e.g., `MSGRAPH`, `OAIAPI`)
+- `_INFO_[TOPIC]-02_Sources.md` exists with all sources collected and IDs assigned
+- [TOPIC] identifier defined (2-6 uppercase chars, e.g., `MSGRAPH`, `OAIAPI`)
 - Full subject name defined (e.g., "Microsoft Graph API")
 
 ## Workflow
@@ -20,7 +20,7 @@ Global workflow for creating Table of Contents in deep research. Used by all res
 3. **Create categories**: Group topics logically from sources
 4. **List topic files**: One entry per topic with clickable link, Doc ID, and brief description
    - Format: `[\`_INFO_[TOPIC]-[NN]_[Name].md\`](./_INFO_[TOPIC]-[NN]_[Name].md) [TOPIC-IN[NN]]`
-   - NN = sequential number (01, 02, 03...), PascalCase for [Name]
+   - NN = sequential number starting at 03 (01=Summary, 02=Sources), PascalCase for [Name]
 5. **Add Topic Count section**: Summary of total and per-category counts
 6. **Write Topic Details**: For each topic add Scope, Contents, Sources
 7. **Add Related**: List related/competing technologies with URLs
@@ -30,8 +30,8 @@ Global workflow for creating Table of Contents in deep research. Used by all res
 
 ## File Naming
 
-Output: `__[SUBJECT]_TOC.md` (double underscore = master document)
-Doc ID: `[SUBJECT]-TOC` (not numbered)
+Output: `__[TOPIC]_TOC.md` (double underscore = scaffolding document, deleted after Summary creation)
+Doc ID: `[TOPIC]-TOC` (not numbered)
 
 ## Structure Rules
 
@@ -43,8 +43,8 @@ Doc ID: `[SUBJECT]-TOC` (not numbered)
 ## Quality Gates
 
 **Done when**:
-- All sources from `__[SUBJECT]_SOURCES.md` covered
-- Doc ID is `[SUBJECT]-TOC` (not numbered)
+- All sources from `_INFO_[TOPIC]-02_Sources.md` covered
+- Doc ID is `[TOPIC]-TOC` (not numbered)
 - Summary is 5-15 sentences
 - All topic links follow format: `[\`_INFO_[TOPIC]-[NN]_[Name].md\`](./_INFO_[TOPIC]-[NN]_[Name].md) [TOPIC-IN[NN]]`
 - Topic Count section present with per-category breakdown
@@ -53,5 +53,5 @@ Doc ID: `[SUBJECT]-TOC` (not numbered)
 
 ## Example
 
-Input: `__OAIAPI_SOURCES.md` with 79 sources
+Input: `_INFO_OAIAPI-02_Sources.md` with 79 sources
 Output: `__OAIAPI_TOC.md` with 62 topics in 16 categories
