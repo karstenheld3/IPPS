@@ -34,9 +34,9 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
   ```
 - **Domain identification**:
   1. Determine research domain from prompt context
-  2. Read corresponding `DOMAIN_*.md` profile (if available)
+  2. Read corresponding `[domain]/DOMAIN_*.md` profile (if available)
   3. Incorporate domain-specific rules (source tiers, document handling, template additions, quality criteria)
-  4. If no matching profile, use DOMAIN_DEFAULT.md and document in STRUT
+  4. If no matching profile, use `default/DOMAIN_DEFAULT.md` and document in STRUT
 - STRUT MUST include the active domain profile and its rules
 - Answer 7 decomposition questions per SKILL.md, store PromptDecomposition in STRUT
 - Run `/verify` on STRUT plan

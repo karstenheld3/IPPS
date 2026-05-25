@@ -41,20 +41,20 @@ Common failures a fresh agent will encounter:
 ## Output Templates (Shared Module)
 
 The `profiles/` subfolder is a shared module used by ANY domain when researching entities (people, companies, organizations, networks). Select template based on subject type:
-- Person → [PERSONAL_PROFILE_TEMPLATE.md](profiles/PERSONAL_PROFILE_TEMPLATE.md)
-- Company → [COMPANY_PROFILE_TEMPLATE.md](profiles/COMPANY_PROFILE_TEMPLATE.md)
-- Organization → [ORGA_PROFILE_TEMPLATE.md](profiles/ORGA_PROFILE_TEMPLATE.md)
-- Network → [NETWORK_PROFILE_TEMPLATE.md](profiles/NETWORK_PROFILE_TEMPLATE.md)
+- Person → [PERSONAL_PROFILE_TEMPLATE.md](PERSONAL_PROFILE_TEMPLATE.md)
+- Company → [COMPANY_PROFILE_TEMPLATE.md](COMPANY_PROFILE_TEMPLATE.md)
+- Organization → [ORGA_PROFILE_TEMPLATE.md](ORGA_PROFILE_TEMPLATE.md)
+- Network → [NETWORK_PROFILE_TEMPLATE.md](NETWORK_PROFILE_TEMPLATE.md)
 
 **Cross-domain usage**: MARKET_INTEL researching a company, DEFAULT researching a person, LEGAL researching a regulatory body - all use these templates for entity-focused output.
 
 ## Rules
 
 Each profile type has a rules file with GOOD/BAD examples. Read the applicable rules file during `/verify` and `/improve`:
-- Person → [PERSONAL_PROFILE_RULES.md](profiles/PERSONAL_PROFILE_RULES.md)
-- Company → [COMPANY_PROFILE_RULES.md](profiles/COMPANY_PROFILE_RULES.md)
-- Organization → [ORGA_PROFILE_RULES.md](profiles/ORGA_PROFILE_RULES.md)
-- Network → [NETWORK_PROFILE_RULES.md](profiles/NETWORK_PROFILE_RULES.md)
+- Person → [PERSONAL_PROFILE_RULES.md](PERSONAL_PROFILE_RULES.md)
+- Company → [COMPANY_PROFILE_RULES.md](COMPANY_PROFILE_RULES.md)
+- Organization → [ORGA_PROFILE_RULES.md](ORGA_PROFILE_RULES.md)
+- Network → [NETWORK_PROFILE_RULES.md](NETWORK_PROFILE_RULES.md)
 
 **Standalone vs inlined**: Only FULL profiles become standalone documents. Supporting entities (relevant connections, past employers, peripheral mentions) are inlined within the parent profile's sections (e.g., Related Company Factsheets, Inner Circle, Career Timeline). Never create a standalone document for an entity that is not the primary research subject.
 

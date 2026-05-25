@@ -32,9 +32,9 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 - STRUT MUST include quality pipeline steps and time log
 - **Domain identification**:
   1. Determine research domain from prompt context
-  2. Read corresponding `DOMAIN_*.md` profile (if available)
+  2. Read corresponding `[domain]/DOMAIN_*.md` profile (if available)
   3. Incorporate domain-specific rules
-  4. If no matching profile, use DOMAIN_DEFAULT.md and document in STRUT
+  4. If no matching profile, use `default/DOMAIN_DEFAULT.md` and document in STRUT
 - STRUT MUST include the active domain profile and its rules
 - Answer 7 decomposition questions per SKILL.md, store PromptDecomposition in STRUT
 - At Q5: Confirm MEPI. Switch to MCPI if high-stakes discovered.

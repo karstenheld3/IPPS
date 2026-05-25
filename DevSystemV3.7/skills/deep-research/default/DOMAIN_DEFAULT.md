@@ -58,7 +58,7 @@ Add these sections to research output template:
 - **Recommendations** - Clear actionable guidance (even if brief)
 - **Source Access Dates** - When each source was accessed
 
-**Profile templates**: When researching a specific entity (person, company, organization, network) as primary subject, use templates from the shared `profiles/` module. See [DOMAIN_PROFILES.md](DOMAIN_PROFILES.md) for template selection and rules.
+**Profile templates**: When researching a specific entity (person, company, organization, network) as primary subject, use templates from the shared `profiles/` module. See [DOMAIN_PROFILES.md](../profiles/DOMAIN_PROFILES.md) for template selection and rules.
 
 ## Quality Criteria
 

@@ -196,11 +196,11 @@ Referenced files MUST exist in `_SOURCES/` subfolder (transcribed markdown).
 ## Domain Profiles
 
 Read one profile per session based on Q6:
-- [DOMAIN_SOFTWARE.md](DOMAIN_SOFTWARE.md) - APIs, frameworks, libraries
-- [DOMAIN_MARKET_INTEL.md](DOMAIN_MARKET_INTEL.md) - Companies, financials
-- [DOMAIN_LEGAL.md](DOMAIN_LEGAL.md) - Legislation, case law
-- [DOMAIN_PROFILES.md](DOMAIN_PROFILES.md) - People, companies, organizations, networks
-- [DOMAIN_DEFAULT.md](DOMAIN_DEFAULT.md) - Generic (use when none match)
+- [DOMAIN_SOFTWARE.md](software/DOMAIN_SOFTWARE.md) - APIs, frameworks, libraries
+- [DOMAIN_MARKET_INTEL.md](market-intel/DOMAIN_MARKET_INTEL.md) - Companies, financials
+- [DOMAIN_LEGAL.md](legal/DOMAIN_LEGAL.md) - Legislation, case law
+- [DOMAIN_PROFILES.md](profiles/DOMAIN_PROFILES.md) - People, companies, organizations, networks
+- [DOMAIN_DEFAULT.md](default/DOMAIN_DEFAULT.md) - Generic (use when none match)
 
 ## Output Format
 
@@ -227,7 +227,7 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 - [RESEARCH_SUMMARY_TEMPLATE.md](RESEARCH_SUMMARY_TEMPLATE.md) - Summary file template
 - [RESEARCH_CREATE_SUMMARY.md](RESEARCH_CREATE_SUMMARY.md) - Summary creation workflow
 
-**Profile Templates and Rules** (in `profiles/` subfolder, see [DOMAIN_PROFILES.md](DOMAIN_PROFILES.md) for full instructions):
+**Profile Templates and Rules** (in `profiles/` subfolder, see [DOMAIN_PROFILES.md](profiles/DOMAIN_PROFILES.md) for full instructions):
 - [PERSONAL_PROFILE_TEMPLATE.md](profiles/PERSONAL_PROFILE_TEMPLATE.md) + [PERSONAL_PROFILE_RULES.md](profiles/PERSONAL_PROFILE_RULES.md)
 - [COMPANY_PROFILE_TEMPLATE.md](profiles/COMPANY_PROFILE_TEMPLATE.md) + [COMPANY_PROFILE_RULES.md](profiles/COMPANY_PROFILE_RULES.md)
 - [ORGA_PROFILE_TEMPLATE.md](profiles/ORGA_PROFILE_TEMPLATE.md) + [ORGA_PROFILE_RULES.md](profiles/ORGA_PROFILE_RULES.md)
