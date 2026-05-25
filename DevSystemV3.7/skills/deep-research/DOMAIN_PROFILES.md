@@ -18,6 +18,18 @@ Research domain for people, companies, organizations, and networks. Produces str
 
 **Tier 4 special rule**: All tier 4 findings MUST be labeled `[ASSUMED]`. Never present inferred information as fact.
 
+## Gotchas
+
+Common failures a fresh agent will encounter:
+
+1. **LinkedIn requires authentication** - `@skills:ms-playwright-mcp` must use a logged-in browser session. Anonymous scraping returns partial data or login walls. Always verify profile access before starting extraction.
+2. **Common name disambiguation** - "Thomas Mueller" returns hundreds of profiles. Use company + location + tenure dates to confirm identity. When uncertain, mark `[ASSUMED - based on company match]`.
+3. **Source decay** - Social media posts, company pages, and news articles disappear. Screenshot critical sources immediately. Store in `_SOURCES/` with access date.
+4. **Research order for multi-profile sets** - Research companies/organizations BEFORE people. Company context helps interpret career moves, role significance, and reporting structures.
+5. **Tier selection timing** - Decide depth tier during Preflight (Phase 1) based on subject's relationship to research requester: direct relationship = FULL, relevant connection = STANDARD, mentioned in passing = BRIEF.
+6. **GDPR for EU subjects** - Only use publicly available information. Do not attempt to access private databases, leaked data, or non-public social media content.
+7. **Profile information half-life** - Career data decays within months (job changes, title changes). Always note data capture date. Flag any profile where newest source is >6 months old.
+
 ## Document Handling
 
 - **LinkedIn**: Primary source for personal profiles. Use `@skills:ms-playwright-mcp` to capture full profile (requires login). Store screenshot + extracted text in `_SOURCES/`
