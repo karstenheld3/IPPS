@@ -115,6 +115,7 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 
 - **STRUT required** for all research sessions (include pipeline steps and time log)
 - **Assumptions check first** - write down what you think you know before researching
+- **Google search via Playwright** - MANDATORY for all research. Use ms-playwright-mcp to search google.com with targeted queries (filetype:pdf, site:, exact phrases). Discovers PDFs, whitepapers, and public documents that `search_web` misses.
 - **Discovery platforms tested** - identify, test, classify (FREE/PAID/PARTIAL) before source collection
 - **Primary sources > secondary > community** - verify tier 1-3 before accepting tier 6-8
 - **Access dates required**: `Accessed: YYYY-MM-DD` on all sources

@@ -63,6 +63,12 @@ Before collecting sources, test each discovery platform from Q7:
 
 - **Document version scope**: Explicitly state the [SUBJECT] version (e.g., `v2.1.0`, `API v3`). If not applicable, use date: `YYYY-MM-DD`
 - Create `_INFO_[TOPIC]-02_Sources.md`
+- **MANDATORY: Google search via Playwright** (ms-playwright-mcp). Navigate to google.com and run targeted queries:
+  - `"[SUBJECT]" filetype:pdf` - Find whitepapers, specs, official PDFs
+  - `"[SUBJECT]" site:[official-domain]` - Exhaustive official content
+  - `"[SUBJECT]" [dimension keyword]` - Per-dimension discovery
+  - Collect PDF URLs, documentation pages, and public resources from results
+  - Download discovered PDFs to `_DOWNLOADS_gitignore/`
 - **Query selected discovery platforms** from Step 3 first
 - Collect ALL official documentation URLs from vendor/project documentation
 - Collect community sources (secondary sources) for real-world insights:

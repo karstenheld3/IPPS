@@ -75,11 +75,6 @@ Apply to ALL document types and contexts:
   - Bold for emphasis on key terms, framework names, or important concepts is acceptable
   - The "no bold" rule applies only to LLM-consumed skill resource files (see Skills section)
   - Do not strip formatting that aids human scanning and comprehension
-- **No project-specific data in reusable files** - Skills, workflows, rules, and templates are reused across projects:
-  - Scan for person names, company names, city names, industry-specific terms in examples and placeholders
-  - Found? → Replace with generic placeholders: `[Person A]`, `[Company X]`, `[City]`, `[industry]`
-  - Domain-neutral terms (SaaS, WhatsApp, LinkedIn) are acceptable as generic examples
-  - Applies to: `[AGENT_FOLDER]/skills/` (including templates), `[AGENT_FOLDER]/workflows/`, `[AGENT_FOLDER]/rules/`
 - **Labels decodable at point of use (AP-PR-11)** - Scan for bracket labels with 1-2 characters:
   - Exempt: `[x]`/`[ ]` checkboxes, `[N]` retry counts
   - Exempt: Established system labels: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`
@@ -138,21 +133,6 @@ Apply these labels to findings, requirements, and decisions in all document type
 - Read `[AGENT_FOLDER]/workflows/research.md` again and verify against instructions.
 - Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
 - Verify against @skills:write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
-
-**Profile-specific checks** (when Domain is PROFILE):
-- Read the applicable rules file from @skills:deep-research `profiles/` subfolder:
-  - Person: `PERSONAL_PROFILE_RULES.md` (PP-* rules)
-  - Company: `COMPANY_PROFILE_RULES.md` (CP-* rules)
-  - Organization: `ORGA_PROFILE_RULES.md` (OP-* rules)
-  - Network: `NETWORK_PROFILE_RULES.md` (NP-* rules)
-- Verify against ALL rules in the applicable file
-- Key checks (common across all profile types):
-  - All sections filled (standalone profiles are always FULL, no empty sections - document gaps in Research Gaps)
-  - `[SENSITIVE]` tags include safe alternative angle
-  - Cross-references use `(see [TOPIC]-IN[NN])` format, not duplicated content
-  - Dates consistent across sections
-  - Engagement Strategy contains at least one concrete, actionable recommendation
-  - Source recency - flag profiles where all sources are older than 12 months
 
 ## Specifications (SPEC)
 

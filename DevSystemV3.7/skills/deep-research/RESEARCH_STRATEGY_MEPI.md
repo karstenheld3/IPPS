@@ -53,6 +53,12 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 
 - **Document version scope**: Explicitly state the [SUBJECT] version (e.g., `v2.1.0`, `API v3`). If not applicable, use date: `YYYY-MM-DD`
 - Create `_INFO_[TOPIC]-02_Sources.md`
+- **MANDATORY: Google search via Playwright** (ms-playwright-mcp). Navigate to google.com and run targeted queries:
+  - `"[SUBJECT]" filetype:pdf` - Find whitepapers, specs, official PDFs
+  - `"[SUBJECT]" site:[official-domain]` - Official content discovery
+  - `"[SUBJECT]" [dimension keyword]` - Per-dimension discovery
+  - Collect PDF URLs, documentation pages, and public resources from results
+  - Download discovered PDFs to `_DOWNLOADS_gitignore/`
 - **Classify discovery platforms** from Q7 as FREE/PAID/PARTIAL; use FREE and PARTIAL, note PAID for user follow-up
 - Collect **5-10 sources per dimension** (focus on top-tier sources first)
 - Skip exhaustive community source collection

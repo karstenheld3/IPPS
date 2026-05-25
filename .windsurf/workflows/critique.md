@@ -173,14 +173,6 @@ When called without specific document, review the entire conversation:
 - What changed since document was written?
 - Are version numbers and dates still accurate?
 
-**For PROFILE documents** (Domain is PROFILE, in addition to INFO checks):
-- Is the depth tier appropriate for the subject's relevance?
-- Are hidden value claims (network analysis) supported by observable patterns, or pure speculation?
-- Does the Engagement Strategy assume access that doesn't exist?
-- Are sensitive topics flagged with safe alternative angles?
-- Is there information that could embarrass the requester if the subject discovered the profile?
-- Are career dates consistent across Career Timeline, Current Occupation, and Related Company Factsheets?
-
 **For SPEC documents**:
 - What happens when [X] fails? (for every external dependency)
 - What happens with invalid input? Empty input? Huge input?

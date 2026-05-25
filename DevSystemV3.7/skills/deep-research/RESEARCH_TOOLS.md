@@ -27,12 +27,42 @@
 
 ## When to Use Each Tool
 
-### Primary: Built-in Tools (Default)
+### MANDATORY: Google Search via Playwright (ms-playwright-mcp)
 
-**Start with these for all research:**
+**Every research session MUST include targeted Google searches via Playwright.** This is not optional - `search_web` alone misses PDFs, whitepapers, and niche public documents.
 
 ```
-search_web → find sources
+ms-playwright-mcp → navigate to google.com
+     ↓
+Run targeted queries:
+  "[SUBJECT]" filetype:pdf
+  "[SUBJECT]" site:[official-domain]
+  "[SUBJECT]" [dimension keyword]
+     ↓
+Collect PDF URLs, doc pages, public resources
+     ↓
+Download PDFs to _DOWNLOADS_gitignore/
+```
+
+**Query patterns:**
+- `"Microsoft Graph" filetype:pdf` - Official whitepapers, specs
+- `"SOC 2 compliance" filetype:pdf site:aicpa.org` - Domain-specific PDFs
+- `"[subject] architecture" OR "design document" filetype:pdf` - Technical docs
+- `"[subject]" site:github.com` - Repos, wikis, discussions
+- `"[subject] [year]" filetype:pdf` - Recent publications
+
+**Why Playwright instead of `search_web`:**
+- `search_web` returns summarized results, may miss direct PDF links
+- Playwright shows actual Google results including file type indicators
+- Can paginate through results for comprehensive discovery
+- Can follow links to verify PDF accessibility before adding to sources
+
+### Primary: Built-in Tools (Supplementary)
+
+**Use alongside Google search via Playwright:**
+
+```
+search_web → quick discovery (supplements Playwright Google search)
      ↓
 read_url_content → fetch content
      ↓
@@ -42,8 +72,8 @@ Fail? → Escalate to Playwright
 ```
 
 **Use `search_web` when:**
-- Starting research, need to discover sources
-- Looking for official documentation URLs
+- Quick supplementary searches during research
+- Looking for official documentation URLs already known to exist
 - Finding GitHub repos, blog posts, Stack Overflow
 
 **Use `read_url_content` when:**
