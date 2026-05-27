@@ -113,9 +113,10 @@ your-project/
 
 ## DevSystem Versions
 
-- **[DevSystemV3.7](DevSystemV3.7/)** - Current system
+- **[DevSystemV3.8](DevSystemV3.8/)** - Current system
 
 Older versions in [`_OldDevSystemVersions/`](_OldDevSystemVersions/):
+- DevSystemV3.7 - Deep research profiles, translation workflow, recap/continue removal, cleanup workflow
 - DevSystemV3.6 - SOCAS quality criteria, 4-phase /improve workflow, NFR in SPEC, STRUT self-tracking
 - DevSystemV3.5 - Generic /fix workflow, improved /implement and /go workflows
 - DevSystemV3.4 - Enhanced logging rules, table formatting, character rules cleanup
@@ -507,12 +508,12 @@ Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.
 ```
 IPPS/
 ├── ../.tools/                    # Shared tool installations (parent folder)
-├── .windsurf/                    # Active agent configuration (synced from DevSystemV3.7)
+├── .windsurf/                    # Active agent configuration (synced from DevSystemV3.8)
 │   ├── rules/
 │   ├── workflows/
 │   └── skills/
-├── _OldDevSystemVersions/        # Previous DevSystem versions (V1 through V3.6)
-├── DevSystemV3.7/                # Current system (source of truth)
+├── _OldDevSystemVersions/        # Previous DevSystem versions (V1 through V3.7)
+├── DevSystemV3.8/                # Current system (source of truth)
 │   ├── rules/
 │   │   ├── agent-behavior.md     # Agent execution patterns and communication
 │   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions

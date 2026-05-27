@@ -385,6 +385,11 @@ Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `
 - `workflows/fail.md` - Record failures to FAILS.md
 - `workflows/learn.md` - Extract learnings from failures
 
+### V3.7 → V3.8 Migration (Removed Workflows)
+
+- `workflows/recap.md` → removed (logic inlined into `workflows/go.md` Step 2: Assess State)
+- `workflows/continue.md` → removed (logic inlined into `workflows/go.md` Step 4: Execute Next)
+
 **If a file is NOT on the deprecated list:** Do NOT delete it. It is a custom repo-specific file.
 
 ## OpenClaw-Specific Files
