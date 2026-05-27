@@ -14,7 +14,7 @@ Key findings for cross-agent compatibility:
 - Hooks in `.windsurf/hooks.json` or `~/.codeium/windsurf/hooks.json` [VERIFIED]
 - Memories auto-generated during conversation, workspace-scoped [VERIFIED]
 - Model switching preserves full context; model fixed per response, change takes effect on next turn [TESTED]
-- Smaller context window: earlier messages dropped/summarized automatically without warning [VERIFIED]
+- Smaller context window: earlier messages dropped/summarized automatically without warning [VERIFIED] 
 - Different providers (Claude/GPT/SWE): Cascade abstracts differences, transparent switching [VERIFIED]
 - Arena Mode: side-by-side model comparison with battle groups and leaderboards [VERIFIED 2026-03]
 - Plan Mode: dedicated mode for implementation planning before coding [VERIFIED 2026-03]

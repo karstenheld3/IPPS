@@ -212,17 +212,15 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 - `/build` - BUILD workflow entry point (code output)
 - `/bugfix` - Record and fix bugs (SESSION-MODE or PROJECT-MODE)
 - `/commit` - Create conventional commits
-- `/continue` - Execute next items on plan
 - `/conversation-start` - Create new conversation tracking file
 - `/conversation-update` - Update existing conversation tracking file
 - `/critique` - Devil's Advocate review
 - `/fail` - Record failures to FAILS.md
-- `/go` - Autonomous loop (recap + continue until done)
+- `/go` - Autonomous loop until goal reached
 - `/implement` - Execute implementation from plan
 - `/learn` - Extract learnings from resolved problems
 - `/partition` - Split plans into discrete tasks
 - `/prime` - Load workspace context
-- `/recap` - Analyze context, identify current status
 - `/reconcile` - Pragmatic review of critique findings
 - `/rename` - Global/local refactoring with verification
 - `/research` - Structured research with verification

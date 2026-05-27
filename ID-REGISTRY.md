@@ -172,9 +172,14 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **WS2DV** - Windsurf 2.0 and Devin (deep research on Windsurf 2.0 release features and Devin integration)
 - **FLCOR** - Fail Correction (cross-repo fails collection and analysis)
 - **WSWN** - What? So What? Now What? (reflective framework deep research, Borton/Driscoll/Rolfe)
+- **CSMP** - Cascade Metaprompt (AI coding assistant metaprompt extraction and analysis)
+- **NTICP** - Network Traffic Interception (programmatic HTTPS interception for LLM prompt extraction)
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 
 ## Document History
+
+**[2026-05-27 12:49]**
+- Added: CSMP topic (Cascade Metaprompt extraction and analysis)
 
 **[2026-05-25 14:44]**
 - Added: DRPRF topic (Deep Research Profile Templates)

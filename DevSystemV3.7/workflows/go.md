@@ -90,12 +90,38 @@ Goal already reached. No further work needed.
 ```
 Stop. Do not re-verify on subsequent `/go` calls.
 
-## Step 2: Recap
+## Step 2: Assess State
 
-Run `/recap` to determine:
-- Last completed action
-- Current state
-- Any blockers
+**Topic Folder Detection:** Run @skills:session-management **Topic Folder Detection** procedure first. If in `T##_*` folder, read both parent and topic folder tracking docs.
+
+**Mandatory re-read:**
+
+**SESSION-MODE** - Re-read session folder documents:
+- NOTES.md
+- PROBLEMS.md
+- PROGRESS.md
+- FAILS.md
+- LEARNINGS.md (if exists)
+
+**PROJECT-MODE** - Re-read workspace-level documents:
+- README.md
+- !NOTES.md or NOTES.md
+- !PROBLEMS.md or PROBLEMS.md (if exists)
+- !PROGRESS.md or PROGRESS.md (if exists)
+- FAILS.md
+- LEARNINGS.md (if exists)
+
+Then read plan documents (improvise if missing):
+- `_SPEC_*.md` - What we're building
+- `_IMPL_*.md` - How we're building
+- `_TEST_*.md` - How we verify
+- `_TASKS_*.md` / `__TASKS_*.md` - Partitioned work items
+
+**Determine exact position:**
+1. **Current phase** - Which of the 5 phases?
+2. **Current document** - Which plan are we executing?
+3. **Current task** - Which item in TASKS (or IMPL step)?
+4. **Task status** - Checked or unchecked?
 
 ## Step 3: Pre-Flight Check
 
@@ -104,12 +130,21 @@ Run `/recap` to determine:
 3. Make internal MUST-NOT-FORGET list from conversation and plan documents
 4. List all scripts and skills needed for task completion
 
-## Step 4: Execute
+## Step 4: Execute Next
 
-Run `/continue` to:
-- Execute next task from plan
-- Update progress tracking document
-- Check for completion
+Build execution sequence from tracking documents:
+
+1. **Analyze conversation context** - Check for queued workflows, successor workflows, explicit user instructions
+2. **Check session lifecycle state** (SESSION-MODE) - If resuming, check NOTES.md "Workflows to Run on Resume"
+3. **Check progress and tasks** - Read PROGRESS.md for unchecked items, read TASKS/IMPL for next step
+4. **Merge into execution sequence** - Workflow succession before task execution
+
+Execute first item:
+- **If session lifecycle workflow** (`/session-finalize`, `/session-archive`): Hard stop, escalate to user
+- **If other workflow** (starts with `/`): Execute, remove from sequence
+- **If task**: Execute, update PROGRESS.md / TASKS (mark as Done)
+
+If sequence is empty: Report "No pending work" and STOP.
 
 ## Step 5: Loop
 
@@ -117,8 +152,8 @@ Run `/continue` to:
 iteration_count = 0
 WHILE goal not reached AND iteration_count < 10:
     iteration_count += 1
-    /recap
-    /continue
+    Assess State (Step 2)
+    Execute Next (Step 4)
 
     IF iteration_count % 5 == 0:
         Run multi-layer completion check (Step 1)
@@ -139,7 +174,7 @@ WHILE goal not reached AND iteration_count < 10:
         IF SCOPE:
             Split: implement what's in scope
             Create new task for out-of-scope part
-            Continue with next task
+            Execute next task
 
         IF blocker unresolved after alternatives:
             /write-info `.tmp_INFO_[BLOCKER].md` (root cause analysis)

@@ -636,14 +636,12 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ## Workflows Reference
 
-40 workflows in `.windsurf/workflows/`:
+38 workflows in `.windsurf/workflows/`:
 
 **Entry Points**
 - [`/build`](.windsurf/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
 - [`/solve`](.windsurf/workflows/solve.md) - Explore problems, evaluate ideas, make decisions (auto-creates session)
 - [`/go`](.windsurf/workflows/go.md) - Autonomous loop until goal reached
-- [`/continue`](.windsurf/workflows/continue.md) - Forward-looking assessment, execute next items on plan
-- [`/recap`](.windsurf/workflows/recap.md) - Analyze context, revisit plan, identify current status
 - [`/prime`](.windsurf/workflows/prime.md) - Prime context with workspace files
 
 **Document Cycle**
@@ -757,7 +755,7 @@ Finalize session and sync findings:
 
 ### Autonomous Execution
 
-**Workflows:** [`/go`](.windsurf/workflows/go.md), [`/recap`](.windsurf/workflows/recap.md), [`/continue`](.windsurf/workflows/continue.md)
+**Workflow:** [`/go`](.windsurf/workflows/go.md)
 
 Run autonomous loop until goal reached:
 ```
@@ -765,8 +763,8 @@ Run autonomous loop until goal reached:
 ```
 
 The [`/go`](.windsurf/workflows/go.md) workflow cycles through:
-1. [`/recap`](.windsurf/workflows/recap.md) - Analyze context, identify current status
-2. [`/continue`](.windsurf/workflows/continue.md) - Execute next items on plan
+1. Assess state - read tracking docs, determine current position
+2. Execute next - build execution sequence, run next task
 3. Repeat until goal reached or blocker hit
 
 ### Document Cycle (INFO -> SPEC -> IMPL -> TEST -> TASKS)

@@ -93,7 +93,7 @@ No brackets for tokens in **conditions** - things the agent checks for branching
 - **[DEFINE]** - Establish clear definitions or criteria
 - **[RECAP]** - Analyze context, revisit plan, identify current status
 - **[CONTINUE]** - Forward-looking assessment, execute next items on plan
-- **[GO]** - Sequence of [RECAP] + [CONTINUE] until goal reached
+- **[GO]** - Autonomous loop: assess state, execute next task, repeat until done
 
 ### Validation and Proof
 
