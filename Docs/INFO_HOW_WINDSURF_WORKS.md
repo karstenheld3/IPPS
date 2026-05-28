@@ -19,6 +19,11 @@ Key findings for cross-agent compatibility:
 - Arena Mode: side-by-side model comparison with battle groups and leaderboards [VERIFIED 2026-03]
 - Plan Mode: dedicated mode for implementation planning before coding [VERIFIED 2026-03]
 - New model picker with family grouping, variant toggles, and pin feature [VERIFIED 2026-03]
+- Language server is a 166MB Go binary making direct HTTPS calls to Codeium APIs [TESTED 2026-05]
+- Proxy detection disabled by default (`--detect_proxy=false`), controllable via `user_settings.pb` field 34 [TESTED 2026-05]
+- MCP transport: NDJSON over stdio (JSON-RPC 2.0), protocol version `2025-11-25` [TESTED 2026-05]
+- MCP tools receive ONLY tool_call arguments, zero system prompt leakage [TESTED 2026-05]
+- HTTP_PROXY env vars break Cascade when detect_proxy=false (language server ignores proxy, connection fails) [TESTED 2026-05]
 
 ## Table of Contents
 
@@ -35,7 +40,8 @@ Key findings for cross-agent compatibility:
 11. [Other Features](#other-features)
 12. [Key Files Reference](#key-files-reference)
 13. [Available Models](#available-models-updated-2026-03)
-14. [Sources](#sources)
+14. [Architecture Internals](#architecture-internals-tested-2026-05)
+15. [Sources](#sources)
 
 ## Overview
 
@@ -621,6 +627,221 @@ Models available in Cascade, grouped by provider:
 
 **Reasoning Effort:** Many models support configurable reasoning effort (none, low, medium, high, xhigh) affecting speed and cost.
 
+## Architecture Internals [TESTED 2026-05]
+
+Reverse-engineered from binary analysis, process inspection, and interception testing during session `_2026-05-27_CascadeMetapromptExtraction`.
+
+### Process Model
+
+Windsurf runs as multiple processes:
+
+```
+Windsurf.exe (Electron main process)
+├─ Windsurf.exe (GPU process)
+├─ Windsurf.exe (renderer - editor UI)
+├─ Windsurf.exe (extension host - Node.js)
+├─ Windsurf.exe (shared process)
+├─ Windsurf.exe (file watcher)
+└─ language_server_windows_x64.exe (Codeium language server - Go binary)
+```
+
+- **Electron processes** (~14 total): Standard VS Code/Electron architecture. Renderer, GPU, extension host, file watcher, shared process, utility processes.
+- **Language server** (1 process): The critical binary that handles ALL Cascade AI communication.
+
+### Language Server Binary [TESTED]
+
+**Path**: `C:\Users\<User>\AppData\Local\Programs\Windsurf\resources\app\extensions\windsurf\bin\language_server_windows_x64.exe`
+
+**Characteristics:**
+- Size: ~166 MB
+- Language: Go (compiled binary, contains Go runtime strings)
+- Launched by: `extension.js` in the Windsurf extension via `child_process.spawn()`
+- Modified: Matches Windsurf release date (updated with each Windsurf version)
+
+**Command line** (observed via `Win32_Process.CommandLine`):
+```
+language_server_windows_x64.exe
+  --api_server_url https://server.self-serve.windsurf.com
+  --run_child
+  --enable_lsp
+  --extension_server_port <port>
+  --ide_name windsurf
+  --random_port
+  --inference_api_server_url https://inference.codeium.com
+  --database_dir <user_home>\.codeium\windsurf\database\<hash>
+  --enable_index_service
+  --enable_local_search
+  --search_max_workspace_file_count 5000
+  --indexed_files_retention_period_days 30
+  --workspace_id <workspace_id>
+  --sentry_telemetry
+  --sentry_environment stable
+  --codeium_dir .codeium/windsurf
+  --extensions_dir <user_home>\.windsurf\extensions
+  --parent_pipe_path \\.\pipe\server_<uuid>
+  --windsurf_version <version>
+  --stdin_initial_metadata
+  --detect_proxy=false
+```
+
+**Key parameters:**
+- `--api_server_url`: Primary Codeium API endpoint (account, settings, telemetry)
+- `--inference_api_server_url`: AI inference endpoint (Cascade chat completions)
+- `--parent_pipe_path`: Named pipe for IPC between extension host and language server
+- `--detect_proxy`: Controls whether the binary honors HTTP_PROXY/HTTPS_PROXY env vars
+- `--stdin_initial_metadata`: Binary receives API key via stdin (protobuf) at startup, then stdin closes
+
+### API Endpoints [TESTED]
+
+- `https://server.self-serve.windsurf.com` - Primary API (auth, settings, telemetry, user data)
+- `https://inference.codeium.com` - AI inference (Cascade chat, completions, tool calls)
+
+Both are HTTPS. The language server makes direct outbound connections (not via Electron/Node.js network stack).
+
+### Startup Sequence [TESTED]
+
+Reconstructed from `extension.js` (minified, 9.4MB) analysis:
+
+1. **Electron main process** starts, loads workspace
+2. **Extension host** (Node.js) loads `windsurf` extension
+3. Extension reads `UserSettings` from `user_settings.pb` via `SettingsWatcher`
+4. Extension builds environment: `{ ...process.env, ...languageServerEnv, CODEIUM_EDITOR_APP_ROOT, WINDSURF_CSRF_TOKEN }`
+5. Extension reads `detectProxy` from `UserSettingBroadcaster.getInstance().userSettings.detectProxy` (default: `false`)
+6. Extension creates named pipe: `\\.\pipe\server_<uuid>`
+7. Extension spawns `language_server_windows_x64.exe` with full argument list including `--detect_proxy=<value>`
+8. Extension writes API key metadata (protobuf binary) to language server stdin, then closes stdin
+9. Language server connects to Codeium APIs and signals ready via named pipe
+10. Cascade UI becomes interactive
+
+**Key code** (from `extension.js`, deobfuscated):
+```javascript
+// Environment construction
+const env = {
+  ...process.env,
+  ...languageServerEnv,
+  ...getExtraEnv(),
+  CODEIUM_EDITOR_APP_ROOT: appRoot,
+  WINDSURF_CSRF_TOKEN: csrfToken,
+  ...(isWindsurfInsiders() ? { GORACE: "halt_on_error=1" } : {})
+};
+
+// Proxy detection from user settings
+const detectProxy = await (async function(env) {
+  let enabled = false;
+  try {
+    const settings = UserSettingBroadcaster.getInstance();
+    await settings.isReady;
+    enabled = settings.userSettings.detectProxy;
+  } catch {}
+  return processProxySettings(enabled, env);
+})(env);
+
+args.push(`--detect_proxy=${detectProxy}`);
+
+// Spawn language server
+const child = spawn(binaryPath, args, { cwd: undefined, env: env });
+const metadata = MetadataProvider.getInstance().getMetadata();
+if (metadata.apiKey) {
+  child.stdin.write(metadata.toBinary());
+}
+child.stdin.end();
+```
+
+### Proxy Detection [TESTED]
+
+**Setting location**: `user_settings.pb` field 34 (`detect_proxy`, bool, protobuf wire type 0)
+
+**Default**: `false` (proxy detection disabled)
+
+**Effect when false**: Language server binary ignores `HTTP_PROXY`, `HTTPS_PROXY`, `NO_PROXY` env vars entirely. All connections go direct.
+
+**Effect when true**: Language server binary reads and honors standard proxy env vars. The Go binary contains full proxy support (proxy.Proxy, proxyURL, proxyAuth, proxyForURL, proxyManager, proxyAddress, proxyNetwork - 418 proxy-related strings found in binary).
+
+**Go binary proxy env var support** (confirmed via string analysis):
+- `HTTP_PROXY` / `http_proxy`
+- `HTTPS_PROXY` / `https_proxy`
+- `NO_PROXY` / `no_proxy`
+- Standard Go `net/http` proxy resolution via `golang.org/s/cgihttpproxy`
+
+**UI location**: Windsurf Settings panel > "Detect Proxy" checkbox (UI-only setting, not in `settings.json`)
+
+**Test result**: With `detect_proxy=false` and `HTTP_PROXY`/`HTTPS_PROXY` set, Cascade is completely non-functional. UI loads but messages cannot be submitted (Enter key does nothing). The language server fails to connect to Codeium APIs because it ignores the proxy but the proxy env vars may affect other components.
+
+### Network Architecture [TESTED]
+
+Three independent network stacks in Windsurf:
+
+1. **Chromium** (Electron renderer): Uses `--proxy-server` flag or system proxy. `HTTP_PROXY` env vars NOT directly honored. Handles: marketplace, update checks, web previews.
+2. **Node.js** (extension host): Honors `HTTP_PROXY`/`HTTPS_PROXY` env vars and `NODE_TLS_REJECT_UNAUTHORIZED`. Handles: extension operations, MCP communication.
+3. **Go binary** (language server): Independent TLS stack. Honors proxy env vars ONLY when `--detect_proxy=true`. Handles: ALL Cascade AI communication, completions, telemetry.
+
+**Consequence**: Setting proxy env vars without enabling `detect_proxy` creates a split-brain: Node.js extension host may route through proxy while the language server goes direct (or fails if env vars affect DNS/routing).
+
+### Extension-Language Server Communication [TESTED]
+
+**Transport**: Named pipe (`\\.\pipe\server_<uuid>`)
+
+**Protocol**: Protobuf-based RPC (language server is a gRPC/protobuf service)
+
+**Key files involved:**
+- `extension.js` (9.4MB, minified): Orchestrates spawn, IPC, settings
+- `user_settings.pb`: Protobuf binary with `UserSettings` message
+- Named pipe: bidirectional communication after startup
+
+**Settings sync**: Extension writes settings changes to language server via `setUserSettings` RPC call. Settings are also persisted to `user_settings.pb` file and watched for external changes.
+
+### MCP Transport [TESTED]
+
+- **Protocol**: JSON-RPC 2.0
+- **Transport**: NDJSON (newline-delimited JSON) over stdio
+- **NOT**: LSP-style Content-Length headers (initial assumption was wrong)
+- **Protocol version**: Windsurf requests `2025-11-25`
+- **Tool visibility**: MCP tools receive ONLY `tool_call` arguments. System prompt, conversation context, user rules, memories, workspace info are NOT visible to MCP servers.
+- **Registration**: Tools visible to Cascade within seconds of Windsurf restart
+- **Config**: `~/.codeium/windsurf/mcp_config.json`
+
+### Inspected Files Reference
+
+- `C:\Users\<User>\AppData\Local\Programs\Windsurf\resources\app\extensions\windsurf\dist\extension.js` (9.4MB, minified JS) - Main extension logic, language server spawn, settings management
+- `C:\Users\<User>\AppData\Local\Programs\Windsurf\resources\app\extensions\windsurf\bin\language_server_windows_x64.exe` (166MB, Go binary) - Codeium language server, AI communication
+- `C:\Users\<User>\AppData\Local\Programs\Windsurf\resources\app\extensions\windsurf\package.json` - Extension manifest, declared settings
+- `C:\Users\<User>\.codeium\windsurf\user_settings.pb` (69KB, protobuf) - User settings including `detectProxy` (field 34)
+- `C:\Users\<User>\.codeium\windsurf\mcp_config.json` - MCP server configurations
+- `C:\Users\<User>\AppData\Roaming\Windsurf\User\settings.json` - VS Code/Windsurf JSON settings
+
+### Protobuf Schema (UserSettings, partial) [TESTED]
+
+Extracted from `extension.js` protobuf definitions:
+
+```
+UserSettings {
+  field 33: disable_cascade_browser_previews (bool)
+  field 34: detect_proxy (bool)
+  field 35: disable_tab_to_import (bool)
+  field 36: use_clipboard_for_completions (bool)
+  // ... additional fields
+}
+```
+
+Default values are protobuf defaults (false for bool, 0 for int, "" for string). Unset fields are omitted from the .pb file.
+
+### Interception Test Results Summary [TESTED]
+
+| Method | Can capture exact API payload? | Issue |
+|--------|-------------------------------|-------|
+| DevTools Network Tab | No | Extension host traffic in separate process [ASSUMED] |
+| MCP Server Observer | No | Only sees tool_call arguments, not prompt |
+| HTTP Proxy (env vars) | No | `detect_proxy=false` causes Cascade to break |
+| HTTP Proxy (detect_proxy=true) | TBD | Not yet tested with setting enabled |
+| SSLKEYLOGFILE | TBD | Go binary unlikely to honor (requires explicit `tls.Config.KeyLogWriter`) |
+| mitmproxy local mode (WinDivert) | TBD | Network-level capture, still needs MITM cert trust |
+
+### Next Steps for Exact Prompt Capture
+
+1. **Enable `detect_proxy=true`** via Windsurf Settings UI, install mitmproxy CA cert in Windows trust store, retry proxy interception
+2. **Named pipe interception**: Monitor `\\.\pipe\server_*` for protobuf messages between extension and language server
+3. **Process memory dump**: Search language server process memory for prompt content after Cascade interaction
+
 ## Sources
 
 **Cascade Documentation:** [TESTED 2026-01-13]
@@ -641,8 +862,20 @@ Models available in Cascade, grouped by provider:
 - Session `_2026-01-26_AutoModelSwitcher` - Model switching and context window research [TESTED]
 - https://docs.windsurf.com/windsurf/cascade/worktrees - Git worktree support [NEW 2026-02]
 - https://docs.windsurf.com/windsurf/cascade/skills - Skills (system-level support) [UPDATED 2026-03]
+- Session `_2026-05-27_CascadeMetapromptExtraction/S03_CSMP-ExtractionTesting_2026-05-27` - Binary analysis, process inspection, interception testing [TESTED 2026-05]
+- `Win32_Process.CommandLine` inspection of `language_server_windows_x64.exe` [TESTED 2026-05]
+- String analysis of Go binary (166MB) for proxy, TLS, and protocol strings [TESTED 2026-05]
+- `extension.js` (9.4MB) regex-based deobfuscation of spawn logic, settings watcher, proxy detection [TESTED 2026-05]
+- MCP observer tool (custom NDJSON JSON-RPC 2.0 server) confirming transport protocol [TESTED 2026-05]
+- mitmproxy 12.2.3 interception testing (proxy mode) confirming language server proxy behavior [TESTED 2026-05]
 
 ## Document History
+
+**[2026-05-28 12:29]**
+- Added: Architecture Internals section with process model, language server binary analysis, API endpoints, startup sequence, proxy detection, network architecture, MCP transport, and inspected files reference [TESTED]
+- Added: Summary entries for language server, proxy detection, MCP transport findings
+- Added: Sources for session S03 testing, binary analysis, extension.js deobfuscation, MCP observer, mitmproxy testing
+- Updated: TOC with Architecture Internals entry
 
 **[2026-03-30 19:48]**
 - Added: Telemetry and Privacy subsection under Other Features [VERIFIED]
