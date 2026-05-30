@@ -74,6 +74,13 @@ ANTHROPIC_TESTS = [
   ("claude-opus-4-7", "medium", "none", None, "reasoning_effort"),
   ("claude-opus-4-7", "high", "none", None, "reasoning_effort"),
   ("claude-opus-4-7", "xhigh", "none", None, "reasoning_effort"),
+    
+  # Adaptive thinking models - claude-opus-4-8 (all effort levels)
+  ("claude-opus-4-8", "low", "none", None, "reasoning_effort"),
+  ("claude-opus-4-8", "medium", "none", None, "reasoning_effort"),
+  ("claude-opus-4-8", "high", "none", None, "reasoning_effort"),
+  ("claude-opus-4-8", "xhigh", "none", None, "reasoning_effort"),
+  ("claude-opus-4-8", "max", "none", None, "reasoning_effort"),
 ]
 
 # Fallback tests - verify fallback mapping works

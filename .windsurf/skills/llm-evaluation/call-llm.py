@@ -14,7 +14,7 @@ from openai import OpenAI
 from anthropic import Anthropic
 
 UNKNOWN = '[UNKNOWN]'
-EFFORT_LEVELS = ['none', 'minimal', 'low', 'medium', 'high', 'xhigh']
+EFFORT_LEVELS = ['none', 'minimal', 'low', 'medium', 'high', 'xhigh', 'max']
 
 def get_script_dir() -> Path:
   """Get directory containing this script."""
