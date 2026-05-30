@@ -150,6 +150,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **ENDIG** - Energie Digitalisierung (digitalization in energy sector research)
 - **ENDSY** - Energie Digital Synthese (consolidated INFO from EnergieDigitalA + B)
 - **GLOB** - Global/project-wide items
+- **LLMCG** - LLM Code Generation (RAG-augmented vs fine-tuned vs prompt-engineered approaches comparison)
 - **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
 - **LLMTR** - LLM Transcription Skill (image-to-markdown, audio-to-markdown)
 - **MCPS** - MCP server integrations
