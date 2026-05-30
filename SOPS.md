@@ -27,6 +27,7 @@
 - [SOP 2: Skill File Added or Removed](#sop-2-skill-file-added-or-removed)
 - [SOP 3: Old Skill Deleted or Deprecated](#sop-3-old-skill-deleted-or-deprecated)
 - [SOP 4: DevSystem Version Changed](#sop-4-devsystem-version-changed)
+- [SOP 5: Model Registry JSON Files Updated](#sop-5-model-registry-json-files-updated)
 - [Common Verification Commands](#common-verification-commands)
 
 ## Quick Reference: Sync Command
@@ -224,6 +225,81 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "Current \[DEVSYSTEM\]:"
 # - No Overwrites for files that should be unchanged
 ```
 
+## SOP 5: Model Registry JSON Files Updated
+
+**Scenario**: Adding a new model, updating pricing, or changing parameter mappings in the LLM evaluation JSON files.
+
+### Source of truth
+
+`[DEVSYSTEM_FOLDER]/skills/llm-evaluation/` contains the canonical copies:
+- `model-registry.json` — model IDs, context windows, prefix routing, effort levels
+- `model-pricing.json` — per-model token pricing
+- `model-parameter-mapping.json` — CLI effort-to-API parameter mapping
+
+### All known targets
+
+These locations contain replicas that must be kept in sync:
+
+- **Sync target**: `[WORKSPACE]/.windsurf/skills/llm-evaluation/` (via standard DevSystem sync)
+- **Same-repo replica**: `[DEVSYSTEM_FOLDER]/skills/llm-transcription/` (3 JSON files)
+- **External repo**: `E:/Dev/LLM-Research/_Sessions/_2026-03-05_TabularDataFormatsForLLMs/01_CSVScaleLimits/_Scripts/` (3 JSON files)
+- **External repo**: `E:/Dev/LLM-Research/_Sessions/_2026-03-05_TabularDataFormatsForLLMs/02_FormatComparison/_Scripts/` (3 JSON files)
+
+**Not a replica**: `[DEVSYSTEM_FOLDER]/skills/windsurf-auto-model-switcher/windsurf-model-registry.json` — different format (Windsurf UI credit multipliers), not API model data.
+
+### Steps
+
+1. **Edit source** in `[DEVSYSTEM_FOLDER]/skills/llm-evaluation/`
+
+2. **Copy to all replicas**:
+   ```powershell
+   $src = "[DEVSYSTEM_FOLDER]\skills\llm-evaluation"
+   $files = @("model-registry.json","model-pricing.json","model-parameter-mapping.json")
+   $targets = @(
+     "[DEVSYSTEM_FOLDER]\skills\llm-transcription",
+     "E:\Dev\LLM-Research\_Sessions\_2026-03-05_TabularDataFormatsForLLMs\01_CSVScaleLimits\_Scripts",
+     "E:\Dev\LLM-Research\_Sessions\_2026-03-05_TabularDataFormatsForLLMs\02_FormatComparison\_Scripts"
+   )
+   foreach ($t in $targets) {
+     foreach ($f in $files) { Copy-Item "$src\$f" "$t\$f" -Force }
+   }
+   ```
+
+3. **Sync DevSystem to `.windsurf/`**:
+   ```powershell
+   Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.windsurf\" -Recurse -Force
+   ```
+
+4. **If effort levels changed**: also update `EFFORT_LEVELS` in `call-llm.py` and `call-llm-batch.py` (both in `[DEVSYSTEM_FOLDER]/skills/llm-evaluation/`), then re-sync
+
+5. **If a new model was added**: add test entries to `test-call-llm.py`, run tests, update `LLM_EVALUATION_CLAUDE_MODELS.md`
+
+6. **Create source documentation** in `[DEVSYSTEM_FOLDER]/skills/llm-evaluation/model-sources/` with `[DATE]_` prefix
+
+### Verification
+
+```powershell
+$src = "[DEVSYSTEM_FOLDER]\skills\llm-evaluation"
+$files = @("model-registry.json","model-pricing.json","model-parameter-mapping.json")
+$targets = @(
+  "[WORKSPACE]\.windsurf\skills\llm-evaluation",
+  "[DEVSYSTEM_FOLDER]\skills\llm-transcription",
+  "[WORKSPACE]\.windsurf\skills\llm-transcription",
+  "E:\Dev\LLM-Research\_Sessions\_2026-03-05_TabularDataFormatsForLLMs\01_CSVScaleLimits\_Scripts",
+  "E:\Dev\LLM-Research\_Sessions\_2026-03-05_TabularDataFormatsForLLMs\02_FormatComparison\_Scripts"
+)
+$ok = 0; $fail = 0
+foreach ($t in $targets) {
+  foreach ($f in $files) {
+    if ((Get-FileHash "$src\$f").Hash -eq (Get-FileHash "$t\$f").Hash) { $ok++ }
+    else { $fail++; Write-Host "MISMATCH: $t\$f" }
+  }
+}
+Write-Host "$ok OK, $fail FAIL"
+```
+
+Expected: 15 OK, 0 FAIL (5 targets x 3 files).
+
 ## Common Verification Commands
 
 ### Check for `__pycache__` pollution
@@ -258,6 +334,9 @@ Compare-Object $src $dst | Where-Object SideIndicator -eq "<="
 Run `/deploy-to-all-repos` in preview mode. Any unexpected items in `Add` / `Overwrite` / `Delete` indicate a missed sync or unregistered skill.
 
 ## Document History
+
+**[2026-05-30 17:03]**
+- Added: SOP 5 for model registry JSON deployment with all known targets
 
 **[2026-04-20 13:15]**
 - Added: Quick Reference Sync Command section (fixes NOTES.md "deploy" pointer precision)
