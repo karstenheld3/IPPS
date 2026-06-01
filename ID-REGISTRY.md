@@ -175,6 +175,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **WSWN** - What? So What? Now What? (reflective framework deep research, Borton/Driscoll/Rolfe)
 - **CSMP** - Cascade Metaprompt (AI coding assistant metaprompt extraction and analysis)
 - **NTICP** - Network Traffic Interception (programmatic HTTPS interception for LLM prompt extraction)
+- **WSFT** - Windsurf Features (comprehensive feature research for updating WSRF-IN01)
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 
 ## Document History
