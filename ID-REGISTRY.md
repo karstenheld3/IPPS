@@ -146,6 +146,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **AXCEL** - Agent Excel Skill (Excel automation from Cascade agent)
 - **DOCWRITEFW** - Document Writing Frameworks (analytical/communication frameworks for IPPS document quality)
 - **DRPRF** - Deep Research Profile Templates (personal, company, organization, network profile research)
+- **DVDT** - Devin Desktop (Windsurf IDE renamed to Devin Desktop; INFO_HOW_DEVIN_WORKS reference doc)
 - **EDIGA** - Energie Digitalisierung A (digitalization in energy sector research)
 - **ENDIG** - Energie Digitalisierung (digitalization in energy sector research)
 - **ENDSY** - Energie Digital Synthese (consolidated INFO from EnergieDigitalA + B)
@@ -182,6 +183,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 
 **[2026-05-27 12:49]**
 - Added: CSMP topic (Cascade Metaprompt extraction and analysis)
+- Added: DVDT topic (Devin Desktop = renamed Windsurf IDE; INFO_HOW_DEVIN_WORKS doc) [2026-06-03]
 
 **[2026-05-25 14:44]**
 - Added: DRPRF topic (Deep Research Profile Templates)
