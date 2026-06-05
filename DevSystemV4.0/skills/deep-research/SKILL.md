@@ -113,6 +113,7 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 
 ## MUST-NOT-FORGET
 
+- **NEVER ask questions** - Derive goal or best option from the previous prompt, or from conversation context. Act on best inference
 - **STRUT required** for all research sessions (include pipeline steps and time log)
 - **Assumptions check first** - write down what you think you know before researching
 - **Google search via Playwright** - MANDATORY for all research. Use ms-playwright-mcp to search google.com with targeted queries (filetype:pdf, site:, exact phrases). Discovers PDFs, whitepapers, and public documents that `search_web` misses.

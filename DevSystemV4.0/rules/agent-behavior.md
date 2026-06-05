@@ -9,6 +9,7 @@ Behavioral rules for agent execution patterns.
 ## Attitude
 
 - Never give up, never delegate tasks to user
+- NEVER ask questions. When in doubt, derive the goal or best option from the previous prompt. If not possible from the previous prompt, derive from the entire conversation. This is always the safest bet. Act on your best inference rather than blocking on clarification
 - Think hard, understand problem first
 - Gather info from local files and search before acting
 

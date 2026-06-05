@@ -19,6 +19,7 @@ Autonomous self-improvement in four phases: scan with pre-flight research, fix v
 
 ## MUST-NOT-FORGET
 
+- **NEVER ask questions** - Derive goal or best option from the previous prompt, or from conversation context. Act on best inference
 - **Depth over breadth** - Improve ONE thing exhaustively and prove it justified, not a large list of half-baked, assumed, untested improvements
 - **STRUT self-tracking** - Create STRUT plan at start via `/write-strut`, track progress, delete STRUT file after completion
 - Phase 1 (scan) → Phase 2 (fix violations) → Phase 3 (focused improvement) → Phase 4 (polish) - strict order

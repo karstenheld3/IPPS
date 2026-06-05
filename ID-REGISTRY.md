@@ -142,8 +142,10 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 
 ## Project Topics
 
+- **AIDET** - AI Writing Detection (detection methods, signals, heuristics for identifying AI-generated text)
 - **AMSW** - Auto Model SWitcher (Windsurf model switching automation)
 - **AXCEL** - Agent Excel Skill (Excel automation from Cascade agent)
+- **BNCL** - Binoculars Cross-Perplexity Detection (zero-shot AI text detection via cross-model perplexity ratio)
 - **DOCWRITEFW** - Document Writing Frameworks (analytical/communication frameworks for IPPS document quality)
 - **DRPRF** - Deep Research Profile Templates (personal, company, organization, network profile research)
 - **DVDT** - Devin Desktop (Windsurf IDE renamed to Devin Desktop; INFO_HOW_DEVIN_WORKS reference doc)
@@ -165,6 +167,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **OCLAW** - OpenClaw exploration (remote agent interaction via WhatsApp/Cascade)
 - **MEPI** - MEPI/MCPI research depth principle
 - **SDDEV** - Spec-Driven Development (research topic)
+- **STYLO** - Stylometric Profiling (feature-based AI text detection via writing style analysis)
 - **SUMQR** - Summary Quality Rules (improving enforcement and quality of summaries)
 - **TRNGFX** - Transcription graphics/ASCII art optimization
 - **LMWS** - LM Studio + Windsurf integration research
@@ -177,9 +180,18 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **CSMP** - Cascade Metaprompt (AI coding assistant metaprompt extraction and analysis)
 - **NTICP** - Network Traffic Interception (programmatic HTTPS interception for LLM prompt extraction)
 - **WSFT** - Windsurf Features (comprehensive feature research for updating WSRF-IN01)
+- **WMRK** - Watermarking and Provenance (SynthID-Text, C2PA, embedded signal detection for AI-generated text)
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 
 ## Document History
+
+**[2026-06-05 19:25]**
+- Added: STYLO topic (Stylometric Profiling for AI detection)
+- Added: WMRK topic (Watermarking and Provenance - SynthID-Text)
+- Added: BNCL topic (Binoculars Cross-Perplexity Detection)
+
+**[2026-06-05 17:25]**
+- Added: AIDET topic (AI Writing Detection methods and heuristics)
 
 **[2026-05-27 12:49]**
 - Added: CSMP topic (Cascade Metaprompt extraction and analysis)
