@@ -191,7 +191,7 @@ After configuration:
 4. Select downloaded file
 
 **Option 2: Lazy Install**
-Extract to `C:\Users\USERNAME\.windsurf\extensions\`
+Extract to `C:\Users\USERNAME\.devin\extensions\`
 
 ### 5.2 Configuration
 
@@ -253,8 +253,8 @@ Search terms:
 - `LMWS-IN01-SC-GTHB-LMSPL`: https://github.com/BlinkZer0/LM-Studio-IDE-Plugin - LM Studio IDE Plugin documentation [VERIFIED]
 - `LMWS-IN01-SC-LMST-DOCS`: https://lmstudio.ai/docs/developer/core/server - LM Studio server documentation [VERIFIED]
 - `LMWS-IN01-SC-LMST-OAPI`: https://lmstudio.ai/docs/developer/openai-compat - OpenAI compatibility endpoints [VERIFIED]
-- `LMWS-IN01-SC-WDSR-MCP`: https://docs.windsurf.com/windsurf/cascade/mcp - Windsurf MCP configuration [VERIFIED]
-- `LMWS-IN01-SC-WDSR-MODL`: https://docs.windsurf.com/windsurf/models - Windsurf models and BYOK [VERIFIED]
+- `LMWS-IN01-SC-WDSR-MCP`: https://docs.devin.com/windsurf/cascade/mcp - Windsurf MCP configuration [VERIFIED]
+- `LMWS-IN01-SC-WDSR-MODL`: https://docs.devin.com/windsurf/models - Windsurf models and BYOK [VERIFIED]
 - `LMWS-IN01-SC-RDDT-CDEM`: https://www.reddit.com/r/Codeium/comments/1h4jo15/ - Community discussion on local LLM limitations [VERIFIED]
 
 ## 8. Next Steps

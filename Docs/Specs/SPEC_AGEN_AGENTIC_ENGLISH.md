@@ -143,7 +143,7 @@ No brackets for tokens that appear in **conditions** - things the agent checks f
 - **[PROJECT_FOLDER]** - Absolute path of project folder (same as workspace if no monorepo)
 - **[SESSION_FOLDER]** - Absolute path of currently active session folder
 - **[SRC_FOLDER]** - Absolute path of source folder
-- **[AGENT_FOLDER]** - Agent config folder (`.windsurf/` or `.claude/`)
+- **[AGENT_FOLDER]** - Agent config folder (`.devin/` or `.claude/`)
 
 **Override example in `!NOTES.md`:**
 ```

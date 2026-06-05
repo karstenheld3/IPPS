@@ -285,7 +285,7 @@ Windsurf implements the Agent Skills specification with full support for progres
 
 ### Skill Locations
 
-- **Workspace skills**: `.windsurf/skills/<skill-name>/SKILL.md` - Current project only
+- **Workspace skills**: `.devin/skills/<skill-name>/SKILL.md` - Current project only
 - **Global skills**: `~/.codeium/windsurf/skills/<skill-name>/SKILL.md` - All workspaces
 
 ### Creating Skills in Windsurf
@@ -299,7 +299,7 @@ Windsurf implements the Agent Skills specification with full support for progres
 
 **Manual Creation:**
 ```
-.windsurf/skills/deploy-to-production/
+.devin/skills/deploy-to-production/
 ├── SKILL.md
 ├── deployment-checklist.md
 ├── rollback-procedure.md
@@ -327,7 +327,7 @@ Windsurf implements the Agent Skills specification with full support for progres
 
 **Deployment Workflow:**
 ```
-.windsurf/skills/deploy-staging/
+.devin/skills/deploy-staging/
 ├── SKILL.md
 ├── pre-deploy-checks.sh
 ├── environment-template.env
@@ -336,7 +336,7 @@ Windsurf implements the Agent Skills specification with full support for progres
 
 **Code Review Guidelines:**
 ```
-.windsurf/skills/code-review/
+.devin/skills/code-review/
 ├── SKILL.md
 ├── style-guide.md
 ├── security-checklist.md
@@ -359,7 +359,7 @@ Windsurf implements the Agent Skills specification with full support for progres
 - https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices - Authoring best practices, patterns, anti-patterns, checklist
 
 **Windsurf Documentation:** [TESTED]
-- https://docs.windsurf.com/windsurf/cascade/skills - Windsurf Skills implementation, creation via UI/manual, invocation, scopes, use cases
+- https://docs.devin.com/windsurf/cascade/skills - Windsurf Skills implementation, creation via UI/manual, invocation, scopes, use cases
 
 **Reference Repositories:**
 - https://github.com/agentskills/agentskills - Main repository, specification source

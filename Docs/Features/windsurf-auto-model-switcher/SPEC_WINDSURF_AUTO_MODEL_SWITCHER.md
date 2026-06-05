@@ -32,7 +32,7 @@ The model switching system consists of three DevSystem pieces:
 ## Skill: windsurf-auto-model-switcher
 
 **Source**: `DevSystemV3.2/skills/windsurf-auto-model-switcher/`
-**Deployed**: `.windsurf/skills/windsurf-auto-model-switcher/`
+**Deployed**: `.devin/skills/windsurf-auto-model-switcher/`
 
 ### Files
 
@@ -76,7 +76,7 @@ The model switching system consists of three DevSystem pieces:
 ## Workflow: switch-model
 
 **Source**: `DevSystemV3.2/workflows/switch-model.md`
-**Deployed**: `.windsurf/workflows/switch-model.md`
+**Deployed**: `.devin/workflows/switch-model.md`
 
 ### Configuration (in workflow file)
 
@@ -103,7 +103,7 @@ MODEL-LOW  = "Gemini 3 Flash Medium"       [1x]
 ## Rule: cascade-model-switching
 
 **Source**: `DevSystemV3.2/rules/cascade-model-switching.md`
-**Deployed**: `.windsurf/rules/cascade-model-switching.md`
+**Deployed**: `.devin/rules/cascade-model-switching.md`
 
 ### Purpose
 
@@ -203,7 +203,7 @@ Hints are recommendations - agent decides based on actual task.
 ## Document History
 
 **[2026-01-26 16:43]**
-- Fixed: Locations now show Source (DevSystemV3.2) vs Deployed (.windsurf)
+- Fixed: Locations now show Source (DevSystemV3.2) vs Deployed (.devin)
 
 **[2026-01-26 16:41]**
 - Renamed: `_SPEC_WINDSURF_AUTO_MODEL_SWITCHER.md`

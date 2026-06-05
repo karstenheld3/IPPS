@@ -4,20 +4,20 @@ description: Deploy DevSystem files to all linked repositories
 
 # Deploy to All Repos
 
-Copies DevSystem files from this repo's `.windsurf` folder to all linked repositories according to their specific rules.
+Copies DevSystem files from this repo's `.devin` folder to all linked repositories according to their specific rules.
 
 ## MUST-NOT-FORGET
 
 1. **Check DevSystem version FIRST** - Read `!NOTES.md` to get `[DEVSYSTEM]` (e.g., `DevSystemV3.1`) before ANY other action
-2. **Read target repo NOTES.md** - For each repo in `[LINKED_REPOS]`, read its `!NOTES.md` or `NOTES.md` to check for special deployment rules (e.g., OpenClaw has no `.windsurf/` folder)
-3. **Sync before deploy** - Copy from `[DEVSYSTEM]\*` to `.windsurf\` BEFORE running preview
-4. **Clean deprecated files** - Remove deprecated files from `.windsurf/` after sync (edird-core.md, go-autonomous.md, next.md, edird-phase-model/)
+2. **Read target repo NOTES.md** - For each repo in `[LINKED_REPOS]`, read its `!NOTES.md` or `NOTES.md` to check for special deployment rules (e.g., OpenClaw has no `.devin/` folder)
+3. **Sync before deploy** - Copy from `[DEVSYSTEM]\*` to `.devin\` BEFORE running preview
+4. **Clean deprecated files** - Remove deprecated files from `.devin/` after sync (edird-core.md, go-autonomous.md, next.md, edird-phase-model/)
 5. **Output format** - ALWAYS use the exact text format in "Output Format" section (NO tables, NO markdown tables)
 6. **List filenames** - ALWAYS list explicit filenames after each category (Add, Overwrite, Delete), not just counts
 7. **PowerShell execution** - Run PowerShell code directly (pwsh IS PowerShell Core). Do NOT wrap in `powershell -Command "..."` - that causes `$` escaping conflicts
 8. **Skill categories** - Each repo has a `Skills:` assignment (All, Development, Personal). Only deploy skills matching that category
 
-**WHY:** `.windsurf/` may contain stale files from older DevSystem versions. Deploying without syncing first will propagate deprecated files to all linked repos.
+**WHY:** `.devin/` may contain stale files from older DevSystem versions. Deploying without syncing first will propagate deprecated files to all linked repos.
 
 ## Execution Modes
 
@@ -71,7 +71,7 @@ Run this PowerShell script. It outputs JSON for consistent parsing:
 
 ```powershell
 # Compare DevSystem files - outputs JSON
-$source = "[WORKSPACE_FOLDER]\.windsurf"
+$source = "[WORKSPACE_FOLDER]\.devin"
 
 # Skill categories (from [SKILL_CATEGORIES] in !NOTES.md)
 $skillCategories = @{
@@ -82,13 +82,13 @@ $skillCategories["All"] = $skillCategories["Development"] + $skillCategories["Pe
 
 # Target repos (from [LINKED_REPOS] in !NOTES.md)
 $targets = @(
-    @{ Path = "e:\Dev\KarstensWorkspace\.windsurf"; Skills = "All" }
-    @{ Path = "e:\Dev\OpenAI-BackendTools\.windsurf"; Skills = "Development" }
-    @{ Path = "e:\Dev\PRXL\src\.windsurf"; Skills = "Development" }
-    @{ Path = "e:\Dev\SharePoint-GPT-Middleware\.windsurf"; Skills = "Development" }
-    @{ Path = "e:\Dev\USTVA\.windsurf"; Skills = "Development" }
+    @{ Path = "e:\Dev\KarstensWorkspace\.devin"; Skills = "All" }
+    @{ Path = "e:\Dev\OpenAI-BackendTools\.devin"; Skills = "Development" }
+    @{ Path = "e:\Dev\PRXL\src\.devin"; Skills = "Development" }
+    @{ Path = "e:\Dev\SharePoint-GPT-Middleware\.devin"; Skills = "Development" }
+    @{ Path = "e:\Dev\USTVA\.devin"; Skills = "Development" }
     @{ Path = "e:\Dev\openclaw\workspace"; Skills = "All" }
-    @{ Path = "e:\Dev\LLM-Research\.windsurf"; Skills = "Development" }
+    @{ Path = "e:\Dev\LLM-Research\.devin"; Skills = "Development" }
 )
 
 # Deprecated files allowlist
@@ -150,7 +150,7 @@ function Format-DeployPreview {
         $lines += ""
         $lines += $r.Path
         if ($r.IsNew) {
-            $lines += "  [NEW REPO] .windsurf folder does not exist - will create with $($r.Add.Count) files"
+            $lines += "  [NEW REPO] .devin folder does not exist - will create with $($r.Add.Count) files"
         } elseif ($r.Add.Count -eq 0 -and $r.Overwrite.Count -eq 0 -and $r.Delete.Count -eq 0) {
             $lines += "  [UP TO DATE] $($r.Unchanged) files unchanged"
         } else {
@@ -209,7 +209,7 @@ Write-Output $preview
   - Excluded skills: skill1, skill2
 
 <RepoPath>
-  [NEW REPO] .windsurf folder does not exist - will create with N files
+  [NEW REPO] .devin folder does not exist - will create with N files
 
 Summary: X repos to process, Y files to deploy, Z files to delete.
 ```
@@ -217,7 +217,7 @@ Summary: X repos to process, Y files to deploy, Z files to delete.
 **GOOD example**:
 
 ```
-e:\Dev\KarstensWorkspace\.windsurf
+e:\Dev\KarstensWorkspace\.devin
   - Add: 10 new files
       skills\deep-research\RESEARCH_CREATE_SUMMARY.md
       skills\deep-research\RESEARCH_SUMMARY_TEMPLATE.md
@@ -235,8 +235,8 @@ Summary: 7 repos to process, 202 files to deploy, 0 files to delete.
 Aligned-column / 2D grid (also counts as a table even without pipes):
 
 ```
-e:\Dev\KarstensWorkspace\.windsurf            Add=10  Overwrite=18  Delete=0
-e:\Dev\OpenAI-BackendTools\.windsurf          Add=10  Overwrite=19  Delete=0
+e:\Dev\KarstensWorkspace\.devin            Add=10  Overwrite=18  Delete=0
+e:\Dev\OpenAI-BackendTools\.devin          Add=10  Overwrite=19  Delete=0
 ```
 
 Bullet summary without filenames:
@@ -271,7 +271,7 @@ For each source file, apply the repo-specific rules:
 
 #### 2.4 Copy Files
 
-Copy files to target repo's `.windsurf` folder, respecting rules.
+Copy files to target repo's `.devin` folder, respecting rules.
 
 Note: This workflow lives in workspace root, so it won't be deployed.
 
@@ -306,7 +306,7 @@ Always exclude from deployment:
 - `__pycache__/` directories and `*.pyc` files (never deploy compiled Python bytecode)
 - Any files matching repo-specific "Never overwrite" patterns
 
-Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `.windsurf/`, so it is automatically excluded from deployment.
+Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `.devin/`, so it is automatically excluded from deployment.
 
 ## Deprecated Files (Allowlist)
 

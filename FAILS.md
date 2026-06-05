@@ -1,5 +1,20 @@
 # Failure Log
 
+## 2026-06-05 - Asked Unnecessary Clarification
+
+### [LOW] `GLOB-FL-033` Asked user for permission to use forward slashes instead of just doing it
+
+- **When**: 2026-06-05 14:53 UTC+02:00
+- **Where**: Grep search for `.windsurf` references
+- **What**: User gave clear instruction to search for `.windsurf` in the project. Agent encountered JSON escaping issue with Windows backslash paths and asked user "Shall I proceed with forward slashes?" instead of silently using the obvious workaround.
+- **Why it went wrong**:
+  - Treated a trivial JSON format issue (use `/` instead of `\` in tool parameters) as requiring user input
+  - Violated "Never give up, never delegate tasks to user" rule
+  - The prompt was unambiguous - no clarification needed
+- **Evidence**: User response: "Why are you asking these questions? Wasnt the prompt clear enough?"
+- **Workflow re-read findings**: `agent-behavior.md` L6: "Never give up, never delegate tasks to user". L7: "Think hard, understand problem first". The workaround (forward slashes) is standard knowledge for JSON path handling on Windows.
+- **Prevention rule**: When a tool parameter has a formatting constraint (like JSON requiring escaped backslashes), silently use the standard workaround. Never ask user about internal tool mechanics.
+
 ## 2026-05-25 - Deploy Without Confirmation
 
 ### [HIGH] `GLOB-FL-032` Deployed to all repos without preview or confirmation

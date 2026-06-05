@@ -16,7 +16,7 @@ IPPS solves this through **deterministic agent behavior**:
 - **STRUT** (STRUctured Thinking) tracks state - agent always knows where it is in the plan
 - **TRACTFUL** (Traceable Requirements Artifacts and Coded Templates For Unified Lifecycle) preserves knowledge - every detail is covered by documents that survive session boundaries
 
-The goal: Run [`/go`](.windsurf/workflows/go.md) and watch the agent execute a multi-session project autonomously, picking up exactly where it left off, never repeating past failures.
+The goal: Run [`/go`](.devin/workflows/go.md) and watch the agent execute a multi-session project autonomously, picking up exactly where it left off, never repeating past failures.
 
 ## Core Concepts
 
@@ -32,11 +32,11 @@ IPPS is built on eight integrated specifications that enable autonomous agent op
 
 - **[MNF - MUST-NOT-FORGET Technique](Docs/Concepts/_INFO_MNF_TECHNIQUE.md)** - Checklist technique preventing critical oversights. Workflows and documents declare MNF items; agent verifies compliance before completion.
 
-- **[APAPALAN - Writing Principle](Docs/Concepts/_INFO_APAPALAN_PRINCIPLE.md)** - As Precise As Possible (Priority 1), As Little As Necessary (Priority 2). Enforceable rules in [`APAPALAN_RULES.md`](.windsurf/skills/write-documents/APAPALAN_RULES.md) for precision, brevity, structure, and naming.
+- **[APAPALAN - Writing Principle](Docs/Concepts/_INFO_APAPALAN_PRINCIPLE.md)** - As Precise As Possible (Priority 1), As Little As Necessary (Priority 2). Enforceable rules in [`APAPALAN_RULES.md`](.devin/skills/write-documents/APAPALAN_RULES.md) for precision, brevity, structure, and naming.
 
-- **[MECT - Minimal Explicit Consistent Terminology](Docs/Concepts/_INFO_MECT_PHILOSOPHY.md)** - Writing quality philosophy. Rules in [`MECT_WRITING_RULES.md`](.windsurf/skills/write-documents/MECT_WRITING_RULES.md) (voice, word choice, terminology, headings, lists) and [`MECT_CODING_RULES.md`](.windsurf/skills/coding-conventions/MECT_CODING_RULES.md) (naming, functions, comments, logs, errors).
+- **[MECT - Minimal Explicit Consistent Terminology](Docs/Concepts/_INFO_MECT_PHILOSOPHY.md)** - Writing quality philosophy. Rules in [`MECT_WRITING_RULES.md`](.devin/skills/write-documents/MECT_WRITING_RULES.md) (voice, word choice, terminology, headings, lists) and [`MECT_CODING_RULES.md`](.devin/skills/coding-conventions/MECT_CODING_RULES.md) (naming, functions, comments, logs, errors).
 
-- **[SOCAS - Signs of Confusion and Sloppiness](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md)** - 15 criteria for ranking web search results and evaluating agent output quality. Rules in [`SOCAS_RULES.md`](.windsurf/skills/write-documents/SOCAS_RULES.md). Used by `/deep-research`, `/improve`, and `/verify`.
+- **[SOCAS - Signs of Confusion and Sloppiness](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md)** - 15 criteria for ranking web search results and evaluating agent output quality. Rules in [`SOCAS_RULES.md`](.devin/skills/write-documents/SOCAS_RULES.md). Used by `/deep-research`, `/improve`, and `/verify`.
 
 **How they work together:**
 ```
@@ -102,10 +102,10 @@ IPPS provides structured rules, workflows, and skills for AI agents to follow co
 
 ## How to Add to Your Project
 
-Copy the `.windsurf/` folder to your VS Code or Windsurf workspace root:
+Copy the `.devin/` folder to your VS Code or Windsurf workspace root:
 ```
 your-project/
-└── .windsurf/
+└── .devin/
     ├── rules/
     ├── workflows/
     └── skills/
@@ -142,7 +142,7 @@ A controlled vocabulary for agent-human communication. Provides consistent termi
 - `[LABEL]` - Classification to apply (e.g., `[UNVERIFIED]`, `[CRITICAL]`)
 - `STATE` - Condition with NO brackets (e.g., `COMPLEXITY-HIGH`, `HOTFIX`, `SINGLE-PROJECT`)
 
-**Extensibility**: Verbs are abstract concepts. Complex verbs CAN be concretized as dedicated workflows (e.g., `[COMMIT]` → [`/commit`](.windsurf/workflows/commit.md)), but this is optional. Simple verbs work inline within phase workflows.
+**Extensibility**: Verbs are abstract concepts. Complex verbs CAN be concretized as dedicated workflows (e.g., `[COMMIT]` → [`/commit`](.devin/workflows/commit.md)), but this is optional. Simple verbs work inline within phase workflows.
 
 **Example workflow instruction**:
 ```
@@ -159,7 +159,7 @@ A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) w
 
 **Full specification**: [SPEC_EDIRD_PHASE_MODEL.md](Docs/Specs/SPEC_EDIRD_PHASE_MODEL.md)
 
-**Goal**: Consistent phase structure for all development work with deterministic next-action logic. We want the agent to always do the right thing when the [`/go`](.windsurf/workflows/go.md) workflow is executed until the initial goal is reached.
+**Goal**: Consistent phase structure for all development work with deterministic next-action logic. We want the agent to always do the right thing when the [`/go`](.devin/workflows/go.md) workflow is executed until the initial goal is reached.
 
 **Rationale**: Without phases, agents skip important steps or apply heavyweight processes to simple tasks. EDIRD provides the right amount of process for each complexity level.
 
@@ -267,18 +267,18 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 
 ## Key Conventions
 
-- [Core Conventions](.windsurf/rules/core-conventions.md) - Text formatting, document structure, header blocks
-- [DevSystem Core](.windsurf/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
-- [DevSystem IDs](.windsurf/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
-- [Agentic English](.windsurf/rules/agentic-english.md) - Controlled vocabulary for agent instructions
-- [EDIRD Phase Planning](.windsurf/rules/edird-phase-planning.md) - Phase model core rules
-- [Git Conventions](.windsurf/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
-- [Coding Conventions](.windsurf/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
-- [Workflow Rules](.windsurf/skills/write-documents/WORKFLOW_RULES.md) - Workflow document structure and formatting
+- [Core Conventions](.devin/rules/core-conventions.md) - Text formatting, document structure, header blocks
+- [DevSystem Core](.devin/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
+- [DevSystem IDs](.devin/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
+- [Agentic English](.devin/rules/agentic-english.md) - Controlled vocabulary for agent instructions
+- [EDIRD Phase Planning](.devin/rules/edird-phase-planning.md) - Phase model core rules
+- [Git Conventions](.devin/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
+- [Coding Conventions](.devin/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
+- [Workflow Rules](.devin/skills/write-documents/WORKFLOW_RULES.md) - Workflow document structure and formatting
 
 ## Skills
 
-Agent skills in `.windsurf/skills/`. Each skill contains scripts, documentation, and optional setup.
+Agent skills in `.devin/skills/`. Each skill contains scripts, documentation, and optional setup.
 
 ### llm-evaluation
 
@@ -297,7 +297,7 @@ Evaluate LLM output quality by generating questions, collecting answers, and sco
 **Quick examples**:
 ```powershell
 $venv = "../.tools/llm-venv/Scripts/python.exe"
-$skill = ".windsurf\skills\llm-evaluation"
+$skill = ".devin\skills\llm-evaluation"
 
 # Transcribe images
 & $venv "$skill\call-llm-batch.py" --model gpt-4o --input-folder images/ --output-folder out/ --prompt-file "$skill\prompts\transcribe-page.md"
@@ -319,7 +319,7 @@ High-quality image-to-markdown transcription using ensemble generation, LLM judg
 **Quick examples**:
 ```powershell
 $venv = "../.tools/llm-venv/Scripts/python.exe"
-$skill = ".windsurf/skills/llm-transcription"
+$skill = ".devin/skills/llm-transcription"
 
 # Basic usage
 & $venv "$skill/transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]/../.tools/.api-keys.txt
@@ -340,7 +340,7 @@ Desktop automation via LLM vision. The AI sees your screen, decides what to clic
 
 **Quick examples**:
 ```powershell
-cd .windsurf/skills/llm-computer-use
+cd .devin/skills/llm-computer-use
 
 # Dry-run (safe, no actions executed)
 python -m llm_computer_use -k [WORKSPACE_FOLDER]/../.tools/.api-keys.txt "Click the Start button"
@@ -372,10 +372,10 @@ Convert, compress, and analyze PDF files using local CLI tools.
 **Quick examples**:
 ```powershell
 # Convert PDF to JPG (output: ../.tools/_pdf_to_jpg_converted/)
-python .windsurf\skills\pdf-tools\convert-pdf-to-jpg.py report.pdf --dpi 150
+python .devin\skills\pdf-tools\convert-pdf-to-jpg.py report.pdf --dpi 150
 
 # Compress PDF
-python .windsurf\skills\pdf-tools\compress-pdf.py report.pdf --compression high
+python .devin\skills\pdf-tools\compress-pdf.py report.pdf --compression high
 ```
 
 ### coding-conventions
@@ -390,10 +390,10 @@ Python and workflow coding style rules with enforcement tools.
 **Quick examples**:
 ```powershell
 # Convert folder to 2-space indentation
-python .windsurf\skills\coding-conventions\reindent.py folder/ --to 2 --recursive
+python .devin\skills\coding-conventions\reindent.py folder/ --to 2 --recursive
 
 # Dry-run (preview only)
-python .windsurf\skills\coding-conventions\reindent.py folder/ --to 2 --recursive --dry-run
+python .devin\skills\coding-conventions\reindent.py folder/ --to 2 --recursive --dry-run
 ```
 
 ### github
@@ -438,7 +438,7 @@ Browser automation via Microsoft Playwright MCP server.
 - `browser_click` - Click element by ref
 - `browser_type` - Type text into element
 
-**Usage**: Configure in `.windsurf/mcp.json`, use accessibility tree refs for element selection.
+**Usage**: Configure in `.devin/mcp.json`, use accessibility tree refs for element selection.
 
 ### session-management
 
@@ -461,10 +461,10 @@ Windows desktop automation utilities.
 **Quick examples**:
 ```powershell
 # Full screen screenshot
-.\.windsurf\skills\windows-desktop-control\simple-screenshot.ps1
+.\.devin\skills\windows-desktop-control\simple-screenshot.ps1
 
 # Custom output path
-.\.windsurf\skills\windows-desktop-control\simple-screenshot.ps1 -OutputPath "C:\temp\screenshot.jpg"
+.\.devin\skills\windows-desktop-control\simple-screenshot.ps1 -OutputPath "C:\temp\screenshot.jpg"
 ```
 
 ### windsurf-auto-model-switcher
@@ -480,7 +480,7 @@ Switch Windsurf Cascade AI models programmatically.
 **Quick examples**:
 ```powershell
 # Select Claude Sonnet 4.5
-.\.windsurf\skills\windsurf-auto-model-switcher\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
+.\.devin\skills\windsurf-auto-model-switcher\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
 ```
 
 ### write-documents
@@ -508,7 +508,7 @@ Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.
 ```
 IPPS/
 ├── ../.tools/                    # Shared tool installations (parent folder)
-├── .windsurf/                    # Active agent configuration (synced from DevSystemV3.8)
+├── .devin/                    # Active agent configuration (synced from DevSystemV3.8)
 │   ├── rules/
 │   ├── workflows/
 │   └── skills/
@@ -523,14 +523,14 @@ IPPS/
 │   │   ├── edird-phase-planning.md # EDIRD phase model core rules
 │   │   └── workspace-rules.md    # Workspace-specific overrides
 │   ├── skills/                   # See Skills section for details
-│   └── workflows/                # See .windsurf/workflows/ for file list
+│   └── workflows/                # See .devin/workflows/ for file list
 ├── ID-REGISTRY.md                # Prevents term/ID collisions (DevSystem constants + project topics)
 └── README.md
 ```
 
 ## Skills Reference
 
-19 skills in `.windsurf/skills/`:
+19 skills in `.devin/skills/`:
 
 - **coding-conventions** - Python, PowerShell coding style rules, MECT coding rules
 - **deep-research** - Deep research strategies (MEPI/MCPI), domain-specific patterns
@@ -556,11 +556,11 @@ IPPS/
 
 IPPS uses special prefixes to control how files are processed:
 
-- **`!` prefix** - Priority files (e.g., `!NOTES.md`). Read first during [`/prime`](.windsurf/workflows/prime.md). Contains critical project information.
+- **`!` prefix** - Priority files (e.g., `!NOTES.md`). Read first during [`/prime`](.devin/workflows/prime.md). Contains critical project information.
 - **`_` prefix** - Deliverables ignored by automatic priming (e.g., `_SPEC_*.md`, `_INFO_*.md`). Session-specific, WIP, or archived content. Single `_` = user-created deliverable.
-- **`__` prefix** - Workflow scaffolding (e.g., `__STRUT_TOPIC.md`, `__TASKS_TOPIC.md`). Auto-created by workflows for self-tracking. Deleted by [`/cleanup`](.windsurf/workflows/cleanup.md) after goal reached. Gitignored.
+- **`__` prefix** - Workflow scaffolding (e.g., `__STRUT_TOPIC.md`, `__TASKS_TOPIC.md`). Auto-created by workflows for self-tracking. Deleted by [`/cleanup`](.devin/workflows/cleanup.md) after goal reached. Gitignored.
 - **`.tmp_` prefix** - Single-run temp files (e.g., `.tmp_fix_quotes.ps1`). Deleted within same workflow or by `/cleanup`. Gitignored.
-- **`.` prefix** - Hidden files following Unix convention (e.g., `.windsurf/`, `.gitignore`).
+- **`.` prefix** - Hidden files following Unix convention (e.g., `.devin/`, `.gitignore`).
 
 ### Lifecycle Tiers
 
@@ -628,7 +628,7 @@ Located in session folder (e.g., `_2026-01-15_FixAuthBug/`):
 
 ### Sync on Session Finalize
 
-When [`/session-finalize`](.windsurf/workflows/session-finalize.md) runs:
+When [`/session-finalize`](.devin/workflows/session-finalize.md) runs:
 - **FAILS.md** - [MEDIUM] and [HIGH] severity entries sync to workspace `FAILS.md`
 - **LEARNINGS.md** - Patterns from [MEDIUM]/[HIGH] fails sync to workspace `LEARNINGS.md` or `!NOTES.md`
 - **PROBLEMS.md** - Open/deferred problems sync to workspace `!PROBLEMS.md`
@@ -637,67 +637,67 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ## Workflows Reference
 
-38 workflows in `.windsurf/workflows/`:
+38 workflows in `.devin/workflows/`:
 
 **Entry Points**
-- [`/build`](.windsurf/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
-- [`/solve`](.windsurf/workflows/solve.md) - Explore problems, evaluate ideas, make decisions (auto-creates session)
-- [`/go`](.windsurf/workflows/go.md) - Autonomous loop until goal reached
-- [`/prime`](.windsurf/workflows/prime.md) - Prime context with workspace files
+- [`/build`](.devin/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
+- [`/solve`](.devin/workflows/solve.md) - Explore problems, evaluate ideas, make decisions (auto-creates session)
+- [`/go`](.devin/workflows/go.md) - Autonomous loop until goal reached
+- [`/prime`](.devin/workflows/prime.md) - Prime context with workspace files
 
 **Document Cycle**
-- [`/research`](.windsurf/workflows/research.md) - Structured research with verification labels and source retention
-- [`/deep-research`](.windsurf/workflows/deep-research.md) - Deep research (MEPI or MCPI) with domain-specific patterns
-- [`/write-info`](.windsurf/workflows/write-info.md) - Create INFO document from research
-- [`/write-spec`](.windsurf/workflows/write-spec.md) - Create specification from requirements
-- [`/write-impl-plan`](.windsurf/workflows/write-impl-plan.md) - Create implementation plan from spec
-- [`/write-test-plan`](.windsurf/workflows/write-test-plan.md) - Create test plan from spec
-- [`/write-tasks-plan`](.windsurf/workflows/write-tasks-plan.md) - Create tasks plan from IMPL/TEST
-- [`/write-strut`](.windsurf/workflows/write-strut.md) - Create STRUT plans with proper format
-- [`/implement`](.windsurf/workflows/implement.md) - Execute implementation from context, INFO, SPEC or IMPL documents
-- [`/test`](.windsurf/workflows/test.md) - Run tests based on scope and context
-- [`/partition`](.windsurf/workflows/partition.md) - Partition plans into discrete tasks
+- [`/research`](.devin/workflows/research.md) - Structured research with verification labels and source retention
+- [`/deep-research`](.devin/workflows/deep-research.md) - Deep research (MEPI or MCPI) with domain-specific patterns
+- [`/write-info`](.devin/workflows/write-info.md) - Create INFO document from research
+- [`/write-spec`](.devin/workflows/write-spec.md) - Create specification from requirements
+- [`/write-impl-plan`](.devin/workflows/write-impl-plan.md) - Create implementation plan from spec
+- [`/write-test-plan`](.devin/workflows/write-test-plan.md) - Create test plan from spec
+- [`/write-tasks-plan`](.devin/workflows/write-tasks-plan.md) - Create tasks plan from IMPL/TEST
+- [`/write-strut`](.devin/workflows/write-strut.md) - Create STRUT plans with proper format
+- [`/implement`](.devin/workflows/implement.md) - Execute implementation from context, INFO, SPEC or IMPL documents
+- [`/test`](.devin/workflows/test.md) - Run tests based on scope and context
+- [`/partition`](.devin/workflows/partition.md) - Partition plans into discrete tasks
 
 **Quality**
-- [`/verify`](.windsurf/workflows/verify.md) - Verify work against specs and rules
-- [`/critique`](.windsurf/workflows/critique.md) - Find flawed assumptions, logic errors, hidden risks
-- [`/reconcile`](.windsurf/workflows/reconcile.md) - Pragmatic review of critique findings
-- [`/improve`](.windsurf/workflows/improve.md) - Depth-first improvement (one proven change per run, versioned backups)
-- [`/sync`](.windsurf/workflows/sync.md) - Document synchronization
-- [`/rename`](.windsurf/workflows/rename.md) - Global and local refactoring with exhaustive search
+- [`/verify`](.devin/workflows/verify.md) - Verify work against specs and rules
+- [`/critique`](.devin/workflows/critique.md) - Find flawed assumptions, logic errors, hidden risks
+- [`/reconcile`](.devin/workflows/reconcile.md) - Pragmatic review of critique findings
+- [`/improve`](.devin/workflows/improve.md) - Depth-first improvement (one proven change per run, versioned backups)
+- [`/sync`](.devin/workflows/sync.md) - Document synchronization
+- [`/rename`](.devin/workflows/rename.md) - Global and local refactoring with exhaustive search
 
 **Problem Fixing**
-- [`/fix`](.windsurf/workflows/fix.md) - Fix any problem by reading relevant DevSystem knowledge
-- [`/bugfix`](.windsurf/workflows/bugfix.md) - Fix bugs with full traceability (record, investigate, test, commit)
+- [`/fix`](.devin/workflows/fix.md) - Fix any problem by reading relevant DevSystem knowledge
+- [`/bugfix`](.devin/workflows/bugfix.md) - Fix bugs with full traceability (record, investigate, test, commit)
 
 **Learning**
-- [`/fail`](.windsurf/workflows/fail.md) - Record a failure in FAILS.md
-- [`/learn`](.windsurf/workflows/learn.md) - Extract lessons from resolved problems
+- [`/fail`](.devin/workflows/fail.md) - Record a failure in FAILS.md
+- [`/learn`](.devin/workflows/learn.md) - Extract lessons from resolved problems
 
 **Sessions**
-- [`/session-new`](.windsurf/workflows/session-new.md) - Initialize a new development session
-- [`/session-save`](.windsurf/workflows/session-save.md) - Save session progress
-- [`/session-load`](.windsurf/workflows/session-load.md) - Resume a development session
-- [`/session-finalize`](.windsurf/workflows/session-finalize.md) - Finalize session, sync findings, prepare for archive
-- [`/session-archive`](.windsurf/workflows/session-archive.md) - Archive a completed session folder
+- [`/session-new`](.devin/workflows/session-new.md) - Initialize a new development session
+- [`/session-save`](.devin/workflows/session-save.md) - Save session progress
+- [`/session-load`](.devin/workflows/session-load.md) - Resume a development session
+- [`/session-finalize`](.devin/workflows/session-finalize.md) - Finalize session, sync findings, prepare for archive
+- [`/session-archive`](.devin/workflows/session-archive.md) - Archive a completed session folder
 
 **Communication**
-- [`/conversation-start`](.windsurf/workflows/conversation-start.md) - Create new conversation tracking file from chat context
-- [`/conversation-update`](.windsurf/workflows/conversation-update.md) - Update existing conversation with new emails or messages
-- [`/transcribe`](.windsurf/workflows/transcribe.md) - Transcribe PDFs and web pages to markdown
-- [`/translate`](.windsurf/workflows/translate.md) - Translate markdown, PDF, or subtitle files to target languages
+- [`/conversation-start`](.devin/workflows/conversation-start.md) - Create new conversation tracking file from chat context
+- [`/conversation-update`](.devin/workflows/conversation-update.md) - Update existing conversation with new emails or messages
+- [`/transcribe`](.devin/workflows/transcribe.md) - Transcribe PDFs and web pages to markdown
+- [`/translate`](.devin/workflows/translate.md) - Translate markdown, PDF, or subtitle files to target languages
 
 **Utility**
-- [`/commit`](.windsurf/workflows/commit.md) - Create conventional commits
-- [`/switch-model`](.windsurf/workflows/switch-model.md) - Switch Cascade AI model tier (HIGH, MID, LOW)
-- [`/project-release`](.windsurf/workflows/project-release.md) - Create a dated release with comprehensive release notes
-- [`/cleanup`](.windsurf/workflows/cleanup.md) - Delete temporary files and artifacts left by workflows and skills
+- [`/commit`](.devin/workflows/commit.md) - Create conventional commits
+- [`/switch-model`](.devin/workflows/switch-model.md) - Switch Cascade AI model tier (HIGH, MID, LOW)
+- [`/project-release`](.devin/workflows/project-release.md) - Create a dated release with comprehensive release notes
+- [`/cleanup`](.devin/workflows/cleanup.md) - Delete temporary files and artifacts left by workflows and skills
 
 ## Usage Examples
 
 ### Prime Context
 
-**Workflows:** [`/prime`](.windsurf/workflows/prime.md)
+**Workflows:** [`/prime`](.devin/workflows/prime.md)
 
 Load workspace context before starting work:
 ```
@@ -717,7 +717,7 @@ Typically loads: `README.md`, `!NOTES.md`, `!PROBLEMS.md`, `FAILS.md`, `LEARNING
 
 Both workflows **automatically create a session**, follow EDIRD phases, and close when done.
 
-**Workflows:** [`/build`](.windsurf/workflows/build.md), [`/solve`](.windsurf/workflows/solve.md)
+**Workflows:** [`/build`](.devin/workflows/build.md), [`/solve`](.devin/workflows/solve.md)
 
 Start a BUILD workflow (create software, new features):
 ```
@@ -731,7 +731,7 @@ Start a SOLVE workflow (research, analysis, decisions):
 
 ### Session Workflows
 
-**Workflows:** [`/session-new`](.windsurf/workflows/session-new.md), [`/session-save`](.windsurf/workflows/session-save.md), [`/session-load`](.windsurf/workflows/session-load.md), [`/session-finalize`](.windsurf/workflows/session-finalize.md)
+**Workflows:** [`/session-new`](.devin/workflows/session-new.md), [`/session-save`](.devin/workflows/session-save.md), [`/session-load`](.devin/workflows/session-load.md), [`/session-finalize`](.devin/workflows/session-finalize.md)
 
 Start a new work session:
 ```
@@ -756,21 +756,21 @@ Finalize session and sync findings:
 
 ### Autonomous Execution
 
-**Workflow:** [`/go`](.windsurf/workflows/go.md)
+**Workflow:** [`/go`](.devin/workflows/go.md)
 
 Run autonomous loop until goal reached:
 ```
 /go
 ```
 
-The [`/go`](.windsurf/workflows/go.md) workflow cycles through:
+The [`/go`](.devin/workflows/go.md) workflow cycles through:
 1. Assess state - read tracking docs, determine current position
 2. Execute next - build execution sequence, run next task
 3. Repeat until goal reached or blocker hit
 
 ### Document Cycle (INFO -> SPEC -> IMPL -> TEST -> TASKS)
 
-**Workflows:** [`/research`](.windsurf/workflows/research.md), [`/write-spec`](.windsurf/workflows/write-spec.md), [`/write-impl-plan`](.windsurf/workflows/write-impl-plan.md), [`/write-test-plan`](.windsurf/workflows/write-test-plan.md), [`/write-tasks-plan`](.windsurf/workflows/write-tasks-plan.md), [`/implement`](.windsurf/workflows/implement.md), [`/verify`](.windsurf/workflows/verify.md), [`/sync`](.windsurf/workflows/sync.md), [`/rename`](.windsurf/workflows/rename.md), [`/commit`](.windsurf/workflows/commit.md)
+**Workflows:** [`/research`](.devin/workflows/research.md), [`/write-spec`](.devin/workflows/write-spec.md), [`/write-impl-plan`](.devin/workflows/write-impl-plan.md), [`/write-test-plan`](.devin/workflows/write-test-plan.md), [`/write-tasks-plan`](.devin/workflows/write-tasks-plan.md), [`/implement`](.devin/workflows/implement.md), [`/verify`](.devin/workflows/verify.md), [`/sync`](.devin/workflows/sync.md), [`/rename`](.devin/workflows/rename.md), [`/commit`](.devin/workflows/commit.md)
 
 This follows the Specification-Driven Development (SDD) methodology used by [GitHub spec-kit](https://github.com/github/spec-kit) and [Zencoder](https://docs.zencoder.ai/user-guides/tutorials/spec-driven-development-guide).
 
@@ -831,7 +831,7 @@ Creates `TASKS_[TOPIC].md` from IMPL/TEST. **Mandatory before implementation.**
 
 ### Problem Fixing
 
-**Workflows:** [`/fix`](.windsurf/workflows/fix.md), [`/bugfix`](.windsurf/workflows/bugfix.md)
+**Workflows:** [`/fix`](.devin/workflows/fix.md), [`/bugfix`](.devin/workflows/bugfix.md)
 
 Fix any problem by reading relevant DevSystem knowledge:
 ```
@@ -849,7 +849,7 @@ Creates `[BUG_FOLDER]` with PROBLEMS.md, runs impact assessment, and documents f
 
 ### Quality Review
 
-**Workflows:** [`/critique`](.windsurf/workflows/critique.md), [`/reconcile`](.windsurf/workflows/reconcile.md), [`/improve`](.windsurf/workflows/improve.md)
+**Workflows:** [`/critique`](.devin/workflows/critique.md), [`/reconcile`](.devin/workflows/reconcile.md), [`/improve`](.devin/workflows/improve.md)
 
 Devil's Advocate review (find flaws):
 ```
@@ -868,7 +868,7 @@ Depth-first improvement (one proven change per run, versioned backups):
 
 ### Learning from Failures
 
-**Workflows:** [`/fail`](.windsurf/workflows/fail.md), [`/learn`](.windsurf/workflows/learn.md)
+**Workflows:** [`/fail`](.devin/workflows/fail.md), [`/learn`](.devin/workflows/learn.md)
 
 Record a failure to FAILS.md:
 ```
@@ -882,7 +882,7 @@ Extract learnings from resolved problems:
 
 ### Testing
 
-**Workflows:** [`/test`](.windsurf/workflows/test.md)
+**Workflows:** [`/test`](.devin/workflows/test.md)
 
 Run tests based on scope and context:
 ```
@@ -891,7 +891,7 @@ Run tests based on scope and context:
 
 ### Planning Tools
 
-**Workflows:** [`/partition`](.windsurf/workflows/partition.md), [`/write-strut`](.windsurf/workflows/write-strut.md), [`/write-info`](.windsurf/workflows/write-info.md)
+**Workflows:** [`/partition`](.devin/workflows/partition.md), [`/write-strut`](.devin/workflows/write-strut.md), [`/write-info`](.devin/workflows/write-info.md)
 
 Split plans into discrete tasks:
 ```
@@ -910,7 +910,7 @@ Create INFO document from research:
 
 ### Research
 
-**Workflows:** [`/deep-research`](.windsurf/workflows/deep-research.md), [`/transcribe`](.windsurf/workflows/transcribe.md)
+**Workflows:** [`/deep-research`](.devin/workflows/deep-research.md), [`/transcribe`](.devin/workflows/transcribe.md)
 
 Execute deep research (MEPI or MCPI):
 ```
@@ -924,7 +924,7 @@ Transcribe PDFs and web pages to markdown:
 
 ### Utility Workflows
 
-**Workflows:** [`/session-archive`](.windsurf/workflows/session-archive.md), [`/switch-model`](.windsurf/workflows/switch-model.md), [`/project-release`](.windsurf/workflows/project-release.md)
+**Workflows:** [`/session-archive`](.devin/workflows/session-archive.md), [`/switch-model`](.devin/workflows/switch-model.md), [`/project-release`](.devin/workflows/project-release.md)
 
 Archive a completed session:
 ```
@@ -947,8 +947,8 @@ Release a project version:
 |--------------------|------------------------|------------------------|------------------------|-----------------------------------|-------------------------|
 | Type               | IDE                    | Terminal               | Terminal               | IDE Extension                     | Gateway + Multi-channel |
 | Platform           | Windows, macOS, Linux  | Windows, macOS, Linux  | macOS, Linux, Win WSL  | VS Code, VS, JetBrains            | Windows, macOS, Linux   |
-| Instructions       | `.windsurf/rules/*.md` | `CLAUDE.md`            | `AGENTS.md`            | `.github/copilot-instructions.md` | `AGENTS.md`, `SOUL.md`  |
-| Commands/Workflows | `.windsurf/workflows/` | `.claude/commands/`    | Custom prompts only    | Prompt files only                 | Skills only             |
+| Instructions       | `.devin/rules/*.md` | `CLAUDE.md`            | `AGENTS.md`            | `.github/copilot-instructions.md` | `AGENTS.md`, `SOUL.md`  |
+| Commands/Workflows | `.devin/workflows/` | `.claude/commands/`    | Custom prompts only    | Prompt files only                 | Skills only             |
 | Skills             | Yes                    | Yes                    | No                     | No                                | Yes                     |
 | Subagents          | No                     | Yes                    | No                     | Yes (custom agents)               | Yes                     |
 | Hooks              | Yes                    | Yes                    | No                     | No                                | Yes (webhooks)          |
@@ -959,20 +959,20 @@ Release a project version:
 ### Deploying to Other Agents
 
 **Claude Code:**
-- `.windsurf/rules/*.md` → `CLAUDE.md` (merge into single file)
-- `.windsurf/workflows/*.md` → `.claude/commands/*.md`
-- `.windsurf/skills/*/SKILL.md` → `.claude/skills/*/SKILL.md`
+- `.devin/rules/*.md` → `CLAUDE.md` (merge into single file)
+- `.devin/workflows/*.md` → `.claude/commands/*.md`
+- `.devin/skills/*/SKILL.md` → `.claude/skills/*/SKILL.md`
 
 **Codex CLI:**
-- `.windsurf/rules/*.md` → `AGENTS.md` (merge into single file)
+- `.devin/rules/*.md` → `AGENTS.md` (merge into single file)
 
 **GitHub Copilot:**
-- `.windsurf/rules/*.md` → `.github/copilot-instructions.md` (merge into single file)
+- `.devin/rules/*.md` → `.github/copilot-instructions.md` (merge into single file)
 
 **OpenClaw:**
-- `.windsurf/rules/*.md` → `AGENTS.md` + `SOUL.md` (split behavioral and persona rules)
-- `.windsurf/workflows/*.md` → `skills/*/SKILL.md` (convert workflows to skills)
-- `.windsurf/skills/*/SKILL.md` → `skills/*/SKILL.md` (direct copy, same format)
+- `.devin/rules/*.md` → `AGENTS.md` + `SOUL.md` (split behavioral and persona rules)
+- `.devin/workflows/*.md` → `skills/*/SKILL.md` (convert workflows to skills)
+- `.devin/skills/*/SKILL.md` → `skills/*/SKILL.md` (direct copy, same format)
 
 ### Detailed Documentation
 

@@ -4,7 +4,7 @@
 **Goal**: Generic skill for LLM evaluation pipelines - works with images, text documents, or any content
 **Timeline**: Created 2026-01-22, Updated 0 times
 
-**Target folder**: `.windsurf/skills/llm-evaluation/`
+**Target folder**: `.devin/skills/llm-evaluation/`
 
 ## MUST-NOT-FORGET
 
@@ -661,7 +661,7 @@ When user runs evaluation pipeline, results are stored in a structured folder:
 ### Skill Folder Structure
 
 ```
-.windsurf/skills/llm-evaluation/
+.devin/skills/llm-evaluation/
 ├── SKILL.md                  # Skill documentation
 ├── call-llm.py               # Single LLM call
 ├── call-llm-batch.py         # Batch LLM calls

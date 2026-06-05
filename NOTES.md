@@ -35,25 +35,25 @@ Usage: `--keys-file [WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
 
 ## DevSystem Source/Sync Rules
 
-**CRITICAL: [DEVSYSTEM_FOLDER] is the SOURCE. .windsurf is the SYNC TARGET.**
+**CRITICAL: [DEVSYSTEM_FOLDER] is the SOURCE. .devin is the SYNC TARGET.**
 **CRITICAL: Never leak project-specific or private data into workflows, skills, or rules.** These are reusable across projects. Use generic examples and placeholders only.
 
 - **Creating new rules, workflows, skills** -> Create in [DEVSYSTEM_FOLDER] first, then sync
 - **Editing existing content** -> Edit in [DEVSYSTEM_FOLDER] first, then sync
-- **NEVER create or edit directly in `.windsurf/`** (except for temp testing)
+- **NEVER create or edit directly in `.devin/`** (except for temp testing)
 
 **Sync direction:**
 ```
-[DEVSYSTEM_FOLDER] ---(sync to)---> .windsurf/
+[DEVSYSTEM_FOLDER] ---(sync to)---> .devin/
 ```
 
-**Exception:** If user edits .windsurf directly, sync BACK to [DEVSYSTEM_FOLDER] first.
+**Exception:** If user edits .devin directly, sync BACK to [DEVSYSTEM_FOLDER] first.
 
 **README.md Link Convention (2026-03-19):**
-- **ALWAYS use `.windsurf/` paths in README.md** - Never reference `DevSystemV3.6/` or any version folder
-- Example: `.windsurf/skills/write-documents/APAPALAN_RULES.md` (GOOD)
+- **ALWAYS use `.devin/` paths in README.md** - Never reference `DevSystemV3.6/` or any version folder
+- Example: `.devin/skills/write-documents/APAPALAN_RULES.md` (GOOD)
 - Example: `DevSystemV3.6/skills/write-documents/APAPALAN_RULES.md` (BAD)
-- Reason: README is user-facing, users interact with `.windsurf/`, not version folders
+- Reason: README is user-facing, users interact with `.devin/`, not version folders
 
 ## Workflow Design Rules
 
@@ -72,9 +72,9 @@ Usage: `--keys-file [WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
 
 ## Platform Notes
 
-**Windows:** No symlinks. `.windsurf/` is a copy of `[DEVSYSTEM_FOLDER]`. Sync command and procedures: see `SOPS.md`.
+**Windows:** No symlinks. `.devin/` is a copy of `[DEVSYSTEM_FOLDER]`. Sync command and procedures: see `SOPS.md`.
 
-**"deploy" keyword:** When user says "deploy", sync `[DEVSYSTEM_FOLDER]` to `.windsurf/` per `SOPS.md` → Quick Reference: Sync Command.
+**"deploy" keyword:** When user says "deploy", sync `[DEVSYSTEM_FOLDER]` to `.devin/` per `SOPS.md` → Quick Reference: Sync Command.
 
 Automatically push commits to GitHub.
 
@@ -82,7 +82,7 @@ Automatically push commits to GitHub.
 
 ## Special Workflows (Workspace Root)
 
-**`deploy-to-all-repos.md`** — deploys to linked repos. Lives at workspace root (not `.windsurf/workflows/`) so it's not propagated. Procedures: `SOPS.md` SOP 4.
+**`deploy-to-all-repos.md`** — deploys to linked repos. Lives at workspace root (not `.devin/workflows/`) so it's not propagated. Procedures: `SOPS.md` SOP 4.
 
 **CRITICAL: NEVER auto-deploy to [LINKED_REPOS]**. Always ask user before deploying to linked repos. Deployment to linked repos is a separate, explicit action.
 

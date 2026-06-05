@@ -7,7 +7,7 @@
 
 **1. Configure** `_run_templateV2/pipeline_config.json`:
 
-- `source_dir` - Folder to compress (e.g., `"E:/Dev/IPPS/.windsurf/"`)
+- `source_dir` - Folder to compress (e.g., `"E:/Dev/IPPS/.devin/"`)
 - `thresholds.target_reduction_percent` - How much to reduce (60 = output is 40% of original)
 - `models.mother` - Compression model (e.g., `"claude-opus-4-6-20260204"`)
 - `models.verifier` - Quality judge model (e.g., `"gpt-5-mini"`)
@@ -33,7 +33,7 @@ python mipps_pipeline.py status    # Check progress anytime
 
 ## Summary
 
-- MinifyIPPS compresses `.windsurf/` markdown files using LLM-based compression with quality verification
+- MinifyIPPS compresses `.devin/` markdown files using LLM-based compression with quality verification
 - Pipeline location: `_Sessions/_2026-03-19_MinifyIPPS/_run_templateV2/`
 - 7-step workflow: bundle -> analyze -> check -> generate -> compress -> verify -> iterate
 - Configuration via `pipeline_config.json` - key setting: `target_reduction_percent` (60 = reduce by 60%)
@@ -82,7 +82,7 @@ File: `pipeline_config.json`
 
 ```json
 {
-  "source_dir": "E:/Dev/IPPS/.windsurf/",
+  "source_dir": "E:/Dev/IPPS/.devin/",
   "models": {
     "mother": "claude-opus-4-6-20260204",
     "verifier": "gpt-5-mini"

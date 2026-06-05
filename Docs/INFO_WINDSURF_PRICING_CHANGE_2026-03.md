@@ -311,7 +311,7 @@ From blog: "If you are a Pro or Teams user, we will grandfather in your current 
 
 - Windsurf Blog: https://windsurf.com/blog/windsurf-pricing-plans [VERIFIED 2026-03-19]
 - User screenshots of usage dashboard and blog post [VERIFIED]
-- Model pricing: `.windsurf/skills/llm-evaluation/model-pricing.json` [VERIFIED 2026-03-12]
+- Model pricing: `.devin/skills/llm-evaluation/model-pricing.json` [VERIFIED 2026-03-12]
 - Transition log: `_PrivateSessions/_2026-03-19_WindsurfTokenUsageLogging/_WINDSURF_PRICING_MODEL_TRANSITION_LOG.md`
 - Anthropic pricing: https://platform.claude.com/docs/en/about-claude/pricing
 - OpenAI pricing: https://developers.openai.com/api/docs/pricing

@@ -1,4 +1,4 @@
-﻿# INFO: How Windsurf Works
+# INFO: How Windsurf Works
 
 **Doc ID**: WSRF-IN01
 **Goal**: Comprehensive reference for Windsurf Integrated Development Environment (IDE) - agent harnesses, AI models, customization, developer tools, enterprise controls, and architecture internals
@@ -15,9 +15,9 @@
 
 **Cascade specifics:**
 - Three modes: Code, Plan, Ask (formerly Chat). `megaplan` for advanced planning [VERIFIED]
-- `.windsurf/rules/*.md` for instructions, 4 trigger modes: `always_on`, `model_decision`, `glob`, `manual` [VERIFIED]
-- Workflows in `.windsurf/workflows/*.md`, invoked as `/workflow-name` [VERIFIED]
-- Skills in `.windsurf/skills/<name>/SKILL.md` or `.agents/skills/` - ONLY mechanism working across both Cascade and Devin Local [VERIFIED]
+- `.devin/rules/*.md` for instructions, 4 trigger modes: `always_on`, `model_decision`, `glob`, `manual` [VERIFIED]
+- Workflows in `.devin/workflows/*.md`, invoked as `/workflow-name` [VERIFIED]
+- Skills in `.devin/skills/<name>/SKILL.md` or `.agents/skills/` - ONLY mechanism working across both Cascade and Devin Local [VERIFIED]
 - Memories auto-generated during conversation, workspace-scoped [VERIFIED]
 - Model switching preserves full context; model fixed per response, change takes effect on next turn [TESTED]
 - Smaller context window: earlier messages dropped/summarized automatically without warning [VERIFIED]
@@ -51,7 +51,7 @@
 **Settings and configuration:**
 - Cascade settings: many now in `settings.json` as `windsurf.*` keys (portable); some remain UI-only in `user_settings.pb` [VERIFIED]
 - MCP config in `~/.codeium/windsurf/mcp_config.json` [VERIFIED]
-- Hooks in `.windsurf/hooks.json` or `~/.codeium/windsurf/hooks.json`, 12 events [VERIFIED]
+- Hooks in `.devin/hooks.json` or `~/.codeium/windsurf/hooks.json`, 12 events [VERIFIED]
 
 **Architecture internals:**
 - Language server is a 166MB Go binary making direct HTTPS calls to Codeium APIs [TESTED 2026-05]
@@ -151,7 +151,7 @@ Cascade offers three modes, switchable via toggle below input box or `Ctrl+.`:
 - `@conversation` - Reference previous conversations (retrieves relevant parts)
 - `@codemap-name` - Reference a codemap
 
-**Workflows:** `/workflow-name` runs workflow from `.windsurf/workflows/`
+**Workflows:** `/workflow-name` runs workflow from `.devin/workflows/`
 
 **Other enrichments:**
 - **URL pasting** - Paste URLs directly, Cascade fetches content
@@ -570,11 +570,11 @@ Persistent instructions that Cascade follows every time. Set coding style, proje
 
 **Storage locations (rules discovery):**
 1. **Global rules**: `~/.codeium/windsurf/memories/global_rules.md` (single file, always on, 6,000 char limit) [VERIFIED]
-2. **Workspace rules**: `.windsurf/rules/*.md` (one file per rule, 12,000 chars per file) [VERIFIED]
+2. **Workspace rules**: `.devin/rules/*.md` (one file per rule, 12,000 chars per file) [VERIFIED]
 3. **AGENTS.md**: Directory-scoped rules (see below). Root-level = always-on, subdirectory = auto-glob for that directory [VERIFIED]
 4. **System-level** (Enterprise): OS-specific paths (e.g. `/etc/windsurf/rules/`), read-only for end users [VERIFIED]
 
-Windsurf searches `.windsurf/rules/` in the current workspace, sub-directories, and parent directories up to git root. Multiple workspaces: rules deduplicated, shown with shortest relative path. [VERIFIED]
+Windsurf searches `.devin/rules/` in the current workspace, sub-directories, and parent directories up to git root. Multiple workspaces: rules deduplicated, shown with shortest relative path. [VERIFIED]
 
 **Activation modes (frontmatter `trigger` field):**
 
@@ -611,7 +611,7 @@ All test files must use describe/it blocks and mock external API calls.
 Step-by-step procedures defined as markdown files. Cascade follows them when invoked via `/workflow-name` slash command. [VERIFIED]
 
 **Storage locations:**
-1. **Workspace**: `.windsurf/workflows/*.md`
+1. **Workspace**: `.devin/workflows/*.md`
 2. **System-level** (Enterprise): Cloud dashboard [VERIFIED]
 
 **Format:**
@@ -634,7 +634,7 @@ Bundles for complex, multi-step tasks. Include `SKILL.md` description plus suppo
 
 **Creation:**
 - **UI method**: Windsurf Settings > Skills (easiest)
-- **Manual**: Create `SKILL.md` in `.windsurf/skills/<skill-name>/` or `.agents/skills/<skill-name>/` [VERIFIED]
+- **Manual**: Create `SKILL.md` in `.devin/skills/<skill-name>/` or `.agents/skills/<skill-name>/` [VERIFIED]
 
 **SKILL.md format:**
 ```yaml
@@ -653,7 +653,7 @@ Required frontmatter field: `description`. [VERIFIED]
 - **Manual** - `@skill-name` in chat [VERIFIED]
 
 **Skill scopes:**
-1. **Project**: `.windsurf/skills/<name>/` or `.agents/skills/<name>/`
+1. **Project**: `.devin/skills/<name>/` or `.agents/skills/<name>/`
 2. **System-level** (Enterprise): Cloud dashboard [VERIFIED]
 
 **Skills vs Rules vs Workflows:**
@@ -702,7 +702,7 @@ Cascade auto-generates memories during conversation when it encounters context i
 
 **Management:** Windsurf Settings > Memories (via Customizations icon in Cascade top right). Review, edit, delete auto-generated memories. [VERIFIED]
 
-**Recommendation:** For durable, shared knowledge, prefer Rules (`.windsurf/rules/`) or AGENTS.md over auto-generated memories. Rules are version-controlled, shareable, and give explicit activation control. [VERIFIED]
+**Recommendation:** For durable, shared knowledge, prefer Rules (`.devin/rules/`) or AGENTS.md over auto-generated memories. Rules are version-controlled, shareable, and give explicit activation control. [VERIFIED]
 
 **Devin Local compatibility:** Memories are NOT supported with Devin Local. Migrate critical memories to Skills. [VERIFIED]
 
@@ -712,7 +712,7 @@ Shell scripts that run before/after Cascade actions. Enable logging, access cont
 
 ### Configuration
 
-`.windsurf/hooks.json` or `~/.codeium/windsurf/hooks.json`:
+`.devin/hooks.json` or `~/.codeium/windsurf/hooks.json`:
 
 ```json
 {
@@ -1171,10 +1171,10 @@ echo "# This file makes the folder visible to Cascade" > _PrivateSessions/.gitke
 
 **Workspace Config:**
 - `.codeiumignore` - Files Cascade should ignore
-- `.windsurf/workflows/*.md` - Custom workflows
-- `.windsurf/rules/*.md` - Project rules for Cascade
-- `.windsurf/skills/*/SKILL.md` - Skills with supporting resources
-- `.windsurf/hooks.json` - Workspace-level Cascade hooks
+- `.devin/workflows/*.md` - Custom workflows
+- `.devin/rules/*.md` - Project rules for Cascade
+- `.devin/skills/*/SKILL.md` - Skills with supporting resources
+- `.devin/hooks.json` - Workspace-level Cascade hooks
 - `AGENTS.md` - Directory-scoped instructions
 
 **Devin Local Config:**
@@ -1216,7 +1216,7 @@ Windsurf.exe (Electron main process)
 **Command line** (observed via `Win32_Process.CommandLine`):
 ```
 language_server_windows_x64.exe
-  --api_server_url https://server.self-serve.windsurf.com
+  --api_server_url https://server.self-serve.devin.com
   --run_child
   --enable_lsp
   --extension_server_port <port>
@@ -1232,7 +1232,7 @@ language_server_windows_x64.exe
   --sentry_telemetry
   --sentry_environment stable
   --codeium_dir .codeium/windsurf
-  --extensions_dir <user_home>\.windsurf\extensions
+  --extensions_dir <user_home>\.devin\extensions
   --parent_pipe_path \\.\pipe\server_<uuid>
   --windsurf_version <version>
   --stdin_initial_metadata
@@ -1248,7 +1248,7 @@ language_server_windows_x64.exe
 
 ### API Endpoints [TESTED]
 
-- `https://server.self-serve.windsurf.com` - Primary API (auth, settings, telemetry, user data)
+- `https://server.self-serve.devin.com` - Primary API (auth, settings, telemetry, user data)
 - `https://inference.codeium.com` - AI inference (Cascade chat, completions, tool calls)
 
 Both are HTTPS. The language server makes direct outbound connections (not via Electron/Node.js network stack).
@@ -1401,15 +1401,15 @@ Default values are protobuf defaults (false for bool, 0 for int, "" for string).
 
 Source IDs reference `_INFO_WSFT-02_Sources.md [WSFT-IN02]` in session `_2026-06-01_WindsurfFeatureResearch`.
 
-**Primary source**: https://docs.windsurf.com/llms-full.txt (full documentation export, accessed 2026-06-01)
+**Primary source**: https://docs.devin.com/llms-full.txt (full documentation export, accessed 2026-06-01)
 
-**Official documentation (34 sources)**: Cascade overview, modes, models, Adaptive router, Tab completion, Fast Context, context awareness, MCP, rules, workflows, skills, hooks, Devin Cloud, Devin Local, Agent Command Center, Spaces, Quick Review, Vibe and Replace, Previews, Terminal, Codemaps, Worktrees, Arena Mode, AGENTS.md, App Deploys, web search, quota, RBAC, DeepWiki, FedRAMP, Analytics API, Enterprise Policies. All from docs.windsurf.com.
+**Official documentation (34 sources)**: Cascade overview, modes, models, Adaptive router, Tab completion, Fast Context, context awareness, MCP, rules, workflows, skills, hooks, Devin Cloud, Devin Local, Agent Command Center, Spaces, Quick Review, Vibe and Replace, Previews, Terminal, Codemaps, Worktrees, Arena Mode, AGENTS.md, App Deploys, web search, quota, RBAC, DeepWiki, FedRAMP, Analytics API, Enterprise Policies. All from docs.devin.com.
 
 **Changelog**: https://windsurf.com/changelog (Windsurf Editor and Windsurf Next, accessed 2026-06-01)
 
 ### Previous Research and Testing
 
-- https://docs.windsurf.com/windsurf/cascade/cascade - Cascade documentation [TESTED 2026-01-13]
+- https://docs.devin.com/windsurf/cascade/cascade - Cascade documentation [TESTED 2026-01-13]
 - Session `_2026-01-26_AutoModelSwitcher` - Model switching and context window research [TESTED]
 - Session `_2026-05-27_CascadeMetapromptExtraction/S03_CSMP-ExtractionTesting_2026-05-27` - Binary analysis, process inspection, interception testing [TESTED 2026-05]
 - `Win32_Process.CommandLine` inspection of `language_server_windows_x64.exe` [TESTED 2026-05]
@@ -1423,8 +1423,8 @@ Source IDs reference `_INFO_WSFT-02_Sources.md [WSFT-IN02]` in session `_2026-06
 ## Document History
 
 **[2026-06-02]**
-- Added: Overview section enriched with VS Code OSS base, platform support (Win/Mac/Linux with min versions), remote development (SSH/Dev Containers/WSL), Windsurf Plugins availability, Windsurf Next channel (from docs.windsurf.com)
-- Added: Rules section enriched with 4 activation modes (was 2), frontmatter trigger format, character limits, glob example, discovery details, best practices (from docs.windsurf.com)
+- Added: Overview section enriched with VS Code OSS base, platform support (Win/Mac/Linux with min versions), remote development (SSH/Dev Containers/WSL), Windsurf Plugins availability, Windsurf Next channel (from docs.devin.com)
+- Added: Rules section enriched with 4 activation modes (was 2), frontmatter trigger format, character limits, glob example, discovery details, best practices (from docs.devin.com)
 - Added: Memories section enriched with storage location, workspace scoping, no-quota-cost, explicit creation prompt, recommendation to prefer Rules
 - Fixed: Acronyms expanded on first use (MCP, CLI, VM, PR, SCIM, IDE, ACU)
 - Fixed: 17 H4 headings converted to bold paragraph headers (MW-HS-02 max 3 levels)

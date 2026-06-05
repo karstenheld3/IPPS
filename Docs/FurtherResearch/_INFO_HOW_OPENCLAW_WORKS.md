@@ -985,16 +985,16 @@ During heartbeats, periodically:
 ### Skills, Workflows, and Rules Comparison
 
 **Skills**:
-- **Windsurf**: `.windsurf/skills/<name>/SKILL.md` - LLM decides when to apply
+- **Windsurf**: `.devin/skills/<name>/SKILL.md` - LLM decides when to apply
 - **OpenClaw**: `<workspace>/skills/<name>/SKILL.md` - Same concept, same format (AgentSkills spec)
 - Both use `/skill-name` invocation
 
 **Workflows**:
-- **Windsurf**: `.windsurf/workflows/*.md` - Step-by-step procedures, `/workflow-name` invocation
+- **Windsurf**: `.devin/workflows/*.md` - Step-by-step procedures, `/workflow-name` invocation
 - **OpenClaw**: No direct equivalent - use skills with strict step instructions to mimic
 
 **Rules**:
-- **Windsurf**: `.windsurf/rules/*.md` - Explicit rule files injected into context
+- **Windsurf**: `.devin/rules/*.md` - Explicit rule files injected into context
 - **OpenClaw**: Embedded in bootstrap files (AGENTS.md, SOUL.md) - merged with persona
 
 **Key Difference**: Windsurf enforces workflow step order at system level. OpenClaw relies on prompt engineering - the LLM "should" follow steps but there's no hard enforcement.
@@ -1002,7 +1002,7 @@ During heartbeats, periodically:
 **Bridge Option**: Create an OpenClaw skill that references Windsurf workflows:
 ```
 <workspace>/skills/windsurf-workflows/SKILL.md
-→ Lists all .windsurf/workflows/*.md files
+→ Lists all .devin/workflows/*.md files
 → Instructs agent to read and follow them exactly
 ```
 

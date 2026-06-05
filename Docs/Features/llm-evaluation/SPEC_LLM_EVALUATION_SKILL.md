@@ -4,7 +4,7 @@
 **Goal**: Generic skill for LLM evaluation pipelines - works with images, text documents, or any content
 **Timeline**: Created 2026-01-22, Updated 2026-01-26
 
-**Target folder**: `.windsurf/skills/llm-evaluation/`
+**Target folder**: `.devin/skills/llm-evaluation/`
 
 ## MUST-NOT-FORGET
 

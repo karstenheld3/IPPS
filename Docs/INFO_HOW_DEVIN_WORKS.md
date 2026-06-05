@@ -30,9 +30,9 @@
 
 **Cascade (legacy) specifics:**
 - Three modes: Code, Plan, Ask. `megaplan` for advanced planning [VERIFIED]
-- `.devin/rules/*.md` (or `.windsurf/rules/*.md`), 4 trigger modes: `always_on`, `model_decision`, `glob`, `manual` [VERIFIED]
-- Workflows in `.devin/workflows/*.md` (or `.windsurf/workflows/`), invoked as `/workflow-name` [VERIFIED]
-- Skills in `.devin/skills/<name>/SKILL.md` or `.windsurf/skills/` - ONLY mechanism working across both Cascade and Devin Local [VERIFIED]
+- `.devin/rules/*.md` (or `.devin/rules/*.md`), 4 trigger modes: `always_on`, `model_decision`, `glob`, `manual` [VERIFIED]
+- Workflows in `.devin/workflows/*.md` (or `.devin/workflows/`), invoked as `/workflow-name` [VERIFIED]
+- Skills in `.devin/skills/<name>/SKILL.md` or `.devin/skills/` - ONLY mechanism working across both Cascade and Devin Local [VERIFIED]
 - Memories auto-generated during conversation, workspace-scoped [VERIFIED]
 
 **AI models:**
@@ -65,11 +65,11 @@
 - Sandbox enforcement, network enforcement, granular permissions (Devin Local) [VERIFIED]
 
 **Configuration and paths:**
-- `.devin/rules/` preferred (`.windsurf/rules/` fallback) [VERIFIED]
-- `.windsurfrules` still read (no `.devinrules` equivalent) [VERIFIED]
+- `.devin/rules/` preferred (`.devin/rules/` fallback) [VERIFIED]
+- `.devinrules` still read (no `.devinrules` equivalent) [VERIFIED]
 - AGENTS.md / agents.md supported [VERIFIED]
 - App data: `%APPDATA%\Devin\` (or `%APPDATA%\Windsurf\` legacy) [VERIFIED]
-- Extensions: `~/.devin/extensions/` (or `~/.windsurf/extensions/`) [VERIFIED]
+- Extensions: `~/.devin/extensions/` (or `~/.devin/extensions/`) [VERIFIED]
 - Executable: `Devin.exe` / `Devin.app` / `devin` (Linux) [VERIFIED]
 - CLI binaries: `devin-desktop`, `surf`, `windsurf` (all still work) [VERIFIED]
 
@@ -134,7 +134,7 @@ Devin Desktop (formerly Windsurf) is an AI-powered IDE built on VS Code Open Sou
 - Windsurf → Devin Desktop
 - Windsurf.exe / Windsurf.app → Devin.exe / Devin.app
 - windsurf.com/editor → devin.ai/download
-- docs.windsurf.com → docs.devin.ai/desktop
+- docs.devin.com → docs.devin.ai/desktop
 - Cascade (primary agent) → Devin Local (primary), Cascade (legacy)
 
 [VERIFIED]
@@ -147,7 +147,7 @@ Devin Desktop (formerly Windsurf) is an AI-powered IDE built on VS Code Open Sou
 - Linux: `~/.config/Windsurf/` → `~/.config/Devin/`
 
 **Extensions:**
-- `~/.windsurf/extensions/` → `~/.devin/extensions/`
+- `~/.devin/extensions/` → `~/.devin/extensions/`
 
 **CLI binaries:** `devin-desktop`, `surf`, `windsurf` (all continue to work)
 - Devin CLI: `devin` (`~/.local/bin/devin` or `%LOCALAPPDATA%\devin\bin\devin.exe`)
@@ -165,21 +165,21 @@ Devin Desktop (formerly Windsurf) is an AI-powered IDE built on VS Code Open Sou
 
 **Rules precedence:**
 1. `.devin/rules/` (preferred, takes precedence)
-2. `.windsurf/rules/` (backward-compatibility fallback)
-3. `.windsurfrules` (legacy single-file, still read)
+2. `.devin/rules/` (backward-compatibility fallback)
+3. `.devinrules` (legacy single-file, still read)
 4. No `.devinrules` single-file equivalent exists
 
 **Workflows:**
-- `.devin/workflows/` or `.windsurf/workflows/` (both read)
+- `.devin/workflows/` or `.devin/workflows/` (both read)
 
 **Skills:**
-- `.devin/skills/` or `.windsurf/skills/` (both read)
+- `.devin/skills/` or `.devin/skills/` (both read)
 
 **Plans:**
-- `.devin/plans/` or `.windsurf/plans/`
+- `.devin/plans/` or `.devin/plans/`
 
 **Ignore files:**
-- `.codeiumignore` and `.windsurfignore` (both still honored)
+- `.codeiumignore` and `.devinignore` (both still honored)
 
 **Also reads:** `AGENTS.md`, `agents.md`, `.cursor/rules/*.mdc` [VERIFIED]
 
@@ -197,8 +197,8 @@ Devin Desktop (formerly Windsurf) is an AI-powered IDE built on VS Code Open Sou
 
 Hostnames to allow:
 - `*.codeiumdata.com`
-- `update.windsurf.com` (update check API)
-- `*.windsurf.com`
+- `update.devin.com` (update check API)
+- `*.devin.com`
 - `*.codeium.com`
 - `*.googleapis.com` (authentication)
 - `apis.google.com` (authentication)
@@ -354,7 +354,7 @@ Devin Desktop ships with ACP, an open-source protocol that standardizes communic
 4. Restart Devin Desktop [VERIFIED]
 
 **Registry configuration:**
-- Local: `~/.windsurf/acp/registry.json` (or `~/.windsurf-next/acp/registry.json`)
+- Local: `~/.devin/acp/registry.json` (or `~/.devin-next/acp/registry.json`)
 - Team: configured via team settings
 - Command Palette: "Open Local ACP Registry Config" [VERIFIED]
 
@@ -580,7 +580,7 @@ New agents in a Space read the DeepWiki index for immediate context instead of c
 ### Ignore Files
 
 - `.codeiumignore` - Prevents agent from reading/indexing specific files
-- `.windsurfignore` - Also honored
+- `.devinignore` - Also honored
 - Global: `~/.codeium/windsurf/.codeiumignore`
 - Setting: `windsurf.allowCascadeAccessGitignoreFiles` [VERIFIED]
 
@@ -641,7 +641,7 @@ Persistent instructions that agents follow. [VERIFIED]
 
 **Storage locations (discovery order):**
 1. **Global rules**: `~/.codeium/windsurf/memories/global_rules.md` (always on, 6,000 char limit)
-2. **Workspace rules**: `.devin/rules/*.md` (preferred) or `.windsurf/rules/*.md` (fallback). One file per rule, 12,000 chars per file.
+2. **Workspace rules**: `.devin/rules/*.md` (preferred) or `.devin/rules/*.md` (fallback). One file per rule, 12,000 chars per file.
 3. **AGENTS.md**: Directory-scoped. Root-level = always-on, subdirectory = auto-glob.
 4. **System-level** (Enterprise): `/etc/devin/rules/` or `C:\ProgramData\Devin\rules\` [VERIFIED]
 
@@ -666,7 +666,7 @@ All test files must use describe/it blocks and mock external API calls.
 
 Step-by-step procedures as markdown. Invoked via `/workflow-name`. **NOT supported with Devin Local.** [VERIFIED]
 
-**Storage:** `.devin/workflows/*.md` or `.windsurf/workflows/*.md`
+**Storage:** `.devin/workflows/*.md` or `.devin/workflows/*.md`
 
 **Format:**
 ```yaml
@@ -684,7 +684,7 @@ Bundles for complex tasks. Include `SKILL.md` plus supporting files. **Works wit
 
 **Creation:**
 - UI: Windsurf Settings > Skills
-- Manual: `.devin/skills/<name>/SKILL.md` or `.windsurf/skills/<name>/SKILL.md` or `.agents/skills/<name>/`
+- Manual: `.devin/skills/<name>/SKILL.md` or `.devin/skills/<name>/SKILL.md` or `.agents/skills/<name>/`
 
 **Invocation:**
 - Automatic (agent matches task to skill description)
@@ -708,7 +708,7 @@ Shell scripts running before/after agent actions. Enable logging, access control
 
 ### Configuration
 
-`.windsurf/hooks.json` or `~/.codeium/windsurf/hooks.json`:
+`.devin/hooks.json` or `~/.codeium/windsurf/hooks.json`:
 
 ```json
 {
@@ -982,17 +982,17 @@ C:\Users\<User>\
 
 **Workspace Config:**
 - `.devin/rules/*.md` - Project rules (preferred)
-- `.windsurf/rules/*.md` - Project rules (fallback)
+- `.devin/rules/*.md` - Project rules (fallback)
 - `.devin/workflows/*.md` - Custom workflows
 - `.devin/skills/*/SKILL.md` - Skills
 - `.devin/config.json` - Devin Local MCP and permissions
 - `.devin/config.local.json` - Local override (gitignored)
-- `.windsurf/hooks.json` - Workspace hooks
+- `.devin/hooks.json` - Workspace hooks
 - `AGENTS.md` - Directory-scoped instructions
-- `.codeiumignore` / `.windsurfignore` - Ignore files
+- `.codeiumignore` / `.devinignore` - Ignore files
 
 **ACP Config:**
-- `~/.windsurf/acp/registry.json` - Local ACP agent registry [VERIFIED]
+- `~/.devin/acp/registry.json` - Local ACP agent registry [VERIFIED]
 
 ### Telemetry and Privacy
 
@@ -1064,7 +1064,7 @@ Devin.exe (Electron main process)
 
 ### API Endpoints
 
-- `https://server.self-serve.windsurf.com` - Primary API (auth, settings, telemetry)
+- `https://server.self-serve.devin.com` - Primary API (auth, settings, telemetry)
 - `https://inference.codeium.com` - AI inference (chat, completions, tool calls) [TESTED 2026-05]
 
 ### Network Architecture
@@ -1112,7 +1112,7 @@ Three independent network stacks:
 
 - Session `_2026-06-01_WindsurfFeatureResearch` - Deep research on Windsurf 2.x features
 - Session `_2026-05-27_CascadeMetapromptExtraction` - Architecture internals testing
-- https://docs.windsurf.com/llms-full.txt - Full documentation export (accessed 2026-06-01)
+- https://docs.devin.com/llms-full.txt - Full documentation export (accessed 2026-06-01)
 
 ## Document History
 
@@ -1124,7 +1124,7 @@ Three independent network stacks:
 - Verified: /improve APAPALAN polish pass. No remaining filler words.
 
 **[2026-06-03 17:45]**
-- Fixed: Path ordering in Summary - `.devin/` before `.windsurf/` to match body (lines 33-35)
+- Fixed: Path ordering in Summary - `.devin/` before `.devin/` to match body (lines 33-35)
 - Fixed: Stale URLs `windsurf.com/subscription/...` and `windsurf.com/team/settings` updated to `devin.ai` [ASSUMED]
 - Fixed: Stale permission label "Disable Windsurf Access" generalized to "Disable Access" [ASSUMED]
 - Fixed: DeepWiki "Add to Cascade" menu label generalized to "context menu"

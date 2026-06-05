@@ -1,6 +1,6 @@
 # Standard Operating Procedures (SOPs)
 
-**Goal**: Prevent drift between `[DEVSYSTEM_FOLDER]`, `.windsurf/`, and linked repos when changing skills or versions.
+**Goal**: Prevent drift between `[DEVSYSTEM_FOLDER]`, `.devin/`, and linked repos when changing skills or versions.
 
 **Why**: Skills and categories are duplicated across `NOTES.md`, `deploy-to-all-repos.md`, and every linked repo. Missing a step silently propagates stale or unregistered content.
 
@@ -14,9 +14,9 @@
 
 ## MUST-NOT-FORGET
 
-- `[DEVSYSTEM_FOLDER]` is the source of truth. Never edit `.windsurf/` directly
+- `[DEVSYSTEM_FOLDER]` is the source of truth. Never edit `.devin/` directly
 - `NOTES.md [SKILL_CATEGORIES]` and `deploy-to-all-repos.md $skillCategories` must stay in sync (duplicated list — weakness)
-- Sync `[DEVSYSTEM_FOLDER]` → `.windsurf/` BEFORE running `/deploy-to-all-repos`
+- Sync `[DEVSYSTEM_FOLDER]` → `.devin/` BEFORE running `/deploy-to-all-repos`
 - `Copy-Item -Recurse -Force` does NOT delete files that no longer exist at source — deletions require explicit `Remove-Item`
 - Every SOP ends with a verification step before you can consider the change complete
 
@@ -32,10 +32,10 @@
 
 ## Quick Reference: Sync Command
 
-Sync `[DEVSYSTEM_FOLDER]` → `.windsurf/` after any edit to source. Referenced by NOTES.md "deploy" keyword.
+Sync `[DEVSYSTEM_FOLDER]` → `.devin/` after any edit to source. Referenced by NOTES.md "deploy" keyword.
 
 ```powershell
-Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.windsurf\" -Recurse -Force
+Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
 ```
 
 **Note**: `Copy-Item` does NOT remove files deleted at source. For removal, see SOP 2 (file) or SOP 3 (skill).
@@ -60,9 +60,9 @@ Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.windsurf\" -Re
 
 5. **If skill introduces a new TOPIC**: register in `[WORKSPACE]/ID-REGISTRY.md`
 
-6. **Sync to `.windsurf/`**:
+6. **Sync to `.devin/`**:
    ```powershell
-   Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.windsurf\" -Recurse -Force
+   Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
    ```
 
 ### Verification
@@ -70,7 +70,7 @@ Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.windsurf\" -Re
 ```powershell
 # 1. Skill folder present in both source and synced copy
 Test-Path "[DEVSYSTEM_FOLDER]\skills\<skill>\SKILL.md"
-Test-Path "[WORKSPACE]\.windsurf\skills\<skill>\SKILL.md"
+Test-Path "[WORKSPACE]\.devin\skills\<skill>\SKILL.md"
 
 # 2. Skill registered in both registries (should print 2 matches)
 Select-String -Path "[WORKSPACE]\NOTES.md","[WORKSPACE]\deploy-to-all-repos.md" -Pattern "<skill>"
@@ -87,12 +87,12 @@ Select-String -Path "[WORKSPACE]\NOTES.md","[WORKSPACE]\deploy-to-all-repos.md" 
 
 **Adding a file**:
 1. Create in `[DEVSYSTEM_FOLDER]/skills/<skill>/<new-file>`
-2. Sync: `Copy-Item [DEVSYSTEM_FOLDER]\* .windsurf\ -Recurse -Force`
+2. Sync: `Copy-Item [DEVSYSTEM_FOLDER]\* .devin\ -Recurse -Force`
 3. Deploy preview shows file in `Add` for all repos → confirm and deploy
 
 **Removing a file**:
 1. Delete from `[DEVSYSTEM_FOLDER]/skills/<skill>/<old-file>`
-2. Delete from `[WORKSPACE]/.windsurf/skills/<skill>/<old-file>` (sync does NOT remove)
+2. Delete from `[WORKSPACE]/.devin/skills/<skill>/<old-file>` (sync does NOT remove)
 3. **Known gap**: current `deploy-to-all-repos.md` does not remove orphaned files from target repos unless listed in `$deprecatedFiles`. Two options:
    - **Acceptable**: leave stale file in linked repos (no harm if unreferenced)
    - **Full cleanup**: manually delete from each linked repo, or extend `$deprecatedFiles` (see SOP 3 pattern)
@@ -104,11 +104,11 @@ Select-String -Path "[WORKSPACE]\NOTES.md","[WORKSPACE]\deploy-to-all-repos.md" 
 ```powershell
 # Presence in both locations
 Test-Path "[DEVSYSTEM_FOLDER]\skills\<skill>\<file>"
-Test-Path "[WORKSPACE]\.windsurf\skills\<skill>\<file>"
+Test-Path "[WORKSPACE]\.devin\skills\<skill>\<file>"
 
 # Hash match
 (Get-FileHash "[DEVSYSTEM_FOLDER]\skills\<skill>\<file>").Hash -eq `
-(Get-FileHash "[WORKSPACE]\.windsurf\skills\<skill>\<file>").Hash
+(Get-FileHash "[WORKSPACE]\.devin\skills\<skill>\<file>").Hash
 ```
 
 **After removing a file**:
@@ -116,7 +116,7 @@ Test-Path "[WORKSPACE]\.windsurf\skills\<skill>\<file>"
 ```powershell
 # Absence in both locations (both should return False)
 Test-Path "[DEVSYSTEM_FOLDER]\skills\<skill>\<old-file>"
-Test-Path "[WORKSPACE]\.windsurf\skills\<skill>\<old-file>"
+Test-Path "[WORKSPACE]\.devin\skills\<skill>\<old-file>"
 ```
 
 ## SOP 3: Old Skill Deleted or Deprecated
@@ -128,7 +128,7 @@ Test-Path "[WORKSPACE]\.windsurf\skills\<skill>\<old-file>"
 1. **Delete skill folder from source**:
    ```powershell
    Remove-Item "[DEVSYSTEM_FOLDER]\skills\<skill>" -Recurse -Force
-   Remove-Item "[WORKSPACE]\.windsurf\skills\<skill>" -Recurse -Force
+   Remove-Item "[WORKSPACE]\.devin\skills\<skill>" -Recurse -Force
    ```
 
 2. **Unregister from `NOTES.md`** `[SKILL_CATEGORIES]`: remove `<skill>` from its list
@@ -152,7 +152,7 @@ Test-Path "[WORKSPACE]\.windsurf\skills\<skill>\<old-file>"
 ```powershell
 # 1. Folder gone from both source and synced copy
 -not (Test-Path "[DEVSYSTEM_FOLDER]\skills\<skill>")
--not (Test-Path "[WORKSPACE]\.windsurf\skills\<skill>")
+-not (Test-Path "[WORKSPACE]\.devin\skills\<skill>")
 
 # 2. Skill NOT in active registries
 Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "\b<skill>\b"  # should return nothing
@@ -178,9 +178,9 @@ foreach ($r in $linkedRepos) { Test-Path "$r\skills\<skill>" }  # all should be 
    - Change `Current [DEVSYSTEM]: DevSystemV3.6` → `Current [DEVSYSTEM]: DevSystemV3.7` (search for `Current \[DEVSYSTEM\]:`)
    - `Current [DEVSYSTEM_FOLDER]` line usually needs no change (uses `[DEVSYSTEM]` placeholder)
 
-3. **Sync new version to `.windsurf/`**:
+3. **Sync new version to `.devin/`**:
    ```powershell
-   Copy-Item -Path "[WORKSPACE]\DevSystemV3.7\*" -Destination "[WORKSPACE]\.windsurf\" -Recurse -Force
+   Copy-Item -Path "[WORKSPACE]\DevSystemV3.7\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
    ```
 
 4. **Document migration** in `[WORKSPACE]/deploy-to-all-repos.md`:
@@ -210,13 +210,13 @@ foreach ($r in $linkedRepos) { Test-Path "$r\skills\<skill>" }  # all should be 
 Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "Current \[DEVSYSTEM\]:"
 # Expected: "Current [DEVSYSTEM]: DevSystemV3.7"
 
-# 2. .windsurf matches new version (spot-check a file hash)
+# 2. .devin matches new version (spot-check a file hash)
 (Get-FileHash "[WORKSPACE]\DevSystemV3.7\skills\write-documents\WORKFLOW_RULES.md").Hash -eq `
-(Get-FileHash "[WORKSPACE]\.windsurf\skills\write-documents\WORKFLOW_RULES.md").Hash
+(Get-FileHash "[WORKSPACE]\.devin\skills\write-documents\WORKFLOW_RULES.md").Hash
 
 # 3. Full byte-count parity (counts should match)
 (Get-ChildItem "[WORKSPACE]\DevSystemV3.7" -Recurse -File).Count
-(Get-ChildItem "[WORKSPACE]\.windsurf"      -Recurse -File).Count
+(Get-ChildItem "[WORKSPACE]\.devin"      -Recurse -File).Count
 
 # 4. Deploy preview shows migration diffs only (no unexpected drift)
 # Run /deploy-to-all-repos in preview, expect:
@@ -240,7 +240,7 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "Current \[DEVSYSTEM\]:"
 
 These locations contain replicas that must be kept in sync:
 
-- **Sync target**: `[WORKSPACE]/.windsurf/skills/llm-evaluation/` (via standard DevSystem sync)
+- **Sync target**: `[WORKSPACE]/.devin/skills/llm-evaluation/` (via standard DevSystem sync)
 - **Same-repo replica**: `[DEVSYSTEM_FOLDER]/skills/llm-transcription/` (3 JSON files)
 - **External repo**: `E:/Dev/LLM-Research/_Sessions/_2026-03-05_TabularDataFormatsForLLMs/01_CSVScaleLimits/_Scripts/` (3 JSON files)
 - **External repo**: `E:/Dev/LLM-Research/_Sessions/_2026-03-05_TabularDataFormatsForLLMs/02_FormatComparison/_Scripts/` (3 JSON files)
@@ -265,9 +265,9 @@ These locations contain replicas that must be kept in sync:
    }
    ```
 
-3. **Sync DevSystem to `.windsurf/`**:
+3. **Sync DevSystem to `.devin/`**:
    ```powershell
-   Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.windsurf\" -Recurse -Force
+   Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
    ```
 
 4. **If effort levels changed**: also update `EFFORT_LEVELS` in `call-llm.py` and `call-llm-batch.py` (both in `[DEVSYSTEM_FOLDER]/skills/llm-evaluation/`), then re-sync
@@ -282,9 +282,9 @@ These locations contain replicas that must be kept in sync:
 $src = "[DEVSYSTEM_FOLDER]\skills\llm-evaluation"
 $files = @("model-registry.json","model-pricing.json","model-parameter-mapping.json")
 $targets = @(
-  "[WORKSPACE]\.windsurf\skills\llm-evaluation",
+  "[WORKSPACE]\.devin\skills\llm-evaluation",
   "[DEVSYSTEM_FOLDER]\skills\llm-transcription",
-  "[WORKSPACE]\.windsurf\skills\llm-transcription",
+  "[WORKSPACE]\.devin\skills\llm-transcription",
   "E:\Dev\LLM-Research\_Sessions\_2026-03-05_TabularDataFormatsForLLMs\01_CSVScaleLimits\_Scripts",
   "E:\Dev\LLM-Research\_Sessions\_2026-03-05_TabularDataFormatsForLLMs\02_FormatComparison\_Scripts"
 )
@@ -305,7 +305,7 @@ Expected: 15 OK, 0 FAIL (5 targets x 3 files).
 ### Check for `__pycache__` pollution
 
 ```powershell
-Get-ChildItem -Path "[WORKSPACE]\DevSystemV3.6","[WORKSPACE]\.windsurf" -Recurse -Directory -Filter "__pycache__"
+Get-ChildItem -Path "[WORKSPACE]\DevSystemV3.6","[WORKSPACE]\.devin" -Recurse -Directory -Filter "__pycache__"
 # Expected: no output
 # Cleanup: pipe to Remove-Item -Recurse -Force
 ```
@@ -323,9 +323,9 @@ $deploy = (Select-String -Path "[WORKSPACE]\deploy-to-all-repos.md" -Pattern '"D
 ### Compare source vs sync (after any change)
 
 ```powershell
-# Files in DevSystem but not in .windsurf (missing sync)
+# Files in DevSystem but not in .devin (missing sync)
 $src = Get-ChildItem "[DEVSYSTEM_FOLDER]" -Recurse -File | ForEach-Object { $_.FullName.Substring("[DEVSYSTEM_FOLDER]".Length) }
-$dst = Get-ChildItem "[WORKSPACE]\.windsurf" -Recurse -File | ForEach-Object { $_.FullName.Substring("[WORKSPACE]\.windsurf".Length) }
+$dst = Get-ChildItem "[WORKSPACE]\.devin" -Recurse -File | ForEach-Object { $_.FullName.Substring("[WORKSPACE]\.devin".Length) }
 Compare-Object $src $dst | Where-Object SideIndicator -eq "<="
 ```
 

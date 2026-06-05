@@ -126,7 +126,7 @@ Hooks are shell commands that run automatically when specific Cascade actions oc
 **Configuration locations (merged in order):**
 - System-level: `C:\ProgramData\Windsurf\hooks.json` (Windows)
 - User-level: `~/.codeium/windsurf/hooks.json`
-- Workspace-level: `.windsurf/hooks.json`
+- Workspace-level: `.devin/hooks.json`
 
 **Hook Events:**
 - `pre_read_code` / `post_read_code` - Before/after reading files
@@ -160,12 +160,12 @@ Create `AGENTS.md` (or `agents.md`) for directory-scoped instructions.
 ### 2.4 Rules and Workflows [VERIFIED]
 
 **Rules** - Persistent context at prompt level
-- Storage: `.windsurf/rules/` directory
+- Storage: `.devin/rules/` directory
 - Activation modes: Manual (`@mention`), Always On, Model Decision, Glob-based
 - Limit: 12000 characters per rule file
 
 **Workflows** - Structured sequence of steps at trajectory level
-- Storage: `.windsurf/workflows/` directory
+- Storage: `.devin/workflows/` directory
 - Invoke via `/workflow-name` command
 - Can call other workflows from within a workflow
 - Limit: 12000 characters per workflow file
@@ -327,14 +327,14 @@ For UI work:
 ## 5. Sources and References
 
 ### Official Documentation
-- Windsurf Cascade Overview: https://docs.windsurf.com/windsurf/cascade/cascade
+- Windsurf Cascade Overview: https://docs.devin.com/windsurf/cascade/cascade
   - Primary findings: 20 tool calls per prompt, Auto-Continue setting, Turbo Mode, queued messages
-- MCP Integration: https://docs.windsurf.com/windsurf/cascade/mcp
+- MCP Integration: https://docs.devin.com/windsurf/cascade/mcp
   - Primary findings: MCP config location, 100 tool limit, stdio/HTTP/SSE transports
-- Workflows: https://docs.windsurf.com/windsurf/cascade/workflows
+- Workflows: https://docs.devin.com/windsurf/cascade/workflows
   - Primary findings: 12000 char limit, `/workflow-name` invocation, can nest workflows
-- Memories & Rules: https://docs.windsurf.com/windsurf/cascade/memories
-  - Primary findings: 4 activation modes, rules auto-discovered from .windsurf/rules/
+- Memories & Rules: https://docs.devin.com/windsurf/cascade/memories
+  - Primary findings: 4 activation modes, rules auto-discovered from .devin/rules/
 
 ### MCP Servers
 - Playwright MCP (Microsoft): https://github.com/microsoft/playwright-mcp

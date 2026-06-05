@@ -399,7 +399,7 @@ cd openclaw-mcp
 npm install && npm start
 ```
 
-**Cascade Configuration** (`.windsurf/mcp.json`):
+**Cascade Configuration** (`.devin/mcp.json`):
 ```json
 {
   "mcpServers": {
@@ -467,7 +467,7 @@ Use {baseDir} for skill-specific resources.
 
 Create a Windsurf workflow that calls OpenClaw CLI:
 
-**`.windsurf/workflows/openclaw.md`**:
+**`.devin/workflows/openclaw.md`**:
 ```markdown
 ---
 description: Send task to OpenClaw for background execution
