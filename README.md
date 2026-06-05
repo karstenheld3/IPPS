@@ -98,7 +98,7 @@ SOCAS provides quality gates  → 15 criteria detecting confusion and sloppiness
 
 ## Overview
 
-IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V3.7) features eight integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT consistency, and SOCAS quality criteria.
+IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V4.0) features eight integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT consistency, and SOCAS quality criteria.
 
 ## How to Add to Your Project
 
@@ -113,9 +113,10 @@ your-project/
 
 ## DevSystem Versions
 
-- **[DevSystemV3.8](DevSystemV3.8/)** - Current system
+- **[DevSystemV4.0](DevSystemV4.0/)** - Current system
 
 Older versions in [`_OldDevSystemVersions/`](_OldDevSystemVersions/):
+- DevSystemV3.8 - Windsurf to Devin migration (.windsurf/ renamed to .devin/), SOP 5, Claude Opus 4.8
 - DevSystemV3.7 - Deep research profiles, translation workflow, recap/continue removal, cleanup workflow
 - DevSystemV3.6 - SOCAS quality criteria, 4-phase /improve workflow, NFR in SPEC, STRUT self-tracking
 - DevSystemV3.5 - Generic /fix workflow, improved /implement and /go workflows
@@ -508,12 +509,12 @@ Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.
 ```
 IPPS/
 ├── ../.tools/                    # Shared tool installations (parent folder)
-├── .devin/                    # Active agent configuration (synced from DevSystemV3.8)
+├── .devin/                    # Active agent configuration (synced from DevSystemV4.0)
 │   ├── rules/
 │   ├── workflows/
 │   └── skills/
-├── _OldDevSystemVersions/        # Previous DevSystem versions (V1 through V3.7)
-├── DevSystemV3.8/                # Current system (source of truth)
+├── _OldDevSystemVersions/        # Previous DevSystem versions (V1 through V3.8)
+├── DevSystemV4.0/                # Current system (source of truth)
 │   ├── rules/
 │   │   ├── agent-behavior.md     # Agent execution patterns and communication
 │   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions
