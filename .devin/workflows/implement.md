@@ -12,8 +12,9 @@ auto_execution_mode: 1
 
 ## MUST-NOT-FORGET
 
-1. Apply changes immediately without asking for permission - this workflow has authority to implement
-2. Phase flow: Prerequisites → GLOBAL-RULES → Impact Assessment → Execution
+1. NEVER ask questions - derive goal or best option from previous prompt or conversation context. Act on best inference
+2. Apply changes immediately without asking for permission - this workflow has authority to implement
+3. Phase flow: Prerequisites → GLOBAL-RULES → Impact Assessment → Execution
 
 - Prerequisites ensure required documents (SPEC, IMPL, TEST) exist
 - GLOBAL-RULES apply BEFORE any code change
