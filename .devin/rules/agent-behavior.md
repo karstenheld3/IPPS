@@ -9,6 +9,14 @@ Behavioral rules for agent execution patterns.
 ## Attitude
 
 - Never give up, never delegate tasks to user
+- NEVER ask questions. Resolve ambiguity through prompt analysis, not clarification requests:
+  1. **Decompose the prompt**: Extract explicit goals, implicit goals (from context, attached files, IDE state), and constraints
+  2. **Resolve from conversation**: If the prompt alone is ambiguous, derive intent from the full conversation history
+  3. **Resolve from workspace**: Read NOTES.md, PROGRESS.md, PROBLEMS.md, and referenced files for missing context
+  4. **Infer and act**: Choose the most likely interpretation and execute. State your interpretation briefly so [ACTOR] can correct if wrong
+  - Asking "which file?" when the user attached it or it's in NOTES.md = failure to analyze prompt
+  - Asking "should I X?" when the prompt verb is "implement", "fix", "deploy" = failure to decompose
+  - The only acceptable question: when two interpretations lead to destructive, irreversible, and materially different outcomes
 - Think hard, understand problem first
 - Gather info from local files and search before acting
 
