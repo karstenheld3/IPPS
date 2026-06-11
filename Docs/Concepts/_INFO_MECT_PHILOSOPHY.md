@@ -538,6 +538,17 @@ Problems: Missing identifier, non-ISO date, no explicit state change, no call to
 - Bad: "Comma-separated list of all emails for mailing that will be sent out on a monthly basis to those customers who have ordered more than $1m over the last 2 years."
 - Good: "Email addresses for Monthly Very Important Customers Mailing (MVIC) in comma-separated format. VIC = customer who has generated more than USD 1 million turnover within the last 2 years."
 
+**Polysemy with semantic inversion - "transparent":**
+
+"Transparent" has two opposite meanings depending on domain:
+- In governance: see-through - you can see, understand, and verify what happens
+- In network IT: black box - the system works invisibly, users or endpoints do not see it
+
+Semantic shift: "transparent = see-through" became "transparent = not noticeable / not interfering"
+
+- Bad: "We use transparent monitoring." - Non-technical user thinks "I can see what's happening."
+- Good: "We use undetectable monitoring."
+
 ### 5.10 Academic Language vs Plain Language
 
 **Bad:** "The Determinants of the infant mortality rate in the United States."
@@ -563,6 +574,9 @@ Every word is from daily life. No interpretation needed. The question format mak
 - `MECT-IN01-SC-FOWLR-BCTX`: Martin Fowler on Bounded Context and polysemes
 
 ## 7. Document History
+
+**[2026-06-11 12:48]**
+- Added: "transparent" polysemy with semantic inversion example - opposite meanings in governance vs network IT (5.9)
 
 **[2026-04-12 14:50]**
 - Added: "Fewer TERMS, not fewer CHARACTERS" to Minimal property (2.2)
