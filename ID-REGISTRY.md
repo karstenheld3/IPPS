@@ -152,6 +152,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **EDIGA** - Energie Digitalisierung A (digitalization in energy sector research)
 - **ENDIG** - Energie Digitalisierung (digitalization in energy sector research)
 - **ENDSY** - Energie Digital Synthese (consolidated INFO from EnergieDigitalA + B)
+- **FINSTRWF** - Follow Instructions Workflow (post-execution instruction-following gap analysis and remediation)
 - **GLOB** - Global/project-wide items
 - **LLMCG** - LLM Code Generation (RAG-augmented vs fine-tuned vs prompt-engineered approaches comparison)
 - **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
@@ -184,6 +185,9 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 
 ## Document History
+
+**[2026-06-12 13:15]**
+- Added: FINSTRWF topic (Agent Realign Workflow - instruction-following gap analysis)
 
 **[2026-06-05 19:25]**
 - Added: STYLO topic (Stylometric Profiling for AI detection)

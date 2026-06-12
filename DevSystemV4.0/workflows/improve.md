@@ -19,6 +19,7 @@ Autonomous self-improvement in four phases: scan with pre-flight research, fix v
 
 ## MUST-NOT-FORGET
 
+- **BACKUP FIRST (GATE)** - Create `_vN` backups of ALL scoped files BEFORE any modification. No backup = no edit. Verify backups exist before entering Phase 2. Never delete backups - only user may delete them
 - **NEVER ask questions** - Derive goal or best option from the previous prompt, or from conversation context. Act on best inference
 - **Depth over breadth** - Improve ONE thing exhaustively and prove it justified, not a large list of half-baked, assumed, untested improvements
 - **STRUT self-tracking** - Create STRUT plan at start via `/write-strut`, track progress, delete STRUT file after completion
@@ -30,7 +31,6 @@ Autonomous self-improvement in four phases: scan with pre-flight research, fix v
 - Preserve existing IDs (FR-XX, NFR-XX, DD-XX, IS-XX, TC-XX, TK-XX, etc.)
 - Never replicate `/verify` (rule-based formal verification) or `/critique` (logic flaw detection)
 - Research enrichment adds value through new evidence, not fault-finding
-- **Versioned backups** - Backup scoped files to `_vN` before modifying. Never delete backups - only user may delete them
 
 ## Mandatory Re-read
 
@@ -370,6 +370,8 @@ Detection: determine context from file naming and content, then apply matching s
 
 # EXECUTION
 
+**CRITICAL: No file may be modified without a `_vN` backup existing first. This is the single most common failure mode of this workflow. Verify backups at every phase transition.**
+
 ## Setup
 
 1. **Scope**: file path → that file; folder → all .md/code; none → conversation context
@@ -398,14 +400,15 @@ Detection: determine context from file naming and content, then apply matching s
    - **Conversation context**: `<session_topic_or_timestamp>_DEFERRED_IMPROVEMENTS.md` in session folder
    - Example: scope `_INFO_CRAWLER_SOURCES.md` → `_INFO_CRAWLER_SOURCES_DEFERRED_IMPROVEMENTS.md`
 5. **Create STRUT plan** via `/write-strut` - Track phases 1-4 with checkboxes. Save as `.tmp_STRUT_IMPROVE_<YYYY-MM-DD_HH-MM>.md` in scope folder (or session folder in SESSION-MODE).
-6. **Backup scoped files** - Before any modification, create versioned backups:
-   - **Detect version**: Find highest existing `_vN` backup for each file. No backups → N=0.
+6. **Backup scoped files** - MANDATORY. Execute IMMEDIATELY after step 5, BEFORE Phase 1:
+   - **Detect version**: Find highest existing `_vN` backup for each file. No backups exist → create `_v0` (the original unmodified version). Backups exist → create `_v(highest+1)`.
    - **Backup**: Copy each scoped file to `<name>_vN.<ext>` in same directory.
-   - Documents: `_SPEC_CRAWLER.md` → `_SPEC_CRAWLER_v0.md`
-   - Code: `src/utils/auth.py` → `src/utils/auth_v0.py`
-   - Subsequent runs increment: `_v1`, `_v2`, etc.
+   - First run: `_SPEC_CRAWLER.md` → `_SPEC_CRAWLER_v0.md` (original before any changes)
+   - Second run: `_SPEC_CRAWLER.md` → `_SPEC_CRAWLER_v1.md` (state after first improvement)
+   - Code: `src/utils/auth.py` → `src/utils/auth_v0.py` (first run)
    - **Working file keeps original filename** - all improvements go to original path. Imports, references, and tests work without changes.
    - **Never delete `_vN` backups** - only user may delete them.
+   - **Confirm in output**: List all created backups with full paths. Example: `Backed up: _SPEC_CRAWLER.md → _SPEC_CRAWLER_v1.md`. If zero backups listed, Setup is incomplete.
 
 ## Phase 1: Pre-flight Scan + Research
 
@@ -425,13 +428,15 @@ Lightweight pass to discover what CAN be improved and how easily.
 - [ ] Rule violations separated from improvement candidates
 - [ ] Pre-flight research completed for improvement candidates
 - [ ] Candidates ranked by impact-to-effort ratio
+- [ ] **BACKUP GATE**: `_vN` backup exists for EVERY file in scope (created in Setup step 6). If missing, STOP and create backups now. Do NOT proceed to Phase 2 without backups.
 
-Pass: Proceed to Phase 2 | Fail: Continue Phase 1
+Pass: Proceed to Phase 2 | Fail: Continue Phase 1 or create missing backups
 
 ## Phase 2: Fix Violations
 
 Apply rule violations immediately. These are corrections, not improvements - no pragmatic filter needed.
 
+0. **Verify backups** - Confirm `_vN` backup exists for every file about to be modified. If any backup is missing, create it NOW before proceeding. This is a hard prerequisite.
 1. **Fix plan** - CRITICAL first, then HIGH, group related fixes
 2. **Execute fixes** - Apply corrections, preserve IDs
 3. **Verify** - Re-read fixed output, check for regressions
@@ -441,6 +446,7 @@ Apply rule violations immediately. These are corrections, not improvements - no 
 - [ ] All rule violations fixed
 - [ ] No regressions from fixes
 - [ ] IDs preserved
+- [ ] Backups still intact (not accidentally overwritten by Phase 2 edits)
 
 Pass: Proceed to Phase 3 | Fail: Continue Phase 2
 
@@ -452,7 +458,7 @@ Select ONE improvement. Research exhaustively. Prove justification. Apply or def
 2. **Deep research** - Execute context-specific Adversarial Collaborator techniques for the selected improvement only. Gather evidence: web research, local codebase analysis, examples, tests.
 3. **Pragmatic filter** - Run the 6 pragmatic questions (see GLOBAL-RULES). Requires evidence for question 6 (Proven?).
 4. **Decision**:
-   - **APPLY** - passes all 6 questions → apply the improvement, update Document History
+   - **APPLY** - passes all 6 questions → verify `_vN` backup exists for target file, then apply the improvement, update Document History
    - **DEFER** - fails any question → append to `[DEFERRED_FILE]` with assessment rationale, select next candidate (repeat from step 1)
 5. **Log remaining** - Unprocessed candidates → append to `[DEFERRED_FILE]` for next run
 

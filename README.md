@@ -264,6 +264,8 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - [**MNF**](Docs/Concepts/_INFO_MNF_TECHNIQUE.md) - Must Not Forget. Technique for critical item tracking during task execution
 - **APAPALAN** - As Precise As Possible, As Little As Necessary. Conciseness principle for workflows and documents
 
+**Agent Drift Prevention**: [ADP Approach](Docs/Concepts/_INFO_AGENT_DRIFT_PREVENTION_APPROACH.md) - How the DevSystem prevents agent drift through TRACTFUL, SMAP, EDIRD, STRUT, GRUC, and MNF across three scopes
+
 **Full registry**: [ID-REGISTRY.md](ID-REGISTRY.md) - All acronyms, TOPICs, states, and named concepts
 
 ## Key Conventions
@@ -638,7 +640,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ## Workflows Reference
 
-38 workflows in `.devin/workflows/`:
+39 workflows in `.devin/workflows/`:
 
 **Entry Points**
 - [`/build`](.devin/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
@@ -663,6 +665,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 - [`/verify`](.devin/workflows/verify.md) - Verify work against specs and rules
 - [`/critique`](.devin/workflows/critique.md) - Find flawed assumptions, logic errors, hidden risks
 - [`/reconcile`](.devin/workflows/reconcile.md) - Pragmatic review of critique findings
+- [`/follow-instructions`](.devin/workflows/follow-instructions.md) - Post-execution drift detection, DoD-based gap filling
 - [`/improve`](.devin/workflows/improve.md) - Depth-first improvement (one proven change per run, versioned backups)
 - [`/sync`](.devin/workflows/sync.md) - Document synchronization
 - [`/rename`](.devin/workflows/rename.md) - Global and local refactoring with exhaustive search
