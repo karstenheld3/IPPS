@@ -1,5 +1,6 @@
 [DEFAULT_SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
 [SESSION_ARCHIVE_FOLDER]: [SESSION_FOLDER]\..\Archive
+[AGENT_FOLDER]:  [WORKSPACE_FOLDER]\.devin
 
 Current [DEVSYSTEM]: DevSystemV4.0
 Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
@@ -87,7 +88,7 @@ Automatically push commits to GitHub.
 **CRITICAL: NEVER auto-deploy to [LINKED_REPOS]**. Always ask user before deploying to linked repos. Deployment to linked repos is a separate, explicit action.
 
 **[SKILL_CATEGORIES]**:
-- **Development**: coding-conventions, deep-research, edird-phase-planning, git, git-conventions, github, llm-computer-use, llm-evaluation, llm-transcription, ms-playwright-mcp, ms-playwright-mcp-v2, pdf-tools, playwriter-mcp, session-management, windows-desktop-control, windsurf-auto-model-switcher, write-documents, youtube-downloader
+- **Development**: adp, coding-conventions, deep-research, edird-phase-planning, git, git-conventions, github, llm-computer-use, llm-evaluation, llm-transcription, ms-playwright-mcp, ms-playwright-mcp-v2, pdf-tools, playwriter-mcp, session-management, windows-desktop-control, windsurf-auto-model-switcher, write-documents, youtube-downloader
 - **Personal**: google-account, travel-info
 - **All**: Development + Personal (all skills)
 

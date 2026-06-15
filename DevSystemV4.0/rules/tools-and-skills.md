@@ -34,6 +34,7 @@ Violation = automatic CRITICAL in FAILS.md. No exceptions.
 
 Skills are in `[AGENT_FOLDER]/skills/`. Each has a `SKILL.md` with usage instructions.
 
+- **@adp** - Process discipline audit criteria (CHECKS files) for `/adp`
 - **@coding-conventions** - Writing, editing, reviewing, or debugging code (Python, PowerShell)
 - **@deep-research** - Deep research on technologies, APIs, frameworks (MEPI/MCPI patterns)
 - **@edird-phase-planning** - Planning for long-running tasks in sessions

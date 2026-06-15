@@ -1,6 +1,6 @@
 # Standard Operating Procedures (SOPs)
 
-**Goal**: Prevent drift between `[DEVSYSTEM_FOLDER]`, `.devin/`, and linked repos when changing skills or versions.
+**Goal**: Prevent drift between `[DEVSYSTEM_FOLDER]`, `[AGENT_FOLDER]`, and linked repos when changing skills, workflows, or versions.
 
 **Why**: Skills and categories are duplicated across `NOTES.md`, `deploy-to-all-repos.md`, and every linked repo. Missing a step silently propagates stale or unregistered content.
 
@@ -10,7 +10,9 @@
 
 - `[DEVSYSTEM_FOLDER]` — current DevSystem source (e.g., `E:\Dev\IPPS\DevSystemV3.6`)
 - `[WORKSPACE]` — `E:\Dev\IPPS`
+- `[AGENT_FOLDER]` — active agent config (e.g., `[WORKSPACE]\.devin`)
 - `<skill>` — skill folder name (e.g., `playwriter-mcp`)
+- `<workflow>` — workflow filename without extension (e.g., `adp`)
 
 ## MUST-NOT-FORGET
 
@@ -28,6 +30,7 @@
 - [SOP 3: Old Skill Deleted or Deprecated](#sop-3-old-skill-deleted-or-deprecated)
 - [SOP 4: DevSystem Version Changed](#sop-4-devsystem-version-changed)
 - [SOP 5: Model Registry JSON Files Updated](#sop-5-model-registry-json-files-updated)
+- [SOP 6: Workflow Added, Edited, or Removed](#sop-6-workflow-added-edited-or-removed)
 - [Common Verification Commands](#common-verification-commands)
 
 ## Quick Reference: Sync Command
@@ -300,6 +303,80 @@ Write-Host "$ok OK, $fail FAIL"
 
 Expected: 15 OK, 0 FAIL (5 targets x 3 files).
 
+## SOP 6: Workflow Added, Edited, or Removed
+
+**Scenario**: Adding a new workflow, editing an existing one, or removing an obsolete workflow.
+
+### Adding or Editing a Workflow
+
+1. **Edit in source**: `[DEVSYSTEM_FOLDER]/workflows/<workflow>.md`
+   - New workflow: create file following `WORKFLOW_RULES.md` (WF-HD-01 through WF-EX-01)
+   - Existing workflow: edit in place
+
+2. **Sync to `[AGENT_FOLDER]`**:
+   ```powershell
+   Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[AGENT_FOLDER]\" -Recurse -Force
+   ```
+
+3. **If new workflow**: register in `devsystem-core.md` Workflow Reference section (alphabetical)
+
+4. **If new workflow**: update `README.md` workflow list and count
+
+5. **Run `/sync`** to propagate changes to `devsystem-core.md` and `README.md`
+
+6. **If new TOPIC introduced**: register in `ID-REGISTRY.md`
+
+### Removing a Workflow
+
+1. **Delete from source and agent folder**:
+   ```powershell
+   Remove-Item "[DEVSYSTEM_FOLDER]\workflows\<workflow>.md" -Force
+   Remove-Item "[AGENT_FOLDER]\workflows\<workflow>.md" -Force
+   ```
+
+2. **Remove from `devsystem-core.md`** Workflow Reference section
+
+3. **Remove from `README.md`** workflow list, update count
+
+4. **If workflow exists in linked repos**: add to `$deprecatedFiles` in `deploy-to-all-repos.md`:
+   - Search for `"workflows" = @(` in `$deprecatedFiles` hashtable
+   - Append `"<workflow>.md"` to the array
+
+5. **If workflow had a TOPIC**: mark deprecated in `ID-REGISTRY.md` (keep history)
+
+6. **Run `/sync`** to propagate removals to `devsystem-core.md` and `README.md`
+
+### Verification
+
+**After adding or editing**:
+
+```powershell
+# 1. File present in both locations with matching content
+Test-Path "[DEVSYSTEM_FOLDER]\workflows\<workflow>.md"
+Test-Path "[AGENT_FOLDER]\workflows\<workflow>.md"
+(Get-FileHash "[DEVSYSTEM_FOLDER]\workflows\<workflow>.md").Hash -eq `
+(Get-FileHash "[AGENT_FOLDER]\workflows\<workflow>.md").Hash
+
+# 2. Registered in devsystem-core.md and README.md (new workflows only)
+Select-String -Path "[DEVSYSTEM_FOLDER]\rules\devsystem-core.md" -Pattern "<workflow>"
+Select-String -Path "[WORKSPACE]\README.md" -Pattern "<workflow>"
+```
+
+**After removing**:
+
+```powershell
+# 1. File absent from both locations (both should return False)
+Test-Path "[DEVSYSTEM_FOLDER]\workflows\<workflow>.md"
+Test-Path "[AGENT_FOLDER]\workflows\<workflow>.md"
+
+# 2. Not referenced in devsystem-core.md or README.md
+Select-String -Path "[DEVSYSTEM_FOLDER]\rules\devsystem-core.md" -Pattern "<workflow>"  # should return nothing
+Select-String -Path "[WORKSPACE]\README.md" -Pattern "<workflow>"  # should return nothing
+
+# 3. Listed in $deprecatedFiles (if deployed to linked repos)
+Select-String -Path "[WORKSPACE]\deploy-to-all-repos.md" -Pattern "<workflow>"
+```
+
 ## Common Verification Commands
 
 ### Check for `__pycache__` pollution
@@ -334,6 +411,10 @@ Compare-Object $src $dst | Where-Object SideIndicator -eq "<="
 Run `/deploy-to-all-repos` in preview mode. Any unexpected items in `Add` / `Overwrite` / `Delete` indicate a missed sync or unregistered skill.
 
 ## Document History
+
+**[2026-06-13 13:47]**
+- Added: SOP 6 for workflow add/edit/remove with sync to `[AGENT_FOLDER]`
+- Changed: Goal and placeholders updated to include workflows and `[AGENT_FOLDER]`
 
 **[2026-05-30 17:03]**
 - Added: SOP 5 for model registry JSON deployment with all known targets

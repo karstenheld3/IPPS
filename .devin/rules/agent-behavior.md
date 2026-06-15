@@ -10,10 +10,10 @@ Behavioral rules for agent execution patterns.
 
 - Never give up, never delegate tasks to user
 - NEVER ask questions. Resolve ambiguity through prompt analysis, not clarification requests:
-  1. **Decompose the prompt**: Extract explicit goals, implicit goals (from context, attached files, IDE state), and constraints
-  2. **Resolve from conversation**: If the prompt alone is ambiguous, derive intent from the full conversation history
-  3. **Resolve from workspace**: Read NOTES.md, PROGRESS.md, PROBLEMS.md, and referenced files for missing context
-  4. **Infer and act**: Choose the most likely interpretation and execute. State your interpretation briefly so [ACTOR] can correct if wrong
+  1. Decompose the prompt: Extract explicit goals, implicit goals (from context, attached files, IDE state), and constraints
+  2. Resolve from conversation: If the prompt alone is ambiguous, derive intent from the full conversation history
+  3. Resolve from workspace: Read NOTES.md, PROGRESS.md, PROBLEMS.md, and referenced files for missing context
+  4. Infer and act: Choose the most likely interpretation and execute. State your interpretation briefly so [ACTOR] can correct if wrong
   - Asking "which file?" when the user attached it or it's in NOTES.md = failure to analyze prompt
   - Asking "should I X?" when the prompt verb is "implement", "fix", "deploy" = failure to decompose
   - The only acceptable question: when two interpretations lead to destructive, irreversible, and materially different outcomes
@@ -66,18 +66,18 @@ Behavioral rules for agent execution patterns.
 
 Agent-created files (helper scripts, intermediate data, temp artifacts) MUST reside in context-appropriate locations:
 
-- **`[DOWNLOAD_FOLDER]`** - Helper scripts for download operations (enrichment, conversion, renaming)
-- **`[SESSION_FOLDER]`** - Helper scripts in SESSION-MODE (POCs, test scripts, analysis)
-- **`[WORKSPACE_FOLDER]`** - Helper scripts in PROJECT-MODE
-- **`[SRC_FOLDER]`** - Only production code, never temp artifacts
+- `[DOWNLOAD_FOLDER]` - Helper scripts for download operations (enrichment, conversion, renaming)
+- `[SESSION_FOLDER]` - Helper scripts in SESSION-MODE (POCs, test scripts, analysis)
+- `[WORKSPACE_FOLDER]` - Helper scripts in PROJECT-MODE
+- `[SRC_FOLDER]` - Only production code, never temp artifacts
 
-**Forbidden**: System temp (`%TEMP%`, `$env:TEMP`, `/tmp/`), user home, Program Files, or any location outside workspace/session/target scope. No exceptions.
+Forbidden: System temp (`%TEMP%`, `$env:TEMP`, `/tmp/`), user home, Program Files, or any location outside workspace/session/target scope. No exceptions.
 
-**Naming**:
+Naming:
 - `.tmp_` prefix for scripts and temp data. Example: `.tmp_fix_quotes.ps1`
 - `__` prefix for scaffolding documents (STRUTs, TASKS, templates auto-created by workflows). Example: `__STRUT_TOPIC.md`
 
-**Lifecycle**:
+Lifecycle:
 - `.tmp_` = single-run temp. Deleted within same workflow or by `/cleanup`
 - `__` = multi-run scaffolding. Persists during active work, deleted by `/cleanup` after goal reached
 - Commit both along with task or session files. Only delete after final goal is reached.

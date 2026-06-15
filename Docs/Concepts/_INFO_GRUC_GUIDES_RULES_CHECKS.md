@@ -11,7 +11,7 @@
 - GRUC pre-calculates compliance criteria into three purpose-specific files per skill/workflow
 - GUIDE = before execution (planning strategy). Consumer: working agent
 - RULES = whole lifecycle (output verification). Consumer: `/verify`, `/improve`
-- CHECKS = after execution only (process audit). Consumer: `/follow-instructions`
+- CHECKS = after execution only (process audit). Consumer: `/adp` (Agent Drift Prevention)
 - Separation prevents gaming: CHECKS invisible during work, GUIDE invisible during audit
 - Each file type maps to a drift category: GUIDE → strategic quality, RULES → output structure (Cat 1), CHECKS → process discipline (Cat 2)
 - Content MUST be verifiable: RULES from artifacts alone, CHECKS from action evidence
@@ -31,7 +31,7 @@
 
 ## 1. The Problem GRUC Solves
 
-Quality assurance workflows (`/verify`, `/follow-instructions`, `/improve`) need compliance criteria to check against. Without pre-calculated criteria, each workflow must:
+Quality assurance workflows (`/verify`, `/adp`, `/improve`) need compliance criteria to check against. Without pre-calculated criteria, each workflow must:
 
 1. Re-read the entire skill/workflow definition
 2. Derive what "correct output" looks like
@@ -102,7 +102,7 @@ Agent Activity Lifecycle
 │       "Does the output meet structural standards?"
 │
 └── AFTER (Verification - Process)
-    └── CHECKS consumed by /follow-instructions
+    └── CHECKS consumed by /adp
         "Were required actions actually performed?"
 ```
 
@@ -154,7 +154,7 @@ RULES
 └── /reconcile (prioritize fixes using rules as reference)
 
 CHECKS
-└── /follow-instructions (audit process discipline post-execution)
+└── /adp (audit process discipline post-execution)
 ```
 
 **No overlap**: Each workflow consumes exactly one GRUC component as primary source. This prevents token waste from reading irrelevant criteria.
@@ -193,7 +193,7 @@ Pattern: `[DOMAIN]_RULES.md` when SKILL_RULES.md would exceed ~200 lines.
 ```
 [AGENT_FOLDER]/workflows/
 ├── verify.md
-├── verify_CHECKS.md       (what /follow-instructions checks about /verify executions)
+├── verify_CHECKS.md       (what /adp checks about /verify executions)
 └── ...
 ```
 
@@ -218,17 +218,17 @@ This creates a feedback loop where past failures become future prevention criter
 - `*_RULES.md` files exist in `@skills:write-documents` (7 files), `@skills:coding-conventions` (10 files), `@skills:deep-research` (5 files)
 - `SKILL_GUIDE.md` exists in `@skills:write-documents`
 - `/verify` consumes RULES files
-- `/follow-instructions` workflow deployed (does not yet consume CHECKS files)
+- `/adp` workflow deployed (does not yet consume CHECKS files)
 
 **Not yet realized:**
 - `SKILL_CHECKS.md` files do not exist in any skill
-- `/follow-instructions` does not look for or consume CHECKS files
+- `/adp` does not look for or consume CHECKS files
 - Most skills lack GUIDE files
 - No per-workflow CHECKS files exist
 
 **Next steps:**
 1. Create first `SKILL_CHECKS.md` for a well-understood skill (e.g., `@skills:deep-research`)
-2. Update `/follow-instructions` to consume CHECKS files when present
+2. Update `/adp` to consume CHECKS files when present
 3. Add GUIDE files to skills that involve complex decision-making
 
 ## 9. How to Write Good GRUC Documents
@@ -324,7 +324,7 @@ A GUIDE file is strategic coaching. Its reader is the working agent before start
 
 ### 9.3 Writing CHECKS Files
 
-A CHECKS file is a process discipline audit. Its reader is `/follow-instructions` after the working agent finished. The working agent NEVER sees this file during execution.
+A CHECKS file is a process discipline audit. Its reader is `/adp` after the working agent finished. The working agent NEVER sees this file during execution.
 
 **Structure pattern** (not yet implemented; designed from GRUC theory):
 
@@ -353,7 +353,7 @@ Process ([2-letter prefix])
 2. **Evidence-based** - Every check specifies what evidence proves compliance. Without defined evidence, a check is unenforceable.
 3. **Failure indicators** - Describe what NON-compliance looks like. Helps the auditing workflow detect violations quickly.
 4. **Severity levels** - CRITICAL (indicates fundamental process failure), HIGH (significant quality risk), MEDIUM (process shortcut with limited impact).
-5. **Invisible to executor** - CHECKS files must NOT be referenced in workflows, SKILL.md intent lookups, or MNF sections. Only `/follow-instructions` reads them.
+5. **Invisible to executor** - CHECKS files must NOT be referenced in workflows, SKILL.md intent lookups, or MNF sections. Only `/adp` reads them.
 6. **No output requirements** - If checkable from the delivered files alone, it belongs in RULES. CHECKS require action traces: timestamps, conversation evidence, git commits, command output.
 7. **Sequence matters** - Order checks by expected execution sequence. First checks verify early-stage actions (planning, research), later checks verify late-stage actions (verification, commit).
 

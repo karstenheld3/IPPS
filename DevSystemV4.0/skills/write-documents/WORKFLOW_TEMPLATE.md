@@ -1,6 +1,6 @@
 # Workflow Template
 
-Template for writing Windsurf workflows with MNF, context branching, and verification.
+Template for writing workflows with MNF, context branching, and verification.
 
 ## Workflow Structure
 
