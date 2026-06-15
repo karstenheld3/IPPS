@@ -1,6 +1,6 @@
-# ADP Workflow Knowledge
+# Drift Detection Knowledge
 
-Knowledge source for the `/adp` workflow. Contains drift lenses, context-specific Definition-of-Done (DoD) extraction rules, and assessment criteria.
+Knowledge source for the `/drift-detect` workflow. Contains drift lenses, context detection, DoD extraction rules, and assessment criteria.
 
 ## Drift Lenses
 
@@ -31,7 +31,7 @@ Cognitive behaviors that predict instruction-following quality. Noted for patter
 
 Meta-criteria observations are noted in the report for user awareness.
 
-**Boundary**: This workflow does NOT modify FAILS.md or LEARNINGS.md. Only the user triggers `/fail` or `/learn`.
+**Boundary**: Neither `/drift-detect` nor `/drift-correct` modify FAILS.md or LEARNINGS.md. Only the user triggers `/fail` or `/learn`.
 
 ## Context Detection
 
@@ -47,7 +47,7 @@ ELSE → Generic context
 
 Read in order, extract DoD items from each:
 
-1. **Directive** - if user passed `[directive]` after `/adp`, this is the primary focus. Filter all other sources through this lens.
+1. **Directive** - if user passed `[directive]` after `/drift-detect`, this is the primary focus. Filter all other sources through this lens.
 2. **Original instruction** - the user prompt that triggered the work. Primary authoritative source.
 3. **Planning artifacts** - any `__STRUT_[TOPIC].md`, `__TASKS_[TOPIC].md`, IMPL docs the agent created.
 4. **Target workflow MNF** - process requirements the workflow specified.
@@ -127,19 +127,19 @@ Build DoD entirely from conversation and planning artifacts (default sources onl
 For each DoD item, verify against actual output:
 
 - **PASS** - criterion met
-- **FAIL** - not met, fixable now (generates TODO)
+- **FAIL** - not met, fixable now (generates TODO for `/drift-correct`)
 - **MISSED** - needed during execution, cannot retroactively fix (e.g., backup before modify, STRUT self-tracking)
 - **N/A** - not applicable to this context
 
 ## DRIFTS.md Format
 
-Used by `/adp log` mode. Append-only file that accumulates deviations across multiple runs for later heuristic analysis. Structured for pattern detection across sessions.
+Used by `/drift-detect log` mode. Append-only file that accumulates deviations across multiple runs for later heuristic analysis. Structured for pattern detection across sessions.
 
-Format specification is in `@skills:adp` `DRIFTS_TEMPLATE.md`.
+Format specification is in `@skills:drift-correction` `DRIFTS_TEMPLATE.md`.
 
 **Rules:**
 - Append new entries at the end (chronological order, oldest first)
 - Never modify or delete previous entries
-- One entry per `/adp log` invocation
+- One entry per `/drift-detect log` invocation
 - If DRIFTS.md does not exist, create with header from template
 - Every field matters for analysis - do not skip fields, use "unknown" if uncertain

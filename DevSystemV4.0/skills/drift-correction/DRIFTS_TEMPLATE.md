@@ -1,6 +1,6 @@
 # DRIFTS.md Template
 
-Template for the drift log file created by `/adp log`. Each entry captures enough context for pattern detection and heuristic development.
+Template for the drift log file created by `/drift-detect log`. Each entry captures enough context for pattern detection and heuristic development.
 
 ## File Header (create once)
 

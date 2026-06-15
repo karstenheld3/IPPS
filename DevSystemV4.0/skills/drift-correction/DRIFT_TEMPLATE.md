@@ -1,5 +1,5 @@
 <DevSystem MarkdownTablesAllowed=true />
-# ADP: [TOPIC]
+# Drift: [TOPIC]
 
 **Target workflow**: /workflow-name
 **Context**: [Code Implementation | Deep Research | Generic]
