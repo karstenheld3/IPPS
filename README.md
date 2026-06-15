@@ -533,8 +533,9 @@ IPPS/
 
 ## Skills Reference
 
-19 skills in `.devin/skills/`:
+20 skills in `.devin/skills/`:
 
+- **drift-correction** - Drift detection/correction knowledge and CHECKS files for `/drift-detect` and `/drift-correct`
 - **coding-conventions** - Python, PowerShell coding style rules, MECT coding rules
 - **deep-research** - Deep research strategies (MEPI/MCPI), domain-specific patterns
 - **edird-phase-planning** - EDIRD phase model with effort allocation, planning guidance, gates
@@ -554,6 +555,17 @@ IPPS/
 - **windsurf-auto-model-switcher** - Switch Cascade AI model tier programmatically
 - **write-documents** - Document templates (INFO, SPEC, IMPL, TEST, TASKS, STRUT), writing rules (APAPALAN, MECT, SOCAS)
 - **youtube-downloader** - Download YouTube content as MP3 or video, extract metadata
+
+### GRUC File Placement
+
+GRUC (Guides, Rules, Checks) files are distributed by consumer alignment:
+
+- **GUIDE** files - in each skill folder (consumed by working agent before execution)
+- **RULES** files - in each skill folder (consumed by `/verify`, `/improve` after execution)
+- **CHECKS** files for skills - in each skill folder (alongside GUIDE and RULES)
+- **CHECKS** files for workflows - in `drift-correction/` (consumed by `/drift-detect` after execution)
+
+Exception: `write-documents` keeps all GRUC types in its own folder.
 
 ## File Naming Conventions
 
@@ -665,7 +677,8 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 - [`/verify`](.devin/workflows/verify.md) - Verify work against specs and rules
 - [`/critique`](.devin/workflows/critique.md) - Find flawed assumptions, logic errors, hidden risks
 - [`/reconcile`](.devin/workflows/reconcile.md) - Pragmatic review of critique findings
-- [`/follow-instructions`](.devin/workflows/follow-instructions.md) - Post-execution drift detection, DoD-based gap filling
+- [`/drift-detect`](.devin/workflows/drift-detect.md) - Post-execution drift detection, persist gaps to __DRIFT_ file
+- [`/drift-correct`](.devin/workflows/drift-correct.md) - Close drift gaps identified by /drift-detect
 - [`/improve`](.devin/workflows/improve.md) - Depth-first improvement (one proven change per run, versioned backups)
 - [`/sync`](.devin/workflows/sync.md) - Document synchronization
 - [`/rename`](.devin/workflows/rename.md) - Global and local refactoring with exhaustive search

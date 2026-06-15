@@ -12,7 +12,7 @@
 - DevSystem scope: TRACTFUL (when creating artifacts) + global rules (always active)
 - Session scope: SMAP (mandatory) + EDIRD and STRUT (modular additions)
 - Workflow/Skill scope: GRUC and MNF (defined per workflow/skill)
-- GRUC (Guides, Rules, Checks) enables quality assurance pipelines (/verify, /improve, /critique, /reconcile, /follow-instructions)
+- GRUC (Guides, Rules, Checks) enables quality assurance pipelines (/verify, /improve, /critique, /reconcile, /drift-detect)
 - Supporting concepts (AGEN, APAPALAN, MECT, SOCAS) provide vocabulary, writing quality, and detection heuristics
 
 ## Table of Contents
@@ -223,9 +223,9 @@ MUST-NOT-FORGET:
 **GRUC** (Guides, Rules, Checks) - Helps the agent detect and reduce 1) instruction-following drift and 2) content quality problems.
 
 - **Mechanism**: three files per skill/workflow (GUIDE, RULES, CHECKS)
-- **Purpose**: enable quality assurance pipelines (/verify, /improve, /critique, /reconcile, /follow-instructions)
+- **Purpose**: enable quality assurance pipelines (/verify, /improve, /critique, /reconcile, /drift-detect)
 - **Lifecycle**: persistent per skill/workflow, accumulates over time from FAILS.md
-- **Implementation status**: partially realized. `*_RULES.md` files exist in several skills. `SKILL_GUIDE.md` and `SKILL_CHECKS.md` patterns not yet implemented per-skill. `/follow-instructions` exists but does not consume GRUC files.
+- **Implementation status**: partially realized. `*_RULES.md` files exist in several skills. `SKILL_GUIDE.md` and `SKILL_CHECKS.md` patterns not yet implemented per-skill. `/drift-detect` exists with CHECKS consumption planned.
 
 ### 6.3 The Three GRUC Components
 
@@ -241,7 +241,7 @@ MUST-NOT-FORGET:
 - Verification: read the output artifacts - no action traces needed
 
 **CHECKS** (`SKILL_CHECKS.md`) - Enforceable process discipline checks.
-- Consumer: `/follow-instructions`
+- Consumer: `/drift-detect`
 - Content: actions that must have been performed, evidence of process followed
 - Lifecycle phase: after only (ex-post)
 - Verification: requires action evidence (conversation logs, file history)
@@ -255,7 +255,7 @@ GRUC provides the MATERIAL that quality assurance workflows consume:
 - **`/improve`** - Consumes: RULES. Purpose: fix output quality
 - **`/critique`** - Consumes: GUIDE (implicit standards). Purpose: find logic flaws
 - **`/reconcile`** - Consumes: RULES + critique findings. Purpose: prioritize fixes
-- **`/follow-instructions`** - Consumes: CHECKS + meta-criteria. Purpose: audit process discipline
+- **`/drift-detect`** - Consumes: CHECKS + meta-criteria. Purpose: audit process discipline
 
 Without GRUC, these workflows must re-derive quality standards from the full skill/workflow definition each time. GRUC pre-calculates them into purpose-specific, lookup-ready files.
 
@@ -281,7 +281,7 @@ Compliance criteria are **constants**, not **variables**. They are knowable in a
 - MNF: process discipline + meta-criteria (reminds agent of steps and cognitive behaviors)
 - GRUC.RULES: output structure drift (category 1)
 - GRUC.CHECKS: process discipline drift (category 2)
-- Meta-criteria drift (category 3): evaluated ad-hoc by `/follow-instructions` based on task context
+- Meta-criteria drift (category 3): evaluated ad-hoc by `/drift-detect` based on task context (observational only, not scored)
 
 ## 7. Supporting Concepts
 
@@ -361,6 +361,12 @@ A simple single-step workflow (e.g., `/commit`) uses minimal components:
 - **Without MNF**: agent forgets constraints mid-turn, violates rules it read 2000 tokens ago
 
 ## 9. Document History
+
+**[2026-06-15 09:33]**
+- Changed: `/adp` references updated to `/drift-detect` and `/drift-correct` (workflow split)
+- Changed: CHECKS consumer updated from `/adp` to `/drift-detect`
+- Changed: Implementation status updated (CHECKS consumption planned)
+- Changed: Meta-criteria drift noted as observational only (FINSTRWF-DD-02)
 
 **[2026-06-12 16:30]**
 - Added: SMAP (Session Management And Persistence) as mandatory Session scope component

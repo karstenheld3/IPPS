@@ -25,6 +25,7 @@ Core definitions and structure for the development system.
 - **[RULES]**: The current set of agent rules in `[AGENT_FOLDER]/rules/`
 - **[WORKFLOWS]**: The current set of agent workflows in `[AGENT_FOLDER]/workflows/`
 - **[SKILLS]**: Agent Skills in `[AGENT_FOLDER]/skills/`
+- **[GRUC]**: Guides, Rules, Checks - pre-calculated compliance criteria. GUIDE + RULES in each skill folder; CHECKS in each skill folder (for skills) or `adp/` (for workflows). Exception: `write-documents` keeps all GRUC types in its own folder.
 
 ### Document Types
 
@@ -216,6 +217,8 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 - `/conversation-update` - Update existing conversation tracking file
 - `/critique` - Devil's Advocate review
 - `/fail` - Record failures to FAILS.md
+- `/drift-detect` - Post-execution drift detection, persist gaps to __DRIFT_ file
+- `/drift-correct` - Close gaps identified by /drift-detect
 - `/go` - Autonomous loop until goal reached
 - `/implement` - Execute implementation from plan
 - `/learn` - Extract learnings from resolved problems
