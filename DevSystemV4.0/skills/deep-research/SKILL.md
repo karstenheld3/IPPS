@@ -66,9 +66,13 @@ Strategy files (MCPI/MEPI) define the details for each phase.
 
 Before proceeding to source collection, ensure Topic ID uniqueness:
 1. Read ID-REGISTRY.md in workspace root
-2. Check for collision with existing Topic IDs per Topic Registry rules in devsystem-ids.md
-3. If collision: narrow abbreviation to specific subtopic
-4. Register new Topic ID immediately in ID-REGISTRY.md
+2. Create Topic ID: 7-14 uppercase chars (mandatory for all new topics)
+3. Check for collision with existing Topic IDs per Topic Registry rules in devsystem-ids.md
+4. If collision: extend or narrow abbreviation
+5. Register new Topic ID immediately in ID-REGISTRY.md
+
+**Nested IDs for T##/S## subfolders:**
+When deep research creates multiple `T##_` folders under one session topic, each subfolder uses a nested Doc ID: `[TOPIC]-[SUBTOPIC]-[DOC][NN]`. The SUBTOPIC (7-14 chars) is registered in session NOTES.md only, not in ID-REGISTRY.md. See devsystem-ids.md "Nested Document IDs" section.
 
 ## Prompt Decomposition (Phase 1, Step 1)
 

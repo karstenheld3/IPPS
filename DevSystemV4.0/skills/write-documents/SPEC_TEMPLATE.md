@@ -1,6 +1,7 @@
 # SPEC: [Component Name]
 
 **Doc ID (TDID)**: [TOPIC]-SP[NN]
+<!-- Topic IDs: 7-14 uppercase chars. Inside T##/S## folders use nested: [TOPIC]-[SUBTOPIC]-SP[NN] -->
 **Feature**: [FEATURE_SLUG]
 **Goal**: [Single sentence describing what to specify]
 **Timeline**: Created YYYY-MM-DD, Updated N times (YYYY-MM-DD - YYYY-MM-DD)

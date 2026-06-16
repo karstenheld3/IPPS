@@ -655,7 +655,7 @@ All variants must be convertible to this form:
 ```
 
 **When to apply:**
-- IDs referenced across documents (use Doc ID system: `CRWL-SP01`)
+- IDs referenced across documents (use Doc ID system: `CRAWLENG-SP01`)
 - Dates in tables or lists (use `YYYY-MM-DD` per AP-PR-01)
 - Status values (define enum: `TODO`, `IN_PROGRESS`, `DONE` - not free text)
 - Any data that appears in more than one place and must be matchable

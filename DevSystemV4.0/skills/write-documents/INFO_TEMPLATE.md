@@ -9,7 +9,8 @@
 <!-- Remove this section after writing the document -->
 - Every claim needs a source ID: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - Summary items need verification labels: [VERIFIED], [ASSUMED], [TESTED], [PROVEN]
-- Check ID-REGISTRY.md before creating new TOPICs
+- Check ID-REGISTRY.md before creating new TOPICs (7-14 uppercase chars required)
+- Inside T##/S## folders: use nested Doc ID format `[TOPIC]-[SUBTOPIC]-IN[NN]`
 - Document History at end, reverse chronological
 
 ## Summary

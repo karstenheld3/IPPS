@@ -30,15 +30,15 @@ Core definitions and structure for the development system.
 ### Document Types
 
 - **[INFO]** (IN): Information gathering from web research, option and code analysis, reading documents
-  - Example: `AUTH-IN01`, `CRWL-IN02`
+  - Example: `AUTHSYST-IN01`, `CRAWLENG-IN02`
 - **[SPEC]** (SP): A specification conforming to defined rules. When implemented, must be reverse-updated (synced) from verified code changes
-  - Example: `CRWL-SP01`, `AUTH-SP01`
+  - Example: `CRAWLENG-SP01`, `AUTHSYST-SP01`
 - **[IMPL]** (IP): An implementation plan. When implemented, must be reverse-updated (synced) from verified code changes
-  - Example: `CRWL-IP01`, `AUTH-IP02`
+  - Example: `CRAWLENG-IP01`, `AUTHSYST-IP02`
 - **[TEST]** (TP): Test plans suffixed to corresponding SPEC or IMPL
-  - Example: `CRWL-TP01`, `AUTH-TP01`
+  - Example: `CRAWLENG-TP01`, `AUTHSYST-TP01`
 - **[TASKS]** (TK): Partitioned task lists from IMPL/TEST plans
-  - Example: `CRWL-TK01`, `AUTH-TK01`
+  - Example: `CRAWLENG-TK01`, `AUTHSYST-TK01`
   - Created via `/write-tasks-plan` or `/partition`
 
 ### Tracking Documents

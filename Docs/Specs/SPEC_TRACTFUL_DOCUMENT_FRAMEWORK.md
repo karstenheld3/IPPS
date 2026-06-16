@@ -105,9 +105,9 @@ TDID (Tractful Document ID) ensures every document and item is uniquely identifi
 
 ### 4.1 TOPIC Registration
 
-A **TOPIC** is a 2-6 uppercase letter code identifying a component or concern.
+A **TOPIC** is a 7-14 uppercase letter code identifying a component or concern.
 
-**Examples:** `AUTH`, `CRWL`, `EDIRD`, `GLOB`
+**Examples:** `CRAWLENG`, `AUTHSYST`, `EDIRDMDL`
 
 **Rule:** Before using a TOPIC, register it in `ID-REGISTRY.md` in workspace root.
 
@@ -116,7 +116,7 @@ A **TOPIC** is a 2-6 uppercase letter code identifying a component or concern.
 **Format:** `[TOPIC]-[DOC][NN]`
 
 **Components:**
-- `TOPIC` - Registered topic code (2-6 chars)
+- `TOPIC` - Registered topic code (7-14 uppercase letters)
 - `DOC` - Document type (IN, SP, IP, TP, TK, RV, LN)
 - `NN` - Sequential number (01-99)
 
@@ -129,7 +129,20 @@ A **TOPIC** is a 2-6 uppercase letter code identifying a component or concern.
 - `RV` - REVIEW
 - `LN` - LEARNINGS
 
-**Examples:** `AUTH-SP01`, `CRWL-IP02`, `GLOB-IN01`
+**Examples:** `CRAWLENG-SP01`, `AUTHSYST-IP02`
+
+### 4.2.1 Nested Document IDs
+
+Documents inside `T##_` (Topic) or `S##_` (Step) session subfolders use nested IDs.
+
+**Format:** `[TOPIC]-[SUBTOPIC]-[DOC][NN]`
+
+- `TOPIC` - Parent topic (7-14 chars, registered in ID-REGISTRY.md)
+- `SUBTOPIC` - Subfolder-specific topic (7-14 chars, registered in session NOTES.md only)
+- No global registration required for SUBTOPICs
+- Max 1 level of nesting
+
+**Examples:** `AIDETECT-STYLMTRY-IN01`, `AIDETECT-WTRMARK-SP01`
 
 ### 4.3 Item IDs
 
@@ -138,34 +151,35 @@ Every major item within a document has a unique ID.
 **Spec-Level Items** (in SPEC documents):
 - Format: `[TOPIC]-[TYPE]-[NN]`
 - Types: FR (Functional Requirement), DD (Design Decision), IG (Implementation Guarantee), AC (Acceptance Criteria)
-- Examples: `AUTH-FR-01`, `CRWL-DD-03`, `TRACT-AC-02`
+- Examples: `CRAWLENG-FR-01`, `CRAWLENG-DD-03`, `AUTHSYST-AC-02`
 
 **Plan-Level Items** (in IMPL, TEST, TASKS documents):
 - Format: `[TOPIC]-[DOC][NN]-[TYPE]-[NN]`
 - Types: IS (Implementation Step), EC (Edge Case), TC (Test Case), VC (Verification Checklist), TK (Task)
-- Examples: `AUTH-IP01-IS-05`, `CRWL-TP01-TC-03`, `AUTH-TK01-TK-001`
+- Examples: `AUTHSYST-IP01-IS-05`, `CRAWLENG-TP01-TC-03`, `AUTHSYST-TK01-TK-001`
 
 **Tracking Items** (in PROBLEMS, FAILS, LEARNINGS):
 - Format: `[TOPIC]-[TYPE]-[NNN]` (3-digit)
 - Types: PR (Problem), FL (Failure Log), LN (Learning), BG (Bug), FT (Feature)
-- Examples: `STRUT-PR-005`, `AUTH-FL-001`
+- Examples: `CRAWLENG-PR-005`, `AUTHSYST-FL-001`
 
 ### 4.4 Cross-Reference Format
 
 **Document reference:** `filename.md [DOC-ID]`
-- Example: `_SPEC_AUTH.md [AUTH-SP01]`
+- Example: `_SPEC_AUTHSYST.md [AUTHSYST-SP01]`
 
 **Item reference:** `[FULL-ITEM-ID]`
-- Example: `AUTH-FR-01`, `CRWL-IP01-EC-02`
+- Example: `AUTHSYST-FR-01`, `CRAWLENG-IP01-EC-02`
 
 ### 4.5 ID Regex Patterns
 
 ```
-TOPIC:      ^[A-Z]{2,6}$
-Document:   ^[A-Z]{2,6}-(IN|SP|IP|TP|TK|RV|LN)\d{2}$
-Spec-Item:  ^[A-Z]{2,6}-(FR|DD|IG|AC)-\d{2}$
-Plan-Item:  ^[A-Z]{2,6}-(IN|SP|IP|TP|TK)\d{2}-(IS|EC|TC|VC|TK)-\d{2,3}$
-Tracking:   ^[A-Z]{2,6}-(PR|FL|LN|BG|FT)-\d{3}$
+TOPIC:      ^[A-Z]{2,14}$
+Document:   ^[A-Z]{2,14}-(IN|SP|IP|TP|TK|RV|LN)\d{2}$
+Nested:     ^[A-Z]{2,14}-[A-Z]{2,14}-(IN|SP|IP|TP|TK|RV|LN)\d{2}$
+Spec-Item:  ^[A-Z]{2,14}-(FR|DD|IG|AC)-\d{2}$
+Plan-Item:  ^[A-Z]{2,14}-(IN|SP|IP|TP|TK)\d{2}-(IS|EC|TC|VC|TK)-\d{2,3}$
+Tracking:   ^[A-Z]{2,14}-(PR|FL|LN|BG|FT)-\d{3,4}$
 ```
 
 ## 5. Document Types
@@ -314,8 +328,8 @@ See `write-documents/SKILL.md` for implementation details.
 
 **TRACT-FR-03: Cross-Reference Format**
 - Format: `filename.md [DOC-ID]`
-- Example: `_SPEC_AUTH.md [AUTH-SP01]`
-- Item references: `AUTH-FR-01`, `AUTH-SP01-TC-03`
+- Example: `_SPEC_AUTHSYST.md [AUTHSYST-SP01]`
+- Item references: `AUTHSYST-FR-01`, `AUTHSYST-SP01-TC-03`
 
 **TRACT-FR-04: Document History**
 - Every document ends with Document History section

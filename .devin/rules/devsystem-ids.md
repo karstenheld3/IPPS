@@ -9,22 +9,24 @@ All documents and items must have unique IDs for traceability.
 ## Number Formats (2-digit vs 4-digit)
 
 **2-digit `[NN]` or `[NUMBER]`** - For document-scoped items (bounded, rarely exceed 99):
-- Document IDs: `AUTH-SP01`, `CRWL-IP01`
-- Review IDs: `AUTH-SP01-RV01`
-- Spec items (FR, DD, IG, AC): `CRWL-FR-01`
-- Plan items (EC, IS, VC, TC, TK): `CRWL-IP01-EC-01`, `AUTH-TK01-TK-05`
-- Review findings (RF): `AUTH-SP01-RV01-RF-01`
+- Document IDs: `CRAWLENG-SP01`, `AUTHSYST-IP01`
+- Review IDs: `CRAWLENG-SP01-RV01`
+- Spec items (FR, DD, IG, AC): `CRAWLENG-FR-01`
+- Plan items (EC, IS, VC, TC, TK): `CRAWLENG-IP01-EC-01`, `AUTHSYST-TK01-TK-05`
+- Review findings (RF): `CRAWLENG-SP01-RV01-RF-01`
 
 **4-digit `[NNNN]`** - For tracking IDs (unbounded, accumulate over time):
-- Bugs: `SAP-BG-0001`, `GLOB-BG-0001`
-- Problems: `AUTH-PR-0001`
-- Features: `UI-FT-0001`
-- Fixes: `CRWL-FX-0002`
+- Bugs: `WEBSYSTM-BG-0001`, `GLOB-BG-0001`
+- Problems: `AUTHSYST-PR-0001`
+- Features: `CRAWLENG-FT-0001`
+- Fixes: `CRAWLENG-FX-0002`
 - Failures: `GLOB-FL-0019`
 
 ## Topic Registry
 
-**Topic:** 2-6 uppercase letters describing component (e.g., `CRWL` for Crawler, `AUTH` for Authentication, `EDIRD` for EDIRD Phase Model)
+**Topic:** 7-14 uppercase letters describing component (e.g., `CRAWLENG` for Crawler Engine, `AUTHSYST` for Authentication System, `EDIRDMDL` for EDIRD Phase Model)
+
+**Migration note (forward-only):** Topics created before 2026-06-16 may have 2-6 chars. These remain valid. All NEW topics MUST be 7-14 chars.
 
 **REQUIREMENT:** Workspace must have an `ID-REGISTRY.md` file as the authoritative source for all TOPICs, acronyms, and states to avoid conflicting topic ids. Topic ids must be unique.
 
@@ -45,28 +47,28 @@ Use `GLOB` for **tracking IDs only** (workspace-level failures, problems, tasks,
 **_BugFixes Session:** Uses `GLOB` prefix for all tracking IDs because bugs there span multiple components. See `/bugfix` workflow for details.
 
 Do NOT use `GLOB` for **document IDs** (IN, SP, IP, TP, TK):
-- Named concepts get their own TOPIC: `MEPI-IN01`, `EDIRD-SP01`, `STRUT-SP01`
-- Features get their own TOPIC: `AUTH-SP01`, `CRWL-IP01`
+- Named concepts get their own TOPIC: `EDIRDMDL-IN01`, `STRUTPLN-SP01`
+- Features get their own TOPIC: `AUTHSYST-SP01`, `CRAWLENG-IP01`
 - If a document has a name, it has a TOPIC
 
 **Example: SINGLE-PROJECT-MODE**
 ```
 ## Topic Registry
 - `GLOB` - Project-mode (main spec, architecture)
-- `V1CR` - Version 1 Crawler
-- `V2CR` - Version 2 Crawler
-- `CUIF` - Common UI Functions
-- `CSPF` - Common SharePoint Functions
+- `CRAWLENG` - Crawler Engine
+- `CRAWLNXT` - Version 2 Crawler
+- `COMNUIFN` - Common UI Functions
+- `COMNSPFN` - Common SharePoint Functions
 ```
 
-**Example: MONOREPO** (first 2 letters = repo prefix)
+**Example: MONOREPO** (first 2-3 letters = repo prefix)
 ```
 ## Topic Registry
-- `CRCORE` - CR: Crawler Core (shared libraries)
-- `CRAPI` - CR: Crawler API (REST endpoints)
-- `CRUI` - CR: Crawler UI (frontend)
-- `IXCORE` - IX: Indexer Core (indexing engine)
-- `IXSCHED` - IX: Indexer Scheduler (job scheduling)
+- `CRWCORE` - CR: Crawler Core (shared libraries)
+- `CRWAPIS` - CR: Crawler API (REST endpoints)
+- `CRWUIFR` - CR: Crawler UI (frontend)
+- `IXRCORE` - IX: Indexer Core (indexing engine)
+- `IXRSCHED` - IX: Indexer Scheduler (job scheduling)
 ```
 
 ## Document IDs
@@ -85,10 +87,53 @@ Every document MUST have an ID in its header block.
 - `LN` - LEARNINGS document
 
 **Examples:**
-- `AUTH-IN01` - Authentication Info doc 1
-- `CRWL-SP01` - Crawler Spec 1
-- `V2CR-IP01` - V2 Crawler Implementation Plan 1
-- `V2CR-TP01` - V2 Crawler Test Plan 1
+- `CRAWLENG-SP01` - Crawler Engine Spec 1
+- `CRAWLNXT-IP01` - V2 Crawler Implementation Plan 1
+- `CRAWLNXT-TP01` - V2 Crawler Test Plan 1
+
+## Nested Document IDs
+
+Documents inside `T##_` (Topic) or `S##_` (Step) session subfolders use nested IDs to avoid collisions when the same subject is researched in multiple sessions or contexts.
+
+**Format:** `[TOPIC]-[SUBTOPIC]-[DOC][NN]`
+
+**Rules:**
+- `TOPIC` - The session-level or parent topic (7-14 chars, registered in ID-REGISTRY.md)
+- `SUBTOPIC` - The subfolder-specific topic (7-14 chars, registered in session NOTES.md only)
+- SubTopicIDs do NOT require global registration in ID-REGISTRY.md
+- No collision possible: parent TOPIC is globally unique, SUBTOPIC is scoped to that parent
+- Nesting applies ONLY inside `T##_` or `S##_` folders. Session root documents use flat IDs.
+- Max 1 level of nesting (no `[TOPIC]-[SUB1]-[SUB2]-...`)
+
+**When to use nested IDs:**
+- Session has multiple Topic Folders exploring different angles of the same subject
+- Deep research creates multiple `T##_` folders under one session topic
+- Step Folders produce documents that need distinct identity from the parent
+
+**When NOT to use (flat ID):**
+- Documents at session root
+- Single-focus sessions without `T##_`/`S##_` subfolders
+- The subfolder topic is itself globally unique and registered in ID-REGISTRY.md
+
+**Examples:**
+```
+Session topic: AIDETECT (registered in ID-REGISTRY.md)
+
+T01_STYLMTRY_Stylometry_2026-06-16/
+  _INFO_AIDETECT-STYLMTRY-01.md   → Doc ID: AIDETECT-STYLMTRY-IN01
+
+T02_WTRMARK_Watermarking_2026-06-16/
+  _INFO_AIDETECT-WTRMARK-01.md    → Doc ID: AIDETECT-WTRMARK-IN01
+  _SPEC_AIDETECT-WTRMARK-01.md    → Doc ID: AIDETECT-WTRMARK-SP01
+
+S01_SRCPROC_SourceProcessing_2026-06-16/
+  _INFO_AIDETECT-SRCPROC-01.md    → Doc ID: AIDETECT-SRCPROC-IN01
+```
+
+**Tracking IDs in nested context:**
+Problems, failures, and bugs inside nested folders also use the nested format:
+- `AIDETECT-STYLMTRY-PR-0001` - Problem in stylometry subfolder
+- `AIDETECT-WTRMARK-FL-0001` - Failure in watermarking subfolder
 
 ### Why IMPL and TEST, not PLAN
 
@@ -108,9 +153,9 @@ Reviews reference their source document with `-RV` suffix.
 **Format:** `[SOURCE-DOC-ID]-RV[NN]`
 
 **Examples:**
-- `AUTH-SP01-RV01` - First review of AUTH-SP01
-- `CRWL-IP01-RV02` - Second review of CRWL-IP01
-- `V2CR-IN01-RV01` - First review of V2CR-IN01
+- `CRAWLENG-IP01-RV02` - Second review of CRAWLENG-IP01
+- `CRAWLNXT-IN01-RV01` - First review of CRAWLNXT-IN01
+- `AIDETECT-STYLMTRY-IN01-RV01` - First review of nested doc AIDETECT-STYLMTRY-IN01
 
 ## Spec-Level Item IDs (FR, IG, DD)
 
@@ -125,9 +170,9 @@ Defined in SPECs, referenced across IMPL and TEST plans.
 - `AC` - Acceptance Criteria
 
 **Examples:**
-- `CRWL-FR-01` - Crawler Functional Requirement 1
-- `CRWL-DD-03` - Crawler Design Decision 3
-- `AUTH-IG-02` - Authentication Implementation Guarantee 2
+- `CRAWLENG-FR-01` - Crawler Engine Functional Requirement 1
+- `CRAWLENG-DD-03` - Crawler Engine Design Decision 3
+- `AUTHSYST-IG-02` - Authentication Implementation Guarantee 2
 
 ## Plan-Level Item IDs (EC, IS, VC, TC, TK)
 
@@ -143,10 +188,10 @@ Local to IMPL, TEST, and TASKS plans. Do NOT use in SPECs.
 - `TK` - Task (work item in TASKS document)
 
 **Examples:**
-- `CRWL-IP01-EC-01` - Crawler Plan 01, Edge Case 1
-- `CRWL-IP01-IS-05` - Crawler Plan 01, Implementation Step 5
-- `AUTH-TP01-TC-03` - Authentication Test Plan 01, Test Case 3
-- `AUTH-TK01-TK-05` - Authentication Tasks 01, Task 5
+- `CRAWLENG-IP01-EC-01` - Crawler Engine Plan 01, Edge Case 1
+- `CRAWLENG-IP01-IS-05` - Crawler Engine Plan 01, Implementation Step 5
+- `AUTHSYST-TP01-TC-03` - Authentication Test Plan 01, Test Case 3
+- `AIDETECT-WTRMARK-IP01-IS-03` - Nested: Watermarking subfolder, Plan 01, Step 3
 
 ## INFO Document Source IDs
 
@@ -160,14 +205,14 @@ All sources in INFO documents MUST have unique IDs.
 - `SOURCE_REF` - Page/section identifier (2-12 chars, omit vowels)
 
 **Examples:**
-- `AGSK-IN01-SC-ASIO-HOME` - agentskills.io/home
-- `AGSK-IN01-SC-CLAUD-SKLBP` - platform.claude.com/.../best-practices
+- `AGNTSKIL-IN01-SC-ASIO-HOME` - agentskills.io/home
+- `AGNTSKIL-IN01-SC-CLAUD-SKLBP` - platform.claude.com/.../best-practices
 
 ## Session Document IDs
 
-Session tracking documents use date-based IDs instead of TOPIC-based IDs.
+Session tracking documents use the session TOPIC ID. This decouples them from the session folder name, allowing folder renames without modifying contained files.
 
-**Format:** `YYYY-MM-DD_[SessionTopicCamelCase]-[TYPE]`
+**Format:** `[TOPIC]-[TYPE]`
 
 **Types:**
 - `NOTES` - Session notes
@@ -175,9 +220,9 @@ Session tracking documents use date-based IDs instead of TOPIC-based IDs.
 - `PROGRESS` - Session progress tracking
 
 **Examples:**
-- `2026-01-15_FixAuthenticationBug-NOTES`
-- `2026-01-15_FixAuthenticationBug-PROBLEMS`
-- `2026-01-15_FixAuthenticationBug-PROGRESS`
+- `AUTHSYST-NOTES`
+- `AUTHSYST-PROBLEMS`
+- `AUTHSYST-PROGRESS`
 
 ## Tracking IDs (BG, FT, PR, FX, FL)
 
@@ -193,11 +238,10 @@ For session and project tracking in PROBLEMS.md, FAILS.md, _REVIEW.md, and backl
 - `FL` - Failure log entry (actual failure in FAILS.md)
 
 **Examples:**
-- `SAP-BG-0001` - SAP-related bug 1 (SESSION-MODE)
-- `AUTH-FT-0001` - Authentication feature request 1
-- `GLOB-PR-0003` - Project-wide problem 3 (PROJECT-MODE)
-- `GLOB-BG-0002` - Project-wide bug 2 (PROJECT-MODE)
-- `CRWL-FX-0002` - Crawler fix 2
-- `CRWL-FL-0001` - Crawler failure log entry 1
+- `AUTHSYST-FT-0001` - Authentication feature request 1
+- `GLOB-PR-0003` - Project-wide problem 3
+- `CRAWLENG-FX-0002` - Crawler Engine fix 2
+- `CRAWLENG-FL-0001` - Crawler Engine failure log entry 1
+- `AIDETECT-STYLMTRY-PR-0001` - Nested: problem in stylometry subfolder
 
 **Note:** The `[TOPIC]` links together related SPEC, IMPL, TEST, INFO, FAILS, and REVIEW documents.

@@ -19,7 +19,7 @@ Sessions track EDIRD phases:
 - Lifecycle: Init → Work → Save → Resume → Finalize → Archive
 - Sync session PROBLEMS.md to project on /session-finalize
 - Phase tracking: NOTES.md has current phase, PROGRESS.md has full phase plan
-- **Topic Folders**: `T##_TopicDescription_YYYY-MM-DD/` for independent work streams. Max 1 level. Run detection procedure on session entry.
+- **Topic Folders**: `T##_SUBTOPIC_Description_YYYY-MM-DD/` for independent work streams. Max 1 level. Run detection procedure on session entry.
 - **STOP after session init**: After creating session files, STOP and wait for user review. Do NOT implement session goal until explicitly requested. User must review and refine goals before work begins.
 
 ## Session Lifecycle
@@ -36,10 +36,11 @@ When a session performs multiple steps in sequence to produce an output, each st
 
 ### Step Folder Naming
 
-**Pattern:** `S##_Description_YYYY-MM-DD[_gitignore]/`
+**Pattern:** `S##_SUBTOPIC_Description_YYYY-MM-DD[_gitignore]/`
 
 - `S##` - 2-digit step sequence number with `S` prefix (S01, S02, ...)
-- `Description` - CamelCase description; optionally prefixed with `TOPIC-` if step belongs to a research track (e.g., `S03_MYTPC-ExtractPatterns_2026-05-10/`)
+- `SUBTOPIC` - Subfolder topic ID (7-14 uppercase chars). Registered in session NOTES.md only. Doc IDs inside use nested format: `[SESSION_TOPIC]-[SUBTOPIC]-[DOC][NN]`
+- `Description` - CamelCase human-readable description
 - `YYYY-MM-DD` - date the step was executed
 - `_gitignore` - optional suffix marking local-only content (large data, intermediate artifacts)
 
@@ -49,9 +50,9 @@ When a session performs multiple steps in sequence to produce an output, each st
 
 Each step folder gets a corresponding summary at the session root.
 
-**Pattern:** `S##_Description_STEPLOG.md`
+**Pattern:** `S##_SUBTOPIC_Description_STEPLOG.md`
 
-- Description matches the step folder name (without date and `_gitignore` suffix)
+- SUBTOPIC and Description match the step folder name (without date and `_gitignore` suffix)
 - No leading underscore (sorts alongside step folders in directory listing)
 - All file references use relative markdown links: `[filename](S##_Folder/filename)`
 
@@ -85,10 +86,11 @@ When a session contains multiple independent work streams, each stream gets its 
 
 ### Naming
 
-**Pattern:** `T##_TopicDescription_YYYY-MM-DD/`
+**Pattern:** `T##_SUBTOPIC_Description_YYYY-MM-DD/`
 
 - `T##` - 2-digit sequence number with `T` prefix (T01, T02, ...). Sequence = creation order, not dependency
-- `TopicDescription` - CamelCase description; optionally prefixed with `TOPIC-` if topic belongs to a research track (e.g., `T01_XLREF-TranslationReflection_2026-05-22/`)
+- `SUBTOPIC` - Subfolder topic ID (7-14 uppercase chars). Registered in session NOTES.md only. Doc IDs inside use nested format: `[SESSION_TOPIC]-[SUBTOPIC]-[DOC][NN]`
+- `Description` - CamelCase human-readable description
 - `YYYY-MM-DD` - date the topic folder was created
 
 ### Structure
@@ -100,28 +102,28 @@ _YYYY-MM-DD_SessionName/
 ├── PROGRESS.md                     (Topic/Step Folders progress)
 │
 │   Topic Folders (independent work streams)
-├── T01_DatabaseOptions_2026-01-15/
+├── T01_DBSELECT_DatabaseOptions_2026-01-15/
 │   ├── NOTES.md
 │   ├── PROBLEMS.md
 │   ├── PROGRESS.md
-│   └── _INFO_DBOPT_01.md
-├── T02_APID-APIDesign_2026-01-15/
+│   └── _INFO_WEBSYSTM-DBSELECT_01.md
+├── T02_APIDESN_APIDesign_2026-01-15/
 │   ├── NOTES.md
 │   ├── PROBLEMS.md
 │   ├── PROGRESS.md
-│   └── _SPEC_APID_01.md
+│   └── _SPEC_WEBSYSTM-APIDESN_01.md
 │
 │   Step Folders (sequential pipeline)
-├── S01_CollectData_2026-01-15_gitignore/
+├── S01_COLDATA_CollectData_2026-01-15_gitignore/
 │   └── (large source files, local only)
-├── S01_CollectData_STEPLOG.md
-├── S02_MYTPC-AnalyzeResults_2026-01-16/
-│   ├── _INFO_MYTPC_01-SUMMARY.md
-│   └── _INFO_MYTPC_02-SOURCES.md
-├── S02_MYTPC-AnalyzeResults_STEPLOG.md
+├── S01_COLDATA_CollectData_STEPLOG.md
+├── S02_ANLYRSL_AnalyzeResults_2026-01-16/
+│   ├── _INFO_WEBSYSTM-ANLYRSL_01-SUMMARY.md
+│   └── _INFO_WEBSYSTM-ANLYRSL_02-SOURCES.md
+├── S02_ANLYRSL_AnalyzeResults_STEPLOG.md
 │
-│   Bug Folders (AUTH = session TOPIC ID, see /bugfix workflow)
-└── AUTH-BG-0001_TokenRaceCondition/
+│   Bug Folders (WEBSYSTM = session TOPIC ID, see /bugfix workflow)
+└── WEBSYSTM-BG-0001_TokenRaceCondition/
     ├── PROBLEMS.md
     └── _INFO_*.md
 ```
@@ -175,10 +177,14 @@ Execute when `/session-finalize` is invoked:
 When creating a new topic folder inside an existing session:
 
 1. Determine next `T##` number (find highest existing `T##` number + 1)
-2. Create `T##_TopicDescription_YYYY-MM-DD/` inside the session folder
-3. Create tracking files from templates (NOTES.md, PROBLEMS.md, PROGRESS.md)
-4. Register in parent NOTES.md `## Topic Folders` section
-5. Add entry to parent PROGRESS.md `## Topic Folders` section
+2. Create SUBTOPIC ID (7-14 uppercase chars) for this subfolder's scope
+3. Create `T##_SUBTOPIC_Description_YYYY-MM-DD/` inside the session folder
+4. Create tracking files from templates (NOTES.md, PROBLEMS.md, PROGRESS.md)
+5. Register SUBTOPIC in parent NOTES.md `## Topic Registry` section (session-local, not ID-REGISTRY.md)
+6. Register folder in parent NOTES.md `## Topic Folders` section
+7. Add entry to parent PROGRESS.md `## Topic Folders` section
+
+**Doc IDs inside the folder** use nested format: `[TOPIC]-[SUBTOPIC]-[DOC][NN]`
 
 ## Session Folder Location
 
@@ -237,9 +243,11 @@ See `[AGENT_FOLDER]/rules/devsystem-ids.md` rule (always-on) for complete ID sys
 
 **Quick Reference:**
 - Document: `[TOPIC]-[DOC][NN]` (IN, SP, IP, TP)
-  - Example: `CRWL-SP01`, `AUTH-IP01`
+  - Example: `CRAWLENG-SP01`, `AUTHSYST-IP01`
+- Nested: `[TOPIC]-[SUBTOPIC]-[DOC][NN]` (inside T##/S## folders)
+  - Example: `AIDETECT-STYLMTRY-IN01`
 - Tracking: `[TOPIC]-[TYPE]-[NNNN]` (BG = Bug, FT = Feature, PR = Problem, FX = Fix, TK = Task)
-  - Example: `SAP-BG-0001`, `UI-PR-0003`, `GLOB-TK-0015`
+  - Example: `WEBSYSTM-BG-0001`, `CRAWLENG-PR-0003`, `GLOB-TK-0015`
 - Topic Registry: Session-level in session NOTES.md, project-level in ID-REGISTRY.md
 
 ## Session Init Templates

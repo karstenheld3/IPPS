@@ -13,8 +13,9 @@ Inventory of all IDs, acronyms, and named concepts in the DevSystem.
 
 ## Core Identifiers
 
-- **TOPIC** - 2-6 uppercase letters identifying a component (e.g., `AUTH`, `CRWL`)
-- **TDID** - Tractful Document ID. Format: `[TOPIC]-[DOC][NN]`
+- **TOPIC** - 7-14 uppercase letters identifying a component (e.g., `CRAWLENG`, `AUTHSYST`). Grandfathered topics (pre-2026-06-16) may be 2-6 chars.
+- **SUBTOPIC** - 7-14 uppercase letters identifying a subfolder scope within a session. Registered in session NOTES.md only, not here. Used in nested Doc IDs: `[TOPIC]-[SUBTOPIC]-[DOC][NN]`
+- **TDID** - Tractful Document ID. Format: `[TOPIC]-[DOC][NN]` or nested: `[TOPIC]-[SUBTOPIC]-[DOC][NN]`
 - **FEATURE_SLUG** - Kebab-case feature identifier (e.g., `user-authentication`)
 
 ## Document Type IDs
