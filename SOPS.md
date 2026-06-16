@@ -18,6 +18,7 @@
 
 - `[DEVSYSTEM_FOLDER]` is the source of truth. Never edit `.devin/` directly
 - `NOTES.md [SKILL_CATEGORIES]` and `deploy-to-all-repos.md $skillCategories` must stay in sync (duplicated list — weakness)
+- Every new skill MUST be added to either `Development` or `Personal` in `[SKILL_CATEGORIES]` and `$skillCategories`. Unregistered skills are silently excluded from deployment.
 - Sync `[DEVSYSTEM_FOLDER]` → `.devin/` BEFORE running `/deploy-to-all-repos`
 - `Copy-Item -Recurse -Force` does NOT delete files that no longer exist at source — deletions require explicit `Remove-Item`
 - Every SOP ends with a verification step before you can consider the change complete

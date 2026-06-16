@@ -75,7 +75,7 @@ $source = "[WORKSPACE_FOLDER]\.devin"
 
 # Skill categories (from [SKILL_CATEGORIES] in !NOTES.md)
 $skillCategories = @{
-    "Development" = @("coding-conventions", "deep-research", "edird-phase-planning", "git", "git-conventions", "github", "llm-computer-use", "llm-evaluation", "llm-transcription", "ms-playwright-mcp", "ms-playwright-mcp-v2", "pdf-tools", "playwriter-mcp", "session-management", "windows-desktop-control", "windsurf-auto-model-switcher", "write-documents", "youtube-downloader")
+    "Development" = @("coding-conventions", "deep-research", "drift-correction", "edird-phase-planning", "git", "git-conventions", "github", "llm-computer-use", "llm-evaluation", "llm-transcription", "ms-playwright-mcp", "ms-playwright-mcp-v2", "pdf-tools", "playwriter-mcp", "session-management", "windows-desktop-control", "windsurf-auto-model-switcher", "write-documents", "youtube-downloader")
     "Personal" = @("google-account", "travel-info")
 }
 $skillCategories["All"] = $skillCategories["Development"] + $skillCategories["Personal"]
