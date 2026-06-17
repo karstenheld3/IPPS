@@ -87,14 +87,14 @@ Scan the current chat for content to add. Classify each item:
 
 For each new attachment:
 
-1. Create folder: `Attachments/YYYY-MM-DD_HH-MM_[Topic]/`
-2. Download/save attachment to folder
+1. Create folder: `Attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/`
+2. Download/save binary files (PDF, ZIP, images) to `Attachments_gitignore/` subfolder
 3. Check downloaded images - delete email garbage per CV-AT-01
 4. If `CONVERSATION_AUTO_TRANSCRIBE_ATTACHMENTS=true`:
    - Run `/transcribe` with: 1 candidate, 120 DPI, min-score=4.5
-   - Output: `[filename].md` in same folder
+   - Output: `[filename].md` in mirrored `Attachments/YYYY-MM-DD_HH-MM_[Topic]/` folder - CV-AT-05
 5. If `CONVERSATION_AUTO_TRANSLATE=true` and content language not in `CONVERSATION_DO_NOT_TRANSLATE_LIST`:
-   - Produce translated version: `[filename]_en.md` in same folder
+   - Produce translated version: `[filename]_en.md` in `Attachments/YYYY-MM-DD_HH-MM_[Topic]/`
    - Use `TRANSLATION_TERM_PAIRS` for consistent terms
 
 ## Step 5: Append to Conversation File
@@ -132,7 +132,7 @@ After updating:
 6. Native special characters used - CV-TR-03
 7. All dates in `YYYY-MM-DD HH:MM` format - CV-DT-01
 8. All new attachments, transcriptions, translations in Links - CV-LN-03
-9. Attachment folders follow `YYYY-MM-DD_HH-MM_[Topic]/` format - CV-AT-04
+9. Attachment folders follow `YYYY-MM-DD_HH-MM_[Topic]/` format, binaries in `Attachments_gitignore/`, text files in `Attachments/` - CV-AT-04, CV-AT-05
 10. Auto-transcription completed if enabled - CV-AT-03
 
 ## Quality Gate

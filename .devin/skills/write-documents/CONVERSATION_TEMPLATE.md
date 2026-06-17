@@ -24,7 +24,7 @@
 - Log entry format: `- **YYYY-MM-DD HH:MM** - Main topic` with anchor to History - CV-ST-03
 - Todo format: `- **YYYY-MM-DD HH:MM** - Item - Deadline: YYYY-MM-DD, Status: TODO:[ACTION]/DONE` - CV-TD-01
 - Todo actions: `TODO:REPLY`, `TODO:REVIEW`, `TODO:PAY`, `TODO:PLAN`, `TODO:SCHEDULE_CALL` (web), `TODO:SCHEDULE_TRIP`, `TODO:SCHEDULE_MEETING` (in person) - CV-TD-02
-- Attachment folder format: `Attachments/YYYY-MM-DD_HH-MM_[Topic]/` - CV-AT-04
+- Attachment folders: binaries in `Attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/`, text files in `Attachments/YYYY-MM-DD_HH-MM_[Topic]/` - CV-AT-04, CV-AT-05
 - AUTO-TRANSCRIBE: When enabled, transcribe attachments via `/transcribe` (1 candidate, 120dpi, min-score=4.5) - CV-AT-03
 - All URLs as Markdown clickable links: `[Title](https://...)` - CV-LN-01
 - LINKS COMPLETENESS: All attachments, transcriptions, translations recorded in Links section - CV-LN-03
@@ -58,7 +58,7 @@ Files matching these patterns should NOT be downloaded. If downloaded, delete th
 - **2026-03-15 09:15** - Some websites to check
   - [Website Title](https://example.com)
 - **2026-03-17 14:30** - Document title
-  - [Document.pdf](Attachments/2026-03-17_14-30_Topic/Document.pdf)
+  - [Document.pdf](Attachments_gitignore/2026-03-17_14-30_Topic/Document.pdf)
   - [Document.md](Attachments/2026-03-17_14-30_Topic/Document.md) (transcription)
   - [Document_en.md](Attachments/2026-03-17_14-30_Topic/Document_en.md) (translation)
 
@@ -89,7 +89,7 @@ Files matching these patterns should NOT be downloaded. If downloaded, delete th
 - **2026-03-17 14:30** - Discussed Q2 timeline adjustments
   - Decision: Move milestone 2 to April 15
   - Action: Send updated document by Friday
-  - Attachment: [Doc.pdf](Attachments/2026-03-17_14-30_Topic/Doc.pdf)
+  - Attachment: [Doc.pdf](Attachments_gitignore/2026-03-17_14-30_Topic/Doc.pdf) | [Doc.md](Attachments/2026-03-17_14-30_Topic/Doc.md)
   - [Email](#2026-03-17-1430---q2-timeline-discussion)
 - **2026-03-15 09:15** - Initial project kickoff
   - Decision: Use agile methodology

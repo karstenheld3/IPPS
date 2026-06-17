@@ -38,7 +38,8 @@ Attachments (AT)
 - CV-AT-01: Check downloaded images - delete email garbage (signatures, logos, spacers)
 - CV-AT-02: Ignore files pattern maintained per conversation
 - CV-AT-03: Auto-transcribe attachments via `/transcribe` when `CONVERSATION_AUTO_TRANSCRIBE_ATTACHMENTS=true`
-- CV-AT-04: Attachments in `[ConversationFolder]/Attachments/YYYY-MM-DD_HH-MM_[Topic]/`
+- CV-AT-04: Binary files (PDF, ZIP, images) in `[ConversationFolder]/Attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/`
+- CV-AT-05: Text files (.md, .txt, .csv, etc.) in `[ConversationFolder]/Attachments/YYYY-MM-DD_HH-MM_[Topic]/`
 
 Todos (TD)
 - CV-TD-01: Todo format with timestamp, item, deadline, status
@@ -287,7 +288,7 @@ Bold timestamp, main topic on same line. Sub-items indented with Decision/Action
 - **2026-03-17 14:30** - Discussed Q2 timeline adjustments
   - Decision: Move milestone 2 to April 15
   - Action: Send updated Gantt chart by Friday
-  - Attachment: [Q2_Timeline.pdf](Attachments/2026-03-17_14-30_Q2Timeline/Q2_Timeline.pdf)
+  - Attachment: [Q2_Timeline.pdf](Attachments_gitignore/2026-03-17_14-30_Q2Timeline/Q2_Timeline.pdf)
   - [Email](#2026-03-17-1430---q2-timeline-discussion)
 ```
 
@@ -346,17 +347,22 @@ Timestamp, item, optional deadline, status with action type.
 
 ## Attachment Folder Format
 
-`Attachments/YYYY-MM-DD_HH-MM_[Topic]/`
+Two mirrored folder trees per conversation:
+- `Attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/` - binary files (PDF, ZIP, images) - excluded from git
+- `Attachments/YYYY-MM-DD_HH-MM_[Topic]/` - text files (.md, .txt, .csv, etc.) - tracked in git
 
 **BAD:**
 ```
-Attachments/contract.pdf
-Attachments/March2026/contract.pdf
+Attachments_gitignore/contract.pdf
+Attachments_gitignore/March2026/contract.pdf
+Attachments_gitignore/2026-03-16_16-50_Contract/contract.md
 ```
 
 **GOOD:**
 ```
-Attachments/2026-03-16_16-50_RentalContract/CT_Arrendamento.pdf
+Attachments_gitignore/2026-03-16_16-50_RentalContract/CT_Arrendamento.pdf
+Attachments/2026-03-16_16-50_RentalContract/CT_Arrendamento.md
+Attachments/2026-03-16_16-50_RentalContract/CT_Arrendamento_en.md
 ```
 
 ## Image Cleanup
@@ -485,36 +491,41 @@ Applies to: Log summaries, Key outcomes, Status updates, Todo items. Does NOT ap
 
 ## Auto-Transcribe Attachments
 
-When `CONVERSATION_AUTO_TRANSCRIBE_ATTACHMENTS=true`, transcribe PDF and image attachments using `/transcribe` workflow with: 1 candidate, 120 DPI, min-score=4.5. Output `.md` file in same folder as original.
+When `CONVERSATION_AUTO_TRANSCRIBE_ATTACHMENTS=true`, transcribe PDF and image attachments using `/transcribe` workflow with: 1 candidate, 120 DPI, min-score=4.5. Output `.md` file in mirrored `Attachments/` folder (same subfolder name).
 
-**BAD:**
+**BAD** (transcription in same folder as binary):
 ```
-Attachments/2026-03-16_16-50_Contract/
-└── contract.pdf
-```
-
-**GOOD:**
-```
-Attachments/2026-03-16_16-50_Contract/
+Attachments_gitignore/2026-03-16_16-50_Contract/
 ├── contract.pdf
 └── contract.md
 ```
 
-If `CONVERSATION_AUTO_TRANSLATE=true` and transcribed content is not in `CONVERSATION_DO_NOT_TRANSLATE_LIST`, also produce translated version: `contract_en.md`.
+**GOOD** (binary and transcription separated):
+```
+Attachments_gitignore/2026-03-16_16-50_Contract/
+└── contract.pdf
+Attachments/2026-03-16_16-50_Contract/
+└── contract.md
+```
+
+If `CONVERSATION_AUTO_TRANSLATE=true` and transcribed content is not in `CONVERSATION_DO_NOT_TRANSLATE_LIST`, also produce translated version in `Attachments/`: `contract_en.md`.
 
 ## Attachment Folder Location
 
-Attachments live inside the conversation folder, under `Attachments/YYYY-MM-DD_HH-MM_[Topic]/`.
+Attachments live inside the conversation folder with two sibling trees:
+- `Attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/` - binaries (git-excluded)
+- `Attachments/YYYY-MM-DD_HH-MM_[Topic]/` - text files (git-tracked)
 
 **BAD:**
 ```
-_!EmailConversations/Attachments/2026-03-16_Contract/file.pdf
+_!EmailConversations/Attachments_gitignore/2026-03-16_Contract/file.pdf
 SharedAttachments/file.pdf
 ```
 
 **GOOD:**
 ```
-JoaoEstevao-FaroLandlord/Attachments/2026-03-16_16-50_RentalContract/contract.pdf
+JoaoEstevao-FaroLandlord/Attachments_gitignore/2026-03-16_16-50_RentalContract/contract.pdf
+JoaoEstevao-FaroLandlord/Attachments/2026-03-16_16-50_RentalContract/contract.md
 ```
 
 ## Links Completeness
@@ -525,14 +536,14 @@ All attachments, transcriptions, and translations must be recorded in the Links 
 ```
 ## Links and shared documents
 - **2026-03-16 16:50** - Rental Contract
-  - [contract.pdf](Attachments/2026-03-16_16-50_RentalContract/contract.pdf)
+  - [contract.pdf](Attachments_gitignore/2026-03-16_16-50_RentalContract/contract.pdf)
 ```
 
 **GOOD:**
 ```
 ## Links and shared documents
 - **2026-03-16 16:50** - Rental Contract
-  - [contract.pdf](Attachments/2026-03-16_16-50_RentalContract/contract.pdf)
+  - [contract.pdf](Attachments_gitignore/2026-03-16_16-50_RentalContract/contract.pdf)
   - [contract.md](Attachments/2026-03-16_16-50_RentalContract/contract.md) (transcription)
   - [contract_en.md](Attachments/2026-03-16_16-50_RentalContract/contract_en.md) (translation)
 ```
