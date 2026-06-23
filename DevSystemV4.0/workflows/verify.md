@@ -128,11 +128,11 @@ Detect by: folder contains `_INFO_[TOPIC]-01_Summary.md` + `_INFO_[TOPIC]-02_Sou
 
 Execute the 6-step verification procedure from `RESEARCH_RULES.md`:
 1. **Structure Check** (RS-01 through RS-06) - file set completeness
-2. **Sources Check** (SC-01 through SC-08) - source collection quality
+2. **Sources Check** (SC-01 through SC-09) - source collection quality
 3. **Summary Check** (SM-01 through SM-08) - summary file quality
 4. **Topic Files Check** (TF-01 through TF-10) - per-file quality
 5. **STRUT Check** (ST-01 through ST-07) - process execution
-6. **Quality Check** (QA-01 through QA-10) - cross-cutting quality
+6. **Quality Check** (QA-01 through QA-11) - cross-cutting quality
 
 Additionally:
 - Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
