@@ -159,13 +159,13 @@ John from Acme Corp, email john@acme.com, call him at +1 555 1234
 - Plan nodes (P1, P1-S1, P1-D1)
 
 **ID formats by scope:**
-- Document-scoped (2-digit): `CRWL-FR-01`, `AUTH-DD-03`
-- Tracking (4-digit): `AUTH-PR-0001`, `GLOB-BG-0002`
+- Document-scoped (2-digit): `CRAWLENG-FR-01`, `AUTHSYST-DD-03`
+- Tracking (4-digit): `AUTHSYST-PR-0001`, `GLOB-BG-0002`
 - Plan-scoped (ephemeral): `P1-S1`, `P2-D1`
 - Headings (implicit): `## 3. Implementation` → "section 3"
 
 **Valid ID systems:**
-- Document IDs: `[TOPIC]-[TYPE][NN]` (e.g., `CRWL-SP01`)
+- Document IDs: `[TOPIC]-[TYPE][NN]` (e.g., `CRAWLENG-SP01`)
 - Numbered headings: `## 1. Section` → reference as "section 1"
 - Item IDs: `FR-01`, `DD-03`, `P1-S2`, `BG-0001`
 - Line numbers in code: `file.py:42`
@@ -202,10 +202,10 @@ Now "section 2.1" is a valid reference target.
 3. Use the IDs to reference within and across documents
 
 **Reference formats:**
-- Document: `_SPEC_CRAWLER.md [CRWL-SP01]` (filename AND Doc ID)
-- Section: `section 3.2` or `CRWL-FR-01`
+- Document: `_SPEC_CRAWLENG.md [CRAWLENG-SP01]` (filename AND Doc ID)
+- Section: `section 3.2` or `CRAWLENG-FR-01`
 - URL: `[Example Site](https://example.com)` (clickable Markdown)
-- Cross-doc: `See CRWL-FR-01 in _SPEC_CRAWLER.md [CRWL-SP01]`
+- Cross-doc: `See CRAWLENG-FR-01 in _SPEC_CRAWLENG.md [CRAWLENG-SP01]`
 
 **BAD:**
 ```

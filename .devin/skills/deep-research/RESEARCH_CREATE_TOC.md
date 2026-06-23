@@ -7,7 +7,7 @@ Global workflow for creating Table of Contents in deep research. Used by all res
 ## Prerequisites
 
 - `_INFO_[TOPIC]-02_Sources.md` exists with all sources collected and IDs assigned
-- [TOPIC] identifier defined (2-6 uppercase chars, e.g., `MSGRAPH`, `OAIAPI`)
+- [TOPIC] identifier defined (7-14 uppercase chars, e.g., `MSGRAPH`, `OAIAPIS`)
 - Full subject name defined (e.g., "Microsoft Graph API")
 
 ## Workflow

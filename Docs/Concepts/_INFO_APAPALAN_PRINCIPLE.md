@@ -11,7 +11,7 @@
 - MECT designs communication systems; APAPALAN applies MECT using rules for documents, code, logs, communication [VERIFIED]
 - Precision always wins over brevity - never sacrifice clarity to save words [VERIFIED]
 - Readers interpret ALL deviation as intentional signal. Unintentional variance (LLMs) causes wrong assumptions [VERIFIED]
-- 26 rules across four categories: Precision (PR), Brevity (BR), Structure (ST), Naming (NM) [VERIFIED]
+- 27 rules across four categories: Precision (PR), Brevity (BR), Structure (ST), Naming (NM) [VERIFIED]
 - Rules are actionable: each has BAD/GOOD examples an agent or human can pattern-match against [VERIFIED]
 
 ## Table of Contents
@@ -214,7 +214,19 @@ Fix auth, deploy, notify.
 - Reader asks: "Is bold marking required fields? Is Email optional?"
 - Wrong assumption: Reader skips Email thinking it's optional. Actually, all fields are required - the writer just forgot to bold Email.
 
-### 3.4 Communication Fails
+### 3.4 Jargon Fails
+
+**FAIL: Unexplained insider language**
+```
+Price: FAIR TO RICH depending on execution.
+Claude Code is the dark horse in this market.
+We need boots on the ground before Q3.
+```
+- Reader asks: "What does FAIR TO RICH mean? Is dark horse positive or negative? What are boots on the ground?"
+- Wrong assumption: Reader either skips the term (losing information) or guesses wrong ("dark horse" = negative connotation, "boots on the ground" = physical boots). Domain insiders don't notice the opacity because the terms are natural to them.
+- Fix: Replace with plain language ("unexpected strong competitor") or keep + explain ("FAIR TO RICH (reasonably priced to slightly overpriced)"). See AP-PR-12.
+
+### 3.5 Communication Fails
 
 **FAIL: Implicit style convention**
 ```
@@ -248,7 +260,7 @@ APAPALAN rules are organized in three categories matching the priority order.
 
 ### 4.1 Precision (PR): Making Every Statement Unambiguous
 
-10 rules ensuring every piece of writing can be understood without guessing.
+11 rules ensuring every piece of writing can be understood without guessing.
 
 - **AP-PR-01**: Standardized datetime format - `YYYY-MM-DD HH:MM` everywhere
 - **AP-PR-02**: Standardized attribute/property format - context-specific but consistent within context
@@ -260,6 +272,7 @@ APAPALAN rules are organized in three categories matching the priority order.
 - **AP-PR-08**: Every non-obvious rule needs examples - BAD/GOOD pairs for format rules and conventions
 - **AP-PR-09**: Consistent patterns - repeat established structures; style deviation = false signal
 - **AP-PR-11**: Labels decodable at point of use - full word, legend in sight, or mnemonic (Reconstruction Test)
+- **AP-PR-12**: Explain domain jargon and idioms on first use - replace with plain language, or keep + explain in parentheses; same pattern as AP-PR-06 but for semantic opacity
 
 The referenceability chain (AP-PR-05 -> AP-PR-04) deserves emphasis: you cannot build a useful reference system unless the referenced information has IDs in the first place. Create IDs first, then reference.
 
@@ -308,6 +321,12 @@ The DRY tension (AP-BR-03 vs AP-ST-04) is intentional: within your own document,
 - `APAPALAN-IN01-SC-LOG-RULES`: `LOGGING-RULES.md` in DevSystemV3.6/skills/coding-conventions/ - Logging rules implementing APAPALAN for output [VERIFIED]
 
 ## 6. Document History
+
+**[2026-06-17 18:10]**
+- Added: AP-PR-12 (Explain domain jargon and idioms on first use) to section 4.1
+- Added: "Unexplained insider language" fail in section 3.4 (Jargon Fails)
+- Changed: PR rule count 10 -> 11, total rule count 26 -> 27
+- Changed: Renumbered section 3.4 Communication Fails -> 3.5
 
 **[2026-04-12 14:50]**
 - Added: Mnemonic vs abbreviation distinction in section 1.3 (reconstruction test boundary)

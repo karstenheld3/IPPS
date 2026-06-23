@@ -1,6 +1,7 @@
 # IMPL: [Feature Name]
 
 **Doc ID (TDID)**: [TOPIC]-IP[NN]
+<!-- Topic IDs: 7-14 uppercase chars. Inside T##/S## folders use nested: [TOPIC]-[SUBTOPIC]-IP[NN] -->
 **Feature**: [FEATURE_SLUG]
 **Goal**: [Single sentence describing what to implement]
 **Timeline**: Created YYYY-MM-DD, Updated N times (YYYY-MM-DD - YYYY-MM-DD)

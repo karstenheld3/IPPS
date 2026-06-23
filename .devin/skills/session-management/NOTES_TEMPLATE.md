@@ -2,7 +2,7 @@
 
 Populated by `/session-new` workflow. Captures session context, decisions, and agent instructions for a specific development task.
 
-**Doc ID**: YYYY-MM-DD_[SessionTopicCamelCase]-NOTES
+**Doc ID**: [TOPIC]-NOTES
 
 ## Initial Request
 
@@ -28,8 +28,8 @@ Populated by `/session-new` workflow. Captures session context, decisions, and a
 
 ## Key Decisions
 
-- **AUTH-DD-01**: Store refresh token in secure storage instead of localStorage. Rationale: localStorage is vulnerable to XSS attacks.
-- **AUTH-DD-02**: Implement token refresh 5 minutes before expiration. Rationale: Prevents race conditions from on-demand refresh.
+- **AUTHSYST-DD-01**: Store refresh token in secure storage instead of localStorage. Rationale: localStorage is vulnerable to XSS attacks.
+- **AUTHSYST-DD-02**: Implement token refresh 5 minutes before expiration. Rationale: Prevents race conditions from on-demand refresh.
 
 ## Important Findings
 
@@ -39,24 +39,28 @@ Populated by `/session-new` workflow. Captures session context, decisions, and a
 
 ## Topic Registry
 
-Maintain list of TOPIC IDs used in this session. Register before use, check for collisions per devsystem-ids.md.
+Maintain list of TOPIC IDs used in this session. Topics MUST be 7-14 uppercase chars. Register globally in ID-REGISTRY.md before use. SUBTOPICs (used in T##/S## nested folders) register HERE only.
 
-- `AUTH` - Authentication and authorization system
-- `API` - API client and request handling
+**Global topics** (registered in ID-REGISTRY.md):
+- `AUTHSYST` - Authentication and authorization system
+
+**Subtopics** (session-local, used in T##/S## folder nested IDs):
+- `TKNRFRSH` - Token refresh mechanism (nested as AUTHSYST-TKNRFRSH)
+- `APICLTFX` - API client error handling fixes (nested as AUTHSYST-APICLTFX)
 
 ## Topic Folders
 
 Independent work streams (see @skills:session-management Topic Folders).
 
-- **T01_TopicDescription** - Purpose of this work stream
-- **T01_AUTH-TokenRefreshDesign_2026-01-15** - With TOPIC ID (e.g. from `/deep-research`)
+- **T01_TKNRFRSH_TokenRefreshDesign_2026-01-15** - Token refresh mechanism research
+- **T02_APICLTFX_APIClientFixes_2026-01-15** - API client error handling
 
 ## Step Folders
 
 Sequential pipeline steps (see @skills:session-management Step Folders).
 
-- **S01_Description_YYYY-MM-DD** - What this step produces
-- **S01_AUTH-CollectSources_2026-01-15** - With TOPIC ID (e.g. from `/deep-research`)
+- **S01_SRCPROC_CollectSources_2026-01-15** - Source collection for auth research
+- **S02_IMPLMNT_ImplementFixes_2026-01-16** - Implementation phase
 
 ## Bug List
 
@@ -64,7 +68,7 @@ Session-local bug tracking. SESSION <-> TOPIC is 1:1, so simple list suffices.
 Get next number by counting existing entries. See `/bugfix` workflow.
 
 Format: `[TOPIC]-BG-NNNN` - Description - Status
-Example: AUTH-BG-0001 - Token refresh race condition - Resolved
+Example: AUTHSYST-BG-0001 - Token refresh race condition - Resolved
 
 - (none yet)
 

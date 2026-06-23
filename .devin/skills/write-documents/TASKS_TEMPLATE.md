@@ -8,6 +8,7 @@ Template for creating task plan documents from partitioned IMPL/TEST plans.
 # TASKS: [TOPIC] Tasks Plan
 
 **Doc ID (TDID)**: [TOPIC]-TK01
+<!-- Topic IDs: 7-14 uppercase chars. Inside T##/S## folders use nested: [TOPIC]-[SUBTOPIC]-TK01 -->
 **Feature**: [FEATURE_SLUG]
 **Goal**: Partitioned tasks for [TOPIC] implementation
 **Source**: `IMPL_[TOPIC].md [TOPIC-IP01]`, `TEST_[TOPIC].md [TOPIC-TP01]`

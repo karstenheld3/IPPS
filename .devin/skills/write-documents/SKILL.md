@@ -41,7 +41,9 @@ This skill implements:
 - No emojis - ASCII only, no `---` markers between sections
 - Header block: Doc ID (required), Goal (required), Target file, Depends on (omit if N/A)
 - Every document MUST have a unique ID
-- Reference other docs by filename AND Doc ID: `_SPEC_CRAWLER.md [CRWL-SP01]`
+- Reference other docs by filename AND Doc ID: `_SPEC_CRAWLENG.md [CRAWLENG-SP01]`
+- Topic IDs: 7-14 uppercase chars
+- Nested Doc IDs inside T##/S## folders: `[TOPIC]-[SUBTOPIC]-[DOC][NN]` (see devsystem-ids.md)
 - Be exhaustive: list ALL domain objects, actions, functions
 - Document History section at end, reverse chronological
 - Use box-drawing characters (├── └── │) for trees
@@ -137,8 +139,10 @@ See `[AGENT_FOLDER]/rules/devsystem-ids.md` rule (always-on) for complete ID sys
 
 **Quick Reference:**
 - Document: `[TOPIC]-[DOC][NN]` (IN = Info, SP = Spec, IP = Impl Plan, TP = Test Plan)
-  - Example: `CRWL-SP01`, `AUTH-IP01`
+  - Example: `CRAWLENG-SP01`, `AUTHSYST-IP01`
+- Nested: `[TOPIC]-[SUBTOPIC]-[DOC][NN]` (inside T##/S## folders)
+  - Example: `AIDETECT-STYLMTRY-IN01`
 - Spec-Level: `[TOPIC]-[TYPE]-[NN]` (FR = Functional Requirement, IG = Implementation Guarantee, DD = Design Decision)
-  - Example: `CRWL-FR-01`, `AUTH-DD-03`
+  - Example: `CRAWLENG-FR-01`, `AUTHSYST-DD-03`
 - Plan-Level: `[TOPIC]-[DOC][NN]-[TYPE]-[NN]` (EC = Edge Case, IS = Implementation Step, VC = Verification Checklist, TC = Test Case)
-  - Example: `CRWL-IP01-EC-01`, `AUTH-TP01-TC-05`
+  - Example: `CRAWLENG-IP01-EC-01`, `AUTHSYST-TP01-TC-05`
