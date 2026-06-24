@@ -59,6 +59,7 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
   - `"[SUBJECT]" [dimension keyword]` - Per-dimension discovery
   - Collect PDF URLs, documentation pages, and public resources from results
   - Download discovered PDFs to `_DOWNLOADS_gitignore/`
+  - **Google = URL discovery only**: Skip AI Overview, Featured Snippets, Knowledge Panels. Extract URLs and titles only, then click through to source websites for content. See RESEARCH_TOOLS.md "Google Search Extraction Principle".
 - **Classify discovery platforms** from Q7 as FREE/PAID/PARTIAL; use FREE and PARTIAL, note PAID for user follow-up
 - Collect **5-10 sources per dimension** (focus on top-tier sources first)
 - Skip exhaustive community source collection

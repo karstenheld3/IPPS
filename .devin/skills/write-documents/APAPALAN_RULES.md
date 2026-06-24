@@ -22,6 +22,7 @@ Precision (PR) - Priority 1
 - AP-PR-09: Consistent patterns (repeat established structures)
 - AP-PR-10: Never abbreviate keys and references (use single quotes for literals)
 - AP-PR-11: Labels decodable at point of use (full word, legend, or mnemonic)
+- AP-PR-12: Explain domain jargon and idioms on first use
 
 Brevity (BR) - Priority 2
 - AP-BR-01: Single line for single statements
@@ -359,6 +360,28 @@ S=Supported | C=Caveated | U=Unsupported
 - Established system labels: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`
 - Plan node IDs: `P1-S1`, `P2-D1` (positional, not classification)
 - Checkbox states: `[x]`, `[ ]`, `[N]` (STRUT system)
+
+### AP-PR-12: Explain Domain Jargon and Idioms on First Use
+
+Like AP-PR-06 for acronyms, but for meaning: domain jargon, idioms, and figurative language must be explained or replaced on first use.
+
+Either **replace** (jargon adds no value) or **keep + explain** in parentheses (term carries domain authority or is a citation).
+
+**BAD:**
+```
+Price: FAIR TO RICH depending on execution.
+Claude Code is the dark horse in this market.
+```
+
+**GOOD:**
+```
+Price: FAIR TO RICH (Mergers & Acquisitions valuation term: reasonably priced to slightly overpriced) depending on execution.
+Claude Code is the dark horse (unexpected strong competitor) in this market.
+```
+
+**Test:** "Would a reader outside this domain understand this without looking it up?"
+
+**Does NOT apply to:** Terms covered by AP-PR-06, terms defined earlier in same document, terms clear from immediate context.
 
 ## Brevity Rules (BR)
 

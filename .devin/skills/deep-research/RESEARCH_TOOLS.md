@@ -57,6 +57,34 @@ Download PDFs to _DOWNLOADS_gitignore/
 - Can paginate through results for comprehensive discovery
 - Can follow links to verify PDF accessibility before adding to sources
 
+### Google Search Extraction Principle
+
+**Google is a URL discovery tool. Never extract text content from Google result pages. All content MUST come from the target website after click-through.**
+
+**Allowed extractions from Google result pages:**
+- URLs (organic result links, PDF links, domain names)
+- Page titles (for identifying relevant results)
+- File type indicators (PDF, DOCX markers)
+- URL-adjacent metadata (domain, path structure)
+
+**Prohibited extractions from Google result pages:**
+- AI Overview / AI-generated answer text
+- Featured Snippet content
+- Knowledge Panel text
+- "People Also Ask" answers
+- Any summarized, paraphrased, or generated text rendered by Google
+- Cached page previews or snippet descriptions used as source content
+
+**Rationale**: Google AI Overview and Featured Snippets are unattributed, potentially inaccurate summaries. Using them violates the source hierarchy (no original source, no verification label possible, no access date for the actual content). Content extracted from Google itself cannot be assigned a source tier or verified against primary sources.
+
+**Procedure**:
+1. Enter search query on google.com
+2. Scan organic results for relevant URLs, titles, and file types
+3. Skip all Google-rendered content blocks (AI Overview, Featured Snippets, Knowledge Panels, People Also Ask)
+4. Click through to each relevant URL
+5. Extract content from the target website (not from Google's preview)
+6. If a Google result links to a PDF, download the PDF directly - do not use Google's text preview of the PDF
+
 ### Primary: Built-in Tools (Supplementary)
 
 **Use alongside Google search via Playwright:**

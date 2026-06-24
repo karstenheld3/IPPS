@@ -69,6 +69,7 @@ Before collecting sources, test each discovery platform from Q7:
   - `"[SUBJECT]" [dimension keyword]` - Per-dimension discovery
   - Collect PDF URLs, documentation pages, and public resources from results
   - Download discovered PDFs to `_DOWNLOADS_gitignore/`
+  - **Google = URL discovery only**: Skip AI Overview, Featured Snippets, Knowledge Panels. Extract URLs and titles only, then click through to source websites for content. See RESEARCH_TOOLS.md "Google Search Extraction Principle".
 - **Query selected discovery platforms** from Step 3 first
 - Collect ALL official documentation URLs from vendor/project documentation
 - Collect community sources (secondary sources) for real-world insights:

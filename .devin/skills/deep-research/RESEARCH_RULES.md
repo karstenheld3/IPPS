@@ -31,6 +31,7 @@ Sources (SC) - Source collection quality
 - SC-06: Community sources labeled `[COMMUNITY]`
 - SC-07: Source count meets strategy minimum (MCPI: 15+, MEPI: 5-10 per dimension)
 - SC-08: Discovery platforms tested and classified (FREE/PAID/PARTIAL)
+- SC-09: No Google-rendered content used as source material (AI Overview, Featured Snippets, Knowledge Panels, People Also Ask). Google used for URL discovery only.
 
 Summary (SM) - Summary file quality
 - SM-01: Summary section is 5-15 sentences of cross-document synthesis (not a TOC restatement)
@@ -92,7 +93,7 @@ List all files in research folder
 └─> All topic files referenced in Summary? (RS-06)
 ```
 
-### 2. Sources Check (SC-01 through SC-08)
+### 2. Sources Check (SC-01 through SC-09)
 
 ```
 Read _INFO_[TOPIC]-02_Sources.md
@@ -103,7 +104,8 @@ Read _INFO_[TOPIC]-02_Sources.md
 ├─> _DOWNLOADS_gitignore/ and _SOURCES/ present? (SC-05)
 ├─> Community sources labeled? (SC-06)
 ├─> Source count sufficient? (SC-07)
-└─> Platforms tested? (SC-08)
+├─> Platforms tested? (SC-08)
+└─> Google used for URL discovery only, no AI-generated content extracted? (SC-09)
 ```
 
 ### 3. Summary Check (SM-01 through SM-08)
@@ -186,14 +188,15 @@ When `/improve` targets a deep-research output folder, apply these specialized t
 
 ### Enrichment Techniques (research-specific)
 
-1. **Source Gap Analysis** - Compare source file against domain-specific tier list. Identify missing tiers (e.g., no official PDFs, no community sources, no changelogs). Run Google search via Playwright for each gap.
-2. **Dimension Depth Check** - For each dimension in PromptDecomposition, count topic files and sources. Flag dimensions with fewer than 3 sources or 1 topic file.
-3. **Claim Verification Upgrade** - Find all `[ASSUMED]` labels. For each, attempt verification via primary sources. Upgrade to `[VERIFIED]` or document why verification failed.
-4. **PDF Discovery Pass** - Re-run `"[SUBJECT]" filetype:pdf` searches with additional dimension keywords. Download and transcribe newly found PDFs.
-5. **Temporal Freshness** - Check source dates. For fast-moving topics (software, legal, financial), sources >12 months need refresh or explicit "still current as of" note.
-6. **Cross-Reference Synthesis** - Read all topic files. Identify connections, patterns, and contradictions not captured in Summary. Update Summary synthesis section.
-7. **Competing Perspective Search** - For each key finding, search for contradicting evidence. Document as "Alternative View" or upgrade finding to `[PROVEN]` if no contradiction found.
-8. **Practical Validation** - For actionable recommendations, verify they work in practice (code examples, configuration tests, API calls). Upgrade labels from `[VERIFIED]` to `[TESTED]`.
+1. **Source Gap Analysis** - Compare source file against domain-specific tier list. Identify missing tiers (e.g., no official PDFs, no community sources, no changelogs). Run Google search via Playwright for each gap (URL discovery only, click through to sources).
+2. **Google AI Content Audit** - Search all topic files for claims that lack a source URL or source ID. Cross-check against Google AI Overview patterns (generic summaries without attribution). Flag and replace with content from actual source websites.
+3. **Dimension Depth Check** - For each dimension in PromptDecomposition, count topic files and sources. Flag dimensions with fewer than 3 sources or 1 topic file.
+4. **Claim Verification Upgrade** - Find all `[ASSUMED]` labels. For each, attempt verification via primary sources. Upgrade to `[VERIFIED]` or document why verification failed.
+5. **PDF Discovery Pass** - Re-run `"[SUBJECT]" filetype:pdf` searches with additional dimension keywords. Download and transcribe newly found PDFs.
+6. **Temporal Freshness** - Check source dates. For fast-moving topics (software, legal, financial), sources >12 months need refresh or explicit "still current as of" note.
+7. **Cross-Reference Synthesis** - Read all topic files. Identify connections, patterns, and contradictions not captured in Summary. Update Summary synthesis section.
+8. **Competing Perspective Search** - For each key finding, search for contradicting evidence. Document as "Alternative View" or upgrade finding to `[PROVEN]` if no contradiction found.
+9. **Practical Validation** - For actionable recommendations, verify they work in practice (code examples, configuration tests, API calls). Upgrade labels from `[VERIFIED]` to `[TESTED]`.
 
 ### Priority Order for Improvement
 

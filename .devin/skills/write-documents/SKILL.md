@@ -20,7 +20,7 @@ Read APAPALAN and MECT before writing any document. Read SOCAS when evaluating q
 ## Verb Mapping
 
 This skill implements:
-- [WRITE-INFO] - Create INFO documents (use `INFO_TEMPLATE.md`)
+- [WRITE-INFO] - Create INFO documents (use `INFO_TEMPLATE.md`, read `INFO_GUIDE.md`, `INFO_RULES.md`)
 - [WRITE-SPEC] - Create SPEC documents (use `SPEC_TEMPLATE.md`, read `SPEC_RULES.md`)
 - [WRITE-IMPL-PLAN] - Create IMPL documents (use `IMPL_TEMPLATE.md`)
 - [WRITE-TEST-PLAN] - Create TEST documents (use `TEST_TEMPLATE.md`)
@@ -52,7 +52,7 @@ This skill implements:
 ## Document Types and When to Use
 
 **Research and Knowledge:**
-- **INFO** (`_INFO_[TOPIC].md`) - Research, analysis, option evaluation. Use when gathering information before making decisions. Read template: `INFO_TEMPLATE.md`
+- **INFO** (`_INFO_[TOPIC].md`) - Research, analysis, option evaluation. Use when gathering information before making decisions. Read template: `INFO_TEMPLATE.md`, guide: `INFO_GUIDE.md`, rules: `INFO_RULES.md`
 - **REVIEW** (`_REVIEW_[TOPIC].md`) - Structured review of existing documents. Use for `/critique` and `/reconcile` outputs. Read template: `REVIEW_TEMPLATE.md`
 
 **Planning:**
@@ -96,11 +96,12 @@ Each document type builds on the previous. INFO informs SPEC decisions. SPEC def
 2. Read `APAPALAN_RULES.md` for precision, brevity, structure, naming
 3. Read `MECT_WRITING_RULES.md` for voice, word choice, terminology, headings, lists
 4. Read the template for your document type (required)
-5. For SPEC documents: also read `SPEC_RULES.md` (required)
-6. For WORKFLOW documents: also read `WORKFLOW_RULES.md` (required)
-7. For SKILL documents: also read `SKILL_RULES.md` (required)
-8. For CONVERSATION documents: also read `CONVERSATION_RULES.md` (required)
-9. Follow the template structure exactly, except when user requests exceptions
+5. For INFO documents: also read `INFO_GUIDE.md` (before writing) and `INFO_RULES.md` (required)
+6. For SPEC documents: also read `SPEC_RULES.md` (required)
+7. For WORKFLOW documents: also read `WORKFLOW_RULES.md` (required)
+8. For SKILL documents: also read `SKILL_RULES.md` (required)
+9. For CONVERSATION documents: also read `CONVERSATION_RULES.md` (required)
+10. Follow the template structure exactly, except when user requests exceptions
 
 ## Document Writing Rules
 
