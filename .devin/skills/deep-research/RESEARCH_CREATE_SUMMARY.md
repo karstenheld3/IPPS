@@ -12,7 +12,7 @@ The Summary file (`_INFO_[TOPIC]-01_Summary.md`) is the master index and cross-d
 
 ## Workflow
 
-1. **Copy template**: Use `RESEARCH_SUMMARY_TEMPLATE.md` as base
+1. **Copy template file**: `Copy-Item` from `RESEARCH_SUMMARY_TEMPLATE.md` to `_INFO_[TOPIC]-01_Summary.md`. Literal file copy, not regeneration from memory.
 2. **Replace placeholders**:
    - `[TOPIC]` → actual topic ID (e.g., `OAIAPIS`)
    - `[SUBJECT]` → full name (e.g., `OpenAI API`)
@@ -20,8 +20,8 @@ The Summary file (`_INFO_[TOPIC]-01_Summary.md`) is the master index and cross-d
 3. **Write Goals and/or Questions** (at least one required):
    - Derive from prompt decomposition (Q1: Goal)
    - Goals: bulleted list of research objectives
-   - Questions: numbered list of research questions
-   - During Phase 2: leave answer/outcome fields as placeholders
+   - Questions: `Q1:`/`A1:` pairs (question on one line, answer on next, blank line between pairs)
+   - During Phase 2: leave answer lines as placeholders (`A1: [placeholder]`)
    - During Phase 4: fill in answers (1-3 sentences) with verification labels, mark goal outcomes
 4. **Create categories**: Group topics logically from sources
 5. **List topic files**: One entry per topic with clickable link, Doc ID, and brief description
@@ -59,7 +59,7 @@ Related files in the same research:
 
 ## Structure Rules
 
-- **Goals/Questions**: At least one required. Derive from prompt decomposition. Answers filled in Phase 4
+- **Goals/Questions**: At least one required. Derive from prompt decomposition. Questions use `Q1:`/`A1:` format. Answers filled in Phase 4
 - **Summary section**: Cross-document synthesis with confidence labels, not a list of topic titles
 - **Topic Files section**: Clickable links with brief descriptions, no checkboxes
 - **Per-Topic Summaries**: 3-20 sentences + Key Findings per topic. Phase 4 only

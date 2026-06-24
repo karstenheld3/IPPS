@@ -10,7 +10,7 @@ Copies DevSystem files from this repo's `.devin` folder to all linked repositori
 
 1. **Check DevSystem version FIRST** - Read `!NOTES.md` to get `[DEVSYSTEM]` (e.g., `DevSystemV3.1`) before ANY other action
 2. **Read target repo NOTES.md** - For each repo in `[LINKED_REPOS]`, read its `!NOTES.md` or `NOTES.md` to check for special deployment rules (e.g., OpenClaw has no `.devin/` folder)
-3. **Sync before deploy** - Copy from `[DEVSYSTEM]\*` to `.devin\` BEFORE running preview
+3. **Sync before deploy** - Run Step 1 (sync script) BEFORE preview. Never skip. Ensures ALL files are current, not just session changes
 4. **Clean deprecated files** - Remove deprecated files from `.devin/` after sync (edird-core.md, go-autonomous.md, next.md, edird-phase-model/)
 5. **Output format** - ALWAYS use the exact text format in "Output Format" section (NO tables, NO markdown tables)
 6. **List filenames** - ALWAYS list explicit filenames after each category (Add, Overwrite, Delete), not just counts
@@ -53,19 +53,50 @@ Read `[SKILL_CATEGORIES]` and `[LINKED_REPOS]` sections from `!NOTES.md` to get:
 - If user message contains confirmation keyword: set `AUTO_EXECUTE = true`
 - Otherwise: set `AUTO_EXECUTE = false` (preview mode)
 
-### 1. Read Configuration
+### 1. Sync `.devin/` from `[DEVSYSTEM]`
+
+**MANDATORY.** Before any comparison or deployment, sync the workspace `.devin/` staging area from the DevSystem source. This ensures ALL files are current, not just the ones changed in the current session.
+
+```powershell
+# Sync DevSystem source to .devin staging - MUST run before preview
+$devsystem = "[DEVSYSTEM]"  # e.g., "DevSystemV4.0" - read from NOTES.md [DEVSYSTEM]
+$source = "[WORKSPACE_FOLDER]\$devsystem"
+$target = "[WORKSPACE_FOLDER]\.devin"
+
+# Mirror skills/, workflows/, rules/ from source to staging
+foreach ($folder in @("skills", "workflows", "rules")) {
+    $srcFolder = Join-Path $source $folder
+    $tgtFolder = Join-Path $target $folder
+    if (-not (Test-Path $srcFolder)) { continue }
+    Get-ChildItem -Path $srcFolder -Recurse -File | ForEach-Object {
+        $rel = $_.FullName.Substring($srcFolder.Length + 1)
+        $dst = Join-Path $tgtFolder $rel
+        $dstDir = Split-Path $dst -Parent
+        if (-not (Test-Path $dstDir)) { New-Item -ItemType Directory -Path $dstDir -Force | Out-Null }
+        if (-not (Test-Path $dst) -or (Get-FileHash $_.FullName -Algorithm MD5).Hash -ne (Get-FileHash $dst -Algorithm MD5).Hash) {
+            Copy-Item $_.FullName $dst -Force
+            Write-Host "SYNC: $folder\$rel"
+        }
+    }
+}
+Write-Host "Sync complete."
+```
+
+**Verify:** After sync, confirm zero diff between `[DEVSYSTEM]` and `.devin/` for skills, workflows, and rules folders.
+
+### 2. Read Configuration
 
 Read `*NOTES.md` and extract `[LINKED_REPOS]` section.
 
-### 2. For Each Linked Repository
+### 3. For Each Linked Repository
 
 Execute the following for each repo in `[LINKED_REPOS]`:
 
-#### 2.1 Verify Target Exists
+#### 3.1 Verify Target Exists
 
 Check that the target repo path exists. Skip if not found (warn user).
 
-#### 2.2 Compare Source and Target Files (JSON Output)
+#### 3.2 Compare Source and Target Files (JSON Output)
 
 Run this PowerShell script. It outputs JSON for consistent parsing:
 
@@ -85,8 +116,8 @@ $targets = @(
     @{ Path = "e:\Dev\KarstensWorkspace\.devin"; Skills = "All" }
     @{ Path = "e:\Dev\OpenAI-BackendTools\.devin"; Skills = "Development" }
     @{ Path = "e:\Dev\PRXL\src\.devin"; Skills = "Development" }
-    @{ Path = "e:\Dev\SharePoint-GPT-Middleware\.devin"; Skills = "Development" }
-    @{ Path = "e:\Dev\USTVA\.devin"; Skills = "Development" }
+    @{ Path = "e:\Dev\SharePoint-GPT-Middleware\.devin"; Skills = "Development"; NeverOverwrite = @("workflows\project-release.md") }
+    @{ Path = "e:\Dev\USTVA\.devin"; Skills = "All" }
     @{ Path = "e:\Dev\openclaw\workspace"; Skills = "All" }
     @{ Path = "e:\Dev\LLM-Research\.devin"; Skills = "Development" }
 )
@@ -94,7 +125,8 @@ $targets = @(
 # Deprecated files allowlist
 $deprecatedFiles = @{
     "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md", "edird-core.md", "cascade-model-switching.md", "research-and-report-writing-rules.md", "implementation-specification-rules.md")
-    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md", "deliver.md", "design.md", "explore.md", "go-research.md", "refine.md", "session-resume.md", "start-conversation.md", "update-conversation.md", "recap.md", "continue.md")
+    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md", "deliver.md", "design.md", "explore.md", "go-research.md", "refine.md", "session-resume.md", "start-conversation.md", "update-conversation.md", "recap.md", "continue.md", "enforce.md")
+    "skills\write-documents" = @("NOTES_TEMPLATE.md")
 }
 $deprecatedSkillFolders = @("edird-phase-model", "ipps-deep-research")
 
@@ -186,9 +218,9 @@ $preview = Format-DeployPreview $results
 Write-Output $preview
 ```
 
-#### 2.3 Emit Preview to Chat
+#### 3.3 Emit Preview to Chat
 
-**CRITICAL:** Preview goes in chat, NOT to a `.tmp` file. Use the `Format-DeployPreview` function from step 2.2 — do NOT hand-format.
+**CRITICAL:** Preview goes in chat, NOT to a `.tmp` file. Use the `Format-DeployPreview` function from step 3.2 — do NOT hand-format.
 
 **Required format** (emitted by `Format-DeployPreview`):
 
@@ -269,13 +301,13 @@ For each source file, apply the repo-specific rules:
 - Files matching these patterns are FULLY PROTECTED - no overwrite, no delete
 - Check `[LINKED_REPOS]` for file-specific exceptions
 
-#### 2.4 Copy Files
+#### 3.4 Copy Files
 
 Copy files to target repo's `.devin` folder, respecting rules.
 
 Note: This workflow lives in workspace root, so it won't be deployed.
 
-#### 2.5 Report Changes
+#### 3.5 Report Changes
 
 For each repo, report:
 - Files copied/updated
@@ -283,11 +315,11 @@ For each repo, report:
 - Files deleted (deprecated)
 - Errors encountered
 
-### 3. Verify MNF Compliance
+### 4. Verify MNF Compliance
 
 Review each MNF item above and confirm compliance.
 
-### 4. Summary
+### 5. Summary
 
 Provide final summary:
 - Total repos processed
@@ -296,7 +328,7 @@ Provide final summary:
 
 ## Output Format
 
-Format is defined in step 2.3 and enforced by the `Format-DeployPreview` function in step 2.2. Do NOT hand-write preview output — run the function and emit its return value verbatim.
+Format is defined in step 3.3 and enforced by the `Format-DeployPreview` function in step 3.2. Do NOT hand-write preview output — run the function and emit its return value verbatim.
 
 See GLOB-FL-023 and GLOB-FL-024 in FAILS.md for the failure history that motivated this enforcement.
 

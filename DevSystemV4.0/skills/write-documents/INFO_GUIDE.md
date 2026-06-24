@@ -27,7 +27,8 @@ Skip when: Goal field in header block is sufficient.
 ### 3.2 Questions
 
 Insert when: request poses specific questions, or document triggered by uncertainty.
-Content: short answers (1-2 sentences). Detailed backing in content sections below TOC.
+Format: `Q1:` question on one line, `A1:` answer on next line. Blank line between pairs.
+Content: short answers (1-3 sentences) with verification labels. Detailed backing in content sections below TOC.
 Skip when: no explicit questions and document is purely informational.
 
 ### 3.3 Conclusions

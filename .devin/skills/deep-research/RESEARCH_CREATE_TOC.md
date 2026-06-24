@@ -12,7 +12,7 @@ Global workflow for creating Table of Contents in deep research. Used by all res
 
 ## Workflow
 
-1. **Copy template**: Use `RESEARCH_TOC_TEMPLATE.md` as base
+1. **Copy template file**: `Copy-Item` from `RESEARCH_TOC_TEMPLATE.md` to `__[TOPIC]_TOC.md`. Literal file copy, not regeneration from memory.
 2. **Replace placeholders**:
    - `[TOPIC]` → actual topic ID (e.g., `OAIAPI`)
    - `[SUBJECT]` → full name (e.g., `OpenAI API`)

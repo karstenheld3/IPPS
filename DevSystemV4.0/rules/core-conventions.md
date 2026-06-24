@@ -20,6 +20,7 @@ Universal formatting and writing conventions for all documents.
 - Try to fit single statements/decisions/objects on a single line
 - Format workflow references as inline code: `/verify`, `/go`, `/build`
 - Inline enumerations use `N)` format, not `(N)`: `1) first, 2) second, 3) third`
+- URLs must always include the scheme (`https://` or `http://`). Never write bare domains: `msn.com` → `https://msn.com`
 
 ## Encoding
 

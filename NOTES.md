@@ -88,7 +88,7 @@ Automatically push commits to GitHub.
 **CRITICAL: NEVER auto-deploy to [LINKED_REPOS]**. Always ask user before deploying to linked repos. Deployment to linked repos is a separate, explicit action.
 
 **[SKILL_CATEGORIES]**:
-- **Development**: adp, coding-conventions, deep-research, drift-correction, edird-phase-planning, git, git-conventions, github, llm-computer-use, llm-evaluation, llm-transcription, ms-playwright-mcp, ms-playwright-mcp-v2, pdf-tools, playwriter-mcp, session-management, windows-desktop-control, windsurf-auto-model-switcher, write-documents, youtube-downloader
+- **Development**: coding-conventions, deep-research, drift-correction, edird-phase-planning, git, git-conventions, github, llm-computer-use, llm-evaluation, llm-transcription, ms-playwright-mcp, ms-playwright-mcp-v2, pdf-tools, playwriter-mcp, session-management, windows-desktop-control, windsurf-auto-model-switcher, write-documents, youtube-downloader
 - **Personal**: google-account, travel-info
 - **All**: Development + Personal (all skills)
 

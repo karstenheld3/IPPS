@@ -19,8 +19,11 @@
 
 [conditional - insert when research request poses specific questions, or research triggered by uncertainty. At least one of Goals or Questions is required. Per INFO_GUIDE.md Section 3.2]
 
-1. [Question from user prompt] → [1-3 sentence answer] [LABEL]
-2. [Question] → [Answer] [LABEL]
+Q1: [Question from user prompt]
+A1: [1-3 sentence answer] [LABEL]
+
+Q2: [Question]
+A2: [Answer] [LABEL]
 
 ## Summary
 
@@ -111,7 +114,7 @@
 3. [SUBJECT] = Full name (e.g., "OpenAI API", "Microsoft Graph API")
 4. File numbering: 01=Summary, 02=Sources, 03+=topic files
 5. Goals and/or Questions: at least one required. Derive from prompt decomposition (Q1).
-6. Questions include inline answers (1-3 sentences) with verification labels
+6. Questions use `Q1:`/`A1:` format (question on one line, answer on next, blank line between pairs)
 7. Conclusions: derived from cross-topic analysis, reference IN-numbers
 8. Emergent Hypotheses: patterns from combined evidence, all [ASSUMED]
 9. Per-Topic Summaries: 3-20 sentences + Key Findings per topic (scale with complexity)

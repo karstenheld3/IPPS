@@ -29,6 +29,7 @@ Sources (SC)
 - INFO-SC-01: Source ID format `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - INFO-SC-02: Each source entry has URL or file reference AND primary finding
 - INFO-SC-03: Sources section lists only findable/verifiable sources
+- INFO-SC-04: URLs start with `https://` (clickable in editors and terminals)
 
 Format (FT)
 - INFO-FT-01: Standard section order per `INFO_GUIDE.md` Section 2
@@ -196,6 +197,14 @@ Each source needs both a reference (URL or filename) AND a primary finding descr
 ## INFO-SC-03: Source Verifiability
 
 Only list sources that can be accessed and verified. Drop dead links, paywalled content without summary, or hallucinated references.
+
+## INFO-SC-04: Clickable URLs
+
+All URLs in source entries must start with `https://` (or `http://` if HTTPS unavailable). Never use bare domains or omit the scheme.
+
+**BAD:** `docs.example.com/oauth`, `www.microsoft.com/learn`
+
+**GOOD:** `https://docs.example.com/oauth`, `https://learn.microsoft.com/oauth`
 
 ## INFO-FT-02: Document History
 
