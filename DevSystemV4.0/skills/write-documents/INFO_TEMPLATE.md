@@ -25,8 +25,8 @@
 
 1. [Section 1](#1-section-1)
 2. [Section 2](#2-section-2)
-3. [Sources](#3-sources)
-4. [Next Steps](#4-next-steps)
+3. [Next Steps](#3-next-steps)
+4. [Sources](#4-sources)
 5. [Document History](#5-document-history)
 
 ## 1. [Section 1]
@@ -41,16 +41,16 @@
 
 [Additional content]
 
-## 3. Sources
+## 3. Next Steps
+
+1. [Action item 1]
+2. [Action item 2]
+
+## 4. Sources
 
 **Primary Sources:**
 - `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`: [URL] - [Primary finding]
 - `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`: `[filename.py]` - [What was analyzed] [VERIFIED]
-
-## 4. Next Steps
-
-1. [Action item 1]
-2. [Action item 2]
 
 ## 5. Document History
 

@@ -34,6 +34,7 @@ Content (CT)
 - SK-CT-03: Gotchas section for non-obvious behavior, deprecated APIs, common mistakes
 - SK-CT-04: Quick Config section with minimal copy-paste examples
 - SK-CT-05: No visual-only formatting in LLM-consumed reference files (no bold, no filler phrases)
+- SK-CT-06: No Document History section in skill documents (SKILL.md, _RULES, _GUIDE, _CHECKS)
 
 ## SK-HD-01: Frontmatter
 
