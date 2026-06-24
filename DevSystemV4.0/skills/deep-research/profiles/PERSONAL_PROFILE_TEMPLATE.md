@@ -171,8 +171,8 @@ Conversation angle: "[specific question one could ask]"
 
 [What remains unknown, unverified, or requires further investigation. Format:]
 
-- [Gap 1]: [What is missing and why it matters] [ASSUMED]
-- [Gap 2]: [What could not be verified] [ASSUMED]
+- [Gap 1]: [What is missing and why it matters] [LABEL]
+- [Gap 2]: [What could not be verified] [LABEL]
 - **Suggested next steps**: [How to close the most critical gaps - direct conversation, specific sources to check, events to attend]
 
 ## Sources

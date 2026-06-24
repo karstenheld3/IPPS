@@ -95,6 +95,8 @@ Summary is mandatory and positioned immediately after the header block. Contains
 
 Summary items use `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, or `[PROVEN]` labels. Not every item requires a label, but key claims must have one.
 
+Labels are applied by writing and verification workflows, never pre-filled in templates. Templates use `[LABEL]` as placeholder.
+
 **BAD:**
 ```markdown
 - OAuth2 is the industry standard

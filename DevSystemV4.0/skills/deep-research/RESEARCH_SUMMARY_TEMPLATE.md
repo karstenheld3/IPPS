@@ -19,14 +19,24 @@
 
 [conditional - insert when research request poses specific questions, or research triggered by uncertainty. At least one of Goals or Questions is required. Per INFO_GUIDE.md Section 3.2]
 
-1. [Question from user prompt] → [1-3 sentence answer with verification label] [VERIFIED]
-2. [Question] → [Answer] [label]
+1. [Question from user prompt] → [1-3 sentence answer] [LABEL]
+2. [Question] → [Answer] [LABEL]
 
 ## Summary
 
 [5-15 sentences of cross-document synthesis. Not a compressed table of contents but a standalone overview answering "what did we learn?" Include: purpose, key findings with confidence labels, main patterns, important limitations, actionable recommendations. Scale with complexity.]
 
-## Topic Files
+## Table of Contents
+
+1. [Topic Files](#1-topic-files)
+2. [Conclusions](#2-conclusions)
+3. [Emergent Hypotheses](#3-emergent-hypotheses)
+4. [Topic Count](#4-topic-count)
+5. [Per-Topic Summaries](#5-per-topic-summaries)
+6. [Limitations](#6-limitations)
+7. [Document History](#7-document-history)
+
+## 1. Topic Files
 
 ### [Category 1] (X files)
 
@@ -45,56 +55,52 @@
 - [`_INFO_[TOPIC]-[NN]_[Name].md`](./_INFO_[TOPIC]-[NN]_[Name].md) [[TOPIC]-IN[NN]]
   - Brief description of contents
 
-## Conclusions
+## 2. Conclusions
 
 [conditional - insert when research produces actionable conclusions derived from cross-topic analysis. Reference supporting topics by IN-number. Per INFO_GUIDE.md Section 3.3]
 
 1. [Conclusion derived from findings] (IN-XX, IN-YY)
 2. [Conclusion] (IN-XX)
 
-## Emergent Hypotheses
+## 3. Emergent Hypotheses
 
 [conditional - insert when research reveals patterns or theories emerging from combined evidence, not directly stated by any single source. All items [ASSUMED]. Per INFO_GUIDE.md Section 3.4]
 
 1. **[Hypothesis name]**: [Description with supporting evidence and validation approach]. [ASSUMED]
 
-## Topic Count
+## 4. Topic Count
 
 - **Total Topics**: XX
 - **[Category 1]**: X
 - **[Category 2]**: X
 - **[Category N]**: X
 
-## Per-Topic Summaries
+## 5. Per-Topic Summaries
 
-[2-3 sentences per topic file, derived from each file's Summary section (TF-03). Reader should understand each topic's key findings without opening the file.]
+[For each topic file: summary (3-20 sentences, scale with complexity) + key findings. Goal: reader understands overall summary and conclusions without opening the file.]
 
-**IN03: [Name1]** — [2-3 sentence summary of what this topic found]
+### IN03: [Name1]
 
-**IN04: [Name2]** — [2-3 sentence summary]
+[3-20 sentence summary derived from the topic file's content. Cover scope, main findings, and significance to the overall research.]
 
-## Topic Details
+**Key Findings:**
+- [Finding 1] [LABEL]
+- [Finding 2] [LABEL]
+- [Finding 3] [LABEL]
 
-### Topic: [Name1]
-**Scope**: What this topic covers
-**Contents**:
-- Key item 1
-- Key item 2
-- Key item 3
-**Sources**: [TOPIC]-SC-[SOURCE]-[DOCREF]
+### IN04: [Name2]
 
-### Topic: [Name2]
-**Scope**: What this topic covers
-**Contents**:
-- Key item 1
-- Key item 2
-**Sources**: [TOPIC]-SC-[SOURCE]-[DOCREF]
+[3-20 sentence summary]
 
-## Limitations
+**Key Findings:**
+- [Finding 1] [LABEL]
+- [Finding 2] [LABEL]
+
+## 6. Limitations
 
 [Known limitations, data quality caveats, scope boundaries, source freshness notes]
 
-## Document History
+## 7. Document History
 
 **[YYYY-MM-DD HH:MM]**
 - Initial Summary created with XX topics
@@ -108,9 +114,8 @@
 6. Questions include inline answers (1-3 sentences) with verification labels
 7. Conclusions: derived from cross-topic analysis, reference IN-numbers
 8. Emergent Hypotheses: patterns from combined evidence, all [ASSUMED]
-9. Per-Topic Summaries: 2-3 sentences per topic from each file's TF-03 summary
-10. Topic Details: scope, contents preview, source IDs
-11. Research stats added in final phase from STRUT
+9. Per-Topic Summaries: 3-20 sentences + Key Findings per topic (scale with complexity)
+10. Research stats added in final phase from STRUT
 12. NO Progress Tracking - that goes in STRUT/TASKS
 13. Summary must be cross-document synthesis, not a table of contents
 14. Limitations: data quality, scope boundaries, source freshness

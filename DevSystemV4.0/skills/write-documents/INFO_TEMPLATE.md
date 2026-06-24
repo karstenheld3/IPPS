@@ -15,11 +15,9 @@
 
 ## Summary
 
-- [Key finding 1] 
-- [Key finding 2] [ASSUMED]
-- [Key finding 3] [VERIFIED]
-- [Key finding 4] [TESTED]
-- [Key finding 5] [PROVEN]
+- [Key finding 1] [LABEL]
+- [Key finding 2] [LABEL]
+- [Key finding 3] [LABEL]
 
 ## Table of Contents
 
@@ -50,7 +48,7 @@
 
 **Primary Sources:**
 - `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`: [URL] - [Primary finding]
-- `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`: `[filename.py]` - [What was analyzed] [VERIFIED]
+- `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`: `[filename.py]` - [What was analyzed] [LABEL]
 
 ## 5. Document History
 

@@ -107,7 +107,7 @@ Create Summary file (skeletal), topic template, TASKS plan, run second VCRIV.
 ### Step 1: Summary File Creation
 
 - Follow [RESEARCH_CREATE_SUMMARY.md](RESEARCH_CREATE_SUMMARY.md) workflow
-- Use [RESEARCH_SUMMARY_TEMPLATE.md](RESEARCH_SUMMARY_TEMPLATE.md) as base
+- `Copy-Item` [RESEARCH_SUMMARY_TEMPLATE.md](RESEARCH_SUMMARY_TEMPLATE.md) to output file (literal copy)
 - Create `_INFO_[TOPIC]-01_Summary.md` with skeletal structure (summary placeholder, topic file links, topic count)
 - **Done when**: Summary file covers all major topics from sources, skeletal summary present, all topic file links resolve
 

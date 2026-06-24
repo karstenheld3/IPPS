@@ -214,8 +214,8 @@
 
 [What remains unknown, unverified, or requires further investigation.]
 
-- [Gap 1]: [What is missing and why it matters] [ASSUMED]
-- [Gap 2]: [What could not be verified] [ASSUMED]
+- [Gap 1]: [What is missing and why it matters] [LABEL]
+- [Gap 2]: [What could not be verified] [LABEL]
 - **Hidden dynamics confidence**: [What aspects of the hidden value analysis are least certain]
 - **Suggested next steps**: [How to close gaps - insider conversations, event attendance, observing interactions]
 

@@ -28,10 +28,10 @@ Populated by `/learn` workflow. Extracts transferable lessons from resolved prob
 - Missing information: [What should have been known but wasn't]
 - Constraints: [Time, resources, dependencies]
 
-**Assumptions made**:
-- [VERIFIED] [Assumption that was confirmed correct]
-- [UNVERIFIED] [Assumption made without evidence]
-- [CONTRADICTS] [Assumption that conflicted with reality]
+**Assumptions made** (label each: VERIFIED, UNVERIFIED, or CONTRADICTS):
+- [Assumption 1] [LABEL]
+- [Assumption 2] [LABEL]
+- [Assumption 3] [LABEL]
 
 **Rationale reconstructed**:
 - Requirements specified: [FR-XX, DD-XX, IG-XX referenced]

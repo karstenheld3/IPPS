@@ -33,9 +33,9 @@ Populated by `/session-new` workflow. Captures session context, decisions, and a
 
 ## Important Findings
 
-- Current implementation has race condition when multiple requests trigger refresh simultaneously [VERIFIED]
-- Token expiration check uses client-side time - vulnerable to clock skew [VERIFIED]
-- Server returns 401 for both expired and invalid tokens - need to distinguish [ASSUMED]
+- [Finding 1] [LABEL]
+- [Finding 2] [LABEL]
+- [Finding 3] [LABEL]
 
 ## Topic Registry
 

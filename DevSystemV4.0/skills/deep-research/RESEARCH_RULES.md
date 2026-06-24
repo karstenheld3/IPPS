@@ -37,15 +37,14 @@ Summary (SM) - Summary file quality
 - SM-01: Summary section is 5-15 sentences of cross-document synthesis (not a TOC restatement)
 - SM-02: Topic Files section has clickable links with Doc IDs
 - SM-03: Topic Count section present with per-category breakdown
-- SM-04: Topic Details section present (Scope + Contents + Sources per topic)
-- SM-05: Research stats in header block (`Xm net | Y docs | Z sources`)
-- SM-06: Doc ID is `[TOPIC]-IN01`
-- SM-07: Depends-on references `_INFO_[TOPIC]-02_Sources.md`
-- SM-08: Document History section exists and is current
-- SM-09: Goals and/or Questions section present (at least one required; per `INFO_GUIDE.md` Section 3)
-- SM-10: Per-Topic Summaries section present (2-3 sentences per topic file, derived from TF-03)
-- SM-11: Conclusions section present when research produces actionable conclusions (reference IN-numbers)
-- SM-12: Emergent Hypotheses section present when patterns emerged from combined evidence (all [ASSUMED])
+- SM-04: Research stats in header block (`Xm net | Y docs | Z sources`)
+- SM-05: Doc ID is `[TOPIC]-IN01`
+- SM-06: Depends-on references `_INFO_[TOPIC]-02_Sources.md`
+- SM-07: Document History section exists and is current
+- SM-08: Goals and/or Questions section present (at least one required; per `INFO_GUIDE.md` Section 3)
+- SM-09: Per-Topic Summaries section present (3-20 sentences + Key Findings per topic file)
+- SM-10: Conclusions section present when research produces actionable conclusions (reference IN-numbers)
+- SM-11: Emergent Hypotheses section present when patterns emerged from combined evidence (all [ASSUMED])
 
 Topic Files (TF) - Individual topic file quality
 - TF-01: Header block present (Doc ID, Goal, Dependencies, Version/Date scope)
@@ -77,7 +76,7 @@ Quality (QA) - Cross-cutting quality
 - QA-06: MECT compliance (voice, word choice, terminology, headings)
 - QA-07: No markdown tables (use lists unless `<DevSystem MarkdownTablesAllowed=true />` present)
 - QA-08: No emojis (unless `<DevSystem EmojisAllowed=true />` present)
-- QA-09: Verification labels used consistently across all files
+- QA-09: Verification labels used consistently across all files (applied by writing/verification workflows, never pre-filled in templates)
 - QA-10: Strategy and domain documented in Summary header with rationale
 - QA-11: Native special characters used when writing in non-English languages (e.g., ae → ä, oe → ö, ue → ü, ss → ß). Never ASCII approximations.
 
@@ -112,22 +111,21 @@ Read _INFO_[TOPIC]-02_Sources.md
 └─> Google used for URL discovery only, no AI-generated content extracted? (SC-09)
 ```
 
-### 3. Summary Check (SM-01 through SM-12)
+### 3. Summary Check (SM-01 through SM-11)
 
 ```
 Read _INFO_[TOPIC]-01_Summary.md
 ├─> Summary is synthesis, not TOC restatement? (SM-01)
 ├─> Topic links clickable with Doc IDs? (SM-02)
 ├─> Topic Count section present? (SM-03)
-├─> Topic Details present? (SM-04)
-├─> Research stats in header? (SM-05)
-├─> Doc ID correct? (SM-06)
-├─> Depends-on correct? (SM-07)
-├─> Document History present? (SM-08)
-├─> Goals and/or Questions present? (SM-09)
-├─> Per-Topic Summaries present? (SM-10)
-├─> Conclusions present (when applicable)? (SM-11)
-└─> Emergent Hypotheses present (when applicable)? (SM-12)
+├─> Research stats in header? (SM-04)
+├─> Doc ID correct? (SM-05)
+├─> Depends-on correct? (SM-06)
+├─> Document History present? (SM-07)
+├─> Goals and/or Questions present? (SM-08)
+├─> Per-Topic Summaries present (3-20 sentences + Key Findings)? (SM-09)
+├─> Conclusions present (when applicable)? (SM-10)
+└─> Emergent Hypotheses present (when applicable)? (SM-11)
 ```
 
 ### 4. Topic Files Check (TF-01 through TF-10)
