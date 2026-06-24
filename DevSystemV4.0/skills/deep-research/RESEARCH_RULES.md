@@ -42,6 +42,10 @@ Summary (SM) - Summary file quality
 - SM-06: Doc ID is `[TOPIC]-IN01`
 - SM-07: Depends-on references `_INFO_[TOPIC]-02_Sources.md`
 - SM-08: Document History section exists and is current
+- SM-09: Goals and/or Questions section present (at least one required; per `INFO_GUIDE.md` Section 3)
+- SM-10: Per-Topic Summaries section present (2-3 sentences per topic file, derived from TF-03)
+- SM-11: Conclusions section present when research produces actionable conclusions (reference IN-numbers)
+- SM-12: Emergent Hypotheses section present when patterns emerged from combined evidence (all [ASSUMED])
 
 Topic Files (TF) - Individual topic file quality
 - TF-01: Header block present (Doc ID, Goal, Dependencies, Version/Date scope)
@@ -108,7 +112,7 @@ Read _INFO_[TOPIC]-02_Sources.md
 └─> Google used for URL discovery only, no AI-generated content extracted? (SC-09)
 ```
 
-### 3. Summary Check (SM-01 through SM-08)
+### 3. Summary Check (SM-01 through SM-12)
 
 ```
 Read _INFO_[TOPIC]-01_Summary.md
@@ -119,7 +123,11 @@ Read _INFO_[TOPIC]-01_Summary.md
 ├─> Research stats in header? (SM-05)
 ├─> Doc ID correct? (SM-06)
 ├─> Depends-on correct? (SM-07)
-└─> Document History present? (SM-08)
+├─> Document History present? (SM-08)
+├─> Goals and/or Questions present? (SM-09)
+├─> Per-Topic Summaries present? (SM-10)
+├─> Conclusions present (when applicable)? (SM-11)
+└─> Emergent Hypotheses present (when applicable)? (SM-12)
 ```
 
 ### 4. Topic Files Check (TF-01 through TF-10)
