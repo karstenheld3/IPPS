@@ -14,7 +14,7 @@
     **Person (11:49)**: Non-English text here.
     > English translation here.
     ```
-- NATIVE CHARACTERS: Non-English text must use native special characters (e.g., ä, ö, ü, ß for German). Never substitute with ASCII approximations (ae, oe, ue, ss) - CV-TR-03
+- NATIVE CHARACTERS: When writing in non-English languages, use native special characters (e.g., German Umlaute: ae → ä, oe → ö, ue → ü, ss → ß). Never substitute with ASCII approximations - CV-TR-03
 - AUTO-TRANSLATE: Translate all languages except `CONVERSATION_DO_NOT_TRANSLATE_LIST` - CV-TR-04
 - TERM PAIRS: Use `TRANSLATION_TERM_PAIRS` for consistent translation - CV-TR-05
 - DOUBLE LANGUAGE: Use `[ENGLISH] / [LOCAL]` in log summaries, key outcomes, status, todos - CV-TR-06
