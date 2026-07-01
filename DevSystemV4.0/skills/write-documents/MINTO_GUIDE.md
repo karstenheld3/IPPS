@@ -28,7 +28,7 @@ The root argument (A) must connect to at least one listener motivator:
 - Saving a resource currently wasted
 - Gaining access otherwise unavailable
 
-If A does not hit a magnet, the tree will not move the listener to action - regardless of evidence quality. Test every candidate against the magnet before scoring.
+If A does not hit a magnet, the tree will not move the listener to action - regardless of evidence quality. Test every candidate against the magnet before scoring. This is a candidate-viability filter, not a framing device. The SCQA introduction (Section 4.1) handles reader engagement at presentation time.
 
 ### 2.3 Argument Selection Strategy
 
@@ -69,7 +69,7 @@ A listener who understands WHY will tolerate HOW and WHAT. But this is a startin
 
 ### 3.2 The One-Argument Test
 
-Before finalizing a multi-question tree, ask: "Can I collapse this into ONE question with three answers?" If yes, the tree is likely stronger with one powerful question and deeper evidence. Multiple top-level questions dilute each other when time is limited.
+Before finalizing a multi-question tree, ask: "Can I collapse this into ONE question with three answers?" If yes, consider whether a single powerful question with deeper evidence might be more focused. This is a diagnostic, not a directive - multi-question structures are Minto's expected norm (3-5 Key Line points at level 2).
 
 ### 3.3 Evidence Selection
 
@@ -80,17 +80,17 @@ For each sub-question (S-node), select evidence that:
 
 ### 3.4 Structure Constraints
 
-- Maximum 3 questions per argument (Q1, Q2, Q3) - fewer is acceptable
+- 3 questions preferred, up to 5 when the argument requires independent dimensions (Q1...Q5)
 - Maximum 3 answers per question (QnA1, QnA2, QnA3) - fewer is acceptable
 - Maximum 3 evidence items per sub-question (QnAn-S1E1...E3) - fewer is acceptable
-- These are cognitive load limits for delivery, not minimum requirements
+- These are cognitive load limits, not minimum requirements
 
 ## 4. Writing the Prose Article
 
 ### 4.1 Top-Down Order
 
 Prose follows conclusion-first structure:
-1. **Executive Summary** - Restate A as opening (2-3 sentences)
+1. **Executive Summary (SCQA)** - Situation (what reader already knows, 1-2 sentences) → Complication (what changed or threatens, 1-2 sentences) → Answer (restate A). Total: 2-3 paragraphs max. The reader must feel the need before receiving the answer.
 2. **Section per Q** - Each question becomes a heading; answers become paragraphs
 3. **Evidence woven in** - S/E level content supports paragraphs without explicit node IDs
 4. **Conclusion** - Summarize proved branches, restate A

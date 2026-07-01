@@ -20,13 +20,14 @@ Argument Quality (AQ)
 - MINTO-AQ-03: One-Argument Test documented per candidate
 - MINTO-AQ-04: Each answer is a single declarative sentence
 - MINTO-AQ-05: Each answer captures significance, not category (Summarize Don't Label)
+- MINTO-AQ-06: All items in a grouping are the same kind (Same Kind, Same Level)
 
 Tree Integrity (TI)
 - MINTO-TI-01: Every QnAn has at least one sub-question (S-node)
 - MINTO-TI-02: Every sub-question has at least one evidence item (E-node)
 - MINTO-TI-03: No orphan nodes (every Q has A, every A has S, every S has E)
 - MINTO-TI-04: Every E-node references a source finding from the inventory
-- MINTO-TI-05: Maximum 3 questions, 3 answers per question, 3 evidence per sub-question
+- MINTO-TI-05: 3-5 questions, max 3 answers per question, max 3 evidence per sub-question
 
 MECE (ME)
 - MINTO-ME-01: Questions under same A do not overlap
@@ -35,11 +36,12 @@ MECE (ME)
 
 Article Structure (AS)
 - MINTO-AS-01: Doc ID assigned in format `[TOPIC]-MINTO-[NN]`
-- MINTO-AS-02: Executive Summary restates A (2-3 sentences max)
+- MINTO-AS-02: Executive Summary uses SCQA and restates A (2-3 paragraphs max)
 - MINTO-AS-03: One section per Q with heading derived from question text
 - MINTO-AS-04: AMINTON tree appendix present and matches prose structure
 - MINTO-AS-05: Prose follows top-down order (conclusion, arguments, evidence)
 - MINTO-AS-06: Section headings state ideas, not categories (reading headings alone tells the story)
+- MINTO-AS-07: Executive Summary uses SCQA structure (Situation → Complication → Answer)
 
 Closing (CL)
 - MINTO-CL-01: Closing section present with summary lines grouped by parent Q
@@ -243,6 +245,46 @@ Section headings must reflect the point being made, not the type of content. Rea
 2. Read them in sequence without body text
 3. If they tell a coherent story → pass
 4. If they read like a table of contents of categories → fail
+
+## MINTO-AS-07: Executive Summary Uses SCQA
+
+The Executive Summary must ground the reader before stating the governing thought. Structure: Situation (what reader already knows) → Complication (what changed or threatens) → Answer (restate A). Total: 2-3 paragraphs max.
+
+**BAD:**
+```markdown
+## Executive Summary
+Migrating to cloud now saves 40% over upgrading the existing system.
+```
+(Bare assertion. Reader has no context for why this matters now.)
+
+**GOOD:**
+```markdown
+## Executive Summary
+Your infrastructure contract renews in Q1, locking in rates for 3 years. Since the original contract, cloud costs dropped 60% while your vendor raised rates to 3x market price. Migrating to cloud now saves 40% over upgrading the existing system.
+```
+(Situation → Complication → Answer. Reader feels the urgency before receiving the recommendation.)
+
+## MINTO-AQ-06: Same Kind, Same Level
+
+Every item in a grouping must be the same kind of thing. All answers under the same Q must be describable by a single plural noun (reasons, steps, problems, recommendations). Do not mix actions with observations, metrics with anecdotes, or abstraction levels.
+
+**BAD** (mixed kinds):
+```markdown
+Q1A1: Migrate the database to cloud. (action)
+Q1A2: The current system is slow. (observation)
+Q1A3: 99.9% uptime target. (metric)
+```
+(Cannot label with one plural noun. Actions + observations + metrics mixed.)
+
+**GOOD** (same kind - all reasons):
+```markdown
+Q1A1: Upgrading costs more than replacing.
+Q1A2: The current system cannot handle projected load.
+Q1A3: Vendor support ends in 6 months.
+```
+(All describable as "reasons to migrate.")
+
+**The test**: Can you label all items with one plural noun? If not, restructure the grouping.
 
 ## MINTO-AS-04: Appendix Matches Prose
 

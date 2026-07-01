@@ -46,9 +46,9 @@ AMINTON makes two additions: 1) Q becomes an explicit node type (not just an imp
 ```
 Level 0: A                          (root argument / thesis)
 Level 1: Q1, Q2, Q3                 (questions raised by A)
-Level 2: Q1A1, Q1A2, Q2A1, ...     (answers per question)
-Level 3: Q1A1-S1, Q1A2-S1, ...     (sub-questions per answer - hyphen marks section boundary)
-Level 4: Q1A1-S1E1, Q1A1-S1E2, ... (evidence answering sub-questions)
+Level 2: Q1A1, Q1A2, Q2A1, ...      (answers per question)
+Level 3: Q1A1-S1, Q1A2-S1, ...      (sub-questions per answer - hyphen marks section boundary)
+Level 4: Q1A1-S1E1, Q1A1-S1E2, ...  (evidence answering sub-questions)
 ```
 
 ### 2.3 Reading an ID
