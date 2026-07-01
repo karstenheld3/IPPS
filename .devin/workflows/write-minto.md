@@ -7,7 +7,7 @@ auto_execution_mode: 1
 
 Develop a selected argument into a complete Minto Pyramid article with drill-down sections, evidence, and closing.
 
-**Goal**: `_MINTO_[Article].md` - top-down structured article with MINTO tree appendix
+**Goal**: `_MINTO_[Article].md` - top-down structured article with AMINTON tree appendix
 
 **Why**: A draft contains root-level structure (A + Q + A) but lacks proof depth. This workflow adds sub-questions, evidence, and closing to create a complete, verifiable argument rendered as readable prose.
 
@@ -28,7 +28,7 @@ Develop a selected argument into a complete Minto Pyramid article with drill-dow
 - Max 3x3 structure enforced: max 3 questions, max 3 answers each (DD-03)
 - Bottom-up synthesis (thinking) precedes top-down communication (writing)
 - Confirm before overwriting existing `_MINTO_*.md`
-- Reference `_INFO_AGENTIC_MINTO_ARTICLES.md [MINTO-IN01]` for notation and tree structure
+- Reference `_INFO_AGENTIC_MINTO_ARTICLES.md [MINTO-IN01]` for AMINTON notation and tree structure
 
 ## Trigger
 
@@ -76,11 +76,11 @@ Generate closing section:
 
 ### 5. Extended Draft Update
 
-Update `__DRAFT-MINTO_[Article].md` with full MINTO tree (all levels through E-nodes) and closing section.
+Update `__DRAFT-MINTO_[Article].md` with full AMINTON tree (all levels through E-nodes) and closing section.
 
 ### 6. Article Rendering (FR-09)
 
-Convert complete MINTO tree into prose article. Structure:
+Convert complete AMINTON tree into prose article. Structure:
 
 ```markdown
 # [Article Title]
@@ -111,9 +111,9 @@ Convert complete MINTO tree into prose article. Structure:
 
 [Closing: summary of proved branches, restated A]
 
-## Appendix: MINTO Structure
+## Appendix: AMINTON Structure
 
-[Full MINTO tree with all levels for machine verification]
+[Full AMINTON tree with all levels for machine verification]
 ```
 
 Write to `_MINTO_[Article].md`. If file exists: confirm with user before overwriting.
@@ -128,12 +128,12 @@ Write to `_MINTO_[Article].md`. If file exists: confirm with user before overwri
 - [ ] Closing section present with one line per answer
 - [ ] Closing introduces no new claims (IG-03)
 - [ ] MECE at all levels (IG-04)
-- [ ] MINTO tree appendix matches prose structure
+- [ ] AMINTON tree appendix matches prose structure
 - [ ] Prose follows top-down order: conclusion, arguments, evidence
 - [ ] Article Doc ID assigned
 
 ## Output
 
 - `_MINTO_[Article].md` in `[SESSION_FOLDER]/` or `[SESSION_FOLDER]/MINTO/`
-- Updated `__DRAFT-MINTO_[Article].md` with full MINTO tree
+- Updated `__DRAFT-MINTO_[Article].md` with full AMINTON tree
 - Suggest: "Run `/verify` to check structural completeness, `/critique` for logic flaws"

@@ -1,13 +1,13 @@
 # Minto Article Guide
 
-Read BEFORE writing. Verify output against `MINTO_RULES.md`. For notation details, see `_INFO_AGENTIC_MINTO_ARTICLES.md [MINTO-IN01]`.
+Read BEFORE writing. Verify output against `MINTO_RULES.md`. For AMINTON notation details, see `_INFO_AGENTIC_MINTO_ARTICLES.md [MINTO-IN01]`.
 
 ## 1. Document Types
 
 Two Minto document types exist:
 
-1. **Draft** (`__DRAFT-MINTO_*.md`) - Scaffolding. Contains findings inventory, selection criteria, and 3 scored candidate arguments with MINTO Root Sections. Deleted by `/cleanup` after article exists.
-2. **Article** (`_MINTO_*.md`) - Deliverable. Complete top-down prose article with MINTO tree appendix.
+1. **Draft** (`__DRAFT-MINTO_*.md`) - Scaffolding. Contains findings inventory, selection criteria, and 3 scored candidate arguments with AMINTON Root Sections. Deleted by `/cleanup` after article exists.
+2. **Article** (`_MINTO_*.md`) - Deliverable. Complete top-down prose article with AMINTON tree appendix.
 
 ## 2. Planning Decisions
 
@@ -39,7 +39,7 @@ When scoring candidates, weight dimensions by article purpose:
 
 Override defaults when user provides explicit criteria.
 
-## 3. Building the MINTO Tree
+## 3. Building the AMINTON Tree
 
 ### 3.1 Question Ordering
 
@@ -116,7 +116,7 @@ Minto: "If you formulate your headings properly, they will stand in the table of
 - Write as if the reader has NOT seen the tree - prose must stand alone
 - Bold the key claim in each paragraph (the answer being proved)
 - Evidence appears as supporting detail within the paragraph, not as a separate list
-- Do NOT include MINTO node IDs in prose sections - the appendix provides the machine-readable structure
+- Do NOT include AMINTON node IDs in prose sections - the appendix provides the machine-readable structure
 - Default to **inductive** presentation (state the point, then support) - reserve deductive chains for paragraph level where premises stay close together
 
 ### 4.4 Closing Generation

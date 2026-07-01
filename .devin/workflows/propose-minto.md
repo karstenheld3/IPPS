@@ -5,7 +5,7 @@ auto_execution_mode: 1
 
 # Propose Minto Workflow
 
-Generate 3 candidate arguments with full MINTO Root Sections from source material. Select the strongest and output a draft.
+Generate 3 candidate arguments with full AMINTON Root Sections from source material. Select the strongest and output a draft.
 
 **Goal**: `__DRAFT-MINTO_[Article].md` with 3 scored candidates, one marked `[RECOMMENDED]`
 
@@ -27,7 +27,7 @@ Generate 3 candidate arguments with full MINTO Root Sections from source materia
 - One-Argument Test: can tree collapse to 1Q with 3 answers? If yes, restructure
 - Evidence traceability: every answer must be supportable from findings inventory
 - MECE (Mutually Exclusive, Collectively Exhaustive) at every level: no overlapping questions, no overlapping answers
-- Reference `_INFO_AGENTIC_MINTO_ARTICLES.md [MINTO-IN01]` for notation and tree structure
+- Reference `_INFO_AGENTIC_MINTO_ARTICLES.md [MINTO-IN01]` for AMINTON notation and tree structure
 
 ## Trigger
 
@@ -117,7 +117,7 @@ For each selected question in each candidate:
 - Generate 5 candidate answers
 - Select top 3 based on: evidence strength (traceable to inventory), clarity (single declarative statement), independence (no overlap)
 
-Assemble complete MINTO Root Section per candidate.
+Assemble complete AMINTON Root Section per candidate.
 
 ### 8. Draft Output (FR-06)
 
@@ -148,7 +148,7 @@ Write `__DRAFT-MINTO_[Article].md` with structure:
 Score: goal_alignment=N, supportability=N, impact=N, specificity=N (composite: N.NN)
 One-Argument Test: [passed/collapsed]
 
-[MINTO Root Section tree]
+[AMINTON Root Section tree]
 
 ## Candidate 2
 
@@ -163,7 +163,7 @@ Article slug: derived from root argument A, kebab-cased, truncated to 40 chars.
 
 ## Quality Gate
 
-- [ ] Exactly 3 candidates present with complete MINTO Root Sections
+- [ ] Exactly 3 candidates present with complete AMINTON Root Sections
 - [ ] One candidate marked `[RECOMMENDED]` (highest composite score)
 - [ ] Selection criteria documented with rationale
 - [ ] Magnet Rule: each A connects to a listener motivator

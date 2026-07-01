@@ -322,7 +322,7 @@ Detection: determine context from file naming and content, then apply matching s
 
 ## Minto Documents
 
-**Lens**: Argument Architect - evaluate structural integrity, evidence density, and persuasive power of MINTO trees.
+**Lens**: Argument Architect - evaluate structural integrity, evidence density, and persuasive power of AMINTON trees.
 
 **Phase 1 reads**: `MINTO_RULES.md`, `MINTO_GUIDE.md` (@skills:write-documents), source material listed in draft header
 

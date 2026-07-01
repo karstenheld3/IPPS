@@ -1,7 +1,7 @@
 # Minto Document Rules
 
 Verification priority:
-1. Structural completeness - MINTO tree integrity
+1. Structural completeness - AMINTON tree integrity
 2. Logic soundness - MECE, no orphans, closing discipline
 3. Evidence traceability - every claim backed by source
 
@@ -37,7 +37,7 @@ Article Structure (AS)
 - MINTO-AS-01: Doc ID assigned in format `[TOPIC]-MINTO-[NN]`
 - MINTO-AS-02: Executive Summary restates A (2-3 sentences max)
 - MINTO-AS-03: One section per Q with heading derived from question text
-- MINTO-AS-04: MINTO tree appendix present and matches prose structure
+- MINTO-AS-04: AMINTON tree appendix present and matches prose structure
 - MINTO-AS-05: Prose follows top-down order (conclusion, arguments, evidence)
 - MINTO-AS-06: Section headings state ideas, not categories (reading headings alone tells the story)
 
@@ -49,7 +49,7 @@ Closing (CL)
 
 ## MINTO-DS-01: Exactly 3 Candidates
 
-Draft must contain exactly 3 candidate arguments, each with a complete MINTO Root Section.
+Draft must contain exactly 3 candidate arguments, each with a complete AMINTON Root Section.
 
 **BAD:**
 ```markdown
@@ -66,7 +66,7 @@ Draft must contain exactly 3 candidate arguments, each with a complete MINTO Roo
 Score: goal_alignment=5, supportability=5, impact=5, specificity=5 (composite: 5.00)
 One-Argument Test: passed
 ### A: Migrating to cloud now saves 40% over upgrading the existing system.
-[Full MINTO Root Section with Q1-Q3 and answers]
+[Full AMINTON Root Section with Q1-Q3 and answers]
 
 ## Candidate 2
 [Same structure]
@@ -189,7 +189,7 @@ Closing summarizes proved branches only. Every statement in closing must trace b
 ## Conclusion
 The market is also growing at 46% CAGR, making this an excellent investment.
 ```
-(Market growth claim not present in the MINTO tree)
+(Market growth claim not present in the AMINTON tree)
 
 **GOOD:**
 ```markdown
@@ -246,7 +246,7 @@ Section headings must reflect the point being made, not the type of content. Rea
 
 ## MINTO-AS-04: Appendix Matches Prose
 
-The MINTO tree appendix must structurally match the prose article. Every section heading corresponds to a Q-node. Every paragraph's key claim corresponds to a QnAn-node.
+The AMINTON tree appendix must structurally match the prose article. Every section heading corresponds to a Q-node. Every paragraph's key claim corresponds to a QnAn-node.
 
 **Verification procedure:**
 1. Count prose sections (excluding Executive Summary and Conclusion) = number of Q-nodes

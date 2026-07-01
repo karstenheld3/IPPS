@@ -1,11 +1,11 @@
-# INFO: Agentic MINTO Articles
+# INFO: AMINTON - Agentic MINTO Notation
 
 **Doc ID**: MINTO-IN01
-**Goal**: Define the MINTO notation system for structured argumentation using section-based delivery with path-based node IDs (A-Q-A-S-E node types)
+**Goal**: Define the AMINTON (Agentic MINTO Notation) system for structured argumentation using section-based delivery with path-based node IDs (A-Q-A-S-E node types)
 
 ## Summary
 
-- MINTO structures arguments into 4 sections + closing for verbal delivery using 5 node types: A (Argument), Q (Question), A (Answer), S (Subquestion), E (Evidence) [VERIFIED]
+- AMINTON structures arguments into 4 sections + closing for verbal delivery using 5 node types: A (Argument), Q (Question), A (Answer), S (Subquestion), E (Evidence) [VERIFIED]
 - Root section: A (thesis) → Q1...Qn (questions) → QnA1...QnAn (answers per question) [VERIFIED]
 - Drill-down sections (A, B, C): Each expands one Q-branch with sub-questions and evidence [VERIFIED]
 - Closing section: Summarizes proved branches and restates A as conclusion [VERIFIED]
@@ -14,7 +14,7 @@
 
 ## Table of Contents
 
-1. [The Problem MINTO Notation Solves](#1-the-problem-minto-notation-solves)
+1. [The Problem AMINTON Solves](#1-the-problem-aminton-solves)
 2. [ID System](#2-id-system)
 3. [Section Structure](#3-section-structure)
 4. [Delivery Mechanics](#4-delivery-mechanics)
@@ -23,11 +23,11 @@
 7. [Sources](#7-sources)
 8. [Document History](#8-document-history)
 
-## 1. The Problem MINTO Notation Solves
+## 1. The Problem AMINTON Solves
 
 Minto's Pyramid Principle defines the argumentative logic (top-down, SCQA (Situation-Complication-Question-Answer), vertical Q&A dialogue, MECE (Mutually Exclusive, Collectively Exhaustive) grouping) and discusses decimal numbering (1, 1.1, 1.1.1) as one of several presentation options to make pyramid structure visible in documents (Ch. 6, "How to Highlight the Structure"). However, Minto's decimal numbering encodes position within a flat outline, not the Q&A relationship between levels. The question that connects a parent claim to its supporting evidence remains invisible in the numbering - you see hierarchy but not WHY the next level exists.
 
-The MINTO notation makes two additions: 1) Q becomes an explicit node type (not just an implied relationship), and 2) the full path IS the ID, encoding parentage directly. Reading `Q1A2-S1E3` tells you exactly where in the argument structure you are and who the parent is at every level.
+AMINTON makes two additions: 1) Q becomes an explicit node type (not just an implied relationship), and 2) the full path IS the ID, encoding parentage directly. Reading `Q1A2-S1E3` tells you exactly where in the argument structure you are and who the parent is at every level.
 
 ## 2. ID System
 
@@ -102,7 +102,7 @@ Q2 "How?": They can be bred to fascinating variations in type, size, personality
 └─> A: Pigs should be kept as pets.
 ```
 
-A MINTO tree is delivered in 4 sections + closing:
+An AMINTON tree is delivered in 4 sections + closing:
 
 ### 3.1 Root Section
 
@@ -203,14 +203,14 @@ In live delivery, not every section needs to be presented:
 
 ### 4.4 Naming Convention
 
-When referencing MINTO trees in documents:
-- Name by root: "the A tree" or by narrative name: "Value-First MINTO"
+When referencing AMINTON trees in documents:
+- Name by root: "the A tree" or by narrative name: "Value-First AMINTON"
 - Reference nodes by full ID: "see Q1A2-S1E3 for the cost argument"
 - Reference sections: "Section B covers the how"
 
 ### 4.5 Selecting and Ordering Questions
 
-When building a MINTO tree from candidate arguments, evaluate each on two dimensions:
+When building an AMINTON tree from candidate arguments, evaluate each on two dimensions:
 
 **Dimension 1: Impact** - How strongly does this move the listener toward action?
 
@@ -568,7 +568,7 @@ Q3 "Why is it shut down?": EUR 12M spent, EUR 890K solved the problem three time
 
 **[2026-07-01 16:38]**
 - Changed: Complete restructure to section-based notation (Root + A/B/C + Closing)
-- Renamed: AQUAT → MINTO
+- Renamed: AQUAT → AMINTON
 - Changed: ID system from path-hyphenated (A1-Q1-A2-Q1-A3) to concatenated (Q1A2-S1E3)
 - Changed: Root marker from numbered A1 to singular A
 - Added: Pigs example (Minto) as full worked example with all sections
