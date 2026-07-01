@@ -104,7 +104,7 @@ AMINTON provides arguments    → Tree notation for structured, verifiable Minto
 
 ## Overview
 
-IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V4.0) features eight integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT consistency, and SOCAS quality criteria.
+IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V4.0) features ten integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT consistency, SOCAS quality criteria, GRUC compliance, and AMINTON arguments.
 
 ## How to Add to Your Project
 
