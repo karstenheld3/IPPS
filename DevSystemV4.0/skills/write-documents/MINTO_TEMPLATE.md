@@ -1,7 +1,7 @@
 # [Article Title]
 
 **Doc ID**: [TOPIC]-MINTO-[NN]
-**Source**: __DRAFT-MINTO_[Article].md
+**Source**: __MINTO-DRAFT_[Article].md
 **Argument**: [Root argument A restated]
 
 ## Executive Summary

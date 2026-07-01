@@ -7,7 +7,7 @@ auto_execution_mode: 1
 
 Generate 3 candidate arguments with full AMINTON Root Sections from source material. Select the strongest and output a draft.
 
-**Goal**: `__DRAFT-MINTO_[Article].md` with 3 scored candidates, one marked `[RECOMMENDED]`
+**Goal**: `__MINTO-DRAFT_[Article].md` with 3 scored candidates, one marked `[RECOMMENDED]`
 
 **Why**: Ad-hoc synthesis produces arguments without traceable evidence or explicit selection criteria. This workflow ensures the strongest argument is identified through a structured funnel with scored dimensions.
 
@@ -17,7 +17,7 @@ Generate 3 candidate arguments with full AMINTON Root Sections from source mater
 
 - @skills:write-documents `MINTO_GUIDE.md` for strategic decisions (magnet, ordering, selection)
 - @skills:write-documents `MINTO_RULES.md` for structural verification (quality gate)
-- @skills:write-documents `DRAFT-MINTO_TEMPLATE.md` for output structure
+- @skills:write-documents `MINTO-DRAFT_TEMPLATE.md` for output structure
 - @skills:write-documents for APAPALAN/MECT compliance
 
 ## MUST-NOT-FORGET
@@ -124,7 +124,7 @@ Assemble complete AMINTON Root Section per candidate.
 
 Mark highest-scoring argument as `[RECOMMENDED]`.
 
-Write `__DRAFT-MINTO_[Article].md` with structure:
+Write `__MINTO-DRAFT_[Article].md` with structure:
 
 ```markdown
 # Minto Draft: [Article Title]
@@ -176,5 +176,5 @@ Article slug: derived from root argument A, kebab-cased, truncated to 40 chars.
 
 ## Output
 
-- `__DRAFT-MINTO_[Article].md` in `[SESSION_FOLDER]/` or `[SESSION_FOLDER]/MINTO/`
+- `__MINTO-DRAFT_[Article].md` in `[SESSION_FOLDER]/` or `[SESSION_FOLDER]/MINTO/`
 - Suggest: "Run `/write-minto` to develop full article from recommended argument"

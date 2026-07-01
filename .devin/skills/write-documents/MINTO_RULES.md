@@ -13,7 +13,7 @@ Draft Structure (DS)
 - MINTO-DS-03: Selection criteria documented with weights and rationale
 - MINTO-DS-04: Findings inventory present with source references and verification labels
 - MINTO-DS-05: Source material list present and non-empty
-- MINTO-DS-06: Draft follows `DRAFT-MINTO_TEMPLATE.md` structure
+- MINTO-DS-06: Draft follows `MINTO-DRAFT_TEMPLATE.md` structure
 
 Argument Quality (AQ)
 - MINTO-AQ-01: Each A connects to a listener motivator (Magnet Rule)

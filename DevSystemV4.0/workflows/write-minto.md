@@ -11,7 +11,7 @@ Develop a selected argument into a complete Minto Pyramid article with drill-dow
 
 **Why**: A draft contains root-level structure (A + Q + A) but lacks proof depth. This workflow adds sub-questions, evidence, and closing to create a complete, verifiable argument rendered as readable prose.
 
-**Scope**: Drill-down development and article rendering. Requires an existing `__DRAFT-MINTO_*.md` (or runs `/propose-minto` first).
+**Scope**: Drill-down development and article rendering. Requires an existing `__MINTO-DRAFT_*.md` (or runs `/propose-minto` first).
 
 ## Required Skills
 
@@ -39,14 +39,14 @@ Develop a selected argument into a complete Minto Pyramid article with drill-dow
 
 ## Prerequisites
 
-- Existing `__DRAFT-MINTO_*.md` with `[RECOMMENDED]` argument, OR source material for `/propose-minto`
+- Existing `__MINTO-DRAFT_*.md` with `[RECOMMENDED]` argument, OR source material for `/propose-minto`
 - If no draft and no source material: stop and report
 
 ## Steps
 
 ### 1. Prerequisite Check (FR-10)
 
-Check for existing `__DRAFT-MINTO_*.md` in scope:
+Check for existing `__MINTO-DRAFT_*.md` in scope:
 - **Found**: Read draft, use `[RECOMMENDED]` argument as starting point
 - **Not found**: Execute `/propose-minto` first, then continue with its output
 
@@ -77,7 +77,7 @@ Generate closing section:
 
 ### 5. Extended Draft Update
 
-Update `__DRAFT-MINTO_[Article].md` with full AMINTON tree (all levels through E-nodes) and closing section.
+Update `__MINTO-DRAFT_[Article].md` with full AMINTON tree (all levels through E-nodes) and closing section.
 
 ### 6. Article Rendering (FR-09)
 
@@ -87,7 +87,7 @@ Convert complete AMINTON tree into prose article. Structure:
 # [Article Title]
 
 **Doc ID**: [TOPIC]-MINTO-[NN]
-**Source**: __DRAFT-MINTO_[Article].md
+**Source**: __MINTO-DRAFT_[Article].md
 **Argument**: [Root argument A restated]
 
 ## Executive Summary
@@ -136,5 +136,5 @@ Write to `_MINTO_[Article].md`. If file exists: confirm with user before overwri
 ## Output
 
 - `_MINTO_[Article].md` in `[SESSION_FOLDER]/` or `[SESSION_FOLDER]/MINTO/`
-- Updated `__DRAFT-MINTO_[Article].md` with full AMINTON tree
+- Updated `__MINTO-DRAFT_[Article].md` with full AMINTON tree
 - Suggest: "Run `/verify` to check structural completeness, `/critique` for logic flaws"

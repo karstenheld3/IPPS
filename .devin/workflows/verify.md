@@ -252,11 +252,11 @@ Read the rule file for your context and verify against all rules. Also verify ag
 
 ## Minto Documents
 
-Detect by: filename pattern `__DRAFT-MINTO_*.md` (draft) or `_MINTO_*.md` (article).
+Detect by: filename pattern `__MINTO-DRAFT_*.md` (draft) or `_MINTO_*.md` (article).
 
 **Read**: @skills:write-documents `MINTO_RULES.md` - contains all MINTO-DS-*, MINTO-AQ-*, MINTO-TI-*, MINTO-ME-*, MINTO-AS-*, MINTO-CL-* rules.
 
-**Verification checklist for Minto Draft (`__DRAFT-MINTO_*`):**
+**Verification checklist for Minto Draft (`__MINTO-DRAFT_*`):**
 - Verify against MINTO-DS-* rules (3 candidates, recommended marked, criteria, inventory)
 - Verify against MINTO-AQ-* rules (magnet, ordering, one-argument test, declarative answers)
 - Verify against MINTO-ME-* rules (MECE at all levels)

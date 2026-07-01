@@ -271,7 +271,7 @@ When reviewing error logs or console output:
 
 ### Minto Documents
 
-Detect by: `__DRAFT-MINTO_*` or `_MINTO_*` filename pattern.
+Detect by: `__MINTO-DRAFT_*` or `_MINTO_*` filename pattern.
 
 **Read**: @skills:write-documents `MINTO_GUIDE.md` for intended structure; `MINTO_RULES.md` for rule IDs; `SOCAS_RULES.md` for logic attack patterns.
 

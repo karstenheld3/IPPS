@@ -405,7 +405,7 @@ Detection: determine context from file naming and content, then apply matching s
    - `_TEST_*` or TC-XX IDs → TEST Plan
    - `_TASKS_*` / `__TASKS_*` or TK-XX IDs → TASKS Plan
    - `.py`, `.ps1`, `.js`, `.ts` etc. → Code
-   - `__DRAFT-MINTO_*` or `_MINTO_*` → Minto Documents
+   - `__MINTO-DRAFT_*` or `_MINTO_*` → Minto Documents
    - `*_[LANG].md` or `*_[LANG].srt` with corresponding source file → Translation Output
    - Workflow folder `.md` files → Workflow
    - Skill folder files → Skill
