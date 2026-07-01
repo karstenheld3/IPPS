@@ -208,6 +208,41 @@ When referencing AQUASE trees in documents:
 - Reference nodes by full ID: "see Q1A2-S1E3 for the cost argument"
 - Reference sections: "Section B covers the how"
 
+### 4.5 Selecting and Ordering Questions
+
+When building a tree from candidate arguments, evaluate each on two dimensions:
+
+**Dimension 1: Impact** - How strongly does this move the listener toward action?
+
+- **High**: Creates urgency, reveals unrecognized risk, or promises concrete measurable gain
+- **Medium**: Builds credibility, provides proof, demonstrates capability
+- **Low**: Descriptive, informational, scopes or defines without motivating
+
+**Dimension 2: Why / How / What** (Sinek principle: start with Why)
+
+- **Why**: Addresses motivation, pain, or purpose - always position first
+- **How**: Mechanism, proof, capability - position second
+- **What**: Scope, description, features - position last
+
+**Ordering rule**: Highest-Impact + Why-type question goes first. A listener who understands WHY will tolerate HOW and WHAT. A listener who hears WHAT first may never reach WHY.
+
+**Selection rules** (when candidates exceed 3 slots):
+
+1. Score each candidate on Impact (1-3) and type (Why/How/What)
+2. Keep the top 3 as questions. Others become drill-down material in Sections A/B/C
+3. If two candidates compete for the same slot: the one addressing WHY wins
+4. If one candidate is dramatically stronger than all others: promote it to the ONLY top-level question, demote the rest to answers beneath it
+
+**The One-Argument Test**:
+
+Before finalizing a multi-question tree, ask: "Can I collapse this into ONE question with three answers?" If yes, the tree is likely stronger with one powerful question and deeper evidence. Multiple top-level questions dilute each other when time is limited. One argument that lands beats three that compete for attention.
+
+**The Magnet Rule**:
+
+The root argument (A) must connect to at least one listener motivator - something the audience already wants or fears. Examples: gaining an advantage others lack, reducing a risk they currently carry, saving a resource they are wasting, or gaining access they cannot get elsewhere.
+
+If A doesn't hit a magnet, the tree won't move the listener to action - regardless of how well-structured the evidence is.
+
 ## 5. Full Example
 
 Source: Barbara Minto, "The Pyramid Principle" (adapted)
