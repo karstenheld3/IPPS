@@ -322,34 +322,26 @@ Detection: determine context from file naming and content, then apply matching s
 
 ## Minto Documents
 
-**Lens**: Argument Strength Analyst (Toulmin) - evaluate argument quality by tracing evidence support depth and identifying unsupported leaps.
+**Lens**: Argument Architect - evaluate structural integrity, evidence density, and persuasive power of AQUASE trees.
 
-**Phase 1 reads**: `_SPEC_MINTO_WORKFLOWS.md [MINTO-SP01]`, source `__DRAFT-MINTO_*.md` findings inventory
+**Phase 1 reads**: `MINTO_RULES.md`, `MINTO_GUIDE.md` (@skills:write-documents), source material listed in draft header
 
-**Phase 1 research**: Check source material for unused findings that could strengthen weak branches. Evaluate AQUASE tree completeness against IG-01 through IG-07.
+**Phase 1 research**: Evaluate evidence strength per branch. Search for stronger evidence, counter-arguments, or alternative framings that would strengthen the tree.
 
 **Specialized issues** (in addition to GLOBAL):
-- Evidence depth - Branches with only 1 E-node per sub-question (target: 2-3)
-- Missing sub-questions - Answers without drill-down (S-level absent)
-- Weak evidence - E-nodes that reference `[ASSUMED]` findings instead of `[VERIFIED]`
-- Argument strength - Weaker answers replaceable with stronger alternatives from unused findings
-- Source enrichment - Gaps where additional research could strengthen a branch
-- Prose quality - APAPALAN/MECT violations in the rendered article
+- Thin branches - answers with only 1 evidence item where 2-3 would strengthen credibility
+- Evidence recycling - same finding (Fnn) used more than 3 times across the tree, indicating narrow evidence base
+- Magnet drift - root argument (A) no longer connects to listener motivator after drill-down development
+- Question-answer mismatch - answer does not actually address the question posed
+- Closing inflation - closing adds nuance or claims not present in the tree
+- MECE violations - overlapping questions or answers within the same parent
 
-**Adversarial Collaborator techniques** (execute in order, skip if not applicable):
+**Adversarial Collaborator techniques** (in addition to cross-context):
+- Challenge each Q1A1 claim: "What would make this false?"
+- For each E-node: "Is there a more compelling piece of evidence available?"
+- For the closing: "Does this summary actually follow from what was proved?"
 
-1. **Evidence Depth Scan** - For each sub-question, count E-nodes. Flag branches with only 1 evidence item. Check findings inventory for additional evidence not yet used.
-2. **Branch Symmetry Check** - Compare Q-branches by total evidence count. Identify significantly weaker branches. Propose evidence redistribution or additional research.
-3. **Source Utilization Audit** - Compare findings inventory against E-nodes in tree. Calculate utilization percentage. Unused high-quality findings → propose as additions to weakest branches.
-4. **Verification Label Upgrade** - For each `[ASSUMED]` E-node, determine if evidence can be verified from existing sources. Upgrade to `[VERIFIED]` or flag for research.
-5. **Alternative Argument Evaluation** - Review non-recommended candidates from draft. Does any Q-branch from candidates 2-3 strengthen the recommended argument's weakest point?
-
-**Improvement references AQUASE node IDs:**
-```
-Phase 3 candidate: Q1A2 has only 1 sub-question with 1 evidence item.
-Source inventory contains 3 additional findings supporting Q1A2.
-Action: Add Q1A2-S1E2 and Q1A2-S1E3 from findings inventory.
-```
+**Improvement references**: `MINTO_RULES.md` MINTO-TI-*, MINTO-ME-*, MINTO-CL-* for structural targets
 
 ## Translation Output
 
@@ -412,8 +404,8 @@ Action: Add Q1A2-S1E2 and Q1A2-S1E3 from findings inventory.
    - `_IMPL_*` or IS-XX IDs → IMPL Plan
    - `_TEST_*` or TC-XX IDs → TEST Plan
    - `_TASKS_*` / `__TASKS_*` or TK-XX IDs → TASKS Plan
-   - `__DRAFT-MINTO_*` or `_MINTO_*` → Minto Documents
    - `.py`, `.ps1`, `.js`, `.ts` etc. → Code
+   - `__DRAFT-MINTO_*` or `_MINTO_*` → Minto Documents
    - `*_[LANG].md` or `*_[LANG].srt` with corresponding source file → Translation Output
    - Workflow folder `.md` files → Workflow
    - Skill folder files → Skill

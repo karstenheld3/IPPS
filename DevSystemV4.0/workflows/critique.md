@@ -269,6 +269,25 @@ When reviewing error logs or console output:
 
 4. **Update** `_PROBLEMS_REVIEW.md` and `FAILS.md` with root causes found
 
+### Minto Documents
+
+Detect by: `__DRAFT-MINTO_*` or `_MINTO_*` filename pattern.
+
+**Read**: @skills:write-documents `MINTO_GUIDE.md` for intended structure; `MINTO_RULES.md` for rule IDs; `SOCAS_RULES.md` for logic attack patterns.
+
+**Attack vectors** (reference AQUASE node IDs in findings):
+- **Magnet failure** - A does not connect to listener motivator (MINTO-AQ-01)
+- **Circular evidence** - E-node restates parent answer instead of providing independent proof
+- **False MECE** - questions/answers appear distinct but test reveals overlap
+- **Unsupported claim** - answer in prose has no corresponding E-node in appendix
+- **Closing creep** - closing adds nuance, qualification, or claims not in tree (MINTO-CL-04)
+- **Single-source dependency** - entire branch rests on one finding that could be wrong
+- **Misapplied statistic** - evidence (Fnn) cited does not actually support the claim made (SOCAS-10)
+- **Absolute claim vulnerability** - "all", "none", "always", "never" invite counter-examples
+- **Speed/quality trade-off hidden** - positioning argument hides an obvious buyer objection
+
+**Output format**: Each finding references AQUASE node IDs: "C-01 (Q1A2-S1E1): [description]"
+
 ## Devil's Advocate Questions
 
 Ask these for EVERY review:

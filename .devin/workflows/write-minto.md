@@ -15,7 +15,9 @@ Develop a selected argument into a complete Minto Pyramid article with drill-dow
 
 ## Required Skills
 
-- @skills:write-documents for article structure, APAPALAN/MECT compliance
+- @skills:write-documents `MINTO_GUIDE.md` for prose style, closing rules, structure decisions
+- @skills:write-documents `MINTO_RULES.md` for structural verification (quality gate)
+- @skills:write-documents for APAPALAN/MECT compliance
 
 ## MUST-NOT-FORGET
 

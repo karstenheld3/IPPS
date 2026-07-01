@@ -254,34 +254,18 @@ Read the rule file for your context and verify against all rules. Also verify ag
 
 Detect by: filename pattern `__DRAFT-MINTO_*.md` (draft) or `_MINTO_*.md` (article).
 
-**Reference**: `_SPEC_MINTO_WORKFLOWS.md [MINTO-SP01]` for full criteria definitions.
+**Read**: @skills:write-documents `MINTO_RULES.md` - contains all MINTO-DS-*, MINTO-AQ-*, MINTO-TI-*, MINTO-ME-*, MINTO-AS-*, MINTO-CL-* rules.
 
 **Verification checklist for Minto Draft (`__DRAFT-MINTO_*`):**
-- [ ] Exactly 3 candidate arguments present
-- [ ] One argument marked `[RECOMMENDED]` (highest composite score)
-- [ ] Selection criteria documented with rationale per candidate
-- [ ] Magnet Rule: each A connects to a listener motivator (IG-07)
-- [ ] Each argument has 1-3 questions ordered Why → How → What (IG-06)
-- [ ] No What-type question precedes a Why-type question
-- [ ] Each question has 1-3 answers (max 3)
-- [ ] One-Argument Test documented per candidate (FR-11)
-- [ ] MECE check: questions under same A do not overlap
-- [ ] MECE check: answers under same Q do not overlap
-- [ ] Source material list present and non-empty
-- [ ] Findings inventory present with source references
+- Verify against MINTO-DS-* rules (3 candidates, recommended marked, criteria, inventory)
+- Verify against MINTO-AQ-* rules (magnet, ordering, one-argument test, declarative answers)
+- Verify against MINTO-ME-* rules (MECE at all levels)
 
 **Verification checklist for Minto Article (`_MINTO_*`):**
-- [ ] Root Section complete (A + all Qs + all QnAns)
-- [ ] Every QnAn has at least one sub-question (QnAn-S1)
-- [ ] Every sub-question has at least one evidence item
-- [ ] No orphan nodes (IG-02)
-- [ ] Every E-node references source material (IG-01)
-- [ ] Closing section present with one line per answer
-- [ ] Closing introduces no new claims (IG-03)
-- [ ] MECE at all levels (IG-04)
-- [ ] AQUASE tree appendix matches prose structure
-- [ ] Prose follows top-down order: conclusion, arguments, evidence
-- [ ] Doc ID assigned
+- Verify against MINTO-TI-* rules (sub-questions, evidence, no orphans, source references)
+- Verify against MINTO-AS-* rules (Doc ID, Executive Summary, section per Q, appendix, top-down order)
+- Verify against MINTO-CL-* rules (closing present, one line per answer, no new claims)
+- Verify against MINTO-ME-* rules (MECE at all levels)
 
 ## Translation Output
 

@@ -250,6 +250,23 @@ Read the rule file for your context and verify against all rules. Also verify ag
   - For _CHECKS: action + evidence + failure indicator per check item
   - No redundancy with referenced files (`core-conventions.md`, templates, other rule files)
 
+## Minto Documents
+
+Detect by: filename pattern `__DRAFT-MINTO_*.md` (draft) or `_MINTO_*.md` (article).
+
+**Read**: @skills:write-documents `MINTO_RULES.md` - contains all MINTO-DS-*, MINTO-AQ-*, MINTO-TI-*, MINTO-ME-*, MINTO-AS-*, MINTO-CL-* rules.
+
+**Verification checklist for Minto Draft (`__DRAFT-MINTO_*`):**
+- Verify against MINTO-DS-* rules (3 candidates, recommended marked, criteria, inventory)
+- Verify against MINTO-AQ-* rules (magnet, ordering, one-argument test, declarative answers)
+- Verify against MINTO-ME-* rules (MECE at all levels)
+
+**Verification checklist for Minto Article (`_MINTO_*`):**
+- Verify against MINTO-TI-* rules (sub-questions, evidence, no orphans, source references)
+- Verify against MINTO-AS-* rules (Doc ID, Executive Summary, section per Q, appendix, top-down order)
+- Verify against MINTO-CL-* rules (closing present, one line per answer, no new claims)
+- Verify against MINTO-ME-* rules (MECE at all levels)
+
 ## Translation Output
 
 Detect by: file has `_[LANG]` suffix (e.g., `report_DE.md`, `video_DE.srt`) and a corresponding source file exists, or context indicates this is `/translate` output.

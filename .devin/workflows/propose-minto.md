@@ -15,7 +15,9 @@ Generate 3 candidate arguments with full AQUASE (Argument-Question-Answer-Subque
 
 ## Required Skills
 
-- @skills:write-documents for output format and APAPALAN/MECT compliance
+- @skills:write-documents `MINTO_GUIDE.md` for strategic decisions (magnet, ordering, selection)
+- @skills:write-documents `MINTO_RULES.md` for structural verification (quality gate)
+- @skills:write-documents for APAPALAN/MECT compliance
 
 ## MUST-NOT-FORGET
 

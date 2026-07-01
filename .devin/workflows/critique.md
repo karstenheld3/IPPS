@@ -249,29 +249,6 @@ Create `[filename]_REVIEW.md` with findings.
 - Are there N+1 query patterns?
 - Any unbounded loops or recursion?
 
-### Minto Documents (Draft or Article)
-
-**Detect by**: filename `__DRAFT-MINTO_*.md` or `_MINTO_*.md`.
-
-**Reference**: `_SPEC_MINTO_WORKFLOWS.md [MINTO-SP01]` Section 10.2.
-
-**Attack vectors for Minto documents:**
-
-- **Weak root argument** - Is A falsifiable? Is there a stronger alternative not considered?
-- **Missing counter-arguments** - What would an opponent say to Q1A1? Is the rebuttal addressed?
-- **Evidence contradiction** - Does any E-node contradict another E-node in the same tree?
-- **Circular reasoning** - Does any answer merely restate the root argument?
-- **Cherry-picked evidence** - Is disconfirming evidence from the source material ignored?
-- **MECE violation** - Do two answers under the same Q say essentially the same thing?
-- **Unsupported leap** - Does any QnAn claim more than its evidence (S/E level) proves?
-- **Strength of weakest branch** - Is one Q-branch significantly weaker than others? (asymmetric support)
-
-**Output format**: Reference AQUASE node IDs directly:
-```
-**[MEDIUM] Logic flaw at Q2A1-S1E2**: Evidence claims "97.3% availability" but source
-(filename-SC-ID) reports this for a different product category.
-```
-
 ### Logs/Console Output Review
 
 When reviewing error logs or console output:
@@ -291,6 +268,25 @@ When reviewing error logs or console output:
    - Cascading errors = missing error boundaries
 
 4. **Update** `_PROBLEMS_REVIEW.md` and `FAILS.md` with root causes found
+
+### Minto Documents
+
+Detect by: `__DRAFT-MINTO_*` or `_MINTO_*` filename pattern.
+
+**Read**: @skills:write-documents `MINTO_GUIDE.md` for intended structure; `MINTO_RULES.md` for rule IDs; `SOCAS_RULES.md` for logic attack patterns.
+
+**Attack vectors** (reference AQUASE node IDs in findings):
+- **Magnet failure** - A does not connect to listener motivator (MINTO-AQ-01)
+- **Circular evidence** - E-node restates parent answer instead of providing independent proof
+- **False MECE** - questions/answers appear distinct but test reveals overlap
+- **Unsupported claim** - answer in prose has no corresponding E-node in appendix
+- **Closing creep** - closing adds nuance, qualification, or claims not in tree (MINTO-CL-04)
+- **Single-source dependency** - entire branch rests on one finding that could be wrong
+- **Misapplied statistic** - evidence (Fnn) cited does not actually support the claim made (SOCAS-10)
+- **Absolute claim vulnerability** - "all", "none", "always", "never" invite counter-examples
+- **Speed/quality trade-off hidden** - positioning argument hides an obvious buyer objection
+
+**Output format**: Each finding references AQUASE node IDs: "C-01 (Q1A2-S1E1): [description]"
 
 ## Devil's Advocate Questions
 

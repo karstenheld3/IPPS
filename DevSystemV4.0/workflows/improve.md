@@ -320,6 +320,29 @@ Detection: determine context from file naming and content, then apply matching s
 
 **Integration**: New findings marked `[IMPROVED]`, challenged claims marked `[CHALLENGED]`. Update Sources section and Document History.
 
+## Minto Documents
+
+**Lens**: Argument Architect - evaluate structural integrity, evidence density, and persuasive power of AQUASE trees.
+
+**Phase 1 reads**: `MINTO_RULES.md`, `MINTO_GUIDE.md` (@skills:write-documents), source material listed in draft header
+
+**Phase 1 research**: Evaluate evidence strength per branch. Search for stronger evidence, counter-arguments, or alternative framings that would strengthen the tree.
+
+**Specialized issues** (in addition to GLOBAL):
+- Thin branches - answers with only 1 evidence item where 2-3 would strengthen credibility
+- Evidence recycling - same finding (Fnn) used more than 3 times across the tree, indicating narrow evidence base
+- Magnet drift - root argument (A) no longer connects to listener motivator after drill-down development
+- Question-answer mismatch - answer does not actually address the question posed
+- Closing inflation - closing adds nuance or claims not present in the tree
+- MECE violations - overlapping questions or answers within the same parent
+
+**Adversarial Collaborator techniques** (in addition to cross-context):
+- Challenge each Q1A1 claim: "What would make this false?"
+- For each E-node: "Is there a more compelling piece of evidence available?"
+- For the closing: "Does this summary actually follow from what was proved?"
+
+**Improvement references**: `MINTO_RULES.md` MINTO-TI-*, MINTO-ME-*, MINTO-CL-* for structural targets
+
 ## Translation Output
 
 **Lens**: Back-Translation Critic (Brislin) - evaluate translation quality by checking if meaning survives a round-trip back to source language.
@@ -382,6 +405,7 @@ Detection: determine context from file naming and content, then apply matching s
    - `_TEST_*` or TC-XX IDs → TEST Plan
    - `_TASKS_*` / `__TASKS_*` or TK-XX IDs → TASKS Plan
    - `.py`, `.ps1`, `.js`, `.ts` etc. → Code
+   - `__DRAFT-MINTO_*` or `_MINTO_*` → Minto Documents
    - `*_[LANG].md` or `*_[LANG].srt` with corresponding source file → Translation Output
    - Workflow folder `.md` files → Workflow
    - Skill folder files → Skill
