@@ -254,18 +254,31 @@ Read the rule file for your context and verify against all rules. Also verify ag
 
 Detect by: filename pattern `__MINTO-DRAFT_*.md` (draft) or `_MINTO_*.md` (article).
 
-**Read**: @skills:write-documents `MINTO_RULES.md` - contains all MINTO-DS-*, MINTO-AQ-*, MINTO-TI-*, MINTO-ME-*, MINTO-AS-*, MINTO-CL-* rules.
+**Read**: @skills:write-documents `MINTO_RULES.md`, `MINTO-DRAFT_TEMPLATE.md`, `MINTO_TEMPLATE.md`
 
 **Verification checklist for Minto Draft (`__MINTO-DRAFT_*`):**
+- Structure matches `MINTO-DRAFT_TEMPLATE.md` (MINTO-DS-06):
+  - Header block: Generated, Source material, Purpose, Listener, Action
+  - Findings Inventory section with Fnn entries (source + label)
+  - Selection Criteria section with weights
+  - Per candidate: Score, Magnet, One-Argument Test, Question ordering, AMINTON tree, Same Kind check
 - Verify against MINTO-DS-* rules (3 candidates, recommended marked, criteria, inventory)
-- Verify against MINTO-AQ-* rules (magnet, ordering, one-argument test, declarative answers)
+- Verify against MINTO-AQ-* rules (magnet, ordering, one-argument test, declarative answers, same kind)
 - Verify against MINTO-ME-* rules (MECE at all levels)
 
 **Verification checklist for Minto Article (`_MINTO_*`):**
+- Structure matches `MINTO_TEMPLATE.md` (MINTO-AS-08):
+  - Header block: Doc ID, Source, Argument
+  - Executive Summary with SCQA (Situation, Complication, Answer)
+  - One section per Q with idea-stating heading (not category label)
+  - Bold claim per answer, evidence woven into paragraphs
+  - Conclusion: one summary line per Q + restated A
+  - Appendix: full AMINTON tree (A through E-nodes with source Fnn refs)
 - Verify against MINTO-TI-* rules (sub-questions, evidence, no orphans, source references)
-- Verify against MINTO-AS-* rules (Doc ID, Executive Summary, section per Q, appendix, top-down order)
+- Verify against MINTO-AS-* rules (Doc ID, SCQA Executive Summary, section per Q, appendix, top-down order)
 - Verify against MINTO-CL-* rules (closing present, one line per answer, no new claims)
 - Verify against MINTO-ME-* rules (MECE at all levels)
+- Every prose paragraph maps to an AMINTON node (no unmapped content)
 
 ## Translation Output
 
