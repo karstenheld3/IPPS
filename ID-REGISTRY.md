@@ -153,6 +153,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **EDIGA** - Energie Digitalisierung A (digitalization in energy sector research)
 - **ENDIG** - Energie Digitalisierung (digitalization in energy sector research)
 - **ENDSY** - Energie Digital Synthese (consolidated INFO from EnergieDigitalA + B)
+- **FINRESAI** - Finance Research AI (research quality/speed value in finance, AI application critique)
 - **FINSTRWF** - Follow Instructions Workflow (post-execution instruction-following gap analysis and remediation)
 - **GLOB** - Global/project-wide items
 - **LLMCG** - LLM Code Generation (RAG-augmented vs fine-tuned vs prompt-engineered approaches comparison)
