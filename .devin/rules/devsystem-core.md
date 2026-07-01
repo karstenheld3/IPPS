@@ -210,35 +210,44 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 
 ## Workflow Reference
 
-- `/build` - BUILD workflow entry point (code output)
 - `/bugfix` - Record and fix bugs (SESSION-MODE or PROJECT-MODE)
+- `/build` - BUILD workflow entry point (code output)
+- `/cleanup` - Delete temporary files and artifacts left by workflows
 - `/commit` - Create conventional commits
 - `/conversation-start` - Create new conversation tracking file
 - `/conversation-update` - Update existing conversation tracking file
 - `/critique` - Devil's Advocate review
-- `/fail` - Record failures to FAILS.md
-- `/drift-detect` - Post-execution drift detection, persist gaps to __DRIFT_ file
+- `/deep-research` - Deep research (MEPI or MCPI) with domain-specific patterns
 - `/drift-correct` - Close gaps identified by /drift-detect
+- `/drift-detect` - Post-execution drift detection, persist gaps to __DRIFT_ file
+- `/fail` - Record failures to FAILS.md
+- `/fix` - Fix any problem by reading relevant DevSystem knowledge
 - `/go` - Autonomous loop until goal reached
 - `/implement` - Execute implementation from plan
+- `/improve` - Depth-first improvement (one proven change per run)
 - `/learn` - Extract learnings from resolved problems
 - `/partition` - Split plans into discrete tasks
 - `/prime` - Load workspace context
+- `/project-release` - Create a dated release with comprehensive release notes
+- `/propose-minto` - Generate AMINTON argument candidates from research material
 - `/reconcile` - Pragmatic review of critique findings
 - `/rename` - Global/local refactoring with verification
 - `/research` - Structured research with verification
 - `/session-archive` - Move session folder to archive
 - `/session-finalize` - Finalize session, sync findings, prepare for archive
-- `/session-new` - Initialize new session
 - `/session-load` - Resume existing session
+- `/session-new` - Initialize new session
 - `/session-save` - Save session progress
 - `/solve` - SOLVE workflow entry point (knowledge output)
+- `/switch-model` - Switch Cascade AI model tier (HIGH, MID, LOW)
 - `/sync` - Document synchronization
 - `/test` - Run tests based on scope
-- `/translate` - Translate markdown or PDF files to target languages
 - `/transcribe` - PDF/web to markdown transcription
+- `/translate` - Translate markdown or PDF files to target languages
 - `/verify` - Verify work against specs and rules
 - `/write-impl-plan` - Create implementation plan from spec
+- `/write-info` - Create INFO document from research
+- `/write-minto` - Develop full Minto Pyramid article from draft
 - `/write-spec` - Create specification from requirements
 - `/write-strut` - Create STRUT plans with proper format
 - `/write-tasks-plan` - Create tasks plan from IMPL/TEST
