@@ -16,7 +16,7 @@ Draft Structure (DS)
 
 Argument Quality (AQ)
 - MINTO-AQ-01: Each A connects to a listener motivator (Magnet Rule)
-- MINTO-AQ-02: Questions ordered Why → How → What (no What precedes Why)
+- MINTO-AQ-02: Questions follow a stated logical ordering (comparative, chronological, structural, or deductive)
 - MINTO-AQ-03: One-Argument Test documented per candidate
 - MINTO-AQ-04: Each answer is a single declarative sentence
 
@@ -88,22 +88,43 @@ Every root argument must connect to a listener motivator. State the magnet expli
 **Magnet**: Saving a resource currently wasted (time on manual audit prep)
 ```
 
-## MINTO-AQ-02: Question Ordering
+## MINTO-AQ-02: Question Ordering Must Be Logical
 
-Questions must follow Why → How → What. No What-type question may precede a Why-type.
+Questions must follow one of Minto's four orderings - there must be a stated reason why Q2 comes after Q1. Arbitrary sequence = rule violation.
 
-**BAD:**
+Valid orderings:
+- **Comparative** (most important first): Why > How > What (Sinek heuristic for persuasion)
+- **Chronological** (cause-effect): What happened? > What caused it? > What should we do?
+- **Structural** (parts of a whole): one Q per division, unit, or component
+- **Deductive** (premise chain): rarely used at Q-level; reserved for paragraph-level
+
+**BAD** (no discernible ordering logic):
 ```markdown
-Q1 (What): What features does it have?
-Q2 (Why): Why does this matter?
-Q3 (How): How does it work?
+Q1: What features does it have?
+Q2: Why does this matter?
+Q3: How does it work?
 ```
+(What-first with no stated reason; appears random)
 
-**GOOD:**
+**GOOD** (comparative - impact-first):
 ```markdown
 Q1 (Why): Why does proof matter more than speed?
 Q2 (How): How do you actually prove output is correct?
 Q3 (What): What does "built for proof" look like in practice?
+```
+
+**GOOD** (chronological - causal chain):
+```markdown
+Q1: What went wrong with the IT system?
+Q2: How did costs escalate undetected?
+Q3: Why is recovery impossible?
+```
+
+**GOOD** (single-question, Minto's simplest structure):
+```markdown
+Q1: Why should pigs be kept as pets?
+  Q1A1: They are beautiful.
+  Q1A2: They could be bred to fascinating variations.
 ```
 
 ## MINTO-TI-03: No Orphan Nodes

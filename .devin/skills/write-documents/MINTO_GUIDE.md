@@ -43,12 +43,31 @@ Override defaults when user provides explicit criteria.
 
 ### 3.1 Question Ordering
 
-Questions under A follow the Why-How-What principle (Sinek):
-- **Q1 (Why)**: Motivation, pain, urgency - always first
-- **Q2 (How)**: Mechanism, proof, capability - second
-- **Q3 (What)**: Scope, features, description - last
+Questions under A arise from what the governing thought naturally raises in the listener's mind. The ordering follows one of Minto's four logical methods (comparative, chronological, structural, deductive) - never arbitrary.
 
-A listener who understands WHY will tolerate HOW and WHAT. A listener who hears WHAT first may never reach WHY.
+**Common question patterns** (from Minto, Exhibit 12):
+
+| Complication type | Natural question |
+|---|---|
+| Something went wrong | What do we do? |
+| Something could go wrong | How can we prevent it? |
+| Something has changed | What should we do? |
+| Someone disagrees | Who is right? |
+
+**Sinek heuristic (Why-How-What)** - useful default for persuasive/sales arguments:
+- **Q1 (Why)**: Motivation, pain, urgency - lead with this when the listener does not yet feel the problem
+- **Q2 (How)**: Mechanism, proof, capability - follow when the listener needs to believe it works
+- **Q3 (What)**: Scope, features, description - last, because What without Why has no pull
+
+A listener who understands WHY will tolerate HOW and WHAT. But this is a starting heuristic, not a law.
+
+**Other valid orderings** (examples from Minto):
+- **Chronological**: "What happened? What caused it? What should we do next?" (investigation)
+- **Structural**: "What are the three divisions' problems?" (one Q per organizational unit)
+- **Comparative**: "Which option is best? What are the trade-offs? What is the risk?" (evaluation)
+- **Single-question**: "Why should pigs be kept as pets?" with multiple independent answers below (Minto's Chesterton example - the simplest and often strongest structure)
+
+**Decision rule**: Choose the ordering that matches how the grouping was formed. If you reasoned by weighing impact, use comparative (most important first). If you traced a causal chain, use chronological. If you divided a system into parts, use structural.
 
 ### 3.2 The One-Argument Test
 

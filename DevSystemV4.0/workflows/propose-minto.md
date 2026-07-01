@@ -23,7 +23,7 @@ Generate 3 candidate arguments with full MINTO Root Sections from source materia
 
 - Selection funnel: 8 candidates → 3 selected (scored), 5 questions → 3 selected (scored), 5 answers → 3 selected
 - Magnet Rule: every candidate A must connect to a listener motivator - eliminate before scoring
-- Question ordering: Why-type first (Q1), How-type second (Q2), What-type last (Q3)
+- Question ordering: must follow a stated logical method (see MINTO_GUIDE.md Section 3.1); Why-How-What is default for persuasion
 - One-Argument Test: can tree collapse to 1Q with 3 answers? If yes, restructure
 - Evidence traceability: every answer must be supportable from findings inventory
 - MECE (Mutually Exclusive, Collectively Exhaustive) at every level: no overlapping questions, no overlapping answers
@@ -90,11 +90,14 @@ For each of the 3 selected arguments, generate 5 questions the reader would ask.
 
 Score each question on two dimensions:
 - **Impact** (1-3): High = urgency or measurable gain; Medium = credibility or proof; Low = descriptive only
-- **Type** (Why / How / What): Why = motivation, pain; How = mechanism, proof; What = scope, features
+- **Type**: Classify as Why (motivation, pain), How (mechanism, proof), What (scope, features), or other (investigation, evaluation, comparison)
 
-Select top 3 questions. Order: Why-type first → How-type second → What-type last.
+Select top 3 questions. Order by one of Minto's four logical methods:
+- **Comparative** (default for persuasion): highest-impact first, typically Why > How > What
+- **Chronological**: cause-effect sequence (investigation, root-cause analysis)
+- **Structural**: one question per division of the subject
 
-Tiebreaker: the one addressing WHY wins.
+Tiebreaker: the question with higher Impact score wins.
 
 Excess candidates (4th, 5th) become drill-down material for `/write-minto`.
 
@@ -164,7 +167,7 @@ Article slug: derived from root argument A, kebab-cased, truncated to 40 chars.
 - [ ] One candidate marked `[RECOMMENDED]` (highest composite score)
 - [ ] Selection criteria documented with rationale
 - [ ] Magnet Rule: each A connects to a listener motivator
-- [ ] Questions ordered Why → How → What (no What precedes Why)
+- [ ] Questions follow a stated logical ordering (MINTO-AQ-02)
 - [ ] One-Argument Test documented per candidate
 - [ ] MECE: questions under same A don't overlap; answers under same Q don't overlap
 - [ ] Findings inventory present with source references
