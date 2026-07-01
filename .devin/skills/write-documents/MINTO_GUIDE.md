@@ -1,6 +1,6 @@
 # Minto Article Guide
 
-Read BEFORE writing. Provides strategic decisions for building AQUASE (Argument-Question-Answer-Subquestion-Evidence) trees and rendering Minto articles.
+Read BEFORE writing. Verify output against `MINTO_RULES.md`. For AQUASE notation details, see `_INFO_AQUASE_ARGUMENT_QUESTION_ANSWER_SUBQUESTION_EVIDENCE.md [AQUASE-IN01]`.
 
 ## 1. Document Types
 
@@ -93,14 +93,11 @@ The closing section:
 - Contains NO claims absent from the tree (nothing new in closing)
 - Serves as the "if you remember nothing else" takeaway
 
-## 5. Review Checklist (Self-Check Before Completion)
+## 5. Process Checklist (Before Completion)
 
-- [ ] A connects to a listener motivator (magnet)
-- [ ] Questions follow Why → How → What order
-- [ ] No What-type question precedes a Why-type question
-- [ ] Answers within one Q are MECE (Mutually Exclusive, Collectively Exhaustive)
-- [ ] Each answer is a single declarative sentence (not compound)
-- [ ] Each evidence item is traceable to a source
-- [ ] Closing restates only proved branches - no new claims
-- [ ] Prose reads naturally without knowledge of the AQUASE structure
-- [ ] One-Argument Test considered and documented
+- [ ] Planning decisions documented (purpose, listener, action, magnet)
+- [ ] One-Argument Test considered and result documented
+- [ ] Scoring criteria selected for article purpose (Section 2.3)
+- [ ] Evidence evaluated for concreteness and independence (Section 3.3)
+- [ ] Prose tested for standalone readability (no tree knowledge required)
+- [ ] Run `/verify` against `MINTO_RULES.md` for structural compliance
