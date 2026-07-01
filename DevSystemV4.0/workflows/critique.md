@@ -275,7 +275,7 @@ Detect by: `__DRAFT-MINTO_*` or `_MINTO_*` filename pattern.
 
 **Read**: @skills:write-documents `MINTO_GUIDE.md` for intended structure; `MINTO_RULES.md` for rule IDs; `SOCAS_RULES.md` for logic attack patterns.
 
-**Attack vectors** (reference AQUASE node IDs in findings):
+**Attack vectors** (reference MINTO node IDs in findings):
 - **Magnet failure** - A does not connect to listener motivator (MINTO-AQ-01)
 - **Circular evidence** - E-node restates parent answer instead of providing independent proof
 - **False MECE** - questions/answers appear distinct but test reveals overlap
@@ -286,7 +286,7 @@ Detect by: `__DRAFT-MINTO_*` or `_MINTO_*` filename pattern.
 - **Absolute claim vulnerability** - "all", "none", "always", "never" invite counter-examples
 - **Speed/quality trade-off hidden** - positioning argument hides an obvious buyer objection
 
-**Output format**: Each finding references AQUASE node IDs: "C-01 (Q1A2-S1E1): [description]"
+**Output format**: Each finding references MINTO node IDs: "C-01 (Q1A2-S1E1): [description]"
 
 ## Devil's Advocate Questions
 
