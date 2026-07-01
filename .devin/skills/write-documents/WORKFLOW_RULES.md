@@ -35,7 +35,7 @@ Content (CT)
 - WF-CT-05: Product names spelled correctly
 - WF-CT-06: APAPALAN requires examples - precision over brevity
 - WF-CT-07: No Document History section in rule files
-- WF-CT-08: Examples use generic placeholders, never real project filenames or failure references
+- WF-CT-08: Examples use generic placeholders, never real project data, never nonsensical or humorous content
 
 Execution (EX)
 - WF-EX-01: Optimize for autonomous execution - no confirmation gates unless destructive
@@ -516,12 +516,21 @@ Before completing, you should verify that:
 
 Examples in workflows must use generic placeholders or fictional names. Never reference real project filenames, session names, failure IDs, or user-specific content. Workflows are reusable across projects.
 
-**BAD:**
+Never use nonsensical, whimsical, or humorous examples. LLMs interpret playful content as a quality signal and will reproduce the tone in output. All examples must be professional and instructive.
+
+**BAD** (real project data):
 ```markdown
 - Example: scope `_INFO_DIGLDR_10-BENCHMARKS.md` → `_INFO_DIGLDR_10-BENCHMARKS_DEFERRED_IMPROVEMENTS.md`
 ```
 
-**GOOD:**
+**BAD** (nonsensical/humorous):
+```markdown
+Q1: Why should pigs be kept as pets?
+  Q1A1: They are beautiful.
+  Q1A2: They could be bred to fascinating variations.
+```
+
+**GOOD** (generic, professional):
 ```markdown
 - Example: scope `_INFO_CRAWLER_SOURCES.md` → `_INFO_CRAWLER_SOURCES_DEFERRED_IMPROVEMENTS.md`
 ```
@@ -571,3 +580,53 @@ If missing, add with defaults.
 
 Create the output file.
 ```
+
+## GRUC Verification (Guides, Rules, Checks)
+
+GRUC documents are skill resource files consumed by LLMs. They have distinct verification requirements from human-facing documents. Detect by: filename pattern `*_GUIDE.md`, `*_RULES.md`, or `*_CHECKS.md` inside a skill folder.
+
+### Branching by GRUC Type
+
+**Guide (`*_GUIDE.md`)** - Strategic decision instructions:
+- Numbered decision steps present (not free prose)
+- No verification checklists (those belong in `*_RULES.md`)
+- Purpose stated in first line (what to read BEFORE doing what)
+- References companion `*_RULES.md` for verification
+- Each section is actionable (tells agent what to DO, not what to know)
+
+**Rules (`*_RULES.md`)** - Verification criteria with examples:
+- Rule Index present at top (all rule IDs listed with one-line descriptions)
+- Every non-trivial rule has BAD/GOOD example pair
+- Rule IDs use consistent prefix format: `[PREFIX]-[CATEGORY]-[NN]`
+- No Document History section (WF-CT-07)
+- Rules are testable (can answer yes/no for any given artifact)
+
+**Checks (`*_CHECKS.md`)** - Execution-time verification lists:
+- Each check item has: action + evidence + failure indicator
+- Checks reference rule IDs they verify
+- Ordered by execution sequence (not alphabetical, not by importance)
+- Can be consumed as a checklist during workflow execution
+
+### Common GRUC Requirements (all three types)
+
+- No visual-only formatting (no bold for emphasis, no filler phrases) - LLMs cannot see bold
+- No Markdown tables - use lists (WF-CT-03)
+- No emojis (WF-CT-04)
+- Examples use generic placeholders only (WF-CT-08)
+- No redundancy with referenced files (`core-conventions.md`, templates, other rule files)
+- Self-contained: agent must not need external context beyond referenced companion files
+- APAPALAN: precise, minimal, goal-first (AP-PR-07, AP-BR-02, AP-ST-01)
+- MECT: one name per concept, no synonyms across the document (AP-NM-01)
+
+### GRUC Verification Checklist
+
+- [ ] Correct file type detected (_GUIDE / _RULES / _CHECKS)
+- [ ] Type-specific requirements met (see branching above)
+- [ ] No visual-only formatting (bold used only in BAD/GOOD labels)
+- [ ] No Markdown tables
+- [ ] No emojis
+- [ ] All examples generic and professional (no project data, no humor)
+- [ ] No Document History section
+- [ ] No redundancy with companion files or `core-conventions.md`
+- [ ] APAPALAN/MECT compliance in all content
+- [ ] All rule IDs unique and consistently formatted
