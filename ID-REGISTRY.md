@@ -183,6 +183,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **NTICP** - Network Traffic Interception (programmatic HTTPS interception for LLM prompt extraction)
 - **WSFT** - Windsurf Features (comprehensive feature research for updating WSRF-IN01)
 - **WMRK** - Watermarking and Provenance (SynthID-Text, C2PA, embedded signal detection for AI-generated text)
+- **RUSESCPOL** - Russia escalation policy in Ukraine war (official statements, nuclear doctrine, red lines)
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 
 ## Document History
