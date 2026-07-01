@@ -20,7 +20,7 @@ The goal: Run [`/go`](.devin/workflows/go.md) and watch the agent execute a mult
 
 ## Core Concepts
 
-IPPS is built on eight integrated specifications that enable autonomous agent operation:
+IPPS is built on ten integrated specifications that enable autonomous agent operation:
 
 - **[AGEN - Agentic English](Docs/Specs/SPEC_AGEN_AGENTIC_ENGLISH.md)** - Controlled vocabulary with verbs `[VERB]`, placeholders `[PLACEHOLDER]`, and states `STATE`. Eliminates ambiguity in agent instructions.
 
@@ -38,6 +38,10 @@ IPPS is built on eight integrated specifications that enable autonomous agent op
 
 - **[SOCAS - Signs of Confusion and Sloppiness](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md)** - 15 criteria for ranking web search results and evaluating agent output quality. Rules in [`SOCAS_RULES.md`](.devin/skills/write-documents/SOCAS_RULES.md). Used by `/deep-research`, `/improve`, and `/verify`.
 
+- **[GRUC - Guides, Rules, Checks](Docs/Concepts/_INFO_GRUC_GUIDES_RULES_CHECKS.md)** - Pre-calculated compliance criteria in three file types: GUIDE (before execution, planning strategy), RULES (whole lifecycle, output verification), CHECKS (after execution, process audit). Separation prevents gaming: CHECKS invisible during work, GUIDE invisible during audit.
+
+- **[AMINTON - Agentic MINTO Notation](Docs/Concepts/_INFO_AGENTIC_MINTO_ARTICLES.md)** - Tree notation for Minto Pyramid articles. Node types: A (root argument), Q (questions), QnAn (answers), QnAn-Sn (sub-questions), QnAn-SnEn (evidence). Enables machine verification of argument completeness. Used by `/propose-minto` and `/write-minto`.
+
 **How they work together:**
 ```
 AGEN provides the language    → Verbs, placeholders, outcomes (-OK, -FAIL, -SKIP)
@@ -48,9 +52,11 @@ MNF provides the safety net   → Critical items that must be verified before co
 APAPALAN provides precision   → Precision first, brevity second (26 enforceable rules)
 MECT provides consistency     → Voice, terminology, naming across documents and code
 SOCAS provides quality gates  → 15 criteria detecting confusion and sloppiness
+GRUC provides compliance      → Pre-calculated criteria for verify, drift-detect, improve
+AMINTON provides arguments    → Tree notation for structured, verifiable Minto articles
 ```
 
-**Design principle:** Each spec has a single responsibility. AGEN defines vocabulary. EDIRD defines phases and gates. STRUT defines notation. TRACTFUL defines documents. MNF prevents oversights. APAPALAN enforces precision and brevity. MECT ensures consistent terminology. SOCAS detects quality degradation. Workflows orchestrate them without hardcoding phase knowledge.
+**Design principle:** Each spec has a single responsibility. AGEN defines vocabulary. EDIRD defines phases and gates. STRUT defines notation. TRACTFUL defines documents. MNF prevents oversights. APAPALAN enforces precision and brevity. MECT ensures consistent terminology. SOCAS detects quality degradation. GRUC pre-calculates compliance. AMINTON structures arguments. Workflows orchestrate them without hardcoding phase knowledge.
 
 **Example** - A hotfix plan in STRUT notation:
 ```
@@ -553,7 +559,7 @@ IPPS/
 - **travel-info** - Travel lookups: flights, trains, transit, country-specific info
 - **windows-desktop-control** - Windows screenshots, window management, keyboard/mouse
 - **windsurf-auto-model-switcher** - Switch Cascade AI model tier programmatically
-- **write-documents** - Document templates (INFO, SPEC, IMPL, TEST, TASKS, STRUT), writing rules (APAPALAN, MECT, SOCAS)
+- **write-documents** - Document templates (INFO, SPEC, IMPL, TEST, TASKS, STRUT, MINTO), writing rules (APAPALAN, MECT, SOCAS)
 - **youtube-downloader** - Download YouTube content as MP3 or video, extract metadata
 
 ### GRUC File Placement
@@ -652,7 +658,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ## Workflows Reference
 
-39 workflows in `.devin/workflows/`:
+41 workflows in `.devin/workflows/`:
 
 **Entry Points**
 - [`/build`](.devin/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
@@ -669,6 +675,8 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 - [`/write-test-plan`](.devin/workflows/write-test-plan.md) - Create test plan from spec
 - [`/write-tasks-plan`](.devin/workflows/write-tasks-plan.md) - Create tasks plan from IMPL/TEST
 - [`/write-strut`](.devin/workflows/write-strut.md) - Create STRUT plans with proper format
+- [`/propose-minto`](.devin/workflows/propose-minto.md) - Generate 3 scored AMINTON argument candidates from research material
+- [`/write-minto`](.devin/workflows/write-minto.md) - Develop full Minto Pyramid article from draft (tree-first, then prose)
 - [`/implement`](.devin/workflows/implement.md) - Execute implementation from context, INFO, SPEC or IMPL documents
 - [`/test`](.devin/workflows/test.md) - Run tests based on scope and context
 - [`/partition`](.devin/workflows/partition.md) - Partition plans into discrete tasks
