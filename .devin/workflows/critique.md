@@ -284,7 +284,7 @@ Detect by: `__DRAFT-MINTO_*` or `_MINTO_*` filename pattern.
 - **Single-source dependency** - entire branch rests on one finding that could be wrong
 - **Misapplied statistic** - evidence (Fnn) cited does not actually support the claim made (SOCAS-10)
 - **Absolute claim vulnerability** - "all", "none", "always", "never" invite counter-examples
-- **Speed/quality trade-off hidden** - positioning argument hides an obvious buyer objection
+- **Hidden trade-off** - positioning argument hides an obvious buyer objection or known downside
 
 **Output format**: Each finding references MINTO node IDs: "C-01 (Q1A2-S1E1): [description]"
 
