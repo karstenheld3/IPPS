@@ -65,7 +65,7 @@ Draft must contain exactly 3 candidate arguments, each with a complete MINTO Roo
 ## Candidate 1 [RECOMMENDED]
 Score: goal_alignment=5, supportability=5, impact=5, specificity=5 (composite: 5.00)
 One-Argument Test: passed
-### A: The AI research tools everyone uses are built for speed - ours is built for proof.
+### A: Migrating to cloud now saves 40% over upgrading the existing system.
 [Full MINTO Root Section with Q1-Q3 and answers]
 
 ## Candidate 2
@@ -86,8 +86,8 @@ Every root argument must connect to a listener motivator. State the magnet expli
 
 **GOOD:**
 ```markdown
-### A: Our platform cuts your audit preparation from 3 weeks to 2 days.
-**Magnet**: Saving a resource currently wasted (time on manual audit prep)
+### A: Migrating to cloud now saves 40% over upgrading the existing system.
+**Magnet**: Saving a resource currently wasted (infrastructure budget on declining hardware)
 ```
 
 ## MINTO-AQ-02: Question Ordering Must Be Logical
@@ -110,9 +110,9 @@ Q3: How does it work?
 
 **GOOD** (comparative - impact-first):
 ```markdown
-Q1 (Why): Why does proof matter more than speed?
-Q2 (How): How do you actually prove output is correct?
-Q3 (What): What does "built for proof" look like in practice?
+Q1 (Why): Why does cloud migration save more than hardware upgrade?
+Q2 (How): How do we migrate without downtime?
+Q3 (What): What does the target architecture look like?
 ```
 
 **GOOD** (chronological - causal chain):
@@ -122,11 +122,12 @@ Q2: How did costs escalate undetected?
 Q3: Why is recovery impossible?
 ```
 
-**GOOD** (single-question, Minto's simplest structure):
+**GOOD** (single-question - simplest structure):
 ```markdown
-Q1: Why should pigs be kept as pets?
-  Q1A1: They are beautiful.
-  Q1A2: They could be bred to fascinating variations.
+Q1: Why should we replace the current system?
+  Q1A1: Upgrading costs more than replacing.
+  Q1A2: The current system cannot handle projected load.
+  Q1A3: Vendor support ends in 6 months.
 ```
 
 ## MINTO-TI-03: No Orphan Nodes
@@ -135,16 +136,16 @@ Every branch must terminate at evidence level. No intermediate nodes left withou
 
 **BAD:**
 ```markdown
-Q1A1: They are beautiful.
+Q1A1: Upgrading costs more than replacing.
   (no sub-question or evidence)
 ```
 
 **GOOD:**
 ```markdown
-Q1A1: They are beautiful.
-  └ Q1A1-S1: "In what way?"
-    ├ Q1A1-S1E1: Lovely curves.
-    └ Q1A1-S1E2: Modesty in the possessor.
+Q1A1: Upgrading costs more than replacing.
+  └ Q1A1-S1: "What makes upgrading more expensive?"
+    ├ Q1A1-S1E1: Legacy vendor charges 3x market rate for equivalent capacity (F03)
+    └ Q1A1-S1E2: Upgrade requires 6 months of parallel operation doubling infra costs (F07)
 ```
 
 ## MINTO-TI-04: Evidence References Source
@@ -153,12 +154,12 @@ Every E-node must reference a finding from the inventory by ID.
 
 **BAD:**
 ```markdown
-Q1A1-S1E1: AI is unreliable in finance.
+Q1A1-S1E1: The vendor is expensive.
 ```
 
 **GOOD:**
 ```markdown
-Q1A1-S1E1: AI hallucinations generate plausible but factually wrong financial data (F08)
+Q1A1-S1E1: Legacy vendor charges 3x market rate for equivalent capacity (F03)
 ```
 
 ## MINTO-ME-01: Questions MECE
@@ -167,16 +168,16 @@ Questions under the same argument must not overlap in scope.
 
 **BAD:**
 ```markdown
-Q1: Why is speed important?
-Q2: Why does latency matter?
+Q1: Why is cost reduction important?
+Q2: Why does saving money matter?
 ```
-(Speed and latency overlap - same concern phrased differently)
+(Cost reduction and saving money overlap - same concern phrased differently)
 
 **GOOD:**
 ```markdown
-Q1: Why does proof matter more than speed?
-Q2: How do you prove output is correct?
-Q3: What does this look like vs. generic tools?
+Q1: Why does cloud migration save more than upgrading?
+Q2: How do we migrate without service disruption?
+Q3: What does the target architecture look like?
 ```
 
 ## MINTO-CL-04: No New Claims in Closing
@@ -193,8 +194,8 @@ The market is also growing at 46% CAGR, making this an excellent investment.
 **GOOD:**
 ```markdown
 ## Conclusion
-Wrong answers delivered fast destroy value. Speed is commoditized. Fiduciary duty demands demonstrable basis.
-The AI research tools everyone uses are built for speed. Ours is built for proof.
+Upgrading costs more than replacing. The current system cannot handle projected load. Vendor support ends in 6 months.
+Migrating to cloud now saves 40% over upgrading the existing system.
 ```
 (Every claim present in tree branches)
 
@@ -204,16 +205,16 @@ Every answer node must capture the *significance* of what it proves, not merely 
 
 **BAD** (labels - intellectually blank):
 ```markdown
-Q1A1: Speed considerations.
-Q1A2: Quality factors.
-Q1A3: Cost implications.
+Q1A1: Cost considerations.
+Q1A2: Capacity factors.
+Q1A3: Support implications.
 ```
 
 **GOOD** (summaries - capture significance):
 ```markdown
-Q1A1: A wrong answer delivered fast causes more damage than a right answer delivered slow.
-Q1A2: Alpha from speed has been competed away - the next edge is being RIGHT.
-Q1A3: Fiduciary duty demands demonstrable basis for every recommendation.
+Q1A1: Upgrading costs more than replacing because the legacy vendor charges 3x market rate.
+Q1A2: The current system hits capacity ceiling at 10K concurrent users - projected load is 25K.
+Q1A3: Vendor support ends in 6 months, leaving critical vulnerabilities unpatched.
 ```
 
 **The test**: Does the answer communicate its point without reading the evidence below? If it merely points at a topic, it fails.
@@ -232,9 +233,9 @@ Section headings must reflect the point being made, not the type of content. Rea
 
 **GOOD** (idea-bearing headings):
 ```markdown
-## Wrong answers cost more than slow answers
-## Verification mechanics already exist but remain unused
-## The difference is visible in real transactions
+## Upgrading costs more than replacing because the legacy vendor charges 3x market rate
+## The current system cannot handle projected load growth
+## Vendor support ends in 6 months leaving critical vulnerabilities unpatched
 ```
 
 **Verification procedure:**

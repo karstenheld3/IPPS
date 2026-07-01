@@ -47,12 +47,10 @@ Questions under A arise from what the governing thought naturally raises in the 
 
 **Common question patterns** (from Minto, Exhibit 12):
 
-| Complication type | Natural question |
-|---|---|
-| Something went wrong | What do we do? |
-| Something could go wrong | How can we prevent it? |
-| Something has changed | What should we do? |
-| Someone disagrees | Who is right? |
+- **Something went wrong** → What do we do?
+- **Something could go wrong** → How can we prevent it?
+- **Something has changed** → What should we do?
+- **Someone disagrees** → Who is right?
 
 **Sinek heuristic (Why-How-What)** - useful default for persuasive/sales arguments:
 - **Q1 (Why)**: Motivation, pain, urgency - lead with this when the listener does not yet feel the problem
@@ -65,7 +63,7 @@ A listener who understands WHY will tolerate HOW and WHAT. But this is a startin
 - **Chronological**: "What happened? What caused it? What should we do next?" (investigation)
 - **Structural**: "What are the three divisions' problems?" (one Q per organizational unit)
 - **Comparative**: "Which option is best? What are the trade-offs? What is the risk?" (evaluation)
-- **Single-question**: "Why should pigs be kept as pets?" with multiple independent answers below (Minto's Chesterton example - the simplest and often strongest structure)
+- **Single-question**: "Why should we replace the current system?" with multiple independent answers below (the simplest and often strongest structure)
 
 **Decision rule**: Choose the ordering that matches how the grouping was formed. If you reasoned by weighing impact, use comparative (most important first). If you traced a causal chain, use chronological. If you divided a system into parts, use structural.
 
