@@ -97,14 +97,31 @@ Prose follows conclusion-first structure:
 3. **Evidence woven in** - S/E level content supports paragraphs without explicit node IDs
 4. **Conclusion** - Summarize proved branches, restate A
 
-### 4.2 Prose Style
+### 4.2 Summarize Don't Label (Minto's Rule 1)
+
+Every summary statement - headings, opening sentences, answer nodes - must capture the *significance* of what follows, not merely label its category. This is the single most common writing failure Minto identifies.
+
+**The test**: Does the summary communicate something meaningful even if the reader never reads the details below?
+
+- **BAD** (labels): "The company has three problems." / "Background" / "Findings" / "Analysis"
+- **GOOD** (summaries): "Three structural problems prevent effective delegation." / "Phase 1 delivers 80% of the cost reduction."
+
+Apply to:
+- **Section headings** - State the idea, not the topic. Reading headings alone should tell the article's story.
+- **Answer nodes** - Each QnAn must be a complete declarative claim, not a topic pointer.
+- **Opening sentences** - Each paragraph's first sentence summarizes the paragraph's point.
+
+Minto: "If you formulate your headings properly, they will stand in the table of contents as a precis of your report."
+
+### 4.3 Prose Style
 
 - Write as if the reader has NOT seen the tree - prose must stand alone
 - Bold the key claim in each paragraph (the answer being proved)
 - Evidence appears as supporting detail within the paragraph, not as a separate list
 - Do NOT include MINTO node IDs in prose sections - the appendix provides the machine-readable structure
+- Default to **inductive** presentation (state the point, then support) - reserve deductive chains for paragraph level where premises stay close together
 
-### 4.3 Closing Generation
+### 4.4 Closing Generation
 
 The closing section:
 - One summary line per answer, grouped by parent question
@@ -112,11 +129,19 @@ The closing section:
 - Contains NO claims absent from the tree (nothing new in closing)
 - Serves as the "if you remember nothing else" takeaway
 
+### 4.5 Revision: Two Diagnostic Tests
+
+Apply at every level during revision:
+- **"So what?"** - If you cannot answer clearly, the statement does not belong. Removes filler, strengthens cause-effect.
+- **"Why is that true?"** - Validates claims or exposes hidden assumptions. Surfaces weakness before the reader does.
+
 ## 5. Process Checklist (Before Completion)
 
 - [ ] Planning decisions documented (purpose, listener, action, magnet)
 - [ ] One-Argument Test considered and result documented
 - [ ] Scoring criteria selected for article purpose (Section 2.3)
 - [ ] Evidence evaluated for concreteness and independence (Section 3.3)
+- [ ] Headings state ideas not categories - reading headings alone tells the story (Section 4.2)
+- [ ] "So what?" and "Why is that true?" applied at every level (Section 4.5)
 - [ ] Prose tested for standalone readability (no tree knowledge required)
 - [ ] Run `/verify` against `MINTO_RULES.md` for structural compliance

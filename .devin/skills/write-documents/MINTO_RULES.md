@@ -19,6 +19,7 @@ Argument Quality (AQ)
 - MINTO-AQ-02: Questions follow a stated logical ordering (comparative, chronological, structural, or deductive)
 - MINTO-AQ-03: One-Argument Test documented per candidate
 - MINTO-AQ-04: Each answer is a single declarative sentence
+- MINTO-AQ-05: Each answer captures significance, not category (Summarize Don't Label)
 
 Tree Integrity (TI)
 - MINTO-TI-01: Every QnAn has at least one sub-question (S-node)
@@ -38,6 +39,7 @@ Article Structure (AS)
 - MINTO-AS-03: One section per Q with heading derived from question text
 - MINTO-AS-04: MINTO tree appendix present and matches prose structure
 - MINTO-AS-05: Prose follows top-down order (conclusion, arguments, evidence)
+- MINTO-AS-06: Section headings state ideas, not categories (reading headings alone tells the story)
 
 Closing (CL)
 - MINTO-CL-01: Closing section present with summary lines grouped by parent Q
@@ -195,6 +197,51 @@ Wrong answers delivered fast destroy value. Speed is commoditized. Fiduciary dut
 The AI research tools everyone uses are built for speed. Ours is built for proof.
 ```
 (Every claim present in tree branches)
+
+## MINTO-AQ-05: Summarize Don't Label
+
+Every answer node must capture the *significance* of what it proves, not merely label a topic. Minto's Rule 1: summaries tell the reader something they could not infer from just seeing the list.
+
+**BAD** (labels - intellectually blank):
+```markdown
+Q1A1: Speed considerations.
+Q1A2: Quality factors.
+Q1A3: Cost implications.
+```
+
+**GOOD** (summaries - capture significance):
+```markdown
+Q1A1: A wrong answer delivered fast causes more damage than a right answer delivered slow.
+Q1A2: Alpha from speed has been competed away - the next edge is being RIGHT.
+Q1A3: Fiduciary duty demands demonstrable basis for every recommendation.
+```
+
+**The test**: Does the answer communicate its point without reading the evidence below? If it merely points at a topic, it fails.
+
+## MINTO-AS-06: Headings State Ideas Not Categories
+
+Section headings must reflect the point being made, not the type of content. Reading only headings should produce a precis of the article.
+
+**BAD** (category labels - no scanning value):
+```markdown
+## Background
+## Analysis
+## Findings
+## Recommendations
+```
+
+**GOOD** (idea-bearing headings):
+```markdown
+## Wrong answers cost more than slow answers
+## Verification mechanics already exist but remain unused
+## The difference is visible in real transactions
+```
+
+**Verification procedure:**
+1. Extract all section headings from the article
+2. Read them in sequence without body text
+3. If they tell a coherent story → pass
+4. If they read like a table of contents of categories → fail
 
 ## MINTO-AS-04: Appendix Matches Prose
 
