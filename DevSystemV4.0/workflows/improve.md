@@ -334,7 +334,7 @@ Detection: determine context from file naming and content, then apply matching s
 - Magnet drift - root argument (A) no longer connects to listener motivator after drill-down development
 - Question-answer mismatch - answer does not actually address the question posed
 - Closing inflation - closing adds nuance or claims not present in the tree
-- MECE violations - overlapping questions or answers within the same parent
+- MECE (Mutually Exclusive, Collectively Exhaustive) violations - overlapping questions or answers within the same parent
 
 **Adversarial Collaborator techniques** (in addition to cross-context):
 - Challenge each Q1A1 claim: "What would make this false?"
