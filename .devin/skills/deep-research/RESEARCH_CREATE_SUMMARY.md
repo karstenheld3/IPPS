@@ -68,7 +68,6 @@ Related files in the same research:
 - **Limitations**: Data quality, scope boundaries, source freshness
 - **NO Progress Tracking**: Progress goes in STRUT or TASKS, not Summary
 - **Research stats**: Added in final phase, not during initial Summary creation
-- **Plain language**: All domain-specific terms, acronyms, codenames, and technical jargon MUST include a parenthetical explanation on first use. Assume the reader has no specialist knowledge. Examples: "RBAC (Role-Based Access Control)", "gRPC (Google Remote Procedure Call framework)", "OIDC (OpenID Connect) flow"
 
 ## Quality Gates
 

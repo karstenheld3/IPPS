@@ -6,8 +6,8 @@ Read BEFORE writing. Verify output against `MINTO_RULES.md`. For AMINTON notatio
 
 Two Minto document types exist:
 
-1. **Draft** (`__DRAFT-MINTO_*.md`) - Scaffolding. Contains findings inventory, selection criteria, and 3 scored candidate arguments with AMINTON Root Sections. Deleted by `/cleanup` after article exists.
-2. **Article** (`_MINTO_*.md`) - Deliverable. Complete top-down prose article with AMINTON tree appendix.
+1. **Draft** (`__DRAFT-MINTO_*.md`) - Scaffolding. Contains findings inventory, selection criteria, and 3 scored candidate arguments with AMINTON Root Sections. Deleted by `/cleanup` after article exists. **Template**: `DRAFT-MINTO_TEMPLATE.md`
+2. **Article** (`_MINTO_*.md`) - Deliverable. Complete top-down prose article with AMINTON tree appendix. **Template**: `MINTO_TEMPLATE.md`
 
 ## 2. Planning Decisions
 

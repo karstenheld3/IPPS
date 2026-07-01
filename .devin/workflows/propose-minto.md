@@ -17,6 +17,7 @@ Generate 3 candidate arguments with full AMINTON Root Sections from source mater
 
 - @skills:write-documents `MINTO_GUIDE.md` for strategic decisions (magnet, ordering, selection)
 - @skills:write-documents `MINTO_RULES.md` for structural verification (quality gate)
+- @skills:write-documents `DRAFT-MINTO_TEMPLATE.md` for output structure
 - @skills:write-documents for APAPALAN/MECT compliance
 
 ## MUST-NOT-FORGET

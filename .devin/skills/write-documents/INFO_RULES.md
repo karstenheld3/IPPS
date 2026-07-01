@@ -14,7 +14,6 @@ Header (HD)
 Summary (SM)
 - INFO-SM-01: Summary section mandatory, positioned immediately after header block
 - INFO-SM-02: Summary items use verification labels
-- INFO-SM-03: All domain-specific terms, acronyms, codenames, and technical jargon explained in parentheses on first use (assume no specialist knowledge)
 
 Table of Contents (TC)
 - INFO-TC-01: TOC entries are clickable markdown links

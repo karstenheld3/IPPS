@@ -13,6 +13,7 @@ Draft Structure (DS)
 - MINTO-DS-03: Selection criteria documented with weights and rationale
 - MINTO-DS-04: Findings inventory present with source references and verification labels
 - MINTO-DS-05: Source material list present and non-empty
+- MINTO-DS-06: Draft follows `DRAFT-MINTO_TEMPLATE.md` structure
 
 Argument Quality (AQ)
 - MINTO-AQ-01: Each A connects to a listener motivator (Magnet Rule)
@@ -42,6 +43,7 @@ Article Structure (AS)
 - MINTO-AS-05: Prose follows top-down order (conclusion, arguments, evidence)
 - MINTO-AS-06: Section headings state ideas, not categories (reading headings alone tells the story)
 - MINTO-AS-07: Executive Summary uses SCQA structure (Situation → Complication → Answer)
+- MINTO-AS-08: Article follows `MINTO_TEMPLATE.md` structure
 
 Closing (CL)
 - MINTO-CL-01: Closing section present with summary lines grouped by parent Q

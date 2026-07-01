@@ -17,6 +17,7 @@ Develop a selected argument into a complete Minto Pyramid article with drill-dow
 
 - @skills:write-documents `MINTO_GUIDE.md` for prose style, closing rules, structure decisions
 - @skills:write-documents `MINTO_RULES.md` for structural verification (quality gate)
+- @skills:write-documents `MINTO_TEMPLATE.md` for output structure
 - @skills:write-documents for APAPALAN/MECT compliance
 
 ## MUST-NOT-FORGET
@@ -25,7 +26,7 @@ Develop a selected argument into a complete Minto Pyramid article with drill-dow
 - No orphan nodes: every Q has A, every A in drill-down has S, every S has E (IG-02)
 - Closing introduces no new claims - only restates proved branches (IG-03)
 - MECE (Mutually Exclusive, Collectively Exhaustive) at all levels (IG-04)
-- Max 3x3 structure enforced: max 3 questions, max 3 answers each (DD-03)
+- Structure: 3-5 questions, max 3 answers each (DD-03)
 - Bottom-up synthesis (thinking) precedes top-down communication (writing)
 - Confirm before overwriting existing `_MINTO_*.md`
 - Reference `_INFO_AGENTIC_MINTO_ARTICLES.md [MINTO-IN01]` for AMINTON notation and tree structure
@@ -91,7 +92,7 @@ Convert complete AMINTON tree into prose article. Structure:
 
 ## Executive Summary
 
-[A restated as opening paragraph. 2-3 sentences max.]
+[SCQA: Situation (what reader knows) -> Complication (what changed) -> Answer (restate A). 2-3 paragraphs max. See MINTO_TEMPLATE.md.]
 
 ## [Q1 as section heading]
 
