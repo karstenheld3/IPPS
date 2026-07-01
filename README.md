@@ -38,7 +38,7 @@ IPPS is built on ten integrated specifications that enable autonomous agent oper
 
 - **[SOCAS - Signs of Confusion and Sloppiness](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md)** - 15 criteria for ranking web search results and evaluating agent output quality. Rules in [`SOCAS_RULES.md`](.devin/skills/write-documents/SOCAS_RULES.md). Used by `/deep-research`, `/improve`, and `/verify`.
 
-- **[GRUC - Guides, Rules, Checks](Docs/Concepts/_INFO_GRUC_GUIDES_RULES_CHECKS.md)** - Pre-calculated compliance criteria in three file types: GUIDE (before execution, planning strategy), RULES (whole lifecycle, output verification), CHECKS (after execution, process audit). Separation prevents gaming: CHECKS invisible during work, GUIDE invisible during audit.
+- **[GRUC - Guides, Rules, Checks](Docs/Concepts/_INFO_GRUC_GUIDES_RULES_CHECKS.md)** - Drift-prevention technique using three file types: GUIDE (before execution, planning strategy), RULES (whole lifecycle, output verification), CHECKS (after execution, process audit). Separation prevents gaming: CHECKS invisible during work, GUIDE invisible during audit.
 
 - **[AMINTON - Agentic MINTO Notation](Docs/Concepts/_INFO_AGENTIC_MINTO_ARTICLES.md)** - Tree notation for Minto Pyramid articles. Node types: A (root argument), Q (questions), QnAn (answers), QnAn-Sn (sub-questions), QnAn-SnEn (evidence). Enables machine verification of argument completeness. Used by `/propose-minto` and `/write-minto`.
 
@@ -52,11 +52,11 @@ MNF provides the safety net   → Critical items that must be verified before co
 APAPALAN provides precision   → Precision first, brevity second (26 enforceable rules)
 MECT provides consistency     → Voice, terminology, naming across documents and code
 SOCAS provides quality gates  → 15 criteria detecting confusion and sloppiness
-GRUC provides compliance      → Pre-calculated criteria for verify, drift-detect, improve
+GRUC prevents drift           → Pre-calculated criteria for verify, drift-detect, improve
 AMINTON provides arguments    → Tree notation for structured, verifiable Minto articles
 ```
 
-**Design principle:** Each spec has a single responsibility. AGEN defines vocabulary. EDIRD defines phases and gates. STRUT defines notation. TRACTFUL defines documents. MNF prevents oversights. APAPALAN enforces precision and brevity. MECT ensures consistent terminology. SOCAS detects quality degradation. GRUC pre-calculates compliance. AMINTON structures arguments. Workflows orchestrate them without hardcoding phase knowledge.
+**Design principle:** Each spec has a single responsibility. AGEN defines vocabulary. EDIRD defines phases and gates. STRUT defines notation. TRACTFUL defines documents. MNF prevents oversights. APAPALAN enforces precision and brevity. MECT ensures consistent terminology. SOCAS detects quality degradation. GRUC prevents drift. AMINTON structures arguments. Workflows orchestrate them without hardcoding phase knowledge.
 
 **Example** - A hotfix plan in STRUT notation:
 ```
@@ -104,7 +104,7 @@ AMINTON provides arguments    → Tree notation for structured, verifiable Minto
 
 ## Overview
 
-IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V4.0) features ten integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT consistency, SOCAS quality criteria, GRUC compliance, and AMINTON arguments.
+IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V4.0) features ten integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT consistency, SOCAS quality criteria, GRUC drift prevention, and AMINTON arguments.
 
 ## How to Add to Your Project
 
