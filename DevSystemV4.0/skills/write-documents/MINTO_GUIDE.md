@@ -41,6 +41,16 @@ Override defaults when user provides explicit criteria.
 
 ## 3. Building the AMINTON Tree
 
+**The tree is the primary working artifact.** Never write prose without a complete AMINTON tree. The tree prevents drift: every paragraph must serve a node, every heading must map to a Q, every claim must trace to a QnAn. If you cannot map output back to the tree, the output does not belong.
+
+Sequence (no exceptions):
+1. Think bottom-up: extract findings, group, synthesize upward into candidate arguments
+2. Build the tree: A → Qs → QnAns → QnAn-Sn → QnAn-SnEn
+3. Verify the tree: MECE, no orphans, logical ordering, same kind same level
+4. THEN write prose top-down from the verified tree
+
+Do not start prose (Section 4) before the tree passes verification. Do not modify prose without checking the tree first.
+
 ### 3.1 Question Ordering
 
 Questions under A arise from what the governing thought naturally raises in the listener's mind. The ordering follows one of Minto's four logical methods (comparative, chronological, structural, deductive) - never arbitrary.
@@ -86,6 +96,8 @@ For each sub-question (S-node), select evidence that:
 - These are cognitive load limits, not minimum requirements
 
 ## 4. Writing the Prose Article
+
+Prose is DERIVED FROM the completed tree, not written independently. Every paragraph must map to an AMINTON node. If prose drifts from the tree, the fix is always: update the tree first, then regenerate prose from it.
 
 ### 4.1 Top-Down Order
 
@@ -136,9 +148,12 @@ Apply at every level during revision:
 ## 5. Process Checklist (Before Completion)
 
 - [ ] Planning decisions documented (purpose, listener, action, magnet)
+- [ ] AMINTON tree complete and verified BEFORE prose was written
 - [ ] One-Argument Test considered and result documented
+- [ ] Same Kind, Same Level: all items in each grouping describable by one plural noun
 - [ ] Scoring criteria selected for article purpose (Section 2.3)
 - [ ] Evidence evaluated for concreteness and independence (Section 3.3)
+- [ ] Every prose paragraph maps to an AMINTON node (no unmapped content)
 - [ ] Headings state ideas not categories - reading headings alone tells the story (Section 4.2)
 - [ ] "So what?" and "Why is that true?" applied at every level (Section 4.5)
 - [ ] Prose tested for standalone readability (no tree knowledge required)
