@@ -250,6 +250,39 @@ Read the rule file for your context and verify against all rules. Also verify ag
   - For _CHECKS: action + evidence + failure indicator per check item
   - No redundancy with referenced files (`core-conventions.md`, templates, other rule files)
 
+## Minto Documents
+
+Detect by: filename pattern `__DRAFT-MINTO_*.md` (draft) or `_MINTO_*.md` (article).
+
+**Reference**: `_SPEC_MINTO_WORKFLOWS.md [MINTO-SP01]` for full criteria definitions.
+
+**Verification checklist for Minto Draft (`__DRAFT-MINTO_*`):**
+- [ ] Exactly 3 candidate arguments present
+- [ ] One argument marked `[RECOMMENDED]` (highest composite score)
+- [ ] Selection criteria documented with rationale per candidate
+- [ ] Magnet Rule: each A connects to a listener motivator (IG-07)
+- [ ] Each argument has 1-3 questions ordered Why → How → What (IG-06)
+- [ ] No What-type question precedes a Why-type question
+- [ ] Each question has 1-3 answers (max 3)
+- [ ] One-Argument Test documented per candidate (FR-11)
+- [ ] MECE check: questions under same A do not overlap
+- [ ] MECE check: answers under same Q do not overlap
+- [ ] Source material list present and non-empty
+- [ ] Findings inventory present with source references
+
+**Verification checklist for Minto Article (`_MINTO_*`):**
+- [ ] Root Section complete (A + all Qs + all QnAns)
+- [ ] Every QnAn has at least one sub-question (QnAn-S1)
+- [ ] Every sub-question has at least one evidence item
+- [ ] No orphan nodes (IG-02)
+- [ ] Every E-node references source material (IG-01)
+- [ ] Closing section present with one line per answer
+- [ ] Closing introduces no new claims (IG-03)
+- [ ] MECE at all levels (IG-04)
+- [ ] AQUASE tree appendix matches prose structure
+- [ ] Prose follows top-down order: conclusion, arguments, evidence
+- [ ] Doc ID assigned
+
 ## Translation Output
 
 Detect by: file has `_[LANG]` suffix (e.g., `report_DE.md`, `video_DE.srt`) and a corresponding source file exists, or context indicates this is `/translate` output.

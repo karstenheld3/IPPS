@@ -249,6 +249,29 @@ Create `[filename]_REVIEW.md` with findings.
 - Are there N+1 query patterns?
 - Any unbounded loops or recursion?
 
+### Minto Documents (Draft or Article)
+
+**Detect by**: filename `__DRAFT-MINTO_*.md` or `_MINTO_*.md`.
+
+**Reference**: `_SPEC_MINTO_WORKFLOWS.md [MINTO-SP01]` Section 10.2.
+
+**Attack vectors for Minto documents:**
+
+- **Weak root argument** - Is A falsifiable? Is there a stronger alternative not considered?
+- **Missing counter-arguments** - What would an opponent say to Q1A1? Is the rebuttal addressed?
+- **Evidence contradiction** - Does any E-node contradict another E-node in the same tree?
+- **Circular reasoning** - Does any answer merely restate the root argument?
+- **Cherry-picked evidence** - Is disconfirming evidence from the source material ignored?
+- **MECE violation** - Do two answers under the same Q say essentially the same thing?
+- **Unsupported leap** - Does any QnAn claim more than its evidence (S/E level) proves?
+- **Strength of weakest branch** - Is one Q-branch significantly weaker than others? (asymmetric support)
+
+**Output format**: Reference AQUASE node IDs directly:
+```
+**[MEDIUM] Logic flaw at Q2A1-S1E2**: Evidence claims "97.3% availability" but source
+(filename-SC-ID) reports this for a different product category.
+```
+
 ### Logs/Console Output Review
 
 When reviewing error logs or console output:
