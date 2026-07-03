@@ -2,11 +2,8 @@
 # Kept as safety net in case .tools/ is accidentally created in workspace
 .tools/
 
-# Private sessions folder (contents ignored, folder tracked)
-# Pattern: ignore all contents (*) but negate (!) the .gitkeep file
-# Result: folder visible in git/Cascade, but session files stay private
-_PrivateSessions/*
-!_PrivateSessions/.gitkeep
+# Private sessions folder (entire folder excluded from git)
+_PrivateSessions/
 
 # Temporary files
 .tmp_*
