@@ -377,6 +377,12 @@ search_web("site:github.com [repo] issue rate limit")
 read_url_content("https://github.com/[org]/[repo]/issues/...")
 ```
 
+## Site-Specific Rules
+
+Mandatory tool overrides for specific websites. These rules take precedence over the default tool selection flowchart.
+
+- **`gesetze-im-internet.de`** - MUST use Playwright browser (ms-playwright-mcp). Never use `search_web` or `read_url_content` for this domain. The `search_web` tool produces UTF-8 parsing errors on German legal text encoding and stops the agent. Navigate directly via `browser_navigate`, extract content via `browser_snapshot` or `browser_evaluate`.
+
 ## Anti-Patterns
 
 - **Using Playwright first** - Always try built-in tools first (faster, cheaper)
