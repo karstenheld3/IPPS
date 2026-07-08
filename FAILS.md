@@ -1,5 +1,20 @@
 # Failure Log
 
+## 2026-07-08 - Private Path Leaked into Reusable Template
+
+### [MEDIUM] `GLOB-FL-034` Used private Dropbox path as example in CONVERSATION_TEMPLATE.md
+
+- **When**: 2026-07-08 10:58 UTC+02:00
+- **Where**: `DevSystemV4.0/skills/write-documents/CONVERSATION_TEMPLATE.md` line 30 (CV-LN-04)
+- **What**: Added rule CV-LN-04 requiring absolute links. Used `e:\Karsten\Dropbox\...\file.pdf` as the example path - a real private filesystem path from the user's screenshot context. This is a reusable template deployed to all linked repos.
+- **Why it went wrong**:
+  - User's screenshot showed real Dropbox paths; agent copied the path pattern verbatim into the example instead of abstracting
+  - Did not re-check agent-behavior.md L63 before writing the example
+  - Same pattern as past leaks: context bleeding from user-provided artifacts into reusable files
+- **Evidence**: CV-LN-04 line contained `e:\Karsten\Dropbox\...\file.pdf` - a private path
+- **Workflow re-read findings**: `agent-behavior.md` L63: "Never leak project-specific or private data into workflows, skills, or rules. These are reusable across projects. Use generic examples and placeholders only."
+- **Prevention rule**: Before writing examples in skills/workflows/rules, always use generic placeholders (`C:\Users\User\Documents\file.pdf`, `[PATH]\file.pdf`). Never copy paths, names, or identifiers from user screenshots or conversation context into reusable files.
+
 ## 2026-06-05 - Asked Unnecessary Clarification
 
 ### [LOW] `GLOB-FL-033` Asked user for permission to use forward slashes instead of just doing it

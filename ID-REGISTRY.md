@@ -143,6 +143,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 
 ## Project Topics
 
+- **AGNTPROB** - Agentic Problems (categorized failure patterns in AI-assisted development)
 - **AIDET** - AI Writing Detection (detection methods, signals, heuristics for identifying AI-generated text)
 - **AMSW** - Auto Model SWitcher (Windsurf model switching automation)
 - **AXCEL** - Agent Excel Skill (Excel automation from Cascade agent)
@@ -188,6 +189,9 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 
 ## Document History
+
+**[2026-07-08 11:44]**
+- Added: AGNTPROB topic (Agentic Problems - categorized failure patterns)
 
 **[2026-06-12 13:15]**
 - Added: FINSTRWF topic (Agent Realign Workflow - instruction-following gap analysis)
