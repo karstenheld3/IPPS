@@ -27,6 +27,7 @@ Read these before proceeding:
 - **Deep beats wide** - Tokens better spent on 2-3 well-researched options than 10+ superficial ones
 - **Document exclusions** - What was NOT considered and why
 - **Keep ALL sources** - Even if findings were minimal
+- **Site exceptions** - Use Playwright browser (NOT `search_web`/`read_url_content`) for: `gesetze-im-internet.de` (UTF-8 errors)
 
 ## Workflow
 
