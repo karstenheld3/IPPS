@@ -28,13 +28,16 @@
       "o3": {"input_per_1m": 2.00, "cached_per_1m": 0.50, "output_per_1m": 8.00, "context_window_k": 200, "currency": "USD"},
       "o3-pro": {"input_per_1m": 20.00, "output_per_1m": 80.00, "context_window_k": 200, "currency": "USD"},
       "o3-mini": {"input_per_1m": 1.10, "cached_per_1m": 0.55, "output_per_1m": 4.40, "context_window_k": 200, "currency": "USD"},
-      "o3-deep-research": {"input_per_1m": 10.00, "cached_per_1m": 2.50, "output_per_1m": 40.00, "context_window_k": 200, "currency": "USD"},
+      "o3-deep-research": {"input_per_1m": 5.00, "output_per_1m": 20.00, "context_window_k": 200, "currency": "USD"},
       "o4-mini": {"input_per_1m": 1.10, "cached_per_1m": 0.275, "output_per_1m": 4.40, "context_window_k": 200, "currency": "USD"},
-      "o4-mini-deep-research": {"input_per_1m": 2.00, "cached_per_1m": 0.50, "output_per_1m": 8.00, "context_window_k": 200, "currency": "USD"},
-      "computer-use-preview": {"input_per_1m": 3.00, "output_per_1m": 12.00, "context_window_k": 128, "currency": "USD"},
+      "o4-mini-deep-research": {"input_per_1m": 1.00, "output_per_1m": 4.00, "context_window_k": 200, "currency": "USD"},
+      "computer-use-preview": {"input_per_1m": 1.50, "output_per_1m": 6.00, "context_window_k": 128, "currency": "USD"},
       "gpt-image-1.5": {"input_per_1m": 5.00, "cached_per_1m": 1.25, "output_per_1m": 10.00, "context_window_k": 128, "currency": "USD"}
     },
     "anthropic": {
+      "claude-fable-5": {"input_per_1m": 10.00, "cached_per_1m": 1.00, "output_per_1m": 50.00, "context_window_k": 1000, "currency": "USD"},
+      "claude-mythos-5": {"input_per_1m": 10.00, "cached_per_1m": 1.00, "output_per_1m": 50.00, "context_window_k": 1000, "currency": "USD"},
+      "claude-sonnet-5": {"input_per_1m": 2.00, "cached_per_1m": 0.20, "output_per_1m": 10.00, "context_window_k": 1000, "currency": "USD"},
       "claude-opus-4-8": {"input_per_1m": 5.00, "cached_per_1m": 0.50, "output_per_1m": 25.00, "context_window_k": 1000, "currency": "USD"},
       "claude-opus-4-7": {"input_per_1m": 5.00, "cached_per_1m": 0.50, "output_per_1m": 25.00, "context_window_k": 1000, "currency": "USD"},
       "claude-opus-4-6": {"input_per_1m": 5.00, "cached_per_1m": 0.50, "output_per_1m": 25.00, "context_window_k": 200, "currency": "USD"},
@@ -51,7 +54,7 @@
       "claude-3-haiku-20240307": {"input_per_1m": 0.25, "cached_per_1m": 0.03, "output_per_1m": 1.25, "context_window_k": 200, "currency": "USD"}
     }
   },
-  "last_updated": "2026-05-30",
+  "last_updated": "2026-07-09",
   "sources": [
     "https://platform.claude.com/docs/en/about-claude/pricing",
     "https://developers.openai.com/api/docs/pricing?latest-pricing=standard"
