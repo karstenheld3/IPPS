@@ -32,6 +32,7 @@
 - [SOP 4: DevSystem Version Changed](#sop-4-devsystem-version-changed)
 - [SOP 5: Model Registry JSON Files Updated](#sop-5-model-registry-json-files-updated)
 - [SOP 6: Workflow Added, Edited, or Removed](#sop-6-workflow-added-edited-or-removed)
+- [SOP 7: Post-Release Version Bump](#sop-7-post-release-version-bump)
 - [Common Verification Commands](#common-verification-commands)
 
 ## Quick Reference: Sync Command
@@ -378,6 +379,54 @@ Select-String -Path "[WORKSPACE]\README.md" -Pattern "<workflow>"  # should retu
 Select-String -Path "[WORKSPACE]\deploy-to-all-repos.md" -Pattern "<workflow>"
 ```
 
+## SOP 7: Post-Release Version Bump
+
+**Scenario**: A release was tagged (e.g., `v4.0`). The working version must be incremented immediately so ongoing development is distinguishable from the released state.
+
+**Why**: Without a bump, the folder name matches the tagged release. Anyone (human or agent) inspecting the workspace cannot tell whether the current state IS the release or has diverged. Git tags are invisible in the filesystem.
+
+### When to apply
+
+Immediately after `git tag` and `git push --tags` for a release. This is the LAST step of the release process.
+
+### Steps
+
+1. **Determine next version**: Increment minor version (e.g., `4.0` → `4.1`). Use major bump only if explicitly planned.
+
+2. **Rename working folder**:
+   ```powershell
+   Rename-Item "[WORKSPACE]\DevSystem[OLD_VERSION]" "DevSystem[NEW_VERSION]"
+   ```
+
+3. **Update `NOTES.md`**:
+   - `Current [DEVSYSTEM]: DevSystem[NEW_VERSION]`
+
+4. **Sync to `.devin/`**:
+   ```powershell
+   Copy-Item -Path "[WORKSPACE]\DevSystem[NEW_VERSION]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
+   ```
+
+5. **Commit**:
+   ```powershell
+   git add -A
+   git commit -m "chore: bump working version to [NEW_VERSION]"
+   ```
+
+### Verification
+
+```powershell
+# 1. Old folder gone, new folder exists
+-not (Test-Path "[WORKSPACE]\DevSystem[OLD_VERSION]")
+Test-Path "[WORKSPACE]\DevSystem[NEW_VERSION]"
+
+# 2. NOTES.md references new version
+Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "Current \[DEVSYSTEM\]: DevSystem[NEW_VERSION]"
+
+# 3. .devin/ is synced (spot-check)
+(Get-ChildItem "[WORKSPACE]\DevSystem[NEW_VERSION]" -Recurse -File).Count -eq `
+(Get-ChildItem "[WORKSPACE]\.devin" -Recurse -File).Count
+```
+
 ## Common Verification Commands
 
 ### Check for `__pycache__` pollution
@@ -412,6 +461,9 @@ Compare-Object $src $dst | Where-Object SideIndicator -eq "<="
 Run `/deploy-to-all-repos` in preview mode. Any unexpected items in `Add` / `Overwrite` / `Delete` indicate a missed sync or unregistered skill.
 
 ## Document History
+
+**[2026-07-13 13:54]**
+- Added: SOP 7 for post-release version bump (increment working version after tagging)
 
 **[2026-06-13 13:47]**
 - Added: SOP 6 for workflow add/edit/remove with sync to `[AGENT_FOLDER]`

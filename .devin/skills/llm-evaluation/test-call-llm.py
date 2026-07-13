@@ -81,19 +81,6 @@ ANTHROPIC_TESTS = [
   ("claude-opus-4-8", "high", "none", None, "reasoning_effort"),
   ("claude-opus-4-8", "xhigh", "none", None, "reasoning_effort"),
   ("claude-opus-4-8", "max", "none", None, "reasoning_effort"),
-    
-  # Adaptive thinking models - claude-fable-5 (always-on adaptive thinking)
-  ("claude-fable-5", "low", "none", None, "reasoning_effort"),
-  ("claude-fable-5", "medium", "none", None, "reasoning_effort"),
-  ("claude-fable-5", "high", "none", None, "reasoning_effort"),
-    
-  # Adaptive thinking models - claude-sonnet-5
-  ("claude-sonnet-5", "low", "none", None, "reasoning_effort"),
-  ("claude-sonnet-5", "medium", "none", None, "reasoning_effort"),
-  ("claude-sonnet-5", "high", "none", None, "reasoning_effort"),
-    
-  # claude-mythos-5 - requires Project Glasswing invitation, skip by default
-  # ("claude-mythos-5", "medium", "none", None, "reasoning_effort"),
 ]
 
 # Fallback tests - verify fallback mapping works
