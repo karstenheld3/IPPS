@@ -11,7 +11,7 @@ Structured research about a topic with step-by-step findings and source document
 
 Read these before proceeding:
 - `[AGENT_FOLDER]/rules/research-and-report-writing-rules.md` for MEPI/MCPI research depth
-- @write-documents for INFO document structure
+- @write-documents `INFO_GUIDE.md` and `INFO_RULES.md` for INFO document structure and formatting rules
 - @write-documents `APAPALAN_RULES.md` for writing quality (precision, brevity, structure, naming)
 
 ## MUST-NOT-FORGET

@@ -7,11 +7,13 @@
 ## MUST-NOT-FORGET
 
 <!-- Remove this section after writing the document -->
-- Every claim needs a source ID: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
+- Factual claims from external sources need a source ID: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`. Derived analysis references supporting sections
+- Online sources, apps, tools: include inline markdown link at first mention in each content section (INFO-SC-05)
 - Summary items need verification labels: [VERIFIED], [ASSUMED], [TESTED], [PROVEN]
 - Check ID-REGISTRY.md before creating new TOPICs (7-14 uppercase chars required)
 - Inside T##/S## folders: use nested Doc ID format `[TOPIC]-[SUBTOPIC]-IN[NN]`
 - Document History at end, reverse chronological
+- Date formats per `core-conventions.md` "Date and Time Format" section
 
 ## Summary
 
@@ -29,7 +31,9 @@
 
 ## 1. [Section 1]
 
-[Content organized by subtopic]/
+[Content organized by subtopic. Include inline link at first mention of each online source:]
+
+According to the [Source Name](https://example.com/page), [key finding or claim].
 
 ### 1.1 [Subtopic]
 

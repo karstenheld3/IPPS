@@ -30,6 +30,7 @@ Sources (SC)
 - INFO-SC-02: Each source entry has URL or file reference AND primary finding
 - INFO-SC-03: Sources section lists only findable/verifiable sources
 - INFO-SC-04: URLs start with `https://` (clickable in editors and terminals)
+- INFO-SC-05: Inline source links in content sections at first mention of each online source, app, or tool
 
 Format (FT)
 - INFO-FT-01: Standard section order per `INFO_GUIDE.md` Section 2
@@ -72,6 +73,8 @@ Must follow `[TOPIC]-IN[NN]` pattern. TOPIC is 7-14 uppercase letters, registere
 
 For new documents with no updates: `Created 2026-06-20, Updated 0 times`
 
+For living/catalog documents that accumulate entries over time, Timeline may be omitted when Document History provides equivalent chronology.
+
 ## INFO-SM-01: Summary Section
 
 Summary is mandatory and positioned immediately after the header block. Contains copy-paste-ready key findings.
@@ -94,7 +97,9 @@ Summary is mandatory and positioned immediately after the header block. Contains
 
 ## INFO-SM-02: Verification Labels
 
-Summary items use `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, or `[PROVEN]` labels. Not every item requires a label, but key claims must have one.
+Summary items use `[VERIFIED]`, `[UNVERIFIED]`, `[ASSUMED]`, `[TESTED]`, or `[PROVEN]` labels. Not every item requires a label, but key claims must have one.
+
+These are *research confidence labels* applied during writing. They are distinct from `ID-REGISTRY.md` *retrospective assumption labels* (`[CONTRADICTS]`, `[OUTDATED]`, `[INCOMPLETE]`) which are applied in FAILS/LEARNINGS after assumptions proved wrong.
 
 Labels are applied by writing and verification workflows, never pre-filled in templates. Templates use `[LABEL]` as placeholder.
 
@@ -205,6 +210,33 @@ All URLs in source entries must start with `https://` (or `http://` if HTTPS una
 **BAD:** `docs.example.com/oauth`, `www.microsoft.com/learn`
 
 **GOOD:** `https://docs.example.com/oauth`, `https://learn.microsoft.com/oauth`
+
+## INFO-SC-05: Inline Source Links
+
+When a content section discusses information from an online source, app, or tool, include the URL as a markdown link at first mention in that section. The centralized Sources section remains as the reference with source IDs and primary findings. Inline links provide immediate access without scrolling.
+
+**BAD** (URL only in Sources section, no inline link):
+```markdown
+## 2. Token Refresh
+
+Token refresh requires client_secret for confidential apps.
+```
+
+**GOOD** (inline link at first mention):
+```markdown
+## 2. Token Refresh
+
+Token refresh requires client_secret for confidential apps ([Microsoft OAuth docs](https://learn.microsoft.com/oauth)).
+```
+
+**Also acceptable** (link text describes the source):
+```markdown
+## 2. Token Refresh
+
+According to the [Microsoft OAuth documentation](https://learn.microsoft.com/oauth), token refresh requires client_secret for confidential apps.
+```
+
+**When to apply:** Online sources, apps, and tools that have a URL. Local file references (`filename.py`) do not need inline links.
 
 ## INFO-FT-02: Document History
 
