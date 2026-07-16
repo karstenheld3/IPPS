@@ -42,6 +42,11 @@ Structure (ST)
 - AP-ST-06: Visual thought grouping (cluster related, separate distinct)
 - AP-ST-07: Cognitive load limit (max 7 ungrouped items)
 
+Communication (CM) - outbound text to counterparts (emails, messages, replies)
+- AP-CM-01: Accountable commitments - every commitment states action, deliverable, and timing
+- AP-CM-02: Labeled questions and requests - own paragraph, blank-line separated, labeled (Question:/Request:), fully self-contained
+- AP-CM-03: Time precision in communication - weekday + ISO date, timezone when scheduling, periods include year
+
 Naming (NM)
 - AP-NM-01: One name per concept (no polysemy, no synonyms)
 - AP-NM-02: Unambiguous compound names (word order determines meaning)
@@ -55,13 +60,16 @@ Naming (NM)
 - [Precision Rules (PR)](#precision-rules-pr)
 - [Brevity Rules (BR)](#brevity-rules-br)
 - [Structure Rules (ST)](#structure-rules-st)
+- [Communication Rules (CM)](#communication-rules-cm)
 - [Naming Rules (NM)](#naming-rules-nm)
 
 ## Core Principle
 
 **Priority 1: Precision** - Never sacrifice clarity for brevity. Every statement must be unambiguous. A reader must understand exactly what is meant without guessing.
 
-**Priority 2: Brevity** - After precision is guaranteed, remove every unnecessary word. Sacrifice grammar, filler, and repetition. But never sacrifice a word that carries meaning.
+**Priority 2: Brevity** - After precision is guaranteed, remove every unnecessary word. Sacrifice grammar, filler, and noise repetition. But never sacrifice a word that carries meaning.
+
+**Critical boundary - noise vs signal redundancy:** Brevity rules (AP-BR-*) cut NOISE words (filler, structural repetition that adds zero information). They NEVER cut SIGNAL redundancy (restated referents, concept anchors, disambiguation words that prevent the reader from guessing). A word is signal redundancy when removing it forces the reader to interpolate from memory or context. "The authentication retry handles transient network errors" repeats "authentication" and specifies "transient network" - both are signal redundancy that a brevity pass must preserve.
 
 **Anti-pattern**: Cryptic abbreviations sacrifice precision for brevity.
 - BAD: `P=1`, `F1=1` - unclear type, unclear meaning
@@ -426,6 +434,8 @@ SESSION-MODE: Read NOTES.md, PROBLEMS.md, PROGRESS.md, FAILS.md
 ### AP-BR-03: DRY Within Same Document Scope
 
 Never repeat the same information within one document. Reference instead of restating. (For action requests to others, see AP-ST-04 which overrides this.)
+
+**Does NOT apply to:** Concept anchors and disambiguation words that reinforce the reader's mental model. Restating a referent ("the authentication retry" instead of "it") is signal redundancy, not DRY violation. DRY targets identical BLOCKS of information, not individual words that anchor concepts.
 
 **BAD:**
 ```
@@ -870,6 +880,83 @@ Coordination:
 - Ordered steps (sequence provides structure: step 1, 2, 3... up to ~10)
 - Exhaustive lookup lists where completeness is key (e.g., all country codes, all error codes, all supported file types). Grouping these adds noise because the reader needs to scan quickly, not memorize. Keep existing sequence or topology if one exists; if none, sort alphabetically.
 - Rule indexes (this document - grouped by category)
+
+## Communication Rules (CM)
+
+Rules for outbound text to counterparts: emails, WhatsApp messages, replies, meeting requests. These apply when writing TO another person, not when writing documents, code, or logs.
+
+**Scope distinction**: PR/BR/ST/NM rules apply to all text (documents, code, logs, communication). CM rules apply ONLY to outbound communication where a counterpart reads and acts.
+
+### AP-CM-01: Accountable Commitments
+
+Every commitment in outbound communication states WHAT the counterpart receives and WHEN: action, deliverable, weekday + ISO date + time. Vague actions leave the counterpart guessing and force follow-up questions.
+
+**BAD** (counterpart does not know what to expect):
+```
+I'll sign tomorrow.
+We'll take care of the heating issue soon.
+I'll look into the invoice.
+```
+
+**GOOD** (action, deliverable, timing explicit):
+```
+I'll send the signed contract back tomorrow (Friday, 2026-07-17) by 12:00 CET.
+The plumber comes Friday, 2026-07-17, 09:00-12:00. I'll confirm by email once the heating works.
+I'll check the invoice and send you the payment confirmation by tomorrow evening (Friday, 2026-07-17, 18:00 CET).
+```
+
+**Relates to** AP-PR-07 (Be Specific) and AP-ST-03 (Self-Contained Units): a commitment is a promise - it must be precise enough that the counterpart can hold you to it without asking clarifying questions.
+
+### AP-CM-02: Labeled Questions and Requests
+
+Every question and call-to-action stands in its own paragraph, separated by blank lines, labeled and fully self-contained. Label questions with "Question:" and action requests with "Request:" (DE: Frage/Bitte, FR: Question/Demande, ES: Pregunta/Solicitud). The ask carries its own context - the counterpart understands it without re-reading.
+
+**BAD** (ask buried in paragraph, unlabeled, not self-contained):
+```
+I reviewed the contract and the terms look fine to me and I was wondering
+if we could maybe also talk about the timeline. Agreed?
+```
+
+**GOOD** (labeled, self-contained question in own paragraph):
+```
+I reviewed the contract - the terms look fine to me.
+
+Question: Can we discuss the project timeline in our meeting on Tuesday, 2026-03-24?
+```
+
+**GOOD** (labeled request with explicit timing):
+```
+I've prepared the updated proposal with the Q2 2026 numbers.
+
+Request: Can you please review the attached proposal and send your feedback by Friday, 2026-07-17 18:00 CET?
+```
+
+**Relates to** AP-ST-04 (Anti-DRY for Delegation): ST-04 says inline 100% for action requests. CM-02 adds the structural requirement: own paragraph, blank-line separation, label prefix, and self-containment test ("Can the counterpart answer/act without re-reading?").
+
+### AP-CM-03: Time Precision in Communication
+
+State dates as weekday + ISO date, times as `HH:MM` with timezone when scheduling across locations. Periods include the year. The weekday adds disambiguation in the reader's mind.
+
+**BAD:**
+```
+Let's meet Tuesday at 2pm.
+The Q2 numbers look good.
+The first installment is due next month.
+```
+
+**GOOD:**
+```
+Let's meet Tuesday, 2026-03-24 14:00 CET.
+The Q2 2026 numbers look good.
+The first installment is due next month (August, 2026-08).
+```
+
+**Language equivalents** (weekday in target language):
+- DE: "Freitag, 2026-07-17"
+- FR: "vendredi 2026-07-17"
+- ES: "viernes, 2026-07-17"
+
+**Relates to** AP-PR-01: PR-01 defines the format (`YYYY-MM-DD HH:MM`). CM-03 adds the disambiguation requirements for communication: weekday prefix, timezone when cross-location, year on period references.
 
 ## Naming Rules (NM)
 

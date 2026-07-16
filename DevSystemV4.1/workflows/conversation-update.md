@@ -10,7 +10,7 @@ Append new communication (emails, WhatsApp, attachments) to an existing `CONVERS
 
 **Why**: Conversation files grow over time. This workflow ensures consistent formatting, auto-transcription, auto-translation, and proper linking when adding new content.
 
-Scope: Updates existing conversation files only. To create new conversations, use `/conversation-start`.
+Scope: Updates existing conversation files only. To create new conversations, use `/conversation-start`. To draft emails/messages as the user, use `/conversation-draft`.
 
 ## Required Skills
 

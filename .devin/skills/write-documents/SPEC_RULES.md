@@ -40,24 +40,6 @@ Rules for writing specification documents with GOOD/BAD examples.
 - **SPEC-FT-02**: No Markdown tables in changelogs
 - **SPEC-FT-03**: Proper header block and section order
 
-## Table of Contents
-
-- [Requirements Format](#requirements-format)
-- [Logging Requirements](#logging-requirements)
-- [UI Diagrams](#ui-diagrams)
-- [Before/After Change Diagrams](#beforeafter-change-diagrams)
-- [UX Text Fidelity](#ux-text-fidelity)
-- [Layer Architecture Diagrams](#layer-architecture-diagrams)
-- [Summarize Styling](#summarize-styling)
-- [Code Outline Only](#code-outline-only)
-- [Single Line Statements](#single-line-statements)
-- [Compact Object Definitions](#compact-object-definitions)
-- [Compact Gate Checklists](#compact-gate-checklists)
-- [Event Flow Documentation](#event-flow-documentation)
-- [Data Structure Examples](#data-structure-examples)
-- [Document History Format](#document-history-format)
-- [Section Order and Header](#section-order-and-header)
-
 ## Requirements Format
 
 **BAD:**

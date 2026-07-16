@@ -31,6 +31,13 @@
 - LINKS COMPLETENESS: All attachments, transcriptions, translations recorded in Links section - CV-LN-03
 - CHECK DOWNLOADED IMAGES - After downloading, review each image. Delete signature icons, logos, spacers, and other email template garbage. Keep only real attachments - CV-AT-01
 - No markdown tables except when sent in emails
+- HUMANIZING: When drafting AS user, apply MECT/APAPALAN as baseline + 1-5% humanizing (CV-HM-*). Humanizing adds texture, not imprecision - CV-HM-01
+- CONSISTENCY ANCHORING: Analyze user's prior messages before first draft. Extract greeting/closing, sentence length, punctuation, discourse markers - CV-HM-02
+- SPELLING VARIANTS: Same word = same spelling every time. Track in SPELLING_VARIANTS - CV-HM-03
+- SENTENCE RHYTHM: Vary sentence length. No 3+ consecutive sentences of similar word count - CV-HM-05
+- QUESTIONS/CTA IN OWN PARAGRAPH: Every question and call-to-action in its own paragraph, separated by blank lines, labeled (Question:/Request:), fully self-contained - AP-CM-02
+- ACCOUNTABLE COMMITMENTS: Every commitment states action, deliverable, and timing - AP-CM-01
+- TIME PRECISION: Weekday + ISO date, HH:MM with timezone when scheduling; periods include year - AP-CM-03
 
 ## Ignore Files
 
@@ -44,6 +51,15 @@ Files matching these patterns should NOT be downloaded. If downloaded, delete th
 - **CONVERSATION_AUTO_TRANSLATE**=true
 - **CONVERSATION_DO_NOT_TRANSLATE_LIST**: English, ...
 - **TRANSLATION_TERM_PAIRS**: [TERM1_LOCAL] -> [TERM1_ENGLISH] | [TERM2_LOCAL] -> [TERM2_ENGLISH] | ...
+
+## Humanizing Settings
+
+- **SPELLING_VARIANTS**: [standard orthography]
+- **DISCOURSE_MARKERS**: [use language defaults, 1-2 per message]
+- **GREETING_VARIANTS**: [extract from first user message]
+- **CLOSING_VARIANTS**: [extract from first user message]
+- **SENTENCE_LENGTH_PROFILE**: [short: 30%, medium: 40%, long: 30%]
+- **ANCHORING**: INSUFFICIENT_HISTORY
 
 ## Status
 

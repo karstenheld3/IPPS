@@ -26,6 +26,7 @@ References (RF)
 - WF-RF-02: Skill references use @skills: format: `@skills:skill-name`
 - WF-RF-03: No hardcoded paths - use placeholders
 - WF-RF-04: Cross-references use relative paths from `[AGENT_FOLDER]`
+- WF-RF-05: Never replicate rule content from referenced files - reference by ID only (prevents drift and dependency problems)
 
 Content (CT)
 - WF-CT-01: Avoid AGEN verbs in prose descriptions
@@ -36,6 +37,7 @@ Content (CT)
 - WF-CT-06: APAPALAN requires examples - precision over brevity
 - WF-CT-07: No Document History section in rule files
 - WF-CT-08: Examples use generic placeholders, never real project data, never nonsensical or humorous content
+- WF-CT-09: References in skill files only to `[AGENT_FOLDER]`-internal files, never project-specific documents
 
 Execution (EX)
 - WF-EX-01: Optimize for autonomous execution - no confirmation gates unless destructive
@@ -394,6 +396,29 @@ Read @coding-conventions for Python rules.
 Use @write-documents for templates.
 ```
 
+## No Content Replication
+
+Never copy rule descriptions, examples, or checklists from a referenced file. Reference by file + rule ID. If the source changes, replicas drift silently.
+
+**BAD** (replicates rule content - creates maintenance dependency):
+```markdown
+Effective Writing (see APAPALAN_RULES.md)
+- AP-CM-01: Accountable commitments - every commitment states action, deliverable, and timing
+- AP-CM-02: Labeled questions and requests - own paragraph, blank-line separated, labeled
+- AP-CM-03: Time precision - weekday + ISO date, timezone when scheduling
+```
+
+**GOOD** (reference only):
+```markdown
+Effective Writing - see `APAPALAN_RULES.md` Communication (CM) section: AP-CM-01, AP-CM-02, AP-CM-03
+```
+
+**GOOD** (in MNF or workflow steps - ID-only reference):
+```markdown
+- AP-CM-01, AP-CM-02, AP-CM-03 apply to every draft
+- Verify against Anti-Pattern Index in `CONVERSATION_HUMANIZING_RULES.md`
+```
+
 ## Path Placeholders
 
 Never hardcode paths.
@@ -614,7 +639,8 @@ GRUC documents are skill resource files consumed by LLMs. They have distinct ver
 - No emojis (WF-CT-04)
 - Examples use generic placeholders only (WF-CT-08)
 - No redundancy with referenced files (`core-conventions.md`, templates, other rule files)
-- Self-contained: agent must not need external context beyond referenced companion files
+- Self-contained: agent must not need external context beyond referenced companion files (WF-CT-09)
+- References point only to files within `[AGENT_FOLDER]` (skills, workflows, rules). Never reference project-specific research (`Docs/`, `_INFO_*.md`), external URLs, or documents outside agent folder hierarchy
 - APAPALAN: precise, minimal, goal-first (AP-PR-07, AP-BR-02, AP-ST-01)
 - MECT: one name per concept, no synonyms across the document (AP-NM-01)
 
@@ -628,5 +654,6 @@ GRUC documents are skill resource files consumed by LLMs. They have distinct ver
 - [ ] All examples generic and professional (no project data, no humor)
 - [ ] No Document History section
 - [ ] No redundancy with companion files or `core-conventions.md`
+- [ ] All references point to `[AGENT_FOLDER]`-internal files only (WF-CT-09)
 - [ ] APAPALAN/MECT compliance in all content
 - [ ] All rule IDs unique and consistently formatted

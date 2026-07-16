@@ -1,5 +1,48 @@
 # Failure Log
 
+## 2026-07-16 - Point-Fixes Instead of Requirement Propagation
+
+### [HIGH] `GLOB-FL-037` Fixed only flagged lines, never propagated requirements file-wide
+
+- **When**: 2026-07-16 12:41-13:22 UTC+02:00
+- **Where**: `DevSystemV4.1/skills/write-documents/` - CONVERSATION_HUMANIZING_RULES.md, CONVERSATION_RULES.md, CONVERSATION_TEMPLATE.md
+- **What**: Across ~8 consecutive corrections (Umlauts, ISO dates, timezone, weekday, Q2+year, questions/CTA separation, accountable commitments, natural phrasing), agent fixed the user-flagged line but left sibling examples and related files with the same defect. User found deviation after deviation: "I'm getting really angry because I find sooooo many little deviations and inconsistencies."
+- **Why it went wrong**:
+  - Treated each user comment as a line-scoped edit request instead of a requirement statement applying to the whole fileset
+  - No post-edit verification pass: never re-scanned the file against the ACCUMULATED requirement list after each change
+  - Cross-file consistency ignored: rule wording updated in one file while MNF/template/index wording drifted in companions
+- **Evidence**: 7 deviations still present at 13:20 despite 8 prior corrections in the same session (missing blank-line separation, missing weekday+date on commitments, bare "next month", undated declined weekdays)
+- **Prevention rule**: Every user correction defines a REQUIREMENT, not an edit location. On each correction: 1) restate the requirement generally, 2) grep/scan ALL related files for every instance matching the pattern, 3) fix all instances, 4) re-verify the full fileset against the accumulated requirement list of the session, 5) only then report done.
+
+## 2026-07-16 - New Rule Examples Violated Existing Rules
+
+### [MEDIUM] `GLOB-FL-036` Wrote rule examples without cross-checking existing rules (locale dates, ASCII Umlauts)
+
+- **When**: 2026-07-16 12:41-13:03 UTC+02:00
+- **Where**: `DevSystemV4.1/skills/write-documents/CONVERSATION_HUMANIZING_RULES.md` - Override Scope and Connective Register examples
+- **What**: Agent wrote example content with locale-dependent date formats ("Tuesday (Mar 24) at 2pm", "Freitag (25.7.)", "viernes 25") violating CV-DT-01 and AP-PR-01 (`YYYY-MM-DD HH:MM` everywhere, never locale formats). No timezone despite scheduling context. Earlier same session: ASCII Umlaut substitutes ("Gruesse") violating CV-TR-03. User had to flag both.
+- **Why it went wrong**:
+  - Generated example content from "natural human writing" intuition instead of checking it against the rule set it belongs to
+  - Treated examples as free-form prose exempt from rules - but examples ARE normative content agents will replicate
+  - Repeated pattern within one session: content-level violations (CV-TR-03, then CV-DT-01) both caught by user, not by agent
+- **Evidence**: User: "ISO everywhere! and mention timezone. dont we have this already? Your not checking consistency with existing rules!"
+- **Prevention rule**: Before writing ANY example content into a rules/template/skill file, list the existing rule families that govern that content type (datetime, characters, links, format) and check each example line against them. Examples in rule files are normative - they must pass every rule the file set enforces.
+
+## 2026-07-16 - Created File When User Said "Draft"
+
+### [MEDIUM] `GLOB-FL-035` Ignored "draft" verb semantics - created file instead of presenting in chat
+
+- **When**: 2026-07-16 12:00 UTC+02:00
+- **Where**: Conversation response to `/delete` workflow request
+- **What**: User said "Draft `/delete` workflow..." - per agent-behavior.md L32, "draft" means "talk ABOUT, don't modify." Agent created `DevSystemV4.1/workflows/delete.md` instead of presenting the content in chat for review.
+- **Why it went wrong**:
+  - Prioritized "deliver a fully functional solution" heuristic over explicit verb semantics rule
+  - Did not re-check agent-behavior.md verb definitions before acting
+  - User provided detailed requirements (template, rules, examples) which triggered implementation mode
+- **Evidence**: User said "Draft `/delete` workflow..." - file was created at `e:\Dev\IPPS\DevSystemV4.1\workflows\delete.md`
+- **Workflow re-read findings**: `agent-behavior.md` L32: `"Propose", "suggest", "draft", "outline" = talk ABOUT, don't modify`. L33: `"Implement", "fix", "change", "update" = modify the object`
+- **Prevention rule**: Before acting on a user request, check the leading verb against L32-33 classification. If verb is in the "talk ABOUT" set, present content in chat only. Never create/modify files for "draft", "propose", "suggest", or "outline" requests regardless of how detailed the requirements are.
+
 ## 2026-07-08 - Private Path Leaked into Reusable Template
 
 ### [MEDIUM] `GLOB-FL-034` Used private Dropbox path as example in CONVERSATION_TEMPLATE.md

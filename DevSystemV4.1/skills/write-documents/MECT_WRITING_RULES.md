@@ -15,6 +15,14 @@ No overlap. Both apply simultaneously. When writing documents, read both.
 **Core concept - Signal vs Noise:**
 Every design choice in a document is either **Signal** (purposeful, carries information the reader needs) or **Noise** (arbitrary, carries no information but the reader interprets as if it does). MECT strengthens signals and eliminates noise. APAPALAN enforces specific patterns to achieve this.
 
+**Core concept - Deliberate Redundancy:**
+MECT intentionally introduces MORE words when they strengthen the reader's association field and pattern matching. The goal is building the reader's mental model as effectively as possible - preventing misunderstandings, misinterpretations, and interpolated knowledge. "Minimal" in MECT refers to the terminology SET (one name per concept, minimal distinct terms), NOT to word count. MECT text may be LONGER than uncontrolled text because it repeats context, restates referents, and adds disambiguation words wherever the reader might otherwise guess wrong.
+
+**MECT vs APAPALAN on word count:**
+- APAPALAN AP-BR-* removes words that carry zero information (filler, redundant structure)
+- MECT adds words that carry ASSOCIATION information (concept anchors, disambiguation, referent restatement)
+- Both apply simultaneously: remove noise words, add signal words
+
 ## Rule Index
 
 Voice (VO)
@@ -31,6 +39,7 @@ Word Choice (WC)
 - MW-WC-05: No terminological synonymy - one concept = one name, no phantom entities
 - MW-WC-06: No inverted semantics - name direction must match value direction
 - MW-WC-07: No premature label compression - short labels require legend in sight, mnemonic, or establishment
+- MW-WC-08: Document language is sovereign - foreign terms must be translated inline at every use
 
 Terminology Design (TD)
 - MW-TD-01: Naming structure method (explicit -> specifiers -> states -> mnemonics)
@@ -63,6 +72,7 @@ Visual Representation (VR)
 
 - [Voice Rules (VO)](#voice-rules-vo)
 - [Word Choice Rules (WC)](#word-choice-rules-wc)
+- [Language Sovereignty Rules (LS)](#language-sovereignty-rules-ls)
 - [Terminology Design Rules (TD)](#terminology-design-rules-td)
 - [Heading and Section Rules (HS)](#heading-and-section-rules-hs)
 - [List and Table Rules (LT)](#list-and-table-rules-lt)
@@ -321,6 +331,62 @@ S=Supported | C=Caveated | U=Unsupported
 1. [SUPPORTED] Database handles our query patterns
 2. [CAVEATED] Write volume stays within limits - peaks may exceed
 ```
+
+## Language Sovereignty Rules (LS)
+
+### MW-WC-08: Document Language is Sovereign
+
+The document's primary language determines how all terms are presented. Foreign-language terms MUST be translated or explained inline at every point of use. Readers cannot remember, spell, or mentally index terms from a language they do not speak.
+
+**Why this matters (MECT perspective):**
+- MECT "Explicit" property: decodable at every point of use, not just at first mention
+- Foreign terms violate Explicit because the reader lacks the association field to decode them
+- Hybrid compounds (fusing a foreign word with a native suffix) create terms that exist in NO language - neither the reader's nor the source language can parse them
+- The reader's working memory cannot retain opaque foreign syllables - they become noise that blocks comprehension of the surrounding content
+
+**Three patterns for foreign terms:**
+
+1. **Official name preserved + translation** - For form fields, legal terms, API names:
+   ```
+   Motivo de entrada: "Trabalho" (= reason for entry: work)
+   ```
+
+2. **Translation only** - When the foreign term adds no value:
+   ```
+   BAD:  You need a Kontoauszug for the application.
+   GOOD: You need a bank statement for the application.
+   ```
+
+3. **Foreign term as parenthetical** - When readers might encounter it elsewhere:
+   ```
+   Bank statement (German: Kontoauszug) must show 3 months of transactions.
+   ```
+
+**NEVER: Hybrid compounds**
+
+Fusing a foreign root with a native suffix creates a term that exists in no language. The reader cannot look it up, cannot spell it, cannot remember it.
+
+**BAD:**
+```
+- The Berechtigung-claim requires additional proof
+- Submit attestation-Nachweis to the office
+- Your demande-application was received
+- Check your Konto-balance online
+```
+
+**GOOD:**
+```
+- The authorization claim (Berechtigung) requires additional proof
+- Submit the attestation (= Nachweis, proof document) to the office
+- Your application (demande) was received
+- Check your account balance online
+```
+
+**Test:** Read each foreign term aloud. Can you spell it from memory? Can you explain it without looking it up? If not, translate it. The document must be self-contained - no external dictionary required.
+
+**Repetition rule:** Translate at EVERY use, not just first mention. Unlike abbreviations (where "define once, use short form after"), foreign terms do not stick in memory across a multi-page document. A reader scanning to page 5 must not need to hunt page 1 for the translation.
+
+**Exception:** When the foreign term IS the established term in the reader's language (e.g., "kindergarten" in English, "software" in German), no translation needed.
 
 ## Terminology Design Rules (TD)
 

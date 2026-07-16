@@ -146,6 +146,8 @@ Use minimal explicit consistent terminology within a defined field of interactio
 
 **Words → mental models → predictions → actions.** "Words represent concepts and their association fields define the mental models we build to predict the outcome of our actions." Once people incorporate mental models they are very unlikely to change them. Incompatible models coexist undetected until they collide.
 
+**Deliberate redundancy for association field strength.** MECT intentionally introduces MORE words when they strengthen the reader's intended association field and pattern matching. The goal is building the reader's mental model as effectively as possible - preventing misunderstandings, misinterpretations, and interpolated knowledge at the reader's side. A reader who must guess fills gaps with their own associations, which may diverge from the writer's intent. MECT prevents this by restating referents, repeating context anchors, and adding disambiguation words wherever the reader might otherwise interpolate. This is NOT verbosity (noise words that carry zero information) - it is signal redundancy (repeated concept anchors that reinforce the correct mental model). The distinction: "Furthermore, it should be noted that the system handles errors" adds zero information. "The authentication retry (3 attempts, exponential backoff) handles transient network errors" repeats "authentication" and specifies "transient network" - both redundant to someone who read the previous paragraph, but both prevent the reader who skimmed or forgot from building a wrong model.
+
 **Signal vs Noise.** Every design choice in terminology, formatting, naming, and structure is either signal or noise. A signal is a purposeful choice that carries information the reader needs - a consistent name, a deliberate format, a meaningful distinction. Noise is an arbitrary choice that carries no information, yet the reader interprets it as if it does - an inconsistent spelling, a random format change, a redundant label. Because readers treat all variation as intentional, noise actively misleads. The three MECT properties work together to maximize signal and minimize noise: Minimal removes redundant terms (noise), Explicit ensures every term teaches its meaning (signal), and Consistent guarantees that identical patterns always mean the same thing (turning potential noise into reliable signal). See `_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]` section 2.2 for how APAPALAN enforces this through concrete rules.
 
 **General design principles.** The following principles from Don Norman's "The Design of Everyday Things" and cognitive science apply to all design - products, interfaces, documents, terminology, and communication. MECT builds on these because good communication design follows the same laws as good product design.
@@ -178,6 +180,29 @@ Use minimal explicit consistent terminology within a defined field of interactio
 - NOT about saying less - About keeping term fragmentation low and being "compatible with yourself"
 - "Like LEGO for communication - every piece has distinctive purpose and fits with all others"
 - Distilled: "As precise as possible. As little as necessary." (German: "So prazise wie moglich. So wenig wie notig.")
+
+### 2.6 Language Sovereignty
+
+**The document language is king.** When a document is written in Language A, every term from Language B is a foreign body that the reader cannot decode, spell, or retain. Foreign terms violate the "Explicit" property because the reader lacks the association field to process them.
+
+**The problem with mixed-language documents:**
+
+- **No association field** - A reader encountering "attestation de conformite" in an English document cannot form a mental model. The syllables occupy working memory without producing meaning. The reader must context-switch to a foreign dictionary, losing the thread of the document.
+- **Hybrid compounds are worst** - Fusing a foreign root with a native suffix ("conformite-proof", "Bescheid-notification") creates a term that exists in NO language. Neither the source language nor the document language can parse it. The reader cannot look it up anywhere.
+- **Cumulative cognitive debt** - Each untranslated foreign term adds a permanent tax on reading speed. After 5-10 such terms, the document becomes hostile to its declared audience.
+
+**The solution - translate at point of use:**
+
+1. Foreign official terms (form fields, legal names, API identifiers) appear as-is followed by translation in parentheses
+2. Foreign concepts with no official status are replaced entirely by the document-language equivalent
+3. Translation must repeat at EVERY use, not just first mention - unlike abbreviations, foreign terms do not stick in memory across pages
+
+**Why repetition matters:** Abbreviations work with "define once, use short form after" because the short form shares the reader's language. Foreign terms lack this anchor. A reader scanning to page 5 cannot reconstruct "attestation de conformite" from memory the way they can reconstruct "API" from "Application Programming Interface." The foreign syllables simply evaporate from working memory.
+
+**Connection to the three properties:**
+- **Minimal** - One name per concept, in the document's language. A foreign synonym is a second name = violates Minimal.
+- **Explicit** - Decodable at point of use. Foreign terms are opaque at point of use = violates Explicit.
+- **Consistent** - Same language everywhere within the field. Switching languages mid-document = violates Consistent.
 
 ## 3. Tools and Methods
 
@@ -574,6 +599,9 @@ Every word is from daily life. No interpretation needed. The question format mak
 - `MECT-IN01-SC-FOWLR-BCTX`: Martin Fowler on Bounded Context and polysemes
 
 ## 7. Document History
+
+**[2026-07-16 14:14]**
+- Added: "Deliberate redundancy for association field strength" insight (2.3) - MECT adds words to strengthen reader's mental model and prevent interpolated knowledge
 
 **[2026-06-11 12:48]**
 - Added: "transparent" polysemy with semantic inversion example - opposite meanings in governance vs network IT (5.9)

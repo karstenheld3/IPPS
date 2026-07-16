@@ -184,11 +184,15 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **CSMP** - Cascade Metaprompt (AI coding assistant metaprompt extraction and analysis)
 - **NTICP** - Network Traffic Interception (programmatic HTTPS interception for LLM prompt extraction)
 - **WSFT** - Windsurf Features (comprehensive feature research for updating WSRF-IN01)
+- **HMNWRTPTN** - Human Writing Patterns (forensic linguistics research for conversation humanizing rules)
 - **WMRK** - Watermarking and Provenance (SynthID-Text, C2PA, embedded signal detection for AI-generated text)
 - **RUSESCPOL** - Russia escalation policy in Ukraine war (official statements, nuclear doctrine, red lines)
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 
 ## Document History
+
+**[2026-07-16 10:30]**
+- Added: HMNWRTPTN topic (Human Writing Patterns - forensic linguistics research for conversation humanizing rules)
 
 **[2026-07-08 11:44]**
 - Added: AGNTPROB topic (Agentic Problems - categorized failure patterns)

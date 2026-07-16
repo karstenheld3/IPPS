@@ -322,6 +322,27 @@ Detect by: file has `_[LANG]` suffix (e.g., `report_DE.md`, `video_DE.srt`) and 
 
 - Read @skills:write-documents `CONVERSATION_RULES.md` and verify against all CV-* rules
 
+**If verifying a conversation DRAFT (email/message written AS user):**
+
+Read all three rule layers and verify in priority order:
+
+1. Read @skills:write-documents `APAPALAN_RULES.md` - verify AP-CM-01, AP-CM-02, AP-CM-03:
+   - [ ] Every commitment has action + deliverable + weekday + ISO date + time (AP-CM-01)
+   - [ ] Every question in own paragraph, "Question:" label, self-contained (AP-CM-02)
+   - [ ] Every request in own paragraph, "Request:" label, explicit timing (AP-CM-02)
+   - [ ] All dates: weekday + ISO date. Periods include year. Timezone when scheduling. (AP-CM-03)
+2. Read @skills:write-documents `CONVERSATION_HUMANIZING_RULES.md` - verify against Anti-Pattern Index:
+   - [ ] Full grammar preserved (no dropped pronouns/articles) - CV-HM-07
+   - [ ] Greeting/closing from user's History, not invented or rotated - CV-HM-06
+   - [ ] Sentence rhythm varies, no 3+ uniform lengths - CV-HM-05
+   - [ ] No LLM vocabulary, no formal connectives in casual context
+   - [ ] No translationese - reads as native speaker wrote it - CV-HM-07
+   - [ ] No over-humanizing (precision intact) - CV-HM-01
+3. Read @skills:write-documents `CONVERSATION_RULES.md` - verify format:
+   - [ ] Email header format correct if email - CV-EM-01
+   - [ ] Draft marked if unsent - CV-EM-04
+   - [ ] Native characters used - CV-TR-03
+
 ## STRUT Plans (Planning Phase)
 
 Verify when STRUT plan is created or updated:

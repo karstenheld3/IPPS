@@ -23,13 +23,15 @@ Email (EM)
 - CV-EM-03: Email signature included only on first occurrence per sender
 - CV-EM-04: Draft emails marked with `**STATUS: DRAFT - NOT SENT**`
 
+Effective Writing - see `APAPALAN_RULES.md` Communication (CM) section: AP-CM-01, AP-CM-02, AP-CM-03
+
 WhatsApp (WA)
 - CV-WA-01: Message format `**HH:MM Person**: message`
 - CV-WA-02: Section heading includes time range and platform
 - CV-WA-03: End WhatsApp sections with `**Key outcomes:**` summary
 
 Structure (ST)
-- CV-ST-01: Required sections in order: MNF, Ignore Files, Translation Settings, Status, Links, Context, Log, History
+- CV-ST-01: Required sections in order: MNF, Ignore Files, Translation Settings, Humanizing Settings, Status, Links, Context, Log, History
 - CV-ST-02: Persons Involved in Context section (not separate Contacts)
 - CV-ST-03: Log entries link to History sections via anchor
 - CV-ST-04: History entries separated by `---`
@@ -57,6 +59,17 @@ Links (LN)
 - CV-LN-01: All URLs as clickable Markdown links
 - CV-LN-02: Links section groups by date with description
 - CV-LN-03: All attachments, transcriptions, and translations recorded in Links and shared documents
+- CV-LN-04: All links absolute - full clickable paths, never relative paths or `...` abbreviations
+- CV-LN-05: Explicit inline URLs when referencing sources in emails - URL at point of reference, not only in Links section
+
+Humanizing (HM) - see [CONVERSATION_HUMANIZING_RULES.md](CONVERSATION_HUMANIZING_RULES.md)
+- CV-HM-01: Override Scope - MECT/APAPALAN baseline + 1-5% humanizing for user-voice drafts
+- CV-HM-02: Consistency Anchoring - extract and replicate user's writing profile from History
+- CV-HM-03: Orthographic Consistency - per-conversation SPELLING_VARIANTS, same word = same spelling
+- CV-HM-04: Discourse Markers - include user's discourse markers at observed frequency
+- CV-HM-05: Sentence Rhythm - vary sentence length (burstiness), no 3+ similar-length consecutive sentences
+- CV-HM-06: Opening/Closing Repertoire - use user's habitual greeting/closing per context, never invent or mechanically rotate
+- CV-HM-07: Native Naturalness - drafts in any language read as written by a native speaker, never as translated English
 
 ## Table of Contents
 
@@ -77,6 +90,8 @@ Links (LN)
 - [Attachment Folder Format](#attachment-folder-format)
 - [Image Cleanup](#image-cleanup)
 - [URL Format](#url-format)
+- [Absolute Links](#absolute-links)
+- [Source References](#source-references)
 - [File Naming](#file-naming)
 - [Translation Settings Variables](#translation-settings-variables)
 - [Auto-Translate](#auto-translate)
@@ -216,6 +231,7 @@ From: me@example.com | To: admin@company.com ...
 
 Draft email body...
 ```
+
 
 ## WhatsApp Message Format
 
@@ -390,19 +406,50 @@ Check [Company Name](https://www.company.com) for details.
 See [Provider Energy](https://provider.com/services/energy/)
 ```
 
+## Absolute Links
+
+File paths, attachment references, and source links must be full absolute clickable paths. Never use relative paths or `...` abbreviations.
+
+**BAD:**
+```
+See Attachments/.../contract.md
+Transcription: ../2026-03-16_RentalContract/contract.md
+```
+
+**GOOD:**
+```
+See [contract.md](e:/Conversations/MariaSilva-Landlord/Attachments/2026-03-16_16-50_RentalContract/contract.md)
+```
+
+## Source References
+
+When referencing a source (article, website, document, regulation), include the explicit URL inline at the point of reference. A name alone is not verifiable; the reader must not need to search the Links section or the web.
+
+**BAD** (source named without URL):
+```
+- **2026-03-17 14:30** - Landlord cited the rental law amendment from the government portal
+- According to the provider's cancellation policy, 30 days notice is required
+```
+
+**GOOD** (explicit inline URL at point of reference):
+```
+- **2026-03-17 14:30** - Landlord cited the [rental law amendment](https://dre.pt/dre/detalhe/lei/56-2023-XXXXXX) from the government portal
+- According to the [provider's cancellation policy](https://provider.com/terms/cancellation), 30 days notice is required
+```
+
 ## File Naming
 
 Filename must always include counterparty identifier. Never use plain `CONVERSATION.md`.
 
 **BAD:**
 ```
-JoaoEstevao-FaroLandlord/CONVERSATION.md
+MariaSilva-Landlord/CONVERSATION.md
 ClientFolder/CONVERSATION.md
 ```
 
 **GOOD:**
 ```
-JoaoEstevao-FaroLandlord/CONVERSATION_JoaoEstevao.md
+MariaSilva-Landlord/CONVERSATION_MariaSilva.md
 ClientFolder/CONVERSATION_ClientName.md
 ```
 
@@ -524,8 +571,8 @@ SharedAttachments/file.pdf
 
 **GOOD:**
 ```
-JoaoEstevao-FaroLandlord/Attachments_gitignore/2026-03-16_16-50_RentalContract/contract.pdf
-JoaoEstevao-FaroLandlord/Attachments/2026-03-16_16-50_RentalContract/contract.md
+MariaSilva-Landlord/Attachments_gitignore/2026-03-16_16-50_RentalContract/contract.pdf
+MariaSilva-Landlord/Attachments/2026-03-16_16-50_RentalContract/contract.md
 ```
 
 ## Links Completeness

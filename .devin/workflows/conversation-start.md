@@ -10,7 +10,7 @@ Create a new `CONVERSATION_[COUNTERPARTY].md` by extracting conversation partner
 
 **Why**: Manual creation of conversation files is tedious and error-prone. This workflow extracts all data from the chat context and structures it according to `CONVERSATION_TEMPLATE.md`.
 
-Scope: Creates conversation files only. To update existing conversations, use `/conversation-update`. Use `/transcribe` for PDF attachments, Playwright Gmail UI for sending emails.
+Scope: Creates conversation files only. To update existing conversations, use `/conversation-update`. To draft emails/messages as the user, use `/conversation-draft`. Use `/transcribe` for PDF attachments, Playwright Gmail UI for sending emails.
 
 ## Required Skills
 

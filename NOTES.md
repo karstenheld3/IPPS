@@ -6,6 +6,10 @@ Current [DEVSYSTEM]: DevSystemV4.1
 Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
 
+## Conversation Humanizing Rules (2026-07-16)
+
+Created `CONVERSATION_HUMANIZING_RULES.md` in `write-documents` skill with 6 rules (CV-HM-01 through CV-HM-06) for ghostwriting emails/messages in the user's voice. Based on forensic linguistics research documented in `Docs/FurtherResearch/_INFO_HUMAN_WRITING_PATTERNS.md [HMNWRTPTN-IN01]`. Updated `CONVERSATION_RULES.md` (CV-HM-* index, CV-ST-01 section order) and `CONVERSATION_TEMPLATE.md` (Humanizing Settings section, MNF items).
+
 ## Release Notes Location (2026-05-01)
 
 Release notes go in `Docs/ReleaseNotes/`. Filename: `RELEASE_NOTES_v[VERSION]_YYYY-MM-DD.md`.

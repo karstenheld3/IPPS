@@ -11,7 +11,7 @@
 - MECT designs communication systems; APAPALAN applies MECT using rules for documents, code, logs, communication [VERIFIED]
 - Precision always wins over brevity - never sacrifice clarity to save words [VERIFIED]
 - Readers interpret ALL deviation as intentional signal. Unintentional variance (LLMs) causes wrong assumptions [VERIFIED]
-- 27 rules across four categories: Precision (PR), Brevity (BR), Structure (ST), Naming (NM) [VERIFIED]
+- 34 rules across five categories: Precision (PR), Brevity (BR), Structure (ST), Communication (CM), Naming (NM) [VERIFIED]
 - Rules are actionable: each has BAD/GOOD examples an agent or human can pattern-match against [VERIFIED]
 
 ## Table of Contents
@@ -260,7 +260,7 @@ APAPALAN rules are organized in three categories matching the priority order.
 
 ### 4.1 Precision (PR): Making Every Statement Unambiguous
 
-11 rules ensuring every piece of writing can be understood without guessing.
+12 rules ensuring every piece of writing can be understood without guessing.
 
 - **AP-PR-01**: Standardized datetime format - `YYYY-MM-DD HH:MM` everywhere
 - **AP-PR-02**: Standardized attribute/property format - context-specific but consistent within context
@@ -272,13 +272,14 @@ APAPALAN rules are organized in three categories matching the priority order.
 - **AP-PR-08**: Every non-obvious rule needs examples - BAD/GOOD pairs for format rules and conventions
 - **AP-PR-09**: Consistent patterns - repeat established structures; style deviation = false signal
 - **AP-PR-11**: Labels decodable at point of use - full word, legend in sight, or mnemonic (Reconstruction Test)
+- **AP-PR-10**: Never abbreviate keys and references - use single quotes for literals; abbreviating creates opaque tokens that fail the reconstruction test
 - **AP-PR-12**: Explain domain jargon and idioms on first use - replace with plain language, or keep + explain in parentheses; same pattern as AP-PR-06 but for semantic opacity
 
 The referenceability chain (AP-PR-05 -> AP-PR-04) deserves emphasis: you cannot build a useful reference system unless the referenced information has IDs in the first place. Create IDs first, then reference.
 
 ### 4.2 Brevity (BR): Removing Without Losing
 
-6 rules for cutting words after precision is secured.
+7 rules for cutting words after precision is secured.
 
 - **AP-BR-01**: Single line for single statements - if it fits on one line, keep it on one line
 - **AP-BR-02**: Sacrifice grammar for brevity - drop articles, filler words, verbose constructions (exception: user-facing text preserves full grammar)
@@ -286,10 +287,11 @@ The referenceability chain (AP-PR-05 -> AP-PR-04) deserves emphasis: you cannot 
 - **AP-BR-04**: Compact object and list definitions - lists, no empty lines between properties
 - **AP-BR-05**: Show format over describing format - a format example communicates more precisely than a description
 - **AP-BR-06**: Pipe-delimited property lines - `Key: Value | Key: Value` for multi-attribute items
+- **AP-BR-07**: No redundant bold in structured lists - bold is signal ("this label is a concept"); when every label is bold, the signal becomes noise
 
 ### 4.3 Structure (ST): Organizing for the Reader
 
-6 rules for organizing content so readers find what they need.
+7 rules for organizing content so readers find what they need.
 
 - **AP-ST-01**: Goal or intention captured first - reader knows WHY before HOW
 - **AP-ST-02**: Subjects direct and actionable - "ACTION: Review contract by 2026-03-20" not "Meeting"
@@ -297,10 +299,23 @@ The referenceability chain (AP-PR-05 -> AP-PR-04) deserves emphasis: you cannot 
 - **AP-ST-04**: Anti-DRY for delegation - when requesting action from others, inline ALL needed information (overrides AP-BR-03 because the audience is different)
 - **AP-ST-05**: Hierarchical information ordering - general to specific, most important first
 - **AP-ST-06**: Visual thought grouping - related content clusters together (no empty lines); distinct thoughts separate by one empty line
+- **AP-ST-07**: Cognitive load limit - max 7 ungrouped items per list, email, or function signature (Miller's Law); beyond 7: group into named clusters
 
 The DRY tension (AP-BR-03 vs AP-ST-04) is intentional: within your own document, reference instead of repeating. But when delegating to someone else, inline everything because people don't follow references.
 
-### 4.4 Naming (NM): One Name, One Meaning
+### 4.4 Communication (CM): Writing to Counterparts
+
+3 rules for outbound text to counterparts: emails, WhatsApp messages, replies, meeting requests. These apply when writing TO another person, not when writing documents, code, or logs.
+
+**Scope distinction**: PR/BR/ST/NM rules apply to all text. CM rules apply ONLY to outbound communication where a counterpart reads and acts.
+
+- **AP-CM-01**: Accountable commitments - every commitment states WHAT the counterpart receives and WHEN (action + deliverable + weekday + ISO date + time)
+- **AP-CM-02**: Labeled questions and requests - every question/CTA in its own paragraph, blank-line separated, labeled (Question:/Request:), fully self-contained
+- **AP-CM-03**: Time precision in communication - weekday + ISO date, timezone when scheduling, periods include year; extends AP-PR-01 with disambiguation requirements for human readers
+
+CM rules relate to but are distinct from humanizing rules (`CONVERSATION_HUMANIZING_RULES.md`): CM ensures precision of CONTENT; humanizing rules (CV-HM-*) add stylistic VOICE to match the user's writing profile.
+
+### 4.5 Naming (NM): One Name, One Meaning
 
 5 rules for naming things consistently across documents, code, logs, and communication. Derived from MECT terminology problems.
 
@@ -321,6 +336,13 @@ The DRY tension (AP-BR-03 vs AP-ST-04) is intentional: within your own document,
 - `APAPALAN-IN01-SC-LOG-RULES`: `LOGGING-RULES.md` in DevSystemV3.6/skills/coding-conventions/ - Logging rules implementing APAPALAN for output [VERIFIED]
 
 ## 6. Document History
+
+**[2026-07-16 14:14]**
+- Added: Section 4.4 Communication (CM) with 3 rules (AP-CM-01, AP-CM-02, AP-CM-03)
+- Added: AP-PR-10, AP-BR-07, AP-ST-07 (previously missing from this document)
+- Changed: Total rule count 27 -> 34, categories 4 -> 5
+- Changed: PR count 11 -> 12, BR count 6 -> 7, ST count 6 -> 7
+- Changed: Renumbered section 4.4 Naming -> 4.5
 
 **[2026-06-17 18:10]**
 - Added: AP-PR-12 (Explain domain jargon and idioms on first use) to section 4.1
