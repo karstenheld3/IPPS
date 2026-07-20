@@ -143,6 +143,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 
 ## Project Topics
 
+- **AGNTMAPR** - Agentic MapReduce (Devin's 5-stage pipeline for whole-codebase reasoning: Plan, Shard, Map, Reduce, Verify)
 - **AGNTPROB** - Agentic Problems (categorized failure patterns in AI-assisted development)
 - **AIDET** - AI Writing Detection (detection methods, signals, heuristics for identifying AI-generated text)
 - **AMSW** - Auto Model SWitcher (Windsurf model switching automation)

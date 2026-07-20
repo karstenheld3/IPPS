@@ -3,7 +3,7 @@
 **Doc ID**: DVDT-IN01
 **Goal**: Comprehensive reference for Devin Desktop (formerly Windsurf) - agent harnesses, AI models, customization, developer tools, enterprise controls, and architecture internals
 **Version scope**: Devin Desktop (June 2026+) / Devin Local 2026.5.26+
-**Timeline**: Created 2026-06-03, Updated 5 times (2026-06-03)
+**Timeline**: Created 2026-06-03, Updated 7 times (latest 2026-07-21)
 
 ## Summary
 
@@ -84,16 +84,17 @@
 7. [Windsurf Tab (Code Completion)](#windsurf-tab-code-completion)
 8. [Context Awareness and Search](#context-awareness-and-search)
 9. [Code Review (Devin Review and Quick Review)](#code-review-devin-review-and-quick-review)
-10. [Customization](#customization)
-11. [Cascade Hooks](#cascade-hooks)
-12. [MCP Integration](#mcp-integration)
-13. [Developer Tools](#developer-tools)
-14. [Pricing and Plans](#pricing-and-plans)
-15. [Enterprise Features](#enterprise-features)
-16. [Settings and Configuration](#settings-and-configuration)
-17. [Architecture Internals](#architecture-internals)
-18. [Sources](#sources)
-19. [Document History](#document-history)
+10. [Security (Devin Review Security + Security Swarm)](#security-devin-review-security--security-swarm)
+11. [Customization](#customization)
+12. [Cascade Hooks](#cascade-hooks)
+13. [MCP Integration](#mcp-integration)
+14. [Developer Tools](#developer-tools)
+15. [Pricing and Plans](#pricing-and-plans)
+16. [Enterprise Features](#enterprise-features)
+17. [Settings and Configuration](#settings-and-configuration)
+18. [Architecture Internals](#architecture-internals)
+19. [Sources](#sources)
+20. [Document History](#document-history)
 
 ## Overview
 
@@ -136,6 +137,7 @@ Devin Desktop (formerly Windsurf) is an AI-powered IDE built on VS Code Open Sou
 - windsurf.com/editor → devin.ai/download
 - docs.devin.com → docs.devin.ai/desktop
 - Cascade (primary agent) → Devin Local (primary), Cascade (legacy)
+- Devin CLI (settings section label) → Devin Local
 
 [VERIFIED]
 
@@ -179,7 +181,9 @@ Devin Desktop (formerly Windsurf) is an AI-powered IDE built on VS Code Open Sou
 - `.devin/plans/` or `.devin/plans/`
 
 **Ignore files:**
-- `.codeiumignore` and `.devinignore` (both still honored)
+- `.codeiumignore`, `.devinignore`, and `.windsurfignore` (all honored)
+
+**Hooks migration:** Command available to migrate Windsurf hooks into Devin hooks across all workspace folders. [VERIFIED]
 
 **Also reads:** `AGENTS.md`, `agents.md`, `.cursor/rules/*.mdc` [VERIFIED]
 
@@ -224,8 +228,9 @@ Devin Local is the primary local agent, successor to Cascade. Completely rewritt
 **Key Improvements Over Cascade**
 
 - **Token efficiency** - 30% fewer tokens for same tasks, greater focus on prompt caching [VERIFIED]
-- **Subagents** - Spawn independent subagents for subtasks (foreground or background). Share tools and codebase context with parent. [VERIFIED]
-- **OS-level sandboxing** - Filesystem isolation (writable/readable paths from permission scopes) and network filtering (domain allowlists/denylists). Enterprise-enforceable. [VERIFIED]
+- **Subagents** - Spawn independent subagents for subtasks (foreground or background). Share tools and codebase context with parent. Configurable with default model. Can call MCP tools directly. Nesting supported (configurable `max-nesting`, default 3). [VERIFIED]
+- **OS-level sandboxing** - Filesystem isolation (writable/readable paths from permission scopes) and network filtering (domain allowlists/denylists). Enterprise-enforceable. Plan mode works in sandbox. [VERIFIED]
+- **Editor context** - Aware of files currently open in the editor. [VERIFIED]
 - **Quick Review** - Dedicated subagent for rapid feedback on changes [VERIFIED]
 
 **Permissions Model**
@@ -255,7 +260,16 @@ Not yet supported in Devin Local:
 - **App Deploys** - Not supported.
 - **Conversation Sharing** - Not yet available. [VERIFIED]
 
-Devin Local DOES support: Rules, AGENTS.md, Skills. [VERIFIED]
+Devin Local DOES support: Rules, AGENTS.md, Skills. Customizations span all open workspace folders. Hooks tab lists configured hooks with source and trigger events. [VERIFIED]
+
+**Additional capabilities (since 2026.5.26):**
+- Skill `permissions:` frontmatter applies to auto-approvals
+- Edits in autonomous mode produce reviewable diffs
+- `!` shell commands run in configured `$SHELL`
+- MCP servers support client-defined OAuth scopes
+- Interactive logins persisted to shared credential store
+- Windows: detects GPO-blocked PowerShell, falls back to Git Bash
+- ACU usage shown via `/usage` command [VERIFIED]
 
 **Enterprise Controls (Devin Local)**
 
@@ -263,6 +277,58 @@ Devin Local DOES support: Rules, AGENTS.md, Skills. [VERIFIED]
 - **Granular permissions** - Fine-grained action control beyond Cascade's level
 - **Network enforcement** - Allowed/denied domain lists
 - **Disable Cascade** - Force team to use Devin Local exclusively [VERIFIED]
+
+**Subagent Profiles**
+
+- **`subagent_explore`** - Default subagent model (SWE-1.6, cheap). For research/read-only tasks.
+- **`subagent_general`** - Inherits parent agent's model. For code changes. Costs like a full extra session.
+- **Custom subagents** - Defined in `AGENT.md` files. Pin specific model via `model:` field.
+
+**Custom subagent locations:**
+- Project: `.devin/agents/<name>/AGENT.md`
+- Global: `~/.config/devin/agents/<name>/AGENT.md` (Windows: `%APPDATA%\devin\agents\`)
+- Import: `.claude/agents/*.md` files auto-discovered [VERIFIED]
+
+**AGENT.md frontmatter fields:** `name`, `description`, `model`, `allowed-tools` (read/edit/grep/glob/exec), `permissions` (allow/deny/ask scopes), `max-nesting` [VERIFIED]
+
+**Tool permissions (subagents):**
+- Foreground: prompted for approval as usual
+- Background: inherits already-granted permissions; unapproved tools auto-denied [VERIFIED]
+
+**Controls:** `Ctrl+B` background a foreground subagent, `f` foreground a background subagent, `x` cancel, resume completed/cancelled subagents for follow-up. Enterprise: admin sets default subagent model via org settings. [VERIFIED]
+
+**Devin Plugins (Preview)**
+
+Install and share bundles of skills from a repo, git URL, or local folder. Opt-in for enterprises. [VERIFIED]
+
+**Structure:**
+```
+my-plugin/
+├── .devin-plugin/
+│   └── plugin.json          # Manifest (name, version, dependencies)
+├── AGENTS.md                 # Optional rules
+└── skills/
+    └── review/
+        └── SKILL.md          # Standard skill format
+```
+
+**CLI commands:**
+- `devin plugins install <owner/repo | git-url | ./local-path>`
+- `devin plugins list` - Show installed, versions, policy status
+- `devin plugins info <name>` - Show skills and dependency lists
+- `devin plugins update [name]` - Re-fetch at latest version
+- `devin plugins remove <name>` [VERIFIED]
+
+**Governance (manifest `plugin.json`):**
+- `requiredPlugins` - Auto-installed dependencies
+- `optionalPlugins` - Suggested but not enforced
+- `forbiddenPlugins` - Block specific plugins or glob patterns (e.g., `"*"` = full lockdown)
+- Deny wins: a forbidden plugin is blocked regardless of other manifests
+- Self-override: own required/optional exempt from own forbidden list [VERIFIED]
+
+**Invocation:** Skills from plugins invoked as `/<plugin-name>:<skill-name>` [VERIFIED]
+
+**Source:** https://docs.devin.ai/cli/extensibility/plugins/overview
 
 ### Cascade (Legacy Local Agent)
 
@@ -296,6 +362,11 @@ Four levels:
 
 Autonomous software engineering agent on its own VM with desktop, browser, and computer use. Works asynchronously. Delivers Pull Requests. [VERIFIED]
 
+**Agent tiers:**
+- **Standard** - Default Devin Cloud agent
+- **Ultra** - Smartest and most capable agent. Excels at long-horizon tasks and debugging. Uses the most powerful available models. Toggle via `!ultra` in Slack. [VERIFIED]
+- **Fast** - Quicker, lower-cost tier. Toggle via `!fast` in Slack. [VERIFIED]
+
 **Availability:**
 - Included with every self-serve plan (Pro, Max, Teams) [VERIFIED]
 - Enterprise: disabled by default, admin must enable [VERIFIED]
@@ -307,6 +378,13 @@ Autonomous software engineering agent on its own VM with desktop, browser, and c
 3. Devin spins up VM, works independently (debugging, deployment, testing)
 4. Review changes and test results in-editor
 5. Returns a reviewable Pull Request [VERIFIED]
+
+**Managed Devins (Parallel Cloud Sessions):**
+- Coordinator session breaks large tasks into parallel workstreams
+- Each child session runs on its own isolated VM
+- Coordinator scopes work, monitors ACU, resolves conflicts, compiles results
+- Spawn, message, sleep/terminate, and wait-for-all-complete from parent session
+- Available through Devin MCP server (sessions, playbooks, schedules, knowledge) [VERIFIED]
 
 **Pricing:** Consumes shared quota and extra usage balance. Same token-based system. [VERIFIED]
 
@@ -408,6 +486,10 @@ The default surface in Devin Desktop. Manages every agent (local and cloud) from
 **Key capability:** Parallel agents. Multiple agents working simultaneously on different parts of same project. One engineer fans out work, reviews results as they land. [VERIFIED]
 
 **Recent improvements:**
+- Status bar hidden by default; restore with `"workbench.statusBar.visible": true` in user settings
+- Restyled command palette
+- Timeline navigator for Devin Local sessions
+- "New session in space" in session kebab menu
 - List display option for agent inbox
 - Improved sessions sidebar sorting and filtering
 - Performance improvements for loading and switching sessions [VERIFIED]
@@ -581,8 +663,9 @@ New agents in a Space read the DeepWiki index for immediate context instead of c
 
 - `.codeiumignore` - Prevents agent from reading/indexing specific files
 - `.devinignore` - Also honored
+- `.windsurfignore` - Also honored
 - Global: `~/.codeium/windsurf/.codeiumignore`
-- Setting: `windsurf.allowCascadeAccessGitignoreFiles` [VERIFIED]
+- Setting: `windsurf.allowCascadeAccessGitignoreFiles` (also available as `devin.allowCascadeAccessGitignoreFiles`) [VERIFIED]
 
 ## Code Review (Devin Review and Quick Review)
 
@@ -622,6 +705,67 @@ Enterprise: Admin must enable from team settings. Can control available review m
 
 - **Quick Review** - Before opening PR. Fast feedback on working tree changes.
 - **Devin Review** - After PR opened. Deep review with smart organization and Autofix. [VERIFIED]
+
+## Security (Devin Review Security + Security Swarm)
+
+### Security in Devin Review
+
+Every PR gets automatic security review alongside the code review. Enabled by default (toggle in Settings > Review > Security scan). [VERIFIED]
+
+**Vulnerability categories:**
+- Injection (SQL, XSS, command, template)
+- Auth flaws (missing/broken access control, privilege escalation, auth bypass)
+- Secrets exposure (hardcoded keys, tokens in logs, credentials in source)
+- SSRF and path traversal
+- Insecure deserialization, prototype pollution
+- Missing input validation on untrusted data
+- Weak cryptography (algorithms, key management)
+- Transport/cookie security (missing HTTPS enforcement, permissive CORS, insecure cookie flags) [VERIFIED]
+
+**Findings:**
+- Classified by severity: Critical (fix before merge) and Warning (investigate)
+- Tagged with CWE identifier
+- Includes description, recommendation, and fix
+- Respects `REVIEW.md` and `SECURITY.md` for custom security policies [VERIFIED]
+
+**Remediation:** Devin writes the fix and opens a merge-ready PR. One click posts the finding as inline GitHub PR comment. [VERIFIED]
+
+**Source:** https://devin.ai/blog/security-in-devin-review (June 18, 2026)
+
+### Security Swarm
+
+Full-codebase vulnerability scanner powered by Agentic MapReduce. A swarm of parallel Devin agents analyzes the codebase like a team of security researchers. [VERIFIED]
+
+**Five stages:**
+1. **Plan** (agentic) - Agent studies repo, builds threat model, writes selectors (routes, auth boundaries, deserialization sinks). Editable before swarm fans out.
+2. **Shard** (deterministic) - Selectors run over entire repo with no model. Matches bucketed into bounded batches. Non-matching files dropped.
+3. **Map** (agentic) - One child Devin session per batch, in parallel. Investigates candidates, traces issues across files.
+4. **Reduce** (agentic) - Deduplicates, attaches owners, composes cross-file attack chains, assigns priority (P0/P1/P2).
+5. **Verify** (optional, agentic) - One sandboxed session per finding reproduces exploit against a running build. Confirmed/False Positive/Inconclusive. [VERIFIED]
+
+**Results:** 72% recall on 50 real-world GHSA vulnerabilities across 14 languages. 30% lower cost per finding than nearest alternative. [VERIFIED]
+
+**Scheduling:** Daily, weekly, or custom. First scan is full baseline. Subsequent scans process only changed files (cost tracks diff, not repo size). [VERIFIED]
+
+**Devin Security Program:** Six-week engagement. Cognition engineers embed with customer team to burn down CVE backlog and set up ongoing Security Swarm scanning. [VERIFIED]
+
+**Source:** https://devin.ai/blog/agentic-map-reduce, https://devin.ai/blog/security-swarm-eval, https://cognition.com/blog/introducing-devin-security-swarm (July 1, 2026)
+
+### Agentic MapReduce (Architecture)
+
+Generic Cognition architecture for whole-codebase reasoning tasks. Security Swarm is the first application. [VERIFIED]
+
+**Principle:** Put agents where reasoning is required (plan, map, reduce). Everything else is deterministic. Cost tracks relevant code, not repo size. [VERIFIED]
+
+**Applicable tasks:**
+- Security scanning (selectors: route declarations, auth boundaries, dangerous APIs)
+- Breaking-change detection (selectors: exported symbols, API schema comparisons)
+- Code-quality enforcement (selectors: deprecated APIs, project-specific anti-patterns)
+- Large-scale migration (selectors: import graph traversals, callers of replaced interfaces) [VERIFIED]
+
+**Selectors** are inspectable, version-controlled artifacts. Types: Tree-sitter queries, compiler queries, import/call graph traversals, generated API schema comparisons, lexical patterns. Persisted for reuse across runs. [VERIFIED]
+
+**Source:** https://devin.ai/blog/agentic-map-reduce (July 1, 2026)
 
 ## Customization
 
@@ -680,15 +824,47 @@ description: [short title]
 
 ### Skills (Universal)
 
-Bundles for complex tasks. Include `SKILL.md` plus supporting files. **Works with BOTH Cascade and Devin Local.** [VERIFIED]
+Bundles for complex tasks. Include `SKILL.md` plus supporting files. **Works with BOTH Cascade and Devin Local.** Follows open Agent Skills standard (`.agents/` compatible). [VERIFIED]
 
 **Creation:**
 - UI: Windsurf Settings > Skills
-- Manual: `.devin/skills/<name>/SKILL.md` or `.devin/skills/<name>/SKILL.md` or `.agents/skills/<name>/`
+- Manual: `.devin/skills/<name>/SKILL.md` or `.windsurf/skills/<name>/SKILL.md` or `.agents/skills/<name>/`
+- Global: `~/.config/devin/skills/<name>/SKILL.md` [VERIFIED]
 
 **Invocation:**
-- Automatic (agent matches task to skill description)
-- Manual (`@skill-name` in chat) [VERIFIED]
+- Automatic (agent matches task to skill description, trigger: `model`)
+- Manual (`/skill-name` in chat or `@skills:skill-name` in message, trigger: `user`)
+- Set `triggers: [user]` to prevent auto-invocation [VERIFIED]
+
+**Frontmatter fields:**
+```yaml
+---
+name: my-skill
+description: What this skill does (shown in completions)
+argument-hint: "[file] [options]"
+model: sonnet                    # Override model for this skill
+subagent: true                   # Run as subagent instead of inline
+agent: reviewer                  # Run as specific custom subagent profile
+allowed-tools:                   # Restrict tools (read/edit/grep/glob/exec)
+  - read
+  - grep
+permissions:                     # Scoped permissions for this skill
+  allow:
+    - Read(src/**)
+    - Exec(npm run test)
+  deny:
+    - Write(/etc/**)
+  ask:
+    - Write(src/**)
+triggers:
+  - user
+  - model
+---
+```
+
+**Skill permissions:** Additive to session base permissions. Cannot grant what is denied at higher level (project/org). `allow` = auto-approved during execution, `deny` = blocked, `ask` = always prompt. [VERIFIED]
+
+**Source:** https://docs.devin.ai/cli/extensibility/skills/creating-skills
 
 ### AGENTS.md
 
@@ -740,6 +916,35 @@ Hooks repaired for Devin Local to allow blocking user prompts (2026.5.26). Plan 
 ## MCP Integration
 
 Devin Desktop supports Model Context Protocol (MCP) for external tools and services. [VERIFIED]
+
+### Devin MCP Server (Cloud API)
+
+Official Cognition MCP server exposing all Devin Cloud capabilities to any MCP-compatible client. URL: `https://mcp.devin.ai/mcp` [VERIFIED]
+
+**Authentication:** API key (prefix `cog_` or `apk_user_`). Enterprise: add `X-Org-Id` header. [VERIFIED]
+
+**Available tools:**
+- **Repository docs** - `read_wiki_structure`, `read_wiki_contents`, `ask_question`, `list_available_repos`
+- **Session management** - `devin_session_create`, `devin_session_search`, `devin_session_interact`, `devin_session_events`, `devin_session_gather`
+- **Playbook management** - `devin_playbook_manage`
+- **Knowledge management** - `devin_knowledge_manage`
+- **Schedule management** - `devin_schedule_manage`
+- **Integration management** - `list_integrations` [VERIFIED]
+
+**Setup (Devin Desktop `.devin/config.json`):**
+```json
+{
+  "mcpServers": {
+    "devin": {
+      "serverUrl": "https://mcp.devin.ai/mcp",
+      "headers": { "Authorization": "Bearer <API_KEY>" }
+    }
+  }
+}
+```
+[VERIFIED]
+
+**Source:** https://docs.devin.ai/work-with-devin/devin-mcp
 
 ### Cascade MCP Configuration
 
@@ -909,8 +1114,11 @@ FedRAMP Security Admin Guide available with administrative roles, permissions, m
 
 Additional controls only available with Devin Local:
 - **Sandbox enforcement** - Org-wide sandbox mode and domain filtering
+- **Sandbox exclusions** - `sandbox.excluded` allow/ask/deny config (user and team settings) to run specific commands outside sandbox; excluded commands skip the sandbox proxy environment
 - **Granular permissions** - Fine-grained action control
 - **Network enforcement** - Allowed/denied domain lists
+- **Terminal allow/deny lists** - Teams can enforce through CLI permission scopes
+- **Enterprise login** - Login policies enforced in CLI
 - **Disable Cascade** - Force Devin Local exclusively [VERIFIED]
 
 ## Settings and Configuration
@@ -955,7 +1163,7 @@ C:\Users\<User>\
 - **Editor settings** - JSON at `%APPDATA%\Devin\User\settings.json`. Editable via text editor. Includes `windsurf.*` keys for agent settings.
 - **Agent settings** (UI-only subset) - Protobuf at `%USERPROFILE%\.codeium\windsurf\user_settings.pb`. Many settings also writable via `windsurf.*` keys. [VERIFIED]
 
-### Key Agent Settings (`windsurf.*` prefix retained)
+### Key Agent Settings (`windsurf.*` and `devin.*` prefixes)
 
 ```json
 {
@@ -968,7 +1176,10 @@ C:\Users\<User>\
   "windsurf.acp.enabledAgents": { "devin-cli": true }
 }
 ```
-[VERIFIED]
+
+**`devin.*` prefix:** `devin.allowCascadeAccessGitignoreFiles`, `devin.completionMode`, and `devin.autoContinue` are now also honored. Both `windsurf.*` and `devin.*` prefixes work. [VERIFIED]
+
+**Attribution:** Set `attribution` to `false` in `.devin/config.json` to suppress Devin mentions in commit messages. [VERIFIED]
 
 ### Key Files Reference
 
@@ -1090,6 +1301,24 @@ Three independent network stacks:
 
 ## Sources
 
+### Official Sources (2026-07-21)
+
+- https://devin.ai/blog/security-in-devin-review - Security in Devin Review (June 18, 2026)
+- https://devin.ai/blog/agentic-map-reduce - Agentic MapReduce architecture (July 1, 2026)
+- https://devin.ai/blog/security-swarm-eval - Security Swarm eval methodology (July 1, 2026)
+- https://cognition.com/blog/introducing-devin-security-swarm - Security Swarm product launch
+- https://devin.ai/security/ - Devin for Security product page
+- https://docs.devin.ai/work-with-devin/advanced-capabilities - Managed Devins, playbooks, MCP server
+- https://docs.devin.ai/cli/subagents - Subagent profiles and model selection
+- https://docs.devin.ai/work-with-devin/devin-review - Devin Review docs (security scanning)
+- https://docs.devin.ai/desktop/changelog-next - Desktop Next channel changelog
+- https://docs.devin.ai/release-notes/2026 - Devin Cloud 2026 release notes
+- https://docs.devin.ai/work-with-devin/devin-mcp - Devin MCP Server (tools, auth, setup)
+- https://docs.devin.ai/cli/extensibility/skills/creating-skills - Skills frontmatter reference
+- https://docs.devin.ai/cli/extensibility/plugins/overview - Plugins system (structure, CLI, governance)
+- https://docs.devin.ai/cli/extensibility/configuration - Config precedence and permission syntax
+- https://docs.devin.ai/cli/reference/permissions - Permission system reference
+
 ### Official Sources (2026-06-03)
 
 - https://devin.ai/blog/windsurf-is-now-devin-desktop - Official announcement (2026-06-02)
@@ -1115,6 +1344,28 @@ Three independent network stacks:
 - https://docs.devin.com/llms-full.txt - Full documentation export (accessed 2026-06-01)
 
 ## Document History
+
+**[2026-07-21 00:21]**
+- Added: Security section (Devin Review Security + Security Swarm + Agentic MapReduce)
+- Added: Devin Cloud Ultra agent tier and Managed Devins (parallel cloud sessions)
+- Added: Devin Local additional capabilities (skill permissions, autonomous diffs, shell !, MCP OAuth, login persistence, GPO fallback)
+- Added: Subagent profiles (explore/general/custom), AGENT.md format, tool permissions, controls
+- Added: Devin Plugins (preview) - structure, CLI commands, governance manifest
+- Added: Skills frontmatter reference (permissions, model, subagent, allowed-tools, triggers)
+- Added: Devin MCP Server - tool list, authentication, setup config
+- Added: 10 new official sources
+- Source: devin.ai/blog, docs.devin.ai, cognition.com/blog
+
+**[2026-07-20 23:37]**
+- Changed: Agent Command Center status bar hidden by default; restore via `"workbench.statusBar.visible": true`
+- Added: `devin.*` settings prefix now honored for gitignore access, completion mode, auto-continue
+- Added: `attribution` config option to suppress Devin mentions in commits
+- Added: Devin Local capabilities (editor context, subagent MCP tools, subagent default model, sandbox plan mode)
+- Added: Devin Plugins (preview, enterprise opt-in)
+- Added: `.windsurfignore` to ignore files; hooks migration command
+- Added: "Devin CLI" renamed to "Devin Local" in naming section
+- Added: Enterprise controls (sandbox.excluded, terminal allow/deny, CLI login policies)
+- Source: https://docs.devin.ai/desktop/changelog (releases 3.0.12 through latest)
 
 **[2026-06-03 18:30]**
 - Fixed: AP-PR-07 violation - removed vague "extremely performant" from CLI section
