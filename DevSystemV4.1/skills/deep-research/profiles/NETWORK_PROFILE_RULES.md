@@ -2,6 +2,8 @@
 
 Rules for writing and verifying network profile INFO documents with GOOD/BAD examples.
 
+**Inherits**: All INFO-* rules from @write-documents `INFO_RULES.md` apply in addition to NP-* rules below. Profiles are specialized INFO documents.
+
 ## Rule Index
 
 Quality (QA) - cross-cutting, applies to ALL sections

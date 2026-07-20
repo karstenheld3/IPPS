@@ -231,6 +231,7 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 - `/project-release` - Create a dated release with comprehensive release notes
 - `/propose-minto` - Generate AMINTON argument candidates from research material
 - `/reconcile` - Pragmatic review of critique findings
+- `/remove` - Remove session content, conversation content, or specific files with preview and confirmation
 - `/rename` - Global/local refactoring with verification
 - `/research` - Structured research with verification
 - `/session-archive` - Move session folder to archive

@@ -1,5 +1,18 @@
 # Failure Log
 
+## 2026-07-16 - Incomplete Sync: Missed devsystem-core.md Workflow Reference
+
+### [LOW] `GLOB-FL-039` Synced /delete workflow to README.md but not to devsystem-core.md Workflow Reference list
+
+- **When**: 2026-07-16 14:36 UTC+02:00
+- **Where**: `e:\Dev\IPPS\.devin\rules\devsystem-core.md` line 212-253 (Workflow Reference section)
+- **What**: When user asked `/sync to workspace Readme files`, agent updated README.md (workflow count, Utility section, Skills Reference, session-management detail) but missed the Workflow Reference list in `devsystem-core.md` which is also a workspace-level reference file loaded by `/prime`.
+- **Why it went wrong**:
+  - Interpreted "Readme files" as only `README.md`, did not consider that `devsystem-core.md` also contains a workflow reference list
+  - Same pattern as GLOB-FL-037: fixed one location, missed sibling locations with the same data
+- **Evidence**: User pointed to the missing entry in devsystem-core.md lines 212-253
+- **Prevention rule**: On any `/sync` that adds a new workflow, grep for ALL workflow reference lists across the workspace (README.md, devsystem-core.md, any index files) and update all of them.
+
 ## 2026-07-16 - Point-Fixes Instead of Requirement Propagation
 
 ### [HIGH] `GLOB-FL-037` Fixed only flagged lines, never propagated requirements file-wide
@@ -27,6 +40,22 @@
   - Repeated pattern within one session: content-level violations (CV-TR-03, then CV-DT-01) both caught by user, not by agent
 - **Evidence**: User: "ISO everywhere! and mention timezone. dont we have this already? Your not checking consistency with existing rules!"
 - **Prevention rule**: Before writing ANY example content into a rules/template/skill file, list the existing rule families that govern that content type (datetime, characters, links, format) and check each example line against them. Examples in rule files are normative - they must pass every rule the file set enforces.
+
+## 2026-07-16 - Deleted File Without Confirmation, Misread "no keep"
+
+### [MEDIUM] `GLOB-FL-038` Deleted useful file without asking, then misinterpreted user's "no keep" correction
+
+- **When**: 2026-07-16 12:05 UTC+02:00
+- **Where**: `DevSystemV4.1/workflows/delete.md` - conversation following GLOB-FL-035
+- **What**: After user flagged the "draft" verb violation (GLOB-FL-035), agent over-corrected: immediately deleted the file AND THEN asked "Want me to re-present?" User replied "no keep." meaning "don't delete it, keep the file" - but it was already gone. Agent misread "no keep" as "no [don't re-present], [moving on]" and proceeded to a new task.
+- **Why it went wrong**:
+  - Over-corrected the GLOB-FL-035 error: the file content was valid and useful, only the creation procedure was wrong
+  - Deleted without asking confirmation first - violated the very preview/confirm pattern the `/delete` workflow itself enforces
+  - Misinterpreted ambiguous two-word response "no keep" by choosing the interpretation that aligned with the action already taken (confirmation bias)
+  - Did not consider that user might want to keep already-created content despite procedural error
+- **Evidence**: Screenshot shows sequence: agent deleted file → asked about re-presenting → user said "no keep." → agent moved to next task. File remained deleted until user asked "where is the delete.md workflow?" 2 hours later.
+- **Workflow re-read findings**: agent-behavior.md distinguishes verb semantics for CREATION, but says nothing about deletion being the correct response to a creation error. A created file with valid content should be kept unless user explicitly asks to remove it.
+- **Prevention rule**: 1) Never delete content that has value just because the creation procedure was wrong - the procedure error is logged, the content stands. 2) When user gives an ambiguous short response that could mean opposite things, ask for clarification instead of assuming. 3) All destructive actions require explicit confirmation BEFORE execution, even corrective ones.
 
 ## 2026-07-16 - Created File When User Said "Draft"
 

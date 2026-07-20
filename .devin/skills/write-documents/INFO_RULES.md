@@ -36,6 +36,7 @@ Format (FT)
 - INFO-FT-01: Standard section order per `INFO_GUIDE.md` Section 2
 - INFO-FT-02: Document History present, reverse chronological, with action prefixes
 - INFO-FT-03: Diagrams use Unicode box-drawing characters per `core-conventions.md`
+- INFO-FT-04: Foreign terms always translated into document language at point of use
 
 ## INFO-HD-01: Header Block
 
@@ -237,6 +238,26 @@ According to the [Microsoft OAuth documentation](https://learn.microsoft.com/oau
 ```
 
 **When to apply:** Online sources, apps, and tools that have a URL. Local file references (`filename.py`) do not need inline links.
+
+## INFO-FT-04: Foreign Term Translation
+
+When a document uses terms from another language, each term MUST be translated or explained in the document's primary language at point of use. Never create hybrid compounds mixing languages without translation.
+
+**BAD:**
+```markdown
+- API requires authentification-Berechtigung before access
+- The Endpunkt has rate-Begrenzung enabled
+- Submit demande for acceso-Nachweis
+```
+
+**GOOD:**
+```markdown
+- API requires authentification (= Berechtigung/authorization) before access
+- Endpoint: "punto de acceso" (access point) has rate limiting enabled
+- Demarche administrative: "demande de titre" (application for certificate)
+```
+
+**Rule**: Foreign terms appear as-is (e.g., official API names, legal terms, form field labels) followed by translation in parentheses or after `=`. Never fuse a foreign word with a native suffix into an undefined hybrid (e.g., "acceso-Nachweis", "demande-Antrag").
 
 ## INFO-FT-02: Document History
 

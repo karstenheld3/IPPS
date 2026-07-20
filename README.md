@@ -451,14 +451,25 @@ Browser automation via Microsoft Playwright MCP server.
 
 ### session-management
 
-Session lifecycle management: init, save, resume, finalize, archive.
+Session lifecycle management: init, save, resume, finalize, archive. Cascade conversation search and deletion.
 
 **Files**:
 - `NOTES_TEMPLATE.md` - Session notes template
 - `PROBLEMS_TEMPLATE.md` - Problem tracking template
 - `PROGRESS_TEMPLATE.md` - Progress tracking template
+- `cascade-search.ps1` - List and search Cascade conversation .pb files by date/size
+- `cascade-delete.ps1` - Delete Cascade conversations with preview and confirmation
 
-**Usage**: Invoked by `/session-new`, `/session-load`, `/session-save`, `/session-finalize`.
+**Usage**: Invoked by `/session-new`, `/session-load`, `/session-save`, `/session-finalize`, `/remove conversation`.
+
+**Quick examples**:
+```powershell
+# List last 10 conversations
+.\DevSystemV4.1\skills\session-management\cascade-search.ps1
+
+# Delete conversations older than 30 days
+.\DevSystemV4.1\skills\session-management\cascade-delete.ps1 -OlderThanDays 30
+```
 
 ### windows-desktop-control
 
@@ -555,7 +566,7 @@ IPPS/
 - **ms-playwright-mcp** - Browser automation via Microsoft Playwright MCP server
 - **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF
 - **playwriter-mcp** - Real browser automation with existing logins via Playwriter extension
-- **session-management** - Session init, save, resume, finalize, archive
+- **session-management** - Session init, save, resume, finalize, archive; Cascade conversation search and deletion
 - **travel-info** - Travel lookups: flights, trains, transit, country-specific info
 - **windows-desktop-control** - Windows screenshots, window management, keyboard/mouse
 - **windsurf-auto-model-switcher** - Switch Cascade AI model tier programmatically
@@ -658,7 +669,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ## Workflows Reference
 
-42 workflows in `.devin/workflows/`:
+43 workflows in `.devin/workflows/`:
 
 **Entry Points**
 - [`/build`](.devin/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
@@ -717,6 +728,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 - [`/switch-model`](.devin/workflows/switch-model.md) - Switch Cascade AI model tier (HIGH, MID, LOW)
 - [`/project-release`](.devin/workflows/project-release.md) - Create a dated release with comprehensive release notes
 - [`/cleanup`](.devin/workflows/cleanup.md) - Delete temporary files and artifacts left by workflows and skills
+- [`/remove`](.devin/workflows/remove.md) - Remove session content, conversation content, or specific files with preview and confirmation
 
 ## Usage Examples
 
