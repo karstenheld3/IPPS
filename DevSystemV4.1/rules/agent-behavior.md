@@ -55,6 +55,7 @@ Behavioral rules for agent execution patterns.
 - Small cycles: implement → test → fix → green → next
 - Question introduced complexity: Is this in the prompt/spec? Avoid scope creep
 - No lazy conclusions: Don't state what you can't prove. Verify before asserting
+- Date verification: When dealing with dates, weekdays, or predicting weekdays, ALWAYS verify today's date and weekday via web search. Never rely on training data or internal clock assumptions
 - Reduce concepts: Fewer moving parts = fewer failure modes. Merge overlapping concepts
 - Avoid contradictions, flawed logic, circular definitions. If it doesn't make sense, stop and fix or re-think
 - Always repeat the initial / overall goal to yourself to stay focused 

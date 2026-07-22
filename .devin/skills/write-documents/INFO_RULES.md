@@ -214,13 +214,20 @@ All URLs in source entries must start with `https://` (or `http://` if HTTPS una
 
 ## INFO-SC-05: Inline Source Links
 
-When a content section discusses information from an online source, app, or tool, include the URL as a markdown link at first mention in that section. The centralized Sources section remains as the reference with source IDs and primary findings. Inline links provide immediate access without scrolling.
+When a content section discusses information from an online source, app, tool, or entity with a website, include the URL as a markdown link at first mention in that section. The centralized Sources section remains as the reference with source IDs and primary findings. Inline links provide immediate access without scrolling.
 
 **BAD** (URL only in Sources section, no inline link):
 ```markdown
 ## 2. Token Refresh
 
 Token refresh requires client_secret for confidential apps.
+```
+
+**BAD** (entity discussed without linking its website, acronym not spelled out):
+```markdown
+## Summary
+
+She is VP of Engineering at Acme Corp (enterprise analytics platform).
 ```
 
 **GOOD** (inline link at first mention):
@@ -230,6 +237,13 @@ Token refresh requires client_secret for confidential apps.
 Token refresh requires client_secret for confidential apps ([Microsoft OAuth docs](https://learn.microsoft.com/oauth)).
 ```
 
+**GOOD** (entity linked at first mention):
+```markdown
+## Summary
+
+She is Vice President of Engineering at [Acme Corp](https://www.acmecorp.example.com) (enterprise analytics platform).
+```
+
 **Also acceptable** (link text describes the source):
 ```markdown
 ## 2. Token Refresh
@@ -237,7 +251,9 @@ Token refresh requires client_secret for confidential apps ([Microsoft OAuth doc
 According to the [Microsoft OAuth documentation](https://learn.microsoft.com/oauth), token refresh requires client_secret for confidential apps.
 ```
 
-**When to apply:** Online sources, apps, and tools that have a URL. Local file references (`filename.py`) do not need inline links.
+**When to apply:** Online sources, apps, tools, and entities (companies, organizations, products, profiles) that have a URL. Link at first mention in each section. Local file references (`filename.py`) do not need inline links.
+
+**Summary sections are high-priority.** Readers expect to click immediately on every important entity mentioned there. The subject's profile, their company, connected people, and referenced communities must all be linked in the Summary.
 
 ## INFO-FT-04: Foreign Term Translation
 

@@ -22,6 +22,8 @@ Criteria (CR)
 - SOCAS-13: Empty Structure
 - SOCAS-14: Arbitrary Sequencing
 - SOCAS-15: Net-Negative Adoption
+- SOCAS-16: Disguised Commercial Intent
+- SOCAS-17: Weaponized Persuasion
 
 Application (AP)
 - SOCAS-AP-01: Cite criterion ID with quoted evidence
@@ -35,13 +37,13 @@ Reporting (RP)
 
 ## Table of Contents
 
-- [The 15 Criteria](#the-15-criteria)
+- [The 17 Criteria](#the-17-criteria)
 - [Application Rules](#application-rules)
 - [Context-Appropriate Subsets](#context-appropriate-subsets)
 - [UX-Specific Criteria](#ux-specific-criteria)
 - [Reporting Format](#reporting-format)
 
-## The 15 Criteria
+## The 17 Criteria
 
 ### SOCAS-01: Inconsistencies
 
@@ -107,6 +109,9 @@ Poor signal-to-noise ratio:
 - Verbose explanations of obvious things
 - Missing explanations of complex things
 - Filler content without substance
+- Hedging clusters adding no information ("it is important to note", "it should be mentioned", "it is worth considering")
+- Generic phrasing where domain expertise would produce specific examples
+- Repetitive thesis restatement in different words across paragraphs
 
 ### SOCAS-09: Lack of Structure
 
@@ -166,6 +171,30 @@ Solution introduces more problems than it solves - detectable through community 
 - Known problems acknowledged by maintainers but unresolved across major versions
 - Adopters report increased complexity, debugging time, or breaking changes disproportionate to value gained
 
+### SOCAS-16: Disguised Commercial Intent
+
+Content whose primary purpose is selling while presenting as journalism, education, or opinion:
+- Call-to-action buried after 80%+ emotional buildup (AIDA: Attention, Interest, Desire, Action)
+- Independence or ad-free claims contradicted by undisclosed sponsorship, equity stakes, or commercial relationships
+- Purchase framed as moral imperative or identity act ("join the movement")
+- Hidden costs: price or recurring charges appear only after emotional investment
+- Confirm-shaming: decline option worded to induce guilt ("No, I prefer to stay uninformed")
+- Author condemns competitors for tactics they themselves employ
+
+Detection test: remove the final CTA. If the text loses its purpose, it was funnel, not content.
+
+### SOCAS-17: Weaponized Persuasion
+
+Cialdini's influence principles (reciprocity, scarcity, authority, consistency, liking, social proof) applied deceptively:
+- Reciprocity trap: unsolicited "free" offering creating obligation to purchase
+- Artificial scarcity or deadline pressure on non-scarce goods ("offer expires Friday")
+- Authority transfer from financially interested parties presented as independent endorsement
+- Commitment escalation: small initial ask (quiz, petition, trial) leading to larger ask
+- Social proof from non-independent parties (investor endorsing own investment, unverifiable "thousands of customers")
+- Tribal framing: in-group vs. out-group language bypassing rational evaluation
+- Fear appeals solvable only by the offered product
+- False binary reducing complex issues to "our product vs. catastrophe"
+
 ## Application Rules
 
 ### SOCAS-AP-01: Cite Criterion ID with Quoted Evidence
@@ -194,13 +223,13 @@ Found 1 minor inconsistency. Recommend complete rework of the specification.
 
 **GOOD:**
 ```
-SOCAS violations: 5 of 15 (SOCAS-01, SOCAS-03, SOCAS-06, SOCAS-09, SOCAS-10)
+SOCAS violations: 5 of 17 (SOCAS-01, SOCAS-03, SOCAS-06, SOCAS-09, SOCAS-10)
 Verdict: REWORK - exceeds 3-criterion threshold
 ```
 
 ### SOCAS-AP-03: Context-Appropriate Subsets
 
-Not all 15 criteria apply to every context. Apply only the relevant subset.
+Not all 17 criteria apply to every context. Apply only the relevant subset.
 
 **BAD:** Flagging SOCAS-04 (Undisclosed Contact Information) on a code module.
 
@@ -226,7 +255,7 @@ Apply when reviewing agent-generated specs, research, code, plans:
 ### Document Review
 
 Apply when reviewing human-authored technical specifications, API docs, process descriptions, requirements:
-- All 14 criteria applicable
+- All 17 criteria applicable
 
 ### Source Evaluation (`/research`)
 
@@ -242,6 +271,8 @@ Apply when ranking external sources for reliability:
 - SOCAS-12 (Presentation Sloppiness)
 - SOCAS-13 (Empty Structure)
 - SOCAS-15 (Net-Negative Adoption)
+- SOCAS-16 (Disguised Commercial Intent)
+- SOCAS-17 (Weaponized Persuasion)
 
 High SOCAS count = unreliable source. Prefer sources with low SOCAS indicators. Document findings in source notes.
 
@@ -254,7 +285,7 @@ Also evaluate community and repo health signals:
 ### Organizational Assessment
 
 Evaluate organizations by their public outputs (website, docs, communications):
-- All 14 criteria applicable
+- All 17 criteria applicable
 
 ## UX-Specific Criteria
 
@@ -302,7 +333,7 @@ Overall the document has some issues that should be addressed.
 
 **GOOD:**
 ```
-SOCAS: 4/15 violated (SOCAS-01 HIGH, SOCAS-06 MEDIUM, SOCAS-10 LOW, SOCAS-12 LOW)
+SOCAS: 4/17 violated (SOCAS-01 HIGH, SOCAS-06 MEDIUM, SOCAS-10 LOW, SOCAS-12 LOW)
 Verdict: REWORK - exceeds 3-criterion threshold
 ```
 

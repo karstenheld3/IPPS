@@ -133,8 +133,14 @@ $deprecatedSkillFolders = @("edird-phase-model", "ipps-deep-research")
 # Personal workflows (from [PERSONAL_WORKFLOWS] in !NOTES.md) - excluded from Development-only repos
 $personalWorkflows = @("conversation-start.md", "conversation-update.md")
 
+# Subfolders to never deploy (research data, large binaries, source screenshots)
+$excludeSubfolders = @("skills\llm-evaluation\model-sources")
+
 function Test-FileIncluded {
     param([string]$RelPath, [string]$Category)
+    foreach ($excl in $excludeSubfolders) {
+        if ($RelPath.StartsWith("$excl\") -or $RelPath -eq $excl) { return $false }
+    }
     if ($RelPath.StartsWith("skills\")) {
         $skillName = ($RelPath.Split('\'))[1]
         return $skillCategories[$Category] -contains $skillName
