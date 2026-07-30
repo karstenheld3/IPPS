@@ -54,9 +54,7 @@ Find the target `CONVERSATION_[COUNTERPARTY].md` file.
 
 **If counterparty specified**: Search for `CONVERSATION_[COUNTERPARTY].md` in session/project folders.
 
-**If not specified**: List all `CONVERSATION_*.md` files in current context. If multiple, ask user which one.
-
-**If legacy `CONVERSATION.md` found**: Rename to `CONVERSATION_[COUNTERPARTY].md` first - CV-FL-01. Confirm with user.
+**If not specified**: List all `CONVERSATION_*.md` files in current context. If multiple, choose most likely match from context, state choice to user.
 
 **If not found**: Inform user to use `/conversation-start` instead. Stop workflow.
 

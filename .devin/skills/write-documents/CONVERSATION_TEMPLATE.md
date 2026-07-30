@@ -18,6 +18,7 @@
 - AUTO-TRANSLATE: Translate all languages except `CONVERSATION_DO_NOT_TRANSLATE_LIST` - CV-TR-04
 - TERM PAIRS: Use `TRANSLATION_TERM_PAIRS` for consistent translation - CV-TR-05
 - DOUBLE LANGUAGE: Use `[ENGLISH] / [LOCAL]` in log summaries, key outcomes, status, todos - CV-TR-06
+- WEEKDAY VERIFICATION: When writing any weekday-date combination, ALWAYS verify via web search first. Never calculate mentally. Never contradict user's weekday without search proof - CV-DT-04
 - SEND EMAILS VIA PLAYWRIGHT GMAIL UI - NEVER use CLI tools to send (body encoding fails) - CV-EM-02
 - Email header format: `From: | To: | CC: | BCC: | Subject: | Reply-To: | Thread: | Message-ID:` - CV-EM-01
 - History heading format: `### YYYY-MM-DD HH:MM - Summary` - CV-ST-04

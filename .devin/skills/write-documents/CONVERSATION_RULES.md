@@ -8,6 +8,7 @@ Datetime (DT)
 - CV-DT-01: Use `YYYY-MM-DD HH:MM` format everywhere
 - CV-DT-02: History and Log in reverse chronological order (newest first)
 - CV-DT-03: Attachment folders use `YYYY-MM-DD_HH-MM_[Topic]/` format
+- CV-DT-04: Verify weekday-date combinations via web search before writing
 
 Translation (TR)
 - CV-TR-01: Non-English text MUST have English translation
@@ -117,6 +118,22 @@ Use `YYYY-MM-DD HH:MM` in all timestamps: headings, log entries, todos, attachme
 ### 2026-03-17 14:30 - Timeline Discussion
 - **2026-03-17 14:30** - Discussed timeline
 - **2026-03-17 14:30** - Send proposal - Deadline: 2026-03-20, Status: TODO:REPLY
+```
+
+## Weekday Verification
+
+When writing any weekday-date combination (e.g. "Friday, 2026-07-24"), ALWAYS verify via web search first. Never calculate mentally - mental calendar math is systematically unreliable.
+
+**BAD:**
+```
+Deadline: Thursday, 2026-07-24
+(written without verification - actually Friday)
+```
+
+**GOOD:**
+```
+[verify via web search: "what day is July 24 2026" → Friday]
+Deadline: Friday, 2026-07-24
 ```
 
 ## Reverse Chronological Order

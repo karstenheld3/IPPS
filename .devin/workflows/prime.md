@@ -17,6 +17,11 @@ These define core conventions and system behavior.
 
 Search for .md files starting with "!" - these contain critical specifications:
 ```
+
+1m
+prime 
+
+
 find_by_name Pattern="!*.md" SearchDirectory="[WORKSPACE_FOLDER]" Type="file"
 ```
 Read each file found and **summarize key points internally** to better remember content.

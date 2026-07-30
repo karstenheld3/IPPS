@@ -29,6 +29,7 @@ LLM-introduced noise patterns. Each violates a rule above - scan every draft aga
 - Zero discourse markers, forced marker stuffing, or wrong register - CV-HM-04
 - Uniform sentence lengths or artificial choppiness - CV-HM-05
 - Dropped subject pronouns or articles in full sentences (telegram style) - CV-HM-01, CV-HM-07
+- Impersonal event descriptions: AI describes what happened ("Discussed X for an hour"), humans describe what THEY did ("We discussed X for about an hour") - CV-HM-07
 - Invented greetings/closings or mechanical per-draft rotation - CV-HM-06
 - Translated-English phrasing (translationese) - CV-HM-07
 - High-frequency LLM vocabulary, formal connectives in casual context - Vocabulary Avoidance, Connective Register
@@ -332,6 +333,31 @@ Draft 3 (new thread, contract topic): "Hallo Thomas," ... "Beste Grüße"
 Drafts in any language must read as written by a native speaker. Never compose in English and translate literally - English sentence structure, idioms, and word choice carry over and read as machine-translated. Compose from the intent directly in the target language.
 
 **Verification test**: Would a native speaker write this sentence exactly this way? If unsure, rephrase from the intent, not from the English wording.
+
+**Subject pronoun test**: Every sentence describing an action or event must have a personal subject (ich, wir, er, sie). AI defaults to impersonal event descriptions (noun phrases, participial constructions). Humans talk about themselves first - the subject pronoun is what makes text sound like a person, not a report.
+
+**BAD** (German, impersonal event description - reads as AI summary):
+```
+Eine Stunde lang über das Projekt gesprochen.
+Richtig produktives Gespräch zum Thema Migration.
+```
+No subject pronoun. Reads like a calendar note or log entry, not a person writing.
+
+**GOOD** (German, personal subject - reads as human):
+```
+Wir haben ca. eine Stunde über das Projekt gesprochen.
+Ich fand das Gespräch zum Thema Migration richtig produktiv.
+```
+
+**BAD** (English, same pattern):
+```
+Great call. Discussed the project scope for an hour.
+```
+
+**GOOD** (English, same pattern):
+```
+We had a great call. We discussed the project scope for about an hour.
+```
 
 **BAD** (German, formal calque from English):
 ```
