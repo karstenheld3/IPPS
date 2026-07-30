@@ -50,7 +50,10 @@ Usage: `--keys-file [WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
 **Sync direction:**
 ```
 [DEVSYSTEM_FOLDER] ---(sync to)---> .devin/
+[DEVSYSTEM_FOLDER]\workflows ---(copy to)---> .claude/commands/
 ```
+
+**Claude Code commands:** All workflows from `[DEVSYSTEM_FOLDER]\workflows` are also copied to `.claude/commands/` (Devin CLI imports these as slash commands via Claude Code compatibility).
 
 **Exception:** If user edits .devin directly, sync BACK to [DEVSYSTEM_FOLDER] first.
 
