@@ -62,9 +62,9 @@
 | **Type** | IDE | Terminal | Terminal | IDE Extension | Gateway + Multi-channel |
 | **Platform** | Windows, macOS, Linux | Windows, macOS, Linux | macOS, Linux, Windows (WSL) | VS Code, Visual Studio, JetBrains | Windows, macOS, Linux |
 | **Instructions** / **Rules** | `.devin/rules/*.md` | `CLAUDE.md` | `AGENTS.md` | `.github/copilot-instructions.md` | `AGENTS.md`, `SOUL.md` |
-| **Commands/Workflows** | `.devin/workflows/*.md` | `.claude/commands/*.md` | Custom prompts only | Prompt files only | Skills only (no workflows) |
-| **Skills** | ✅ Yes | ✅ Yes | ❌ No | ❌ No | ✅ Yes |
-| **Subagents** | ❌ No | ✅ Yes | ❌ No | ✅ Yes (custom agents) | ✅ Yes (`sessions_spawn`) |
+| **Commands/Workflows** | `.devin/workflows/*.md` | `.claude/commands/*.md` (legacy) | ❌ Removed (v0.117.0) | Prompt files only | Skills only (no workflows) |
+| **Skills** | ✅ Yes | ✅ Yes (absorbed commands) | ✅ Yes (`.agents/skills/`) | ❌ No | ✅ Yes |
+| **Subagents** | ❌ No | ✅ Yes | ✅ Yes (`/agent`) | ✅ Yes (custom agents) | ✅ Yes (`sessions_spawn`) |
 | **Hooks** | ✅ Yes | ✅ Yes | ❌ No | ❌ No | ✅ Yes (webhooks) |
 | **MCP Support** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No (native tools) |
 | **Sandbox** | ❌ No | ❌ No | ✅ Yes (OS-level) | ❌ No | ✅ Yes (Docker/VM) |
@@ -88,11 +88,11 @@
 
 | Aspect | Windsurf | Claude Code | Codex CLI | GitHub Copilot | OpenClaw |
 |--------|----------|-------------|-----------|----------------|----------|
-| **Custom commands** | `/workflow-name` | `/command-name` | `/prompts: name` | Not supported | `/skill-name` |
-| **Command location (project)** | `.devin/workflows/*.md` | `.claude/commands/*.md` | Not supported | `.github/prompts/*.prompt.md` | `<workspace>/skills/*/SKILL.md` |
-| **Command location (user)** | Not supported | `~/.claude/commands/*.md` | Not supported | Not supported | `~/.openclaw/skills/*/SKILL.md` |
-| **Command format** | Markdown with YAML frontmatter | Markdown with arguments | Not supported | Markdown with YAML frontmatter | AgentSkills YAML frontmatter |
-| **Built-in commands** | `/prime`, `/verify`, `/commit` | `/init`, `/memory`, `/agents` | `/review`, `/compact`, `/diff` | None | None (use skills) |
+| **Custom commands** | `/workflow-name` | `/command-name` (legacy) | ❌ Removed (use skills) | Not supported | `/skill-name` |
+| **Command location (project)** | `.devin/workflows/*.md` | `.claude/commands/*.md` (legacy) | `.agents/skills/*/SKILL.md` | `.github/prompts/*.prompt.md` | `<workspace>/skills/*/SKILL.md` |
+| **Command location (user)** | Not supported | `~/.claude/commands/*.md` (legacy) | `~/.agents/skills/*/SKILL.md` | Not supported | `~/.openclaw/skills/*/SKILL.md` |
+| **Command format** | Markdown with YAML frontmatter | Markdown with arguments | ❌ Removed → SKILL.md | Markdown with YAML frontmatter | AgentSkills YAML frontmatter |
+| **Built-in commands** | `/prime`, `/verify`, `/commit` | `/init`, `/memory`, `/agents` | `/review`, `/compact`, `/skills` | None | None (use skills) |
 
 ### Prompt Syntax (Agentic Language Enrichments)
 
@@ -100,15 +100,15 @@
 |------------|----------|-------------|-----------|----------------|----------|
 | **File reference** | `@file` | `@file` | `@` (fuzzy picker) | `#file:name` | File tools |
 | **Folder reference** | `@folder/` | `@folder/` | ❌ No | ❌ No | File tools |
-| **Skill invocation** | `@skill-name` | `@skill-name` | N/A | N/A | `/skill-name` |
+| **Skill invocation** | `@skill-name` | `@skill-name` | `$skill-name` or `/skills` | N/A | `/skill-name` |
 | **Web/docs search** | `@web`, `@docs` | ❌ No | `--search` flag | ❌ No | `web_search` tool |
 | **Terminal reference** | `@terminal` | ❌ No | ❌ No | `@terminal` | ❌ No |
 | **Conversation reference** | `@conversation` | ❌ No | ❌ No | ❌ No | Session history |
 | **Workspace context** | (automatic) | (automatic) | (automatic) | `@workspace` | Bootstrap files |
 | **Selection reference** | (automatic) | (automatic) | (automatic) | `#selection` | N/A |
 | **Codemap reference** | `@codemap-name` | ❌ No | ❌ No | ❌ No | ❌ No |
-| **Slash commands** | `/workflow-name` | `/command-name` | `/command` | ❌ No (use prompts) | `/skill-name` |
-| **Custom prompts** | N/A | N/A | `/prompts: name` | Prompt files | Skills |
+| **Slash commands** | `/workflow-name` | `/command-name` | `/skills` + `$name` | ❌ No (use prompts) | `/skill-name` |
+| **Custom prompts** | N/A | N/A | ❌ Removed (v0.117.0) | Prompt files | Skills |
 | **Shell execution** | ❌ No | `!command` | `!command` | ❌ No | `exec` tool |
 | **Memory shortcut** | ❌ No | `#` key (saves to CLAUDE.md) | ❌ No | ❌ No | Write to `memory/` |
 | **MCP tool reference** | (automatic) | (automatic) | (automatic) | `#tool:name` | Native tools |
@@ -126,21 +126,23 @@
 
 | Aspect | Windsurf | Claude Code | Codex CLI | GitHub Copilot | OpenClaw |
 |--------|----------|-------------|-----------|----------------|----------|
-| **Skills supported** | ✅ Yes | ✅ Yes | ❌ No | ❌ No | ✅ Yes |
-| **Skill location (project)** | `.devin/skills/<name>/SKILL.md` | `.claude/skills/<name>/SKILL.md` | N/A | N/A | `<workspace>/skills/<name>/SKILL.md` |
-| **Skill location (user)** | `~/.codeium/windsurf/skills/` | `~/.claude/skills/` | N/A | N/A | `~/.openclaw/skills/` |
-| **Skill format** | YAML frontmatter + Markdown | YAML frontmatter + Markdown | N/A | N/A | AgentSkills YAML + Markdown |
-| **Skill invocation** | `@skill-name` or auto-trigger | `@skill-name` or auto-trigger | N/A | N/A | `/skill-name` |
+| **Skills supported** | ✅ Yes | ✅ Yes (absorbed commands) | ✅ Yes (absorbed prompts) | ❌ No | ✅ Yes |
+| **Skill location (project)** | `.devin/skills/<name>/SKILL.md` | `.claude/skills/<name>/SKILL.md` | `.agents/skills/<name>/SKILL.md` | N/A | `<workspace>/skills/<name>/SKILL.md` |
+| **Skill location (user)** | `~/.codeium/windsurf/skills/` | `~/.claude/skills/` | `~/.agents/skills/` | N/A | `~/.openclaw/skills/` |
+| **Skill format** | YAML frontmatter + Markdown | YAML frontmatter + Markdown | YAML frontmatter + Markdown | N/A | AgentSkills YAML + Markdown |
+| **Skill invocation** | `@skill-name` or auto-trigger | `@skill-name` or auto-trigger | `$skill-name` or auto-trigger | N/A | `/skill-name` |
+| **Disable auto-invocation** | `triggers: [user]` | `disable-model-invocation: true` | `allow_implicit_invocation: false` | N/A | N/A (always explicit) |
+| **Progressive disclosure** | ❌ No (full load) | ✅ Yes (3-level) | ✅ Yes (3-level) | N/A | ❌ No (full load) |
 
 ### Subagents and Custom Agents
 
 | Aspect | Windsurf | Claude Code | Codex CLI | GitHub Copilot | OpenClaw |
 |--------|----------|-------------|-----------|----------------|----------|
-| **Subagents supported** | ❌ No | ✅ Yes | ❌ No | ✅ Yes | ✅ Yes |
-| **Agent location (project)** | N/A | `.claude/agents/*.md` | N/A | `.github/agents/*.agent.md` | N/A (runtime spawn) |
-| **Agent location (user)** | N/A | `~/.claude/agents/*.md` | N/A | VS Code profile folder | N/A (runtime spawn) |
-| **Agent format** | N/A | Markdown with config | N/A | YAML frontmatter + Markdown | `sessions_spawn` tool call |
-| **Built-in agents** | N/A | Explore, Plan, General | N/A | Ask, Edit, Agent | Main + spawned sessions |
+| **Subagents supported** | ❌ No | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
+| **Agent location (project)** | N/A | `.claude/agents/*.md` | N/A (runtime) | `.github/agents/*.agent.md` | N/A (runtime spawn) |
+| **Agent location (user)** | N/A | `~/.claude/agents/*.md` | N/A (runtime) | VS Code profile folder | N/A (runtime spawn) |
+| **Agent format** | N/A | Markdown with config | `/agent` command | YAML frontmatter + Markdown | `sessions_spawn` tool call |
+| **Built-in agents** | N/A | Explore, Plan, General | `/agent` threads | Ask, Edit, Agent | Main + spawned sessions |
 | **Agent handoffs** | N/A | Not supported | N/A | ✅ Yes (sequential workflows) | `sessions_send` messaging |
 
 ### Hooks
@@ -208,12 +210,40 @@
 | File Type | Windsurf | Claude Code | Codex CLI | GitHub Copilot | OpenClaw |
 |-----------|----------|-------------|-----------|----------------|----------|
 | **Instructions** | `.devin/rules/*.md` | `CLAUDE.md` | `AGENTS.md` | `.github/copilot-instructions.md` | `AGENTS.md`, `SOUL.md` |
-| **Commands/Workflows** | `.devin/workflows/*.md` | `.claude/commands/*.md` | N/A | `.github/prompts/*.prompt.md` | `skills/*/SKILL.md` |
-| **Skills** | `.devin/skills/*/SKILL.md` | `.claude/skills/*/SKILL.md` | N/A | N/A | `skills/*/SKILL.md` |
-| **Agents** | N/A | `.claude/agents/*.md` | N/A | `.github/agents/*.agent.md` | `sessions_spawn` (runtime) |
+| **Commands/Workflows** | `.devin/workflows/*.md` | `.claude/commands/*.md` (legacy) | ❌ Removed → Skills | `.github/prompts/*.prompt.md` | `skills/*/SKILL.md` |
+| **Skills** | `.devin/skills/*/SKILL.md` | `.claude/skills/*/SKILL.md` | `.agents/skills/*/SKILL.md` | N/A | `skills/*/SKILL.md` |
+| **Agents** | N/A | `.claude/agents/*.md` | `/agent` (runtime) | `.github/agents/*.agent.md` | `sessions_spawn` (runtime) |
 | **Hooks** | `.devin/hooks.json` | `.claude/settings.json` | N/A | N/A | `openclaw.json` webhooks |
 | **MCP servers** | `~/.codeium/windsurf/mcp_config.json` | `.mcp.json` | `~/.codex/config.toml` | `.vscode/mcp.json` | N/A (native tools) |
 | **Main config** | `%APPDATA%\Windsurf\User\settings.json` | `~/.claude/settings.json` | `~/.codex/config.toml` | VS Code settings | `~/.openclaw/openclaw.json` |
+
+## Design Convergence: Commands Merged into Skills
+
+The industry is converging on a unified "skills" concept that absorbs what was previously "commands" or "workflows":
+
+| Tool | Original Model | Current Model (2026) | Separation Mechanism |
+|------|---------------|---------------------|---------------------|
+| Windsurf Cascade | Workflows + Skills + Rules (3 types) | Legacy, being sunset | Directory separation |
+| Claude Code | Commands + Skills + Rules (3 types) | Skills absorbed Commands (v2.1.3, Jan 2026) | `disable-model-invocation: true` flag |
+| Codex CLI | Prompts + AGENTS.md (2 types) | Skills absorbed Prompts (v0.117.0, Mar 2026) | `allow_implicit_invocation: false` in openai.yaml |
+| Devin CLI/Local | Skills + Rules (2 types, from start) | Skills only (never had commands) | `triggers: [user]` frontmatter |
+
+**The two conflated interaction patterns:**
+1. **Command** (imperative): "Execute `/verify` NOW" - user-initiated, deterministic
+2. **Skill** (declarative): "Apply this knowledge when relevant" - agent-initiated, contextual
+
+**Why tools merged them (engineering rationale):**
+- Implementation parity: both are markdown + YAML frontmatter injected as prompts
+- Skills are a strict superset: add subagent execution, progressive disclosure, supporting files
+- One system to maintain vs two with identical mechanics
+- OpenAI (Codex): "It doesn't make sense to provide two overlapping features and mechanisms that do the same thing. The industry has rallied behind skills as a standard."
+
+**What was lost:**
+- Browsability: can't scan "my explicit commands" separately from "agent knowledge"
+- Semantic clarity: "do this now" vs "know this for later" collapsed into a flag
+- User mental model: directory separation (`commands/` vs `skills/`) was more intuitive than frontmatter flags
+
+**Note:** Windsurf/Devin Desktop Cascade still maintains the original separation (workflows = user-invoked, skills = auto-invoked). This is the only remaining tool that preserves the directory-level distinction, but it is being sunset.
 
 ## Cross-Agent Compatibility Notes
 
@@ -234,10 +264,12 @@ Both **Codex CLI** and **GitHub Copilot** support `AGENTS.md` files:
 
 ### Skills Portability
 
-Windsurf, Claude Code, and OpenClaw share compatible `SKILL.md` formats:
-- Same YAML frontmatter structure (AgentSkills spec)
-- Invocation: `@skill-name` (Windsurf/Claude) or `/skill-name` (OpenClaw)
-- Skills can be copied between `.devin/skills/`, `.claude/skills/`, and `<workspace>/skills/`
+Windsurf, Claude Code, Codex CLI, and OpenClaw share compatible `SKILL.md` formats:
+- Same YAML frontmatter structure (AgentSkills open standard: https://agentskills.io/)
+- Invocation: `@skill-name` (Windsurf/Claude), `$skill-name` (Codex), `/skill-name` (OpenClaw)
+- Vendor-neutral path: `.agents/skills/` (Codex chose this explicitly for cross-tool sharing)
+- Skills can be copied between `.devin/skills/`, `.claude/skills/`, `.agents/skills/`, and `<workspace>/skills/`
+- Codex confirms: symlink `~/.claude/skills/` to `~/.agents/skills/` and both products see the same skills
 
 ### OpenClaw Unique Features
 
@@ -250,6 +282,19 @@ Windsurf, Claude Code, and OpenClaw share compatible `SKILL.md` formats:
 - **No MCP**: Uses native tools instead (exec, browser, web_search, etc.)
 
 ## Document History
+
+**[2026-07-23 18:00]**
+- Changed: All Codex CLI columns updated - skills now ✅, subagents now ✅, custom prompts marked removed
+- Added: Codex row to Design Convergence table (v0.117.0, March 2026)
+- Added: OpenAI quote to "Why tools merged" rationale
+- Added: `disable auto-invocation` and `progressive disclosure` rows to Skills table
+- Changed: Skills Portability updated with Codex, vendor-neutral `.agents/skills/` path, symlink tip
+- Changed: Key File Locations updated for Codex
+
+**[2026-07-23 17:30]**
+- Added: "Design Convergence: Commands Merged into Skills" section documenting industry trend
+- Covers: original vs current models, conflated interaction patterns, engineering rationale, what was lost
+- Sources: github.com/anthropics/claude-code/issues/13115, Devin CLI docs, Windsurf docs
 
 **[2026-02-28 10:55]**
 - Added: Design Goals, Target Scenarios, Fields of Application, Example Use Cases section

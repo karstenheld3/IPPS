@@ -7,8 +7,9 @@
 
 Key findings for cross-agent compatibility:
 - Claude Code uses `CLAUDE.md` for instructions (equivalent to Windsurf rules) [VERIFIED]
-- Commands stored in `.claude/commands/*.md`, invoked as `/command-name` [VERIFIED]
-- Skills in `.claude/skills/<name>/SKILL.md` with same SKILL.md format as Windsurf [VERIFIED]
+- Commands merged into Skills (v2.1.3, Jan 2026). `.claude/commands/` still works but is legacy format [VERIFIED]
+- Skills in `.claude/skills/<name>/SKILL.md` with same SKILL.md format as Windsurf/Devin [VERIFIED]
+- `disable-model-invocation: true` makes a skill behave like an explicit command [VERIFIED]
 - Subagents (`.claude/agents/`) are unique to Claude Code - no Windsurf equivalent [VERIFIED]
 - MCP config in `.mcp.json` (project) or `~/.claude.json` (user) [VERIFIED]
 - Hooks configured in `settings.json`, similar events to Windsurf hooks [VERIFIED]
@@ -337,10 +338,37 @@ Skills bundle complex multi-step tasks with supporting resources.
 
 **Based on:** Agent Skills open format (https://agentskills.io/)
 
+### Commands-Skills Merge (v2.1.3, January 2026)
+
+As of v2.1.3, **commands have been merged into skills**. `.claude/commands/deploy.md` and `.claude/skills/deploy/SKILL.md` both create `/deploy` and work identically. Existing `.claude/commands/` files continue to work. [VERIFIED]
+
+**Why Anthropic merged them (from GitHub issue #13115 and official sources):**
+
+Anthropic initially intended to keep them separate. Their team stated: "We think this difference is significant enough to keep the two concepts separate." But they reversed because:
+
+1. **Implementation parity** - Both were markdown with YAML frontmatter, both injected prompts, both supported the same fields (`allowed-tools`, `description`, `model`). Two codepaths for identical mechanics.
+2. **Skills are a strict superset** - Skills add: directory for supporting files, subagent execution (`context: fork`), progressive disclosure (name/description loaded first, full body on invocation, referenced files on demand), auto-invocation by model.
+3. **Maintenance burden** - One system to maintain, one parser, one discovery path.
+
+**What the merge preserved:**
+- `disable-model-invocation: true` → command-like (user-only, never auto-invoked)
+- Default (no flag) → skill-like (agent can auto-invoke when relevant)
+- If a skill and command share the same name, the skill takes precedence.
+
+**What was lost:**
+- Browsability: no longer possible to scan "things I explicitly trigger" vs "knowledge the agent uses" by directory
+- Semantic clarity: the distinction between "execute this procedure NOW" and "apply this knowledge when relevant" is collapsed into a frontmatter flag
+
+**Sources:**
+- https://github.com/anthropics/claude-code/issues/13115
+- https://code.claude.com/docs/en/skills
+- https://blog.devgenius.io/why-did-anthropic-merge-slash-commands-into-skills-4bf6464c96ca [VERIFIED]
+
 ### Skill Locations
 
 - **User:** `~/.claude/skills/<skill-name>/SKILL.md`
 - **Project:** `.claude/skills/<skill-name>/SKILL.md`
+- **Legacy commands (still work):** `.claude/commands/*.md`, `~/.claude/commands/*.md`
 
 ### SKILL.md Format
 
@@ -348,6 +376,10 @@ Skills bundle complex multi-step tasks with supporting resources.
 ---
 name: deploy-to-production
 description: Guides deployment with safety checks
+disable-model-invocation: true    # Optional: makes it command-like (user-only)
+context: fork                     # Optional: run as subagent
+allowed-tools: Read, Bash(git:*)  # Optional: restrict tools
+model: sonnet                     # Optional: override model
 ---
 
 ## Pre-deployment Checklist
@@ -356,10 +388,13 @@ description: Guides deployment with safety checks
 ...
 ```
 
-### Skills vs Slash Commands
+### Skills vs Slash Commands (Historical, Pre-Merge)
 
+Before v2.1.3, these were separate concepts:
 - **Skills** - Complex tasks with supporting files, auto-invoked based on description
 - **Slash commands** - Simple prompt templates, explicitly invoked with `/command`
+
+After v2.1.3, this distinction is preserved only via `disable-model-invocation` frontmatter flag.
 
 ## Subagents
 
@@ -612,6 +647,13 @@ claude -p --output-format json "List all TODO comments"
 - https://www.anthropic.com/engineering/claude-code-best-practices
 
 ## Document History
+
+**[2026-07-23 17:30]**
+- Added: Commands-Skills Merge section (v2.1.3, Jan 2026) with full rationale from GitHub issue #13115
+- Added: `disable-model-invocation`, `context: fork`, progressive disclosure to SKILL.md format
+- Changed: Summary updated to reflect merge (commands = legacy format)
+- Changed: Skills section restructured to document pre/post-merge state
+- Sources: github.com/anthropics/claude-code/issues/13115, code.claude.com/docs/en/skills, blog.devgenius.io
 
 **[2026-01-15 08:35]**
 - Initial document created from official Claude Code documentation

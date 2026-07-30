@@ -8,12 +8,15 @@
 Key findings for cross-agent compatibility:
 - Codex uses `AGENTS.md` for instructions (hierarchical, directory-scoped) [VERIFIED]
 - `AGENTS.override.md` takes precedence over `AGENTS.md` in same directory [VERIFIED]
-- No skills or subagents system - use `AGENTS.md` for detailed task guidance [VERIFIED]
+- **Skills fully supported** - `.agents/skills/<name>/SKILL.md` format (vendor-neutral path) [VERIFIED 2026-07]
+- Custom prompts (`~/.codex/prompts/`) deprecated and **removed in v0.117.0** (March 2026) [VERIFIED 2026-07]
+- Invocation: `$skill-name` (explicit), `/skills` (picker), or implicit (model decides based on description) [VERIFIED 2026-07]
+- Progressive disclosure: name+description at startup, full SKILL.md on invocation, references on demand [VERIFIED 2026-07]
 - No hooks system - use `requirements.toml` for managed policy enforcement [VERIFIED]
 - Configuration in `~/.codex/config.toml` (TOML format, not JSON) [VERIFIED]
 - MCP servers configured in `config.toml` under `[mcp_servers.<id>]` [VERIFIED]
 - OS-level sandbox: Seatbelt (macOS), Landlock+seccomp (Linux) [VERIFIED]
-- Custom prompts via `/prompts: <name>`, not slash commands like other agents [VERIFIED]
+- Subagents supported via `/agent` and `/subagents` commands [VERIFIED 2026-07]
 
 ## Table of Contents
 
@@ -284,21 +287,141 @@ Run `/init` in a directory to have Codex generate an `AGENTS.md` scaffold.
 - `/review` - Ask for code review
 - `/status` - Show session status
 
-### Custom Prompts
+### Custom Prompts (REMOVED in v0.117.0)
 
-Create reusable prompts invoked as `/prompts: <name>`. See [Custom Prompts](https://developers.openai.com/codex/custom-prompts) documentation.
+Custom prompts (`~/.codex/prompts/`) were **deprecated and removed** in Codex CLI v0.117.0 (March 2026). OpenAI's stated rationale:
+
+> "It doesn't make sense to provide two overlapping features and mechanisms that do the same thing. The industry has rallied behind skills as a standard."
+
+All feature requests to restore commands were rejected (GitHub issues #15941, #18857, #22674). Users are directed to convert prompts to skills. Codex can perform the conversion automatically.
+
+**Migration:** `~/.codex/prompts/commit.md` → `~/.agents/skills/commit/SKILL.md` [VERIFIED 2026-07]
 
 ## Skills
 
-**Not supported natively.** Codex does not have a skills system like Windsurf or Claude Code.
+Skills are fully supported as of late 2025 (experimental) and stable since mid-2026. Codex follows the open Agent Skills standard (https://agentskills.io/). [VERIFIED 2026-07]
 
-Use `AGENTS.md` files to provide detailed instructions for specific tasks.
+### Skills-Commands Merge (v0.117.0, March 2026)
+
+Codex previously had "custom prompts" in `~/.codex/prompts/` (their equivalent of commands). These were **deprecated and removed** in v0.117.0. OpenAI explicitly rejected all requests to restore them:
+
+> "We previously supported custom slash commands but removed the support in favor of skills, which provide a superset of the functionality." (GitHub issue #22674)
+
+**Why OpenAI merged them:**
+1. **Implementation parity** - Both were markdown files injected as context. Two systems for identical mechanics.
+2. **Skills are a strict superset** - Add: progressive disclosure (3-level context loading), supporting files (scripts, references, templates), implicit invocation by model, plugins distribution.
+3. **Industry standard** - "The industry has rallied behind skills as a standard." OpenAI adopted the vendor-neutral `.agents/skills/` path so skills can be shared across tools.
+
+**What was lost:**
+- Custom prompts had zero context cost when not invoked. Skills always inject name+description at startup (budget: 2% of context window or 8,000 chars).
+- Custom prompts were never auto-invoked. Skills can be (unless `allow_implicit_invocation: false`).
+- Deterministic local execution (no model invocation) is gone. Feature request #18857 explicitly rejected.
+
+### Skill Locations
+
+| Scope | Path | Use |
+|-------|------|-----|
+| Repo (nearest) | `$CWD/.agents/skills/` | Module-specific workflows |
+| Repo (parent) | `../.agents/skills/` | Nested project layouts |
+| Repo (root) | `$REPO_ROOT/.agents/skills/` | Team-shared skills |
+| User | `~/.agents/skills/` | Personal skills across all projects |
+| Admin | `/etc/codex/skills/` | System-wide managed skills |
+| Plugins | Plugin directories | Distributed via plugin system |
+
+**Legacy paths (still scanned):** `~/.codex/skills/`, `.codex/skills/`
+
+**Vendor-neutral design:** OpenAI chose `~/.agents/skills/` (not `~/.codex/skills/`) so one folder on disk serves multiple tools. Symlink from `~/.claude/skills/` and both products read the same skills. [VERIFIED 2026-07]
+
+### SKILL.md Format
+
+```yaml
+---
+name: deploy-staging
+description: Deploy current branch to staging. Use when user says "deploy to staging" or "push to stage".
+---
+
+## Steps
+1. Run tests: `npm run test`
+2. Build: `npm run build`
+3. Deploy: `./scripts/deploy-staging.sh`
+4. Verify health check
+```
+
+**Required frontmatter:** `name`, `description` (both mandatory)
+
+**Optional metadata (`agents/openai.yaml`):**
+```yaml
+interface:
+  display_name: "Deploy to Staging"
+  short_description: "Deploy current branch"
+
+policy:
+  allow_implicit_invocation: false    # Equivalent to disable-model-invocation
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "github"
+      transport: "streamable_http"
+      url: "https://mcp.github.com"
+```
+
+### Skill Invocation
+
+Two modes:
+
+1. **Explicit** - `$skill-name` in prompt, or `/skills` picker in TUI
+2. **Implicit** - Model matches task to skill `description` and loads it automatically
+
+Control implicit invocation:
+- `agents/openai.yaml` → `policy.allow_implicit_invocation: false` (per-skill)
+- `[[skills.config]]` in `config.toml` → `enabled = false` (disable entirely)
+
+### Progressive Disclosure (3-Level Context Loading)
+
+- **Level 1 (startup):** Name + description + file path injected into system prompt. Budget: max 2% of context window or 8,000 chars.
+- **Level 2 (invocation):** Full `SKILL.md` body loaded when skill is selected.
+- **Level 3 (on-demand):** Supporting files (`scripts/`, `references/`, `templates/`) read by model only when needed.
+
+### Skill Directory Structure
+
+```
+skill-name/
+├── SKILL.md              (required - instructions)
+├── agents/
+│   └── openai.yaml       (optional - UI metadata, invocation policy)
+├── scripts/              (optional - CLI scripts Codex can invoke)
+├── references/           (optional - reference docs loaded on demand)
+└── templates/            (optional - file templates)
+```
+
+### Feature Flag (Legacy)
+
+Skills were behind a feature flag in early versions:
+```toml
+[features]
+skills = true
+```
+No longer required as of mid-2026 (skills enabled by default). [VERIFIED 2026-07]
+
+### Sources
+
+- https://developers.openai.com/codex/skills
+- https://github.com/openai/codex/issues/15941 (custom prompts removal)
+- https://github.com/openai/codex/issues/18857 (slash commands rejected)
+- https://github.com/openai/codex/issues/22674 (commands rejected again)
+- https://deepwiki.com/openai/codex/5.9-skills-system
 
 ## Subagents
 
-**Not supported natively.** Codex does not have a subagent system.
+Codex now supports subagents (multi-agent mode). [VERIFIED 2026-07]
 
-Built-in code review runs as a separate agent via `/review` command.
+- `/agent` and `/subagents` commands to switch between agent threads
+- Built-in code review runs as a separate agent via `/review` command
+- Feature flag: `multi_agent = true` in `config.toml`
+- Subagent threads run in isolated contexts with their own tool permissions
+
+**Note:** Full subagent documentation pending. Current evidence from GitHub issues and slash commands reference.
 
 ## Hooks
 
@@ -459,12 +582,14 @@ eval "$(codex completion zsh)"
 - `~/.codex/config.toml` - Main configuration
 - `~/.codex/AGENTS.md` - Global instructions
 - `~/.codex/AGENTS.override.md` - Global override
+- `~/.agents/skills/` - User skills (vendor-neutral, shared across tools)
 - `~/.codex/sessions/` - Session transcripts
 - `~/.codex/log/` - Logs
 
 **Project Config:**
 - `AGENTS.md` - Project instructions (checked in)
 - `AGENTS.override.md` - Project override
+- `.agents/skills/` - Project skills (checked in)
 
 **Managed (IT-deployed):**
 - `/etc/codex/requirements.toml` - Enforced requirements
@@ -484,7 +609,31 @@ eval "$(codex completion zsh)"
 - https://developers.openai.com/codex/guides/agents-md/ - AGENTS.md instructions
 - https://developers.openai.com/codex/guides/slash-commands - Slash commands
 
+**Skills and Commands (2026-07):**
+- https://developers.openai.com/codex/skills - Skills documentation
+- https://github.com/openai/codex/issues/15941 - Custom prompts removed (v0.117.0)
+- https://github.com/openai/codex/issues/18857 - Slash commands rejected
+- https://github.com/openai/codex/issues/22674 - Commands from .agents/commands/ rejected
+- https://deepwiki.com/openai/codex/5.9-skills-system - Skills system internals
+
 **Other:**
 - https://github.com/openai/codex - Open source repository
 - https://agents.md/ - AGENTS.md specification
+
+## Document History
+
+**[2026-07-23 18:00]**
+- Added: Full Skills section - locations, SKILL.md format, invocation modes, progressive disclosure, directory structure
+- Added: Skills-Commands Merge subsection documenting v0.117.0 removal of custom prompts with OpenAI's explicit rationale
+- Changed: Summary updated - skills now verified, custom prompts marked removed
+- Changed: Custom Prompts section updated to "REMOVED in v0.117.0" with migration guidance
+- Changed: Subagents section updated - now supported via /agent and /subagents commands
+- Added: Key Files Reference updated with `.agents/skills/` paths
+- Added: Sources section with skills-related GitHub issues
+- Sources: developers.openai.com/codex/skills, GitHub issues #15941 #18857 #22674, deepwiki.com
+
+**[2026-01-15 08:35]**
+- Initial document created from official Codex CLI documentation
+- Researched: overview, configuration, sandbox, AGENTS.md, MCP, CLI
+- Sources verified against developers.openai.com/codex
 

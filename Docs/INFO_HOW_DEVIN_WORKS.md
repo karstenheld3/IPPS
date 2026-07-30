@@ -3,7 +3,7 @@
 **Doc ID**: DVDT-IN01
 **Goal**: Comprehensive reference for Devin Desktop (formerly Windsurf) - agent harnesses, AI models, customization, developer tools, enterprise controls, and architecture internals
 **Version scope**: Devin Desktop (June 2026+) / Devin Local 2026.5.26+
-**Timeline**: Created 2026-06-03, Updated 7 times (latest 2026-07-21)
+**Timeline**: Created 2026-06-03, Updated 8 times (latest 2026-07-30)
 
 ## Summary
 
@@ -25,14 +25,14 @@
 **Devin Local specifics:**
 - Permissions model: Deny/Ask/Allow (replaces Cascade auto-execution levels) [VERIFIED]
 - Config: `.devin/config.json` for MCP and permissions [VERIFIED]
-- Does NOT support: Workflows, Memories, Codemaps, Code Lenses, App Deploys, Conversation Sharing [VERIFIED]
-- DOES support: Rules, AGENTS.md, Skills [VERIFIED]
+- Does NOT support: Workflows, Memories, Code Lenses, App Deploys, Conversation Sharing [VERIFIED]
+- DOES support: Rules, AGENTS.md, Skills, Codemaps, Fast Context, Megaplan [VERIFIED]
 
 **Cascade (legacy) specifics:**
 - Three modes: Code, Plan, Ask. `megaplan` for advanced planning [VERIFIED]
-- `.devin/rules/*.md` (or `.devin/rules/*.md`), 4 trigger modes: `always_on`, `model_decision`, `glob`, `manual` [VERIFIED]
-- Workflows in `.devin/workflows/*.md` (or `.devin/workflows/`), invoked as `/workflow-name` [VERIFIED]
-- Skills in `.devin/skills/<name>/SKILL.md` or `.devin/skills/` - ONLY mechanism working across both Cascade and Devin Local [VERIFIED]
+- `.devin/rules/*.md` (or `.windsurf/rules/*.md`), 4 trigger modes: `always_on`, `model_decision`, `glob`, `manual` [VERIFIED]
+- Workflows in `.devin/workflows/*.md` (or `.windsurf/workflows/`), invoked as `/workflow-name` [VERIFIED]
+- Skills in `.devin/skills/<name>/SKILL.md` or `.windsurf/skills/` - ONLY mechanism working across both Cascade and Devin Local [VERIFIED]
 - Memories auto-generated during conversation, workspace-scoped [VERIFIED]
 
 **AI models:**
@@ -65,11 +65,11 @@
 - Sandbox enforcement, network enforcement, granular permissions (Devin Local) [VERIFIED]
 
 **Configuration and paths:**
-- `.devin/rules/` preferred (`.devin/rules/` fallback) [VERIFIED]
+- `.devin/rules/` preferred (`.windsurf/rules/` fallback) [VERIFIED]
 - `.devinrules` still read (no `.devinrules` equivalent) [VERIFIED]
 - AGENTS.md / agents.md supported [VERIFIED]
 - App data: `%APPDATA%\Devin\` (or `%APPDATA%\Windsurf\` legacy) [VERIFIED]
-- Extensions: `~/.devin/extensions/` (or `~/.devin/extensions/`) [VERIFIED]
+- Extensions: `~/.devin/extensions/` (or `~/.windsurf/extensions/`) [VERIFIED]
 - Executable: `Devin.exe` / `Devin.app` / `devin` (Linux) [VERIFIED]
 - CLI binaries: `devin-desktop`, `surf`, `windsurf` (all still work) [VERIFIED]
 
@@ -149,7 +149,7 @@ Devin Desktop (formerly Windsurf) is an AI-powered IDE built on VS Code Open Sou
 - Linux: `~/.config/Windsurf/` → `~/.config/Devin/`
 
 **Extensions:**
-- `~/.devin/extensions/` → `~/.devin/extensions/`
+- `~/.windsurf/extensions/` → `~/.devin/extensions/`
 
 **CLI binaries:** `devin-desktop`, `surf`, `windsurf` (all continue to work)
 - Devin CLI: `devin` (`~/.local/bin/devin` or `%LOCALAPPDATA%\devin\bin\devin.exe`)
@@ -167,25 +167,48 @@ Devin Desktop (formerly Windsurf) is an AI-powered IDE built on VS Code Open Sou
 
 **Rules precedence:**
 1. `.devin/rules/` (preferred, takes precedence)
-2. `.devin/rules/` (backward-compatibility fallback)
+2. `.windsurf/rules/` (backward-compatibility fallback)
 3. `.devinrules` (legacy single-file, still read)
-4. No `.devinrules` single-file equivalent exists
+4. No `.windsurfrules` single-file equivalent exists
 
-**Workflows:**
-- `.devin/workflows/` or `.devin/workflows/` (both read)
+**Workflows (Cascade only):**
+- `.devin/workflows/` or `.windsurf/workflows/` (both read by Cascade)
+- NOT imported by Devin Local (Desktop) or Devin CLI. Windsurf workflows are explicitly excluded from import.
+- **Migration path (CLI)**: Place workflow files in `.claude/commands/` for Devin CLI (terminal) compatibility (imported as slash commands). Does NOT work in Devin Desktop's Devin Local. [VERIFIED 2026-07-23]
+- **Migration path (Desktop)**: Convert to native Skills at `.devin/skills/<name>/SKILL.md` (only method that works in Devin Desktop) [VERIFIED 2026-07-23]
 
 **Skills:**
-- `.devin/skills/` or `.devin/skills/` (both read)
+- `.devin/skills/` or `.windsurf/skills/` (both read)
 
 **Plans:**
-- `.devin/plans/` or `.devin/plans/`
+- `.devin/plans/` or `.windsurf/plans/`
 
 **Ignore files:**
 - `.codeiumignore`, `.devinignore`, and `.windsurfignore` (all honored)
 
-**Hooks migration:** Command available to migrate Windsurf hooks into Devin hooks across all workspace folders. [VERIFIED]
+**Hooks migration:** Command available to migrate Windsurf hooks into Devin hooks across all workspace folders.
+
+**Cascade Migration Wizard (since 3.6.22):** "Devin: Open Cascade Migration Wizard" command opens a guided wizard chaining hooks → skills → memories migration in one flow, with per-item opt-in and dry-run previews. [VERIFIED]
 
 **Also reads:** `AGENTS.md`, `agents.md`, `.cursor/rules/*.mdc` [VERIFIED]
+
+**Configuration Import (`read_config_from`) - Devin CLI only:**
+
+Devin CLI (terminal) auto-imports rules, skills, MCP servers, and commands from other AI coding tools. **This import does NOT apply to Devin Local in Devin Desktop** — Desktop only reads native `.devin/skills/` and `.windsurf/skills/`. [VERIFIED 2026-07-23]
+
+- **Standard**: `AGENTS.md`, `AGENTS.local.md`, `AGENT.md`, `.windsurfrules`
+- **Cursor**: `.cursor/rules/*.md`, `.cursor/rules/*.mdc`, `.cursor/mcp.json`
+- **Windsurf**: `.windsurf/rules/*.md`, `.windsurf/skills/`, `~/.codeium/<channel>/mcp_config.json` (NOT workflows)
+- **Claude Code**: `CLAUDE.md`, `.claude/skills/**/SKILL.md`, `.claude/commands/**/*.md` (as skills), `.mcp.json`, `.claude/settings.json`
+- **OpenCode**: `opencode.json`, `~/.config/opencode/opencode.json`
+- **VS Code**: `.vscode/mcp.json`
+- **Zed**: `.zed/settings.json`, `~/.config/zed/settings.json`
+
+Disable per-tool import via `.devin/config.json`:
+```json
+{ "read_config_from": { "windsurf": false, "cursor": false } }
+```
+[VERIFIED]
 
 ### What Stayed the Same
 
@@ -241,7 +264,9 @@ Replaces Cascade's auto-execution levels:
 - **Ask** rules - Always prompt for approval
 - **Allow** rules - Auto-approve without prompting
 
-Scoped to: file reads, file writes, command execution, HTTP fetches, Model Context Protocol (MCP) tools. Configurable at project, user, or organization level. "Always Allow" grants persist across sessions (since 2026.5.26). [VERIFIED]
+Scoped to: file reads, file writes, command execution, HTTP fetches, Model Context Protocol (MCP) tools. Configurable at project, user, or organization level. "Always Allow" grants persist across sessions (since 2026.5.26). Session permission grants apply to root agent and all sibling subagents (no re-prompting for already-granted scopes). [VERIFIED]
+
+**Editable command approvals (since 3.6.22):** Click a command in a permission card to edit it before approving, or use the wand action to describe a change in plain language and have a fast model rewrite it for review. [VERIFIED]
 
 **MCP Configuration (Devin Local)**
 
@@ -253,14 +278,19 @@ Scoped to: file reads, file writes, command execution, HTTP fetches, Model Conte
 
 Not yet supported in Devin Local:
 - **Memories** - Does not persist memories. Migrate to Skills.
-- **Workflows** - Not available. Migrate to Skills.
-- **Codemaps** - Does not read codemaps yet.
+- **Workflows** - `.devin/workflows/` not read. Migrate to native Skills (`.devin/skills/<name>/SKILL.md`). Note: `.claude/commands/` only works in Devin CLI (terminal), not in Desktop.
 - **Code Lenses** - Do not trigger Devin Local.
-- **Fast Context** - Uses subagents instead, no same UI.
 - **App Deploys** - Not supported.
 - **Conversation Sharing** - Not yet available. [VERIFIED]
 
+Previously unsupported, **now available in Devin Local** (since 3.6.21-3.6.22):
+- **Codemaps** - Open in editor tabs in agent window mode. Codemap `@`-mentions work. Icon restored in activity bar. [VERIFIED]
+- **Fast Context** - Supported in Devin Local sessions (since 3.6.21). [VERIFIED]
+- **Megaplan** - Works in Devin Local; switches session into Plan mode and prompts agent to plan first. [VERIFIED]
+
 Devin Local DOES support: Rules, AGENTS.md, Skills. Customizations span all open workspace folders. Hooks tab lists configured hooks with source and trigger events. [VERIFIED]
+
+**Plan mode (since 3.6.22):** Agent researches with read-only commands, maintains a persistent Markdown plan file at `~/.devin/plans/plan-<session>.md`, and asks for approval before implementing. Works like Cascade's plan mode. [VERIFIED]
 
 **Additional capabilities (since 2026.5.26):**
 - Skill `permissions:` frontmatter applies to auto-approvals
@@ -269,7 +299,8 @@ Devin Local DOES support: Rules, AGENTS.md, Skills. Customizations span all open
 - MCP servers support client-defined OAuth scopes
 - Interactive logins persisted to shared credential store
 - Windows: detects GPO-blocked PowerShell, falls back to Git Bash
-- ACU usage shown via `/usage` command [VERIFIED]
+- ACU usage shown via `/usage` command
+- Keyboard shortcuts for permission requests (always-allow and reject) [VERIFIED]
 
 **Enterprise Controls (Devin Local)**
 
@@ -285,7 +316,8 @@ Devin Local DOES support: Rules, AGENTS.md, Skills. Customizations span all open
 - **Custom subagents** - Defined in `AGENT.md` files. Pin specific model via `model:` field.
 
 **Custom subagent locations:**
-- Project: `.devin/agents/<name>/AGENT.md`
+- Project: `.devin/agents/<name>/AGENT.md` or flat `.devin/agents/<name>.md` (since 3.6.22)
+- Per-agent directories also accept `AGENTS.md`, `agent.md`, `agents.md`
 - Global: `~/.config/devin/agents/<name>/AGENT.md` (Windows: `%APPDATA%\devin\agents\`)
 - Import: `.claude/agents/*.md` files auto-discovered [VERIFIED]
 
@@ -366,6 +398,7 @@ Autonomous software engineering agent on its own VM with desktop, browser, and c
 - **Standard** - Default Devin Cloud agent
 - **Ultra** - Smartest and most capable agent. Excels at long-horizon tasks and debugging. Uses the most powerful available models. Toggle via `!ultra` in Slack. [VERIFIED]
 - **Fast** - Quicker, lower-cost tier. Toggle via `!fast` in Slack. [VERIFIED]
+- **Fusion** - Shown as mode badge on session-create cards in Desktop (since 3.6.22). Capabilities not yet documented. [ASSUMED from changelog badge only]
 
 **Availability:**
 - Included with every self-serve plan (Pro, Max, Teams) [VERIFIED]
@@ -387,6 +420,13 @@ Autonomous software engineering agent on its own VM with desktop, browser, and c
 - Available through Devin MCP server (sessions, playbooks, schedules, knowledge) [VERIFIED]
 
 **Pricing:** Consumes shared quota and extra usage balance. Same token-based system. [VERIFIED]
+
+**Desktop integration (3.6.22):**
+- Server-side send queue synced with web app; `Cmd/Ctrl+Enter` queues next message on server
+- Multi-user (Slack) sessions show each participant's name above messages
+- "Copy link" action in cloud session menus
+- "Remote ACP is disconnected" banner with Reconnect action when Cloud connection drops
+- Configure session network policy and grant/deny network access inline from chat [VERIFIED]
 
 ### Devin for Terminal (CLI Agent)
 
@@ -485,14 +525,26 @@ The default surface in Devin Desktop. Manages every agent (local and cloud) from
 
 **Key capability:** Parallel agents. Multiple agents working simultaneously on different parts of same project. One engineer fans out work, reviews results as they land. [VERIFIED]
 
-**Recent improvements:**
+**Recent improvements (3.6.21-3.6.22):**
 - Status bar hidden by default; restore with `"workbench.statusBar.visible": true` in user settings
-- Restyled command palette
+- Restyled command palette, refreshed agent window UI (Inter font, rounded pill session tabs with state/PR icons)
 - Timeline navigator for Devin Local sessions
 - "New session in space" in session kebab menu
 - List display option for agent inbox
-- Improved sessions sidebar sorting and filtering
-- Performance improvements for loading and switching sessions [VERIFIED]
+- Agent sidebar: right-click context menus, double-click to rename, per-workspace filters/sort/grouping, greyed-out locked (read-only) sessions, sticky grouped spaces
+- Session-create cards show Devin mode badge (Fast, Ultra, Fusion)
+- PR editor tabs show state-specific icon (open, draft, merged, closed)
+- Unified notifications setting for OS notifications when any agent session finishes or needs input
+- "Open customizations" available from new-tab menu and Devin Local session context menu
+- Plugins section in Devin Local customizations listing loaded and available plugins
+- New tabs default to Devin Local when no preferred agent chosen
+- "Duplicate session" action to branch off a conversation
+- "Subagents (Preview)" toggle in Devin settings
+- Select text in transcript and add to chat input with "Add to chat" / `Cmd/Ctrl+L`
+- Added Rules to `@`-mention menu for manual-trigger rules
+- Cascade, Devin Local, and ACP agents unavailable in Restricted Mode; hooks do not load or run
+- Updated base IDE to VS Code 1.126
+- Performance: faster syntax highlighting for streaming diffs, typing no longer lags during background streaming [VERIFIED]
 
 ### Spaces (Task Grouping)
 
@@ -535,6 +587,7 @@ Spaces group everything related to a task or project:
 - Claude Sonnet 4.6, Opus 4.6 / 4.6 Fast Mode, Sonnet 4.5
 
 **OpenAI:**
+- GPT-5.6 variants (**Devin Local only** - disabled in Cascade's model picker with tooltip; since 3.6.22)
 - GPT-5.5, GPT-5.4 / GPT-5.4 Mini
 - GPT-5.2-Codex / GPT-5.1-Codex / GPT-5.1-Codex Max
 - o4-mini
@@ -627,7 +680,7 @@ Specialized subagent retrieving relevant code 20x faster than traditional agenti
 - Uses restricted cross-platform tools (grep, read, glob)
 - Prevents context pollution [VERIFIED]
 
-**Devin Local note:** Devin Local uses subagents instead of Fast Context and lacks the same UI. [VERIFIED]
+**Devin Local note:** Fast Context supported in Devin Local sessions since 3.6.21. [VERIFIED]
 
 ### DeepWiki
 
@@ -785,7 +838,7 @@ Persistent instructions that agents follow. [VERIFIED]
 
 **Storage locations (discovery order):**
 1. **Global rules**: `~/.codeium/windsurf/memories/global_rules.md` (always on, 6,000 char limit)
-2. **Workspace rules**: `.devin/rules/*.md` (preferred) or `.devin/rules/*.md` (fallback). One file per rule, 12,000 chars per file.
+2. **Workspace rules**: `.devin/rules/*.md` (preferred) or `.windsurf/rules/*.md` (fallback). One file per rule, 12,000 chars per file.
 3. **AGENTS.md**: Directory-scoped. Root-level = always-on, subdirectory = auto-glob.
 4. **System-level** (Enterprise): `/etc/devin/rules/` or `C:\ProgramData\Devin\rules\` [VERIFIED]
 
@@ -810,7 +863,7 @@ All test files must use describe/it blocks and mock external API calls.
 
 Step-by-step procedures as markdown. Invoked via `/workflow-name`. **NOT supported with Devin Local.** [VERIFIED]
 
-**Storage:** `.devin/workflows/*.md` or `.devin/workflows/*.md`
+**Storage:** `.devin/workflows/*.md` or `.windsurf/workflows/*.md`
 
 **Format:**
 ```yaml
@@ -820,7 +873,12 @@ description: [short title]
 [specific steps]
 ```
 
-**Migration:** Convert workflows to Skills for Devin Local compatibility. [VERIFIED]
+**Migration to Devin Local/CLI:**
+- **Devin Desktop (Devin Local)**: Convert to native Skills at `.devin/skills/<name>/SKILL.md`. This is the ONLY method that provides `/slash-command` autocomplete in Devin Desktop. Full control over model, tools, permissions, subagent execution.
+- **Devin CLI (terminal only)**: Place workflow `.md` files in `.claude/commands/`. Devin CLI imports these as slash commands via Claude Code compatibility. Does NOT work in Devin Desktop. [VERIFIED 2026-07-23]
+- **NOT imported by either**: `.devin/workflows/` and `.windsurf/workflows/` are explicitly excluded from import.
+
+**Source:** https://docs.devin.ai/cli/reference/configuration/read-config-from [VERIFIED]
 
 ### Skills (Universal)
 
@@ -975,7 +1033,7 @@ Server-level "approve all" (session or permanent) for MCP tool permissions. [VER
 
 ### OAuth Support
 
-MCP OAuth flow forwards RFC 8707 resource parameter (fixes auth for servers like Snowflake requiring resource indicators). [VERIFIED]
+MCP OAuth flow forwards RFC 8707 resource parameter (fixes auth for servers like Snowflake requiring resource indicators). MCP servers reporting "Needs auth" show an Authenticate button in the Devin Local MCP list, marketplace card, and detail page (clears stored OAuth credentials and reruns browser authorization flow). [VERIFIED]
 
 ### Admin Controls (Teams/Enterprise)
 
@@ -993,7 +1051,7 @@ MCP OAuth flow forwards RFC 8707 resource parameter (fixes auth for servers like
 
 ### Windsurf Previews
 
-Preview web apps in IDE or browser with element selection, error capture, and agent integration. [VERIFIED]
+Preview web apps in IDE or browser with element selection, error capture, and agent integration. Remote ACP agent sessions can also open browser previews (since 3.6.22): agent proxies local dev server, captured elements and console output land in message box as pending context. [VERIFIED]
 
 ### Vibe and Replace
 
@@ -1001,7 +1059,7 @@ AI-powered find-and-replace. Search codebase, apply AI prompt to each replacemen
 
 ### Codemaps
 
-Visual architecture diagrams. Referenced via `@codemap-name`. Devin Local does not yet read Codemaps. [VERIFIED]
+Visual architecture diagrams. Referenced via `@codemap-name`. Devin Local supports Codemaps since 3.6.22: open in editor tabs in agent window mode, `@`-mentions work, icon restored in activity bar. [VERIFIED]
 
 ### App Deploys
 
@@ -1013,7 +1071,12 @@ Auto-generated commit messages based on staged changes. [VERIFIED]
 
 ### Worktrees
 
-Git worktree support. Each worktree has own directory. `post_setup_worktree` hook event. [VERIFIED]
+Git worktree support. Each worktree has own directory. `post_setup_worktree` hook event.
+
+**Improvements (3.6.22):**
+- Worktree sessions show a Merge button to bring changes back into the workspace
+- Pick an existing worktree from the agent location selector's Local submenu
+- New worktree-backed sessions open instantly; worktree created in background [VERIFIED]
 
 ### Other Tools
 
@@ -1193,21 +1256,21 @@ C:\Users\<User>\
 
 **Workspace Config:**
 - `.devin/rules/*.md` - Project rules (preferred)
-- `.devin/rules/*.md` - Project rules (fallback)
-- `.devin/workflows/*.md` - Custom workflows
+- `.windsurf/rules/*.md` - Project rules (fallback)
+- `.devin/workflows/*.md` - Custom workflows (Cascade only)
 - `.devin/skills/*/SKILL.md` - Skills
 - `.devin/config.json` - Devin Local MCP and permissions
 - `.devin/config.local.json` - Local override (gitignored)
 - `.devin/hooks.json` - Workspace hooks
 - `AGENTS.md` - Directory-scoped instructions
-- `.codeiumignore` / `.devinignore` - Ignore files
+- `.codeiumignore` / `.devinignore` / `.windsurfignore` - Ignore files
 
 **ACP Config:**
 - `~/.devin/acp/registry.json` - Local ACP agent registry [VERIFIED]
 
 ### Telemetry and Privacy
 
-Devin Desktop collects non-essential telemetry data by default. Opt out via account settings.
+Devin Desktop collects non-essential telemetry data by default. Opt out via account settings. Since 3.6.22, product analytics are not started before account status resolves, so telemetry is never collected for accounts that have it turned off. [VERIFIED]
 
 **Disable Telemetry:**
 1. Open devin.ai/account (or Codeium account page) [ASSUMED URL updated with rename]
@@ -1344,6 +1407,40 @@ Three independent network stacks:
 - https://docs.devin.com/llms-full.txt - Full documentation export (accessed 2026-06-01)
 
 ## Document History
+
+**[2026-07-30 11:41]**
+- Changed: Devin Local now supports Codemaps (editor tabs, @-mentions), Fast Context, and Megaplan (3.6.22)
+- Added: Devin Local Plan mode - persistent plan file at `~/.devin/plans/plan-<session>.md`, read-only commands, approval before implementing
+- Added: Editable command approvals - edit before approving, AI wand rewrite
+- Added: Session permission grants apply to root agent + sibling subagents
+- Added: Custom subagent flat files `agents/<name>.md`, per-agent dirs accept `agent.md`/`agents.md`
+- Added: Cascade Migration Wizard (hooks → skills → memories in one flow)
+- Added: Worktree merge button, pick existing worktree from agent selector
+- Added: ACP browser preview for remote agent sessions
+- Added: MCP "Needs auth" Authenticate button (clears OAuth, reruns flow)
+- Added: Devin Cloud Fusion tier badge on session-create cards
+- Changed: ACC improvements: refreshed UI (Inter font, pill tabs), agent sidebar (context menus, rename, filters), OS notifications, Restricted Mode, VS Code 1.126 base
+- Fixed: Duplicate `.devin/` paths throughout document - corrected fallback paths to `.windsurf/` (rules, extensions, workflows, skills)
+- Fixed: Fast Context note updated (was "uses subagents instead", now "supported since 3.6.21")
+- Fixed: Fusion tier label changed from `[VERIFIED]` to `[ASSUMED]` (only badge name known)
+- Added: Telemetry improvement - analytics not started before account status resolves (3.6.22)
+- Added: GPT-5.6 variants (Devin Local only - disabled in Cascade model picker)
+- Added: Devin Cloud Desktop integration (server-side queue, Slack names, copy link, inline network policy)
+- Source: https://docs.devin.ai/desktop/changelog (3.6.22)
+
+**[2026-07-23 17:00]**
+- Fixed: `.claude/commands/` import is Devin CLI (terminal) ONLY - does not work in Devin Desktop's Devin Local [VERIFIED by testing]
+- Changed: Configuration Import section marked as "Devin CLI only" with explicit Desktop exclusion note
+- Changed: All migration guidance now distinguishes Desktop (native Skills required) vs CLI (`.claude/commands/` works)
+- Changed: Limitations vs Cascade - Workflows bullet corrected to recommend native Skills for Desktop
+
+**[2026-07-23 16:00]**
+- Added: Configuration Import (`read_config_from`) subsection - full import matrix for Cursor, Windsurf, Claude Code, OpenCode, VS Code, Zed
+- Added: `.claude/commands/**/*.md` as migration path for workflows to Devin CLI (terminal)
+- Changed: Workflows section clarified that `.devin/workflows/` explicitly excluded from Devin Local import
+- Changed: Limitations vs Cascade - Workflows bullet updated with migration options
+- Changed: Workspace-Level Changes - Workflows entry corrected to show Cascade-only scope
+- Source: docs.devin.ai/cli/reference/configuration/read-config-from (verified from local Devin CLI docs)
 
 **[2026-07-21 00:21]**
 - Added: Security section (Devin Review Security + Security Swarm + Agentic MapReduce)
