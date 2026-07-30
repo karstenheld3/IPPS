@@ -22,6 +22,7 @@
 - Sync `[DEVSYSTEM_FOLDER]` → `.devin/` BEFORE running `/deploy-to-all-repos`
 - `Copy-Item -Recurse -Force` does NOT delete files that no longer exist at source — deletions require explicit `Remove-Item`
 - Every SOP ends with a verification step before you can consider the change complete
+- All prior DevSystem releases MUST be backed up in `[WORKSPACE]\_OldDevSystemVersions\` before deletion (SOP 4 step 6)
 
 ## Table of Contents
 
@@ -198,11 +199,11 @@ foreach ($r in $linkedRepos) { Test-Path "$r\skills\<skill>" }  # all should be 
    - `SOPS.md` example paths reference `DevSystemV3.6` in comments — update to new version
    - Any other docs with hardcoded version strings — search and update
 
-6. **Archive old version** (optional):
+6. **Archive old version** (MANDATORY before deletion):
    ```powershell
-   # Keep for historical reference, or:
-   Remove-Item "[WORKSPACE]\DevSystemV3.6" -Recurse -Force
+   Move-Item "[WORKSPACE]\DevSystemV3.6" "[WORKSPACE]\_OldDevSystemVersions\DevSystemV3.6"
    ```
+   All prior releases MUST be preserved in `[WORKSPACE]\_OldDevSystemVersions\`. Never delete a version folder without moving it there first.
 
 7. **Commit before deploying**: new version is a major change, isolate in git history
 

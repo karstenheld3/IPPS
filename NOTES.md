@@ -80,6 +80,8 @@ Usage: `--keys-file [WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
 
 ## Platform Notes
 
+**Release archive**: `[WORKSPACE_FOLDER]\_OldDevSystemVersions\` — all prior DevSystem version folders are preserved here before deletion. Never delete a version folder without backing it up.
+
 **Windows:** No symlinks. `.devin/` is a copy of `[DEVSYSTEM_FOLDER]`. Sync command and procedures: see `SOPS.md`.
 
 **"deploy" keyword:** When user says "deploy", sync `[DEVSYSTEM_FOLDER]` to `.devin/` per `SOPS.md` → Quick Reference: Sync Command.
