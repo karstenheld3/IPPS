@@ -180,6 +180,7 @@ When called without specific document, review the entire conversation:
 - What are the implicit assumptions not stated?
 - What would a malicious user try?
 - Are success criteria measurable and testable?
+- Does the SPEC contain implementation details (code, line numbers, function signatures) that belong in IMPL?
 
 **For IMPL documents**:
 - Does the plan match the spec exactly? Diff them mentally.

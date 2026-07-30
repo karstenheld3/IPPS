@@ -91,10 +91,15 @@ List all `CONVERSATION_*.md` files in the target folder.
 - Do NOT create a new file. Inform user to use `/conversation-update` instead
 - Stop workflow
 
-**Case B - Other conversation files exist (different partner):**
+**Case B - Legacy `CONVERSATION.md` exists:**
+- Rename to `CONVERSATION_[COUNTERPARTY].md` using the partner from that file
+- Confirm rename with user before executing
+- Then create new file as `CONVERSATION_[NEW_COUNTERPARTY].md`
+
+**Case C - Other conversation files exist (different partner):**
 - Create new file as `CONVERSATION_[COUNTERPARTY].md`
 
-**Case C - Empty folder or folder does not exist:**
+**Case D - Empty folder or folder does not exist:**
 - PROJECT-MODE: create subfolder if needed
 - Create `CONVERSATION_[COUNTERPARTY].md`
 

@@ -104,6 +104,7 @@ When implementation differs from plan or spec:
 - Update FR-XX if requirement interpretation changed
 - Add DD-XX for design decisions made during implementation
 - Update IG-XX if guarantees changed
+- Sync behavioral descriptions only. Never sync code snippets, line numbers, or function signatures into SPEC (SPEC-CT-02)
 
 **Sync to TEST:**
 - Update TC-XX expected results if behavior changed

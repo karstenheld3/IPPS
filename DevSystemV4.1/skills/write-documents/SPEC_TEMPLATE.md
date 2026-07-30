@@ -33,7 +33,7 @@
 11. [User Actions](#11-user-actions) *(UI specs only)*
 12. [UX Design](#12-ux-design) *(UI specs only)*
 13. [Logging Requirements](#13-logging-requirements)
-14. [Implementation Details](#14-implementation-details)
+14. [Technical Constraints](#14-technical-constraints)
 15. [Document History](#15-document-history)
 
 ## 1. Scenario
@@ -204,9 +204,19 @@ Use decision tree from SPEC-LG-01 (@skills:write-documents `SPEC_RULES.md`) to i
 [Log output example following Announce > Track > Report pattern]
 ```
 
-## 14. Implementation Details
+## 14. Technical Constraints
 
-[Code organization, function signatures, module structure]
+[Facts that constrain implementation without prescribing code. No code snippets, no line numbers, no function signatures - those belong in IMPL.]
+
+Examples of valid content:
+- "Reuses existing `openModal()` infrastructure from common UI functions"
+- "Must integrate with FastAPI endpoint pattern (GET with query parameter)"
+- "Clipboard API requires HTTPS in production; localhost exempt"
+
+Examples of content that belongs in IMPL:
+- Function bodies, HTML strings, JS code blocks
+- "Located at app.py lines 258-287"
+- "[VERIFIED: common_ui_functions_v2.py lines 255-304]"
 
 ## 15. Document History
 

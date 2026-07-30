@@ -163,6 +163,7 @@ Detection: determine context from file naming and content, then apply matching s
 - Non-functional requirements missing (performance, accessibility, observability)
 - Design decisions without rationale or alternatives
 - Multiplicative design decisions (too many testing configurations)
+- Implementation details leaked into SPEC (code snippets, line numbers, function signatures, `[VERIFIED]` code tags belong in IMPL)
 
 **Adversarial Collaborator techniques** (execute in order, skip if not applicable):
 

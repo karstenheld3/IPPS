@@ -165,6 +165,7 @@ Additionally:
 - Ensure exhaustive implementation verification checklist at end.
 - Verify Document History section exists and is up to date
 - Verify UI mockups use Unicode box-drawing characters (SPEC-DG-06: `┌ ├ └ │ ─` not `+ - |`)
+- Verify no implementation details in SPEC (SPEC-CT-02): no code snippets, no source file line numbers, no function signatures, no `[VERIFIED: file lines]` tags. Implementation details belong in IMPL.
 - Read @skills:write-documents skill again and verify against rules.
 - Verify against @skills:write-documents `SPEC_RULES.md` (required for all SPEC documents)
 - Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)

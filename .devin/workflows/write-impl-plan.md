@@ -20,6 +20,7 @@ Create implementation plans from specifications.
 - Specification exists (`_SPEC_[COMPONENT].md`)
 - Read spec completely before starting
 - Read @write-documents skill
+- Read target source files listed in spec header. SPEC defines WHAT; the codebase shows current HOW.
 
 ## Steps
 

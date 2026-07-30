@@ -56,7 +56,7 @@ This skill implements:
 - **REVIEW** (`_REVIEW_[TOPIC].md`) - Structured review of existing documents. Use for `/critique` and `/reconcile` outputs. Read template: `REVIEW_TEMPLATE.md`
 
 **Planning:**
-- **SPEC** (`_SPEC_[COMPONENT].md`) - Technical specifications. Use to define WHAT to build before building it. Read template: `SPEC_TEMPLATE.md`, rules: `SPEC_RULES.md`
+- **SPEC** (`_SPEC_[COMPONENT].md`) - Technical specifications. Define WHAT to build and WHY, never HOW (no code, line numbers, or function signatures - those belong in IMPL). Read template: `SPEC_TEMPLATE.md`, rules: `SPEC_RULES.md`
 - **IMPL** (`_IMPL_[COMPONENT].md`) - Implementation plans. Use to define HOW to build what SPEC describes. Read template: `IMPL_TEMPLATE.md`
 - **TEST** (`_TEST_[COMPONENT].md`) - Test plans. Use to define how to VERIFY what SPEC requires. Read template: `TEST_TEMPLATE.md`
 - **TASKS** (`TASKS_[TOPIC].md`) - Partitioned task lists from IMPL/TEST plans. Use to break plans into discrete work items. Read template: `TASKS_TEMPLATE.md`

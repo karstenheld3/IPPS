@@ -562,11 +562,13 @@ Q1: Why should pigs be kept as pets?
 
 ## Autonomous Execution
 
-**Goal**: Workflows run start-to-finish without user interaction. Every step executes, every decision is made by the agent, every ambiguity is resolved from context.
+Workflows must execute without unnecessary pauses. Only request confirmation for destructive or ambiguous actions.
 
-**Default**: Act, don't ask. Read context, infer intent, choose most likely option, state choice, proceed. Multiple candidates → pick best match from context. Missing info → use defaults or derive from workspace files.
+**Destructive** (confirmation required): renaming files, deleting content, overwriting user data, sending emails.
 
-**Exceptions must be explicit**: A workflow step that requires user input MUST be marked with `(confirmation required)` and justify WHY. Unmarked steps execute autonomously. Only destructive + irreversible + materially ambiguous actions qualify. Examples: deleting files, sending emails.
+**Ambiguous** (confirmation required): multiple candidates and no way to determine correct one.
+
+**Non-destructive** (no confirmation): creating new files, extracting data, reading context, populating templates, setting defaults. User can review and edit output after.
 
 **BAD:**
 ```markdown

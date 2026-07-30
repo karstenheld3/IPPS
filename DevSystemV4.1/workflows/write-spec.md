@@ -43,6 +43,7 @@ Create technical specifications from requirements.
      - Functional Requirements (numbered: XXXX-FR-01)
      - Design Decisions (numbered: XXXX-DD-01)
      - Key Mechanisms
+     - Technical Constraints (facts constraining implementation - NO code, line numbers, or function signatures)
 
 4. **For UI Specs** (`_SPEC_[COMPONENT]_UI.md`)
    - Add User Actions section

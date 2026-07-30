@@ -23,7 +23,7 @@ Rules for writing specification documents with GOOD/BAD examples.
 
 **Content (CT)**
 - **SPEC-CT-01**: Summarize styling - avoid CSS detail
-- **SPEC-CT-02**: Code outline only - avoid implementation detail
+- **SPEC-CT-02**: No implementation details - SPEC defines WHAT, IMPL defines HOW
 - **SPEC-CT-03**: Single line statements when possible
 - **SPEC-CT-04**: Document event flows with box-drawing characters
 - **SPEC-CT-05**: Provide data structure examples (JSON, CSV)
@@ -536,6 +536,51 @@ Provide examples for JSON, CSV, and other data formats.
 <end_json>
 {"id": 42, "state": "completed", "result": "ok", "finished": "2025-11-27T11:30:15"}
 </end_json>
+```
+
+## SPEC-IMPL Boundary
+
+SPEC defines WHAT the system does and WHY. IMPL defines HOW and WHERE in code. Implementation details in SPEC create double maintenance and let agent hallucinations carry authoritative weight.
+
+**Prohibited in SPEC:**
+- Code snippets (function bodies, HTML fragments, JS/Python blocks)
+- Source file line numbers ("lines 258-287", "at line 836")
+- `[VERIFIED: file.py lines N-M]` tags referencing source code
+- Function signatures with parameters
+- Variable/constant names from implementation (`HOMEPAGE_JS`, `spfx_btn_html`)
+- Import statements
+
+**Allowed in SPEC:**
+- Interface/schema definitions (JSON shapes, API contracts)
+- Technical constraints ("reuses existing modal infrastructure")
+- Behavioral descriptions ("copies JSON text to clipboard via Clipboard API")
+- UX wireframes and action flows (user-facing behavior)
+- Logging goals and example output format
+- API routes and endpoint URLs (contracts between components)
+
+**Action flow nuance:** API routes (`/v2/spfx-config`) are contracts - allowed. Internal variable names (`request.base_url`), source file paths (`src/template.json`), and internal-only function names are implementation - belong in IMPL. Test: "Is this visible to the caller/user, or only to the implementer?"
+
+**Boundary test:** "Would this break if a developer renamed a function or moved code?" If yes, it belongs in IMPL.
+
+**BAD** (implementation detail in SPEC):
+```
+## 14. Implementation Details
+
+Caller in `root()` at line 836:
+```python
+if show_advanced:
+    storage_path = getattr(app.state.system_info, 'PERSISTENT_STORAGE_PATH', '') or ''
+    if storage_path:
+        domains = load_all_domains(storage_path)
+```
+
+**GOOD** (technical constraint in SPEC):
+```
+## 14. Technical Constraints
+
+- Button rendered server-side during homepage generation (Advanced mode only)
+- Domain count determined by `load_all_domains()` call during page render
+- Button disabled with "(no storage)" text when storage path not configured
 ```
 
 ## Document History Format
