@@ -3,7 +3,7 @@
 **Doc ID**: DVDT-IN01
 **Goal**: Comprehensive reference for Devin Desktop (formerly Windsurf) - agent harnesses, AI models, customization, developer tools, enterprise controls, and architecture internals
 **Version scope**: Devin Desktop (June 2026+) / Devin Local 2026.5.26+
-**Timeline**: Created 2026-06-03, Updated 8 times (latest 2026-07-30)
+**Timeline**: Created 2026-06-03, Updated 9 times (latest 2026-08-04)
 
 ## Summary
 
@@ -26,7 +26,7 @@
 - Permissions model: Deny/Ask/Allow (replaces Cascade auto-execution levels) [VERIFIED]
 - Config: `.devin/config.json` for MCP and permissions [VERIFIED]
 - Does NOT support: Workflows, Memories, Code Lenses, App Deploys, Conversation Sharing [VERIFIED]
-- DOES support: Rules, AGENTS.md, Skills, Codemaps, Fast Context, Megaplan [VERIFIED]
+- DOES support: Rules, AGENTS.md, Skills, Plugins, Codemaps, Fast Context, Megaplan [VERIFIED]
 
 **Cascade (legacy) specifics:**
 - Three modes: Code, Plan, Ask. `megaplan` for advanced planning [VERIFIED]
@@ -34,6 +34,13 @@
 - Workflows in `.devin/workflows/*.md` (or `.windsurf/workflows/`), invoked as `/workflow-name` [VERIFIED]
 - Skills in `.devin/skills/<name>/SKILL.md` or `.windsurf/skills/` - ONLY mechanism working across both Cascade and Devin Local [VERIFIED]
 - Memories auto-generated during conversation, workspace-scoped [VERIFIED]
+
+**Extensibility and skill economics:**
+- Skills use progressive disclosure: only name+description in context at startup, full SKILL.md loaded on invocation [VERIFIED]
+- `triggers: ["user"]` prevents agent auto-invocation (workflow-equivalent behavior) [VERIFIED]
+- Plugins bundle skills under namespaces (`/plugin:skill`), installed via `devin plugins install` [VERIFIED]
+- `devin migrate workflows` converts legacy Cascade workflows to skills [VERIFIED]
+- Detection ceiling: agent skill-selection accuracy degrades beyond ~32 skills (only applies to model-triggered skills) [VERIFIED - community benchmarks]
 
 **AI models:**
 - SWE-1.6 (latest in-house model, optimized intelligence + UX), SWE-1.5 (free) [VERIFIED]
@@ -85,7 +92,7 @@
 8. [Context Awareness and Search](#context-awareness-and-search)
 9. [Code Review (Devin Review and Quick Review)](#code-review-devin-review-and-quick-review)
 10. [Security (Devin Review Security + Security Swarm)](#security-devin-review-security--security-swarm)
-11. [Customization](#customization)
+11. [Customization](#customization) (Rules, Workflows, Skills, Plugins, AGENTS.md, Memories)
 12. [Cascade Hooks](#cascade-hooks)
 13. [MCP Integration](#mcp-integration)
 14. [Developer Tools](#developer-tools)
@@ -822,7 +829,7 @@ Generic Cognition architecture for whole-codebase reasoning tasks. Security Swar
 
 ## Customization
 
-Five mechanisms for customizing agent behavior. Skills are the only mechanism working across both Cascade and Devin Local.
+Six mechanisms for customizing agent behavior. Skills and Plugins are the mechanisms working across both Cascade and Devin Local.
 
 ### Decision Guide
 
@@ -830,6 +837,7 @@ Five mechanisms for customizing agent behavior. Skills are the only mechanism wo
 - **Rules** - Persistent coding style, project conventions, behavioral constraints
 - **Workflows** - Step-by-step procedures (Cascade only)
 - **Skills** - Complex multi-step tasks with templates/scripts (universal)
+- **Plugins** - Bundles of skills, rules, hooks, MCP servers under a namespace (Devin Local/CLI)
 - **AGENTS.md** - Directory-scoped instructions [VERIFIED]
 
 ### Rules
@@ -878,6 +886,8 @@ description: [short title]
 - **Devin CLI (terminal only)**: Place workflow `.md` files in `.claude/commands/`. Devin CLI imports these as slash commands via Claude Code compatibility. Does NOT work in Devin Desktop. [VERIFIED 2026-07-23]
 - **NOT imported by either**: `.devin/workflows/` and `.windsurf/workflows/` are explicitly excluded from import.
 
+**Migration command:** `devin migrate workflows` converts legacy Cascade workflows to native skills. Available since Devin Local 2026.5.26. [VERIFIED]
+
 **Source:** https://docs.devin.ai/cli/reference/configuration/read-config-from [VERIFIED]
 
 ### Skills (Universal)
@@ -922,7 +932,108 @@ triggers:
 
 **Skill permissions:** Additive to session base permissions. Cannot grant what is denied at higher level (project/org). `allow` = auto-approved during execution, `deny` = blocked, `ask` = always prompt. [VERIFIED]
 
+**Progressive disclosure (context cost):**
+
+At session start, agent sees only the skill catalog (name + description per skill). Full SKILL.md body loaded ONLY when the skill is invoked - either by user (`/name`) or by agent auto-matching. This means skill body content costs near-zero tokens until needed. [VERIFIED]
+
+- Cascade: "Only name and description shown to model by default. Full SKILL.md content and supporting files loaded only when Cascade decides to invoke the skill." [VERIFIED]
+- Devin Local/CLI: "At the start of every session, Devin sees a list of all available skills (name + description). When a skill is invoked, Devin reads the full SKILL.md file and injects its body into current context." [VERIFIED]
+
+**Invocation control:**
+
+- `triggers: ["user", "model"]` (default) - Agent can auto-invoke, user can type `/name`
+- `triggers: ["user"]` - User-only. Agent cannot auto-invoke. Equivalent to workflow behavior. [VERIFIED]
+- Devin: "One skill active at a time. Invoking a new skill replaces the previous one." [VERIFIED]
+- Cascade: supports concurrent skills (no one-at-a-time limitation). [VERIFIED]
+
+**Cross-platform comparison (Claude Code `disable-model-invocation`):**
+
+Claude Code provides stronger invocation control than Devin's `triggers`:
+
+| Frontmatter | User can invoke | Agent can invoke | Description in context |
+|---|---|---|---|
+| (default) | Yes | Yes | Yes - always loaded |
+| `disable-model-invocation: true` | Yes | No | **No - removed from context** |
+| `user-invocable: false` | No | Yes | Yes - always loaded |
+
+Key difference: Claude Code's `disable-model-invocation: true` removes the description from agent context entirely (zero tokens). Devin's `triggers: ["user"]` prevents auto-invocation but descriptions may still be loaded. Both fields can coexist in the same SKILL.md; each platform reads only its own. [VERIFIED - Anthropic official docs]
+
+Source: https://code.claude.com/docs/en/skills#control-who-invokes-a-skill [VERIFIED]
+
+**Detection ceiling:** Community benchmarks report agent skill-selection accuracy degrades beyond ~32-36 model-triggered skills. This ceiling applies ONLY to skills the agent can auto-invoke. User-only skills (`triggers: ["user"]` / `disable-model-invocation: true`) bypass this limit entirely since the agent never needs to select them. [VERIFIED - multiple independent sources]
+
+**Skill discovery paths:**
+- `.agents/skills/<name>/SKILL.md` (recommended, cross-platform)
+- `.devin/skills/<name>/SKILL.md`
+- `.windsurf/skills/<name>/SKILL.md` (legacy fallback)
+- `.claude/skills/<name>/SKILL.md` (if Claude Code config reading enabled)
+- Global: `~/.config/devin/skills/<name>/SKILL.md`
+- System (Enterprise): OS-specific paths [VERIFIED]
+
+When the same skill name is loaded from more than one location, each copy surfaces with a location prefix (`/agents:foo`, `/claude:foo`) instead of appearing as duplicates. [VERIFIED]
+
+**`devin skills` CLI commands:**
+- `devin skills list` - List all available skills (filter by `--trigger <user|model>`)
+- `devin skills show <name>` - Show details for a specific skill
+- `devin skills paths` - Show skill directory locations
+- `skill search` - Find model-invocable skills recursively by keywords [VERIFIED]
+
 **Source:** https://docs.devin.ai/cli/extensibility/skills/creating-skills
+
+### Plugins
+
+Bundles of skills, rules, subagents, hooks, and MCP servers in a single installable package. Plugins provide namespace-based skill organization and team distribution. [VERIFIED]
+
+**Structure:**
+```
+my-plugin/
+  .devin-plugin/
+    plugin.json           # Manifest (name, version, description)
+  AGENTS.md               # Optional always-on rule
+  rules/                  # Optional triggered rules
+  agents/                 # Optional custom subagents
+  hooks.json              # Optional lifecycle hooks
+  mcp_config.json         # Optional MCP servers
+  skills/
+    review/
+      SKILL.md            # Ordinary skill, invoked as /my-plugin:review
+```
+
+Only `plugin.json` goes inside `.devin-plugin/`. All other directories at plugin root. [VERIFIED]
+
+**Manifest (`plugin.json`):**
+```json
+{
+  "name": "review-tools",
+  "version": "1.0.0",
+  "description": "Code-review skills for our team",
+  "requiredPlugins": ["acme/secure-base"],
+  "optionalPlugins": ["acme/deploy-tools"],
+  "forbiddenPlugins": ["sketchy-org/bad-plugin"]
+}
+```
+
+The `name` field becomes the namespace prefix: skills invoke as `/<name>:<skill>`. [VERIFIED]
+
+**CLI commands:**
+- `devin plugins install <source>` - From GitHub (`owner/repo`), git URL, or local folder
+- `devin plugins list` - List installed plugins, versions, policy status
+- `devin plugins info <name>` - Show plugin's skills and dependency lists
+- `devin plugins update [name]` - Re-fetch at latest version
+- `devin plugins remove <name>` - Uninstall [VERIFIED]
+
+**Governance:**
+- `requiredPlugins` - Auto-installed dependencies
+- `optionalPlugins` - Endorsed, not required
+- `forbiddenPlugins` - Blocked (supports glob patterns like `acme/*` or `*`)
+- Higher authority wins: Enterprise overrides user, user overrides project
+- A denylist is only overridden at its own level [VERIFIED]
+
+**Manifest `skills` field:** Customize where skills load from within the plugin, or disable with `[]`. [VERIFIED]
+
+**Cross-platform:** Claude Code uses `.claude-plugin/plugin.json` with the same concept. Skills invoke as `/plugin-name:skill-name`. Devin auto-discovers `.claude-plugin/` format alongside `.devin-plugin/`. [VERIFIED]
+
+**Source:** https://docs.devin.ai/cli/extensibility/plugins/overview
 
 ### AGENTS.md
 
@@ -1382,6 +1493,15 @@ Three independent network stacks:
 - https://docs.devin.ai/cli/extensibility/configuration - Config precedence and permission syntax
 - https://docs.devin.ai/cli/reference/permissions - Permission system reference
 
+### Official Sources (2026-08-04)
+
+- https://docs.devin.ai/product-guides/skills - Skill discovery, progressive disclosure, invocation control
+- https://docs.devin.ai/desktop/cascade/skills - Cascade progressive disclosure, skills vs rules vs workflows comparison
+- https://docs.devin.ai/cli/changelog/stable - Devin CLI changelog (plugins, migrate command, skill deduplication)
+- https://docs.devin.ai/cli/reference/commands - Devin CLI commands reference (skills, plugins subcommands)
+- https://code.claude.com/docs/en/skills - Claude Code skills, disable-model-invocation, invocation control table
+- https://code.claude.com/docs/en/custom-skills - Claude Code custom skills, commands merge, progressive disclosure
+
 ### Official Sources (2026-06-03)
 
 - https://devin.ai/blog/windsurf-is-now-devin-desktop - Official announcement (2026-06-02)
@@ -1407,6 +1527,19 @@ Three independent network stacks:
 - https://docs.devin.com/llms-full.txt - Full documentation export (accessed 2026-06-01)
 
 ## Document History
+
+**[2026-08-04 17:45]**
+- Added: Plugins subsection - structure, manifest, CLI commands, governance, cross-platform
+- Added: Skills progressive disclosure mechanics (name+description only at startup, body on invocation)
+- Added: Skills invocation control (`triggers: ["user"]` prevents auto-invocation)
+- Added: Claude Code `disable-model-invocation` comparison table (removes description from context entirely)
+- Added: Detection ceiling (32-36 model-triggered skills) with bypass via user-only triggers
+- Added: Skill discovery paths (all supported locations with deduplication behavior)
+- Added: `devin skills` CLI commands and `devin migrate workflows`
+- Added: Extensibility summary in document header
+- Changed: Customization count from 5 to 6 (added Plugins)
+- Changed: Decision Guide updated with Plugins entry
+- Source: docs.devin.ai/product-guides/skills, docs.devin.ai/cli/changelog/stable, code.claude.com/docs/en/skills
 
 **[2026-07-30 11:41]**
 - Changed: Devin Local now supports Codemaps (editor tabs, @-mentions), Fast Context, and Megaplan (3.6.22)

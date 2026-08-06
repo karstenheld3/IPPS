@@ -6,6 +6,8 @@
 
 ## Summary
 
+**Origin:** Developed by Karsten Held 2026
+
 SOCAS is a quality evaluation heuristic with 15 criteria for detecting degradation in:
 - Agent outputs (research, code, specifications)
 - Human documents (specs, plans, communications)

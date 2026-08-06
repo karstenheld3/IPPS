@@ -6,6 +6,8 @@
 
 ## Summary
 
+**Origin:** Developed by Karsten Held 2017
+
 - **MECT** = "Use minimal explicit consistent terminology within a defined field of interaction" 
 - Applied in communication as APAPALAN principle: "As precise as possible. As little as necessary." 
 - One name per concept, self-describing terms, consistent usage everywhere 

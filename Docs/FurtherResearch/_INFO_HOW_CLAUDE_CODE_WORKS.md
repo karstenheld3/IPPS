@@ -9,7 +9,11 @@ Key findings for cross-agent compatibility:
 - Claude Code uses `CLAUDE.md` for instructions (equivalent to Windsurf rules) [VERIFIED]
 - Commands merged into Skills (v2.1.3, Jan 2026). `.claude/commands/` still works but is legacy format [VERIFIED]
 - Skills in `.claude/skills/<name>/SKILL.md` with same SKILL.md format as Windsurf/Devin [VERIFIED]
-- `disable-model-invocation: true` makes a skill behave like an explicit command [VERIFIED]
+- `disable-model-invocation: true` makes a skill behave like an explicit command AND removes description from agent context (zero tokens) [VERIFIED]
+- `user-invocable: false` hides from `/` menu but keeps in agent context (shadow tool risk) [VERIFIED]
+- Progressive disclosure: only name+description in context at startup, full body on invocation [VERIFIED]
+- Plugins bundle skills/agents/hooks/MCP under namespace (`/plugin:skill`), installable via marketplace [VERIFIED]
+- `skillOverrides` in settings.json can override visibility without editing SKILL.md [VERIFIED]
 - Subagents (`.claude/agents/`) are unique to Claude Code - no Windsurf equivalent [VERIFIED]
 - MCP config in `.mcp.json` (project) or `~/.claude.json` (user) [VERIFIED]
 - Hooks configured in `settings.json`, similar events to Windsurf hooks [VERIFIED]
@@ -388,6 +392,59 @@ model: sonnet                     # Optional: override model
 ...
 ```
 
+### Invocation Control
+
+Two frontmatter fields control who can invoke a skill:
+
+| Frontmatter | User can invoke | Claude can invoke | Description in context |
+|---|---|---|---|
+| (default) | Yes | Yes | Yes - always loaded |
+| `disable-model-invocation: true` | Yes | No | **No - removed from context** |
+| `user-invocable: false` | No | Yes | Yes - always loaded |
+
+**`disable-model-invocation: true`** - User-only. The skill appears in the `/` autocomplete menu but its description is NOT loaded into Claude's context. Zero token cost. Claude cannot auto-trigger it. This is the exact equivalent of a workflow/explicit command. Use for: destructive skills (`/deploy`), expensive operations, timing-sensitive procedures. [VERIFIED]
+
+**`user-invocable: false`** - Claude-only. Hidden from `/` menu but Claude CAN still invoke it via the Skill tool. The description IS loaded into context. Use for: background knowledge that isn't actionable as a command (`/legacy-system-context`). **Caution:** This creates a "shadow tool" - the user doesn't see it in the menu but Claude can still execute it. [VERIFIED]
+
+"Hide individual skills by adding `disable-model-invocation: true` to their frontmatter. This removes the skill from Claude's context entirely." [VERIFIED - Anthropic official docs]
+
+**Known issue (bug #26251):** In some versions, Claude refuses to execute `disable-model-invocation: true` skills via the Skill tool even when the user explicitly types `/name`. The model misinterprets the flag as "I cannot use the Skill tool for this skill at all." Status: reported, may be fixed in later versions. [VERIFIED]
+
+Source: https://code.claude.com/docs/en/skills#control-who-invokes-a-skill [VERIFIED]
+
+### Override Skill Visibility from Settings
+
+`skillOverrides` in `settings.json` lets you override invocation behavior without editing the SKILL.md file. Useful for skills whose SKILL.md you don't control (installed plugins, shared team skills):
+
+```json
+{
+  "skillOverrides": {
+    "deploy-to-production": {
+      "disable-model-invocation": true
+    },
+    "legacy-context": {
+      "user-invocable": false
+    }
+  }
+}
+```
+
+[VERIFIED]
+
+### Progressive Disclosure (Context Cost)
+
+In a regular session, skill descriptions are loaded into context so Claude knows what's available, but **full skill content only loads when invoked**. This means:
+
+- 44 skills with `disable-model-invocation: true` = **zero tokens** in context
+- 10 skills with default invocation = ~300 tokens (name+description only)
+- Full SKILL.md body = loaded **only** when `/skill-name` is typed or Claude auto-invokes
+
+Exception: Subagents with preloaded skills load full skill content at startup (via `skills:` field in agent frontmatter). [VERIFIED]
+
+### Detection Ceiling
+
+Community benchmarks report agent skill-selection accuracy degrades beyond ~32-36 model-triggered skills. This ceiling applies ONLY to skills Claude can auto-invoke (those without `disable-model-invocation: true`). User-only skills bypass this limit entirely since Claude never needs to select them. [VERIFIED - community benchmarks]
+
 ### Skills vs Slash Commands (Historical, Pre-Merge)
 
 Before v2.1.3, these were separate concepts:
@@ -532,24 +589,101 @@ claude mcp add --transport http slack --scope user https://mcp.slack.com
 
 ## Plugins
 
-Plugins extend Claude Code with additional functionality.
+Plugins bundle skills, agents, hooks, MCP servers, LSP configs, and settings into a single installable package with namespace isolation. [VERIFIED]
+
+### Plugin Structure
+
+```
+my-plugin/
+  .claude-plugin/
+    plugin.json             # Manifest (ONLY file inside .claude-plugin/)
+  skills/                   # Skills (folder per skill, each with SKILL.md)
+    code-review/
+      SKILL.md
+  agents/                   # Custom subagents (.md files)
+    reviewer.md
+  commands/                 # Legacy slash commands (flat .md files)
+  hooks/
+    hooks.json              # Lifecycle hooks (same schema as settings.json hooks)
+  .mcp.json                 # MCP server config
+  .lsp.json                 # LSP server config (symbol-level search)
+  settings.json             # Default settings applied when plugin is enabled
+```
+
+**Critical:** Only `plugin.json` goes inside `.claude-plugin/`. All other directories at plugin root. Placing `skills/` or `hooks/` inside `.claude-plugin/` causes silent discovery failure. [VERIFIED]
+
+### Manifest (`plugin.json`)
+
+```json
+{
+  "name": "quality-review",
+  "version": "1.0.0",
+  "description": "Code quality automation tools",
+  "author": { "name": "Team Name" },
+  "homepage": "https://github.com/team/quality-review",
+  "repository": "https://github.com/team/quality-review"
+}
+```
+
+The `name` field becomes the namespace prefix. A `code-review` skill inside plugin `quality-review` is invoked as `/quality-review:code-review`. [VERIFIED]
+
+### Namespace Rules
+
+- Plugin skills are always namespaced: `/plugin-name:skill-name`
+- Standalone skills (in `.claude/skills/`) use short form: `/skill-name`
+- Namespacing prevents collisions when multiple plugins ship skills with the same name (e.g., three plugins each with `/deploy`)
+- Cross-references in CLAUDE.md and subagent definitions must use the namespaced form [VERIFIED]
+
+### Installation and Management
+
+```bash
+# Install from GitHub
+claude plugins install owner/repo
+
+# Install from local folder (for authoring/testing)
+claude plugins install ./my-plugin
+
+# List installed plugins
+claude plugins list
+
+# Update a specific plugin (or all)
+claude plugins update quality-review
+claude plugins update
+
+# Remove a plugin
+claude plugins remove quality-review
+
+# Reload after edits (during development)
+/reload-plugins
+```
+
+[VERIFIED]
+
+### Testing During Development
+
+Use `claude plugins install ./my-plugin` for local testing. After every edit, run `/reload-plugins` to pick up changes. Verify skills appear under the plugin namespace (`/my-plugin:skill-name`), agents show in `/agents`, and hooks fire as expected. [VERIFIED]
+
+### Marketplace
+
+Enterprise admins can run an in-org marketplace via `marketplace.json`. A `relevance` block in marketplace entries enables Claude Code to suggest installing a plugin when it fits the user's work context (v2.1.152+). [VERIFIED]
+
+```bash
+# Install from marketplace
+claude plugins install quality-review@my-marketplace
+```
+
+The `@my-marketplace` suffix disambiguates when multiple marketplaces ship a plugin with the same name. [VERIFIED]
 
 ### Plugin Locations
 
 - User: `~/.claude/plugins/`
 - Project: `.claude/plugins/`
+- Installed from remote: cached in user plugin directory [VERIFIED]
 
-### Plugin Features
+### When to Use Plugins vs Standalone Skills
 
-- Custom tools
-- Slash commands
-- MCP servers
-- Subagents
-
-### Plugin Commands
-
-- `/plugin` - Manage plugins
-- Marketplace discovery via settings
+- **Standalone (`.claude/skills/`)** - Personal workflows, project-specific, quick experiments
+- **Plugin (`.claude-plugin/`)** - Team sharing, community distribution, version management, reuse across projects [VERIFIED]
 
 ## Terminal and CLI
 
@@ -608,21 +742,26 @@ claude -p --output-format json "List all TODO comments"
 
 **User Config:**
 - `~/.claude/CLAUDE.md` - Global instructions
-- `~/.claude/settings.json` - User settings
+- `~/.claude/settings.json` - User settings (includes `skillOverrides`)
 - `~/.claude/agents/` - User subagents
-- `~/.claude/commands/` - User slash commands
+- `~/.claude/commands/` - User slash commands (legacy)
+- `~/.claude/skills/` - User skills
+- `~/.claude/plugins/` - User plugins
 - `~/.claude/rules/` - User rules
 - `~/.claude.json` - Preferences, OAuth, MCP servers
 
 **Project Config:**
 - `CLAUDE.md` - Project instructions (checked in)
 - `CLAUDE.local.md` - Local instructions (gitignored)
-- `.claude/settings.json` - Project settings (checked in)
+- `.claude/settings.json` - Project settings (checked in, includes `skillOverrides`)
 - `.claude/settings.local.json` - Local settings (gitignored)
 - `.claude/agents/` - Project subagents
-- `.claude/commands/` - Project slash commands
+- `.claude/commands/` - Project slash commands (legacy)
+- `.claude/skills/` - Project skills
+- `.claude/plugins/` - Project plugins
 - `.claude/rules/` - Project rules with optional path patterns
 - `.mcp.json` - Project MCP servers
+- `.claude-plugin/plugin.json` - Plugin manifest (if project IS a plugin)
 
 **Managed (IT-deployed):**
 - `managed-settings.json` - Enforced settings
@@ -646,7 +785,31 @@ claude -p --output-format json "List all TODO comments"
 **Best Practices:**
 - https://www.anthropic.com/engineering/claude-code-best-practices
 
+**Official Documentation:** [VERIFIED 2026-08-04]
+- https://code.claude.com/docs/en/skills#control-who-invokes-a-skill - Invocation control table, disable-model-invocation behavior
+- https://code.claude.com/docs/en/plugins - Plugin system, structure, namespace rules
+- https://code.claude.com/docs/en/settings - skillOverrides, settings scopes
+- https://claude-code-playbook.pages.dev/en/docs/level-4/plugins - Plugin authoring guide, marketplace, testing
+
+**Community Sources:** [VERIFIED 2026-08-04]
+- https://github.com/anthropics/claude-code/issues/26251 - Bug: disable-model-invocation blocks user invocation via Skill tool
+- https://github.com/anthropics/claude-code/issues/19141 - Clarification: user-invocable vs disable-model-invocation distinction
+- https://www.developersdigest.tech/guides/disable-model-invocation - disable-model-invocation usage guide
+- https://claudefa.st/blog/tools/mcp-extensions/plugins-distribution - Plugin distribution patterns, marketplace setup
+- https://github.com/anthropics/claude-plugins-official/blob/main/plugins/plugin-dev/commands/create-plugin.md - Official plugin creation guide
+
 ## Document History
+
+**[2026-08-04 17:50]**
+- Added: Invocation Control subsection with full behavior table (disable-model-invocation removes from context, user-invocable creates shadow tool)
+- Added: Override Skill Visibility subsection (skillOverrides in settings.json)
+- Added: Progressive Disclosure subsection (context cost mechanics, zero tokens for user-only skills)
+- Added: Detection Ceiling subsection (32-36 model-triggered skills)
+- Added: Known bug #26251 (disable-model-invocation blocking user invocation)
+- Changed: Plugins section expanded from stub to full documentation (structure, manifest, namespace, CLI, marketplace, testing)
+- Changed: Key Files Reference updated with skills, plugins, skillOverrides, plugin manifest
+- Changed: Summary updated with invocation control findings, progressive disclosure, plugins, skillOverrides
+- Added: 9 new sources (official docs, community, plugin guides)
 
 **[2026-07-23 17:30]**
 - Added: Commands-Skills Merge section (v2.1.3, Jan 2026) with full rationale from GitHub issue #13115

@@ -6,6 +6,8 @@
 
 ## Summary
 
+**Origin:** Developed by Karsten Held 2017
+
 - **APAPALAN** = "As Precise As Possible (Priority 1), As Little As Necessary (Priority 2)" [VERIFIED]
 - APAPALAN implements MECT (Minimal Explicit Consistent Terminology) through concrete, enforceable rules [VERIFIED]
 - MECT designs communication systems; APAPALAN applies MECT using rules for documents, code, logs, communication [VERIFIED]
