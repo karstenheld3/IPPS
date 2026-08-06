@@ -1,6 +1,7 @@
 # [SUBJECT] - Summary
 
 **Doc ID**: [TOPIC]-IN01
+<!-- Topic IDs: 7-14 uppercase chars. Inside T##/S## folders use nested: [TOPIC]-[SUBTOPIC]-IN01 -->
 **Goal**: Cross-document synthesis and master index for [SUBJECT] research
 **Version scope**: [VERSION or Documentation date YYYY-MM-DD]
 **Research stats**: [pending - added in final phase]
@@ -10,14 +11,14 @@
 
 ## Goals
 
-[conditional - insert when research request defines explicit goals, success criteria, or deliverables. Skip when Goal field in header block is sufficient. Per INFO_GUIDE.md Section 3.1]
+<!-- Conditional: insert when research request defines explicit goals, success criteria, or deliverables. Skip when Goal field in header block is sufficient. Per INFO_GUIDE.md Section 3.1 -->
 
 - [Goal 1] → [ACHIEVED] / [PARTIAL] / [NOT ACHIEVED]
 - [Goal 2] → [outcome label]
 
 ## Questions
 
-[conditional - insert when research request poses specific questions, or research triggered by uncertainty. At least one of Goals or Questions is required. Per INFO_GUIDE.md Section 3.2]
+<!-- Conditional: insert when research request poses specific questions, or research triggered by uncertainty. At least one of Goals or Questions is required. Per INFO_GUIDE.md Section 3.2 -->
 
 Q1: [Question from user prompt]
 A1: [1-3 sentence answer] [LABEL]
@@ -70,21 +71,21 @@ A2: [Answer] [LABEL]
 
 ## 2. Reading Guide
 
-[conditional - insert when 3+ distinct audience types benefit from different reading orders. Per RESEARCH_SUMMARY_RULES.md SD-ES-06]
+<!-- Conditional: insert when 3+ distinct audience types benefit from different reading orders. Per RESEARCH_SUMMARY_RULES.md SD-ES-06 -->
 
 - [Role 1]: Summary → IN-XX ([topic]) → IN-YY ([topic]) → Conclusions
 - [Role 2]: IN-XX ([topic]) → IN-YY ([topic]) → Limitations
 
 ## 3. Conclusions
 
-[conditional - insert when research produces actionable conclusions derived from cross-topic analysis. Reference supporting topics by IN-number. Per INFO_GUIDE.md Section 3.3]
+<!-- Conditional: insert when research produces actionable conclusions derived from cross-topic analysis. Reference supporting topics by IN-number. Per INFO_GUIDE.md Section 3.3 -->
 
 1. [Conclusion derived from findings] (IN-XX, IN-YY)
 2. [Conclusion] (IN-XX)
 
 ## 4. Emergent Hypotheses
 
-[conditional - insert when research reveals patterns or theories emerging from combined evidence, not directly stated by any single source. All items [ASSUMED]. Per INFO_GUIDE.md Section 3.4]
+<!-- Conditional: insert when research reveals patterns or theories emerging from combined evidence, not directly stated by any single source. All items [ASSUMED]. Per INFO_GUIDE.md Section 3.4 -->
 
 1. **[Hypothesis name]**: [Description with supporting evidence and validation approach]. [ASSUMED]
 
@@ -118,7 +119,7 @@ A2: [Answer] [LABEL]
 
 ## 7. Problem → Solution Lookup
 
-[conditional - insert when research evaluates multiple options (libraries, vendors, tools, strategies) for distinct problems or needs. Format: problem statement → recommended solution + alternatives. Adapt heading to domain: "Problem → Solution Lookup", "Requirement → Library", "Need → Vendor". Per RESEARCH_SUMMARY_RULES.md SD-ES-07]
+<!-- Conditional: insert when research evaluates multiple options (libraries, vendors, tools, strategies) for distinct problems or needs. Format: problem statement → recommended solution + alternatives. Adapt heading to domain: "Problem → Solution Lookup", "Requirement → Library", "Need → Vendor". Per RESEARCH_SUMMARY_RULES.md SD-ES-07 -->
 
 ### [Category 1]
 
@@ -127,7 +128,7 @@ A2: [Answer] [LABEL]
 
 ## 8. Recommendations
 
-[conditional - insert when research produces actionable advice beyond analytical conclusions. Group by use case, audience, or scenario. Distinct from Conclusions (what we learned) - Recommendations say what to do. Per RESEARCH_SUMMARY_RULES.md SD-ES-08]
+<!-- Conditional: insert when research produces actionable advice beyond analytical conclusions. Group by use case, audience, or scenario. Distinct from Conclusions (what we learned) - Recommendations say what to do. Per RESEARCH_SUMMARY_RULES.md SD-ES-08 -->
 
 ### [Use Case / Audience 1]
 
@@ -140,7 +141,7 @@ A2: [Answer] [LABEL]
 
 ## 9. Risk Assessment
 
-[conditional - insert when evaluated options carry categorized risks (legal, technical, operational, financial). Adapt categories to domain: license risks, vendor lock-in, regulatory exposure, technical debt. Per RESEARCH_SUMMARY_RULES.md SD-ES-09]
+<!-- Conditional: insert when evaluated options carry categorized risks (legal, technical, operational, financial). Adapt categories to domain: license risks, vendor lock-in, regulatory exposure, technical debt. Per RESEARCH_SUMMARY_RULES.md SD-ES-09 -->
 
 ### [Risk Category 1]
 
@@ -156,26 +157,26 @@ A2: [Answer] [LABEL]
 
 ## 11. Contradictions and Tensions
 
-[conditional - insert when research findings pull in opposite directions or reveal paradoxes. State both sides with IN-references. Per RESEARCH_SUMMARY_RULES.md SD-ES-03]
+<!-- Conditional: insert when research findings pull in opposite directions or reveal paradoxes. State both sides with IN-references. Per RESEARCH_SUMMARY_RULES.md SD-ES-03 -->
 
 1. [Tension name]: [Side A with data] vs [Side B with data] (IN-XX vs IN-YY)
 2. [Tension name]: [Description of paradox] (IN-XX)
 
 ## 12. Cross-Research References
 
-[conditional - insert when entity appears in 2+ sibling research sets within the same parent folder. List entity, both research folders, and finding delta. Per RESEARCH_SUMMARY_RULES.md SD-ES-01]
+<!-- Conditional: insert when entity appears in 2+ sibling research sets within the same parent folder. List entity, both research folders, and finding delta. Per RESEARCH_SUMMARY_RULES.md SD-ES-01 -->
 
 - [Entity]: [Finding in this research] (IN-XX) + [Finding in other research] (OTHER_TOPIC, IN-YY). Delta: [what differs].
 
 ## 13. Entity Index
 
-[conditional - insert when 5+ named entities with classifications appear across topic files. Adapt classification scheme to domain: COMPETE/PARTNER/MONITOR for market research, license type for software, risk level for compliance. Per RESEARCH_SUMMARY_RULES.md SD-ES-02]
+<!-- Conditional: insert when 5+ named entities with classifications appear across topic files. Adapt classification scheme to domain: COMPETE/PARTNER/MONITOR for market research, license type for software, risk level for compliance. Per RESEARCH_SUMMARY_RULES.md SD-ES-02 -->
 
 - [Entity] ([classification]) - [key attributes relevant to domain] -> IN-XX
 
 ## 14. Open Questions and Research Gaps
 
-[conditional - insert when topic files contain unanswered questions or "Extend This Segment" prompts. Aggregate and deduplicate. Per RESEARCH_SUMMARY_RULES.md SD-ES-04]
+<!-- Conditional: insert when topic files contain unanswered questions or "Extend This Segment" prompts. Aggregate and deduplicate. Per RESEARCH_SUMMARY_RULES.md SD-ES-04 -->
 
 - [Unanswered question]? (IN-XX)
 - [Research extension prompt] (IN-YY)

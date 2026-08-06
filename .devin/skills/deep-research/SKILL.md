@@ -5,7 +5,7 @@ description: Apply when conducting deep research on technologies, APIs, framewor
 
 # Deep Research Skill
 
-Systematic research using MCPI (Most Complete Point of Information) or MEPI (Most Executable Point of Information) approaches.
+Systematic research using MCPI (Most Complete Point of Information) or MEPI (Most Executable Point of Information) approaches. Origin: `_INFO_MEPI_MCPI_PRINCIPLE.md [MEPI-IN01]` (Karsten Held, 2003).
 
 ## When to Use
 
@@ -117,6 +117,7 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 
 ## MUST-NOT-FORGET
 
+- **MEPI = Most Executable Point of Information, MCPI = Most Complete Point of Information** - Never invent alternative expansions. Verify against this line if unsure.
 - **NEVER ask questions** - Derive goal or best option from the previous prompt, or from conversation context. Act on best inference
 - **STRUT required** for all research sessions (include pipeline steps and time log)
 - **Assumptions check first** - write down what you think you know before researching
