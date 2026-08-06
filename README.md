@@ -49,7 +49,7 @@ EDIRD provides the phases     → EXPLORE → DESIGN → IMPLEMENT → REFINE �
 STRUT provides the notation   → Tree structure for plans with progress tracking
 TRACTFUL provides the docs    → INFO, SPEC, IMPL, TEST, TASKS with unique IDs
 MNF provides the safety net   → Critical items that must be verified before completion
-APAPALAN provides precision   → Precision first, brevity second (26 enforceable rules)
+APAPALAN provides precision   → Precision first, brevity second (34 enforceable rules)
 MECT provides consistency     → Voice, terminology, naming across documents and code
 SOCAS provides quality gates  → 15 criteria detecting confusion and sloppiness
 GRUC prevents drift           → Pre-calculated criteria for verify, drift-detect, improve
@@ -104,7 +104,7 @@ AMINTON provides arguments    → Tree notation for structured, verifiable Minto
 
 ## Overview
 
-IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V4.0) features ten integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT consistency, SOCAS quality criteria, GRUC drift prevention, and AMINTON arguments.
+IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V4.2) features ten integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT consistency, SOCAS quality criteria, GRUC drift prevention, and AMINTON arguments.
 
 ## How to Add to Your Project
 
@@ -119,9 +119,11 @@ your-project/
 
 ## DevSystem Versions
 
-- **[DevSystemV4.0](DevSystemV4.0/)** - Current system
+- **[DevSystemV4.2](DevSystemV4.2/)** - Current system
 
 Older versions in [`_OldDevSystemVersions/`](_OldDevSystemVersions/):
+- DevSystemV4.1 - Conversation intelligence, agent research, write-documents refinement
+- DevSystemV4.0 - GRUC drift prevention, AMINTON structured argumentation, 10 core concepts
 - DevSystemV3.8 - Windsurf to Devin migration (.windsurf/ renamed to .devin/), SOP 5, Claude Opus 4.8
 - DevSystemV3.7 - Deep research profiles, translation workflow, recap/continue removal, cleanup workflow
 - DevSystemV3.6 - SOCAS quality criteria, 4-phase /improve workflow, NFR in SPEC, STRUT self-tracking
@@ -271,6 +273,12 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - **APAPALAN** - As Precise As Possible, As Little As Necessary. Conciseness principle for workflows and documents
 
 **Agent Drift Prevention**: [ADP Approach](Docs/Concepts/_INFO_AGENT_DRIFT_PREVENTION_APPROACH.md) - How the DevSystem prevents agent drift through TRACTFUL, SMAP, EDIRD, STRUT, GRUC, and MNF across three scopes
+
+**How-To Guides**:
+- [How to Write Good Document Templates](Docs/Concepts/_INFO_HOW_TO_WRITE_GOOD_DOCUMENT_TEMPLATES.md) - Patterns and rules for unambiguous templates that agents reliably instantiate
+- [How to Create Auditable Research Summaries](Docs/Concepts/_INFO_HOW_TO_CREATE_AUDITABLE_RESEARCH_SUMMARIES.md) - Citation and source-linking standard for 100% audit chain
+- [How to Detect AI-Assisted Writing](Docs/Concepts/_INFO_HOW_TO_DETECT_AI_ASSISTED_WRITING.md) - Detection signals for AI-assisted writing across style, structure, reasoning, and sourcing
+- [Bundling Workflows with Skills](Docs/Concepts/_INFO_HOW_TO_IMPLEMENT_WORKFLOWS_AS_SKILLS.md) - Research on migrating workflows into skill-based architecture
 
 **Full registry**: [ID-REGISTRY.md](ID-REGISTRY.md) - All acronyms, TOPICs, states, and named concepts
 
@@ -465,10 +473,10 @@ Session lifecycle management: init, save, resume, finalize, archive. Cascade con
 **Quick examples**:
 ```powershell
 # List last 10 conversations
-.\DevSystemV4.1\skills\session-management\cascade-search.ps1
+.\DevSystemV4.2\skills\session-management\cascade-search.ps1
 
 # Delete conversations older than 30 days
-.\DevSystemV4.1\skills\session-management\cascade-delete.ps1 -OlderThanDays 30
+.\DevSystemV4.2\skills\session-management\cascade-delete.ps1 -OlderThanDays 30
 ```
 
 ### windows-desktop-control
@@ -528,12 +536,12 @@ Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.
 ```
 IPPS/
 ├── ../.tools/                    # Shared tool installations (parent folder)
-├── .devin/                    # Active agent configuration (synced from DevSystemV4.0)
+├── .devin/                    # Active agent configuration (synced from DevSystemV4.2)
 │   ├── rules/
 │   ├── workflows/
 │   └── skills/
 ├── _OldDevSystemVersions/        # Previous DevSystem versions (V1 through V3.8)
-├── DevSystemV4.0/                # Current system (source of truth)
+├── DevSystemV4.2/                # Current system (source of truth)
 │   ├── rules/
 │   │   ├── agent-behavior.md     # Agent execution patterns and communication
 │   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions
@@ -669,7 +677,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ## Workflows Reference
 
-43 workflows in `.devin/workflows/`:
+45 workflows in `.devin/workflows/`:
 
 **Entry Points**
 - [`/build`](.devin/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
@@ -720,6 +728,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 **Communication**
 - [`/conversation-start`](.devin/workflows/conversation-start.md) - Create new conversation tracking file from chat context
 - [`/conversation-update`](.devin/workflows/conversation-update.md) - Update existing conversation with new emails or messages
+- [`/conversation-draft`](.devin/workflows/conversation-draft.md) - Draft emails, WhatsApp messages, or other text AS the user
 - [`/transcribe`](.devin/workflows/transcribe.md) - Transcribe PDFs and web pages to markdown
 - [`/translate`](.devin/workflows/translate.md) - Translate markdown, PDF, or subtitle files to target languages
 
@@ -729,6 +738,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 - [`/project-release`](.devin/workflows/project-release.md) - Create a dated release with comprehensive release notes
 - [`/cleanup`](.devin/workflows/cleanup.md) - Delete temporary files and artifacts left by workflows and skills
 - [`/remove`](.devin/workflows/remove.md) - Remove session content, conversation content, or specific files with preview and confirmation
+- [`/write-template`](.devin/workflows/write-template.md) - Create purpose-built document templates that produce consistent, comparable instances
 
 ## Usage Examples
 
