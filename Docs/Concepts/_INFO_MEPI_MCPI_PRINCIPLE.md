@@ -9,18 +9,18 @@
 **Origin:** Developed by Karsten Held 2003 while working for a Fintech startup in Munich 
 
 **Cognitive Science:**
-- MEPI (Most Executable Point of Information) presents a few options aligned with implicit intentions, enabling cheap decisions [VERIFIED]
-- MCPI (Most Complete Point of Information) presents exhaustive options, forcing costly decision models [VERIFIED]
-- More options correlate with less satisfaction, more regret, and decision paralysis (Schwartz, 2002) [VERIFIED]
-- Maximizers report lower happiness, higher depression, more regret than satisficers (Schwartz et al., 2002) [VERIFIED]
-- The jam study showed 10x purchase rate with fewer options, but replication is inconsistent (Scheibehenne 2010 meta-analysis) [VERIFIED]
-- MEPI aligns with System 1 thinking; MCPI forces System 2 overhead (Kahneman, 2011) [VERIFIED]
+- MEPI (Most Executable Point of Information) presents a few options aligned with implicit intentions, enabling cheap decisions
+- MCPI (Most Complete Point of Information) presents exhaustive options, forcing costly decision models
+- More options correlate with less satisfaction, more regret, and decision paralysis (Schwartz, 2002)
+- Maximizers report lower happiness, higher depression, more regret than satisficers (Schwartz et al., 2002)
+- The jam study showed 10x purchase rate with fewer options, but replication is inconsistent (Scheibehenne 2010 meta-analysis)
+- MEPI aligns with System 1 thinking; MCPI forces System 2 overhead (Kahneman, 2011)
 
 **Software and Business:**
-- Analysis paralysis is a recognized software development anti-pattern [VERIFIED]
-- Bezos 70% rule: decide with 70% of desired info; waiting for 90% means being too slow [VERIFIED]
+- Analysis paralysis is a recognized software development anti-pattern
+- Bezos 70% rule: decide with 70% of desired info; waiting for 90% means being too slow
 - McKinsey: speed and decision quality are positively correlated, not trade-offs [ASSUMED]
-- Case studies: BlackBerry and Microsoft Mobile failed due to decision delays [VERIFIED]
+- Case studies: BlackBerry and Microsoft Mobile failed due to decision delays
 
 ## Table of Contents
 
@@ -286,20 +286,20 @@ The following studies were reviewed but excluded because they address methodolog
 
 **Cognitive Science Sources:**
 
-- `MEPI-IN01-SC-TDLAB-SYS12`: https://thedecisionlab.com/reference-guide/philosophy/system-1-and-system-2-thinking - System 1/2 definition and Kahneman quote [VERIFIED]
-- `MEPI-IN01-SC-WIKI-SATIS`: https://en.wikipedia.org/wiki/Satisficing - Simon's satisficing theory, bounded rationality, maximizer/satisficer research [VERIFIED]
-- `MEPI-IN01-SC-TDLAB-PARA`: https://thedecisionlab.com/reference-guide/economics/the-paradox-of-choice - Paradox of choice definition, Schwartz quote [VERIFIED]
-- `MEPI-IN01-SC-MODTH-JAM`: https://modelthinkers.com/mental-model/paradox-of-choice - Jam study data (24 vs 6 jams, 3% vs 30% purchase) [VERIFIED]
-- `MEPI-IN01-SC-PUBM-MAXS`: https://pubmed.ncbi.nlm.nih.gov/12416921/ - Schwartz et al. 2002 study on maximizers vs satisficers [VERIFIED]
-- `MEPI-IN01-SC-TDLAB-SUNK`: https://thedecisionlab.com/biases/the-sunk-cost-fallacy - Sunk cost fallacy definition [VERIFIED]
-- `MEPI-IN01-SC-WIKI-ESCA`: https://en.wikipedia.org/wiki/Escalation_of_commitment - Escalation of commitment definition [VERIFIED]
+- `MEPI-IN01-SC-TDLAB-SYS12`: https://thedecisionlab.com/reference-guide/philosophy/system-1-and-system-2-thinking - System 1/2 definition and Kahneman quote
+- `MEPI-IN01-SC-WIKI-SATIS`: https://en.wikipedia.org/wiki/Satisficing - Simon's satisficing theory, bounded rationality, maximizer/satisficer research
+- `MEPI-IN01-SC-TDLAB-PARA`: https://thedecisionlab.com/reference-guide/economics/the-paradox-of-choice - Paradox of choice definition, Schwartz quote
+- `MEPI-IN01-SC-MODTH-JAM`: https://modelthinkers.com/mental-model/paradox-of-choice - Jam study data (24 vs 6 jams, 3% vs 30% purchase)
+- `MEPI-IN01-SC-PUBM-MAXS`: https://pubmed.ncbi.nlm.nih.gov/12416921/ - Schwartz et al. 2002 study on maximizers vs satisficers
+- `MEPI-IN01-SC-TDLAB-SUNK`: https://thedecisionlab.com/biases/the-sunk-cost-fallacy - Sunk cost fallacy definition
+- `MEPI-IN01-SC-WIKI-ESCA`: https://en.wikipedia.org/wiki/Escalation_of_commitment - Escalation of commitment definition
 
 **Software and Business Sources:**
 
-- `MEPI-IN01-SC-WIKI-ANPA`: https://en.wikipedia.org/wiki/Analysis_paralysis - Analysis paralysis definition, software development anti-pattern [VERIFIED]
-- `MEPI-IN01-SC-ISACA-ANPA`: https://www.isaca.org/resources/news-and-trends/newsletters/atisaca/2024/volume-5/how-to-avoid-analysis-paralysis-in-decision-making - BlackBerry/Microsoft case studies, causes of analysis paralysis [VERIFIED]
-- `MEPI-IN01-SC-WIKI-BDUF`: https://en.wikipedia.org/wiki/Big_design_up_front - BDUF arguments for/against, Spolsky quote [VERIFIED]
-- `MEPI-IN01-SC-FORB-BEZOS`: https://www.forbes.com/sites/eriklarson/2018/09/24/how-jeff-bezos-uses-faster-better-decisions-to-keep-amazon-innovating/ - Bezos 70% rule, Type 1/2 decisions, disagree and commit [VERIFIED]
+- `MEPI-IN01-SC-WIKI-ANPA`: https://en.wikipedia.org/wiki/Analysis_paralysis - Analysis paralysis definition, software development anti-pattern
+- `MEPI-IN01-SC-ISACA-ANPA`: https://www.isaca.org/resources/news-and-trends/newsletters/atisaca/2024/volume-5/how-to-avoid-analysis-paralysis-in-decision-making - BlackBerry/Microsoft case studies, causes of analysis paralysis
+- `MEPI-IN01-SC-WIKI-BDUF`: https://en.wikipedia.org/wiki/Big_design_up_front - BDUF arguments for/against, Spolsky quote
+- `MEPI-IN01-SC-FORB-BEZOS`: https://www.forbes.com/sites/eriklarson/2018/09/24/how-jeff-bezos-uses-faster-better-decisions-to-keep-amazon-innovating/ - Bezos 70% rule, Type 1/2 decisions, disagree and commit
 - `MEPI-IN01-SC-MCKIN-SPEED`: McKinsey research - Speed and quality correlation (URL inaccessible, cited from search summary) [ASSUMED]
 
 **Book References:**

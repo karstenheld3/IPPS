@@ -7,16 +7,16 @@
 ## Summary
 
 **Core pattern:**
-- Template IS the document skeleton; all annotations use XML comments, no exceptions [VERIFIED]
-- Placeholders use `[BRACKETS]` for values; conditional sections use `<!-- Conditional: ... -->` [VERIFIED]
-- Full examples in fenced code blocks with `<!-- EXAMPLE: Reference only -->` annotation [VERIFIED]
-- Complex rules belong in `*_RULES.md` or `*_GUIDE.md` companion files [VERIFIED]
+- Template IS the document skeleton; all annotations use XML comments, no exceptions
+- Placeholders use `[BRACKETS]` for values; conditional sections use `<!-- Conditional: ... -->`
+- Full examples in fenced code blocks with `<!-- EXAMPLE: Reference only -->` annotation
+- Complex rules belong in `*_RULES.md` or `*_GUIDE.md` companion files
 
 **Header and structural standards (per-task documents only):**
-- `**Doc ID**:` without suffixes; Topic ID XML comment for nested ID guidance [VERIFIED]
-- `**Target file(s)**:` with list format; `**Timeline**:` for versioned documents [VERIFIED]
-- Document History required in all per-task document templates [VERIFIED]
-- Per-task: INFO, SPEC, IMPL, TEST, TASKS, REVIEW, MINTO, DEFERRED, FIXES [VERIFIED]
+- `**Doc ID**:` without suffixes; Topic ID XML comment for nested ID guidance
+- `**Target file(s)**:` with list format; `**Timeline**:` for versioned documents
+- Document History required in all per-task document templates
+- Per-task: INFO, SPEC, IMPL, TEST, TASKS, REVIEW, MINTO, DEFERRED, FIXES
 
 ## Table of Contents
 
@@ -395,9 +395,9 @@ When creating or reviewing a template:
 
 ## 9. Sources
 
-- `DOCTMPLS-IN01-SC-DFTMPL-CURR`: Current state audit of 15 write-documents templates (2026-08-05) [VERIFIED]
-- `DOCTMPLS-IN01-SC-RSRTMPL-REF`: `RESEARCH_SUMMARY_TEMPLATE.md` (deep-research skill) - exemplar template with XML comment conditionals [VERIFIED]
-- `DOCTMPLS-IN01-SC-DFRIMP-REF`: `DEFERRED_IMPROVEMENTS_TEMPLATE.md` - template with XML comment annotations and annotated full example [VERIFIED]
+- `DOCTMPLS-IN01-SC-DFTMPL-CURR`: Current state audit of 15 write-documents templates (2026-08-05)
+- `DOCTMPLS-IN01-SC-RSRTMPL-REF`: `RESEARCH_SUMMARY_TEMPLATE.md` (deep-research skill) - exemplar template with XML comment conditionals
+- `DOCTMPLS-IN01-SC-DFRIMP-REF`: `DEFERRED_IMPROVEMENTS_TEMPLATE.md` - template with XML comment annotations and annotated full example
 
 ## 10. Document History
 

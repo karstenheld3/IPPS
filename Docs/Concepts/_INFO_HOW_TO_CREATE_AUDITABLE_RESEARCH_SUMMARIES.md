@@ -6,13 +6,13 @@
 
 ## Summary
 
-- Every factual claim must trace to a source with full URL, publication date, and archived copy [VERIFIED]
-- Three-layer audit architecture: inline citation (Layer 1) → source registry (Layer 2) → source archive (Layer 3) [VERIFIED]
-- Inline format: `(SOURCE-ID | https://exact-url YYYY[-MM[-DD]])` on first mention; `(SOURCE-ID YYYY[-MM[-DD]])` on subsequent [VERIFIED]
-- Deep-research multi-file output MUST produce `_Sources.md` as separate file; single-file output MUST include Sources section [VERIFIED]
-- Source registry MUST include: Published date, Data vintage, Accessed date, Archived filename, Tier classification [VERIFIED]
-- Bare source IDs without URL and year are non-compliant - they fail the "can an auditor verify this in 30 seconds?" test [VERIFIED]
-- Citation = in-text source marker; Quotation = verbatim source text + citation. Quotations required for editorial conclusions and foundational arguments [VERIFIED]
+- Every factual claim must trace to a source with full URL, publication date, and archived copy
+- Three-layer audit architecture: inline citation (Layer 1) → source registry (Layer 2) → source archive (Layer 3)
+- Inline format: `(SOURCE-ID | https://exact-url YYYY[-MM[-DD]])` on first mention; `(SOURCE-ID YYYY[-MM[-DD]])` on subsequent
+- Deep-research multi-file output MUST produce `_Sources.md` as separate file; single-file output MUST include Sources section
+- Source registry MUST include: Published date, Data vintage, Accessed date, Archived filename, Tier classification
+- Bare source IDs without URL and year are non-compliant - they fail the "can an auditor verify this in 30 seconds?" test
+- Citation = in-text source marker; Quotation = verbatim source text + citation. Quotations required for editorial conclusions and foundational arguments
 
 ## Table of Contents
 
@@ -448,7 +448,7 @@ When research is a single document, the source registry is a **section within th
   - Data vintage: [period]
   - Accessed: YYYY-MM-DD
   - Key Data: [what was extracted]
-  - [VERIFIED]
+  -
 
 ### Tier 2: Consulting/Vendor
 ...
@@ -465,7 +465,7 @@ When research is a single document, the source registry is a **section within th
 ### GOOD: Full Audit Chain (B2BAGTMKT Per-Topic Key Findings)
 
 ```markdown
-- Total B2B AI agent market: $10-12B (2026), 45-50% CAGR [VERIFIED]
+- Total B2B AI agent market: $10-12B (2026), 45-50% CAGR
   (B2BAGTMKT-SC-TBRC-MKTSZE | https://thebusinessresearchcompany.com/report/artificial-intelligence-agents-global-market-report 2026,
    B2BAGTMKT-SC-GVR-MKTSZE | https://grandviewresearch.com/industry-analysis/ai-agents-market-report 2025)
 ```
@@ -475,7 +475,7 @@ What an auditor sees:
 - Two independent sources (analyst consensus)
 - Both clickable URLs
 - Publication dates: 2026 (TBRC) and 2025 (GVR) - reader knows GVR report is older
-- Verification label: [VERIFIED]
+- Verification label:
 - Can click URL immediately to verify
 
 ### GOOD: Source Registry Entry (B2BAGTMKT)
@@ -522,7 +522,7 @@ Problems:
 ### BAD: Domain Without Scheme
 
 ```markdown
-- 7 frameworks converge: Plan + Act + Loop + Tools = Agent [VERIFIED]
+- 7 frameworks converge: Plan + Act + Loop + Tools = Agent
   (B2BAGTMKT-SC-GRTNR-40PCT26 | gartner.com)
 ```
 
@@ -554,14 +554,14 @@ What works:
 ### GOOD: Source with Quarter Precision
 
 ```markdown
-US banks project $177M average AI spend, up 33% from Q4 2025 [VERIFIED]
+US banks project $177M average AI spend, up 33% from Q4 2025
 (AIAUTMFIN-SC-KPMG-BKPLS1 | https://kpmg.com/us/en/articles/banking-leaders-pulse-survey-q1-2026.html 2026-Q1)
 ```
 
 What works:
 - Quarter precision: `2026-Q1` tells the auditor when this source was published
 - Full URL with scheme: clickable, verifiable
-- Verification label: [VERIFIED]
+- Verification label:
 
 ## 9. Compliance Checklist
 
@@ -572,7 +572,7 @@ Use this to verify any research document meets the auditable citation standard.
 - [ ] Claim has a SOURCE-ID
 - [ ] SOURCE-ID includes full URL with `https://` (first mention) or was already introduced earlier in document
 - [ ] Publication date present in citation (YYYY-MM-DD, YYYY-MM, YYYY-QN, YYYY-HN, or YYYY)
-- [ ] Verification label present: [ASSUMED], [VERIFIED], [TESTED], or [PROVEN]
+- [ ] Verification label present: [ASSUMED],, [TESTED], or [PROVEN]
 
 ### 9.2 Per-Source Verification
 

@@ -6,14 +6,14 @@
 
 ## Summary
 
-- **AI-assisted writing** leaves detectable patterns in style, structure, sourcing, voice, and lexical choice [VERIFIED]
-- Detection works through **signal analysis**: identifying patterns that arise from Large Language Model (LLM) generation mechanics, not from human writing habits [VERIFIED]
-- The strongest single indicator is **confident misattribution** - stating falsifiable claims with authority but without citation, where the claim turns out wrong [VERIFIED]
-- No single signal is conclusive. Detection requires **convergence** of multiple independent signals across categories [VERIFIED]
-- The five detection categories: Sourcing (SO), Style (SY), Structure (ST), Voice (VO), Lexical (LX) [VERIFIED]
-- Human writing has **idiosyncrasies** (unusual word choices, structural surprises, personal reference). LLM writing has **uniformity** (predictable cadence, perfect escalation, no rough edges) [VERIFIED]
-- Computational research confirms these patterns persist in reasoning models (o1, o3). The PLOS One 2025 study found no difference between o1 and GPT-4o in detectable writing patterns [VERIFIED] (STYLO-SC-PLOS-STYLJP)
-- Human judges perform at chance (50%) when asked to identify AI text. Pattern-based detection achieves 99.8% accuracy on the same texts. The signals are real but invisible to casual reading [VERIFIED] (STYLO-SC-PLOS-STYLJP)
+- **AI-assisted writing** leaves detectable patterns in style, structure, sourcing, voice, and lexical choice
+- Detection works through **signal analysis**: identifying patterns that arise from Large Language Model (LLM) generation mechanics, not from human writing habits
+- The strongest single indicator is **confident misattribution** - stating falsifiable claims with authority but without citation, where the claim turns out wrong
+- No single signal is conclusive. Detection requires **convergence** of multiple independent signals across categories
+- The five detection categories: Sourcing (SO), Style (SY), Structure (ST), Voice (VO), Lexical (LX)
+- Human writing has **idiosyncrasies** (unusual word choices, structural surprises, personal reference). LLM writing has **uniformity** (predictable cadence, perfect escalation, no rough edges)
+- Computational research confirms these patterns persist in reasoning models (o1, o3). The PLOS One 2025 study found no difference between o1 and GPT-4o in detectable writing patterns (STYLO-SC-PLOS-STYLJP)
+- Human judges perform at chance (50%) when asked to identify AI text. Pattern-based detection achieves 99.8% accuracy on the same texts. The signals are real but invisible to casual reading (STYLO-SC-PLOS-STYLJP)
 
 ## Table of Contents
 
@@ -41,7 +41,7 @@ LLMs produce text by predicting the most probable next token given context. This
 - **Confident vagueness** - LLMs generate authoritative-sounding claims without access to source verification. The output sounds knowledgeable but avoids falsifiable specifics
 - **Internet-discourse conflation** - LLMs trained on web data absorb the popularized commentary layer (blog posts, YouTube summaries, Reddit threads) and conflate it with primary sources. The model does not distinguish between what an author actually wrote and what a blogger said the author wrote
 - **Rhetorical optimization** - LLMs produce engagement-optimized structures because their training data rewards these patterns. The result is text that reads like it was A/B-tested for maximum persuasive impact
-- **Grammatical standardization** - LLMs produce more uniform grammatical patterns than human writers. Where humans vary sentence construction idiosyncratically, LLMs converge on predictable Part-of-Speech sequences. This uniformity is computationally measurable but invisible to casual reading [VERIFIED] (STYLO-SC-ARXV-STYLOREC)
+- **Grammatical standardization** - LLMs produce more uniform grammatical patterns than human writers. Where humans vary sentence construction idiosyncratically, LLMs converge on predictable Part-of-Speech sequences. This uniformity is computationally measurable but invisible to casual reading (STYLO-SC-ARXV-STYLOREC)
 
 ### 1.3 Signal vs Proof
 
@@ -56,9 +56,9 @@ The assessment weakens when:
 - Only style signals are present (some humans write in LLM-like cadence)
 - The text is heavily edited (human post-processing removes generation artifacts)
 - The domain is one where formulaic writing is conventional (legal, academic abstracts)
-- The text is shorter than 10 sentences - detection reliability drops significantly below this threshold [VERIFIED] (STYLO-SC-ARXV-STYLOREC)
+- The text is shorter than 10 sentences - detection reliability drops significantly below this threshold (STYLO-SC-ARXV-STYLOREC)
 
-**Human judges cannot do this:** A study of 403 participants found human accuracy at distinguishing AI from human text was near chance (50%). Worse, more advanced LLMs like o1 led humans to INCORRECTLY believe text was human-written with HIGHER confidence. This confirms that pattern-based detection identifies signals invisible to human perception [VERIFIED] (STYLO-SC-PLOS-STYLJP)
+**Human judges cannot do this:** A study of 403 participants found human accuracy at distinguishing AI from human text was near chance (50%). Worse, more advanced LLMs like o1 led humans to INCORRECTLY believe text was human-written with HIGHER confidence. This confirms that pattern-based detection identifies signals invisible to human perception (STYLO-SC-PLOS-STYLJP)
 
 ## 2. Why This Matters
 
@@ -129,21 +129,21 @@ Computational stylometric research (2024-2026) confirms the detection principle 
 
 The writing patterns this document describes as SO, SY, ST, VO, and LX signals have computational counterparts. Stylometric analysis extracts quantifiable features from text - function word frequencies, grammatical sequence patterns, sentence length distributions, vocabulary diversity - and classifiers trained on these features distinguish human from LLM text with near-perfect accuracy.
 
-The signals our rules target at the human-perceptible level are the same patterns computational methods measure. Our rules are a human-readable approximation of what stylometric classifiers detect computationally. [VERIFIED] (STYLO-SC-ARXV-STYLOREC)
+The signals our rules target at the human-perceptible level are the same patterns computational methods measure. Our rules are a human-readable approximation of what stylometric classifiers detect computationally. (STYLO-SC-ARXV-STYLOREC)
 
 ### 4.2 Reasoning Models Do Not Escape Detection
 
-The PLOS One 2025 study tested 7 LLMs including ChatGPT o1 (a reasoning model) and found "no significant difference" between o1 and GPT-4o in detectable writing patterns. Accuracy: 99.8% across all models. The internal chain-of-thought reasoning process does not change the surface-level writing patterns of the output. [VERIFIED] (STYLO-SC-PLOS-STYLJP)
+The PLOS One 2025 study tested 7 LLMs including ChatGPT o1 (a reasoning model) and found "no significant difference" between o1 and GPT-4o in detectable writing patterns. Accuracy: 99.8% across all models. The internal chain-of-thought reasoning process does not change the surface-level writing patterns of the output. (STYLO-SC-PLOS-STYLJP)
 
 This means the detection signals described in this document remain valid for post-2025 reasoning models. The patterns arise from the token-prediction mechanic, which reasoning models still use for output generation.
 
 ### 4.3 Key Research Findings (High-Level)
 
-- LLMs show **"greater grammatical standardization"** than human writers - more uniform sentence construction patterns [VERIFIED] (STYLO-SC-ARXV-STYLOREC)
-- **10-sentence samples are sufficient** for reliable detection [VERIFIED] (STYLO-SC-ARXV-STYLOREC)
-- **Paraphrase attacks reduce but do not eliminate** detectable patterns - rephrased AI text retains some signature of the original generator [VERIFIED] (STYLO-SC-ARXV-STYLOREC)
-- **No single detection method works universally** across all text types. Performance degrades when the text domain differs from what the detector was trained on [VERIFIED] (STYLO-SC-ARXV-SPOTBLND)
-- **All detectors fail on at least one text type** - evaluation data is "highly predictive of model performance" [VERIFIED] (STYLO-SC-ARXV-SPOTBLND)
+- LLMs show **"greater grammatical standardization"** than human writers - more uniform sentence construction patterns (STYLO-SC-ARXV-STYLOREC)
+- **10-sentence samples are sufficient** for reliable detection (STYLO-SC-ARXV-STYLOREC)
+- **Paraphrase attacks reduce but do not eliminate** detectable patterns - rephrased AI text retains some signature of the original generator (STYLO-SC-ARXV-STYLOREC)
+- **No single detection method works universally** across all text types. Performance degrades when the text domain differs from what the detector was trained on (STYLO-SC-ARXV-SPOTBLND)
+- **All detectors fail on at least one text type** - evaluation data is "highly predictive of model performance" (STYLO-SC-ARXV-SPOTBLND)
 
 ### 4.4 What This Means for Our Rules
 
@@ -179,15 +179,15 @@ Style and structure signals alone are insufficient. Many humans write in LLM-lik
 ## 6. Sources
 
 **Primary Sources:**
-- `AIDET-IN01-SC-APAP-PRINCPL`: `_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]` - Structural model for this document [VERIFIED]
-- `AIDET-IN01-SC-APAP-RULES`: `APAPALAN_RULES.md` - Rule format model for companion document [VERIFIED]
+- `AIDET-IN01-SC-APAP-PRINCPL`: `_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]` - Structural model for this document
+- `AIDET-IN01-SC-APAP-RULES`: `APAPALAN_RULES.md` - Rule format model for companion document
 
 **Research Sources:**
-- `STYLO-SC-PLOS-STYLJP`: "Stylometry can reveal AI authorship, but humans struggle" (PLOS One 2025). Tests 7 LLMs including o1. 99.8% accuracy. Human judges at chance. [VERIFIED]
+- `STYLO-SC-PLOS-STYLJP`: "Stylometry can reveal AI authorship, but humans struggle" (PLOS One 2025). Tests 7 LLMs including o1. 99.8% accuracy. Human judges at chance.
   - URL: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0335369
-- `STYLO-SC-ARXV-STYLOREC`: "Stylometry recognizes human and LLM-generated texts in short samples" (Expert Systems with Applications 2025, arXiv 2507.00838). StyloMetrix features, 10-sentence samples, multiclass attribution. [VERIFIED]
+- `STYLO-SC-ARXV-STYLOREC`: "Stylometry recognizes human and LLM-generated texts in short samples" (Expert Systems with Applications 2025, arXiv 2507.00838). StyloMetrix features, 10-sentence samples, multiclass attribution.
   - URL: https://arxiv.org/abs/2507.00838
-- `STYLO-SC-ARXV-SPOTBLND`: "Spotlights and Blindspots: Evaluating Machine-Generated Text Detection" (April 2026, arXiv 2604.16607). 15 detection systems, 8 datasets. Feature-based models match transformers. [VERIFIED]
+- `STYLO-SC-ARXV-SPOTBLND`: "Spotlights and Blindspots: Evaluating Machine-Generated Text Detection" (April 2026, arXiv 2604.16607). 15 detection systems, 8 datasets. Feature-based models match transformers.
   - URL: https://arxiv.org/html/2604.16607v2
 
 ## 7. Document History

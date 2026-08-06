@@ -8,13 +8,13 @@
 
 **Origin:** Developed by Karsten Held 2017
 
-- **APAPALAN** = "As Precise As Possible (Priority 1), As Little As Necessary (Priority 2)" [VERIFIED]
-- APAPALAN implements MECT (Minimal Explicit Consistent Terminology) through concrete, enforceable rules [VERIFIED]
-- MECT designs communication systems; APAPALAN applies MECT using rules for documents, code, logs, communication [VERIFIED]
-- Precision always wins over brevity - never sacrifice clarity to save words [VERIFIED]
-- Readers interpret ALL deviation as intentional signal. Unintentional variance (LLMs) causes wrong assumptions [VERIFIED]
-- 34 rules across five categories: Precision (PR), Brevity (BR), Structure (ST), Communication (CM), Naming (NM) [VERIFIED]
-- Rules are actionable: each has BAD/GOOD examples an agent or human can pattern-match against [VERIFIED]
+- **APAPALAN** = "As Precise As Possible (Priority 1), As Little As Necessary (Priority 2)"
+- APAPALAN implements MECT (Minimal Explicit Consistent Terminology) through concrete, enforceable rules
+- MECT designs communication systems; APAPALAN applies MECT using rules for documents, code, logs, communication
+- Precision always wins over brevity - never sacrifice clarity to save words
+- Readers interpret ALL deviation as intentional signal. Unintentional variance (LLMs) causes wrong assumptions
+- 34 rules across five categories: Precision (PR), Brevity (BR), Structure (ST), Communication (CM), Naming (NM)
+- Rules are actionable: each has BAD/GOOD examples an agent or human can pattern-match against
 
 ## Table of Contents
 
@@ -166,7 +166,7 @@ Categories: Supported (S), Caveated (C), Unsupported (U)
 2. [C] Dashboard is read-heavy
 3. [U] Bundle size is primary bottleneck
 ```
-- Reader asks: "What is [S]? What is [C]? I see [ASSUMED] and [VERIFIED] elsewhere - are [S] and [C] part of the same system or something different?"
+- Reader asks: "What is [S]? What is [C]? I see [ASSUMED] and elsewhere - are [S] and [C] part of the same system or something different?"
 - Wrong assumption: Reader confuses author-invented shorthand with established labels. The "Categories" line is a definition, not a legend visible at every usage point - once the list grows, it scrolls off screen.
 - Fix: Use full words (`[SUPPORTED]`, `[CAVEATED]`, `[UNSUPPORTED]`), OR add a compact legend (`S=Supported | C=Caveated | U=Unsupported`) visible at every usage point without scrolling. See AP-PR-11.
 - Note: `CMDTY` for "Commodity" would NOT be a fail - it is a designed mnemonic where the full term is phonetically recoverable (Reconstruction Test: pass). `[S]` for "Supported" fails the Reconstruction Test.
@@ -330,12 +330,12 @@ CM rules relate to but are distinct from humanizing rules (`CONVERSATION_HUMANIZ
 ## 5. Sources
 
 **Primary Sources:**
-- `APAPALAN-IN01-SC-MECT-IN01`: `_INFO_MECT_PHILOSOPHY.md [MECT-IN01]` - MECT communication design philosophy [VERIFIED]
-- `APAPALAN-IN01-SC-APAP-RULES`: `APAPALAN_RULES.md` in DevSystemV3.6/skills/write-documents/ - Full rule set with BAD/GOOD examples [VERIFIED]
+- `APAPALAN-IN01-SC-MECT-IN01`: `_INFO_MECT_PHILOSOPHY.md [MECT-IN01]` - MECT communication design philosophy
+- `APAPALAN-IN01-SC-APAP-RULES`: `APAPALAN_RULES.md` in DevSystemV3.6/skills/write-documents/ - Full rule set with BAD/GOOD examples
 
 **Related Documents:**
-- `APAPALAN-IN01-SC-DSYS-IDS`: `devsystem-ids.md` - ID system referenced by AP-PR-04 and AP-PR-05 [VERIFIED]
-- `APAPALAN-IN01-SC-LOG-RULES`: `LOGGING-RULES.md` in DevSystemV3.6/skills/coding-conventions/ - Logging rules implementing APAPALAN for output [VERIFIED]
+- `APAPALAN-IN01-SC-DSYS-IDS`: `devsystem-ids.md` - ID system referenced by AP-PR-04 and AP-PR-05
+- `APAPALAN-IN01-SC-LOG-RULES`: `LOGGING-RULES.md` in DevSystemV3.6/skills/coding-conventions/ - Logging rules implementing APAPALAN for output
 
 ## 6. Document History
 

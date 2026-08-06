@@ -5,12 +5,12 @@
 
 ## Summary
 
-- AMINTON structures arguments into 4 sections + closing for verbal delivery using 5 node types: A (Argument), Q (Question), A (Answer), S (Subquestion), E (Evidence) [VERIFIED]
-- Root section: A (thesis) → Q1...Qn (questions) → QnA1...QnAn (answers per question) [VERIFIED]
-- Drill-down sections (A, B, C): Each expands one Q-branch with sub-questions and evidence [VERIFIED]
-- Closing section: Summarizes proved branches and restates A as conclusion [VERIFIED]
-- IDs concatenate within a section (QnAn), hyphens mark section boundaries (QnAn-SnEn) [VERIFIED]
-- Applicable to any field requiring structured argumentation: sales, investment, journalism, policy, legal [VERIFIED]
+- AMINTON structures arguments into 4 sections + closing for verbal delivery using 5 node types: A (Argument), Q (Question), A (Answer), S (Subquestion), E (Evidence)
+- Root section: A (thesis) → Q1...Qn (questions) → QnA1...QnAn (answers per question)
+- Drill-down sections (A, B, C): Each expands one Q-branch with sub-questions and evidence
+- Closing section: Summarizes proved branches and restates A as conclusion
+- IDs concatenate within a section (QnAn), hyphens mark section boundaries (QnAn-SnEn)
+- Applicable to any field requiring structured argumentation: sales, investment, journalism, policy, legal
 
 ## Table of Contents
 
@@ -562,7 +562,7 @@ Q3 "Why is it shut down?": EUR 12M spent, EUR 890K solved the problem three time
 
 ## 7. Sources
 
-- `MINTO-IN01-SC-MINTO-PYR`: Barbara Minto, "The Pyramid Principle" (3rd ed., 2009) - Ch. 6 "How to Highlight the Structure", decimal numbering (p. 81); Ch. 2 vertical Q&A dialogue [VERIFIED]
+- `MINTO-IN01-SC-MINTO-PYR`: Barbara Minto, "The Pyramid Principle" (3rd ed., 2009) - Ch. 6 "How to Highlight the Structure", decimal numbering (p. 81); Ch. 2 vertical Q&A dialogue
 
 ## 8. Document History
 

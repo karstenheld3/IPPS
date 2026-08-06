@@ -26,18 +26,18 @@ With `disable-model-invocation: true`:
 - Agent cannot auto-trigger it (workflow-equivalent behavior)
 - Detection ceiling becomes irrelevant (agent never auto-selects these skills)
 
-Source: https://code.claude.com/docs/en/skills#control-who-invokes-a-skill [VERIFIED]
+Source: https://code.claude.com/docs/en/skills#control-who-invokes-a-skill
 
 **Devin CLI equivalent:** `triggers: ["user"]` prevents auto-invocation but descriptions may still be loaded. Not as strong as Claude Code's `disable-model-invocation`. [ASSUMED - Devin docs less explicit]
 
-**Cascade:** Workflows already provide this behavior natively. Keep workflows. [VERIFIED]
+**Cascade:** Workflows already provide this behavior natively. Keep workflows.
 
 **Recommended approach: Option F (User-Only Skills + Domain Knowledge Skills)**
 
 All 44 procedure skills use `disable-model-invocation: true` / `triggers: ["user"]`:
-- Zero context cost on Claude Code [VERIFIED]
+- Zero context cost on Claude Code
 - Minimal context cost on Devin CLI (~1300 tokens for descriptions) [ASSUMED]
-- Full autocomplete and type safety on all platforms [VERIFIED]
+- Full autocomplete and type safety on all platforms
 - Detection ceiling irrelevant (only ~8-12 domain skills are model-triggered)
 
 Combined with ~8-12 domain skills (model-triggered) for auto-discovery:
@@ -47,11 +47,11 @@ Combined with ~8-12 domain skills (model-triggered) for auto-discovery:
 
 **Key findings:**
 
-- **Claude Code**: `disable-model-invocation: true` removes skill from agent context entirely. User still gets `/` autocomplete. This is the workflow equivalent. [VERIFIED]
-- **Devin CLI/Desktop**: `triggers: ["user"]` prevents auto-activation. Plugins bundle skills under namespaces (`/plugin:skill`). `devin migrate workflows` converts Cascade workflows to skills. [VERIFIED]
+- **Claude Code**: `disable-model-invocation: true` removes skill from agent context entirely. User still gets `/` autocomplete. This is the workflow equivalent.
+- **Devin CLI/Desktop**: `triggers: ["user"]` prevents auto-activation. Plugins bundle skills under namespaces (`/plugin:skill`). `devin migrate workflows` converts Cascade workflows to skills.
 - **Detection ceiling at 32-36 skills**: Only applies to model-triggered skills. User-only skills bypass this. [VERIFIED - multiple sources]
-- **Plugins**: Devin CLI and Claude Code both support plugin-based skill bundling with namespaces, reducing organizational bloat. [VERIFIED]
-- **IPPS existing pattern**: `write-documents` (30 files, 12 verbs) and `session-management` (7 files, 5 ops) already work as domain routers. [VERIFIED]
+- **Plugins**: Devin CLI and Claude Code both support plugin-based skill bundling with namespaces, reducing organizational bloat.
+- **IPPS existing pattern**: `write-documents` (30 files, 12 verbs) and `session-management` (7 files, 5 ops) already work as domain routers.
 
 **Alternatives considered (previous iterations):**
 
@@ -72,51 +72,51 @@ Combined with ~8-12 domain skills (model-triggered) for auto-discovery:
 **Skill sprawl is a recognized problem:**
 - **the-agency** (GitHub): 59 SKILL.md files, explicitly flags "skill sprawl". Recommends consolidating redundant skills (e.g., 7 `sandbox-*` skills into one with subcommands). Audit classified skills as: compliant, minor drift, major rework, retire. [VERIFIED - issue #289]
 - **skill-fuse** (gaia-research): Tool that merges overlapping skills into one. "Agent skill merge is a real problem. You install shape, audit, and refactor as three separate commands - now every task juggles three /commands, three prompt budgets, three chances for the agent to pick the wrong one." SKILL.md acts as router, delegates to reference/ files. [VERIFIED - GitHub]
-- **Shrivu Shankar** (blog.sshh.io): "Build skills for the class of task, not the instance. Some are specs (how to do a thing); others are principles (how to think about a class of things)." Warns against "one skill per task, ending up with a directory of one-shots nobody else can use." [VERIFIED]
+- **Shrivu Shankar** (blog.sshh.io): "Build skills for the class of task, not the instance. Some are specs (how to do a thing); others are principles (how to think about a class of things)." Warns against "one skill per task, ending up with a directory of one-shots nobody else can use."
 
 **Community patterns for organizing skills:**
-- **"Route, do not restate"** (Philip Hern, DEV Community): 5-layer architecture. AGENTS.md as thin router. Skills as on-demand runbooks. Reference files for catalogs. "Tell the agent explicitly when not to load the heavy stuff." Reduced token spend on routine edits. [VERIFIED]
-- **CheesecakeLabs**: Real-world measurement: **69% reduction in startup tokens** (7,121 to 2,213) by moving task-specific content from rules into skills. "A project can have dozens of skills installed. The agent only pays the token cost for the ones it uses." [VERIFIED]
-- **localskills.sh**: "Skills are cheap at rest - the ceiling is discoverability, not tokens. The real failure mode is vague descriptions that never match tasks. Write descriptions that name the trigger." [VERIFIED]
-- **Cursor**: Recursive subfolder discovery. `.cursor/skills/shipping/deploy-staging/SKILL.md` - "Cursor walks the skills root recursively, so category folders work for grouping related skills. The skill's name comes from the folder that contains SKILL.md, not the category above it." [VERIFIED]
-- **Claude Code mastery**: Trigger tables in CLAUDE.md that map task types to skills. Skill gates for security. [VERIFIED]
-- **Anthropic best practices** (nyosegawa/skills): "SKILL.md as routing and workflow layer. Put schemas, API docs, examples, rubrics, long style guides, and domain notes in separate files." Orchestration skills "should be architected like small software systems, not long prompts." [VERIFIED]
+- **"Route, do not restate"** (Philip Hern, DEV Community): 5-layer architecture. AGENTS.md as thin router. Skills as on-demand runbooks. Reference files for catalogs. "Tell the agent explicitly when not to load the heavy stuff." Reduced token spend on routine edits.
+- **CheesecakeLabs**: Real-world measurement: **69% reduction in startup tokens** (7,121 to 2,213) by moving task-specific content from rules into skills. "A project can have dozens of skills installed. The agent only pays the token cost for the ones it uses."
+- **localskills.sh**: "Skills are cheap at rest - the ceiling is discoverability, not tokens. The real failure mode is vague descriptions that never match tasks. Write descriptions that name the trigger."
+- **Cursor**: Recursive subfolder discovery. `.cursor/skills/shipping/deploy-staging/SKILL.md` - "Cursor walks the skills root recursively, so category folders work for grouping related skills. The skill's name comes from the folder that contains SKILL.md, not the category above it."
+- **Claude Code mastery**: Trigger tables in CLAUDE.md that map task types to skills. Skill gates for security.
+- **Anthropic best practices** (nyosegawa/skills): "SKILL.md as routing and workflow layer. Put schemas, API docs, examples, rubrics, long style guides, and domain notes in separate files." Orchestration skills "should be architected like small software systems, not long prompts."
 
 **Migration guides:**
-- **Claude Code power user tips**: "If you do something more than once a day, turn it into a skill." Skills replace legacy `.claude/commands/`. [VERIFIED]
-- **Developers Digest** (Windsurf-to-Claude migration): "Windsurf Flows let you save and replay prompt sequences. Claude Code has Skills - markdown files with structured frontmatter that become slash commands." [VERIFIED]
-- **claudecodeguides.com**: "Too many commands clutter the menu: organize with prefixes (review-, gen-, check-) or consolidate related commands into one command with argument-based branching." [VERIFIED]
+- **Claude Code power user tips**: "If you do something more than once a day, turn it into a skill." Skills replace legacy `.claude/commands/`.
+- **Developers Digest** (Windsurf-to-Claude migration): "Windsurf Flows let you save and replay prompt sequences. Claude Code has Skills - markdown files with structured frontmatter that become slash commands."
+- **claudecodeguides.com**: "Too many commands clutter the menu: organize with prefixes (review-, gen-, check-) or consolidate related commands into one command with argument-based branching."
 
 **Enterprise anti-patterns:**
-- **CEAD paper** (arxiv): "Micro-agent proliferation" mirrors micro-skill proliferation. "Start with business capabilities and risk boundaries, not with a target number of agents. Decompose only where there is a durable reason." A 32-agent swarm with no strong capability map performed worst. [VERIFIED]
-- **Wasowski**: Dynamic tool assembly - "loading schemas on demand rather than upfront - show the agent a menu, not the whole kitchen" cuts payload by ~85% while improving accuracy. [VERIFIED]
+- **CEAD paper** (arxiv): "Micro-agent proliferation" mirrors micro-skill proliferation. "Start with business capabilities and risk boundaries, not with a target number of agents. Decompose only where there is a durable reason." A 32-agent swarm with no strong capability map performed worst.
+- **Wasowski**: Dynamic tool assembly - "loading schemas on demand rather than upfront - show the agent a menu, not the whole kitchen" cuts payload by ~85% while improving accuracy.
 
 ## Platform Capabilities Comparison
 
 **Devin Desktop (Cascade - legacy):**
-- Workflows: `.devin/workflows/*.md`, invoked via `/name`. Cascade-only. [VERIFIED]
-- Skills: `.devin/skills/<name>/SKILL.md`, progressive disclosure (name+description in prompt, body loaded on invoke). [VERIFIED]
-- Both coexist: workflows for user-triggered procedures, skills for agent-discoverable capabilities. [VERIFIED]
+- Workflows: `.devin/workflows/*.md`, invoked via `/name`. Cascade-only.
+- Skills: `.devin/skills/<name>/SKILL.md`, progressive disclosure (name+description in prompt, body loaded on invoke).
+- Both coexist: workflows for user-triggered procedures, skills for agent-discoverable capabilities.
 
 **Devin Desktop (Devin Local):**
-- Workflows: NOT supported. [VERIFIED]
-- Skills: ONLY supported mechanism for reusable procedures. Same format as Devin CLI. [VERIFIED]
-- Frontmatter: `name`, `description`, `argument-hint`, `model`, `subagent`, `agent`, `allowed-tools`, `permissions`, `triggers`. [VERIFIED]
-- Subagent orchestration: One skill can invoke other skills as subagents. One level deep (no nesting). [VERIFIED]
+- Workflows: NOT supported.
+- Skills: ONLY supported mechanism for reusable procedures. Same format as Devin CLI.
+- Frontmatter: `name`, `description`, `argument-hint`, `model`, `subagent`, `agent`, `allowed-tools`, `permissions`, `triggers`.
+- Subagent orchestration: One skill can invoke other skills as subagents. One level deep (no nesting).
 - Source: https://docs.devin.ai/cli/extensibility/skills/creating-skills
 
 **Claude Code:**
-- Commands (`.claude/commands/*.md`) and skills (`.claude/skills/<name>/SKILL.md`) are merged - same feature. [VERIFIED]
-- Subfolder organization: `.claude/commands/ci/build.md` creates `/build` (subfolder shown in help but NOT in command name). [VERIFIED]
-- Plugin namespacing: `plugin-name:skill-name` colon syntax. [VERIFIED]
-- Nested skills in monorepo subdirectories: supported, qualified as `subdir:skill-name`. [VERIFIED]
+- Commands (`.claude/commands/*.md`) and skills (`.claude/skills/<name>/SKILL.md`) are merged - same feature.
+- Subfolder organization: `.claude/commands/ci/build.md` creates `/build` (subfolder shown in help but NOT in command name).
+- Plugin namespacing: `plugin-name:skill-name` colon syntax.
+- Nested skills in monorepo subdirectories: supported, qualified as `subdir:skill-name`.
 - Source: https://code.claude.com/docs/en/skills
 
 **Agent Skills Standard (agentskills.io):**
-- Open specification by Anthropic, adopted by Devin, Claude Code, Microsoft Agent Framework, Cursor, Codex. [VERIFIED]
-- 1 skill = 1 directory with SKILL.md + optional scripts/, references/, assets/. [VERIFIED]
-- Progressive disclosure: advertise (~100 tokens) -> load (<5000 tokens) -> read resources -> run scripts. [VERIFIED]
-- No built-in subcommand or grouping concept. [VERIFIED]
+- Open specification by Anthropic, adopted by Devin, Claude Code, Microsoft Agent Framework, Cursor, Codex.
+- 1 skill = 1 directory with SKILL.md + optional scripts/, references/, assets/.
+- Progressive disclosure: advertise (~100 tokens) -> load (<5000 tokens) -> read resources -> run scripts.
+- No built-in subcommand or grouping concept.
 - Source: https://agentskills.io/specification
 
 ## Current IPPS State
@@ -130,8 +130,8 @@ Combined with ~8-12 domain skills (model-triggered) for auto-discovery:
 **44 workflows** (line counts range 13-495, median ~88 lines)
 
 **Existing router patterns in IPPS:**
-- `write-documents` SKILL.md lists 12 verbs with "Read template X, guide Y, rules Z" instructions per verb. Workflows like `/write-spec` currently invoke this skill via `@skills:write-documents`. [VERIFIED]
-- `session-management` SKILL.md covers 5 lifecycle operations (init, work, save, resume, finalize). [VERIFIED]
+- `write-documents` SKILL.md lists 12 verbs with "Read template X, guide Y, rules Z" instructions per verb. Workflows like `/write-spec` currently invoke this skill via `@skills:write-documents`.
+- `session-management` SKILL.md covers 5 lifecycle operations (init, work, save, resume, finalize).
 
 ## Approach Analysis
 
@@ -457,13 +457,13 @@ Both fields can coexist. Each platform reads only its own field.
 
 ## ACP (Agent Client Protocol) - Not Relevant
 
-ACP has no concept of workflows, skills, slash commands, or direct-call syntax. The protocol is a wire-level standard (JSON-RPC 2.0 over stdio) for editor-to-agent communication. Its `session/prompt` method accepts free-form text content blocks - no structured field for command name, skill reference, or procedure invocation exists. [VERIFIED]
+ACP has no concept of workflows, skills, slash commands, or direct-call syntax. The protocol is a wire-level standard (JSON-RPC 2.0 over stdio) for editor-to-agent communication. Its `session/prompt` method accepts free-form text content blocks - no structured field for command name, skill reference, or procedure invocation exists.
 
 If a user types `/verify` in an ACP client (Zed, JetBrains), the editor passes that string as plain text in `session/prompt`. The agent interprets it however it wants. ACP v2 proposal adds plan variants and unified tool calls but introduces nothing related to commands or skills.
 
 **Implication for this research:** ACP is not a factor in the skill vs workflow architecture decision. Cross-platform portability comes from file conventions (SKILL.md format, `.agents/` standard), not from protocol features. Each client implements its own command mechanism outside ACP.
 
-Source: `e:\Dev\KarstensWorkspace\docs\AI-Standards\ACP-AgentClientProtocol_2026-06-12` [ACP-IN01 through ACP-IN14] [VERIFIED]
+Source: `e:\Dev\KarstensWorkspace\docs\AI-Standards\ACP-AgentClientProtocol_2026-06-12` [ACP-IN01 through ACP-IN14]
 
 ## Open Questions
 
@@ -480,50 +480,50 @@ Source: `e:\Dev\KarstensWorkspace\docs\AI-Standards\ACP-AgentClientProtocol_2026
 
 ## Sources
 
-- SKLWRKFL-IN01-SC-DVNAI-CRSKL: https://docs.devin.ai/cli/extensibility/skills/creating-skills - Skill format, frontmatter, subagent orchestration [VERIFIED]
-- SKLWRKFL-IN01-SC-DVNAI-OVRVW: https://docs.devin.ai/cli/extensibility/skills/overview - Skill discovery, triggers, scope [VERIFIED]
-- SKLWRKFL-IN01-SC-DVNAI-CSKLS: https://docs.devin.ai/desktop/cascade/skills - Cascade progressive disclosure, supporting files [VERIFIED]
-- SKLWRKFL-IN01-SC-DVNAI-PRDSK: https://docs.devin.ai/product-guides/skills - Devin Cloud skills, one-at-a-time limitation [VERIFIED]
-- SKLWRKFL-IN01-SC-DVNAI-DVNLC: https://docs.devin.ai/desktop/devin-local - Devin Local limitations, skill migration [VERIFIED]
-- SKLWRKFL-IN01-SC-AGSKL-SPEC: https://agentskills.io/specification - Agent Skills open standard, directory structure, progressive disclosure [VERIFIED]
-- SKLWRKFL-IN01-SC-AGSKL-IMPL: https://agentskills.io/client-implementation/adding-skills-support.md - Client implementation guide, discovery paths [VERIFIED]
-- SKLWRKFL-IN01-SC-CLAUD-SKLS: https://code.claude.com/docs/en/skills - Claude Code skills, subfolder discovery, live change detection [VERIFIED]
-- SKLWRKFL-IN01-SC-CLAUD-SLSH: https://code.claude.com/docs/en/slash-commands - Commands/skills merge, namespace syntax [VERIFIED]
-- SKLWRKFL-IN01-SC-CLAUD-CMDS: https://github.com/anthropics/claude-code/blob/main/plugins/plugin-dev/skills/command-development/SKILL.md - Command organization patterns [VERIFIED]
-- SKLWRKFL-IN01-SC-GHUB-AGNT: https://github.com/agentsfolder/spec - .agents specification, manifest.yaml, SKILL.yaml format [VERIFIED]
-- SKLWRKFL-IN01-SC-GHUB-AGSK: https://github.com/agentskills/agentskills - Agent Skills repo, Anthropic-developed standard [VERIFIED]
-- SKLWRKFL-IN01-SC-MSFT-AGSK: https://learn.microsoft.com/en-us/agent-framework/agents/skills - Microsoft Agent Framework skills adoption [VERIFIED]
-- SKLWRKFL-IN01-SC-GHUB-DCUL: https://github.com/OnlyTerp/DevinCLI-Unlocked - Devin CLI community guide, subagent patterns [VERIFIED]
-- SKLWRKFL-IN01-SC-GHUB-SBFLD: https://github.com/anthropics/claude-code/issues/44678 - Subfolder organization request for slash commands [VERIFIED]
-- SKLWRKFL-IN01-SC-IPPS-DVDT: `e:\Dev\IPPS\Docs\INFO_HOW_DEVIN_WORKS.md` [DVDT-IN01] - Devin Desktop capabilities reference [VERIFIED]
-- SKLWRKFL-IN01-SC-GHUB-AGNC: https://github.com/the-agency-ai/the-agency/issues/289 - 59 skills audit, skill sprawl, consolidation recommendations [VERIFIED]
-- SKLWRKFL-IN01-SC-GHUB-FUSE: https://github.com/gaia-research/skill-fuse - Skill fusion tool, SKILL.md as router with reference/ delegation [VERIFIED]
-- SKLWRKFL-IN01-SC-CRSR-SKLS: https://cursor.com/help/customization/skills - Cursor recursive subfolder discovery, category folders [VERIFIED]
-- SKLWRKFL-IN01-SC-CKLB-BLOG: https://cheesecakelabs.com/blog/agent-skills-for-workflows-into-rules-file/ - 69% token reduction measurement, rules-to-skills migration [VERIFIED]
-- SKLWRKFL-IN01-SC-LCSK-BLOG: https://localskills.sh/blog/skill-md-vs-claude-md-vs-agents-md - SKILL.md vs CLAUDE.md vs AGENTS.md decision guide [VERIFIED]
-- SKLWRKFL-IN01-SC-DVTO-BLOG: https://dev.to/shrouwoods/an-efficient-cursor-directory-less-context-better-agents-kl0 - "Route, do not restate" pattern, 5-layer architecture [VERIFIED]
-- SKLWRKFL-IN01-SC-GHUB-PRDN: https://github.com/enuno/claude-command-and-control - Production-grade skills, 32-36 detection ceiling, trigger tables [VERIFIED]
-- SKLWRKFL-IN01-SC-GHUB-BPRC: https://github.com/nyosegawa/skills/blob/main/agent-skill-best-practices.md - Anthropic-aligned best practices, orchestration patterns [VERIFIED]
-- SKLWRKFL-IN01-SC-GHUB-DSTL: https://github.com/distillation-labs/agentyc/blob/main/skills-guide.md - Anthropic skills guide, cross-platform deployment [VERIFIED]
-- SKLWRKFL-IN01-SC-MDIM-WSKT: https://medium.com/@wasowski.jarek - MCP tool sprawl, 25-50 tool accuracy degradation, dynamic tool assembly [VERIFIED]
-- SKLWRKFL-IN01-SC-ARXV-CEAD: https://arxiv.org/html/2605.08258v1 - CEAD paper, micro-agent proliferation anti-pattern [VERIFIED]
-- SKLWRKFL-IN01-SC-SSHH-BLOG: https://blog.sshh.io/p/how-ai-productivity-fails - "Build skills for class not instance", skill encoding philosophy [VERIFIED]
-- SKLWRKFL-IN01-SC-CLPW-TIPS: https://support.claude.com/en/articles/14554000-claude-code-power-user-tips - Claude Code power user patterns, skills for repeated workflows [VERIFIED]
-- SKLWRKFL-IN01-SC-DVDG-MIGR: https://www.developersdigest.tech/blog/migrating-from-windsurf-to-claude-code - Windsurf-to-Claude migration guide [VERIFIED]
-- SKLWRKFL-IN01-SC-CCGD-BLOG: https://claudecodeguides.com/how-to-create-custom-slash-command-claude-2026/ - Command organization, prefix naming [VERIFIED]
-- SKLWRKFL-IN01-SC-GHUB-CCCM: https://github.com/epicurean-Paradox/claude-code-mastery - Trigger tables, skill gates, session drift mitigation [VERIFIED]
-- SKLWRKFL-IN01-SC-BCLW-SOUL: https://www.betterclaw.io/blog/soul-md-agents-md-configuration-guide - Token budget guidelines, 400-500 token ceiling per always-on file [VERIFIED]
-- SKLWRKFL-IN01-SC-SJNM-TOOL: https://github.com/sjnims/plugin-dev/commit/4a5bb09 - SlashCommand tool consolidated into Skill tool [VERIFIED]
-- SKLWRKFL-IN01-SC-CLCD-SKLS: https://code.claude.com/docs/en/skills - disable-model-invocation removes description from context, invocation control table [VERIFIED]
-- SKLWRKFL-IN01-SC-CLCD-DMOD: https://code.claude.com/docs/en/custom-skills - Commands merged into skills, disable-model-invocation for workflow equivalence [VERIFIED]
-- SKLWRKFL-IN01-SC-DVNAI-PLGN: https://docs.devin.ai/cli/extensibility/plugins/overview - Devin CLI plugin system, namespaced skills, manifest, governance [VERIFIED]
-- SKLWRKFL-IN01-SC-GHUB-SGNZ: https://github.com/SigNoz/agent-skills - Devin plugin example, /plugin:skill namespace pattern [VERIFIED]
-- SKLWRKFL-IN01-SC-CLCD-PLGN: https://claude-code-playbook.pages.dev/en/docs/level-4/plugins - Claude Code plugin system, namespace rules [VERIFIED]
-- SKLWRKFL-IN01-SC-GHUB-BG26: https://github.com/anthropics/claude-code/issues/26251 - Bug: disable-model-invocation blocks user invocation via Skill tool [VERIFIED]
-- SKLWRKFL-IN01-SC-GHUB-IS19: https://github.com/anthropics/claude-code/issues/19141 - Clarification: user-invocable vs disable-model-invocation distinction [VERIFIED]
-- SKLWRKFL-IN01-SC-DVDG-DMOD: https://www.developersdigest.tech/guides/disable-model-invocation - disable-model-invocation usage guide [VERIFIED]
-- SKLWRKFL-IN01-SC-CLKF-PLGN: https://claudefa.st/blog/tools/mcp-extensions/plugins-distribution - Plugin distribution, marketplace, namespace rules [VERIFIED]
-- SKLWRKFL-IN01-SC-IPPS-ACPR: `e:\Dev\KarstensWorkspace\docs\AI-Standards\ACP-AgentClientProtocol_2026-06-12` [ACP-IN01] - ACP protocol has no skill/workflow/command concept [VERIFIED]
+- SKLWRKFL-IN01-SC-DVNAI-CRSKL: https://docs.devin.ai/cli/extensibility/skills/creating-skills - Skill format, frontmatter, subagent orchestration
+- SKLWRKFL-IN01-SC-DVNAI-OVRVW: https://docs.devin.ai/cli/extensibility/skills/overview - Skill discovery, triggers, scope
+- SKLWRKFL-IN01-SC-DVNAI-CSKLS: https://docs.devin.ai/desktop/cascade/skills - Cascade progressive disclosure, supporting files
+- SKLWRKFL-IN01-SC-DVNAI-PRDSK: https://docs.devin.ai/product-guides/skills - Devin Cloud skills, one-at-a-time limitation
+- SKLWRKFL-IN01-SC-DVNAI-DVNLC: https://docs.devin.ai/desktop/devin-local - Devin Local limitations, skill migration
+- SKLWRKFL-IN01-SC-AGSKL-SPEC: https://agentskills.io/specification - Agent Skills open standard, directory structure, progressive disclosure
+- SKLWRKFL-IN01-SC-AGSKL-IMPL: https://agentskills.io/client-implementation/adding-skills-support.md - Client implementation guide, discovery paths
+- SKLWRKFL-IN01-SC-CLAUD-SKLS: https://code.claude.com/docs/en/skills - Claude Code skills, subfolder discovery, live change detection
+- SKLWRKFL-IN01-SC-CLAUD-SLSH: https://code.claude.com/docs/en/slash-commands - Commands/skills merge, namespace syntax
+- SKLWRKFL-IN01-SC-CLAUD-CMDS: https://github.com/anthropics/claude-code/blob/main/plugins/plugin-dev/skills/command-development/SKILL.md - Command organization patterns
+- SKLWRKFL-IN01-SC-GHUB-AGNT: https://github.com/agentsfolder/spec - .agents specification, manifest.yaml, SKILL.yaml format
+- SKLWRKFL-IN01-SC-GHUB-AGSK: https://github.com/agentskills/agentskills - Agent Skills repo, Anthropic-developed standard
+- SKLWRKFL-IN01-SC-MSFT-AGSK: https://learn.microsoft.com/en-us/agent-framework/agents/skills - Microsoft Agent Framework skills adoption
+- SKLWRKFL-IN01-SC-GHUB-DCUL: https://github.com/OnlyTerp/DevinCLI-Unlocked - Devin CLI community guide, subagent patterns
+- SKLWRKFL-IN01-SC-GHUB-SBFLD: https://github.com/anthropics/claude-code/issues/44678 - Subfolder organization request for slash commands
+- SKLWRKFL-IN01-SC-IPPS-DVDT: `e:\Dev\IPPS\Docs\INFO_HOW_DEVIN_WORKS.md` [DVDT-IN01] - Devin Desktop capabilities reference
+- SKLWRKFL-IN01-SC-GHUB-AGNC: https://github.com/the-agency-ai/the-agency/issues/289 - 59 skills audit, skill sprawl, consolidation recommendations
+- SKLWRKFL-IN01-SC-GHUB-FUSE: https://github.com/gaia-research/skill-fuse - Skill fusion tool, SKILL.md as router with reference/ delegation
+- SKLWRKFL-IN01-SC-CRSR-SKLS: https://cursor.com/help/customization/skills - Cursor recursive subfolder discovery, category folders
+- SKLWRKFL-IN01-SC-CKLB-BLOG: https://cheesecakelabs.com/blog/agent-skills-for-workflows-into-rules-file/ - 69% token reduction measurement, rules-to-skills migration
+- SKLWRKFL-IN01-SC-LCSK-BLOG: https://localskills.sh/blog/skill-md-vs-claude-md-vs-agents-md - SKILL.md vs CLAUDE.md vs AGENTS.md decision guide
+- SKLWRKFL-IN01-SC-DVTO-BLOG: https://dev.to/shrouwoods/an-efficient-cursor-directory-less-context-better-agents-kl0 - "Route, do not restate" pattern, 5-layer architecture
+- SKLWRKFL-IN01-SC-GHUB-PRDN: https://github.com/enuno/claude-command-and-control - Production-grade skills, 32-36 detection ceiling, trigger tables
+- SKLWRKFL-IN01-SC-GHUB-BPRC: https://github.com/nyosegawa/skills/blob/main/agent-skill-best-practices.md - Anthropic-aligned best practices, orchestration patterns
+- SKLWRKFL-IN01-SC-GHUB-DSTL: https://github.com/distillation-labs/agentyc/blob/main/skills-guide.md - Anthropic skills guide, cross-platform deployment
+- SKLWRKFL-IN01-SC-MDIM-WSKT: https://medium.com/@wasowski.jarek - MCP tool sprawl, 25-50 tool accuracy degradation, dynamic tool assembly
+- SKLWRKFL-IN01-SC-ARXV-CEAD: https://arxiv.org/html/2605.08258v1 - CEAD paper, micro-agent proliferation anti-pattern
+- SKLWRKFL-IN01-SC-SSHH-BLOG: https://blog.sshh.io/p/how-ai-productivity-fails - "Build skills for class not instance", skill encoding philosophy
+- SKLWRKFL-IN01-SC-CLPW-TIPS: https://support.claude.com/en/articles/14554000-claude-code-power-user-tips - Claude Code power user patterns, skills for repeated workflows
+- SKLWRKFL-IN01-SC-DVDG-MIGR: https://www.developersdigest.tech/blog/migrating-from-windsurf-to-claude-code - Windsurf-to-Claude migration guide
+- SKLWRKFL-IN01-SC-CCGD-BLOG: https://claudecodeguides.com/how-to-create-custom-slash-command-claude-2026/ - Command organization, prefix naming
+- SKLWRKFL-IN01-SC-GHUB-CCCM: https://github.com/epicurean-Paradox/claude-code-mastery - Trigger tables, skill gates, session drift mitigation
+- SKLWRKFL-IN01-SC-BCLW-SOUL: https://www.betterclaw.io/blog/soul-md-agents-md-configuration-guide - Token budget guidelines, 400-500 token ceiling per always-on file
+- SKLWRKFL-IN01-SC-SJNM-TOOL: https://github.com/sjnims/plugin-dev/commit/4a5bb09 - SlashCommand tool consolidated into Skill tool
+- SKLWRKFL-IN01-SC-CLCD-SKLS: https://code.claude.com/docs/en/skills - disable-model-invocation removes description from context, invocation control table
+- SKLWRKFL-IN01-SC-CLCD-DMOD: https://code.claude.com/docs/en/custom-skills - Commands merged into skills, disable-model-invocation for workflow equivalence
+- SKLWRKFL-IN01-SC-DVNAI-PLGN: https://docs.devin.ai/cli/extensibility/plugins/overview - Devin CLI plugin system, namespaced skills, manifest, governance
+- SKLWRKFL-IN01-SC-GHUB-SGNZ: https://github.com/SigNoz/agent-skills - Devin plugin example, /plugin:skill namespace pattern
+- SKLWRKFL-IN01-SC-CLCD-PLGN: https://claude-code-playbook.pages.dev/en/docs/level-4/plugins - Claude Code plugin system, namespace rules
+- SKLWRKFL-IN01-SC-GHUB-BG26: https://github.com/anthropics/claude-code/issues/26251 - Bug: disable-model-invocation blocks user invocation via Skill tool
+- SKLWRKFL-IN01-SC-GHUB-IS19: https://github.com/anthropics/claude-code/issues/19141 - Clarification: user-invocable vs disable-model-invocation distinction
+- SKLWRKFL-IN01-SC-DVDG-DMOD: https://www.developersdigest.tech/guides/disable-model-invocation - disable-model-invocation usage guide
+- SKLWRKFL-IN01-SC-CLKF-PLGN: https://claudefa.st/blog/tools/mcp-extensions/plugins-distribution - Plugin distribution, marketplace, namespace rules
+- SKLWRKFL-IN01-SC-IPPS-ACPR: `e:\Dev\KarstensWorkspace\docs\AI-Standards\ACP-AgentClientProtocol_2026-06-12` [ACP-IN01] - ACP protocol has no skill/workflow/command concept
 
 ## Document History
 
