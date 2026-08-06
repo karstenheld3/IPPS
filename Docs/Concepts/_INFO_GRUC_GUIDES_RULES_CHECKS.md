@@ -4,7 +4,7 @@
 **Goal**: Define the three GRUC file types, their consumers, lifecycle positions, and content boundaries
 
 **Depends on:**
-- `_INFO_AGENT_DRIFT_PREVENTION_APPROACH.md [ADP-IN01]` for GRUC's position in the DevSystem
+- [`_INFO_AGENT_DRIFT_PREVENTION_APPROACH.md [ADP-IN01]`](_INFO_AGENT_DRIFT_PREVENTION_APPROACH.md) for GRUC's position in the DevSystem
 
 ## Summary
 

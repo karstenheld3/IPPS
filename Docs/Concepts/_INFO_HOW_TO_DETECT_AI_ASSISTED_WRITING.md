@@ -179,7 +179,7 @@ Style and structure signals alone are insufficient. Many humans write in LLM-lik
 ## 6. Sources
 
 **Primary Sources:**
-- `AIDET-IN01-SC-APAP-PRINCPL`: `_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]` - Structural model for this document
+- `AIDET-IN01-SC-APAP-PRINCPL`: [`_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]`](_INFO_APAPALAN_PRINCIPLE.md) - Structural model for this document
 - `AIDET-IN01-SC-APAP-RULES`: `APAPALAN_RULES.md` - Rule format model for companion document
 
 **Research Sources:**
@@ -207,5 +207,5 @@ Style and structure signals alone are insufficient. Many humans write in LLM-lik
 
 **[2026-06-05 16:48]**
 - Initial document created
-- Structure modeled on `_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]`
+- Structure modeled on [`_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]`](_INFO_APAPALAN_PRINCIPLE.md)
 - 12 detection signals across 4 categories

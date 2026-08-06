@@ -40,7 +40,7 @@ The tension between the two priorities is the core challenge. Cryptic abbreviati
 
 ### 1.2 From MECT to APAPALAN
 
-MECT (Minimal Explicit Consistent Terminology) is the underlying philosophy. See `_INFO_MECT_PHILOSOPHY.md [MECT-IN01]` for the full design philosophy.
+MECT (Minimal Explicit Consistent Terminology) is the underlying philosophy. See [`_INFO_MECT_PHILOSOPHY.md [MECT-IN01]`](_INFO_MECT_PHILOSOPHY.md) for the full design philosophy.
 
 - **MECT** = Design philosophy for communication systems (the "why" and "what")
 - **APAPALAN** = Implementation principle with enforceable rules (the "how")
@@ -58,13 +58,13 @@ Precision before brevity is not a suggestion - it's a strict ordering. When the 
 
 Brevity only applies AFTER precision is satisfied. Then you cut aggressively: drop articles, filler words, verbose constructions. "The system should automatically process the incoming files on a regular basis" becomes "Auto-process incoming files on schedule." Same precision, half the words.
 
-The distinction between mnemonics and abbreviations clarifies the boundary. A mnemonic (`CMDTY` for Commodity) is designed compression where the short form evokes the full term - it passes the reconstruction test (see `_INFO_MECT_PHILOSOPHY.md [MECT-IN01]` section 3.2). An abbreviation (`P=1` for Precision=1.00, `[S]` for Supported) is arbitrary compression where the short form is opaque - the reader must look up the meaning. Mnemonics serve precision (the short form teaches). Abbreviations sacrifice precision for brevity (the short form hides). APAPALAN permits mnemonics after establishment. APAPALAN prohibits abbreviations that fail the reconstruction test.
+The distinction between mnemonics and abbreviations clarifies the boundary. A mnemonic (`CMDTY` for Commodity) is designed compression where the short form evokes the full term - it passes the reconstruction test (see [`_INFO_MECT_PHILOSOPHY.md [MECT-IN01]`](_INFO_MECT_PHILOSOPHY.md) section 3.2). An abbreviation (`P=1` for Precision=1.00, `[S]` for Supported) is arbitrary compression where the short form is opaque - the reader must look up the meaning. Mnemonics serve precision (the short form teaches). Abbreviations sacrifice precision for brevity (the short form hides). APAPALAN permits mnemonics after establishment. APAPALAN prohibits abbreviations that fail the reconstruction test.
 
 ## 2. Why This Matters
 
 ### 2.1 The Mental Model Chain
 
-MECT establishes that words shape mental models which drive actions (see `_INFO_MECT_PHILOSOPHY.md [MECT-IN01]` section 2.3). For APAPALAN, the practical consequence is:
+MECT establishes that words shape mental models which drive actions (see [`_INFO_MECT_PHILOSOPHY.md [MECT-IN01]`](_INFO_MECT_PHILOSOPHY.md) section 2.3). For APAPALAN, the practical consequence is:
 
 Every formatting choice, structural pattern, and word in a document shapes the reader's mental model. If any of these are ambiguous or inconsistent, the reader builds a wrong model and takes wrong actions - even while feeling confident they understood. This applies equally to:
 - A developer reading a spec and implementing the wrong behavior
@@ -330,7 +330,7 @@ CM rules relate to but are distinct from humanizing rules (`CONVERSATION_HUMANIZ
 ## 5. Sources
 
 **Primary Sources:**
-- `APAPALAN-IN01-SC-MECT-IN01`: `_INFO_MECT_PHILOSOPHY.md [MECT-IN01]` - MECT communication design philosophy
+- `APAPALAN-IN01-SC-MECT-IN01`: [`_INFO_MECT_PHILOSOPHY.md [MECT-IN01]`](_INFO_MECT_PHILOSOPHY.md) - MECT communication design philosophy
 - `APAPALAN-IN01-SC-APAP-RULES`: `APAPALAN_RULES.md` in DevSystemV3.6/skills/write-documents/ - Full rule set with BAD/GOOD examples
 
 **Related Documents:**

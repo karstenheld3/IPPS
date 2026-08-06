@@ -39,10 +39,10 @@ This creates a compounding problem. Unlike code, where a bug is fixed once, temp
 
 **Connection to MECT, APAPALAN (As Precise As Possible, As Little As Necessary), SOCAS (Signs of Confusion and Sloppiness), and GRUC (Guides, Rules, Checks):**
 
-- **MECT Signal vs Noise** - Every formatting choice in a template is either signal (carries information) or noise (arbitrary variation the reader misinterprets). Inconsistent annotation formats are noise that agents amplify. See `_INFO_MECT_PHILOSOPHY.md [MECT-IN01]` section 2.2.
-- **APAPALAN AP-PR-09** - "Repeat established structures. Do not invent new forms for similar content." Templates ARE the established structures. If the template itself uses inconsistent forms, no downstream document can be consistent. See `_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]` section 4.1.
-- **SOCAS-08** - Information vs Noise Imbalance. Template annotations that look like content (italic markers, bracket markers) are noise that the agent may preserve in output. XML comments are automatically filtered - zero noise leakage risk.
-- **GRUC boundary** - This document defines WHAT templates must look like (RULES territory). HOW to write them is in companion `*_GUIDE.md` files. WHY is in this section. See `_INFO_GRUC_GUIDES_RULES_CHECKS.md [GRUC-IN01]` section 4.
+- **MECT Signal vs Noise** - Every formatting choice in a template is either signal (carries information) or noise (arbitrary variation the reader misinterprets). Inconsistent annotation formats are noise that agents amplify. See [`_INFO_MECT_PHILOSOPHY.md [MECT-IN01]`](_INFO_MECT_PHILOSOPHY.md) section 2.2.
+- **APAPALAN AP-PR-09** - "Repeat established structures. Do not invent new forms for similar content." Templates ARE the established structures. If the template itself uses inconsistent forms, no downstream document can be consistent. See [`_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]`](_INFO_APAPALAN_PRINCIPLE.md) section 4.1.
+- **SOCAS-08** - Information vs Noise Imbalance. Template annotations that look like content (italic markers, bracket markers) are noise that the agent may preserve in output. XML comments are automatically filtered - zero noise leakage risk. See [`_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md [SOCAS-IN01]`](_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md).
+- **GRUC boundary** - This document defines WHAT templates must look like (RULES territory). HOW to write them is in companion `*_GUIDE.md` files. WHY is in this section. See [`_INFO_GRUC_GUIDES_RULES_CHECKS.md [GRUC-IN01]`](_INFO_GRUC_GUIDES_RULES_CHECKS.md) section 4.
 
 ## 2. Core Principle
 
