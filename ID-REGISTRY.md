@@ -188,9 +188,13 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **HMNWRTPTN** - Human Writing Patterns (forensic linguistics research for conversation humanizing rules)
 - **WMRK** - Watermarking and Provenance (SynthID-Text, C2PA, embedded signal detection for AI-generated text)
 - **RUSESCPOL** - Russia escalation policy in Ukraine war (official statements, nuclear doctrine, red lines)
+- **RECSLFIM** - Recursive Self-Improvement (AI systems accelerating or automating their own development)
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 
 ## Document History
+
+**[2026-08-13 14:55]**
+- Added: RECSLFIM topic (Recursive Self-Improvement - AI systems automating own development)
 
 **[2026-07-16 10:30]**
 - Added: HMNWRTPTN topic (Human Writing Patterns - forensic linguistics research for conversation humanizing rules)
