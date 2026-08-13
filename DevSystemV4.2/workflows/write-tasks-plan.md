@@ -14,6 +14,7 @@ Create partitioned task documents from IMPL plans. Combines `/partition` workflo
 ## MUST-NOT-FORGET
 
 - Run `/partition` to split IMPL into tasks
+- Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content in any file → examples generic. Assess context BEFORE writing.
 
 ## Prerequisites
 

@@ -10,7 +10,7 @@
 - Template IS the document skeleton; all annotations use XML comments, no exceptions
 - Placeholders use `[BRACKETS]` for values; conditional sections use `<!-- Conditional: ... -->`
 - Full examples in fenced code blocks with `<!-- EXAMPLE: Reference only -->` annotation
-- Complex rules belong in `*_RULES.md` or `*_GUIDE.md` companion files
+- Complex rules belong in `*_RULES.md` or `*_GUIDES.md` companion files
 
 **Header and structural standards (per-task documents only):**
 - `**Doc ID**:` without suffixes; Topic ID XML comment for nested ID guidance
@@ -42,7 +42,7 @@ This creates a compounding problem. Unlike code, where a bug is fixed once, temp
 - **MECT Signal vs Noise** - Every formatting choice in a template is either signal (carries information) or noise (arbitrary variation the reader misinterprets). Inconsistent annotation formats are noise that agents amplify. See [`_INFO_MECT_PHILOSOPHY.md [MECT-IN01]`](_INFO_MECT_PHILOSOPHY.md) section 2.2.
 - **APAPALAN AP-PR-09** - "Repeat established structures. Do not invent new forms for similar content." Templates ARE the established structures. If the template itself uses inconsistent forms, no downstream document can be consistent. See [`_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]`](_INFO_APAPALAN_PRINCIPLE.md) section 4.1.
 - **SOCAS-08** - Information vs Noise Imbalance. Template annotations that look like content (italic markers, bracket markers) are noise that the agent may preserve in output. XML comments are automatically filtered - zero noise leakage risk. See [`_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md [SOCAS-IN01]`](_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md).
-- **GRUC boundary** - This document defines WHAT templates must look like (RULES territory). HOW to write them is in companion `*_GUIDE.md` files. WHY is in this section. See [`_INFO_GRUC_GUIDES_RULES_CHECKS.md [GRUC-IN01]`](_INFO_GRUC_GUIDES_RULES_CHECKS.md) section 4.
+- **GRUC boundary** - This document defines WHAT templates must look like (RULES territory). HOW to write them is in companion `*_GUIDES.md` files. WHY is in this section. See [`_INFO_GRUC_GUIDES_RULES_CHECKS.md [GRUC-IN01]`](_INFO_GRUC_GUIDES_RULES_CHECKS.md) section 4.
 
 ## 2. Core Principle
 
@@ -52,7 +52,7 @@ Every line in a template is one of:
 - **Template content** - Markdown headings, fields, placeholder values. Becomes part of the output document.
 - **XML comment** - Annotations: rules, conditional markers, optional fields. Removed after instantiation.
 
-Templates do not teach. Teaching belongs in `*_RULES.md` and `*_GUIDE.md` companion files. The template is the skeleton, the rules file explains when and how to fill it.
+Templates do not teach. Teaching belongs in `*_RULES.md` and `*_GUIDES.md` companion files. The template is the skeleton, the rules file explains when and how to fill it.
 
 ## 3. Template Structure
 
@@ -101,7 +101,7 @@ Template metadata: naming convention, creation trigger, lifecycle.
 5. **Repeatable items show one instance** - Show one `### D-01:` entry, not three. Agent understands repetition.
 6. **Conditional sections** - Use XML comment with insertion criteria: `<!-- Conditional: insert when [criteria]. Per [rule reference] -->`
 7. **Full example at end** - Always in fenced code block, always preceded by `<!-- EXAMPLE: Reference only -->` annotation
-8. **Rules go in companion files** - Complex rules, categories, and decision logic belong in `*_RULES.md` or `*_GUIDE.md`, not in the template
+8. **Rules go in companion files** - Complex rules, categories, and decision logic belong in `*_RULES.md` or `*_GUIDES.md`, not in the template
 
 ### 3.2 Exemplar Templates
 
@@ -380,7 +380,7 @@ When creating or reviewing a template:
 - [ ] **Template IS the document**: Not a description of it, not wrapped in code blocks
 - [ ] **Annotations as XML comments**: No prose, brackets, or italic markers for annotations
 - [ ] **BAD/GOOD examples**: Wrapped in XML comments, not inline as section content
-- [ ] **Complex rules in companion files**: `*_RULES.md` or `*_GUIDE.md`, not in the template
+- [ ] **Complex rules in companion files**: `*_RULES.md` or `*_GUIDES.md`, not in the template
 - [ ] **Doc ID label**: Uses `**Doc ID**:` not `**Doc ID (TDID)**:`
 - [ ] **Doc ID present**: Required for per-task documents, not for tracking logs or reusable artifacts
 - [ ] **Topic ID comment**: Present after Doc ID field (nested ID guidance)
@@ -434,7 +434,7 @@ When creating or reviewing a template:
 
 **[2026-08-05 23:51]**
 - Unified to single pattern: template IS the document (removed Pattern A/B distinction)
-- Rules and teaching belong in companion `*_RULES.md` / `*_GUIDE.md` files
+- Rules and teaching belong in companion `*_RULES.md` / `*_GUIDES.md` files
 
 **[2026-08-05 23:49]**
 - Initial document created from template audit findings

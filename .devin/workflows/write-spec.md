@@ -14,6 +14,7 @@ Create technical specifications from requirements.
 ## MUST-NOT-FORGET
 
 - Run `/verify` after spec complete
+- Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content in any file → examples generic. Assess context BEFORE writing.
 
 ## Prerequisites
 

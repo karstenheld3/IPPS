@@ -14,12 +14,14 @@ Create implementation plans from specifications.
 ## MUST-NOT-FORGET
 
 - Run `/verify` after plan complete
+- Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content in any file → examples generic. Assess context BEFORE writing.
 
 ## Prerequisites
 
 - Specification exists (`_SPEC_[COMPONENT].md`)
 - Read spec completely before starting
 - Read @write-documents skill
+- Read target source files listed in spec header. SPEC defines WHAT; the codebase shows current HOW.
 
 ## Steps
 

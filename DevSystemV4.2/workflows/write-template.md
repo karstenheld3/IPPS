@@ -13,10 +13,11 @@ Create purpose-built document templates that produce consistent, comparable inst
 
 ## Required Skills
 
-- @skills:write-documents for `TEMPLATE_GUIDE.md`, `TEMPLATE_RULES.md`, `APAPALAN_RULES.md`
+- @skills:write-documents for `TEMPLATE_GUIDES.md`, `TEMPLATE_RULES.md`, `APAPALAN_RULES.md`
 
 ## MUST-NOT-FORGET
 
+- Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content in any file → examples generic. Assess context BEFORE writing.
 - Template IS the document skeleton, not a description of one (TMPL-ST-01)
 - All annotations use XML comments only - no italic, bracket, or prose annotations (TMPL-AN-01)
 - Primary and secondary goals must be answerable from every template instance
@@ -50,7 +51,7 @@ Create purpose-built document templates that produce consistent, comparable inst
 
 ## Phase 3: Decompose Prompt
 
-Read @skills:write-documents `TEMPLATE_GUIDE.md` before this phase.
+Read @skills:write-documents `TEMPLATE_GUIDES.md` before this phase.
 
 Answer these design questions:
 
@@ -79,7 +80,7 @@ Answer these design questions:
 
 Read @skills:write-documents `TEMPLATE_RULES.md`.
 
-1. Determine template category per `TEMPLATE_GUIDE.md` Section 3:
+1. Determine template category per `TEMPLATE_GUIDES.md` Section 3:
    - Per-task document → Doc ID, Goal, Timeline, Document History required
    - Other template → these fields do not apply
 2. Build consolidated requirements list from:
@@ -91,7 +92,7 @@ Read @skills:write-documents `TEMPLATE_RULES.md`.
 
 ## Phase 5: Construct Template
 
-Write the template file following the skeleton from `TEMPLATE_GUIDE.md` Section 4.
+Write the template file following the skeleton from `TEMPLATE_GUIDES.md` Section 4.
 
 1. Write top comment block if template has naming conventions or lifecycle rules
 2. Write title with placeholder: `# [Document Type]: [PLACEHOLDER]`

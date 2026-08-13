@@ -54,7 +54,7 @@ GRUC eliminates this by pre-calculating criteria into lookup-ready files. The co
 
 **Key property**: Read BEFORE execution. Shapes behavior during work. Does not verify afterward.
 
-**Example**: `SKILL_GUIDE.md` in `@skills:write-documents` tells agents how to structure skill files, what skill types exist, and how to optimize for LLM consumption.
+**Example**: `SKILL_GUIDES.md` in `@skills:write-documents` tells agents how to structure skill files, what skill types exist, and how to optimize for LLM consumption.
 
 ### 2.2 RULES - Output Standards (Whole Lifecycle)
 
@@ -166,7 +166,7 @@ CHECKS
 ```
 [AGENT_FOLDER]/skills/[skill-name]/
 ├── SKILL.md              (entry point)
-├── SKILL_GUIDE.md        (approach guidance)
+├── SKILL_GUIDES.md        (approach guidance)
 ├── SKILL_RULES.md        (output verification rules)
 ├── SKILL_CHECKS.md       (process discipline checks)
 └── [other files]
@@ -178,7 +178,7 @@ When a skill has multiple distinct domains, rules split by domain:
 
 ```
 [AGENT_FOLDER]/skills/write-documents/
-├── SKILL_GUIDE.md         (general writing guidance)
+├── SKILL_GUIDES.md         (general writing guidance)
 ├── SKILL_RULES.md         (general output rules)
 ├── WORKFLOW_RULES.md      (workflow-specific rules)
 ├── SPEC_RULES.md          (specification-specific rules)
@@ -216,7 +216,7 @@ This creates a feedback loop where past failures become future prevention criter
 
 **Realized:**
 - `*_RULES.md` files exist in `@skills:write-documents` (7 files), `@skills:coding-conventions` (10 files), `@skills:deep-research` (5 files)
-- `SKILL_GUIDE.md` exists in `@skills:write-documents`
+- `SKILL_GUIDES.md` exists in `@skills:write-documents`
 - `/verify` consumes RULES files
 - `/drift-detect` and `/drift-correct` workflows deployed (do not yet consume CHECKS files)
 
@@ -284,7 +284,7 @@ A RULES file is a verification lookup table. Its reader is `/verify` or `/improv
 
 A GUIDE file is strategic coaching. Its reader is the working agent before starting a task. It shapes HOW the agent approaches work.
 
-**Structure pattern** (derived from `SKILL_GUIDE.md`):
+**Structure pattern** (derived from `SKILL_GUIDES.md`):
 
 ```
 # [Domain] Guide

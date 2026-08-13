@@ -177,7 +177,7 @@ Combined with ~8-12 domain skills (model-triggered) for auto-discovery:
   write-info/
     SKILL.md
     INFO_TEMPLATE.md   # Duplicated
-    INFO_GUIDE.md      # Duplicated
+    INFO_GUIDES.md      # Duplicated
     INFO_RULES.md      # Duplicated
   session-new/
     SKILL.md

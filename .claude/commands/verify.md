@@ -42,7 +42,7 @@ Invoke based on context:
 
 ## Workflow
 
-1. First find out what the context is (INFO, SPEC, IMPL, Code, TEST, Session, Workflow, Skill, Conversation, Translation Output)
+1. First find out what the context is (INFO, SPEC, IMPL, Code, TEST, Session, Workflow, Skill, Template, Conversation, Translation Output)
 2. Read GLOBAL-RULES and Verification Labels
 3. Read the relevant Context-Specific section
 4. Create a verification task list
@@ -80,6 +80,14 @@ Apply to ALL document types and contexts:
   - Exempt: Established system labels: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`
   - Short label found? Check: Is a legend visible at every usage point (no scrolling)? If yes: pass. If no: replace with full word or add legend.
   - For labels 3+ characters: apply Reconstruction Test - can the full term be recovered from the short form? If not, flag as opaque abbreviation
+- **Privacy Leak Scan** (Post-generation enforcement of Pre-Write Privacy Gate from `agent-behavior.md`):
+  - For every file in verification scope, classify by context:
+    - **General-purpose document** (reusable knowledge, guides, rules, HOW-TOs, topic-independent INFO): scan ALL content for private data
+    - **ILLUSTRATIVE content** in ANY file (BAD/GOOD blocks, code snippets, sample data, templates, demonstrations): scan examples for private data
+  - Grep for known private data patterns: real IBANs, postal codes, phone numbers, tax IDs, addresses with house numbers, names of real people, session-specific references (certificate dates, contract numbers, case IDs)
+  - Cross-check against session data files (e.g., project data files, `NOTES.md`) if available - values from those files must not appear in general-purpose documents or ILLUSTRATIVE sections
+  - Any match = `[CRITICAL]` finding → fix immediately by replacing with generic placeholder
+  - Stranger test: Would someone reading this file learn the user's identity, location, family, or finances? If yes → fix
 
 ## Conceptual verification
 
@@ -134,6 +142,9 @@ Execute the 6-step verification procedure from `RESEARCH_RULES.md`:
 5. **STRUT Check** (ST-01 through ST-07) - process execution
 6. **Quality Check** (QA-01 through QA-11) - cross-cutting quality
 
+After SM-* checks pass, verify summary content depth:
+7. **Summary Depth Check** (SD-CD-01 through SD-CD-07, SD-ES-* conditionals): Read @skills:deep-research `RESEARCH_SUMMARY_RULES.md`. Execute the Verification Procedure from that file.
+
 Additionally:
 - Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
 - Verify against @skills:write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology, headings, lists)
@@ -151,7 +162,7 @@ Additionally:
 
 **Priority 2: Document structure** (template compliance)
 - Read @skills:write-documents `INFO_RULES.md` and verify against all INFO-* rules
-- If research document: verify optional sections positioned per @skills:write-documents `INFO_GUIDE.md`
+- If research document: verify optional sections positioned per @skills:write-documents `INFO_GUIDES.md`
 - Read `[AGENT_FOLDER]/workflows/research.md` again and verify against instructions
 
 ## Specifications (SPEC)
@@ -165,6 +176,7 @@ Additionally:
 - Ensure exhaustive implementation verification checklist at end.
 - Verify Document History section exists and is up to date
 - Verify UI mockups use Unicode box-drawing characters (SPEC-DG-06: `┌ ├ └ │ ─` not `+ - |`)
+- Verify no implementation details in SPEC (SPEC-CT-02): no code snippets, no source file line numbers, no function signatures, no `[VERIFIED: file lines]` tags. Implementation details belong in IMPL.
 - Read @skills:write-documents skill again and verify against rules.
 - Verify against @skills:write-documents `SPEC_RULES.md` (required for all SPEC documents)
 - Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, structure, naming)
@@ -242,13 +254,42 @@ Read the rule file for your context and verify against all rules. Also verify ag
 - Workflows → @skills:write-documents `WORKFLOW_RULES.md` (all WF-*), also @skills:coding-conventions `WORKFLOW-RULES.md` (design principles)
 - Skills → @skills:write-documents `SKILL_RULES.md` (all SK-*)
   - If SETUP.md exists: verify UNINSTALL.md also exists (not in SK-* rules)
-- Skill Resource Files (`*_RULES.md`, `*_GUIDE.md`, `*_CHECKS.md` in skill folders) → @skills:write-documents `WORKFLOW_RULES.md` (applicable WF-*)
+- Skill Resource Files (`*_RULES.md`, `*_GUIDES.md`, `*_CHECKS.md` in skill folders) → @skills:write-documents `WORKFLOW_RULES.md` (applicable WF-*)
   - Verify SK-CT-05: no visual-only formatting (no bold, no filler phrases)
   - Verify SK-CT-06: no Document History section
   - For _RULES: Rule Index present, BAD/GOOD pairs for non-trivial rules
   - For _GUIDE: numbered decision steps, no verification checklists (belongs in _RULES)
   - For _CHECKS: action + evidence + failure indicator per check item
   - No redundancy with referenced files (`core-conventions.md`, templates, other rule files)
+
+## Templates
+
+Detect by: filename pattern `*_TEMPLATE.md` in skill or workflow folder, or `__TEMPLATE_*` working template in session/topic folder.
+
+**Read**: @skills:write-documents `TEMPLATE_RULES.md` (all TMPL-*), `TEMPLATE_GUIDES.md`
+
+### Branching by Template Type
+
+**Permanent template** (`*_TEMPLATE.md` in skill/workflow folder):
+- Reusable across sessions and projects
+- Must follow all TMPL-* rules
+- Companion `*_RULES.md` or `*_GUIDES.md` if template has complex verification rules (TMPL-ST-06)
+- Verify SK-CT-05: no visual-only formatting (bold only in template content fields like `**Doc ID**:`)
+- Verify SK-CT-06: no Document History section in the template FILE (template may CONTAIN a Document History section for instances)
+
+**Working template** (`__TEMPLATE_*` in session/topic folder):
+- Scaffolding for one research or task set, retained for extension
+- Must follow structural TMPL-* rules (ST, AN, PH)
+- Header rules (HD) adapt to domain context
+- No companion files needed
+
+### Verification
+
+- Run audit checklist from `TEMPLATE_RULES.md` (all TMPL-* rules)
+- Dynamic components: conditional markers have insertion criteria, agent instructions present at non-obvious sections
+- No redundancy with companion `*_RULES.md` or `*_GUIDES.md` files
+- Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity, naming)
+- Verify against @skills:write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology)
 
 ## Minto Documents
 

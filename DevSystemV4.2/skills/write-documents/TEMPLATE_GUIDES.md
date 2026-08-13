@@ -10,7 +10,7 @@ Every line is one of:
 - **Template content** - Markdown headings, fields, placeholder values. Becomes part of the output document.
 - **XML comment** - Annotations: rules, conditional markers, optional fields. Removed after instantiation.
 
-Templates do not teach. Teaching belongs in `*_RULES.md` and `*_GUIDE.md` companion files.
+Templates do not teach. Teaching belongs in `*_RULES.md` and `*_GUIDES.md` companion files.
 
 ## 2. Why Template Design Matters
 

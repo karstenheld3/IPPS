@@ -13,6 +13,7 @@ Create or insert a STRUT plan (Structured Thinking notation) into any document.
 ## MUST-NOT-FORGET
 
 - Run `/verify` to validate STRUT structure
+- Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content in any file → examples generic. Assess context BEFORE writing.
 
 ## Step 1: Read Template
 

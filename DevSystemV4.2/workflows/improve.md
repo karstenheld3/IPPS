@@ -57,6 +57,8 @@ Apply @write-documents `SOCAS_RULES.md` with context-appropriate subset. SOCAS c
 9. New solutions for already solved problems (SOCAS-03)
 10. Concept overlap (SOCAS-03)
 11. Broken rules
+12. Data boundary violations: private data in general-purpose documents or illustrative examples (Pre-Write Privacy Gate, `agent-behavior.md`)
+13. GDPR/privacy exposure: personal data in logs, error messages, examples, or documents beyond intended audience
 
 ### Pragmatic Filter (Phase 3, applied to selected improvement)
 
@@ -139,6 +141,7 @@ Detection: determine context from file naming and content, then apply matching s
 **Specialized issues** (in addition to GLOBAL):
 - Duplicated code blocks (rule of three violated)
 - Feature envy (method uses another class's data more than its own)
+- Personal data exposed beyond intended audience (logs, error messages, examples, documentation, comments, output files, telemetry)
 
 **Adversarial Collaborator techniques** (execute in order, skip if not applicable):
 
@@ -254,6 +257,7 @@ Detection: determine context from file naming and content, then apply matching s
 - No failure recovery at each step
 - Branching logic without explicit conditions for each branch
 - Workflow assumes state that prior steps did not establish
+- Examples or templates containing project-specific data instead of generic placeholders (WF-CT-08)
 
 **Adversarial Collaborator techniques** (execute in order, skip if not applicable):
 
@@ -276,6 +280,7 @@ Detection: determine context from file naming and content, then apply matching s
 - Gotchas known to author but not documented
 - Intent Lookup entries without corresponding procedure
 - Examples covering only the obvious use case
+- Examples or resource files containing project-specific data instead of generic placeholders (WF-CT-08)
 
 **Adversarial Collaborator techniques** (execute in order, skip if not applicable):
 
@@ -288,7 +293,7 @@ Detection: determine context from file naming and content, then apply matching s
 
 **Lens**: Template Usability Analyst - evaluate by simulating the filling agent's experience and comparing against real instances.
 
-**Phase 1 reads**: `TEMPLATE_RULES.md`, `TEMPLATE_GUIDE.md` (@skills:write-documents)
+**Phase 1 reads**: `TEMPLATE_RULES.md`, `TEMPLATE_GUIDES.md` (@skills:write-documents)
 
 **Phase 1 research**: Find existing filled-in instances of the template. Compare them against the template to identify where agents diverged, struggled, or added content outside the template's structure.
 
@@ -345,7 +350,7 @@ Detection: determine context from file naming and content, then apply matching s
 
 **Lens**: Argument Architect - evaluate structural integrity, evidence density, and persuasive power of AMINTON trees.
 
-**Phase 1 reads**: `MINTO_RULES.md`, `MINTO_GUIDE.md` (@skills:write-documents), source material listed in draft header
+**Phase 1 reads**: `MINTO_RULES.md`, `MINTO_GUIDES.md` (@skills:write-documents), source material listed in draft header
 
 **Phase 1 research**: Evaluate evidence strength per branch. Search for stronger evidence, counter-arguments, or alternative framings that would strengthen the tree.
 

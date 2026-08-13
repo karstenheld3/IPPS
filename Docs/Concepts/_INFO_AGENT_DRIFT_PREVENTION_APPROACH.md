@@ -225,11 +225,11 @@ MUST-NOT-FORGET:
 - **Mechanism**: three files per skill/workflow (GUIDE, RULES, CHECKS)
 - **Purpose**: enable quality assurance pipelines (/verify, /improve, /critique, /reconcile, /drift-detect)
 - **Lifecycle**: persistent per skill/workflow, accumulates over time from FAILS.md
-- **Implementation status**: partially realized. `*_RULES.md` files exist in several skills. `SKILL_GUIDE.md` and `SKILL_CHECKS.md` patterns not yet implemented per-skill. `/drift-detect` exists with CHECKS consumption planned.
+- **Implementation status**: partially realized. `*_RULES.md` files exist in several skills. `SKILL_GUIDES.md` and `SKILL_CHECKS.md` patterns not yet implemented per-skill. `/drift-detect` exists with CHECKS consumption planned.
 
 ### 6.3 The Three GRUC Components
 
-**GUIDE** (`SKILL_GUIDE.md`) - Goal-oriented process guidance.
+**GUIDE** (`SKILL_GUIDES.md`) - Goal-oriented process guidance.
 - Consumer: working agent (before execution)
 - Content: how to approach the work, decision frameworks, strategies
 - Lifecycle phase: before (planning)

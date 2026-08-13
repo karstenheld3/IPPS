@@ -14,6 +14,7 @@ Create research and analysis documents following INFO_TEMPLATE.md structure.
 ## MUST-NOT-FORGET
 
 - Run `/verify` after document complete
+- Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content in any file → examples generic. Assess context BEFORE writing.
 
 ## Prerequisites
 

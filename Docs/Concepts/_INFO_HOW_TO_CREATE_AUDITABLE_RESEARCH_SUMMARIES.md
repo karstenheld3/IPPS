@@ -2,7 +2,7 @@
 
 **Doc ID**: AUDITCITE-IN01
 **Goal**: Define the citation and source-linking standard for research summaries targeting regulated businesses (100% audit chain)
-**Timeline**: Created 2026-08-05, Updated 1 time (2026-08-05 - 2026-08-05)
+**Timeline**: Created 2026-08-05, Updated 2 times (2026-08-05 - 2026-08-09)
 
 ## Summary
 
@@ -228,7 +228,7 @@ Each unique SOURCE-ID gets its full URL **once** on first appearance in the docu
 
 ### 4.5 Citation vs Quotation
 
-Standard terminology (aligned with APA/Harvard/Chicago conventions):
+Standard terminology (aligned with American Psychological Association (APA)/Harvard/Chicago conventions):
 
 - **Citation**: In-text marker linking a claim to its source. The reader trusts the author's interpretation.
   Format: `(SOURCE-ID | https://url YYYY)`
@@ -448,7 +448,7 @@ When research is a single document, the source registry is a **section within th
   - Data vintage: [period]
   - Accessed: YYYY-MM-DD
   - Key Data: [what was extracted]
-  -
+  - [VERIFICATION LABEL]
 
 ### Tier 2: Consulting/Vendor
 ...
@@ -466,7 +466,7 @@ When research is a single document, the source registry is a **section within th
 
 ```markdown
 - Total B2B AI agent market: $10-12B (2026), 45-50% CAGR
-  (B2BAGTMKT-SC-TBRC-MKTSZE | https://thebusinessresearchcompany.com/report/artificial-intelligence-agents-global-market-report 2026,
+  (B2BAGTMKT-SC-TBRC-MKTSZE | https://thebusinessresearchcompany.com/report/artificial-intelligence-agents-global-market-report 2026-01,
    B2BAGTMKT-SC-GVR-MKTSZE | https://grandviewresearch.com/industry-analysis/ai-agents-market-report 2025)
 ```
 
@@ -474,8 +474,8 @@ What an auditor sees:
 - Claim: "$10-12B (2026), 45-50% CAGR"
 - Two independent sources (analyst consensus)
 - Both clickable URLs
-- Publication dates: 2026 (TBRC) and 2025 (GVR) - reader knows GVR report is older
-- Verification label:
+- Publication dates: 2026-01 (TBRC) and 2025 (GVR) - reader knows GVR report is older
+- Verification label: [VERIFIED]
 - Can click URL immediately to verify
 
 ### GOOD: Source Registry Entry (B2BAGTMKT)
@@ -489,8 +489,8 @@ What an auditor sees:
 - **Accessed**: 2026-08-04
 - **Archived**: `_SOURCES/tbrc-ai-agents-market-report-2026.md`
 - **Type**: Market Report
-- **Tier**: 1 (Analyst Research, Primary)
-- **Key Data Points**: $8.29B (2025) -> $12.06B (2026) -> $53.2B (2030), CAGR 44.9%
+- **Tier**: 2 (Analyst Research)
+- **Key Data Points**: $8.29B (2025) → $12.06B (2026) → $53.2B (2030), CAGR 44.9%
 - **[VERIFIED]**
 ```
 
@@ -561,7 +561,7 @@ US banks project $177M average AI spend, up 33% from Q4 2025
 What works:
 - Quarter precision: `2026-Q1` tells the auditor when this source was published
 - Full URL with scheme: clickable, verifiable
-- Verification label:
+- Verification label: [VERIFIED]
 
 ## 9. Compliance Checklist
 
@@ -572,7 +572,7 @@ Use this to verify any research document meets the auditable citation standard.
 - [ ] Claim has a SOURCE-ID
 - [ ] SOURCE-ID includes full URL with `https://` (first mention) or was already introduced earlier in document
 - [ ] Publication date present in citation (YYYY-MM-DD, YYYY-MM, YYYY-QN, YYYY-HN, or YYYY)
-- [ ] Verification label present: [ASSUMED],, [TESTED], or [PROVEN]
+- [ ] Verification label present: [ASSUMED], [VERIFIED], [TESTED], or [PROVEN]
 
 ### 9.2 Per-Source Verification
 
@@ -614,6 +614,15 @@ Existing T02 research targeting Level 2 is compliant for internal use. Upgrade t
 This standard complements INFO-SC-05 (entity/tool linking with markdown hyperlinks). INFO-SC-05 links entities for navigation: `[Microsoft OAuth docs](https://url)`. This standard links claims to evidence for audit: `(SOURCE-ID | https://url YYYY)`. Both coexist in the same document. They serve different purposes and never conflict.
 
 ## 11. Document History
+
+**[2026-08-09 20:05]**
+- Fixed: Section 9.1 checklist missing `[VERIFIED]` label and had double comma (`,, [TESTED]` → `, [VERIFIED], [TESTED]`)
+- Fixed: Section 7.2 single-file format had stray empty bullet; added missing `[VERIFICATION LABEL]` field
+- Fixed: GOOD example inline citation used year-only `2026` while registry had `2026-01`; aligned to most precise available (Section 4.3 rule)
+- Fixed: GOOD example "What an auditor sees" had empty verification label values; added `[VERIFIED]`
+- Fixed: GOOD registry example Key Data Points used ASCII `->` instead of Unicode `→` (core-conventions arrow rule)
+- Fixed: GOOD registry example classified TBRC as Tier 1; corrected to Tier 2 (analyst research firm per Section 5.2 definitions)
+- Fixed: `APA` acronym expanded on first use to `American Psychological Association (APA)` (AP-PR-06)
 
 **[2026-08-05 15:12]**
 - Fixed: "First-Reference Rule" renamed to "First-Mention Rule" - eliminates polysemy with "reference" = bibliographic entry (MW-WC-05)

@@ -57,6 +57,8 @@ Apply @write-documents `SOCAS_RULES.md` with context-appropriate subset. SOCAS c
 9. New solutions for already solved problems (SOCAS-03)
 10. Concept overlap (SOCAS-03)
 11. Broken rules
+12. Data boundary violations: private data in general-purpose documents or illustrative examples (Pre-Write Privacy Gate, `agent-behavior.md`)
+13. GDPR/privacy exposure: personal data in logs, error messages, examples, or documents beyond intended audience
 
 ### Pragmatic Filter (Phase 3, applied to selected improvement)
 
@@ -73,7 +75,7 @@ The selected improvement must pass this filter before applying. Answer:
 - **APPLY** - passes all 6 questions → apply the improvement
 - **DEFER** - fails any question → append to `[DEFERRED_FILE]` with assessment rationale, select next candidate
 
-`[DEFERRED_FILE]` is additive - each run appends, never overwrites. Use reconcile's findings format. Run `/reconcile` on `[DEFERRED_FILE]` for pragmatic review.
+`[DEFERRED_FILE]` is additive - each run appends, never overwrites. Create from @skills:write-documents `DEFERRED_IMPROVEMENTS_TEMPLATE.md` on first use. Run `/reconcile` on `[DEFERRED_FILE]` for pragmatic review.
 
 ### Quality Polish (Phase 4, all contexts)
 
@@ -139,6 +141,7 @@ Detection: determine context from file naming and content, then apply matching s
 **Specialized issues** (in addition to GLOBAL):
 - Duplicated code blocks (rule of three violated)
 - Feature envy (method uses another class's data more than its own)
+- Personal data exposed beyond intended audience (logs, error messages, examples, documentation, comments, output files, telemetry)
 
 **Adversarial Collaborator techniques** (execute in order, skip if not applicable):
 
@@ -163,6 +166,7 @@ Detection: determine context from file naming and content, then apply matching s
 - Non-functional requirements missing (performance, accessibility, observability)
 - Design decisions without rationale or alternatives
 - Multiplicative design decisions (too many testing configurations)
+- Implementation details leaked into SPEC (code snippets, line numbers, function signatures, `[VERIFIED]` code tags belong in IMPL)
 
 **Adversarial Collaborator techniques** (execute in order, skip if not applicable):
 
@@ -253,6 +257,7 @@ Detection: determine context from file naming and content, then apply matching s
 - No failure recovery at each step
 - Branching logic without explicit conditions for each branch
 - Workflow assumes state that prior steps did not establish
+- Examples or templates containing project-specific data instead of generic placeholders (WF-CT-08)
 
 **Adversarial Collaborator techniques** (execute in order, skip if not applicable):
 
@@ -275,6 +280,7 @@ Detection: determine context from file naming and content, then apply matching s
 - Gotchas known to author but not documented
 - Intent Lookup entries without corresponding procedure
 - Examples covering only the obvious use case
+- Examples or resource files containing project-specific data instead of generic placeholders (WF-CT-08)
 
 **Adversarial Collaborator techniques** (execute in order, skip if not applicable):
 
@@ -283,13 +289,33 @@ Detection: determine context from file naming and content, then apply matching s
 3. **Reference Collapse** - For each "See X.md" in SKILL.md, ask: "would a new agent succeed without reading X.md?" If not, inline the essential 3-5 sentences.
 4. **Example Generation from Novice Perspective** - For each primary use case, write the example a new agent would most need. Include edge cases and error handling examples.
 
+## Templates
+
+**Lens**: Template Usability Analyst - evaluate by simulating the filling agent's experience and comparing against real instances.
+
+**Phase 1 reads**: `TEMPLATE_RULES.md`, `TEMPLATE_GUIDES.md` (@skills:write-documents)
+
+**Phase 1 research**: Find existing filled-in instances of the template. Compare them against the template to identify where agents diverged, struggled, or added content outside the template's structure.
+
+**Specialized issues** (in addition to GLOBAL):
+- Sections that real instances consistently leave empty or skip
+- Sections where real instances diverge in depth or format
+- Instructions that real instances interpret differently
+- Missing sections that instances consistently add outside the template
+
+**Adversarial Collaborator techniques** (execute in order, skip if not applicable):
+
+1. **Instance Comparison** - Find 2-3 filled instances. Compare section-by-section: where do they diverge from template intent? Where do they add content not in the template? Gaps and divergences are improvement candidates.
+2. **Filling Walkthrough** - Mentally fill in the template as the target audience. At each section: do I know what to put here? Is the expected depth clear? Would another agent produce a comparable result?
+3. **Conditional Calibration** - For each mandatory section: should it be conditional (empty in >50% of instances)? For each conditional section: is the criteria specific enough that two agents would make the same include/exclude decision?
+
 ## Research Output (INFO Documents)
 
 **Lens**: Evidence-Finding Collaborator (Kahneman) - improve through constructive challenge backed by new evidence. Not fault-finding; evidence-finding.
 
-**Phase 1 reads**: `INFO_TEMPLATE.md` (@skills:write-documents), `RESEARCH_STRATEGY_MEPI.md` or `RESEARCH_STRATEGY_MCPI.md` (@skills:deep-research), `RESEARCH_RULES.md` (@skills:deep-research)
+**Phase 1 reads**: `INFO_TEMPLATE.md` (@skills:write-documents), `RESEARCH_STRATEGY_MEPI.md` or `RESEARCH_STRATEGY_MCPI.md` (@skills:deep-research), `RESEARCH_RULES.md` (@skills:deep-research), `RESEARCH_SUMMARY_RULES.md` (@skills:deep-research)
 
-**Multi-file research sets** (folder with Summary + Sources + topic files): Read @skills:deep-research `RESEARCH_RULES.md` for depth indicators and enrichment techniques. Apply the "Improvement Procedure" and "Priority Order" sections from that file in addition to the techniques below.
+**Multi-file research sets** (folder with Summary + Sources + topic files): Read @skills:deep-research `RESEARCH_RULES.md` for depth indicators and enrichment techniques. Apply the "Improvement Procedure" and "Priority Order" sections from that file in addition to the techniques below. For Summary-specific improvements, also read @skills:deep-research `RESEARCH_SUMMARY_RULES.md` - each SD-* rule maps to one improvement candidate for Phase 3 selection. Execute enrichment techniques from that file's Improvement Procedure in priority order.
 
 **Specialized issues** (in addition to GLOBAL):
 - Sources concentrated on single search engine or database
@@ -324,7 +350,7 @@ Detection: determine context from file naming and content, then apply matching s
 
 **Lens**: Argument Architect - evaluate structural integrity, evidence density, and persuasive power of AMINTON trees.
 
-**Phase 1 reads**: `MINTO_RULES.md`, `MINTO_GUIDE.md` (@skills:write-documents), source material listed in draft header
+**Phase 1 reads**: `MINTO_RULES.md`, `MINTO_GUIDES.md` (@skills:write-documents), source material listed in draft header
 
 **Phase 1 research**: Evaluate evidence strength per branch. Search for stronger evidence, counter-arguments, or alternative framings that would strengthen the tree.
 
@@ -409,6 +435,7 @@ Detection: determine context from file naming and content, then apply matching s
    - `*_[LANG].md` or `*_[LANG].srt` with corresponding source file → Translation Output
    - Workflow folder `.md` files → Workflow
    - Skill folder files → Skill
+   - `*_TEMPLATE.md` or `__TEMPLATE_*` → Template
    - Solution approaches in tracking docs → Problem Solving
    - No match → No Context Match
 3. **Re-read dependencies**:
@@ -418,11 +445,11 @@ Detection: determine context from file naming and content, then apply matching s
    - Code quality: `MECT_CODING_RULES.md` (@skills:coding-conventions)
    - Workspace: README, NOTES, ID-REGISTRY, FAILS, LEARNINGS
    - Session: NOTES, PROBLEMS, PROGRESS (if SESSION-MODE)
-4. **Derive `[DEFERRED_FILE]`** - Unique per improve chain to enable parallel runs:
-   - **Single file**: `<filename_without_ext>_DEFERRED_IMPROVEMENTS.md` in same directory
-   - **Folder**: `<foldername>_DEFERRED_IMPROVEMENTS.md` in that folder
-   - **Conversation context**: `<session_topic_or_timestamp>_DEFERRED_IMPROVEMENTS.md` in session folder
-   - Example: scope `_INFO_CRAWLER_SOURCES.md` → `_INFO_CRAWLER_SOURCES_DEFERRED_IMPROVEMENTS.md`
+4. **Derive `[DEFERRED_FILE]`** - Unique per improve chain to enable parallel runs. Uses `__` prefix (scaffolding convention). Create from @skills:write-documents `DEFERRED_IMPROVEMENTS_TEMPLATE.md` with proper header block (Doc ID, Goal, Target file, Timeline, Depends on):
+   - **Single file**: `__<filename_without_ext>_DEFERRED_IMPROVEMENTS.md` in same directory
+   - **Folder**: `__<foldername>_DEFERRED_IMPROVEMENTS.md` in that folder
+   - **Conversation context**: `__<session_topic_or_timestamp>_DEFERRED_IMPROVEMENTS.md` in session folder
+   - Example: scope `_INFO_CRAWLER_SOURCES.md` → `__INFO_CRAWLER_SOURCES_DEFERRED_IMPROVEMENTS.md`
 5. **Create STRUT plan** via `/write-strut` - Track phases 1-4 with checkboxes. Save as `.tmp_STRUT_IMPROVE_<YYYY-MM-DD_HH-MM>.md` in scope folder (or session folder in SESSION-MODE).
 6. **Backup scoped files** - MANDATORY. Execute IMMEDIATELY after step 5, BEFORE Phase 1:
    - **Detect version**: Find highest existing `_vN` backup for each file. No backups exist → create `_v0` (the original unmodified version). Backups exist → create `_v(highest+1)`.

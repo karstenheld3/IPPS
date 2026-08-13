@@ -16,16 +16,17 @@ Scope: File deletion only. Does NOT uninstall tools, remove sessions, or modify 
 ## MUST-NOT-FORGET
 
 - **When in doubt, ASK the user** - never assume scope, never assume intent
-- Scan BEFORE deleting - always preview first, never delete without showing what will be removed
+- Scan BEFORE deleting - always show preview of what will be removed
 - NEVER delete `../.tools/` output folders (see Protected Locations)
 - NEVER delete `/bugfix` `backup/` folders or `/go` backups/zips
-- Confirmation required before any deletion (destructive workflow)
+- **Safe categories auto-delete after preview** - no confirmation needed (see Auto-Delete vs Confirm-Delete)
+- **Confirm-delete categories require explicit user confirmation** before deletion
 - NEVER run workspace-wide cleanup during an active session without explicit user confirmation
 
 ## Trigger
 
-- `/cleanup` - ask user for scope, then scan
-- `/cleanup [path]` - scan only specified path (still confirm scope)
+- `/cleanup` - infer scope from conversation context (narrowest scope wins), then scan
+- `/cleanup [path]` - scope to specified path directly
 
 ## GLOBAL-RULES
 
@@ -34,8 +35,43 @@ Apply to all cleanup runs regardless of scope.
 1. Scan all target locations and collect file list BEFORE deleting anything
 2. Group findings by category in preview
 3. Show full paths in preview - never abbreviate or truncate
-4. Require explicit user confirmation after preview
+4. Auto-delete safe categories after preview; confirm only confirm-delete categories (see Auto-Delete vs Confirm-Delete)
 5. Report deletion results with counts per category
+
+## Auto-Delete vs Confirm-Delete
+
+Categories split by risk level. Safe categories are deleted immediately after preview (no confirmation). This prevents cleanup from stalling when user moves to another task.
+
+**Auto-delete (safe, always disposable):**
+- Category 1: Agent temp files (`.tmp_*`, `*.tmp`) - single-run scripts, always disposable
+- Category 2: Python build artifacts (`__pycache__/`, `*.pyc`) - regenerated automatically
+- Category 3: Improve workflow backups (`_vN.*`) - safety copies after improvement accepted
+- Category 4: MCP config backups - superseded config snapshots
+- Category 6: Workflow scaffolding (`__*.md`, legacy `STRUT_*`) - consumed process artifacts
+
+**Confirm-delete (may contain unaddressed findings):**
+- Category 5: Critique review files (`*_REVIEW.md`) - may contain unaddressed findings
+
+**Always confirm (modifies file content, not deletion):**
+- INFO marker stripping (`[VERIFIED]` labels) - in-place text modification
+
+**Execution flow:**
+1. Scan all categories and show preview grouped by auto-delete vs confirm-delete
+2. Delete auto-delete categories immediately (no confirmation needed)
+3. Ask for confirmation only for confirm-delete categories
+4. Report results
+
+## Post-Workflow Cleanup Trigger
+
+Workflows that create disposable artifacts SHOULD self-clean on successful completion. When a workflow completes successfully, it should delete its own artifacts from the working directory:
+
+- `/improve` → delete `_vN.*` backups of the improved file
+- `/drift-detect` → (keep `__DRIFT_*` until `/drift-correct` runs)
+- `/drift-correct` → delete `__DRIFT_*` file after all gaps closed
+- `/deep-research` → delete `__STRUT_*`, `__TASKS_*`, `__TEMPLATE_*` after research complete
+- `/go` → delete `__TASKS_*` after goal reached
+
+If the parent workflow forgets, `/cleanup` catches them. But the goal is: **artifacts should not survive beyond their parent workflow's completion**.
 
 # CONTEXT-SPECIFIC
 
@@ -47,38 +83,38 @@ Detection: determine applicable contexts from scope. Multiple contexts may apply
 
 Delete files and directories matching these patterns:
 
-### 1. Agent Temp Files
+### 1. Agent Temp Files [AUTO-DELETE]
 
 - **Pattern**: `.tmp_*` files, `*.tmp` files
 - **Locations**: `[WORKSPACE_FOLDER]` recursive, `[DEFAULT_SESSIONS_FOLDER]` recursive
 - **Source**: Agent scripts, `/test`, `/implement`, `/go`, `/improve` STRUT plans, youtube-downloader metadata
 - **Note**: `.tmp_*` files are dotfiles - invisible to `fd`/`find_by_name` by default. Always use PowerShell `Get-ChildItem -Force` or `fd --hidden` to scan for them.
 
-### 2. Python Build Artifacts
+### 2. Python Build Artifacts [AUTO-DELETE]
 
 - **Pattern**: `__pycache__/` directories, `*.pyc` files, `.pytest_cache/`, `.mypy_cache/`
 - **Locations**: `[WORKSPACE_FOLDER]` recursive, `[DEVSYSTEM_FOLDER]` recursive, `[AGENT_FOLDER]` recursive
 - **Source**: Python script execution
 
-### 3. Improve Workflow Artifacts
+### 3. Improve Workflow Artifacts [AUTO-DELETE]
 
 - **Pattern**: `*_vN.*` versioned backups (filename ending in `_v` followed by digits before extension), `*_DEFERRED_IMPROVEMENTS.md`
 - **Locations**: `[WORKSPACE_FOLDER]` recursive, excluding `_Archive/` and `_OldDevSystemVersions/`
 - **Source**: `/improve` workflow versioned backups and deferred improvement logs
 
-### 4. MCP Config Backups
+### 4. MCP Config Backups [AUTO-DELETE]
 
 - **Pattern**: `mcp_config.json._beforeRemoving*`, `mcp_config.json._backup_*`
 - **Location**: MCP config directory (resolve from Windsurf/Codeium config path)
 - **Source**: MCP server install/uninstall scripts (ms-playwright-mcp, playwriter-mcp)
 
-### 5. Critique Review Files
+### 5. Critique Review Files [CONFIRM-DELETE]
 
 - **Pattern**: `*_REVIEW.md`, `_PROBLEMS_REVIEW.md`
 - **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSION_FOLDER]` recursive, excluding `_Archive/` and `_OldDevSystemVersions/`
 - **Source**: `/critique` workflow creates these per review run. Intended to be discarded after findings are addressed.
 
-### 6. Workflow Scaffolding
+### 6. Workflow Scaffolding [AUTO-DELETE]
 
 - **Pattern**: `__*.md` files (double underscore prefix). Also legacy patterns: `STRUT_*.md` (not `STRUT_TEMPLATE.md`), `_TASKS_*.md` (files auto-created by `/go` before convention change)
 - **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSION_FOLDER]` recursive, excluding `_Archive/`, `_OldDevSystemVersions/`, and skill folders
@@ -130,13 +166,15 @@ Six cleanup scopes exist, from narrowest to widest:
 5. **Session** - everything in `[SESSION_FOLDER]` matching cleanup patterns
 6. **Workspace** - everything in `[WORKSPACE_FOLDER]` and all known locations
 
-**Resolution rules (ONE question only):**
-- Infer scope from conversation context, path args, and active session
-- Present inferred scope to user for confirmation in a SINGLE question
+**Resolution rules (ONE question only, narrowest scope wins):**
+- **Narrowest scope principle**: Always infer the NARROWEST scope that covers the user's working context. Never broaden beyond what the conversation context requires.
+- If all recent work is within a session subfolder (e.g., `Faro-Autokauf/`): scope = **Folder** (that subfolder), NOT Session
 - If path arg provided: infer scope from path type (file → document, directory → folder/session)
 - If conversation just finished a `/critique` or `/improve` run: suggest workflow scope
+- If conversation spans multiple session subfolders or session root: scope = **Session**
 - If ambiguous: ask "Cleanup scope? (markers / document / workflow / folder / session / workspace)" - omit session if not in SESSION-MODE
 - Do NOT ask follow-up questions about which files or folders - scan first, let user exclude in Step 4
+- Present inferred scope to user for confirmation in a SINGLE question
 
 **After scope is confirmed, scan immediately:**
 - **Markers** → all INFO docs in scope
@@ -232,12 +270,14 @@ Total: N items to delete, N files to modify
 
 If no items found: report "Workspace is clean - nothing to delete" and exit.
 
-## Step 4: Confirm
+## Step 4: Auto-Delete + Confirm
 
-Ask user for explicit confirmation. User may:
-- **Confirm all** - delete everything shown
-- **Exclude categories** - skip specific categories (e.g., "skip improve artifacts")
-- **Cancel** - abort without deleting
+1. **Auto-delete safe categories immediately** (1, 2, 3, 4, 6) - no confirmation needed
+2. **Ask confirmation for confirm-delete categories** (5, INFO markers) - user may:
+   - **Confirm** - proceed with deletion/modification
+   - **Skip** - keep these files
+   - **Cancel** - abort (auto-deleted files are already gone)
+3. If ONLY auto-delete categories found: delete all, report results, done (no question asked)
 
 ## Step 5: Delete
 
@@ -277,10 +317,12 @@ Errors: [count and paths if any]
 
 ## Quality Gate
 
+- [ ] Scope inferred as narrowest that covers working context
 - [ ] All target locations scanned before any deletion
 - [ ] Protected locations excluded from results
 - [ ] Preview shown in chat with full paths
-- [ ] User confirmed before deletion
+- [ ] Auto-delete categories deleted without asking
+- [ ] Confirm-delete categories only proceeded after user confirmation
 - [ ] Deletion results reported with counts
 
 ## Output

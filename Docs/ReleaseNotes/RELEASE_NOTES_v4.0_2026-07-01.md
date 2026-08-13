@@ -34,11 +34,11 @@ None.
 ## New Skills / Skill Changes
 
 - **write-documents** - Added MINTO guide, rules, and templates:
-  - `MINTO_GUIDE.md` - Strategic decisions for Minto article writing (tree-first sequencing)
+  - `MINTO_GUIDES.md` - Strategic decisions for Minto article writing (tree-first sequencing)
   - `MINTO_RULES.md` - Structural verification rules (DS, AQ, TI, ME, AS, CL categories)
   - `MINTO-DRAFT_TEMPLATE.md` - Template for `__MINTO-DRAFT_[Article].md` scaffolding
   - `MINTO_TEMPLATE.md` - Template for `_MINTO_[Article].md` final article
-  - `INFO_GUIDE.md`, `INFO_RULES.md` - GRUC files for INFO documents
+  - `INFO_GUIDES.md`, `INFO_RULES.md` - GRUC files for INFO documents
   - `SK-CT-06` - No Document History in skill resource files
 - **drift-correction** - New skill folder with CHECKS files for workflow process audit
 - **deep-research** - Refined summary structure, Goals/Questions section, per-topic summaries, prevent Google AI answer extraction

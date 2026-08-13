@@ -696,7 +696,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 - [`/write-strut`](.devin/workflows/write-strut.md) - Create STRUT plans with proper format
 - [`/propose-minto`](.devin/workflows/propose-minto.md) - Generate 3 scored AMINTON argument candidates from research material
 - [`/write-minto`](.devin/workflows/write-minto.md) - Develop full Minto Pyramid article from draft (tree-first, then prose)
-- [`/implement`](.devin/workflows/implement.md) - Execute implementation from context, INFO, SPEC or IMPL documents
+- [`/implement`](.devin/workflows/implement.md) - Execute implementation from context, INFO, SPEC or IMPL documents. Works in actual files. Relies on SPEC, IMPL, TASKS, TEST, STRUT, and chat instructions; aims to implement them as closely as possible.
 - [`/test`](.devin/workflows/test.md) - Run tests based on scope and context
 - [`/partition`](.devin/workflows/partition.md) - Partition plans into discrete tasks
 
@@ -706,7 +706,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 - [`/reconcile`](.devin/workflows/reconcile.md) - Pragmatic review of critique findings
 - [`/drift-detect`](.devin/workflows/drift-detect.md) - Post-execution drift detection, persist gaps to __DRIFT_ file
 - [`/drift-correct`](.devin/workflows/drift-correct.md) - Close drift gaps identified by /drift-detect
-- [`/improve`](.devin/workflows/improve.md) - Depth-first improvement (one proven change per run, versioned backups)
+- [`/improve`](.devin/workflows/improve.md) - Depth-first improvement (one proven change per run). Always makes versioned backups so user can compare with older versions. Uses lenses and web research to add creative thinking and analysis before improving the target in one specific field or angle.
 - [`/sync`](.devin/workflows/sync.md) - Document synchronization
 - [`/rename`](.devin/workflows/rename.md) - Global and local refactoring with exhaustive search
 

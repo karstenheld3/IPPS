@@ -23,6 +23,7 @@ Precision (PR) - Priority 1
 - AP-PR-10: Never abbreviate keys and references (use single quotes for literals)
 - AP-PR-11: Labels decodable at point of use (full word, legend, or mnemonic)
 - AP-PR-12: Explain domain jargon and idioms on first use
+- AP-PR-13: Authoritative literals reproduced character-for-character (no Unicode normalization, no abbreviation, no reformatting)
 
 Brevity (BR) - Priority 2
 - AP-BR-01: Single line for single statements
@@ -390,6 +391,45 @@ Claude Code is the dark horse (unexpected strong competitor) in this market.
 **Test:** "Would a reader outside this domain understand this without looking it up?"
 
 **Does NOT apply to:** Terms covered by AP-PR-06, terms defined earlier in same document, terms clear from immediate context.
+
+### AP-PR-13: Authoritative Literals Reproduced Character-for-Character
+
+Values marked `[LITERAL]` or stored in an "Authoritative Literals" section are lexical, not semantic. Every character matters. GenAI systematically introduces format drift: Unicode normalization (`º` for `o`), punctuation changes (dashes for commas), abbreviation, expansion.
+
+**Applies to:** Addresses, IBANs, reference numbers, registration codes, certificate numbers, official names, tax IDs.
+
+**Source of truth:** Official documents (government registrations, contracts, bank confirmations). Never copy from secondary documents without cross-referencing the authoritative source.
+
+**BAD** (GenAI reformats IBAN - spaces, dashes, digit transposition):
+```
+DE89 3704 0044 0532 0130 00     (spaces inserted)
+DE89-3704-0044-0532-0130-00    (dashes inserted)
+DE89370400440532013000          (last 2 digits swapped - still valid MOD-97!)
+```
+
+**GOOD**: `DE89370400440532013000`
+
+**BAD** (sub-premise loss - floor/unit dropped, address undeliverable):
+```
+Rua da Liberdade 42-E           (floor "3.o" lost, "Esq." → "E")
+Flat 453, Tagore Road, 118923   ("Hostel" building name dropped)
+港区六本木6-10-1                  (building name + floor stripped)
+```
+
+**BAD** (Unicode normalization + expansion):
+```
+R.ª da Liberdade, 42 - 3.º Esq.    (ª and º introduced)
+Rua da Liberdade, n.º 42, 3.º Esquerdo  (abbreviation expanded)
+```
+
+**BAD** (postal code reformatting):
+```
+1000001         (hyphen removed from 1000-001)
+SW1A1AA         (space removed from UK SW1A 1AA)
+〒 100-0000     (space after 〒 symbol, Japan)
+```
+
+Full corruption categories in `core-conventions.md` "Authoritative Literals" section.
 
 ## Brevity Rules (BR)
 

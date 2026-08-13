@@ -73,6 +73,8 @@ Invoke based on context:
 - Hidden complexity and edge cases
 - What happens when things fail unexpectedly
 - Contradictions between stated intent and actual behavior
+- Data boundary violations: private data leaking into general-purpose documents or illustrative examples (Pre-Write Privacy Gate, `agent-behavior.md`)
+- GDPR and privacy risks: personal data exposed in logs, error messages, examples, or documents beyond their intended audience
 
 **DO NOT focus on** (use `/verify` instead):
 - Rule violations and convention compliance
@@ -297,6 +299,7 @@ Create `[filename]_REVIEW.md` with findings.
 - Authentication: Can it be bypassed?
 - Authorization: Are all paths checked?
 - Secrets: Hardcoded or properly externalized?
+- Data leakage: Personal data in logs, error messages, debug output, or telemetry? GDPR-relevant fields (names, emails, IPs, identifiers) logged without anonymization?
 
 **Performance**:
 - What's the worst-case complexity?
@@ -328,7 +331,7 @@ When reviewing error logs or console output:
 
 Detect by: `__MINTO-DRAFT_*` or `_MINTO_*` filename pattern.
 
-**Read**: @skills:write-documents `MINTO_GUIDE.md` for intended structure; `MINTO_RULES.md` for rule IDs; `SOCAS_RULES.md` for logic attack patterns.
+**Read**: @skills:write-documents `MINTO_GUIDES.md` for intended structure; `MINTO_RULES.md` for rule IDs; `SOCAS_RULES.md` for logic attack patterns.
 
 **Attack vectors** (reference AMINTON node IDs in findings):
 - **Magnet failure** - A does not connect to listener motivator (MINTO-AQ-01)
@@ -355,6 +358,8 @@ Ask these for EVERY review:
 6. **What sensitive data could leak in logs/errors?**
 7. **What would break if we deployed this at 3 AM during a database migration?**
 8. **What would a new team member misunderstand?**
+9. **Does this document or code expose personal data beyond its intended audience?** (addresses, IBANs, tax IDs, names in general-purpose files, illustrative examples, logs, error messages, or public-facing output)
+10. **If this artifact were shared publicly, would it reveal the user's identity, location, family, or finances?**
 
 ## Final Checklist
 

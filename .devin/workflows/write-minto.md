@@ -15,13 +15,14 @@ Develop a selected argument into a complete Minto Pyramid article with drill-dow
 
 ## Required Skills
 
-- @skills:write-documents `MINTO_GUIDE.md` for prose style, closing rules, structure decisions
+- @skills:write-documents `MINTO_GUIDES.md` for prose style, closing rules, structure decisions
 - @skills:write-documents `MINTO_RULES.md` for structural verification (quality gate)
 - @skills:write-documents `MINTO_TEMPLATE.md` for output structure
 - @skills:write-documents for APAPALAN/MECT compliance
 
 ## MUST-NOT-FORGET
 
+- Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content in any file → examples generic. Assess context BEFORE writing.
 - Every E-node must reference a source finding from the inventory (IG-01)
 - No orphan nodes: every Q has A, every A in drill-down has S, every S has E (IG-02)
 - Closing introduces no new claims - only restates proved branches (IG-03)
