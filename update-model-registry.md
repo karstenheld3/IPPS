@@ -6,17 +6,18 @@
 
 **Code block convention**: Blocks showing `browser_navigate(...)`, `browser_evaluate(...)`, `browser_run_code(...)` illustrate Playwright MCP tool invocations. The string inside `function:` / `code:` is the actual JavaScript argument.
 
-**Replaces**: `UPDATE_MODEL_PRICING.md` and `UPDATE_MODEL_REGISTRY.md` (both deleted).
-
 ## Placeholders
 
-- `[SKILL_FOLDER]`: Folder containing this workflow (e.g., `DevSystemV3.7/skills/llm-evaluation`)
-- `[MODEL_SOURCES]`: `[SKILL_FOLDER]/model-sources`
+- `[DEVSYSTEM_FOLDER]`: Current DevSystem folder (e.g., `DevSystemV4.2`)
+- `[SKILL_FOLDER]`: `[DEVSYSTEM_FOLDER]/skills/llm-evaluation` (canonical JSON location)
+- `[SESSION_FOLDER]`: `_Sessions/!ModelRegistryUpdate` (permanent session for artifacts)
+- `[MODEL_SOURCES]`: `[SESSION_FOLDER]/model-sources`
 - `[DATE]`: Today in `YYYY-MM-DD`
 - `[VENV_PYTHON]`: `../.tools/llm-venv/Scripts/python.exe`
 - `[TRANSCRIPTION_SCRIPT]`: `.devin/skills/llm-transcription/transcribe-image-to-markdown.py`
 - `[AGENT_FOLDER]`: Active agent folder (e.g., `.devin`)
 - `[KEYS_FILE]`: API keys file path
+- `[DIST_TARGETS]`: Locations receiving copies of updated JSONs (defined in Phase 9)
 
 ## Sources
 
@@ -501,21 +502,33 @@ If `test-call-llm.py` has no test entries for a new model, the `--model` filter 
 - API error (400): likely wrong parameters — check `model_id_startswith[]` config.
 - Timeout: retry once, then flag in report.
 
-## Phase 9: Sync to Dependent Locations
+## Phase 9: Distribute and Sync
 
-After all gates pass, copy the canonical files.
+After all gates pass, copy canonical JSONs from `[SKILL_FOLDER]` to all targets.
 
-### 9.1 Sync to Dependent Skills
+### 9.1 Distribute to Agent Folder
 
-`model-pricing.json` and `model-registry.json` are consumed by other skills:
+Copy all 3 JSONs from `[DEVSYSTEM_FOLDER]` to the active agent's llm-evaluation skill:
 
 ```powershell
 $src = "[SKILL_FOLDER]"
 $jsonFiles = @("model-pricing.json", "model-registry.json", "model-parameter-mapping.json")
-$targets = @(
-  "[AGENT_FOLDER]/skills/llm-transcription"
+$agentDst = "[AGENT_FOLDER]/skills/llm-evaluation"
+foreach ($f in $jsonFiles) {
+  Copy-Item "$src/$f" "$agentDst/$f" -Force
+}
+```
+
+### 9.2 Distribute to Dependent Skills
+
+Some skills consume a subset of these JSONs. Only copy files that already exist at the target:
+
+```powershell
+$dependentSkills = @(
+  "[AGENT_FOLDER]/skills/llm-transcription",
+  "[DEVSYSTEM_FOLDER]/skills/llm-transcription"
 )
-foreach ($dst in $targets) {
+foreach ($dst in $dependentSkills) {
   foreach ($f in $jsonFiles) {
     if (Test-Path "$dst/$f") {
       Copy-Item "$src/$f" "$dst/$f" -Force
@@ -524,22 +537,11 @@ foreach ($dst in $targets) {
 }
 ```
 
-Only copy files that already exist at the target (not every skill uses all 3 JSONs).
-
-### 9.2 Sync model-sources to .devin
-
-The DevSystemV3.7 skill folder is the source of truth. Sync model-sources to the active agent folder:
-
-```powershell
-Copy-Item -Path "[SKILL_FOLDER]/model-sources/*" `
-  -Destination "[AGENT_FOLDER]/skills/llm-evaluation/model-sources/" `
-  -Recurse -Force
-```
-
 ### Gate 9 (Sync Check)
 
 ```powershell
-foreach ($dst in $targets) {
+$allTargets = @($agentDst) + $dependentSkills
+foreach ($dst in $allTargets) {
   foreach ($f in $jsonFiles) {
     if (Test-Path "$dst/$f") {
       $a = (Get-FileHash "$src/$f").Hash
@@ -572,10 +574,19 @@ Print a concise summary:
 - **Anthropic API ID unresolvable**: write the alias, add `_note_<alias>` key, flag in report. Do not block the run.
 - **Gate 5, 6, 7, or 9 fails**: the edit did not persist or the sync did not complete. Most common cause: file was edited in memory but never written. Re-read from disk, re-apply, re-verify.
 - **test-call-llm.py has no entries for new model**: add minimal test entry, re-run. Do not skip verification.
-- **New dependent skill added**: append its folder to Phase 9 `$targets` and add to "Dependent skills" list.
+- **New dependent skill added**: append its folder to Phase 9 `$dependentSkills` and add to "Dependent skills" list.
+- **New distribution target added**: append to Phase 9.1 or 9.2 as appropriate.
 - **Duplicate model in pricing vs registry**: reconcile toward the pricing file (prices are authoritative for existence); registry must follow.
 
 ## Document History
+
+**[2026-08-30 14:20]**
+- Changed: Moved workflow from `skills/llm-evaluation/` to workspace root
+- Changed: Artifacts now stored in `_Sessions/!ModelRegistryUpdate/model-sources/` (permanent session)
+- Changed: Added `[DEVSYSTEM_FOLDER]`, `[SESSION_FOLDER]`, `[DIST_TARGETS]` placeholders
+- Changed: Phase 9 rewritten for multi-target distribution (agent folder + dependent skills)
+- Removed: Phase 9.2 model-sources sync (artifacts no longer in distributable skill folder)
+- Removed: "Replaces" note (no longer relevant)
 
 **[2026-05-22 15:58]**
 - Fixed: Gate 7 `adaptive_thinking` key mapping `openai_reasoning_effort` → `anthropic_adaptive_effort` (matches config-driven lookup in code)
