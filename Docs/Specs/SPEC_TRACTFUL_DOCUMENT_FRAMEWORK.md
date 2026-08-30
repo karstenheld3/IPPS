@@ -237,7 +237,7 @@ Tracking:   ^[A-Z]{2,14}-(PR|FL|LN|BG|FT)-\d{3,4}$
 ### Review Documents
 
 - **REVIEW** - Potential issues and improvement suggestions
-  - Template: `REVIEW_TEMPLATE.md`
+  - Template: `CRITIQUE_REVIEW_TEMPLATE.md` (for `/critique`), `FACT-CHECK_REVIEW_TEMPLATE.md` (for `/fact-check`)
   - Naming: `_REVIEW.md` or `[SOURCE]-RV[NN].md`
   - Contains: RV (Review findings) categorized by priority
 
