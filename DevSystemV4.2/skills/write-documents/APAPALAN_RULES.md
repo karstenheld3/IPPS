@@ -996,6 +996,19 @@ The first installment is due next month (August, 2026-08).
 - FR: "vendredi 2026-07-17"
 - ES: "viernes, 2026-07-17"
 
+**Seasonal timezone rule** (Europe/Berlin): CET (UTC+1) applies last Sunday of October through last Sunday of March. CEST (UTC+2) applies last Sunday of March through last Sunday of October. Never use "CET" as generic catch-all. Check the scheduled date's season and use the correct abbreviation. If the conversation file states a timezone explicitly, use that exact abbreviation.
+
+**BAD:**
+```
+Let's meet Wednesday, 2026-08-19 11:00 CET.
+```
+August = summer = CEST, not CET.
+
+**GOOD:**
+```
+Let's meet Wednesday, 2026-08-19 11:00 CEST.
+```
+
 **Relates to** AP-PR-01: PR-01 defines the format (`YYYY-MM-DD HH:MM`). CM-03 adds the disambiguation requirements for communication: weekday prefix, timezone when cross-location, year on period references.
 
 ## Naming Rules (NM)

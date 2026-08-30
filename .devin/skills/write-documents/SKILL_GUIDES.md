@@ -196,12 +196,24 @@ Apply `SKILL_RULES.md` SK-FL-* rules:
 
 ```
 my-skill/
-  SKILL.md                    # Required entry point
-  SETUP.md                    # Standard name (unprefixed)
-  UNINSTALL.md                # Standard name (unprefixed)
-  MYSKILL_REFERENCE.md        # Skill-specific (prefixed)
-  myskill_config_examples.json # Data files (lowercase)
+  SKILL.md                       # Required entry point
+  SETUP.md                       # Standard name (unprefixed)
+  UNINSTALL.md                   # Standard name (unprefixed)
+  MYSKILL_REFERENCE.md           # Skill-specific (prefixed)
+  myskill_config_examples.json   # Data files (lowercase)
+  _deploy_template.bat           # Script template (lowercase _template suffix)
+  _deploy_template.ps1           # Script template (lowercase _template suffix)
+  CONVERSATION_TEMPLATE.md       # Document template (uppercase _TEMPLATE suffix)
 ```
+
+### 7.1 Template Naming (SK-FL-07)
+
+Files that serve as templates (copied and adapted per project) MUST use a `_TEMPLATE` or `_template` suffix:
+
+- **Document templates**: `_TEMPLATE.md` (uppercase, per document conventions)
+- **Script/code templates**: `_template.ext` (lowercase, per code conventions)
+
+This prevents confusion between operational files and templates that require adaptation. Without the suffix, a user or agent may attempt to run a template directly (missing placeholder substitution).
 
 ## 8. Review Checklist
 
@@ -216,4 +228,5 @@ Before publishing:
 - [ ] All code snippets tested manually
 - [ ] Expected output documented for each step
 - [ ] Token optimization applied (no visual-only formatting in LLM-consumed files)
+- [ ] Template files use `_TEMPLATE`/`_template` suffix (SK-FL-07)
 - [ ] References link to primary sources

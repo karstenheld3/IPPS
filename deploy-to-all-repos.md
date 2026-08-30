@@ -48,12 +48,12 @@ Read `[SKILL_CATEGORIES]` and `[LINKED_REPOS]` sections from `!NOTES.md` to get:
 
 ## Workflow Steps
 
-### 0. Check Execution Mode
+### 1. Check Execution Mode
 
 - If user message contains confirmation keyword: set `AUTO_EXECUTE = true`
 - Otherwise: set `AUTO_EXECUTE = false` (preview mode)
 
-### 1. Sync `.devin/` from `[DEVSYSTEM]`
+### 2. Sync `.devin/` from `[DEVSYSTEM]`
 
 **MANDATORY.** Before any comparison or deployment, sync the workspace `.devin/` staging area from the DevSystem source. This ensures ALL files are current, not just the ones changed in the current session.
 
@@ -84,19 +84,19 @@ Write-Host "Sync complete."
 
 **Verify:** After sync, confirm zero diff between `[DEVSYSTEM]` and `.devin/` for skills, workflows, and rules folders.
 
-### 2. Read Configuration
+### 3. Read Configuration
 
 Read `*NOTES.md` and extract `[LINKED_REPOS]` section.
 
-### 3. For Each Linked Repository
+### 4. For Each Linked Repository
 
 Execute the following for each repo in `[LINKED_REPOS]`:
 
-#### 3.1 Verify Target Exists
+#### 4.1 Verify Target Exists
 
 Check that the target repo path exists. Skip if not found (warn user).
 
-#### 3.2 Compare Source and Target Files (JSON Output)
+#### 4.2 Compare Source and Target Files (JSON Output)
 
 Run this PowerShell script. It outputs JSON for consistent parsing:
 
@@ -224,9 +224,9 @@ $preview = Format-DeployPreview $results
 Write-Output $preview
 ```
 
-#### 3.3 Emit Preview to Chat
+#### 4.3 Emit Preview to Chat
 
-**CRITICAL:** Preview goes in chat, NOT to a `.tmp` file. Use the `Format-DeployPreview` function from step 3.2 — do NOT hand-format.
+**CRITICAL:** Preview goes in chat, NOT to a `.tmp` file. Use the `Format-DeployPreview` function from step 4.2 — do NOT hand-format.
 
 **Required format** (emitted by `Format-DeployPreview`):
 
@@ -292,7 +292,7 @@ Summary: 7 repos, 70 add, 132 overwrite, 0 delete
 
 Missing filenames, "..." truncation, abbreviated paths (`sk\` instead of `skills\`), or any manual rewriting of what `Format-DeployPreview` returns.
 
-#### 2.4 Apply Copy Rules
+#### 4.4 Apply Copy Rules
 
 For each source file, apply the repo-specific rules:
 
@@ -307,13 +307,13 @@ For each source file, apply the repo-specific rules:
 - Files matching these patterns are FULLY PROTECTED - no overwrite, no delete
 - Check `[LINKED_REPOS]` for file-specific exceptions
 
-#### 3.4 Copy Files
+#### 4.5 Copy Files
 
 Copy files to target repo's `.devin` folder, respecting rules.
 
 Note: This workflow lives in workspace root, so it won't be deployed.
 
-#### 3.5 Report Changes
+#### 4.6 Report Changes
 
 For each repo, report:
 - Files copied/updated
@@ -321,11 +321,11 @@ For each repo, report:
 - Files deleted (deprecated)
 - Errors encountered
 
-### 4. Verify MNF Compliance
+### 5. Verify MNF Compliance
 
 Review each MNF item above and confirm compliance.
 
-### 5. Summary
+### 6. Summary
 
 Provide final summary:
 - Total repos processed
@@ -334,7 +334,7 @@ Provide final summary:
 
 ## Output Format
 
-Format is defined in step 3.3 and enforced by the `Format-DeployPreview` function in step 3.2. Do NOT hand-write preview output — run the function and emit its return value verbatim.
+Format is defined in step 4.3 and enforced by the `Format-DeployPreview` function in step 4.2. Do NOT hand-write preview output — run the function and emit its return value verbatim.
 
 See GLOB-FL-023 and GLOB-FL-024 in FAILS.md for the failure history that motivated this enforcement.
 

@@ -19,7 +19,7 @@ Autonomous self-improvement in four phases: scan with pre-flight research, fix v
 
 ## MUST-NOT-FORGET
 
-- **BACKUP FIRST (GATE)** - Create `_vN` backups of ALL scoped files BEFORE any modification. No backup = no edit. Verify backups exist before entering Phase 2. Never delete backups - only user may delete them
+- **BACKUP FIRST (GATE)** - Create `_vN` backups of ALL scoped files BEFORE any modification. No backup = no edit. Verify backups exist before entering Phase 2. Never delete backups - only user may delete them. **EXCEPTION: Code files** - NEVER create `_vN` copies of source code. Instead, ensure clean working tree (commit unrelated changes first if dirty), then commit improvements AFTER applying them via `/commit` workflow. The improvement commit's diff IS the change record (revert via `git revert HEAD` or `git checkout HEAD~1 -- <file>`)
 - **NEVER ask questions** - Derive goal or best option from the previous prompt, or from conversation context. Act on best inference
 - **Depth over breadth** - Improve ONE thing exhaustively and prove it justified, not a large list of half-baked, assumed, untested improvements
 - **STRUT self-tracking** - Create STRUT plan at start via `/write-strut`, track progress, delete STRUT file after completion
@@ -419,7 +419,7 @@ Detection: determine context from file naming and content, then apply matching s
 
 # EXECUTION
 
-**CRITICAL: No file may be modified without a `_vN` backup existing first. This is the single most common failure mode of this workflow. Verify backups at every phase transition.**
+**CRITICAL: No file may be modified without a safety net. For code files: working tree must be clean before modifications (HEAD = baseline). For non-code files: a `_vN` backup must exist. Verify at every phase transition.**
 
 ## Setup
 
@@ -452,14 +452,20 @@ Detection: determine context from file naming and content, then apply matching s
    - Example: scope `_INFO_CRAWLER_SOURCES.md` → `__INFO_CRAWLER_SOURCES_DEFERRED_IMPROVEMENTS.md`
 5. **Create STRUT plan** via `/write-strut` - Track phases 1-4 with checkboxes. Save as `.tmp_STRUT_IMPROVE_<YYYY-MM-DD_HH-MM>.md` in scope folder (or session folder in SESSION-MODE).
 6. **Backup scoped files** - MANDATORY. Execute IMMEDIATELY after step 5, BEFORE Phase 1:
-   - **Detect version**: Find highest existing `_vN` backup for each file. No backups exist → create `_v0` (the original unmodified version). Backups exist → create `_v(highest+1)`.
-   - **Backup**: Copy each scoped file to `<name>_vN.<ext>` in same directory.
-   - First run: `_SPEC_CRAWLER.md` → `_SPEC_CRAWLER_v0.md` (original before any changes)
-   - Second run: `_SPEC_CRAWLER.md` → `_SPEC_CRAWLER_v1.md` (state after first improvement)
-   - Code: `src/utils/auth.py` → `src/utils/auth_v0.py` (first run)
-   - **Working file keeps original filename** - all improvements go to original path. Imports, references, and tests work without changes.
-   - **Never delete `_vN` backups** - only user may delete them.
-   - **Confirm in output**: List all created backups with full paths. Example: `Backed up: _SPEC_CRAWLER.md → _SPEC_CRAWLER_v1.md`. If zero backups listed, Setup is incomplete.
+   - **Code files** (`.py`, `.ps1`, `.js`, `.ts`, `.jsx`, `.tsx`, `.css`, `.html`, etc.):
+     - **NEVER create `_vN` copies** of source code files
+     - **CLEAN WORKING TREE GATE**: Verify scoped code files have no uncommitted changes (`git status`). If dirty, execute `/commit` workflow on those files first with an appropriate message (NOT the improvement commit - that comes after)
+     - **Confirm in output**: `Clean baseline confirmed: HEAD is <commit-hash>` with list of scoped code files. HEAD serves as the revert point.
+     - After all improvements are applied (end of Phase 4), execute `/commit` workflow on modified code files with message `refactor(improve): <description of improvement applied> [workflow:improve.md]`
+     - The improvement commit's diff = the change. Revert via `git revert HEAD` or `git checkout HEAD~1 -- <file>`
+   - **Non-code files** (`.md`, `.json`, `.yaml`, etc.):
+     - **Detect version**: Find highest existing `_vN` backup for each file. No backups exist → create `_v0` (the original unmodified version). Backups exist → create `_v(highest+1)`.
+     - **Backup**: Copy each scoped file to `<name>_vN.<ext>` in same directory.
+     - First run: `_SPEC_CRAWLER.md` → `_SPEC_CRAWLER_v0.md` (original before any changes)
+     - Second run: `_SPEC_CRAWLER.md` → `_SPEC_CRAWLER_v1.md` (state after first improvement)
+     - **Working file keeps original filename** - all improvements go to original path.
+     - **Never delete `_vN` backups** - only user may delete them.
+     - **Confirm in output**: List all created backups with full paths. Example: `Backed up: _SPEC_CRAWLER.md → _SPEC_CRAWLER_v1.md`. If zero backups listed, Setup is incomplete.
 
 ## Phase 1: Pre-flight Scan + Research
 
@@ -479,7 +485,7 @@ Lightweight pass to discover what CAN be improved and how easily.
 - [ ] Rule violations separated from improvement candidates
 - [ ] Pre-flight research completed for improvement candidates
 - [ ] Candidates ranked by impact-to-effort ratio
-- [ ] **BACKUP GATE**: `_vN` backup exists for EVERY file in scope (created in Setup step 6). If missing, STOP and create backups now. Do NOT proceed to Phase 2 without backups.
+- [ ] **BACKUP GATE**: Safety net exists for EVERY file in scope (created in Setup step 6). Code files: working tree is clean (HEAD = baseline). Non-code files: `_vN` backup exists. If missing, STOP and fix now. Do NOT proceed to Phase 2 without safety net.
 
 Pass: Proceed to Phase 2 | Fail: Continue Phase 1 or create missing backups
 
@@ -487,17 +493,17 @@ Pass: Proceed to Phase 2 | Fail: Continue Phase 1 or create missing backups
 
 Apply rule violations immediately. These are corrections, not improvements - no pragmatic filter needed.
 
-0. **Verify backups** - Confirm `_vN` backup exists for every file about to be modified. If any backup is missing, create it NOW before proceeding. This is a hard prerequisite.
-1. **Fix plan** - CRITICAL first, then HIGH, group related fixes
-2. **Execute fixes** - Apply corrections, preserve IDs
-3. **Verify** - Re-read fixed output, check for regressions
+1. **Verify safety net** - Code files: confirm working tree is clean for scoped files (`git status`). Non-code files: confirm `_vN` backup exists. If any is missing, fix NOW before proceeding. This is a hard prerequisite.
+2. **Fix plan** - CRITICAL first, then HIGH, group related fixes
+3. **Execute fixes** - Apply corrections, preserve IDs
+4. **Verify** - Re-read fixed output, check for regressions
 
 ### Gate: Phase 2 → Phase 3
 
 - [ ] All rule violations fixed
 - [ ] No regressions from fixes
 - [ ] IDs preserved
-- [ ] Backups still intact (not accidentally overwritten by Phase 2 edits)
+- [ ] Safety nets intact (code: no untracked changes outside improvement scope; non-code: `_vN` files not overwritten)
 
 Pass: Proceed to Phase 3 | Fail: Continue Phase 2
 
@@ -509,7 +515,7 @@ Select ONE improvement. Research exhaustively. Prove justification. Apply or def
 2. **Deep research** - Execute context-specific Adversarial Collaborator techniques for the selected improvement only. Gather evidence: web research, local codebase analysis, examples, tests.
 3. **Pragmatic filter** - Run the 6 pragmatic questions (see GLOBAL-RULES). Requires evidence for question 6 (Proven?).
 4. **Decision**:
-   - **APPLY** - passes all 6 questions → verify `_vN` backup exists for target file, then apply the improvement, update Document History
+   - **APPLY** - passes all 6 questions → verify safety net exists for target file (code: clean baseline in git; non-code: `_vN` backup), then apply the improvement, update Document History
    - **DEFER** - fails any question → append to `[DEFERRED_FILE]` with assessment rationale, select next candidate (repeat from step 1)
 5. **Log remaining** - Unprocessed candidates → append to `[DEFERRED_FILE]` for next run
 
@@ -532,15 +538,18 @@ Apply APAPALAN + MECT to all changes made in Phase 2 and Phase 3.
 
 ## Evaluation
 
-After Phase 4, compare working file against its `_vN` backup:
+After Phase 4, compare working file against its safety net:
 - **Documents**: Diff working file vs `_vN`. Run SOCAS on both. Improved version must not score worse.
-- **Code**: Run tests on working file. Compare results against `_vN`. No new failures allowed.
-- **If degraded**: Revert by copying `_vN` back to working filename. Log failed improvement to `[DEFERRED_FILE]` with "caused regression" rationale.
+- **Code**: Run tests on working file. Use `git diff -- <file>` to review uncommitted changes against HEAD (baseline). No new failures allowed.
+- **If degraded**:
+  - Code: Revert via `git checkout -- <file>` (restores to HEAD baseline). Log failed improvement to `[DEFERRED_FILE]` with "caused regression" rationale.
+  - Non-code: Revert by copying `_vN` back to working filename. Log failed improvement to `[DEFERRED_FILE]` with "caused regression" rationale.
+- **If passed (code)**: Execute `/commit` workflow on improved code files with message `refactor(improve): <description> [workflow:improve.md]`. This single commit captures the entire improvement for clean diff and revert.
 
 ## Stuck Detection
 
 If 3 consecutive fix attempts cause regressions:
-1. Revert from `_vN` backup to working filename
+1. Revert (code: `git checkout -- <file>` to restore baseline; non-code: copy `_vN` back)
 2. Document in PROBLEMS.md
 3. Ask user for guidance
 
@@ -551,20 +560,20 @@ If 3 consecutive fix attempts cause regressions:
 - [ ] All rule violations fixed (Phase 2)
 - [ ] ONE improvement applied with proof of justification (Phase 3), or all candidates deferred
 - [ ] IDs preserved (no broken FR-XX, NFR-XX, DD-XX, IS-XX, TC-XX references)
-- [ ] No regressions vs `_vN` backup (Evaluation passed)
+- [ ] No regressions vs safety net (Evaluation passed)
 - [ ] APAPALAN/MECT compliance in all modified text (Phase 4)
 - [ ] STRUT plan checkboxes all checked
 
 ## Cleanup
 
 1. Delete `.tmp_STRUT_IMPROVE_<timestamp>.md` - plan is complete
-2. Keep all `_vN` backups - only user may delete them
+2. Keep all `_vN` backups (non-code) - only user may delete them. Code improvements committed as single atomic commit for clean diff/revert.
 3. If `[DEFERRED_FILE]` has entries, suggest `/reconcile` for pragmatic review
 
 ## Output
 
 - Modified files in place (original filenames, newest version)
-- `_vN` backups preserved for comparison and rollback
+- Safety nets preserved: `_vN` backups (non-code) and improvement commits (code) for comparison and rollback
 - Document History updated with improvement summary
 - `[DEFERRED_FILE]` with remaining candidates (if any)
 - PROBLEMS.md updated if stuck or regression occurred
@@ -573,7 +582,7 @@ If 3 consecutive fix attempts cause regressions:
 
 Run `/verify` to check:
 1. All phases completed (STRUT checkboxes)
-2. Versioned backups exist for all modified files
-3. No regressions vs `_vN` backup
+2. Safety nets exist for all modified files (code: improvement commit with clean diff; non-code: `_vN` backups)
+3. No regressions vs safety net
 4. APAPALAN/MECT compliance in modified text
 5. MNF items addressed
