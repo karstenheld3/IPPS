@@ -278,6 +278,7 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - [How to Write Good Document Templates](Docs/Concepts/_INFO_HOW_TO_WRITE_GOOD_DOCUMENT_TEMPLATES.md) - Patterns and rules for unambiguous templates that agents reliably instantiate
 - [How to Create Auditable Research Summaries](Docs/Concepts/_INFO_HOW_TO_CREATE_AUDITABLE_RESEARCH_SUMMARIES.md) - Citation and source-linking standard for 100% audit chain
 - [How to Detect AI-Assisted Writing](Docs/Concepts/_INFO_HOW_TO_DETECT_AI_ASSISTED_WRITING.md) - Detection signals for AI-assisted writing across style, structure, reasoning, and sourcing
+- [How to Check Factuality](Docs/Concepts/_INFO_HOW_TO_CHECK_FACTUALITY.md) - Epistemological framework, claim taxonomy, trust hierarchy, and verification methods for AI agent fact-checking
 - [Bundling Workflows with Skills](Docs/Concepts/_INFO_HOW_TO_IMPLEMENT_WORKFLOWS_AS_SKILLS.md) - Research on migrating workflows into skill-based architecture
 
 **Full registry**: [ID-REGISTRY.md](ID-REGISTRY.md) - All acronyms, TOPICs, states, and named concepts
@@ -522,8 +523,10 @@ Document templates for INFO, SPEC, IMPL, TEST, TASKS, and STRUT plans.
 - `TEST_TEMPLATE.md` - Test plans
 - `TASKS_TEMPLATE.md` - Task plans
 - `STRUT_TEMPLATE.md` - STRUT plans
+- `CRITIQUE_REVIEW_TEMPLATE.md` - Review documents from `/critique` (findings with risk/evidence/suggested action)
+- `FACT-CHECK_REVIEW_TEMPLATE.md` - Review documents from `/fact-check` (source/fact/conclusion verdicts)
 
-**Usage**: Invoked by `/write-spec`, `/write-impl-plan`, `/write-test-plan`, `/write-tasks-plan`.
+**Usage**: Invoked by `/write-spec`, `/write-impl-plan`, `/write-test-plan`, `/write-tasks-plan`, `/critique`, `/fact-check`.
 
 ## Agent Tools
 
@@ -677,7 +680,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ## Workflows Reference
 
-47 workflows in `.devin/workflows/`:
+48 workflows in `.devin/workflows/`:
 
 **Entry Points**
 - [`/build`](.devin/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
@@ -703,7 +706,8 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 **Quality**
 - [`/verify`](.devin/workflows/verify.md) - Verify work against specs and rules
 - [`/critique`](.devin/workflows/critique.md) - Find flawed assumptions, logic errors, hidden risks
-- [`/reconcile`](.devin/workflows/reconcile.md) - Pragmatic review of critique findings
+- [`/fact-check`](.devin/workflows/fact-check.md) - Verify factual claims against external reality (Extract → Materialize → Verify → Report)
+- [`/reconcile`](.devin/workflows/reconcile.md) - Pragmatic review of critique and fact-check findings
 - [`/drift-detect`](.devin/workflows/drift-detect.md) - Post-execution drift detection, persist gaps to __DRIFT_ file
 - [`/drift-correct`](.devin/workflows/drift-correct.md) - Close drift gaps identified by /drift-detect
 - [`/improve`](.devin/workflows/improve.md) - Depth-first improvement (one proven change per run). Always makes versioned backups so user can compare with older versions. Uses lenses and web research to add creative thinking and analysis before improving the target in one specific field or angle.
@@ -897,14 +901,19 @@ Creates `[BUG_FOLDER]` with PROBLEMS.md, runs impact assessment, and documents f
 
 ### Quality Review
 
-**Workflows:** [`/critique`](.devin/workflows/critique.md), [`/reconcile`](.devin/workflows/reconcile.md), [`/improve`](.devin/workflows/improve.md)
+**Workflows:** [`/critique`](.devin/workflows/critique.md), [`/fact-check`](.devin/workflows/fact-check.md), [`/reconcile`](.devin/workflows/reconcile.md), [`/improve`](.devin/workflows/improve.md)
 
 Devil's Advocate review (find flaws):
 ```
 /critique
 ```
 
-Pragmatic review of critique findings:
+Fact-check document claims against external reality:
+```
+/fact-check
+```
+
+Pragmatic review of critique and fact-check findings:
 ```
 /reconcile
 ```
