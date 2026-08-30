@@ -155,6 +155,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **EDIGA** - Energie Digitalisierung A (digitalization in energy sector research)
 - **ENDIG** - Energie Digitalisierung (digitalization in energy sector research)
 - **ENDSY** - Energie Digital Synthese (consolidated INFO from EnergieDigitalA + B)
+- **FCTCHECK** - Factcheck Workflow (factuality verification for agent-generated documents). INFO: `Docs/Concepts/_INFO_HOW_TO_CHECK_FACTUALITY.md`
 - **FINRESAI** - Finance Research AI (research quality/speed value in finance, AI application critique)
 - **FINSTRWF** - Follow Instructions Workflow (post-execution instruction-following gap analysis and remediation)
 - **GLOB** - Global/project-wide items
@@ -192,6 +193,9 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 
 ## Document History
+
+**[2026-08-30 15:39]**
+- Added: FCTCHECK topic (Factcheck Workflow - factuality verification for agent-generated documents)
 
 **[2026-08-13 14:55]**
 - Added: RECSLFIM topic (Recursive Self-Improvement - AI systems automating own development)
