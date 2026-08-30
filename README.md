@@ -677,7 +677,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ## Workflows Reference
 
-45 workflows in `.devin/workflows/`:
+47 workflows in `.devin/workflows/`:
 
 **Entry Points**
 - [`/build`](.devin/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
@@ -734,6 +734,7 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 **Utility**
 - [`/commit`](.devin/workflows/commit.md) - Create conventional commits
+- [`/deploy`](.devin/workflows/deploy.md) - Deploy project to configured hosting platform
 - [`/switch-model`](.devin/workflows/switch-model.md) - Switch Cascade AI model tier (HIGH, MID, LOW)
 - [`/project-release`](.devin/workflows/project-release.md) - Create a dated release with comprehensive release notes
 - [`/cleanup`](.devin/workflows/cleanup.md) - Delete temporary files and artifacts left by workflows and skills

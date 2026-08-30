@@ -280,7 +280,7 @@ These locations contain replicas that must be kept in sync:
 
 5. **If a new model was added**: add test entries to `test-call-llm.py`, run tests, update `LLM_EVALUATION_CLAUDE_MODELS.md`
 
-6. **Create source documentation** in `[DEVSYSTEM_FOLDER]/skills/llm-evaluation/model-sources/` with `[DATE]_` prefix
+6. **Create source documentation** in `[WORKSPACE]/_Sessions/!ModelRegistryUpdate/model-sources/` with `[DATE]_` prefix
 
 ### Verification
 
