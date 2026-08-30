@@ -1,5 +1,21 @@
 # Failure Log
 
+## 2026-08-30 - Skipped SOP 7 Post-Release Version Bump
+
+### [HIGH] `GLOB-FL-040` Released v4.2 without executing SOP 7 (post-release version bump)
+
+- **When**: 2026-08-30 15:00 UTC+02:00
+- **Where**: `/project-release` workflow execution for v4.2
+- **What**: Completed all release steps (commits, tag, push, GitHub release) but did not rename `DevSystemV4.2` to `DevSystemV4.3` or update NOTES.md. Working folder remained identical to the tagged release name, making it impossible to distinguish released state from ongoing work. Additionally, release notes were placed at workspace root (`RELEASE_NOTES_2026-08-30.md`) instead of `Docs/ReleaseNotes/RELEASE_NOTES_v4.2_2026-08-30.md` per established convention. User had to point out both issues.
+- **Why it went wrong**:
+  - `/project-release` workflow has no reference to SOP 7 or SOPS.md
+  - Agent treated version bump as optional/separate instead of mandatory post-release step
+  - Agent asked for confirmation to execute SOP 7 instead of just doing it (SOP 7 says "immediately after git tag and git push --tags" and "LAST step of the release process")
+  - Release notes location: agent did not check `Docs/ReleaseNotes/` for existing naming convention before creating the file
+- **Workflow re-read findings**: `SOPS.md` SOP 7 line 391: "Immediately after `git tag` and `git push --tags` for a release. This is the LAST step of the release process." `project-release.md` contains no reference to SOP 7, SOPS.md, version bumping, or release notes location convention.
+- **Evidence**: User asked "what about the devsystem folder version? When should that be upped?" and "Yes why did you not do that?" and "where are the release notes? E:\Dev\IPPS\Docs\ReleaseNotes"
+- **Suggested fix**: 1) Add SOP 7 reference to `project-release.md` as final step. 2) Add release notes location convention to `project-release.md`. 3) Agent must read SOPS.md during `/project-release` execution.
+
 ## 2026-07-16 - Incomplete Sync: Missed devsystem-core.md Workflow Reference
 
 ### [LOW] `GLOB-FL-039` Synced /delete workflow to README.md but not to devsystem-core.md Workflow Reference list
