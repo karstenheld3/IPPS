@@ -127,7 +127,7 @@ $targets = @(
 # Deprecated files allowlist
 $deprecatedFiles = @{
     "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md", "edird-core.md", "cascade-model-switching.md", "research-and-report-writing-rules.md", "implementation-specification-rules.md")
-    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md", "deliver.md", "design.md", "explore.md", "go-research.md", "refine.md", "session-resume.md", "start-conversation.md", "update-conversation.md", "recap.md", "continue.md", "enforce.md")
+    "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md", "deliver.md", "design.md", "explore.md", "go-research.md", "refine.md", "session-resume.md", "start-conversation.md", "update-conversation.md", "recap.md", "continue.md", "enforce.md", "solve.md", "build.md", "partition.md")
     "skills\write-documents" = @("NOTES_TEMPLATE.md", "REVIEW_TEMPLATE.md")
 }
 $deprecatedSkillFolders = @("edird-phase-model", "ipps-deep-research")
@@ -424,6 +424,12 @@ Note: This workflow (`deploy-to-all-repos.md`) lives in workspace root, not in `
 - `workflows/continue.md` - Execute next items on plan
 - `workflows/fail.md` - Record failures to FAILS.md
 - `workflows/learn.md` - Extract learnings from failures
+
+### V4.3 Migration (Removed Workflows)
+
+- `workflows/solve.md` → removed (use `/go` instead)
+- `workflows/build.md` → removed (use `/go` instead)
+- `workflows/partition.md` → removed (use `/write-tasks-plan` instead)
 
 ### V3.7 → V3.8 Migration (Removed Workflows)
 

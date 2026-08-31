@@ -119,12 +119,10 @@ your-project/
 
 ## Workflows Reference
 
-47 workflows in `.devin/workflows/`:
+45 workflows in `.devin/workflows/`:
 
 **Entry Points**
-- [`/build`](.devin/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
-- [`/solve`](.devin/workflows/solve.md) - Explore problems, evaluate ideas, make decisions (auto-creates session)
-- [`/go`](.devin/workflows/go.md) - Autonomous loop until goal reached
+- [`/go`](.devin/workflows/go.md) - Autonomous loop until goal reached (BUILD or SOLVE mode, auto-creates session, follows EDIRD)
 - [`/prime`](.devin/workflows/prime.md) - Prime context with workspace files
 
 **Document Cycle**
@@ -140,7 +138,6 @@ your-project/
 - [`/write-minto`](.devin/workflows/write-minto.md) - Develop full Minto Pyramid article from draft (tree-first, then prose)
 - [`/implement`](.devin/workflows/implement.md) - Implement approved changes - code from plans or corrections from reviews. Detects context: Build (SPEC/IMPL → code) or Review Pipeline (`*_REVIEW.md` → corrections to source documents).
 - [`/test`](.devin/workflows/test.md) - Run tests based on scope and context
-- [`/partition`](.devin/workflows/partition.md) - Partition plans into discrete tasks
 
 **Quality**
 - [`/verify`](.devin/workflows/verify.md) - Verify work against specs and rules
@@ -268,18 +265,16 @@ Typically loads: `README.md`, `!NOTES.md`, `!PROBLEMS.md`, `FAILS.md`, `LEARNING
 
 ### Workflow Entry Points
 
-Both workflows **automatically create a session**, follow EDIRD phases, and close when done.
+The `/go` workflow **automatically creates a session**, follows EDIRD phases, and closes when done. It detects BUILD (code output) or SOLVE (knowledge output) mode from the task.
 
-**Workflows:** [`/build`](.devin/workflows/build.md), [`/solve`](.devin/workflows/solve.md)
-
-Start a BUILD workflow (create software, new features):
+Start a BUILD task (create software, new features):
 ```
-/build "Add user authentication API"
+/go "Add user authentication API"
 ```
 
-Start a SOLVE workflow (research, analysis, decisions):
+Start a SOLVE task (research, analysis, decisions):
 ```
-/solve "Evaluate database migration options"
+/go "Evaluate database migration options"
 ```
 
 ### Session Workflows
@@ -449,11 +444,11 @@ Run tests based on scope and context:
 
 ### Planning Tools
 
-**Workflows:** [`/partition`](.devin/workflows/partition.md), [`/write-strut`](.devin/workflows/write-strut.md), [`/write-info`](.devin/workflows/write-info.md)
+**Workflows:** [`/write-tasks-plan`](.devin/workflows/write-tasks-plan.md), [`/write-strut`](.devin/workflows/write-strut.md), [`/write-info`](.devin/workflows/write-info.md)
 
 Split plans into discrete tasks:
 ```
-/partition
+/write-tasks-plan
 ```
 
 Create STRUT plan with proper format:
@@ -808,7 +803,7 @@ EDIRD phase model for long-running agentic tasks.
 **Files**:
 - `SKILL.md` - Phase gates, workflow examples, effort allocation
 
-**Usage**: Invoked automatically by `/build` and `/solve` workflows.
+**Usage**: Invoked automatically by `/go` workflow.
 
 ### ms-playwright-mcp
 

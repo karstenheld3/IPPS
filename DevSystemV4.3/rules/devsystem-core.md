@@ -39,7 +39,7 @@ Core definitions and structure for the development system.
   - Example: `CRAWLENG-TP01`, `AUTHSYST-TP01`
 - **[TASKS]** (TK): Partitioned task lists from IMPL/TEST plans
   - Example: `CRAWLENG-TK01`, `AUTHSYST-TK01`
-  - Created via `/write-tasks-plan` or `/partition`
+  - Created via `/write-tasks-plan`
 
 ### Tracking Documents
 
@@ -211,7 +211,6 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 ## Workflow Reference
 
 - `/bugfix` - Record and fix bugs (SESSION-MODE or PROJECT-MODE)
-- `/build` - BUILD workflow entry point (code output)
 - `/cleanup` - Delete temporary files and artifacts left by workflows
 - `/commit` - Create conventional commits
 - `/conversation-draft` - Draft emails, messages, or other text as the user
@@ -229,7 +228,6 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 - `/implement` - Implement approved changes - code from plans or corrections from reviews
 - `/improve` - Depth-first improvement (one proven change per run)
 - `/learn` - Extract learnings from resolved problems
-- `/partition` - Split plans into discrete tasks
 - `/prime` - Load workspace context
 - `/project-release` - Create a dated release with comprehensive release notes
 - `/propose-minto` - Generate AMINTON argument candidates from research material
@@ -242,7 +240,6 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 - `/session-load` - Resume existing session
 - `/session-new` - Initialize new session
 - `/session-save` - Save session progress
-- `/solve` - SOLVE workflow entry point (knowledge output)
 - `/switch-model` - Switch Cascade AI model tier (HIGH, MID, LOW)
 - `/sync` - Document synchronization
 - `/test` - Run tests based on scope
@@ -256,6 +253,7 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 - `/write-strut` - Create STRUT plans with proper format
 - `/write-tasks-plan` - Create tasks plan from IMPL/TEST
 - `/write-template` - Create purpose-built document templates
+- `/write-prompts` - Create prompt queue files for sequential headless execution
 - `/write-test-plan` - Create test plan from spec
 
 ## Quality Pipelines

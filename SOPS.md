@@ -205,9 +205,15 @@ foreach ($r in $linkedRepos) { Test-Path "$r\skills\<skill>" }  # all should be 
    ```
    All prior releases MUST be preserved in `[WORKSPACE]\_OldDevSystemVersions\`. Never delete a version folder without moving it there first.
 
-7. **Commit before deploying**: new version is a major change, isolate in git history
+7. **Run workflow reference check** (MANDATORY):
+   ```powershell
+   .\check_workflow_refs.ps1
+   ```
+   Fix any broken references before proceeding. Zero broken references required.
 
-8. **Deploy to linked repos** via `/deploy-to-all-repos` (always preview first)
+8. **Commit before deploying**: new version is a major change, isolate in git history
+
+9. **Deploy to linked repos** via `/deploy-to-all-repos` (always preview first)
 
 ### Verification
 
@@ -457,11 +463,30 @@ $dst = Get-ChildItem "[WORKSPACE]\.devin" -Recurse -File | ForEach-Object { $_.F
 Compare-Object $src $dst | Where-Object SideIndicator -eq "<="
 ```
 
+### Workflow reference integrity check
+
+Mandatory before any release (SOP 4 step 7). Detects references to non-existing workflows in rules, skills, README, and ID-REGISTRY.
+
+```powershell
+# Auto-detects [DEVSYSTEM_FOLDER] from NOTES.md
+.\check_workflow_refs.ps1
+
+# Or specify explicitly
+.\check_workflow_refs.ps1 -DevSystemFolder "[DEVSYSTEM_FOLDER]"
+```
+
+Expected: `None found!` (zero broken references). Any match must be fixed before release.
+
 ### Linked repo drift check
 
 Run `/deploy-to-all-repos` in preview mode. Any unexpected items in `Add` / `Overwrite` / `Delete` indicate a missed sync or unregistered skill.
 
 ## Document History
+
+**[2026-08-31 18:24]**
+- Added: Mandatory workflow reference check (SOP 4 step 7) using `check_workflow_refs.ps1`
+- Added: Workflow reference integrity check in Common Verification Commands
+- Changed: SOP 4 steps renumbered (commit → step 8, deploy → step 9)
 
 **[2026-07-13 13:54]**
 - Added: SOP 7 for post-release version bump (increment working version after tagging)

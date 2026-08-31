@@ -187,13 +187,21 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **CSMP** - Cascade Metaprompt (AI coding assistant metaprompt extraction and analysis)
 - **NTICP** - Network Traffic Interception (programmatic HTTPS interception for LLM prompt extraction)
 - **WSFT** - Windsurf Features (comprehensive feature research for updating WSRF-IN01)
+- **IPPSPRMTFMT** - IPPS Prompt File Format (syntax, semantics, execution model for prompt queue files)
 - **HMNWRTPTN** - Human Writing Patterns (forensic linguistics research for conversation humanizing rules)
 - **WMRK** - Watermarking and Provenance (SynthID-Text, C2PA, embedded signal detection for AI-generated text)
 - **RUSESCPOL** - Russia escalation policy in Ukraine war (official statements, nuclear doctrine, red lines)
 - **RECSLFIM** - Recursive Self-Improvement (AI systems accelerating or automating their own development)
+- **WRTPRMPT** - Write Prompts Workflow (prompt queue file generation for sequential headless execution)
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 
 ## Document History
+
+**[2026-08-31 22:15]**
+- Added: IPPSPRMTFMT topic (IPPS Prompt File Format specification)
+
+**[2026-08-31 21:26]**
+- Added: WRTPRMPT topic (Write Prompts Workflow - prompt queue file generation)
 
 **[2026-08-30 15:39]**
 - Added: FCTCHECK topic (Factcheck Workflow - factuality verification for agent-generated documents)
