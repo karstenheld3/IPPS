@@ -39,7 +39,7 @@ Invoke based on context:
 **PROJECT-MODE** - Re-read workspace-level documents:
 - README.md
 - !NOTES.md or NOTES.md
-- !PROBLEMS.md or PROBLEMS.md (if exists)
+- PROBLEMS.md (if exists)
 - !PROGRESS.md or PROGRESS.md (if exists)
 - FAILS.md
 - LEARNINGS.md (if exists)

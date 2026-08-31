@@ -261,7 +261,7 @@ The prime workflow:
 4. Detects workspace scenario (project structure, version strategy, work mode)
 5. Reports summary: files read, scenario detected
 
-Typically loads: `README.md`, `!NOTES.md`, `!PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`, `ID-REGISTRY.md`, agent rules
+Typically loads: `README.md`, `!NOTES.md`, `PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`, `ID-REGISTRY.md`, agent rules
 
 ### Workflow Entry Points
 
@@ -931,7 +931,7 @@ Located in workspace root (or project root in monorepos):
 | File             | Required     | Purpose                                                    |
 |------------------|--------------|------------------------------------------------------------|
 | `!NOTES.md`      | Yes          | Critical project info, agent instructions, key patterns    |
-| `!PROBLEMS.md`   | Optional     | Known issues across the project                            |
+| `PROBLEMS.md`   | Optional     | Known issues across the project                            |
 | `!PROGRESS.md`   | Optional     | Overall project progress                                   |
 | `FAILS.md`       | Auto-created | Lessons learned from past mistakes (via `/fail` workflow)  |
 | `LEARNINGS.md`   | Auto-created | Reusable patterns (via `/learn` workflow analyzing fails)  |
@@ -973,7 +973,7 @@ Located in session folder (e.g., `_2026-01-15_FixAuthBug/`):
 When [`/session-finalize`](.devin/workflows/session-finalize.md) runs:
 - **FAILS.md** - [MEDIUM] and [HIGH] severity entries sync to workspace `FAILS.md`
 - **LEARNINGS.md** - Patterns from [MEDIUM]/[HIGH] fails sync to workspace `LEARNINGS.md` or `!NOTES.md`
-- **PROBLEMS.md** - Open/deferred problems sync to workspace `!PROBLEMS.md`
+- **PROBLEMS.md** - Open/deferred problems sync to workspace `PROBLEMS.md`
 
 This ensures lessons learned survive session boundaries and prevent repeated mistakes.
 

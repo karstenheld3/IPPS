@@ -133,7 +133,7 @@ Three dimensions define how the agent should behave:
 │   └── FAILS.md            # Lessons learned
 ├── src/                    # Source code
 ├── !NOTES.md               # Workspace notes (priority file)
-├── !PROBLEMS.md            # Known problems
+├── PROBLEMS.md            # Known problems
 ├── !PROGRESS.md            # Overall progress
 └── FAILS.md                # Lessons learned (workspace-level)
 ```
@@ -158,7 +158,7 @@ Three dimensions define how the agent should behave:
 ├── [PROJECT_B]/
 │   └── ...                 # Same structure
 ├── !NOTES.md               # Workspace-level notes
-├── !PROBLEMS.md            # Workspace-level problems
+├── PROBLEMS.md            # Workspace-level problems
 ├── !PROGRESS.md            # Workspace-level progress
 └── FAILS.md                # Lessons learned (workspace-level)
 ```

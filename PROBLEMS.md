@@ -33,6 +33,7 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
    - **write-code** - Language-independent rules with language-specific rules as extensions (subfolders)
    - **write-workflow** - Standardized part of skill, replaces current Cascade workflows and old Claude Code commands
    - **compare** - Branching comparison workflow: 1) different versions of same file: use classic diff, 2) different files: use LLM compare with document-type-aware prompts and focuses, 3) folders, projects, office files: use extra tools and branching to create useful outputs. Must produce standardized file that is then used with sync.md to check dependent files for change propagation.
+   - **migrate** - Cross-project and cross-workspace migration: 1) migrate code from one project to another (extract, adapt imports/paths, verify), 2) migrate documents and folders from one workspace to another (preserve IDs, update references, handle naming conflicts)
 
 3. **Generic self-reflection using MNF**
    - How to add self-reflection to have better output consistency in the first generative run?

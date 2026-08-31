@@ -854,7 +854,7 @@ This document is based on analytical reasoning about epistemological principles 
 **Primary Sources:**
 - `FCTCHECK-IN01-SC-DVSYS-INFORULES`: `INFO_RULES.md` - Existing source citation requirements (INFO-SC-01 through INFO-SC-05) [VERIFIED]
 - `FCTCHECK-IN01-SC-DVSYS-VRFY`: `verify.md` - Existing verification workflow scope and INFO section (lines 152-166) [VERIFIED]
-- `FCTCHECK-IN01-SC-DVSYS-PROBS`: `!PROBLEMS.md` - DVSYS-FT-0001 item 2 factcheck requirements definition [VERIFIED]
+- `FCTCHECK-IN01-SC-DVSYS-PROBS`: `PROBLEMS.md` - DVSYS-FT-0001 item 2 factcheck requirements definition [VERIFIED]
 - `FCTCHECK-IN01-SC-DVSYS-APAPALAN`: `APAPALAN_RULES.md` - 26 precision/brevity/structure/communication/naming rules [VERIFIED]
 - `FCTCHECK-IN01-SC-DVSYS-MECT`: `MECT_WRITING_RULES.md` - 22 voice/word-choice/terminology/heading/list/description/visual rules [VERIFIED]
 - `FCTCHECK-IN01-SC-DVSYS-SOCAS`: `SOCAS_RULES.md` - 17 quality evaluation criteria with context-appropriate subsets [VERIFIED]
