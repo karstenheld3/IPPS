@@ -3,14 +3,14 @@
 **Doc ID**: DVDT-IN01
 **Goal**: Comprehensive reference for Devin Desktop (formerly Windsurf) - agent harnesses, AI models, customization, developer tools, enterprise controls, and architecture internals
 **Version scope**: Devin Desktop 3.8.20+ / Devin Local 2026.5.26+
-**Timeline**: Created 2026-08-27, Updated 1 time (2026-08-27 - 2026-08-27)
+**Timeline**: Created 2026-08-27, Updated 2 times (2026-08-27 - 2026-08-30)
 
 ## Summary
 
 **Agent Architecture:**
 - Devin Local (Rust-based) replaces Cascade as primary agent with subagents, OS-level sandboxing, and 5 permission modes [VERIFIED]
 - Conversation sharing now supported in Devin Local (previously Cascade-only) [VERIFIED]
-- ACP open protocol enables Codex CLI, Claude Agent, OpenCode, Junie, Gemini CLI as first-party agents [VERIFIED]
+- ACP open protocol enables 12+ agents (Codex, Claude, OpenCode, Junie, Gemini, Amp, Cline, etc.) plus custom agent registration via local registry [VERIFIED]
 
 **AI Models:**
 - SWE-1.7 replaces SWE-1.6 with 4.5x improvement on FrontierCode (9.4% → 42.3%) [VERIFIED]
@@ -224,24 +224,32 @@ Detailed commands and slash commands in Section 13.
 
 Devin Desktop ships with [ACP](https://agentclientprotocol.com/), an open-source protocol that standardizes communication between code editors and coding agents. Analogous to Language Server Protocol (LSP) for language intelligence. Third-party agents get the same interface as Devin: Kanban view, Spaces, shared context. [VERIFIED]
 
-**Compatible agents:**
+**Compatible agents (built-in registry):**
 - **Codex CLI** (OpenAI)
 - **Claude Agent** (Anthropic)
 - **OpenCode** - Open source coding agent
 - **Junie** (JetBrains)
 - **Gemini CLI** (Google)
-- **Custom agents** - In-house agents built by teams [VERIFIED]
+- **Amp** - Frontier coding agent
+- **Google Antigravity** - Google's AI coding agent
+- **Auggie CLI** (Augment Code)
+- **Autohand Code** (Autohand AI)
+- **Cline** - Autonomous coding agent CLI
+- **Codebuddy Code** (Tencent Cloud)
+- **Agoragentic** - Agent marketplace with 174+ AI capabilities
+- **Custom agents** - Any ACP-compatible binary registered via local or team registry [VERIFIED 2026-08-30]
 
 **Enabling:**
-1. Command Palette > "Windsurf User Settings"
+1. Command Palette (`Ctrl+Shift+P`) > "Devin User Settings"
 2. Click "Agents" tab
 3. Toggle on desired ACP agents
-4. Restart Devin Desktop [VERIFIED]
+4. Restart Devin Desktop (or run `Reload ACP Connections` from Command Palette to iterate without restart) [VERIFIED 2026-08-30]
 
 **Registry configuration:**
-- Local: `~/.devin/acp/registry.json` (or `~/.devin-next/acp/registry.json`)
-- Team: configured via team settings
-- Command Palette: "Open Local ACP Registry Config" [VERIFIED]
+- **macOS/Linux**: `~/.windsurf/acp/registry.json` (Devin Desktop) or `~/.windsurf-next/acp/registry.json` (Next) [VERIFIED]
+- **Windows**: Documented paths above do NOT work. The extension source (`getWindsurfConfigDirectory` in `windsurf/dist/extension.js`) hardcodes `path.join(os.homedir(), "AppData", "Roaming", "Code", "User")` on Windows, ignoring the `.windsurf-next` channel variable. Actual path: `%APPDATA%\Code\User\acp\registry.json` [TESTED 2026-08-31]
+- **Team**: configured via Devin Settings at [windsurf.com/team/settings](https://windsurf.com/team/settings)
+- Command Palette: "Open Local ACP Registry Config" creates/opens the file at the correct path for the current OS and channel [VERIFIED 2026-08-31]
 
 **ACP registry format:**
 ```json
@@ -257,17 +265,31 @@ Devin Desktop ships with [ACP](https://agentclientprotocol.com/), an open-source
       "license": "proprietary",
       "distribution": {
         "binary": {
-          "darwin-aarch64": { "cmd": "devin", "args": ["acp"] },
-          "windows-x86_64": { "cmd": "devin", "args": ["acp"] }
+          "darwin-aarch64": { "archive": "", "cmd": "devin", "args": ["acp"] },
+          "windows-x86_64": { "archive": "", "cmd": "devin", "args": ["acp"] }
         }
       }
     }
-  ]
+  ],
+  "extensions": []
 }
 ```
-[VERIFIED]
+[VERIFIED 2026-08-30]
+
+**Custom agent registration:**
+1. Add agent entry to local registry JSON (`cmd` = absolute path to binary, `args` = ACP flag)
+2. Binary must already be installed locally -- Devin Desktop does not download from `archive` URLs
+3. Restart Devin Desktop or run `Reload ACP Connections` from Command Palette
+4. Enable the agent in Devin User Settings > Agents tab
+5. Agent environment variables: configure via `...` button next to each agent in the Agents tab, or via `devin.acp.agentEnv.<agentId>` in `settings.json` [VERIFIED 2026-08-30]
 
 **Availability:** Pro, Max, and Teams users. Enterprise admins contact account team for third-party agent access. [VERIFIED]
+
+**Limitations (Devin Desktop as ACP client):**
+- Session modes not exposed in UI -- use session config option with `"mode"` category instead
+- Terminal capabilities not advertised -- agents run commands in own subprocess and stream output via `tool_call` updates
+- Distribution downloads not supported -- binary must be pre-installed
+- **Windows registry path bug**: `getWindsurfConfigDirectory()` returns `%APPDATA%\Code\User` on Windows regardless of product channel (stable/next/insiders/airgap). The `.windsurf-next` variable is set but never used in the Windows branch. macOS and Linux use the correct channel-specific `~/.windsurf-*` path. [TESTED 2026-08-31]
 
 ### 3.5 Cascade
 
@@ -1132,6 +1154,15 @@ Devin.exe (Electron main process)
 ```
 ~14 Electron processes + 1 language server handling ALL AI communication. [TESTED 2026-05 on Windsurf]
 
+**Bundled dependencies:**
+- **ripgrep 15.0.0** (`rg.exe`) at `resources/app/node_modules/@vscode/ripgrep-universal/bin/win32-x64/rg.exe` (~5.4 MB). Inherited from VS Code OSS. Features: PCRE2 with JIT, SIMD (SSE2/SSSE3/AVX2 at runtime). Used by:
+  - Workspace text search (`Ctrl+Shift+F`)
+  - Extension host grep (extensions calling VS Code search API)
+  - Cascade/Devin Local context gathering (`Ptn.quickGrepContext`)
+  - Deepwiki summary indexing (`NMn._loadDeepwikiSummary`)
+  - Node summary extraction (`DN.getSummary`)
+- Missing `rg.exe` causes cascading `ENOENT` errors across extension host, search, and context features. Source: [BurntSushi/ripgrep](https://github.com/BurntSushi/ripgrep) [TESTED 2026-08-31]
+
 **API endpoints:**
 - `https://server.self-serve.devin.com` - Primary API (auth, settings, telemetry)
 - `https://inference.codeium.com` - AI inference (chat, completions, tool calls) [TESTED 2026-05]
@@ -1181,6 +1212,8 @@ Devin.exe (Electron main process)
 - `DVDT-IN01-SC-ANTHR-REST`: https://www.anthropic.com/news/fable-mythos-access - Fable/Mythos restored [VERIFIED]
 - `DVDT-IN01-SC-OPENAI-PC`: https://openai.com/index/advancing-the-price-performance-frontier-with-gpt-5-6/ - GPT-5.6 price cuts [VERIFIED]
 - `DVDT-IN01-SC-ACPSP-HOME`: https://agentclientprotocol.com/ - ACP specification [VERIFIED]
+- `DVDT-IN01-SC-DVNDC-ACP`: https://docs.devin.ai/desktop/acp - ACP agent setup and registry [VERIFIED]
+- `DVDT-IN01-SC-DVNDC-ACPC`: https://docs.devin.ai/desktop/acp-custom - Building custom ACP agents [VERIFIED]
 - `DVDT-IN01-SC-DVNDC-MCP`: https://docs.devin.ai/work-with-devin/devin-mcp - Devin MCP Server [VERIFIED]
 
 **Secondary Sources:**
@@ -1189,6 +1222,25 @@ Devin.exe (Electron main process)
 - `DVDT-IN01-SC-CLDCD-SKLL`: https://code.claude.com/docs/en/skills - Claude Code skills reference [VERIFIED]
 
 ## 19. Document History
+
+**[2026-08-31 00:35]**
+- Added: Section 17 bundled dependencies -- ripgrep 15.0.0 binary, location, features, IDE uses, failure mode
+
+**[2026-08-31 00:10]**
+- Fixed: Section 3.4 Windows ACP registry path -- documented `~/.windsurf-next/acp/` does not work on Windows
+- Added: Root cause analysis of `getWindsurfConfigDirectory()` Windows branch bug
+- Added: `Open Local ACP Registry Config` as recommended discovery method
+- Changed: Verification labels updated to `[TESTED 2026-08-31]` for path findings
+
+**[2026-08-30 23:50]**
+- Changed: Section 3.4 ACP registry paths corrected (`~/.windsurf/acp/` not `~/.devin/acp/`)
+- Changed: Command Palette label "Windsurf User Settings" → "Devin User Settings"
+- Added: 7 agents to compatible agents list (Amp, Google Antigravity, Auggie CLI, Autohand Code, Cline, Codebuddy Code, Agoragentic)
+- Added: Custom agent registration workflow (5 steps)
+- Added: ACP client limitations (session modes, terminal, distribution downloads)
+- Added: `Reload ACP Connections` command, env var configuration via `...` button
+- Added: `archive` and `extensions` fields to registry format example
+- Added: Sources DVDT-IN01-SC-DVNDC-ACP, DVDT-IN01-SC-DVNDC-ACPC
 
 **[2026-08-27 20:12]**
 - Fixed: AP-PR-06 acronym expansions on first use (GHSA, MoE, SSE, CORS, XSS, OIDC, SAML, FedRAMP)
