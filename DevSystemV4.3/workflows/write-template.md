@@ -17,6 +17,7 @@ Create purpose-built document templates that produce consistent, comparable inst
 
 ## MUST-NOT-FORGET
 
+- **NEVER modify tracking documents** (PROGRESS.md, PROBLEMS.md, NOTES.md, FAILS.md). Write-* workflows create NEW files only. Tracking docs are session state, not agent operation artifacts.
 - Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content in any file → examples generic. Assess context BEFORE writing.
 - Template IS the document skeleton, not a description of one (TMPL-ST-01)
 - All annotations use XML comments only - no italic, bracket, or prose annotations (TMPL-AN-01)
