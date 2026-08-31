@@ -86,7 +86,10 @@ AMINTON provides arguments    → Tree notation for structured, verifiable Minto
 - [Core Concepts](#core-concepts)
 - [Overview](#overview)
 - [How to Add to Your Project](#how-to-add-to-your-project)
-- [DevSystem Versions](#devsystem-versions)
+- [Workflows Reference](#workflows-reference)
+- [Skills Reference](#skills-reference)
+- [File Naming Conventions](#file-naming-conventions)
+- [Usage Examples](#usage-examples)
 - [Agentic English](#agentic-english)
 - [EDIRD Phase Model](#edird-phase-model---explore-design-implement-refine-deliver)
 - [STRUT - Structured Thinking](#strut---structured-thinking)
@@ -95,11 +98,8 @@ AMINTON provides arguments    → Tree notation for structured, verifiable Minto
 - [Key Conventions](#key-conventions)
 - [Agent Tools](#agent-tools)
 - [Project Structure](#project-structure)
-- [Skills Reference](#skills-reference)
-- [File Naming Conventions](#file-naming-conventions)
 - [Workspaces and Sessions](#workspaces-and-sessions)
-- [Workflows Reference](#workflows-reference)
-- [Usage Examples](#usage-examples)
+- [DevSystem Versions](#devsystem-versions)
 - [Agent Compatibility](#agent-compatibility)
 
 ## Overview
@@ -117,23 +117,387 @@ your-project/
     └── skills/
 ```
 
-## DevSystem Versions
+## Workflows Reference
 
-- **[DevSystemV4.2](DevSystemV4.2/)** - Current system
+48 workflows in `.devin/workflows/`:
 
-Older versions in [`_OldDevSystemVersions/`](_OldDevSystemVersions/):
-- DevSystemV4.1 - Conversation intelligence, agent research, write-documents refinement
-- DevSystemV4.0 - GRUC drift prevention, AMINTON structured argumentation, 10 core concepts
-- DevSystemV3.8 - Windsurf to Devin migration (.windsurf/ renamed to .devin/), SOP 5, Claude Opus 4.8
-- DevSystemV3.7 - Deep research profiles, translation workflow, recap/continue removal, cleanup workflow
-- DevSystemV3.6 - SOCAS quality criteria, 4-phase /improve workflow, NFR in SPEC, STRUT self-tracking
-- DevSystemV3.5 - Generic /fix workflow, improved /implement and /go workflows
-- DevSystemV3.4 - Enhanced logging rules, table formatting, character rules cleanup
-- DevSystemV3.3 - Deep-research skill, shared .tools folder
-- DevSystemV3.2 - Concurrent blocks, effort allocation, planning guidance
-- DevSystemV3.1 - STRUT notation
-- DevSystemV3 - EDIRD phase model and Agentic English
-- DevSystemV2.1, V2, V1 - Legacy versions
+**Entry Points**
+- [`/build`](.devin/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
+- [`/solve`](.devin/workflows/solve.md) - Explore problems, evaluate ideas, make decisions (auto-creates session)
+- [`/go`](.devin/workflows/go.md) - Autonomous loop until goal reached
+- [`/prime`](.devin/workflows/prime.md) - Prime context with workspace files
+
+**Document Cycle**
+- [`/research`](.devin/workflows/research.md) - Structured research with verification labels and source retention
+- [`/deep-research`](.devin/workflows/deep-research.md) - Deep research (MEPI or MCPI) with domain-specific patterns
+- [`/write-info`](.devin/workflows/write-info.md) - Create INFO document from research
+- [`/write-spec`](.devin/workflows/write-spec.md) - Create specification from requirements
+- [`/write-impl-plan`](.devin/workflows/write-impl-plan.md) - Create implementation plan from spec
+- [`/write-test-plan`](.devin/workflows/write-test-plan.md) - Create test plan from spec
+- [`/write-tasks-plan`](.devin/workflows/write-tasks-plan.md) - Create tasks plan from IMPL/TEST
+- [`/write-strut`](.devin/workflows/write-strut.md) - Create STRUT plans with proper format
+- [`/propose-minto`](.devin/workflows/propose-minto.md) - Generate 3 scored AMINTON argument candidates from research material
+- [`/write-minto`](.devin/workflows/write-minto.md) - Develop full Minto Pyramid article from draft (tree-first, then prose)
+- [`/implement`](.devin/workflows/implement.md) - Execute implementation from context, INFO, SPEC or IMPL documents. Works in actual files. Relies on SPEC, IMPL, TASKS, TEST, STRUT, and chat instructions; aims to implement them as closely as possible.
+- [`/test`](.devin/workflows/test.md) - Run tests based on scope and context
+- [`/partition`](.devin/workflows/partition.md) - Partition plans into discrete tasks
+
+**Quality**
+- [`/verify`](.devin/workflows/verify.md) - Verify work against specs and rules
+- [`/critique`](.devin/workflows/critique.md) - Find flawed assumptions, logic errors, hidden risks
+- [`/fact-check`](.devin/workflows/fact-check.md) - Verify factual claims against external reality (Extract → Materialize → Verify → Report)
+- [`/reconcile`](.devin/workflows/reconcile.md) - Pragmatic review of critique and fact-check findings
+- [`/drift-detect`](.devin/workflows/drift-detect.md) - Post-execution drift detection, persist gaps to __DRIFT_ file
+- [`/drift-correct`](.devin/workflows/drift-correct.md) - Close drift gaps identified by /drift-detect
+- [`/improve`](.devin/workflows/improve.md) - Depth-first improvement (one proven change per run). Always makes versioned backups so user can compare with older versions. Uses lenses and web research to add creative thinking and analysis before improving the target in one specific field or angle.
+- [`/sync`](.devin/workflows/sync.md) - Document synchronization
+- [`/rename`](.devin/workflows/rename.md) - Global and local refactoring with exhaustive search
+
+**Problem Fixing**
+- [`/fix`](.devin/workflows/fix.md) - Fix any problem by reading relevant DevSystem knowledge
+- [`/bugfix`](.devin/workflows/bugfix.md) - Fix bugs with full traceability (record, investigate, test, commit)
+
+**Learning**
+- [`/fail`](.devin/workflows/fail.md) - Record a failure in FAILS.md
+- [`/learn`](.devin/workflows/learn.md) - Extract lessons from resolved problems
+
+**Sessions**
+- [`/session-new`](.devin/workflows/session-new.md) - Initialize a new development session
+- [`/session-save`](.devin/workflows/session-save.md) - Save session progress
+- [`/session-load`](.devin/workflows/session-load.md) - Resume a development session
+- [`/session-finalize`](.devin/workflows/session-finalize.md) - Finalize session, sync findings, prepare for archive
+- [`/session-archive`](.devin/workflows/session-archive.md) - Archive a completed session folder
+
+**Communication**
+- [`/conversation-start`](.devin/workflows/conversation-start.md) - Create new conversation tracking file from chat context
+- [`/conversation-update`](.devin/workflows/conversation-update.md) - Update existing conversation with new emails or messages
+- [`/conversation-draft`](.devin/workflows/conversation-draft.md) - Draft emails, WhatsApp messages, or other text AS the user
+- [`/transcribe`](.devin/workflows/transcribe.md) - Transcribe PDFs and web pages to markdown
+- [`/translate`](.devin/workflows/translate.md) - Translate markdown, PDF, or subtitle files to target languages
+
+**Utility**
+- [`/commit`](.devin/workflows/commit.md) - Create conventional commits
+- [`/deploy`](.devin/workflows/deploy.md) - Deploy project to configured hosting platform
+- [`/switch-model`](.devin/workflows/switch-model.md) - Switch Cascade AI model tier (HIGH, MID, LOW)
+- [`/project-release`](.devin/workflows/project-release.md) - Create a dated release with comprehensive release notes
+- [`/cleanup`](.devin/workflows/cleanup.md) - Delete temporary files and artifacts left by workflows and skills
+- [`/remove`](.devin/workflows/remove.md) - Remove session content, conversation content, or specific files with preview and confirmation
+- [`/write-template`](.devin/workflows/write-template.md) - Create purpose-built document templates that produce consistent, comparable instances
+
+## Skills Reference
+
+20 skills in `.devin/skills/`:
+
+- **drift-correction** - Drift detection/correction knowledge and CHECKS files for `/drift-detect` and `/drift-correct`
+- **coding-conventions** - Python, PowerShell coding style rules, MECT coding rules
+- **deep-research** - Deep research strategies (MEPI/MCPI), domain-specific patterns
+- **edird-phase-planning** - EDIRD phase model with effort allocation, planning guidance, gates
+- **git** - Commit history navigation, file recovery from previous commits
+- **git-conventions** - Commit message format, .gitignore rules
+- **github** - GitHub CLI operations (repos, issues, PRs, releases)
+- **google-account** - Google services (Gmail, Calendar, Drive, Tasks) via gogcli CLI
+- **llm-computer-use** - Desktop automation via LLM vision (click, type, navigate)
+- **llm-evaluation** - LLM evaluation pipeline (questions, answers, scoring, cost analysis)
+- **llm-transcription** - Image/audio to markdown transcription (ensemble + judge + refinement)
+- **ms-playwright-mcp** - Browser automation via Microsoft Playwright MCP server
+- **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF
+- **playwriter-mcp** - Real browser automation with existing logins via Playwriter extension
+- **session-management** - Session init, save, resume, finalize, archive; Cascade conversation search and deletion
+- **travel-info** - Travel lookups: flights, trains, transit, country-specific info
+- **windows-desktop-control** - Windows screenshots, window management, keyboard/mouse
+- **windsurf-auto-model-switcher** - Switch Cascade AI model tier programmatically
+- **write-documents** - Document templates (INFO, SPEC, IMPL, TEST, TASKS, STRUT, MINTO), writing rules (APAPALAN, MECT, SOCAS)
+- **youtube-downloader** - Download YouTube content as MP3 or video, extract metadata
+
+### GRUC File Placement
+
+GRUC (Guides, Rules, Checks) files are distributed by consumer alignment:
+
+- **GUIDE** files - in each skill folder (consumed by working agent before execution)
+- **RULES** files - in each skill folder (consumed by `/verify`, `/improve` after execution)
+- **CHECKS** files for skills - in each skill folder (alongside GUIDE and RULES)
+- **CHECKS** files for workflows - in `drift-correction/` (consumed by `/drift-detect` after execution)
+
+Exception: `write-documents` keeps all GRUC types in its own folder.
+
+## File Naming Conventions
+
+IPPS uses special prefixes to control how files are processed:
+
+- **`!` prefix** - Priority files (e.g., `!NOTES.md`). Read first during [`/prime`](.devin/workflows/prime.md). Contains critical project information.
+- **`_` prefix** - Deliverables ignored by automatic priming (e.g., `_SPEC_*.md`, `_INFO_*.md`). Session-specific, WIP, or archived content. Single `_` = user-created deliverable.
+- **`__` prefix** - Workflow scaffolding (e.g., `__STRUT_TOPIC.md`, `__TASKS_TOPIC.md`). Auto-created by workflows for self-tracking. Deleted by [`/cleanup`](.devin/workflows/cleanup.md) after goal reached. Gitignored.
+- **`.tmp_` prefix** - Single-run temp files (e.g., `.tmp_fix_quotes.ps1`). Deleted within same workflow or by `/cleanup`. Gitignored.
+- **`.` prefix** - Hidden files following Unix convention (e.g., `.devin/`, `.gitignore`).
+
+### Lifecycle Tiers
+
+```
+.tmp_  = single-run temp (scripts, metadata) → deleted within workflow or by /cleanup
+__     = multi-run scaffolding (STRUTs, TASKS, templates) → deleted by /cleanup after goal
+_      = deliverable (INFO, SPEC, IMPL, TEST, TASKS) → never auto-deleted
+```
+
+**Key distinction**: User-explicit = deliverable (no `__`). Workflow/skill-implicit = scaffolding (`__`).
+- `/write-tasks-plan` output → `TASKS_[TOPIC].md` (user asked for it, deliverable)
+- `/deep-research` auto-creates → `__TASKS_[TOPIC]_RESEARCH.md` (scaffolding, deletable)
+
+### Suffix Conventions
+
+- **`_gitignore` suffix** - Append before extension to exclude any file or folder from git (e.g., `data_gitignore.json`, `scratch_gitignore/`). Useful for per-file exclusion without editing `.gitignore`.
+
+## Usage Examples
+
+### Prime Context
+
+**Workflows:** [`/prime`](.devin/workflows/prime.md)
+
+Load workspace context before starting work:
+```
+/prime
+```
+
+The prime workflow:
+1. Reads all `.md` files in `[AGENT_FOLDER]/rules/` (core conventions, system behavior)
+2. Reads all `!*.md` files (priority documentation with critical project info)
+3. Reads standard `.md` files in workspace root (excluding `_` and `!` prefixed)
+4. Detects workspace scenario (project structure, version strategy, work mode)
+5. Reports summary: files read, scenario detected
+
+Typically loads: `README.md`, `!NOTES.md`, `!PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`, `ID-REGISTRY.md`, agent rules
+
+### Workflow Entry Points
+
+Both workflows **automatically create a session**, follow EDIRD phases, and close when done.
+
+**Workflows:** [`/build`](.devin/workflows/build.md), [`/solve`](.devin/workflows/solve.md)
+
+Start a BUILD workflow (create software, new features):
+```
+/build "Add user authentication API"
+```
+
+Start a SOLVE workflow (research, analysis, decisions):
+```
+/solve "Evaluate database migration options"
+```
+
+### Session Workflows
+
+**Workflows:** [`/session-new`](.devin/workflows/session-new.md), [`/session-save`](.devin/workflows/session-save.md), [`/session-load`](.devin/workflows/session-load.md), [`/session-finalize`](.devin/workflows/session-finalize.md)
+
+Start a new work session:
+```
+/session-new
+```
+Creates a session folder with NOTES.md, PROBLEMS.md, PROGRESS.md.
+
+Save progress during work:
+```
+/session-save
+```
+
+Resume an existing session:
+```
+/session-load
+```
+
+Finalize session and sync findings:
+```
+/session-finalize
+```
+
+### Autonomous Execution
+
+**Workflow:** [`/go`](.devin/workflows/go.md)
+
+Run autonomous loop until goal reached:
+```
+/go
+```
+
+The [`/go`](.devin/workflows/go.md) workflow cycles through:
+1. Assess state - read tracking docs, determine current position
+2. Execute next - build execution sequence, run next task
+3. Repeat until goal reached or blocker hit
+
+### Document Cycle (INFO -> SPEC -> IMPL -> TEST -> TASKS)
+
+**Workflows:** [`/research`](.devin/workflows/research.md), [`/write-spec`](.devin/workflows/write-spec.md), [`/write-impl-plan`](.devin/workflows/write-impl-plan.md), [`/write-test-plan`](.devin/workflows/write-test-plan.md), [`/write-tasks-plan`](.devin/workflows/write-tasks-plan.md), [`/implement`](.devin/workflows/implement.md), [`/verify`](.devin/workflows/verify.md), [`/sync`](.devin/workflows/sync.md), [`/rename`](.devin/workflows/rename.md), [`/commit`](.devin/workflows/commit.md)
+
+This follows the Specification-Driven Development (SDD) methodology used by [GitHub spec-kit](https://github.com/github/spec-kit) and [Zencoder](https://docs.zencoder.ai/user-guides/tutorials/spec-driven-development-guide).
+
+1. **Research** - Gather information:
+```
+/research
+```
+Creates `_INFO_*.md` with findings.
+
+2. **Specify** - Create specification:
+```
+/write-spec
+```
+Creates `_SPEC_*.md` from requirements.
+
+3. **Plan** - Create implementation plan:
+```
+/write-impl-plan
+```
+Creates `_IMPL_*.md` from spec.
+
+4. **Test Plan** - Create test plan:
+```
+/write-test-plan
+```
+Creates `_TEST_*.md` from spec.
+
+5. **Tasks** - Partition into discrete work items:
+```
+/write-tasks-plan
+```
+Creates `TASKS_[TOPIC].md` from IMPL/TEST. **Mandatory before implementation.**
+
+6. **Implement** - Execute the tasks:
+```
+/implement
+```
+
+7. **Verify** - Check work against specs:
+```
+/verify
+```
+
+8. **Sync** - Update dependent documents:
+```
+/sync
+```
+
+9. **Rename** - Global/local pattern replacement:
+```
+/rename
+```
+
+10. **Commit** - Create conventional commits:
+```
+/commit
+```
+
+### Problem Fixing
+
+**Workflows:** [`/fix`](.devin/workflows/fix.md), [`/bugfix`](.devin/workflows/bugfix.md)
+
+Fix any problem by reading relevant DevSystem knowledge:
+```
+/fix
+```
+
+Classifies problem (CODE, DOCUMENT, DESIGN, UNDERSTANDING, PROCESS, CONFIG), reads context-specific workflows and rules, then applies that knowledge.
+
+Fix code bugs with full traceability:
+```
+/bugfix "Login fails when session expires"
+```
+
+Creates `[BUG_FOLDER]` with PROBLEMS.md, runs impact assessment, and documents fix.
+
+### Quality Review
+
+**Workflows:** [`/critique`](.devin/workflows/critique.md), [`/fact-check`](.devin/workflows/fact-check.md), [`/reconcile`](.devin/workflows/reconcile.md), [`/improve`](.devin/workflows/improve.md)
+
+Devil's Advocate review (find flaws):
+```
+/critique
+```
+
+Fact-check document claims against external reality:
+```
+/fact-check
+```
+
+Pragmatic review of critique and fact-check findings:
+```
+/reconcile
+```
+
+Depth-first improvement (one proven change per run, versioned backups):
+```
+/improve
+```
+
+### Learning from Failures
+
+**Workflows:** [`/fail`](.devin/workflows/fail.md), [`/learn`](.devin/workflows/learn.md)
+
+Record a failure to FAILS.md:
+```
+/fail "Deployed without running tests"
+```
+
+Extract learnings from resolved problems:
+```
+/learn
+```
+
+### Testing
+
+**Workflows:** [`/test`](.devin/workflows/test.md)
+
+Run tests based on scope and context:
+```
+/test
+```
+
+### Planning Tools
+
+**Workflows:** [`/partition`](.devin/workflows/partition.md), [`/write-strut`](.devin/workflows/write-strut.md), [`/write-info`](.devin/workflows/write-info.md)
+
+Split plans into discrete tasks:
+```
+/partition
+```
+
+Create STRUT plan with proper format:
+```
+/write-strut
+```
+
+Create INFO document from research:
+```
+/write-info
+```
+
+### Research
+
+**Workflows:** [`/deep-research`](.devin/workflows/deep-research.md), [`/transcribe`](.devin/workflows/transcribe.md)
+
+Execute deep research (MEPI or MCPI):
+```
+/deep-research "Compare vector databases for RAG"
+```
+
+Transcribe PDFs and web pages to markdown:
+```
+/transcribe path/to/document.pdf
+```
+
+### Utility Workflows
+
+**Workflows:** [`/session-archive`](.devin/workflows/session-archive.md), [`/switch-model`](.devin/workflows/switch-model.md), [`/project-release`](.devin/workflows/project-release.md)
+
+Archive a completed session:
+```
+/session-archive
+```
+
+Switch Cascade AI model tier:
+```
+/switch-model HIGH
+```
+
+Release a project version:
+```
+/project-release
+```
 
 ## Agentic English
 
@@ -559,68 +923,6 @@ IPPS/
 └── README.md
 ```
 
-## Skills Reference
-
-20 skills in `.devin/skills/`:
-
-- **drift-correction** - Drift detection/correction knowledge and CHECKS files for `/drift-detect` and `/drift-correct`
-- **coding-conventions** - Python, PowerShell coding style rules, MECT coding rules
-- **deep-research** - Deep research strategies (MEPI/MCPI), domain-specific patterns
-- **edird-phase-planning** - EDIRD phase model with effort allocation, planning guidance, gates
-- **git** - Commit history navigation, file recovery from previous commits
-- **git-conventions** - Commit message format, .gitignore rules
-- **github** - GitHub CLI operations (repos, issues, PRs, releases)
-- **google-account** - Google services (Gmail, Calendar, Drive, Tasks) via gogcli CLI
-- **llm-computer-use** - Desktop automation via LLM vision (click, type, navigate)
-- **llm-evaluation** - LLM evaluation pipeline (questions, answers, scoring, cost analysis)
-- **llm-transcription** - Image/audio to markdown transcription (ensemble + judge + refinement)
-- **ms-playwright-mcp** - Browser automation via Microsoft Playwright MCP server
-- **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF
-- **playwriter-mcp** - Real browser automation with existing logins via Playwriter extension
-- **session-management** - Session init, save, resume, finalize, archive; Cascade conversation search and deletion
-- **travel-info** - Travel lookups: flights, trains, transit, country-specific info
-- **windows-desktop-control** - Windows screenshots, window management, keyboard/mouse
-- **windsurf-auto-model-switcher** - Switch Cascade AI model tier programmatically
-- **write-documents** - Document templates (INFO, SPEC, IMPL, TEST, TASKS, STRUT, MINTO), writing rules (APAPALAN, MECT, SOCAS)
-- **youtube-downloader** - Download YouTube content as MP3 or video, extract metadata
-
-### GRUC File Placement
-
-GRUC (Guides, Rules, Checks) files are distributed by consumer alignment:
-
-- **GUIDE** files - in each skill folder (consumed by working agent before execution)
-- **RULES** files - in each skill folder (consumed by `/verify`, `/improve` after execution)
-- **CHECKS** files for skills - in each skill folder (alongside GUIDE and RULES)
-- **CHECKS** files for workflows - in `drift-correction/` (consumed by `/drift-detect` after execution)
-
-Exception: `write-documents` keeps all GRUC types in its own folder.
-
-## File Naming Conventions
-
-IPPS uses special prefixes to control how files are processed:
-
-- **`!` prefix** - Priority files (e.g., `!NOTES.md`). Read first during [`/prime`](.devin/workflows/prime.md). Contains critical project information.
-- **`_` prefix** - Deliverables ignored by automatic priming (e.g., `_SPEC_*.md`, `_INFO_*.md`). Session-specific, WIP, or archived content. Single `_` = user-created deliverable.
-- **`__` prefix** - Workflow scaffolding (e.g., `__STRUT_TOPIC.md`, `__TASKS_TOPIC.md`). Auto-created by workflows for self-tracking. Deleted by [`/cleanup`](.devin/workflows/cleanup.md) after goal reached. Gitignored.
-- **`.tmp_` prefix** - Single-run temp files (e.g., `.tmp_fix_quotes.ps1`). Deleted within same workflow or by `/cleanup`. Gitignored.
-- **`.` prefix** - Hidden files following Unix convention (e.g., `.devin/`, `.gitignore`).
-
-### Lifecycle Tiers
-
-```
-.tmp_  = single-run temp (scripts, metadata) → deleted within workflow or by /cleanup
-__     = multi-run scaffolding (STRUTs, TASKS, templates) → deleted by /cleanup after goal
-_      = deliverable (INFO, SPEC, IMPL, TEST, TASKS) → never auto-deleted
-```
-
-**Key distinction**: User-explicit = deliverable (no `__`). Workflow/skill-implicit = scaffolding (`__`).
-- `/write-tasks-plan` output → `TASKS_[TOPIC].md` (user asked for it, deliverable)
-- `/deep-research` auto-creates → `__TASKS_[TOPIC]_RESEARCH.md` (scaffolding, deletable)
-
-### Suffix Conventions
-
-- **`_gitignore` suffix** - Append before extension to exclude any file or folder from git (e.g., `data_gitignore.json`, `scratch_gitignore/`). Useful for per-file exclusion without editing `.gitignore`.
-
 ## Workspaces and Sessions
 
 IPPS uses a two-level tracking system: **workspace-level** files for project-wide information and **session-level** files for focused work periods. In MONOREPO workspaces, there's an additional **project-level** layer between workspace and sessions.
@@ -678,325 +980,23 @@ When [`/session-finalize`](.devin/workflows/session-finalize.md) runs:
 
 This ensures lessons learned survive session boundaries and prevent repeated mistakes.
 
-## Workflows Reference
-
-48 workflows in `.devin/workflows/`:
-
-**Entry Points**
-- [`/build`](.devin/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
-- [`/solve`](.devin/workflows/solve.md) - Explore problems, evaluate ideas, make decisions (auto-creates session)
-- [`/go`](.devin/workflows/go.md) - Autonomous loop until goal reached
-- [`/prime`](.devin/workflows/prime.md) - Prime context with workspace files
-
-**Document Cycle**
-- [`/research`](.devin/workflows/research.md) - Structured research with verification labels and source retention
-- [`/deep-research`](.devin/workflows/deep-research.md) - Deep research (MEPI or MCPI) with domain-specific patterns
-- [`/write-info`](.devin/workflows/write-info.md) - Create INFO document from research
-- [`/write-spec`](.devin/workflows/write-spec.md) - Create specification from requirements
-- [`/write-impl-plan`](.devin/workflows/write-impl-plan.md) - Create implementation plan from spec
-- [`/write-test-plan`](.devin/workflows/write-test-plan.md) - Create test plan from spec
-- [`/write-tasks-plan`](.devin/workflows/write-tasks-plan.md) - Create tasks plan from IMPL/TEST
-- [`/write-strut`](.devin/workflows/write-strut.md) - Create STRUT plans with proper format
-- [`/propose-minto`](.devin/workflows/propose-minto.md) - Generate 3 scored AMINTON argument candidates from research material
-- [`/write-minto`](.devin/workflows/write-minto.md) - Develop full Minto Pyramid article from draft (tree-first, then prose)
-- [`/implement`](.devin/workflows/implement.md) - Execute implementation from context, INFO, SPEC or IMPL documents. Works in actual files. Relies on SPEC, IMPL, TASKS, TEST, STRUT, and chat instructions; aims to implement them as closely as possible.
-- [`/test`](.devin/workflows/test.md) - Run tests based on scope and context
-- [`/partition`](.devin/workflows/partition.md) - Partition plans into discrete tasks
-
-**Quality**
-- [`/verify`](.devin/workflows/verify.md) - Verify work against specs and rules
-- [`/critique`](.devin/workflows/critique.md) - Find flawed assumptions, logic errors, hidden risks
-- [`/fact-check`](.devin/workflows/fact-check.md) - Verify factual claims against external reality (Extract → Materialize → Verify → Report)
-- [`/reconcile`](.devin/workflows/reconcile.md) - Pragmatic review of critique and fact-check findings
-- [`/drift-detect`](.devin/workflows/drift-detect.md) - Post-execution drift detection, persist gaps to __DRIFT_ file
-- [`/drift-correct`](.devin/workflows/drift-correct.md) - Close drift gaps identified by /drift-detect
-- [`/improve`](.devin/workflows/improve.md) - Depth-first improvement (one proven change per run). Always makes versioned backups so user can compare with older versions. Uses lenses and web research to add creative thinking and analysis before improving the target in one specific field or angle.
-- [`/sync`](.devin/workflows/sync.md) - Document synchronization
-- [`/rename`](.devin/workflows/rename.md) - Global and local refactoring with exhaustive search
-
-**Problem Fixing**
-- [`/fix`](.devin/workflows/fix.md) - Fix any problem by reading relevant DevSystem knowledge
-- [`/bugfix`](.devin/workflows/bugfix.md) - Fix bugs with full traceability (record, investigate, test, commit)
-
-**Learning**
-- [`/fail`](.devin/workflows/fail.md) - Record a failure in FAILS.md
-- [`/learn`](.devin/workflows/learn.md) - Extract lessons from resolved problems
-
-**Sessions**
-- [`/session-new`](.devin/workflows/session-new.md) - Initialize a new development session
-- [`/session-save`](.devin/workflows/session-save.md) - Save session progress
-- [`/session-load`](.devin/workflows/session-load.md) - Resume a development session
-- [`/session-finalize`](.devin/workflows/session-finalize.md) - Finalize session, sync findings, prepare for archive
-- [`/session-archive`](.devin/workflows/session-archive.md) - Archive a completed session folder
-
-**Communication**
-- [`/conversation-start`](.devin/workflows/conversation-start.md) - Create new conversation tracking file from chat context
-- [`/conversation-update`](.devin/workflows/conversation-update.md) - Update existing conversation with new emails or messages
-- [`/conversation-draft`](.devin/workflows/conversation-draft.md) - Draft emails, WhatsApp messages, or other text AS the user
-- [`/transcribe`](.devin/workflows/transcribe.md) - Transcribe PDFs and web pages to markdown
-- [`/translate`](.devin/workflows/translate.md) - Translate markdown, PDF, or subtitle files to target languages
-
-**Utility**
-- [`/commit`](.devin/workflows/commit.md) - Create conventional commits
-- [`/deploy`](.devin/workflows/deploy.md) - Deploy project to configured hosting platform
-- [`/switch-model`](.devin/workflows/switch-model.md) - Switch Cascade AI model tier (HIGH, MID, LOW)
-- [`/project-release`](.devin/workflows/project-release.md) - Create a dated release with comprehensive release notes
-- [`/cleanup`](.devin/workflows/cleanup.md) - Delete temporary files and artifacts left by workflows and skills
-- [`/remove`](.devin/workflows/remove.md) - Remove session content, conversation content, or specific files with preview and confirmation
-- [`/write-template`](.devin/workflows/write-template.md) - Create purpose-built document templates that produce consistent, comparable instances
-
-## Usage Examples
-
-### Prime Context
-
-**Workflows:** [`/prime`](.devin/workflows/prime.md)
-
-Load workspace context before starting work:
-```
-/prime
-```
-
-The prime workflow:
-1. Reads all `.md` files in `[AGENT_FOLDER]/rules/` (core conventions, system behavior)
-2. Reads all `!*.md` files (priority documentation with critical project info)
-3. Reads standard `.md` files in workspace root (excluding `_` and `!` prefixed)
-4. Detects workspace scenario (project structure, version strategy, work mode)
-5. Reports summary: files read, scenario detected
-
-Typically loads: `README.md`, `!NOTES.md`, `!PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`, `ID-REGISTRY.md`, agent rules
-
-### Workflow Entry Points
-
-Both workflows **automatically create a session**, follow EDIRD phases, and close when done.
-
-**Workflows:** [`/build`](.devin/workflows/build.md), [`/solve`](.devin/workflows/solve.md)
-
-Start a BUILD workflow (create software, new features):
-```
-/build "Add user authentication API"
-```
-
-Start a SOLVE workflow (research, analysis, decisions):
-```
-/solve "Evaluate database migration options"
-```
-
-### Session Workflows
-
-**Workflows:** [`/session-new`](.devin/workflows/session-new.md), [`/session-save`](.devin/workflows/session-save.md), [`/session-load`](.devin/workflows/session-load.md), [`/session-finalize`](.devin/workflows/session-finalize.md)
-
-Start a new work session:
-```
-/session-new
-```
-Creates a session folder with NOTES.md, PROBLEMS.md, PROGRESS.md.
-
-Save progress during work:
-```
-/session-save
-```
-
-Resume an existing session:
-```
-/session-load
-```
-
-Finalize session and sync findings:
-```
-/session-finalize
-```
-
-### Autonomous Execution
-
-**Workflow:** [`/go`](.devin/workflows/go.md)
-
-Run autonomous loop until goal reached:
-```
-/go
-```
-
-The [`/go`](.devin/workflows/go.md) workflow cycles through:
-1. Assess state - read tracking docs, determine current position
-2. Execute next - build execution sequence, run next task
-3. Repeat until goal reached or blocker hit
-
-### Document Cycle (INFO -> SPEC -> IMPL -> TEST -> TASKS)
-
-**Workflows:** [`/research`](.devin/workflows/research.md), [`/write-spec`](.devin/workflows/write-spec.md), [`/write-impl-plan`](.devin/workflows/write-impl-plan.md), [`/write-test-plan`](.devin/workflows/write-test-plan.md), [`/write-tasks-plan`](.devin/workflows/write-tasks-plan.md), [`/implement`](.devin/workflows/implement.md), [`/verify`](.devin/workflows/verify.md), [`/sync`](.devin/workflows/sync.md), [`/rename`](.devin/workflows/rename.md), [`/commit`](.devin/workflows/commit.md)
-
-This follows the Specification-Driven Development (SDD) methodology used by [GitHub spec-kit](https://github.com/github/spec-kit) and [Zencoder](https://docs.zencoder.ai/user-guides/tutorials/spec-driven-development-guide).
-
-1. **Research** - Gather information:
-```
-/research
-```
-Creates `_INFO_*.md` with findings.
-
-2. **Specify** - Create specification:
-```
-/write-spec
-```
-Creates `_SPEC_*.md` from requirements.
-
-3. **Plan** - Create implementation plan:
-```
-/write-impl-plan
-```
-Creates `_IMPL_*.md` from spec.
-
-4. **Test Plan** - Create test plan:
-```
-/write-test-plan
-```
-Creates `_TEST_*.md` from spec.
-
-5. **Tasks** - Partition into discrete work items:
-```
-/write-tasks-plan
-```
-Creates `TASKS_[TOPIC].md` from IMPL/TEST. **Mandatory before implementation.**
-
-6. **Implement** - Execute the tasks:
-```
-/implement
-```
-
-7. **Verify** - Check work against specs:
-```
-/verify
-```
-
-8. **Sync** - Update dependent documents:
-```
-/sync
-```
-
-9. **Rename** - Global/local pattern replacement:
-```
-/rename
-```
-
-10. **Commit** - Create conventional commits:
-```
-/commit
-```
-
-### Problem Fixing
-
-**Workflows:** [`/fix`](.devin/workflows/fix.md), [`/bugfix`](.devin/workflows/bugfix.md)
-
-Fix any problem by reading relevant DevSystem knowledge:
-```
-/fix
-```
-
-Classifies problem (CODE, DOCUMENT, DESIGN, UNDERSTANDING, PROCESS, CONFIG), reads context-specific workflows and rules, then applies that knowledge.
-
-Fix code bugs with full traceability:
-```
-/bugfix "Login fails when session expires"
-```
-
-Creates `[BUG_FOLDER]` with PROBLEMS.md, runs impact assessment, and documents fix.
-
-### Quality Review
-
-**Workflows:** [`/critique`](.devin/workflows/critique.md), [`/fact-check`](.devin/workflows/fact-check.md), [`/reconcile`](.devin/workflows/reconcile.md), [`/improve`](.devin/workflows/improve.md)
-
-Devil's Advocate review (find flaws):
-```
-/critique
-```
-
-Fact-check document claims against external reality:
-```
-/fact-check
-```
-
-Pragmatic review of critique and fact-check findings:
-```
-/reconcile
-```
-
-Depth-first improvement (one proven change per run, versioned backups):
-```
-/improve
-```
-
-### Learning from Failures
-
-**Workflows:** [`/fail`](.devin/workflows/fail.md), [`/learn`](.devin/workflows/learn.md)
-
-Record a failure to FAILS.md:
-```
-/fail "Deployed without running tests"
-```
-
-Extract learnings from resolved problems:
-```
-/learn
-```
-
-### Testing
-
-**Workflows:** [`/test`](.devin/workflows/test.md)
-
-Run tests based on scope and context:
-```
-/test
-```
-
-### Planning Tools
-
-**Workflows:** [`/partition`](.devin/workflows/partition.md), [`/write-strut`](.devin/workflows/write-strut.md), [`/write-info`](.devin/workflows/write-info.md)
-
-Split plans into discrete tasks:
-```
-/partition
-```
-
-Create STRUT plan with proper format:
-```
-/write-strut
-```
-
-Create INFO document from research:
-```
-/write-info
-```
-
-### Research
-
-**Workflows:** [`/deep-research`](.devin/workflows/deep-research.md), [`/transcribe`](.devin/workflows/transcribe.md)
-
-Execute deep research (MEPI or MCPI):
-```
-/deep-research "Compare vector databases for RAG"
-```
-
-Transcribe PDFs and web pages to markdown:
-```
-/transcribe path/to/document.pdf
-```
-
-### Utility Workflows
-
-**Workflows:** [`/session-archive`](.devin/workflows/session-archive.md), [`/switch-model`](.devin/workflows/switch-model.md), [`/project-release`](.devin/workflows/project-release.md)
-
-Archive a completed session:
-```
-/session-archive
-```
-
-Switch Cascade AI model tier:
-```
-/switch-model HIGH
-```
-
-Release a project version:
-```
-/project-release
-```
+## DevSystem Versions
+
+- **[DevSystemV4.2](DevSystemV4.2/)** - Current system
+
+Older versions in [`_OldDevSystemVersions/`](_OldDevSystemVersions/):
+- DevSystemV4.1 - Conversation intelligence, agent research, write-documents refinement
+- DevSystemV4.0 - GRUC drift prevention, AMINTON structured argumentation, 10 core concepts
+- DevSystemV3.8 - Windsurf to Devin migration (.windsurf/ renamed to .devin/), SOP 5, Claude Opus 4.8
+- DevSystemV3.7 - Deep research profiles, translation workflow, recap/continue removal, cleanup workflow
+- DevSystemV3.6 - SOCAS quality criteria, 4-phase /improve workflow, NFR in SPEC, STRUT self-tracking
+- DevSystemV3.5 - Generic /fix workflow, improved /implement and /go workflows
+- DevSystemV3.4 - Enhanced logging rules, table formatting, character rules cleanup
+- DevSystemV3.3 - Deep-research skill, shared .tools folder
+- DevSystemV3.2 - Concurrent blocks, effort allocation, planning guidance
+- DevSystemV3.1 - STRUT notation
+- DevSystemV3 - EDIRD phase model and Agentic English
+- DevSystemV2.1, V2, V1 - Legacy versions
 
 ## Agent Compatibility
 
