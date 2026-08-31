@@ -104,7 +104,7 @@ AMINTON provides arguments    → Tree notation for structured, verifiable Minto
 
 ## Overview
 
-IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V4.2) features ten integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT consistency, SOCAS quality criteria, GRUC drift prevention, and AMINTON arguments.
+IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V4.3) features ten integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT (Minimal Explicit Consistent Terminology) consistency, SOCAS quality criteria, GRUC drift prevention, and AMINTON (Agentic Minto) arguments.
 
 ## How to Add to Your Project
 
@@ -119,7 +119,7 @@ your-project/
 
 ## Workflows Reference
 
-48 workflows in `.devin/workflows/`:
+47 workflows in `.devin/workflows/`:
 
 **Entry Points**
 - [`/build`](.devin/workflows/build.md) - Create software, features, systems (auto-creates session, follows EDIRD)
@@ -136,9 +136,9 @@ your-project/
 - [`/write-test-plan`](.devin/workflows/write-test-plan.md) - Create test plan from spec
 - [`/write-tasks-plan`](.devin/workflows/write-tasks-plan.md) - Create tasks plan from IMPL/TEST
 - [`/write-strut`](.devin/workflows/write-strut.md) - Create STRUT plans with proper format
-- [`/propose-minto`](.devin/workflows/propose-minto.md) - Generate 3 scored AMINTON argument candidates from research material
+- [`/propose-minto`](.devin/workflows/propose-minto.md) - Generate 3 scored Agentic Minto (AMINTON) argument candidates from research material
 - [`/write-minto`](.devin/workflows/write-minto.md) - Develop full Minto Pyramid article from draft (tree-first, then prose)
-- [`/implement`](.devin/workflows/implement.md) - Execute implementation from context, INFO, SPEC or IMPL documents. Works in actual files. Relies on SPEC, IMPL, TASKS, TEST, STRUT, and chat instructions; aims to implement them as closely as possible.
+- [`/implement`](.devin/workflows/implement.md) - Implement approved changes - code from plans or corrections from reviews. Detects context: Build (SPEC/IMPL → code) or Review Pipeline (`*_REVIEW.md` → corrections to source documents).
 - [`/test`](.devin/workflows/test.md) - Run tests based on scope and context
 - [`/partition`](.devin/workflows/partition.md) - Partition plans into discrete tasks
 
@@ -147,8 +147,8 @@ your-project/
 - [`/critique`](.devin/workflows/critique.md) - Find flawed assumptions, logic errors, hidden risks
 - [`/fact-check`](.devin/workflows/fact-check.md) - Verify factual claims against external reality (Extract → Materialize → Verify → Report)
 - [`/reconcile`](.devin/workflows/reconcile.md) - Pragmatic review of critique and fact-check findings
-- [`/drift-detect`](.devin/workflows/drift-detect.md) - Post-execution drift detection, persist gaps to __DRIFT_ file
-- [`/drift-correct`](.devin/workflows/drift-correct.md) - Close drift gaps identified by /drift-detect
+- [`/drift-detect`](.devin/workflows/drift-detect.md) - Post-execution drift detection, persist gaps to `__DRIFT_` file
+- [`/drift-correct`](.devin/workflows/drift-correct.md) - Close drift gaps identified by `/drift-detect`
 - [`/improve`](.devin/workflows/improve.md) - Depth-first improvement (one proven change per run). Always makes versioned backups so user can compare with older versions. Uses lenses and web research to add creative thinking and analysis before improving the target in one specific field or angle.
 - [`/sync`](.devin/workflows/sync.md) - Document synchronization
 - [`/rename`](.devin/workflows/rename.md) - Global and local refactoring with exhaustive search
@@ -321,7 +321,7 @@ The [`/go`](.devin/workflows/go.md) workflow cycles through:
 2. Execute next - build execution sequence, run next task
 3. Repeat until goal reached or blocker hit
 
-### Document Cycle (INFO -> SPEC -> IMPL -> TEST -> TASKS)
+### Document Cycle (INFO → SPEC → IMPL → TEST → TASKS)
 
 **Workflows:** [`/research`](.devin/workflows/research.md), [`/write-spec`](.devin/workflows/write-spec.md), [`/write-impl-plan`](.devin/workflows/write-impl-plan.md), [`/write-test-plan`](.devin/workflows/write-test-plan.md), [`/write-tasks-plan`](.devin/workflows/write-tasks-plan.md), [`/implement`](.devin/workflows/implement.md), [`/verify`](.devin/workflows/verify.md), [`/sync`](.devin/workflows/sync.md), [`/rename`](.devin/workflows/rename.md), [`/commit`](.devin/workflows/commit.md)
 
@@ -550,13 +550,13 @@ A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) w
 
 **Operation Modes**:
 - `IMPL-CODEBASE` (default) → Output to project source folders
-- `IMPL-ISOLATED` → Output to `[SESSION_FOLDER]/` only (for POCs, prototypes)
+- `IMPL-ISOLATED` → Output to `[SESSION_FOLDER]/` only (for Proofs of Concept (POCs), prototypes)
 
 **Example BUILD flow**:
 ```
 [EXPLORE] → [ASSESS] complexity → Gate check
 [DESIGN] → [WRITE-SPEC] → [PROVE] risky parts → Gate check
-[IMPLEMENT] → [IMPLEMENT]→[TEST]→[FIX]→green→next → Gate check
+[IMPLEMENT] → [IMPLEMENT] → [TEST] → [FIX] → green → next → Gate check
 [REFINE] → [VERIFY] against spec → [CRITIQUE] if HIGH → Gate check
 [DELIVER] → [COMMIT] → [MERGE]
 ```
@@ -632,9 +632,11 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - **AWT** - Agentic Work Time. Agent time estimate for planning and capacity
 - [**MEPI**](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Executable Point of Information. Present 2-3 curated options aligned with implicit intentions.
 - [**MCPI**](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Complete Point of Information. Present exhaustive options when thoroughness is explicitly required
-- [**SOCAS**](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md) - Signs Of Confusion And Sloppiness. 15 criteria for detecting agent degradation
+- [**SOCAS**](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md) - Signs Of Confusion And Sloppiness. 17 criteria for detecting agent degradation
 - [**MNF**](Docs/Concepts/_INFO_MNF_TECHNIQUE.md) - Must Not Forget. Technique for critical item tracking during task execution
 - **APAPALAN** - As Precise As Possible, As Little As Necessary. Conciseness principle for workflows and documents
+- **VCRIV** - Verify-Critique-Reconcile-Implement-Verify. Quality pipeline for logic and design review: `/verify` → `/critique` → `/reconcile` → `/implement` → `/verify`
+- **FACRIV** - Fact-check-Reconcile-Implement-Verify. Quality pipeline for factual claim verification: `/fact-check` → `/reconcile` → `/implement` → `/verify`
 
 **Agent Drift Prevention**: [ADP Approach](Docs/Concepts/_INFO_AGENT_DRIFT_PREVENTION_APPROACH.md) - How the DevSystem prevents agent drift through TRACTFUL, SMAP, EDIRD, STRUT, GRUC, and MNF across three scopes
 
@@ -838,10 +840,10 @@ Session lifecycle management: init, save, resume, finalize, archive. Cascade con
 **Quick examples**:
 ```powershell
 # List last 10 conversations
-.\DevSystemV4.2\skills\session-management\cascade-search.ps1
+.\DevSystemV4.3\skills\session-management\cascade-search.ps1
 
 # Delete conversations older than 30 days
-.\DevSystemV4.2\skills\session-management\cascade-delete.ps1 -OlderThanDays 30
+.\DevSystemV4.3\skills\session-management\cascade-delete.ps1 -OlderThanDays 30
 ```
 
 ### windows-desktop-control
@@ -903,12 +905,12 @@ Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.
 ```
 IPPS/
 ├── ../.tools/                    # Shared tool installations (parent folder)
-├── .devin/                    # Active agent configuration (synced from DevSystemV4.2)
+├── .devin/                    # Active agent configuration (synced from DevSystemV4.3)
 │   ├── rules/
 │   ├── workflows/
 │   └── skills/
 ├── _OldDevSystemVersions/        # Previous DevSystem versions (V1 through V3.8)
-├── DevSystemV4.2/                # Current system (source of truth)
+├── DevSystemV4.3/                # Current system (source of truth)
 │   ├── rules/
 │   │   ├── agent-behavior.md     # Agent execution patterns and communication
 │   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions
@@ -982,9 +984,10 @@ This ensures lessons learned survive session boundaries and prevent repeated mis
 
 ## DevSystem Versions
 
-- **[DevSystemV4.2](DevSystemV4.2/)** - Current system
+- **[DevSystemV4.3](DevSystemV4.3/)** - Current system
 
 Older versions in [`_OldDevSystemVersions/`](_OldDevSystemVersions/):
+- DevSystemV4.2 - Quality pipelines (VCRIV, FACRIV), implement.md context branching, fact-check boundary enforcement
 - DevSystemV4.1 - Conversation intelligence, agent research, write-documents refinement
 - DevSystemV4.0 - GRUC drift prevention, AMINTON structured argumentation, 10 core concepts
 - DevSystemV3.8 - Windsurf to Devin migration (.windsurf/ renamed to .devin/), SOP 5, Claude Opus 4.8

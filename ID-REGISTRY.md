@@ -74,10 +74,11 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **AWT** - Agentic Work Time. Agent time estimate. Example: "complete in < 5mins AWT"
 - **MEPI** - Most Executable Point of Information (used for research and decision making)
 - **MCPI** - Most Complete Point of Information (used for research)
-- **SOCAS** - Signs Of Confusion And Sloppiness (10 criteria)
+- **SOCAS** - Signs Of Confusion And Sloppiness (17 criteria)
 - **MNF** - Must Not Forget. Technique for critical item tracking during task execution
 - **APAPALAN** - As Precise As Possible, As Little As Necessary. Conciseness principle for workflows and documents
-- **VCRIV** - Verify, Critique, Reconcile, Implement, Verify. Standard quality control pipeline for document review cycles. Runs `/verify` → `/critique` → `/reconcile` → `/implement` → `/verify`
+- **VCRIV** - Verify, Critique, Reconcile, Implement, Verify. Quality pipeline for logic and design review. Runs `/verify` → `/critique` → `/reconcile` → `/implement` → `/verify`
+- **FACRIV** - Fact-check, Reconcile, Implement, Verify. Quality pipeline for factual claim verification. Runs `/fact-check` → `/reconcile` → `/implement` → `/verify`
 
 ## States (no brackets)
 
