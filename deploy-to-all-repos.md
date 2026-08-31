@@ -118,15 +118,17 @@ $targets = @(
     @{ Path = "e:\Dev\PRXL\src\.devin"; Skills = "Development" }
     @{ Path = "e:\Dev\SharePoint-GPT-Middleware\.devin"; Skills = "Development"; NeverOverwrite = @("workflows\project-release.md") }
     @{ Path = "e:\Dev\USTVA\.devin"; Skills = "All" }
-    @{ Path = "e:\Dev\openclaw\workspace"; Skills = "All" }
     @{ Path = "e:\Dev\LLM-Research\.devin"; Skills = "Development" }
+    @{ Path = "e:\Dev\Lana-V1\.devin"; Skills = "Development" }
+    @{ Path = "e:\Dev\Lana-V1\.lana"; Skills = "Development" }
+    @{ Path = "e:\Dev\SharePoint-GPT-Extensions\.devin"; Skills = "Development" }
 )
 
 # Deprecated files allowlist
 $deprecatedFiles = @{
     "rules" = @("commit-rules.md", "devsystem-rules.md", "document-rules.md", "git-rules.md", "proper-english-rules.md", "python-rules.md", "tools-rules.md", "edird-core.md", "cascade-model-switching.md", "research-and-report-writing-rules.md", "implementation-specification-rules.md")
     "workflows" = @("review-devilsadvocate.md", "review-pragmaticprogrammer.md", "session-init.md", "go-autonomous.md", "next.md", "new-feature.md", "new-task.md", "setup-pdftools.md", "deliver.md", "design.md", "explore.md", "go-research.md", "refine.md", "session-resume.md", "start-conversation.md", "update-conversation.md", "recap.md", "continue.md", "enforce.md")
-    "skills\write-documents" = @("NOTES_TEMPLATE.md")
+    "skills\write-documents" = @("NOTES_TEMPLATE.md", "REVIEW_TEMPLATE.md")
 }
 $deprecatedSkillFolders = @("edird-phase-model", "ipps-deep-research")
 
