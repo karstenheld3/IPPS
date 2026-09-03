@@ -1,6 +1,6 @@
 ---
 description: Find flawed assumptions, logic errors, and hidden risks (not rule violations)
-auto_execution_mode: 1
+auto_execution_mode: 3
 ---
 
 # Devil's Advocate

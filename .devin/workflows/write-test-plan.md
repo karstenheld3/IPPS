@@ -1,6 +1,6 @@
 ---
 description: Create test plan from spec
-auto_execution_mode: 1
+auto_execution_mode: 3
 ---
 
 # Write Test Plan Workflow

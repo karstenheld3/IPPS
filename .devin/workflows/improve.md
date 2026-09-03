@@ -1,6 +1,6 @@
 ---
 description: Find and fix contradictions, inconsistencies, and improvement opportunities
-auto_execution_mode: 1
+auto_execution_mode: 3
 ---
 
 # Improve Workflow
