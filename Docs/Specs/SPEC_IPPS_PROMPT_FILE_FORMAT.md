@@ -43,7 +43,7 @@
 
 **What we don't want:**
 - JSON/YAML/TOML structured formats (not human-writable, no Markdown rendering)
-- Frontmatter or header blocks before the first prompt (adds parser complexity, no benefit)
+- YAML frontmatter before the first prompt (`---` conflicts with separator token)
 - Global fence length (forces unnecessary depth when only one prompt contains code blocks)
 - Implicit prompt boundaries (whitespace-based splitting is ambiguous and error-prone)
 
@@ -67,7 +67,7 @@ The IPPS Prompt File Format is a DevSystem standard for encoding ordered prompt 
 A **Prompt Queue File** is a Markdown-compatible text file containing one or more Prompt Blocks separated by Separators. Recommended name pattern: `_PROMPTS_[Topic].md` (DevSystem convention) or `PROMPTS*.md` (general convention).
 
 - **Encoding**: UTF-8
-- **First non-empty line**: Must be an Opening Fence
+- **First fenced line**: Must be an Opening Fence (Commentary allowed before it)
 - **Minimum content**: One Prompt Block
 
 ### Prompt Block
@@ -92,7 +92,7 @@ A **Separator** is a single `---` line between two consecutive Prompt Blocks. It
 
 ### Commentary
 
-**Commentary** is human-readable text (headings, notes, explanations) placed between a Separator and the next Opening Fence. Commentary is never sent to the model. It documents expected state, purpose of the next prompt, or context for human reviewers.
+**Commentary** is human-readable text (headings, notes, explanations) placed between prompts or before the first prompt. Commentary is never sent to the model. It documents expected state, purpose of the next prompt, or context for human reviewers. In final output files, Commentary is limited to a heading plus one sentence. Templates may use longer Commentary for authoring instructions.
 
 ### Info String
 
@@ -105,8 +105,9 @@ An **Info String** is optional text following the backticks on an Opening Fence 
 These rules define what makes a file syntactically valid. A parser MUST reject files that violate these rules.
 
 **IPPSPRMTFMT-FR-01: Leading Fence**
-- The first non-empty line of the file must be an Opening Fence
-- No frontmatter, header block, or Markdown title before the first fence
+- The first Opening Fence must appear before any non-Commentary content
+- Commentary (headings, notes) is allowed before the first Prompt Block
+- No frontmatter or YAML header blocks before the first fence
 
 **IPPSPRMTFMT-FR-02: Fence Length Range**
 - Opening Fence backtick count N: 3 <= N <= 9
@@ -122,9 +123,10 @@ These rules define what makes a file syntactically valid. A parser MUST reject f
 - The Separator appears after the Closing Fence of the preceding block and before the Opening Fence (or Commentary) of the next block
 
 **IPPSPRMTFMT-FR-05: Commentary Placement**
-- Commentary is allowed only between a Separator and the next Opening Fence
-- No commentary before the first Prompt Block
+- Commentary is allowed between a Separator and the next Opening Fence
+- Commentary is also allowed before the first Prompt Block (per FR-01)
 - Commentary is never sent to the model
+- Commentary density in final output files: heading + max 1 sentence per prompt. Templates may use longer Commentary for authoring instructions.
 
 **IPPSPRMTFMT-FR-06: Minimum One Prompt**
 - The file must contain at least one Prompt Block
@@ -168,7 +170,7 @@ Content quality is governed by `PROMPTS_RULES.md` (PRMT-* rules). This spec does
 
 **IPPSPRMTFMT-DD-02:** Per-prompt fence length (not per-file). Rationale: Most prompts contain no inner code blocks and use 3 backticks. Only prompts with embedded code examples need longer fences. Per-file minimum would force unnecessary depth everywhere.
 
-**IPPSPRMTFMT-DD-03:** Leading fence required (no frontmatter). Rationale: Eliminates parser ambiguity. The first non-empty line unambiguously signals "this is a prompt queue file". Metadata belongs in Commentary after the first separator, or in a companion file.
+**IPPSPRMTFMT-DD-03:** Commentary allowed before first fence, but no frontmatter/YAML. Rationale: A heading before the first prompt improves human readability. The parser skips non-fence lines until it finds the first Opening Fence. Frontmatter (YAML `---` blocks) is still prohibited because `---` is the separator token.
 
 **IPPSPRMTFMT-DD-04:** `---` separator (not blank lines). Rationale: Blank lines are ambiguous (could appear within prompts). `---` is an explicit, unambiguous boundary that also renders as a horizontal rule in Markdown.
 
@@ -213,7 +215,7 @@ Not every prompt needs all four parts. Complexity determines which parts to incl
 
 A conforming parser rejects the file with a diagnostic message when:
 
-- First non-empty line is not an Opening Fence (violates FR-01)
+- No Opening Fence found before non-Commentary content (violates FR-01)
 - A fence is never closed (violates FR-02)
 - Separator missing between consecutive Prompt Blocks (violates FR-04)
 - Opening Fence exceeds 9 backticks (violates FR-02)
@@ -301,6 +303,12 @@ Verify: Run `pnpm test:auth`. All tests pass.
 - Maximum file size is limited by the agent's context window, not by the format
 
 ## 9. Document History
+
+**[2026-09-01 18:00]**
+- Changed: FR-01 allows Commentary before first Prompt Block (was: first non-empty line must be fence)
+- Changed: FR-05 allows Commentary before first Prompt Block; added density rule (heading + 1 sentence in final files, no limit in templates)
+- Changed: DD-03 rationale updated for Commentary-before-first-fence allowance
+- Changed: Domain Object "Commentary" and "Prompt Queue File" definitions updated
 
 **[2026-08-31 22:20]**
 - Fixed: Term consistency - capitalized "Prompt Block" and "Commentary" as domain objects throughout (MW-WC-05)
