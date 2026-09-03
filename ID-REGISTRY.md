@@ -105,6 +105,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 ### Workspace Context
 - **SINGLE-PROJECT** - Workspace contains one project
 - **MONOREPO** - Workspace contains multiple projects
+- **WORKSPACE** - Workspace root with multiple independent repos
 - **SINGLE-VERSION** - One active version
 - **MULTI-VERSION** - Side-by-side versions
 - **SESSION-MODE** - Time-limited session with specific goals
@@ -192,10 +193,14 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **WMRK** - Watermarking and Provenance (SynthID-Text, C2PA, embedded signal detection for AI-generated text)
 - **RUSESCPOL** - Russia escalation policy in Ukraine war (official statements, nuclear doctrine, red lines)
 - **RECSLFIM** - Recursive Self-Improvement (AI systems accelerating or automating their own development)
+- **WSKMGMT** - Workspace Management Skill (DevSystem V5.0 workspace/project operations skill)
 - **WRTPRMPT** - Write Prompts Workflow (prompt queue file generation for sequential headless execution)
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 
 ## Document History
+
+**[2026-09-03 13:06]**
+- Added: WSKMGMT topic (Workspace Management Skill - DevSystem V5.0)
 
 **[2026-08-31 22:15]**
 - Added: IPPSPRMTFMT topic (IPPS Prompt File Format specification)
