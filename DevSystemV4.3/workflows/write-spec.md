@@ -1,6 +1,6 @@
 ---
 description: Create specification from requirements
-auto_execution_mode: 1
+auto_execution_mode: 3
 ---
 
 # Write Specification Workflow

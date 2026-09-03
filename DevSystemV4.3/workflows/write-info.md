@@ -1,6 +1,6 @@
 ---
 description: Create INFO document from research
-auto_execution_mode: 1
+auto_execution_mode: 3
 ---
 
 # Write INFO Workflow

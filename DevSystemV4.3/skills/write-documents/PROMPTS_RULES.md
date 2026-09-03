@@ -7,10 +7,10 @@ Rules for `_PROMPTS_[Topic].md` files. Verifiable from the artifact alone.
 ## Rule Index
 
 Format (FT)
-- PRMT-FT-01: First non-empty line is an opening fence
+- PRMT-FT-01: First fence must appear before any non-commentary content
 - PRMT-FT-02: Fence length 3-9 backticks, outer exceeds deepest inner
 - PRMT-FT-03: Separator `---` between every pair of consecutive prompts
-- PRMT-FT-04: Commentary only between separator and next fence
+- PRMT-FT-04: Commentary between prompts and before first prompt; density limits apply
 - PRMT-FT-05: At least one prompt per file
 - PRMT-FT-06: No content outside fences intended for the model
 
@@ -34,6 +34,8 @@ Content (CT)
 - PRMT-CT-05: Precision over token savings (APAPALAN priority order)
 - PRMT-CT-06: Signal redundancy preserved (MECT deliberate redundancy)
 - PRMT-CT-07: Examples over descriptions for format and behavior
+- PRMT-CT-08: Workflow calls on standalone lines, call first
+- PRMT-CT-09: Formatting discipline inside fences (no tables, no emojis, structure over decoration)
 
 Naming (NM)
 - PRMT-NM-01: Filename follows `_PROMPTS_[Topic].md` pattern
@@ -41,21 +43,23 @@ Naming (NM)
 
 ## PRMT-FT-01: Leading Fence Required
 
-The first non-empty line of the file MUST be an opening fence. No header block, no frontmatter, no markdown title.
+The first Opening Fence must appear before any non-Commentary content. Commentary (headings, notes) is allowed before the first prompt. No YAML frontmatter (`---` blocks conflict with separator token).
 
-**BAD:**
+**BAD** (YAML frontmatter):
 ```markdown
-# Setup Prompts
-
-This file sets up the project environment.
+---
+title: Setup Prompts
+---
 
 `` `
 Create a new Next.js project with TypeScript.
 `` `
 ```
 
-**GOOD:**
+**GOOD** (commentary heading before first fence):
 `````markdown
+## Prompt 1 - Create project
+
 ```
 Create a new Next.js project with TypeScript.
 ```
@@ -113,35 +117,54 @@ Second prompt.
 ```
 `````
 
-## PRMT-FT-04: Commentary Placement
+## PRMT-FT-04: Commentary Placement and Density
 
-Commentary (headings, notes, explanations) is allowed ONLY between a `---` separator and the next opening fence. Commentary is for human readers and is never sent to the model.
+Commentary (headings, notes, explanations) is allowed between prompts and before the first prompt. Commentary is for human readers and is never sent to the model.
 
-**BAD** (commentary before first prompt):
+**Density rule:**
+- **Final output files** (`_PROMPTS_[Topic].md`): heading + max 1 sentence per prompt
+- **Template files** (`_PROMPTS_[Topic]_TEMPLATE.md`): no limit (authoring instructions need detail)
+
+**BAD** (verbose commentary in final file):
 `````markdown
-## Setup Phase
+---
 
-This prompt creates the project.
+## Prompt 2 - MEASURE baseline
+
+Expected state: all findings classified, checks.yaml has tagged checks.
+Code changes already implemented (recovery scenario).
+Need to stash changes, capture baseline, restore, capture verify.
 
 ```
-Create a new project.
+Run the eval test to capture baseline.
 ```
 `````
 
-**GOOD** (commentary between separator and next fence):
+**GOOD** (heading + 1 sentence in final file):
 `````markdown
-```
-Create a new project.
-```
-
 ---
 
-## Step 2 - Add authentication
+## Prompt 2 - MEASURE baseline
 
-Previous step created the project skeleton. Now add auth.
+Expected state: findings classified, checks tagged, code changes implemented.
 
 ```
-Add JWT authentication to the Express server.
+Run the eval test to capture baseline.
+```
+`````
+
+**GOOD** (verbose commentary in template file):
+`````markdown
+---
+
+<!-- MEASURE: Single baseline run for the entire batch.
+All new checks should FAIL. This is the evidence baseline.
+Expected state: one run folder with all checks recorded. -->
+
+## Prompt 3 - MEASURE baseline (single run for batch)
+
+```
+**Objective**: MEASURE - Record the baseline eval score.
 ```
 `````
 
@@ -426,13 +449,21 @@ Verification criteria must be observable (you can see the result) or machine-che
 
 ## PRMT-CT-04: Objectives Not Implementation Steps
 
+**This rule takes precedence over PRMT-CT-05.** Precision tokens go into objectives, constraints, and verification criteria — never into implementation commands. Commands are acceptable only in `Verify:` sections (PRMT-CT-03). Commands in the prompt body = micromanagement.
+
 The objective describes the desired outcome, not the steps to get there. The agent determines implementation.
 
 **BAD:** "Open auth.ts, find line 42, change the timeout from 30 to 60"
 
+**BAD:** Embedding `git stash push -m "..."` or `python evals/runner.py --scripted` in the objective. These are implementation steps the agent can derive from the objective.
+
 **GOOD:** "The auth token expires too quickly for long-running API operations. Increase the token TTL to 60 seconds"
 
+**GOOD:** "Capture a pre-change baseline by temporarily reverting uncommitted changes, run the eval, restore changes, then run the eval again. Derive attribution from check-level diff."
+
 ## PRMT-CT-05: Precision Over Token Savings
+
+**Subordinate to PRMT-CT-04.** Precision applies to what (objectives), boundaries (constraints), and checks (verification) — not to how (implementation commands). Adding a `git stash` command is not precision; stating "capture a pre-change baseline" is.
 
 APAPALAN's priority order applies to prompts: Precision (Priority 1) before Brevity (Priority 2). Never remove tokens that carry meaning to save context window space. One failed re-execution costs 10-50x more tokens than the precision tokens saved.
 
@@ -522,6 +553,66 @@ Use environment variables for secrets.
 - Place after objective and constraints, before verification
 - Use realistic but generic values (privacy gate applies - no real credentials, addresses, or identifiers)
 - If the codebase already contains the pattern, reference the file instead: "Follow the pattern in `src/api/users.py`"
+
+## PRMT-CT-08: Workflow Calls on Standalone Lines
+
+Slash workflow references (`/verify`, `/prime`, `/session-load`) must appear on their own line with the workflow call first. Enables quick human scanning for workflow invocations in prompt content.
+
+**BAD** (workflow buried in sentence):
+`````markdown
+```
+After implementing the fix, make sure to run /verify against the spec and then /commit.
+```
+`````
+
+**GOOD** (workflow calls on standalone lines, call first):
+`````markdown
+```
+After implementing the fix:
+
+/verify against specs/_SPEC_LANA_MVP-1.md
+/commit with conventional format
+```
+`````
+
+This aligns with `agent-behavior.md` "Prompt Templates in NOTES.md" which requires standalone lines for workflow calls in fenced prompt blocks.
+
+## PRMT-CT-09: Formatting Discipline Inside Fences
+
+Prompt content inside fences is consumed by LLMs, not rendered visually. Markdown rendering (bold, italic, tables) adds no signal for models. Use structural markers instead.
+
+**Rules:**
+- No Markdown tables inside fences - use lists or line-separated entries
+- No emojis inside fences
+- No bold/italic for emphasis within prose - models process tokens, not rendering
+- Structural labels at line start are acceptable: `**Objective**:`, `**Step 1:**` - these function as parseable section markers, not visual decoration
+- Use ALL CAPS for category labels (`REGRESSION`, `FIXED`, `NOT FIXED`) instead of bold
+- Use line breaks and indentation for grouping, not horizontal rules
+
+Source: `WORKFLOW_RULES.md` WF-CT-03 (no tables), WF-CT-04 (no emojis), GRUC "no visual-only formatting" principle.
+
+**BAD** (visual formatting for emphasis):
+`````markdown
+````
+Check the **critical** files in `src/auth/`. If any test **fails**, you **must** revert immediately.
+
+| Finding | Status | Action |
+|---------|--------|--------|
+| PR-0001 | FIXED  | keep   |
+| PR-0002 | FAIL   | revert |
+````
+`````
+
+**GOOD** (structural markers only):
+`````markdown
+```
+Check the critical files in src/auth/. If any test fails, revert immediately.
+
+Finding status:
+- PR-0001  FIXED   keep
+- PR-0002  FAIL    revert
+```
+`````
 
 ## PRMT-NM-01: Filename Pattern
 

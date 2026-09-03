@@ -50,9 +50,10 @@ Plan what each prompt produces that the next one needs:
 - Do not restate facts already established - they are in conversation history
 - Never contradict constraints from earlier prompts
 
-Use commentary sections (between `---` and next fence) to document the expected state for human readers:
-- "Previous step should have created config.yaml with database settings"
-- "At this point, all tests should be passing"
+Use commentary sections (before the first prompt or between `---` and next fence) to document expected state for human readers. Commentary density depends on file type:
+
+- **Final output files**: heading + max 1 sentence per prompt. The sentence captures expected state for the human reviewer. More than one sentence is noise — the prompt itself carries the detail.
+- **Template files**: no limit. Templates need authoring instructions, placeholder explanations, and conditional guidance that get removed when filling the template.
 
 ## 5. Manage Prompt Density
 

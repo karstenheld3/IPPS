@@ -1,6 +1,6 @@
 ---
 description: Verify factual claims in documents against external reality
-auto_execution_mode: 1
+auto_execution_mode: 3
 ---
 
 # Fact-Check Workflow

@@ -1,5 +1,6 @@
 ---
 description: Create prompt queue files (_PROMPTS_[Topic].md) for sequential headless execution
+auto_execution_mode: 3
 ---
 
 # Write Prompts Workflow
@@ -12,9 +13,9 @@ Create `_PROMPTS_[Topic].md` files containing an ordered list of prompts. Each p
 
 ## Required Skills
 
-- @write-documents `PROMPTS_TEMPLATE.md` for file skeleton (copy and fill)
-- @write-documents `PROMPTS_GUIDES.md` for strategic approach (read BEFORE writing)
-- @write-documents `PROMPTS_RULES.md` for output verification (PRMT-* rules)
+- @skills:write-documents `PROMPTS_TEMPLATE.md` for file skeleton (copy and fill)
+- @skills:write-documents `PROMPTS_GUIDES.md` for strategic approach (read BEFORE writing)
+- @skills:write-documents `PROMPTS_RULES.md` for output verification (PRMT-* rules)
 
 ## MUST-NOT-FORGET
 
@@ -25,15 +26,39 @@ Create `_PROMPTS_[Topic].md` files containing an ordered list of prompts. Each p
 - At least one prompt per file
 - **NEVER modify tracking documents** (PROGRESS.md, PROBLEMS.md, NOTES.md, FAILS.md). Write-* workflows create NEW files only.
 - Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content → examples generic.
+- **Rule precedence**: PRMT-CT-04 (objectives not steps) overrides PRMT-CT-05 (precision). See PRMT-CT-04 for details.
+
+## Context Branching
+
+This workflow has two modes. Determine the mode from the user's request:
+
+- **Compose mode** (default) - Write prompts from scratch based on user description
+  - Trigger: `/write-prompts [description]`
+  - Steps: classify task, decompose, write, verify
+
+- **From Template mode** - Generate a filled prompts file from a `_PROMPTS_*_TEMPLATE.md`
+  - Trigger: `/write-prompts from template [path/to/template]`
+  - Steps: read template, collect placeholder values, generate filled instance, verify
+  - The template's top comment block contains the placeholder registry and usage instructions
+  - Output: `_PROMPTS_[Topic]_[Instance].md` following the template's naming convention
 
 ## Prerequisites
+
+### Compose mode
 
 - User has described one or more prompts to execute sequentially
 - Determine if prompts contain code blocks (affects fence length)
 
+### From Template mode
+
+- User has provided a path to a `_PROMPTS_*_TEMPLATE.md` file
+- User has provided (or can provide) case-specific context for placeholder values
+
+# COMPOSE MODE
+
 ## Step 1: Read PROMPTS_GUIDES.md
 
-Read `PROMPTS_GUIDES.md` from @write-documents. Classify the task, decide decomposition, plan state flow between prompts.
+Read `PROMPTS_GUIDES.md` from @skills:write-documents. Classify the task, decide decomposition, plan state flow between prompts.
 
 ## Step 2: Determine File Location and Name
 
@@ -98,12 +123,65 @@ Check output against all PRMT-* rules in `PROMPTS_RULES.md`:
 - [ ] Sequence (SQ): PRMT-SQ-01 through PRMT-SQ-03
 - [ ] Content (CT): PRMT-CT-01 through PRMT-CT-07
 
-## Output
+# FROM TEMPLATE MODE
+
+## Step T1: Read Template
+
+Read the `_PROMPTS_*_TEMPLATE.md` file specified by the user. Extract:
+
+1. **Placeholder registry** from the top comment block - list of all `[PLACEHOLDER]` values with descriptions
+2. **Instance naming convention** - how the filled file should be named
+3. **Usage instructions** - any special filling rules
+4. **Conditional sections** - prompts or sections marked `<!-- Conditional: ... -->` that may be included or removed based on context
+
+## Step T2: Collect Placeholder Values
+
+For each placeholder in the registry:
+
+1. Check if the user provided the value in their request or conversation history
+2. If not provided: derive from context (session files, PROBLEMS.md, SPEC, IMPL) by reading the referenced files
+3. If not derivable: list the missing placeholders and their descriptions - the user must provide them
+4. Do not guess placeholder values. Every value must be sourced from user input or workspace files.
+
+## Step T3: Generate Filled Instance
+
+1. Copy the template content
+2. Remove ALL XML comments (template annotations are not part of the output)
+3. Replace ALL `[PLACEHOLDER]` values with the collected case-specific data
+4. Resolve conditional sections: remove the branch that does not apply based on the collected values (e.g., remove BUG pipeline when category = CHANGE)
+5. Verify fence depths are still correct after modifications (PRMT-FT-02)
+6. Save as `_PROMPTS_[Topic]_[Instance].md` following the template's naming convention
+
+## Step T4: Verify Filled Instance
+
+The filled file must pass all PRMT-* rules as a standalone prompts file:
+
+- [ ] PRMT-FT-01: First non-empty line is an opening fence
+- [ ] PRMT-FT-02: Fence lengths correct (outer > deepest inner)
+- [ ] PRMT-FT-03: `---` separator between every pair of consecutive prompts
+- [ ] PRMT-FT-04: Commentary only between separator and next fence
+- [ ] PRMT-ST-01..05: Each prompt has objective, constraints (if implementation), verification, single reasoning mode, density limit
+- [ ] PRMT-SQ-01..03: No contradictions, explicit dependencies, commentary documents state
+- [ ] PRMT-CT-01..07: Specific objectives, negative constraints, observable verification
+- [ ] No unresolved `[PLACEHOLDER]` values remain in the output
+- [ ] No XML comments remain in the output
+- [ ] Privacy gate: no real user data leaked into the filled instance
+
+# OUTPUT
+
+## Compose mode
 
 Validated `_PROMPTS_[Topic].md` file in target location.
 
+## From Template mode
+
+Validated `_PROMPTS_[Topic]_[Instance].md` file with all placeholders resolved, ready for sequential execution.
+
 ## Quality Gate
 
-- [ ] All PRMT-* rules pass (Step 5)
+- [ ] All PRMT-* rules pass
 - [ ] Privacy gate applied (no real project data in examples)
 - [ ] Fence depths verified (outer > deepest inner per prompt)
+- [ ] **From Template mode**: Zero unresolved placeholders
+- [ ] **From Template mode**: Zero remaining XML comments
+- [ ] **From Template mode**: All conditional sections resolved

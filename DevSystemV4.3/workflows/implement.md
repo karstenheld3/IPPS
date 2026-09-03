@@ -1,6 +1,6 @@
 ---
 description: Implement approved changes - code from plans or corrections from reviews
-auto_execution_mode: 1
+auto_execution_mode: 3
 ---
 
 # Implement Workflow

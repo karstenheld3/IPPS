@@ -1,6 +1,6 @@
 ---
 description: Develop a full Minto Pyramid article from a MINTO draft
-auto_execution_mode: 1
+auto_execution_mode: 3
 ---
 
 # Write Minto Workflow

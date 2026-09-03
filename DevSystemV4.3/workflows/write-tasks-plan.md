@@ -1,6 +1,6 @@
 ---
 description: Create tasks plan document from IMPL/TEST
-auto_execution_mode: 1
+auto_execution_mode: 3
 ---
 
 # Write Tasks Plan Workflow
