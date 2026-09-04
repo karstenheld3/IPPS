@@ -244,7 +244,7 @@ Sync procedure:
 7. If not confirmed: abort, no changes made
 
 Sync direction:
-- downstream: source to target (e.g., Company knowledge to DevRepo)
-- upstream: target to source (e.g., DevRepo changes back to Company)
+- Downstream = sync from source to all targets (distribute content to dependent repos)
+- Upstream = sync from here back to source (push local changes back to origin)
 
 Preserve list: files in preserve list are never overwritten during sync, regardless of source changes.

@@ -46,7 +46,11 @@ CompanyRepo structure:
 
 ## How to Configure Sync Sources
 
-Three sync sources, each with downstream (source to target) and upstream (target to source) directions:
+Direction definitions:
+- Downstream = sync from source to all targets (distribute content to dependent repos)
+- Upstream = sync from here back to source (push local changes back to origin)
+
+Three sync sources, each with downstream and upstream directions:
 
 1. Prompt System
    - Source: DevSystem source (latest DevSystemV* folder)
