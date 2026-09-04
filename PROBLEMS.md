@@ -99,6 +99,18 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
       - `_DOWNLOAD_gitignore` folders for downloaded content
       - `_SOURCES` for transcribed content
 
+12. **ASCII art diagrams, UX designs, and markdown formatting in write-documents skill**
+   - Guides, rules, templates, and scripts to create and update ASCII art diagrams and UX designs in markdown documents
+   - **Workflow**: `ascii-art.md` → creates, edits, transforms ASCII art diagrams and visualizations
+   - **Script**: `md.py` → comprehensive markdown formatting and extraction CLI tool
+     - Detects frame glitches in ASCII art diagrams and UX designs and fixes them
+     - Detects markdown table glitches and fixes them
+     - Adds chapter links to table of contents
+     - Detects unexpanded acronyms and lists them with contextual information (lines, positions, sentences)
+     - Outputs markdown file structure and outline
+     - Formatting style extraction for LLMs to insert content with consistent formatting
+   - **Goal**: Ensure consistent formatting of markdown files that are easily readable by humans (equal-width formatted columns in tables) and editable by agents (extracted formatting and content)
+
 ## Resolved
 
 (none)
@@ -108,6 +120,9 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
 (none)
 
 ## Problems Changes
+
+**[2026-09-03 19:09]**
+- Updated: DVSYS-FT-0001 (added item 12 - ASCII art diagrams, UX designs, and markdown formatting in write-documents skill)
 
 **[2026-08-03 16:31]**
 - Added: DVSYS-FT-0001 (DevSystem V5.0 requirements - 5 areas)

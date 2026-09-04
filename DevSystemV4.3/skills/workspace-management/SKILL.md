@@ -70,7 +70,7 @@ Use before any sync operation to preview changes. Use before deploy to verify De
 7. Report results per file: added, modified, deleted, skipped, migrated
 ```
 
-Use to sync DevSystem from source, knowledge from Company, or rules from Company. Supports downstream (source to target) and upstream (target to source).
+Use to sync DevSystem from source, knowledge from Company, or rules from Company. Downstream = sync from source to all targets. Upstream = sync from here back to source.
 
 ### 3. Rollback
 

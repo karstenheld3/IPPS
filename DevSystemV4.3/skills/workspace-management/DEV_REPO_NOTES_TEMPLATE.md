@@ -19,6 +19,10 @@ Instructions: Replace [product-repo-name] with your product repository folder na
 
 ## Sync Sources
 
+Direction definitions:
+- Downstream = sync from source to all targets (distribute content to dependent repos)
+- Upstream = sync from here back to source (push local changes back to origin)
+
 ### Prompt System
 - Source: [WORKSPACE_FOLDER]\..\[devsystem-source-name]\DevSystemV*
 - Target: [DEV_REPO_FOLDER]\[AGENT_FOLDER]
