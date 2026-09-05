@@ -201,8 +201,8 @@ my-skill/
   UNINSTALL.md                   # Standard name (unprefixed)
   MYSKILL_REFERENCE.md           # Skill-specific (prefixed)
   myskill_config_examples.json   # Data files (lowercase)
-  _deploy_template.bat           # Script template (lowercase _template suffix)
-  _deploy_template.ps1           # Script template (lowercase _template suffix)
+  deploy_template.bat            # Script template (lowercase _template suffix)
+  deploy_template.ps1            # Script template (lowercase _template suffix)
   CONVERSATION_TEMPLATE.md       # Document template (uppercase _TEMPLATE suffix)
 ```
 

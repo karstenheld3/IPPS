@@ -111,15 +111,15 @@ Files intended as templates (copied and adapted per project) MUST use the `_TEMP
 **BAD:**
 ```
 hosting/netlify/
-  _deploy.bat           # Looks like a runnable script
-  _deploy.ps1           # Ambiguous: template or operational?
+  deploy.bat            # Looks like a runnable script
+  deploy.ps1            # Ambiguous: template or operational?
 ```
 
 **GOOD:**
 ```
 hosting/netlify/
-  _deploy_template.bat  # Clearly a template to copy and adapt
-  _deploy_template.ps1  # Clearly a template to copy and adapt
+  deploy_template.bat  # Clearly a template to copy and adapt
+  deploy_template.ps1  # Clearly a template to copy and adapt
 ```
 
 **BAD:** `CONVERSATION.md` used as a template (no suffix)

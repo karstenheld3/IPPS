@@ -15,12 +15,10 @@ How to set up and use local runtime environments for project repos. Local enviro
 
 ### Version Managers
 
-| Tool | Platform | Auto-switch | Pins in | Notes |
-| --- | --- | --- | --- | --- |
-| fnm | All (Win/Mac/Linux) | Yes (`--use-on-cd`) | `.nvmrc` or `.node-version` | Fast Rust binary, recommended default |
-| Volta | All | Yes (transparent) | `package.json` `"volta"` | Also pins npm/Yarn, best for teams |
-| nvm | Mac/Linux only | Manual (hook needed) | `.nvmrc` | Classic, slow shell startup |
-| nvm-windows | Windows only | No | N/A | Separate project from nvm |
+- **fnm** - All platforms (Win/Mac/Linux). Auto-switch on `cd` with `--use-on-cd`. Pins in `.nvmrc` or `.node-version`. Fast Rust binary, recommended default
+- **Volta** - All platforms. Transparent auto-switch (no shell hook). Pins in `package.json` `"volta"` key. Also pins npm/Yarn, best for teams
+- **nvm** - Mac/Linux only. Manual switching (hook needed). Pins in `.nvmrc`. Classic, slow shell startup
+- **nvm-windows** - Windows only. No auto-switching. Separate project from nvm
 
 **Recommended**: `fnm` for personal machines, `Volta` for team repos needing package manager pinning.
 
@@ -39,7 +37,7 @@ Bun installs its own runtime. No version manager needed for single-version proje
 1. Install: `powershell -c "irm bun.sh/install.ps1 | iex"`
 2. Initialize: `bun init`
 3. Install deps: `bun install`
-4. Add `.gitignore` entry for `node_modules/` and `bun.lockb` (keep lockfile, ignore cache)
+4. Add `.gitignore` entry for `node_modules/`. Commit `bun.lockb` (lockfile tracks exact versions)
 
 ### Deno
 
@@ -108,11 +106,9 @@ components = ["rustfmt", "clippy"]
 
 ### Version Managers
 
-| Tool | Platform | Auto-detect | Pins in | Notes |
-| --- | --- | --- | --- | --- |
-| zvm | All | Yes (`build.zig.zon`) | `build.zig.zon` `minimum_zig_version` | Native, project-aware shims |
-| zv | All | Yes (`.zigversion`) | `.zigversion` | Rust binary, inline `+version` syntax |
-| zix | All | Yes (`.zigversion`) | `.zigversion` | Lightweight, parallel downloads |
+- **zvm** - All platforms. Auto-detects from `build.zig.zon` `minimum_zig_version`. Native, project-aware shims
+- **zv** - All platforms. Auto-detects `.zigversion` file. Rust binary, inline `+version` syntax. Also provisions ZLS
+- **zix** - All platforms. Auto-detects `.zigversion` file. Lightweight, parallel downloads
 
 **Recommended**: `zvm` for project-aware detection from `build.zig.zon`, `zv` for explicit `.zigversion` files.
 
@@ -134,17 +130,15 @@ components = ["rustfmt", "clippy"]
 
 To detect which runtime environment a project uses:
 
-| Signal | Runtime | Environment Location |
-| --- | --- | --- |
-| `package.json` + `.nvmrc` | Node.js | `node_modules/` |
-| `package.json` + `"volta"` key | Node.js (Volta) | `node_modules/` |
-| `bun.lockb` | Bun | `node_modules/` |
-| `deno.json` | Deno | global cache |
-| `requirements.txt` or `pyproject.toml` | Python | `.venv/` |
-| `.python-version` | Python (pyenv) | `.venv/` |
-| `Cargo.toml` + `rust-toolchain.toml` | Rust | `target/` |
-| `build.zig.zon` | Zig | `zig-cache/` |
-| `.zigversion` | Zig (zv/zix) | `zig-cache/` |
+- `package.json` + `.nvmrc` → Node.js, env in `node_modules/`
+- `package.json` + `"volta"` key → Node.js (Volta), env in `node_modules/`
+- `bun.lockb` → Bun, env in `node_modules/`
+- `deno.json` → Deno, env in global cache
+- `requirements.txt` or `pyproject.toml` → Python, env in `.venv/`
+- `.python-version` → Python (pyenv), env in `.venv/`
+- `Cargo.toml` + `rust-toolchain.toml` → Rust, env in `target/`
+- `build.zig.zon` → Zig, env in `zig-cache/`
+- `.zigversion` → Zig (zv/zix), env in `zig-cache/`
 
 ## .gitignore Patterns
 
