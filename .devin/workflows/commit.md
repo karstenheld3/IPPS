@@ -15,7 +15,7 @@ Create conventional commits for staged changes.
 
 - **Suppress git noise**: Use `2>$null` on `git add` (CRLF warnings go to stderr) and `-q` on `git commit` (suppresses rename/summary output). Without this, large repos produce hundreds of lines that cause Cascade blocking commands to hang or time out.
 - **Use non-blocking execution** (`Blocking: false`, `WaitMsBeforeAsync: 5000`) for `git add -A` when many files are affected (e.g., version bumps, bulk renames). Check completion with `command_status`.
-- **Workspace-only scope**: Only commit and push repos whose `.git` folder is inside `[WORKSPACE_FOLDER]`. Never commit or push repos outside the workspace (e.g., linked repos in `[LINKED_REPOS]`, target repos from `deploy-to-all-repos`) unless [ACTOR] explicitly requests it. "all push" means "push all changes in the workspace repo", not "push all repos that received files".
+- **Workspace-only scope**: Only commit and push the workspace repo(s). In WORKSPACE mode (main.code-workspace exists), commit repos referenced in the workspace file - these may be physically outside `[WORKSPACE_FOLDER]` (e.g., ProductRepo at `[WORKSPACE_FOLDER]\..`). In SINGLE-PROJECT and MONOREPO modes, commit only the workspace repo itself. Never commit or push linked repos (`[LINKED_REPOS]`), deploy targets, or any repo not part of the workspace unless [ACTOR] explicitly requests it. "all push" means "push all changes in the workspace repo(s)", not "push all repos that received files".
 
 ## Steps
 
@@ -59,10 +59,10 @@ Types: feat, fix, docs, refactor, test, chore, style, perf
 
 Detect by: WORKSPACE mode (main.code-workspace file exists in workspace root).
 
-When WORKSPACE mode is detected, commit changes across multiple git repos **inside the workspace**:
+When WORKSPACE mode is detected, commit changes across multiple git repos referenced in the `main.code-workspace` file:
 
-1. Detect changes across all git repos whose `.git` folder is inside `[WORKSPACE_FOLDER]`
-2. **Exclude repos outside the workspace**: Linked repos (`[LINKED_REPOS]`), target repos from `deploy-to-all-repos`, and any repo whose path is not a subdirectory of `[WORKSPACE_FOLDER]` are excluded. These repos are only committed when [ACTOR] explicitly requests it (e.g., "commit KarstensWorkspace too")
+1. Read `main.code-workspace` to identify all repos in the workspace (ProductRepo, DevRepo, CompanyRepo, others)
+2. **Exclude repos not in the workspace file**: Linked repos (`[LINKED_REPOS]`), target repos from `deploy-to-all-repos`, and any repo not referenced in `main.code-workspace` are excluded. These repos are only committed when [ACTOR] explicitly requests it (e.g., "commit KarstensWorkspace too")
 3. Commit order (product-first):
    1. Product repo first (primary deliverable)
    2. Dev repo second (documentation of product changes)
