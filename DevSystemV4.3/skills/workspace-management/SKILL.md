@@ -11,6 +11,7 @@ Manages workspace setup, DevSystem sync, and knowledge distribution across produ
 References (loaded on demand):
 - WORKSPACE-GUIDES.md - High-level guidance on workspace setup, product/dev separation, sync sources
 - WORKSPACE-RULES.md - Verifiable rules for workspace integrity, required files and constants
+- WORKSPACE_CREATION_GUIDE.md - Interactive questionnaire for creating new workspaces with defaults
 - DEV_REPO_NOTES_TEMPLATE.md - Template for DevRepo NOTES.md with all workspace constants
 - PRODUCT_REPO_README_TEMPLATE.md - Template for ProductRepo README.md
 - COMPANY_REPO_NOTES_TEMPLATE.md - Template for CompanyRepo NOTES.md with sync policy tracking
@@ -29,6 +30,7 @@ References (loaded on demand):
 ## Intent Lookup
 
 User wants to...
+- Create a new workspace → WORKSPACE_CREATION_GUIDE.md questionnaire
 - Compare workspace settings → Procedure 1, FR-15
 - Update workspace from source → Procedure 2, FR-16
 - Roll back workspace settings → Procedure 3, FR-17
