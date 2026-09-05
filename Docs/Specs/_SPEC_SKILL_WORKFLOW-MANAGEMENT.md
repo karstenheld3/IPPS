@@ -3,17 +3,19 @@
 **Doc ID**: WSKMGMT-SP01
 **Feature**: workspace-management-skill
 **Goal**: Specify a skill that manages agentic workspace setup, DevSystem synchronization, and knowledge distribution across product/dev/company repo architectures
-**Timeline**: Created 2026-09-03, Updated 0 times (2026-09-03 - 2026-09-03)
+**Timeline**: Created 2026-09-03, Updated 3 times (2026-09-03 - 2026-09-06)
 **Target file(s)**:
 - `DevSystemV4.3/rules/devsystem-core.md` (Operation Modes, Workspace Scenarios)
 - `DevSystemV4.3/skills/workspace-management/SKILL.md`
 - `DevSystemV4.3/skills/workspace-management/WORKSPACE-GUIDES.md`
 - `DevSystemV4.3/skills/workspace-management/WORKSPACE-RULES.md`
+- `DevSystemV4.3/skills/workspace-management/WORKSPACE_CREATION_GUIDE.md`
 - `DevSystemV4.3/skills/workspace-management/DEV_REPO_NOTES_TEMPLATE.md`
 - `DevSystemV4.3/skills/workspace-management/PRODUCT_REPO_README_TEMPLATE.md`
 - `DevSystemV4.3/skills/workspace-management/COMPANY_REPO_NOTES_TEMPLATE.md`
 - `DevSystemV4.3/skills/workspace-management/workspace_diff_template.ps1`
 - `DevSystemV4.3/skills/workspace-management/workspace_sync_template.ps1`
+- `DevSystemV4.3/workflows/workspace-create.md` (new workflow)
 - `DevSystemV4.3/workflows/verify.md` (new context section)
 - `DevSystemV4.3/workflows/sync.md` (new context section)
 - `DevSystemV4.3/workflows/commit.md` (multi-repo commit support)
@@ -22,18 +24,18 @@
 **Depends on:**
 - `DevSystemV4.3/rules/devsystem-core.md` for existing operation modes and workspace scenarios
 - `DevSystemV4.3/skills/session-management/SKILL.md` for session folder structure (T##/S##)
-- `deploy-to-all-repos.md` for diff/sync preview/confirm pattern
 
 **Does not depend on:**
+- `deploy-to-all-repos.md` (IPPS-only deployment script, not referenced by skill files)
 - Any project-specific SPEC (this skill is generic, reusable across all DevSystem workspaces)
 
 ## MUST-NOT-FORGET
 
 - Skill files must be generic - no project-specific data, no real identifiers, addresses, or names
 - All new rules/workflows/skills created in `[DEVSYSTEM_FOLDER]` first, then sync to `.devin/`
-- Register `workspace-management` in `NOTES.md` `[SKILL_CATEGORIES]` and `deploy-to-all-repos.md` `$skillCategories`
+- Register `workspace-management` in `NOTES.md` `[SKILL_CATEGORIES]`
 - Follow SOP 1 (SOPS.md) for new skill creation including verification
-- `deploy-to-all-repos.md` is inspiration for diff/sync scripts, not a copy target - scripts must be generic, not hardcoded to any specific project
+- Skill must be completely independent of `deploy-to-all-repos.md` (IPPS-only deployment script). Diff/sync scripts generalize the pattern but must not reference or depend on it
 - Workspace constants are defined in DevRepo NOTES.md, not in the skill itself - skill reads them from there
 - Sync policy lookup order: 1) downstream repo NOTES.md, 2) CompanyRepo NOTES.md - never skip to defaults without checking both
 - Downstream repo modifications are allowed during verify - only gaps and incompatibilities must be fixed
@@ -43,6 +45,9 @@
 - Detection must be deterministic - no ambiguity between SYNCED and SELF-CONTAINED
 - SELF-CONTAINED repos must still pass /verify - missing sync constants are valid, not gaps
 - Existing repos with [LINKED_REPOS] or [*_SOURCE_FOLDER] are SYNCED by default - no migration needed
+- Workspace creation questionnaire must show impact per question so user understands consequences of each choice
+- Workspace creation is non-destructive (creating new files/folders) - no confirmation gate per WF-EX-01
+- `workspace-create.md` workflow is thin: references WORKSPACE_CREATION_GUIDE.md for questionnaire content, does not replicate questions
 
 ## Table of Contents
 
@@ -519,6 +524,36 @@ Direction definitions:
 - Explain: Self-contained is valid for standalone projects, prototypes, or repos with custom rules
 - Explain: Switching from SELF-CONTAINED to SYNCED = add source constants and run sync
 
+### Workspace Creation
+
+**WSKMGMT-FR-41: WORKSPACE_CREATION_GUIDE.md**
+- Interactive questionnaire for creating new single-repo and multi-repo workspaces
+- 7 sections: Workspace Mode, Product Repo, Dev Repo, Version Strategy, Sync Sources, Release Configuration, Skill Categories
+- Each question shows default value in brackets and impact description explaining consequences
+- Conditional sections: SINGLE-PROJECT skips Product Repo, Sync Sources, Skill Categories sections
+- Output section lists exact files to generate per workspace mode
+- References DEV_REPO_NOTES_TEMPLATE.md and PRODUCT_REPO_README_TEMPLATE.md for file generation
+- Guide is a skill resource file (not a template) - contains questionnaire logic, not document skeleton
+- Privacy gate compliant: all placeholders generic (e.g., [myapp], [appname])
+
+**WSKMGMT-FR-42: workspace-create.md workflow**
+- Thin workflow entry point: references WORKSPACE_CREATION_GUIDE.md for questionnaire content
+- Does not replicate questions in workflow body (Workflow-Skill Separation rule)
+- Frontmatter: description, auto_execution_mode
+- Goal and Why per WF-HD-02
+- MUST-NOT-FORGET section per WF-ST-03
+- Prerequisites: target folder must not already be a workspace (no existing NOTES.md or !NOTES.md)
+- Context branching: SINGLE-PROJECT vs WORKSPACE (determined by Section 1 answer)
+- Steps: load guide, present questions section by section, collect answers, generate files from templates, run integrity check
+- No confirmation gates - workspace creation is non-destructive per WF-EX-01
+- Verification section per WF-ST-04: run `/verify workspace` after creation
+- Follows WORKFLOW_RULES.md (all WF-* rules) and WORKFLOW_TEMPLATE.md structure
+
+**WSKMGMT-FR-43: Workspace creation procedure in SKILL.md**
+- Add intent to Intent Lookup: "Create a new workspace -> WORKSPACE_CREATION_GUIDE.md questionnaire"
+- Add WORKSPACE_CREATION_GUIDE.md to References list
+- No new Core Procedure needed - creation flow lives in workflow, guide provides questionnaire content
+
 ## 5. Non-Functional Requirements
 
 **WSKMGMT-NFR-01: Performance - Diff execution time**
@@ -585,19 +620,21 @@ Direction definitions:
 
 **WSKMGMT-DD-09:** `/commit` workflow extended for WORKSPACE mode. In multi-repo workspace mode, commits changes across multiple git repos in order: 1) product repo first, 2) dev repo second, 3) all other workspace repos. Rationale: Product repo changes (code, tests) are the primary deliverable and should be committed first. Dev repo changes (specs, sessions, knowledge) are secondary. Other repos (Company, linked repos) are tertiary. Dev repo is committed second because it contains documentation of the product changes. Temporary inconsistency (product committed, dev not) is acceptable because dev repo content is not a runtime dependency. This ordering ensures product changes are not left uncommitted if dev repo commit fails.
 
-**WSKMGMT-DD-10:** Diff and sync scripts (FR-13, FR-14) generalize `deploy-to-all-repos.md` patterns, not duplicate them. `deploy-to-all-repos.md` deploys from `.devin/` staging to linked repos with hardcoded repo lists and skill categories. The new scripts generalize this to: (1) read source and target from workspace constants, not hardcoded paths, (2) read sync policy from NOTES.md, not inline configuration, (3) support 3 sync sources (Prompt System, Knowledge, Rules), not only DevSystem, (4) support upstream and downstream, not only downstream. `deploy-to-all-repos.md` remains unchanged for existing deployment workflows. The new scripts are the foundation for `/sync workspace` context. Rationale: `deploy-to-all-repos.md` solves 80% of the problem but is project-specific. Generalizing its proven patterns (hash comparison, skill filtering, preview/confirm) into generic scripts avoids duplication while preserving the working deployment workflow.
+**WSKMGMT-DD-10:** Diff and sync scripts (FR-13, FR-14) are generic, independent of any project-specific deployment script. Scripts read source and target from workspace constants, read sync policy from NOTES.md, support 3 sync sources (Prompt System, Knowledge, Rules), and support upstream and downstream directions. The scripts are the foundation for `/sync workspace` context. Rationale: Project-specific deployment scripts solve 80% of the problem but are not reusable. Generic scripts that read all configuration from workspace constants work for any DevSystem workspace without modification.
 
-**WSKMGMT-DD-11:** Two states only (SYNCED, SELF-CONTAINED), not three. A repo is either part of a dependency tree or it isn't. No "partial sync" state. Rationale: Simplicity. If a repo syncs knowledge but not rules, it still has sync markers and is SYNCED. The sync policy handles which sources to sync.
+**WSKMGMT-DD-11:** Workspace creation uses a guide file (WORKSPACE_CREATION_GUIDE.md) for questionnaire content and a thin workflow (workspace-create.md) for execution flow. Rationale: Workflow-Skill Separation rule states workflows are thin entry points, skills hold knowledge. The questionnaire is knowledge (what to ask, what defaults to offer, what impact to explain) - it belongs in the skill. The workflow is the execution wrapper (load guide, present questions, generate files, verify). This mirrors how session-new.md references session-management skill templates.
 
-**WSKMGMT-DD-12:** Auto-detection, not declaration. Sync relationship is inferred from NOTES.md content, not from an explicit field. Rationale: Zero migration cost. Existing repos are automatically classified correctly. Adding an explicit `[SYNC_RELATIONSHIP]: SYNCED` field would require all existing repos to update.
+**WSKMGMT-DD-12:** Two states only (SYNCED, SELF-CONTAINED), not three. A repo is either part of a dependency tree or it isn't. No "partial sync" state. Rationale: Simplicity. If a repo syncs knowledge but not rules, it still has sync markers and is SYNCED. The sync policy handles which sources to sync.
 
-**WSKMGMT-DD-13:** Sync source constants are conditional, not base constants. [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER] and [RULES_SOURCE_FOLDER] are only required for SYNCED repos. Rationale: Self-contained repos don't have upstream sources. Requiring these constants would force self-contained repos to define meaningless paths.
+**WSKMGMT-DD-13:** Auto-detection, not declaration. Sync relationship is inferred from NOTES.md content, not from an explicit field. Rationale: Zero migration cost. Existing repos are automatically classified correctly. Adding an explicit `[SYNC_RELATIONSHIP]: SYNCED` field would require all existing repos to update.
 
-**WSKMGMT-DD-14:** Dimension 4 is orthogonal to Dimension 1. A SINGLE-PROJECT repo can be SYNCED (syncs from DevSystem) or SELF-CONTAINED (standalone). A WORKSPACE repo can be SYNCED (full dependency tree) or SELF-CONTAINED (multi-repo but no external sync). Rationale: Sync relationship and project structure are independent concerns.
+**WSKMGMT-DD-14:** Sync source constants are conditional, not base constants. [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER] and [RULES_SOURCE_FOLDER] are only required for SYNCED repos. Rationale: Self-contained repos don't have upstream sources. Requiring these constants would force self-contained repos to define meaningless paths.
 
-**WSKMGMT-DD-15:** [DEVSYSTEM] reference in NOTES.md counts as a sync marker. Even if a repo doesn't have [LINKED_REPOS] or [*_SOURCE_FOLDER], referencing [DEVSYSTEM] means it syncs from a DevSystem source. Rationale: [DEVSYSTEM] is the primary sync marker - it identifies the upstream DevSystem version.
+**WSKMGMT-DD-15:** Dimension 4 is orthogonal to Dimension 1. A SINGLE-PROJECT repo can be SYNCED (syncs from DevSystem) or SELF-CONTAINED (standalone). A WORKSPACE repo can be SYNCED (full dependency tree) or SELF-CONTAINED (multi-repo but no external sync). Rationale: Sync relationship and project structure are independent concerns.
 
-**WSKMGMT-DD-16:** [WORKSPACE_FOLDER] and [WORKSPACE_FILE] are distinct concepts. [WORKSPACE_FOLDER] is the filesystem path. [WORKSPACE_FILE] is the main.code-workspace file that defines workspace membership. Repos in the workspace file may be outside the workspace folder. Commit scope is determined by [WORKSPACE_FILE], not by physical location inside [WORKSPACE_FOLDER]. Rationale: GLOB-FL-041 showed that conflating these concepts leads to incorrectly excluding ProductRepo/CompanyRepo from commit scope, or incorrectly including linked repos. The distinction must be explicit in guides, rules, and templates.
+**WSKMGMT-DD-16:** [DEVSYSTEM] reference in NOTES.md counts as a sync marker. Even if a repo doesn't have [LINKED_REPOS] or [*_SOURCE_FOLDER], referencing [DEVSYSTEM] means it syncs from a DevSystem source. Rationale: [DEVSYSTEM] is the primary sync marker - it identifies the upstream DevSystem version.
+
+**WSKMGMT-DD-17:** [WORKSPACE_FOLDER] and [WORKSPACE_FILE] are distinct concepts. [WORKSPACE_FOLDER] is the filesystem path. [WORKSPACE_FILE] is the main.code-workspace file that defines workspace membership. Repos in the workspace file may be outside the workspace folder. Commit scope is determined by [WORKSPACE_FILE], not by physical location inside [WORKSPACE_FOLDER]. Rationale: GLOB-FL-041 showed that conflating these concepts leads to incorrectly excluding ProductRepo/CompanyRepo from commit scope, or incorrectly including linked repos. The distinction must be explicit in guides, rules, and templates.
 
 ## 7. Implementation Guarantees
 
@@ -1051,6 +1088,17 @@ Verify complete. 2 issues fixed.
 - Updated: Technical Constraints - hash-based comparison preferred (from critique RV-007)
 - Updated: CompanyRepo domain object storage to use `[COMPANY_REPO_FOLDER]`
 - Updated: Workspace Constants data structure to include `[COMPANY_REPO_FOLDER]`
+
+**[2026-09-06 00:22]**
+- Added: FR-41 (WORKSPACE_CREATION_GUIDE.md - interactive questionnaire)
+- Added: FR-42 (workspace-create.md workflow - thin entry point)
+- Added: FR-43 (workspace creation procedure in SKILL.md)
+- Added: DD-11 (guide + thin workflow separation for workspace creation)
+- Renumbered: DD-11 through DD-16 to DD-12 through DD-17 (avoid duplicate DD-11)
+- Added: WORKSPACE_CREATION_GUIDE.md to target files
+- Added: workspace-create.md to target files
+- Updated: Timeline to reflect 3 updates
+- Added: 3 MNF items (impact per question, non-destructive creation, thin workflow)
 
 **[2026-09-03 16:10]**
 - Fixed: Privacy gate - replaced real project paths with generic placeholders in Context, Domain Objects, NFRs, "What we don't want", and logging examples
