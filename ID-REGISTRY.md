@@ -196,6 +196,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **WSKMGMT** - Workspace Management Skill (DevSystem V5.0 workspace/project operations skill)
 - **WRTPRMPT** - Write Prompts Workflow (prompt queue file generation for sequential headless execution)
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
+- **ZAIINT** - Z.AI Integration (GLM model integration into llm-evaluation skill)
 
 ## Document History
 

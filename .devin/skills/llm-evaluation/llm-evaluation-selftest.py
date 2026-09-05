@@ -108,7 +108,7 @@ def create_test_fixtures(temp_dir: Path) -> Dict[str, Path]:
     
   # Fake API keys
   keys_file = temp_dir / ".env"
-  keys_file.write_text("OPENAI_API_KEY=sk-test\nANTHROPIC_API_KEY=sk-ant-test", encoding='utf-8')
+  keys_file.write_text("OPENAI_API_KEY=sk-test\nANTHROPIC_API_KEY=sk-ant-test\nZAI_API_KEY=sk-zai-test", encoding='utf-8')
   fixtures["keys"] = keys_file
     
   return fixtures
@@ -168,7 +168,7 @@ def test_config_loading(skill_dir: Path, results: TestResult):
   if pricing_file.exists():
     try:
       pricing = json.loads(pricing_file.read_text(encoding='utf-8'))
-      if "pricing" in pricing and ("openai" in pricing["pricing"] or "anthropic" in pricing["pricing"]):
+      if "pricing" in pricing and ("openai" in pricing["pricing"] or "anthropic" in pricing["pricing"] or "zai" in pricing["pricing"]):
         results.add_pass("Model pricing valid")
       else:
         results.add_fail("Model pricing valid", "Missing pricing structure")

@@ -96,6 +96,15 @@ FALLBACK_TESTS = [
   ("gpt-5.2", "minimal", "none", None, "reasoning_effort"),   # minimal -> low
 ]
 
+ZAI_TESTS = [
+  # reasoning_effort method (Z.AI: reasoning_effort + thinking via extra_body)
+  ("glm-5.2", "high", "none", None, "reasoning_effort"),       # 7 effort levels
+  ("glm-5.3-flash", "low", "none", None, "reasoning_effort"),  # limited: low/high/max only
+  # thinking method (Z.AI: thinking enabled/disabled via extra_body)
+  ("glm-4.5-flash", "medium", "none", None, "reasoning_effort"), # free model, thinking enabled
+  ("glm-4.5", "high", "none", None, "reasoning_effort"),        # standard thinking model
+]
+
 def get_script_dir() -> Path:
   return Path(__file__).parent
 
@@ -217,7 +226,7 @@ def run_tests(tests: list, keys_file: Path, prompt_file: Path, script_dir: Path,
 def parse_args():
   parser = argparse.ArgumentParser(description='Test all LLM models with parameter combinations')
   parser.add_argument('--keys-file', type=Path, required=True, help='Path to API keys file')
-  parser.add_argument('--provider', choices=['openai', 'anthropic', 'all'], default='all',
+  parser.add_argument('--provider', choices=['openai', 'anthropic', 'zai', 'all'], default='all',
             help='Provider to test (default: all)')
   parser.add_argument('--model', type=str, help='Test specific model only')
   parser.add_argument('--include-fallback', action='store_true', help='Include fallback tests')
@@ -253,7 +262,10 @@ def main():
     if args.model:
       openai_tests = [t for t in OPENAI_TESTS if t[0] == args.model]
       anthropic_tests = [t for t in ANTHROPIC_TESTS if t[0] == args.model]
+      zai_tests = [t for t in ZAI_TESTS if t[0] == args.model]
       fallback_tests = [t for t in FALLBACK_TESTS if t[0] == args.model]
+    else:
+      zai_tests = ZAI_TESTS
         
     # Run OpenAI tests
     if args.provider in ['openai', 'all'] and openai_tests:
@@ -264,6 +276,12 @@ def main():
     # Run Anthropic tests
     if args.provider in ['anthropic', 'all'] and anthropic_tests:
       passed, failed = run_tests(anthropic_tests, args.keys_file, prompt_file, script_dir, "Anthropic")
+      total_passed += passed
+      total_failed += failed
+    
+    # Run Z.AI tests
+    if args.provider in ['zai', 'all'] and zai_tests:
+      passed, failed = run_tests(zai_tests, args.keys_file, prompt_file, script_dir, "Z.AI")
       total_passed += passed
       total_failed += failed
         

@@ -17,7 +17,6 @@
 - `[TRANSCRIPTION_SCRIPT]`: `.devin/skills/llm-transcription/transcribe-image-to-markdown.py`
 - `[AGENT_FOLDER]`: Active agent folder (e.g., `.devin`)
 - `[KEYS_FILE]`: API keys file path
-- `[DIST_TARGETS]`: Locations receiving copies of updated JSONs (defined in Phase 9)
 
 ## Sources
 
@@ -32,6 +31,11 @@
 - O2 - Batch Pricing: `https://developers.openai.com/api/docs/pricing?latest-pricing=batch`
 - O3 - Model Compare: `https://platform.openai.com/docs/models/compare`
 
+**Z.AI (Zhipu AI):**
+- Z1 - Pricing: `https://docs.z.ai/guides/overview/pricing`
+- Z2 - Models: `https://docs.z.ai/guides/overview/overview`
+- Z3 - API Reference: `https://docs.z.ai/api-reference`
+
 ## Pricing Dimensions
 
 For every model, capture all available:
@@ -42,8 +46,14 @@ For every model, capture all available:
 - **Long context input/cached/output** per 1M tokens (OpenAI only, null if model has no long-context tier)
 - **Tier**: Standard and Batch (captured as separate datasets)
 - **Context window** (K tokens)
+- **Cached input** (Z.AI): implicit context caching with 50% discount on cached tokens
 
-`model-pricing.json` stores **Standard tier** prices for both providers. Models with a long-context pricing tier store those prices in a nested `long_context` object. Both tiers are still captured for the archive.
+`model-pricing.json` stores **Standard tier** prices for all providers. Models with a long-context pricing tier store those prices in a nested `long_context` object. Both tiers are still captured for the archive.
+
+**Z.AI-specific dimensions:**
+- Z.AI uses implicit context caching (no API parameter needed) — `cached_per_1m` is always populated
+- Free models (e.g., glm-4.5-flash, glm-4.7-flash) have `0.00` for all price fields
+- Z.AI promo pricing (e.g., GLM-5.3-Flash 50% off) is NOT stored — use list prices only
 
 ## Archive Convention
 
@@ -61,6 +71,10 @@ model-sources/
   [DATE]_OpenAI-Standard.md
   [DATE]_OpenAI-Batch.md
   [DATE]_OpenAI-Compare.md
+  [DATE]_ZAI-Pricing-DOM.json
+  [DATE]_ZAI-Models-DOM.json
+  [DATE]_ZAI-Pricing.md
+  [DATE]_ZAI-Models.md
   [DATE]_screenshots/                     # Screenshot archive
     Anthropic-Pricing/01.jpg, 02.jpg, ...
     Anthropic-ModelOverview/...
@@ -68,6 +82,8 @@ model-sources/
     OpenAI-Standard/...
     OpenAI-Batch/...
     OpenAI-Compare/...
+    ZAI-Pricing/...
+    ZAI-Models/...
 ```
 
 ## Phase 1: Pre-Flight Checks
@@ -75,7 +91,7 @@ model-sources/
 1. Read `last_updated` from `model-pricing.json`, `_updated` from `model-registry.json` and `model-parameter-mapping.json`.
 2. If any equals today's `[DATE]` → confirm with user whether to re-run.
 3. Confirm `[MODEL_SOURCES]` exists. If missing, create it.
-4. Create `[MODEL_SOURCES]/[DATE]_screenshots/` and subfolders for each source (A1, A3-A4, O1-O3). A2 is DOM-only — no screenshot subfolder. Pre-existing files in these paths **will be overwritten** on re-run — confirm before proceeding.
+4. Create `[MODEL_SOURCES]/[DATE]_screenshots/` and subfolders for each source (A1, A3-A4, O1-O3, Z1-Z2). A2 and Z3 are DOM-only — no screenshot subfolder. Pre-existing files in these paths **will be overwritten** on re-run — confirm before proceeding.
 
 **Gate 1**: Proceed only if all dates < `[DATE]` or user confirmed re-run.
 
@@ -177,12 +193,29 @@ URL: `https://developers.openai.com/api/docs/pricing?latest-pricing=batch`
 
 After Standard Page Setup, run Table Extraction. Save to: `[MODEL_SOURCES]/[DATE]_OpenAI-Batch-DOM.json`
 
+### 2.5 Z.AI Pricing (Z1)
+
+URL: `https://docs.z.ai/guides/overview/pricing`
+
+After Standard Page Setup, run Table Extraction. Z.AI pricing page shows input, cached (50% of input), and output per 1M tokens. Save to: `[MODEL_SOURCES]/[DATE]_ZAI-Pricing-DOM.json`
+
+Key columns: `Input`, `Cached Input` (50% of input), `Output`. Free models show "Free" — store as `0.00`.
+
+### 2.6 Z.AI Models (Z2)
+
+URL: `https://docs.z.ai/guides/overview/overview`
+
+After Standard Page Setup, extract model IDs, context windows, and thinking/reasoning_effort support. The page contains multiple tables: text models (with context column), vision models (with context column), and tools. Save to: `[MODEL_SOURCES]/[DATE]_ZAI-Models-DOM.json`
+
+Key fields: model ID (e.g., `glm-5.2`), context window (e.g., `128K` or `1M`), thinking mode (forced/auto/none), reasoning_effort support (levels or none).
+
 ### Gate 2
 
 Every model visible on the pricing pages has:
 - Numeric input / output prices captured
 - Cached price captured or explicitly `null`
 - (Anthropic) resolved or flagged API ID
+- (Z.AI) model ID and context window captured from models page
 
 If any check fails, retry extraction or escalate to user before Phase 3.
 
@@ -268,6 +301,18 @@ browser_run_code(code: "async (page) => {
 }")
 ```
 
+### Screenshot Path Limitation
+
+Playwright MCP can only save screenshots to its own allowed roots directory (typically `C:\Users\<user>\AppData\Local\Programs\<agent>\.playwright-mcp`). It cannot save directly to `[MODEL_SOURCES]`. Workaround:
+
+1. Take screenshot with a relative filename (saves to Playwright default dir)
+2. Copy to target folder via shell command:
+   ```powershell
+   Copy-Item "<playwright_default_dir>/<filename>.jpg" "[MODEL_SOURCES]/[DATE]_screenshots/<folder>/<filename>.jpg" -Force
+   ```
+
+Alternatively, use `browser_run_code` with `page.screenshot({ path: '<absolute_path>' })` — but this is also subject to the same restriction.
+
 ### Page-to-Folder Mapping
 
 - A1 Anthropic Pricing — Body-Scroll → `[MODEL_SOURCES]/[DATE]_screenshots/Anthropic-Pricing`
@@ -276,8 +321,10 @@ browser_run_code(code: "async (page) => {
 - O1 OpenAI Standard — Inner-Scroll → `[MODEL_SOURCES]/[DATE]_screenshots/OpenAI-Standard`
 - O2 OpenAI Batch — Inner-Scroll → `[MODEL_SOURCES]/[DATE]_screenshots/OpenAI-Batch`
 - O3 OpenAI Compare — Inner-Scroll → `[MODEL_SOURCES]/[DATE]_screenshots/OpenAI-Compare`
+- Z1 Z.AI Pricing — Body-Scroll → `[MODEL_SOURCES]/[DATE]_screenshots/ZAI-Pricing`
+- Z2 Z.AI Models — Body-Scroll → `[MODEL_SOURCES]/[DATE]_screenshots/ZAI-Models`
 
-A2 (Anthropic Models) is DOM-only — no screenshots needed (text page, no pricing tables).
+A2 (Anthropic Models) and Z3 (Z.AI API Reference) are DOM-only — no screenshots needed (text pages, no pricing tables).
 
 Replace `[FOLDER]` in the capture templates with the full screenshot folder path.
 
@@ -313,7 +360,9 @@ $sources = @(
   "Anthropic-Deprecations",
   "OpenAI-Standard",
   "OpenAI-Batch",
-  "OpenAI-Compare"
+  "OpenAI-Compare",
+  "ZAI-Pricing",
+  "ZAI-Models"
 )
 foreach ($src in $sources) {
   $folder = "[MODEL_SOURCES]/[DATE]_screenshots/$src"
@@ -339,6 +388,8 @@ $stitch = @{
   "OpenAI-Standard"          = "[MODEL_SOURCES]/[DATE]_OpenAI-Standard.md"
   "OpenAI-Batch"             = "[MODEL_SOURCES]/[DATE]_OpenAI-Batch.md"
   "OpenAI-Compare"           = "[MODEL_SOURCES]/[DATE]_OpenAI-Compare.md"
+  "ZAI-Pricing"              = "[MODEL_SOURCES]/[DATE]_ZAI-Pricing.md"
+  "ZAI-Models"               = "[MODEL_SOURCES]/[DATE]_ZAI-Models.md"
 }
 foreach ($src in $stitch.Keys) {
   $folder = "[MODEL_SOURCES]/[DATE]_screenshots/$src"
@@ -411,18 +462,19 @@ if (($ids | Sort-Object -Unique).Count -ne $ids.Count) { throw "Duplicate model_
 
 ## Phase 6: Update `model-pricing.json`
 
-Input: `[MODEL_SOURCES]/[DATE]_Anthropic-Pricing-DOM.json`, `[DATE]_OpenAI-Standard-DOM.json`, `[DATE]_Anthropic-ModelIDs-DOM.json`
+Input: `[MODEL_SOURCES]/[DATE]_Anthropic-Pricing-DOM.json`, `[DATE]_OpenAI-Standard-DOM.json`, `[DATE]_Anthropic-ModelIDs-DOM.json`, `[DATE]_ZAI-Pricing-DOM.json`, `[DATE]_ZAI-Models-DOM.json`
 
 ### Rules
 
 1. **Add** new models not currently in the file.
 2. **Update** prices for existing models if changed.
 3. **Never remove** legacy entries — even deprecated models stay for historical cost calc.
-4. **Tier selection:** Standard tier for both providers.
+4. **Tier selection:** Standard tier for all providers.
 5. **Column mapping:**
    - Anthropic: `Base Input Tokens` → `input_per_1m`, `Cache Hits & Refreshes` → `cached_per_1m`, `Output Tokens` → `output_per_1m`. Ignore `5m Cache Writes` and `1h Cache Writes`.
    - OpenAI short context: `Input` → `input_per_1m`, `Cached input` → `cached_per_1m`, `Output` → `output_per_1m`.
    - OpenAI long context: `Input (Long)` → `long_context.input_per_1m`, `Cached input (Long)` → `long_context.cached_per_1m`, `Output (Long)` → `long_context.output_per_1m`. Only present when the DOM row has non-empty long-context columns.
+   - Z.AI: `Input` → `input_per_1m`, `Cached Input` → `cached_per_1m` (50% of input), `Output` → `output_per_1m`. Free models show "Free" → store as `0.00`. Promo prices appear as dual values (e.g., `$0.15 $0.075`) — use the first (list) price only, ignore the second (promo) price.
 6. **Short/Long context split** (OpenAI only): store **Short context** numbers under the flat keys. If a model has long-context columns in the DOM, add a `long_context` nested object: `{input_per_1m, cached_per_1m|omit if null, output_per_1m, threshold_k: null}`. Set `threshold_k` to `null` until OpenAI documents the exact token threshold.
 7. Every entry: `{input_per_1m, cached_per_1m|omit if null, output_per_1m, long_context|omit if no long tier, context_window_k, currency: "USD"}`.
 8. Bump `last_updated` to `[DATE]`.
@@ -436,7 +488,7 @@ if ($p.last_updated -ne "[DATE]") { throw "last_updated not bumped" }
 
 # Every new model_id from Phase 2 DOM is present
 foreach ($id in $newIds) {
-  if (-not $p.pricing.anthropic.$id -and -not $p.pricing.openai.$id) { throw "Missing $id" }
+  if (-not $p.pricing.anthropic.$id -and -not $p.pricing.openai.$id -and -not $p.pricing.zai.$id) { throw "Missing $id" }
 }
 ```
 
@@ -470,6 +522,7 @@ foreach ($method in $methods) {
   $key = switch ($method) {
     "temperature"        { "temperature_factor" }
     "reasoning_effort"   { "openai_reasoning_effort" }
+    "effort"             { "openai_reasoning_effort" }
     "thinking"           { "anthropic_thinking_factor" }
     "adaptive_thinking"  { "anthropic_adaptive_effort" }
     default              { $method }
@@ -492,14 +545,17 @@ foreach ($modelId in $newEnabledModels) {
 ```
 
 If `test-call-llm.py` has no test entries for a new model, the `--model` filter returns zero tests. In that case:
-1. Add a minimal test entry to the appropriate `OPENAI_TESTS` or `ANTHROPIC_TESTS` list in `test-call-llm.py`.
+1. Add a minimal test entry to the appropriate `OPENAI_TESTS`, `ANTHROPIC_TESTS`, or `ZAI_TESTS` list in `test-call-llm.py`.
 2. Re-run.
+
+**Z.AI note**: Z.AI uses the OpenAI SDK with `base_url` swap. Z.AI-specific parameters (`thinking`, `reasoning_effort`) are passed via `extra_body`. The `call-llm.py` and `call-llm-batch.py` scripts handle this automatically via the `zai_reasoning` and `zai_thinking` methods.
 
 **Streaming note**: Models with `method: "adaptive_thinking"` require the Anthropic streaming API (`client.messages.stream()`) because the SDK enforces streaming for operations that may exceed 10 minutes. The `call-llm.py` scripts handle this automatically.
 
 **Gate 8**: All test runs exit with code 0. If a model fails:
 - API error (401, 403): likely no access — set `status: "no_access"`, `enabled: false` in registry.
 - API error (400): likely wrong parameters — check `model_id_startswith[]` config.
+- API error (429) with "Insufficient balance": account has no credits — API key is valid but paid models cannot be tested. Set `status: "no_access"` for paid models, leave free models as `status: "available"`. Do NOT block the run.
 - Timeout: retry once, then flag in report.
 
 ## Phase 9: Distribute and Sync
@@ -579,6 +635,18 @@ Print a concise summary:
 - **Duplicate model in pricing vs registry**: reconcile toward the pricing file (prices are authoritative for existence); registry must follow.
 
 ## Document History
+
+**[2026-09-05 19:50]**
+- Fixed: Z2 URL from `/models` (404) to `/overview` (actual page)
+- Fixed: Phase 6 Input line missing Z.AI DOM files
+- Fixed: Phase 6 Rule 4 "both providers" → "all providers"
+- Fixed: Gate 8 missing 429 (insufficient balance) handling
+- Fixed: Z.AI promo price parsing — document dual-value format (e.g., `$0.15 $0.075`), use first value only
+- Added: Screenshot Path Limitation section — Playwright MCP can only save to allowed roots, document shell copy workaround
+- Removed: Dead `[DIST_TARGETS]` placeholder (defined but never used)
+
+**[2026-09-05 19:35]**
+- Added: Z.AI (Zhipu AI) provider support — sources Z1-Z3, pricing dimensions, Phase 2.5-2.6 DOM extraction, screenshot archive folders, Phase 6 column mapping, Gate 2/6/7 Z.AI checks, Phase 8 ZAI_TESTS reference, Z.AI note for OpenAI SDK + extra_body pattern
 
 **[2026-08-30 14:20]**
 - Changed: Moved workflow from `skills/llm-evaluation/` to workspace root

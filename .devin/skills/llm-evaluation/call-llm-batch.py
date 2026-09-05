@@ -67,24 +67,31 @@ def build_api_params(model: str, mapping: dict, registry: dict,
     effort_value = effort_map[reasoning_effort]['openai_reasoning_effort']
     supported = model_config.get('effort', [])
     if effort_value not in supported and supported:
-      # Fallback: none->minimal, minimal->low if not supported
       fallback_map = {'none': 'minimal', 'minimal': 'low'}
       if effort_value in fallback_map and fallback_map[effort_value] in supported:
         print(f"[WARN] '{effort_value}' not supported by {model}, falling back to '{fallback_map[effort_value]}'", file=sys.stderr)
         effort_value = fallback_map[effort_value]
-    params['reasoning_effort'] = effort_value
-    if verbosity:
-      params['verbosity'] = effort_map[verbosity]['openai_verbosity']
+    if provider == 'zai':
+      params['reasoning_effort'] = effort_value
+      params['thinking'] = {'type': 'enabled'}
+    else:
+      params['reasoning_effort'] = effort_value
+      if verbosity:
+        params['verbosity'] = effort_map[verbosity]['openai_verbosity']
   elif method == 'effort':
     params['effort'] = effort_map[reasoning_effort]['openai_reasoning_effort']
   elif method == 'adaptive_thinking':
     params['thinking'] = {'type': 'adaptive'}
     params['anthropic_effort'] = effort_map[reasoning_effort]['anthropic_adaptive_effort']
   elif method == 'thinking':
-    factor = effort_map[reasoning_effort]['anthropic_thinking_factor']
-    budget = int(factor * model_config.get('thinking_max', 100000))
-    if budget > 0:
-      params['thinking'] = {'type': 'enabled', 'budget_tokens': budget}
+    if provider == 'zai':
+      thinking_on = reasoning_effort in ('medium', 'high', 'xhigh', 'max')
+      params['thinking'] = {'type': 'enabled' if thinking_on else 'disabled'}
+    else:
+      factor = effort_map[reasoning_effort]['anthropic_thinking_factor']
+      budget = int(factor * model_config.get('thinking_max', 100000))
+      if budget > 0:
+        params['thinking'] = {'type': 'enabled', 'budget_tokens': budget}
     
   output_factor = effort_map[output_length]['output_length_factor']
   max_output = model_config.get('max_output', 16384)
@@ -148,6 +155,8 @@ def detect_provider(model_id: str) -> str:
     return 'openai'
   if model_lower.startswith('claude'):
     return 'anthropic'
+  if model_lower.startswith('glm-'):
+    return 'zai'
   print(f"ERROR: Cannot detect provider for model: {model_id}", file=sys.stderr)
   sys.exit(1)
 
@@ -217,6 +226,14 @@ def create_anthropic_client(keys: dict):
     print("ERROR: ANTHROPIC_API_KEY not found in keys file", file=sys.stderr)
     sys.exit(1)
   return Anthropic(api_key=api_key)
+
+def create_zai_client(keys: dict):
+  """Create Z.AI client using OpenAI SDK with base_url swap."""
+  api_key = keys.get('ZAI_API_KEY')
+  if not api_key:
+    print("ERROR: ZAI_API_KEY not found in keys file", file=sys.stderr)
+    sys.exit(1)
+  return OpenAI(api_key=api_key, base_url='https://api.z.ai/api/paas/v4/')
 
 def call_openai_responses(client, model: str, prompt: str, api_params: dict,
               image_data: str = None, image_media_type: str = None):
@@ -408,6 +425,40 @@ def call_anthropic(client, model: str, prompt: str, api_params: dict, method: st
     "model": response.model
   }
 
+def call_zai(client, model, prompt, api_params, method,
+             image_data=None, image_media_type=None):
+  """Call Z.AI API via OpenAI SDK with base_url swap. Uses Chat Completions API only."""
+  if image_data:
+    content = [
+      {"type": "text", "text": prompt},
+      {"type": "image_url", "image_url": {"url": f"data:{image_media_type};base64,{image_data}"}}
+    ]
+  else:
+    content = prompt
+  messages = [{"role": "user", "content": content}]
+  call_params = {'model': model, 'messages': messages, 'max_tokens': api_params.get('max_tokens', 4096)}
+  extra_body = {}
+  if 'thinking' in api_params:
+    extra_body['thinking'] = api_params['thinking']
+  if 'reasoning_effort' in api_params:
+    extra_body['reasoning_effort'] = api_params['reasoning_effort']
+  if extra_body:
+    call_params['extra_body'] = extra_body
+  response = client.chat.completions.create(**call_params)
+  result = {
+    "text": response.choices[0].message.content,
+    "usage": {
+      "input_tokens": response.usage.prompt_tokens,
+      "output_tokens": response.usage.completion_tokens
+    },
+    "model": response.model
+  }
+  if hasattr(response.usage, 'prompt_tokens_details') and response.usage.prompt_tokens_details:
+    cached = getattr(response.usage.prompt_tokens_details, 'cached_tokens', 0)
+    if cached:
+      result["usage"]["cached_tokens"] = cached
+  return result
+
 def get_output_path(input_file: Path, output_folder: Path, model: str, run: int) -> Path:
   """Generate output path for content (.md)."""
   safe_model = model.replace('/', '_').replace(':', '_')
@@ -494,6 +545,10 @@ def process_file(worker_id: int, file_idx: int, total_files: int, input_file: Pa
       if provider == 'openai':
         result = retry_with_backoff(
           lambda: call_openai(client, args.model, file_prompt, api_params, method, image_data, image_media_type)
+        )
+      elif provider == 'zai':
+        result = retry_with_backoff(
+          lambda: call_zai(client, args.model, file_prompt, api_params, method, image_data, image_media_type)
         )
       else:
         result = retry_with_backoff(
@@ -617,6 +672,10 @@ def main():
     client = create_openai_client(keys)
     if use_caching:
       print("[INFO] OpenAI prompt caching is automatic (no API changes needed)", file=sys.stderr)
+  elif provider == 'zai':
+    client = create_zai_client(keys)
+    if use_caching:
+      print("[INFO] Z.AI context caching is automatic (no API changes needed)", file=sys.stderr)
   else:
     client = create_anthropic_client(keys)
     if use_caching:
