@@ -7,13 +7,14 @@ Rules for `_PROMPTS_[Topic].md` files. Verifiable from the artifact alone.
 ## Rule Index
 
 Format (FT)
-- PRMT-FT-01: First fence must appear before any non-commentary content
+- PRMT-FT-01: First fence must appear before any non-commentary content (optional frontmatter per PRMT-FT-08)
 - PRMT-FT-02: Fence length 3-9 backticks, outer exceeds deepest inner
 - PRMT-FT-03: Separator `---` between every pair of consecutive prompts
 - PRMT-FT-04: Commentary between prompts and before first prompt; density limits apply
 - PRMT-FT-05: At least one prompt per file
 - PRMT-FT-06: No content outside fences intended for the model
 - PRMT-FT-07: Heading consistency - headings recommended (SHOULD); if used, all prompts MUST have headings
+- PRMT-FT-08: Optional execution frontmatter - YAML block at file start with execution hints
 
 Structure (ST)
 - PRMT-ST-01: Every prompt has an identifiable objective
@@ -37,6 +38,7 @@ Content (CT)
 - PRMT-CT-07: Examples over descriptions for format and behavior
 - PRMT-CT-08: Workflow calls on standalone lines, call first
 - PRMT-CT-09: Formatting discipline inside fences (no tables, no emojis, structure over decoration)
+- PRMT-CT-10: Workflow references in backticks when not calling (distinct from PRMT-CT-08 standalone calls)
 
 Naming (NM)
 - PRMT-NM-01: Filename follows `_PROMPTS_[Topic].md` pattern
@@ -44,9 +46,9 @@ Naming (NM)
 
 ## PRMT-FT-01: Leading Fence Required
 
-The first Opening Fence must appear before any non-Commentary content. Commentary (headings, notes) is allowed before the first prompt. No YAML frontmatter (`---` blocks conflict with separator token).
+The first Opening Fence must appear before any non-Commentary content. Commentary (headings, notes) is allowed before the first prompt. Optional Execution Frontmatter (per PRMT-FT-08) may appear before Commentary. No other YAML frontmatter.
 
-**BAD** (YAML frontmatter):
+**BAD** (non-execution YAML frontmatter):
 ```markdown
 ---
 title: Setup Prompts
@@ -57,7 +59,23 @@ Create a new Next.js project with TypeScript.
 `` `
 ```
 
-**GOOD** (commentary heading before first fence):
+**GOOD** (optional execution frontmatter per PRMT-FT-08):
+`````markdown
+---
+intended_model: claude-sonnet-4-5
+context_window_size: 200k
+reasoning_settings: high
+prompt_system: IPPS
+---
+
+## Prompt 1 - Create project
+
+```
+Create a new Next.js project with TypeScript.
+```
+`````
+
+**GOOD** (commentary heading before first fence, no frontmatter):
 `````markdown
 ## Prompt 1 - Create project
 
@@ -665,6 +683,100 @@ Check the critical files in src/auth/. If any test fails, revert immediately.
 Finding status:
 - PR-0001  FIXED   keep
 - PR-0002  FAIL    revert
+```
+`````
+
+## PRMT-CT-10: Workflow References in Backticks When Not Calling
+
+When a workflow name appears in prompt prose as a reference (not as an actual call to execute), it MUST be wrapped in backticks. This distinguishes references from executable calls (PRMT-CT-08 standalone lines without backticks).
+
+**BAD** (workflow referenced in prose without backticks):
+`````markdown
+```
+Then use /write-prompts to write the remaining prompts into a file.
+
+/session-new
+```
+`````
+
+**GOOD** (reference in backticks, call without backticks on standalone line):
+`````markdown
+```
+Then use `/write-prompts` to write the remaining prompts into a file.
+
+/session-new
+```
+`````
+
+Applies to all workflow names mentioned in prose: `/deep-research`, `/fact-check`, `/go`, `/verify`, `/write-prompts`, etc. When the workflow is actually being called (PRMT-CT-08), it appears on its own line without backticks.
+
+## PRMT-FT-08: Optional Execution Frontmatter
+
+An optional YAML block at the very top of the file (before any Commentary or Opening Fence). Provides execution hints to the execution engine. The execution engine MAY honor these hints or override with its own configuration.
+
+**Supported keys:**
+- `intended_model`: Model identifier (e.g., `claude-sonnet-4-5`, `gpt-4o`)
+- `context_window_size`: Context window size (e.g., `200k`, `128k`, `1M`)
+- `reasoning_settings`: Reasoning effort (`medium` | `high` | `extra-high`)
+- `prompt_system`: Prompt system identifier (e.g., `IPPS`)
+
+**Rules:**
+1. If present, frontmatter MUST be the first content in the file (no blank lines before opening `---`)
+2. Only one frontmatter block allowed (at file start only)
+3. Frontmatter is never sent to the model
+4. Frontmatter is OPTIONAL - omit entirely if no execution hints needed
+5. Unknown keys are ignored by the parser (forward compatibility)
+
+**GOOD** (with frontmatter):
+`````markdown
+---
+intended_model: claude-sonnet-4-5
+context_window_size: 200k
+reasoning_settings: high
+prompt_system: IPPS
+---
+
+## Prompt 1 - Analyze codebase
+
+```
+Analyze the authentication module for security vulnerabilities.
+```
+`````
+
+**GOOD** (without frontmatter - still valid):
+`````markdown
+## Prompt 1 - Analyze codebase
+
+```
+Analyze the authentication module for security vulnerabilities.
+```
+`````
+
+**BAD** (frontmatter not at file start - blank line before `---`):
+`````markdown
+
+---
+intended_model: claude-sonnet-4-5
+---
+
+```
+Analyze the authentication module.
+```
+`````
+
+**BAD** (frontmatter after a prompt - this is a Separator, not frontmatter):
+`````markdown
+```
+First prompt.
+```
+
+---
+
+intended_model: claude-sonnet-4-5
+---
+
+```
+Second prompt.
 ```
 `````
 

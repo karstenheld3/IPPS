@@ -4,9 +4,20 @@ Location: session folder (default), workspace root, or user-specified path
 Topic: CamelCase description (e.g., SetupProject, MigrateAuth, AnalyzePerformance)
 
 Read PROMPTS_GUIDES.md BEFORE writing. Verify against all PRMT-* rules in PROMPTS_RULES.md.
-Remove ALL XML comments after creating the document. First non-empty line must be an opening fence.
+Remove ALL XML comments after creating the document. First non-empty line must be frontmatter (optional), Commentary, or opening fence.
 Heading recommendation (PRMT-FT-07): use `## Prompt N - [title]` before each prompt for readability.
 If headings are used, ALL prompts MUST have headings (consistency enforced). -->
+
+<!-- Optional Execution Frontmatter (PRMT-FT-08): YAML block at file start.
+Provides execution hints to the execution engine. The engine MAY honor or override.
+Omit entirely if no execution hints needed. Remove this block if not used.
+Supported keys: intended_model, context_window_size, reasoning_settings, prompt_system -->
+---
+intended_model: [model identifier, e.g., claude-sonnet-4-5]
+context_window_size: [e.g., 200k, 128k, 1M]
+reasoning_settings: [medium | high | extra-high]
+prompt_system: [e.g., IPPS]
+---
 
 <!-- Simple prompt: 3-backtick fence when no inner code blocks.
 Heading before the fence is optional but recommended (PRMT-FT-07). -->
@@ -44,11 +55,18 @@ Constraints:
 Verify: [Observable success criteria]
 ````
 
-<!-- EXAMPLE: Reference only. Do not copy into new documents. Shows a completed 2-prompt file with headings (PRMT-FT-07). -->
+<!-- EXAMPLE: Reference only. Do not copy into new documents. Shows a completed 2-prompt file with optional frontmatter and headings (PRMT-FT-07/08). -->
 
 ## Full Example
 
 `````markdown
+---
+intended_model: claude-sonnet-4-5
+context_window_size: 200k
+reasoning_settings: high
+prompt_system: IPPS
+---
+
 ## Prompt 1 - Security analysis
 
 ```

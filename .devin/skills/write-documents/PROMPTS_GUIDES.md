@@ -162,11 +162,41 @@ Keep examples minimal: one representative instance, not three variations of the 
 
 Examples containing code blocks require deeper outer fences. A prompt showing a markdown example with ``` inside needs a 4+ backtick outer fence. Plan fence depth AFTER writing examples (section 7).
 
-## 10. Review Checklist
+## 10. Optional Execution Frontmatter
+
+Execution Frontmatter (PRMT-FT-08) is an optional YAML block at the very top of the file. It provides execution hints to the execution engine.
+
+### 10.1 When to Include Frontmatter
+
+Include frontmatter when:
+- The prompts are designed for a specific model or reasoning level
+- The execution engine supports frontmatter and benefits from hints
+- The prompt sequence is part of a prompt system (e.g., IPPS)
+
+Omit frontmatter when:
+- The prompts are model-agnostic
+- No specific reasoning settings are needed
+- Simplicity is preferred over explicitness
+
+### 10.2 Supported Keys
+
+- `intended_model`: Model identifier (e.g., `claude-sonnet-4-5`, `gpt-4o`)
+- `context_window_size`: Context window size (e.g., `200k`, `128k`, `1M`)
+- `reasoning_settings`: Reasoning effort (`medium` | `high` | `extra-high`)
+- `prompt_system`: Prompt system identifier (e.g., `IPPS`)
+
+### 10.3 Key Principles
+
+- **Optional**: The execution engine decides whether to honor frontmatter or use its own configuration
+- **Portability**: The same prompt file can run on different engines with different models
+- **Never sent to model**: Frontmatter is metadata for the execution engine, not prompt content
+- **File start only**: Frontmatter must be the first content in the file (no blank lines before opening `---`)
+
+## 11. Review Checklist
 
 Before considering the prompts file complete:
 
-- [ ] First non-empty line is an opening fence (no frontmatter, no header)
+- [ ] First non-empty line is optional frontmatter (PRMT-FT-08), Commentary, or opening fence (no other frontmatter)
 - [ ] Each prompt has a clear objective (verifiable from artifact per PRMT-ST-01)
 - [ ] Implementation prompts have constraints and verification criteria
 - [ ] No prompt mixes more than one reasoning mode (research + implement = split)

@@ -94,6 +94,10 @@ A **Separator** is a single `---` line between two consecutive Prompt Blocks. It
 
 **Commentary** is human-readable text (headings, notes, explanations) placed between prompts or before the first prompt. Commentary is never sent to the model. It documents expected state, purpose of the next prompt, or context for human reviewers. In final output files, Commentary is limited to a heading plus one sentence. Templates may use longer Commentary for authoring instructions.
 
+### Execution Frontmatter
+
+**Execution Frontmatter** is an optional YAML block at the very top of a Prompt Queue File (before any Commentary or Opening Fence). It provides execution hints to the execution engine: intended model, context window size, reasoning settings, and prompt system. The execution engine MAY use these hints or override them with its own configuration. Frontmatter is delimited by `---` lines, which is unambiguous because Separators only appear between Prompt Blocks (after a Closing Fence).
+
 ### Info String
 
 An **Info String** is optional text following the backticks on an Opening Fence line (e.g., `` ```text ``). The parser ignores it. It exists for Markdown renderer compatibility.
@@ -107,7 +111,8 @@ These rules define what makes a file syntactically valid. A parser MUST reject f
 **IPPSPRMTFMT-FR-01: Leading Fence**
 - The first Opening Fence must appear before any non-Commentary content
 - Commentary (headings, notes) is allowed before the first Prompt Block
-- No frontmatter or YAML header blocks before the first fence
+- Optional Execution Frontmatter (per FR-11) may appear before Commentary
+- No other frontmatter or YAML header blocks before the first fence
 
 **IPPSPRMTFMT-FR-02: Fence Length Range**
 - Opening Fence backtick count N: 3 <= N <= 9
@@ -159,6 +164,19 @@ Content quality is governed by `PROMPTS_RULES.md` (PRMT-* rules). This spec does
 
 ### Naming Convention
 
+**IPPSPRMTFMT-FR-11: Optional Execution Frontmatter**
+- Execution Frontmatter is an optional YAML block at the very top of the file (before any Commentary or Opening Fence)
+- Format: `---` on first line, YAML key-value pairs, `---` closing line
+- Supported keys:
+  - `intended_model`: Model identifier (e.g., `claude-sonnet-4-5`, `gpt-4o`)
+  - `context_window_size`: Context window size (e.g., `200k`, `128k`, `1M`)
+  - `reasoning_settings`: Reasoning effort (`medium` | `high` | `extra-high`)
+  - `prompt_system`: Prompt system identifier (e.g., `IPPS`)
+- The execution engine MAY honor these hints or override with its own configuration
+- If present, frontmatter MUST be the first content in the file (no blank lines or content before the opening `---`)
+- Only one frontmatter block allowed (at file start only)
+- Frontmatter is never sent to the model
+
 **IPPSPRMTFMT-FR-10: DevSystem Filename**
 - DevSystem convention: `_PROMPTS_[Topic].md` where Topic is CamelCase
 - General convention: `PROMPTS*.md` (e.g., `PROMPTS.md`, `PROMPTS_setup.md`)
@@ -170,7 +188,7 @@ Content quality is governed by `PROMPTS_RULES.md` (PRMT-* rules). This spec does
 
 **IPPSPRMTFMT-DD-02:** Per-prompt fence length (not per-file). Rationale: Most prompts contain no inner code blocks and use 3 backticks. Only prompts with embedded code examples need longer fences. Per-file minimum would force unnecessary depth everywhere.
 
-**IPPSPRMTFMT-DD-03:** Commentary allowed before first fence, but no frontmatter/YAML. Rationale: A heading before the first prompt improves human readability. The parser skips non-fence lines until it finds the first Opening Fence. Frontmatter (YAML `---` blocks) is still prohibited because `---` is the separator token.
+**IPPSPRMTFMT-DD-03:** Commentary allowed before first fence. Optional Execution Frontmatter allowed at file start (per FR-11). Rationale: A heading before the first prompt improves human readability. The parser skips non-fence lines until it finds the first Opening Fence. Execution Frontmatter (YAML `---` blocks) is allowed only at the very top of the file and is unambiguous because Separators only appear between Prompt Blocks (after a Closing Fence).
 
 **IPPSPRMTFMT-DD-04:** `---` separator (not blank lines). Rationale: Blank lines are ambiguous (could appear within prompts). `---` is an explicit, unambiguous boundary that also renders as a horizontal rule in Markdown.
 
@@ -181,6 +199,8 @@ Content quality is governed by `PROMPTS_RULES.md` (PRMT-* rules). This spec does
 **IPPSPRMTFMT-DD-07:** Maximum 9 backticks. Rationale: Practical upper bound. A prompt needing > 9 levels of fence nesting is a design smell indicating the prompt should be split. Keeps the format simple for parser implementations.
 
 **IPPSPRMTFMT-DD-08:** Heading consistency. Rationale: Markdown headings before each prompt improve human readability - scan structure, locate prompts, understand flow. Using headings is recommended (SHOULD) but not required. However, if headings are used for any prompt's Commentary, all prompts MUST have headings for consistency. Mixed files (some prompts with headings, some without) are invalid. Enforced by PRMT-FT-07.
+
+**IPPSPRMTFMT-DD-09:** Optional Execution Frontmatter. Rationale: Execution hints (intended model, context window, reasoning settings) help the execution engine select appropriate configuration. Frontmatter is OPTIONAL - the execution engine decides whether to honor it or use its own configuration. This enables portability: the same prompt file can run on different engines with different models. Frontmatter is unambiguous with Separators because it only appears at the file start (before any fence), while Separators only appear between Prompt Blocks (after a Closing Fence).
 
 ## 6. Key Mechanisms
 
@@ -228,6 +248,23 @@ A conforming parser rejects the file with a diagnostic message when:
 ### Minimal Valid File (Single Prompt)
 
 ``````text
+```
+List all Python files in the project and count their lines.
+```
+``````
+
+### File with Optional Execution Frontmatter
+
+``````text
+---
+intended_model: claude-sonnet-4-5
+context_window_size: 200k
+reasoning_settings: high
+prompt_system: IPPS
+---
+
+## Prompt 1 - Analyze codebase
+
 ```
 List all Python files in the project and count their lines.
 ```
@@ -309,6 +346,14 @@ Verify: Run `pnpm test:auth`. All tests pass.
 - Maximum file size is limited by the agent's context window, not by the format
 
 ## 9. Document History
+
+**[2026-09-05 16:18]**
+- Added: FR-11 Optional Execution Frontmatter (intended_model, context_window_size, reasoning_settings, prompt_system)
+- Added: DD-09 Execution Frontmatter design decision
+- Added: Execution Frontmatter domain object
+- Changed: FR-01 allows optional Execution Frontmatter before Commentary
+- Changed: DD-03 updated - frontmatter now allowed at file start, unambiguous with Separators
+- Added: Example file with optional frontmatter
 
 **[2026-09-05 14:50]**
 - Added: DD-08 heading consistency - headings recommended (SHOULD); if used, all prompts MUST have headings
