@@ -66,7 +66,7 @@ Deno has no `node_modules`. Dependencies are URL-imported and cached globally pe
 
 ### uv (Fast Alternative)
 
-`uv` is a Rust-based Python package manager that creates venvs and installs packages 10-100x faster.
+`uv` is a Rust-based Python package manager that creates venvs and installs packages significantly faster than pip (often 10x or more for cached installs).
 
 1. Install: `pip install uv` or `powershell -c "irm https://astral.sh/uv/install.ps1 | iex"`
 2. Create venv + install: `uv venv && uv pip install -r requirements.txt`
@@ -135,7 +135,7 @@ To detect which runtime environment a project uses:
 - `package.json` + `.nvmrc` → Node.js, env in `node_modules/`
 - `package.json` + `"volta"` key → Node.js (Volta), env in `node_modules/`
 - `bun.lockb` → Bun, env in `node_modules/`
-- `deno.json` → Deno, env in global cache
+- `deno.json` → Deno, env in global cache (or `node_modules/` if `nodeModulesDir` enabled)
 - `requirements.txt` or `pyproject.toml` → Python, env in `.venv/`
 - `.python-version` → Python (pyenv), env in `.venv/`
 - `Cargo.toml` + `rust-toolchain.toml` → Rust, env in `target/`
