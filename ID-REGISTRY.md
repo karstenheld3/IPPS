@@ -195,10 +195,14 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **RECSLFIM** - Recursive Self-Improvement (AI systems accelerating or automating their own development)
 - **WSKMGMT** - Workspace Management Skill (DevSystem V5.0 workspace/project operations skill)
 - **WRTPRMPT** - Write Prompts Workflow (prompt queue file generation for sequential headless execution)
+- **RLSPROJ** - Release Project Workflow (unified multi-repo tagging and release notes process)
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
 - **ZAIINT** - Z.AI Integration (GLM model integration into llm-evaluation skill)
 
 ## Document History
+
+**[2026-09-05 22:30]**
+- Added: RLSPROJ topic (Release Project Workflow - unified multi-repo tagging and release notes process)
 
 **[2026-09-03 13:06]**
 - Added: WSKMGMT topic (Workspace Management Skill - DevSystem V5.0)
