@@ -84,7 +84,7 @@ GOOD: Commit scope = repos referenced in [WORKSPACE_FILE], regardless of physica
 
 ## WS-CT-05: Local Environments by Default
 
-Every project repo must use a local runtime environment. No global package installs for project dependencies.
+Every **source-code repo** (typically ProductRepo) must use a local runtime environment. No global package installs for project dependencies. DevRepo, CompanyRepo, and other non-source repos are exempt - they contain documentation and configuration, not buildable applications.
 
 - Runtime version pinned in a committed version file (`.nvmrc`, `.python-version`, `rust-toolchain.toml`, `build.zig.zon`)
 - Environment directory gitignored (`node_modules/`, `.venv/`, `target/`, `zig-cache/`)

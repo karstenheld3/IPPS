@@ -64,12 +64,14 @@ Instructions: Define commands for building, testing, and linting your product re
 
 ## Runtime Environment
 
+**Applies to ProductRepo only.** DevRepo and CompanyRepo are exempt (no buildable source code).
+
 - Runtime: [node|bun|deno|python|rust|zig]
 - Version file: [.nvmrc|.python-version|rust-toolchain.toml|build.zig.zon]
 - Environment dir: [node_modules|.venv|target|zig-cache]
 - Activate command: [n/a for rust/zig|.venv\Scripts\activate for python|fnm use for node]
 
-Instructions: Every project must use a local environment. See LOCAL_ENVIRONMENTS.md in workspace-management skill for setup details. Pin runtime version in a committed version file. Gitignore the environment directory.
+Instructions: Every ProductRepo must use a local environment. See LOCAL_ENVIRONMENTS.md in workspace-management skill for setup details. Pin runtime version in a committed version file. Gitignore the environment directory.
 
 ## Skill Categories
 

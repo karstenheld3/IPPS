@@ -9,6 +9,8 @@ Deploy a project to its configured hosting platform. Creates deploy scripts if m
 
 Scope: Production deployment only. Use platform UI for preview/staging deploys.
 
+**Repo scope**: Applies to ProductRepo (repos with buildable source code) only. DevRepo, CompanyRepo, and other non-source repos are out of scope - they have no buildable source to deploy.
+
 **Goal**: Project deployed to production with shareable URL, `deploy.bat` + `deploy.ps1` checked into project
 
 **Why**: Reproducible deployments for all team members without manual CLI knowledge

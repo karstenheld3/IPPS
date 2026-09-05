@@ -2,6 +2,8 @@
 
 How to set up and use local runtime environments for project repos. Local environments isolate dependencies per project, preventing version conflicts and ensuring reproducibility.
 
+**Scope**: Applies ONLY to repos with buildable source code (typically ProductRepo). DevRepo, CompanyRepo, and other non-source repos are OUT OF SCOPE - they contain documentation, rules, and configuration, not buildable applications.
+
 **Why**: Global installations cause dependency conflicts between projects. Local environments pin runtime versions and dependencies per project, checked into version control for team reproducibility.
 
 ## Principles
