@@ -92,6 +92,48 @@ To remove a knowledge bundle:
 
 Sub-bundles (nested folders) are supported (e.g., Windsurf/HowCascadeWorks/).
 
+## [WORKSPACE_FOLDER] vs [WORKSPACE_FILE]
+
+These two concepts are distinct and must not be conflated:
+
+- **[WORKSPACE_FOLDER]**: The filesystem path of the workspace root directory. This is where the DevRepo lives. Example: `e:\Dev\MyProject`. All workspace constants are relative to this path.
+
+- **[WORKSPACE_FILE]**: The `main.code-workspace` file inside [WORKSPACE_FOLDER]. This JSON file defines which repos belong to the workspace by referencing their folder paths. Repos referenced in this file may be physically outside [WORKSPACE_FOLDER] (e.g., `../ProductRepo`). The file is the authority for multi-repo commit scope.
+
+**Why the distinction matters:**
+- Filtering repos by physical location inside [WORKSPACE_FOLDER] would incorrectly exclude ProductRepo and CompanyRepo in WORKSPACE mode, because they are typically siblings (`../ProductRepo`), not subdirectories
+- The workspace file defines workspace membership, not the folder path
+- In SINGLE-PROJECT and MONOREPO modes, there is no [WORKSPACE_FILE] - only [WORKSPACE_FOLDER] exists
+
+**Detection:**
+- [WORKSPACE_FOLDER] is always the current workspace root (where the agent operates)
+- [WORKSPACE_FILE] exists only in WORKSPACE mode (detected by presence of `main.code-workspace`)
+
+**Commit scope:**
+- WORKSPACE mode: commit repos referenced in [WORKSPACE_FILE], regardless of physical location
+- SINGLE-PROJECT/MONOREPO: commit only the repo at [WORKSPACE_FOLDER]
+- Never commit linked repos or deploy targets unless [ACTOR] explicitly requests
+
+## Quick Config
+
+Minimal workspace constants in DevRepo NOTES.md:
+
+```
+## Workspace Constants
+- [WORKSPACE_FOLDER]: [current workspace root path]
+- [WORKSPACE_FILE]: [WORKSPACE_FOLDER]\main.code-workspace (WORKSPACE mode only)
+- [DEV_REPO_FOLDER]: [WORKSPACE_FOLDER]
+- [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\[product-repo-name]
+- [COMPANY_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\Company
+- [KNOWLEDGE_FOLDER]: [DEV_REPO_FOLDER]\knowledge
+- [KNOWLEDGE_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\knowledge
+- [RULES_FOLDER]: [DEV_REPO_FOLDER]\rules
+- [RULES_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\rules
+- [PRODUCT_DOCS_FOLDER]: [PRODUCT_REPO_FOLDER]\docs
+```
+
+[WORKSPACE_FOLDER] is the filesystem path. [WORKSPACE_FILE] is the main.code-workspace file that defines which repos belong to the workspace (WORKSPACE mode only). Repos in the workspace file may be outside [WORKSPACE_FOLDER].
+
 ## Workspace Mode Detection Logic
 
 ```

@@ -451,7 +451,7 @@ Direction definitions:
 - Follows SKILL_RULES.md (all SK-* rules) and SKILL_TEMPLATE.md structure
 
 **WSKMGMT-FR-30: commit.md multi-repo support**
-- In WORKSPACE mode, detect changes across all git repos in the workspace
+- In WORKSPACE mode, detect changes across all git repos referenced in [WORKSPACE_FILE] (main.code-workspace)
 - Commit order: 1) product repo first, 2) dev repo second, 3) all other workspace repos
 - For each repo: detect uncommitted changes, analyze by type (feat, fix, docs, test, chore), create conventional commits
 - If no changes in a repo, skip silently
@@ -460,6 +460,17 @@ Direction definitions:
 - Must detect and use per-repo git config (user.name, user.email) - do not assume workspace-wide git identity
 - All git operations must be explicitly scoped to the target repo using `git -C [repo_path]` or equivalent. Do not rely on current working directory for repo resolution
 - If a repo commit fails, report the failure with error message, continue with remaining repos, and summarize partial success at end. Do not roll back already-committed repos
+- **Exclude repos not in [WORKSPACE_FILE]**: Linked repos ([LINKED_REPOS]), deploy targets, and any repo not referenced in main.code-workspace are excluded unless [ACTOR] explicitly requests
+
+**WSKMGMT-FR-40: [WORKSPACE_FOLDER] vs [WORKSPACE_FILE] distinction**
+- [WORKSPACE_FOLDER] = filesystem path of workspace root directory. Always present.
+- [WORKSPACE_FILE] = main.code-workspace file inside [WORKSPACE_FOLDER]. Only in WORKSPACE mode.
+- [WORKSPACE_FILE] defines workspace membership by referencing repo folder paths. Repos may be physically outside [WORKSPACE_FOLDER] (e.g., ../ProductRepo)
+- Commit scope in WORKSPACE mode = repos referenced in [WORKSPACE_FILE], not repos inside [WORKSPACE_FOLDER]
+- DevRepo NOTES.md should define [WORKSPACE_FILE] constant in WORKSPACE mode, omit in SINGLE-PROJECT/MONOREPO
+- WORKSPACE-GUIDES.md must explain the distinction with examples
+- WORKSPACE-RULES.md must enforce it via WS-CT-04
+- DEV_REPO_NOTES_TEMPLATE.md must include [WORKSPACE_FILE] constant with instructions
 
 ### Sync Relationship Dimension
 
@@ -585,6 +596,8 @@ Direction definitions:
 **WSKMGMT-DD-14:** Dimension 4 is orthogonal to Dimension 1. A SINGLE-PROJECT repo can be SYNCED (syncs from DevSystem) or SELF-CONTAINED (standalone). A WORKSPACE repo can be SYNCED (full dependency tree) or SELF-CONTAINED (multi-repo but no external sync). Rationale: Sync relationship and project structure are independent concerns.
 
 **WSKMGMT-DD-15:** [DEVSYSTEM] reference in NOTES.md counts as a sync marker. Even if a repo doesn't have [LINKED_REPOS] or [*_SOURCE_FOLDER], referencing [DEVSYSTEM] means it syncs from a DevSystem source. Rationale: [DEVSYSTEM] is the primary sync marker - it identifies the upstream DevSystem version.
+
+**WSKMGMT-DD-16:** [WORKSPACE_FOLDER] and [WORKSPACE_FILE] are distinct concepts. [WORKSPACE_FOLDER] is the filesystem path. [WORKSPACE_FILE] is the main.code-workspace file that defines workspace membership. Repos in the workspace file may be outside the workspace folder. Commit scope is determined by [WORKSPACE_FILE], not by physical location inside [WORKSPACE_FOLDER]. Rationale: GLOB-FL-041 showed that conflating these concepts leads to incorrectly excluding ProductRepo/CompanyRepo from commit scope, or incorrectly including linked repos. The distinction must be explicit in guides, rules, and templates.
 
 ## 7. Implementation Guarantees
 
@@ -985,6 +998,15 @@ Verify complete. 2 issues fixed.
 - All skill files must pass privacy gate (no real identifiers, addresses, names, project-specific data)
 
 ## 15. Document History
+
+**[2026-09-05 15:00]**
+- Added: FR-40 [WORKSPACE_FOLDER] vs [WORKSPACE_FILE] distinction
+- Added: DD-16 rationale for the distinction (from GLOB-FL-041)
+- Updated: FR-30 commit.md multi-repo support - exclude repos not in [WORKSPACE_FILE]
+- Updated: WS-CT-01 changed from "all 8" to "all required" (conditional constants)
+- Added: WS-CT-04 rule for [WORKSPACE_FOLDER] vs [WORKSPACE_FILE]
+- Updated: DEV_REPO_NOTES_TEMPLATE.md includes [WORKSPACE_FILE] constant
+- Updated: WORKSPACE-GUIDES.md includes [WORKSPACE_FOLDER] vs [WORKSPACE_FILE] section
 
 **[2026-09-04 16:10]**
 - Merged: Sync Relationship Dimension (SYNCREL-SP01) into this spec as FR-32..39, NFR-07..08, DD-11..15, IG-08..11, and new Key Mechanisms sections

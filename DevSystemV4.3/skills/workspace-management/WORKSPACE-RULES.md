@@ -10,9 +10,10 @@ Files (FL)
 - WS-FL-03: CompanyRepo must contain NOTES.md if it exists
 
 Constants (CT)
-- WS-CT-01: DevRepo NOTES.md must define all 8 workspace constants
+- WS-CT-01: DevRepo NOTES.md must define all required workspace constants
 - WS-CT-02: Constants must not contain hardcoded project-specific paths
 - WS-CT-03: Constants must use [WORKSPACE_FOLDER] as base where applicable
+- WS-CT-04: [WORKSPACE_FOLDER] and [WORKSPACE_FILE] must not be conflated
 
 Structure (ST)
 - WS-ST-01: Agent folder must contain rules/, workflows/, skills/ subfolders
@@ -51,18 +52,14 @@ GOOD: All 6 required files present in DevRepo root
 
 ## WS-CT-01: Required Workspace Constants
 
-DevRepo NOTES.md must define all 8 constants:
-- [DEV_REPO_FOLDER]
-- [PRODUCT_REPO_FOLDER]
-- [COMPANY_REPO_FOLDER]
-- [KNOWLEDGE_FOLDER]
-- [KNOWLEDGE_SOURCE_FOLDER]
-- [RULES_FOLDER]
-- [RULES_SOURCE_FOLDER]
-- [PRODUCT_DOCS_FOLDER]
+DevRepo NOTES.md must define all required workspace constants:
+- Always required: [WORKSPACE_FOLDER], [DEV_REPO_FOLDER], [PRODUCT_REPO_FOLDER], [KNOWLEDGE_FOLDER], [RULES_FOLDER], [PRODUCT_DOCS_FOLDER]
+- Required for SYNCED only: [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER], [RULES_SOURCE_FOLDER]
+- Required for WORKSPACE mode only: [WORKSPACE_FILE]
+- SELF-CONTAINED repos pass without sync source constants
 
-BAD: NOTES.md defines [KNOWLEDGE_FOLDER] but not [KNOWLEDGE_SOURCE_FOLDER] - sync cannot find source
-GOOD: All 8 constants defined with paths relative to [WORKSPACE_FOLDER]
+BAD: NOTES.md defines [KNOWLEDGE_FOLDER] but not [KNOWLEDGE_SOURCE_FOLDER] (SYNCED repo) - sync cannot find source
+GOOD: All required constants defined with paths relative to [WORKSPACE_FOLDER]
 
 ## WS-CT-02: No Hardcoded Project Paths
 
@@ -70,6 +67,19 @@ Constants must use [WORKSPACE_FOLDER] as base, not absolute paths.
 
 BAD: [PRODUCT_REPO_FOLDER]: e:\Dev\MyProject
 GOOD: [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\MyProject
+
+## WS-CT-04: [WORKSPACE_FOLDER] vs [WORKSPACE_FILE] Distinction
+
+[WORKSPACE_FOLDER] is the filesystem path of the workspace root. [WORKSPACE_FILE] is the main.code-workspace file that defines workspace membership. These must not be conflated.
+
+- [WORKSPACE_FOLDER]: always present, the directory path
+- [WORKSPACE_FILE]: only in WORKSPACE mode, the .code-workspace file
+- Repos referenced in [WORKSPACE_FILE] may be physically outside [WORKSPACE_FOLDER]
+- Commit scope in WORKSPACE mode = repos in [WORKSPACE_FILE], not repos inside [WORKSPACE_FOLDER]
+- DevRepo NOTES.md should define [WORKSPACE_FILE] in WORKSPACE mode, omit in SINGLE-PROJECT/MONOREPO
+
+BAD: Filtering commit scope by repos whose .git is inside [WORKSPACE_FOLDER] - excludes ProductRepo at ../ProductRepo
+GOOD: Commit scope = repos referenced in [WORKSPACE_FILE], regardless of physical location
 
 ## WS-ST-01: Agent Folder Structure
 

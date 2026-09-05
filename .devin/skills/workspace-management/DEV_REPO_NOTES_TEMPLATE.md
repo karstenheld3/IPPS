@@ -6,6 +6,8 @@ Replace all `[placeholder]` values with your workspace-specific content.
 
 ## Workspace Constants
 
+- [WORKSPACE_FOLDER]: [current workspace root path]
+- [WORKSPACE_FILE]: [WORKSPACE_FOLDER]\main.code-workspace (WORKSPACE mode only, omit if SINGLE-PROJECT or MONOREPO)
 - [DEV_REPO_FOLDER]: [WORKSPACE_FOLDER]
 - [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\[product-repo-name]
 - [COMPANY_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\Company
@@ -15,7 +17,7 @@ Replace all `[placeholder]` values with your workspace-specific content.
 - [RULES_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\rules
 - [PRODUCT_DOCS_FOLDER]: [PRODUCT_REPO_FOLDER]\docs
 
-Instructions: Replace [product-repo-name] with your product repository folder name. Adjust [COMPANY_REPO_FOLDER] if your company folder is in a different location. All paths should be relative to [WORKSPACE_FOLDER].
+Instructions: Replace [product-repo-name] with your product repository folder name. Adjust [COMPANY_REPO_FOLDER] if your company folder is in a different location. All paths should be relative to [WORKSPACE_FOLDER]. [WORKSPACE_FOLDER] is the filesystem path of the workspace root. [WORKSPACE_FILE] is the main.code-workspace file that defines which repos belong to the workspace - repos referenced in it may be physically outside [WORKSPACE_FOLDER] (e.g., ../ProductRepo). Omit [WORKSPACE_FILE] in SINGLE-PROJECT and MONOREPO modes.
 
 ## Sync Sources
 
