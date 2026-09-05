@@ -5,6 +5,17 @@
 Current [DEVSYSTEM]: DevSystemV4.3
 Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
 
+## Workspace Constants
+
+- [WORKSPACE_FOLDER]: E:\Dev\IPPS
+- [DEV_REPO_FOLDER]: [WORKSPACE_FOLDER]
+- [PRODUCT_DOCS_FOLDER]: [WORKSPACE_FOLDER]\Docs
+- [RELEASE_SOPS_FILE]: SOPS.md
+- [RELEASE_SESSIONS_FOLDER]: [DEFAULT_SESSIONS_FOLDER]
+- [RELEASE_NOTES_DIR]: [PRODUCT_DOCS_FOLDER]\ReleaseNotes
+
+Instructions: SINGLE-PROJECT mode (no main.code-workspace). [DEV_REPO_FOLDER] equals [WORKSPACE_FOLDER] (single repo). Release constants compose from existing workspace constants. `[RELEASE_SOPS_FILE]` is the SOPS filename in workspace root. `[RELEASE_SESSIONS_FOLDER]` equals `[DEFAULT_SESSIONS_FOLDER]`. `[RELEASE_NOTES_DIR]` composes from `[PRODUCT_DOCS_FOLDER]` and `ReleaseNotes` subfolder.
+
 
 ## Conversation Humanizing Rules (2026-07-16)
 
@@ -143,3 +154,26 @@ Automatically push commits to GitHub.
   - Overwrite everything
   - Delete deprecated or renamed files from older DevSystem versions
   - Don't delete unrelated existing files
+
+## Release Configuration
+
+Config for `/project-release` workflow. All paths use workspace constants from `## Workspace Constants` section above. See `_SPEC_RELEASE_PROJECT_WORKFLOW.md [RLSPROJ-SP01]` in `Docs/Specs/` for full schema and decision guide.
+
+```
+[RELEASE_CONFIG]
+sops_file: [RELEASE_SOPS_FILE]
+sessions_folder: [RELEASE_SESSIONS_FOLDER]
+release_notes_dir: [RELEASE_NOTES_DIR]
+release_notes_naming: RELEASE_NOTES_v{VERSION}_{DATE}.md
+tag_annotation_template: Release {TAG}: {SUMMARY}
+
+[RELEASE_REPO: product]
+path: [WORKSPACE_FOLDER]
+role: product
+tag_format: date
+version_source: devsystem_folder
+post_release_bump: devsystem_rename
+github_release: true
+```
+
+Instructions: SINGLE-PROJECT mode — one repo, one `[RELEASE_REPO]` block. Date-based tags (`YYYY-MM-DD`). Version source is `devsystem_folder` (parsed from `Current [DEVSYSTEM]` line above). Post-release bump renames `DevSystemVX.Y` folder to next minor version per SOPS SOP 7. No binary build, no version gate. Release notes go in `Docs/ReleaseNotes/` per existing convention (see Release Notes Location section above).
