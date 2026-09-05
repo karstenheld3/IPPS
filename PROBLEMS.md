@@ -111,6 +111,27 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
      - Formatting style extraction for LLMs to insert content with consistent formatting
    - **Goal**: Ensure consistent formatting of markdown files that are easily readable by humans (equal-width formatted columns in tables) and editable by agents (extracted formatting and content)
 
+13. **Deep-research and research update compatibility (re-run over existing output)**
+   - Make `deep-research.md` (+ skill) and `research.md` support re-running over existing research output
+   - **Copy existing output**: Preserve original output as backup before modifying (versioned copy, e.g., `_INFO_[TOPIC]-IN01_v1_[Date].md`)
+   - **Verify all claims using `/fact-check`**: Run fact-check workflow over existing output to find changes on the web - sources that changed, disappeared, or now say something different
+   - **Re-research old research questions**: Re-execute original research questions to find updates, new sources, or corrections on the web since last research date
+   - **Update output**: Merge verified updates into existing INFO documents, preserving original findings with `[UPDATED YYYY-MM-DD]` markers and adding new findings with access dates
+   - **Source diff**: Compare existing `_SOURCES/` transcriptions against current web content to detect staleness
+   - **Detection**: Workflow detects existing research output by checking for `_INFO_*.md` files matching the topic in the target folder
+   - **Affected files**: `deep-research.md` workflow, `research.md` workflow, `deep-research` skill (SKILL.md, RESEARCH_STRATEGY_MEPI.md, RESEARCH_STRATEGY_MCPI.md), `fact-check.md` workflow (as dependency)
+
+14. **Deep-research reusable templates via write-template workflow**
+   - Deep-research should use proper reusable templates created via `write-template.md` workflow (+ guides + rules)
+   - **Goal**: Make it easy to create, compare, and update multi-file outputs
+   - **Block templates**: Add blocks of INFO files that share the same output structure, tied together by a common template
+   - **Template includes**: Hints and instructions inline in the template (instructive templates, not just structural skeletons)
+   - **Consistent structure**: All INFO files in a multi-file research set follow the same template sections, enabling:
+     - Easy comparison across topic files (same section layout)
+     - Easy updates (change template, re-apply across files)
+     - Better drift detection (structural deviations stand out)
+   - **Affected files**: `deep-research` skill (new template files in skill folder), `write-template.md` workflow (must support research template creation), `RESEARCH_STRATEGY_MEPI.md` and `RESEARCH_STRATEGY_MCPI.md` (reference templates instead of inline structure)
+
 ## Resolved
 
 (none)
@@ -120,6 +141,12 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
 (none)
 
 ## Problems Changes
+
+**[2026-09-05 15:26]**
+- Updated: DVSYS-FT-0001 (added item 14 - deep-research reusable templates via write-template workflow)
+
+**[2026-09-05 15:23]**
+- Updated: DVSYS-FT-0001 (added item 13 - deep-research and research update compatibility, re-run over existing output with fact-check verification)
 
 **[2026-09-03 19:09]**
 - Updated: DVSYS-FT-0001 (added item 12 - ASCII art diagrams, UX designs, and markdown formatting in write-documents skill)
