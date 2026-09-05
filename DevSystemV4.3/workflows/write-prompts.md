@@ -19,10 +19,11 @@ Create `_PROMPTS_[Topic].md` files containing an ordered list of prompts. Each p
 
 ## MUST-NOT-FORGET
 
-- First non-empty line MUST be an opening fence (no header block, no frontmatter)
+- First non-empty line MUST be an opening fence OR Commentary (heading/notes). No YAML frontmatter.
 - Fence length: 3-9 backticks per prompt. Outer fence MUST exceed deepest inner fence
 - `---` separator between every pair of consecutive prompts
 - Commentary (headings, notes) only between `---` and next fence - never sent to model
+- Heading recommendation (PRMT-FT-07): use `## Prompt N - [title]` before each prompt. If headings are used, ALL prompts MUST have headings
 - At least one prompt per file
 - **NEVER modify tracking documents** (PROGRESS.md, PROBLEMS.md, NOTES.md, FAILS.md). Write-* workflows create NEW files only.
 - Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content → examples generic.
@@ -78,16 +79,18 @@ For each prompt, find the deepest inner fence and set the outer fence one longer
 
 ## Step 4: Write Prompts File
 
-**Format overview** (3-prompt example):
+**Format overview** (3-prompt example with headings, per PRMT-FT-07):
 
 `````markdown
+## Prompt 1 - Setup
+
 ```
 First prompt text. Plain instruction, no code blocks inside.
 ```
 
 ---
 
-## Step 2 - commentary heading (never sent to model)
+## Step 2 - commentary heading (never sent to the model)
 
 Optional notes explaining the next prompt's purpose.
 
@@ -100,25 +103,28 @@ print("hello")
 
 ---
 
+## Prompt 3 - Finalize
+
 ```
 Third prompt. Simple again.
 ```
 `````
 
 **Format rules:**
-1. First non-empty line = opening fence
+1. First non-empty line = opening fence OR Commentary (heading/notes). No YAML frontmatter
 2. Each prompt = opening fence + prompt text + closing fence
 3. Closing fence = line with >= N backticks (where N = opening fence length)
 4. `---` on its own line between consecutive prompts
-5. Commentary (headings, paragraphs, lists) allowed only between `---` and next opening fence
-6. Info string after opening fence (e.g. `` ```text ``) is optional and ignored by executor
-7. Prompts execute in file order
+5. Commentary (headings, paragraphs, lists) allowed before the first prompt and between `---` and next opening fence
+6. Heading recommendation (PRMT-FT-07): use `## Prompt N - [title]` before each prompt. If headings are used, ALL prompts MUST have headings
+7. Info string after opening fence (e.g. `` ```text ``) is optional and ignored by executor
+8. Prompts execute in file order
 
 ## Step 5: Verify
 
 Check output against all PRMT-* rules in `PROMPTS_RULES.md`:
 
-- [ ] Format (FT): PRMT-FT-01 through PRMT-FT-06
+- [ ] Format (FT): PRMT-FT-01 through PRMT-FT-07
 - [ ] Structure (ST): PRMT-ST-01 through PRMT-ST-05
 - [ ] Sequence (SQ): PRMT-SQ-01 through PRMT-SQ-03
 - [ ] Content (CT): PRMT-CT-01 through PRMT-CT-07
@@ -156,10 +162,11 @@ For each placeholder in the registry:
 
 The filled file must pass all PRMT-* rules as a standalone prompts file:
 
-- [ ] PRMT-FT-01: First non-empty line is an opening fence
+- [ ] PRMT-FT-01: First non-empty line is an opening fence OR Commentary
 - [ ] PRMT-FT-02: Fence lengths correct (outer > deepest inner)
 - [ ] PRMT-FT-03: `---` separator between every pair of consecutive prompts
-- [ ] PRMT-FT-04: Commentary only between separator and next fence
+- [ ] PRMT-FT-04: Commentary only between separator and next fence (or before first fence)
+- [ ] PRMT-FT-07: If headings are used, all prompts have headings (MUST)
 - [ ] PRMT-ST-01..05: Each prompt has objective, constraints (if implementation), verification, single reasoning mode, density limit
 - [ ] PRMT-SQ-01..03: No contradictions, explicit dependencies, commentary documents state
 - [ ] PRMT-CT-01..07: Specific objectives, negative constraints, observable verification

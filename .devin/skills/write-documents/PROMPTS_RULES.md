@@ -13,6 +13,7 @@ Format (FT)
 - PRMT-FT-04: Commentary between prompts and before first prompt; density limits apply
 - PRMT-FT-05: At least one prompt per file
 - PRMT-FT-06: No content outside fences intended for the model
+- PRMT-FT-07: Heading consistency - headings recommended (SHOULD); if used, all prompts MUST have headings
 
 Structure (ST)
 - PRMT-ST-01: Every prompt has an identifiable objective
@@ -203,6 +204,59 @@ Create the database schema. Add indexes on the email column.
 Write the migration script for the schema created above.
 ```
 `````
+
+## PRMT-FT-07: Heading Consistency
+
+Using Markdown headings before each prompt is recommended (SHOULD) but not required. However, if headings are used for any prompt's Commentary, all prompts in the file MUST have headings. Mixed files (some prompts with headings, some without) are invalid.
+
+**Recommendation**: Use `## Prompt N - [short title]` or `## Step N - [short title]` before each prompt's Commentary section.
+
+**GOOD** (headings on all prompts):
+`````markdown
+## Prompt 1 - Create project
+
+```
+Create a new Next.js project with TypeScript.
+```
+
+---
+
+## Prompt 2 - Add authentication
+
+```
+Add JWT authentication to the Express API.
+```
+`````
+
+**ACCEPTABLE** (no headings on any prompt):
+`````markdown
+```
+Create a new Next.js project with TypeScript.
+```
+
+---
+
+```
+Add JWT authentication to the Express API.
+```
+`````
+
+**AVOID** (inconsistent - heading on prompt 2 but not prompt 1, violates PRMT-FT-07):
+`````markdown
+```
+Create a new Next.js project with TypeScript.
+```
+
+---
+
+## Prompt 2 - Add authentication
+
+```
+Add JWT authentication to the Express API.
+```
+`````
+
+This is a MUST rule for consistency: if any prompt has a heading, all must have headings. Using headings at all is a SHOULD recommendation.
 
 ## PRMT-ST-01: Identifiable Objective
 

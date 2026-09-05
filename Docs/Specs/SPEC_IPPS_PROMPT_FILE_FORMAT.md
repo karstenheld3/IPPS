@@ -180,6 +180,8 @@ Content quality is governed by `PROMPTS_RULES.md` (PRMT-* rules). This spec does
 
 **IPPSPRMTFMT-DD-07:** Maximum 9 backticks. Rationale: Practical upper bound. A prompt needing > 9 levels of fence nesting is a design smell indicating the prompt should be split. Keeps the format simple for parser implementations.
 
+**IPPSPRMTFMT-DD-08:** Heading consistency. Rationale: Markdown headings before each prompt improve human readability - scan structure, locate prompts, understand flow. Using headings is recommended (SHOULD) but not required. However, if headings are used for any prompt's Commentary, all prompts MUST have headings for consistency. Mixed files (some prompts with headings, some without) are invalid. Enforced by PRMT-FT-07.
+
 ## 6. Key Mechanisms
 
 ### Fence Length Selection
@@ -231,9 +233,11 @@ List all Python files in the project and count their lines.
 ```
 ``````
 
-### Multi-Prompt with Commentary
+### Multi-Prompt with Commentary (Headings per PRMT-FT-07)
 
 ``````text
+## Prompt 1 - Create calc module
+
 ```
 Create `calc.py` with an `add(a, b)` function.
 
@@ -257,9 +261,11 @@ Verify: `python -c "from calc import multiply; assert multiply(2, 3) == 6"` succ
 ```
 ``````
 
-### Mixed Fence Lengths (Nested Code Blocks)
+### Mixed Fence Lengths (Nested Code Blocks, Headings per PRMT-FT-07)
 
 ```````text
+## Prompt 1 - Security analysis
+
 ```
 Analyze the authentication module in src/auth/ for security vulnerabilities.
 
@@ -303,6 +309,12 @@ Verify: Run `pnpm test:auth`. All tests pass.
 - Maximum file size is limited by the agent's context window, not by the format
 
 ## 9. Document History
+
+**[2026-09-05 14:50]**
+- Added: DD-08 heading consistency - headings recommended (SHOULD); if used, all prompts MUST have headings
+- Added: PRMT-FT-07 rule reference in PROMPTS_RULES.md
+- Changed: Examples updated to use headings consistently (Multi-Prompt, Mixed Fence Lengths)
+- Changed: DD-03 rationale updated - headings before first prompt recommended for readability
 
 **[2026-09-01 18:00]**
 - Changed: FR-01 allows Commentary before first Prompt Block (was: first non-empty line must be fence)
