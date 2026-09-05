@@ -15,6 +15,7 @@ Create conventional commits for staged changes.
 
 - **Suppress git noise**: Use `2>$null` on `git add` (CRLF warnings go to stderr) and `-q` on `git commit` (suppresses rename/summary output). Without this, large repos produce hundreds of lines that cause Cascade blocking commands to hang or time out.
 - **Use non-blocking execution** (`Blocking: false`, `WaitMsBeforeAsync: 5000`) for `git add -A` when many files are affected (e.g., version bumps, bulk renames). Check completion with `command_status`.
+- **Workspace-only scope**: Only commit and push repos whose `.git` folder is inside `[WORKSPACE_FOLDER]`. Never commit or push repos outside the workspace (e.g., linked repos in `[LINKED_REPOS]`, target repos from `deploy-to-all-repos`) unless [ACTOR] explicitly requests it. "all push" means "push all changes in the workspace repo", not "push all repos that received files".
 
 ## Steps
 
@@ -58,27 +59,28 @@ Types: feat, fix, docs, refactor, test, chore, style, perf
 
 Detect by: WORKSPACE mode (main.code-workspace file exists in workspace root).
 
-When WORKSPACE mode is detected, commit changes across multiple git repos:
+When WORKSPACE mode is detected, commit changes across multiple git repos **inside the workspace**:
 
-1. Detect changes across all git repos in workspace
-2. Commit order (product-first):
+1. Detect changes across all git repos whose `.git` folder is inside `[WORKSPACE_FOLDER]`
+2. **Exclude repos outside the workspace**: Linked repos (`[LINKED_REPOS]`), target repos from `deploy-to-all-repos`, and any repo whose path is not a subdirectory of `[WORKSPACE_FOLDER]` are excluded. These repos are only committed when [ACTOR] explicitly requests it (e.g., "commit KarstensWorkspace too")
+3. Commit order (product-first):
    1. Product repo first (primary deliverable)
    2. Dev repo second (documentation of product changes)
-   3. All other workspace repos (Company, linked repos)
-3. For each repo with changes:
+   3. All other workspace repos
+4. For each repo with changes:
    - Detect uncommitted changes
    - Analyze by type (feat, fix, docs, test, chore)
    - Use `git -C [repo_path]` for all git operations (explicit scoping)
    - Detect and use per-repo git config (user.name, user.email) - do not assume workspace-wide git identity
    - Create conventional commits per type
-4. If a repo commit fails:
+5. If a repo commit fails:
    - Report failure with error message
    - Continue with remaining repos
    - Summarize partial success at end
    - Do not roll back already-committed repos
-5. Skip repos with no changes silently
-6. Report committed changes per repo at end
+6. Skip repos with no changes silently
+7. Report committed changes per repo at end
 
-Rationale: Product repo changes are the primary deliverable. Dev repo changes are secondary. Temporary inconsistency (product committed, dev not) is acceptable because dev repo content is not a runtime dependency.
+Rationale: Product repo changes are the primary deliverable. Dev repo changes are secondary. Temporary inconsistency (product committed, dev not) is acceptable because dev repo content is not a runtime dependency. Repos outside the workspace have their own git lifecycle managed by their owners.
 
-In SINGLE-PROJECT and MONOREPO modes: existing single-repo commit behavior is unchanged.
+In SINGLE-PROJECT and MONOREPO modes: commit and push only the workspace repo. Never commit or push linked repos or deploy targets without explicit [ACTOR] request.

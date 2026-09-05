@@ -1,5 +1,21 @@
 # Failure Log
 
+## 2026-09-05 - Committed and Pushed Target Repos During Deploy
+
+### [HIGH] `GLOB-FL-041` Committed and pushed linked repos instead of only IPPS source repo
+
+- **When**: 2026-09-05 14:52 UTC+02:00
+- **Where**: `/commit all push` execution after `deploy-to-all-repos`
+- **What**: After deploying PRMT-FT-07 changes to 6 linked repos, user said `/commit all push`. Agent committed and pushed ALL accumulated changes in KarstensWorkspace, OpenAI-BackendTools, USTVA, and LLM-Research - not just the 3 deployed files. These repos had large amounts of uncommitted DevSystem changes from previous deploys. User intent was to commit and push IPPS only (the source repo containing the prompt library). Target repos receive file copies via deploy; their git state is managed separately by the user.
+- **Why it went wrong**:
+  - Interpreted "all push" as "commit and push all repos with changes" instead of "push all changes in IPPS"
+  - Did not consider that target repos may have accumulated uncommitted changes from prior deploys that the user has not yet reviewed
+  - Applied the `/commit` workflow's Multi-Repo mode without verifying user intent
+  - `git add -A` in target repos staged everything, not just the 3 deployed files
+- **Workflow re-read findings**: `deploy-to-all-repos.md` step 4.5 says "Copy files to target repo's .devin folder" - no mention of committing or pushing target repos. `NOTES.md` line 97: "CRITICAL: NEVER auto-deploy to [LINKED_REPOS]. Always ask user before deploying to linked repos." The `/commit` workflow Multi-Repo mode says "Detect by: WORKSPACE mode (main.code-workspace file exists)" - IPPS is SINGLE-PROJECT mode, so Multi-Repo mode should not have applied.
+- **Evidence**: User said "you should have replicated our IPPS prompt library, not push target repos"
+- **Suggested fix**: When `/commit` follows `deploy-to-all-repos`, commit and push ONLY the source repo (IPPS). Target repo git state is the user's responsibility. If user wants target repos committed, they will specify explicitly. Do not use Multi-Repo commit mode in SINGLE-PROJECT workspace.
+
 ## 2026-08-30 - Skipped SOP 7 Post-Release Version Bump
 
 ### [HIGH] `GLOB-FL-040` Released v4.2 without executing SOP 7 (post-release version bump)
