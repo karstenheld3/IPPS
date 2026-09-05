@@ -11,11 +11,11 @@ Platform-specific deployment knowledge, command-line interface (CLI) tooling, an
 **References** (loaded on demand per platform):
 - `{platform}/SETUP.md` - Installation and authentication
 - `{platform}/UNINSTALL.md` - Removal
-- `{platform}/_deploy_template.bat` + `_deploy_template.ps1` - Deploy script templates
+- `{platform}/deploy_template.bat` + `deploy_template.ps1` - Deploy script templates
 
 ## MUST-NOT-FORGET
 
-- Always create both `_deploy.bat` AND `_deploy.ps1` (bat is entry point, ps1 has logic)
+- Always create both `deploy.bat` AND `deploy.ps1` (bat is entry point, ps1 has logic)
 - Scripts must be self-contained: install missing tools before attempting deploy
 - Never hardcode absolute paths in generated scripts - use `$PSScriptRoot` and relative paths
 - Template placeholders (`{{...}}`) must ALL be replaced before script is functional
@@ -44,8 +44,8 @@ Platform-specific deployment knowledge, command-line interface (CLI) tooling, an
 Each platform subfolder contains:
 - `SETUP.md` - Install CLI tools, authenticate, link project
 - `UNINSTALL.md` - Remove CLI tools, unlink project
-- `_deploy_template.bat` - Template: Windows batch wrapper (checks PowerShell 7, calls `_deploy.ps1`)
-- `_deploy_template.ps1` - Template: Install tools if missing, read config, build, deploy, verify
+- `deploy_template.bat` - Template: Windows batch wrapper (checks PowerShell 7, calls `deploy.ps1`)
+- `deploy_template.ps1` - Template: Install tools if missing, read config, build, deploy, verify
 
 Exception: `zola/` has no deploy templates (build tool, not a host).
 
@@ -54,7 +54,7 @@ Exception: `zola/` has no deploy templates (build tool, not a host).
 When `/deploy` is invoked, determine platform by scanning (first match wins):
 
 1. `!NOTES.md` or `NOTES.md` "Deployment" section (explicit, highest priority)
-2. Existing `_deploy.bat` or `_deploy.ps1` in project root or `scripts/` folder
+2. Existing `deploy.bat` or `deploy.ps1` in project root or `scripts/` folder
 3. Config files in project root:
    - `netlify.toml` → Netlify
    - `vercel.json` → Vercel
@@ -66,18 +66,18 @@ When `/deploy` is invoked, determine platform by scanning (first match wins):
 
 ## Deploy Script Conventions
 
-### `_deploy.bat` Pattern
+### `deploy.bat` Pattern
 
-All `_deploy.bat` files follow this structure:
+All `deploy.bat` files follow this structure:
 1. Check PowerShell 7 exists at `C:\Program Files\PowerShell\7\pwsh.exe`
 2. `cd /d "%~dp0"` to script directory
 3. `Unblock-File` the `.ps1` script
-4. Run `_deploy.ps1` with PowerShell 7
+4. Run `deploy.ps1` with PowerShell 7
 5. `pause` at end
 
-### `_deploy.ps1` Pattern
+### `deploy.ps1` Pattern
 
-All `_deploy.ps1` files follow this structure:
+All `deploy.ps1` files follow this structure:
 1. **Check/install tools** - Platform CLI (netlify-cli, vercel, az CLI)
 2. **Read config** - From `netlify.toml`, `vercel.json`, `.env`, or `package.json`
 3. **Build** - Run project build command (`npm run build`, `zola build`, etc.)
@@ -87,8 +87,8 @@ All `_deploy.ps1` files follow this structure:
 ### Placement in Projects
 
 Deploy scripts are placed in the **project root** (not `scripts/`) for discoverability:
-- `_deploy.bat` - Windows batch entry point (checked into git)
-- `_deploy.ps1` - PowerShell 7 implementation (checked into git)
+- `deploy.bat` - Windows batch entry point (checked into git)
+- `deploy.ps1` - PowerShell 7 implementation (checked into git)
 
 Exception: Projects with existing `scripts/` folder convention keep scripts there.
 
@@ -104,5 +104,5 @@ Exception: Projects with existing `scripts/` folder convention keep scripts ther
 ## When to Use
 
 - `/deploy` workflow references this skill for platform-specific commands
-- Agent creates `_deploy.bat` + `_deploy.ps1` from templates when missing
+- Agent creates `deploy.bat` + `deploy.ps1` from templates when missing
 - Templates are adapted to project (build command, site name, publish dir)

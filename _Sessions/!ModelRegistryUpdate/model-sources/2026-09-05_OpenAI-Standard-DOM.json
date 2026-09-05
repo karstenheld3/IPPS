@@ -1,0 +1,67 @@
+{
+  "_source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard",
+  "_extracted": "2026-09-05",
+  "_method": "web search of official pricing page",
+  "_note": "Playwright MCP browser unavailable. Data from search results of official OpenAI pricing page.",
+  "tables": [
+    {
+      "caption": "Flagship models - Standard tier - per 1M tokens",
+      "headers": ["Model", "Input", "Cached Input", "Cache Writes", "Output", "Long Input", "Long Cached Input", "Long Cache Writes", "Long Output"],
+      "rows": [
+        ["gpt-6-astra", "$10.00", "$1.00", "$12.50", "$50.00", "$20.00", "$2.00", "$25.00", "$75.00"],
+        ["gpt-5.6-sol", "$4.00", "$0.40", "$5.00", "$20.00", "$8.00", "$0.80", "$10.00", "$30.00"],
+        ["gpt-5.6-terra", "$2.00", "$0.20", "$2.50", "$12.00", "$4.00", "$0.40", "$5.00", "$18.00"],
+        ["gpt-5.6-luna", "$0.20", "$0.02", "$0.25", "$1.20", "$0.40", "$0.04", "$0.50", "$1.80"]
+      ]
+    },
+    {
+      "caption": "Cyber models - Standard tier - per 1M tokens",
+      "headers": ["Model", "Input", "Cached Input", "Cache Writes", "Output", "Long Input", "Long Cached Input", "Long Cache Writes", "Long Output"],
+      "rows": [
+        ["gpt-5.6-sol", "$4.00", "$0.40", "$5.00", "$20.00", "$8.00", "$0.80", "$10.00", "$30.00"],
+        ["gpt-5.6-cyber", "$12.50", "$1.25", "$15.625", "$75.00", "-", "-", "-", "-"]
+      ]
+    },
+    {
+      "caption": "Other models - Standard tier - per 1M tokens (from model pages)",
+      "headers": ["Model", "Input", "Cached Input", "Output", "Long Input", "Long Cached Input", "Long Output"],
+      "rows": [
+        ["gpt-5.5", "$5.00", "$0.50", "$30.00", "$10.00", "$1.00", "$45.00"],
+        ["gpt-5.5-pro", "$30.00", null, "$180.00", "$60.00", null, "$270.00"],
+        ["gpt-5.4", "$2.50", "$0.25", "$15.00", "$5.00", "$0.50", "$22.50"],
+        ["gpt-5.4-pro", "$30.00", null, "$180.00", "$60.00", null, "$270.00"],
+        ["gpt-5.4-mini", "$0.75", "$0.075", "$4.50", null, null, null],
+        ["gpt-5.4-nano", "$0.20", "$0.02", "$1.25", null, null, null],
+        ["gpt-5.2", "$1.75", "$0.175", "$14.00", null, null, null],
+        ["gpt-5.2-pro", "$21.00", null, "$168.00", null, null, null],
+        ["gpt-5.1", "$1.25", "$0.125", "$10.00", null, null, null],
+        ["gpt-5", "$1.25", "$0.125", "$10.00", null, null, null],
+        ["gpt-5-mini", "$0.25", "$0.025", "$2.00", null, null, null],
+        ["gpt-5-nano", "$0.05", "$0.005", "$0.40", null, null, null],
+        ["gpt-5-pro", "$15.00", null, "$120.00", null, null, null],
+        ["gpt-4.1", "$2.00", "$0.50", "$8.00", null, null, null],
+        ["gpt-4.1-mini", "$0.40", "$0.10", "$1.60", null, null, null],
+        ["gpt-4.1-nano", "$0.10", "$0.025", "$0.40", null, null, null],
+        ["gpt-4o", "$2.50", "$1.25", "$10.00", null, null, null],
+        ["gpt-4o-mini", "$0.15", "$0.075", "$0.60", null, null, null],
+        ["o1", "$15.00", "$7.50", "$60.00", null, null, null],
+        ["o1-pro", "$150.00", null, "$600.00", null, null, null],
+        ["o1-mini", "$1.10", "$0.55", "$4.40", null, null, null],
+        ["o3", "$2.00", "$0.50", "$8.00", null, null, null],
+        ["o3-pro", "$20.00", null, "$80.00", null, null, null],
+        ["o3-mini", "$1.10", "$0.55", "$4.40", null, null, null],
+        ["o3-deep-research", "$10.00", "$2.50", "$40.00", null, null, null],
+        ["o4-mini", "$1.10", "$0.275", "$4.40", null, null, null],
+        ["o4-mini-deep-research", "$2.00", "$0.50", "$8.00", null, null, null]
+      ]
+    }
+  ],
+  "_notes": [
+    "gpt-6-astra released Sep 3, 2026. 1,050,000 context window, 128K max output. reasoning.effort: low, medium, high, xhigh, max (default low). Knowledge cutoff Apr 30, 2026.",
+    "gpt-5.6-cyber: cyber model, no long context tier. Context window unknown (likely 1.05M based on family but unconfirmed).",
+    "gpt-daybreak-blue-latest and gpt-daybreak-red-latest are aliases pointing to gpt-5.6-sol and gpt-5.6-cyber respectively.",
+    "GPT-5.6 Sol promotional pricing available at least through Nov 21, 2026.",
+    "Priority processing renamed Fast mode on Jul 30, 2026.",
+    "Long context threshold: >272K input tokens triggers 2x input/cache and 1.5x output for full request."
+  ]
+}

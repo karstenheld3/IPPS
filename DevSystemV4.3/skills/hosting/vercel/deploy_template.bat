@@ -10,7 +10,7 @@ if not exist %PWSH% (
 
 rem change to folder where BAT file is
 cd /d "%~dp0"
-set SCRIPT_NAME=_deploy.ps1
+set SCRIPT_NAME=deploy.ps1
 set SCRIPT=%~dp0%SCRIPT_NAME%
 
 echo ============ Deploy to Vercel ============

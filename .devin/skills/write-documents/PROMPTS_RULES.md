@@ -10,7 +10,7 @@ Format (FT)
 - PRMT-FT-01: First fence must appear before any non-commentary content (optional frontmatter per PRMT-FT-08)
 - PRMT-FT-02: Fence length 3-9 backticks, outer exceeds deepest inner
 - PRMT-FT-03: Separator `---` between every pair of consecutive prompts
-- PRMT-FT-04: Commentary between prompts and before first prompt; density limits apply
+- PRMT-FT-04: Commentary between prompts and before first prompt; notes MUST be in HTML comments; density limits apply
 - PRMT-FT-05: At least one prompt per file
 - PRMT-FT-06: No content outside fences intended for the model
 - PRMT-FT-07: Heading consistency - headings recommended (SHOULD); if used, all prompts MUST have headings
@@ -39,6 +39,10 @@ Content (CT)
 - PRMT-CT-08: Workflow calls on standalone lines, call first
 - PRMT-CT-09: Formatting discipline inside fences (no tables, no emojis, structure over decoration)
 - PRMT-CT-10: Workflow references in backticks when not calling (distinct from PRMT-CT-08 standalone calls)
+
+Execution (EX)
+- PRMT-EX-01: One prompt per turn - prompts are never concatenated into a single model submission
+- PRMT-EX-02: Agent must not self-execute prompt files - writing a prompt file and running all prompts in one response circumvents the format
 
 Naming (NM)
 - PRMT-NM-01: Filename follows `_PROMPTS_[Topic].md` pattern
@@ -140,11 +144,16 @@ Second prompt.
 
 Commentary (headings, notes, explanations) is allowed between prompts and before the first prompt. Commentary is for human readers and is never sent to the model.
 
+**Format rules:**
+- Commentary headings (`## Prompt N - [title]`) are plain Markdown
+- Commentary notes (explanations, expected state, context) MUST be wrapped in HTML comments (`<!-- ... -->`)
+- Plain prose commentary between prompts is a violation - it must be in HTML comments
+
 **Density rule:**
-- **Final output files** (`_PROMPTS_[Topic].md`): heading + max 1 sentence per prompt
+- **Final output files** (`_PROMPTS_[Topic].md`): heading + max 1 sentence in one HTML comment per prompt
 - **Template files** (`_PROMPTS_[Topic]_TEMPLATE.md`): no limit (authoring instructions need detail)
 
-**BAD** (verbose commentary in final file):
+**BAD** (verbose prose commentary in final file, not in HTML comments):
 `````markdown
 ---
 
@@ -159,20 +168,20 @@ Run the eval test to capture baseline.
 ```
 `````
 
-**GOOD** (heading + 1 sentence in final file):
+**GOOD** (heading + 1 sentence in HTML comment in final file):
 `````markdown
 ---
 
 ## Prompt 2 - MEASURE baseline
 
-Expected state: findings classified, checks tagged, code changes implemented.
+<!-- Expected state: findings classified, checks tagged, code changes implemented. -->
 
 ```
 Run the eval test to capture baseline.
 ```
 `````
 
-**GOOD** (verbose commentary in template file):
+**GOOD** (verbose commentary in template file, still in HTML comments):
 `````markdown
 ---
 
@@ -463,7 +472,7 @@ Write tests for the calc.py file created in step 1. Cover add(), subtract(), and
 
 ## PRMT-SQ-03: Commentary Documents State
 
-Commentary sections between prompts should document expected state for human readers: what the previous prompt should have produced, what the next prompt expects.
+Commentary sections between prompts should document expected state for human readers: what the previous prompt should have produced, what the next prompt expects. Commentary notes MUST be wrapped in HTML comments per PRMT-FT-04.
 
 **BAD** (empty commentary, no context):
 `````markdown
@@ -478,7 +487,7 @@ Deploy the application.
 ```
 `````
 
-**GOOD:**
+**GOOD** (heading + HTML comment with expected state):
 `````markdown
 ```
 Create config.yaml with database connection settings, API keys from environment variables, and logging configuration.
@@ -488,7 +497,7 @@ Create config.yaml with database connection settings, API keys from environment 
 
 ## Step 2 - deploy with the generated config
 
-Previous step created config.yaml. The application should now be configurable via environment variables.
+<!-- Previous step created config.yaml. The application should now be configurable via environment variables. -->
 
 ```
 Deploy the application to the staging environment. Verify config.yaml is loaded and database connection succeeds.
@@ -779,6 +788,54 @@ intended_model: claude-sonnet-4-5
 Second prompt.
 ```
 `````
+
+## PRMT-EX-01: One Prompt Per Turn
+
+Each Prompt Block in a prompt file is a separate turn: submitted individually to the model, with the model response received before the next prompt is submitted. Concatenating all prompts into a single model submission is a format violation.
+
+Prompt files exist to work around the context, compute, and output limits of a single model run. Each turn receives the agent's full context engineering and input rendering. Concatenation collapses the sequence into one run, limiting execution depth to whatever the model can produce in a single response.
+
+**BAD** (agent concatenates all prompts into one submission):
+````markdown
+```
+Do step 1: analyze the code. Then do step 2: fix the bug. Then do step 3: run tests.
+```
+````
+
+**GOOD** (each prompt is a separate turn, executed sequentially):
+````markdown
+```
+Analyze the authentication module for security vulnerabilities.
+```
+
+---
+
+```
+Fix the highest-severity vulnerability found in the previous step.
+```
+
+---
+
+```
+Run the test suite. All tests must pass.
+```
+````
+
+## PRMT-EX-02: Agent Must Not Self-Execute Prompt Files
+
+An agent that writes a prompt file and then immediately executes all prompts in a single run is NOT executing the prompt file - it is circumventing the format. The agent's internal context engineering, input rendering, and compute allocation mechanisms apply to each turn individually. Self-executing all prompts at once collapses them into a single turn, defeating the purpose of decomposing work into a prompt queue.
+
+Prompt files are authored for an execution engine (e.g., Lana) that submits prompts one at a time. The writing agent creates the file; the execution engine runs it. These are separate roles.
+
+**BAD** (agent writes prompt file, then runs all prompts in one response):
+- Agent creates `_PROMPTS_FixAuth.md` with 3 prompts
+- Agent immediately processes all 3 prompts in a single response, as if they were one instruction
+- Result: single-run depth limit, no per-turn context engineering
+
+**GOOD** (agent writes prompt file for later execution):
+- Agent creates `_PROMPTS_FixAuth.md` with 3 prompts
+- Agent delivers the file to the user or execution engine
+- Execution engine (Lana, headless runner, or human submitting one prompt at a time) processes each prompt as a separate turn
 
 ## PRMT-NM-01: Filename Pattern
 

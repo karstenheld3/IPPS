@@ -14,6 +14,7 @@ Constants (CT)
 - WS-CT-02: Constants must not contain hardcoded project-specific paths
 - WS-CT-03: Constants must use [WORKSPACE_FOLDER] as base where applicable
 - WS-CT-04: [WORKSPACE_FOLDER] and [WORKSPACE_FILE] must not be conflated
+- WS-CT-05: Projects must use local environments by default
 
 Structure (ST)
 - WS-ST-01: Agent folder must contain rules/, workflows/, skills/ subfolders
@@ -80,6 +81,18 @@ GOOD: [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\MyProject
 
 BAD: Filtering commit scope by repos whose .git is inside [WORKSPACE_FOLDER] - excludes ProductRepo at ../ProductRepo
 GOOD: Commit scope = repos referenced in [WORKSPACE_FILE], regardless of physical location
+
+## WS-CT-05: Local Environments by Default
+
+Every project repo must use a local runtime environment. No global package installs for project dependencies.
+
+- Runtime version pinned in a committed version file (`.nvmrc`, `.python-version`, `rust-toolchain.toml`, `build.zig.zon`)
+- Environment directory gitignored (`node_modules/`, `.venv/`, `target/`, `zig-cache/`)
+- Lock file committed (`package-lock.json`, `requirements.txt`, `Cargo.lock`)
+- See LOCAL_ENVIRONMENTS.md for per-runtime setup instructions
+
+BAD: Running `npm install -g express` globally - version conflicts, no reproducibility
+GOOD: `.nvmrc` + `npm install` in project root - isolated, reproducible
 
 ## WS-ST-01: Agent Folder Structure
 

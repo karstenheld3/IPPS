@@ -10,10 +10,12 @@ if not exist %PWSH% (
 
 rem change to folder where BAT file is
 cd /d "%~dp0"
-set SCRIPT_NAME=_deploy.ps1
+set SCRIPT_NAME=deploy.ps1
 set SCRIPT=%~dp0%SCRIPT_NAME%
 
-echo ============ Deploy to SharePoint App Catalog ============
+echo ============ Deploy to Azure App Service ============
+echo This will zip the source code and deploy it to Azure.
+pause
 
 rem unblock the PowerShell script first
 %PWSH% -Command "Unblock-File -Path '%SCRIPT%'"

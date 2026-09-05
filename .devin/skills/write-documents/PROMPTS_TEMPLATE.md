@@ -6,7 +6,9 @@ Topic: CamelCase description (e.g., SetupProject, MigrateAuth, AnalyzePerformanc
 Read PROMPTS_GUIDES.md BEFORE writing. Verify against all PRMT-* rules in PROMPTS_RULES.md.
 Remove ALL XML comments after creating the document. First non-empty line must be frontmatter (optional), Commentary, or opening fence.
 Heading recommendation (PRMT-FT-07): use `## Prompt N - [title]` before each prompt for readability.
-If headings are used, ALL prompts MUST have headings (consistency enforced). -->
+If headings are used, ALL prompts MUST have headings (consistency enforced).
+
+Execution model (PRMT-EX-01/02): Each prompt is a separate turn for an execution engine. NEVER self-execute prompt files by running all prompts in one response. The writing agent creates the file; the execution engine runs it. -->
 
 <!-- Optional Execution Frontmatter (PRMT-FT-08): YAML block at file start.
 Provides execution hints to the execution engine. The engine MAY honor or override.
@@ -36,10 +38,13 @@ Verify: [Machine-checkable done criteria]
 ---
 
 <!-- Commentary: purpose of next prompt and expected state from previous step.
-For human readers only - never sent to model. Remove if no commentary needed. -->
+For human readers only - never sent to model. Wrap in HTML comments per PRMT-FT-04.
+Remove if no commentary needed. -->
 
 <!-- Prompt with inner code blocks: 4-backtick fence. Outer must exceed deepest inner fence. -->
 ## Prompt 2 - [short title]
+
+<!-- [Expected state from previous step and purpose of this prompt. Max 1 sentence in final files.] -->
 
 ````
 [Objective referencing output from previous prompt explicitly]
@@ -83,6 +88,8 @@ Verify: Output a numbered list of findings with severity (HIGH/MEDIUM/LOW) and f
 ---
 
 ## Step 2 - Fix highest-severity finding
+
+<!-- Previous step produced a numbered findings list. Fix the highest-severity item. -->
 
 ````
 Using the analysis from the previous step, fix the highest-severity vulnerability identified.

@@ -46,6 +46,7 @@
 - YAML frontmatter before the first prompt (`---` conflicts with separator token)
 - Global fence length (forces unnecessary depth when only one prompt contains code blocks)
 - Implicit prompt boundaries (whitespace-based splitting is ambiguous and error-prone)
+- Concatenating all prompts into a single model submission (defeats the purpose of prompt files - see FR-12, DD-10)
 
 ## 2. Context
 
@@ -56,7 +57,7 @@ The IPPS Prompt File Format is a DevSystem standard for encoding ordered prompt 
 - **DevSystem write-prompts workflow** (`/write-prompts`) - Authoring workflow producing files conforming to this format
 
 **Related DevSystem artifacts:**
-- `PROMPTS_RULES.md` - Content quality rules (PRMT-FT, PRMT-ST, PRMT-SQ, PRMT-CT, PRMT-NM)
+- `PROMPTS_RULES.md` - Content quality rules (PRMT-FT, PRMT-ST, PRMT-SQ, PRMT-CT, PRMT-EX, PRMT-NM)
 - `PROMPTS_GUIDES.md` - Authoring guidance (decomposition, density, state flow, precision)
 - `PROMPTS_TEMPLATE.md` - File skeleton for authoring
 
@@ -92,7 +93,13 @@ A **Separator** is a single `---` line between two consecutive Prompt Blocks. It
 
 ### Commentary
 
-**Commentary** is human-readable text (headings, notes, explanations) placed between prompts or before the first prompt. Commentary is never sent to the model. It documents expected state, purpose of the next prompt, or context for human reviewers. In final output files, Commentary is limited to a heading plus one sentence. Templates may use longer Commentary for authoring instructions.
+**Commentary** is human-readable text placed between prompts or before the first prompt. Commentary is never sent to the model. It documents expected state, purpose of the next prompt, or context for human reviewers.
+
+Commentary consists of two elements:
+- **Headings** (`## Prompt N - [title]`) - plain Markdown, provide structure for human scanning
+- **Commentary notes** (explanations, expected state, session split markers) - MUST be wrapped in HTML comments (`<!-- ... -->`)
+
+Wrapping commentary notes in HTML comments creates a clear visual distinction between meta-content and prompt content in raw text, and prevents markdown renderers from displaying commentary as prose. In final output files, Commentary is limited to a heading plus one HTML comment of max 1 sentence. Templates may use longer HTML comments for authoring instructions.
 
 ### Execution Frontmatter
 
@@ -131,7 +138,9 @@ These rules define what makes a file syntactically valid. A parser MUST reject f
 - Commentary is allowed between a Separator and the next Opening Fence
 - Commentary is also allowed before the first Prompt Block (per FR-01)
 - Commentary is never sent to the model
-- Commentary density in final output files: heading + max 1 sentence per prompt. Templates may use longer Commentary for authoring instructions.
+- Commentary headings (`## Prompt N - [title]`) are plain Markdown
+- Commentary notes (explanations, expected state, context) MUST be wrapped in HTML comments (`<!-- ... -->`)
+- Commentary density in final output files: heading + max 1 sentence in one HTML comment per prompt. Templates may use longer HTML comments for authoring instructions.
 
 **IPPSPRMTFMT-FR-06: Minimum One Prompt**
 - The file must contain at least one Prompt Block
@@ -143,9 +152,17 @@ These rules define what makes a file syntactically valid. A parser MUST reject f
 
 ### Execution Rules
 
-**IPPSPRMTFMT-FR-08: Single Session**
-- All Prompt Blocks in a file execute as turns of one session
-- Later prompts see all earlier conversation context (model responses included)
+**IPPSPRMTFMT-FR-08: Sequential Turn Execution**
+- Each Prompt Block executes as a separate turn, submitted individually to the model
+- The execution engine submits one prompt, waits for the model response, then submits the next prompt
+- All Prompt Blocks execute within one session: later prompts see all earlier conversation context (model responses included)
+- Prompts are NEVER concatenated into a single submission (see FR-12)
+
+**IPPSPRMTFMT-FR-12: No Concatenation**
+- Concatenating multiple Prompt Blocks into a single model submission is a format violation
+- Each Prompt Block is a discrete turn that receives the model's full context engineering, input rendering, and compute budget
+- Concatenation limits execution depth to what the model can produce in one response, defeating the purpose of prompt files
+- An agent that writes a prompt file and then executes all prompts in a single run is NOT executing the prompt file - it is circumventing the format
 
 **IPPSPRMTFMT-FR-09: Failure Handling**
 - A failed turn (provider error, cancellation) abandons remaining prompts
@@ -160,6 +177,7 @@ Content quality is governed by `PROMPTS_RULES.md` (PRMT-* rules). This spec does
 - **PRMT-ST-***: Structure rules (objective, constraints, verification, reasoning mode, density)
 - **PRMT-SQ-***: Sequence rules (no contradictions, explicit dependencies, commentary)
 - **PRMT-CT-***: Content rules (specificity, negative constraints, observable verification, precision)
+- **PRMT-EX-***: Execution rules (one prompt per turn, no self-execution)
 - **PRMT-NM-***: Naming rules (filename pattern, topic naming)
 
 ### Naming Convention
@@ -192,9 +210,11 @@ Content quality is governed by `PROMPTS_RULES.md` (PRMT-* rules). This spec does
 
 **IPPSPRMTFMT-DD-04:** `---` separator (not blank lines). Rationale: Blank lines are ambiguous (could appear within prompts). `---` is an explicit, unambiguous boundary that also renders as a horizontal rule in Markdown.
 
-**IPPSPRMTFMT-DD-05:** Commentary never sent to model. Rationale: Clean separation between human-readable documentation and model-intended instructions. Prevents accidental injection of meta-commentary into the model's context.
+**IPPSPRMTFMT-DD-05:** Commentary never sent to model, wrapped in HTML comments. Rationale: Clean separation between human-readable documentation and model-intended instructions. HTML comments create a visual boundary in raw text that prevents accidental injection of meta-commentary into the model's context. Headings remain as plain Markdown for structural scannability.
 
 **IPPSPRMTFMT-DD-06:** Single session execution. Rationale: Later prompts can reference earlier results without explicit state serialization. Matches the natural workflow where steps build on prior work. Trade-off: a failed middle prompt blocks all subsequent prompts (mitigated by resume capability per FR-09).
+
+**IPPSPRMTFMT-DD-10:** One prompt per turn, never concatenated. Rationale: Prompt files exist to work around the context, compute, and output limits of a single model run. Each turn receives the agent's full context engineering and input rendering mechanisms. Concatenating prompts into one submission collapses the sequence into a single run, limiting execution depth to whatever the model can produce in one response. This defeats the entire purpose of decomposing work into a prompt queue. An agent that writes a prompt file and then executes all prompts at once has not used the prompt file format - it has bypassed it.
 
 **IPPSPRMTFMT-DD-07:** Maximum 9 backticks. Rationale: Practical upper bound. A prompt needing > 9 levels of fence nesting is a design smell indicating the prompt should be split. Keeps the format simple for parser implementations.
 
@@ -270,7 +290,7 @@ List all Python files in the project and count their lines.
 ```
 ``````
 
-### Multi-Prompt with Commentary (Headings per PRMT-FT-07)
+### Multi-Prompt with Commentary (Headings per PRMT-FT-07, HTML comments per FR-05)
 
 ``````text
 ## Prompt 1 - Create calc module
@@ -285,7 +305,7 @@ Verify: File exists and `python -c "from calc import add; assert add(2, 3) == 5"
 
 ## Step 2 - extend with multiply
 
-Previous step created calc.py with add(). Now add multiplication.
+<!-- Previous step created calc.py with add(). Now add multiplication. -->
 
 ```
 Add a `multiply(a, b)` function to `calc.py`.
@@ -298,7 +318,7 @@ Verify: `python -c "from calc import multiply; assert multiply(2, 3) == 6"` succ
 ```
 ``````
 
-### Mixed Fence Lengths (Nested Code Blocks, Headings per PRMT-FT-07)
+### Mixed Fence Lengths (Nested Code Blocks, Headings per PRMT-FT-07, HTML comments per FR-05)
 
 ```````text
 ## Prompt 1 - Security analysis
@@ -316,6 +336,8 @@ Verify: Output a numbered list of findings with severity (HIGH/MEDIUM/LOW) and f
 ---
 
 ## Step 2 - fix highest-severity finding
+
+<!-- Previous step produced a numbered findings list. Fix the highest-severity item. -->
 
 ````
 Using the analysis from the previous step, fix the highest-severity vulnerability identified.
@@ -346,6 +368,18 @@ Verify: Run `pnpm test:auth`. All tests pass.
 - Maximum file size is limited by the agent's context window, not by the format
 
 ## 9. Document History
+
+**[2026-09-05 16:56]**
+- Changed: FR-05 commentary notes MUST be wrapped in HTML comments (`<!-- ... -->`), headings remain plain Markdown
+- Changed: DD-05 updated - HTML comments create visual boundary, prevent meta-commentary injection
+- Changed: Commentary domain object updated with two-element structure (headings + HTML comment notes)
+- Changed: All multi-prompt examples updated to use HTML comments for commentary notes
+
+**[2026-09-05 16:45]**
+- Added: FR-12 No Concatenation (each prompt is a separate turn, never concatenated into one submission)
+- Added: DD-10 One prompt per turn rationale (why separate turns matter: context engineering, compute budget, execution depth)
+- Changed: FR-08 renamed from "Single Session" to "Sequential Turn Execution", explicit one-prompt-per-turn language
+- Changed: "What we don't want" section: added concatenation as anti-pattern
 
 **[2026-09-05 16:18]**
 - Added: FR-11 Optional Execution Frontmatter (intended_model, context_window_size, reasoning_settings, prompt_system)

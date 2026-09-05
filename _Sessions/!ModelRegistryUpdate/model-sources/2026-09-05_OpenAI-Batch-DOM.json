@@ -1,0 +1,18 @@
+{
+  "_source": "https://developers.openai.com/api/docs/pricing?latest-pricing=batch",
+  "_extracted": "2026-09-05",
+  "_method": "web search of official pricing page",
+  "_note": "Batch tier = 50% of Standard for all models. Not used in model-pricing.json (Standard tier only).",
+  "tables": [
+    {
+      "caption": "Flagship models - Batch tier - per 1M tokens",
+      "headers": ["Model", "Input", "Cached Input", "Cache Writes", "Output", "Long Input", "Long Cached Input", "Long Cache Writes", "Long Output"],
+      "rows": [
+        ["gpt-6-astra", "$5.00", "$0.50", "$6.25", "$25.00", "$10.00", "$1.00", "$12.50", "$37.50"],
+        ["gpt-5.6-sol", "$2.00", "$0.20", "$2.50", "$10.00", "$4.00", "$0.40", "$5.00", "$15.00"],
+        ["gpt-5.6-terra", "$1.00", "$0.10", "$1.25", "$6.00", "$2.00", "$0.20", "$2.50", "$9.00"],
+        ["gpt-5.6-luna", "$0.10", "$0.01", "$0.125", "$0.60", "$0.20", "$0.02", "$0.25", "$0.90"]
+      ]
+    }
+  ]
+}

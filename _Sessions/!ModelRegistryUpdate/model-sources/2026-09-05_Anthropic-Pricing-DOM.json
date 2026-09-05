@@ -1,0 +1,56 @@
+{
+  "_source": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "_extracted": "2026-09-05",
+  "_method": "web search + read_url_content (Playwright MCP browser unavailable)",
+  "_note": "Playwright MCP browser was in use by another process. Data extracted from search results of the official pricing page.",
+  "tables": [
+    {
+      "caption": "Standard pricing - per 1M tokens",
+      "headers": ["Model", "Base Input Tokens", "5m Cache Writes", "1h Cache Writes", "Cache Hits & Refreshes", "Output Tokens"],
+      "rows": [
+        ["Claude Fable 5", "$10", "$12.50", "$20", "$1", "$50"],
+        ["Claude Mythos 5 (limited availability)", "$10", "$12.50", "$20", "$1", "$50"],
+        ["Claude Opus 5", "$5", "$6.25", "$10", "$0.50", "$25"],
+        ["Claude Opus 4.8", "$5", "$6.25", "$10", "$0.50", "$25"],
+        ["Claude Opus 4.7", "$5", "$6.25", "$10", "$0.50", "$25"],
+        ["Claude Opus 4.6", "$5", "$6.25", "$10", "$0.50", "$25"],
+        ["Claude Opus 4.5", "$5", "$6.25", "$10", "$0.50", "$25"],
+        ["Claude Opus 4.1 (deprecated)", "$15", "$18.75", "$30", "$1.50", "$75"],
+        ["Claude Opus 4 (retired)", "$15", "$18.75", "$30", "$1.50", "$75"],
+        ["Claude Sonnet 5 (from Sep 1, 2026)", "$3", "$3.75", "$6", "$0.30", "$15"],
+        ["Claude Sonnet 4.6", "$3", "$3.75", "$6", "$0.30", "$15"],
+        ["Claude Sonnet 4.5", "$3", "$3.75", "$6", "$0.30", "$15"],
+        ["Claude Sonnet 4 (retired)", "$3", "$3.75", "$6", "$0.30", "$15"],
+        ["Claude Haiku 4.5", "$1", "$1.25", "$2", "$0.10", "$5"],
+        ["Claude Haiku 3.5 (retired)", "$0.80", "$1", "$1.60", "$0.08", "$4"]
+      ]
+    },
+    {
+      "caption": "Batch processing pricing - per 1M tokens",
+      "headers": ["Model", "Base Input Tokens", "Output Tokens"],
+      "rows": [
+        ["Claude Fable 5", "$5", "$25"],
+        ["Claude Mythos 5 (limited availability)", "$5", "$25"],
+        ["Claude Opus 5", "$2.50", "$12.50"],
+        ["Claude Opus 4.8", "$2.50", "$12.50"],
+        ["Claude Opus 4.7", "$2.50", "$12.50"],
+        ["Claude Opus 4.6", "$2.50", "$12.50"],
+        ["Claude Opus 4.5", "$2.50", "$12.50"],
+        ["Claude Opus 4.1 (deprecated)", "$7.50", "$37.50"],
+        ["Claude Opus 4 (retired)", "$7.50", "$37.50"],
+        ["Claude Sonnet 5 (from Sep 1, 2026)", "$1.50", "$7.50"],
+        ["Claude Sonnet 4.6", "$1.50", "$7.50"],
+        ["Claude Sonnet 4.5", "$1.50", "$7.50"],
+        ["Claude Sonnet 4 (retired)", "$1.50", "$7.50"],
+        ["Claude Haiku 4.5", "$0.50", "$2.50"],
+        ["Claude Haiku 3.5 (retired)", "$0.40", "$2"]
+      ]
+    }
+  ],
+  "_notes": [
+    "Claude Sonnet 5 introductory pricing $2/$10 through Aug 31, 2026; standard pricing $3/$15 from Sep 1, 2026",
+    "Claude Opus 4.6 has 1M context window (beta, standard pricing applies per context windows docs)",
+    "Claude Fable 5, Mythos 5, Opus 5, Opus 4.8, Opus 4.7, Opus 4.6, Sonnet 5, Sonnet 4.6 all have 1M context windows",
+    "Claude Haiku 4.5 has 200K context window"
+  ]
+}

@@ -9,7 +9,7 @@ Deploy a project to its configured hosting platform. Creates deploy scripts if m
 
 Scope: Production deployment only. Use platform UI for preview/staging deploys.
 
-**Goal**: Project deployed to production with shareable URL, `_deploy.bat` + `_deploy.ps1` checked into project
+**Goal**: Project deployed to production with shareable URL, `deploy.bat` + `deploy.ps1` checked into project
 
 **Why**: Reproducible deployments for all team members without manual CLI knowledge
 
@@ -28,7 +28,7 @@ Scope: Production deployment only. Use platform UI for preview/staging deploys.
 ## MUST-NOT-FORGET
 
 - **DO NOT USE** Windsurf deploy tool (`deploy_web_app`) or `*.windsurf.build` domains. Always use platform CLI directly.
-- Deploy scripts (`_deploy.bat` + `_deploy.ps1`) MUST exist in project after workflow completes
+- Deploy scripts (`deploy.bat` + `deploy.ps1`) MUST exist in project after workflow completes
 - Scripts must install all required tools if not present (self-contained)
 - Never deploy without successful build first
 - Update PROGRESS.md after successful deploy
@@ -39,21 +39,22 @@ Scope: Production deployment only. Use platform UI for preview/staging deploys.
 Apply to ALL deployment contexts.
 
 1. Detect platform (see @skills:hosting SKILL.md "Detection Order")
-2. Verify project builds cleanly before any deploy attempt
-3. Ensure `_deploy.bat` + `_deploy.ps1` exist (create from templates if missing)
-4. Deploy to production
-5. Verify deployment succeeded (live URL returns HTTP 200 or platform confirms success)
+2. **Verify local environment**: Check that the project has a local runtime environment set up (see @skills:workspace-management `LOCAL_ENVIRONMENTS.md`). If missing, set it up before building.
+3. Verify project builds cleanly before any deploy attempt
+4. Ensure `deploy.bat` + `deploy.ps1` exist (create from templates if missing)
+5. Deploy to production
+6. Verify deployment succeeded (live URL returns HTTP 200 or platform confirms success)
 
 # CONTEXT-SPECIFIC
 
 ## Context: Deploy Scripts Missing
 
-Entry condition: No `_deploy.bat` in project root (or `scripts/` folder for projects with that convention).
+Entry condition: No `deploy.bat` in project root (or `scripts/` folder for projects with that convention).
 
 1. Determine platform from detection order in @skills:hosting SKILL.md
-2. Copy `_deploy_template.bat` from `[AGENT_FOLDER]/skills/hosting/{platform}/_deploy_template.bat` → project as `_deploy.bat`
-3. Copy `_deploy_template.ps1` from `[AGENT_FOLDER]/skills/hosting/{platform}/_deploy_template.ps1` → project as `_deploy.ps1`
-4. Adapt placeholders in `_deploy.ps1`:
+2. Copy `deploy_template.bat` from `[AGENT_FOLDER]/skills/hosting/{platform}/deploy_template.bat` → project as `deploy.bat`
+3. Copy `deploy_template.ps1` from `[AGENT_FOLDER]/skills/hosting/{platform}/deploy_template.ps1` → project as `deploy.ps1`
+4. Adapt placeholders in `deploy.ps1`:
    - `{{SITE_NAME}}` → from `netlify.toml`, `vercel.json`, or `!NOTES.md`
    - `{{STARTUP_COMMAND}}` → from project config
    - `{{SPFX_PROJECT_DIR}}` → from project structure
@@ -89,21 +90,21 @@ Entry condition: `vercel.json` exists or platform detected as Vercel.
 
 Entry condition: `.env` with `AZURE_APP_SERVICE_NAME` or platform detected as Azure.
 
-1. Run `_deploy.ps1` (handles auth, zip, deploy)
+1. Run `deploy.ps1` (handles auth, zip, deploy)
 2. Verify: print app service URL, optionally check HTTP 200
 
 ## Context: SharePoint App Catalog
 
 Entry condition: `config/package-solution.json` exists or platform detected as SharePoint.
 
-1. Run `_deploy.ps1` (handles build, upload, publish)
+1. Run `deploy.ps1` (handles build, upload, publish)
 2. Verify: confirm "Deploy complete" output
 
 ## Context: Custom Script Exists
 
-Entry condition: `_deploy.bat` already exists but platform not recognized above.
+Entry condition: `deploy.bat` already exists but platform not recognized above.
 
-1. Run existing `_deploy.bat` via PowerShell
+1. Run existing `deploy.bat` via PowerShell
 2. Report output to user
 
 ## Context: Zola Site
@@ -120,7 +121,7 @@ Entry condition: No platform detected by any method above.
 
 1. List detection attempts and results
 2. Ask user which platform to deploy to
-3. After user responds, create `_deploy.bat` + `_deploy.ps1` from selected platform template
+3. After user responds, create `deploy.bat` + `deploy.ps1` from selected platform template
 4. Add "Deployment" section to `!NOTES.md` or `NOTES.md` for future detection
 
 ## Stuck Detection
@@ -161,13 +162,13 @@ npx vercel --prod --yes
 **Deploy Azure/SharePoint** (non-blocking for long uploads):
 ```powershell
 # Run as non-blocking with WaitMsBeforeAsync: 10000
-pwsh -f "_deploy.ps1"
+pwsh -f "deploy.ps1"
 ```
 
 # VERIFICATION
 
 1. Deployment succeeded (CLI exit code 0, "live" or "complete" in output)
-2. `_deploy.bat` and `_deploy.ps1` exist in project (created or pre-existing)
+2. `deploy.bat` and `deploy.ps1` exist in project (created or pre-existing)
 3. Live URL accessible (if applicable)
 4. Update PROGRESS.md with deploy URL and timestamp
 
