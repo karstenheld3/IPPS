@@ -591,12 +591,24 @@ foreach ($dst in $dependentSkills) {
     }
   }
 }
+
+# 9.3 Distribute to external config targets
+$externalTargets = @(
+  "e:\Dev\Lana-V1\config"
+)
+foreach ($dst in $externalTargets) {
+  foreach ($f in $jsonFiles) {
+    if (Test-Path "$dst/$f") {
+      Copy-Item "$src/$f" "$dst/$f" -Force
+    }
+  }
+}
 ```
 
 ### Gate 9 (Sync Check)
 
 ```powershell
-$allTargets = @($agentDst) + $dependentSkills
+$allTargets = @($agentDst) + $dependentSkills + $externalTargets
 foreach ($dst in $allTargets) {
   foreach ($f in $jsonFiles) {
     if (Test-Path "$dst/$f") {
@@ -631,10 +643,15 @@ Print a concise summary:
 - **Gate 5, 6, 7, or 9 fails**: the edit did not persist or the sync did not complete. Most common cause: file was edited in memory but never written. Re-read from disk, re-apply, re-verify.
 - **test-call-llm.py has no entries for new model**: add minimal test entry, re-run. Do not skip verification.
 - **New dependent skill added**: append its folder to Phase 9 `$dependentSkills` and add to "Dependent skills" list.
-- **New distribution target added**: append to Phase 9.1 or 9.2 as appropriate.
+- **New distribution target added**: append to Phase 9.1, 9.2, or 9.3 as appropriate.
 - **Duplicate model in pricing vs registry**: reconcile toward the pricing file (prices are authoritative for existence); registry must follow.
 
 ## Document History
+
+**[2026-09-05 22:15]**
+- Added: Phase 9.3 "Distribute to external config targets" with `e:\Dev\Lana-V1\config` as first target
+- Added: `$externalTargets` to Gate 9 sync check
+- Updated: Failure mode reference to include 9.3
 
 **[2026-09-05 19:50]**
 - Fixed: Z2 URL from `/models` (404) to `/overview` (actual page)
