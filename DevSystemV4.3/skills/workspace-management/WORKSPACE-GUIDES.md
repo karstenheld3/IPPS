@@ -19,7 +19,7 @@ A WORKSPACE mode workspace has:
 
 - DevRepo (workspace root) - contains main.code-workspace, specs, sessions, knowledge, SOPs, agent folder
 - ProductRepo - contains shipped code, tests, config, product docs. Referenced in main.code-workspace
-- CompanyRepo (optional) - central source folder for knowledge and rules shared across multiple workspaces
+- CompanyRepo (optional) - central source folder for knowledge and specs shared across multiple workspaces
 
 Detection: WORKSPACE mode is detected by presence of main.code-workspace file in workspace root.
 
@@ -55,7 +55,7 @@ Three sync sources, each with downstream and upstream directions:
 1. Prompt System
    - Source: DevSystem source (latest DevSystemV* folder)
    - Target: [AGENT_FOLDER] in DevRepo and/or ProductRepo
-   - Content: rules, workflows, skills
+   - Content: specs, workflows, skills
    - Filter: skill categories (not all repos get all skills)
 
 2. Knowledge
@@ -64,7 +64,7 @@ Three sync sources, each with downstream and upstream directions:
    - Content: knowledge bundles (topic folders with reference documents)
    - Filter: bundle names from sync policy
 
-3. Rules
+3. Specs
    - Source: [SPECS_SOURCE_FOLDER] (CompanyRepo)
    - Target: [SPECS_FOLDER] (DevRepo)
    - Content: specs, workflows, design guidelines, SOPs
@@ -207,11 +207,11 @@ User runs /verify workspace
 ├─> Read workspace constants from DevRepo NOTES.md
 ├─> Check required files per workspace type
 ├─> If SYNCED:
-│   ├─> Check all 8 constants (5 base + 3 sync source)
+│   ├─> Check all required constants (base + sync source + WORKSPACE_FILE if applicable)
 │   ├─> Check devsystem-sync.json exists at [WORKSPACE_FOLDER] root
 │   └─> Check source paths in devsystem-sync.json resolve to valid paths
 ├─> If SELF-CONTAINED:
-│   ├─> Check 5 base constants only
+│   ├─> Check base constants only (skip sync source constants)
 │   └─> Skip sync source constant checks
 ├─> Check agent folder structure (specs/, workflows/, skills/)
 ├─> Report gaps:

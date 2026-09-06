@@ -12,59 +12,40 @@ Replace all `[placeholder]` values with your organization-specific content.
 
 ## Downstream Repositories
 
+This section is informational only. Each downstream repo owns its own sync configuration in `devsystem-sync.json` at its `[WORKSPACE_FOLDER]` root. The source repo does NOT contain bundle definitions or sync configuration.
+
 ### [downstream-repo-1]
 
-- Repo path: [absolute-or-relative-path]
-- Skill categories: Development, Infrastructure
-- Knowledge bundles: [bundle-1], [bundle-2]
-- Rules: [rule-set-1]
-- Workflows: [workflow-1]
-- DevSystem rules to sync: [rule-1], [rule-2]
-- Overwrite rules:
-  - Overwrite: rules/, workflows/, skills/
-  - Preserve: NOTES.md, PROBLEMS.md, PROGRESS.md
-- Content filters:
-  - Include: *.md, *.ps1
-  - Exclude: _*, .*
+- Repo path: ../[downstream-repo-1] (relative path only)
+- Sync sources used: Prompt System, Knowledge, Specs
+- Knowledge bundles received: [bundle-1], [bundle-2]
+- Specs bundles received: [bundle-1]
+- DevSystem version: DevSystemV[X.Y]
 
 ### [downstream-repo-2]
 
-- Repo path: [absolute-or-relative-path]
-- Skill categories: Research
-- Knowledge bundles: [bundle-3]
-- Rules: [rule-set-2]
-- Workflows: [workflow-2]
-- DevSystem rules to sync: [rule-3]
-- Overwrite rules:
-  - Overwrite: rules/, workflows/
-  - Preserve: NOTES.md, *.local.md
-- Content filters:
-  - Include: *.md
-  - Exclude: _*, .*, *.local.*
+- Repo path: ../[downstream-repo-2] (relative path only)
+- Sync sources used: Prompt System, Knowledge
+- Knowledge bundles received: [bundle-3]
+- Specs bundles received: (none)
+- DevSystem version: DevSystemV[X.Y]
 
-Instructions: Add one section per downstream repo. Define which skill categories, knowledge bundles, rules, and workflows each repo receives. Overwrite rules control which files are replaced vs preserved during sync. Content filters control which file patterns are included or excluded.
+Instructions: Add one section per downstream repo. Use RELATIVE paths only (e.g., `../MyProject`), never absolute paths. This list is informational — it helps `/sync to targets` workflows know which repos to push to. The actual sync configuration (bundles, filters, never_overwrite, deprecated) lives in each target repo's `devsystem-sync.json`.
 
-## Sync Policy Data Structure
+## Source Content
 
-Example sync policy entry in JSON format:
+### Knowledge Bundles
 
-```json
-{
-  "repo_path": "[WORKSPACE_FOLDER]\\..\\[downstream-repo]",
-  "skill_categories": ["Development", "Infrastructure"],
-  "knowledge_bundles": ["[bundle-1]", "[bundle-2]"],
-  "rules": ["[rule-set-1]", "[rule-set-2]"],
-  "workflows": ["[workflow-1]", "[workflow-2]", "[workflow-3]"],
-  "devsystem_rules": ["[rule-1]", "[rule-2]"],
-  "overwrite": {
-    "overwrite_paths": ["rules/", "workflows/", "skills/"],
-    "preserve_patterns": ["NOTES.md", "PROBLEMS.md", "PROGRESS.md", "*.local.*"]
-  },
-  "content_filter": {
-    "include_patterns": ["*.md", "*.ps1"],
-    "exclude_patterns": ["_*", ".*"]
-  }
-}
-```
+Folders in `[COMPANY_REPO_FOLDER]\knowledge\` available for sync:
 
-Instructions: Adapt the data structure to your needs. The sync scripts read this structure to determine what to sync, what to overwrite, and what to preserve.
+- [bundle-1]/ - [description]
+- [bundle-2]/ - [description]
+- [bundle-3]/ - [description]
+
+### Specs Bundles
+
+Folders in `[COMPANY_REPO_FOLDER]\specs\` available for sync:
+
+- [bundle-1]/ - [description]
+
+Instructions: List available knowledge and specs bundles that downstream repos can select in their `devsystem-sync.json` `selected_bundles` arrays. Add or remove bundles as content evolves.

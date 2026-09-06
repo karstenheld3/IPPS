@@ -15,7 +15,8 @@ References (loaded on demand):
 - DEV_REPO_NOTES_TEMPLATE.md - Template for DevRepo NOTES.md with all workspace constants
 - PRODUCT_REPO_README_TEMPLATE.md - Template for ProductRepo README.md
 - COMPANY_REPO_NOTES_TEMPLATE.md - Template for CompanyRepo NOTES.md with sync policy tracking
-- sync.ps1 - Generic sync script with -diff and -execute modes (replaces workspace_diff_template.ps1 and workspace_sync_template.ps1)
+- sync.ps1 - Generic sync script with -diff and -execute modes
+- LOCAL_ENVIRONMENTS.md - Per-runtime setup instructions for local development environments
 
 ## MUST-NOT-FORGET
 
@@ -58,7 +59,7 @@ User wants to...
 6. Note excluded files (filtered by bundle include/exclude rules) with -verbose
 ```
 
-Use before any sync operation to preview changes. Use before deploy to verify DevSystem is current.
+Use before any sync operation to preview changes.
 
 ### 2. Update
 

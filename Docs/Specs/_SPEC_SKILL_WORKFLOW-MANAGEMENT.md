@@ -456,11 +456,11 @@ Direction definitions:
 
 **WSKMGMT-FR-31: SKILL.md entry point**
 - YAML frontmatter: `name: workspace-management`, `description`, `compatibility: PowerShell 7+ for diff/sync scripts`
-- MUST-NOT-FORGET section (5-8 items): generic paths only, sync before deploy, preserve list check, rollback warning for shared branches, privacy gate, register in NOTES.md
+- MUST-NOT-FORGET section (5-8 items): generic paths only, run -diff before -execute, never_overwrite check, rollback warning for shared branches, privacy gate, register in NOTES.md
 - Intent Lookup: maps 3 areas (WORKSPACE, DEVSYSTEM, KNOWLEDGE) x 4 operations (compare, update, rollback, integrity) to procedures and FR references
 - Core Procedures: compare workspace, update from source, rollback, integrity check, multi-repo commit
-- References: links to WORKSPACE-GUIDES.md, WORKSPACE-RULES.md, DEV_REPO_NOTES_TEMPLATE.md, PRODUCT_REPO_README_TEMPLATE.md, COMPANY_REPO_NOTES_TEMPLATE.md
-- Gotchas: sync timestamp missing triggers full diff, preserve list overrides overwrite rules, rollback on shared branches requires revert commit
+- References: links to WORKSPACE-GUIDES.md, WORKSPACE-RULES.md, WORKSPACE_CREATION_QUESTIONNAIRE.md, DEV_REPO_NOTES_TEMPLATE.md, PRODUCT_REPO_README_TEMPLATE.md, COMPANY_REPO_NOTES_TEMPLATE.md, sync.ps1, LOCAL_ENVIRONMENTS.md
+- Gotchas: sync config is JSON-based, never_overwrite overrides deprecated, rollback on shared branches requires revert commit
 - Follows SKILL_RULES.md (all SK-* rules) and SKILL_TEMPLATE.md structure
 
 **WSKMGMT-FR-30: commit.md multi-repo support**
@@ -611,7 +611,7 @@ Direction definitions:
 - Its functionality is absorbed by `sync.md` workflow Workspace Sync context (FR-49)
 - No standalone deployment workflow exists - all deployment is sync-driven
 - Existing [LINKED_REPOS] in NOTES.md becomes obsolete and is removed. [SKILL_CATEGORIES] is retained for workspace integrity checks (WS-ST-02, WS-ST-03)
-- SOPS.md SOP 4 (deploy procedure) updated to reference `/sync workspace` instead of `deploy-to-all-repos.md`
+- SOPS.md SOP 4 step 9 (sync to linked repos) references `/sync workspace` instead of `deploy-to-all-repos.md`
 
 **WSKMGMT-FR-49: sync.md Workspace Sync context update**
 - Existing `sync.md` Workspace Sync section updated to use `sync.ps1` from workspace-management skill
@@ -1213,6 +1213,13 @@ RESULT: PASSED WITH FIXES
 - All skill files must pass privacy gate (no real identifiers, addresses, names, project-specific data)
 
 ## 15. Document History
+
+**[2026-09-06 14:45]**
+- Fixed: FR-31 — updated MNF, References, and Gotchas to match current SKILL.md (removed stale 'deploy', 'preserve list', added sync.ps1, LOCAL_ENVIRONMENTS.md, WORKSPACE_CREATION_QUESTIONNAIRE.md references) [VERIFIED from /verify]
+- Fixed: WORKSPACE-GUIDES.md — "Rules" to "Specs" in sync source list, "rules" to "specs" in content descriptions, "knowledge and rules" to "knowledge and specs" [VERIFIED from /verify]
+- Fixed: COMPANY_REPO_NOTES_TEMPLATE.md — rewritten to use devsystem-sync.json architecture (removed old preserve/overwrite patterns, rules/ references, old sync policy JSON structure) [VERIFIED from /verify]
+- Fixed: SKILL.md — removed stale "deploy" reference, removed deleted script names from sync.ps1 reference, added LOCAL_ENVIRONMENTS.md to references [VERIFIED from /verify]
+- Fixed: WORKSPACE-GUIDES.md verify flow — replaced hardcoded "8 constants" with flexible wording matching WS-CT-01 variable counts [VERIFIED from /verify]
 
 **[2026-09-06 14:30]**
 - Fixed: FR-14 — removed `.sync-timestamp` reference, updated to `last_sync` in `devsystem-sync.json`, removed upstream direction (upstream = swap params at workflow level) [IMPLEMENTED from /critique CRIT-01, CRIT-02]

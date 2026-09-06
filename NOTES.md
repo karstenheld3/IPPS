@@ -103,9 +103,9 @@ Automatically push commits to GitHub.
 
 ## Special Workflows (Workspace Root)
 
-**`deploy-to-all-repos.md`** — LEGACY, replaced by `/sync workspace` (FR-49). Will be deleted after migration to `sync.ps1`.
+**`deploy-to-all-repos.md`** — Deleted. Replaced by `/sync workspace` (FR-49) using `sync.ps1`.
 
-**CRITICAL: NEVER auto-deploy to [LINKED_REPOS]**. Always ask user before deploying to linked repos. Deployment to linked repos is a separate, explicit action.
+**CRITICAL: NEVER auto-sync to downstream repos without explicit user confirmation.** Sync to downstream repos is a separate, explicit action.
 
 ## Sync Architecture Revision (2026-09-06)
 

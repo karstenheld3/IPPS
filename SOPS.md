@@ -18,7 +18,7 @@
 
 - `[DEVSYSTEM_FOLDER]` is the source of truth. Never edit `.devin/` directly
 - `NOTES.md [SKILL_CATEGORIES]` must stay in sync with skills/ folder contents
-- Every new skill MUST be added to either `Development` or `Personal` in `[SKILL_CATEGORIES]`. Unregistered skills are silently excluded from sync.
+- Every new skill MUST be added to either `Development` or `Personal` in `[SKILL_CATEGORIES]`. Unregistered skills fail workspace integrity checks (WS-ST-02, WS-ST-03). Sync distribution is controlled by `devsystem-sync.json` bundle include/exclude patterns, not `[SKILL_CATEGORIES]`.
 - Sync `[DEVSYSTEM_FOLDER]` → `.devin/` BEFORE running `/sync workspace`
 - `Copy-Item -Recurse -Force` does NOT delete files that no longer exist at source — deletions require explicit `Remove-Item`
 - Every SOP ends with a verification step before you can consider the change complete
@@ -95,7 +95,7 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "<skill>"
 **Adding a file**:
 1. Create in `[DEVSYSTEM_FOLDER]/skills/<skill>/<new-file>`
 2. Sync: `Copy-Item [DEVSYSTEM_FOLDER]\* .devin\ -Recurse -Force`
-3. **Deploy preview shows file in `Add` for all repos** → confirm and run `/sync workspace -execute`
+3. **Sync preview shows file in `Add` for all repos** → confirm and run `/sync workspace -execute`
 
 **Removing a file**:
 1. Delete from `[DEVSYSTEM_FOLDER]/skills/<skill>/<old-file>`
@@ -209,7 +209,7 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "\b<skill>\b"  # should retu
    ```
    Fix any broken references before proceeding. Zero broken references required.
 
-8. **Commit before deploying**: new version is a major change, isolate in git history
+8. **Commit before syncing**: new version is a major change, isolate in git history
 
 9. **Sync to linked repos** via `/sync workspace` (always preview with `-diff` first)
 
@@ -365,7 +365,7 @@ Test-Path "[AGENT_FOLDER]\workflows\<workflow>.md"
 (Get-FileHash "[AGENT_FOLDER]\workflows\<workflow>.md").Hash
 
 # 2. Registered in devsystem-core.md and README.md (new workflows only)
-Select-String -Path "[DEVSYSTEM_FOLDER]\rules\devsystem-core.md" -Pattern "<workflow>"
+Select-String -Path "[DEVSYSTEM_FOLDER]\specs\devsystem-core.md" -Pattern "<workflow>"
 Select-String -Path "[WORKSPACE]\README.md" -Pattern "<workflow>"
 ```
 
@@ -377,10 +377,10 @@ Test-Path "[DEVSYSTEM_FOLDER]\workflows\<workflow>.md"
 Test-Path "[AGENT_FOLDER]\workflows\<workflow>.md"
 
 # 2. Not referenced in devsystem-core.md or README.md
-Select-String -Path "[DEVSYSTEM_FOLDER]\rules\devsystem-core.md" -Pattern "<workflow>"  # should return nothing
+Select-String -Path "[DEVSYSTEM_FOLDER]\specs\devsystem-core.md" -Pattern "<workflow>"  # should return nothing
 Select-String -Path "[WORKSPACE]\README.md" -Pattern "<workflow>"  # should return nothing
 
-# 3. Listed in deprecated (if deployed to synced repos)
+# 3. Listed in deprecated (if synced to downstream repos)
 Select-String -Path "[WORKSPACE]\devsystem-sync.json" -Pattern "<workflow>"
 ```
 
@@ -463,7 +463,7 @@ Compare-Object $src $dst | Where-Object SideIndicator -eq "<="
 
 ### Workflow reference integrity check
 
-Mandatory before any release (SOP 4 step 7). Detects references to non-existing workflows in rules, skills, README, and ID-REGISTRY.
+Mandatory before any release (SOP 4 step 7). Detects references to non-existing workflows in specs, skills, README, and ID-REGISTRY.
 
 ```powershell
 # Auto-detects [DEVSYSTEM_FOLDER] from NOTES.md
@@ -480,6 +480,14 @@ Expected: `None found!` (zero broken references). Any match must be fixed before
 Run `/sync workspace -diff` in preview mode. Any unexpected items in `Add` / `Modify` / `Delete` indicate a missed sync or unregistered skill.
 
 ## Document History
+
+**[2026-09-06 14:50]**
+- Fixed: MNF line 21 — [SKILL_CATEGORIES] no longer controls sync exclusion; sync driven by devsystem-sync.json bundles; [SKILL_CATEGORIES] retained for integrity checks only [VERIFIED from /verify]
+- Fixed: SOP 2 step 3 — "Deploy preview" to "Sync preview" [VERIFIED from /verify]
+- Fixed: SOP 4 step 8 — "Commit before deploying" to "Commit before syncing" [VERIFIED from /verify]
+- Fixed: SOP 6 verification — "if deployed to synced repos" to "if synced to downstream repos" [VERIFIED from /verify]
+- Fixed: SOP 6 verification commands — `rules\devsystem-core.md` to `specs\devsystem-core.md` (3 occurrences) [VERIFIED from /verify]
+- Fixed: Workflow reference check description — "rules, skills, README" to "specs, skills, README" [VERIFIED from /verify]
 
 **[2026-08-31 18:24]**
 - Added: Mandatory workflow reference check (SOP 4 step 7) using `check_workflow_refs.ps1`
