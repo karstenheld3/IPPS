@@ -12,6 +12,7 @@ Use product/dev separation when:
 Do not use when:
 - Single project with no separation between development artifacts and shipped code
 - Monorepo where all content lives in one repository
+- GENERAL workspace (no product code, no build infrastructure)
 
 ## How to Structure a Workspace
 
@@ -149,10 +150,10 @@ Always required workspace constants in DevRepo NOTES.md:
 ## Workspace Constants
 - [WORKSPACE_FOLDER]: [current workspace root path]
 - [WORKSPACE_FILE]: [WORKSPACE_FOLDER]\main.code-workspace (WORKSPACE mode only)
-- [DEV_REPO_FOLDER]: [WORKSPACE_FOLDER]
+- [WORKSPACE_FOLDER]: [WORKSPACE_FOLDER]
 - [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\[product-repo-name]
-- [KNOWLEDGE_FOLDER]: [DEV_REPO_FOLDER]\knowledge
-- [SPECS_FOLDER]: [DEV_REPO_FOLDER]\specs
+- [KNOWLEDGE_FOLDER]: [WORKSPACE_FOLDER]\knowledge
+- [SPECS_FOLDER]: [WORKSPACE_FOLDER]\specs
 - [PRODUCT_DOCS_FOLDER]: [PRODUCT_REPO_FOLDER]\docs
 ```
 
@@ -170,16 +171,22 @@ Required for SYNCED only (remove if SELF-CONTAINED):
 
 ```
 Workspace root
-├─> main.code-workspace exists?
-│   ├─> Yes -> WORKSPACE mode
-│   │   └─> Read .code-workspace folders to identify ProductRepo and other repos
-│   └─> No
-│       ├─> Multiple project subfolders?
-│       │   ├─> Yes -> MONOREPO mode
-│       │   └─> No -> SINGLE-PROJECT mode
+├─> Has src/ folder or build infrastructure (Build/Test, Runtime)?
+│   ├─> Yes -> SOFTWARE-DEV (Dimension 5)
+│   │   └─> Detect Dimension 1 (Project Structure):
+│   │       ├─> main.code-workspace exists?
+│   │       │   ├─> Yes -> WORKSPACE mode
+│   │       │   └─> No
+│   │       │       ├─> Multiple project subfolders?
+│   │       │       │   ├─> Yes -> MONOREPO mode
+│   │       │       │   └─> No -> SINGLE-PROJECT mode
+│   └─> No -> GENERAL (Dimension 5)
+│       └─> Dimension 1 = N/A (single repo, no structure mode)
+│       └─> Defaults to IMPL-ISOLATED (code only in session folders)
 ```
 
 In WORKSPACE mode, version strategy (SINGLE-VERSION vs MULTI-VERSION) is detected per repo, not workspace-wide.
+GENERAL mode: Dimension 1 and 2 = N/A. Defaults to IMPL-ISOLATED.
 
 ## Sync Flow
 

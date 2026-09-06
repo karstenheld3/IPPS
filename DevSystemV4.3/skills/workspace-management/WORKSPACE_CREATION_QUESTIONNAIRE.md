@@ -9,25 +9,45 @@ Interactive questionnaire for creating new single-repo and multi-repo workspaces
 3. After each section, summarize what will be created and the impact
 4. After all sections answered, generate files from templates and report results
 
-## Section 1: Workspace Mode
+## Section 1: Workspace Type and Mode
 
 ```
-Question: What workspace mode do you need?
+Question 1a: What workspace type do you need?
+
+1) SOFTWARE-DEV - Software development workspace
+   Impact: Has product repo, build/test rules, runtime environment, release
+   configuration. Mode selection (SINGLE-PROJECT, MONOREPO, WORKSPACE) required.
+   Examples: CLI tool workspace, web app dev+product split
+
+2) GENERAL - General-purpose workspace, no product code or build infrastructure
+   Impact: Single git repo. No product repo, no src/ folder, no Build/Test,
+   no Runtime Environment, no Release Configuration. Code allowed only in
+   session folders (POCs, analysis scripts). Defaults to IMPL-ISOLATED.
+   Use for research, documentation, tax/finance, or any non-software workspace.
+   Examples: research workspace, documentation hub, finance tracking workspace
+
+Default: [1] SOFTWARE-DEV
+```
+
+```
+Question 1b: What workspace mode do you need? (SOFTWARE-DEV only)
 
 1) SINGLE-PROJECT - One repo with everything (code, specs, sessions, knowledge)
-   Impact: Single git repo. No main.code-workspace. Agent folder, sessions, 
+   Impact: Single git repo. No main.code-workspace. Agent folder, sessions,
    knowledge, SOPs all in one folder. Simplest setup.
 
 2) WORKSPACE - Dev repo + product repo, separate git repos
-   Impact: Two git repos. main.code-workspace links them. Dev repo has specs, 
+   Impact: Two git repos. main.code-workspace links them. Dev repo has specs,
    sessions, knowledge, SOPs. Product repo has shipped code, tests, docs.
    Keeps proprietary IP out of product repo. More setup but better separation.
 
 Default: [1] SINGLE-PROJECT
 ```
 
-<!-- If user selects SINGLE-PROJECT, skip Section 2 (Product Repo) and Section 5 (Sync Sources).
-     If user selects WORKSPACE, all sections apply. If Section 5 answer is SELF-CONTAINED,
+<!-- If user selects GENERAL, skip Section 2 (Product Repo), Section 4 (Version Strategy),
+     and Section 6 (Release Configuration).
+     If user selects SOFTWARE-DEV + SINGLE-PROJECT, skip Section 2 (Product Repo) and Section 5 (Sync Sources).
+     If user selects SOFTWARE-DEV + WORKSPACE, all sections apply. If Section 5 answer is SELF-CONTAINED,
      skip questions 5b through 5h and omit sync source constants from NOTES.md. -->
 
 ## Section 2: Product Repo
@@ -84,7 +104,7 @@ Questions for WORKSPACE mode:
 ```
 4a) Version source: 
     1) devsystem_folder - Version from DevSystemVX.Y folder name
-       Impact: Version parsed from "Current [DEVSYSTEM]: DevSystemVX.Y" in NOTES.md.
+       Impact: Version parsed from "[PRODUCT_VERSION]: X.Y" in NOTES.md.
        Post-release bump renames the folder. Use for DevSystem development repos.
     
     2) pyproject_toml - Version from pyproject.toml
@@ -163,14 +183,14 @@ Questions for WORKSPACE mode:
     multiple workspaces. /sync workspace distributes content from here
     to downstream repos. Skip if SELF-CONTAINED.
 
-5d) Knowledge folder: [DEV_REPO_FOLDER]\knowledge
-    Default: [DEV_REPO_FOLDER]\knowledge
+5d) Knowledge folder: [WORKSPACE_FOLDER]\knowledge
+    Default: [WORKSPACE_FOLDER]\knowledge
     Impact: Where reference documents are stored in dev repo. Synced from
     Company knowledge folder via devsystem-sync.json bundle configuration.
     Created as empty folder during workspace generation.
 
-5e) Specs folder: [DEV_REPO_FOLDER]\specs
-    Default: [DEV_REPO_FOLDER]\specs
+5e) Specs folder: [WORKSPACE_FOLDER]\specs
+    Default: [WORKSPACE_FOLDER]\specs
     Impact: Where shared specs, design guidelines, and SOPs are stored in
     dev repo. Synced from Company specs folder via devsystem-sync.json
     bundle configuration. Created as empty folder during workspace generation.
@@ -228,19 +248,8 @@ Questions for WORKSPACE mode:
 
 ## Section 7: Skill Categories
 
-<!-- Conditional: WORKSPACE mode only. -->
-
-```
-7a) Which skill categories to deploy to this workspace?
-    1) Development - coding, git, testing, research, writing, workspace management
-       Impact: 22 skills. Covers software development workflows. No personal skills.
-    
-    2) All - Development + Personal (google-account, travel-info)
-       Impact: 24 skills. Includes personal productivity skills. Use for 
-       personal workspaces that also handle non-dev tasks.
-    
-    Default: [1] Development
-```
+<!-- Removed: Skills are discovered by scanning skills/ folder at startup. Sync selection
+     is controlled by devsystem-sync.json selected_bundles. No manual skill category list needed. -->
 
 ## Output: Files to Generate
 
@@ -253,7 +262,7 @@ After all sections answered, generate these files:
   NOTES.md                    <- from DEV_REPO_NOTES_TEMPLATE.md (adapted)
   PROBLEMS.md                 <- empty tracking file
   PROGRESS.md                 <- empty tracking file
-  ID-REGISTRY.md              <- with project topic
+  ID-REGISTRY.md              <- from ID-REGISTRY_TEMPLATE.md (with project topic)
   SOPS.md                     <- from SOPS template or minimal
   FAILS.md                    <- empty tracking file
   _WORKSPACE_CREATION_QUESTIONNAIRE.md <- questionnaire for remaining sections
@@ -266,15 +275,39 @@ After all sections answered, generate these files:
   docs\ReleaseNotes\          <- empty folder (if release configured)
 ```
 
+### GENERAL Mode
+
+```
+[WORKSPACE_FOLDER]\
+  NOTES.md                    <- from DEV_REPO_NOTES_TEMPLATE.md (adapted, no dev-only sections)
+  PROBLEMS.md                 <- empty tracking file
+  PROGRESS.md                 <- empty tracking file
+  ID-REGISTRY.md              <- from ID-REGISTRY_TEMPLATE.md (with project topic)
+  SOPS.md                     <- from SOPS template or minimal
+  FAILS.md                    <- empty tracking file
+  _WORKSPACE_CREATION_QUESTIONNAIRE.md <- questionnaire for remaining sections
+  [AGENT_FOLDER]\             <- sync from DevSystem source
+    specs\
+    workflows\
+    skills\
+  _sessions\                 <- empty folder
+  _sessions\_archive\        <- empty folder (session archive)
+```
+
+<!-- GENERAL mode: No product repo, no src/ folder, no docs/ReleaseNotes/.
+     NOTES.md omits [PRODUCT_REPO_FOLDER], [PRODUCT_SOURCE_FOLDER], [PRODUCT_DOCS_FOLDER],
+     [PRODUCT_VERSION], [SOPS_FILE], [RELEASE_NOTES_FOLDER], Build/Test Rules,
+     Runtime Environment, and Release Configuration sections. -->
+
 ### WORKSPACE Mode
 
 ```
-[DEV_REPO_FOLDER]\
+[WORKSPACE_FOLDER]\
   main.code-workspace         <- references product repo
   !NOTES.md                   <- from DEV_REPO_NOTES_TEMPLATE.md (adapted)
   !PROBLEMS.md                <- empty tracking file
   !PROGRESS.md                <- empty tracking file
-  ID-REGISTRY.md              <- with project topic
+  ID-REGISTRY.md              <- from ID-REGISTRY_TEMPLATE.md (with project topic)
   _SOPS.md                    <- from SOPS template or minimal
   FAILS.md                    <- empty tracking file
   _WORKSPACE_CREATION_QUESTIONNAIRE.md <- questionnaire for remaining sections

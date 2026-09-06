@@ -92,15 +92,17 @@ Use when sync introduced errors or unwanted changes. IG-07: rollback on shared b
 
 ```
 1. Determine area to check (WORKSPACE, DEVSYSTEM, KNOWLEDGE)
-2. For WORKSPACE: verify required constants in DevRepo NOTES.md, required files exist, workspace structure matches declared mode
-3. For DEVSYSTEM: verify agent folder has specs/, workflows/, skills/ subfolders, all skills registered in [SKILL_CATEGORIES], no deprecated files
-4. For KNOWLEDGE: verify knowledge folder exists if [KNOWLEDGE_FOLDER] set, all bundles in devsystem-sync.json exist, no empty bundles
-5. Report sync relationship state (SYNCED or SELF-CONTAINED)
-6. Report gaps and incompatibilities
-7. Fix actions: missing constant -> add with template default. Missing file -> create from template. Broken reference -> report only. Structural violation -> report only
+2. Detect workspace type (SOFTWARE-DEV or GENERAL) and mode (SINGLE-PROJECT, MONOREPO, WORKSPACE)
+3. For WORKSPACE: verify required constants in DevRepo NOTES.md, required files exist, workspace structure matches declared mode
+4. For DEVSYSTEM: verify agent folder has specs/, workflows/, skills/ subfolders, no deprecated files
+5. For KNOWLEDGE: verify knowledge folder exists if [DEV_KNOWLEDGE_FOLDER] set, all bundles in devsystem-sync.json exist, no empty bundles
+6. If GENERAL: verify dev-only constants and sections are absent (WS-CT-09). Do not report missing product repo, Build/Test, Runtime, or Release Configuration as gaps. Dimension 1 = N/A.
+7. Report sync relationship state (SYNCED or SELF-CONTAINED)
+8. Report gaps and incompatibilities
+9. Fix actions: missing constant -> add with template default. Missing file -> create from template. Broken reference -> report only. Structural violation -> report only
 ```
 
-Use via /verify workspace context. Downstream customizations are allowed and do not fail verification.
+Use via /verify workspace context. Downstream customizations are allowed and do not fail verification. GENERAL workspaces pass with simplified constants (no product repo, no build infrastructure).
 
 ### 5. Multi-Repo Commit
 
@@ -133,10 +135,10 @@ Always required workspace constants in DevRepo NOTES.md:
 
 ```
 ## Workspace Constants
-- [DEV_REPO_FOLDER]: [WORKSPACE_FOLDER]
+- [WORKSPACE_FOLDER]: [WORKSPACE_FOLDER]
 - [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\[product-repo-name]
-- [KNOWLEDGE_FOLDER]: [DEV_REPO_FOLDER]\knowledge
-- [SPECS_FOLDER]: [DEV_REPO_FOLDER]\specs
+- [KNOWLEDGE_FOLDER]: [WORKSPACE_FOLDER]\knowledge
+- [SPECS_FOLDER]: [WORKSPACE_FOLDER]\specs
 - [PRODUCT_DOCS_FOLDER]: [PRODUCT_REPO_FOLDER]\docs
 ```
 

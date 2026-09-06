@@ -63,7 +63,7 @@ Apply to ALL document types and contexts:
 - Use verification labels consistently (see below)
 - Re-read relevant rules and session files before verifying
 - Make internal "MUST-NOT-FORGET" list and check after each step
-- If product names are used, make sure there are spelled correctly. Do web research when needed.
+- If product names are used, make sure they are spelled correctly. Do web research when needed.
   - BAD: Sharepoint -> GOOD: SharePoint
   - BAD: AI Foundry Remote SharePoint -> GOOD: "SharePoint tool" for Azure AI Foundry Agent Service
 - **Avoid Markdown tables** - Convert to lists:
@@ -497,23 +497,27 @@ Verification checklist (sourced from WORKSPACE-RULES.md):
 1. Detect sync relationship (SYNCED or SELF-CONTAINED) by checking for sync markers:
    - devsystem-sync.json at [WORKSPACE_FOLDER] root
    - [SYNCED_REPOS] in source NOTES.md
-   - [KNOWLEDGE_SOURCE_FOLDER], [SPECS_SOURCE_FOLDER], [DEVSYSTEM] constants defined
+   - [KNOWLEDGE_SOURCE_FOLDER], [SPECS_SOURCE_FOLDER], [PRODUCT_VERSION] constants defined
 2. Read workspace constants from DevRepo NOTES.md
-3. If SYNCED: check all 8 constants (5 base + 3 sync source):
-   - Base: [DEV_REPO_FOLDER], [PRODUCT_REPO_FOLDER], [KNOWLEDGE_FOLDER], [SPECS_FOLDER], [PRODUCT_DOCS_FOLDER]
+3. If SYNCED: check all required constants (base + sync source):
+   - Always required (all types): [WORKSPACE_FOLDER], [DEV_KNOWLEDGE_FOLDER], [DEV_SPECS_FOLDER], [AGENT_FOLDER], [SESSIONS_FOLDER], [SESSION_ARCHIVE_FOLDER], [SKILL_TOOLS_FOLDER], [API_KEYS_FILE]
+   - Required for SOFTWARE-DEV only: [PRODUCT_REPO_FOLDER], [PRODUCT_SOURCE_FOLDER], [PRODUCT_DOCS_FOLDER], [PRODUCT_VERSION], [SOPS_FILE]
+   - Repo-specific (check if present): [DEVSYSTEM_FOLDER]
    - Sync source: [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER], [SPECS_SOURCE_FOLDER]
    - Check devsystem-sync.json exists at [WORKSPACE_FOLDER] root
    - Check source paths in devsystem-sync.json resolve to valid paths
-4. If SELF-CONTAINED: check 5 base constants only, skip sync source constant checks
-5. Check required files per workspace type:
+4. If SELF-CONTAINED: check base constants only, skip sync source constant checks
+5. Check required files:
    - DevRepo: NOTES.md, PROBLEMS.md, PROGRESS.md, ID-REGISTRY.md, SOPS.md, FAILS.md
-   - ProductRepo: README.md
+   - ProductRepo: README.md (SOFTWARE-DEV only)
    - CompanyRepo (if exists): NOTES.md
 6. Check agent folder structure: specs/, workflows/, skills/ subfolders exist
-7. Check skill registration: all skills in skills/ folder are in [SKILL_CATEGORIES], and vice versa
-8. Check workspace structure matches declared mode (SINGLE-PROJECT, MONOREPO, WORKSPACE)
-9. Check no deprecated files in agent folder
-10. Report sync relationship state (SYNCED or SELF-CONTAINED)
+7. Check workspace structure matches declared mode (SINGLE-PROJECT, MONOREPO, WORKSPACE). If GENERAL: Dimension 1 = N/A, skip structure check
+8. Check no deprecated files in agent folder
+9. Check ID-REGISTRY.md Project Topics have inline datestamps (WS-FL-04)
+10. Check NOTES.md Release Configuration section present for SOFTWARE-DEV workspaces (WS-CT-08)
+11. If GENERAL: verify dev-only constants and sections are absent (WS-CT-09). If SOFTWARE-DEV: verify dev-only constants and sections are present
+12. Report sync relationship state (SYNCED or SELF-CONTAINED)
 
 Fix actions per gap type:
 - Missing constant -> add with template default from DEV_REPO_NOTES_TEMPLATE.md

@@ -8,6 +8,7 @@ Files (FL)
 - WS-FL-01: DevRepo must contain required tracking files
 - WS-FL-02: ProductRepo must contain README.md
 - WS-FL-03: CompanyRepo must contain NOTES.md if it exists
+- WS-FL-04: ID-REGISTRY.md Project Topics must have inline datestamps
 
 Constants (CT)
 - WS-CT-01: DevRepo NOTES.md must define all required workspace constants
@@ -16,11 +17,12 @@ Constants (CT)
 - WS-CT-04: [WORKSPACE_FOLDER] and [WORKSPACE_FILE] must not be conflated
 - WS-CT-05: Projects must use local environments by default
 - WS-CT-06: Synced repos must have devsystem-sync.json at [WORKSPACE_FOLDER] root
+- WS-CT-08: Release Configuration conditional on workspace type
+- WS-CT-09: GENERAL workspaces must omit dev-only constants and sections
 
 Structure (ST)
 - WS-ST-01: Agent folder must contain specs/, workflows/, skills/ subfolders
-- WS-ST-02: All skills in [SKILL_CATEGORIES] must exist in skills/ folder
-- WS-ST-03: All skills in skills/ folder must be registered in [SKILL_CATEGORIES]
+- WS-ST-02: Workspace structure must match declared mode
 - WS-ST-04: No deprecated files in agent folder
 
 Sync (SY)
@@ -34,6 +36,7 @@ Templates (TM)
 - WS-TM-01: Templates must use _TEMPLATE suffix
 - WS-TM-02: Templates must follow TEMPLATE_RULES.md
 - WS-TM-03: Templates must mark required vs optional sections
+- WS-TM-04: Template annotations must use XML comments
 
 Privacy (PR)
 - WS-PR-01: No real identifiers, project names, or paths in skill files
@@ -55,12 +58,15 @@ GOOD: All 6 required files present in DevRepo root
 ## WS-CT-01: Required Workspace Constants
 
 DevRepo NOTES.md must define all required workspace constants:
-- Always required: [WORKSPACE_FOLDER], [DEV_REPO_FOLDER], [PRODUCT_REPO_FOLDER], [KNOWLEDGE_FOLDER], [SPECS_FOLDER], [PRODUCT_DOCS_FOLDER]
+- Always required (all types): [WORKSPACE_FOLDER], [DEV_KNOWLEDGE_FOLDER], [DEV_SPECS_FOLDER], [AGENT_FOLDER], [SESSIONS_FOLDER], [SESSION_ARCHIVE_FOLDER], [SKILL_TOOLS_FOLDER], [API_KEYS_FILE]
+- Required for SOFTWARE-DEV only: [PRODUCT_REPO_FOLDER], [PRODUCT_SOURCE_FOLDER], [PRODUCT_DOCS_FOLDER], [PRODUCT_VERSION], [SOPS_FILE]
 - Required for SYNCED only: [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER], [SPECS_SOURCE_FOLDER]
 - Required for WORKSPACE mode only: [WORKSPACE_FILE]
+- Repo-specific (not in template): [DEVSYSTEM_FOLDER] — compose as `[WORKSPACE_FOLDER]\DevSystem[PRODUCT_VERSION]`
 - SELF-CONTAINED repos pass without sync source constants
+- GENERAL repos pass without SOFTWARE-DEV-only constants (WS-CT-09)
 
-BAD: NOTES.md defines [KNOWLEDGE_FOLDER] but not [KNOWLEDGE_SOURCE_FOLDER] (SYNCED repo) - sync cannot find source
+BAD: NOTES.md defines [DEV_KNOWLEDGE_FOLDER] but not [KNOWLEDGE_SOURCE_FOLDER] (SYNCED repo) - sync cannot find source
 GOOD: All required constants defined with paths relative to [WORKSPACE_FOLDER]
 
 ## WS-CT-02: No Hardcoded Project Paths
@@ -109,12 +115,15 @@ Agent folder must contain specs/, workflows/, skills/ subfolders.
 BAD: Agent folder has specs/ and workflows/ but no skills/ - skills cannot be loaded
 GOOD: Agent folder has all three subfolders with content
 
-## WS-ST-02: Skills Registered in CATEGORIES
+## WS-ST-02: Workspace Structure Matches Declared Mode
 
-All skills present in skills/ folder must be registered in NOTES.md [SKILL_CATEGORIES].
+Workspace structure must match the declared mode in NOTES.md Project Info:
+- SINGLE-PROJECT: One project, no main.code-workspace file
+- MONOREPO: Multiple projects in subfolders, no main.code-workspace file
+- WORKSPACE: main.code-workspace file present, references repos that may be outside [WORKSPACE_FOLDER]
 
-BAD: skills/pdf-tools/ exists but not in [SKILL_CATEGORIES] - skill is invisible to sync
-GOOD: All skill folders have corresponding entry in [SKILL_CATEGORIES]
+BAD: NOTES.md declares WORKSPACE mode but no main.code-workspace file exists
+GOOD: Declared mode matches actual workspace structure
 
 ## WS-SY-01: Relative Source Paths in devsystem-sync.json
 
@@ -143,6 +152,40 @@ Template files must use _TEMPLATE suffix (SK-FL-07).
 
 BAD: DEV_REPO_NOTES.md (looks like an operational file, may be used directly without adaptation)
 GOOD: DEV_REPO_NOTES_TEMPLATE.md (clearly a template requiring adaptation)
+
+## WS-TM-04: Template Annotations Use XML Comments
+
+All template annotations (instructions, conditionals, removal notices) must use XML comments per TEMPLATE_RULES.md TMPL-AN-01. No prose paragraphs disguised as content.
+
+BAD: `Instructions: Replace placeholder values with your project information.`
+GOOD: `<!-- Instructions: Replace placeholder values with your project information. -->`
+
+## WS-FL-04: ID-REGISTRY.md Inline Datestamps
+
+ID-REGISTRY.md Project Topics entries must include a datestamp after the description. No Document History section required.
+
+BAD: `- **WSKMGMT** - Workspace Management Skill (DevSystem V5.0)` (no datestamp)
+GOOD: `- **WSKMGMT** - Workspace Management Skill (DevSystem V5.0) - 2026-09-03`
+
+## WS-CT-08: Release Configuration Conditional on Workspace Type
+
+NOTES.md must contain a Release Configuration section with [RELEASE_CONFIG] and at least one [RELEASE_REPO] block for SOFTWARE-DEV workspaces. GENERAL workspaces must omit Release Configuration entirely.
+
+BAD: SOFTWARE-DEV workspace with no Release Configuration section
+GOOD: SOFTWARE-DEV workspace with [RELEASE_CONFIG] and [RELEASE_REPO: product] block
+BAD: GENERAL workspace with Release Configuration section (no product to release)
+GOOD: GENERAL workspace with no Release Configuration section
+
+## WS-CT-09: GENERAL Workspace Constraints
+
+GENERAL workspace type (Dimension 5) must omit dev-only constants and sections. Code allowed only in session folders (IMPL-ISOLATED default). Dimension 1 = N/A.
+
+Omitted constants: [PRODUCT_REPO_FOLDER], [PRODUCT_SOURCE_FOLDER], [PRODUCT_DOCS_FOLDER], [PRODUCT_VERSION], [WORKSPACE_FILE], [SOPS_FILE], [RELEASE_NOTES_FOLDER]
+Omitted sections: Build/Test Rules, Runtime Environment, Release Configuration
+Required constants: [WORKSPACE_FOLDER], [DEV_KNOWLEDGE_FOLDER], [DEV_SPECS_FOLDER], [AGENT_FOLDER], [SESSIONS_FOLDER], [SESSION_ARCHIVE_FOLDER], [SKILL_TOOLS_FOLDER], [API_KEYS_FILE]
+
+BAD: GENERAL workspace with [PRODUCT_REPO_FOLDER] and Build/Test Rules section
+GOOD: GENERAL workspace with only base constants, no dev-only sections
 
 ## WS-PR-01: Privacy Gate
 

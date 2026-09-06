@@ -39,7 +39,7 @@ Before any release steps, detect workspace context:
 5. Validate config (see Config Validation below)
 6. Verify all configured repos have clean worktree: `git -C [repo_path] status --porcelain` must return empty. If any repo is dirty: halt and report which files are uncommitted in which repo
 7. Read SOPS file (name from config `sops_file` key) for workspace-specific procedures and deviations
-8. Resolve all workspace constants in repo paths (e.g., `[WORKSPACE_FOLDER]`, `[PRODUCT_REPO_FOLDER]`, `[DEV_REPO_FOLDER]`)
+8. Resolve all workspace constants in repo paths (e.g., `[WORKSPACE_FOLDER]`, `[PRODUCT_REPO_FOLDER]`, `[DEVSYSTEM_FOLDER]`)
 
 ## Config Validation
 
@@ -59,7 +59,7 @@ After parsing `[RELEASE_CONFIG]`, validate before proceeding:
 
 ## Version Extraction
 
-- `devsystem_folder`: Parse `Current [DEVSYSTEM]: DevSystemVX.Y` from NOTES.md, extract `X.Y`
+- `devsystem_folder`: Parse `[PRODUCT_VERSION]: X.Y` from NOTES.md, extract `X.Y`
 - `pyproject_toml`: Parse `version = "X.Y.Z"` from configured `version_file`
 - `package_json`: Parse `"version": "X.Y.Z"` from configured `version_file`
 - `none`: No version extraction; tag is the version identifier

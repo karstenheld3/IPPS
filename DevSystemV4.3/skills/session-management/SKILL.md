@@ -13,8 +13,8 @@ Sessions track EDIRD phases:
 
 ## MUST-NOT-FORGET
 
-- Session folder location: `[DEFAULT_SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
-- Default: `[DEFAULT_SESSIONS_FOLDER]` = `[WORKSPACE_FOLDER]` (override in `!NOTES.md`)
+- Session folder location: `[SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
+- Default: `[SESSIONS_FOLDER]` = `[WORKSPACE_FOLDER]` (override in `!NOTES.md`)
 - Required files: NOTES.md, PROBLEMS.md, PROGRESS.md
 - Lifecycle: Init → Work → Save → Resume → Finalize → Archive
 - Sync session PROBLEMS.md to project on /session-finalize
@@ -188,9 +188,9 @@ When creating a new topic folder inside an existing session:
 
 ## Session Folder Location
 
-**Base:** `[DEFAULT_SESSIONS_FOLDER]` (default: `[WORKSPACE_FOLDER]`, can be overridden in `!NOTES.md`)
+**Base:** `[SESSIONS_FOLDER]` (default: `[WORKSPACE_FOLDER]`, can be overridden in `!NOTES.md`)
 
-**Format:** `[DEFAULT_SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
+**Format:** `[SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
 
 **Example:** `_PrivateSessions/_2026-01-12_FixAuthenticationBug/`
 

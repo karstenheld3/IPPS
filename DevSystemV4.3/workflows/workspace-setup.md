@@ -1,11 +1,11 @@
 ---
-description: Create a new workspace with interactive questionnaire
+description: Create or modify workspace setup with interactive questionnaire
 auto_execution_mode: 3
 ---
 
-# Workspace Create Workflow
+# Workspace Setup Workflow
 
-Create a new single-repo or multi-repo workspace using an interactive questionnaire with defaults and impact descriptions.
+Create or modify a single-repo, multi-repo, or general workspace using an interactive questionnaire with defaults and impact descriptions.
 
 **Goal**: A fully initialized workspace with all required files, constants, and folder structure
 
@@ -42,12 +42,28 @@ Apply before any context-specific steps:
 
 # CONTEXT-SPECIFIC
 
-## SINGLE-PROJECT
+## GENERAL
 
-Sections: 1 (Workspace Mode), 3 (Dev Repo), 4 (Version Strategy), 6 (Release Configuration)
+Sections: 1 (Workspace Type and Mode)
 
 1. Load WORKSPACE_CREATION_QUESTIONNAIRE.md from `[AGENT_FOLDER]/skills/workspace-management/`
-2. Present Section 1 (Workspace Mode) to user. Accept default or user value
+2. Present Section 1a (Workspace Type) to user. If GENERAL: skip to file generation
+3. Present remaining applicable sections (none for GENERAL)
+4. Generate workspace files from templates:
+   - Read DEV_REPO_NOTES_TEMPLATE.md from `[AGENT_FOLDER]/skills/workspace-management/`
+   - Substitute collected answers into template placeholders
+   - Create NOTES.md at workspace root
+   - Create PROBLEMS.md, PROGRESS.md, ID-REGISTRY.md, SOPS.md, FAILS.md
+   - Create empty folders: [AGENT_FOLDER], _sessions, _sessions/_archive
+5. Sync DevSystem files from source to [AGENT_FOLDER] using @skills:workspace-management Procedure 2
+6. Run `/verify workspace` to confirm all required files and constants are present
+
+## SINGLE-PROJECT
+
+Sections: 1 (Workspace Type and Mode), 3 (Dev Repo), 4 (Version Strategy), 6 (Release Configuration)
+
+1. Load WORKSPACE_CREATION_QUESTIONNAIRE.md from `[AGENT_FOLDER]/skills/workspace-management/`
+2. Present Section 1a (Workspace Type) then 1b (Workspace Mode) to user. Accept defaults or user values
 3. Present remaining applicable sections one at a time. Collect answers with defaults
 4. Generate workspace files from templates:
    - Read DEV_REPO_NOTES_TEMPLATE.md from `[AGENT_FOLDER]/skills/workspace-management/`
@@ -61,10 +77,10 @@ Sections: 1 (Workspace Mode), 3 (Dev Repo), 4 (Version Strategy), 6 (Release Con
 
 ## WORKSPACE
 
-Sections: 1 (Workspace Mode), 2 (Product Repo), 3 (Dev Repo), 4 (Version Strategy), 5 (Sync Sources), 6 (Release Configuration), 7 (Skill Categories)
+Sections: 1 (Workspace Type and Mode), 2 (Product Repo), 3 (Dev Repo), 4 (Version Strategy), 5 (Sync Sources), 6 (Release Configuration)
 
 1. Load WORKSPACE_CREATION_QUESTIONNAIRE.md from `[AGENT_FOLDER]/skills/workspace-management/`
-2. Present Section 1 (Workspace Mode) to user. Accept default or user value
+2. Present Section 1a (Workspace Type) then 1b (Workspace Mode) to user. Accept defaults or user values
 3. Present remaining applicable sections one at a time. Collect answers with defaults
 4. Generate workspace files from templates:
    - Read DEV_REPO_NOTES_TEMPLATE.md from `[AGENT_FOLDER]/skills/workspace-management/`
@@ -81,11 +97,12 @@ Sections: 1 (Workspace Mode), 2 (Product Repo), 3 (Dev Repo), 4 (Version Strateg
 
 ## No Context Match
 
-1. If Section 1 answer is neither SINGLE-PROJECT nor WORKSPACE, ask user to choose between the two options
+1. If Section 1a answer is GENERAL: use GENERAL flow above
+2. If Section 1b answer is neither SINGLE-PROJECT nor WORKSPACE, ask user to choose between the two options
 
 ## Output
 
-`Created: [file] | Mode: [SINGLE-PROJECT|WORKSPACE] | Files: [N] | Folders: [N]`
+`Created: [file] | Mode: [GENERAL|SINGLE-PROJECT|WORKSPACE] | Files: [N] | Folders: [N]`
 
 ## Quality Gate
 

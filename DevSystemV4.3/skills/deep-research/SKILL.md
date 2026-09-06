@@ -30,7 +30,7 @@ Deep research ALWAYS creates a dedicated subfolder for its outputs. This ensures
 
 ### Step 1.1: Detect Work Mode
 
-1. Read workspace NOTES.md for `[DEFAULT_SESSIONS_FOLDER]`
+1. Read workspace NOTES.md for `[SESSIONS_FOLDER]`
 2. Check from conversation: Is there an active session?
    - Active session exists -> SESSION-MODE
    - No active session -> PROJECT-MODE
@@ -69,7 +69,7 @@ Before proceeding to source collection, ensure Topic ID uniqueness:
 2. Create Topic ID: 7-14 uppercase chars (mandatory for all new topics)
 3. Check for collision with existing Topic IDs per Topic Registry rules in devsystem-ids.md
 4. If collision: extend or narrow abbreviation
-5. Register new Topic ID immediately in ID-REGISTRY.md
+5. Register new Topic ID immediately in ID-REGISTRY.md `## Project Topics` section with datestamp: `- **[TOPIC]** - Description - YYYY-MM-DD`
 
 **Nested IDs for T##/S## subfolders:**
 When deep research creates multiple `T##_` folders under one session topic, each subfolder uses a nested Doc ID: `[TOPIC]-[SUBTOPIC]-[DOC][NN]`. The SUBTOPIC (7-14 chars) is registered in session NOTES.md only, not in ID-REGISTRY.md. See devsystem-ids.md "Nested Document IDs" section.

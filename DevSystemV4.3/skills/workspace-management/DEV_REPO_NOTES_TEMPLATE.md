@@ -1,70 +1,142 @@
-# DevRepo NOTES Template
+<!-- DEV_REPO_NOTES TEMPLATE. Remove this comment after creating. -->
 
-Template for DevRepo NOTES.md. Copy and adapt for your workspace.
-
-Replace all `[placeholder]` values with your workspace-specific content.
+# NOTES
 
 ## Workspace Constants
 
-Always required:
+[WORKSPACE_FOLDER]: `[current workspace root path]`
+- Root folder of the workspace. All other paths compose from this.
 
-- [WORKSPACE_FOLDER]: [current workspace root path]
-- [WORKSPACE_FILE]: [WORKSPACE_FOLDER]\main.code-workspace (WORKSPACE mode only, omit if SINGLE-PROJECT or MONOREPO)
-- [DEV_REPO_FOLDER]: [WORKSPACE_FOLDER]
-- [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\[product-repo-name]
-- [KNOWLEDGE_FOLDER]: [DEV_REPO_FOLDER]\knowledge
-- [SPECS_FOLDER]: [DEV_REPO_FOLDER]\specs
-- [PRODUCT_DOCS_FOLDER]: [PRODUCT_REPO_FOLDER]\docs
+[WORKSPACE_FILE]: `[WORKSPACE_FOLDER]\main.code-workspace`
+- WORKSPACE mode only. Omit if SINGLE-PROJECT or MONOREPO.
 
-Required for SYNCED only (remove if SELF-CONTAINED):
+<!-- Conditional: Omit the following constants for GENERAL workspaces (WS-CT-09). -->
 
-- [COMPANY_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\Company
-- [KNOWLEDGE_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\knowledge
-- [SPECS_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\specs
+[PRODUCT_REPO_FOLDER]: `[WORKSPACE_FOLDER]\..\[product-repo-name]`
+- Product repository folder. In SINGLE-PROJECT mode, equals [WORKSPACE_FOLDER]. In WORKSPACE mode, may be outside [WORKSPACE_FOLDER].
 
-# Release constants (uncomment if using /project-release workflow)
-# - [RELEASE_SOPS_FILE]: SOPS.md
-# - [RELEASE_SESSIONS_FOLDER]: [DEFAULT_SESSIONS_FOLDER]
-# - [RELEASE_NOTES_DIR]: [PRODUCT_DOCS_FOLDER]\ReleaseNotes
+[PRODUCT_SOURCE_FOLDER]: `[PRODUCT_REPO_FOLDER]\src`
+- Source code folder. Applies to ProductRepo only.
 
-Instructions: Replace [product-repo-name] with your product repository folder name. Adjust [COMPANY_REPO_FOLDER] if your company folder is in a different location. All paths should be relative to [WORKSPACE_FOLDER]. [WORKSPACE_FOLDER] is the filesystem path of the workspace root. [WORKSPACE_FILE] is the main.code-workspace file that defines which repos belong to the workspace - repos referenced in it may be physically outside [WORKSPACE_FOLDER] (e.g., ../ProductRepo). Omit [WORKSPACE_FILE] in SINGLE-PROJECT and MONOREPO modes. Remove the SYNCED-only constants if your repo is SELF-CONTAINED (no external sync sources). Release constants compose from existing workspace constants and are used by `/project-release` workflow. `[RELEASE_SOPS_FILE]` is the SOPS filename (`SOPS.md` or `_SOPS.md`). `[RELEASE_SESSIONS_FOLDER]` typically equals `[DEFAULT_SESSIONS_FOLDER]` from `@skills:session-management`. `[RELEASE_NOTES_DIR]` composes from `[PRODUCT_DOCS_FOLDER]` and a `ReleaseNotes` subfolder.
+[PRODUCT_DOCS_FOLDER]: `[PRODUCT_REPO_FOLDER]\docs`
+- Product documentation folder.
 
-## Sync Sources (SYNCED only - remove if SELF-CONTAINED)
+[PRODUCT_VERSION]: `X.Y`
+- Current product version. Format: `X.Y`, `X.Y.Z`, or `YYYY-MM-DD`. Used to compose version-dependent folder names and for release version extraction.
 
-Direction definitions:
-- Downstream = sync from source to all targets (distribute content to dependent repos)
-- Upstream = sync from here back to source (push local changes back to origin)
+[DEV_KNOWLEDGE_FOLDER]: `[WORKSPACE_FOLDER]\knowledge`
+- Knowledge bundles folder (synced from upstream in SYNCED repos).
 
-Sync configuration is stored in `devsystem-sync.json` at [WORKSPACE_FOLDER] root. This file is the single source of truth for all sync settings. See WSKMGMT-SP01 section 10 for the JSON schema.
+[DEV_SPECS_FOLDER]: `[WORKSPACE_FOLDER]\specs`
+- Specs folder containing shared specifications, design guidelines, SOPs.
 
-### Prompt System
-- Source: [WORKSPACE_FOLDER]\..\[devsystem-source-name]\DevSystemV*
-- Target: [DEV_REPO_FOLDER]\[AGENT_FOLDER]
-- Direction: downstream
-- Filter: bundle include/exclude rules in devsystem-sync.json
+[AGENT_FOLDER]: `[WORKSPACE_FOLDER]\.devin`
+- Agent config folder. Sync target — copy of DevSystem source content.
 
-### Knowledge
-- Source: [KNOWLEDGE_SOURCE_FOLDER]
-- Target: [KNOWLEDGE_FOLDER]
-- Direction: downstream
-- Filter: bundle include/exclude rules in devsystem-sync.json
+[SESSIONS_FOLDER]: `[WORKSPACE_FOLDER]\_PrivateSessions`
+- Base folder for session folders.
 
-### Specs
-- Source: [SPECS_SOURCE_FOLDER]
-- Target: [SPECS_FOLDER]
-- Direction: downstream
-- Filter: bundle include/exclude rules in devsystem-sync.json
+[SESSION_ARCHIVE_FOLDER]: `[SESSIONS_FOLDER]\..\Archive`
+- Archive folder for closed sessions.
 
-Instructions: Adjust source paths if your DevSystem source or Company folder is in a different location. All sync configuration (bundles, filters, deprecated, never_overwrite) is defined in devsystem-sync.json at [WORKSPACE_FOLDER] root. Remove this entire section if your repo is SELF-CONTAINED.
+[SKILL_TOOLS_FOLDER]: `[WORKSPACE_FOLDER]\..\.tools\`
+- Command line tools used by various DevSystem skills. Shared across workspaces.
+
+[API_KEYS_FILE]: `[SKILL_TOOLS_FOLDER]\.api-keys.txt`
+- API keys file for skill scripts. Pass via `--keys-file [API_KEYS_FILE]`.
+
+<!-- Conditional: Required for SYNCED only. Remove if SELF-CONTAINED. -->
+
+[COMPANY_REPO_FOLDER]: `[WORKSPACE_FOLDER]\..\Company`
+- Company repository folder (upstream source for knowledge and specs).
+
+[KNOWLEDGE_SOURCE_FOLDER]: `[COMPANY_REPO_FOLDER]\knowledge`
+- Upstream knowledge source. Sync target is [DEV_KNOWLEDGE_FOLDER].
+
+[SPECS_SOURCE_FOLDER]: `[COMPANY_REPO_FOLDER]\specs`
+- Upstream specs source. Sync target is [DEV_SPECS_FOLDER].
+
+<!-- Release constants: Required for /project-release workflow. -->
+
+[SOPS_FILE]: `SOPS.md`
+- SOPS filename in workspace root.
+
+[RELEASE_NOTES_FOLDER]: `[PRODUCT_DOCS_FOLDER]\ReleaseNotes`
+- Release notes directory. Naming: `RELEASE_NOTES_v{VERSION}_{DATE}.md`.
+
+<!-- Instructions:
+- Replace [product-repo-name] with your product repository folder name
+- Adjust [COMPANY_REPO_FOLDER] if your company folder is in a different location
+- All paths should be relative to [WORKSPACE_FOLDER]
+- [WORKSPACE_FILE] is the main.code-workspace file that defines which repos belong to the workspace
+- Repos referenced in it may be physically outside [WORKSPACE_FOLDER] (e.g., ../ProductRepo)
+- Omit [WORKSPACE_FILE] in SINGLE-PROJECT and MONOREPO modes
+- Remove the SYNCED-only constants if your repo is SELF-CONTAINED (no external sync sources)
+- [DEVSYSTEM_FOLDER] is repo-specific — compose as [WORKSPACE_FOLDER]\DevSystem[PRODUCT_VERSION] in NOTES.md -->
+
+<!-- Conditional: Remove this entire section if SELF-CONTAINED (no external sync sources). -->
+
+## Sync Sources
+
+### How Syncing Works
+
+Sync configuration lives in `devsystem-sync.json` at `[WORKSPACE_FOLDER]` root. This file defines:
+- **Sources**: upstream repos to sync from (relative paths)
+- **Bundles**: named content groups (e.g., `Windsurf`, `AI-Standards`) with include/exclude file patterns
+- **never_overwrite**: glob patterns protecting local files from being overwritten or deleted
+- **deprecated**: files that have been renamed or removed and should be cleaned up in targets
+
+The `sync.ps1` script in `@skills:workspace-management` performs the actual sync. Always preview with `-diff` before executing.
+
+### Sync Streams
+
+Three content streams sync independently, each from its source to its target:
+
+- **Prompt System**: `[devsystem-source]\DevSystem*` → `[AGENT_FOLDER]` — rules, workflows, skills
+- **Knowledge**: `[KNOWLEDGE_SOURCE_FOLDER]` → `[DEV_KNOWLEDGE_FOLDER]` — reference documents by topic
+- **Specs**: `[SPECS_SOURCE_FOLDER]` → `[DEV_SPECS_FOLDER]` — shared specifications and SOPs
+
+### Usage Examples
+
+Preview changes (no files modified):
+```powershell
+# Preview sync from a single source
+& sync.ps1 -diff -sources "../MyDevRepo/DevSystem1.0" -targets "." -configs "devsystem-sync.json"
+
+# Preview sync to a single target
+& sync.ps1 -diff -sources "../MyDevRepo/DevSystem1.0" -targets "../ProductRepo" -configs "devsystem-sync.json"
+```
+
+Apply changes (copies, overwrites, deletes deprecated files):
+```powershell
+# Execute sync from a single source
+& sync.ps1 -execute -sources "../MyDevRepo/DevSystem1.0" -targets "." -configs "devsystem-sync.json"
+
+# Execute sync to multiple targets in one call
+& sync.ps1 -execute -sources '["../MyDevRepo/DevSystem1.0"]' -targets '["../ProductRepo", "../OtherRepo"]' -configs '["devsystem-sync.json", "devsystem-sync.json"]'
+```
+
+Or use the `/sync` workflow which wraps these commands:
+- `/sync workspace` — preview and sync all streams from configured sources
+- `/sync knowledge from source` — sync only knowledge bundles
+- `/sync specs to targets` — push specs to downstream repos
+
+<!-- Instructions:
+- Adjust source paths in devsystem-sync.json if your DevSystem source or Company folder is in a different location
+- All bundle definitions, filters, deprecated, and never_overwrite patterns are defined in devsystem-sync.json
+- See WSKMGMT-SP01 section 10 for the JSON schema -->
 
 ## Project Info
 
 - Project name: [project-name]
 - Project goal: [one-sentence-description]
-- Workspace mode: WORKSPACE
-- Version strategy: SINGLE-VERSION
+- Workspace type: [SOFTWARE-DEV|GENERAL]
+- Workspace mode: [SINGLE-PROJECT|MONOREPO|WORKSPACE] (omit if GENERAL)
+- Version strategy: [SINGLE-VERSION|MULTI-VERSION] (omit if GENERAL)
 
-Instructions: Replace placeholder values with your project information.
+<!-- Instructions: Replace placeholder values with your project information. -->
+
+<!-- Conditional: Omit Build/Test, Runtime Environment, and Release Configuration for GENERAL workspaces (WS-CT-09). -->
 
 ## Build/Test Rules
 
@@ -72,69 +144,70 @@ Instructions: Replace placeholder values with your project information.
 - Test command: [test-command]
 - Lint command: [lint-command]
 
-Instructions: Define commands for building, testing, and linting your product repo.
+<!-- Instructions: Define commands for building, testing, and linting your product repo. -->
+
+<!-- Conditional: Applies to ProductRepo only. DevRepo and CompanyRepo are exempt (no buildable source code). -->
 
 ## Runtime Environment
-
-**Applies to ProductRepo only.** DevRepo and CompanyRepo are exempt (no buildable source code).
 
 - Runtime: [node|bun|deno|python|rust|zig]
 - Version file: [.nvmrc|.python-version|rust-toolchain.toml|build.zig.zon]
 - Environment dir: [node_modules|.venv|target|zig-cache]
 - Activate command: [n/a for rust/zig|.venv\Scripts\activate for python|fnm use for node]
 
-Instructions: Every ProductRepo must use a local environment. See LOCAL_ENVIRONMENTS.md in workspace-management skill for setup details. Pin runtime version in a committed version file. Gitignore the environment directory.
+<!-- Instructions:
+- Every ProductRepo must use a local environment
+- See LOCAL_ENVIRONMENTS.md in workspace-management skill for setup details
+- Pin runtime version in a committed version file
+- Gitignore the environment directory -->
 
-## Skill Categories
-
-[SKILL_CATEGORIES]
-- Development: [list-of-development-skills]
-- Infrastructure: [list-of-infrastructure-skills]
-- Research: [list-of-research-skills]
-
-Instructions: Register all skills installed in your agent folder. Categories determine which skills are synced to which downstream repos.
+<!-- Conditional: Omit for GENERAL workspaces. -->
 
 ## Release Configuration
 
-Optional. Uncomment and configure if using `/project-release` workflow. All paths use workspace constants from `## Workspace Constants` section above. See `_SPEC_RELEASE_PROJECT_WORKFLOW.md [RLSPROJ-SP01]` for full config schema and decision guide.
+<!-- Instructions:
+- Configure for /project-release workflow
+- All paths use workspace constants from ## Workspace Constants section above
+- See _SPEC_RELEASE_PROJECT_WORKFLOW.md [RLSPROJ-SP01] for full config schema and decision guide -->
 
 ```
-# ## Release Configuration
-#
-# [RELEASE_CONFIG]
-# sops_file: [RELEASE_SOPS_FILE]
-# sessions_folder: [RELEASE_SESSIONS_FOLDER]
-# release_notes_dir: [RELEASE_NOTES_DIR]
-# release_notes_naming: RELEASE_NOTES_v{VERSION}_{DATE}.md
-# tag_annotation_template: Release {TAG}: {SUMMARY}
-#
-# # Single-repo: one [RELEASE_REPO] block
-# # Multi-repo: product block first, then dev block(s)
-#
-# [RELEASE_REPO: product]
+[RELEASE_CONFIG]
+sops_file: [SOPS_FILE]
+sessions_folder: [SESSIONS_FOLDER]
+release_notes_dir: [RELEASE_NOTES_FOLDER]
+release_notes_naming: RELEASE_NOTES_v{VERSION}_{DATE}.md
+tag_annotation_template: Release {TAG}: {SUMMARY}
+
+# Single-repo: one [RELEASE_REPO] block
+# Multi-repo: product block first, then dev block(s)
+
+[RELEASE_REPO: product]
+path: [WORKSPACE_FOLDER]
+role: product
+tag_format: [date or semver]
+version_source: [devsystem_folder or pyproject_toml or package_json or none]
+# version_file: [PRODUCT_REPO_FOLDER]\pyproject.toml  # Required when version_source is pyproject_toml or package_json
+post_release_bump: [devsystem_rename or patch_bump or minor_bump or none]
+# binary_build: true     # Uncomment if product has a binary
+# binary_path_pattern: dist/[appname]-{version}-win-x64.exe  # Required when binary_build is true
+# version_gate: true     # Uncomment if version consistency check needed
+# test_command: [command]  # Uncomment if tests not already defined in ## Build/Test Rules
+github_release: true
+# github_release_assets:  # Uncomment if binary assets to attach
+#   - dist/[appname]-{version}-win-x64.exe
+
+# [RELEASE_REPO: dev]    # Uncomment for multi-repo
 # path: [WORKSPACE_FOLDER]
-# role: product
+# role: dev
 # tag_format: [date or semver]
 # version_source: [devsystem_folder or pyproject_toml or package_json or none]
-# # version_file: [PRODUCT_REPO_FOLDER]\pyproject.toml  # Required when version_source is pyproject_toml or package_json
 # post_release_bump: [devsystem_rename or patch_bump or minor_bump or none]
-# # binary_build: true     # Uncomment if product has a binary
-# # binary_path_pattern: dist/[appname]-{version}-win-x64.exe  # Required when binary_build is true
-# # version_gate: true     # Uncomment if version consistency check needed
-# # test_command: [command]  # Uncomment if tests not already defined in ## Build/Test Rules
+# test_command: [command]
 # github_release: true
-# # github_release_assets:  # Uncomment if binary assets to attach
-# #   - dist/[appname]-{version}-win-x64.exe
-#
-# # [RELEASE_REPO: dev]    # Uncomment for multi-repo
-# # path: [DEV_REPO_FOLDER]
-# # role: dev
-# # tag_format: [date or semver]
-# # version_source: [devsystem_folder or pyproject_toml or package_json or none]
-# # post_release_bump: [devsystem_rename or patch_bump or minor_bump or none]
-# # test_command: [command]
-# # github_release: true
-# # github_release_notes: reference  # Dev repo references product release
+# github_release_notes: reference  # Dev repo references product release
 ```
 
-Instructions: Uncomment and replace placeholder values. `test_command` lookup order: (1) `[RELEASE_REPO]` config, (2) `## Build/Test Rules` section above, (3) skip. If `test_command` already defined in Build/Test Rules, omit it from `[RELEASE_REPO]` config.
+<!-- Instructions:
+- Replace placeholder values
+- test_command lookup order: (1) [RELEASE_REPO] config, (2) ## Build/Test Rules section above, (3) skip
+- If test_command already defined in Build/Test Rules, omit it from [RELEASE_REPO] config -->
