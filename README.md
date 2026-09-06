@@ -20,27 +20,27 @@ The goal: Run [`/go`](.devin/workflows/go.md) and watch the agent execute a mult
 
 ## Core Concepts
 
-IPPS is built on ten integrated specifications that enable autonomous agent operation:
+IPPS is built on ten integrated concepts that enable autonomous agent operation:
 
-- **[AGEN - Agentic English](Docs/Specs/SPEC_AGEN_AGENTIC_ENGLISH.md)** - Controlled vocabulary with verbs `[VERB]`, placeholders `[PLACEHOLDER]`, and states `STATE`. Eliminates ambiguity in agent instructions.
+- **[AGEN - Agentic English](specs/_SPEC_AGEN_AGENTIC_ENGLISH.md)** - Controlled vocabulary with verbs `[VERB]`, placeholders `[PLACEHOLDER]`, and states `STATE`. Eliminates ambiguity in agent instructions.
 
-- **[EDIRD - Phase Model](Docs/Specs/SPEC_EDIRD_PHASE_MODEL.md)** - Five-phase workflow (Explore, Design, Implement, Refine, Deliver) with gates and deterministic next-action logic. Supports BUILD (code) and SOLVE (knowledge) workflows.
+- **[EDIRD - Phase Model](specs/_SPEC_EDIRD_PHASE_MODEL.md)** - Five-phase workflow (Explore, Design, Implement, Refine, Deliver) with gates and deterministic next-action logic. Supports BUILD (code) and SOLVE (knowledge) workflows.
 
-- **[STRUT - Structured Thinking](Docs/Specs/SPEC_STRUT_STRUCTURED_THINKING.md)** - Tree notation for planning and tracking agent work. Uses unique IDs (`P1`, `P1-S1`, `P1-D1`), checkbox states (`[ ]`, `[x]`, `[N]`), and transitions for flow control.
+- **[STRUT - Structured Thinking](specs/_SPEC_STRUT_STRUCTURED_THINKING.md)** - Tree notation for planning and tracking agent work. Uses unique IDs (`P1`, `P1-S1`, `P1-D1`), checkbox states (`[ ]`, `[x]`, `[N]`), and transitions for flow control.
 
-- **[TRACTFUL - Document Framework](Docs/Specs/SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md)** - Document types (INFO, SPEC, IMPL, TEST, TASKS) with unique IDs and traceability. Defines how documents reference each other and track progress.
+- **[TRACTFUL - Document Framework](specs/_SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md)** - Document types (INFO, SPEC, IMPL, TEST, TASKS) with unique IDs and traceability. Defines how documents reference each other and track progress.
 
-- **[MNF - MUST-NOT-FORGET Technique](Docs/Concepts/_INFO_MNF_TECHNIQUE.md)** - Checklist technique preventing critical oversights. Workflows and documents declare MNF items; agent verifies compliance before completion.
+- **[MNF - MUST-NOT-FORGET Technique](specs/_INFO_MNF_TECHNIQUE.md)** - Checklist technique preventing critical oversights. Workflows and documents declare MNF items; agent verifies compliance before completion.
 
-- **[APAPALAN - Writing Principle](Docs/Concepts/_INFO_APAPALAN_PRINCIPLE.md)** - As Precise As Possible (Priority 1), As Little As Necessary (Priority 2). Enforceable rules in [`APAPALAN_RULES.md`](.devin/skills/write-documents/APAPALAN_RULES.md) for precision, brevity, structure, and naming.
+- **[APAPALAN - Writing Principle](specs/_INFO_APAPALAN_PRINCIPLE.md)** - As Precise As Possible (Priority 1), As Little As Necessary (Priority 2). Enforceable rules in [`APAPALAN_RULES.md`](.devin/skills/write-documents/APAPALAN_RULES.md) for precision, brevity, structure, and naming.
 
-- **[MECT - Minimal Explicit Consistent Terminology](Docs/Concepts/_INFO_MECT_PHILOSOPHY.md)** - Writing quality philosophy. Rules in [`MECT_WRITING_RULES.md`](.devin/skills/write-documents/MECT_WRITING_RULES.md) (voice, word choice, terminology, headings, lists) and [`MECT_CODING_RULES.md`](.devin/skills/coding-conventions/MECT_CODING_RULES.md) (naming, functions, comments, logs, errors).
+- **[MECT - Minimal Explicit Consistent Terminology](specs/_INFO_MECT_PHILOSOPHY.md)** - Writing quality philosophy. Rules in [`MECT_WRITING_RULES.md`](.devin/skills/write-documents/MECT_WRITING_RULES.md) (voice, word choice, terminology, headings, lists) and [`MECT_CODING_RULES.md`](.devin/skills/coding-conventions/MECT_CODING_RULES.md) (naming, functions, comments, logs, errors).
 
-- **[SOCAS - Signs of Confusion and Sloppiness](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md)** - 15 criteria for ranking web search results and evaluating agent output quality. Rules in [`SOCAS_RULES.md`](.devin/skills/write-documents/SOCAS_RULES.md). Used by `/deep-research`, `/improve`, and `/verify`.
+- **[SOCAS - Signs of Confusion and Sloppiness](specs/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md)** - 15 criteria for ranking web search results and evaluating agent output quality. Rules in [`SOCAS_RULES.md`](.devin/skills/write-documents/SOCAS_RULES.md). Used by `/deep-research`, `/improve`, and `/verify`.
 
-- **[GRUC - Guides, Rules, Checks](Docs/Concepts/_INFO_GRUC_GUIDES_RULES_CHECKS.md)** - Drift-prevention technique using three file types: GUIDE (before execution, planning strategy), RULES (whole lifecycle, output verification), CHECKS (after execution, process audit). Separation prevents gaming: CHECKS invisible during work, GUIDE invisible during audit.
+- **[GRUC - Guides, Rules, Checks](specs/_INFO_GRUC_GUIDES_RULES_CHECKS.md)** - Drift-prevention technique using three file types: GUIDE (before execution, planning strategy), RULES (whole lifecycle, output verification), CHECKS (after execution, process audit). Separation prevents gaming: CHECKS invisible during work, GUIDE invisible during audit.
 
-- **[AMINTON - Agentic MINTO Notation](Docs/Concepts/_INFO_AGENTIC_MINTO_ARTICLES.md)** - Tree notation for Minto Pyramid articles. Node types: A (root argument), Q (questions), QnAn (answers), QnAn-Sn (sub-questions), QnAn-SnEn (evidence). Enables machine verification of argument completeness. Used by `/propose-minto` and `/write-minto`.
+- **[AMINTON - Agentic MINTO Notation](specs/_INFO_AGENTIC_MINTO_ARTICLES.md)** - Tree notation for Minto Pyramid articles. Node types: A (root argument), Q (questions), QnAn (answers), QnAn-Sn (sub-questions), QnAn-SnEn (evidence). Enables machine verification of argument completeness. Used by `/propose-minto` and `/write-minto`.
 
 **How they work together:**
 ```
@@ -49,7 +49,7 @@ EDIRD provides the phases     → EXPLORE → DESIGN → IMPLEMENT → REFINE �
 STRUT provides the notation   → Tree structure for plans with progress tracking
 TRACTFUL provides the docs    → INFO, SPEC, IMPL, TEST, TASKS with unique IDs
 MNF provides the safety net   → Critical items that must be verified before completion
-APAPALAN provides precision   → Precision first, brevity second (34 enforceable rules)
+APAPALAN provides precision   → Precision first, brevity second (35 enforceable rules)
 MECT provides consistency     → Voice, terminology, naming across documents and code
 SOCAS provides quality gates  → 15 criteria detecting confusion and sloppiness
 GRUC prevents drift           → Pre-calculated criteria for verify, drift-detect, improve
@@ -117,9 +117,17 @@ your-project/
     └── skills/
 ```
 
+Then configure workspace files:
+1. **NOTES.md** — Copy from [DEV_REPO_NOTES_TEMPLATE.md](.devin/skills/workspace-management/DEV_REPO_NOTES_TEMPLATE.md), set `[WORKSPACE_FOLDER]` and other constants
+2. **ID-REGISTRY.md** — Copy from [ID-REGISTRY_TEMPLATE.md](.devin/skills/workspace-management/ID-REGISTRY_TEMPLATE.md), add your project topics
+3. **SOPS.md** — Create standard operating procedures for your project
+4. **SETUP.md** — Run in each skill folder that requires external tools (pdf-tools, llm-evaluation, github, etc.)
+
+Or run [`/workspace-setup`](.devin/workflows/workspace-setup.md) for an interactive guided setup.
+
 ## Workflows Reference
 
-45 workflows in `.devin/workflows/`:
+46 workflows in `.devin/workflows/`:
 
 **Entry Points**
 - [`/go`](.devin/workflows/go.md) - Autonomous loop until goal reached (BUILD or SOLVE mode, auto-creates session, follows EDIRD)
@@ -177,13 +185,14 @@ your-project/
 - [`/deploy`](.devin/workflows/deploy.md) - Deploy project to configured hosting platform
 - [`/switch-model`](.devin/workflows/switch-model.md) - Switch Cascade AI model tier (HIGH, MID, LOW)
 - [`/project-release`](.devin/workflows/project-release.md) - Create a dated release with comprehensive release notes
+- [`/workspace-setup`](.devin/workflows/workspace-setup.md) - Create or modify workspace setup with interactive questionnaire
 - [`/cleanup`](.devin/workflows/cleanup.md) - Delete temporary files and artifacts left by workflows and skills
 - [`/remove`](.devin/workflows/remove.md) - Remove session content, conversation content, or specific files with preview and confirmation
 - [`/write-template`](.devin/workflows/write-template.md) - Create purpose-built document templates that produce consistent, comparable instances
 
 ## Skills Reference
 
-20 skills in `.devin/skills/`:
+24 skills in `.devin/skills/`:
 
 - **drift-correction** - Drift detection/correction knowledge and CHECKS files for `/drift-detect` and `/drift-correct`
 - **coding-conventions** - Python, PowerShell coding style rules, MECT coding rules
@@ -193,16 +202,20 @@ your-project/
 - **git-conventions** - Commit message format, .gitignore rules
 - **github** - GitHub CLI operations (repos, issues, PRs, releases)
 - **google-account** - Google services (Gmail, Calendar, Drive, Tasks) via gogcli CLI
+- **hosting** - Platform-specific deployment to Netlify, Vercel, Azure App Service, SharePoint
+- **image-tools** - Image conversion, resizing, compression, batch processing (ImageMagick, Pillow)
 - **llm-computer-use** - Desktop automation via LLM vision (click, type, navigate)
 - **llm-evaluation** - LLM evaluation pipeline (questions, answers, scoring, cost analysis)
 - **llm-transcription** - Image/audio to markdown transcription (ensemble + judge + refinement)
 - **ms-playwright-mcp** - Browser automation via Microsoft Playwright MCP server
 - **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF
 - **playwriter-mcp** - Real browser automation with existing logins via Playwriter extension
+- **seo-tools** - SEO data APIs and search engine tools for keyword research and rank tracking
 - **session-management** - Session init, save, resume, finalize, archive; Cascade conversation search and deletion
 - **travel-info** - Travel lookups: flights, trains, transit, country-specific info
 - **windows-desktop-control** - Windows screenshots, window management, keyboard/mouse
 - **windsurf-auto-model-switcher** - Switch Cascade AI model tier programmatically
+- **workspace-management** - Multi-repo workspace setup, DevSystem synchronization, knowledge distribution
 - **write-documents** - Document templates (INFO, SPEC, IMPL, TEST, TASKS, STRUT, MINTO), writing rules (APAPALAN, MECT, SOCAS)
 - **youtube-downloader** - Download YouTube content as MP3 or video, extract metadata
 
@@ -320,7 +333,7 @@ The [`/go`](.devin/workflows/go.md) workflow cycles through:
 
 **Workflows:** [`/research`](.devin/workflows/research.md), [`/write-spec`](.devin/workflows/write-spec.md), [`/write-impl-plan`](.devin/workflows/write-impl-plan.md), [`/write-test-plan`](.devin/workflows/write-test-plan.md), [`/write-tasks-plan`](.devin/workflows/write-tasks-plan.md), [`/implement`](.devin/workflows/implement.md), [`/verify`](.devin/workflows/verify.md), [`/sync`](.devin/workflows/sync.md), [`/rename`](.devin/workflows/rename.md), [`/commit`](.devin/workflows/commit.md)
 
-This follows the Specification-Driven Development (SDD) methodology used by [GitHub spec-kit](https://github.com/github/spec-kit) and [Zencoder](https://docs.zencoder.ai/user-guides/tutorials/spec-driven-development-guide).
+This follows the Specification-Driven Development (SDD) methodology used by [GitHub spec-kit](https://github.com/github/spec-kit) and [Zencoder](https://docs.zencoder.ai/user-guides/guides/spec-driven-development).
 
 1. **Research** - Gather information:
 ```
@@ -498,7 +511,7 @@ Release a project version:
 
 A controlled vocabulary for agent-human communication. Provides consistent terminology across all workflows.
 
-**Full specification**: [SPEC_AGEN_AGENTIC_ENGLISH.md](Docs/Specs/SPEC_AGEN_AGENTIC_ENGLISH.md)
+**Full specification**: [SPEC_AGEN_AGENTIC_ENGLISH.md](specs/_SPEC_AGEN_AGENTIC_ENGLISH.md)
 
 **Goal**: Eliminate ambiguity in agent instructions by using bracketed verbs, placeholders, and labels.
 
@@ -525,7 +538,7 @@ A controlled vocabulary for agent-human communication. Provides consistent termi
 
 A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) work.
 
-**Full specification**: [SPEC_EDIRD_PHASE_MODEL.md](Docs/Specs/SPEC_EDIRD_PHASE_MODEL.md)
+**Full specification**: [SPEC_EDIRD_PHASE_MODEL.md](specs/_SPEC_EDIRD_PHASE_MODEL.md)
 
 **Goal**: Consistent phase structure for all development work with deterministic next-action logic. We want the agent to always do the right thing when the [`/go`](.devin/workflows/go.md) workflow is executed until the initial goal is reached.
 
@@ -560,7 +573,7 @@ A 5-phase workflow model for both BUILD (code) and SOLVE (knowledge/decisions) w
 
 Tree notation for planning and tracking complex autonomous work.
 
-**Full specification**: [SPEC_STRUT_STRUCTURED_THINKING.md](Docs/Specs/SPEC_STRUT_STRUCTURED_THINKING.md)
+**Full specification**: [SPEC_STRUT_STRUCTURED_THINKING.md](specs/_SPEC_STRUT_STRUCTURED_THINKING.md)
 
 **Goal**: Provide a notation for agent plans that supports progress tracking, hierarchical decomposition, and flow control.
 
@@ -599,7 +612,7 @@ Tree notation for planning and tracking complex autonomous work.
 
 Document types and templates that cover the entire development cycle from exploration of ideas to fixing issues.
 
-**Full specification**: [SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md](Docs/Specs/SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md)
+**Full specification**: [SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md](specs/_SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md)
 
 **Goal**: Ensure all development artifacts are uniquely identified, properly structured, and traceable from ideation to maintenance.
 
@@ -625,22 +638,22 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - **AGEN** - Agentic English. PREN enriched with semantics: `@mentions`, `/workflow`, `[VERB]`, `[PLACEHOLDER]`
 - **HWT** - Human Work Time. Partition target: max 0.5h per task for predictable progress
 - **AWT** - Agentic Work Time. Agent time estimate for planning and capacity
-- [**MEPI**](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Executable Point of Information. Present 2-3 curated options aligned with implicit intentions.
-- [**MCPI**](Docs/Concepts/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Complete Point of Information. Present exhaustive options when thoroughness is explicitly required
-- [**SOCAS**](Docs/Concepts/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md) - Signs Of Confusion And Sloppiness. 17 criteria for detecting agent degradation
-- [**MNF**](Docs/Concepts/_INFO_MNF_TECHNIQUE.md) - Must Not Forget. Technique for critical item tracking during task execution
+- [**MEPI**](specs/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Executable Point of Information. Present 2-3 curated options aligned with implicit intentions.
+- [**MCPI**](specs/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Complete Point of Information. Present exhaustive options when thoroughness is explicitly required
+- [**SOCAS**](specs/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md) - Signs Of Confusion And Sloppiness. 15 criteria for detecting agent degradation
+- [**MNF**](specs/_INFO_MNF_TECHNIQUE.md) - Must Not Forget. Technique for critical item tracking during task execution
 - **APAPALAN** - As Precise As Possible, As Little As Necessary. Conciseness principle for workflows and documents
 - **VCRIV** - Verify-Critique-Reconcile-Implement-Verify. Quality pipeline for logic and design review: `/verify` → `/critique` → `/reconcile` → `/implement` → `/verify`
 - **FACRIV** - Fact-check-Reconcile-Implement-Verify. Quality pipeline for factual claim verification: `/fact-check` → `/reconcile` → `/implement` → `/verify`
 
-**Agent Drift Prevention**: [ADP Approach](Docs/Concepts/_INFO_AGENT_DRIFT_PREVENTION_APPROACH.md) - How the DevSystem prevents agent drift through TRACTFUL, SMAP, EDIRD, STRUT, GRUC, and MNF across three scopes
+**Agent Drift Prevention**: [ADP Approach](specs/_INFO_AGENT_DRIFT_PREVENTION_APPROACH.md) - How the DevSystem prevents agent drift through TRACTFUL, SMAP, EDIRD, STRUT, GRUC, and MNF across three scopes
 
 **How-To Guides**:
-- [How to Write Good Document Templates](Docs/Concepts/_INFO_HOW_TO_WRITE_GOOD_DOCUMENT_TEMPLATES.md) - Patterns and rules for unambiguous templates that agents reliably instantiate
-- [How to Create Auditable Research Summaries](Docs/Concepts/_INFO_HOW_TO_CREATE_AUDITABLE_RESEARCH_SUMMARIES.md) - Citation and source-linking standard for 100% audit chain
-- [How to Detect AI-Assisted Writing](Docs/Concepts/_INFO_HOW_TO_DETECT_AI_ASSISTED_WRITING.md) - Detection signals for AI-assisted writing across style, structure, reasoning, and sourcing
-- [How to Check Factuality](Docs/Concepts/_INFO_HOW_TO_CHECK_FACTUALITY.md) - Epistemological framework, claim taxonomy, trust hierarchy, and verification methods for AI agent fact-checking
-- [Bundling Workflows with Skills](Docs/Concepts/_INFO_HOW_TO_IMPLEMENT_WORKFLOWS_AS_SKILLS.md) - Research on migrating workflows into skill-based architecture
+- [How to Write Good Document Templates](specs/_INFO_HOW_TO_WRITE_GOOD_DOCUMENT_TEMPLATES.md) - Patterns and rules for unambiguous templates that agents reliably instantiate
+- [How to Create Auditable Research Summaries](specs/_INFO_HOW_TO_CREATE_AUDITABLE_RESEARCH_SUMMARIES.md) - Citation and source-linking standard for 100% audit chain
+- [How to Detect AI-Assisted Writing](specs/_INFO_HOW_TO_DETECT_AI_ASSISTED_WRITING.md) - Detection signals for AI-assisted writing across style, structure, reasoning, and sourcing
+- [How to Check Factuality](specs/_INFO_HOW_TO_CHECK_FACTUALITY.md) - Epistemological framework, claim taxonomy, trust hierarchy, and verification methods for AI agent fact-checking
+- [Bundling Workflows with Skills](specs/_INFO_HOW_TO_IMPLEMENT_WORKFLOWS_AS_SKILLS.md) - Research on migrating workflows into skill-based architecture
 
 **Full registry**: [ID-REGISTRY.md](ID-REGISTRY.md) - All acronyms, TOPICs, states, and named concepts
 
@@ -835,10 +848,10 @@ Session lifecycle management: init, save, resume, finalize, archive. Cascade con
 **Quick examples**:
 ```powershell
 # List last 10 conversations
-.\DevSystemV4.3\skills\session-management\cascade-search.ps1
+.\.devin\skills\session-management\cascade-search.ps1
 
 # Delete conversations older than 30 days
-.\DevSystemV4.3\skills\session-management\cascade-delete.ps1 -OlderThanDays 30
+.\.devin\skills\session-management\cascade-delete.ps1 -OlderThanDays 30
 ```
 
 ### windows-desktop-control
@@ -893,7 +906,7 @@ Document templates for INFO, SPEC, IMPL, TEST, TASKS, and STRUT plans.
 
 Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.md` in each skill folder to install.
 
-- **[MinifyIPPS](Docs/INFO_HOW_TO_MINIFY_IPPS.md)** - LLM-based compression pipeline for DevSystem markdown files. Reduces token count while preserving meaning. Pipeline: bundle → analyze → compress → verify.
+- **[MinifyIPPS](specs/_INFO_HOW_TO_MINIFY_IPPS.md)** - LLM-based compression pipeline for DevSystem markdown files. Reduces token count while preserving meaning. Pipeline: bundle → analyze → compress → verify.
 
 ## Project Structure
 
@@ -916,7 +929,15 @@ IPPS/
 │   │   └── workspace-rules.md    # Workspace-specific overrides
 │   ├── skills/                   # See Skills section for details
 │   └── workflows/                # See .devin/workflows/ for file list
+├── docs/                         # Product documentation, tool research, release notes
+│   └── ReleaseNotes/             # Release notes per version
+├── specs/                        # IPPS specs, DevSystem methodology, guidelines
 ├── ID-REGISTRY.md                # Prevents term/ID collisions (DevSystem constants + project topics)
+├── NOTES.md                      # Workspace constants, project info, sync rules
+├── PROBLEMS.md                   # Known issues across the project
+├── PROGRESS.md                   # Overall project progress
+├── FAILS.md                      # Lessons learned from past mistakes
+├── SOPS.md                       # Standard operating procedures
 └── README.md
 ```
 
@@ -1001,7 +1022,7 @@ Older versions in [`_OldDevSystemVersions/`](_OldDevSystemVersions/):
 | Feature            | Windsurf               | Claude Code            | Codex CLI              | GitHub Copilot                    | OpenClaw                |
 |--------------------|------------------------|------------------------|------------------------|-----------------------------------|-------------------------|
 | Type               | IDE                    | Terminal               | Terminal               | IDE Extension                     | Gateway + Multi-channel |
-| Platform           | Windows, macOS, Linux  | Windows, macOS, Linux  | macOS, Linux, Win WSL  | VS Code, VS, JetBrains            | Windows, macOS, Linux   |
+| Platform           | Windows, macOS, Linux  | Windows, macOS, Linux  | macOS, Linux, Windows  | VS Code, VS, JetBrains            | Windows, macOS, Linux   |
 | Instructions       | `.devin/rules/*.md` | `CLAUDE.md`            | `AGENTS.md`            | `.github/copilot-instructions.md` | `AGENTS.md`, `SOUL.md`  |
 | Commands/Workflows | `.devin/workflows/` | `.claude/commands/`    | Custom prompts only    | Prompt files only                 | Skills only             |
 | Skills             | Yes                    | Yes                    | No                     | No                                | Yes                     |
@@ -1031,20 +1052,20 @@ Older versions in [`_OldDevSystemVersions/`](_OldDevSystemVersions/):
 
 ### Detailed Documentation
 
-- [Agent Comparison](Docs/FurtherResearch/_INFO_AGENT_COMPARISON.md) - Full feature comparison with detailed tables
-- [Fast and Cheap Models](Docs/FurtherResearch/_INFO_FAST_CHEAP_MODELS.md) - Speed and benchmark comparison for free and economical models
-- [Agent Skills](Docs/FurtherResearch/_INFO_AGENT_SKILLS.md) - Capabilities and tool usage of different agent types
-- [Using Cascade as Agent](Docs/FurtherResearch/_INFO_USE_CASCADE_AS_AGENT.md) - Best practices for agentic workflows in Windsurf
-- [Spec-Driven Development](Docs/FurtherResearch/_INFO_SPEC_DRIVEN_DEVELOPMENT.md) - The SDD methodology powering IPPS
-- [How Windsurf Works](Docs/INFO_HOW_WINDSURF_WORKS.md) - Windsurf IDE and Cascade assistant
-- [How Claude Code Works](Docs/FurtherResearch/_INFO_HOW_CLAUDE_CODE_WORKS.md) - Anthropic's terminal agent
-- [How Codex CLI Works](Docs/FurtherResearch/_INFO_HOW_CODEX_WORKS.md) - OpenAI's terminal agent
-- [How GitHub Copilot Works](Docs/FurtherResearch/_INFO_HOW_COPILOT_WORKS.md) - GitHub's IDE extension
-- [How OpenClaw Works](Docs/FurtherResearch/_INFO_HOW_OPENCLAW_WORKS.md) - Multi-channel personal AI assistant
-- [OpenClaw Overview](Docs/FurtherResearch/_INFO_OPENCLAW.md) - Setup and feature overview
+- [Agent Comparison](docs/_INFO_AGENT_COMPARISON.md) - Full feature comparison with detailed tables
+- [Fast and Cheap Models](docs/_INFO_FAST_CHEAP_MODELS.md) - Speed and benchmark comparison for free and economical models
+- [Agent Skills](docs/_INFO_AGENT_SKILLS.md) - Capabilities and tool usage of different agent types
+- [Using Cascade as Agent](docs/_INFO_USE_CASCADE_AS_AGENT.md) - Best practices for agentic workflows in Windsurf
+- [Spec-Driven Development](docs/_INFO_SPEC_DRIVEN_DEVELOPMENT.md) - The SDD methodology powering IPPS
+- [How Windsurf Works](docs/INFO_HOW_WINDSURF_WORKS.md) - Windsurf IDE and Cascade assistant
+- [How Claude Code Works](docs/_INFO_HOW_CLAUDE_CODE_WORKS.md) - Anthropic's terminal agent
+- [How Codex CLI Works](docs/_INFO_HOW_CODEX_WORKS.md) - OpenAI's terminal agent
+- [How GitHub Copilot Works](docs/_INFO_HOW_COPILOT_WORKS.md) - GitHub's IDE extension
+- [How OpenClaw Works](docs/_INFO_HOW_OPENCLAW_WORKS.md) - Multi-channel personal AI assistant
+- [OpenClaw Overview](docs/_INFO_OPENCLAW.md) - Setup and feature overview
 
 ### Technical Reference
 
-- [OpenAI and Anthropic Model Costs](Docs/FurtherResearch/_INFO_OPENAI_ANTHROPIC_MODEL_COSTS.md) - Token pricing and credit multiplier analysis
-- [ASCII Art Width Test](Docs/FurtherResearch/_TEST_ASCII_ART_WIDTH.md) - Unicode character width testing for monospace fonts
+- [OpenAI and Anthropic Model Costs](docs/_INFO_OPENAI_ANTHROPIC_MODEL_COSTS.md) - Token pricing and credit multiplier analysis
+- [ASCII Art Width Test](docs/_TEST_ASCII_ART_WIDTH.md) - Unicode character width testing for monospace fonts
 - [ASCII Art Transcription Cost/Quality Eval](_Sessions/_Archive/_2026-01-23_JpgToAsciiArtTranscriptionCostQualityEval/INFO_ASCII_ART_TRANSCRIPTION_COST_QUALITY_EVAL.md) - LLM model comparison for image-to-ASCII transcription

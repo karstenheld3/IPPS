@@ -1,47 +1,56 @@
-[DEFAULT_SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
-[SESSION_ARCHIVE_FOLDER]: [SESSION_FOLDER]\..\Archive
-[AGENT_FOLDER]:  [WORKSPACE_FOLDER]\.devin
+[WORKSPACE_FOLDER]: `E:\Dev\IPPS`
+- Root folder of the workspace. All other paths compose from this.
 
-Current [DEVSYSTEM]: DevSystemV4.3
-Current [DEVSYSTEM_FOLDER]: [WORKSPACE_FOLDER]\[DEVSYSTEM]
+[PRODUCT_REPO_FOLDER]: `[WORKSPACE_FOLDER]`
+- In SINGLE-PROJECT mode, equals [WORKSPACE_FOLDER]. In WORKSPACE mode, points to product repo (may be outside [WORKSPACE_FOLDER]).
 
-## Workspace Constants
+[PRODUCT_SOURCE_FOLDER]: `[PRODUCT_REPO_FOLDER]\src`
+- Source code folder. Applies to ProductRepo only.
 
-- [WORKSPACE_FOLDER]: E:\Dev\IPPS
-- [DEV_REPO_FOLDER]: [WORKSPACE_FOLDER]
-- [PRODUCT_DOCS_FOLDER]: [WORKSPACE_FOLDER]\Docs
-- [RELEASE_SOPS_FILE]: SOPS.md
-- [RELEASE_SESSIONS_FOLDER]: [DEFAULT_SESSIONS_FOLDER]
-- [RELEASE_NOTES_DIR]: [PRODUCT_DOCS_FOLDER]\ReleaseNotes
+[PRODUCT_DOCS_FOLDER]: `[WORKSPACE_FOLDER]\docs`
+- Product documentation folder.
 
-Instructions: SINGLE-PROJECT mode (no main.code-workspace). [DEV_REPO_FOLDER] equals [WORKSPACE_FOLDER] (single repo). Release constants compose from existing workspace constants. `[RELEASE_SOPS_FILE]` is the SOPS filename in workspace root. `[RELEASE_SESSIONS_FOLDER]` equals `[DEFAULT_SESSIONS_FOLDER]`. `[RELEASE_NOTES_DIR]` composes from `[PRODUCT_DOCS_FOLDER]` and `ReleaseNotes` subfolder.
+[DEV_KNOWLEDGE_FOLDER]: `E:\Dev\Delphios\knowledge`
+- Knowledge bundles folder. External — shared across workspaces via Delphios repo.
 
+[DEV_SPECS_FOLDER]: `[WORKSPACE_FOLDER]\specs`
+- Specs folder containing shared specifications, design guidelines, SOPs.
 
-## Conversation Humanizing Rules (2026-07-16)
+[PRODUCT_VERSION]: `4.3`
+- Current DevSystem version. Update on version changes (SOPS SOP 4/7).
 
-Created `CONVERSATION_HUMANIZING_RULES.md` in `write-documents` skill with 6 rules (CV-HM-01 through CV-HM-06) for ghostwriting emails/messages in the user's voice. Based on forensic linguistics research documented in `Docs/FurtherResearch/_INFO_HUMAN_WRITING_PATTERNS.md [HMNWRTPTN-IN01]`. Updated `CONVERSATION_RULES.md` (CV-HM-* index, CV-ST-01 section order) and `CONVERSATION_TEMPLATE.md` (Humanizing Settings section, MNF items).
+[DEVSYSTEM_FOLDER]: `[WORKSPACE_FOLDER]\DevSystem[PRODUCT_VERSION]`
+- Source of truth for all rules, workflows, skills. Never edit `.devin/` directly. Repo-specific — not in template.
 
-## Release Notes Location (2026-05-01)
+[AGENT_FOLDER]: `[WORKSPACE_FOLDER]\.devin`
+- Sync target. Copy of [DEVSYSTEM_FOLDER] content.
 
-Release notes go in `Docs/ReleaseNotes/`. Filename: `RELEASE_NOTES_v[VERSION]_YYYY-MM-DD.md`.
+[SESSIONS_FOLDER]: `[WORKSPACE_FOLDER]\_PrivateSessions`
+- Base folder for session folders.
 
-## .tools Folder Location (2026-02-11)
+[SESSION_ARCHIVE_FOLDER]: `[SESSIONS_FOLDER]\..\Archive`
+- Archive folder for closed sessions.
 
-**MOVED**: `.tools` folder relocated from `[WORKSPACE_FOLDER]\.tools` to `[WORKSPACE_FOLDER]\..\.tools` (shared across workspaces).
+[SKILL_TOOLS_FOLDER]: `[WORKSPACE_FOLDER]\..\.tools\`
+- Command line tools used by various DevSystem skills. Shared across workspaces. Not the agent built-in tools.
 
-Old path: `[WORKSPACE_FOLDER]\.tools\`
-New path: `[WORKSPACE_FOLDER]\..\.tools\`
+[API_KEYS_FILE]: `[SKILL_TOOLS_FOLDER]\.api-keys.txt`
+- API keys file for skill scripts. Pass via `--keys-file [API_KEYS_FILE]`.
 
-All SETUP.md, UNINSTALL.md, SKILL.md, scripts, and README.md references need updating. See `_TASKS_TOOLS.md` for full change list.
+[SOPS_FILE]: `SOPS.md`
+- SOPS filename in workspace root.
 
-## API Keys Location (2026-02-11)
+[RELEASE_NOTES_FOLDER]: `[PRODUCT_DOCS_FOLDER]\ReleaseNotes`
+- Release notes directory. Naming: `RELEASE_NOTES_v{VERSION}_{DATE}.md`.
 
-**API keys file**: `[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt` (in shared .tools folder)
+## Project Info
 
-Old path: `[WORKSPACE_FOLDER]\..\.api-keys.txt`
-New path: `[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
+- Project name: IPPS
+- Project goal: DevSystem source repository — rules, workflows, skills for agentic development
+- Workspace type: SOFTWARE-DEV
+- Workspace mode: SINGLE-PROJECT
+- Version strategy: SINGLE-VERSION
 
-Usage: `--keys-file [WORKSPACE_FOLDER]\..\.tools\.api-keys.txt`
 
 ## Prevention Rules (from session fails)
 
@@ -109,10 +118,9 @@ Automatically push commits to GitHub.
 
 ## Sync Architecture Revision (2026-09-06)
 
-**Folder rename**: `[WORKSPACE_FOLDER]\rules` → `[WORKSPACE_FOLDER]\specs` (pending `/rename` execution)
-- `\specs` contains all SPEC, IMPL, TEST files
-- `\specs\sops` contains advanced SOPs referenced in SOPS.md
-- `\specs\guides` contains guides and how-tos
+**Folder rename**: `[WORKSPACE_FOLDER]\rules` → `[WORKSPACE_FOLDER]\specs` (completed 2026-09-06)
+- `\specs` contains all SPEC, IMPL, TEST, INFO concept files
+- `\docs` contains product documentation, tool research, release notes
 
 **Single script**: `sync.ps1` in workspace-management skill
 - `-diff -sources [array] -targets [array] -configs [array] -output-file [path]` → produces additions, changes, deletions
@@ -137,12 +145,6 @@ Automatically push commits to GitHub.
 - `/sync knowledge to targets` — reads targets from source NOTES.md synced repos list, runs sync.ps1 -diff, preview, auto-execute on confirm
 - `/sync specs from source` — same flow for specs
 - `/sync specs to targets` — same flow for specs
-
-## [SKILL_CATEGORIES]
-
-- **Development**: coding-conventions, deep-research, drift-correction, edird-phase-planning, git, git-conventions, github, hosting, image-tools, llm-computer-use, llm-evaluation, llm-transcription, ms-playwright-mcp, pdf-tools, playwriter-mcp, seo-tools, session-management, windows-desktop-control, windsurf-auto-model-switcher, workspace-management, write-documents, youtube-downloader
-- **Personal**: google-account, travel-info
-- **All**: Development + Personal (all skills)
 
 ## [PERSONAL_WORKFLOWS] (excluded from Development-only repos, deployed only to "All" repos)
 
@@ -190,13 +192,13 @@ Automatically push commits to GitHub.
 
 ## Release Configuration
 
-Config for `/project-release` workflow. All paths use workspace constants from `## Workspace Constants` section above. See `_SPEC_RELEASE_PROJECT_WORKFLOW.md [RLSPROJ-SP01]` in `Docs/Specs/` for full schema and decision guide.
+Config for `/project-release` workflow. All paths use workspace constants from `## Workspace Constants` section above. See `_SPEC_RELEASE_PROJECT_WORKFLOW.md [RLSPROJ-SP01]` in `[DEV_SPECS_FOLDER]` for full schema and decision guide.
 
 ```
 [RELEASE_CONFIG]
-sops_file: [RELEASE_SOPS_FILE]
-sessions_folder: [RELEASE_SESSIONS_FOLDER]
-release_notes_dir: [RELEASE_NOTES_DIR]
+sops_file: [SOPS_FILE]
+sessions_folder: [SESSIONS_FOLDER]
+release_notes_dir: [RELEASE_NOTES_FOLDER]
 release_notes_naming: RELEASE_NOTES_v{VERSION}_{DATE}.md
 tag_annotation_template: Release {TAG}: {SUMMARY}
 
@@ -209,4 +211,4 @@ post_release_bump: devsystem_rename
 github_release: true
 ```
 
-Instructions: SINGLE-PROJECT mode — one repo, one `[RELEASE_REPO]` block. Date-based tags (`YYYY-MM-DD`). Version source is `devsystem_folder` (parsed from `Current [DEVSYSTEM]` line above). Post-release bump renames `DevSystemVX.Y` folder to next minor version per SOPS SOP 7. No binary build, no version gate. Release notes go in `Docs/ReleaseNotes/` per existing convention (see Release Notes Location section above).
+Instructions: SINGLE-PROJECT mode — one repo, one `[RELEASE_REPO]` block. Date-based tags (`YYYY-MM-DD`). Version source is `devsystem_folder` (parsed from `[PRODUCT_VERSION]` line above). Post-release bump renames `DevSystemVX.Y` folder to next minor version per SOPS SOP 7. No binary build, no version gate. Release notes go in `Docs/ReleaseNotes/` per existing convention (see `[RELEASE_NOTES_FOLDER]` constant above).

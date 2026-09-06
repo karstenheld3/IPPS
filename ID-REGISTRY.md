@@ -74,7 +74,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **AWT** - Agentic Work Time. Agent time estimate. Example: "complete in < 5mins AWT"
 - **MEPI** - Most Executable Point of Information (used for research and decision making)
 - **MCPI** - Most Complete Point of Information (used for research)
-- **SOCAS** - Signs Of Confusion And Sloppiness (17 criteria)
+- **SOCAS** - Signs Of Confusion And Sloppiness (15 criteria)
 - **MNF** - Must Not Forget. Technique for critical item tracking during task execution
 - **APAPALAN** - As Precise As Possible, As Little As Necessary. Conciseness principle for workflows and documents
 - **VCRIV** - Verify, Critique, Reconcile, Implement, Verify. Quality pipeline for logic and design review. Runs `/verify` → `/critique` → `/reconcile` → `/implement` → `/verify`
@@ -102,20 +102,30 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **CHORE** - Maintenance analysis
 - **MIGRATION** - Data or system migration
 
-### Workspace Context
-- **SINGLE-PROJECT** - Workspace contains one project
-- **MONOREPO** - Workspace contains multiple projects
-- **WORKSPACE** - Workspace root with multiple independent repos
-- **SINGLE-VERSION** - One active version
-- **MULTI-VERSION** - Side-by-side versions
-- **SESSION-MODE** - Time-limited session with specific goals
-- **PROJECT-MODE** - Work spans entire project
-- **SYNCED** - Repo participates in sync dependency tree (has upstream/downstream)
-- **SELF-CONTAINED** - Repo manages all content locally, no sync relationships
+<!-- START: Core -->
+### Core States
+- **SESSION-MODE**
+- **PROJECT-MODE**
 
-### Operation Modes
-- **IMPL-CODEBASE** - Output to project source folders (default)
-- **IMPL-ISOLATED** - Output to session folder only (POCs, prototypes)
+### Core Operation Modes
+- **IMPL-CODEBASE**
+- **IMPL-ISOLATED**
+<!-- END: Core -->
+
+<!-- START: Skill: workspace-management -->
+### workspace-management States
+- **SINGLE-PROJECT**
+- **MONOREPO**
+- **WORKSPACE**
+- **SINGLE-VERSION**
+- **MULTI-VERSION**
+- **SYNCED**
+- **SELF-CONTAINED**
+- **SOFTWARE-DEV**
+- **GENERAL**
+<!-- END: Skill: workspace-management -->
+
+<!-- See devsystem-core.md for definitions and behavior of each state -->
 
 ## Labels
 
@@ -147,173 +157,55 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 
 ## Project Topics
 
-- **AGNTMAPR** - Agentic MapReduce (Devin's 5-stage pipeline for whole-codebase reasoning: Plan, Shard, Map, Reduce, Verify)
-- **AGNTPROB** - Agentic Problems (categorized failure patterns in AI-assisted development)
-- **AIDET** - AI Writing Detection (detection methods, signals, heuristics for identifying AI-generated text)
-- **AMSW** - Auto Model SWitcher (Windsurf model switching automation)
-- **AXCEL** - Agent Excel Skill (Excel automation from Cascade agent)
-- **BNCL** - Binoculars Cross-Perplexity Detection (zero-shot AI text detection via cross-model perplexity ratio)
-- **DOCWRITEFW** - Document Writing Frameworks (analytical/communication frameworks for IPPS document quality)
-- **DRPRF** - Deep Research Profile Templates (personal, company, organization, network profile research)
-- **DVDT** - Devin Desktop (Windsurf IDE renamed to Devin Desktop; INFO_HOW_DEVIN_WORKS reference doc)
-- **EDIGA** - Energie Digitalisierung A (digitalization in energy sector research)
-- **ENDIG** - Energie Digitalisierung (digitalization in energy sector research)
-- **ENDSY** - Energie Digital Synthese (consolidated INFO from EnergieDigitalA + B)
-- **FCTCHECK** - Factcheck Workflow (factuality verification for agent-generated documents). INFO: `Docs/Concepts/_INFO_HOW_TO_CHECK_FACTUALITY.md`
-- **FINRESAI** - Finance Research AI (research quality/speed value in finance, AI application critique)
-- **FINSTRWF** - Follow Instructions Workflow (post-execution instruction-following gap analysis and remediation)
-- **GLOB** - Global/project-wide items
-- **LLMCG** - LLM Code Generation (RAG-augmented vs fine-tuned vs prompt-engineered approaches comparison)
-- **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline)
-- **LLMTR** - LLM Transcription Skill (image-to-markdown, audio-to-markdown)
-- **MCPS** - MCP server integrations
-- **MECE** - Mutually Exclusive, Collectively Exhaustive (grouping/decomposition quality principle)
-- **MDPDF** - Markdown to PDF Renderer (Python tool with theme.json and settings.json)
-- **MECT** - Minimal Explicit Consistent Terminology (communication design principle)
-- **MINTO** - Minto Pyramid Principle (communication framework research and reference)
-- **MIPPS** - Minimal IPPS (DevSystem compression pipeline)
-- **PLWR** - Playwriter MCP (Chrome extension browser automation)
-- **REPRT** - Report Writing (DevSystem capability for Minto Pyramid-based high-quality reports)
-- **OCLAW** - OpenClaw exploration (remote agent interaction via WhatsApp/Cascade)
-- **MEPI** - MEPI/MCPI research depth principle
-- **SDDEV** - Spec-Driven Development (research topic)
-- **STYLO** - Stylometric Profiling (feature-based AI text detection via writing style analysis)
-- **SUMQR** - Summary Quality Rules (improving enforcement and quality of summaries)
-- **TRNGFX** - Transcription graphics/ASCII art optimization
-- **LMWS** - LM Studio + Windsurf integration research
-- **TOOLS** - .tools folder relocation and path updates
-- **GCRU** - Global Coding Rules (universal coding conventions)
-- **WSTKTRAC** - Windsurf Token Logging (token usage tracking via hooks)
-- **WS2DV** - Windsurf 2.0 and Devin (deep research on Windsurf 2.0 release features and Devin integration)
-- **FLCOR** - Fail Correction (cross-repo fails collection and analysis)
-- **WSWN** - What? So What? Now What? (reflective framework deep research, Borton/Driscoll/Rolfe)
-- **CSMP** - Cascade Metaprompt (AI coding assistant metaprompt extraction and analysis)
-- **NTICP** - Network Traffic Interception (programmatic HTTPS interception for LLM prompt extraction)
-- **WSFT** - Windsurf Features (comprehensive feature research for updating WSRF-IN01)
-- **IPPSPRMTFMT** - IPPS Prompt File Format (syntax, semantics, execution model for prompt queue files)
-- **HMNWRTPTN** - Human Writing Patterns (forensic linguistics research for conversation humanizing rules)
-- **WMRK** - Watermarking and Provenance (SynthID-Text, C2PA, embedded signal detection for AI-generated text)
-- **RUSESCPOL** - Russia escalation policy in Ukraine war (official statements, nuclear doctrine, red lines)
-- **RECSLFIM** - Recursive Self-Improvement (AI systems accelerating or automating their own development)
-- **WSKMGMT** - Workspace Management Skill (DevSystem V5.0 workspace/project operations skill)
-- **WRTPRMPT** - Write Prompts Workflow (prompt queue file generation for sequential headless execution)
-- **RLSPROJ** - Release Project Workflow (unified multi-repo tagging and release notes process)
-- **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow)
-- **ZAIINT** - Z.AI Integration (GLM model integration into llm-evaluation skill)
-
-## Document History
-
-**[2026-09-05 22:30]**
-- Added: RLSPROJ topic (Release Project Workflow - unified multi-repo tagging and release notes process)
-
-**[2026-09-03 13:06]**
-- Added: WSKMGMT topic (Workspace Management Skill - DevSystem V5.0)
-
-**[2026-08-31 22:15]**
-- Added: IPPSPRMTFMT topic (IPPS Prompt File Format specification)
-
-**[2026-08-31 21:26]**
-- Added: WRTPRMPT topic (Write Prompts Workflow - prompt queue file generation)
-
-**[2026-08-30 15:39]**
-- Added: FCTCHECK topic (Factcheck Workflow - factuality verification for agent-generated documents)
-
-**[2026-08-13 14:55]**
-- Added: RECSLFIM topic (Recursive Self-Improvement - AI systems automating own development)
-
-**[2026-07-16 10:30]**
-- Added: HMNWRTPTN topic (Human Writing Patterns - forensic linguistics research for conversation humanizing rules)
-
-**[2026-07-08 11:44]**
-- Added: AGNTPROB topic (Agentic Problems - categorized failure patterns)
-
-**[2026-06-12 13:15]**
-- Added: FINSTRWF topic (Agent Realign Workflow - instruction-following gap analysis)
-
-**[2026-06-05 19:25]**
-- Added: STYLO topic (Stylometric Profiling for AI detection)
-- Added: WMRK topic (Watermarking and Provenance - SynthID-Text)
-- Added: BNCL topic (Binoculars Cross-Perplexity Detection)
-
-**[2026-06-05 17:25]**
-- Added: AIDET topic (AI Writing Detection methods and heuristics)
-
-**[2026-05-27 12:49]**
-- Added: CSMP topic (Cascade Metaprompt extraction and analysis)
-- Added: DVDT topic (Devin Desktop = renamed Windsurf IDE; INFO_HOW_DEVIN_WORKS doc) [2026-06-03]
-
-**[2026-05-25 14:44]**
-- Added: DRPRF topic (Deep Research Profile Templates)
-
-**[2026-05-05 10:19]**
-- Added: XLATE topic (Translation quality improvement methods)
-
-**[2026-05-01 17:39]**
-- Added: MDPDF topic (Markdown to PDF Renderer)
-
-**[2026-04-30 20:21]**
-- Added: NFR (Non-Functional Requirement) to Spec-Level Item IDs
-
-**[2026-04-16 13:26]**
-- Added: REPRT topic (Report Writing - Minto Pyramid-based reports)
-
-**[2026-04-12 22:40]**
-- Added: WSWN topic (What? So What? Now What? reflective framework deep research)
-
-**[2026-04-12 15:57]**
-- Added: DOCWRITEFW topic (Document Writing Frameworks)
-
-**[2026-04-12 15:35]**
-- Added: MECE topic (Mutually Exclusive, Collectively Exhaustive)
-- Added: SUMQR topic (Summary Quality Rules)
-
-**[2026-04-04 12:22]**
-- Added: ENDIG topic description updated for EnergieDigitalB session
-
-**[2026-03-20 04:20]**
-- Added: MIPPS topic (Minimal IPPS - DevSystem compression pipeline)
-
-**[2026-03-15 21:05]**
-- Fixed: Tracking Item IDs format `[NNN]` → `[NNNN]` (align with devsystem-ids.md)
-- Fixed: States `SESSION-BASED`/`PROJECT-WIDE` → `SESSION-MODE`/`PROJECT-MODE` (align with rules)
-
-**[2026-03-15 14:55]**
-- Added: PLWR topic (Playwriter MCP)
-
-**[2026-02-11 10:28]**
-- Added: TOOLS topic (.tools folder relocation and path updates)
-
-**[2026-01-29 10:38]**
-- Added: LMWS topic (LM Studio + Windsurf integration research)
-
-**[2026-01-26 23:56]**
-- Added: LLMTR topic (LLM Transcription Skill)
-
-**[2026-01-26 16:33]**
-- Added: AMSW topic (Auto Model SWitcher)
-- Fixed: Alphabetized Project Topics list
-
-**[2026-01-24 18:58]**
-- Added: MEPI topic (MEPI/MCPI research depth principle)
-
-**[2026-01-23 00:45]**
-- Added: LLMEV topic (LLM Evaluation Skill)
-
-**[2026-01-22 09:45]**
-- Added: Project Topics section with GLOB, MCPS, TRNGFX
-
-**[2026-01-20 16:40]**
-- Comprehensive update: added all IDs from devsystem-ids.md
-- Added: Document Type IDs, Spec-Level, Plan-Level, Tracking IDs
-- Added: States (workflow types, complexity, problem types)
-- Added: Labels (severity, assumption, status)
-- Renamed title to "ID Registry"
-
-**[2026-01-17 14:44]**
-- Simplified to inventory format - removed spec replication
-
-**[2026-01-17 14:41]**
-- Synced ALL concepts from session and DevSystemV3.1
-
-**[2026-01-17 14:12]**
-- Initial creation
+- **AGNTMAPR** - Agentic MapReduce (Devin's 5-stage pipeline for whole-codebase reasoning: Plan, Shard, Map, Reduce, Verify) - 2026-01-17
+- **AGNTPROB** - Agentic Problems (categorized failure patterns in AI-assisted development) - 2026-07-08
+- **AIDET** - AI Writing Detection (detection methods, signals, heuristics for identifying AI-generated text) - 2026-06-05
+- **AMSW** - Auto Model SWitcher (Windsurf model switching automation) - 2026-01-26
+- **AXCEL** - Agent Excel Skill (Excel automation from Cascade agent) - 2026-01-17
+- **BNCL** - Binoculars Cross-Perplexity Detection (zero-shot AI text detection via cross-model perplexity ratio) - 2026-06-05
+- **DOCWRITEFW** - Document Writing Frameworks (analytical/communication frameworks for IPPS document quality) - 2026-04-12
+- **DRPRF** - Deep Research Profile Templates (personal, company, organization, network profile research) - 2026-05-25
+- **DVDT** - Devin Desktop (Windsurf IDE renamed to Devin Desktop; INFO_HOW_DEVIN_WORKS reference doc) - 2026-05-27
+- **EDIGA** - Energie Digitalisierung A (digitalization in energy sector research) - 2026-01-17
+- **ENDIG** - Energie Digitalisierung (digitalization in energy sector research) - 2026-01-17
+- **ENDSY** - Energie Digital Synthese (consolidated INFO from EnergieDigitalA + B) - 2026-01-17
+- **FCTCHECK** - Factcheck Workflow (factuality verification for agent-generated documents). INFO: `Docs/Concepts/_INFO_HOW_TO_CHECK_FACTUALITY.md` - 2026-08-30
+- **FINRESAI** - Finance Research AI (research quality/speed value in finance, AI application critique) - 2026-01-17
+- **FINSTRWF** - Follow Instructions Workflow (post-execution instruction-following gap analysis and remediation) - 2026-06-12
+- **FLCOR** - Fail Correction (cross-repo fails collection and analysis) - 2026-01-17
+- **GCRU** - Global Coding Rules (universal coding conventions) - 2026-01-17
+- **GLOB** - Global/project-wide items - 2026-01-22
+- **IPPSPRMTFMT** - IPPS Prompt File Format (syntax, semantics, execution model for prompt queue files) - 2026-08-31
+- **HMNWRTPTN** - Human Writing Patterns (forensic linguistics research for conversation humanizing rules) - 2026-07-16
+- **LLMCG** - LLM Code Generation (RAG-augmented vs fine-tuned vs prompt-engineered approaches comparison) - 2026-01-17
+- **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline) - 2026-01-23
+- **LLMTR** - LLM Transcription Skill (image-to-markdown, audio-to-markdown) - 2026-01-26
+- **LMWS** - LM Studio + Windsurf integration research - 2026-01-29
+- **MCPS** - MCP server integrations - 2026-01-22
+- **MDPDF** - Markdown to PDF Renderer (Python tool with theme.json and settings.json) - 2026-05-01
+- **MECE** - Mutually Exclusive, Collectively Exhaustive (grouping/decomposition quality principle) - 2026-04-12
+- **MECT** - Minimal Explicit Consistent Terminology (communication design principle) - 2026-01-17
+- **MEPI** - MEPI/MCPI research depth principle - 2026-01-24
+- **MINTO** - Minto Pyramid Principle (communication framework research and reference) - 2026-01-17
+- **MIPPS** - Minimal IPPS (DevSystem compression pipeline) - 2026-03-20
+- **NTICP** - Network Traffic Interception (programmatic HTTPS interception for LLM prompt extraction) - 2026-01-17
+- **OCLAW** - OpenClaw exploration (remote agent interaction via WhatsApp/Cascade) - 2026-01-17
+- **PLWR** - Playwriter MCP (Chrome extension browser automation) - 2026-03-15
+- **RECSLFIM** - Recursive Self-Improvement (AI systems accelerating or automating their own development) - 2026-08-13
+- **REPRT** - Report Writing (DevSystem capability for Minto Pyramid-based high-quality reports) - 2026-04-16
+- **RLSPROJ** - Release Project Workflow (unified multi-repo tagging and release notes process) - 2026-09-05
+- **RUSESCPOL** - Russia escalation policy in Ukraine war (official statements, nuclear doctrine, red lines) - 2026-01-17
+- **SDDEV** - Spec-Driven Development (research topic) - 2026-01-17
+- **STYLO** - Stylometric Profiling (feature-based AI text detection via writing style analysis) - 2026-06-05
+- **SUMQR** - Summary Quality Rules (improving enforcement and quality of summaries) - 2026-04-12
+- **TOOLS** - .tools folder relocation and path updates - 2026-02-11
+- **TRNGFX** - Transcription graphics/ASCII art optimization - 2026-01-22
+- **WMRK** - Watermarking and Provenance (SynthID-Text, C2PA, embedded signal detection for AI-generated text) - 2026-06-05
+- **WS2DV** - Windsurf 2.0 and Devin (deep research on Windsurf 2.0 release features and Devin integration) - 2026-01-17
+- **WSFT** - Windsurf Features (comprehensive feature research for updating WSRF-IN01) - 2026-01-17
+- **WSKMGMT** - Workspace Management Skill (DevSystem V5.0 workspace/project operations skill) - 2026-09-03
+- **WSWN** - What? So What? Now What? (reflective framework deep research, Borton/Driscoll/Rolfe) - 2026-04-12
+- **WSTKTRAC** - Windsurf Token Logging (token usage tracking via hooks) - 2026-01-17
+- **WRTPRMPT** - Write Prompts Workflow (prompt queue file generation for sequential headless execution) - 2026-08-31
+- **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow) - 2026-05-05
+- **ZAIINT** - Z.AI Integration (GLM model integration into llm-evaluation skill) - 2026-01-17

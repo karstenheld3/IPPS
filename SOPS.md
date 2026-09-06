@@ -17,8 +17,7 @@
 ## MUST-NOT-FORGET
 
 - `[DEVSYSTEM_FOLDER]` is the source of truth. Never edit `.devin/` directly
-- `NOTES.md [SKILL_CATEGORIES]` must stay in sync with skills/ folder contents
-- Every new skill MUST be added to either `Development` or `Personal` in `[SKILL_CATEGORIES]`. Unregistered skills fail workspace integrity checks (WS-ST-02, WS-ST-03). Sync distribution is controlled by `devsystem-sync.json` bundle include/exclude patterns, not `[SKILL_CATEGORIES]`.
+- Skills are discovered by scanning `skills/` folder at startup. No manual registration list needed
 - Sync `[DEVSYSTEM_FOLDER]` → `.devin/` BEFORE running `/sync workspace`
 - `Copy-Item -Recurse -Force` does NOT delete files that no longer exist at source — deletions require explicit `Remove-Item`
 - Every SOP ends with a verification step before you can consider the change complete
@@ -56,18 +55,15 @@ Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recur
    - Required: `SKILL.md` (name, purpose, usage)
    - Optional: `SETUP.md`, `UNINSTALL.md`, `references/`, `assets/`, scripts
 
-2. **Register skill** in `[WORKSPACE]/NOTES.md` `[SKILL_CATEGORIES]`:
-   - Append `<skill>` to `Development` or `Personal` list (alphabetical order)
-
-3. **Register skill** in `devsystem-sync.json` at target `[WORKSPACE_FOLDER]` root:
+2. **Register skill** in `devsystem-sync.json` at target `[WORKSPACE_FOLDER]` root:
    - Add skill to appropriate bundle include patterns in source entry
    - Sync will distribute to all targets that select that bundle
 
-4. **If skill introduces a workflow**: also create `[DEVSYSTEM_FOLDER]/workflows/<name>.md`
+3. **If skill introduces a workflow**: also create `[DEVSYSTEM_FOLDER]/workflows/<name>.md`
 
-5. **If skill introduces a new TOPIC**: register in `[WORKSPACE]/ID-REGISTRY.md`
+4. **If skill introduces a new TOPIC**: register in `[WORKSPACE]/ID-REGISTRY.md`
 
-6. **Sync to `.devin/`**:
+5. **Sync to `.devin/`**:
    ```powershell
    Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
    ```
@@ -138,19 +134,17 @@ Test-Path "[WORKSPACE]\.devin\skills\<skill>\<old-file>"
    Remove-Item "[WORKSPACE]\.devin\skills\<skill>" -Recurse -Force
    ```
 
-2. **Unregister from `NOTES.md`** `[SKILL_CATEGORIES]`: remove `<skill>` from its list
-
-3. **Add to deprecated patterns** in `devsystem-sync.json`:
+2. **Add to deprecated patterns** in `devsystem-sync.json`:
    - Add `skills/<skill>/*` to `deprecated` array in relevant source entry
    - This triggers deletion in synced repos on next `/sync workspace -execute`
 
-4. **Document migration** in NOTES.md or session NOTES.md:
+3. **Document migration** in NOTES.md or session NOTES.md:
    ```markdown
    ### V3.x Migration (Deprecated Skills)
    - `skills/<skill>/` → removed (migrated to `<replacement>` or obsolete)
    ```
 
-5. **If skill had a TOPIC**: mark deprecated in `ID-REGISTRY.md` (do NOT delete, keep history)
+4. **If skill had a TOPIC**: mark deprecated in `ID-REGISTRY.md` (do NOT delete, keep history)
 
 ### Verification
 
@@ -179,8 +173,8 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "\b<skill>\b"  # should retu
    ```
 
 2. **Update `NOTES.md`**:
-   - Change `Current [DEVSYSTEM]: DevSystemV3.6` → `Current [DEVSYSTEM]: DevSystemV3.7` (search for `Current \[DEVSYSTEM\]:`)
-   - `Current [DEVSYSTEM_FOLDER]` line usually needs no change (uses `[DEVSYSTEM]` placeholder)
+   - Change `[PRODUCT_VERSION]: 3.6` → `[PRODUCT_VERSION]: 3.7` (search for `\[PRODUCT_VERSION\]:`)
+   - `[DEVSYSTEM_FOLDER]` line usually needs no change (uses `[PRODUCT_VERSION]` placeholder)
 
 3. **Sync new version to `.devin/`**:
    ```powershell
@@ -217,8 +211,8 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "\b<skill>\b"  # should retu
 
 ```powershell
 # 1. NOTES.md points to new version
-Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "Current \[DEVSYSTEM\]:"
-# Expected: "Current [DEVSYSTEM]: DevSystemV3.7"
+Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "\[PRODUCT_VERSION\]:"
+# Expected: "[PRODUCT_VERSION]: 3.7"
 
 # 2. .devin matches new version (spot-check a file hash)
 (Get-FileHash "[WORKSPACE]\DevSystemV3.7\skills\write-documents\WORKFLOW_RULES.md").Hash -eq `
@@ -404,7 +398,7 @@ Immediately after `git tag` and `git push --tags` for a release. This is the LAS
    ```
 
 3. **Update `NOTES.md`**:
-   - `Current [DEVSYSTEM]: DevSystem[NEW_VERSION]`
+   - `[PRODUCT_VERSION]: [NEW_VERSION]`
 
 4. **Sync to `.devin/`**:
    ```powershell
@@ -482,7 +476,7 @@ Run `/sync workspace -diff` in preview mode. Any unexpected items in `Add` / `Mo
 ## Document History
 
 **[2026-09-06 14:50]**
-- Fixed: MNF line 21 — [SKILL_CATEGORIES] no longer controls sync exclusion; sync driven by devsystem-sync.json bundles; [SKILL_CATEGORIES] retained for integrity checks only [VERIFIED from /verify]
+- Removed: [SKILL_CATEGORIES] section from NOTES.md and template — skills discovered by scanning skills/ folder, sync controlled by devsystem-sync.json bundles
 - Fixed: SOP 2 step 3 — "Deploy preview" to "Sync preview" [VERIFIED from /verify]
 - Fixed: SOP 4 step 8 — "Commit before deploying" to "Commit before syncing" [VERIFIED from /verify]
 - Fixed: SOP 6 verification — "if deployed to synced repos" to "if synced to downstream repos" [VERIFIED from /verify]
