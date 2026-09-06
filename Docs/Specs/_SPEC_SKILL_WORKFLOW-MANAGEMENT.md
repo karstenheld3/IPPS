@@ -3,18 +3,20 @@
 **Doc ID**: WSKMGMT-SP01
 **Feature**: workspace-management-skill
 **Goal**: Specify a skill that manages agentic workspace setup, DevSystem synchronization, and knowledge distribution across product/dev/company repo architectures
-**Timeline**: Created 2026-09-03, Updated 3 times (2026-09-03 - 2026-09-06)
+**Timeline**: Created 2026-09-03, Updated 8 times (2026-09-03 - 2026-09-06)
 **Target file(s)**:
-- `DevSystemV4.3/rules/devsystem-core.md` (Operation Modes, Workspace Scenarios)
+- `DevSystemV4.3/specs/devsystem-core.md` (Operation Modes, Workspace Scenarios)
 - `DevSystemV4.3/skills/workspace-management/SKILL.md`
 - `DevSystemV4.3/skills/workspace-management/WORKSPACE-GUIDES.md`
 - `DevSystemV4.3/skills/workspace-management/WORKSPACE-RULES.md`
-- `DevSystemV4.3/skills/workspace-management/WORKSPACE_CREATION_GUIDE.md`
+- `DevSystemV4.3/skills/workspace-management/WORKSPACE_CREATION_QUESTIONNAIRE.md`
 - `DevSystemV4.3/skills/workspace-management/DEV_REPO_NOTES_TEMPLATE.md`
 - `DevSystemV4.3/skills/workspace-management/PRODUCT_REPO_README_TEMPLATE.md`
 - `DevSystemV4.3/skills/workspace-management/COMPANY_REPO_NOTES_TEMPLATE.md`
-- `DevSystemV4.3/skills/workspace-management/workspace_diff_template.ps1`
-- `DevSystemV4.3/skills/workspace-management/workspace_sync_template.ps1`
+- `DevSystemV4.3/skills/workspace-management/workspace_diff_template.ps1` (deleted, replaced by sync.ps1)
+- `DevSystemV4.3/skills/workspace-management/workspace_sync_template.ps1` (deleted, replaced by sync.ps1)
+- `DevSystemV4.3/skills/workspace-management/sync.ps1` (single generic sync script with -diff and -execute modes)
+- `[WORKSPACE_FOLDER]\devsystem-sync.json` (target-side sync config, single source of truth)
 - `DevSystemV4.3/workflows/workspace-create.md` (new workflow)
 - `DevSystemV4.3/workflows/verify.md` (new context section)
 - `DevSystemV4.3/workflows/sync.md` (new context section)
@@ -22,12 +24,12 @@
 - `ID-REGISTRY.md` (Workspace Context states)
 
 **Depends on:**
-- `DevSystemV4.3/rules/devsystem-core.md` for existing operation modes and workspace scenarios
+- `DevSystemV4.3/specs/devsystem-core.md` for existing operation modes and workspace scenarios
 - `DevSystemV4.3/skills/session-management/SKILL.md` for session folder structure (T##/S##)
 
 **Does not depend on:**
-- `deploy-to-all-repos.md` (IPPS-only deployment script, not referenced by skill files)
 - Any project-specific SPEC (this skill is generic, reusable across all DevSystem workspaces)
+- `deploy-to-all-repos.md` is replaced by this spec (FR-49), not a dependency
 
 ## MUST-NOT-FORGET
 
@@ -35,19 +37,25 @@
 - All new rules/workflows/skills created in `[DEVSYSTEM_FOLDER]` first, then sync to `.devin/`
 - Register `workspace-management` in `NOTES.md` `[SKILL_CATEGORIES]`
 - Follow SOP 1 (SOPS.md) for new skill creation including verification
-- Skill must be completely independent of `deploy-to-all-repos.md` (IPPS-only deployment script). Diff/sync scripts generalize the pattern but must not reference or depend on it
+- `deploy-to-all-repos.md` is replaced by `sync.md` workspace sync context using single `sync.ps1` with -diff and -execute modes - no standalone deploy workflow
 - Workspace constants are defined in DevRepo NOTES.md, not in the skill itself - skill reads them from there
-- Sync policy lookup order: 1) downstream repo NOTES.md, 2) CompanyRepo NOTES.md - never skip to defaults without checking both
+- Sync config read from `devsystem-sync.json` at target `[WORKSPACE_FOLDER]` root - no NOTES.md prose lookup
 - Downstream repo modifications are allowed during verify - only gaps and incompatibilities must be fixed
 - IMPL-ISOLATED extension is a core rule change affecting all DevSystem users - must be backwards compatible
 - WORKSPACE mode is additive to Dimension 1 - existing SINGLE-PROJECT and MONOREPO detection must not break
 - Dimension 4 (Sync Relationship) is additive - existing 3 dimensions must not break
 - Detection must be deterministic - no ambiguity between SYNCED and SELF-CONTAINED
 - SELF-CONTAINED repos must still pass /verify - missing sync constants are valid, not gaps
-- Existing repos with [LINKED_REPOS] or [*_SOURCE_FOLDER] are SYNCED by default - no migration needed
+- Existing repos with [LINKED_REPOS] or [*_SOURCE_FOLDER] are SYNCED by default - migration to devsystem-sync.json required but sync relationship detection unchanged
 - Workspace creation questionnaire must show impact per question so user understands consequences of each choice
 - Workspace creation is non-destructive (creating new files/folders) - no confirmation gate per WF-EX-01
-- `workspace-create.md` workflow is thin: references WORKSPACE_CREATION_GUIDE.md for questionnaire content, does not replicate questions
+- `workspace-create.md` workflow is thin: references WORKSPACE_CREATION_QUESTIONNAIRE.md for questionnaire content, does not replicate questions
+- Sync configuration is JSON-based: devsystem-sync.json at target [WORKSPACE_FOLDER] root is single source of truth - no hardcoded arrays in scripts or NOTES.md prose
+- Single sync.ps1 script with -diff and -execute modes; params are -sources, -targets, -configs, -output-file (all accept JSON arrays or single strings)
+- Source repo only references RELATIVE downstream repo paths (e.g., ../Lana-V2-Dev), never absolute paths
+- Bundle definitions live in target's devsystem-sync.json, NOT at source - each source entry carries its own complete sync configuration
+- Include/exclude refiners are glob patterns evaluated in order: source include → source exclude → bundle include → bundle exclude → target never_overwrite → deprecated
+- `rules` folder renamed to `specs` with subfolders `sops/` and `guides/`
 
 ## Table of Contents
 
@@ -69,7 +77,7 @@
 
 ## 1. Scenario
 
-**Problem:** DevSystem workspaces come in multiple architectures (single project, monorepo, multi-repo workspace with product/dev separation). The current system has no unified way to compare workspace state against central sources, update from sources, roll back changes, or verify integrity. Existing mechanisms (SOPS.md, deploy-to-all-repos.md, /prime, /sync) are scattered, project-specific, and do not cover the full product/dev/company repo pattern.
+**Problem:** DevSystem workspaces come in multiple architectures (single project, monorepo, multi-repo workspace with product/dev separation). The current system has no unified way to compare workspace state against central sources, update from sources, roll back changes, or verify integrity. Existing mechanisms (SOPS.md, /prime, /sync) are scattered and do not cover the full product/dev/company repo pattern. The legacy `deploy-to-all-repos.md` script hardcodes target paths and skill categories in PowerShell, is not machine-readable, and is project-specific to IPPS.
 
 **Solution:**
 - Extend core rules with WORKSPACE mode and IMPL-ISOLATED T##/S## folders
@@ -89,7 +97,7 @@
 
 The DevSystem currently supports two operation modes (IMPL-CODEBASE, IMPL-ISOLATED) and three workspace scenario dimensions (Project Structure, Version Strategy, Work Mode). The existing `/prime` workflow detects these scenarios but cannot classify multi-repo workspaces where a DevRepo contains `main.code-workspace` referencing a separate ProductRepo.
 
-Real-world pattern: A DevRepo (private, git) contains specs, sessions, evals, knowledge, and an agent folder (`.devin/`). It has `main.code-workspace` referencing a separate ProductRepo (public, git) with shipped code. A `Company` folder serves as central source for knowledge and rules. The DevSystem source is a separate folder with versioned DevSystem releases.
+Real-world pattern: A DevRepo (private, git) contains specs, sessions, evals, knowledge, and an agent folder (`.devin/`). It has `main.code-workspace` referencing a separate ProductRepo (public, git) with shipped code. A `Company` folder serves as central source for knowledge and specs. The DevSystem source is a separate folder with versioned DevSystem releases.
 
 ### Dependency Tree
 
@@ -105,7 +113,7 @@ DevSystem source          CompanyRepo
     │  owns 1:1
     ▼
   ProductRepo
-  (docs only, no rules/knowledge/DevSystem artifacts)
+  (docs only, no specs/knowledge/DevSystem artifacts)
 
   Dev-to-Dev sync chain (DevRepo as source for other DevRepos):
 
@@ -126,15 +134,15 @@ Direction definitions:
 
 Existing infrastructure:
 - `SOPS.md`: 7 Standard Operating Procedures (SOPs) for DevSystem file/skill/version changes
-- `deploy-to-all-repos.md`: Deploys `.devin/` to linked repos with preview/confirm flow
 - `/prime`: Detects workspace scenario, reads rules and docs
-- `/sync`: Document-level sync (code to docs, session to project)
+- `/sync`: Document-level sync (code to docs, session to project) - will gain Workspace Sync context
 - `/verify`: Multi-context verification (SPEC, IMPL, Code, TEST, etc.)
+- `deploy-to-all-repos.md`: Legacy IPPS-only deployment script - replaced by generic sync.md workspace context (FR-49)
 - Session management skill: Init/save/resume/finalize/archive lifecycle
 
 None of these provide unified workspace compare/update/rollback/integrity operations. The workspace-management skill fills this gap.
 
-Note: The DevSystem source repository is the upstream source for all DevSystem workspaces. It contains the canonical version of rules, skills, and workflows.
+Note: The DevSystem source repository is the upstream source for all DevSystem workspaces. It contains the canonical version of specs, skills, and workflows.
 
 ## 3. Domain Objects
 
@@ -157,7 +165,6 @@ A **DevRepo** is the development repository containing specs, sessions, evals, k
 - `notes_path` - `[DEV_REPO_FOLDER]\NOTES.md` (or `!NOTES.md`)
 - `agent_folder` - `[DEV_REPO_FOLDER]\.devin` (or project-specific agent folder)
 - `knowledge_folder` - `[DEV_REPO_FOLDER]\knowledge`
-- `rules_folder` - `[DEV_REPO_FOLDER]\rules`
 - `sessions_folder` - `[DEV_REPO_FOLDER]\_Sessions` or `_PrivateSessions`
 - `specs_folder` - `[DEV_REPO_FOLDER]\specs`
 - `evals_folder` - `[DEV_REPO_FOLDER]\evals`
@@ -175,13 +182,13 @@ A **ProductRepo** is the product repository containing shipped code, tests, conf
 
 ### CompanyRepo
 
-A **CompanyRepo** is a central source folder (not necessarily a git repo) containing knowledge bundles and rules shared across multiple workspaces. Tracks downstream repositories and sync policies.
+A **CompanyRepo** is a central source folder (not necessarily a git repo) containing knowledge bundles and specs shared across multiple workspaces. Tracks downstream repositories and sync policies.
 
 **Storage:** `[COMPANY_REPO_FOLDER]` (default: `[WORKSPACE_FOLDER]\..\Company`)
 **Key properties:**
 - `notes_path` - `[COMPANY_REPO_FOLDER]\NOTES.md`
 - `knowledge_source_folder` - `[COMPANY_REPO_FOLDER]\knowledge`
-- `rules_source_folder` - `[COMPANY_REPO_FOLDER]\rules`
+- `specs_source_folder` - `[COMPANY_REPO_FOLDER]\specs`
 - `downstream_repos` - list of registered downstream repos with sync policies
 
 ### SyncPolicy
@@ -198,11 +205,11 @@ A **SyncPolicy** defines what content syncs from which source to which target, i
 
 ### PromptSystem
 
-A **PromptSystem** is a folder containing `rules`, `skills`, and `workflows` subfolders. The DevSystem source is a PromptSystem. Agent folders (e.g., `.devin`, `.[product-agent-folder]`) are PromptSystem mirrors.
+A **PromptSystem** is a folder containing `specs`, `skills`, and `workflows` subfolders. The DevSystem source is a PromptSystem. Agent folders (e.g., `.devin`, `.[product-agent-folder]`) are PromptSystem mirrors.
 
 **Storage:** `[DEVSYSTEM_FOLDER]` (source), `[AGENT_FOLDER]` (mirror)
 **Key properties:**
-- `rules_folder` - contains rule `.md` files
+- `specs_folder` - contains spec `.md` files
 - `workflows_folder` - contains workflow `.md` files
 - `skills_folder` - contains skill subfolders with `SKILL.md`
 
@@ -216,11 +223,11 @@ A **KnowledgeBundle** is a folder of reference documents for a specific topic (e
 - `documents` - list of contained `.md` files
 - `sub_bundles` - nested folders (e.g., `Windsurf/HowCascadeWorks/`)
 
-### RulesBundle
+### SpecsBundle
 
-A **RulesBundle** is a folder of rules, workflows, design guidelines, and SOPs shared from Company to downstream repos.
+A **SpecsBundle** is a folder of specs, workflows, design guidelines, and SOPs shared from Company to downstream repos.
 
-**Storage:** `[RULES_FOLDER]` (local) or `[RULES_SOURCE_FOLDER]` (central)
+**Storage:** `[SPECS_FOLDER]` (local) or `[SPECS_SOURCE_FOLDER]` (central)
 **Key properties:**
 - `bundle_name` - folder name
 - `documents` - list of contained `.md` files
@@ -233,14 +240,15 @@ A **SyncRelationship** is the 4th workspace scenario dimension, indicating wheth
 **Key properties:**
 - `state` - SYNCED or SELF-CONTAINED
 - `has_upstream` - boolean, true if [*_SOURCE_FOLDER] constants defined
-- `has_downstream` - boolean, true if [LINKED_REPOS] section defined
+- `has_downstream` - boolean, true if [SYNCED_REPOS] section defined in source NOTES.md
 
 ### Detection Markers
 
-Sync-related markers in NOTES.md that indicate SYNCED state:
-- `[LINKED_REPOS]` section present → has downstream targets
+Sync-related markers that indicate SYNCED state:
+- `devsystem-sync.json` exists at [WORKSPACE_FOLDER] root → has sync configuration
+- `[SYNCED_REPOS]` section in source NOTES.md → has downstream targets
 - `[KNOWLEDGE_SOURCE_FOLDER]` constant defined → has knowledge upstream
-- `[RULES_SOURCE_FOLDER]` constant defined → has rules upstream
+- `[SPECS_SOURCE_FOLDER]` constant defined → has specs upstream
 - `[DEVSYSTEM_FOLDER]` or `[DEVSYSTEM]` reference → has DevSystem upstream
 
 If none of these markers are found, the repo is SELF-CONTAINED.
@@ -284,14 +292,14 @@ Direction definitions:
 
 **WSKMGMT-FR-06: Workspace constants in DevRepo NOTES.md**
 - Define and track workspace constants in DevRepo NOTES.md
-- Required constants: `[DEV_REPO_FOLDER]`, `[PRODUCT_REPO_FOLDER]`, `[COMPANY_REPO_FOLDER]`, `[KNOWLEDGE_FOLDER]`, `[KNOWLEDGE_SOURCE_FOLDER]`, `[RULES_FOLDER]`, `[RULES_SOURCE_FOLDER]`, `[PRODUCT_DOCS_FOLDER]`
+- Required constants: `[DEV_REPO_FOLDER]`, `[PRODUCT_REPO_FOLDER]`, `[COMPANY_REPO_FOLDER]`, `[KNOWLEDGE_FOLDER]`, `[KNOWLEDGE_SOURCE_FOLDER]`, `[SPECS_FOLDER]`, `[SPECS_SOURCE_FOLDER]`, `[PRODUCT_DOCS_FOLDER]`
 - Constants are workspace-specific - skill reads them from NOTES.md, does not hardcode values
 - `DEV_REPO_NOTES_TEMPLATE.md` provides the template with all constants and defaults
 
 **WSKMGMT-FR-07: Three sync sources**
 - Prompt System: default source is DevSystem source `[WORKSPACE_FOLDER]\..\[DevSystemSourceName]\DevSystemV*`, syncs to `[DEV_REPO_FOLDER]\.devin` and/or other agent folders
 - Knowledge: default source is `[KNOWLEDGE_SOURCE_FOLDER]` (Company), syncs to `[KNOWLEDGE_FOLDER]`
-- Rules: default source is `[RULES_SOURCE_FOLDER]` (Company), syncs to `[RULES_FOLDER]`
+- Specs: default source is `[SPECS_SOURCE_FOLDER]` (Company), syncs to `[SPECS_FOLDER]`
 - Each source supports downstream (source to target) and upstream (target to source) sync
 
 ### Skill Files
@@ -322,7 +330,7 @@ Direction definitions:
 **WSKMGMT-FR-12: COMPANY_REPO_NOTES_TEMPLATE.md**
 - Template for CompanyRepo NOTES.md
 - Tracks downstream repositories and sync policy
-- Per downstream repo: repo path, skill categories, knowledge bundles, rules, workflows, DevSystem rules to sync
+- Per downstream repo: repo path, skill categories, knowledge bundles, specs, workflows, DevSystem specs to sync
 - Defines overwrite rules and content filters per repo
 - Follows TEMPLATE_RULES.md
 
@@ -335,12 +343,12 @@ Direction definitions:
 
 **WSKMGMT-FR-14: Sync scripts**
 - PowerShell script that executes sync operations based on diff output
-- Supports downstream (source to target) and upstream (target to source) directions
 - Handles file copy, delete, and content migration for breaking changes
-- Preview mode (dry-run) and execute mode
+- Preview mode (dry-run via `-diff`) and execute mode (`-execute`)
 - Must be generic - no hardcoded project paths
-- Before overwriting a file not in the preserve list, check if target file was modified after last sync timestamp. If so, warn user and offer to add to preserve list or proceed with overwrite
-- Store last sync timestamp in target folder root (`.sync-timestamp`, gitignored). Missing timestamp triggers full comparison
+- Before overwriting a file not in `never_overwrite`, check if target file was modified after `last_sync` timestamp in `devsystem-sync.json`. If so, mark as `LOCALLY_MODIFIED` in diff preview to warn user before overwrite
+- Store `last_sync` timestamp in `devsystem-sync.json` at target `[WORKSPACE_FOLDER]` root. Missing timestamp triggers full comparison
+- Upstream sync (target to source) is handled at workflow level by swapping `-sources` and `-targets` parameters — sync.ps1 itself is always source-to-target
 
 ### WORKSPACE Area Operations
 
@@ -364,7 +372,7 @@ Direction definitions:
 - Verify all required constants present in DevRepo NOTES.md
 - Verify all required files exist (NOTES.md, PROBLEMS.md, PROGRESS.md, ID-REGISTRY.md, SOPS.md)
 - Verify workspace structure matches declared mode (SINGLE-PROJECT, MONOREPO, WORKSPACE)
-- Verify agent folder exists and contains rules, workflows, skills subfolders
+- Verify agent folder exists and contains specs, workflows, skills subfolders
 - Report gaps and incompatibilities
 
 ### DEVSYSTEM Area Operations
@@ -387,7 +395,7 @@ Direction definitions:
 - Report what changed between current and rolled-back version
 
 **WSKMGMT-FR-22: Check DevSystem integrity**
-- Verify agent folder contains required subfolders (rules, workflows, skills)
+- Verify agent folder contains required subfolders (specs, workflows, skills)
 - Verify all skills in NOTES.md `[SKILL_CATEGORIES]` exist in skills folder
 - Verify all skills in skills folder are registered in `[SKILL_CATEGORIES]`
 - Verify workflows reference valid skills
@@ -448,7 +456,7 @@ Direction definitions:
 
 **WSKMGMT-FR-31: SKILL.md entry point**
 - YAML frontmatter: `name: workspace-management`, `description`, `compatibility: PowerShell 7+ for diff/sync scripts`
-- MUST-NOT-FORGET section (5-8 items): generic paths only, sync before deploy, preserve list check, rollback warning for shared branches, privacy gate, register in NOTES.md and deploy-to-all-repos.md
+- MUST-NOT-FORGET section (5-8 items): generic paths only, sync before deploy, preserve list check, rollback warning for shared branches, privacy gate, register in NOTES.md
 - Intent Lookup: maps 3 areas (WORKSPACE, DEVSYSTEM, KNOWLEDGE) x 4 operations (compare, update, rollback, integrity) to procedures and FR references
 - Core Procedures: compare workspace, update from source, rollback, integrity check, multi-repo commit
 - References: links to WORKSPACE-GUIDES.md, WORKSPACE-RULES.md, DEV_REPO_NOTES_TEMPLATE.md, PRODUCT_REPO_README_TEMPLATE.md, COMPANY_REPO_NOTES_TEMPLATE.md
@@ -491,14 +499,14 @@ Direction definitions:
 
 **WSKMGMT-FR-34: Extend /prime with sync relationship detection**
 - After detecting dimensions 1-3, detect dimension 4
-- Check NOTES.md for sync markers: [LINKED_REPOS], [*_SOURCE_FOLDER], [DEVSYSTEM]
+- Check for sync markers: devsystem-sync.json at target root, [SYNCED_REPOS] in source NOTES.md, [*_SOURCE_FOLDER], [DEVSYSTEM]
 - Report all 4 dimensions in final output
 - Example: "Mode: WORKSPACE + SINGLE-VERSION + SESSION-MODE + SYNCED"
 
 **WSKMGMT-FR-35: Make sync source constants conditional**
 - WS-CT-01 in WORKSPACE-RULES.md must split constants into:
-  - Always required (5): [DEV_REPO_FOLDER], [PRODUCT_REPO_FOLDER], [KNOWLEDGE_FOLDER], [RULES_FOLDER], [PRODUCT_DOCS_FOLDER]
-  - Required for SYNCED only (3): [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER], [RULES_SOURCE_FOLDER]
+  - Always required (5): [DEV_REPO_FOLDER], [PRODUCT_REPO_FOLDER], [KNOWLEDGE_FOLDER], [SPECS_FOLDER], [PRODUCT_DOCS_FOLDER]
+  - Required for SYNCED only (3): [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER], [SPECS_SOURCE_FOLDER]
 - SELF-CONTAINED repos pass verify without sync source constants
 - SYNCED repos fail verify if sync source constants are missing
 
@@ -526,7 +534,7 @@ Direction definitions:
 
 ### Workspace Creation
 
-**WSKMGMT-FR-41: WORKSPACE_CREATION_GUIDE.md**
+**WSKMGMT-FR-41: WORKSPACE_CREATION_QUESTIONNAIRE.md**
 - Interactive questionnaire for creating new single-repo and multi-repo workspaces
 - 7 sections: Workspace Mode, Product Repo, Dev Repo, Version Strategy, Sync Sources, Release Configuration, Skill Categories
 - Each question shows default value in brackets and impact description explaining consequences
@@ -537,7 +545,7 @@ Direction definitions:
 - Privacy gate compliant: all placeholders generic (e.g., [myapp], [appname])
 
 **WSKMGMT-FR-42: workspace-create.md workflow**
-- Thin workflow entry point: references WORKSPACE_CREATION_GUIDE.md for questionnaire content
+- Thin workflow entry point: references WORKSPACE_CREATION_QUESTIONNAIRE.md for questionnaire content
 - Does not replicate questions in workflow body (Workflow-Skill Separation rule)
 - Frontmatter: description, auto_execution_mode
 - Goal and Why per WF-HD-02
@@ -550,9 +558,105 @@ Direction definitions:
 - Follows WORKFLOW_RULES.md (all WF-* rules) and WORKFLOW_TEMPLATE.md structure
 
 **WSKMGMT-FR-43: Workspace creation procedure in SKILL.md**
-- Add intent to Intent Lookup: "Create a new workspace -> WORKSPACE_CREATION_GUIDE.md questionnaire"
-- Add WORKSPACE_CREATION_GUIDE.md to References list
+- Add intent to Intent Lookup: "Create a new workspace -> WORKSPACE_CREATION_QUESTIONNAIRE.md questionnaire"
+- Add WORKSPACE_CREATION_QUESTIONNAIRE.md to References list
 - No new Core Procedure needed - creation flow lives in workflow, guide provides questionnaire content
+
+### JSON-Based Sync Configuration
+
+**WSKMGMT-FR-44: devsystem-sync.json (target-side, single source of truth)**
+- Machine-readable JSON file at target `[WORKSPACE_FOLDER]` root (not inside `.devin/`)
+- Single source of truth for all sync configuration — no separate bundle file at source
+- Each source entry carries its own complete sync configuration:
+  - `source`: relative path to source repo (e.g., `../IPPS/DevSystemV4.3`)
+  - `selected_bundles`: array of bundle names this target wants from this source
+  - `bundles`: bundle definitions with include/exclude glob patterns (what was previously in sync-bundles.json at source)
+  - `include`: source-level whitelist of syncable paths
+  - `exclude`: source-level global removal patterns
+  - `deprecated`: files/folders marked for deletion at target
+  - `never_overwrite`: glob patterns for files protected from overwrite and deletion
+- `last_sync` timestamp written by sync script after execution
+- Replaces [SKILL_CATEGORIES] prose in NOTES.md, [LINKED_REPOS] in NOTES.md, hardcoded arrays in deploy-to-all-repos.md, and the previously proposed sync-bundles.json at source
+- New repos added by creating devsystem-sync.json with desired sources and bundles - no source-side changes needed
+- Privacy gate compliant: no real paths or identifiers in bundle definitions (use generic examples)
+
+**WSKMGMT-FR-45: Source repo synced repos reference**
+- Source repo maintains a list of all repos it syncs to, using RELATIVE paths only
+- Referenced in NOTES.md or a simple JSON file at source root
+- Example: `../Lana-V2-Dev`, not `e:\Dev\Lana-V2-Dev`
+- Source does NOT contain bundle definitions or sync configuration — that lives entirely in target's devsystem-sync.json
+- Source list is informational only (for `/sync to targets` workflows to know which repos to push to)
+- Enables portability across machines and drive layouts
+
+**WSKMGMT-FR-46: Single sync.ps1 script**
+- ONE PowerShell script in workspace-management skill (not two separate scripts)
+- Two modes: `-diff` (preview, no changes) and `-execute` (apply changes)
+- Parameters: `-sources` (JSON array or single string), `-targets` (JSON array or single string), `-configs` (JSON array or single string of config file paths), `-output-file` (optional filepath)
+- Reads devsystem-sync.json from each target for ALL sync configuration: bundle definitions, selected bundles, include/exclude refiners, never_overwrite, deprecated
+- Does NOT read any config from source — source is purely a content provider
+- Evaluation order (per source entry in target config): source include → source exclude → bundle include (union of all selected bundles) → bundle exclude (union) → target never_overwrite → deprecated
+- `-diff` mode: produces list of additions, changes, deletions to output file or console
+- `-execute` mode: copies new and changed files, deletes deprecated files, writes last_sync timestamp
+- If `-output-file` present: full report goes to file, console just summarizes numbers (X added, Y changed, Z deleted)
+- If `-output-file` absent: full report outputs to console
+- All parameters accept JSON arrays OR single strings (e.g., `-sources "path1"` or `-sources '["path1","path2"]'`)
+- Replaces workspace_sync_template.ps1, workspace_diff_template.ps1, and hardcoded sync logic in deploy-to-all-repos.md
+
+**WSKMGMT-FR-47: Removed (merged into FR-46)**
+- diff.ps1 is not a separate script - diff mode is `sync.ps1 -diff`
+- This FR is intentionally removed; FR-46 covers both diff and execute in a single script
+
+**WSKMGMT-FR-48: deploy-to-all-repos.md replacement**
+- `deploy-to-all-repos.md` is deleted, not refactored
+- Its functionality is absorbed by `sync.md` workflow Workspace Sync context (FR-49)
+- No standalone deployment workflow exists - all deployment is sync-driven
+- Existing [LINKED_REPOS] in NOTES.md becomes obsolete and is removed. [SKILL_CATEGORIES] is retained for workspace integrity checks (WS-ST-02, WS-ST-03)
+- SOPS.md SOP 4 (deploy procedure) updated to reference `/sync workspace` instead of `deploy-to-all-repos.md`
+
+**WSKMGMT-FR-49: sync.md Workspace Sync context update**
+- Existing `sync.md` Workspace Sync section updated to use `sync.ps1` from workspace-management skill
+- Replaces references to `workspace_diff_template.ps1` and `workspace_sync_template.ps1`
+- Sync config read from `devsystem-sync.json` at target `[WORKSPACE_FOLDER]` root
+- For each source in config: run `sync.ps1 -diff -sources <paths> -targets <paths> -configs <config>` for preview, then `sync.ps1 -execute` for apply
+- Multi-source, multi-target, multi-config support in a single script call
+- No hardcoded paths, skill categories, or target lists in the workflow itself
+- Preview/confirm flow preserved: diff first, show results, confirm, then sync
+- Auto-execute on confirmation keywords: yes, go, do, execute, confirmed
+
+**WSKMGMT-FR-50: rules → specs folder rename**
+- `[WORKSPACE_FOLDER]\rules` renamed to `[WORKSPACE_FOLDER]\specs`
+- `\specs` contains all SPEC, IMPL, TEST files
+- `\specs\sops` contains advanced SOPs referenced in SOPS.md
+- `\specs\guides` contains guides and how-tos (e.g., UX design guidelines)
+- All references to `rules/` in DevSystem files, NOTES.md, sync configs, and workflows updated to `specs/`
+- [RULES_FOLDER] constant renamed to [SPECS_FOLDER] in workspace templates
+- [RULES_SOURCE_FOLDER] constant renamed to [SPECS_SOURCE_FOLDER]
+
+**WSKMGMT-FR-51: Settings sync use cases**
+- `/sync workspace settings from repo xyz` — compares NOTES.md and devsystem-sync.json from repo xyz, merges or replicates them into current repo
+- `/sync workspace settings to repo xyz` — compares NOTES.md and devsystem-sync.json from current repo, merges or replicates them into target repo xyz
+- `/sync sync settings from repo xyz` — compares and replicates ONLY devsystem-sync.json (not NOTES.md) into current repo
+- `/sync sync settings to repo xyz` — compares and replicates ONLY devsystem-sync.json into target repo xyz
+- Settings sync uses sync.ps1 with config files as both source and target content
+- Merge strategy: target files win for fields that exist in both; source-only fields are added
+
+**WSKMGMT-FR-52: Knowledge sync use cases**
+- `/sync knowledge from source` — reads knowledge source from devsystem-sync.json, runs `sync.ps1 -diff`, previews, auto-executes on confirm
+- `/sync knowledge to targets` — reads target repos from source NOTES.md synced repos list, runs `sync.ps1 -diff` for each target, previews, auto-executes on confirm
+- Knowledge folder structure preserved: subfolders like `AI-Standards/`, `Anthropic/` synced as-is
+- Knowledge content is filtered by bundle include/exclude rules in target's devsystem-sync.json
+
+**WSKMGMT-FR-53: Specs sync use cases**
+- `/sync specs from source` — reads specs source from devsystem-sync.json, runs `sync.ps1 -diff`, previews, auto-executes on confirm
+- `/sync specs to targets` — reads target repos from source NOTES.md synced repos list, runs `sync.ps1 -diff` for each target, previews, auto-executes on confirm
+- Specs folder structure preserved: subfolders like `sops/`, `guides/` synced as-is
+- Specs content is filtered by bundle include/exclude rules in target's devsystem-sync.json
+
+**WSKMGMT-FR-54: Source repo relative path references**
+- Source repo NOTES.md only references downstream repos by RELATIVE paths
+- Example: `../Lana-V2-Dev` not `e:\Dev\Lana-V2-Dev`
+- Enables portability across different machines and drive layouts
+- sync.ps1 resolves relative paths against source repo root
 
 ## 5. Non-Functional Requirements
 
@@ -563,7 +667,7 @@ Direction definitions:
 **WSKMGMT-NFR-02: Reliability - Sync safety**
 - Sync scripts must never delete files without showing them in preview first
 - Sync scripts must create backup of overwritten files before writing
-- Diff preview must mark files modified locally since last sync as 'locally modified - will be overwritten'
+- Diff preview must mark files modified locally since last sync (target LastWriteTime > `last_sync` in `devsystem-sync.json`) as 'LOCALLY_MODIFIED - will be overwritten'
 - Verification method: dry-run preview must list all deletions and locally modified files before any execute mode runs
 
 **WSKMGMT-NFR-03: Usability - Error messages**
@@ -608,9 +712,9 @@ Direction definitions:
 
 **WSKMGMT-DD-03:** Product/Dev repo separation is a first-class WORKSPACE pattern. The workspace root is the DevRepo, which contains `main.code-workspace` referencing the ProductRepo. Rationale: Real-world workspaces demonstrate this pattern - dev repo has specs/sessions/evals/knowledge, product repo has shipped code. Keeps product small, protects proprietary IP.
 
-**WSKMGMT-DD-04:** Workspace constants tracked in DevRepo NOTES.md. New constants: `[DEV_REPO_FOLDER]`, `[PRODUCT_REPO_FOLDER]`, `[COMPANY_REPO_FOLDER]`, `[KNOWLEDGE_FOLDER]`, `[KNOWLEDGE_SOURCE_FOLDER]`, `[RULES_FOLDER]`, `[RULES_SOURCE_FOLDER]`, `[PRODUCT_DOCS_FOLDER]`. Rationale: Centralizes workspace configuration for the skill's compare/update/rollback/integrity operations.
+**WSKMGMT-DD-04:** Workspace constants tracked in DevRepo NOTES.md. New constants: `[DEV_REPO_FOLDER]`, `[PRODUCT_REPO_FOLDER]`, `[COMPANY_REPO_FOLDER]`, `[KNOWLEDGE_FOLDER]`, `[KNOWLEDGE_SOURCE_FOLDER]`, `[SPECS_FOLDER]`, `[SPECS_SOURCE_FOLDER]`, `[PRODUCT_DOCS_FOLDER]`. Rationale: Centralizes workspace configuration for the skill's compare/update/rollback/integrity operations.
 
-**WSKMGMT-DD-05:** Three sync sources for WORKSPACE mode: (1) Prompt System from DevSystem source, (2) Knowledge from Company folder, (3) Rules from Company folder. Each supports downstream and upstream sync. Rationale: Different content types have different sources and sync directions.
+**WSKMGMT-DD-05:** Three sync sources for WORKSPACE mode: (1) Prompt System from DevSystem source, (2) Knowledge from Company folder, (3) Specs from Company folder. Each supports downstream and upstream sync. Rationale: Different content types have different sources and sync directions.
 
 **WSKMGMT-DD-06:** Workspace Management Skill contains GRUC files plus templates plus diff/sync scripts. Checks are embedded in the `/verify` workflow (FR-27 "Workspace Setup" context) rather than a separate WORKSPACE-CHECKS.md file. Rationale: GRUC pattern (Guides + Rules + Checks) extended with templates and scripts. Checks live in verify.md because workspace verification is workflow-triggered (`/verify workspace`), not skill-internal. Templates provide structure, scripts provide automation, guides provide understanding, rules provide verification.
 
@@ -620,21 +724,29 @@ Direction definitions:
 
 **WSKMGMT-DD-09:** `/commit` workflow extended for WORKSPACE mode. In multi-repo workspace mode, commits changes across multiple git repos in order: 1) product repo first, 2) dev repo second, 3) all other workspace repos. Rationale: Product repo changes (code, tests) are the primary deliverable and should be committed first. Dev repo changes (specs, sessions, knowledge) are secondary. Other repos (Company, linked repos) are tertiary. Dev repo is committed second because it contains documentation of the product changes. Temporary inconsistency (product committed, dev not) is acceptable because dev repo content is not a runtime dependency. This ordering ensures product changes are not left uncommitted if dev repo commit fails.
 
-**WSKMGMT-DD-10:** Diff and sync scripts (FR-13, FR-14) are generic, independent of any project-specific deployment script. Scripts read source and target from workspace constants, read sync policy from NOTES.md, support 3 sync sources (Prompt System, Knowledge, Rules), and support upstream and downstream directions. The scripts are the foundation for `/sync workspace` context. Rationale: Project-specific deployment scripts solve 80% of the problem but are not reusable. Generic scripts that read all configuration from workspace constants work for any DevSystem workspace without modification.
+**WSKMGMT-DD-10:** Diff and sync scripts (FR-13, FR-14) are generic, independent of any project-specific deployment script. Scripts read source and target from workspace constants, read sync policy from NOTES.md, support 3 sync sources (Prompt System, Knowledge, Specs), and support upstream and downstream directions. The scripts are the foundation for `/sync workspace` context. Rationale: Project-specific deployment scripts solve 80% of the problem but are not reusable. Generic scripts that read all configuration from workspace constants work for any DevSystem workspace without modification.
 
-**WSKMGMT-DD-11:** Workspace creation uses a guide file (WORKSPACE_CREATION_GUIDE.md) for questionnaire content and a thin workflow (workspace-create.md) for execution flow. Rationale: Workflow-Skill Separation rule states workflows are thin entry points, skills hold knowledge. The questionnaire is knowledge (what to ask, what defaults to offer, what impact to explain) - it belongs in the skill. The workflow is the execution wrapper (load guide, present questions, generate files, verify). This mirrors how session-new.md references session-management skill templates.
+**WSKMGMT-DD-11:** Workspace creation uses a guide file (WORKSPACE_CREATION_QUESTIONNAIRE.md) for questionnaire content and a thin workflow (workspace-create.md) for execution flow. Rationale: Workflow-Skill Separation rule states workflows are thin entry points, skills hold knowledge. The questionnaire is knowledge (what to ask, what defaults to offer, what impact to explain) - it belongs in the skill. The workflow is the execution wrapper (load guide, present questions, generate files, verify). This mirrors how session-new.md references session-management skill templates.
 
-**WSKMGMT-DD-12:** Two states only (SYNCED, SELF-CONTAINED), not three. A repo is either part of a dependency tree or it isn't. No "partial sync" state. Rationale: Simplicity. If a repo syncs knowledge but not rules, it still has sync markers and is SYNCED. The sync policy handles which sources to sync.
+**WSKMGMT-DD-12:** Two states only (SYNCED, SELF-CONTAINED), not three. A repo is either part of a dependency tree or it isn't. No "partial sync" state. Rationale: Simplicity. If a repo syncs knowledge but not specs, it still has sync markers and is SYNCED. The sync policy handles which sources to sync.
 
 **WSKMGMT-DD-13:** Auto-detection, not declaration. Sync relationship is inferred from NOTES.md content, not from an explicit field. Rationale: Zero migration cost. Existing repos are automatically classified correctly. Adding an explicit `[SYNC_RELATIONSHIP]: SYNCED` field would require all existing repos to update.
 
-**WSKMGMT-DD-14:** Sync source constants are conditional, not base constants. [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER] and [RULES_SOURCE_FOLDER] are only required for SYNCED repos. Rationale: Self-contained repos don't have upstream sources. Requiring these constants would force self-contained repos to define meaningless paths.
+**WSKMGMT-DD-14:** Sync source constants are conditional, not base constants. [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER] and [SPECS_SOURCE_FOLDER] are only required for SYNCED repos. Rationale: Self-contained repos don't have upstream sources. Requiring these constants would force self-contained repos to define meaningless paths.
 
 **WSKMGMT-DD-15:** Dimension 4 is orthogonal to Dimension 1. A SINGLE-PROJECT repo can be SYNCED (syncs from DevSystem) or SELF-CONTAINED (standalone). A WORKSPACE repo can be SYNCED (full dependency tree) or SELF-CONTAINED (multi-repo but no external sync). Rationale: Sync relationship and project structure are independent concerns.
 
-**WSKMGMT-DD-16:** [DEVSYSTEM] reference in NOTES.md counts as a sync marker. Even if a repo doesn't have [LINKED_REPOS] or [*_SOURCE_FOLDER], referencing [DEVSYSTEM] means it syncs from a DevSystem source. Rationale: [DEVSYSTEM] is the primary sync marker - it identifies the upstream DevSystem version.
+**WSKMGMT-DD-16:** [DEVSYSTEM] reference in NOTES.md counts as a sync marker. Even if a repo doesn't have devsystem-sync.json or [*_SOURCE_FOLDER], referencing [DEVSYSTEM] means it syncs from a DevSystem source. Rationale: [DEVSYSTEM] is the primary sync marker - it identifies the upstream DevSystem version.
 
 **WSKMGMT-DD-17:** [WORKSPACE_FOLDER] and [WORKSPACE_FILE] are distinct concepts. [WORKSPACE_FOLDER] is the filesystem path. [WORKSPACE_FILE] is the main.code-workspace file that defines workspace membership. Repos in the workspace file may be outside the workspace folder. Commit scope is determined by [WORKSPACE_FILE], not by physical location inside [WORKSPACE_FOLDER]. Rationale: GLOB-FL-041 showed that conflating these concepts leads to incorrectly excluding ProductRepo/CompanyRepo from commit scope, or incorrectly including linked repos. The distinction must be explicit in guides, rules, and templates.
+
+**WSKMGMT-DD-18:** Sync configuration lives entirely at target in `devsystem-sync.json` at `[WORKSPACE_FOLDER]` root. No bundle definitions or sync config at source. Rationale: Previous architecture had sync-bundles.json at source defining what is available, and sync-config.json at target declaring what it wants. This created a split-brain: source had to know about bundle definitions, target had to know about source. The corrected architecture puts everything in one file at target — each source entry carries its own complete sync configuration (bundle definitions, include/exclude refiners, deprecated, never_overwrite). Source only maintains a list of relative paths to repos it syncs to (for push operations). This is true single source of truth: target owns its sync config, source is purely a content provider. Adding a new repo requires zero source-side changes. Changing bundles requires editing only the target's devsystem-sync.json.
+
+**WSKMGMT-DD-19:** Single sync.ps1 script with -diff and -execute modes instead of separate diff.ps1 and sync.ps1. Rationale: The diff and execute operations share identical config reading, filtering, and evaluation logic. Splitting them into two scripts duplicates this logic and risks divergence. A single script with mode flag is simpler, has fewer files to maintain, and ensures diff preview always matches execute behavior. Array parameters (-sources, -targets, -configs) enable batch operations in a single call, reducing script invocations for multi-target sync.
+
+**WSKMGMT-DD-20:** Source repo only references downstream repos by relative paths in its synced repos list. Rationale: Absolute paths (e.g., `e:\Dev\Lana-V2-Dev`) are machine-specific and break when repos are cloned to different locations. Relative paths (e.g., `../Lana-V2-Dev`) are portable and work across machines, drive layouts, and CI environments. sync.ps1 resolves relative paths against the source repo root at runtime. The source's synced repos list is informational — it tells `/sync to targets` workflows which repos to push to. The actual sync configuration (bundles, filters, never_overwrite) lives in each target's devsystem-sync.json.
+
+**WSKMGMT-DD-21:** `rules` folder renamed to `specs` with subfolders `sops/` and `guides/`. Rationale: The `rules` folder name is misleading — it contains specifications, implementation plans, test plans, SOPs, and guides, not just rules. The `specs` name better reflects the content. Subfolders `sops/` and `guides/` provide structure for advanced SOPs (referenced by SOPS.md) and how-to guides (e.g., UX design guidelines).
 
 ## 7. Implementation Guarantees
 
@@ -658,7 +770,7 @@ Direction definitions:
 
 **WSKMGMT-IG-10:** SELF-CONTAINED repos that currently fail /verify for missing sync source constants must pass after this change is implemented.
 
-**WSKMGMT-IG-11:** deploy-to-all-repos.md must continue to work unchanged - it already reads [LINKED_REPOS] which only exists in SYNCED repos.
+**WSKMGMT-IG-11:** `deploy-to-all-repos.md` is replaced by `sync.md` workspace context. Existing repos with `[LINKED_REPOS]` in NOTES.md must migrate to `devsystem-sync.json` at `[WORKSPACE_FOLDER]` root - a migration script or procedure must be provided. Absolute paths in `[LINKED_REPOS]` must be converted to relative paths per FR-54.
 
 ## 8. Key Mechanisms
 
@@ -677,33 +789,32 @@ Detect workspace mode:
 │       │   └─ No -> SINGLE-PROJECT
 ```
 
-### Sync Policy Lookup Chain
+### Sync Config Resolution
 
 ```
-Resolve sync policy:
-├─> Check downstream repo NOTES.md for [SYNC_POLICY] section?
-│   ├─ Found -> Use downstream policy (local customizations take precedence)
+Resolve sync config:
+├─> Check target [WORKSPACE_FOLDER] root for devsystem-sync.json?
+│   ├─ Found -> Read devsystem-sync.json
+│   │   └─> Each source entry defines: source (relative path), selected_bundles, bundles, include, exclude, deprecated, never_overwrite
 │   └─ Not found
-│       ├─> Check CompanyRepo NOTES.md for downstream repo entry?
-│       │   ├─ Found -> Use CompanyRepo policy (central default for this repo)
-│       │   └─ Not found
-│       │       └─> Use workspace constants defaults (fallback)
+│       └─> No sync configured for this repo (SELF-CONTAINED)
 ```
 
 ### Diff and Sync Flow
 
 ```
-User runs /sync workspace
-├─> Read workspace constants from DevRepo NOTES.md
-├─> Resolve sync policy (lookup chain above)
-├─> For each sync source (Prompt System, Knowledge, Rules):
-│   ├─> Run diff script: compare source vs target
-│   └─> Collect diff results
-├─> Show preview: files to add, modify, delete, skip
+User runs /sync workspace (or /sync knowledge, /sync specs)
+├─> Read devsystem-sync.json from target [WORKSPACE_FOLDER] root
+├─> For each source in config:
+│   ├─> All config from devsystem-sync.json source entry (bundles, refiners, deprecated, never_overwrite)
+│   ├─> Run sync.ps1 -diff -sources <source> -targets <target> -configs devsystem-sync.json
+│   └─> Collect diff results (add/overwrite/delete/excluded)
+├─> Show preview: files to add, modify, delete, skip (with reason)
 ├─> Prompt for confirmation
-│   ├─> Confirmed -> Run sync script for each source
+│   ├─> Confirmed -> Run sync.ps1 -execute with same params
 │   │   ├─> Create backups of files to overwrite
 │   │   ├─> Execute copy/delete operations
+│   │   ├─> Write last_sync timestamp to devsystem-sync.json
 │   │   └─> Report results
 │   └─> Not confirmed -> Abort, no changes
 ```
@@ -712,10 +823,11 @@ User runs /sync workspace
 
 ```
 Detect sync relationship:
-├─> Check NOTES.md for sync markers:
-│   ├─> [LINKED_REPOS] section present? → has downstream
+├─> Check for sync markers:
+│   ├─> devsystem-sync.json at [WORKSPACE_FOLDER] root? → has sync config
+│   ├─> [SYNCED_REPOS] in source NOTES.md? → has downstream targets
 │   ├─> [KNOWLEDGE_SOURCE_FOLDER] defined? → has knowledge upstream
-│   ├─> [RULES_SOURCE_FOLDER] defined? → has rules upstream
+│   ├─> [SPECS_SOURCE_FOLDER] defined? → has specs upstream
 │   └─> [DEVSYSTEM] or [DEVSYSTEM_FOLDER] referenced? → has DevSystem upstream
 ├─> Any marker found?
 │   ├─ Yes → SYNCED
@@ -729,12 +841,12 @@ Detect sync relationship:
 ├─> Detect sync relationship
 │   ├─> SYNCED
 │   │   ├─> Check all 8 constants (5 base + 3 sync source)
-│   │   ├─> Check sync policy if [SYNC_POLICY] section exists
-│   │   └─> Check [LINKED_REPOS] targets exist
+│   │   ├─> Check devsystem-sync.json exists at [WORKSPACE_FOLDER] root
+│   │   └─> Check source paths in devsystem-sync.json resolve to valid paths
 │   └─> SELF-CONTAINED
 │       ├─> Check 5 base constants only
 │       ├─> Skip sync source constant checks
-│       └─> Skip sync policy validation
+│       └─> Skip devsystem-sync.json validation
 ```
 
 ### Verify Workspace Setup Flow
@@ -763,42 +875,27 @@ User runs /verify workspace (or /verify setup)
 
 ```
 /sync workspace
-├─> Read DevRepo NOTES.md
-│   ├─> Extract workspace constants
-│   └─> Extract sync policy (if present)
-├─> Resolve sync policy via lookup chain
-├─> For Prompt System:
-│   ├─> Diff [DEVSYSTEM_FOLDER] against [AGENT_FOLDER]
-│   │   └─> Returns: new files, modified files, deleted files
-│   ├─> Show preview
-│   └─> If confirmed: sync downstream
-├─> For Knowledge:
-│   ├─> Diff [KNOWLEDGE_SOURCE_FOLDER] against [KNOWLEDGE_FOLDER]
-│   ├─> Show preview
-│   └─> If confirmed: sync downstream
-└─> For Rules:
-    ├─> Diff [RULES_SOURCE_FOLDER] against [RULES_FOLDER]
-    ├─> Show preview
-    └─> If confirmed: sync downstream
+├─> Read devsystem-sync.json from target [WORKSPACE_FOLDER] root
+├─> For each source in config:
+│   ├─> Run sync.ps1 -diff -sources <source> -targets <target> -configs devsystem-sync.json
+│   └─> Collect diff results (add/overwrite/delete/locally-modified/excluded)
+├─> Show preview: files to add, modify, delete, skip (with reason)
+├─> Prompt for confirmation
+│   ├─> Confirmed -> Run sync.ps1 -execute with same params
+│   │   ├─> Execute copy/delete operations
+│   │   ├─> Write last_sync timestamp to devsystem-sync.json
+│   │   └─> Report results
+│   └─> Not confirmed -> Abort, no changes
 ```
 
 ### Workspace Sync (upstream)
 
 ```
 /sync workspace upstream
-├─> Read DevRepo NOTES.md
-├─> For Prompt System:
-│   ├─> Diff [AGENT_FOLDER] against [DEVSYSTEM_FOLDER]
-│   ├─> Show preview (changes to push back to central source)
-│   └─> If confirmed: sync upstream
-├─> For Knowledge:
-│   ├─> Diff [KNOWLEDGE_FOLDER] against [KNOWLEDGE_SOURCE_FOLDER]
-│   ├─> Show preview
-│   └─> If confirmed: sync upstream
-└─> For Rules:
-    ├─> Diff [RULES_FOLDER] against [RULES_SOURCE_FOLDER]
-    ├─> Show preview
-    └─> If confirmed: sync upstream
+├─> Upstream sync = run sync.ps1 with swapped -sources and -targets parameters
+├─> The target repo becomes the source, the original source becomes the target
+├─> Config is read from the other repo's devsystem-sync.json
+├─> Same diff/confirm/execute flow as downstream
 ```
 
 ### Workspace Verify
@@ -814,7 +911,7 @@ User runs /verify workspace (or /verify setup)
 ├─> Check workspace constants in DevRepo NOTES.md
 │   └─> Each required constant present and resolves to valid path?
 ├─> Check agent folder structure
-│   └─> rules/, workflows/, skills/ subfolders exist?
+│   └─> specs/, workflows/, skills/ subfolders exist?
 ├─> Compare against templates
 │   ├─> Missing required sections?
 │   └─> Incompatible structure?
@@ -869,38 +966,18 @@ User runs /verify workspace (or /verify setup)
 [DEV_REPO_FOLDER]: [WORKSPACE_FOLDER]
 [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\[ProductRepoName]
 [KNOWLEDGE_FOLDER]: [DEV_REPO_FOLDER]\knowledge
-[RULES_FOLDER]: [DEV_REPO_FOLDER]\rules
+[SPECS_FOLDER]: [DEV_REPO_FOLDER]\specs
 [PRODUCT_DOCS_FOLDER]: [PRODUCT_REPO_FOLDER]\docs
 
 # Required for SYNCED only (3):
 [COMPANY_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\Company
 [KNOWLEDGE_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\knowledge
-[RULES_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\rules
+[SPECS_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\specs
 ```
 
-### Sync Policy (in downstream NOTES.md or CompanyRepo NOTES.md)
+### Sync Config (devsystem-sync.json at [WORKSPACE_FOLDER] root)
 
-```
-[SYNC_POLICY]
-- Source: [DEVSYSTEM_FOLDER]
-  Target: [AGENT_FOLDER]
-  Direction: downstream
-  Filter: skill_categories=Development
-  Overwrite: rules/*, workflows/*, skills/*
-  Preserve: skills/selftest/ (local-only skill)
-- Source: [KNOWLEDGE_SOURCE_FOLDER]
-  Target: [KNOWLEDGE_FOLDER]
-  Direction: downstream
-  Filter: include=Windsurf/,AI-Standards/
-  Overwrite: all
-  Preserve: (none)
-- Source: [RULES_SOURCE_FOLDER]
-  Target: [RULES_FOLDER]
-  Direction: downstream
-  Filter: (all)
-  Overwrite: all
-  Preserve: (none)
-```
+Replaced by `devsystem-sync.json` — see data structure above. The old `[SYNC_POLICY]` section in NOTES.md is obsolete and removed per FR-44 and FR-48.
 
 ### Diff Report Structure
 
@@ -928,6 +1005,73 @@ Diff Report: [Source] vs [Target]
 - Research: deep-research, youtube-downloader
 - Deployment: hosting, deploy
 - Utilities: image-tools, pdf-tools, git, github
+```
+
+### Source repo synced repos list (in NOTES.md or simple JSON at source root)
+
+```
+[SYNCED_REPOS]
+- ../Lana-V2-Dev
+- ../USTVA
+- ../OpenAI-BackendTools
+```
+
+### devsystem-sync.json (target-side, at [WORKSPACE_FOLDER] root — single source of truth)
+
+```json
+{
+  "sources": [
+    {
+      "source": "../IPPS/DevSystemV4.3",
+      "selected_bundles": ["Development"],
+      "bundles": {
+        "Development": {
+          "include": ["skills/coding-conventions", "skills/git", "skills/write-documents", "workflows/*", "specs/*"],
+          "exclude": ["skills/google-account", "skills/travel-info", "workflows/conversation-start.md", "workflows/conversation-update.md"]
+        },
+        "Personal": {
+          "include": ["skills/google-account", "skills/travel-info", "workflows/conversation-start.md", "workflows/conversation-update.md"],
+          "exclude": []
+        }
+      },
+      "include": ["skills/*", "workflows/*", "specs/*"],
+      "exclude": ["__pycache__/*", "*.pyc", "skills/llm-evaluation/model-sources/*"],
+      "deprecated": ["specs/commit-rules.md", "workflows/go-autonomous.md", "skills/edird-phase-model"],
+      "never_overwrite": ["specs/sops/project-release.md"]
+    },
+    {
+      "source": "../Company/knowledge",
+      "selected_bundles": ["all"],
+      "bundles": {
+        "all": {
+          "include": ["*"],
+          "exclude": []
+        }
+      },
+      "include": ["*"],
+      "exclude": [],
+      "deprecated": [],
+      "never_overwrite": []
+    }
+  ],
+  "last_sync": "2026-09-06T13:20:00"
+}
+```
+
+### sync.ps1 usage examples
+
+```powershell
+# Diff mode - preview to console
+sync.ps1 -diff -sources "../IPPS/DevSystemV4.3" -targets "." -configs "devsystem-sync.json"
+
+# Diff mode - output to file, console summarizes
+sync.ps1 -diff -sources "../IPPS/DevSystemV4.3" -targets "." -configs "devsystem-sync.json" -output-file "sync-report.txt"
+
+# Execute mode - apply changes
+sync.ps1 -execute -sources "../IPPS/DevSystemV4.3" -targets "." -configs "devsystem-sync.json"
+
+# Multi-target batch
+sync.ps1 -diff -sources '["../IPPS/DevSystemV4.3"]' -targets '["../Lana-V2-Dev", "../USTVA"]' -configs '["devsystem-sync.json"]'
 ```
 
 ### main.code-workspace Structure
@@ -968,60 +1112,95 @@ N/A: No UI components. All interaction is via CLI/workflow commands and console 
 
 **Expected output for diff preview:**
 ```
-Workspace Sync Preview
-├─> Prompt System: [DEVSYSTEM_FOLDER] -> [AGENT_FOLDER]
-│   ├─> 3 new files:
-│   │   ├─> skills/workspace-management/SKILL.md
-│   │   ├─> skills/workspace-management/WORKSPACE-GUIDES.md
-│   │   └─> skills/workspace-management/WORKSPACE-RULES.md
-│   ├─> 2 modified files:
-│   │   ├─> rules/devsystem-core.md
-│   │   └─> workflows/verify.md
-│   └─> 0 deleted files
-├─> Knowledge: [KNOWLEDGE_SOURCE_FOLDER] -> [KNOWLEDGE_FOLDER]
-│   └─> No changes
-└─> Rules: [RULES_SOURCE_FOLDER] -> [RULES_FOLDER]
-    └─> No changes
+=============================== START: WORKSPACE SYNC PREVIEW ===============================
+[2026-09-06 13:35:00]
+
+Syncing from '../IPPS/DevSystemV4.3' to '.'...
+  Reading 'devsystem-sync.json'...
+    OK.
+  Comparing files...
+    [ 1 / 3 ] Adding 'skills/workspace-management/SKILL.md'...
+    [ 2 / 3 ] Adding 'skills/workspace-management/WORKSPACE-GUIDES.md'...
+    [ 3 / 3 ] Adding 'skills/workspace-management/WORKSPACE-RULES.md'...
+    3 new files found.
+  Comparing modified files...
+    [ 1 / 2 ] 'specs/devsystem-core.md' differs...
+    [ 2 / 2 ] 'workflows/verify.md' differs...
+    2 modified files found.
+  Checking deprecated files...
+    0 deprecated files found.
+  Checking never-overwrite files...
+    1 file protected: 'specs/sops/project-release.md'
+
+Summary: 3 add, 2 modify, 0 delete, 1 skip, 45 unchanged.
+RESULT: CHANGES FOUND
+================================ END: WORKSPACE SYNC PREVIEW =================================
+[2026-09-06 13:35:02] (2.0 secs)
 
 Confirm sync? (yes/go/confirmed to execute, no/cancel to abort)
 ```
 
 **Expected output for verify:**
 ```
-Workspace Verify: [DevRepo Name] (WORKSPACE mode)
-├─> Required files:
-│   ├─> NOTES.md: OK
-│   ├─> PROBLEMS.md: OK
-│   ├─> PROGRESS.md: OK
-│   ├─> ID-REGISTRY.md: OK
-│   └─> SOPS.md: OK
-├─> Workspace constants:
-│   ├─> [DEV_REPO_FOLDER]: OK
-│   ├─> [PRODUCT_REPO_FOLDER]: OK
-│   ├─> [COMPANY_REPO_FOLDER]: OK
-│   ├─> [KNOWLEDGE_FOLDER]: OK
-│   ├─> [KNOWLEDGE_SOURCE_FOLDER]: MISSING - not defined in NOTES.md
-│   ├─> [RULES_FOLDER]: OK
-│   ├─> [RULES_SOURCE_FOLDER]: MISSING - not defined in NOTES.md
-│   └─> [PRODUCT_DOCS_FOLDER]: OK
-├─> Agent folder:
-│   ├─> rules/: OK (7 files)
-│   ├─> workflows/: OK (24 files)
-│   └─> skills/: OK (18 skills)
-└─> 2 issues found:
-    ├─> MISSING: [KNOWLEDGE_SOURCE_FOLDER] constant in NOTES.md
-    └─> MISSING: [RULES_SOURCE_FOLDER] constant in NOTES.md
+================================ START: WORKSPACE VERIFY =================================
+[2026-09-06 13:35:00]
+
+Verifying workspace 'DevRepo' (WORKSPACE mode)...
+  Checking required files...
+    [ 1 / 5 ] 'NOTES.md'...
+      OK.
+    [ 2 / 5 ] 'PROBLEMS.md'...
+      OK.
+    [ 3 / 5 ] 'PROGRESS.md'...
+      OK.
+    [ 4 / 5 ] 'ID-REGISTRY.md'...
+      OK.
+    [ 5 / 5 ] 'SOPS.md'...
+      OK.
+    5 files found.
+  Checking workspace constants...
+    [ 1 / 8 ] [DEV_REPO_FOLDER]...
+      OK.
+    [ 2 / 8 ] [PRODUCT_REPO_FOLDER]...
+      OK.
+    [ 3 / 8 ] [COMPANY_REPO_FOLDER]...
+      OK.
+    [ 4 / 8 ] [KNOWLEDGE_FOLDER]...
+      OK.
+    [ 5 / 8 ] [KNOWLEDGE_SOURCE_FOLDER]...
+      MISSING: not defined in 'NOTES.md'.
+    [ 6 / 8 ] [SPECS_FOLDER]...
+      OK.
+    [ 7 / 8 ] [SPECS_SOURCE_FOLDER]...
+      MISSING: not defined in 'NOTES.md'.
+    [ 8 / 8 ] [PRODUCT_DOCS_FOLDER]...
+      OK.
+    6 constants found, 2 missing.
+  Checking agent folder...
+    'specs/' found. 7 files.
+    'workflows/' found. 24 files.
+    'skills/' found. 18 skills.
+    OK.
+
+2 issues found:
+  MISSING: [KNOWLEDGE_SOURCE_FOLDER] constant in 'NOTES.md'.
+  MISSING: [SPECS_SOURCE_FOLDER] constant in 'NOTES.md'.
 
 Fixing issues...
-├─> Added [KNOWLEDGE_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\knowledge
-└─> Added [RULES_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\rules
+  Adding [KNOWLEDGE_SOURCE_FOLDER] to 'NOTES.md'...
+    OK.
+  Adding [SPECS_SOURCE_FOLDER] to 'NOTES.md'...
+    OK.
 
 Verify complete. 2 issues fixed.
+RESULT: PASSED WITH FIXES
+================================= END: WORKSPACE VERIFY ==================================
+[2026-09-06 13:35:03] (3.0 secs)
 ```
 
 ## 14. Technical Constraints
 
-- Diff and sync scripts are PowerShell (`.ps1`) - consistent with existing DevSystem scripts in SOPS.md and deploy-to-all-repos.md
+- Diff and sync scripts are PowerShell (`.ps1`) - consistent with existing DevSystem scripts in SOPS.md
 - Scripts must use `Compare-Object` or equivalent for file content comparison. Hash-based comparison (SHA-256) is preferred for file content equality due to performance
 - Scripts must handle Unicode filenames and paths with spaces
 - Skill files must follow SKILL_RULES.md (all SK-* rules) and WORKFLOW_RULES.md (applicable WF-* rules)
@@ -1030,11 +1209,21 @@ Verify complete. 2 issues fixed.
 - sync.md integration adds a new context section, does not modify existing contexts
 - devsystem-core.md edits are limited to Operation Modes and Workspace Scenarios sections
 - ID-REGISTRY.md edit adds one line to Workspace Context states
-- Skill must be registered in NOTES.md `[SKILL_CATEGORIES]` under Development category
-- Skill must be registered in deploy-to-all-repos.md `$skillCategories` under Development category
+- Skill must be registered in `devsystem-sync.json` Development bundle
 - All skill files must pass privacy gate (no real identifiers, addresses, names, project-specific data)
 
 ## 15. Document History
+
+**[2026-09-06 14:30]**
+- Fixed: FR-14 — removed `.sync-timestamp` reference, updated to `last_sync` in `devsystem-sync.json`, removed upstream direction (upstream = swap params at workflow level) [IMPLEMENTED from /critique CRIT-01, CRIT-02]
+- Fixed: NFR-02 — updated locally-modified warning to reference `last_sync` in `devsystem-sync.json` and `LastWriteTime` check [IMPLEMENTED from /critique CRIT-01]
+- Fixed: FR-48 — retained [SKILL_CATEGORIES], removed only [LINKED_REPOS] as obsolete [IMPLEMENTED from /critique CRIT-03]
+- Fixed: Section 9 Action Flow — rewritten to match Section 8 (single sync.ps1 call iterating sources from config, not 3 separate operations) [IMPLEMENTED from /critique CRIT-04]
+- Fixed: DD-12 — "rules" to "specs" [IMPLEMENTED from /critique CRIT-09]
+- Fixed: MNF line 58 — removed "pending /rename execution" (rename is done) [IMPLEMENTED from /critique CRIT-10]
+- Fixed: Target files — annotated deleted files as "deleted, replaced by sync.ps1" [IMPLEMENTED from /critique CRIT-11]
+- Fixed: Section 13 logging example — "OK. 1 source, 1 bundle selected." to "OK." to match implementation [IMPLEMENTED from /critique CRIT-14]
+- Updated: Timeline to reflect 8 updates
 
 **[2026-09-05 15:00]**
 - Added: FR-40 [WORKSPACE_FOLDER] vs [WORKSPACE_FILE] distinction
@@ -1089,13 +1278,89 @@ Verify complete. 2 issues fixed.
 - Updated: CompanyRepo domain object storage to use `[COMPANY_REPO_FOLDER]`
 - Updated: Workspace Constants data structure to include `[COMPANY_REPO_FOLDER]`
 
+**[2026-09-06 13:50]**
+- Fixed: Section 13 logging examples — stale `rules/` → `specs/`, `[RULES_SOURCE_FOLDER]` → `[SPECS_SOURCE_FOLDER]`, `[RULES_FOLDER]` → `[SPECS_FOLDER]` [VERIFIED]
+- Fixed: Section 13 logging examples — rewritten to comply with LOG-UF-01 (timestamps), LOG-UF-02 (progress indicators), LOG-UF-06 (100-char headers), LOG-GN-02 (quoted paths), LOG-GN-08 (two-level errors), LOG-GN-10 (ellipsis), LOG-GN-11 (sentence endings), LOG-SC-07 (RESULT keyword) [VERIFIED]
+- Updated: Timeline to reflect 7 updates
+
+**[2026-09-06 13:35]**
+- Revised: FR-44 — bundle definitions moved from source (sync-bundles.json) to target (devsystem-sync.json) as single source of truth
+- Revised: FR-45 — source repo only maintains relative path list to synced repos, no bundle definitions
+- Revised: FR-46 — sync.ps1 reads ALL config from target's devsystem-sync.json, reads nothing from source
+- Revised: FR-49 — sync.md reads devsystem-sync.json instead of per-content-type *-sync.json
+- Revised: FR-51 — settings sync uses devsystem-sync.json, not *-sync.json
+- Revised: FR-52 — knowledge sync reads from devsystem-sync.json, not knowledge-sync.json
+- Revised: FR-53 — specs sync reads from devsystem-sync.json, not specs-sync.json
+- Revised: FR-54 — source NOTES.md only (no sync-bundles.json reference)
+- Revised: DD-18 — target-only config architecture, no split-brain
+- Revised: DD-20 — source synced repos list is informational only
+- Updated: Target files — removed sync-bundles.json, added devsystem-sync.json at target
+- Updated: MNF — bundle definitions at target, not source
+- Updated: Data structures — devsystem-sync.json with complete per-source config, source synced repos list
+- Updated: sync.ps1 usage examples — all use devsystem-sync.json
+- Updated: Timeline to reflect 6 updates
+
+**[2026-09-06 13:30]**
+- Fixed: IG-11 - updated stale `sync-config.json` reference to per-content-type `*-sync.json` [VERIFIED]
+- Fixed: Sync Policy Lookup Chain (section 8) - replaced NOTES.md [SYNC_POLICY] with *-sync.json resolution [VERIFIED]
+- Fixed: Diff and Sync Flow (section 8) - replaced old diff/sync script references with sync.ps1 -diff/-execute [VERIFIED]
+- Fixed: Sync Policy data structure (section 10) - replaced old [SYNC_POLICY] format with reference to *-sync.json [VERIFIED]
+- Fixed: Workspace Constants data structure (section 10) - [RULES_FOLDER] → [SPECS_FOLDER], [RULES_SOURCE_FOLDER] → [SPECS_SOURCE_FOLDER] [VERIFIED]
+- Fixed: Workspace Verify flow (section 8) - rules/ → specs/ in agent folder check [VERIFIED]
+- Fixed: Logging example (section 13) - [RULES_FOLDER] → [SPECS_FOLDER], [RULES_SOURCE_FOLDER] → [SPECS_SOURCE_FOLDER], rules/ → specs/ [VERIFIED]
+- Fixed: Depends on - rules/devsystem-core.md → specs/devsystem-core.md [VERIFIED]
+- Fixed: DD-14 - [RULES_SOURCE_FOLDER] → [SPECS_SOURCE_FOLDER] [VERIFIED]
+- Fixed: Upstream Sync flow (section 8) - [RULES_FOLDER]/[RULES_SOURCE_FOLDER] → [SPECS_FOLDER]/[SPECS_SOURCE_FOLDER] [VERIFIED]
+- Fixed: Target files - workspace_diff_template.ps1 and workspace_sync_template.ps1 marked as replaced by sync.ps1 [VERIFIED]
+- Updated: IG-11 - added absolute-to-relative path conversion requirement for migration [VERIFIED]
+
+**[2026-09-06 13:20]**
+- Revised: FR-44 - sync-bundles.json now references specs/ instead of rules/
+- Revised: FR-45 - per-content-type *-sync.json at [WORKSPACE_FOLDER] root (not .devin/sync-config.json)
+- Revised: FR-46 - single sync.ps1 with -diff/-execute modes, array params (-sources, -targets, -configs, -output-file)
+- Removed: FR-47 - diff.ps1 merged into sync.ps1 -diff mode (DD-19)
+- Kept: FR-48 - deploy-to-all-repos.md replacement (unchanged)
+- Revised: FR-49 - sync.md uses sync.ps1, per-content-type configs, auto-execute on confirm
+- Added: FR-50 - rules → specs folder rename with sops/ and guides/ subfolders
+- Added: FR-51 - settings sync use cases (workspace settings from/to, sync settings from/to)
+- Added: FR-52 - knowledge sync use cases (knowledge from source, knowledge to targets)
+- Added: FR-53 - specs sync use cases (specs from source, specs to targets)
+- Added: FR-54 - source repo relative path references only
+- Revised: DD-18 - per-content-type config files instead of single sync-config.json
+- Added: DD-19 - single script rationale (diff and execute share logic)
+- Added: DD-20 - relative path rationale (portability)
+- Added: DD-21 - rules → specs rename rationale
+- Updated: Target files - removed diff.ps1, sync.ps1 moved to workspace-management skill
+- Updated: Data structures - specs-sync.json, knowledge-sync.json, sync.ps1 usage examples
+- Updated: MNF - single script, relative paths, rules→specs rename
+- Updated: Timeline to reflect 5 updates
+
+**[2026-09-06 12:55]**
+- Added: FR-44 (sync-bundles.json - source-side JSON bundle definitions with include/exclude refiners)
+- Added: FR-45 (sync-config.json - target-side JSON config with multi-bundle, multi-source support)
+- Added: FR-46 (generic sync.ps1 - takes -Source and -Target only, reads JSON config)
+- Added: FR-47 (generic diff.ps1 - takes -Source and -Target only, reads JSON config)
+- Added: FR-48 (deploy-to-all-repos.md replacement - deleted, not refactored)
+- Added: FR-49 (sync.md Workspace Sync context - uses diff.ps1/sync.ps1, reads sync-config.json)
+- Added: DD-18 (two-file JSON sync config architecture with three-layer glob refiners)
+- Added: sync-bundles.json, sync.ps1, diff.ps1 to target files
+- Added: sync-bundles.json and sync-config.json data structures to section 10
+- Added: 3 MNF items (JSON-based config, -Source/-Target only params, glob refiner evaluation order)
+- Updated: MNF - deploy-to-all-repos.md replaced by sync.md, not just independent
+- Updated: Scenario - deploy-to-all-repos.md described as legacy
+- Updated: Context - deploy-to-all-repos.md marked as replaced by FR-49
+- Updated: FR-31 - removed deploy-to-all-repos.md registration requirement
+- Updated: IG-11 - deploy-to-all-repos.md replaced, migration required
+- Updated: Technical Constraints - removed deploy-to-all-repos.md references
+- Updated: Timeline to reflect 4 updates
+
 **[2026-09-06 00:22]**
-- Added: FR-41 (WORKSPACE_CREATION_GUIDE.md - interactive questionnaire)
+- Added: FR-41 (WORKSPACE_CREATION_QUESTIONNAIRE.md - interactive questionnaire)
 - Added: FR-42 (workspace-create.md workflow - thin entry point)
 - Added: FR-43 (workspace creation procedure in SKILL.md)
 - Added: DD-11 (guide + thin workflow separation for workspace creation)
 - Renumbered: DD-11 through DD-16 to DD-12 through DD-17 (avoid duplicate DD-11)
-- Added: WORKSPACE_CREATION_GUIDE.md to target files
+- Added: WORKSPACE_CREATION_QUESTIONNAIRE.md to target files
 - Added: workspace-create.md to target files
 - Updated: Timeline to reflect 3 updates
 - Added: 3 MNF items (impact per question, non-destructive creation, thin workflow)

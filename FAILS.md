@@ -1,5 +1,69 @@
 # Failure Log
 
+## 2026-09-06 - SPEC FR-14 Not Updated After Architecture Change
+
+### [HIGH] `WSKMGMT-FL-003` FR-14 still references .sync-timestamp and locally-modified warning after FR-44/46 superseded it [RESOLVED]
+
+- **When**: 2026-09-06 14:00 UTC+02:00
+- **Where**: `Docs/Specs/_SPEC_SKILL_WORKFLOW-MANAGEMENT.md` FR-14 (lines 350-351), NFR-02 (line 670)
+- **What**: FR-14 specifies `.sync-timestamp` file and locally-modified file warning. FR-44/46 later moved `last_sync` to `devsystem-sync.json` but FR-14 was never updated. NFR-02 requires "locally modified - will be overwritten" marking in diff preview. Implementation has neither - it compares content hashes only, no modification time check.
+- **Why it went wrong**: When FR-44/46 were added (13:35 revision), FR-14 was not revisited. The locally-modified warning requirement was lost in the architecture shift.
+- **Evidence**: FR-14 line 351: "Store last sync timestamp in target folder root (`.sync-timestamp`, gitignored)". Implementation `Update-LastSync` writes to `devsystem-sync.json` `last_sync` field. No modification time check exists in `Compare-Files`.
+- **Suggested fix**: Update FR-14: remove `.sync-timestamp` reference, keep locally-modified warning as diff mode requirement. Implement modification time check in `Compare-Files` against `last_sync` from config.
+- **Resolved**: 2026-09-06 14:30 — FR-14 updated (removed `.sync-timestamp`, updated to reference `last_sync` in `devsystem-sync.json`, removed upstream direction). NFR-02 updated to reference `last_sync` field. Code implementation of locally-modified detection deferred.
+
+## 2026-09-06 - SPEC Internal Contradictions Not Caught During Verification
+
+### [MEDIUM] `WSKMGMT-FL-004` MNF says register in [SKILL_CATEGORIES] but FR-48 says obsolete [RESOLVED]
+
+- **When**: 2026-09-06 14:00 UTC+02:00
+- **Where**: `Docs/Specs/_SPEC_SKILL_WORKFLOW-MANAGEMENT.md` MNF line 38 vs FR-48 line 613
+- **What**: MNF says "Register `workspace-management` in `NOTES.md` `[SKILL_CATEGORIES]`". FR-48 says "[SKILL_CATEGORIES] and [LINKED_REPOS] in NOTES.md become obsolete and are removed". WORKSPACE-RULES.md WS-ST-02/03 still enforce [SKILL_CATEGORIES] registration.
+- **Why it went wrong**: FR-48 was added to remove deploy-to-all-repos dependencies, but [SKILL_CATEGORIES] was conflated with [LINKED_REPOS]. Only [LINKED_REPOS] should be obsolete.
+- **Suggested fix**: Keep [SKILL_CATEGORIES], remove only [LINKED_REPOS] from FR-48. Update MNF and rules accordingly.
+- **Resolved**: 2026-09-06 14:30 — FR-48 updated to retain [SKILL_CATEGORIES], remove only [LINKED_REPOS].
+
+## 2026-09-06 - SPEC Section 9 Action Flow Doesn't Match Section 8 Key Mechanisms
+
+### [MEDIUM] `WSKMGMT-FL-005` Action flow shows 3 separate syncs, key mechanisms shows single call [RESOLVED]
+
+- **When**: 2026-09-06 14:00 UTC+02:00
+- **Where**: `Docs/Specs/_SPEC_SKILL_WORKFLOW-MANAGEMENT.md` Section 8 (lines 803-820) vs Section 9 (lines 872-895)
+- **What**: Section 8 shows "For each source in config: Run sync.ps1 -diff". Section 9 shows "For Prompt System: Diff...", "For Knowledge: Diff...", "For Specs: Diff..." as separate operations. Implementation follows Section 8 (single call, iterates sources).
+- **Why it went wrong**: Section 9 was written before the single-script architecture (FR-46) and never updated to match.
+- **Suggested fix**: Update Section 9 to match Section 8: single sync.ps1 call iterating sources from devsystem-sync.json.
+- **Resolved**: 2026-09-06 14:30 — Section 9 downstream and upstream flows rewritten to match Section 8 (single sync.ps1 call iterating sources from config).
+
+## 2026-09-06 - Used Strikethrough Instead of HTML Comments for Non-Selected Options
+
+### [LOW] `WSKMGMT-FL-002` Used markdown strikethrough when user said "comment out"
+
+- **When**: 2026-09-06 00:45 UTC+02:00
+- **Where**: `e:\Dev\Lana-V2-Dev\_WORKSPACE_CREATION_QUESTIONNAIRE.md` line 15
+- **What**: User said "comment out whats not selected" — I used markdown strikethrough (`~~text~~`) instead of HTML comments (`<!-- text -->`). Strikethrough is still visible text; HTML comments are actually commented out and hidden from rendered output.
+- **Why it went wrong**:
+  - Interpreted "comment out" as a visual styling instruction rather than a literal instruction to use comments
+  - "Comment out" has a specific technical meaning: make content invisible in rendered output
+  - Strikethrough makes content still visible, just styled differently — not commented out
+- **Workflow re-read findings**: `agent-behavior.md` says "NEVER ask questions. Resolve ambiguity through prompt analysis" — "comment out" is unambiguous technical terminology, no interpretation needed
+- **Evidence**: User message: "also I said comment out but you chose strikethrough"
+- **Suggested fix**: When user says "comment out", use HTML comments (`<!-- -->`) in markdown files. Fixed in Lana-V2-Dev questionnaire. Also updated legend.
+
+## 2026-09-06 - Named Workspace Creation Questionnaire as "Guide" Instead of "Questionnaire"
+
+### [LOW] `WSKMGMT-FL-001` Used "GUIDE" in filename despite user using "questionnaire" terminology
+
+- **When**: 2026-09-06 00:25 UTC+02:00
+- **Where**: `DevSystemV4.3/skills/workspace-management/WORKSPACE_CREATION_GUIDE.md` (now renamed)
+- **What**: Named the workspace creation file `WORKSPACE_CREATION_GUIDE.md` when the user had explicitly referred to it as a questionnaire. User corrected this: "I told you so earlier but you chose guide". The file is an interactive questionnaire with checkboxes and fill-in sections, not a passive guide.
+- **Why it went wrong**:
+  - User said "questionnaire" in earlier conversation but I chose "GUIDE" as the filename
+  - Did not follow user's terminology — imposed my own naming choice
+  - Violates AP-NM-01 (one name per concept) — user's concept name was "questionnaire"
+- **Workflow re-read findings**: `agent-behavior.md` says "NEVER ask questions. Resolve ambiguity through prompt analysis" — the user's prompt used "questionnaire" and I should have matched that term exactly
+- **Evidence**: User message: "I told you so earlier but you chose guide"
+- **Suggested fix**: Always use the exact terminology the user provides. When user says "questionnaire", name the file QUESTIONNAIRE not GUIDE. Renamed all references: file, workflow, SPEC, SKILL.md, Lana-V2-Dev copy.
+
 ## 2026-09-05 - Committed and Pushed Target Repos During Deploy
 
 ### [HIGH] `GLOB-FL-041` Committed and pushed linked repos instead of only IPPS source repo

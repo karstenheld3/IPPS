@@ -11,29 +11,29 @@ Manages workspace setup, DevSystem sync, and knowledge distribution across produ
 References (loaded on demand):
 - WORKSPACE-GUIDES.md - High-level guidance on workspace setup, product/dev separation, sync sources
 - WORKSPACE-RULES.md - Verifiable rules for workspace integrity, required files and constants
-- WORKSPACE_CREATION_GUIDE.md - Interactive questionnaire for creating new workspaces with defaults
+- WORKSPACE_CREATION_QUESTIONNAIRE.md - Interactive questionnaire for creating new workspaces with defaults
 - DEV_REPO_NOTES_TEMPLATE.md - Template for DevRepo NOTES.md with all workspace constants
 - PRODUCT_REPO_README_TEMPLATE.md - Template for ProductRepo README.md
 - COMPANY_REPO_NOTES_TEMPLATE.md - Template for CompanyRepo NOTES.md with sync policy tracking
-- workspace_diff_template.ps1 - Diff script template (adapt before use)
-- workspace_sync_template.ps1 - Sync script template (adapt before use)
+- sync.ps1 - Generic sync script with -diff and -execute modes (replaces workspace_diff_template.ps1 and workspace_sync_template.ps1)
 
 ## MUST-NOT-FORGET
 
 1. All paths must come from workspace constants in DevRepo NOTES.md - never hardcode project-specific paths
-2. Sync before deploy - always run diff and review changes before executing sync
-3. Check preserve list before overwriting - files in preserve list are never overwritten during sync
+2. Always run sync.ps1 -diff before -execute - review changes before applying
+3. Check never_overwrite patterns - files matching never_overwrite are never overwritten or deleted during sync
 4. Rollback on shared branches (main, master, remote-tracked) requires explicit confirmation - advise revert commit instead
 5. Privacy gate - no real identifiers, project names, or paths in any skill file
-6. Register skill in NOTES.md [SKILL_CATEGORIES] AND deploy-to-all-repos.md $skillCategories after creation
+6. Sync config is JSON-based: devsystem-sync.json at target [WORKSPACE_FOLDER] root is single source of truth - no NOTES.md prose lookup
 
 ## Intent Lookup
 
 User wants to...
-- Create a new workspace → WORKSPACE_CREATION_GUIDE.md questionnaire
+- Create a new workspace → WORKSPACE_CREATION_QUESTIONNAIRE.md questionnaire
 - Compare workspace settings → Procedure 1, FR-15
 - Update workspace from source → Procedure 2, FR-16
 - Roll back workspace settings → Procedure 3, FR-17
+- Check if repo is synced or self-contained → Procedure 4, FR-18
 - Check workspace integrity → Procedure 4, FR-18
 - Compare DevSystem files → Procedure 1, FR-19
 - Update DevSystem from source → Procedure 2, FR-20
@@ -50,12 +50,12 @@ User wants to...
 ### 1. Compare
 
 ```
-1. Read workspace constants from DevRepo NOTES.md
+1. Read devsystem-sync.json from target [WORKSPACE_FOLDER] root
 2. Determine sync area (WORKSPACE, DEVSYSTEM, KNOWLEDGE)
-3. Determine sync source and target from constants
-4. Run workspace_diff_template.ps1 with Source, Target, Filter parameters
+3. Determine sync source and target from config source entries
+4. Run sync.ps1 -diff -sources <source> -targets <target> -configs <config>
 5. Review structured diff report: new files, modified files, deleted files, skipped files
-6. Note locally-modified files (modified after .sync-timestamp) for sync warning
+6. Note excluded files (filtered by bundle include/exclude rules) with -verbose
 ```
 
 Use before any sync operation to preview changes. Use before deploy to verify DevSystem is current.
@@ -65,14 +65,14 @@ Use before any sync operation to preview changes. Use before deploy to verify De
 ```
 1. Run Compare procedure first
 2. Review diff preview - check for breaking changes, locally-modified files
-3. Read sync policy from downstream NOTES.md (priority 1) or CompanyRepo NOTES.md (priority 2)
+3. Read all sync config from target's devsystem-sync.json (bundles, filters, never_overwrite, deprecated)
 4. Confirm sync: prompt user (yes/go/confirmed/execute/apply to proceed, no/cancel/abort/stop to abort)
-5. Run workspace_sync_template.ps1 with DiffReport, Direction, PreserveList parameters
-6. Verify .sync-timestamp updated in target folder root
-7. Report results per file: added, modified, deleted, skipped, migrated
+5. Run sync.ps1 -execute -sources <source> -targets <target> -configs <config>
+6. Verify last_sync timestamp updated in devsystem-sync.json
+7. Report results per file: added, modified, deleted, skipped
 ```
 
-Use to sync DevSystem from source, knowledge from Company, or rules from Company. Downstream = sync from source to all targets. Upstream = sync from here back to source.
+Use to sync DevSystem from source, knowledge from Company, or specs from Company. Downstream = sync from source to all targets. Upstream = sync from here back to source.
 
 ### 3. Rollback
 
@@ -92,10 +92,11 @@ Use when sync introduced errors or unwanted changes. IG-07: rollback on shared b
 ```
 1. Determine area to check (WORKSPACE, DEVSYSTEM, KNOWLEDGE)
 2. For WORKSPACE: verify required constants in DevRepo NOTES.md, required files exist, workspace structure matches declared mode
-3. For DEVSYSTEM: verify agent folder has rules/, workflows/, skills/ subfolders, all skills registered in [SKILL_CATEGORIES], no deprecated files
-4. For KNOWLEDGE: verify knowledge folder exists if [KNOWLEDGE_FOLDER] set, all bundles in sync policy exist, no empty bundles
-5. Report gaps and incompatibilities
-6. Fix actions: missing constant -> add with template default. Missing file -> create from template. Broken reference -> report only. Structural violation -> report only
+3. For DEVSYSTEM: verify agent folder has specs/, workflows/, skills/ subfolders, all skills registered in [SKILL_CATEGORIES], no deprecated files
+4. For KNOWLEDGE: verify knowledge folder exists if [KNOWLEDGE_FOLDER] set, all bundles in devsystem-sync.json exist, no empty bundles
+5. Report sync relationship state (SYNCED or SELF-CONTAINED)
+6. Report gaps and incompatibilities
+7. Fix actions: missing constant -> add with template default. Missing file -> create from template. Broken reference -> report only. Structural violation -> report only
 ```
 
 Use via /verify workspace context. Downstream customizations are allowed and do not fail verification.
@@ -121,24 +122,29 @@ Use via /commit in WORKSPACE mode. SINGLE-PROJECT and MONOREPO modes use existin
 
 ## Gotchas
 
-- Sync timestamp missing - If .sync-timestamp not found in target folder, full comparison runs (no incremental optimization). Timestamp created after sync completes
-- Preserve list overrides overwrite rules - Files in preserve list are never overwritten, even if source has newer version. Check preserve list before sync
+- Sync config is JSON-based - All sync configuration lives in devsystem-sync.json at target [WORKSPACE_FOLDER] root. No NOTES.md prose lookup or hardcoded arrays
+- never_overwrite overrides deprecated - Files matching never_overwrite patterns are protected from both overwrite and deletion, even if also matching deprecated patterns
 - Rollback on shared branches - Using git checkout on shared branches (main, master) can cause issues for other contributors. Always use revert commit instead. IG-07 requires explicit confirmation
 
 ## Quick Config
 
-Minimal workspace constants in DevRepo NOTES.md:
+Always required workspace constants in DevRepo NOTES.md:
 
 ```
 ## Workspace Constants
 - [DEV_REPO_FOLDER]: [WORKSPACE_FOLDER]
 - [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\[product-repo-name]
-- [COMPANY_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\Company
 - [KNOWLEDGE_FOLDER]: [DEV_REPO_FOLDER]\knowledge
-- [KNOWLEDGE_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\knowledge
-- [RULES_FOLDER]: [DEV_REPO_FOLDER]\rules
-- [RULES_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\rules
+- [SPECS_FOLDER]: [DEV_REPO_FOLDER]\specs
 - [PRODUCT_DOCS_FOLDER]: [PRODUCT_REPO_FOLDER]\docs
+```
+
+Required for SYNCED only (remove if SELF-CONTAINED):
+
+```
+- [COMPANY_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\Company
+- [KNOWLEDGE_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\knowledge
+- [SPECS_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\specs
 ```
 
 See DEV_REPO_NOTES_TEMPLATE.md for full template with defaults and instructions.
