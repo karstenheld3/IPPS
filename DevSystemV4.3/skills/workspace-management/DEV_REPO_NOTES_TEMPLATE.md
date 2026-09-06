@@ -6,48 +6,56 @@ Replace all `[placeholder]` values with your workspace-specific content.
 
 ## Workspace Constants
 
+Always required:
+
 - [WORKSPACE_FOLDER]: [current workspace root path]
 - [WORKSPACE_FILE]: [WORKSPACE_FOLDER]\main.code-workspace (WORKSPACE mode only, omit if SINGLE-PROJECT or MONOREPO)
 - [DEV_REPO_FOLDER]: [WORKSPACE_FOLDER]
 - [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\[product-repo-name]
-- [COMPANY_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\Company
 - [KNOWLEDGE_FOLDER]: [DEV_REPO_FOLDER]\knowledge
-- [KNOWLEDGE_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\knowledge
-- [RULES_FOLDER]: [DEV_REPO_FOLDER]\rules
-- [RULES_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\rules
+- [SPECS_FOLDER]: [DEV_REPO_FOLDER]\specs
 - [PRODUCT_DOCS_FOLDER]: [PRODUCT_REPO_FOLDER]\docs
+
+Required for SYNCED only (remove if SELF-CONTAINED):
+
+- [COMPANY_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\Company
+- [KNOWLEDGE_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\knowledge
+- [SPECS_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\specs
+
 # Release constants (uncomment if using /project-release workflow)
 # - [RELEASE_SOPS_FILE]: SOPS.md
 # - [RELEASE_SESSIONS_FOLDER]: [DEFAULT_SESSIONS_FOLDER]
 # - [RELEASE_NOTES_DIR]: [PRODUCT_DOCS_FOLDER]\ReleaseNotes
 
-Instructions: Replace [product-repo-name] with your product repository folder name. Adjust [COMPANY_REPO_FOLDER] if your company folder is in a different location. All paths should be relative to [WORKSPACE_FOLDER]. [WORKSPACE_FOLDER] is the filesystem path of the workspace root. [WORKSPACE_FILE] is the main.code-workspace file that defines which repos belong to the workspace - repos referenced in it may be physically outside [WORKSPACE_FOLDER] (e.g., ../ProductRepo). Omit [WORKSPACE_FILE] in SINGLE-PROJECT and MONOREPO modes. Release constants compose from existing workspace constants and are used by `/project-release` workflow. `[RELEASE_SOPS_FILE]` is the SOPS filename (`SOPS.md` or `_SOPS.md`). `[RELEASE_SESSIONS_FOLDER]` typically equals `[DEFAULT_SESSIONS_FOLDER]` from `@skills:session-management`. `[RELEASE_NOTES_DIR]` composes from `[PRODUCT_DOCS_FOLDER]` and a `ReleaseNotes` subfolder.
+Instructions: Replace [product-repo-name] with your product repository folder name. Adjust [COMPANY_REPO_FOLDER] if your company folder is in a different location. All paths should be relative to [WORKSPACE_FOLDER]. [WORKSPACE_FOLDER] is the filesystem path of the workspace root. [WORKSPACE_FILE] is the main.code-workspace file that defines which repos belong to the workspace - repos referenced in it may be physically outside [WORKSPACE_FOLDER] (e.g., ../ProductRepo). Omit [WORKSPACE_FILE] in SINGLE-PROJECT and MONOREPO modes. Remove the SYNCED-only constants if your repo is SELF-CONTAINED (no external sync sources). Release constants compose from existing workspace constants and are used by `/project-release` workflow. `[RELEASE_SOPS_FILE]` is the SOPS filename (`SOPS.md` or `_SOPS.md`). `[RELEASE_SESSIONS_FOLDER]` typically equals `[DEFAULT_SESSIONS_FOLDER]` from `@skills:session-management`. `[RELEASE_NOTES_DIR]` composes from `[PRODUCT_DOCS_FOLDER]` and a `ReleaseNotes` subfolder.
 
-## Sync Sources
+## Sync Sources (SYNCED only - remove if SELF-CONTAINED)
 
 Direction definitions:
 - Downstream = sync from source to all targets (distribute content to dependent repos)
 - Upstream = sync from here back to source (push local changes back to origin)
 
+Sync configuration is stored in `devsystem-sync.json` at [WORKSPACE_FOLDER] root. This file is the single source of truth for all sync settings. See WSKMGMT-SP01 section 10 for the JSON schema.
+
 ### Prompt System
 - Source: [WORKSPACE_FOLDER]\..\[devsystem-source-name]\DevSystemV*
 - Target: [DEV_REPO_FOLDER]\[AGENT_FOLDER]
 - Direction: downstream
-- Filter: skill categories from [SKILL_CATEGORIES]
+- Filter: bundle include/exclude rules in devsystem-sync.json
 
 ### Knowledge
 - Source: [KNOWLEDGE_SOURCE_FOLDER]
 - Target: [KNOWLEDGE_FOLDER]
 - Direction: downstream
-- Filter: bundle names from sync policy
+- Filter: bundle include/exclude rules in devsystem-sync.json
 
-### Rules
-- Source: [RULES_SOURCE_FOLDER]
-- Target: [RULES_FOLDER]
+### Specs
+- Source: [SPECS_SOURCE_FOLDER]
+- Target: [SPECS_FOLDER]
 - Direction: downstream
-- Filter: file patterns from sync policy
+- Filter: bundle include/exclude rules in devsystem-sync.json
 
-Instructions: Adjust source paths if your DevSystem source or Company folder is in a different location. Set direction to "upstream" for target-to-source sync.
+Instructions: Adjust source paths if your DevSystem source or Company folder is in a different location. All sync configuration (bundles, filters, deprecated, never_overwrite) is defined in devsystem-sync.json at [WORKSPACE_FOLDER] root. Remove this entire section if your repo is SELF-CONTAINED.
 
 ## Project Info
 

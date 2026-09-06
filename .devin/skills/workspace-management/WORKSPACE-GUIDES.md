@@ -30,7 +30,7 @@ DevRepo structure:
 - [AGENT_FOLDER]/ (rules, workflows, skills)
 - knowledge/ (knowledge bundles)
 - rules/ (rules bundles from Company)
-- _PrivateSessions/ or session folders
+- _sessions/ (session folders)
 
 ProductRepo structure:
 - README.md (from PRODUCT_REPO_README_TEMPLATE.md)

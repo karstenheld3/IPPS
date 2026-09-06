@@ -2,7 +2,7 @@
 
 **Goal**: Prevent drift between `[DEVSYSTEM_FOLDER]`, `[AGENT_FOLDER]`, and linked repos when changing skills, workflows, or versions.
 
-**Why**: Skills and categories are duplicated across `NOTES.md`, `deploy-to-all-repos.md`, and every linked repo. Missing a step silently propagates stale or unregistered content.
+**Why**: Skills and categories are duplicated across `NOTES.md` and every synced repo. Missing a step silently propagates stale or unregistered content.
 
 **Acronyms**: SOP = Standard Operating Procedure. MNF = MUST-NOT-FORGET.
 
@@ -17,9 +17,9 @@
 ## MUST-NOT-FORGET
 
 - `[DEVSYSTEM_FOLDER]` is the source of truth. Never edit `.devin/` directly
-- `NOTES.md [SKILL_CATEGORIES]` and `deploy-to-all-repos.md $skillCategories` must stay in sync (duplicated list — weakness)
-- Every new skill MUST be added to either `Development` or `Personal` in `[SKILL_CATEGORIES]` and `$skillCategories`. Unregistered skills are silently excluded from deployment.
-- Sync `[DEVSYSTEM_FOLDER]` → `.devin/` BEFORE running `/deploy-to-all-repos`
+- `NOTES.md [SKILL_CATEGORIES]` must stay in sync with skills/ folder contents
+- Every new skill MUST be added to either `Development` or `Personal` in `[SKILL_CATEGORIES]`. Unregistered skills are silently excluded from sync.
+- Sync `[DEVSYSTEM_FOLDER]` → `.devin/` BEFORE running `/sync workspace`
 - `Copy-Item -Recurse -Force` does NOT delete files that no longer exist at source — deletions require explicit `Remove-Item`
 - Every SOP ends with a verification step before you can consider the change complete
 - All prior DevSystem releases MUST be backed up in `[WORKSPACE]\_OldDevSystemVersions\` before deletion (SOP 4 step 6)
@@ -38,13 +38,13 @@
 
 ## Quick Reference: Sync Command
 
-Sync `[DEVSYSTEM_FOLDER]` → `.devin/` after any edit to source. Referenced by NOTES.md "deploy" keyword.
+Sync `[DEVSYSTEM_FOLDER]` → `.devin/` after any edit to source. Referenced by NOTES.md "sync" keyword.
 
 ```powershell
 Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
 ```
 
-**Note**: `Copy-Item` does NOT remove files deleted at source. For removal, see SOP 2 (file) or SOP 3 (skill).
+**Note**: `Copy-Item` does NOT remove files deleted at source. For removal, see SOP 2 (file) or SOP 3 (skill). Use `/sync workspace` with `sync.ps1 -execute` for full sync including deletions via `deprecated` patterns in `devsystem-sync.json`.
 
 ## SOP 1: New Skill Created
 
@@ -59,8 +59,9 @@ Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recur
 2. **Register skill** in `[WORKSPACE]/NOTES.md` `[SKILL_CATEGORIES]`:
    - Append `<skill>` to `Development` or `Personal` list (alphabetical order)
 
-3. **Mirror registration** in `[WORKSPACE]/deploy-to-all-repos.md`:
-   - Append `"<skill>"` to the matching array in `$skillCategories` hashtable (search for `"Development" = @(` or `"Personal" = @(`)
+3. **Register skill** in `devsystem-sync.json` at target `[WORKSPACE_FOLDER]` root:
+   - Add skill to appropriate bundle include patterns in source entry
+   - Sync will distribute to all targets that select that bundle
 
 4. **If skill introduces a workflow**: also create `[DEVSYSTEM_FOLDER]/workflows/<name>.md`
 
@@ -78,11 +79,11 @@ Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recur
 Test-Path "[DEVSYSTEM_FOLDER]\skills\<skill>\SKILL.md"
 Test-Path "[WORKSPACE]\.devin\skills\<skill>\SKILL.md"
 
-# 2. Skill registered in both registries (should print 2 matches)
-Select-String -Path "[WORKSPACE]\NOTES.md","[WORKSPACE]\deploy-to-all-repos.md" -Pattern "<skill>"
+# 2. Skill registered in NOTES.md
+Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "<skill>"
 
-# 3. Deploy preview includes skill in Add for "All" repos and (if Development) Development repos
-# Run deploy-to-all-repos in preview mode (no confirm) and check Excluded skills does NOT contain <skill>
+# 3. Sync preview includes skill in Add for synced repos
+# Run /sync workspace in diff mode and check new skill appears in Add list
 ```
 
 ## SOP 2: Skill File Added or Removed
@@ -94,14 +95,14 @@ Select-String -Path "[WORKSPACE]\NOTES.md","[WORKSPACE]\deploy-to-all-repos.md" 
 **Adding a file**:
 1. Create in `[DEVSYSTEM_FOLDER]/skills/<skill>/<new-file>`
 2. Sync: `Copy-Item [DEVSYSTEM_FOLDER]\* .devin\ -Recurse -Force`
-3. Deploy preview shows file in `Add` for all repos → confirm and deploy
+3. **Deploy preview shows file in `Add` for all repos** → confirm and run `/sync workspace -execute`
 
 **Removing a file**:
 1. Delete from `[DEVSYSTEM_FOLDER]/skills/<skill>/<old-file>`
 2. Delete from `[WORKSPACE]/.devin/skills/<skill>/<old-file>` (sync does NOT remove)
-3. **Known gap**: current `deploy-to-all-repos.md` does not remove orphaned files from target repos unless listed in `$deprecatedFiles`. Two options:
-   - **Acceptable**: leave stale file in linked repos (no harm if unreferenced)
-   - **Full cleanup**: manually delete from each linked repo, or extend `$deprecatedFiles` (see SOP 3 pattern)
+3. **Known gap**: `Copy-Item` sync does not remove orphaned files from target repos. Use `deprecated` patterns in `devsystem-sync.json` for full cleanup via `sync.ps1 -execute`. Two options:
+   - **Acceptable**: leave stale file in synced repos (no harm if unreferenced)
+   - **Full cleanup**: add file pattern to `deprecated` array in `devsystem-sync.json`, run `/sync workspace -execute`
 
 ### Verification
 
@@ -139,19 +140,17 @@ Test-Path "[WORKSPACE]\.devin\skills\<skill>\<old-file>"
 
 2. **Unregister from `NOTES.md`** `[SKILL_CATEGORIES]`: remove `<skill>` from its list
 
-3. **Unregister from `deploy-to-all-repos.md`**: remove `"<skill>"` from `$skillCategories` hashtable
+3. **Add to deprecated patterns** in `devsystem-sync.json`:
+   - Add `skills/<skill>/*` to `deprecated` array in relevant source entry
+   - This triggers deletion in synced repos on next `/sync workspace -execute`
 
-4. **Add to deprecated list** in `deploy-to-all-repos.md`:
-   - Append `<skill>` to `$deprecatedSkillFolders` array (search for `$deprecatedSkillFolders = @(`)
-   - This triggers deletion in linked repos on next deploy
-
-5. **Document migration** in `deploy-to-all-repos.md` "Deprecated Files" section:
+4. **Document migration** in NOTES.md or session NOTES.md:
    ```markdown
    ### V3.x Migration (Deprecated Skills)
    - `skills/<skill>/` → removed (migrated to `<replacement>` or obsolete)
    ```
 
-6. **If skill had a TOPIC**: mark deprecated in `ID-REGISTRY.md` (do NOT delete, keep history)
+5. **If skill had a TOPIC**: mark deprecated in `ID-REGISTRY.md` (do NOT delete, keep history)
 
 ### Verification
 
@@ -162,11 +161,10 @@ Test-Path "[WORKSPACE]\.devin\skills\<skill>\<old-file>"
 
 # 2. Skill NOT in active registries
 Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "\b<skill>\b"  # should return nothing
-# deploy-to-all-repos.md should list it ONLY in $deprecatedSkillFolders, not in $skillCategories
+# devsystem-sync.json should list it ONLY in deprecated, not in bundle includes
 
-# 3. Deploy preview shows "Delete: skills\<skill>" for each linked repo that still has it
-# After deploy: verify folder gone from every linked repo
-foreach ($r in $linkedRepos) { Test-Path "$r\skills\<skill>" }  # all should be False
+# 3. Sync preview shows "Delete: skills\<skill>" for each synced repo that still has it
+# After /sync workspace -execute: verify folder gone from every synced repo
 ```
 
 ## SOP 4: DevSystem Version Changed
@@ -189,11 +187,11 @@ foreach ($r in $linkedRepos) { Test-Path "$r\skills\<skill>" }  # all should be 
    Copy-Item -Path "[WORKSPACE]\DevSystemV3.7\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
    ```
 
-4. **Document migration** in `[WORKSPACE]/deploy-to-all-repos.md`:
-   - Add section `### V3.6 → V3.7 Migration` under "Deprecated Files (Allowlist)"
+4. **Document migration** in NOTES.md or session NOTES.md:
+   - Add section `### V3.6 → V3.7 Migration` under deprecated notes
    - List renamed/removed files and their replacements
-   - If files were deleted: add to `$deprecatedFiles` hashtable (by folder: `rules`, `workflows`)
-   - If skills were removed: add to `$deprecatedSkillFolders`
+   - If files were deleted: add patterns to `deprecated` array in `devsystem-sync.json`
+   - If skills were removed: add `skills/<skill>/*` to `deprecated`
 
 5. **Update SOPs and docs with new version**:
    - `SOPS.md` example paths reference `DevSystemV3.6` in comments — update to new version
@@ -213,7 +211,7 @@ foreach ($r in $linkedRepos) { Test-Path "$r\skills\<skill>" }  # all should be 
 
 8. **Commit before deploying**: new version is a major change, isolate in git history
 
-9. **Deploy to linked repos** via `/deploy-to-all-repos` (always preview first)
+9. **Sync to linked repos** via `/sync workspace` (always preview with `-diff` first)
 
 ### Verification
 
@@ -230,8 +228,8 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "Current \[DEVSYSTEM\]:"
 (Get-ChildItem "[WORKSPACE]\DevSystemV3.7" -Recurse -File).Count
 (Get-ChildItem "[WORKSPACE]\.devin"      -Recurse -File).Count
 
-# 4. Deploy preview shows migration diffs only (no unexpected drift)
-# Run /deploy-to-all-repos in preview, expect:
+# 4. Sync preview shows migration diffs only (no unexpected drift)
+# Run /sync workspace -diff, expect:
 # - Old-version-specific deprecated files in Delete list
 # - Renamed/new files in Add list
 # - No Overwrites for files that should be unchanged
@@ -347,9 +345,9 @@ Expected: 15 OK, 0 FAIL (5 targets x 3 files).
 
 3. **Remove from `README.md`** workflow list, update count
 
-4. **If workflow exists in linked repos**: add to `$deprecatedFiles` in `deploy-to-all-repos.md`:
-   - Search for `"workflows" = @(` in `$deprecatedFiles` hashtable
-   - Append `"<workflow>.md"` to the array
+4. **If workflow exists in synced repos**: add to `deprecated` patterns in `devsystem-sync.json`:
+   - Add `workflows/<workflow>.md` to `deprecated` array in relevant source entry
+   - Next `/sync workspace -execute` will delete it from synced repos
 
 5. **If workflow had a TOPIC**: mark deprecated in `ID-REGISTRY.md` (keep history)
 
@@ -382,8 +380,8 @@ Test-Path "[AGENT_FOLDER]\workflows\<workflow>.md"
 Select-String -Path "[DEVSYSTEM_FOLDER]\rules\devsystem-core.md" -Pattern "<workflow>"  # should return nothing
 Select-String -Path "[WORKSPACE]\README.md" -Pattern "<workflow>"  # should return nothing
 
-# 3. Listed in $deprecatedFiles (if deployed to linked repos)
-Select-String -Path "[WORKSPACE]\deploy-to-all-repos.md" -Pattern "<workflow>"
+# 3. Listed in deprecated (if deployed to synced repos)
+Select-String -Path "[WORKSPACE]\devsystem-sync.json" -Pattern "<workflow>"
 ```
 
 ## SOP 7: Post-Release Version Bump
@@ -449,8 +447,8 @@ Get-ChildItem -Path "[WORKSPACE]\DevSystemV3.6","[WORKSPACE]\.devin" -Recurse -D
 ```powershell
 # Extract skills from NOTES.md
 $notes = (Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "^\- \*\*Development\*\*:").Line
-# Extract from deploy-to-all-repos.md
-$deploy = (Select-String -Path "[WORKSPACE]\deploy-to-all-repos.md" -Pattern '"Development" = @\(').Line
+# Verify all skills in skills/ folder are registered
+Get-ChildItem "[DEVSYSTEM_FOLDER]\skills" -Directory | ForEach-Object { $_.Name } | Sort-Object
 # Visually compare — they must list identical skills
 ```
 
@@ -477,9 +475,9 @@ Mandatory before any release (SOP 4 step 7). Detects references to non-existing 
 
 Expected: `None found!` (zero broken references). Any match must be fixed before release.
 
-### Linked repo drift check
+### Synced repo drift check
 
-Run `/deploy-to-all-repos` in preview mode. Any unexpected items in `Add` / `Overwrite` / `Delete` indicate a missed sync or unregistered skill.
+Run `/sync workspace -diff` in preview mode. Any unexpected items in `Add` / `Modify` / `Delete` indicate a missed sync or unregistered skill.
 
 ## Document History
 

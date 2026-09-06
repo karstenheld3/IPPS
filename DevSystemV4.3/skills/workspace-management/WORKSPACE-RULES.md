@@ -15,19 +15,20 @@ Constants (CT)
 - WS-CT-03: Constants must use [WORKSPACE_FOLDER] as base where applicable
 - WS-CT-04: [WORKSPACE_FOLDER] and [WORKSPACE_FILE] must not be conflated
 - WS-CT-05: Projects must use local environments by default
+- WS-CT-06: Synced repos must have devsystem-sync.json at [WORKSPACE_FOLDER] root
 
 Structure (ST)
-- WS-ST-01: Agent folder must contain rules/, workflows/, skills/ subfolders
+- WS-ST-01: Agent folder must contain specs/, workflows/, skills/ subfolders
 - WS-ST-02: All skills in [SKILL_CATEGORIES] must exist in skills/ folder
 - WS-ST-03: All skills in skills/ folder must be registered in [SKILL_CATEGORIES]
 - WS-ST-04: No deprecated files in agent folder
 
 Sync (SY)
-- WS-SY-01: SyncPolicy direction must be "downstream" or "upstream"
-- WS-SY-02: SyncPolicy must define source_folder and target_folder
-- WS-SY-03: Preserve list files must not be overwritten during sync
-- WS-SY-04: .sync-timestamp must be created after sync completes
-- WS-SY-05: Locally-modified files not in preserve list must trigger warning before overwrite
+- WS-SY-01: devsystem-sync.json source paths must be relative
+- WS-SY-02: devsystem-sync.json must define source, selected_bundles, bundles, include, exclude, deprecated, never_overwrite per source entry
+- WS-SY-03: never_overwrite files must not be overwritten or deleted during sync
+- WS-SY-04: last_sync timestamp must be updated after successful execute
+- WS-SY-05: Source repo is read-only during downstream sync
 
 Templates (TM)
 - WS-TM-01: Templates must use _TEMPLATE suffix
@@ -54,8 +55,8 @@ GOOD: All 6 required files present in DevRepo root
 ## WS-CT-01: Required Workspace Constants
 
 DevRepo NOTES.md must define all required workspace constants:
-- Always required: [WORKSPACE_FOLDER], [DEV_REPO_FOLDER], [PRODUCT_REPO_FOLDER], [KNOWLEDGE_FOLDER], [RULES_FOLDER], [PRODUCT_DOCS_FOLDER]
-- Required for SYNCED only: [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER], [RULES_SOURCE_FOLDER]
+- Always required: [WORKSPACE_FOLDER], [DEV_REPO_FOLDER], [PRODUCT_REPO_FOLDER], [KNOWLEDGE_FOLDER], [SPECS_FOLDER], [PRODUCT_DOCS_FOLDER]
+- Required for SYNCED only: [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER], [SPECS_SOURCE_FOLDER]
 - Required for WORKSPACE mode only: [WORKSPACE_FILE]
 - SELF-CONTAINED repos pass without sync source constants
 
@@ -94,33 +95,47 @@ Every **source-code repo** (typically ProductRepo) must use a local runtime envi
 BAD: Running `npm install -g express` globally - version conflicts, no reproducibility
 GOOD: `.nvmrc` + `npm install` in project root - isolated, reproducible
 
+## WS-CT-06: devsystem-sync.json Required for SYNCED Repos
+
+SYNCED repos must have a devsystem-sync.json at [WORKSPACE_FOLDER] root. SELF-CONTAINED repos do not need one.
+
+BAD: SYNCED repo with no devsystem-sync.json - sync script cannot find configuration
+GOOD: devsystem-sync.json at [WORKSPACE_FOLDER] root with sources, bundles, and filters defined
+
 ## WS-ST-01: Agent Folder Structure
 
-Agent folder must contain rules/, workflows/, skills/ subfolders.
+Agent folder must contain specs/, workflows/, skills/ subfolders.
 
-BAD: Agent folder has rules/ and workflows/ but no skills/ - skills cannot be loaded
+BAD: Agent folder has specs/ and workflows/ but no skills/ - skills cannot be loaded
 GOOD: Agent folder has all three subfolders with content
 
 ## WS-ST-02: Skills Registered in CATEGORIES
 
 All skills present in skills/ folder must be registered in NOTES.md [SKILL_CATEGORIES].
 
-BAD: skills/pdf-tools/ exists but not in [SKILL_CATEGORIES] - skill is invisible to deploy-to-all-repos
+BAD: skills/pdf-tools/ exists but not in [SKILL_CATEGORIES] - skill is invisible to sync
 GOOD: All skill folders have corresponding entry in [SKILL_CATEGORIES]
 
-## WS-SY-01: Valid SyncPolicy Direction
+## WS-SY-01: Relative Source Paths in devsystem-sync.json
 
-SyncPolicy direction field must be "downstream" or "upstream".
+devsystem-sync.json source paths must be relative (e.g., `../IPPS/DevSystemV4.3`), not absolute.
 
-BAD: direction: "both" - ambiguous, sync script cannot determine operation
-GOOD: direction: "downstream" - clear, sync copies source to target
+BAD: source: "e:\\Dev\\IPPS\\DevSystemV4.3" - machine-specific, breaks portability
+GOOD: source: "../IPPS/DevSystemV4.3" - portable across machines
 
-## WS-SY-03: Preserve List Enforcement
+## WS-SY-02: devsystem-sync.json Source Entry Validation
 
-Files listed in preserve list must never be overwritten during sync, regardless of source changes.
+Each source entry in devsystem-sync.json must define: source, selected_bundles, bundles, include, exclude, deprecated, never_overwrite.
 
-BAD: Sync overwrites NOTES.md because source has newer version, destroying local customizations
-GOOD: Sync skips NOTES.md because it is in preserve list, local customizations preserved
+BAD: Source entry missing 'never_overwrite' array - sync script cannot protect files from overwrite
+GOOD: All 7 required fields present per source entry
+
+## WS-SY-03: never_overwrite Enforcement
+
+Files matching never_overwrite patterns must never be overwritten or deleted during sync, regardless of source changes or deprecated status.
+
+BAD: Sync overwrites 'specs/sops/project-release.md' because source has newer version, destroying local customizations
+GOOD: Sync skips 'specs/sops/project-release.md' because it matches never_overwrite pattern
 
 ## WS-TM-01: Template Suffix
 

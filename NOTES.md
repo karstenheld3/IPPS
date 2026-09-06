@@ -103,16 +103,49 @@ Automatically push commits to GitHub.
 
 ## Special Workflows (Workspace Root)
 
-**`deploy-to-all-repos.md`** — deploys to linked repos. Lives at workspace root (not `.devin/workflows/`) so it's not propagated. Procedures: `SOPS.md` SOP 4.
+**`deploy-to-all-repos.md`** — LEGACY, replaced by `/sync workspace` (FR-49). Will be deleted after migration to `sync.ps1`.
 
 **CRITICAL: NEVER auto-deploy to [LINKED_REPOS]**. Always ask user before deploying to linked repos. Deployment to linked repos is a separate, explicit action.
 
-**[SKILL_CATEGORIES]**:
+## Sync Architecture Revision (2026-09-06)
+
+**Folder rename**: `[WORKSPACE_FOLDER]\rules` → `[WORKSPACE_FOLDER]\specs` (pending `/rename` execution)
+- `\specs` contains all SPEC, IMPL, TEST files
+- `\specs\sops` contains advanced SOPs referenced in SOPS.md
+- `\specs\guides` contains guides and how-tos
+
+**Single script**: `sync.ps1` in workspace-management skill
+- `-diff -sources [array] -targets [array] -configs [array] -output-file [path]` → produces additions, changes, deletions
+- `-execute [same params]` → executes sync
+- All params are JSON arrays but also support single strings
+- If `-output-file` present, console just summarizes numbers; full report goes to file
+
+**devsystem-sync.json at target `[WORKSPACE_FOLDER]` root**:
+- Single source of truth for ALL sync configuration
+- Each source entry carries its own complete config: bundle definitions, selected_bundles, include/exclude refiners, deprecated, never_overwrite
+- NO sync-bundles.json at source — source is purely a content provider
+- Source repo only maintains a list of relative paths to synced repos (for push operations)
+
+**Source repo**: Only references RELATIVE downstream repo paths (e.g., `../Lana-V2-Dev`), never absolute
+
+**Use cases** (implemented in `sync.md` workflow):
+- `/sync workspace settings from repo xyz` — merges/replicates NOTES.md + devsystem-sync.json into current repo
+- `/sync workspace settings to repo xyz` — merges/replicates NOTES.md + devsystem-sync.json into target repo
+- `/sync sync settings from repo xyz` — only devsystem-sync.json into current repo
+- `/sync sync settings to repo xyz` — only devsystem-sync.json into target repo
+- `/sync knowledge from source` — reads source from devsystem-sync.json, runs sync.ps1 -diff, preview, auto-execute on confirm
+- `/sync knowledge to targets` — reads targets from source NOTES.md synced repos list, runs sync.ps1 -diff, preview, auto-execute on confirm
+- `/sync specs from source` — same flow for specs
+- `/sync specs to targets` — same flow for specs
+
+## [SKILL_CATEGORIES]
+
 - **Development**: coding-conventions, deep-research, drift-correction, edird-phase-planning, git, git-conventions, github, hosting, image-tools, llm-computer-use, llm-evaluation, llm-transcription, ms-playwright-mcp, pdf-tools, playwriter-mcp, seo-tools, session-management, windows-desktop-control, windsurf-auto-model-switcher, workspace-management, write-documents, youtube-downloader
 - **Personal**: google-account, travel-info
 - **All**: Development + Personal (all skills)
 
-**[PERSONAL_WORKFLOWS]** (excluded from Development-only repos, deployed only to "All" repos):
+## [PERSONAL_WORKFLOWS] (excluded from Development-only repos, deployed only to "All" repos)
+
 - conversation-start.md
 - conversation-update.md
 

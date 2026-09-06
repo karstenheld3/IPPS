@@ -494,16 +494,26 @@ Read @skills:workspace-management SKILL.md, WORKSPACE-RULES.md, and WORKSPACE-GU
 
 Verification checklist (sourced from WORKSPACE-RULES.md):
 
-1. Read workspace constants from DevRepo NOTES.md
-2. Check required constants (8): [DEV_REPO_FOLDER], [PRODUCT_REPO_FOLDER], [COMPANY_REPO_FOLDER], [KNOWLEDGE_FOLDER], [KNOWLEDGE_SOURCE_FOLDER], [RULES_FOLDER], [RULES_SOURCE_FOLDER], [PRODUCT_DOCS_FOLDER]
-3. Check required files per workspace type:
+1. Detect sync relationship (SYNCED or SELF-CONTAINED) by checking for sync markers:
+   - devsystem-sync.json at [WORKSPACE_FOLDER] root
+   - [SYNCED_REPOS] in source NOTES.md
+   - [KNOWLEDGE_SOURCE_FOLDER], [SPECS_SOURCE_FOLDER], [DEVSYSTEM] constants defined
+2. Read workspace constants from DevRepo NOTES.md
+3. If SYNCED: check all 8 constants (5 base + 3 sync source):
+   - Base: [DEV_REPO_FOLDER], [PRODUCT_REPO_FOLDER], [KNOWLEDGE_FOLDER], [SPECS_FOLDER], [PRODUCT_DOCS_FOLDER]
+   - Sync source: [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER], [SPECS_SOURCE_FOLDER]
+   - Check devsystem-sync.json exists at [WORKSPACE_FOLDER] root
+   - Check source paths in devsystem-sync.json resolve to valid paths
+4. If SELF-CONTAINED: check 5 base constants only, skip sync source constant checks
+5. Check required files per workspace type:
    - DevRepo: NOTES.md, PROBLEMS.md, PROGRESS.md, ID-REGISTRY.md, SOPS.md, FAILS.md
    - ProductRepo: README.md
    - CompanyRepo (if exists): NOTES.md
-4. Check agent folder structure: rules/, workflows/, skills/ subfolders exist
-5. Check skill registration: all skills in skills/ folder are in [SKILL_CATEGORIES], and vice versa
-6. Check workspace structure matches declared mode (SINGLE-PROJECT, MONOREPO, WORKSPACE)
-7. Check no deprecated files in agent folder
+6. Check agent folder structure: specs/, workflows/, skills/ subfolders exist
+7. Check skill registration: all skills in skills/ folder are in [SKILL_CATEGORIES], and vice versa
+8. Check workspace structure matches declared mode (SINGLE-PROJECT, MONOREPO, WORKSPACE)
+9. Check no deprecated files in agent folder
+10. Report sync relationship state (SYNCED or SELF-CONTAINED)
 
 Fix actions per gap type:
 - Missing constant -> add with template default from DEV_REPO_NOTES_TEMPLATE.md

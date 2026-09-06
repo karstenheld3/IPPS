@@ -68,11 +68,9 @@ Questions for WORKSPACE mode:
     Impact: Folder where rules, workflows, skills are synced from DevSystem source.
     Some projects use a custom name (e.g., .lana) for product-bundled prompt systems.
 
-3d) Sessions folder name: [_Sessions] or [_PrivateSessions]
-    Default: [_PrivateSessions] (gitignored, for private work)
-    Alternative: [_Sessions] (tracked in git, for shared work)
-    Impact: Where /session-new creates session folders. If gitignored, sessions 
-    are private. If tracked, sessions are visible in git history.
+3d) Sessions folder name: [_sessions]
+    Default: [_sessions]
+    Impact: Where /session-new creates session folders. Lowercase with underscore prefix.
 
 3e) SOPS file name: [SOPS.md] or [_SOPS.md]
     Default: [SOPS.md]
@@ -219,12 +217,14 @@ After all sections answered, generate these files:
   ID-REGISTRY.md              <- with project topic
   SOPS.md                     <- from SOPS template or minimal
   FAILS.md                    <- empty tracking file
+  _WORKSPACE_CREATION_QUESTIONNAIRE.md <- questionnaire for remaining sections
   [AGENT_FOLDER]\             <- sync from DevSystem source
     rules\
     workflows\
     skills\
-  [DEFAULT_SESSIONS_FOLDER]\  <- empty folder
-  Docs\ReleaseNotes\          <- empty folder (if release configured)
+  _sessions\                 <- empty folder
+  _sessions\_archive\        <- empty folder (session archive)
+  docs\ReleaseNotes\          <- empty folder (if release configured)
 ```
 
 ### WORKSPACE Mode
@@ -238,13 +238,15 @@ After all sections answered, generate these files:
   ID-REGISTRY.md              <- with project topic
   _SOPS.md                    <- from SOPS template or minimal
   FAILS.md                    <- empty tracking file
+  _WORKSPACE_CREATION_QUESTIONNAIRE.md <- questionnaire for remaining sections
   [AGENT_FOLDER]\             <- sync from DevSystem source
     rules\
     workflows\
     skills\
   knowledge\                  <- empty folder
   rules\                      <- empty folder
-  [DEFAULT_SESSIONS_FOLDER]\  <- empty folder
+  _sessions\                 <- empty folder
+  _sessions\_archive\        <- empty folder (session archive)
 
 [PRODUCT_REPO_FOLDER]\
   README.md                   <- from PRODUCT_REPO_README_TEMPLATE.md

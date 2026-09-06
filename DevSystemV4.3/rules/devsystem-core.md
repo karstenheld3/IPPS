@@ -13,6 +13,10 @@ Core definitions and structure for the development system.
 - **[WORKSPACE]**: The Windsurf/VSCode workspace root folder
 - **[PROJECT]**: If Monorepo (workspace contains multiple projects), the project subfolder. No Monorepo: Workspace = Project
 - **[SESSION]**: All context belonging to a work session - folder, files, conversations, commits, and tracking files (notes, problems, progress)
+- **[DEVSYSTEM]**: The agent's operating framework - a versioned folder (e.g., `DevSystemV4.3`) containing specs, workflows, and skills that define agent behavior. The DevSystem is the source of truth for agent configuration. It is synced to `[AGENT_FOLDER]` (e.g., `.devin/`) so the agent can load rules, workflows, and skills at runtime. A workspace may be SYNCED (receives DevSystem updates from an upstream source) or SELF-CONTAINED (manages its own DevSystem locally)
+- **[SPECS_FOLDER]**: Folder at `[WORKSPACE_FOLDER]/specs/` containing shared specifications, design guidelines, and SOPs synced from an upstream source via `devsystem-sync.json`. Replaces the former `rules/` folder. Specs are read-only from the agent's perspective during sync - local modifications are preserved via `never_overwrite` patterns. In SELF-CONTAINED repos, specs are authored locally without sync
+- **[KNOWLEDGE_FOLDER]**: Folder at `[WORKSPACE_FOLDER]/knowledge/` containing reference documents organized as knowledge bundles (topic folders with `.md` files). Synced from an upstream source via `devsystem-sync.json` bundle configuration. Knowledge bundles are topic-specific (e.g., `Windsurf/`, `AI-Standards/`) and selected per-repo via `selected_bundles` in the sync config. In SELF-CONTAINED repos, knowledge is authored locally
+- **[DEVSYSTEM_SYNC_CONFIG]**: `devsystem-sync.json` file at `[WORKSPACE_FOLDER]` root. Single source of truth for sync configuration: defines source paths, bundle definitions, include/exclude filters, deprecated files, and never_overwrite patterns. Only present in SYNCED repos. Managed by `sync.ps1` script and `/sync workspace` workflow
 
 ### Agent Folder
 
@@ -22,7 +26,7 @@ Core definitions and structure for the development system.
 
 ### Configuration
 
-- **[RULES]**: The current set of agent rules in `[AGENT_FOLDER]/rules/`
+- **[RULES]**: The current set of agent specs in `[AGENT_FOLDER]/specs/`
 - **[WORKFLOWS]**: The current set of agent workflows in `[AGENT_FOLDER]/workflows/`
 - **[SKILLS]**: Agent Skills in `[AGENT_FOLDER]/skills/`
 - **[GRUC]**: Guides, Rules, Checks - pre-calculated compliance criteria. GUIDE + RULES in each skill folder; CHECKS in each skill folder (for skills) or `drift-correction/` (for workflows). Exception: `write-documents` keeps all GRUC types in its own folder.
@@ -112,6 +116,13 @@ Three dimensions define how the agent should behave:
 - **SESSION-MODE** - Time-limited session with specific goals
 - **PROJECT-MODE** - Work spans entire project without session boundaries
 
+### Dimension 4: Sync Relationship
+
+- **SYNCED** - Repo participates in a sync dependency tree (has upstream sources and/or downstream targets)
+- **SELF-CONTAINED** - Repo manages all content locally, no sync relationships
+- Detection: based on presence of sync markers (devsystem-sync.json, [SYNCED_REPOS], [*_SOURCE_FOLDER], [DEVSYSTEM])
+- Orthogonal to existing 3 dimensions
+
 ## Folder Structure
 
 ### Single Project (No Monorepo)
@@ -119,7 +130,7 @@ Three dimensions define how the agent should behave:
 ```
 [WORKSPACE_FOLDER]/
 ├── [AGENT_FOLDER]/
-│   ├── rules/              # Agent rules (.md files)
+│   ├── specs/               # Agent specs (.md files)
 │   ├── workflows/          # Agent workflows (.md files)
 │   └── skills/             # Agent Skills (folders with SKILL.md)
 ├── _Archive/               # Archived sessions
@@ -144,7 +155,7 @@ Three dimensions define how the agent should behave:
 ```
 [WORKSPACE_FOLDER]/
 ├── [AGENT_FOLDER]/
-│   ├── rules/              # Workspace-level rules
+│   ├── specs/               # Workspace-level specs
 │   ├── workflows/          # Workspace-level workflows
 │   └── skills/             # Workspace-level skills
 ├── _Archive/               # Archived sessions (all projects)

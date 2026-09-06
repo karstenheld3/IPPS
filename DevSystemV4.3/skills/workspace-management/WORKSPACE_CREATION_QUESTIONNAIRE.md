@@ -26,8 +26,9 @@ Question: What workspace mode do you need?
 Default: [1] SINGLE-PROJECT
 ```
 
-<!-- If user selects SINGLE-PROJECT, skip Section 2 (Product Repo) and Section 5 (Sync Sources). 
-     If user selects WORKSPACE, all sections apply. -->
+<!-- If user selects SINGLE-PROJECT, skip Section 2 (Product Repo) and Section 5 (Sync Sources).
+     If user selects WORKSPACE, all sections apply. If Section 5 answer is SELF-CONTAINED,
+     skip questions 5b through 5h and omit sync source constants from NOTES.md. -->
 
 ## Section 2: Product Repo
 
@@ -65,14 +66,12 @@ Questions for WORKSPACE mode:
 
 3c) Agent folder name: [.devin]
     Default: [.devin]
-    Impact: Folder where rules, workflows, skills are synced from DevSystem source.
+    Impact: Folder where specs, workflows, skills are synced from DevSystem source.
     Some projects use a custom name (e.g., .lana) for product-bundled prompt systems.
 
-3d) Sessions folder name: [_Sessions] or [_PrivateSessions]
-    Default: [_PrivateSessions] (gitignored, for private work)
-    Alternative: [_Sessions] (tracked in git, for shared work)
-    Impact: Where /session-new creates session folders. If gitignored, sessions 
-    are private. If tracked, sessions are visible in git history.
+3d) Sessions folder name: [_sessions]
+    Default: [_sessions]
+    Impact: Where /session-new creates session folders. Lowercase with underscore prefix.
 
 3e) SOPS file name: [SOPS.md] or [_SOPS.md]
     Default: [SOPS.md]
@@ -138,25 +137,63 @@ Questions for WORKSPACE mode:
 ```
 Questions for WORKSPACE mode:
 
-5a) DevSystem source path: [WORKSPACE_FOLDER]\..\[devsystem-source-name]\DevSystemV*
+5a) Sync relationship: SYNCED or SELF-CONTAINED?
+    1) SYNCED - Repo receives updates from upstream sources
+       Impact: Creates devsystem-sync.json at [WORKSPACE_FOLDER] root.
+       Sync source constants defined in NOTES.md. /sync workspace distributes
+       content from source repos. Use for repos in a multi-workspace sync tree.
+
+    2) SELF-CONTAINED - Repo manages all content locally
+       Impact: No devsystem-sync.json. No sync source constants in NOTES.md.
+       Use for standalone projects, prototypes, or repos with custom content
+       that does not need upstream sync.
+
+    Default: [1] SYNCED
+
+5b) DevSystem source path: [WORKSPACE_FOLDER]\..\[devsystem-source-name]\DevSystemV*
     Default: [WORKSPACE_FOLDER]\..\IPPS\DevSystemV*
-    Impact: Where rules, workflows, skills are synced FROM. Agent folder 
-    (.devin) is the sync TARGET. /sync from source updates agent folder.
+    Impact: Where specs, workflows, skills are synced FROM. Agent folder
+    (.devin) is the sync TARGET. /sync workspace updates agent folder
+    from this source. Configured as a source entry in devsystem-sync.json.
+    Skip if SELF-CONTAINED.
 
-5b) Company folder path: [WORKSPACE_FOLDER]\..\Company
+5c) Company folder path: [WORKSPACE_FOLDER]\..\Company
     Default: [WORKSPACE_FOLDER]\..\Company
-    Impact: Central source for knowledge and rules bundles. Shared across 
-    multiple workspaces. /sync distributes content from here to downstream repos.
+    Impact: Central source for knowledge and specs bundles. Shared across
+    multiple workspaces. /sync workspace distributes content from here
+    to downstream repos. Skip if SELF-CONTAINED.
 
-5c) Knowledge folder: [DEV_REPO_FOLDER]\knowledge
+5d) Knowledge folder: [DEV_REPO_FOLDER]\knowledge
     Default: [DEV_REPO_FOLDER]\knowledge
-    Impact: Where reference docs are stored in dev repo. Synced from Company 
-    knowledge folder if configured.
+    Impact: Where reference documents are stored in dev repo. Synced from
+    Company knowledge folder via devsystem-sync.json bundle configuration.
+    Created as empty folder during workspace generation.
 
-5d) Rules folder: [DEV_REPO_FOLDER]\rules
-    Default: [DEV_REPO_FOLDER]\rules
-    Impact: Where rules are stored in dev repo. Synced from Company rules 
-    folder if configured.
+5e) Specs folder: [DEV_REPO_FOLDER]\specs
+    Default: [DEV_REPO_FOLDER]\specs
+    Impact: Where shared specs, design guidelines, and SOPs are stored in
+    dev repo. Synced from Company specs folder via devsystem-sync.json
+    bundle configuration. Created as empty folder during workspace generation.
+    Replaces the former 'rules' folder.
+
+5f) Knowledge bundles to select:
+    Default: [] (empty - select during first /sync workspace)
+    Impact: Bundle names from Company knowledge folder to sync to this repo.
+    Configured in devsystem-sync.json selected_bundles array. Can be changed
+    later by editing the JSON config. Skip if SELF-CONTAINED.
+
+5g) Specs bundles to select:
+    Default: [] (empty - select during first /sync workspace)
+    Impact: Bundle names from Company specs folder to sync to this repo.
+    Configured in devsystem-sync.json selected_bundles array. Can be changed
+    later by editing the JSON config. Skip if SELF-CONTAINED.
+
+5h) Files to protect from overwrite (never_overwrite):
+    Default: ["NOTES.md", "!NOTES.md", "PROBLEMS.md", "!PROGRESS.md", "FAILS.md", "ID-REGISTRY.md", "SOPS.md", "_SOPS.md", "devsystem-sync.json"]
+    Impact: Glob patterns for files that sync.ps1 will never overwrite or
+    delete, even if source has newer versions or files are deprecated.
+    Protects workspace-specific customizations. Configured in
+    devsystem-sync.json never_overwrite array. Skip if SELF-CONTAINED.
 ```
 
 ## Section 6: Release Configuration
@@ -219,12 +256,14 @@ After all sections answered, generate these files:
   ID-REGISTRY.md              <- with project topic
   SOPS.md                     <- from SOPS template or minimal
   FAILS.md                    <- empty tracking file
+  _WORKSPACE_CREATION_QUESTIONNAIRE.md <- questionnaire for remaining sections
   [AGENT_FOLDER]\             <- sync from DevSystem source
-    rules\
+    specs\
     workflows\
     skills\
-  [DEFAULT_SESSIONS_FOLDER]\  <- empty folder
-  Docs\ReleaseNotes\          <- empty folder (if release configured)
+  _sessions\                 <- empty folder
+  _sessions\_archive\        <- empty folder (session archive)
+  docs\ReleaseNotes\          <- empty folder (if release configured)
 ```
 
 ### WORKSPACE Mode
@@ -238,13 +277,16 @@ After all sections answered, generate these files:
   ID-REGISTRY.md              <- with project topic
   _SOPS.md                    <- from SOPS template or minimal
   FAILS.md                    <- empty tracking file
+  _WORKSPACE_CREATION_QUESTIONNAIRE.md <- questionnaire for remaining sections
   [AGENT_FOLDER]\             <- sync from DevSystem source
-    rules\
+    specs\
     workflows\
     skills\
   knowledge\                  <- empty folder
-  rules\                      <- empty folder
-  [DEFAULT_SESSIONS_FOLDER]\  <- empty folder
+  specs\                      <- empty folder
+  _sessions\                 <- empty folder
+  _sessions\_archive\        <- empty folder (session archive)
+  devsystem-sync.json         <- sync config (if SYNCED)
 
 [PRODUCT_REPO_FOLDER]\
   README.md                   <- from PRODUCT_REPO_README_TEMPLATE.md

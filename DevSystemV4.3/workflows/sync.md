@@ -212,39 +212,51 @@ When IDs change or documents restructure:
 
 ## Workspace Sync
 
-Detect by: user runs `/sync workspace` or context is workspace-level sync.
+Detect by: user runs `/sync workspace`, `/sync knowledge`, `/sync specs`, `/sync workspace settings`, or `/sync sync settings`.
 
 Read @skills:workspace-management SKILL.md before syncing.
 
-Sync procedure:
+### Use Cases
 
-1. Read workspace constants from DevRepo NOTES.md
-2. Resolve sync policy (lookup order):
-   1. Downstream repo NOTES.md (highest priority - local customizations)
-   2. CompanyRepo NOTES.md (central defaults)
-   3. Workspace constants (fallback if no policy found)
-3. For each sync source (Prompt System, Knowledge, Rules):
-   - Read source and target paths from workspace constants
-   - Run workspace_diff_template.ps1 with Source, Target, Filter parameters
-   - Review structured diff report
-   - Mark locally-modified files (modified after .sync-timestamp)
-   - Mark breaking changes (structural changes requiring content migration)
-4. Show preview to user:
+**`/sync workspace settings from repo xyz`** — compares NOTES.md and devsystem-sync.json from repo xyz, merges or replicates them into current repo. Merge strategy: target files win for fields that exist in both; source-only fields are added.
+
+**`/sync workspace settings to repo xyz`** — compares NOTES.md and devsystem-sync.json from current repo, merges or replicates them into target repo xyz.
+
+**`/sync sync settings from repo xyz`** — compares and replicates ONLY devsystem-sync.json (not NOTES.md) into current repo.
+
+**`/sync sync settings to repo xyz`** — compares and replicates ONLY devsystem-sync.json into target repo xyz.
+
+**`/sync knowledge from source`** — reads knowledge source from devsystem-sync.json, runs `sync.ps1 -diff`, previews. Auto-executes on confirmation keywords: yes, go, do, execute, confirmed.
+
+**`/sync knowledge to targets`** — reads target repos from source NOTES.md synced repos list, runs `sync.ps1 -diff` for each target, previews. Auto-executes on confirm.
+
+**`/sync specs from source`** — reads specs source from devsystem-sync.json, runs `sync.ps1 -diff`, previews. Auto-executes on confirm.
+
+**`/sync specs to targets`** — reads target repos from source NOTES.md synced repos list, runs `sync.ps1 -diff` for each target, previews. Auto-executes on confirm.
+
+### Sync Procedure
+
+1. Read `devsystem-sync.json` from target `[WORKSPACE_FOLDER]` root
+2. For each source entry in config:
+   - Read `source` path (relative) and `selected_bundles` array
+   - Bundle definitions, include/exclude refiners, deprecated, never_overwrite all come from the same source entry
+   - Run `sync.ps1 -diff -sources <source> -targets <target> -configs devsystem-sync.json` for preview
+   - Review structured diff report (add/overwrite/delete/unchanged/excluded)
+3. Show preview to user:
    - Files to add, modify, delete, skip (with reason)
-   - Locally-modified files not in preserve list
-   - Breaking changes requiring content migration
-5. Prompt user for confirmation:
-   - Confirmation keywords: "yes", "go", "confirmed", "execute", "apply"
+   - Excluded files (filtered by bundle include/exclude rules)
+   - Deprecated files marked for deletion
+4. Prompt user for confirmation:
+   - Confirmation keywords: "yes", "go", "do", "execute", "confirmed", "apply"
    - Non-confirmation keywords: "no", "cancel", "abort", "stop"
-6. If confirmed:
-   - For each sync source: run workspace_sync_template.ps1 with DiffReport, Direction, PreserveList
-   - Verify .sync-timestamp updated in target folder root
-   - Report results per file: added, modified, deleted, skipped, migrated
-   - Summary: X added, Y modified, Z deleted, W skipped
-7. If not confirmed: abort, no changes made
+5. If confirmed:
+   - Run `sync.ps1 -execute -sources <source> -targets <target> -configs devsystem-sync.json`
+   - Verify `last_sync` timestamp updated in target config
+   - Report results: X added, Y modified, Z deleted, W skipped
+6. If not confirmed: abort, no changes made
 
 Sync direction:
 - Downstream = sync from source to all targets (distribute content to dependent repos)
 - Upstream = sync from here back to source (push local changes back to origin)
 
-Preserve list: files in preserve list are never overwritten during sync, regardless of source changes.
+Never overwrite: files matching `never_overwrite` glob patterns in devsystem-sync.json are protected from overwrite and deletion.

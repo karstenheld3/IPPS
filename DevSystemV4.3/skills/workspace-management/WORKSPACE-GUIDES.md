@@ -27,10 +27,10 @@ DevRepo structure:
 - main.code-workspace (references ProductRepo and other repos)
 - NOTES.md (workspace constants, project info, build/test rules)
 - PROBLEMS.md, PROGRESS.md, ID-REGISTRY.md, SOPS.md, FAILS.md
-- [AGENT_FOLDER]/ (rules, workflows, skills)
+- [AGENT_FOLDER]/ (specs, workflows, skills)
 - knowledge/ (knowledge bundles)
-- rules/ (rules bundles from Company)
-- _PrivateSessions/ or session folders
+- specs/ (specs bundles from Company)
+- _sessions/ (session folders)
 
 ProductRepo structure:
 - README.md (from PRODUCT_REPO_README_TEMPLATE.md)
@@ -42,7 +42,7 @@ ProductRepo structure:
 CompanyRepo structure:
 - NOTES.md (from COMPANY_REPO_NOTES_TEMPLATE.md, tracks downstream repos and sync policies)
 - knowledge/ (knowledge bundles shared to downstream repos)
-- rules/ (rules bundles shared to downstream repos)
+- specs/ (specs bundles shared to downstream repos)
 
 ## How to Configure Sync Sources
 
@@ -65,15 +65,14 @@ Three sync sources, each with downstream and upstream directions:
    - Filter: bundle names from sync policy
 
 3. Rules
-   - Source: [RULES_SOURCE_FOLDER] (CompanyRepo)
-   - Target: [RULES_FOLDER] (DevRepo)
-   - Content: rules, workflows, design guidelines, SOPs
-   - Filter: file patterns from sync policy
+   - Source: [SPECS_SOURCE_FOLDER] (CompanyRepo)
+   - Target: [SPECS_FOLDER] (DevRepo)
+   - Content: specs, workflows, design guidelines, SOPs
+   - Filter: file patterns from devsystem-sync.json
 
-Sync policy lookup order:
-1. Downstream repo NOTES.md (highest priority - local customizations)
-2. CompanyRepo NOTES.md (central defaults)
-3. Workspace constants (fallback if no policy found)
+Sync config lookup:
+1. devsystem-sync.json at target [WORKSPACE_FOLDER] root (single source of truth)
+2. No fallback - if devsystem-sync.json is missing, repo is SELF-CONTAINED
 
 ## How to Manage Knowledge Bundles
 
@@ -82,11 +81,11 @@ A knowledge bundle is a folder of reference documents for a specific topic (e.g.
 To add a new knowledge bundle:
 1. Create folder in [KNOWLEDGE_SOURCE_FOLDER] (CompanyRepo)
 2. Add reference documents (.md files) to the folder
-3. Update sync policy in CompanyRepo NOTES.md to include the new bundle
+3. Update devsystem-sync.json at target to include the new bundle in selected_bundles
 4. Run sync to distribute to downstream repos
 
 To remove a knowledge bundle:
-1. Remove from sync policy in CompanyRepo NOTES.md
+1. Remove from selected_bundles in devsystem-sync.json
 2. Run sync - bundle will be marked for deletion in downstream repos
 3. Confirm deletion during sync preview
 
@@ -114,9 +113,37 @@ These two concepts are distinct and must not be conflated:
 - SINGLE-PROJECT/MONOREPO: commit only the repo at [WORKSPACE_FOLDER]
 - Never commit linked repos or deploy targets unless [ACTOR] explicitly requests
 
+## When to Use Sync vs Self-Contained
+
+A repo can be SYNCED or SELF-CONTAINED:
+
+- **SYNCED**: Repo receives updates from upstream sources. Has devsystem-sync.json at [WORKSPACE_FOLDER] root. Sync source constants ([COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER], [SPECS_SOURCE_FOLDER]) are defined in NOTES.md.
+
+- **SELF-CONTAINED**: Repo manages all content locally. No devsystem-sync.json. No sync source constants in NOTES.md.
+
+Use SELF-CONTAINED for:
+- Standalone projects with no external dependencies
+- Prototypes and experiments
+- Repos with custom rules that don't need upstream sync
+
+Use SYNCED for:
+- Repos that receive DevSystem updates from a central source
+- Repos that share knowledge bundles from a Company folder
+- Repos in a multi-workspace sync dependency tree
+
+Switching from SELF-CONTAINED to SYNCED:
+1. Add sync source constants to NOTES.md
+2. Create devsystem-sync.json at [WORKSPACE_FOLDER] root
+3. Run `/sync workspace` to pull initial content
+
+Switching from SYNCED to SELF-CONTAINED:
+1. Remove sync source constants from NOTES.md
+2. Delete or archive devsystem-sync.json
+3. Future syncs will not run (no config found)
+
 ## Quick Config
 
-Minimal workspace constants in DevRepo NOTES.md:
+Always required workspace constants in DevRepo NOTES.md:
 
 ```
 ## Workspace Constants
@@ -124,12 +151,17 @@ Minimal workspace constants in DevRepo NOTES.md:
 - [WORKSPACE_FILE]: [WORKSPACE_FOLDER]\main.code-workspace (WORKSPACE mode only)
 - [DEV_REPO_FOLDER]: [WORKSPACE_FOLDER]
 - [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\[product-repo-name]
-- [COMPANY_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\Company
 - [KNOWLEDGE_FOLDER]: [DEV_REPO_FOLDER]\knowledge
-- [KNOWLEDGE_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\knowledge
-- [RULES_FOLDER]: [DEV_REPO_FOLDER]\rules
-- [RULES_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\rules
+- [SPECS_FOLDER]: [DEV_REPO_FOLDER]\specs
 - [PRODUCT_DOCS_FOLDER]: [PRODUCT_REPO_FOLDER]\docs
+```
+
+Required for SYNCED only (remove if SELF-CONTAINED):
+
+```
+- [COMPANY_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\Company
+- [KNOWLEDGE_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\knowledge
+- [SPECS_SOURCE_FOLDER]: [COMPANY_REPO_FOLDER]\specs
 ```
 
 [WORKSPACE_FOLDER] is the filesystem path. [WORKSPACE_FILE] is the main.code-workspace file that defines which repos belong to the workspace (WORKSPACE mode only). Repos in the workspace file may be outside [WORKSPACE_FOLDER].
@@ -153,19 +185,15 @@ In WORKSPACE mode, version strategy (SINGLE-VERSION vs MULTI-VERSION) is detecte
 
 ```
 User runs /sync workspace
-├─> Read workspace constants from DevRepo NOTES.md
-├─> Resolve sync policy (downstream NOTES.md -> CompanyRepo NOTES.md -> defaults)
-├─> For each sync source (Prompt System, Knowledge, Rules):
-│   ├─> Run diff script (compare source vs target)
+├─> Read devsystem-sync.json from target [WORKSPACE_FOLDER] root
+├─> For each source entry in config:
+│   ├─> Run sync.ps1 -diff -sources <source> -targets <target> -configs devsystem-sync.json
 │   ├─> Show preview: new, modified, deleted, skipped files
-│   ├─> Mark locally-modified files (modified after .sync-timestamp)
-│   └─> Mark breaking changes (structural changes requiring content migration)
+│   └─> Show excluded files with -verbose (filtered by bundle include/exclude rules)
 ├─> Prompt user for confirmation
 ├─> If confirmed:
-│   ├─> For each sync source:
-│   │   ├─> Run sync script (copy, delete, migrate)
-│   │   ├─> Update .sync-timestamp
-│   │   └─> Report results per file
+│   ├─> Run sync.ps1 -execute with same params
+│   ├─> Verify last_sync timestamp updated in devsystem-sync.json
 │   └─> Summary: X added, Y modified, Z deleted, W skipped
 └─> If not confirmed: abort, no changes made
 ```
@@ -175,10 +203,17 @@ User runs /sync workspace
 ```
 User runs /verify workspace
 ├─> Read WORKSPACE-RULES.md from skill folder
+├─> Detect sync relationship (SYNCED or SELF-CONTAINED)
 ├─> Read workspace constants from DevRepo NOTES.md
 ├─> Check required files per workspace type
-├─> Check required constants (8 constants)
-├─> Check agent folder structure (rules/, workflows/, skills/)
+├─> If SYNCED:
+│   ├─> Check all 8 constants (5 base + 3 sync source)
+│   ├─> Check devsystem-sync.json exists at [WORKSPACE_FOLDER] root
+│   └─> Check source paths in devsystem-sync.json resolve to valid paths
+├─> If SELF-CONTAINED:
+│   ├─> Check 5 base constants only
+│   └─> Skip sync source constant checks
+├─> Check agent folder structure (specs/, workflows/, skills/)
 ├─> Report gaps:
 │   ├─> Missing constant -> add with template default
 │   ├─> Missing required file -> create from template

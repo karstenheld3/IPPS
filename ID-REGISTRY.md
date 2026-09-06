@@ -110,6 +110,8 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **MULTI-VERSION** - Side-by-side versions
 - **SESSION-MODE** - Time-limited session with specific goals
 - **PROJECT-MODE** - Work spans entire project
+- **SYNCED** - Repo participates in sync dependency tree (has upstream/downstream)
+- **SELF-CONTAINED** - Repo manages all content locally, no sync relationships
 
 ### Operation Modes
 - **IMPL-CODEBASE** - Output to project source folders (default)
