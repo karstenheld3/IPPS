@@ -210,12 +210,31 @@ function Invoke-FileFilter {
     return $result
 }
 
+function Test-BreakingChange {
+    param([string]$SourcePath, [string]$TargetPath)
+    # Heuristic: detect structural changes (removed headers/sections) in source vs target
+    # A breaking change is when source has removed structural markers that target still has
+    $structuralPattern = '^\s{0,3}(#{1,6}\s|-\s\*\*\[|##\s)'
+    try {
+        $sourceLines = Get-Content -Path $SourcePath -Encoding UTF8
+        $targetLines = Get-Content -Path $TargetPath -Encoding UTF8
+        $sourceStructural = $sourceLines | Where-Object { $_ -match $structuralPattern } | ForEach-Object { $_.Trim() }
+        $targetStructural = $targetLines | Where-Object { $_ -match $structuralPattern } | ForEach-Object { $_.Trim() }
+        # If target has structural markers that source no longer has -> breaking change
+        $removedFromSource = $targetStructural | Where-Object { $_ -notin $sourceStructural }
+        return $removedFromSource.Count -gt 0
+    } catch {
+        return $false
+    }
+}
+
 function Compare-Files {
     param(
         [array]$SourceFiles,
         [string]$TargetRoot,
         [string[]]$Deprecated,
-        [string[]]$NeverOverwrite
+        [string[]]$NeverOverwrite,
+        [string]$LastSync
     )
     $targetRootFull = [System.IO.Path]::GetFullPath($TargetRoot)
     $results = @()
@@ -246,11 +265,45 @@ function Compare-Files {
                         TargetPath = $targetPath
                     }
                 } else {
-                    $results += [PSCustomObject]@{
-                        Action = 'MODIFY'
-                        RelativePath = $relPath
-                        SourcePath = $file.FullPath
-                        TargetPath = $targetPath
+                    # Check if target was locally modified after last_sync (NFR-02, FR-14)
+                    $isLocallyModified = $false
+                    if ($LastSync) {
+                        try {
+                            $lastSyncDate = [datetime]::Parse($LastSync)
+                            $targetLastWrite = (Get-Item $targetPath).LastWriteTime
+                            if ($targetLastWrite -gt $lastSyncDate) {
+                                $isLocallyModified = $true
+                            }
+                        } catch {
+                            # Invalid last_sync format, skip check
+                        }
+                    }
+
+                    if ($isLocallyModified) {
+                        # Check for breaking change (FR-16): source removed structural markers
+                        $isBreaking = Test-BreakingChange -SourcePath $file.FullPath -TargetPath $targetPath
+                        if ($isBreaking) {
+                            $results += [PSCustomObject]@{
+                                Action = 'BREAKING_CHANGE'
+                                RelativePath = $relPath
+                                SourcePath = $file.FullPath
+                                TargetPath = $targetPath
+                            }
+                        } else {
+                            $results += [PSCustomObject]@{
+                                Action = 'LOCALLY_MODIFIED'
+                                RelativePath = $relPath
+                                SourcePath = $file.FullPath
+                                TargetPath = $targetPath
+                            }
+                        }
+                    } else {
+                        $results += [PSCustomObject]@{
+                            Action = 'MODIFY'
+                            RelativePath = $relPath
+                            SourcePath = $file.FullPath
+                            TargetPath = $targetPath
+                        }
                     }
                 }
             }
@@ -364,6 +417,8 @@ function New-DiffReport {
     $deletes = $Results | Where-Object { $_.Action -eq 'DELETE' }
     $skips = $Results | Where-Object { $_.Action -eq 'SKIP' }
     $unchanged = $Results | Where-Object { $_.Action -eq 'UNCHANGED' }
+    $locallyModified = $Results | Where-Object { $_.Action -eq 'LOCALLY_MODIFIED' }
+    $breakingChanges = $Results | Where-Object { $_.Action -eq 'BREAKING_CHANGE' }
 
     [void]$sb.AppendLine((Get-Header -Title 'WORKSPACE SYNC PREVIEW'))
     [void]$sb.AppendLine("[$timestamp]")
@@ -372,7 +427,7 @@ function New-DiffReport {
     [void]$sb.AppendLine("  Reading '$ConfigPath'...")
     [void]$sb.AppendLine('    OK.')
 
-    $totalChanges = $adds.Count + $modifies.Count + $deletes.Count + $skips.Count
+    $totalChanges = $adds.Count + $modifies.Count + $locallyModified.Count + $breakingChanges.Count + $deletes.Count + $skips.Count
     $hasChanges = $totalChanges -gt 0
 
     if ($adds.Count -gt 0) {
@@ -391,6 +446,24 @@ function New-DiffReport {
             [void]$sb.AppendLine("    [ $idx / $($modifies.Count) ] '$($modifies[$i].RelativePath)' differs...")
         }
         [void]$sb.AppendLine("    $($modifies.Count) modified file$(if ($modifies.Count -ne 1) {'s'}) found.")
+    }
+
+    if ($locallyModified.Count -gt 0) {
+        [void]$sb.AppendLine('  Checking locally-modified files...')
+        for ($i = 0; $i -lt $locallyModified.Count; $i++) {
+            $idx = $i + 1
+            [void]$sb.AppendLine("    [ $idx / $($locallyModified.Count) ] '$($locallyModified[$i].RelativePath)' LOCALLY_MODIFIED - will be overwritten...")
+        }
+        [void]$sb.AppendLine("    $($locallyModified.Count) locally-modified file$(if ($locallyModified.Count -ne 1) {'s'}) found.")
+    }
+
+    if ($breakingChanges.Count -gt 0) {
+        [void]$sb.AppendLine('  WARNING: Breaking changes detected...')
+        for ($i = 0; $i -lt $breakingChanges.Count; $i++) {
+            $idx = $i + 1
+            [void]$sb.AppendLine("    [ $idx / $($breakingChanges.Count) ] '$($breakingChanges[$i].RelativePath)' BREAKING_CHANGE - content migration required before overwrite...")
+        }
+        [void]$sb.AppendLine("    $($breakingChanges.Count) breaking change$(if ($breakingChanges.Count -ne 1) {'s'}) detected.")
     }
 
     [void]$sb.AppendLine('  Checking deprecated files...')
@@ -426,6 +499,8 @@ function New-DiffReport {
     $summaryParts = @()
     $summaryParts += "$($adds.Count) add"
     $summaryParts += "$($modifies.Count) modify"
+    $summaryParts += "$($locallyModified.Count) locally_modified"
+    $summaryParts += "$($breakingChanges.Count) breaking_change"
     $summaryParts += "$($deletes.Count) delete"
     $summaryParts += "$($skips.Count) skip"
     $summaryParts += "$($unchanged.Count) unchanged"
@@ -459,6 +534,8 @@ function Invoke-Execute {
     $modifies = $Results | Where-Object { $_.Action -eq 'MODIFY' }
     $deletes = $Results | Where-Object { $_.Action -eq 'DELETE' }
     $skips = $Results | Where-Object { $_.Action -eq 'SKIP' }
+    $locallyModified = $Results | Where-Object { $_.Action -eq 'LOCALLY_MODIFIED' }
+    $breakingChanges = $Results | Where-Object { $_.Action -eq 'BREAKING_CHANGE' }
 
     [void]$sb.AppendLine((Get-Header -Title 'WORKSPACE SYNC EXECUTE'))
     [void]$sb.AppendLine("[$timestamp]")
@@ -490,28 +567,30 @@ function Invoke-Execute {
         [void]$sb.AppendLine("    $($adds.Count) file$(if ($adds.Count -ne 1) {'s'}) added.")
     }
 
-    # Modifying files
-    if ($modifies.Count -gt 0) {
+    # Modifying files (includes LOCALLY_MODIFIED and BREAKING_CHANGE - all get backup + overwrite)
+    $allModifies = @($modifies) + @($locallyModified) + @($breakingChanges)
+    if ($allModifies.Count -gt 0) {
         [void]$sb.AppendLine('  Modifying files...')
-        for ($i = 0; $i -lt $modifies.Count; $i++) {
+        for ($i = 0; $i -lt $allModifies.Count; $i++) {
             $idx = $i + 1
-            [void]$sb.AppendLine("    [ $idx / $($modifies.Count) ] Updating '$($modifies[$i].RelativePath)'...")
-            $backupPath = $modifies[$i].TargetPath + '.tmp_bak'
+            $warningTag = if ($allModifies[$i].Action -eq 'LOCALLY_MODIFIED') { ' [LOCALLY_MODIFIED]' } elseif ($allModifies[$i].Action -eq 'BREAKING_CHANGE') { ' [BREAKING_CHANGE]' } else { '' }
+            [void]$sb.AppendLine("    [ $idx / $($allModifies.Count) ] Updating '$($allModifies[$i].RelativePath)'$warningTag...")
+            $backupPath = $allModifies[$i].TargetPath + '.tmp_bak'
             try {
-                Copy-Item -Path $modifies[$i].TargetPath -Destination $backupPath -Force
-                Copy-Item -Path $modifies[$i].SourcePath -Destination $modifies[$i].TargetPath -Force
+                Copy-Item -Path $allModifies[$i].TargetPath -Destination $backupPath -Force
+                Copy-Item -Path $allModifies[$i].SourcePath -Destination $allModifies[$i].TargetPath -Force
                 Remove-Item -Path $backupPath -Force
                 [void]$sb.AppendLine('      OK.')
             } catch {
                 $hasErrors = $true
                 if (Test-Path $backupPath) {
-                    Copy-Item -Path $backupPath -Destination $modifies[$i].TargetPath -Force
+                    Copy-Item -Path $backupPath -Destination $allModifies[$i].TargetPath -Force
                     Remove-Item -Path $backupPath -Force
                 }
-                [void]$sb.AppendLine("      ERROR: Failed to update '$($modifies[$i].RelativePath)' -> $($_.Exception.Message)")
+                [void]$sb.AppendLine("      ERROR: Failed to update '$($allModifies[$i].RelativePath)' -> $($_.Exception.Message)")
             }
         }
-        [void]$sb.AppendLine("    $($modifies.Count) file$(if ($modifies.Count -ne 1) {'s'}) modified.")
+        [void]$sb.AppendLine("    $($allModifies.Count) file$(if ($allModifies.Count -ne 1) {'s'}) modified.")
     }
 
     # Deleting deprecated files
@@ -555,6 +634,8 @@ function Invoke-Execute {
     $summaryParts = @()
     $summaryParts += "$($adds.Count) added"
     $summaryParts += "$($modifies.Count) modified"
+    $summaryParts += "$($locallyModified.Count) locally_modified"
+    $summaryParts += "$($breakingChanges.Count) breaking_change"
     $summaryParts += "$($deletes.Count) deleted"
     $summaryParts += "$($skips.Count) skipped"
     [void]$sb.AppendLine('')
@@ -691,10 +772,10 @@ for ($t = 0; $t -lt $targetList.Count; $t++) {
         # IS-07, IS-08: Compare against target
         $deprecated = @($srcEntry.deprecated)
         $neverOverwrite = @($srcEntry.never_overwrite)
-        $results = Compare-Files -SourceFiles $filterResult.Included -TargetRoot $targetPath -Deprecated $deprecated -NeverOverwrite $neverOverwrite
+        $results = Compare-Files -SourceFiles $filterResult.Included -TargetRoot $targetPath -Deprecated $deprecated -NeverOverwrite $neverOverwrite -LastSync $config.last_sync
 
         # Check for changes
-        $changes = $results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'DELETE', 'SKIP') }
+        $changes = $results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE', 'SKIP') }
         if ($changes.Count -gt 0) { $hasAnyChanges = $true }
 
         if ($diff) {

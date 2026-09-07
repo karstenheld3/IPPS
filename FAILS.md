@@ -10,7 +10,7 @@
 - **Why it went wrong**: When FR-44/46 were added (13:35 revision), FR-14 was not revisited. The locally-modified warning requirement was lost in the architecture shift.
 - **Evidence**: FR-14 line 351: "Store last sync timestamp in target folder root (`.sync-timestamp`, gitignored)". Implementation `Update-LastSync` writes to `devsystem-sync.json` `last_sync` field. No modification time check exists in `Compare-Files`.
 - **Suggested fix**: Update FR-14: remove `.sync-timestamp` reference, keep locally-modified warning as diff mode requirement. Implement modification time check in `Compare-Files` against `last_sync` from config.
-- **Resolved**: 2026-09-06 14:30 — FR-14 updated (removed `.sync-timestamp`, updated to reference `last_sync` in `devsystem-sync.json`, removed upstream direction). NFR-02 updated to reference `last_sync` field. Code implementation of locally-modified detection deferred.
+- **Resolved**: 2026-09-06 14:30 — FR-14 updated (removed `.sync-timestamp`, updated to reference `last_sync` in `devsystem-sync.json`, removed upstream direction). NFR-02 updated to reference `last_sync` field. Code implementation of locally-modified detection implemented 2026-09-07 in sync.ps1 Compare-Files (LOCALLY_MODIFIED + BREAKING_CHANGE actions).
 
 ## 2026-09-06 - SPEC Internal Contradictions Not Caught During Verification
 

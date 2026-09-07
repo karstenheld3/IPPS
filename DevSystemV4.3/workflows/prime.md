@@ -38,6 +38,7 @@ find_by_name Pattern="*.md" SearchDirectory="[WORKSPACE_FOLDER]" Type="file" Exc
 Identify active scenario from five dimensions:
 1. **Project Structure**: SINGLE-PROJECT, MONOREPO, or WORKSPACE? (N/A for GENERAL)
 2. **Version Strategy**: SINGLE-VERSION or MULTI-VERSION? (N/A for GENERAL)
+   - In WORKSPACE mode: detect per repo independently. Read each repo's NOTES.md for version strategy. Report as "RepoA=SINGLE-VERSION, RepoB=MULTI-VERSION" etc.
 3. **Work Mode**: SESSION-MODE or PROJECT-MODE?
 4. **Sync Relationship**: SYNCED or SELF-CONTAINED?
 5. **Workspace Type**: SOFTWARE-DEV or GENERAL?
@@ -47,3 +48,5 @@ Identify active scenario from five dimensions:
 Answer in single row: "Read [a] .md files ([b] priority), [c] code files ( [d] .py, [e] ...). Mode: [scenario]"
 
 Example: "Read 5 .md files (2 priority), 12 code files (10 .py, 2 .html). Mode: SINGLE-PROJECT + SINGLE-VERSION + SESSION-MODE + SYNCED + SOFTWARE-DEV"
+
+Example (WORKSPACE): "Read 5 .md files (2 priority), 12 code files (10 .py, 2 .html). Mode: WORKSPACE + DevRepo=SINGLE-VERSION,ProductRepo=MULTI-VERSION + SESSION-MODE + SYNCED + SOFTWARE-DEV"
