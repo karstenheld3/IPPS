@@ -63,7 +63,7 @@ No brackets for tokens in **conditions** - things the agent checks for branching
 
 ### Configuration
 
-- **[DEVSYSTEM]** - Current DevSystem version
+- **[PRODUCT_VERSION]** - Current product version string (e.g., `4.3`)
 - **[DEVSYSTEM_FOLDER]** - Path to DevSystem folder
 
 ## Verbs

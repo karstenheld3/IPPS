@@ -8,6 +8,7 @@ Files (FL)
 - WS-FL-01: DevRepo must contain required tracking files
 - WS-FL-02: ProductRepo must contain README.md
 - WS-FL-03: CompanyRepo must contain NOTES.md if it exists
+- WS-FL-04: ID-REGISTRY.md Project Topics must have inline datestamps
 
 Constants (CT)
 - WS-CT-01: DevRepo NOTES.md must define all required workspace constants
@@ -15,24 +16,27 @@ Constants (CT)
 - WS-CT-03: Constants must use [WORKSPACE_FOLDER] as base where applicable
 - WS-CT-04: [WORKSPACE_FOLDER] and [WORKSPACE_FILE] must not be conflated
 - WS-CT-05: Projects must use local environments by default
+- WS-CT-06: Synced repos must have devsystem-sync.json at [WORKSPACE_FOLDER] root
+- WS-CT-08: Release Configuration conditional on workspace type
+- WS-CT-09: GENERAL workspaces must omit dev-only constants and sections
 
 Structure (ST)
-- WS-ST-01: Agent folder must contain rules/, workflows/, skills/ subfolders
-- WS-ST-02: All skills in [SKILL_CATEGORIES] must exist in skills/ folder
-- WS-ST-03: All skills in skills/ folder must be registered in [SKILL_CATEGORIES]
+- WS-ST-01: Agent folder must contain specs/, workflows/, skills/ subfolders
+- WS-ST-02: Workspace structure must match declared mode
 - WS-ST-04: No deprecated files in agent folder
 
 Sync (SY)
-- WS-SY-01: SyncPolicy direction must be "downstream" or "upstream"
-- WS-SY-02: SyncPolicy must define source_folder and target_folder
-- WS-SY-03: Preserve list files must not be overwritten during sync
-- WS-SY-04: .sync-timestamp must be created after sync completes
-- WS-SY-05: Locally-modified files not in preserve list must trigger warning before overwrite
+- WS-SY-01: devsystem-sync.json source paths must be relative
+- WS-SY-02: devsystem-sync.json must define source, selected_bundles, bundles, include, exclude, deprecated, never_overwrite per source entry
+- WS-SY-03: never_overwrite files must not be overwritten or deleted during sync
+- WS-SY-04: last_sync timestamp must be updated after successful execute
+- WS-SY-05: Source repo is read-only during downstream sync
 
 Templates (TM)
 - WS-TM-01: Templates must use _TEMPLATE suffix
 - WS-TM-02: Templates must follow TEMPLATE_RULES.md
 - WS-TM-03: Templates must mark required vs optional sections
+- WS-TM-04: Template annotations must use XML comments
 
 Privacy (PR)
 - WS-PR-01: No real identifiers, project names, or paths in skill files
@@ -54,12 +58,15 @@ GOOD: All 6 required files present in DevRepo root
 ## WS-CT-01: Required Workspace Constants
 
 DevRepo NOTES.md must define all required workspace constants:
-- Always required: [WORKSPACE_FOLDER], [DEV_REPO_FOLDER], [PRODUCT_REPO_FOLDER], [KNOWLEDGE_FOLDER], [RULES_FOLDER], [PRODUCT_DOCS_FOLDER]
-- Required for SYNCED only: [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER], [RULES_SOURCE_FOLDER]
+- Always required (all types): [WORKSPACE_FOLDER], [DEV_KNOWLEDGE_FOLDER], [DEV_SPECS_FOLDER], [AGENT_FOLDER], [SESSIONS_FOLDER], [SESSION_ARCHIVE_FOLDER], [SKILL_TOOLS_FOLDER], [API_KEYS_FILE]
+- Required for SOFTWARE-DEV only: [PRODUCT_REPO_FOLDER], [PRODUCT_SOURCE_FOLDER], [PRODUCT_DOCS_FOLDER], [PRODUCT_VERSION], [SOPS_FILE]
+- Required for SYNCED only: [COMPANY_REPO_FOLDER], [KNOWLEDGE_SOURCE_FOLDER], [SPECS_SOURCE_FOLDER]
 - Required for WORKSPACE mode only: [WORKSPACE_FILE]
+- Repo-specific (not in template): [DEVSYSTEM_FOLDER] — compose as `[WORKSPACE_FOLDER]\DevSystem[PRODUCT_VERSION]`
 - SELF-CONTAINED repos pass without sync source constants
+- GENERAL repos pass without SOFTWARE-DEV-only constants (WS-CT-09)
 
-BAD: NOTES.md defines [KNOWLEDGE_FOLDER] but not [KNOWLEDGE_SOURCE_FOLDER] (SYNCED repo) - sync cannot find source
+BAD: NOTES.md defines [DEV_KNOWLEDGE_FOLDER] but not [KNOWLEDGE_SOURCE_FOLDER] (SYNCED repo) - sync cannot find source
 GOOD: All required constants defined with paths relative to [WORKSPACE_FOLDER]
 
 ## WS-CT-02: No Hardcoded Project Paths
@@ -94,33 +101,50 @@ Every **source-code repo** (typically ProductRepo) must use a local runtime envi
 BAD: Running `npm install -g express` globally - version conflicts, no reproducibility
 GOOD: `.nvmrc` + `npm install` in project root - isolated, reproducible
 
+## WS-CT-06: devsystem-sync.json Required for SYNCED Repos
+
+SYNCED repos must have a devsystem-sync.json at [WORKSPACE_FOLDER] root. SELF-CONTAINED repos do not need one.
+
+BAD: SYNCED repo with no devsystem-sync.json - sync script cannot find configuration
+GOOD: devsystem-sync.json at [WORKSPACE_FOLDER] root with sources, bundles, and filters defined
+
 ## WS-ST-01: Agent Folder Structure
 
-Agent folder must contain rules/, workflows/, skills/ subfolders.
+Agent folder must contain specs/, workflows/, skills/ subfolders.
 
-BAD: Agent folder has rules/ and workflows/ but no skills/ - skills cannot be loaded
+BAD: Agent folder has specs/ and workflows/ but no skills/ - skills cannot be loaded
 GOOD: Agent folder has all three subfolders with content
 
-## WS-ST-02: Skills Registered in CATEGORIES
+## WS-ST-02: Workspace Structure Matches Declared Mode
 
-All skills present in skills/ folder must be registered in NOTES.md [SKILL_CATEGORIES].
+Workspace structure must match the declared mode in NOTES.md Project Info:
+- SINGLE-PROJECT: One project, no main.code-workspace file
+- MONOREPO: Multiple projects in subfolders, no main.code-workspace file
+- WORKSPACE: main.code-workspace file present, references repos that may be outside [WORKSPACE_FOLDER]
 
-BAD: skills/pdf-tools/ exists but not in [SKILL_CATEGORIES] - skill is invisible to deploy-to-all-repos
-GOOD: All skill folders have corresponding entry in [SKILL_CATEGORIES]
+BAD: NOTES.md declares WORKSPACE mode but no main.code-workspace file exists
+GOOD: Declared mode matches actual workspace structure
 
-## WS-SY-01: Valid SyncPolicy Direction
+## WS-SY-01: Relative Source Paths in devsystem-sync.json
 
-SyncPolicy direction field must be "downstream" or "upstream".
+devsystem-sync.json source paths must be relative (e.g., `../IPPS/DevSystemV4.3`), not absolute.
 
-BAD: direction: "both" - ambiguous, sync script cannot determine operation
-GOOD: direction: "downstream" - clear, sync copies source to target
+BAD: source: "e:\\Dev\\IPPS\\DevSystemV4.3" - machine-specific, breaks portability
+GOOD: source: "../IPPS/DevSystemV4.3" - portable across machines
 
-## WS-SY-03: Preserve List Enforcement
+## WS-SY-02: devsystem-sync.json Source Entry Validation
 
-Files listed in preserve list must never be overwritten during sync, regardless of source changes.
+Each source entry in devsystem-sync.json must define: source, selected_bundles, bundles, include, exclude, deprecated, never_overwrite.
 
-BAD: Sync overwrites NOTES.md because source has newer version, destroying local customizations
-GOOD: Sync skips NOTES.md because it is in preserve list, local customizations preserved
+BAD: Source entry missing 'never_overwrite' array - sync script cannot protect files from overwrite
+GOOD: All 7 required fields present per source entry
+
+## WS-SY-03: never_overwrite Enforcement
+
+Files matching never_overwrite patterns must never be overwritten or deleted during sync, regardless of source changes or deprecated status.
+
+BAD: Sync overwrites 'specs/sops/project-release.md' because source has newer version, destroying local customizations
+GOOD: Sync skips 'specs/sops/project-release.md' because it matches never_overwrite pattern
 
 ## WS-TM-01: Template Suffix
 
@@ -128,6 +152,40 @@ Template files must use _TEMPLATE suffix (SK-FL-07).
 
 BAD: DEV_REPO_NOTES.md (looks like an operational file, may be used directly without adaptation)
 GOOD: DEV_REPO_NOTES_TEMPLATE.md (clearly a template requiring adaptation)
+
+## WS-TM-04: Template Annotations Use XML Comments
+
+All template annotations (instructions, conditionals, removal notices) must use XML comments per TEMPLATE_RULES.md TMPL-AN-01. No prose paragraphs disguised as content.
+
+BAD: `Instructions: Replace placeholder values with your project information.`
+GOOD: `<!-- Instructions: Replace placeholder values with your project information. -->`
+
+## WS-FL-04: ID-REGISTRY.md Inline Datestamps
+
+ID-REGISTRY.md Project Topics entries must include a datestamp after the description. No Document History section required.
+
+BAD: `- **WSKMGMT** - Workspace Management Skill (DevSystem V5.0)` (no datestamp)
+GOOD: `- **WSKMGMT** - Workspace Management Skill (DevSystem V5.0) - 2026-09-03`
+
+## WS-CT-08: Release Configuration Conditional on Workspace Type
+
+NOTES.md must contain a Release Configuration section with [RELEASE_CONFIG] and at least one [RELEASE_REPO] block for SOFTWARE-DEV workspaces. GENERAL workspaces must omit Release Configuration entirely.
+
+BAD: SOFTWARE-DEV workspace with no Release Configuration section
+GOOD: SOFTWARE-DEV workspace with [RELEASE_CONFIG] and [RELEASE_REPO: product] block
+BAD: GENERAL workspace with Release Configuration section (no product to release)
+GOOD: GENERAL workspace with no Release Configuration section
+
+## WS-CT-09: GENERAL Workspace Constraints
+
+GENERAL workspace type (Dimension 5) must omit dev-only constants and sections. Code allowed only in session folders (IMPL-ISOLATED default). Dimension 1 = N/A.
+
+Omitted constants: [PRODUCT_REPO_FOLDER], [PRODUCT_SOURCE_FOLDER], [PRODUCT_DOCS_FOLDER], [PRODUCT_VERSION], [WORKSPACE_FILE], [SOPS_FILE], [RELEASE_NOTES_FOLDER]
+Omitted sections: Build/Test Rules, Runtime Environment, Release Configuration
+Required constants: [WORKSPACE_FOLDER], [DEV_KNOWLEDGE_FOLDER], [DEV_SPECS_FOLDER], [AGENT_FOLDER], [SESSIONS_FOLDER], [SESSION_ARCHIVE_FOLDER], [SKILL_TOOLS_FOLDER], [API_KEYS_FILE]
+
+BAD: GENERAL workspace with [PRODUCT_REPO_FOLDER] and Build/Test Rules section
+GOOD: GENERAL workspace with only base constants, no dev-only sections
 
 ## WS-PR-01: Privacy Gate
 

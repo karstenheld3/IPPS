@@ -28,11 +28,11 @@ All documents and items must have unique IDs for traceability.
 
 **Migration note (forward-only):** Topics created before 2026-06-16 may have 2-6 chars. These remain valid. All NEW topics MUST be 7-14 chars.
 
-**REQUIREMENT:** Workspace must have an `ID-REGISTRY.md` file as the authoritative source for all TOPICs, acronyms, and states to avoid conflicting topic ids. Topic ids must be unique.
+**REQUIREMENT:** Workspace must have an `ID-REGISTRY.md` file as the authoritative source for all TOPICs, acronyms, and states to avoid conflicting topic ids. Topic ids must be unique. Each Project Topic entry must include a datestamp after the description: `- **[TOPIC]** - Description - YYYY-MM-DD`. No Document History section required — the inline datestamp serves as the creation record.
 
 **Before creating a new TOPIC or acronym:**
 1. Read `ID-REGISTRY.md` to check for existing TOPICs
-2. If new, add to `ID-REGISTRY.md` with description
+2. If new, add to `ID-REGISTRY.md` `## Project Topics` section with description and datestamp
 3. Use consistent TOPIC across all related documents
 4. Never create duplicate or conflicting TOPICs
 

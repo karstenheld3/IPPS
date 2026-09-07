@@ -35,7 +35,7 @@ SESSION-MODE (bug found during active session):
 - Commit: `fix([TOPIC]-BG-NNNN): description`
 
 PROJECT-MODE (bug found after session closed):
-- Folder: `[BUGFIXES_FOLDER]/` = `[DEFAULT_SESSIONS_FOLDER]/_BugFixes/`
+- Folder: `[BUGFIXES_FOLDER]/` = `[SESSIONS_FOLDER]/_BugFixes/`
 - Bug ID: `GLOB-BG-NNNN` (4-digit, uses GLOB prefix)
 - Bug Folder: `[BUGFIXES_FOLDER]/GLOB-BG-NNNN_IssueDescription/`
 - Docs: SPEC, IMPL, TEST + `*_FIXES.md`

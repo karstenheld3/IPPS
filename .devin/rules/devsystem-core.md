@@ -10,9 +10,20 @@ Core definitions and structure for the development system.
 
 ### Core Concepts
 
+<!-- START: Core -->
 - **[WORKSPACE]**: The Windsurf/VSCode workspace root folder
 - **[PROJECT]**: If Monorepo (workspace contains multiple projects), the project subfolder. No Monorepo: Workspace = Project
 - **[SESSION]**: All context belonging to a work session - folder, files, conversations, commits, and tracking files (notes, problems, progress)
+<!-- END: Core -->
+
+<!-- START: Skill: workspace-management -->
+- **[PRODUCT_VERSION]**: Current product version string (e.g., `4.3`, `1.2.0`, `2026-03-15`). Used to compose `[DEVSYSTEM_FOLDER]` as `[WORKSPACE_FOLDER]\DevSystem[PRODUCT_VERSION]` and for release version extraction. A workspace may be SYNCED (receives DevSystem updates from an upstream source) or SELF-CONTAINED (manages its own DevSystem locally)
+- **[DEV_SPECS_FOLDER]**: Folder at `[WORKSPACE_FOLDER]/specs/` containing shared specifications, design guidelines, and SOPs synced from an upstream source via `devsystem-sync.json`. Replaces the former `rules/` folder. Specs are read-only from the agent's perspective during sync - local modifications are preserved via `never_overwrite` patterns. In SELF-CONTAINED repos, specs are authored locally without sync
+- **[DEV_KNOWLEDGE_FOLDER]**: Folder at `[WORKSPACE_FOLDER]/knowledge/` containing reference documents organized as knowledge bundles (topic folders with `.md` files). Synced from an upstream source via `devsystem-sync.json` bundle configuration. Knowledge bundles are topic-specific (e.g., `Windsurf/`, `AI-Standards/`) and selected per-repo via `selected_bundles` in the sync config. In SELF-CONTAINED repos, knowledge is authored locally
+- **[DEVSYSTEM_SYNC_CONFIG]**: `devsystem-sync.json` file at `[WORKSPACE_FOLDER]` root. Single source of truth for sync configuration: defines source paths, bundle definitions, include/exclude filters, deprecated files, and never_overwrite patterns. Only present in SYNCED repos. Managed by `sync.ps1` script and `/sync workspace` workflow
+<!-- END: Skill: workspace-management -->
+
+<!-- START: Core -->
 
 ### Agent Folder
 
@@ -22,7 +33,7 @@ Core definitions and structure for the development system.
 
 ### Configuration
 
-- **[RULES]**: The current set of agent rules in `[AGENT_FOLDER]/rules/`
+- **[RULES]**: The current set of agent specs in `[AGENT_FOLDER]/specs/`
 - **[WORKFLOWS]**: The current set of agent workflows in `[AGENT_FOLDER]/workflows/`
 - **[SKILLS]**: Agent Skills in `[AGENT_FOLDER]/skills/`
 - **[GRUC]**: Guides, Rules, Checks - pre-calculated compliance criteria. GUIDE + RULES in each skill folder; CHECKS in each skill folder (for skills) or `drift-correction/` (for workflows). Exception: `write-documents` keeps all GRUC types in its own folder.
@@ -91,10 +102,13 @@ Determines where implementation outputs are placed:
   - Existing code/config/runtime MUST NOT be affected
   - NEVER create folders in workspace root
   - **REQUIRES SESSION**: If no session exists, run `/session-new` first
+<!-- END: Core -->
+
+<!-- START: Skill: workspace-management -->
 
 ## Workspace Scenarios
 
-Three dimensions define how the agent should behave:
+Five dimensions define how the agent should behave:
 
 ### Dimension 1: Project Structure
 
@@ -106,11 +120,27 @@ Three dimensions define how the agent should behave:
 
 - **SINGLE-VERSION** - One active version, no migration
 - **MULTI-VERSION** - Side-by-side versions (e.g., V1 and V2 coexisting)
+<!-- END: Skill: workspace-management -->
+
+<!-- START: Skill: session-management -->
 
 ### Dimension 3: Work Mode
 
 - **SESSION-MODE** - Time-limited session with specific goals
 - **PROJECT-MODE** - Work spans entire project without session boundaries
+<!-- END: Skill: session-management -->
+
+<!-- START: Skill: workspace-management -->
+
+### Dimension 4: Sync Relationship
+
+- **SYNCED** - Repo participates in sync dependency tree (has upstream/downstream)
+- **SELF-CONTAINED** - Repo manages all content locally, no sync relationships
+
+### Dimension 5: Workspace Type
+
+- **SOFTWARE-DEV** - Software development workspace. Has product repo, build/test rules, runtime environment, release configuration. Dimension 1 applies (SINGLE-PROJECT, MONOREPO, or WORKSPACE). Examples: CLI tool workspace, web app dev+product split
+- **GENERAL** - General-purpose workspace. No product repo, no build infrastructure, no release configuration. Code allowed only in session folders (POCs, analysis scripts). Defaults to IMPL-ISOLATED. Dimension 1 = N/A (single repo, no structure mode). Examples: research workspaces, documentation hubs, tax/finance workspaces
 
 ## Folder Structure
 
@@ -119,7 +149,7 @@ Three dimensions define how the agent should behave:
 ```
 [WORKSPACE_FOLDER]/
 ├── [AGENT_FOLDER]/
-│   ├── rules/              # Agent rules (.md files)
+│   ├── specs/               # Agent specs (.md files)
 │   ├── workflows/          # Agent workflows (.md files)
 │   └── skills/             # Agent Skills (folders with SKILL.md)
 ├── _Archive/               # Archived sessions
@@ -144,7 +174,7 @@ Three dimensions define how the agent should behave:
 ```
 [WORKSPACE_FOLDER]/
 ├── [AGENT_FOLDER]/
-│   ├── rules/              # Workspace-level rules
+│   ├── specs/               # Workspace-level specs
 │   ├── workflows/          # Workspace-level workflows
 │   └── skills/             # Workspace-level skills
 ├── _Archive/               # Archived sessions (all projects)
@@ -163,6 +193,10 @@ Three dimensions define how the agent should behave:
 ├── !PROGRESS.md            # Workspace-level progress
 └── FAILS.md                # Lessons learned (workspace-level)
 ```
+
+<!-- END: Skill: workspace-management -->
+
+<!-- START: Core -->
 
 ## File Naming Conventions
 
@@ -200,14 +234,25 @@ Append `_gitignore` before the extension to exclude any file or folder from git 
 
 Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 
+<!-- END: Core -->
+
+<!-- START: Skill: workspace-management -->
+
 ## Placeholders
 
 - **[WORKSPACE_FOLDER]**: Absolute path of root folder where Windsurf operates
 - **[PROJECT_FOLDER]**: Absolute path of project folder (same as workspace if no monorepo)
 - **[SRC_FOLDER]**: Absolute path of source folder
-- **[DEFAULT_SESSIONS_FOLDER]**: Base folder for sessions (default: `[WORKSPACE_FOLDER]`, override in `!NOTES.md`)
+<!-- END: Skill: workspace-management -->
+
+<!-- START: Skill: session-management -->
+
+- **[SESSIONS_FOLDER]**: Base folder for sessions (default: `[WORKSPACE_FOLDER]`, override in `!NOTES.md`)
 - **[SESSION_ARCHIVE_FOLDER]**: Archive folder for closed sessions (default: `[SESSION_FOLDER]/../_Archive`)
 - **[SESSION_FOLDER]**: Absolute path of currently active session folder
+<!-- END: Skill: session-management -->
+
+<!-- START: Core -->
 
 ## Workflow Reference
 
@@ -310,4 +355,5 @@ Execution follows these rules:
 - `[PHASE-NAME]` - Next phase (e.g., `[DESIGN]`, `[IMPLEMENT]`)
 - `[CONSULT]` - Escalate to [ACTOR]
 - `[END]` - Plan complete
+<!-- END: Core -->
 

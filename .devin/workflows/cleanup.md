@@ -86,7 +86,7 @@ Delete files and directories matching these patterns:
 ### 1. Agent Temp Files [AUTO-DELETE]
 
 - **Pattern**: `.tmp_*` files, `*.tmp` files
-- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[DEFAULT_SESSIONS_FOLDER]` recursive
+- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSIONS_FOLDER]` recursive
 - **Source**: Agent scripts, `/test`, `/implement`, `/go`, `/improve` STRUT plans, youtube-downloader metadata
 - **Note**: `.tmp_*` files are dotfiles - invisible to `fd`/`find_by_name` by default. Always use PowerShell `Get-ChildItem -Force` or `fd --hidden` to scan for them.
 
@@ -153,7 +153,7 @@ These folders and their contents are EXCLUDED from all cleanup operations:
 
 ## Step 1: Determine Scope and Context
 
-Read NOTES.md to resolve `[DEFAULT_SESSIONS_FOLDER]` and `[DEVSYSTEM_FOLDER]`.
+Read NOTES.md to resolve `[SESSIONS_FOLDER]` and `[DEVSYSTEM_FOLDER]`.
 
 **Scope resolution** (MANDATORY - resolve scope before scanning):
 
