@@ -217,10 +217,10 @@ tag_annotation_template: Release {TAG}: {SUMMARY}
 [RELEASE_REPO: product]
 path: [WORKSPACE_FOLDER]
 role: product
-tag_format: date
+tag_format: semver
 version_source: devsystem_folder
 post_release_bump: devsystem_rename
 github_release: true
 ```
 
-Instructions: SINGLE-PROJECT mode — one repo, one `[RELEASE_REPO]` block. Date-based tags (`YYYY-MM-DD`). Version source is `devsystem_folder` (parsed from `[PRODUCT_VERSION]` line above). Post-release bump renames `DevSystemVX.Y` folder to next minor version per SOPS SOP 7. No binary build, no version gate. Release notes go in `Docs/ReleaseNotes/` per existing convention (see `[RELEASE_NOTES_FOLDER]` constant above).
+Instructions: SINGLE-PROJECT mode — one repo, one `[RELEASE_REPO]` block. Semver tags (`vX.Y`). Version source is `devsystem_folder` (parsed from `[PRODUCT_VERSION]` line above). Post-release bump renames `DevSystemVX.Y` folder to next minor version per SOPS SOP 7. No binary build, no version gate. Release notes go in `docs/ReleaseNotes/` per existing convention (see `[RELEASE_NOTES_FOLDER]` constant above).
