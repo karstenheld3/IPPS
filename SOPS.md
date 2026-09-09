@@ -394,20 +394,29 @@ Immediately after `git tag` and `git push --tags` for a release. This is the LAS
 
 1. **Determine next version**: Increment minor version (e.g., `4.0` → `4.1`). Use major bump only if explicitly planned.
 
-2. **Rename working folder**:
+2. **Backup released version** (MANDATORY before rename):
+   ```powershell
+   # Restore the released version from git at the tag commit
+   git archive [TAG] -- "DevSystem[OLD_VERSION]/" | tar -x -C .
+   # Move to archive
+   Move-Item "[WORKSPACE]\DevSystem[OLD_VERSION]" "[WORKSPACE]\_OldDevSystemVersions\DevSystem[OLD_VERSION]"
+   ```
+   All prior releases MUST be preserved in `[WORKSPACE]\_OldDevSystemVersions\`. Never rename a version folder without backing it up first.
+
+3. **Rename working folder**:
    ```powershell
    Rename-Item "[WORKSPACE]\DevSystem[OLD_VERSION]" "DevSystem[NEW_VERSION]"
    ```
 
-3. **Update `NOTES.md`**:
+4. **Update `NOTES.md`**:
    - `[PRODUCT_VERSION]: [NEW_VERSION]`
 
-4. **Sync to `.devin/`**:
+5. **Sync to `.devin/`**:
    ```powershell
    Copy-Item -Path "[WORKSPACE]\DevSystem[NEW_VERSION]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
    ```
 
-5. **Commit**:
+6. **Commit**:
    ```powershell
    git add -A
    git commit -m "chore: bump working version to [NEW_VERSION]"
@@ -420,10 +429,13 @@ Immediately after `git tag` and `git push --tags` for a release. This is the LAS
 -not (Test-Path "[WORKSPACE]\DevSystem[OLD_VERSION]")
 Test-Path "[WORKSPACE]\DevSystem[NEW_VERSION]"
 
-# 2. NOTES.md references new version
+# 2. Released version backed up
+Test-Path "[WORKSPACE]\_OldDevSystemVersions\DevSystem[OLD_VERSION]"
+
+# 3. NOTES.md references new version
 Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "Current \[DEVSYSTEM\]: DevSystem[NEW_VERSION]"
 
-# 3. .devin/ is synced (spot-check)
+# 4. .devin/ is synced (spot-check)
 (Get-ChildItem "[WORKSPACE]\DevSystem[NEW_VERSION]" -Recurse -File).Count -eq `
 (Get-ChildItem "[WORKSPACE]\.devin" -Recurse -File).Count
 ```
