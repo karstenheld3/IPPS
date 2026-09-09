@@ -147,8 +147,8 @@ No brackets for tokens that appear in **conditions** - things the agent checks f
 
 **Override example in `!NOTES.md`:**
 ```
-[SESSION_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
-[SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions
+[SESSION_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions_gitignore
+[SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_PrivateSessions_gitignore
 [SESSION_ARCHIVE_FOLDER]: [SESSIONS_FOLDER]\_Archive
 ```
 

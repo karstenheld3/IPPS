@@ -1145,18 +1145,18 @@ Cascade can read/write gitignored files when explicitly referenced, but gitignor
 **.gitignore pattern:**
 ```gitignore
 # Private sessions folder (contents ignored, folder tracked)
-_PrivateSessions/*
-!_PrivateSessions/.gitkeep
+_PrivateSessions_gitignore/*
+!_PrivateSessions_gitignore/.gitkeep
 ```
 
 **.gitkeep file:**
 ```bash
-echo "# This file makes the folder visible to Cascade" > _PrivateSessions/.gitkeep
+echo "# This file makes the folder visible to Cascade" > _PrivateSessions_gitignore/.gitkeep
 ```
 
 **How it works:**
-- `_PrivateSessions/*` - Ignores all files/folders inside
-- `!_PrivateSessions/.gitkeep` - Negation pattern, tracks this specific file
+- `_PrivateSessions_gitignore/*` - Ignores all files/folders inside
+- `!_PrivateSessions_gitignore/.gitkeep` - Negation pattern, tracks this specific file
 - Result: Folder appears in workspace, contents stay private
 
 ### Key Files Reference

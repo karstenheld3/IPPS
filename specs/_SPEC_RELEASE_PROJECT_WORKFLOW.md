@@ -355,7 +355,7 @@ Rationale: Some workspaces use `SOPS.md`, others use `_SOPS.md`. Hardcoding eith
 Rationale: DevSystem workspaces rename a version folder (`DevSystemV4.3` -> `DevSystemV4.4`). Product repos bump a version field in a file (`pyproject.toml`). Dev repos may not need any bump. Per-repo `post_release_bump` config handles all three cases.
 
 **RLSPROJ-DD-10: Sessions folder is configurable**
-Rationale: Workspaces use different session folder names (e.g., `_PrivateSessions`, `_Sessions`). The workflow must not assume a fixed folder name.
+Rationale: Workspaces use different session folder names (e.g., `_PrivateSessions_gitignore`, `_Sessions`). The workflow must not assume a fixed folder name.
 
 **RLSPROJ-DD-11: No new TOPIC for SOPS integration**
 Rationale: SOPS files are workspace-specific and already maintained. The workflow references them by configured name. No need to create a unified SOPS spec - each workspace has its own operational procedures.

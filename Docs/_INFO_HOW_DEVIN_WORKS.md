@@ -1167,8 +1167,8 @@ To make a gitignored folder visible to agents while keeping contents private, us
 
 ```gitignore
 # In .gitignore - folder contents ignored, folder tracked
-_PrivateSessions/*
-!_PrivateSessions/.gitkeep
+_PrivateSessions_gitignore/*
+!_PrivateSessions_gitignore/.gitkeep
 ```
 
 Result: folder appears in workspace snapshot, contents stay private. [VERIFIED]

@@ -1,4 +1,4 @@
-# Release Notes: 2026-08-30
+# Release Notes: v4.2 (2026-08-30)
 
 ## Summary
 

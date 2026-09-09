@@ -68,7 +68,7 @@ None.
 ## Infrastructure
 
 - Removed obsolete `Windsurf.bat` and `WindsurfNext.bat` (renamed to `Devin.bat` / `DevinNext.bat` in v4.0)
-- Excluded `_PrivateSessions/` from git tracking
+- Excluded private session folder from git tracking
 - Excluded `skills/llm-evaluation/model-sources/` from git and deployment
 - Fixed commit workflow git noise (CRLF warnings, rename summaries) causing Cascade hangs
 

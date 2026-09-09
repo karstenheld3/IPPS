@@ -169,7 +169,7 @@ A **DevRepo** is the development repository containing specs, sessions, evals, k
 - `notes_path` - `[WORKSPACE_FOLDER]\NOTES.md` (or `!NOTES.md`)
 - `agent_folder` - `[WORKSPACE_FOLDER]\.devin` (or project-specific agent folder)
 - `knowledge_folder` - `[WORKSPACE_FOLDER]\knowledge`
-- `sessions_folder` - `[WORKSPACE_FOLDER]\_Sessions` or `_PrivateSessions`
+- `sessions_folder` - `[WORKSPACE_FOLDER]\_Sessions` or `_PrivateSessions_gitignore`
 - `specs_folder` - `[WORKSPACE_FOLDER]\specs`
 - `evals_folder` - `[WORKSPACE_FOLDER]\evals`
 

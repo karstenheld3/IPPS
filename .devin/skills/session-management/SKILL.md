@@ -192,7 +192,7 @@ When creating a new topic folder inside an existing session:
 
 **Format:** `[SESSIONS_FOLDER]/_YYYY-MM-DD_[SessionTopicCamelCase]/`
 
-**Example:** `_PrivateSessions/_2026-01-12_FixAuthenticationBug/`
+**Example:** `_PrivateSessions_gitignore/_2026-01-12_FixAuthenticationBug/`
 
 ## Required Session Files
 

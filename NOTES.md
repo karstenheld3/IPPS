@@ -25,7 +25,7 @@
 [AGENT_FOLDER]: `[WORKSPACE_FOLDER]\.devin`
 - Sync target. Copy of [DEVSYSTEM_FOLDER] content.
 
-[SESSIONS_FOLDER]: `[WORKSPACE_FOLDER]\_PrivateSessions`
+[SESSIONS_FOLDER]: `[WORKSPACE_FOLDER]\_PrivateSessions_gitignore`
 - Base folder for session folders.
 
 [SESSION_ARCHIVE_FOLDER]: `[SESSIONS_FOLDER]\..\Archive`

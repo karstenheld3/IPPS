@@ -1,4 +1,4 @@
-# Release Notes: 2026-09-10 (v4.3)
+# Release Notes: v4.3 (2026-09-10)
 
 ## Summary
 
@@ -79,12 +79,6 @@ This release covers work from 2026-08-30 to 2026-09-10, spanning 55 commits acro
 
 ## Sessions
 
-### _2026-09-03_WorkspaceManagementSkill (PrivateSessions)
-
-**Goal**: Workspace management skill with sync.ps1, questionnaire, and workflow integrations
-
-**Artifacts**: SPEC, IMPL, TEST, PROMPTS
-
 ### _2026-09-05_ZAIIntegration (Sessions)
 
 **Goal**: Z.AI provider integration with unified parameter mapping
@@ -92,18 +86,6 @@ This release covers work from 2026-08-30 to 2026-09-10, spanning 55 commits acro
 ### _2026-09-06_SyncScriptImpl (Sessions)
 
 **Goal**: sync.ps1 implementation with per-repo version detection
-
-### _2026-09-05_FixSoundForge (PrivateSessions)
-
-**Goal**: Sound Forge fix session
-
-### _2026-09-09_DevSystemRename (PrivateSessions)
-
-**Goal**: DevSystem to PromptSystem rename analysis (session created, work pending)
-
-### _2026-09-09_InvestigateWorkflow (PrivateSessions)
-
-**Goal**: Investigate workflow design and implementation
 
 ## Statistics
 

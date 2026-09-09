@@ -33,7 +33,7 @@
 [AGENT_FOLDER]: `[WORKSPACE_FOLDER]\.devin`
 - Agent config folder. Sync target — copy of DevSystem source content.
 
-[SESSIONS_FOLDER]: `[WORKSPACE_FOLDER]\_PrivateSessions`
+[SESSIONS_FOLDER]: `[WORKSPACE_FOLDER]\_PrivateSessions_gitignore`
 - Base folder for session folders.
 
 [SESSION_ARCHIVE_FOLDER]: `[SESSIONS_FOLDER]\..\Archive`
