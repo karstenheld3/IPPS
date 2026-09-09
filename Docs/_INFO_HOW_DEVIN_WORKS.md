@@ -2,8 +2,8 @@
 
 **Doc ID**: DVDT-IN01
 **Goal**: Comprehensive reference for Devin Desktop (formerly Windsurf) - agent harnesses, AI models, customization, developer tools, enterprise controls, and architecture internals
-**Version scope**: Devin Desktop 3.8.20+ / Devin Local 2026.5.26+
-**Timeline**: Created 2026-08-27, Updated 2 times (2026-08-27 - 2026-08-30)
+**Version scope**: Devin Desktop 3.8.20+ / Devin Local 2026.5.26+ / Devin Next 3.8.1020 and 3.9.1018
+**Timeline**: Created 2026-08-27, Updated 4 times (2026-08-27 - 2026-09-09)
 
 ## Summary
 
@@ -11,6 +11,7 @@
 - Devin Local (Rust-based) replaces Cascade as primary agent with subagents, OS-level sandboxing, and 5 permission modes [VERIFIED]
 - Conversation sharing now supported in Devin Local (previously Cascade-only) [VERIFIED]
 - ACP open protocol enables 12+ agents (Codex, Claude, OpenCode, Junie, Gemini, Amp, Cline, etc.) plus custom agent registration via local registry [VERIFIED]
+- Cascade announced end-of-life July 1, 2026; progressively deprecated (enterprise disabled by default, JetBrains-only scope, migration wizard) [VERIFIED]
 
 **AI Models:**
 - SWE-1.7 replaces SWE-1.6 with 4.5x improvement on FrontierCode (9.4% → 42.3%) [VERIFIED]
@@ -34,6 +35,16 @@
 **Architecture:**
 - VS Code OSS 1.126 base. Go language server handles all AI communication [TESTED 2026-05]
 - Three independent network stacks with separate proxy handling [TESTED 2026-05]
+- Cascade UI built into app shell (`workbench.desktop.main.js`), not extension.js [TESTED 2026-09-09]
+- `devin.cascade.enabled` setting is dead code: registered in package.json but never read in extension.js [TESTED 2026-09-09]
+- Auto-update controlled by `product.json` `updateUrl` field, not `update.mode` setting [TESTED 2026-09-09]
+
+**Version Differences (3.8.1020 vs 3.9.1018):**
+- 3.9 adds multimodal support: DocumentData, VideoData protobuf types, ChatMessagePrompt fields 20-21, ModelFeatures fields 27-30 [VERIFIED]
+- 3.9 removes `devin.cascade.enabled` and `windsurf.cascade.enabled` from package.json [VERIFIED]
+- 3.9 adds 80+ new ACP metadata keys for sessions, automations, blueprints, slack/teams, mentions [VERIFIED]
+- 3.8 language_server binary has zero knowledge of multimodal types; 3.9 binary has DocumentData (14x), VideoData (13x) [VERIFIED]
+- Multimodal cannot be patched into 3.8 via extension.js alone - binary swap required [VERIFIED]
 
 ## Table of Contents
 
@@ -54,8 +65,9 @@
 15. [Enterprise Features](#15-enterprise-features)
 16. [Settings and Configuration](#16-settings-and-configuration)
 17. [Architecture Internals](#17-architecture-internals)
-18. [Sources](#18-sources)
-19. [Document History](#19-document-history)
+18. [Version Differences: 3.8 vs 3.9](#18-version-differences-38-vs-39)
+19. [Sources](#19-sources)
+20. [Document History](#20-document-history)
 
 ## 1. Overview
 
@@ -81,7 +93,7 @@ Devin Desktop (formerly Windsurf) is an AI-powered IDE built on [VS Code Open So
 - **Devin Local** - Primary local agent (replaces Cascade for new sessions)
 - **Devin Cloud** - Autonomous cloud agent with own VM
 - **Devin CLI** - Terminal agent, same harness as Devin Local
-- **Cascade** - Legacy local agent, still maintained and shipped. Modes: Code, Plan, Ask
+- **Cascade** - Legacy local agent, no longer selectable in UI as of 2026-09-09. Announced EOL July 1, 2026. Modes: Code, Plan, Ask
 - **Spaces** - Task grouping with shared context
 - **Adaptive Model Router** - Automatic model selection based on task complexity
 - **Windsurf Tab** - AI-powered code completion (Autocomplete and Supercomplete)
@@ -93,7 +105,7 @@ Devin Desktop (formerly Windsurf) is an AI-powered IDE built on [VS Code Open So
 
 ## 2. Product History
 
-On 2026-06-02, [Cognition](https://cognition.com/) (which acquired Codeium) renamed Windsurf to Devin Desktop via standard over-the-air update. The primary agent changed from Cascade to Devin Local. Cascade remains available as a legacy agent (see Section 12). [VERIFIED]
+On 2026-06-02, [Cognition](https://cognition.com/) (which acquired Codeium) renamed Windsurf to Devin Desktop via standard over-the-air update. The primary agent changed from Cascade to Devin Local. Cascade remained available as a legacy agent through July 1, 2026 (announced EOL), with progressive deprecation thereafter (see Section 12.6). [VERIFIED]
 
 **Key renames:**
 - Windsurf.exe / Windsurf.app → Devin.exe / Devin.app
@@ -130,7 +142,7 @@ On 2026-06-02, [Cognition](https://cognition.com/) (which acquired Codeium) rena
 
 ## 3. Agent Architecture
 
-Devin Desktop provides multiple agent harnesses that coexist in the IDE. An agent selector in the bottom-right corner when starting new conversations offers: Devin Local (primary), Cascade (legacy), and ACP agents (if enabled). Enterprise admins can disable Cascade entirely. [VERIFIED]
+Devin Desktop provides multiple agent harnesses that coexist in the IDE. An agent selector in the bottom-right corner when starting new conversations offers: Devin Local (primary) and ACP agents (if enabled). Cascade was removed from the agent selector as of 2026-09-09. Enterprise admins could previously disable Cascade or scope it to JetBrains plugin only. [TESTED 2026-09-09]
 
 ### 3.1 Devin Local
 
@@ -293,11 +305,11 @@ Devin Desktop ships with [ACP](https://agentclientprotocol.com/), an open-source
 
 ### 3.5 Cascade
 
-Legacy local agent. Open via `Cmd/Ctrl+L` or click agent icon (top right). Maintained and shipped as part of Devin Desktop. [VERIFIED]
+Legacy local agent. No longer selectable in Devin Desktop agent selector as of 2026-09-09. Announced end-of-life July 1, 2026 in the [rebrand blog post](https://devin.ai/blog/windsurf-is-now-devin-desktop). Progressive deprecation: enterprise disabled by default, JetBrains-only scope option, migration wizard. See Section 12.6 for phase-out timeline. [TESTED 2026-09-09]
 
 Three modes (Code, Plan, Ask) and four execution levels (Disabled, Allowlist, Auto, Turbo). See Section 12 for detailed coverage of modes, Memories, and Cascade-only features.
 
-Enterprise can disable Cascade via "Enable Cascade" control. [VERIFIED]
+Enterprise can disable Cascade via "Enable Cascade" control or scope to JetBrains plugin only. [VERIFIED]
 
 ## 4. Agent Command Center and Spaces
 
@@ -811,7 +823,7 @@ Shell scripts running before/after agent actions. `.devin/hooks.json` or `~/.cod
 
 ## 12. Cascade (Legacy Agent)
 
-Legacy local agent. Maintained and shipped as part of Devin Desktop. Open via `Cmd/Ctrl+L` or agent icon. Enterprise can disable via "Enable Cascade" control. Cascade-specific config hidden when disabled for team. [VERIFIED]
+Legacy local agent. No longer selectable in Devin Desktop UI as of 2026-09-09. Announced EOL July 1, 2026. Enterprise could previously disable via "Enable Cascade" control or scope to JetBrains plugin only. Cascade-specific config hidden when disabled for team. See Section 12.6 for phase-out timeline. [TESTED 2026-09-09]
 
 ### 12.1 Modes
 
@@ -850,6 +862,8 @@ Features present in Cascade but absent from Devin Local:
 
 Based on reverse-engineering and system prompt analysis. Cascade uses a distinct architecture from Devin Local. [ASSUMED]
 
+**Dead setting discovery (3.8.1020):** `devin.cascade.enabled` is registered in package.json `contributes.configuration.properties` (type=boolean, default=true, description "Enable or disable Cascade. When false, Cascade is disabled and only ACP agents can be used") and mapped in `SETTING_KEYS.cascadeEnabled` in extension.js. However, `SETTING_KEYS.cascadeEnabled` has **zero references** elsewhere in extension.js. The setting is decorative - no code reads it to show/hide Cascade. Cascade UI is built into the app shell `workbench.desktop.main.js` (found `cascade` view ID at line 411, `getCascadeIcon` at line 1026), not the extension. No `windsurf:*` context key controls Cascade visibility. Server-side `canUseCascade` (on PlanInfo, DevinOrganization, WindsurfPostAuthResponse), `disableCascade`, and `cascadeAvailability` (enum: UNSPECIFIED=0, ENABLED=1, JETBRAINS_ONLY=2, DISABLED=3) exist only in protobuf class definitions - no client logic reads them to toggle UI. [TESTED 2026-09-09 on 3.8.1020]
+
 **Multi-model pipeline:** Cascade orchestrates multiple AI models in a pipeline, each with a specialized role:
 - **Primary reasoning model** - Handles main chat responses and tool calls
 - **Thinking/planning generator** - Produces extended thinking chains for complex tasks
@@ -875,6 +889,24 @@ Based on reverse-engineering and system prompt analysis. Cascade uses a distinct
 7. **MCP recommendations** - Server-provided guidance for tool usage [ASSUMED]
 
 **Protocol:** gRPC-based communication between IDE and Codeium language server. Primary method `GetChatMessage` sends entire accumulated context window per turn (no delta encoding). Context grows from ~37 KB on first call to 500+ KB in long sessions. [ASSUMED]
+
+### 12.6 Phase-Out Timeline
+
+**Announced EOL:** July 1, 2026. The [official rebrand blog post](https://devin.ai/blog/windsurf-is-now-devin-desktop) states: "For incremental migration, you can still continue to use the legacy Cascade agent through July 1st." The [Devin Desktop FAQ](https://docs.devin.ai/desktop/devin-desktop-faq) confirms: "The existing Cascade agent remains available through July." [VERIFIED]
+
+**Progressive deprecation milestones:**
+- 2026-06-02: Devin Local becomes default for new tabs; Cascade moved to legacy [VERIFIED]
+- 2026-06-22+: GPT-5.6 variants disabled in Cascade model picker (Devin Local only) [VERIFIED]
+- 2026-07-01: Announced EOL date. Third-party sources ([byteiota](https://byteiota.com/cascade-eol-july-1-2026-devin-local-migration/), [webdeveloper.com](https://webdeveloper.com/news/windsurf-devin-desktop-cascade-eol/)) report Cascade agent invocation removed for CI/automation with no grace period [VERIFIED]
+- Post-July 1: Enterprise Cascade setting became scope choice (enabled everywhere, JetBrains plugin only, or disabled). Legacy Cascade disabled by default for enterprise tiers [VERIFIED]
+- 3.7.16+: Cascade-specific configuration hidden when Cascade is disabled for team [VERIFIED]
+- Next channel: "Devin: Migrate off Cascade" wizard added, chaining hooks to skills to memories migration with dry-run previews [VERIFIED]
+- 2026-09-09: Cascade no longer selectable as agent in Devin Desktop UI (agent selector offers Devin Local and ACP agents only). `devin.cascade.enabled` setting and docs pages may persist but Cascade is effectively removed from the user-facing agent picker [TESTED 2026-09-09]
+- 3.9.1018: `devin.cascade.enabled` and `windsurf.cascade.enabled` removed from package.json `contributes.configuration.properties`. `cascadeEnabled` removed from `SETTING_KEYS` in extension.js. Setting was already dead code in 3.8 (0 usages), removal is cleanup only [VERIFIED 2026-09-09]
+
+**Current status (as of 2026-09-09):** Cascade is no longer selectable as an agent in the Devin Desktop UI. The `devin.cascade.enabled` setting and docs pages for Cascade (overview, memories, workflows, MCP) remain live at `docs.devin.ai/desktop/cascade/`, but the agent selector offers Devin Local and ACP agents only. Cascade may remain available in the JetBrains plugin per enterprise scope setting. [TESTED 2026-09-09]
+
+**Migration path:** `devin migrate workflows` converts Cascade workflows to native Skills. "Devin: Open Cascade Migration Wizard" command chains hooks to skills to memories migration with per-item opt-in and dry-run previews. [VERIFIED]
 
 ## 13. Devin CLI Reference
 
@@ -1091,6 +1123,8 @@ C:\Users\<User>\
 
 **Attribution:** Set `attribution` to `false` in `.devin/config.json` to suppress Devin mentions in commit messages. [VERIFIED]
 
+**Auto-update control (3.8.1020, Next channel):** `product.json` at `resources/app/product.json` contains `updateUrl` field pointing to `https://windsurf-next.codeium.com`. Setting this to empty string blocks auto-updates reliably. The standard VS Code `update.mode: "none"` setting in settings.json may not be respected by this fork. `product.json` also contains `windsurfVersion` (e.g., `3.8.1020+next.2d9020110a`), `commit` hash, `date`, and `quality` fields. [TESTED 2026-09-09]
+
 **Key files reference:**
 
 **User config:**
@@ -1184,9 +1218,165 @@ Devin.exe (Electron main process)
 
 **Telemetry:** Opt-out via Settings > Telemetry. Categories: usage analytics, crash reports, extension telemetry. No code content transmitted in telemetry payloads. [VERIFIED]
 
-**Update mechanism:** Two channels: Stable (default) and Next (pre-release). Auto-update enabled by default. Enterprise can disable auto-update via GPO/MDM policy. [VERIFIED]
+**Update mechanism:** Two channels: Stable (default) and Next (pre-release). Auto-update enabled by default. Enterprise can disable auto-update via GPO/MDM policy. Update URL in `product.json` controls update source; nullifying it blocks updates. [VERIFIED]
 
-## 18. Sources
+**Binary analysis (3.8.1020 vs 3.9.1018):**
+
+`language_server_windows_x64.exe` is a Go binary (~178MB) handling all AI communication via gRPC. Binary string extraction reveals version-specific protobuf support:
+
+- 3.8 binary: 0 occurrences of `DocumentData`, `VideoData`, `supports_video`, `supports_documents`. 102 occurrences of `ChatMessagePrompt`, 81 of `ModelFeatures`
+- 3.9 binary: 14 occurrences of `DocumentData`, 13 of `VideoData`, 6 of `supports_video`, 3 each of `supports_documents`/`supports_document_urls`/`supports_video_urls`. 104 of `ChatMessagePrompt`, 85 of `ModelFeatures`
+- 3.9 binary has `name=documents,proto3` and `name=videos,proto3` protobuf definitions; 3.8 has neither
+- `pre-uploaded` ACP metadata key is client-side only (0 occurrences in both binaries)
+- 3.8 binary `documents`/`videos` strings are from unrelated concepts (web_documents, open_documents, nginx config) [TESTED 2026-09-09]
+
+**Extension.js analysis (3.8.1020):**
+
+- 9.4MB minified. 170 CASCADE_ feature flags. 21 tool names found
+- `SETTING_KEYS` object maps config keys: `completionMode`, `autoContinue`, `allowCascadeAccessGitignoreFiles`, `readClaudeCodeConfig`, `preferredAcpAgent`, `acpEnabled`, `cascadeEnabled`, `acpDiffZonesEnabled`, `agentNotifications`
+- `cascadeEnabled` key mapped to `"devin.cascade.enabled"` but never referenced after definition (0 usages of `SETTING_KEYS.cascadeEnabled`)
+- 10 `windsurf:*` context keys: `acpEnabled`, `acpCustomEnabled`, `isDevin`, `enableCursorImportCursor`, `enableVSCodeImport`, `isInternalUser`, `isAirgapMode`, `isSecureFlavor`, `isMultiTenantMode`, `isNextOrInsiders`. None control Cascade visibility
+- Extension package.json has no `views` or `viewsContainers` - Cascade UI is native to the app shell [TESTED 2026-09-09]
+
+**Extension.js analysis (3.9.1018):**
+
+- 9.5MB minified (+120KB from 3.8). Same 170 CASCADE_ flags, same 21 tool names
+- `cascadeEnabled` removed from `SETTING_KEYS`. `devin.cascade.enabled` removed from package.json
+- 2 new MODEL_ identifiers: `MODEL_FAMILY_DIMENSION_CONTROL_TYPE_LIST`, `MODEL_UIDS_READ_METHOD`
+- 1 new event key: `PRE_UPLOADED_META_KEY` (metadata key for uploaded content, not a hook)
+- 10,876 unique quoted strings (vs 10,685 in 3.8). 171 meaningful new strings, 1 removed (`devin.cascade.enabled`)
+- No changes to commands, keybindings, menus, authentication, languages, or jsonValidation in package.json [TESTED 2026-09-09]
+
+## 18. Version Differences: 3.8 vs 3.9
+
+Binary and source analysis of Devin Next 3.8.1020 vs 3.9.1018. All findings from reverse-engineering minified extension.js and Go binary string extraction. [TESTED 2026-09-09]
+
+### 18.1 File Size Deltas
+
+- `extension.js`: +120KB (9.4MB → 9.5MB)
+- `language_server_windows_x64.exe`: +159KB (~178MB)
+- `package.json`: -453 bytes (config properties removed)
+- `agentHostMain.js`: unchanged
+
+### 18.2 Multimodal Support (3.9 only)
+
+3.9 adds document and video support to the chat protocol:
+
+**New protobuf types:**
+- `DocumentData` (`exa.codeium_common_pb.DocumentData`, 14 occurrences in 3.9 binary, 0 in 3.8)
+  - Field 1: `base64_data` (string) - Inline document data as base64
+  - Field 2: `mime_type` (string) - MIME type, free-form (no enum restriction)
+  - Field 3: `filename` (string) - Original filename
+  - Field 4: `url` (string) - URL to pre-uploaded document resource
+- `VideoData` (`exa.codeium_common_pb.VideoData`, 13 occurrences in 3.9 binary, 0 in 3.8)
+  - Field 1: `base64_data` (string) - Inline video data as base64
+  - Field 2: `mime_type` (string) - MIME type, free-form
+  - Field 3: `url` (string) - URL to pre-uploaded video resource
+
+**New ChatMessagePrompt fields:**
+- Field 20: `videos` (repeated VideoData)
+- Field 21: `documents` (repeated DocumentData)
+
+**New ModelFeatures fields:**
+- `supports_video` (6 occurrences in 3.9)
+- `supports_video_urls` (3 occurrences)
+- `supports_documents` (3 occurrences)
+- `supports_document_urls` (3 occurrences)
+
+**New gRPC service methods:**
+- `documents` method (file upload for chat)
+- `videos` method (video upload for chat)
+- `filename` parameter on upload methods
+
+**Client-side support (extension.js):**
+- `buildPreUploadedResourceLink` function constructs resource URLs
+- `PRE_UPLOADED_META_KEY` metadata key for uploaded content references
+- `hasAttachments` check on chat messages
+- `cleanVideoUrl` utility for video URL normalization
+- `annotationsAttachmentUuid` for annotation-to-attachment mapping
+
+**Patch feasibility:** Multimodal cannot be added to 3.8 via extension.js patching alone. The language_server binary has zero knowledge of DocumentData/VideoData protobuf types. A binary swap from 3.9 would be required, but the 3.9 binary is incompatible with the 3.8 extension.js (different SETTING_KEYS, different protobuf field expectations).
+
+**Type acceptance model:** The protobuf `mime_type` field is free-form string - no enum restricts allowed formats. The client includes a full file-type detection library (file-type package) recognizing: mp4, webm, mov/quicktime, mkv/matroska, avi, flv, ogg/ogv, mpeg, mts/mp2t, 3gp/3g2, asf, m4v, h261, h263, h264, m4s, jpgv, jpm, mj2 (video); pdf, docx, pptx, xlsx, rtf (documents). Actual acceptance is gated server-side via `ModelFeatures` flags - if `supports_video=false` and `supports_video_urls=false`, videos are rejected regardless of format. The client sends whatever the user attaches; the server decides based on model capabilities. [TESTED 2026-09-09]
+
+### 18.3 ACP Metadata Expansion (3.9 only)
+
+3.9 adds 80+ new `cognition.ai/*` metadata keys for structured ACP communication:
+
+**Session management:**
+- `cognition.ai/session/id`, `cognition.ai/session/title`, `cognition.ai/session/status`
+- `cognition.ai/session/created_at`, `cognition.ai/session/updated_at`
+- `cognition.ai/session/branch`, `cognition.ai/session/pr_url`
+
+**Automations and blueprints:**
+- `cognition.ai/automation/*` keys
+- `cognition.ai/blueprint/*` keys
+
+**Slack/Teams integration:**
+- `cognition.ai/slack/*` keys
+- `cognition.ai/teams/*` keys
+
+**Mentions:**
+- `cognition.ai/mention/*` keys
+- `devin-mention-` prefix for mention parsing
+- `slash-command` and `slash-command-mention` for command references
+
+**Repository indexing:**
+- `cognition.ai/repo/indexing` and related keys
+
+**Pre-uploaded resources:**
+- `cognition.ai/pre-uploaded` metadata key (client-side only, not in language_server binary)
+
+### 18.4 Configuration Changes (3.8 → 3.9)
+
+**Removed from package.json `contributes.configuration.properties`:**
+- `devin.cascade.enabled` (was: type=boolean, default=true)
+- `windsurf.cascade.enabled` (was: deprecated alias)
+
+**Removed from extension.js SETTING_KEYS:**
+- `cascadeEnabled` key
+
+**Note:** Both settings were already dead code in 3.8 (0 usages of `SETTING_KEYS.cascadeEnabled`). The 3.9 removal is cleanup, not a behavioral change.
+
+**Unchanged in 3.9:**
+- Commands (no additions or removals)
+- Keybindings
+- Menus
+- Authentication providers
+- Languages
+- JSON validation schemas
+
+### 18.5 Error and Status Codes (3.9 only)
+
+3.9 adds new error/status codes:
+- `access_denied`
+- `auth_required`
+- `blocked_action`
+- `payment_declined`
+- `quota_exhausted`
+- `tool_rejected`
+
+### 18.6 Server-Side Cascade Controls (unchanged in both versions)
+
+These protobuf fields exist in both 3.8 and 3.9 but are server-side only - no client logic reads them:
+
+- `canUseCascade` (boolean) on `PlanInfo`, `GetEligibleDevinOrganizationsResponse.DevinOrganization`, `WindsurfPostAuthResponse`
+- `disableCascade` (boolean) on team config
+- `cascadeAvailability` (enum) on team config: `UNSPECIFIED=0`, `ENABLED=1`, `JETBRAINS_ONLY=2`, `DISABLED=3`
+
+The client extension never checks these fields to show/hide Cascade UI. Cascade visibility is hardcoded in the app shell.
+
+### 18.7 Modification Options Assessment
+
+**Option A (stay on 3.8, set `devin.cascade.enabled: false`):** FAILED. Setting is dead code. Cascade UI is always present in the app shell regardless of settings. [TESTED]
+
+**Option B (patch 3.9 to re-add cascade toggle):** VIABLE but moderate effort. Would need to inject reading logic into minified extension.js and patch app shell `workbench.desktop.main.js` to respect the setting.
+
+**Option C (patch app shell to hardcode Cascade off):** VIABLE. Would require finding Cascade view registration in `workbench.desktop.main.js` and patching it. Different file from extension.js, also minified, but Cascade view ID is findable.
+
+**Option D (accept Cascade presence, use ACP only):** Zero effort. ACP agents work alongside Cascade. `devin-cli` agent already configured. Cascade is selectable but user simply doesn't use it.
+
+## 19. Sources
 
 **Primary Sources:**
 - `DVDT-IN01-SC-DVNAI-RNAME`: https://devin.ai/blog/windsurf-is-now-devin-desktop - Official rename announcement [VERIFIED]
@@ -1220,8 +1410,51 @@ Devin.exe (Electron main process)
 - `DVDT-IN01-SC-APIDG-WHAT`: https://apidog.com/blog/whats-new-in-devin-2026/ - Feature comparison [VERIFIED]
 - `DVDT-IN01-SC-RLSBT-UPDT`: https://releasebot.io/updates/windsurf - Release aggregation [VERIFIED]
 - `DVDT-IN01-SC-CLDCD-SKLL`: https://code.claude.com/docs/en/skills - Claude Code skills reference [VERIFIED]
+- `DVDT-IN01-SC-BTITA-CEOL`: https://byteiota.com/cascade-eol-july-1-2026-devin-local-migration/ - Cascade EOL analysis and CI migration guide [VERIFIED]
+- `DVDT-IN01-SC-WBDEV-CEOL`: https://webdeveloper.com/news/windsurf-devin-desktop-cascade-eol/ - Cascade EOL July 1 announcement coverage [VERIFIED]
+- `DVDT-IN01-SC-ANDOO-CEOL`: https://andrew.ooo/answers/cascade-eol-july-1-2026-migrate-devin-local-cursor-claude-code/ - Cascade EOL migration comparison [VERIFIED]
+- `DVDT-IN01-SC-CGNTN-RN26`: https://cognitionai.mintlify.app/release-notes/2026 - 2026 release notes including Cascade enterprise controls [VERIFIED]
+- `DVDT-IN01-SC-DVNDC-CHNX`: https://docs.devin.ai/desktop/changelog-next - Next channel changelog with Migrate off Cascade wizard [VERIFIED]
+- `DVDT-IN01-SC-DVNDC-CSC`: https://docs.devin.ai/desktop/cascade/cascade - Cascade overview docs (legacy) [VERIFIED]
+- `DVDT-IN01-SC-DVNDC-ENTC`: https://docs.devin.ai/cli/enterprise/controls - Enterprise controls for Cascade disable [VERIFIED]
 
-## 19. Document History
+**Local Investigation Sources (2026-09-09):**
+- `DVDT-IN01-SC-LOCAL-V38`: Devin Next 3.8.1020 extension.js, package.json, product.json, language_server binary - Extracted from installed `%LOCALAPPDATA%\Programs\Devin Next` [TESTED 2026-09-09]
+- `DVDT-IN01-SC-LOCAL-V39`: Devin Next 3.9.1018 extension.js, package.json, language_server binary - Extracted from installer ZIP [TESTED 2026-09-09]
+- `DVDT-IN01-SC-LOCAL-BIN`: Binary string extraction and comparison using PowerShell `[regex]::Matches` on Go binary [TESTED 2026-09-09]
+- `DVDT-IN01-SC-LOCAL-WS`: `workbench.desktop.main.js` Cascade view registration analysis [TESTED 2026-09-09]
+
+## 20. Document History
+
+**[2026-09-09 20:30]**
+- Added: Section 18 "Version Differences: 3.8 vs 3.9" -- file size deltas, multimodal support (DocumentData, VideoData, ChatMessagePrompt fields 20-21, ModelFeatures fields), ACP metadata expansion (80+ cognition.ai/* keys), configuration changes, error codes, server-side cascade controls, modification options assessment
+- Added: Section 18.2 protobuf field-level details -- VideoData (base64_data, mime_type, url), DocumentData (base64_data, mime_type, filename, url), type acceptance model (free-form mime_type, server-side ModelFeatures gating, file-type detection library)
+- Added: Section 12.5 dead setting discovery -- `devin.cascade.enabled` has 0 usages in extension.js, Cascade UI in app shell
+- Added: Section 12.6 milestone -- 3.9.1018 removed cascade config keys (cleanup of already-dead code)
+- Added: Section 16 auto-update control -- `product.json` `updateUrl` field, nullify to block updates
+- Added: Section 17 binary analysis -- language_server protobuf type counts, extension.js SETTING_KEYS, context keys, feature flags
+- Added: Summary version differences block
+- Added: 4 local investigation sources
+- Changed: Version scope to include 3.8.1020 and 3.9.1018
+- Changed: Timeline updated to 4 updates
+- Changed: ToC updated with Section 18, Sources renumbered to 19, Document History to 20
+- Changed: Section 12.6 current status updated from [ASSUMED] to [TESTED 2026-09-09] -- Cascade no longer selectable in agent selector UI
+- Added: Milestone 2026-09-09 -- Cascade removed from agent picker
+- Changed: Section 3 agent selector description updated -- Cascade removed from selector
+- Changed: Section 3.5 Cascade description updated -- no longer selectable
+- Changed: Section 12 header updated -- no longer selectable in UI
+- Changed: Key concepts (Section 1) updated -- no longer selectable
+
+**[2026-09-09 10:30]**
+- Added: Section 12.6 Phase-Out Timeline -- Cascade EOL July 1, 2026, progressive deprecation milestones, current status, migration path
+- Changed: Section 3.5 Cascade description updated with EOL date and deprecation status
+- Changed: Section 12 header updated with EOL date reference
+- Changed: Section 2 Product History updated from "remains available" to "remained available through July 1, 2026"
+- Changed: Key concepts (Section 1) updated from "still maintained and shipped" to "announced EOL July 1, 2026"
+- Changed: Section 3 agent selector description updated with JetBrains-only scope
+- Added: 8 new sources (byteiota, webdeveloper, andrew.ooo, Cognition release notes, changelog-next, Cascade overview docs, enterprise controls)
+- Changed: Summary Agent Architecture updated with Cascade EOL finding
+- Changed: Timeline updated from 2 to 3 updates
 
 **[2026-08-31 00:35]**
 - Added: Section 17 bundled dependencies -- ripgrep 15.0.0 binary, location, features, IDE uses, failure mode

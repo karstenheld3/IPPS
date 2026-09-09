@@ -168,6 +168,14 @@ Documents may opt-in to use Markdown tables or emojis by adding a DevSystem tag 
 - Feature matrices and compatibility charts
 - Status dashboards
 
+## Confirmation Keywords
+
+`[CONFIRMATION_KEYWORDS]`: yes, confirm, confirmed, do, execute, apply
+
+Workflows that require user confirmation before executing changes MUST accept any of these keywords. Non-confirmation keywords: no, cancel, abort, stop.
+
+Workflows reference this list as `@rules:core-conventions.md [CONFIRMATION_KEYWORDS]` instead of inlining keyword lists.
+
 ## Skill References
 
 Reference skills using `@skills:skill-name` format. The skill name must match a folder in `[AGENT_FOLDER]/skills/`.

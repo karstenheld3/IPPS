@@ -15,6 +15,7 @@ Format (FT)
 - PRMT-FT-06: No content outside fences intended for the model
 - PRMT-FT-07: Heading consistency - headings recommended (SHOULD); if used, all prompts MUST have headings
 - PRMT-FT-08: Optional execution frontmatter - YAML block at file start with execution hints
+- PRMT-FT-09: prompt_system frontmatter empty when user requests workflow independence
 
 Structure (ST)
 - PRMT-ST-01: Every prompt has an identifiable objective
@@ -36,9 +37,10 @@ Content (CT)
 - PRMT-CT-05: Precision over token savings (APAPALAN priority order)
 - PRMT-CT-06: Signal redundancy preserved (MECT deliberate redundancy)
 - PRMT-CT-07: Examples over descriptions for format and behavior
-- PRMT-CT-08: Workflow calls on standalone lines, call first
+- PRMT-CT-08: Workflow execution on standalone lines without backticks
 - PRMT-CT-09: Formatting discipline inside fences (no tables, no emojis, structure over decoration)
-- PRMT-CT-10: Workflow references in backticks when not calling (distinct from PRMT-CT-08 standalone calls)
+- PRMT-CT-10: Workflow references in backticks when not executing (distinct from PRMT-CT-08 execution)
+- PRMT-CT-11: Leverage existing workflows whenever possible
 
 Execution (EX)
 - PRMT-EX-01: One prompt per turn - prompts are never concatenated into a single model submission
@@ -635,18 +637,25 @@ Use environment variables for secrets.
 - Use realistic but generic values (privacy gate applies - no real credentials, addresses, or identifiers)
 - If the codebase already contains the pattern, reference the file instead: "Follow the pattern in `src/api/users.py`"
 
-## PRMT-CT-08: Workflow Calls on Standalone Lines
+## PRMT-CT-08: Workflow Execution on Standalone Lines Without Backticks
 
-Slash workflow references (`/verify`, `/prime`, `/session-load`) must appear on their own line with the workflow call first. Enables quick human scanning for workflow invocations in prompt content.
+When a prompt instructs the agent to execute a workflow, the slash command MUST appear on its own line without backticks. This signals execution, not reference. Enables quick human scanning for workflow invocations in prompt content.
 
-**BAD** (workflow buried in sentence):
+**BAD** (workflow execution buried in sentence with backticks):
+`````markdown
+```
+After implementing the fix, make sure to run `/verify` against the spec and then `/commit`.
+```
+`````
+
+**BAD** (workflow buried in sentence without backticks):
 `````markdown
 ```
 After implementing the fix, make sure to run /verify against the spec and then /commit.
 ```
 `````
 
-**GOOD** (workflow calls on standalone lines, call first):
+**GOOD** (workflow execution on standalone lines, no backticks):
 `````markdown
 ```
 After implementing the fix:
@@ -695,9 +704,9 @@ Finding status:
 ```
 `````
 
-## PRMT-CT-10: Workflow References in Backticks When Not Calling
+## PRMT-CT-10: Workflow References in Backticks When Not Executing
 
-When a workflow name appears in prompt prose as a reference (not as an actual call to execute), it MUST be wrapped in backticks. This distinguishes references from executable calls (PRMT-CT-08 standalone lines without backticks).
+When a workflow or prompt system command appears in prompt prose as a reference (not as an actual call to execute), it MUST be wrapped in backticks. This distinguishes references from executable calls (PRMT-CT-08: standalone lines without backticks).
 
 **BAD** (workflow referenced in prose without backticks):
 `````markdown
@@ -719,6 +728,36 @@ Then use `/write-prompts` to write the remaining prompts into a file.
 
 Applies to all workflow names mentioned in prose: `/deep-research`, `/fact-check`, `/go`, `/verify`, `/write-prompts`, etc. When the workflow is actually being called (PRMT-CT-08), it appears on its own line without backticks.
 
+## PRMT-CT-11: Leverage Existing Workflows Whenever Possible
+
+Prompts MUST reference and use existing workflows from `[AGENT_FOLDER]/workflows/` whenever a matching workflow exists. This leverages standardized processes defined in the prompt system. Do not reinvent workflow logic in prompt prose when a workflow already handles the task.
+
+**Before writing prompts**: Scan `[AGENT_FOLDER]/workflows/` frontmatters (the `description` field) to find applicable workflows. Load matching workflows entirely to understand their structure, steps, and dispatch patterns before designing prompts that build on or invoke them.
+
+**When to reference a workflow**:
+- A prompt instructs the agent to sync, verify, test, deploy, commit, or any action that has a dedicated workflow
+- A prompt produces output that a downstream workflow consumes (e.g., prompt writes a SPEC, `/write-impl-plan` follows)
+- A prompt's step overlaps with an existing workflow's scope
+
+**When NOT to reference a workflow**:
+- No matching workflow exists (e.g., domain-specific logic unique to the prompt sequence)
+- User explicitly requests workflow independence (see PRMT-FT-09)
+- The workflow's scope is tangential (mentioning it adds noise without actionable value)
+
+**BAD** (reinvents sync logic in prompt prose):
+`````markdown
+```
+Sync all changes from DevSystemV4.3/ to .devin/. Run sync.ps1 -diff first, review output, then run sync.ps1 -execute. Check that renamed files appear, new files exist, deprecated files deleted.
+```
+`````
+
+**GOOD** (uses existing `/sync` workflow):
+`````markdown
+```
+Use the `/sync` workflow (`[AGENT_FOLDER]/workflows/sync.md`) to sync all changes from DevSystemV4.3/ to .devin/. Follow the sync workflow's GLOBAL-RULES and Workspace Sync section.
+```
+`````
+
 ## PRMT-FT-08: Optional Execution Frontmatter
 
 An optional YAML block at the very top of the file (before any Commentary or Opening Fence). Provides execution hints to the execution engine. The execution engine MAY honor these hints or override with its own configuration.
@@ -735,6 +774,7 @@ An optional YAML block at the very top of the file (before any Commentary or Ope
 3. Frontmatter is never sent to the model
 4. Frontmatter is OPTIONAL - omit entirely if no execution hints needed
 5. Unknown keys are ignored by the parser (forward compatibility)
+6. If user explicitly requests prompt system independence, `prompt_system` MUST be empty or omitted. This signals that prompts do not depend on any specific workflow ecosystem.
 
 **GOOD** (with frontmatter):
 `````markdown

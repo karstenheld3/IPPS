@@ -146,6 +146,18 @@ Automatically push commits to GitHub.
 - `/sync specs from source` — same flow for specs
 - `/sync specs to targets` — same flow for specs
 
+## DevSystem 5.0 Planning
+
+**Investigate workflow** (created 2026-09-09 in DevSystemV4.3, ready for 5.0 inclusion):
+- `specs/_SPEC_INVESTIGATE_WORKFLOW.md [INVESTIGATE-SP01]` - Specification
+- `DevSystemV4.3/workflows/investigate.md` - Workflow file
+- `DevSystemV4.3/skills/write-documents/INVESTIGATION_LOG_TEMPLATE.md` - Log template
+- `DevSystemV4.3/skills/write-documents/INVESTIGATION_GUIDES.md` - Entry type guidance
+- `DevSystemV4.3/skills/write-documents/INVESTIGATION_LOG_RULES.md` - Verification rules (IL-* rule IDs)
+- `DevSystemV4.3/workflows/verify.md` - Updated with Investigation Logs section
+
+Workflow behavior: formulates goal, collects premises, analyzes problem nature, lists known knowns and unknowns, writes STRUT with phased approaches (Phase 1 first), creates append-only investigation log, executes phases with mandatory log checkpoints, updates log with handover state and STRUT with progress after each phase.
+
 ## [PERSONAL_WORKFLOWS] (excluded from Development-only repos, deployed only to "All" repos)
 
 - conversation-start.md

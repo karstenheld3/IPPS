@@ -18,6 +18,21 @@
 - `[AGENT_FOLDER]`: Active agent folder (e.g., `.devin`)
 - `[KEYS_FILE]`: API keys file path
 
+## Distribution Targets
+
+All targets receive the 3 canonical JSONs (`model-pricing.json`, `model-registry.json`, `model-parameter-mapping.json`) from `[SKILL_FOLDER]`. Edit these lists to add or remove targets.
+
+**Agent folder** (always copy all 3 files):
+- `[AGENT_FOLDER]/skills/llm-evaluation`
+
+**Dependent skills** (copy only if file already exists at target):
+- `[AGENT_FOLDER]/skills/llm-transcription`
+- `[DEVSYSTEM_FOLDER]/skills/llm-transcription`
+
+**External config targets** (copy only if file already exists at target):
+- `e:\Dev\Lana-V1\config`
+- `e:\Dev\Lana-V2\config`
+
 ## Sources
 
 **Anthropic:**
@@ -562,24 +577,19 @@ If `test-call-llm.py` has no test entries for a new model, the `--model` filter 
 
 After all gates pass, copy canonical JSONs from `[SKILL_FOLDER]` to all targets.
 
-### 9.1 Distribute to Agent Folder
-
-Copy all 3 JSONs from `[DEVSYSTEM_FOLDER]` to the active agent's llm-evaluation skill:
+Targets are defined in the **Distribution Targets** section at the top of this document. Update them there to add or remove targets.
 
 ```powershell
 $src = "[SKILL_FOLDER]"
 $jsonFiles = @("model-pricing.json", "model-registry.json", "model-parameter-mapping.json")
+
+# 9.1 Agent folder (always copy all 3 files)
 $agentDst = "[AGENT_FOLDER]/skills/llm-evaluation"
 foreach ($f in $jsonFiles) {
   Copy-Item "$src/$f" "$agentDst/$f" -Force
 }
-```
 
-### 9.2 Distribute to Dependent Skills
-
-Some skills consume a subset of these JSONs. Only copy files that already exist at the target:
-
-```powershell
+# 9.2 Dependent skills (copy only if file already exists at target)
 $dependentSkills = @(
   "[AGENT_FOLDER]/skills/llm-transcription",
   "[DEVSYSTEM_FOLDER]/skills/llm-transcription"
@@ -592,9 +602,10 @@ foreach ($dst in $dependentSkills) {
   }
 }
 
-# 9.3 Distribute to external config targets
+# 9.3 External config targets (copy only if file already exists at target)
 $externalTargets = @(
-  "e:\Dev\Lana-V1\config"
+  "e:\Dev\Lana-V1\config",
+  "e:\Dev\Lana-V2\config"
 )
 foreach ($dst in $externalTargets) {
   foreach ($f in $jsonFiles) {
@@ -642,11 +653,16 @@ Print a concise summary:
 - **Anthropic API ID unresolvable**: write the alias, add `_note_<alias>` key, flag in report. Do not block the run.
 - **Gate 5, 6, 7, or 9 fails**: the edit did not persist or the sync did not complete. Most common cause: file was edited in memory but never written. Re-read from disk, re-apply, re-verify.
 - **test-call-llm.py has no entries for new model**: add minimal test entry, re-run. Do not skip verification.
-- **New dependent skill added**: append its folder to Phase 9 `$dependentSkills` and add to "Dependent skills" list.
-- **New distribution target added**: append to Phase 9.1, 9.2, or 9.3 as appropriate.
+- **New dependent skill added**: append its folder to the Distribution Targets section and Phase 9 `$dependentSkills` array.
+- **New distribution target added**: append to the Distribution Targets section and the corresponding Phase 9 array (`$agentDst`, `$dependentSkills`, or `$externalTargets`).
 - **Duplicate model in pricing vs registry**: reconcile toward the pricing file (prices are authoritative for existence); registry must follow.
 
 ## Document History
+
+**[2026-09-09 11:06]**
+- Added: `e:\Dev\Lana-V2\config` as external config target
+- Changed: Moved distribution targets to configurable section at top of document
+- Changed: Phase 9 now references the Distribution Targets section instead of hardcoding target lists
 
 **[2026-09-05 22:15]**
 - Added: Phase 9.3 "Distribute to external config targets" with `e:\Dev\Lana-V1\config` as first target

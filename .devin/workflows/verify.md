@@ -364,6 +364,9 @@ Detect by: filename pattern `_PROMPTS_*.md` or file starts with a fenced code bl
 - Verify fence depth per prompt: outer fence exceeds deepest inner fence (PRMT-FT-02)
 - Verify no model-intended content outside fences (PRMT-FT-06)
 - Verify `---` separator between every pair of consecutive prompts (PRMT-FT-03)
+- Verify existing workflows are referenced or invoked when matching workflows exist (PRMT-CT-11): scan `[AGENT_FOLDER]/workflows/` frontmatters, check that prompts with sync/verify/test/deploy/commit/session actions reference the corresponding workflow instead of reinventing logic
+- Verify workflow execution vs reference distinction: workflows intended to execute use slash command on standalone line without backticks (PRMT-CT-08); workflows mentioned as references use backticks (PRMT-CT-10). Check every workflow name occurrence in prompt prose for correct formatting
+- Verify `prompt_system` frontmatter is empty or omitted when user requested workflow independence (PRMT-FT-09)
 - Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity)
 
 ## Minto Documents
@@ -490,9 +493,11 @@ Verify before phase transition (when evaluating Transitions):
 
 Detect by: user runs `/verify workspace` or `/verify setup` or context is workspace configuration.
 
-Read @skills:workspace-management SKILL.md, WORKSPACE-RULES.md, and WORKSPACE-GUIDES.md before verifying. Read templates (DEV_REPO_NOTES_TEMPLATE.md, PRODUCT_REPO_README_TEMPLATE.md, COMPANY_REPO_NOTES_TEMPLATE.md) for comparison against workspace files.
+Read @skills:workspace-management SKILL.md, WORKSPACE-RULES.md, and WORKSPACE-GUIDES.md before verifying. Also read WORKSPACE_SETUP_QUESTIONNAIRE.md schema section for schema-aware verification. Read templates (DEV_REPO_NOTES_TEMPLATE.md, PRODUCT_REPO_README_TEMPLATE.md, COMPANY_REPO_NOTES_TEMPLATE.md) for comparison against workspace files.
 
-Verification checklist (sourced from WORKSPACE-RULES.md):
+Schema-aware mode (FR-68): When invoked as `/verify workspace` or `/verify setup`, also load schema fields from WORKSPACE_SETUP_QUESTIONNAIRE.md. Evaluate each field for status (OK/GAP/STALE/DEVIATION/N/A) per Procedure 6. This produces identical results to `/workspace-setup verify`. Schema-aware mode proposes fixes but does NOT execute them — consistent with workspace-setup.md Use Case 1. User must confirm with @rules:core-conventions.md [CONFIRMATION_KEYWORDS] before applying.
+
+Verification checklist (sourced from WORKSPACE-RULES.md + schema fields):
 
 1. Detect sync relationship (SYNCED or SELF-CONTAINED) by checking for sync markers:
    - devsystem-sync.json at [WORKSPACE_FOLDER] root
@@ -518,12 +523,14 @@ Verification checklist (sourced from WORKSPACE-RULES.md):
 10. Check NOTES.md Release Configuration section present for SOFTWARE-DEV workspaces (WS-CT-08)
 11. If GENERAL: verify dev-only constants and sections are absent (WS-CT-09). If SOFTWARE-DEV: verify dev-only constants and sections are present
 12. Report sync relationship state (SYNCED or SELF-CONTAINED)
+13. Schema-aware: evaluate each schema field from WORKSPACE_SETUP_QUESTIONNAIRE.md (OK/GAP/STALE/DEVIATION/N/A), propose fixes for GAP and STALE fields
 
 Fix actions per gap type:
 - Missing constant -> add with template default from DEV_REPO_NOTES_TEMPLATE.md
 - Missing required file -> create from template
 - Broken reference -> report only (requires user judgment)
 - Structural violation -> report only
+- Schema GAP/STALE -> propose fix, do NOT execute without @rules:core-conventions.md [CONFIRMATION_KEYWORDS]
 
 Downstream repo modifications are allowed (customizations are valid). Do not fail verification for intentional customizations.
 

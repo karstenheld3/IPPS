@@ -226,13 +226,13 @@ Read @skills:workspace-management SKILL.md before syncing.
 
 **`/sync sync settings to repo xyz`** — compares and replicates ONLY devsystem-sync.json into target repo xyz.
 
-**`/sync knowledge from source`** — reads knowledge source from devsystem-sync.json, runs `sync.ps1 -diff`, previews. Auto-executes on confirmation keywords: yes, go, do, execute, confirmed.
+**`/sync knowledge from source`** — reads knowledge source from devsystem-sync.json, runs `sync.ps1 -diff`, previews. Auto-executes on @rules:core-conventions.md [CONFIRMATION_KEYWORDS].
 
-**`/sync knowledge to targets`** — reads target repos from source NOTES.md synced repos list, runs `sync.ps1 -diff` for each target, previews. Auto-executes on confirm.
+**`/sync knowledge to targets`** — reads target repos from source NOTES.md synced repos list, runs `sync.ps1 -diff` for each target, previews. Auto-executes on @rules:core-conventions.md [CONFIRMATION_KEYWORDS].
 
-**`/sync specs from source`** — reads specs source from devsystem-sync.json, runs `sync.ps1 -diff`, previews. Auto-executes on confirm.
+**`/sync specs from source`** — reads specs source from devsystem-sync.json, runs `sync.ps1 -diff`, previews. Auto-executes on @rules:core-conventions.md [CONFIRMATION_KEYWORDS].
 
-**`/sync specs to targets`** — reads target repos from source NOTES.md synced repos list, runs `sync.ps1 -diff` for each target, previews. Auto-executes on confirm.
+**`/sync specs to targets`** — reads target repos from source NOTES.md synced repos list, runs `sync.ps1 -diff` for each target, previews. Auto-executes on @rules:core-conventions.md [CONFIRMATION_KEYWORDS].
 
 ### Sync Procedure
 
@@ -247,8 +247,8 @@ Read @skills:workspace-management SKILL.md before syncing.
    - Excluded files (filtered by bundle include/exclude rules)
    - Deprecated files marked for deletion
 4. Prompt user for confirmation:
-   - Confirmation keywords: "yes", "go", "do", "execute", "confirmed", "apply"
-   - Non-confirmation keywords: "no", "cancel", "abort", "stop"
+   - Confirmation keywords: @rules:core-conventions.md [CONFIRMATION_KEYWORDS]
+   - Non-confirmation keywords: no, cancel, abort, stop
 5. If confirmed:
    - Run `sync.ps1 -execute -sources <source> -targets <target> -configs devsystem-sync.json`
    - Verify `last_sync` timestamp updated in target config

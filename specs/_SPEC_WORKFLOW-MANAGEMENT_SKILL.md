@@ -9,7 +9,8 @@
 - `DevSystemV4.3/skills/workspace-management/SKILL.md`
 - `DevSystemV4.3/skills/workspace-management/WORKSPACE-GUIDES.md`
 - `DevSystemV4.3/skills/workspace-management/WORKSPACE-RULES.md`
-- `DevSystemV4.3/skills/workspace-management/WORKSPACE_CREATION_QUESTIONNAIRE.md`
+- `DevSystemV4.3/skills/workspace-management/WORKSPACE_SETUP_QUESTIONNAIRE.md` (renamed from WORKSPACE_CREATION_QUESTIONNAIRE.md)
+- `DevSystemV4.3/skills/workspace-management/WORKSPACE_SETUP_REPORT_TEMPLATE.md` (new)
 - `DevSystemV4.3/skills/workspace-management/DEV_REPO_NOTES_TEMPLATE.md`
 - `DevSystemV4.3/skills/workspace-management/PRODUCT_REPO_README_TEMPLATE.md`
 - `DevSystemV4.3/skills/workspace-management/COMPANY_REPO_NOTES_TEMPLATE.md`
@@ -18,6 +19,7 @@
 - `DevSystemV4.3/skills/workspace-management/sync.ps1` (single generic sync script with -diff and -execute modes)
 - `[WORKSPACE_FOLDER]\devsystem-sync.json` (target-side sync config, single source of truth)
 - `DevSystemV4.3/workflows/workspace-setup.md` (new workflow)
+- `DevSystemV4.3/workflows/compare-workspace-setup.md` (new workflow for compare use case)
 - `DevSystemV4.3/workflows/verify.md` (new context section)
 - `DevSystemV4.3/workflows/sync.md` (new context section)
 - `DevSystemV4.3/workflows/commit.md` (multi-repo commit support)
@@ -51,7 +53,7 @@
 - Existing repos with [LINKED_REPOS] or [*_SOURCE_FOLDER] are SYNCED by default - migration to devsystem-sync.json required but sync relationship detection unchanged
 - Workspace creation questionnaire must show impact per question so user understands consequences of each choice
 - Workspace creation is non-destructive (creating new files/folders) - no confirmation gate per WF-EX-01
-- `workspace-setup.md` workflow is thin: references WORKSPACE_CREATION_QUESTIONNAIRE.md for questionnaire content, does not replicate questions
+- `workspace-setup.md` workflow is thin: references WORKSPACE_SETUP_QUESTIONNAIRE.md for questionnaire content, does not replicate questions
 - Sync configuration is JSON-based: devsystem-sync.json at target [WORKSPACE_FOLDER] root is single source of truth - no hardcoded arrays in scripts or NOTES.md prose
 - Single sync.ps1 script with -diff and -execute modes; params are -sources, -targets, -configs, -output-file (all accept JSON arrays or single strings)
 - Source repo only references RELATIVE downstream repo paths (e.g., ../Lana-V2-Dev), never absolute paths
@@ -436,6 +438,7 @@ Direction definitions:
 - Fix actions per gap type: missing constant -> add with template default. Missing required file -> create from template. Broken reference -> report only (requires user judgment). Structural violation -> report only
 - All fixes must be reported with what was changed and why
 - Uses WORKSPACE-RULES.md as verification checklist source
+- Note: `/workspace-setup verify` is an alternative entry point to the same verification logic as `/verify workspace`. Both entry points produce identical results — they dispatch to Procedure 4 (Integrity Check) with the same rules and templates
 
 **WSKMGMT-FR-28: sync.md "Workspace Sync" context**
 - New context in `/sync` workflow: "Workspace Sync"
@@ -448,8 +451,8 @@ Direction definitions:
 
 **WSKMGMT-FR-29: sync.md preview/confirm flow**
 - After diff preview, prompt user for confirmation
-- Confirmation keywords: "yes", "go", "confirmed", "execute", "apply"
-- Non-confirmation keywords: "no", "cancel", "abort", "stop"
+- Confirmation keywords: @rules:core-conventions.md [CONFIRMATION_KEYWORDS]
+- Non-confirmation keywords: no, cancel, abort, stop
 - If confirmed: execute sync using skill's sync scripts
 - If not confirmed: abort, no changes made
 - Preview must show: files to add, files to modify, files to delete, files to skip (with reason)
@@ -459,7 +462,7 @@ Direction definitions:
 - MUST-NOT-FORGET section (5-8 items): generic paths only, run -diff before -execute, never_overwrite check, rollback warning for shared branches, privacy gate, register in NOTES.md
 - Intent Lookup: maps 3 areas (WORKSPACE, DEVSYSTEM, KNOWLEDGE) x 4 operations (compare, update, rollback, integrity) to procedures and FR references
 - Core Procedures: compare workspace, update from source, rollback, integrity check, multi-repo commit
-- References: links to WORKSPACE-GUIDES.md, WORKSPACE-RULES.md, WORKSPACE_CREATION_QUESTIONNAIRE.md, DEV_REPO_NOTES_TEMPLATE.md, PRODUCT_REPO_README_TEMPLATE.md, COMPANY_REPO_NOTES_TEMPLATE.md, sync.ps1, LOCAL_ENVIRONMENTS.md
+- References: links to WORKSPACE-GUIDES.md, WORKSPACE-RULES.md, WORKSPACE_SETUP_QUESTIONNAIRE.md, DEV_REPO_NOTES_TEMPLATE.md, PRODUCT_REPO_README_TEMPLATE.md, COMPANY_REPO_NOTES_TEMPLATE.md, sync.ps1, LOCAL_ENVIRONMENTS.md
 - Gotchas: sync config is JSON-based, never_overwrite overrides deprecated, rollback on shared branches requires revert commit
 - Follows SKILL_RULES.md (all SK-* rules) and SKILL_TEMPLATE.md structure
 
@@ -535,7 +538,7 @@ Direction definitions:
 
 ### Workspace Creation
 
-**WSKMGMT-FR-41: WORKSPACE_CREATION_QUESTIONNAIRE.md**
+**WSKMGMT-FR-41: WORKSPACE_SETUP_QUESTIONNAIRE.md**
 - Interactive questionnaire for creating new single-repo and multi-repo workspaces
 - 7 sections: Workspace Mode, Product Repo, Dev Repo, Version Strategy, Sync Sources, Release Configuration, Skill Categories
 - Each question shows default value in brackets and impact description explaining consequences
@@ -546,7 +549,7 @@ Direction definitions:
 - Privacy gate compliant: all placeholders generic (e.g., [myapp], [appname])
 
 **WSKMGMT-FR-42: workspace-setup.md workflow**
-- Thin workflow entry point: references WORKSPACE_CREATION_QUESTIONNAIRE.md for questionnaire content
+- Thin workflow entry point: references WORKSPACE_SETUP_QUESTIONNAIRE.md for questionnaire content
 - Does not replicate questions in workflow body (Workflow-Skill Separation rule)
 - Frontmatter: description, auto_execution_mode
 - Scope: workspace creation AND modification (rename from workspace-create reflects dual purpose)
@@ -558,10 +561,17 @@ Direction definitions:
 - No confirmation gates - workspace creation is non-destructive per WF-EX-01
 - Verification section per WF-ST-04: run `/verify workspace` after creation
 - Follows WORKFLOW_RULES.md (all WF-* rules) and WORKFLOW_TEMPLATE.md structure
+- Use cases (5 total, dispatched by command argument):
+  - FR-68: `/workspace-setup verify` — dispatches to Procedure 4 with schema-aware mode, proposes fixes, executes on @rules:core-conventions.md [CONFIRMATION_KEYWORDS]
+  - FR-69: `/workspace-setup sync from [source]` — dispatches to Procedure 2 scoped to setup files, previews changes, executes on confirmation
+  - FR-70: `/workspace-setup sync to [target]` — dispatches to Procedure 2 reversed, previews changes, executes on confirmation
+  - FR-75: `/workspace-setup compare [path]` — dispatches to Procedure 7, generates diff report, read-only by default
+  - FR-71: `/workspace-setup` (default) — covers two sub-variants: (a) [instructions] executes provided instructions and settings; (b) no args dispatches to Procedure 6 (Setup Analysis), generates full analysis report in chat, no changes executed
+- Workflow handles creation AND modification — the existing creation flow becomes the default use case when no command argument matches verify/sync/compare
 
 **WSKMGMT-FR-43: Workspace creation procedure in SKILL.md**
-- Add intent to Intent Lookup: "Create a new workspace -> WORKSPACE_CREATION_QUESTIONNAIRE.md questionnaire"
-- Add WORKSPACE_CREATION_QUESTIONNAIRE.md to References list
+- Add intent to Intent Lookup: "Create a new workspace -> WORKSPACE_SETUP_QUESTIONNAIRE.md questionnaire"
+- Add WORKSPACE_SETUP_QUESTIONNAIRE.md to References list
 - No new Core Procedure needed - creation flow lives in workflow, guide provides questionnaire content
 
 ### JSON-Based Sync Configuration
@@ -623,7 +633,7 @@ Direction definitions:
 - Multi-source, multi-target, multi-config support in a single script call
 - No hardcoded paths, skill categories, or target lists in the workflow itself
 - Preview/confirm flow preserved: diff first, show results, confirm, then sync
-- Auto-execute on confirmation keywords: yes, go, do, execute, confirmed
+- Auto-execute on @rules:core-conventions.md [CONFIRMATION_KEYWORDS]
 
 **WSKMGMT-FR-50: rules → specs folder rename**
 - `[WORKSPACE_FOLDER]\rules` renamed to `[WORKSPACE_FOLDER]\specs`
@@ -693,7 +703,7 @@ Direction definitions:
 - Sync source constants still optional (SYNCED or SELF-CONTAINED) — GENERAL workspaces can be either
 - Verify must pass GENERAL workspaces without reporting missing dev-only sections as gaps
 - prime.md must detect and report Workspace Type as Dimension 5 in output
-- WORKSPACE_CREATION_QUESTIONNAIRE.md must ask workspace type first (1a), then mode (1b) for SOFTWARE-DEV only
+- WORKSPACE_SETUP_QUESTIONNAIRE.md must ask workspace type first (1a), then mode (1b) for SOFTWARE-DEV only
 - If GENERAL selected: skip Section 2 (Product Repo), Section 4 (Version Strategy), Section 6 (Release Configuration)
 - Remove Section 7 (Skill Categories) from questionnaire — dead concept, skills discovered by scanning skills/ folder
 - DEV_REPO_NOTES_TEMPLATE.md must include `Workspace type: [SOFTWARE-DEV|GENERAL]` in Project Info
@@ -705,6 +715,142 @@ Direction definitions:
 - workspace-management owns: [PRODUCT_VERSION], [DEV_SPECS_FOLDER], [DEV_KNOWLEDGE_FOLDER], [DEVSYSTEM_SYNC_CONFIG] concepts, Dimensions 1/2/4/5, Folder Structure, [WORKSPACE_FOLDER]/[PROJECT_FOLDER]/[SRC_FOLDER] placeholders
 - session-management owns: Dimension 3 (Work Mode), [SESSIONS_FOLDER]/[SESSION_ARCHIVE_FOLDER]/[SESSION_FOLDER] placeholders
 - ID-REGISTRY.md states reorganized under skill headings with START/END markers (bare enumerations, no descriptions — see devsystem-core.md for definitions)
+
+### Schema and Analysis (from WSKMGMT-SP02)
+
+**WSKMGMT-FR-65: Setup schema in questionnaire**
+- Add `## Setup Schema` section to `WORKSPACE_SETUP_QUESTIONNAIRE.md` (renamed from WORKSPACE_CREATION_QUESTIONNAIRE.md)
+- Schema contains all fields from questionnaire sections 1-6, expressed as flat SetupField entries
+- Each field has: id, type (single/list/enum), condition, default, report_label, options (enum only)
+- Fields are ordered by section number — conditions always reference earlier field IDs
+- Condition syntax: `==` for equality, `AND` for conjunction, `(always)` for unconditional fields
+- No OR, no negation, no nested predicates — evaluation is trivial for LLM
+- Schema is the single source of truth — report template references field IDs, not duplicate definitions
+- Privacy gate compliant: all default values use generic placeholders
+
+**WSKMGMT-FR-66: WORKSPACE_SETUP_REPORT_TEMPLATE.md**
+- New file in `DevSystemV4.3/skills/workspace-management/`
+- Report structure mirrors questionnaire sections 1-6 using same field IDs
+- Per-section table: Field ID | Current | Default | Status | Proposed Fix
+- Summary section: workspace type, mode, sync relationship, counts (OK/GAP/STALE/DEVIATION/N/A)
+- List field details section: expanded missing/extra items for list-type fields
+- Status values: OK, GAP, STALE, DEVIATION, N/A (see FieldStatus domain object)
+- Template is a guide for report generation, not a fill-in form — agent generates report in chat following the structure
+- Harmonized with questionnaire: same field IDs, same sections, same condition logic
+
+**WSKMGMT-FR-67: Procedure 6 (Setup Analysis) in SKILL.md**
+- New Core Procedure added to SKILL.md Intent Lookup and Core Procedures
+- Intent: "Analyze workspace setup and generate report" → Procedure 6
+- Steps:
+  1. Load `WORKSPACE_SETUP_QUESTIONNAIRE.md` schema section
+  2. Detect current workspace type and mode (reuse detection from Procedure 4)
+  3. For each field in schema (top-to-bottom):
+     a. Evaluate condition — if not met, mark N/A and skip
+     b. Read current value from workspace (NOTES.md, devsystem-sync.json, folder structure)
+     c. Compare against default
+     d. Assign status: OK, GAP, STALE, DEVIATION, or N/A
+  4. Generate report following `WORKSPACE_SETUP_REPORT_TEMPLATE.md` structure
+  5. Output report to chat
+- Does not execute changes — analysis only
+- List field comparison: set difference (missing = in default not in current, extra = in current not in default)
+- Enum field comparison: validate current is a valid option, compare against default
+- Single field comparison: string equality with default
+
+**WSKMGMT-FR-68: `/workspace-setup verify` use case**
+- Compares current workspace against schema defaults and templates
+- Main question: "Is everything correctly set up?"
+- Detects: stale configuration, missing components and constants, deviations from templates and recommendations
+- Calls @skills:workspace-management Procedure 4 (Integrity Check, existing) with setup-specific scoping
+- Procedure 4 enhanced: reads schema fields in addition to WORKSPACE-RULES.md
+- Proposes changes in chat — does not execute by default
+- Previews proposed changes with field-level detail
+- Executes if user responds with @rules:core-conventions.md [CONFIRMATION_KEYWORDS]
+- Non-confirmation: aborts, no changes made
+- Amends FR-27 (`/verify workspace`): Procedure 4 enhanced with schema-awareness — reads schema fields from WORKSPACE_SETUP_QUESTIONNAIRE.md in addition to WORKSPACE-RULES.md. `/verify workspace` and `/workspace-setup verify` are alternative entry points to the same enhanced logic and produce identical results
+
+**WSKMGMT-FR-69: `/workspace-setup sync from [source]` use case**
+- Analyzes workspace setup in source repo, compares with current workspace
+- Syncs setup changes FROM source TO current
+- Setup content = NOTES.md workspace constants, devsystem-sync.json, folder structure
+- Calls @skills:workspace-management Procedure 2 (Update, existing) with setup-specific scoping
+- Procedure 2 scoped to setup files only (not DevSystem content, not knowledge bundles)
+- Proposes changes in chat — does not execute by default
+- Previews: fields to add, fields to modify, fields to remove (with reason)
+- Executes if user responds with @rules:core-conventions.md [CONFIRMATION_KEYWORDS]
+- Merge strategy: source values win for fields that exist in both, current-only fields are preserved
+- List fields: union of source and current items (additive merge, no removal)
+
+**WSKMGMT-FR-70: `/workspace-setup sync to [target]` use case**
+- Analyzes workspace setup in target repo, compares with current workspace
+- Syncs setup changes FROM current TO target
+- Same logic as FR-69 with reversed direction (current is source, target is destination)
+- Calls @skills:workspace-management Procedure 2 with swapped source/target
+- Same preview/confirm/execute flow as FR-69, same @rules:core-conventions.md [CONFIRMATION_KEYWORDS]
+- Same merge strategy: current values win for fields that exist in both, target-only fields preserved
+
+**WSKMGMT-FR-71: `/workspace-setup [instructions]` use case (default)**
+- If instructions provided: execute instructions and settings
+- If no instructions or settings: analyze and detect current workspace setup
+- Default analysis calls Procedure 6 (Setup Analysis, FR-67)
+- Compares with defaults and questionnaire schema
+- Writes full analysis report into chat following `WORKSPACE_SETUP_REPORT_TEMPLATE.md`
+- Does not propose changes or execute — pure analysis output
+- If user wants changes after reading report: runs `/workspace-setup verify` or `/workspace-setup sync`
+
+**WSKMGMT-FR-72: Rename and deprecate files**
+- Rename `WORKSPACE_CREATION_QUESTIONNAIRE.md` → `WORKSPACE_SETUP_QUESTIONNAIRE.md` in:
+  - `DevSystemV4.3/skills/workspace-management/` (source)
+  - `.devin/skills/workspace-management/` (sync target, updated via sync)
+  - All references in SKILL.md, SPEC, workflow, README.md
+- Deprecate `workspace-create.md`:
+  - Already renamed to `workspace-setup.md` in `DevSystemV4.3/workflows/`
+  - Old `workspace-create.md` in `.devin/workflows/` is stale sync copy
+  - Add `workspace-create.md` to `deprecated` array in `devsystem-sync.json` so sync deletes it
+  - Update SPEC WSKMGMT-SP01 FR-42 to reflect new workflow scope (amend existing FR)
+- Update `README.md` workflow reference (already says `workspace-setup` — verify link target)
+- Update all internal references from `WORKSPACE_CREATION_QUESTIONNAIRE` to `WORKSPACE_SETUP_QUESTIONNAIRE` across:
+  - `DevSystemV4.3/workflows/workspace-setup.md`
+  - `DevSystemV4.3/skills/workspace-management/SKILL.md`
+  - `specs/_SPEC_WORKFLOW-MANAGEMENT_SKILL.md`
+  - `.devin/` copies (via sync)
+
+**WSKMGMT-FR-73: compare-workspace-setup.md workflow**
+- New workflow file in `DevSystemV4.3/workflows/compare-workspace-setup.md`
+- Follows WORKFLOW_TEMPLATE.md structure (WF-HD-01 through WF-BR-04)
+- Thin workflow — dispatches to Procedure 7 in SKILL.md, no embedded comparison logic
+- Frontmatter: description, auto_execution_mode
+- Goal: compare workspace settings between two workspaces using schema
+- MUST-NOT-FORGET: load schema from questionnaire, agent reads prose NOTES.md (not script), thin workflow, @rules:core-conventions.md [CONFIRMATION_KEYWORDS]
+- Required Skills: @skills:workspace-management
+- Prerequisites: target workspace path provided in [instructions]
+- Steps: load schema, read workspace A (current), read workspace B (target from path), dispatch to Procedure 7 for comparison, generate diff report
+- Diff status values: MATCH, DIFF, ONLY_A, ONLY_B, N/A (distinct from verify statuses)
+- Output: diff report in chat with per-field comparison and summary counts
+- No Context Match fallback: if no target path provided, ask user
+- Verification: all applicable schema fields covered, both workspaces read correctly
+
+**WSKMGMT-FR-74: Procedure 7 Compare Workspace Setup in SKILL.md**
+- New Procedure 7 in workspace-management SKILL.md
+- Steps: load schema from WORKSPACE_SETUP_QUESTIONNAIRE.md, read workspace A (NOTES.md + devsystem-sync.json + folder structure), read workspace B from provided path, compare field-by-field using schema, generate diff report
+- Agent is the comparison engine — reads prose NOTES.md directly, evaluates conditions, assigns semantic status
+- No script or regex parsing — LLM extraction from prose markdown
+- Diff status values: MATCH (identical), DIFF (both have value, different), ONLY_A (only in workspace A), ONLY_B (only in workspace B), N/A (condition not met for this workspace type)
+- For list fields: compare as sets (common, only-A, only-B)
+- Report follows WORKSPACE_SETUP_REPORT_TEMPLATE.md structure adapted for two-workspace comparison
+- Does not modify either workspace — analysis only
+- If user requests applying differences after report: dispatch to Procedure 2 (Update) with appropriate direction
+
+**WSKMGMT-FR-75: `/workspace-setup compare [instructions]` use case**
+- Called by `/workspace-setup compare [path]` or `/workspace-setup compare [instructions]`
+- [path] = filesystem path to target workspace
+- [instructions] = natural language instructions (e.g., "compare with the repo at ../OtherProject")
+- Dispatches to Procedure 7 via compare-workspace-setup.md workflow
+- Generates diff report showing per-field comparison between current and target workspace
+- Report shows: field ID, workspace A value, workspace B value, status (MATCH/DIFF/ONLY_A/ONLY_B/N/A)
+- Summary: counts per status, total fields compared, fields skipped (N/A)
+- Does not modify either workspace without @rules:core-conventions.md [CONFIRMATION_KEYWORDS]
+- If target workspace missing NOTES.md or devsystem-sync.json: report ONLY_A status for affected fields, continue comparison
+- After report: user can request `/workspace-setup sync from [path]` or `/workspace-setup sync to [path]` to apply differences
 
 ## 5. Non-Functional Requirements
 
@@ -774,7 +920,7 @@ Direction definitions:
 
 **WSKMGMT-DD-10:** Diff and sync scripts (FR-13, FR-14) are generic, independent of any project-specific deployment script. Scripts read source and target from workspace constants, read sync policy from NOTES.md, support 3 sync sources (Prompt System, Knowledge, Specs), and support upstream and downstream directions. The scripts are the foundation for `/sync workspace` context. Rationale: Project-specific deployment scripts solve 80% of the problem but are not reusable. Generic scripts that read all configuration from workspace constants work for any DevSystem workspace without modification.
 
-**WSKMGMT-DD-11:** Workspace setup uses a guide file (WORKSPACE_CREATION_QUESTIONNAIRE.md) for questionnaire content and a thin workflow (workspace-setup.md) for execution flow. Rationale: Workflow-Skill Separation rule states workflows are thin entry points, skills hold knowledge. The questionnaire is knowledge (what to ask, what defaults to offer, what impact to explain) - it belongs in the skill. The workflow is the execution wrapper (load guide, present questions, generate files, verify). This mirrors how session-new.md references session-management skill templates.
+**WSKMGMT-DD-11:** Workspace setup uses a guide file (WORKSPACE_SETUP_QUESTIONNAIRE.md) for questionnaire content and a thin workflow (workspace-setup.md) for execution flow. Rationale: Workflow-Skill Separation rule states workflows are thin entry points, skills hold knowledge. The questionnaire is knowledge (what to ask, what defaults to offer, what impact to explain) - it belongs in the skill. The workflow is the execution wrapper (load guide, present questions, generate files, verify). This mirrors how session-new.md references session-management skill templates.
 
 **WSKMGMT-DD-12:** Two states only (SYNCED, SELF-CONTAINED), not three. A repo is either part of a dependency tree or it isn't. No "partial sync" state. Rationale: Simplicity. If a repo syncs knowledge but not specs, it still has sync markers and is SYNCED. The sync policy handles which sources to sync.
 
@@ -795,6 +941,28 @@ Direction definitions:
 **WSKMGMT-DD-20:** Source repo only references downstream repos by relative paths in its synced repos list. Rationale: Absolute paths (e.g., `e:\Dev\Lana-V2-Dev`) are machine-specific and break when repos are cloned to different locations. Relative paths (e.g., `../Lana-V2-Dev`) are portable and work across machines, drive layouts, and CI environments. sync.ps1 resolves relative paths against the source repo root at runtime. The source's synced repos list is informational — it tells `/sync to targets` workflows which repos to push to. The actual sync configuration (bundles, filters, never_overwrite) lives in each target's devsystem-sync.json.
 
 **WSKMGMT-DD-21:** `rules` folder renamed to `specs` with subfolders `sops/` and `guides/`. Rationale: The `rules` folder name is misleading — it contains specifications, implementation plans, test plans, SOPs, and guides, not just rules. The `specs` name better reflects the content. Subfolders `sops/` and `guides/` provide structure for advanced SOPs (referenced by SOPS.md) and how-to guides (e.g., UX design guidelines).
+
+**WSKMGMT-DD-22:** Flat field registry with ID references, not nested tree. Rationale: Nested structures require tree traversal, which is error-prone for LLM agents. Flat registry with condition references to prior field IDs enables simple top-to-bottom evaluation. Fields are ordered by section number, guaranteeing conditions always reference already-evaluated fields.
+
+**WSKMGMT-DD-23:** Condition syntax limited to `==` and `AND`. Rationale: OR and negation introduce ambiguity in evaluation order and make condition chains harder to trace. The questionnaire's conditional sections (e.g., "if WORKSPACE mode, ask Section 2") are all expressible with `==` and `AND`. Keeping the syntax minimal ensures LLM can evaluate conditions reliably without a parser.
+
+**WSKMGMT-DD-24:** Three field types only: `single`, `list`, `enum`. Rationale: These cover all questionnaire field types. `single` for strings/paths/names. `list` for arrays (never_overwrite patterns, knowledge bundles). `enum` for finite option sets (workspace type, mode, version source). No `object` or `nested` type — complexity is unnecessary for workspace configuration.
+
+**WSKMGMT-DD-25:** List fields use set comparison (missing/extra), not ordered comparison. Rationale: Lists in workspace configuration (never_overwrite patterns, knowledge bundles) are unordered sets. Comparing as sets (items in default not in current = missing, items in current not in default = extra) is the correct semantic. Order does not matter.
+
+**WSKMGMT-DD-26:** `DEVIATION` is a valid user choice, not a gap. Rationale: Users legitimately choose non-default values (e.g., WORKSPACE mode instead of SINGLE-PROJECT). Reporting these as gaps would prompt unnecessary fixes. DEVIATION status informs the user without suggesting action. Only GAP and STALE trigger proposed fixes.
+
+**WSKMGMT-DD-27:** Report template references schema field IDs, not duplicate definitions. Rationale: Duplicating field definitions in both questionnaire and report template creates drift risk. The template defines report structure (sections, columns, status values) and references field IDs from the schema. The agent reads the schema for field details and the template for report format.
+
+**WSKMGMT-DD-28:** `/workspace-setup verify` reuses Procedure 4 (Integrity Check), not a new procedure. Rationale: Procedure 4 already verifies workspace constants, files, and structure against rules and templates. Adding schema-awareness to Procedure 4 (reading schema fields in addition to WORKSPACE-RULES.md) extends it without duplication. `/workspace-setup verify` and `/verify workspace` are alternative entry points to the same logic.
+
+**WSKMGMT-DD-29:** `/workspace-setup sync from/to` reuses Procedure 2 (Update), scoped to setup files. Rationale: Procedure 2 already handles sync preview/confirm/execute flow. Scoping it to setup files (NOTES.md, devsystem-sync.json, folder structure) instead of DevSystem content or knowledge bundles reuses the existing flow. The merge strategy (source wins for shared fields, preserve target-only fields) is a new parameter to Procedure 2, not a new procedure.
+
+**WSKMGMT-DD-30:** Schema section added to questionnaire, not as separate file. Rationale: The questionnaire is the natural home for field definitions — it already contains the questions, defaults, and impact descriptions. A separate schema file would duplicate the field list and create drift. Adding a `## Setup Schema` section makes the questionnaire dual-purpose: interactive guide during creation, structured schema during analysis/verify/sync.
+
+**WSKMGMT-DD-31:** Agent is the comparison engine for workspace diff, not a script. Rationale: NOTES.md is prose markdown designed for human and LLM consumption. Parsing `[DEV_REPO_FOLDER] -> usually called [Product]-Dev` with regex is fragile — every format variation breaks the parser. LLMs excel at extracting structured data from prose. The agent evaluates conditions (`1a == SOFTWARE-DEV AND 2c == SYNCED`), assigns semantic status (MATCH/DIFF/ONLY_A/ONLY_B/N/A), and handles format variations naturally. A script would need custom regex per field, a condition evaluator, and would break on format changes. The schema IS the comparison specification — adding a field automatically makes it comparable.
+
+**WSKMGMT-DD-32:** Compare workflow is thin — dispatches to Procedure 7, no embedded logic. Rationale: Workflow-Skill Separation rule (DD-11). The workflow handles input parsing (extracting target path from instructions) and output formatting (diff report in chat). The comparison logic (reading two workspaces, evaluating schema fields, assigning status) lives in Procedure 7 in SKILL.md. This mirrors how workspace-setup.md dispatches to Procedures 2, 4, and 6.
 
 ## 7. Implementation Guarantees
 
@@ -819,6 +987,22 @@ Direction definitions:
 **WSKMGMT-IG-10:** SELF-CONTAINED repos that currently fail /verify for missing sync source constants must pass after this change is implemented.
 
 **WSKMGMT-IG-11:** `deploy-to-all-repos.md` is replaced by `sync.md` workspace context. Existing repos with `[LINKED_REPOS]` in NOTES.md must migrate to `devsystem-sync.json` at `[WORKSPACE_FOLDER]` root - a migration script or procedure must be provided. Absolute paths in `[LINKED_REPOS]` must be converted to relative paths per FR-54.
+
+**WSKMGMT-IG-12:** Existing questionnaire sections 1-6 remain unchanged — schema section is additive and does not modify question content.
+
+**WSKMGMT-IG-13:** Existing `/verify workspace` context (FR-27) produces identical results before and after schema addition — schema enhances Procedure 4, does not replace it.
+
+**WSKMGMT-IG-14:** Existing workspace creation flow works identically — schema section is read by analysis/verify/sync, not by the creation questionnaire flow.
+
+**WSKMGMT-IG-15:** All field IDs in schema are unique — no collision between sections.
+
+**WSKMGMT-IG-16:** Renamed `WORKSPACE_SETUP_QUESTIONNAIRE.md` is recognized by all workflows and skills that previously referenced `WORKSPACE_CREATION_QUESTIONNAIRE.md`.
+
+**WSKMGMT-IG-17:** Deprecated `workspace-create.md` is deleted from `.devin/workflows/` during next sync after `devsystem-sync.json` deprecated array is updated.
+
+**WSKMGMT-IG-18:** Compare use case must not modify either workspace without @rules:core-conventions.md [CONFIRMATION_KEYWORDS] — comparison is read-only by default.
+
+**WSKMGMT-IG-19:** Compare use case must handle missing NOTES.md or devsystem-sync.json in target workspace gracefully — report ONLY_A status for affected fields, continue comparison for remaining fields.
 
 ## 8. Key Mechanisms
 
@@ -1175,7 +1359,7 @@ RESULT: CHANGES FOUND
 ================================ END: WORKSPACE SYNC PREVIEW =================================
 [2026-09-06 13:35:02] (2.0 secs)
 
-Confirm sync? (yes/go/confirmed to execute, no/cancel to abort)
+Confirm sync? (@rules:core-conventions.md [CONFIRMATION_KEYWORDS] to execute, no/cancel to abort)
 ```
 
 **Expected output for verify:**
@@ -1251,6 +1435,12 @@ RESULT: PASSED WITH FIXES
 - All skill files must pass privacy gate (no real identifiers, addresses, names, project-specific data)
 
 ## 15. Document History
+
+**[2026-09-08 20:50]**
+- Added: FR-65 to FR-75, DD-22 to DD-32, IG-12 to IG-19 from WSKMGMT-SP02
+- Amended: FR-42 — added 5 use cases as sub-requirements (verify, sync from, sync to, compare, default analysis)
+- Amended: FR-27 — added note that `/workspace-setup verify` is an alternative entry point to the same verification logic
+- Updated: Target files — renamed WORKSPACE_CREATION_QUESTIONNAIRE.md to WORKSPACE_SETUP_QUESTIONNAIRE.md, added WORKSPACE_SETUP_REPORT_TEMPLATE.md and compare-workspace-setup.md
 
 **[2026-09-06 16:15]**
 - Added: FR-61 Skill-tagged sections in devsystem-core.md and ID-REGISTRY.md (START/END markers for organization)

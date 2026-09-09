@@ -265,7 +265,7 @@ After all sections answered, generate these files:
   ID-REGISTRY.md              <- from ID-REGISTRY_TEMPLATE.md (with project topic)
   SOPS.md                     <- from SOPS template or minimal
   FAILS.md                    <- empty tracking file
-  _WORKSPACE_CREATION_QUESTIONNAIRE.md <- questionnaire for remaining sections
+  _WORKSPACE_SETUP_QUESTIONNAIRE.md <- questionnaire for remaining sections
   [AGENT_FOLDER]\             <- sync from DevSystem source
     specs\
     workflows\
@@ -285,7 +285,7 @@ After all sections answered, generate these files:
   ID-REGISTRY.md              <- from ID-REGISTRY_TEMPLATE.md (with project topic)
   SOPS.md                     <- from SOPS template or minimal
   FAILS.md                    <- empty tracking file
-  _WORKSPACE_CREATION_QUESTIONNAIRE.md <- questionnaire for remaining sections
+  _WORKSPACE_SETUP_QUESTIONNAIRE.md <- questionnaire for remaining sections
   [AGENT_FOLDER]\             <- sync from DevSystem source
     specs\
     workflows\
@@ -310,7 +310,7 @@ After all sections answered, generate these files:
   ID-REGISTRY.md              <- from ID-REGISTRY_TEMPLATE.md (with project topic)
   _SOPS.md                    <- from SOPS template or minimal
   FAILS.md                    <- empty tracking file
-  _WORKSPACE_CREATION_QUESTIONNAIRE.md <- questionnaire for remaining sections
+  _WORKSPACE_SETUP_QUESTIONNAIRE.md <- questionnaire for remaining sections
   [AGENT_FOLDER]\             <- sync from DevSystem source
     specs\
     workflows\
@@ -331,3 +331,197 @@ After all sections answered, generate these files:
 
 <!-- After generation, run integrity check (Procedure 4) to verify all required 
      files and constants are present. Report any gaps and fix from templates. -->
+
+## Setup Schema
+
+Flat registry of all setup fields from questionnaire sections 1-6. Used by Procedure 6 (Setup Analysis), Procedure 7 (Compare Workspace Setup), and Procedure 4 (Integrity Check, schema-aware mode). Fields are ordered by section number — conditions always reference earlier field IDs.
+
+Condition syntax: `==` for equality, `AND` for conjunction, `(always)` for unconditional fields. No OR, no negation, no nested predicates.
+
+Field types: `single` (string/path/name), `list` (array), `enum` (finite option set).
+
+Status values for analysis: OK, GAP, STALE, DEVIATION, N/A.
+
+### Section 1: Workspace Type and Mode
+
+- id: workspace_type
+  type: enum
+  condition: (always)
+  default: SOFTWARE-DEV
+  report_label: Workspace Type
+  options: [SOFTWARE-DEV, GENERAL]
+
+- id: workspace_mode
+  type: enum
+  condition: workspace_type == SOFTWARE-DEV
+  default: SINGLE-PROJECT
+  report_label: Workspace Mode
+  options: [SINGLE-PROJECT, MONOREPO, WORKSPACE]
+
+### Section 2: Product Repo
+
+- id: product_repo_folder
+  type: single
+  condition: workspace_mode == WORKSPACE
+  default: myapp
+  report_label: Product Repo Folder
+
+- id: product_repo_description
+  type: single
+  condition: workspace_mode == WORKSPACE
+  default: A CLI tool for ...
+  report_label: Product Repo Description
+
+- id: binary_build
+  type: enum
+  condition: workspace_mode == WORKSPACE
+  default: no
+  report_label: Binary Build
+  options: [yes, no]
+
+- id: binary_path_pattern
+  type: single
+  condition: workspace_mode == WORKSPACE AND binary_build == yes
+  default: dist/[appname]-{version}-win-x64.exe
+  report_label: Binary Path Pattern
+
+### Section 3: Dev Repo / Workspace Root
+
+- id: project_name
+  type: single
+  condition: (always)
+  default: myapp
+  report_label: Project Name
+
+- id: project_goal
+  type: single
+  condition: (always)
+  default: Describe what this project does
+  report_label: Project Goal
+
+- id: agent_folder_name
+  type: single
+  condition: (always)
+  default: .devin
+  report_label: Agent Folder Name
+
+- id: sessions_folder_name
+  type: single
+  condition: (always)
+  default: _sessions
+  report_label: Sessions Folder Name
+
+- id: sops_file_name
+  type: single
+  condition: (always)
+  default: SOPS.md
+  report_label: SOPS File Name
+
+### Section 4: Version Strategy
+
+- id: version_source
+  type: enum
+  condition: workspace_type == SOFTWARE-DEV
+  default: devsystem_folder
+  report_label: Version Source
+  options: [devsystem_folder, pyproject_toml, package_json, none]
+
+- id: tag_format
+  type: enum
+  condition: workspace_type == SOFTWARE-DEV
+  default: date
+  report_label: Tag Format
+  options: [date, semver]
+
+- id: post_release_bump
+  type: enum
+  condition: workspace_type == SOFTWARE-DEV
+  default: devsystem_rename
+  report_label: Post-Release Bump Strategy
+  options: [devsystem_rename, patch_bump, minor_bump, none]
+
+### Section 5: Sync Sources
+
+- id: sync_relationship
+  type: enum
+  condition: workspace_mode == WORKSPACE
+  default: SYNCED
+  report_label: Sync Relationship
+  options: [SYNCED, SELF-CONTAINED]
+
+- id: devsystem_source_path
+  type: single
+  condition: workspace_mode == WORKSPACE AND sync_relationship == SYNCED
+  default: [WORKSPACE_FOLDER]\..\IPPS\DevSystemV*
+  report_label: DevSystem Source Path
+
+- id: company_folder_path
+  type: single
+  condition: workspace_mode == WORKSPACE AND sync_relationship == SYNCED
+  default: [WORKSPACE_FOLDER]\..\Company
+  report_label: Company Folder Path
+
+- id: knowledge_folder
+  type: single
+  condition: workspace_mode == WORKSPACE
+  default: [WORKSPACE_FOLDER]\knowledge
+  report_label: Knowledge Folder
+
+- id: specs_folder
+  type: single
+  condition: workspace_mode == WORKSPACE
+  default: [WORKSPACE_FOLDER]\specs
+  report_label: Specs Folder
+
+- id: knowledge_bundles
+  type: list
+  condition: workspace_mode == WORKSPACE AND sync_relationship == SYNCED
+  default: []
+  report_label: Knowledge Bundles
+
+- id: specs_bundles
+  type: list
+  condition: workspace_mode == WORKSPACE AND sync_relationship == SYNCED
+  default: []
+  report_label: Specs Bundles
+
+- id: never_overwrite
+  type: list
+  condition: workspace_mode == WORKSPACE AND sync_relationship == SYNCED
+  default: ["NOTES.md", "!NOTES.md", "PROBLEMS.md", "!PROGRESS.md", "FAILS.md", "ID-REGISTRY.md", "SOPS.md", "_SOPS.md", "devsystem-sync.json"]
+  report_label: Never Overwrite Patterns
+
+### Section 6: Release Configuration
+
+- id: github_releases
+  type: enum
+  condition: workspace_type == SOFTWARE-DEV
+  default: yes
+  report_label: GitHub Releases
+  options: [yes, no]
+
+- id: release_notes_directory
+  type: single
+  condition: workspace_type == SOFTWARE-DEV AND github_releases == yes
+  default: [PRODUCT_DOCS_FOLDER]\ReleaseNotes
+  report_label: Release Notes Directory
+
+- id: run_tests_before_release
+  type: enum
+  condition: workspace_type == SOFTWARE-DEV
+  default: yes
+  report_label: Run Tests Before Release
+  options: [yes, no]
+
+- id: test_command
+  type: single
+  condition: workspace_type == SOFTWARE-DEV AND run_tests_before_release == yes
+  default: from ## Build/Test Rules section in NOTES.md
+  report_label: Test Command
+
+- id: version_consistency_gate
+  type: enum
+  condition: workspace_type == SOFTWARE-DEV AND binary_build == yes
+  default: yes
+  report_label: Version Consistency Gate
+  options: [yes, no]

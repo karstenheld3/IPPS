@@ -29,7 +29,8 @@ Create `_PROMPTS_[Topic].md` files containing an ordered list of prompts. Each p
 - **NEVER modify tracking documents** (PROGRESS.md, PROBLEMS.md, NOTES.md, FAILS.md). Write-* workflows create NEW files only.
 - Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content → examples generic.
 - **Rule precedence**: PRMT-CT-04 (objectives not steps) overrides PRMT-CT-05 (precision). See PRMT-CT-04 for details.
-- **Workflow references** (PRMT-CT-10): When a workflow name appears in prompt prose as a reference, wrap in backticks (`/write-prompts`). When actually calling a workflow, use a standalone line without backticks (PRMT-CT-08).
+- **Workflow references** (PRMT-CT-10): When a workflow or prompt system command appears in prompt prose as a reference (not executing it), wrap in backticks (`/write-prompts`). When actually calling a workflow to execute, use a standalone line with the slash command without backticks (PRMT-CT-08).
+- **Leverage existing workflows** (PRMT-CT-11): Before writing prompts, scan `[AGENT_FOLDER]/workflows/` frontmatters to find workflows relevant to the task. Load matching workflows entirely. Design prompts that reference or invoke existing workflows instead of reinventing their logic in prompt prose. If user explicitly requests prompt system independence, omit `prompt_system` from frontmatter (PRMT-FT-09) and do not reference workflows.
 - **NEVER self-execute prompt files** (PRMT-EX-02): After writing a prompt file, deliver it to the user or execution engine. Do NOT run all prompts in a single response. Each prompt is a separate turn for an execution engine (Lana, headless runner). Self-executing circumvents per-turn context engineering and compute allocation, defeating the purpose of prompt files.
 
 ## Context Branching
@@ -60,9 +61,11 @@ This workflow has two modes. Determine the mode from the user's request:
 
 # COMPOSE MODE
 
-## Step 1: Read PROMPTS_GUIDES.md
+## Step 1: Read PROMPTS_GUIDES.md and Scan Existing Workflows
 
 Read `PROMPTS_GUIDES.md` from @skills:write-documents. Classify the task, decide decomposition, plan state flow between prompts.
+
+Then scan `[AGENT_FOLDER]/workflows/` frontmatters (the `description` field) to find workflows relevant to the task. Load matching workflows entirely to understand their structure, steps, and dispatch patterns before designing prompts (PRMT-CT-11). Design prompts that reference or invoke these workflows instead of reinventing their logic.
 
 ## Step 2: Determine File Location and Name
 
@@ -138,7 +141,7 @@ Check output against all PRMT-* rules in `PROMPTS_RULES.md`:
 - [ ] Format (FT): PRMT-FT-01 through PRMT-FT-08
 - [ ] Structure (ST): PRMT-ST-01 through PRMT-ST-05
 - [ ] Sequence (SQ): PRMT-SQ-01 through PRMT-SQ-03
-- [ ] Content (CT): PRMT-CT-01 through PRMT-CT-10
+- [ ] Content (CT): PRMT-CT-01 through PRMT-CT-11
 - [ ] Execution (EX): PRMT-EX-01 (one prompt per turn), PRMT-EX-02 (no self-execution)
 
 # FROM TEMPLATE MODE
@@ -182,7 +185,7 @@ The filled file must pass all PRMT-* rules as a standalone prompts file:
 - [ ] PRMT-FT-08: If frontmatter present, it is at file start with valid keys
 - [ ] PRMT-ST-01..05: Each prompt has objective, constraints (if implementation), verification, single reasoning mode, density limit
 - [ ] PRMT-SQ-01..03: No contradictions, explicit dependencies, commentary documents state
-- [ ] PRMT-CT-01..10: Specific objectives, negative constraints, observable verification, workflow references in backticks
+- [ ] PRMT-CT-01..11: Specific objectives, negative constraints, observable verification, workflow references in backticks, existing workflows leveraged
 - [ ] PRMT-EX-01..02: One prompt per turn, no self-execution by writing agent
 - [ ] No unresolved `[PLACEHOLDER]` values remain in the output
 - [ ] No XML comments remain in the output
@@ -200,7 +203,7 @@ Validated `_PROMPTS_[Topic]_[Instance].md` file with all placeholders resolved, 
 
 ## Quality Gate
 
-- [ ] All PRMT-* rules pass (FT-01 through FT-08, ST, SQ, CT, EX, NM)
+- [ ] All PRMT-* rules pass (FT-01 through FT-09, ST, SQ, CT, EX, NM)
 - [ ] Privacy gate applied (no real project data in examples)
 - [ ] Fence depths verified (outer > deepest inner per prompt)
 - [ ] **From Template mode**: Zero unresolved placeholders

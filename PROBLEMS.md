@@ -28,6 +28,7 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
    - **propose** - Propose options in chat
    - **draft** - Create annotated drafts (templates, conversations, specs, info, etc.). How to draft skeletons first and then fill sections later.
    - **investigate** - Meta-prompt for investigating a behavior, assumption, reported bug. Always produces special templated `_INFO_` document. Remedy for superficial, misleading, low-token-budget investigations that are unsound and waste time.
+     - **Status**: Implemented 2026-09-09 in DevSystemV4.3. Deliverables: `specs/_SPEC_INVESTIGATE_WORKFLOW.md [INVESTIGATE-SP01]`, `workflows/investigate.md`, `skills/write-documents/INVESTIGATION_LOG_TEMPLATE.md`, `skills/write-documents/INVESTIGATION_GUIDES.md`, `skills/write-documents/INVESTIGATION_LOG_RULES.md`, `verify.md` updated with Investigation Logs section. Topic `INVESTIGATE` registered in ID-REGISTRY.md. Session: `_PrivateSessions/_2026-09-09_InvestigateWorkflow/`.
    - **factcheck** - Identifies: 1) factual statements, 2) derivative statements. Checks both against the noted sources. Ensures that sources are inlined in the documents (URLs, source names, dates, verbatim citations with page numbers) and that derivative statements are sound and stand up against critical analysis.
    - **write-skill** - Create agent skills based on rules and templates
    - **write-code** - Language-independent rules with language-specific rules as extensions (subfolders)

@@ -177,6 +177,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **GLOB** - Global/project-wide items - 2026-01-22
 - **IPPSPRMTFMT** - IPPS Prompt File Format (syntax, semantics, execution model for prompt queue files) - 2026-08-31
 - **HMNWRTPTN** - Human Writing Patterns (forensic linguistics research for conversation humanizing rules) - 2026-07-16
+- **INVESTIGATE** - Investigate Workflow (structured investigation with STRUT plan and append-only log) - 2026-09-09
 - **LLMCG** - LLM Code Generation (RAG-augmented vs fine-tuned vs prompt-engineered approaches comparison) - 2026-01-17
 - **LLMEV** - LLM Evaluation Skill (generic evaluation pipeline) - 2026-01-23
 - **LLMTR** - LLM Transcription Skill (image-to-markdown, audio-to-markdown) - 2026-01-26

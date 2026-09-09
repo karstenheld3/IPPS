@@ -7,11 +7,29 @@ Read BEFORE writing `_PROMPTS_[Topic].md` files. Follow `PROMPTS_RULES.md` for v
 Determine what the prompts file accomplishes. This determines decomposition and structure:
 
 1. **Single task** - One prompt, one concern (file edit, question, simple generation)
-2. **Multi-step pipeline** - Sequential prompts where each builds on prior output (research → implement → test)
+2. **Multi-step pipeline** - Sequential prompts where each builds on prior output (research -> implement -> test)
 3. **Setup + work** - First prompt establishes environment/context, subsequent prompts do the work
 4. **Exploration** - Open-ended research or investigation, each prompt refining direction based on prior findings
 
 Single tasks need one prompt. Pipelines and setup+work patterns need multiple. Exploration may need either, depending on how predictable the path is.
+
+## 1b. Scan Existing Workflows Before Designing Prompts
+
+Before writing complex prompts or prompt sequences, scan `[AGENT_FOLDER]/workflows/` to find workflows relevant to the task. This leverages standardized processes defined in the prompt system (PRMT-CT-11).
+
+**Process**:
+1. Read all workflow frontmatters (the `description` field in YAML frontmatter) in `[AGENT_FOLDER]/workflows/`
+2. Identify workflows whose scope overlaps with any prompt in the sequence (sync, verify, test, deploy, commit, session management, etc.)
+3. Load matching workflows entirely to understand their structure, steps, and dispatch patterns
+4. Design prompts that reference or invoke these workflows instead of reinventing their logic in prompt prose
+
+**Why**: Workflows encode standardized processes with GLOBAL-RULES, context-specific sections, and quality gates. Reinventing workflow logic in prompt prose bypasses these standards, produces inconsistent output, and creates maintenance burden when workflows evolve.
+
+**Workflow execution vs reference**: When a prompt instructs the agent to execute a workflow, use the slash command on a standalone line without backticks (PRMT-CT-08). When a prompt mentions a workflow or prompt system command as a reference (not executing it), wrap in backticks (PRMT-CT-10). Examples:
+- Execute: `/sync` on its own line inside the fence
+- Reference: "Use the `/sync` workflow" in prose inside the fence
+
+**Exception**: If the user explicitly requests prompt system independence, omit `prompt_system` from frontmatter (PRMT-FT-09) and do not reference workflows. The prompts must then be self-contained.
 
 ## 2. Decide Decomposition
 
@@ -221,6 +239,9 @@ After writing a prompt file:
 
 Before considering the prompts file complete:
 
+- [ ] Existing workflows scanned and referenced where applicable (PRMT-CT-11)
+- [ ] Workflow execution vs reference distinction: execute = slash on standalone line without backticks (PRMT-CT-08); reference = backticks in prose (PRMT-CT-10)
+- [ ] `prompt_system` frontmatter empty/omitted if user requested independence (PRMT-FT-09)
 - [ ] First non-empty line is optional frontmatter (PRMT-FT-08), Commentary, or opening fence (no other frontmatter)
 - [ ] Each prompt has a clear objective (verifiable from artifact per PRMT-ST-01)
 - [ ] Implementation prompts have constraints and verification criteria

@@ -11,12 +11,14 @@ Manages workspace setup, DevSystem sync, and knowledge distribution across produ
 References (loaded on demand):
 - WORKSPACE-GUIDES.md - High-level guidance on workspace setup, product/dev separation, sync sources
 - WORKSPACE-RULES.md - Verifiable rules for workspace integrity, required files and constants
-- WORKSPACE_CREATION_QUESTIONNAIRE.md - Interactive questionnaire for creating new workspaces with defaults
+- WORKSPACE_SETUP_QUESTIONNAIRE.md - Interactive questionnaire for creating new workspaces with defaults and schema section with 27 setup fields
+- WORKSPACE_SETUP_REPORT_TEMPLATE.md - Report template for workspace setup analysis and comparison reports
 - DEV_REPO_NOTES_TEMPLATE.md - Template for DevRepo NOTES.md with all workspace constants
 - PRODUCT_REPO_README_TEMPLATE.md - Template for ProductRepo README.md
 - COMPANY_REPO_NOTES_TEMPLATE.md - Template for CompanyRepo NOTES.md with sync policy tracking
 - sync.ps1 - Generic sync script with -diff and -execute modes
 - LOCAL_ENVIRONMENTS.md - Per-runtime setup instructions for local development environments
+- compare-workspace-setup.md - Thin workflow dispatching to Procedure 7 for two-workspace comparison
 
 ## MUST-NOT-FORGET
 
@@ -30,7 +32,7 @@ References (loaded on demand):
 ## Intent Lookup
 
 User wants to...
-- Create a new workspace → WORKSPACE_CREATION_QUESTIONNAIRE.md questionnaire
+- Create a new workspace → WORKSPACE_SETUP_QUESTIONNAIRE.md questionnaire
 - Compare workspace settings → Procedure 1, FR-15
 - Update workspace from source → Procedure 2, FR-16
 - Roll back workspace settings → Procedure 3, FR-17
@@ -45,6 +47,8 @@ User wants to...
 - Roll back knowledge → Procedure 3, FR-25
 - Check knowledge integrity → Procedure 4, FR-26
 - Commit across multiple repos → Procedure 5, FR-30
+- Analyze workspace setup and generate report → Procedure 6, FR-67
+- Compare workspace setup between two workspaces → Procedure 7, FR-74
 
 ## Core Procedures
 
@@ -75,6 +79,8 @@ Use before any sync operation to preview changes.
 
 Use to sync DevSystem from source, knowledge from Company, or specs from Company. Downstream = sync from source to all targets. Upstream = sync from here back to source.
 
+Note: When called from /workspace-setup sync, scoped to setup files only (NOTES.md, devsystem-sync.json, folder structure) — not DevSystem content or knowledge bundles.
+
 ### 3. Rollback
 
 ```
@@ -102,7 +108,9 @@ Use when sync introduced errors or unwanted changes. IG-07: rollback on shared b
 9. Fix actions: missing constant -> add with template default. Missing file -> create from template. Broken reference -> report only. Structural violation -> report only
 ```
 
-Use via /verify workspace context. Downstream customizations are allowed and do not fail verification. GENERAL workspaces pass with simplified constants (no product repo, no build infrastructure).
+Use via /verify workspace context. Downstream customizations are allowed and do not fail verification. GENERAL workspaces pass with simplified constants (no product repo, no build infrastructure, no Release Configuration).
+
+Note: When called from /workspace-setup verify, also reads schema fields from WORKSPACE_SETUP_QUESTIONNAIRE.md in addition to WORKSPACE-RULES.md. Schema-aware mode evaluates each schema field for status (OK/GAP/STALE/DEVIATION/N/A) and proposes fixes.
 
 ### 5. Multi-Repo Commit
 
@@ -122,6 +130,36 @@ Use via /verify workspace context. Downstream customizations are allowed and do 
 ```
 
 Use via /commit in WORKSPACE mode. SINGLE-PROJECT and MONOREPO modes use existing single-repo commit behavior.
+
+### 6. Setup Analysis
+
+```
+1. Load WORKSPACE_SETUP_QUESTIONNAIRE.md schema section
+2. Detect current workspace type and mode (reuse detection from Procedure 4)
+3. For each field in schema (top-to-bottom): evaluate condition, read current value, compare against default, assign status (OK/GAP/STALE/DEVIATION/N/A)
+4. Generate report following WORKSPACE_SETUP_REPORT_TEMPLATE.md structure
+5. Output report to chat
+6. Does not execute changes — analysis only
+```
+
+Use via /workspace-setup with no args. Analysis-only — does not modify workspace.
+
+### 7. Compare Workspace Setup
+
+```
+1. Load schema from WORKSPACE_SETUP_QUESTIONNAIRE.md
+2. Read workspace A (current): NOTES.md, devsystem-sync.json, folder structure
+3. Read workspace B (target from provided path): NOTES.md, devsystem-sync.json, folder structure
+4. For each schema field (top-to-bottom): evaluate condition for both workspaces, extract A value, extract B value, compare
+5. Assign diff status: MATCH (identical), DIFF (both have value, different), ONLY_A (only in A), ONLY_B (only in B), N/A (condition not met)
+6. For list fields: compare as sets (common, only-A, only-B)
+7. Generate diff report following WORKSPACE_SETUP_REPORT_TEMPLATE.md adapted for two-workspace comparison
+8. Output report to chat
+9. Does not modify either workspace — analysis only
+10. If user requests applying differences: dispatch to Procedure 2 with appropriate direction
+```
+
+Use via /workspace-setup compare or /compare-workspace-setup. Comparison-only — does not modify either workspace without confirmation.
 
 ## Gotchas
 
