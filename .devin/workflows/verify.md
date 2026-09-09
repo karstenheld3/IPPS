@@ -489,6 +489,25 @@ Verify before phase transition (when evaluating Transitions):
 - Check Objective checkbox only after confirming linked Deliverables
 - If Objective has no links (`←`), require explicit [ACTOR] confirmation
 
+## Investigation Logs
+
+Detect by: filename pattern `_LOG_*.md` in session folder, or context indicates `/investigate` output.
+
+**Read**: @skills:write-documents `INVESTIGATION_LOG_RULES.md` (all IL-* rules)
+
+- Verify against all IL-* rules in `INVESTIGATION_LOG_RULES.md`
+- Verify log structure: header (Goal, Started, Sources), Premises, Index, entries
+- Verify entry IDs follow `I[NNN].[NNN]-type(topic)` format (IL-EF-01)
+- Verify bold usage: status/outcome values only (IL-CT-01)
+- Verify Index completeness: every entry has corresponding Index line (IL-IX-01)
+- Verify Index is rebuildable via grep on entry headings (IL-IX-03)
+- Verify first entry is a state entry with STARTING status (IL-ST-05)
+- Verify all hypotheses have resolved status or are documented as open (IL-HL-02)
+- Verify append-only: no past entries modified (IL-EF-04)
+- Verify path lookup table in first STATE entry (IL-CT-03)
+- Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity)
+- Verify against @skills:write-documents `MECT_WRITING_RULES.md` (voice, word choice, terminology)
+
 ## Workspace Setup
 
 Detect by: user runs `/verify workspace` or `/verify setup` or context is workspace configuration.

@@ -16,7 +16,7 @@
 [DEV_SPECS_FOLDER]: `[WORKSPACE_FOLDER]\specs`
 - Specs folder containing shared specifications, design guidelines, SOPs.
 
-[PRODUCT_VERSION]: `4.3`
+[PRODUCT_VERSION]: `4.4`
 - Current DevSystem version. Update on version changes (SOPS SOP 4/7).
 
 [DEVSYSTEM_FOLDER]: `[WORKSPACE_FOLDER]\DevSystem[PRODUCT_VERSION]`
