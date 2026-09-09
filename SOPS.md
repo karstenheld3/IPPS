@@ -22,6 +22,7 @@
 - `Copy-Item -Recurse -Force` does NOT delete files that no longer exist at source — deletions require explicit `Remove-Item`
 - Every SOP ends with a verification step before you can consider the change complete
 - All prior DevSystem releases MUST be backed up in `[WORKSPACE]\_OldDevSystemVersions\` before deletion (SOP 4 step 6)
+- **NEVER mention `_PrivateSessions` in public artifacts**: release notes, git commit messages, GitHub releases, README, or any publicly visible file. Use generic "internal session" or omit entirely. Session inventories in release notes must only include sessions from `_Sessions/` (tracked sessions), never from `_PrivateSessions/`.
 
 ## Table of Contents
 
