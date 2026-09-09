@@ -1,7 +1,7 @@
 # INFO: How to Minify IPPS
 
 **Doc ID**: MIPPS-IN01
-**Goal**: Document the MinifyIPPS pipeline for compressing DevSystem markdown files
+**Goal**: Document the MinifyIPPS pipeline for compressing PromptSystem markdown files
 
 ## How to Run
 

@@ -252,7 +252,7 @@ Mark values in-place where they are defined. No separate section, no duplication
 
 ### 4.2 Rules Enforcing the Tag
 
-The `[LITERAL]` system is enforced at multiple DevSystem layers:
+The `[LITERAL]` system is enforced at multiple PromptSystem layers:
 
 - **Global rule** (`core-conventions.md`): "Authoritative Literals" section defines the tag format and all 8 corruption categories
 - **Precision rule** (`APAPALAN_RULES.md`, AP-PR-13): BAD/GOOD examples for IBANs, addresses, postal codes across 4 countries

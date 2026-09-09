@@ -1,6 +1,6 @@
 # Standard Operating Procedures (SOPs)
 
-**Goal**: Prevent drift between `[DEVSYSTEM_FOLDER]`, `[AGENT_FOLDER]`, and linked repos when changing skills, workflows, or versions.
+**Goal**: Prevent drift between `[PROMPTSYSTEM_FOLDER]`, `[AGENT_FOLDER]`, and linked repos when changing skills, workflows, or versions.
 
 **Why**: Skills and categories are duplicated across `NOTES.md` and every synced repo. Missing a step silently propagates stale or unregistered content.
 
@@ -8,7 +8,7 @@
 
 ## Placeholders
 
-- `[DEVSYSTEM_FOLDER]` — current DevSystem source (e.g., `E:\Dev\IPPS\DevSystemV3.6`)
+- `[PROMPTSYSTEM_FOLDER]` — current PromptSystem source (e.g., `E:\Dev\IPPS\DevSystemV3.6`)
 - `[WORKSPACE]` — `E:\Dev\IPPS`
 - `[AGENT_FOLDER]` — active agent config (e.g., `[WORKSPACE]\.devin`)
 - `<skill>` — skill folder name (e.g., `playwriter-mcp`)
@@ -16,12 +16,12 @@
 
 ## MUST-NOT-FORGET
 
-- `[DEVSYSTEM_FOLDER]` is the source of truth. Never edit `.devin/` directly
+- `[PROMPTSYSTEM_FOLDER]` is the source of truth. Never edit `.devin/` directly
 - Skills are discovered by scanning `skills/` folder at startup. No manual registration list needed
-- Sync `[DEVSYSTEM_FOLDER]` → `.devin/` BEFORE running `/sync workspace`
+- Sync `[PROMPTSYSTEM_FOLDER]` → `.devin/` BEFORE running `/sync workspace`
 - `Copy-Item -Recurse -Force` does NOT delete files that no longer exist at source — deletions require explicit `Remove-Item`
 - Every SOP ends with a verification step before you can consider the change complete
-- All prior DevSystem releases MUST be backed up in `[WORKSPACE]\_OldDevSystemVersions\` before deletion (SOP 4 step 6)
+- All prior PromptSystem releases MUST be backed up in `[WORKSPACE]\_OldDevSystemVersions\` before deletion (SOP 4 step 6)
 - **NEVER mention private sessions folder in public artifacts**: release notes, git commit messages, GitHub releases, README, or any publicly visible file. Use generic "internal session" or omit entirely. Session inventories in release notes must only include sessions from `_Sessions/` (tracked sessions), never from the private sessions folder.
 - **Release naming convention**: All releases use `vX.Y` format everywhere — git tags, GitHub release titles, release notes headers. Format: `release vX.Y` for GitHub release title, `# Release Notes: vX.Y (YYYY-MM-DD)` for release notes header. No date-based tags, no descriptive suffixes in titles.
 
@@ -31,7 +31,7 @@
 - [SOP 1: New Skill Created](#sop-1-new-skill-created)
 - [SOP 2: Skill File Added or Removed](#sop-2-skill-file-added-or-removed)
 - [SOP 3: Old Skill Deleted or Deprecated](#sop-3-old-skill-deleted-or-deprecated)
-- [SOP 4: DevSystem Version Changed](#sop-4-devsystem-version-changed)
+- [SOP 4: PromptSystem Version Changed](#sop-4-promptsystem-version-changed)
 - [SOP 5: Model Registry JSON Files Updated](#sop-5-model-registry-json-files-updated)
 - [SOP 6: Workflow Added, Edited, or Removed](#sop-6-workflow-added-edited-or-removed)
 - [SOP 7: Post-Release Version Bump](#sop-7-post-release-version-bump)
@@ -39,42 +39,42 @@
 
 ## Quick Reference: Sync Command
 
-Sync `[DEVSYSTEM_FOLDER]` → `.devin/` after any edit to source. Referenced by NOTES.md "sync" keyword.
+Sync `[PROMPTSYSTEM_FOLDER]` → `.devin/` after any edit to source. Referenced by NOTES.md "sync" keyword.
 
 ```powershell
-Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
+Copy-Item -Path "[PROMPTSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
 ```
 
-**Note**: `Copy-Item` does NOT remove files deleted at source. For removal, see SOP 2 (file) or SOP 3 (skill). Use `/sync workspace` with `sync.ps1 -execute` for full sync including deletions via `deprecated` patterns in `devsystem-sync.json`.
+**Note**: `Copy-Item` does NOT remove files deleted at source. For removal, see SOP 2 (file) or SOP 3 (skill). Use `/sync workspace` with `sync.ps1 -execute` for full sync including deletions via `deprecated` patterns in `promptsystem-sync.json`.
 
 ## SOP 1: New Skill Created
 
-**Scenario**: Adding a new skill folder (e.g., `playwriter-mcp`) to DevSystem.
+**Scenario**: Adding a new skill folder (e.g., `playwriter-mcp`) to PromptSystem.
 
 ### Files to modify
 
-1. **Create skill folder**: `[DEVSYSTEM_FOLDER]/skills/<skill>/`
+1. **Create skill folder**: `[PROMPTSYSTEM_FOLDER]/skills/<skill>/`
    - Required: `SKILL.md` (name, purpose, usage)
    - Optional: `SETUP.md`, `UNINSTALL.md`, `references/`, `assets/`, scripts
 
-2. **Register skill** in `devsystem-sync.json` at target `[WORKSPACE_FOLDER]` root:
+2. **Register skill** in `promptsystem-sync.json` at target `[WORKSPACE_FOLDER]` root:
    - Add skill to appropriate bundle include patterns in source entry
    - Sync will distribute to all targets that select that bundle
 
-3. **If skill introduces a workflow**: also create `[DEVSYSTEM_FOLDER]/workflows/<name>.md`
+3. **If skill introduces a workflow**: also create `[PROMPTSYSTEM_FOLDER]/workflows/<name>.md`
 
 4. **If skill introduces a new TOPIC**: register in `[WORKSPACE]/ID-REGISTRY.md`
 
 5. **Sync to `.devin/`**:
    ```powershell
-   Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
+   Copy-Item -Path "[PROMPTSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
    ```
 
 ### Verification
 
 ```powershell
 # 1. Skill folder present in both source and synced copy
-Test-Path "[DEVSYSTEM_FOLDER]\skills\<skill>\SKILL.md"
+Test-Path "[PROMPTSYSTEM_FOLDER]\skills\<skill>\SKILL.md"
 Test-Path "[WORKSPACE]\.devin\skills\<skill>\SKILL.md"
 
 # 2. Skill registered in NOTES.md
@@ -91,16 +91,16 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "<skill>"
 ### Files to modify
 
 **Adding a file**:
-1. Create in `[DEVSYSTEM_FOLDER]/skills/<skill>/<new-file>`
-2. Sync: `Copy-Item [DEVSYSTEM_FOLDER]\* .devin\ -Recurse -Force`
+1. Create in `[PROMPTSYSTEM_FOLDER]/skills/<skill>/<new-file>`
+2. Sync: `Copy-Item [PROMPTSYSTEM_FOLDER]\* .devin\ -Recurse -Force`
 3. **Sync preview shows file in `Add` for all repos** → confirm and run `/sync workspace -execute`
 
 **Removing a file**:
-1. Delete from `[DEVSYSTEM_FOLDER]/skills/<skill>/<old-file>`
+1. Delete from `[PROMPTSYSTEM_FOLDER]/skills/<skill>/<old-file>`
 2. Delete from `[WORKSPACE]/.devin/skills/<skill>/<old-file>` (sync does NOT remove)
-3. **Known gap**: `Copy-Item` sync does not remove orphaned files from target repos. Use `deprecated` patterns in `devsystem-sync.json` for full cleanup via `sync.ps1 -execute`. Two options:
+3. **Known gap**: `Copy-Item` sync does not remove orphaned files from target repos. Use `deprecated` patterns in `promptsystem-sync.json` for full cleanup via `sync.ps1 -execute`. Two options:
    - **Acceptable**: leave stale file in synced repos (no harm if unreferenced)
-   - **Full cleanup**: add file pattern to `deprecated` array in `devsystem-sync.json`, run `/sync workspace -execute`
+   - **Full cleanup**: add file pattern to `deprecated` array in `promptsystem-sync.json`, run `/sync workspace -execute`
 
 ### Verification
 
@@ -108,11 +108,11 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "<skill>"
 
 ```powershell
 # Presence in both locations
-Test-Path "[DEVSYSTEM_FOLDER]\skills\<skill>\<file>"
+Test-Path "[PROMPTSYSTEM_FOLDER]\skills\<skill>\<file>"
 Test-Path "[WORKSPACE]\.devin\skills\<skill>\<file>"
 
 # Hash match
-(Get-FileHash "[DEVSYSTEM_FOLDER]\skills\<skill>\<file>").Hash -eq `
+(Get-FileHash "[PROMPTSYSTEM_FOLDER]\skills\<skill>\<file>").Hash -eq `
 (Get-FileHash "[WORKSPACE]\.devin\skills\<skill>\<file>").Hash
 ```
 
@@ -120,7 +120,7 @@ Test-Path "[WORKSPACE]\.devin\skills\<skill>\<file>"
 
 ```powershell
 # Absence in both locations (both should return False)
-Test-Path "[DEVSYSTEM_FOLDER]\skills\<skill>\<old-file>"
+Test-Path "[PROMPTSYSTEM_FOLDER]\skills\<skill>\<old-file>"
 Test-Path "[WORKSPACE]\.devin\skills\<skill>\<old-file>"
 ```
 
@@ -132,11 +132,11 @@ Test-Path "[WORKSPACE]\.devin\skills\<skill>\<old-file>"
 
 1. **Delete skill folder from source**:
    ```powershell
-   Remove-Item "[DEVSYSTEM_FOLDER]\skills\<skill>" -Recurse -Force
+   Remove-Item "[PROMPTSYSTEM_FOLDER]\skills\<skill>" -Recurse -Force
    Remove-Item "[WORKSPACE]\.devin\skills\<skill>" -Recurse -Force
    ```
 
-2. **Add to deprecated patterns** in `devsystem-sync.json`:
+2. **Add to deprecated patterns** in `promptsystem-sync.json`:
    - Add `skills/<skill>/*` to `deprecated` array in relevant source entry
    - This triggers deletion in synced repos on next `/sync workspace -execute`
 
@@ -152,18 +152,18 @@ Test-Path "[WORKSPACE]\.devin\skills\<skill>\<old-file>"
 
 ```powershell
 # 1. Folder gone from both source and synced copy
--not (Test-Path "[DEVSYSTEM_FOLDER]\skills\<skill>")
+-not (Test-Path "[PROMPTSYSTEM_FOLDER]\skills\<skill>")
 -not (Test-Path "[WORKSPACE]\.devin\skills\<skill>")
 
 # 2. Skill NOT in active registries
 Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "\b<skill>\b"  # should return nothing
-# devsystem-sync.json should list it ONLY in deprecated, not in bundle includes
+# promptsystem-sync.json should list it ONLY in deprecated, not in bundle includes
 
 # 3. Sync preview shows "Delete: skills\<skill>" for each synced repo that still has it
 # After /sync workspace -execute: verify folder gone from every synced repo
 ```
 
-## SOP 4: DevSystem Version Changed
+## SOP 4: PromptSystem Version Changed
 
 **Scenario**: Moving from `DevSystemV3.6` to `DevSystemV3.7`.
 
@@ -176,7 +176,7 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "\b<skill>\b"  # should retu
 
 2. **Update `NOTES.md`**:
    - Change `[PRODUCT_VERSION]: 3.6` → `[PRODUCT_VERSION]: 3.7` (search for `\[PRODUCT_VERSION\]:`)
-   - `[DEVSYSTEM_FOLDER]` line usually needs no change (uses `[PRODUCT_VERSION]` placeholder)
+   - `[PROMPTSYSTEM_FOLDER]` line usually needs no change (uses `[PRODUCT_VERSION]` placeholder)
 
 3. **Sync new version to `.devin/`**:
    ```powershell
@@ -186,7 +186,7 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "\b<skill>\b"  # should retu
 4. **Document migration** in NOTES.md or session NOTES.md:
    - Add section `### V3.6 → V3.7 Migration` under deprecated notes
    - List renamed/removed files and their replacements
-   - If files were deleted: add patterns to `deprecated` array in `devsystem-sync.json`
+   - If files were deleted: add patterns to `deprecated` array in `promptsystem-sync.json`
    - If skills were removed: add `skills/<skill>/*` to `deprecated`
 
 5. **Update SOPs and docs with new version**:
@@ -237,7 +237,7 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "\[PRODUCT_VERSION\]:"
 
 ### Source of truth
 
-`[DEVSYSTEM_FOLDER]/skills/llm-evaluation/` contains the canonical copies:
+`[PROMPTSYSTEM_FOLDER]/skills/llm-evaluation/` contains the canonical copies:
 - `model-registry.json` — model IDs, context windows, prefix routing, effort levels
 - `model-pricing.json` — per-model token pricing
 - `model-parameter-mapping.json` — CLI effort-to-API parameter mapping
@@ -246,23 +246,23 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "\[PRODUCT_VERSION\]:"
 
 These locations contain replicas that must be kept in sync:
 
-- **Sync target**: `[WORKSPACE]/.devin/skills/llm-evaluation/` (via standard DevSystem sync)
-- **Same-repo replica**: `[DEVSYSTEM_FOLDER]/skills/llm-transcription/` (3 JSON files)
+- **Sync target**: `[WORKSPACE]/.devin/skills/llm-evaluation/` (via standard PromptSystem sync)
+- **Same-repo replica**: `[PROMPTSYSTEM_FOLDER]/skills/llm-transcription/` (3 JSON files)
 - **External repo**: `E:/Dev/LLM-Research/_Sessions/_2026-03-05_TabularDataFormatsForLLMs/01_CSVScaleLimits/_Scripts/` (3 JSON files)
 - **External repo**: `E:/Dev/LLM-Research/_Sessions/_2026-03-05_TabularDataFormatsForLLMs/02_FormatComparison/_Scripts/` (3 JSON files)
 
-**Not a replica**: `[DEVSYSTEM_FOLDER]/skills/windsurf-auto-model-switcher/windsurf-model-registry.json` — different format (Windsurf UI credit multipliers), not API model data.
+**Not a replica**: `[PROMPTSYSTEM_FOLDER]/skills/windsurf-auto-model-switcher/windsurf-model-registry.json` — different format (Windsurf UI credit multipliers), not API model data.
 
 ### Steps
 
-1. **Edit source** in `[DEVSYSTEM_FOLDER]/skills/llm-evaluation/`
+1. **Edit source** in `[PROMPTSYSTEM_FOLDER]/skills/llm-evaluation/`
 
 2. **Copy to all replicas**:
    ```powershell
-   $src = "[DEVSYSTEM_FOLDER]\skills\llm-evaluation"
+   $src = "[PROMPTSYSTEM_FOLDER]\skills\llm-evaluation"
    $files = @("model-registry.json","model-pricing.json","model-parameter-mapping.json")
    $targets = @(
-     "[DEVSYSTEM_FOLDER]\skills\llm-transcription",
+     "[PROMPTSYSTEM_FOLDER]\skills\llm-transcription",
      "E:\Dev\LLM-Research\_Sessions\_2026-03-05_TabularDataFormatsForLLMs\01_CSVScaleLimits\_Scripts",
      "E:\Dev\LLM-Research\_Sessions\_2026-03-05_TabularDataFormatsForLLMs\02_FormatComparison\_Scripts"
    )
@@ -271,12 +271,12 @@ These locations contain replicas that must be kept in sync:
    }
    ```
 
-3. **Sync DevSystem to `.devin/`**:
+3. **Sync PromptSystem to `.devin/`**:
    ```powershell
-   Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
+   Copy-Item -Path "[PROMPTSYSTEM_FOLDER]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
    ```
 
-4. **If effort levels changed**: also update `EFFORT_LEVELS` in `call-llm.py` and `call-llm-batch.py` (both in `[DEVSYSTEM_FOLDER]/skills/llm-evaluation/`), then re-sync
+4. **If effort levels changed**: also update `EFFORT_LEVELS` in `call-llm.py` and `call-llm-batch.py` (both in `[PROMPTSYSTEM_FOLDER]/skills/llm-evaluation/`), then re-sync
 
 5. **If a new model was added**: add test entries to `test-call-llm.py`, run tests, update `LLM_EVALUATION_CLAUDE_MODELS.md`
 
@@ -285,11 +285,11 @@ These locations contain replicas that must be kept in sync:
 ### Verification
 
 ```powershell
-$src = "[DEVSYSTEM_FOLDER]\skills\llm-evaluation"
+$src = "[PROMPTSYSTEM_FOLDER]\skills\llm-evaluation"
 $files = @("model-registry.json","model-pricing.json","model-parameter-mapping.json")
 $targets = @(
   "[WORKSPACE]\.devin\skills\llm-evaluation",
-  "[DEVSYSTEM_FOLDER]\skills\llm-transcription",
+  "[PROMPTSYSTEM_FOLDER]\skills\llm-transcription",
   "[WORKSPACE]\.devin\skills\llm-transcription",
   "E:\Dev\LLM-Research\_Sessions\_2026-03-05_TabularDataFormatsForLLMs\01_CSVScaleLimits\_Scripts",
   "E:\Dev\LLM-Research\_Sessions\_2026-03-05_TabularDataFormatsForLLMs\02_FormatComparison\_Scripts"
@@ -312,20 +312,20 @@ Expected: 15 OK, 0 FAIL (5 targets x 3 files).
 
 ### Adding or Editing a Workflow
 
-1. **Edit in source**: `[DEVSYSTEM_FOLDER]/workflows/<workflow>.md`
+1. **Edit in source**: `[PROMPTSYSTEM_FOLDER]/workflows/<workflow>.md`
    - New workflow: create file following `WORKFLOW_RULES.md` (WF-HD-01 through WF-EX-01)
    - Existing workflow: edit in place
 
 2. **Sync to `[AGENT_FOLDER]`**:
    ```powershell
-   Copy-Item -Path "[DEVSYSTEM_FOLDER]\*" -Destination "[AGENT_FOLDER]\" -Recurse -Force
+   Copy-Item -Path "[PROMPTSYSTEM_FOLDER]\*" -Destination "[AGENT_FOLDER]\" -Recurse -Force
    ```
 
-3. **If new workflow**: register in `devsystem-core.md` Workflow Reference section (alphabetical)
+3. **If new workflow**: register in `promptsystem-core.md` Workflow Reference section (alphabetical)
 
 4. **If new workflow**: update `README.md` workflow list and count
 
-5. **Run `/sync`** to propagate changes to `devsystem-core.md` and `README.md`
+5. **Run `/sync`** to propagate changes to `promptsystem-core.md` and `README.md`
 
 6. **If new TOPIC introduced**: register in `ID-REGISTRY.md`
 
@@ -333,21 +333,21 @@ Expected: 15 OK, 0 FAIL (5 targets x 3 files).
 
 1. **Delete from source and agent folder**:
    ```powershell
-   Remove-Item "[DEVSYSTEM_FOLDER]\workflows\<workflow>.md" -Force
+   Remove-Item "[PROMPTSYSTEM_FOLDER]\workflows\<workflow>.md" -Force
    Remove-Item "[AGENT_FOLDER]\workflows\<workflow>.md" -Force
    ```
 
-2. **Remove from `devsystem-core.md`** Workflow Reference section
+2. **Remove from `promptsystem-core.md`** Workflow Reference section
 
 3. **Remove from `README.md`** workflow list, update count
 
-4. **If workflow exists in synced repos**: add to `deprecated` patterns in `devsystem-sync.json`:
+4. **If workflow exists in synced repos**: add to `deprecated` patterns in `promptsystem-sync.json`:
    - Add `workflows/<workflow>.md` to `deprecated` array in relevant source entry
    - Next `/sync workspace -execute` will delete it from synced repos
 
 5. **If workflow had a TOPIC**: mark deprecated in `ID-REGISTRY.md` (keep history)
 
-6. **Run `/sync`** to propagate removals to `devsystem-core.md` and `README.md`
+6. **Run `/sync`** to propagate removals to `promptsystem-core.md` and `README.md`
 
 ### Verification
 
@@ -355,13 +355,13 @@ Expected: 15 OK, 0 FAIL (5 targets x 3 files).
 
 ```powershell
 # 1. File present in both locations with matching content
-Test-Path "[DEVSYSTEM_FOLDER]\workflows\<workflow>.md"
+Test-Path "[PROMPTSYSTEM_FOLDER]\workflows\<workflow>.md"
 Test-Path "[AGENT_FOLDER]\workflows\<workflow>.md"
-(Get-FileHash "[DEVSYSTEM_FOLDER]\workflows\<workflow>.md").Hash -eq `
+(Get-FileHash "[PROMPTSYSTEM_FOLDER]\workflows\<workflow>.md").Hash -eq `
 (Get-FileHash "[AGENT_FOLDER]\workflows\<workflow>.md").Hash
 
-# 2. Registered in devsystem-core.md and README.md (new workflows only)
-Select-String -Path "[DEVSYSTEM_FOLDER]\specs\devsystem-core.md" -Pattern "<workflow>"
+# 2. Registered in promptsystem-core.md and README.md (new workflows only)
+Select-String -Path "[PROMPTSYSTEM_FOLDER]\specs\promptsystem-core.md" -Pattern "<workflow>"
 Select-String -Path "[WORKSPACE]\README.md" -Pattern "<workflow>"
 ```
 
@@ -369,15 +369,15 @@ Select-String -Path "[WORKSPACE]\README.md" -Pattern "<workflow>"
 
 ```powershell
 # 1. File absent from both locations (both should return False)
-Test-Path "[DEVSYSTEM_FOLDER]\workflows\<workflow>.md"
+Test-Path "[PROMPTSYSTEM_FOLDER]\workflows\<workflow>.md"
 Test-Path "[AGENT_FOLDER]\workflows\<workflow>.md"
 
-# 2. Not referenced in devsystem-core.md or README.md
-Select-String -Path "[DEVSYSTEM_FOLDER]\specs\devsystem-core.md" -Pattern "<workflow>"  # should return nothing
+# 2. Not referenced in promptsystem-core.md or README.md
+Select-String -Path "[PROMPTSYSTEM_FOLDER]\specs\promptsystem-core.md" -Pattern "<workflow>"  # should return nothing
 Select-String -Path "[WORKSPACE]\README.md" -Pattern "<workflow>"  # should return nothing
 
 # 3. Listed in deprecated (if synced to downstream repos)
-Select-String -Path "[WORKSPACE]\devsystem-sync.json" -Pattern "<workflow>"
+Select-String -Path "[WORKSPACE]\promptsystem-sync.json" -Pattern "<workflow>"
 ```
 
 ## SOP 7: Post-Release Version Bump
@@ -397,15 +397,15 @@ Immediately after `git tag` and `git push --tags` for a release. This is the LAS
 2. **Backup released version** (MANDATORY before rename):
    ```powershell
    # Restore the released version from git at the tag commit
-   git archive [TAG] -- "DevSystem[OLD_VERSION]/" | tar -x -C .
+   git archive [TAG] -- "PromptSystem[OLD_VERSION]/" | tar -x -C .
    # Move to archive
-   Move-Item "[WORKSPACE]\DevSystem[OLD_VERSION]" "[WORKSPACE]\_OldDevSystemVersions\DevSystem[OLD_VERSION]"
+   Move-Item "[WORKSPACE]\PromptSystem[OLD_VERSION]" "[WORKSPACE]\_OldDevSystemVersions\PromptSystem[OLD_VERSION]"
    ```
    All prior releases MUST be preserved in `[WORKSPACE]\_OldDevSystemVersions\`. Never rename a version folder without backing it up first.
 
 3. **Rename working folder**:
    ```powershell
-   Rename-Item "[WORKSPACE]\DevSystem[OLD_VERSION]" "DevSystem[NEW_VERSION]"
+   Rename-Item "[WORKSPACE]\PromptSystem[OLD_VERSION]" "PromptSystem[NEW_VERSION]"
    ```
 
 4. **Update `NOTES.md`**:
@@ -413,7 +413,7 @@ Immediately after `git tag` and `git push --tags` for a release. This is the LAS
 
 5. **Sync to `.devin/`**:
    ```powershell
-   Copy-Item -Path "[WORKSPACE]\DevSystem[NEW_VERSION]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
+   Copy-Item -Path "[WORKSPACE]\PromptSystem[NEW_VERSION]\*" -Destination "[WORKSPACE]\.devin\" -Recurse -Force
    ```
 
 6. **Commit**:
@@ -426,17 +426,17 @@ Immediately after `git tag` and `git push --tags` for a release. This is the LAS
 
 ```powershell
 # 1. Old folder gone, new folder exists
--not (Test-Path "[WORKSPACE]\DevSystem[OLD_VERSION]")
-Test-Path "[WORKSPACE]\DevSystem[NEW_VERSION]"
+-not (Test-Path "[WORKSPACE]\PromptSystem[OLD_VERSION]")
+Test-Path "[WORKSPACE]\PromptSystem[NEW_VERSION]"
 
 # 2. Released version backed up
-Test-Path "[WORKSPACE]\_OldDevSystemVersions\DevSystem[OLD_VERSION]"
+Test-Path "[WORKSPACE]\_OldDevSystemVersions\PromptSystem[OLD_VERSION]"
 
 # 3. NOTES.md references new version
-Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "Current \[DEVSYSTEM\]: DevSystem[NEW_VERSION]"
+Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "Current \[PROMPTSYSTEM\]: PromptSystem[NEW_VERSION]"
 
 # 4. .devin/ is synced (spot-check)
-(Get-ChildItem "[WORKSPACE]\DevSystem[NEW_VERSION]" -Recurse -File).Count -eq `
+(Get-ChildItem "[WORKSPACE]\PromptSystem[NEW_VERSION]" -Recurse -File).Count -eq `
 (Get-ChildItem "[WORKSPACE]\.devin" -Recurse -File).Count
 ```
 
@@ -456,15 +456,15 @@ Get-ChildItem -Path "[WORKSPACE]\DevSystemV3.6","[WORKSPACE]\.devin" -Recurse -D
 # Extract skills from NOTES.md
 $notes = (Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "^\- \*\*Development\*\*:").Line
 # Verify all skills in skills/ folder are registered
-Get-ChildItem "[DEVSYSTEM_FOLDER]\skills" -Directory | ForEach-Object { $_.Name } | Sort-Object
+Get-ChildItem "[PROMPTSYSTEM_FOLDER]\skills" -Directory | ForEach-Object { $_.Name } | Sort-Object
 # Visually compare — they must list identical skills
 ```
 
 ### Compare source vs sync (after any change)
 
 ```powershell
-# Files in DevSystem but not in .devin (missing sync)
-$src = Get-ChildItem "[DEVSYSTEM_FOLDER]" -Recurse -File | ForEach-Object { $_.FullName.Substring("[DEVSYSTEM_FOLDER]".Length) }
+# Files in PromptSystem but not in .devin (missing sync)
+$src = Get-ChildItem "[PROMPTSYSTEM_FOLDER]" -Recurse -File | ForEach-Object { $_.FullName.Substring("[PROMPTSYSTEM_FOLDER]".Length) }
 $dst = Get-ChildItem "[WORKSPACE]\.devin" -Recurse -File | ForEach-Object { $_.FullName.Substring("[WORKSPACE]\.devin".Length) }
 Compare-Object $src $dst | Where-Object SideIndicator -eq "<="
 ```
@@ -474,11 +474,11 @@ Compare-Object $src $dst | Where-Object SideIndicator -eq "<="
 Mandatory before any release (SOP 4 step 7). Detects references to non-existing workflows in specs, skills, README, and ID-REGISTRY.
 
 ```powershell
-# Auto-detects [DEVSYSTEM_FOLDER] from NOTES.md
+# Auto-detects [PROMPTSYSTEM_FOLDER] from NOTES.md
 .\check_workflow_refs.ps1
 
 # Or specify explicitly
-.\check_workflow_refs.ps1 -DevSystemFolder "[DEVSYSTEM_FOLDER]"
+.\check_workflow_refs.ps1 -PromptSystemFolder "[PROMPTSYSTEM_FOLDER]"
 ```
 
 Expected: `None found!` (zero broken references). Any match must be fixed before release.

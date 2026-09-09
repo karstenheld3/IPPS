@@ -1,4 +1,4 @@
-<DevSystem MarkdownTablesAllowed=true />
+<PromptSystem MarkdownTablesAllowed=true />
 
 # INFO: Windsurf Pricing Change Impact Analysis (March 2026)
 

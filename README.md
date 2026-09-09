@@ -99,7 +99,7 @@ AMINTON provides arguments    → Tree notation for structured, verifiable Minto
 - [Agent Tools](#agent-tools)
 - [Project Structure](#project-structure)
 - [Workspaces and Sessions](#workspaces-and-sessions)
-- [DevSystem Versions](#devsystem-versions)
+- [PromptSystem Versions](#promptsystem-versions)
 - [Agent Compatibility](#agent-compatibility)
 
 ## Overview
@@ -159,7 +159,7 @@ Or run [`/workspace-setup`](.devin/workflows/workspace-setup.md) for an interact
 - [`/rename`](.devin/workflows/rename.md) - Global and local refactoring with exhaustive search
 
 **Problem Fixing**
-- [`/fix`](.devin/workflows/fix.md) - Fix any problem by reading relevant DevSystem knowledge
+- [`/fix`](.devin/workflows/fix.md) - Fix any problem by reading relevant PromptSystem knowledge
 - [`/bugfix`](.devin/workflows/bugfix.md) - Fix bugs with full traceability (record, investigate, test, commit)
 
 **Learning**
@@ -215,7 +215,7 @@ Or run [`/workspace-setup`](.devin/workflows/workspace-setup.md) for an interact
 - **travel-info** - Travel lookups: flights, trains, transit, country-specific info
 - **windows-desktop-control** - Windows screenshots, window management, keyboard/mouse
 - **windsurf-auto-model-switcher** - Switch Cascade AI model tier programmatically
-- **workspace-management** - Multi-repo workspace setup, DevSystem synchronization, knowledge distribution
+- **workspace-management** - Multi-repo workspace setup, PromptSystem synchronization, knowledge distribution
 - **write-documents** - Document templates (INFO, SPEC, IMPL, TEST, TASKS, STRUT, MINTO), writing rules (APAPALAN, MECT, SOCAS)
 - **youtube-downloader** - Download YouTube content as MP3 or video, extract metadata
 
@@ -394,7 +394,7 @@ Creates `TASKS_[TOPIC].md` from IMPL/TEST. **Mandatory before implementation.**
 
 **Workflows:** [`/fix`](.devin/workflows/fix.md), [`/bugfix`](.devin/workflows/bugfix.md)
 
-Fix any problem by reading relevant DevSystem knowledge:
+Fix any problem by reading relevant PromptSystem knowledge:
 ```
 /fix
 ```
@@ -646,7 +646,7 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - **VCRIV** - Verify-Critique-Reconcile-Implement-Verify. Quality pipeline for logic and design review: `/verify` → `/critique` → `/reconcile` → `/implement` → `/verify`
 - **FACRIV** - Fact-check-Reconcile-Implement-Verify. Quality pipeline for factual claim verification: `/fact-check` → `/reconcile` → `/implement` → `/verify`
 
-**Agent Drift Prevention**: [ADP Approach](specs/_INFO_AGENT_DRIFT_PREVENTION_APPROACH.md) - How the DevSystem prevents agent drift through TRACTFUL, SMAP, EDIRD, STRUT, GRUC, and MNF across three scopes
+**Agent Drift Prevention**: [ADP Approach](specs/_INFO_AGENT_DRIFT_PREVENTION_APPROACH.md) - How the PromptSystem prevents agent drift through TRACTFUL, SMAP, EDIRD, STRUT, GRUC, and MNF across three scopes
 
 **How-To Guides**:
 - [How to Write Good Document Templates](specs/_INFO_HOW_TO_WRITE_GOOD_DOCUMENT_TEMPLATES.md) - Patterns and rules for unambiguous templates that agents reliably instantiate
@@ -660,8 +660,8 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 ## Key Conventions
 
 - [Core Conventions](.devin/rules/core-conventions.md) - Text formatting, document structure, header blocks
-- [DevSystem Core](.devin/rules/devsystem-core.md) - Workspace scenarios, folder structure, workflow reference
-- [DevSystem IDs](.devin/rules/devsystem-ids.md) - Document IDs, topic registry, tracking IDs
+- [PromptSystem Core](.devin/rules/promptsystem-core.md) - Workspace scenarios, folder structure, workflow reference
+- [PromptSystem IDs](.devin/rules/promptsystem-ids.md) - Document IDs, topic registry, tracking IDs
 - [Agentic English](.devin/rules/agentic-english.md) - Controlled vocabulary for agent instructions
 - [EDIRD Phase Planning](.devin/rules/edird-phase-planning.md) - Phase model core rules
 - [Git Conventions](.devin/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
@@ -906,7 +906,7 @@ Document templates for INFO, SPEC, IMPL, TEST, TASKS, and STRUT plans.
 
 Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.md` in each skill folder to install.
 
-- **[MinifyIPPS](specs/_INFO_HOW_TO_MINIFY_IPPS.md)** - LLM-based compression pipeline for DevSystem markdown files. Reduces token count while preserving meaning. Pipeline: bundle → analyze → compress → verify.
+- **[MinifyIPPS](specs/_INFO_HOW_TO_MINIFY_IPPS.md)** - LLM-based compression pipeline for PromptSystem markdown files. Reduces token count while preserving meaning. Pipeline: bundle → analyze → compress → verify.
 
 ## Project Structure
 
@@ -917,22 +917,22 @@ IPPS/
 │   ├── rules/
 │   ├── workflows/
 │   └── skills/
-├── _OldDevSystemVersions/        # Previous DevSystem versions (V1 through V3.8)
+├── _OldDevSystemVersions/        # Previous PromptSystem versions (V1 through V3.8)
 ├── DevSystemV4.3/                # Current system (source of truth)
 │   ├── rules/
 │   │   ├── agent-behavior.md     # Agent execution patterns and communication
 │   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions
 │   │   ├── core-conventions.md   # Text formatting, document structure, character rules
-│   │   ├── devsystem-core.md     # Workspace scenarios, folder structure, operation modes
-│   │   ├── devsystem-ids.md      # Document and item ID conventions
+│   │   ├── promptsystem-core.md     # Workspace scenarios, folder structure, operation modes
+│   │   ├── promptsystem-ids.md      # Document and item ID conventions
 │   │   ├── edird-phase-planning.md # EDIRD phase model core rules
 │   │   └── workspace-rules.md    # Workspace-specific overrides
 │   ├── skills/                   # See Skills section for details
 │   └── workflows/                # See .devin/workflows/ for file list
 ├── docs/                         # Product documentation, tool research, release notes
 │   └── ReleaseNotes/             # Release notes per version
-├── specs/                        # IPPS specs, DevSystem methodology, guidelines
-├── ID-REGISTRY.md                # Prevents term/ID collisions (DevSystem constants + project topics)
+├── specs/                        # IPPS specs, PromptSystem methodology, guidelines
+├── ID-REGISTRY.md                # Prevents term/ID collisions (PromptSystem constants + project topics)
 ├── NOTES.md                      # Workspace constants, project info, sync rules
 ├── PROBLEMS.md                   # Known issues across the project
 ├── PROGRESS.md                   # Overall project progress
@@ -973,7 +973,7 @@ Located in session folder (e.g., `_2026-01-15_FixAuthBug/`):
 ### Session Lifecycle
 
 ```
-/prime           → Load constants and documents from workspace and devsystem
+/prime           → Load constants and documents from workspace and promptsystem
                    (README, NOTES, PROBLEMS, FAILS, LEARNINGS, ID-REGISTRY, ...)
 /session-new     → Create session folder with NOTES, PROBLEMS, PROGRESS
     ↓
@@ -998,7 +998,7 @@ When [`/session-finalize`](.devin/workflows/session-finalize.md) runs:
 
 This ensures lessons learned survive session boundaries and prevent repeated mistakes.
 
-## DevSystem Versions
+## PromptSystem Versions
 
 - **[DevSystemV4.3](DevSystemV4.3/)** - Current system
 

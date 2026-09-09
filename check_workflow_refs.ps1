@@ -1,16 +1,16 @@
-# Check for references to non-existing workflows across DevSystem
-# Usage: .\check_workflow_refs.ps1 [-DevSystemFolder <path>]
+# Check for references to non-existing workflows across PromptSystem
+# Usage: .\check_workflow_refs.ps1 [-PromptSystemFolder <path>]
 param(
-    [string]$DevSystemFolder = (Join-Path $PSScriptRoot (Get-Content (Join-Path $PSScriptRoot "NOTES.md") | Where-Object { $_ -match 'Current \[DEVSYSTEM\]: (\S+)' } | ForEach-Object { $Matches[1] }))
+    [string]$PromptSystemFolder = (Join-Path $PSScriptRoot (Get-Content (Join-Path $PSScriptRoot "NOTES.md") | Where-Object { $_ -match 'Current \[PROMPTSYSTEM\]: (\S+)' } | ForEach-Object { $Matches[1] }))
 )
 
 $workspace = $PSScriptRoot
-$workflowDir = Join-Path $DevSystemFolder "workflows"
+$workflowDir = Join-Path $PromptSystemFolder "workflows"
 if (-not (Test-Path $workflowDir)) { Write-Error "Workflow dir not found: $workflowDir"; exit 1 }
 $searchDirs = @(
-    (Join-Path $DevSystemFolder "workflows")
-    (Join-Path $DevSystemFolder "rules")
-    (Join-Path $DevSystemFolder "skills")
+    (Join-Path $PromptSystemFolder "workflows")
+    (Join-Path $PromptSystemFolder "rules")
+    (Join-Path $PromptSystemFolder "skills")
     (Join-Path $workspace "README.md")
     (Join-Path $workspace "ID-REGISTRY.md")
 )
@@ -40,7 +40,7 @@ foreach ($file in $allFiles) {
         $wfName = $m.Groups[1].Value
         if ($wfName -notin $existingWorkflows -and $wfName -notin $ignoredRefs) {
             $lineNum = ($content.Substring(0, $m.Index) -split "`n").Count
-            $relPath = $file.FullName.Replace("$DevSystemFolder\", "").Replace("$workspace\", "")
+            $relPath = $file.FullName.Replace("$PromptSystemFolder\", "").Replace("$workspace\", "")
             $missing += [PSCustomObject]@{
                 File = $relPath
                 Line = $lineNum

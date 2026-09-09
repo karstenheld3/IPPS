@@ -1,4 +1,4 @@
-<DevSystem APAPALAN=false />
+<PromptSystem APAPALAN=false />
 
 # UX Design Notepad
 

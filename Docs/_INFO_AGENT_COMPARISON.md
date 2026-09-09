@@ -1,4 +1,4 @@
-<DevSystem MarkdownTablesAllowed=true EmojisAllowed=true />
+<PromptSystem MarkdownTablesAllowed=true EmojisAllowed=true />
 
 # INFO: AI Coding Agent Comparison
 

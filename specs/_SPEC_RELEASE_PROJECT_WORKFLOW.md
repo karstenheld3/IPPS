@@ -76,10 +76,10 @@ Three variants of project-release.md exist:
 Workspace A (single-repo, date-based)
 ├── Tag format: YYYY-MM-DD (date-based)
 ├── Repos: 1 (single)
-├── Version source: DevSystem folder name (DevSystemVX.Y)
+├── Version source: PromptSystem folder name (PromptSystemVX.Y)
 ├── Binary: none
 ├── Release notes: Docs/ReleaseNotes/
-├── Post-release bump: rename DevSystem folder
+├── Post-release bump: rename PromptSystem folder
 └── SOPS file: SOPS.md
 
 Workspace B (multi-repo, semver)
@@ -140,9 +140,9 @@ Configuration for a single repo participating in the release process.
 - `path` - Repo root path using workspace constants (e.g., `[WORKSPACE_FOLDER]`, `[PRODUCT_REPO_FOLDER]`, `[WORKSPACE_FOLDER]`)
 - `role` - `product` or `dev` (determines release order and notes placement)
 - `tag_format` - Tag naming pattern: `date` (YYYY-MM-DD) or `semver` (vX.Y.Z)
-- `version_source` - How version is determined: `devsystem_folder`, `pyproject_toml`, `package_json`, `none`
+- `version_source` - How version is determined: `promptsystem_folder`, `pyproject_toml`, `package_json`, `none`
 - `version_file` - Path to version source file using workspace constants (e.g., `[PRODUCT_REPO_FOLDER]\pyproject.toml`). Required when version_source is file-based
-- `post_release_bump` - Bump strategy: `devsystem_rename`, `patch_bump`, `minor_bump`, `none`
+- `post_release_bump` - Bump strategy: `promptsystem_rename`, `patch_bump`, `minor_bump`, `none`
 - `binary_build` - Boolean: whether user must build a binary before release
 - `binary_path_pattern` - Pattern for binary path (e.g., `dist/myapp-{version}-win-x64.exe`)
 - `version_gate` - Boolean: whether version consistency gate is required before tagging
@@ -156,7 +156,7 @@ Configuration for a single repo participating in the release process.
 Mechanism for determining the current version string of a repo.
 
 **Types:**
-- `devsystem_folder` - Version derived from DevSystem folder name (e.g., `DevSystemV4.3` -> `4.3`)
+- `promptsystem_folder` - Version derived from PromptSystem folder name (e.g., `DevSystemV4.3` -> `4.3`)
 - `pyproject_toml` - Version from `pyproject.toml` `[project] version` field
 - `package_json` - Version from `package.json` `version` field
 - `none` - No version source (tag-only repo, version derived from tag or product repo)
@@ -272,8 +272,8 @@ Markdown document summarizing sessions, artifacts, and changes since last releas
 
 **RLSPROJ-FR-15: Post-Release Version Bump**
 - After all tags pushed and GitHub releases created (or skipped per FR-12), workflow MUST execute post-release bump
-- Bump strategy per repo: `devsystem_rename`, `patch_bump`, `minor_bump`, `none`
-- `devsystem_rename`: rename `DevSystem[OLD]` folder to `DevSystem[NEW]`, update NOTES.md, sync to `.devin/`
+- Bump strategy per repo: `promptsystem_rename`, `patch_bump`, `minor_bump`, `none`
+- `promptsystem_rename`: rename `PromptSystem[OLD]` folder to `PromptSystem[NEW]`, update NOTES.md, sync to `.devin/`
 - `patch_bump`: increment patch version in version source file
 - `minor_bump`: increment minor version in version source file
 - `none`: no bump (tag-only repo)
@@ -294,7 +294,7 @@ Markdown document summarizing sessions, artifacts, and changes since last releas
 - After parsing `[RELEASE_CONFIG]`, workflow MUST validate config before proceeding
 - Required global keys MUST be present: `sops_file`, `sessions_folder`, `release_notes_dir`
 - Each `[RELEASE_REPO]` block MUST have all required keys: `path`, `role`, `tag_format`, `version_source`, `post_release_bump`
-- Enum values MUST be valid: `tag_format` in [`date`, `semver`], `role` in [`product`, `dev`], `version_source` in [`devsystem_folder`, `pyproject_toml`, `package_json`, `none`], `post_release_bump` in [`devsystem_rename`, `patch_bump`, `minor_bump`, `none`]
+- Enum values MUST be valid: `tag_format` in [`date`, `semver`], `role` in [`product`, `dev`], `version_source` in [`promptsystem_folder`, `pyproject_toml`, `package_json`, `none`], `post_release_bump` in [`promptsystem_rename`, `patch_bump`, `minor_bump`, `none`]
 - Conditional keys MUST be present when parent key requires: `version_file` when `version_source` is file-based, `binary_path_pattern` when `binary_build` is true
 - If validation fails: workflow MUST report specific missing or invalid key and halt
 
@@ -328,7 +328,7 @@ Markdown document summarizing sessions, artifacts, and changes since last releas
 ## 6. Design Decisions
 
 **RLSPROJ-DD-01: Configuration in NOTES.md, not workflow file**
-Rationale: NOTES.md is already the workspace configuration file (sessions folder, agent folder, DevSystem version). Release config is workspace-specific, not workflow-generic. Keeping it in NOTES.md means the workflow file never needs editing per-workspace.
+Rationale: NOTES.md is already the workspace configuration file (sessions folder, agent folder, PromptSystem version). Release config is workspace-specific, not workflow-generic. Keeping it in NOTES.md means the workflow file never needs editing per-workspace.
 
 **RLSPROJ-DD-02: Product-first ordering**
 Rationale: Product repo contains shippable artifacts (binary, release notes). Dev repo contains knowledge artifacts. Product must be tagged and released first so dev repo release can reference the product release URL. In single-repo mode, the one repo is the product.
@@ -337,7 +337,7 @@ Rationale: Product repo contains shippable artifacts (binary, release notes). De
 Rationale: In multi-repo workspaces, product may use semver (`v1.0.1`) while dev repo uses date-based tags (`2026-09-05`), or both may use the same format. In single-repo workspaces, date-based tags are common. Per-repo config allows mixed or uniform formats without workflow modification.
 
 **RLSPROJ-DD-04: Version source is per-repo**
-Rationale: Product repo may track version in `pyproject.toml` while dev repo has no version file (derives version from product repo's tag). DevSystem workspaces track version via folder name. Each repo needs its own version source declaration.
+Rationale: Product repo may track version in `pyproject.toml` while dev repo has no version file (derives version from product repo's tag). PromptSystem workspaces track version via folder name. Each repo needs its own version source declaration.
 
 **RLSPROJ-DD-05: Binary build is always user-managed**
 Rationale: Build tools (build.bat, cargo, PyApp) require interactive environments, toolchain checks, and may fail in ways the agent cannot diagnose. User builds manually, agent verifies binary exists. Consistent with workspace `!NOTES.md` Build Rules.
@@ -352,7 +352,7 @@ Rationale: Release notes are user-facing documentation. Product repo is the user
 Rationale: Some workspaces use `SOPS.md`, others use `_SOPS.md`. Hardcoding either name breaks workspaces using the other. Config field `sops_file` lets each workspace specify its own.
 
 **RLSPROJ-DD-09: Post-release bump strategy is per-repo**
-Rationale: DevSystem workspaces rename a version folder (`DevSystemV4.3` -> `DevSystemV4.4`). Product repos bump a version field in a file (`pyproject.toml`). Dev repos may not need any bump. Per-repo `post_release_bump` config handles all three cases.
+Rationale: PromptSystem workspaces rename a version folder (`DevSystemV4.3` -> `PromptSystemV4.4`). Product repos bump a version field in a file (`pyproject.toml`). Dev repos may not need any bump. Per-repo `post_release_bump` config handles all three cases.
 
 **RLSPROJ-DD-10: Sessions folder is configurable**
 Rationale: Workspaces use different session folder names (e.g., `_PrivateSessions_gitignore`, `_Sessions`). The workflow must not assume a fixed folder name.
@@ -391,8 +391,8 @@ release_notes_naming: RELEASE_NOTES_v{VERSION}_{DATE}.md
 path: [WORKSPACE_FOLDER]
 role: product
 tag_format: date
-version_source: devsystem_folder
-post_release_bump: devsystem_rename
+version_source: promptsystem_folder
+post_release_bump: promptsystem_rename
 binary_build: false
 github_release: true
 
@@ -414,7 +414,7 @@ github_release_assets:
 
 ### Version Extraction
 
-- `devsystem_folder`: Parse `[PRODUCT_VERSION]: X.Y` from NOTES.md, extract `X.Y`
+- `promptsystem_folder`: Parse `[PRODUCT_VERSION]: X.Y` from NOTES.md, extract `X.Y`
 - `pyproject_toml`: Parse `version = "X.Y.Z"` from configured version_file
 - `package_json`: Parse `"version": "X.Y.Z"` from configured version_file
 - `none`: No version extraction; tag is the version identifier
@@ -430,7 +430,7 @@ The workflow uses a standard release notes template (defined by the workflow, no
 
 ### Post-Release Bump Execution
 
-- `devsystem_rename`: Read current version from NOTES.md, increment minor, rename folder, update NOTES.md, sync to `.devin/`, commit, push
+- `promptsystem_rename`: Read current version from NOTES.md, increment minor, rename folder, update NOTES.md, sync to `.devin/`, commit, push
 - `patch_bump`: Read version from version_file, increment patch, write back, commit, push
 - `minor_bump`: Read version from version_file, increment minor, reset patch to 0, write back, commit, push
 - `none`: Skip
@@ -553,9 +553,9 @@ Each repo is defined in a `[RELEASE_REPO: <name>]` block:
 - `path` - (required) Repo root path. Must use workspace constants (e.g., `[WORKSPACE_FOLDER]`, `[PRODUCT_REPO_FOLDER]`, `[WORKSPACE_FOLDER]`)
 - `role` - (required) `product` or `dev`
 - `tag_format` - (required) `date` or `semver`
-- `version_source` - (required) `devsystem_folder`, `pyproject_toml`, `package_json`, or `none`
+- `version_source` - (required) `promptsystem_folder`, `pyproject_toml`, `package_json`, or `none`
 - `version_file` - (conditional) Path to version file. Must use workspace constants (e.g., `[PRODUCT_REPO_FOLDER]\pyproject.toml`). Required when version_source is file-based
-- `post_release_bump` - (required) `devsystem_rename`, `patch_bump`, `minor_bump`, or `none`
+- `post_release_bump` - (required) `promptsystem_rename`, `patch_bump`, `minor_bump`, or `none`
 - `binary_build` - (optional) `true` or `false`. Default: `false`
 - `binary_path_pattern` - (conditional) Pattern for binary path relative to repo root. Required when binary_build is true. Placeholder: `{version}`
 - `version_gate` - (optional) `true` or `false`. Default: `false`
@@ -579,8 +579,8 @@ release_notes_naming: RELEASE_NOTES_v{VERSION}_{DATE}.md
 path: [WORKSPACE_FOLDER]
 role: product
 tag_format: date
-version_source: devsystem_folder
-post_release_bump: devsystem_rename
+version_source: promptsystem_folder
+post_release_bump: promptsystem_rename
 github_release: true
 ```
 
@@ -635,8 +635,8 @@ release_notes_naming: RELEASE_NOTES_v{VERSION}_{DATE}.md
 path: [WORKSPACE_FOLDER]
 role: product
 tag_format: date
-version_source: devsystem_folder
-post_release_bump: devsystem_rename
+version_source: promptsystem_folder
+post_release_bump: promptsystem_rename
 github_release: true
 ```
 
@@ -676,9 +676,9 @@ tag_annotation_template: Release {TAG}: {SUMMARY}
 path: [WORKSPACE_FOLDER]
 role: product
 tag_format: [date or semver]
-version_source: [devsystem_folder or pyproject_toml or package_json or none]
+version_source: [promptsystem_folder or pyproject_toml or package_json or none]
 # version_file: [PRODUCT_REPO_FOLDER]\pyproject.toml  # Required when version_source is pyproject_toml or package_json
-post_release_bump: [devsystem_rename or patch_bump or minor_bump or none]
+post_release_bump: [promptsystem_rename or patch_bump or minor_bump or none]
 # binary_build: true     # Uncomment if product has a binary
 # binary_path_pattern: dist/[appname]-{version}-win-x64.exe  # Required when binary_build is true
 # version_gate: true     # Uncomment if version consistency check needed
@@ -691,8 +691,8 @@ github_release: true
 # path: [WORKSPACE_FOLDER]
 # role: dev
 # tag_format: [date or semver]
-# version_source: [devsystem_folder or pyproject_toml or package_json or none]
-# post_release_bump: [devsystem_rename or patch_bump or minor_bump or none]
+# version_source: [promptsystem_folder or pyproject_toml or package_json or none]
+# post_release_bump: [promptsystem_rename or patch_bump or minor_bump or none]
 # test_command: [command]
 # github_release: true
 # github_release_notes: reference  # Dev repo references product release
@@ -707,24 +707,24 @@ github_release: true
 ### Config Decision Guide
 
 **When to use `date` vs `semver` tag format:**
-- `date`: Single-repo DevSystem workspaces, knowledge repos, no binary releases. Tags like `2026-09-05` convey "what changed since last date" without version management overhead
+- `date`: Single-repo PromptSystem workspaces, knowledge repos, no binary releases. Tags like `2026-09-05` convey "what changed since last date" without version management overhead
 - `semver`: Product repos with binaries, public APIs, or semantic versioning expectations. Tags like `v1.0.1` convey breaking/minor/patch intent
 
 **When to use each `version_source`:**
-- `devsystem_folder`: Workspace tracks version via DevSystem folder name (e.g., `DevSystemV4.3` -> version `4.3`). Use for DevSystem-only workspaces
+- `promptsystem_folder`: Workspace tracks version via PromptSystem folder name (e.g., `DevSystemV4.3` -> version `4.3`). Use for PromptSystem-only workspaces
 - `pyproject_toml`: Python project with version in `pyproject.toml`. Requires `version_file` path
 - `package_json`: Node.js project with version in `package.json`. Requires `version_file` path
 - `none`: Repo has no version file. Version is derived from tag or product repo. Use for dev repos that mirror product version
 
 **When to use each `post_release_bump`:**
-- `devsystem_rename`: DevSystem workspaces. Renames `DevSystemVX.Y` folder to next minor, updates NOTES.md, syncs to `.devin/`. Follows SOPS SOP 7 or equivalent
+- `promptsystem_rename`: PromptSystem workspaces. Renames `PromptSystemVX.Y` folder to next minor, updates NOTES.md, syncs to `.devin/`. Follows SOPS SOP 7 or equivalent
 - `patch_bump`: Product repos after patch release. Increments `X.Y.Z` to `X.Y.Z+1` in version file
 - `minor_bump`: Product repos after minor release. Increments `X.Y.Z` to `X.Y+1.0` in version file
 - `none`: Tag-only repos, dev repos with no version file, or repos where bump is handled externally
 
 **When to enable `binary_build`:**
 - Enable when product repo ships a binary (exe, app, binary distribution). Workflow asks user to build, verifies binary exists at `binary_path_pattern`
-- Disable for knowledge repos, DevSystem-only workspaces, or repos without binary artifacts
+- Disable for knowledge repos, PromptSystem-only workspaces, or repos without binary artifacts
 
 **When to enable `version_gate`:**
 - Enable when version appears in multiple places (version file, binary filename, binary `--version` output, tag). Gate catches mismatches before tagging
@@ -743,7 +743,7 @@ github_release: true
 - The `[RELEASE_CONFIG]` section format is intentionally non-YAML to match the existing NOTES.md key-value style (e.g., `[SESSIONS_FOLDER]`, `[AGENT_FOLDER]`)
 - Config parsing is line-based: keys before `[RELEASE_REPO:` blocks are global, keys inside blocks are per-repo
 - The workflow must handle the case where NOTES.md uses `!NOTES.md` naming (priority file) vs `NOTES.md`
-- Post-release bump for `devsystem_rename` must follow SOPS.md SOP 7 or equivalent procedure in the workspace's SOPS file
+- Post-release bump for `promptsystem_rename` must follow SOPS.md SOP 7 or equivalent procedure in the workspace's SOPS file
 
 ## 12. Logging Requirements
 

@@ -1,15 +1,15 @@
-# INFO: Agent Drift Prevention (ADP) - DevSystem Approach
+# INFO: Agent Drift Prevention (ADP) - PromptSystem Approach
 
 **Doc ID**: ADP-IN01
-**Goal**: Describe how the DevSystem prevents agent drift through structured, modular instruction layers
+**Goal**: Describe how the PromptSystem prevents agent drift through structured, modular instruction layers
 **Timeline**: Created 2026-06-12
 
 ## Summary
 
-- Agent Drift Prevention (ADP) is the core problem the DevSystem solves: agents systematically deviate from instructions
+- Agent Drift Prevention (ADP) is the core problem the PromptSystem solves: agents systematically deviate from instructions
 - General approach: structure and modularize instructions to reduce agent freedom and increase agent accountability
-- Three scopes: DevSystem, Session (dependent), Workflow/Skill (dependent)
-- DevSystem scope: TRACTFUL (when creating artifacts) + global rules (always active)
+- Three scopes: PromptSystem, Session (dependent), Workflow/Skill (dependent)
+- PromptSystem scope: TRACTFUL (when creating artifacts) + global rules (always active)
 - Session scope: SMAP (mandatory) + EDIRD and STRUT (modular additions)
 - Workflow/Skill scope: GRUC and MNF (defined per workflow/skill)
 - GRUC (Guides, Rules, Checks) enables quality assurance pipelines (/verify, /improve, /critique, /reconcile, /drift-detect)
@@ -20,7 +20,7 @@
 1. [The Problem: Agent Drift](#1-the-problem-agent-drift)
 2. [The Approach: Structure and Modularize](#2-the-approach-structure-and-modularize)
 3. [Three Scopes](#3-three-scopes)
-4. [DevSystem Scope: TRACTFUL + Global Rules](#4-devsystem-scope-tractful--global-rules)
+4. [PromptSystem Scope: TRACTFUL + Global Rules](#4-promptsystem-scope-tractful--global-rules)
 5. [Session Scope: SMAP, EDIRD, and STRUT](#5-session-scope-smap-edird-and-strut)
 6. [Workflow/Skill Scope: GRUC and MNF](#6-workflowskill-scope-gruc-and-mnf)
 7. [Supporting Concepts](#7-supporting-concepts)
@@ -49,7 +49,7 @@ Agents allocate a finite context budget. Content quality, process compliance, an
 
 ## 2. The Approach: Structure and Modularize
 
-The DevSystem's approach to ADP:
+The PromptSystem's approach to ADP:
 
 **Reduce agent freedom** by providing structured instructions that leave fewer decisions to the agent. Not "figure out what to do" but "follow this structure."
 
@@ -70,7 +70,7 @@ Different drift categories require countermeasures at different scopes. No singl
 ## 3. Three Scopes
 
 ```
-DevSystem:
+PromptSystem:
   TRACTFUL     (document framework - active when creating artifacts)
   Global rules (always active)
 
@@ -86,7 +86,7 @@ Workflow/Skill (dependent):
 
 SMAP is mandatory for every session. EDIRD and STRUT are modular additions at session or step level - they can be used separately or together. GRUC and MNF can be used separately or together. What a session or workflow uses depends on its complexity and needs.
 
-## 4. DevSystem Scope: TRACTFUL + Global Rules
+## 4. PromptSystem Scope: TRACTFUL + Global Rules
 
 **Global rules** are always active. **TRACTFUL** is active when artifacts are being created: designing and writing code, writing documents/reports/articles, designing and writing workflows.
 
@@ -317,7 +317,7 @@ Supports GRUC.RULES as detection heuristics. Used by `/verify`, `/improve`, `/cr
 
 A complex deep-research session uses most components:
 
-- **TRACTFUL** (DevSystem): _INFO_[TOPIC]-01_Summary.md defines expected output structure
+- **TRACTFUL** (PromptSystem): _INFO_[TOPIC]-01_Summary.md defines expected output structure
 - **SMAP** (Session): NOTES.md, PROGRESS.md, PROBLEMS.md track session state
 - **No EDIRD**: deep research uses its own 4-phase model (Preflight, Planning, Research, Final), not the standard EDIRD 5 phases
 - **STRUT** (Session): tree notation tracks progress through custom phases

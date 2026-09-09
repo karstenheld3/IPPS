@@ -13,7 +13,7 @@
 - Interpolated knowledge (LLM filling gaps from training patterns) is the most dangerous failure mode because it reads as confident and specific, making it indistinguishable from sourced knowledge without verification [VERIFIED]
 - A factcheck workflow must separately verify 1) factual claims against sources, and 2) derivative claims against the logic connecting them to supporting facts [VERIFIED]
 - The cost of undetected factual errors compounds through document dependency chains: wrong INFO leads to wrong SPEC leads to wrong IMPL leads to wrong code [VERIFIED]
-- **Separation of concerns**: `fact-check.md` verifies "Is it true?" (correspondence to external reality). `verify.md` verifies "Does it conform?" (conformance to DevSystem rules, upstream documents like SPEC for IMPL, templates, and instructions). These are orthogonal. A document can pass verify and fail fact-check, or vice versa. [VERIFIED]
+- **Separation of concerns**: `fact-check.md` verifies "Is it true?" (correspondence to external reality). `verify.md` verifies "Does it conform?" (conformance to PromptSystem rules, upstream documents like SPEC for IMPL, templates, and instructions). These are orthogonal. A document can pass verify and fail fact-check, or vice versa. [VERIFIED]
 - SOCAS-10 (Gaps in Reasoning) and SOCAS-06 (Incomplete Specifications) are the boundary rules: they check internal logic quality, not external truth. Both stay in `verify.md`. `fact-check.md` goes outside the document to test claims against reality. [VERIFIED]
 - Seven SOCAS/APAPALAN/MECT patterns serve as hallucination detection signals that `fact-check.md` should use as input: SOCAS-08 generic phrasing, SOCAS-12 stale information, SOCAS-13 empty structure, AP-PR-07 vague claims, MW-WC-01 wrong term precision, SOCAS-10 assumptions-as-facts, SOCAS-06 unsupported conclusions [VERIFIED]
 - **The primary reason for `fact-check.md` is AI agent gullibility.** LLM agents trust all text unconditionally, cannot distinguish aspirational docs from actual behavior, treat documentation as ground truth rather than as claims about ground truth, and have no mechanism to detect when a source is wrong. Without a systematic adversarial process, the agent will build on unverified claims. [VERIFIED]
@@ -143,7 +143,7 @@ Primary (the actual running API - call it, observe the response)
        └─> Tertiary (blog post explaining the docs)
             └─> Quaternary (LLM training on blogs and docs)
                  └─> Quinary (LLM output claiming API behavior)
-                      └─> Senary (DevSystem document quoting LLM output as fact)
+                      └─> Senary (PromptSystem document quoting LLM output as fact)
 ```
 
 Note: most people (and all AI agents) treat the docs as primary. This is the first and most common reasoning error. The docs already introduce one layer of human interpretation between you and reality. When an agent reads docs and writes an INFO document, the agent is already at the tertiary level - two steps removed from the actual system.
@@ -162,7 +162,7 @@ A factcheck workflow must:
 3. For secondary/tertiary claims, trace back toward the primary source
 4. Flag claims with no source attribution as requiring verification
 
-The existing DevSystem already partially addresses this: INFO documents require source IDs (INFO-SC-01 through INFO-SC-05), and source entries must include a primary finding. The factcheck workflow extends this by verifying that the documented finding actually matches what the source says.
+The existing PromptSystem already partially addresses this: INFO documents require source IDs (INFO-SC-01 through INFO-SC-05), and source entries must include a primary finding. The factcheck workflow extends this by verifying that the documented finding actually matches what the source says.
 
 ## 3. Evidence, Proof, and Verification
 
@@ -331,7 +331,7 @@ To the agent, all text has equal authority. A line in the official docs, a blog 
 
 ### 6.3 Why Existing Workflows Cannot Solve This
 
-**`/verify`** checks conformance to governing sources: Does the IMPL implement everything in the SPEC? Does the code match the IMPL plan? Are DevSystem rules (APAPALAN, MECT, SOCAS) followed? But verify TRUSTS its upstream sources as authoritative. It will catch "the IMPL forgot FR-03 from the SPEC" but it cannot catch "FR-03 in the SPEC is based on a hallucinated API feature that does not exist." A fabricated API method name written into the SPEC will be faithfully propagated to IMPL, to code, and verified as "conforming" at every stage.
+**`/verify`** checks conformance to governing sources: Does the IMPL implement everything in the SPEC? Does the code match the IMPL plan? Are PromptSystem rules (APAPALAN, MECT, SOCAS) followed? But verify TRUSTS its upstream sources as authoritative. It will catch "the IMPL forgot FR-03 from the SPEC" but it cannot catch "FR-03 in the SPEC is based on a hallucinated API feature that does not exist." A fabricated API method name written into the SPEC will be faithfully propagated to IMPL, to code, and verified as "conforming" at every stage.
 
 **`/improve`** finds contradictions and structural issues within the document. It cannot reach outside the document to check whether claims match reality.
 
@@ -374,7 +374,7 @@ An LLM's output is a function of statistical distribution in its training data. 
 
 ### 7.1 The Cascading Error Problem
 
-In the DevSystem document chain:
+In the PromptSystem document chain:
 
 ```
 INFO (research) ──> SPEC (requirements) ──> IMPL (plan) ──> Code
@@ -411,7 +411,7 @@ Session 3: Agent cites X in SPEC as verified requirement
 Session 4: Agent implements X in code
 ```
 
-Without factchecking, a single hallucination in session 1 becomes "verified" through repetition across sessions. The factcheck workflow must break this loop by verifying claims against external sources, not against other DevSystem documents.
+Without factchecking, a single hallucination in session 1 becomes "verified" through repetition across sessions. The factcheck workflow must break this loop by verifying claims against external sources, not against other PromptSystem documents.
 
 ### 7.4 Cost Asymmetry
 
@@ -424,7 +424,7 @@ This cost asymmetry is the fundamental justification for a factcheck workflow: a
 
 ## 8. Claim Taxonomy for Verification
 
-Based on the analysis above, claims in DevSystem documents fall into distinct categories requiring different verification strategies:
+Based on the analysis above, claims in PromptSystem documents fall into distinct categories requiring different verification strategies:
 
 ### 8.1 Category 1: Factual Claims (directly verifiable)
 
@@ -481,7 +481,7 @@ The claim taxonomy (Section 8) defines WHAT kinds of claims exist. This section 
 
 ### 9.1 External Sources (General Writing)
 
-Content from outside the DevSystem. The agent encounters these during `/research`, `/deep-research`, `/transcribe`, or when the user provides reference material. These sources are NEVER primary - they are always someone's claim about reality.
+Content from outside the PromptSystem. The agent encounters these during `/research`, `/deep-research`, `/transcribe`, or when the user provides reference material. These sources are NEVER primary - they are always someone's claim about reality.
 
 **Web pages (HTML)**:
 - **Claim density**: Varies wildly. API docs are dense. Blog posts mix claims with opinion.
@@ -512,11 +512,11 @@ Content from outside the DevSystem. The agent encounters these during `/research
 
 **Unknown source**:
 - **Claim density**: Unknown.
-- **Fact-check approach**: Treat EVERY claim as unverified until the source is identified and evaluated. Unknown source = unknown reliability. Do not extract claims from unknown sources into DevSystem documents without independent verification against the actual system.
+- **Fact-check approach**: Treat EVERY claim as unverified until the source is identified and evaluated. Unknown source = unknown reliability. Do not extract claims from unknown sources into PromptSystem documents without independent verification against the actual system.
 
-### 9.2 DevSystem Document Types
+### 9.2 PromptSystem Document Types
 
-Content produced by the agent or the user within the DevSystem. Each document type has a different claim profile and requires a different fact-check strategy.
+Content produced by the agent or the user within the PromptSystem. Each document type has a different claim profile and requires a different fact-check strategy.
 
 **INFO documents** (highest priority for fact-checking):
 - **Claim density**: Very high. The entire document is claims gathered from research.
@@ -639,7 +639,7 @@ Priority 4 (minimal fact-checking):
 
 The fundamental distinction:
 
-- **`verify.md`** = "Does it conform?" Checks whether an artifact conforms to everything that governs it: DevSystem rules (APAPALAN, MECT, SOCAS, templates), upstream documents (SPEC governs IMPL, IMPL governs Code, SPEC governs TEST), session instructions, and MNF checklists. It compares artifact-to-artifact and artifact-to-rules. It trusts upstream sources as authoritative.
+- **`verify.md`** = "Does it conform?" Checks whether an artifact conforms to everything that governs it: PromptSystem rules (APAPALAN, MECT, SOCAS, templates), upstream documents (SPEC governs IMPL, IMPL governs Code, SPEC governs TEST), session instructions, and MNF checklists. It compares artifact-to-artifact and artifact-to-rules. It trusts upstream sources as authoritative.
 
 - **`fact-check.md`** = "Is it true?" Checks whether factual claims correspond to external reality. Goes outside the document system to primary sources (the actual running system, source code, test execution, web research). Does NOT trust any written source as ground truth. Eliminates assumptions, hallucinations, incorrect conclusions, unsupported claims, and unreliable claims.
 
@@ -648,7 +648,7 @@ The critical difference: `verify.md` will catch "the IMPL forgot to implement FR
 ### 10.1 Orthogonality Proof
 
 A document can:
-- **Pass verify, fail fact-check**: IMPL perfectly conforms to SPEC, all DevSystem rules followed, but the SPEC contains a fabricated API method name. Verify sees full conformance. Fact-check calls the API and discovers the method does not exist.
+- **Pass verify, fail fact-check**: IMPL perfectly conforms to SPEC, all PromptSystem rules followed, but the SPEC contains a fabricated API method name. Verify sees full conformance. Fact-check calls the API and discovers the method does not exist.
 - **Pass fact-check, fail verify**: Every factual claim is verified against the actual system, but the document uses inconsistent naming, tables instead of lists, and the IMPL missed two items from the SPEC.
 - **Fail both**: Non-conforming AND factually wrong.
 - **Pass both**: Conforms to all governing sources AND all factual claims match reality. This is the goal.
@@ -700,7 +700,7 @@ Cannot catch:       Wrong SPEC (trusted as truth)        Formatting errors, miss
 - TEST conforms to IMPL: all edge cases from IMPL have corresponding test cases
 - SPEC conforms to requirements and existing code: no contradictions with current system behavior
 
-**DevSystem rules (writing quality and structure)**:
+**PromptSystem rules (writing quality and structure)**:
 
 **APAPALAN (all rules)**:
 - AP-PR-01 through AP-PR-13: Precision formatting, datetime, attributes, contacts, links, IDs, acronyms, specificity, examples, patterns, literals
@@ -814,7 +814,7 @@ Using "accuracy" when "precision" is meant, or "simple" when "simplistic" applie
 
 ## 13. Conclusions
 
-The analysis reveals that a factcheck workflow must be structurally different from existing DevSystem verification workflows:
+The analysis reveals that a factcheck workflow must be structurally different from existing PromptSystem verification workflows:
 
 1. **AI agent gullibility is the primary reason `fact-check.md` must exist.** The agent trusts all text unconditionally: official docs, blog posts, its own previous output, and hallucinated claims all have equal authority in the agent's processing. It cannot distinguish aspirational documentation from actual system behavior. It cannot question whether a source was written by someone who tested the product or someone who guessed. Without a systematic adversarial workflow, the agent builds on unverified claims and propagates errors across sessions (Section 6).
 
@@ -849,7 +849,7 @@ The analysis reveals that a factcheck workflow must be structurally different fr
 
 ## 15. Sources
 
-This document is based on analytical reasoning about epistemological principles applied to the DevSystem context. Section 6 is based on first-principles analysis of AI agent trust behavior. Section 9 is based on analysis of DevSystem document types and their claim profiles. Sections 10-12 are based on direct analysis of existing rule files.
+This document is based on analytical reasoning about epistemological principles applied to the PromptSystem context. Section 6 is based on first-principles analysis of AI agent trust behavior. Section 9 is based on analysis of PromptSystem document types and their claim profiles. Sections 10-12 are based on direct analysis of existing rule files.
 
 **Primary Sources:**
 - `FCTCHECK-IN01-SC-DVSYS-INFORULES`: `INFO_RULES.md` - Existing source citation requirements (INFO-SC-01 through INFO-SC-05) [VERIFIED]
@@ -862,7 +862,7 @@ This document is based on analytical reasoning about epistemological principles 
 ## 16. Document History
 
 **[2026-08-30 16:01]**
-- Added: Section 9 (Input Types: What Can Be Fact-Checked and How) - external sources (web, PDF, ebooks, press, images, unknown), DevSystem document types (INFO through deep research), code (5 claim categories), priority matrix
+- Added: Section 9 (Input Types: What Can Be Fact-Checked and How) - external sources (web, PDF, ebooks, press, images, unknown), PromptSystem document types (INFO through deep research), code (5 claim categories), priority matrix
 - Changed: All sections 9-15 renumbered to 10-16
 
 **[2026-08-30 15:53]**
@@ -873,10 +873,10 @@ This document is based on analytical reasoning about epistemological principles 
 - Changed: Summary added statistical distribution finding
 
 **[2026-08-30 15:49]**
-- Fixed: verify.md characterization throughout document - was "Is it well-written?" (writing quality only), corrected to "Does it conform?" (conformance to ALL governing sources: DevSystem rules, upstream documents like SPEC for IMPL, templates, instructions)
+- Fixed: verify.md characterization throughout document - was "Is it well-written?" (writing quality only), corrected to "Does it conform?" (conformance to ALL governing sources: PromptSystem rules, upstream documents like SPEC for IMPL, templates, instructions)
 - Fixed: Section 9 intro, decision boundary table, orthogonality proof examples - all now reflect verify.md's artifact-vs-artifact checking (IMPL vs SPEC, Code vs IMPL, TEST vs SPEC)
 - Fixed: Section 6.3 verify.md description - now explains it trusts upstream sources as authoritative, which is the core limitation fact-check.md addresses
-- Fixed: Section 10.1 heading and content - added upstream document conformance as the core of verify.md, separate from DevSystem writing rules
+- Fixed: Section 10.1 heading and content - added upstream document conformance as the core of verify.md, separate from PromptSystem writing rules
 - Fixed: Conclusion 3 - corrected from "compliance" to "conformance" with accurate scope description
 - Added: Section 9.4 recommended sequence: fact-check first, then verify
 - Changed: Summary line 16 corrected

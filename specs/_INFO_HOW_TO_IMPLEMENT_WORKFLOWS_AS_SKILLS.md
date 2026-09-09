@@ -453,7 +453,7 @@ Both fields can coexist. Each platform reads only its own field.
 2. Follow the template
 ```
 
-**Plugin option for Devin CLI:** Bundle all procedure skills into a DevSystem plugin. Invoke as `/devsys:verify`, `/devsys:commit`. Reduces namespace clutter, enables `devin plugins install` distribution. [VERIFIED - Devin plugin system supports this]
+**Plugin option for Devin CLI:** Bundle all procedure skills into a PromptSystem plugin. Invoke as `/devsys:verify`, `/devsys:commit`. Reduces namespace clutter, enables `devin plugins install` distribution. [VERIFIED - Devin plugin system supports this]
 
 ## ACP (Agent Client Protocol) - Not Relevant
 

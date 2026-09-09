@@ -6,13 +6,13 @@
 **Timeline**: Created 2026-09-04, Updated 0 times (2026-09-04 - 2026-09-04)
 **Target file(s)**:
 - `DevSystemV4.3/workflows/prime.md` (startup sequence formalization)
-- `DevSystemV4.3/rules/devsystem-core.md` (startup sequence section, operation modes)
+- `DevSystemV4.3/rules/promptsystem-core.md` (startup sequence section, operation modes)
 - `DevSystemV4.3/skills/workspace-management/WORKSPACE-GUIDES.md` (startup guidance)
 
 **Depends on:**
 - `Docs/Specs/_SPEC_SKILL_WORKFLOW-MANAGEMENT.md [WSKMGMT-SP01]` for 4 workspace dimensions, workspace constants, sync relationship (including Dimension 4: FR-32..39, DD-11..15)
 - `DevSystemV4.3/skills/session-management/SKILL.md` for session lifecycle and folder structure
-- `DevSystemV4.3/rules/devsystem-core.md` for operation modes, workspace scenarios, document types
+- `DevSystemV4.3/rules/promptsystem-core.md` for operation modes, workspace scenarios, document types
 
 **Does not depend on:**
 - Any agent-specific documentation (AGENTS.md is explicitly out of scope)
@@ -47,7 +47,7 @@
 
 ## 1. Scenario
 
-**Problem:** The DevSystem prompt system (IPPS) has no formal specification of how agents start up, what happens before the first workflow call, and where the boundary between agent behavior and IPPS behavior lies. This causes:
+**Problem:** The PromptSystem prompt system (IPPS) has no formal specification of how agents start up, what happens before the first workflow call, and where the boundary between agent behavior and IPPS behavior lies. This causes:
 - Confusion about whether `/prime` runs automatically or must be called
 - Unclear responsibility for rules loading (agent auto-load vs `/prime` read)
 - No explicit contract for what agents must support to use IPPS
@@ -69,7 +69,7 @@
 
 ## 2. Context
 
-The DevSystem prompt system (IPPS) is a collection of rules, workflows, skills, and templates stored in `[DEVSYSTEM_FOLDER]` and mirrored to `[AGENT_FOLDER]` (e.g., `.devin/`). It provides structured development workflows for agentic AI coding assistants.
+The PromptSystem prompt system (IPPS) is a collection of rules, workflows, skills, and templates stored in `[PROMPTSYSTEM_FOLDER]` and mirrored to `[AGENT_FOLDER]` (e.g., `.devin/`). It provides structured development workflows for agentic AI coding assistants.
 
 Different agents interact with IPPS differently (descriptive context only — IPPS does not depend on any specific agent):
 - **Cascade** (Windsurf): Auto-loads `rules/` folder content as system prompt. Supports `auto_execution_mode` in workflow frontmatter. May auto-run `/prime` on session start.
@@ -215,8 +215,8 @@ Session creation is an IPPS activity (Layer 3), triggered by user calling `/sess
 
 ### Startup Sequence
 
-**IPPSSTART-FR-01: Define 3-layer startup model in devsystem-core.md**
-- Add "Startup Sequence" section to devsystem-core.md
+**IPPSSTART-FR-01: Define 3-layer startup model in promptsystem-core.md**
+- Add "Startup Sequence" section to promptsystem-core.md
 - Document 3 layers: Agent Startup, IPPS Startup (/prime), IPPS Activity (workflows)
 - Document orthogonality principle: IPPS and AGENTS.md are independent
 - Document lazy activation: no IPPS action without explicit workflow call
@@ -512,7 +512,7 @@ Mode: WORKSPACE + SINGLE-VERSION + SESSION-MODE + SYNCED
 
 ## 14. Technical Constraints
 
-- devsystem-core.md edit adds Startup Sequence section and formalizes 3-layer model
+- promptsystem-core.md edit adds Startup Sequence section and formalizes 3-layer model
 - prime.md edit adds Dimension 4 detection to Step 4 and updates output format
 - WORKSPACE-GUIDES.md edit adds startup sequence guidance section
 - No new files created in rules/ or workflows/ — this spec formalizes existing behavior

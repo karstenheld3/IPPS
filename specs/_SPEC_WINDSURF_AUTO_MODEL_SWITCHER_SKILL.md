@@ -17,13 +17,13 @@
 2. [Skill: windsurf-auto-model-switcher](#skill-windsurf-auto-model-switcher)
 3. [Workflow: switch-model](#workflow-switch-model)
 4. [Rule: cascade-model-switching](#rule-cascade-model-switching)
-5. [DevSystem Integration](#devsystem-integration)
+5. [PromptSystem Integration](#promptsystem-integration)
 6. [Cost Estimation](#cost-estimation)
 7. [Implementation Status](#implementation-status)
 
 ## Components
 
-The model switching system consists of three DevSystem pieces:
+The model switching system consists of three PromptSystem pieces:
 
 - **Skill** (`windsurf-auto-model-switcher`) - Scripts and registry for model switching mechanics
 - **Workflow** (`switch-model.md`) - User-facing workflow for manual tier switching
@@ -135,7 +135,7 @@ Strategy sections may include hints:
 
 Hints are recommendations - agent decides based on actual task.
 
-## DevSystem Integration
+## PromptSystem Integration
 
 ### Tier Definitions (from !NOTES.md)
 

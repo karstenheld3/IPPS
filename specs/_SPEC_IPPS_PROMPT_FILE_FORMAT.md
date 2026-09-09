@@ -50,13 +50,13 @@
 
 ## 2. Context
 
-The IPPS Prompt File Format is a DevSystem standard for encoding ordered prompt sequences. It is designed for headless agent execution where a human authors prompts in advance, and an agent processes them sequentially in a single session.
+The IPPS Prompt File Format is a PromptSystem standard for encoding ordered prompt sequences. It is designed for headless agent execution where a human authors prompts in advance, and an agent processes them sequentially in a single session.
 
 **Implementations:**
 - **Lana** (`lana --prompt-file <path>`) - Reference implementation. Parser documented in `Lana-V1/docs/PROMPT_FILE_FORMAT.md [LANAACPB-DOC01]`
-- **DevSystem write-prompts workflow** (`/write-prompts`) - Authoring workflow producing files conforming to this format
+- **PromptSystem write-prompts workflow** (`/write-prompts`) - Authoring workflow producing files conforming to this format
 
-**Related DevSystem artifacts:**
+**Related PromptSystem artifacts:**
 - `PROMPTS_RULES.md` - Content quality rules (PRMT-FT, PRMT-ST, PRMT-SQ, PRMT-CT, PRMT-EX, PRMT-NM)
 - `PROMPTS_GUIDES.md` - Authoring guidance (decomposition, density, state flow, precision)
 - `PROMPTS_TEMPLATE.md` - File skeleton for authoring
@@ -65,7 +65,7 @@ The IPPS Prompt File Format is a DevSystem standard for encoding ordered prompt 
 
 ### Prompt Queue File
 
-A **Prompt Queue File** is a Markdown-compatible text file containing one or more Prompt Blocks separated by Separators. Recommended name pattern: `_PROMPTS_[Topic].md` (DevSystem convention) or `PROMPTS*.md` (general convention).
+A **Prompt Queue File** is a Markdown-compatible text file containing one or more Prompt Blocks separated by Separators. Recommended name pattern: `_PROMPTS_[Topic].md` (PromptSystem convention) or `PROMPTS*.md` (general convention).
 
 - **Encoding**: UTF-8
 - **First fenced line**: Must be an Opening Fence (Commentary allowed before it)
@@ -195,8 +195,8 @@ Content quality is governed by `PROMPTS_RULES.md` (PRMT-* rules). This spec does
 - Only one frontmatter block allowed (at file start only)
 - Frontmatter is never sent to the model
 
-**IPPSPRMTFMT-FR-10: DevSystem Filename**
-- DevSystem convention: `_PROMPTS_[Topic].md` where Topic is CamelCase
+**IPPSPRMTFMT-FR-10: PromptSystem Filename**
+- PromptSystem convention: `_PROMPTS_[Topic].md` where Topic is CamelCase
 - General convention: `PROMPTS*.md` (e.g., `PROMPTS.md`, `PROMPTS_setup.md`)
 - Per PRMT-NM-01, PRMT-NM-02
 
@@ -406,4 +406,4 @@ Verify: Run `pnpm test:auth`. All tests pass.
 
 **[2026-08-31 22:15]**
 - Initial specification created
-- Source: Lana implementation doc `PROMPT_FILE_FORMAT.md [LANAACPB-DOC01]`, DevSystem `PROMPTS_RULES.md`, `PROMPTS_GUIDES.md`
+- Source: Lana implementation doc `PROMPT_FILE_FORMAT.md [LANAACPB-DOC01]`, PromptSystem `PROMPTS_RULES.md`, `PROMPTS_GUIDES.md`

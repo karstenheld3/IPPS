@@ -170,7 +170,7 @@ Control automatic creation and injection of bootstrap files via `agents.defaults
 }
 ```
 
-**Use case**: When you want to manage workspace files manually (e.g., syncing from DevSystem) and prevent OpenClaw from recreating deleted files on restart.
+**Use case**: When you want to manage workspace files manually (e.g., syncing from PromptSystem) and prevent OpenClaw from recreating deleted files on restart.
 
 **Source**: [VERIFIED] (OCLAW-SC-DOCS-CFGREF | https://docs.openclaw.ai/gateway/configuration-reference)
 

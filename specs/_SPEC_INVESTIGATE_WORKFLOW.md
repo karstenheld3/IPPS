@@ -3,7 +3,7 @@
 **Doc ID**: INVESTIGATE-SP01
 **Goal**: Define a structured investigation workflow that produces a STRUT plan and an append-only investigation log for multi-phase problem analysis
 
-**Target file**: `[DEVSYSTEM_FOLDER]/workflows/investigate.md`, `[DEVSYSTEM_FOLDER]/skills/write-documents/INVESTIGATION_LOG_TEMPLATE.md`, `[DEVSYSTEM_FOLDER]/skills/write-documents/INVESTIGATION_GUIDES.md`, `[DEVSYSTEM_FOLDER]/skills/write-documents/INVESTIGATION_LOG_RULES.md`
+**Target file**: `[PROMPTSYSTEM_FOLDER]/workflows/investigate.md`, `[PROMPTSYSTEM_FOLDER]/skills/write-documents/INVESTIGATION_LOG_TEMPLATE.md`, `[PROMPTSYSTEM_FOLDER]/skills/write-documents/INVESTIGATION_GUIDES.md`, `[PROMPTSYSTEM_FOLDER]/skills/write-documents/INVESTIGATION_LOG_RULES.md`
 
 **Depends on:**
 - `_SPEC_STRUT_STRUCTURED_THINKING.md [STRUT-SP01]` for STRUT plan format

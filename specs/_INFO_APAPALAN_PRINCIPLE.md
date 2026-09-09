@@ -334,7 +334,7 @@ CM rules relate to but are distinct from humanizing rules (`CONVERSATION_HUMANIZ
 - `APAPALAN-IN01-SC-APAP-RULES`: `APAPALAN_RULES.md` in DevSystemV3.6/skills/write-documents/ - Full rule set with BAD/GOOD examples
 
 **Related Documents:**
-- `APAPALAN-IN01-SC-DSYS-IDS`: `devsystem-ids.md` - ID system referenced by AP-PR-04 and AP-PR-05
+- `APAPALAN-IN01-SC-DSYS-IDS`: `promptsystem-ids.md` - ID system referenced by AP-PR-04 and AP-PR-05
 - `APAPALAN-IN01-SC-LOG-RULES`: `LOGGING-RULES.md` in DevSystemV3.6/skills/coding-conventions/ - Logging rules implementing APAPALAN for output
 
 ## 6. Document History

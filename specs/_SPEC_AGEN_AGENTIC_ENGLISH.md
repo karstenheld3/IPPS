@@ -51,7 +51,7 @@ Skills are **extensions to verbs** - they provide detailed instructions for comp
 ```
 ## File Naming
 - Create `_SPEC_[COMPONENT].md` in [SESSION_FOLDER]
-- See `[AGENT_FOLDER]/rules/devsystem-ids.md` for IDs
+- See `[AGENT_FOLDER]/rules/promptsystem-ids.md` for IDs
 ```
 
 When a workflow needs `[WRITE-SPEC]`, it invokes `@write-documents` skill for detailed guidance.
@@ -155,7 +155,7 @@ No brackets for tokens that appear in **conditions** - things the agent checks f
 ### Configuration
 
 - **[PRODUCT_VERSION]** - Current product version string (e.g., `2.1`)
-- **[DEVSYSTEM_FOLDER]** - Path to DevSystem folder
+- **[PROMPTSYSTEM_FOLDER]** - Path to PromptSystem folder
 - **[RULES]** - Agent rules in `[AGENT_FOLDER]/rules/`
 - **[WORKFLOWS]** - Agent workflows in `[AGENT_FOLDER]/workflows/`
 - **[SKILLS]** - Agent skills in `[AGENT_FOLDER]/skills/`
