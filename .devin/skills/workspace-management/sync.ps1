@@ -18,12 +18,18 @@
     Paths to promptsystem-sync.json files, paired 1:1 with targets.
 .PARAMETER output_file
     File path for full diff report. Default: console.
+.PARAMETER deprecated
+    JSON array of deprecated file paths to delete at targets (relative to agent folder).
+    Source-level concern — passed from NOTES.md [DEPRECATED_FILES], not per-target config.
+.PARAMETER preview_file
+    File path for template-formatted preview report (compact per-target blocks).
+    Use with -diff: produces PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md format for chat presentation.
 .PARAMETER showVerbose
     Show excluded files and skip reasons in output.
 .EXAMPLE
-    sync.ps1 -diff -sources "../IPPS/DevSystemV4.3" -targets "." -configs "promptsystem-sync.json"
+    sync.ps1 -diff -sources "../IPPS/.devin" -targets "." -configs "promptsystem-sync.json"
 .EXAMPLE
-    sync.ps1 -execute -sources '["../IPPS/DevSystemV4.3"]' -targets '["../Lana-V2-Dev"]' -configs '["promptsystem-sync.json"]'
+    sync.ps1 -execute -sources '["../IPPS/.devin"]' -targets '["e:\\Dev\\Lana-V1-Dev\\.devin"]' -configs '["promptsystem-sync.json"]' -deprecated '["workflows/workspace-create.md"]'
 #>
 
 [CmdletBinding()]
@@ -34,6 +40,8 @@ param(
     [string]$targets,
     [string]$configs,
     [string]$output_file,
+    [string]$deprecated,
+    [string]$preview_file,
     [switch]$showVerbose
 )
 
@@ -76,7 +84,7 @@ function Test-SyncConfig {
         if (-not $src.selected_bundles) { $errors += "Source '$($src.source)' missing 'selected_bundles' array." }
         if (-not $src.bundles) { $errors += "Source '$($src.source)' missing 'bundles' definitions." }
         if (-not $src.include) { $errors += "Source '$($src.source)' missing 'include' array." }
-        foreach ($field in @('selected_bundles', 'include', 'exclude', 'deprecated', 'never_overwrite')) {
+        foreach ($field in @('selected_bundles', 'include', 'exclude', 'never_overwrite')) {
             $val = $src.$field
             if ($null -ne $val -and $val -isnot [array]) {
                 $errors += "Source '$($src.source)' field '$field' must be an array, got $($val.GetType().Name)."
@@ -401,6 +409,90 @@ function Format-Duration {
     return "$mins min $secs secs"
 }
 
+function New-PreviewReport {
+    param(
+        [array]$Results,
+        [string]$TargetPath,
+        [array]$Excluded
+    )
+    $sb = [System.Text.StringBuilder]::new()
+
+    $adds = $Results | Where-Object { $_.Action -eq 'ADD' }
+    $modifies = $Results | Where-Object { $_.Action -eq 'MODIFY' }
+    $deletes = $Results | Where-Object { $_.Action -eq 'DELETE' }
+    $skips = $Results | Where-Object { $_.Action -eq 'SKIP' }
+    $unchanged = $Results | Where-Object { $_.Action -eq 'UNCHANGED' }
+    $locallyModified = $Results | Where-Object { $_.Action -eq 'LOCALLY_MODIFIED' }
+
+    $totalChanges = $adds.Count + $modifies.Count + $locallyModified.Count + $deletes.Count + $skips.Count
+
+    if ($totalChanges -eq 0) {
+        [void]$sb.AppendLine("$TargetPath")
+        [void]$sb.AppendLine("  [UP TO DATE] $($unchanged.Count) files unchanged")
+        return $sb.ToString()
+    }
+
+    [void]$sb.AppendLine("$TargetPath")
+
+    if ($adds.Count -gt 0) {
+        [void]$sb.AppendLine("  - Add: $($adds.Count) new files")
+        foreach ($f in $adds) {
+            $relPath = $f.RelativePath -replace '/', '\'
+            [void]$sb.AppendLine("      $relPath")
+        }
+    }
+
+    if ($modifies.Count -gt 0) {
+        [void]$sb.AppendLine("  - Overwrite: $($modifies.Count) older files")
+        foreach ($f in $modifies) {
+            $relPath = $f.RelativePath -replace '/', '\'
+            [void]$sb.AppendLine("      $relPath")
+        }
+    }
+
+    if ($locallyModified.Count -gt 0) {
+        [void]$sb.AppendLine("  - Overwrite: $($locallyModified.Count) locally-modified files")
+        foreach ($f in $locallyModified) {
+            $relPath = $f.RelativePath -replace '/', '\'
+            [void]$sb.AppendLine("      $relPath")
+        }
+    }
+
+    if ($deletes.Count -gt 0) {
+        [void]$sb.AppendLine("  - Delete: $($deletes.Count) deprecated files")
+        foreach ($f in $deletes) {
+            $relPath = $f.RelativePath -replace '/', '\'
+            [void]$sb.AppendLine("      $relPath")
+        }
+    }
+
+    if ($skips.Count -gt 0) {
+        $skipPaths = $skips | ForEach-Object { $_.RelativePath -replace '/', '\' }
+        [void]$sb.AppendLine("  - Skipped: $($skips.Count) files protected (never_overwrite)")
+        foreach ($p in $skipPaths) {
+            [void]$sb.AppendLine("      $p")
+        }
+    }
+
+    if ($Excluded.Count -gt 0) {
+        $excludedSkills = @()
+        foreach ($ex in $Excluded) {
+            $relPath = $ex.File.RelativePath
+            if ($relPath -match '^skills/([^/]+)/') {
+                $skillName = $Matches[1]
+                if ($skillName -notin $excludedSkills) { $excludedSkills += $skillName }
+            }
+        }
+        if ($excludedSkills.Count -gt 0) {
+            [void]$sb.AppendLine("  - Excluded skills: $($excludedSkills -join ', ')")
+        } else {
+            [void]$sb.AppendLine("  - Excluded: $($Excluded.Count) files by bundle rules")
+        }
+    }
+
+    return $sb.ToString()
+}
+
 function New-DiffReport {
     param(
         [array]$Results,
@@ -706,6 +798,7 @@ if ($targetList.Count -ne $configList.Count) {
 
 $startTime = Get-Date
 $allOutput = [System.Text.StringBuilder]::new()
+$previewOutput = [System.Text.StringBuilder]::new()
 $hasAnyChanges = $false
 $hasAnyErrors = $false
 
@@ -772,9 +865,13 @@ for ($t = 0; $t -lt $targetList.Count; $t++) {
         Write-VerboseLog "  Excluded: $($filterResult.Excluded.Count)"
 
         # IS-07, IS-08: Compare against target
-        $deprecated = @($srcEntry.deprecated)
+        # Deprecated files come from -deprecated parameter (source-level), not per-target config
+        $deprecatedList = @()
+        if ($deprecated) {
+            $deprecatedList = $deprecated | ConvertFrom-Json
+        }
         $neverOverwrite = @($srcEntry.never_overwrite)
-        $results = Compare-Files -SourceFiles $filterResult.Included -TargetRoot $targetPath -Deprecated $deprecated -NeverOverwrite $neverOverwrite -LastSync $config.last_sync
+        $results = Compare-Files -SourceFiles $filterResult.Included -TargetRoot $targetPath -Deprecated $deprecatedList -NeverOverwrite $neverOverwrite -LastSync $config.last_sync
 
         # Check for changes
         $changes = $results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE', 'SKIP') }
@@ -785,6 +882,10 @@ for ($t = 0; $t -lt $targetList.Count; $t++) {
             $report = New-DiffReport -Results $results -SourcePath $srcEntry.source -TargetPath $targetPath -ConfigPath $configPath -Excluded $filterResult.Excluded -VerboseMode:$showVerbose -StartTime $startTime
             [void]$allOutput.AppendLine($report)
             [void]$allOutput.AppendLine('')
+
+            # Generate template-formatted preview
+            $preview = New-PreviewReport -Results $results -TargetPath $targetPath -Excluded $filterResult.Excluded
+            [void]$previewOutput.AppendLine($preview)
         } elseif ($execute) {
             # IS-11, IS-21: Execute operations
             $execResult = Invoke-Execute -Results $results -SourcePath $srcEntry.source -TargetPath $targetPath -ConfigPath $configPath
@@ -797,6 +898,14 @@ for ($t = 0; $t -lt $targetList.Count; $t++) {
 
 # Output
 $outputContent = $allOutput.ToString().TrimEnd()
+
+# Write preview file if requested (template-formatted, for chat presentation)
+if ($preview_file -and $diff) {
+    $previewFileFull = [System.IO.Path]::GetFullPath($preview_file)
+    $previewContent = $previewOutput.ToString().TrimEnd()
+    $previewContent | Set-Content -Path $previewFileFull -Encoding UTF8
+    Write-Output "Preview written to: '$previewFileFull'"
+}
 
 if ($output_file) {
     $outputFileFull = [System.IO.Path]::GetFullPath($output_file)
