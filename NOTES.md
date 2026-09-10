@@ -170,6 +170,7 @@ Workflow behavior: formulates goal, collects premises, analyzes problem nature, 
 - rules/devsystem-ids.md
 - workflows/workspace-create.md
 - skills/workspace-management/WORKSPACE_CREATION_QUESTIONNAIRE.md
+- skills/workspace-management/LOCAL_ENVIRONMENTS_REVIEW.md
 
 **[LINKED_REPOS]**:
 - ../KarstensWorkspace
