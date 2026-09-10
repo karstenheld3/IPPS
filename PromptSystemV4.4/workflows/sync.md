@@ -214,6 +214,7 @@ When IDs change or documents restructure:
 
 **MUST-NOT-FORGET**:
 - Run `sync.ps1 -diff` for ALL targets before any `-execute`
+- Use `-preview_file` to generate template-formatted preview, read it, present in chat
 - Present diff summary in chat text (not buried in command output)
 - `-execute` is the confirmation — never run it without a preceding `-diff` preview shown in chat
 - One target's diff is NOT sufficient preview for other targets
@@ -243,20 +244,24 @@ Read @skills:workspace-management SKILL.md before syncing.
 ### Sync Procedure
 
 1. Read `promptsystem-sync.json` from target `[WORKSPACE_FOLDER]` root
-2. For each source entry in config:
-   - Read `source` path (relative) and `selected_bundles` array
-   - Bundle definitions, include/exclude refiners, deprecated, never_overwrite all come from the same source entry
-   - Run `sync.ps1 -diff -sources <source> -targets <target> -configs promptsystem-sync.json` for preview
+2. For each target entry in config:
+   - Read `path` (relative agent folder, e.g., `.devin`), `source` (relative path to source agent folder)
+   - `include`/`exclude` patterns, `never_overwrite` patterns come from the target entry
+   - Deprecated files come from top-level `deprecated` array in promptsystem-sync.json
+   - Run `sync.ps1 -diff -config <path> -preview_file <path>` for preview
    - Review structured diff report (add/overwrite/delete/unchanged/excluded)
-3. Show preview to user:
+3. Read preview file (markdown formatted per `PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md` from @skills:workspace-management):
+   - One section per target (never aggregate across targets)
    - Files to add, modify, delete, skip (with reason)
-   - Excluded files (filtered by bundle include/exclude rules)
+   - Excluded files (filtered by target include/exclude patterns)
    - Deprecated files marked for deletion
+   - Locally modified files (target modified after last_sync)
+   - Group file lists by top-level folder when 10+ files
 4. Prompt user for confirmation:
    - Confirmation keywords: @rules:core-conventions.md [CONFIRMATION_KEYWORDS]
    - Non-confirmation keywords: no, cancel, abort, stop
 5. If confirmed:
-   - Run `sync.ps1 -execute -sources <source> -targets <target> -configs promptsystem-sync.json`
+   - Run `sync.ps1 -execute -config <path>`
    - Verify `last_sync` timestamp updated in target config
    - Report results: X added, Y modified, Z deleted, W skipped
 6. If not confirmed: abort, no changes made
