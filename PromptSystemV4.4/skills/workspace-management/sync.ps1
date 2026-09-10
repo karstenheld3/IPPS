@@ -509,13 +509,13 @@ function New-DiffReport {
     $sb = [System.Text.StringBuilder]::new()
     $timestamp = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss')
 
-    $adds = $Results | Where-Object { $_.Action -eq 'ADD' }
-    $modifies = $Results | Where-Object { $_.Action -eq 'MODIFY' }
-    $deletes = $Results | Where-Object { $_.Action -eq 'DELETE' }
-    $skips = $Results | Where-Object { $_.Action -eq 'SKIP' }
-    $unchanged = $Results | Where-Object { $_.Action -eq 'UNCHANGED' }
-    $locallyModified = $Results | Where-Object { $_.Action -eq 'LOCALLY_MODIFIED' }
-    $breakingChanges = $Results | Where-Object { $_.Action -eq 'BREAKING_CHANGE' }
+    $adds = @($Results | Where-Object { $_.Action -eq 'ADD' })
+    $modifies = @($Results | Where-Object { $_.Action -eq 'MODIFY' })
+    $deletes = @($Results | Where-Object { $_.Action -eq 'DELETE' })
+    $skips = @($Results | Where-Object { $_.Action -eq 'SKIP' })
+    $unchanged = @($Results | Where-Object { $_.Action -eq 'UNCHANGED' })
+    $locallyModified = @($Results | Where-Object { $_.Action -eq 'LOCALLY_MODIFIED' })
+    $breakingChanges = @($Results | Where-Object { $_.Action -eq 'BREAKING_CHANGE' })
 
     [void]$sb.AppendLine((Get-Header -Title 'WORKSPACE SYNC PREVIEW'))
     [void]$sb.AppendLine("[$timestamp]")
@@ -627,12 +627,12 @@ function Invoke-Execute {
     $timestamp = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss')
     $startTime = Get-Date
 
-    $adds = $Results | Where-Object { $_.Action -eq 'ADD' }
-    $modifies = $Results | Where-Object { $_.Action -eq 'MODIFY' }
-    $deletes = $Results | Where-Object { $_.Action -eq 'DELETE' }
-    $skips = $Results | Where-Object { $_.Action -eq 'SKIP' }
-    $locallyModified = $Results | Where-Object { $_.Action -eq 'LOCALLY_MODIFIED' }
-    $breakingChanges = $Results | Where-Object { $_.Action -eq 'BREAKING_CHANGE' }
+    $adds = @($Results | Where-Object { $_.Action -eq 'ADD' })
+    $modifies = @($Results | Where-Object { $_.Action -eq 'MODIFY' })
+    $deletes = @($Results | Where-Object { $_.Action -eq 'DELETE' })
+    $skips = @($Results | Where-Object { $_.Action -eq 'SKIP' })
+    $locallyModified = @($Results | Where-Object { $_.Action -eq 'LOCALLY_MODIFIED' })
+    $breakingChanges = @($Results | Where-Object { $_.Action -eq 'BREAKING_CHANGE' })
 
     [void]$sb.AppendLine((Get-Header -Title 'WORKSPACE SYNC EXECUTE'))
     [void]$sb.AppendLine("[$timestamp]")
@@ -878,7 +878,7 @@ foreach ($tgtEntry in $syncConfig.targets) {
     }
 
     # Check for changes
-    $changes = $results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE', 'SKIP') }
+    $changes = @($results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE', 'SKIP') })
     if ($changes.Count -gt 0) { $hasAnyChanges = $true }
 
     if ($diff) {
