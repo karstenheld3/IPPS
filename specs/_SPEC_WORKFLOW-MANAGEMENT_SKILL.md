@@ -3,33 +3,33 @@
 **Doc ID**: WSKMGMT-SP01
 **Feature**: workspace-management-skill
 **Goal**: Specify a skill that manages agentic workspace setup, PromptSystem synchronization, and knowledge distribution across product/dev/company repo architectures
-**Timeline**: Created 2026-09-03, Updated 10 times (2026-09-03 - 2026-09-06)
+**Timeline**: Created 2026-09-03, Updated 11 times (2026-09-03 - 2026-09-10)
 **Target file(s)**:
-- `DevSystemV4.3/specs/promptsystem-core.md` (Operation Modes, Workspace Scenarios)
-- `DevSystemV4.3/skills/workspace-management/SKILL.md`
-- `DevSystemV4.3/skills/workspace-management/WORKSPACE-GUIDES.md`
-- `DevSystemV4.3/skills/workspace-management/WORKSPACE-RULES.md`
-- `DevSystemV4.3/skills/workspace-management/WORKSPACE_SETUP_QUESTIONNAIRE.md` (renamed from WORKSPACE_CREATION_QUESTIONNAIRE.md)
-- `DevSystemV4.3/skills/workspace-management/WORKSPACE_SETUP_REPORT_TEMPLATE.md` (new)
-- `DevSystemV4.3/skills/workspace-management/DEV_REPO_NOTES_TEMPLATE.md`
-- `DevSystemV4.3/skills/workspace-management/PRODUCT_REPO_README_TEMPLATE.md`
-- `DevSystemV4.3/skills/workspace-management/COMPANY_REPO_NOTES_TEMPLATE.md`
-- `DevSystemV4.3/skills/workspace-management/workspace_diff_template.ps1` (deleted, replaced by sync.ps1)
-- `DevSystemV4.3/skills/workspace-management/workspace_sync_template.ps1` (deleted, replaced by sync.ps1)
-- `DevSystemV4.3/skills/workspace-management/sync.ps1` (single generic sync script with -diff and -execute modes)
+- `PromptSystemV4.4/specs/promptsystem-core.md` (Operation Modes, Workspace Scenarios)
+- `PromptSystemV4.4/skills/workspace-management/SKILL.md`
+- `PromptSystemV4.4/skills/workspace-management/WORKSPACE-GUIDES.md`
+- `PromptSystemV4.4/skills/workspace-management/WORKSPACE-RULES.md`
+- `PromptSystemV4.4/skills/workspace-management/WORKSPACE_SETUP_QUESTIONNAIRE.md` (renamed from WORKSPACE_CREATION_QUESTIONNAIRE.md)
+- `PromptSystemV4.4/skills/workspace-management/WORKSPACE_SETUP_REPORT_TEMPLATE.md` (new)
+- `PromptSystemV4.4/skills/workspace-management/DEV_REPO_NOTES_TEMPLATE.md`
+- `PromptSystemV4.4/skills/workspace-management/PRODUCT_REPO_README_TEMPLATE.md`
+- `PromptSystemV4.4/skills/workspace-management/COMPANY_REPO_NOTES_TEMPLATE.md`
+- `PromptSystemV4.4/skills/workspace-management/workspace_diff_template.ps1` (deleted, replaced by sync.ps1)
+- `PromptSystemV4.4/skills/workspace-management/workspace_sync_template.ps1` (deleted, replaced by sync.ps1)
+- `PromptSystemV4.4/skills/workspace-management/sync.ps1` (single generic sync script with -diff and -execute modes)
 - `[WORKSPACE_FOLDER]\promptsystem-sync.json` (target-side sync config, single source of truth)
-- `DevSystemV4.3/workflows/workspace-setup.md` (new workflow)
-- `DevSystemV4.3/workflows/compare-workspace-setup.md` (new workflow for compare use case)
-- `DevSystemV4.3/workflows/verify.md` (new context section)
-- `DevSystemV4.3/workflows/sync.md` (new context section)
-- `DevSystemV4.3/workflows/commit.md` (multi-repo commit support)
-- `DevSystemV4.3/workflows/prime.md` (Dimension 5 detection)
+- `PromptSystemV4.4/workflows/workspace-setup.md` (new workflow)
+- `PromptSystemV4.4/workflows/compare-workspace-setup.md` (new workflow for compare use case)
+- `PromptSystemV4.4/workflows/verify.md` (new context section)
+- `PromptSystemV4.4/workflows/sync.md` (new context section)
+- `PromptSystemV4.4/workflows/commit.md` (multi-repo commit support)
+- `PromptSystemV4.4/workflows/prime.md` (Dimension 5 detection)
 - `ID-REGISTRY.md` (skill-tagged state enumerations)
 
 **Depends on:**
-- `DevSystemV4.3/specs/promptsystem-core.md` for existing operation modes and workspace scenarios
-- `DevSystemV4.3/skills/session-management/SKILL.md` for session folder structure (T##/S##)
-- `DevSystemV4.3/workflows/prime.md` for workspace scenario detection (Dimension 1 values)
+- `PromptSystemV4.4/specs/promptsystem-core.md` for existing operation modes and workspace scenarios
+- `PromptSystemV4.4/skills/session-management/SKILL.md` for session folder structure (T##/S##)
+- `PromptSystemV4.4/workflows/prime.md` for workspace scenario detection (Dimension 1 values)
 
 **Does not depend on:**
 - Any project-specific SPEC (this skill is generic, reusable across all PromptSystem workspaces)
@@ -55,10 +55,12 @@
 - Workspace creation is non-destructive (creating new files/folders) - no confirmation gate per WF-EX-01
 - `workspace-setup.md` workflow is thin: references WORKSPACE_SETUP_QUESTIONNAIRE.md for questionnaire content, does not replicate questions
 - Sync configuration is JSON-based: promptsystem-sync.json at target [WORKSPACE_FOLDER] root is single source of truth - no hardcoded arrays in scripts or NOTES.md prose
-- Single sync.ps1 script with -diff and -execute modes; params are -sources, -targets, -configs, -output-file (all accept JSON arrays or single strings)
+- Single sync.ps1 script with -diff and -execute modes; params are -config (path to promptsystem-sync.json), -preview_file (markdown preview per PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md), -output_file (full text report)
 - Source repo only references RELATIVE downstream repo paths (e.g., ../Lana-V2-Dev), never absolute paths
-- Bundle definitions live in target's promptsystem-sync.json, NOT at source - each source entry carries its own complete sync configuration
-- Include/exclude refiners are glob patterns evaluated in order: source include → source exclude → bundle include → bundle exclude → target never_overwrite → deprecated
+- promptsystem-sync.json uses `targets` array (not `sources`); each target entry is self-contained with path, source, include, exclude, never_overwrite
+- `bundles` and `selected_bundles` are removed — include/exclude on each target entry is the single filter layer
+- `deprecated` is top-level in promptsystem-sync.json (shared across all targets in that repo)
+- Include/exclude refiners are glob patterns evaluated in order: target include → target exclude → target never_overwrite → deprecated
 - `rules` folder renamed to `specs` with subfolders `sops/` and `guides/`
 
 ## Table of Contents
@@ -81,7 +83,7 @@
 
 ## 1. Scenario
 
-**Problem:** PromptSystem workspaces come in multiple architectures (single project, monorepo, multi-repo workspace with product/dev separation). The current system has no unified way to compare workspace state against central sources, update from sources, roll back changes, or verify integrity. Existing mechanisms (SOPS.md, /prime, /sync) are scattered and do not cover the full product/dev/company repo pattern. The legacy `deploy-to-all-repos.md` script hardcodes target paths and skill categories in PowerShell, is not machine-readable, and is project-specific to IPPS.
+**Problem:** PromptSystem workspaces come in multiple architectures (single project, monorepo, multi-repo workspace with product/dev separation). The current system has no unified way to compare workspace state against central sources, update from sources, roll back changes, or verify integrity. Existing mechanisms (SOPS.md, /prime, /sync) are scattered and do not cover the full product/dev/company repo pattern. The legacy `deploy-to-all-repos.md` script hardcodes target paths in PowerShell, is not machine-readable, and is project-specific to IPPS.
 
 **Solution:**
 - Extend core rules with WORKSPACE mode and IMPL-ISOLATED T##/S## folders
@@ -204,7 +206,7 @@ A **SyncPolicy** defines what content syncs from which source to which target, i
 - `source_folder` - central source path
 - `target_folder` - local target path
 - `direction` - downstream (source to target) or upstream (target to source)
-- `content_filter` - include/exclude patterns (e.g., skill categories, knowledge bundles)
+- `content_filter` - include/exclude patterns (e.g., skill names, knowledge folders)
 - `overwrite_rules` - which files to overwrite vs preserve
 
 ### PromptSystem
@@ -334,7 +336,7 @@ Direction definitions:
 **WSKMGMT-FR-12: COMPANY_REPO_NOTES_TEMPLATE.md**
 - Template for CompanyRepo NOTES.md
 - Tracks downstream repositories and sync policy
-- Per downstream repo: repo path, skill categories, knowledge bundles, specs, workflows, PromptSystem specs to sync
+- Per downstream repo: repo path, knowledge folders, specs, workflows, PromptSystem specs to sync
 - Defines overwrite rules and content filters per repo
 - Follows TEMPLATE_RULES.md
 
@@ -352,7 +354,7 @@ Direction definitions:
 - Must be generic - no hardcoded project paths
 - Before overwriting a file not in `never_overwrite`, check if target file was modified after `last_sync` timestamp in `promptsystem-sync.json`. If so, mark as `LOCALLY_MODIFIED` in diff preview to warn user before overwrite
 - Store `last_sync` timestamp in `promptsystem-sync.json` at target `[WORKSPACE_FOLDER]` root. Missing timestamp triggers full comparison
-- Upstream sync (target to source) is handled at workflow level by swapping `-sources` and `-targets` parameters — sync.ps1 itself is always source-to-target
+- Upstream sync (target to source) is handled at workflow level by creating a reversed promptsystem-sync.json (swap source and target paths) — sync.ps1 itself is always source-to-target
 
 ### WORKSPACE Area Operations
 
@@ -390,12 +392,12 @@ Direction definitions:
 - Copy new and modified files from source to target
 - Delete deprecated files (with confirmation)
 - Migrate breaking changes (renamed skills, changed folder structure) with content migration
-- Support skill category filtering (not all repos get all skills)
+- Support include/exclude filtering (not all repos get all skills)
 - Use sync scripts from FR-14
 
 **WSKMGMT-FR-21: Roll back PromptSystem to previous version**
 - Roll back using git history (last committed version of agent folder)
-- Or roll back to archived PromptSystem version in `_OldDevSystemVersions/`
+- Or roll back to archived PromptSystem version in `_OldVersions/`
 - Report what changed between current and rolled-back version
 
 **WSKMGMT-FR-22: Check PromptSystem integrity**
@@ -423,8 +425,8 @@ Direction definitions:
 
 **WSKMGMT-FR-26: Check knowledge integrity**
 - Verify knowledge folder exists if `[KNOWLEDGE_FOLDER]` constant is set
-- Verify all bundles referenced in sync policy exist
-- Verify no empty bundles (folders with no documents)
+- Verify all knowledge folders referenced in sync config exist
+- Verify no empty knowledge folders (folders with no documents)
 - Report gaps and incompatibilities
 
 ### Workflow Integration
@@ -540,9 +542,9 @@ Direction definitions:
 
 **WSKMGMT-FR-41: WORKSPACE_SETUP_QUESTIONNAIRE.md**
 - Interactive questionnaire for creating new single-repo and multi-repo workspaces
-- 7 sections: Workspace Mode, Product Repo, Dev Repo, Version Strategy, Sync Sources, Release Configuration, Skill Categories
+- 6 sections: Workspace Mode, Product Repo, Dev Repo, Version Strategy, Sync Sources, Release Configuration
 - Each question shows default value in brackets and impact description explaining consequences
-- Conditional sections: SINGLE-PROJECT skips Product Repo, Sync Sources, Skill Categories sections
+- Conditional sections: SINGLE-PROJECT skips Product Repo, Sync Sources sections
 - Output section lists exact files to generate per workspace mode
 - References DEV_REPO_NOTES_TEMPLATE.md and PRODUCT_REPO_README_TEMPLATE.md for file generation
 - Guide is a skill resource file (not a template) - contains questionnaire logic, not document skeleton
@@ -579,18 +581,20 @@ Direction definitions:
 **WSKMGMT-FR-44: promptsystem-sync.json (target-side, single source of truth)**
 - Machine-readable JSON file at target `[WORKSPACE_FOLDER]` root (not inside `.devin/`)
 - Single source of truth for all sync configuration — no separate bundle file at source
-- Each source entry carries its own complete sync configuration:
-  - `source`: relative path to source repo (e.g., `../IPPS/DevSystemV4.3`)
-  - `selected_bundles`: array of bundle names this target wants from this source
-  - `bundles`: bundle definitions with include/exclude glob patterns (what was previously in sync-bundles.json at source)
-  - `include`: source-level whitelist of syncable paths
-  - `exclude`: source-level global removal patterns
-  - `deprecated`: files/folders marked for deletion at target
+- Top-level fields:
+  - `last_sync`: ISO timestamp written by sync script after execution
+  - `deprecated`: array of file paths marked for deletion (relative to target agent folder, shared across all targets in this repo)
+  - `targets`: array of target entries, each self-contained
+- Each target entry defines:
+  - `path`: relative path to agent folder within repo (e.g., `.devin`, `.lana`)
+  - `source`: relative path to source repo (e.g., `../IPPS/.devin`)
+  - `include`: glob patterns for files to sync (whitelist)
+  - `exclude`: glob patterns for files to exclude (blacklist)
   - `never_overwrite`: glob patterns for files protected from overwrite and deletion
-- `last_sync` timestamp written by sync script after execution
-- Replaces [SKILL_CATEGORIES] in NOTES.md, [LINKED_REPOS] in NOTES.md, hardcoded arrays in deploy-to-all-repos.md, and the previously proposed sync-bundles.json at source
-- New repos added by creating promptsystem-sync.json with desired sources and bundles - no source-side changes needed
-- Privacy gate compliant: no real paths or identifiers in bundle definitions (use generic examples)
+- No `bundles` or `selected_bundles` — include/exclude on each target is the single filter layer
+- Replaces [SKILL_CATEGORIES] in NOTES.md, [LINKED_REPOS] agent folder entries in NOTES.md, hardcoded arrays in deploy-to-all-repos.md
+- New repos added by creating promptsystem-sync.json with desired targets — no source-side changes needed
+- Privacy gate compliant: no real paths or identifiers (use generic examples)
 
 **WSKMGMT-FR-45: Source repo synced repos reference**
 - Source repo maintains a list of all repos it syncs to, using RELATIVE paths only
@@ -603,15 +607,16 @@ Direction definitions:
 **WSKMGMT-FR-46: Single sync.ps1 script**
 - ONE PowerShell script in workspace-management skill (not two separate scripts)
 - Two modes: `-diff` (preview, no changes) and `-execute` (apply changes)
-- Parameters: `-sources` (JSON array or single string), `-targets` (JSON array or single string), `-configs` (JSON array or single string of config file paths), `-output-file` (optional filepath)
-- Reads promptsystem-sync.json from each target for ALL sync configuration: bundle definitions, selected bundles, include/exclude refiners, never_overwrite, deprecated
+- Parameters: `-config` (path to promptsystem-sync.json), `-preview_file` (optional, markdown preview per `PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md`), `-output_file` (optional, full text report)
+- Reads promptsystem-sync.json from `-config` path for ALL sync configuration: targets array, include/exclude, never_overwrite, deprecated
 - Does NOT read any config from source — source is purely a content provider
-- Evaluation order (per source entry in target config): source include → source exclude → bundle include (union of all selected bundles) → bundle exclude (union) → target never_overwrite → deprecated
-- `-diff` mode: produces list of additions, changes, deletions to output file or console
+- Evaluation order (per target entry): target include → target exclude → target never_overwrite → deprecated
+- `-diff` mode: produces list of additions, changes, deletions; writes markdown preview to `-preview_file` if provided (formatted per `PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md`)
 - `-execute` mode: copies new and changed files, deletes deprecated files, writes last_sync timestamp
-- If `-output-file` present: full report goes to file, console just summarizes numbers (X added, Y changed, Z deleted)
-- If `-output-file` absent: full report outputs to console
-- All parameters accept JSON arrays OR single strings (e.g., `-sources "path1"` or `-sources '["path1","path2"]'`)
+- If `-output_file` present: full text report goes to file, console just summarizes numbers
+- If `-output_file` absent: full text report outputs to console
+- Preview format defined by `PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md` in workspace-management skill
+- Paths in preview are relative to target agent folder (e.g., `.devin`, `.lana`), not absolute
 - Replaces workspace_sync_template.ps1, workspace_diff_template.ps1, and hardcoded sync logic in deploy-to-all-repos.md
 
 **WSKMGMT-FR-47: Removed (merged into FR-46)**
@@ -629,10 +634,10 @@ Direction definitions:
 - Existing `sync.md` Workspace Sync section updated to use `sync.ps1` from workspace-management skill
 - Replaces references to `workspace_diff_template.ps1` and `workspace_sync_template.ps1`
 - Sync config read from `promptsystem-sync.json` at target `[WORKSPACE_FOLDER]` root
-- For each source in config: run `sync.ps1 -diff -sources <paths> -targets <paths> -configs <config>` for preview, then `sync.ps1 -execute` for apply
-- Multi-source, multi-target, multi-config support in a single script call
-- No hardcoded paths, skill categories, or target lists in the workflow itself
-- Preview/confirm flow preserved: diff first, show results, confirm, then sync
+- Run `sync.ps1 -diff -config <path> -preview_file <path>` for preview, then `sync.ps1 -execute -config <path>` for apply
+- Agent reads NOTES.md [LINKED_REPOS] for repo roots, reads each repo's promptsystem-sync.json for target folders
+- No hardcoded paths or target lists in the workflow itself
+- Preview/confirm flow: diff first, read markdown preview file, present in chat using PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md, confirm, then execute
 - Auto-execute on @rules:core-conventions.md [CONFIRMATION_KEYWORDS]
 
 **WSKMGMT-FR-50: rules → specs folder rename**
@@ -656,13 +661,13 @@ Direction definitions:
 - `/sync knowledge from source` — reads knowledge source from promptsystem-sync.json, runs `sync.ps1 -diff`, previews, auto-executes on confirm
 - `/sync knowledge to targets` — reads target repos from source NOTES.md synced repos list, runs `sync.ps1 -diff` for each target, previews, auto-executes on confirm
 - Knowledge folder structure preserved: subfolders like `AI-Standards/`, `Anthropic/` synced as-is
-- Knowledge content is filtered by bundle include/exclude rules in target's promptsystem-sync.json
+- Knowledge content is filtered by target include/exclude patterns in target's promptsystem-sync.json
 
 **WSKMGMT-FR-53: Specs sync use cases**
 - `/sync specs from source` — reads specs source from promptsystem-sync.json, runs `sync.ps1 -diff`, previews, auto-executes on confirm
 - `/sync specs to targets` — reads target repos from source NOTES.md synced repos list, runs `sync.ps1 -diff` for each target, previews, auto-executes on confirm
 - Specs folder structure preserved: subfolders like `sops/`, `guides/` synced as-is
-- Specs content is filtered by bundle include/exclude rules in target's promptsystem-sync.json
+- Specs content is filtered by target include/exclude patterns in target's promptsystem-sync.json
 
 **WSKMGMT-FR-54: Source repo relative path references**
 - Source repo NOTES.md only references downstream repos by RELATIVE paths
@@ -729,7 +734,7 @@ Direction definitions:
 - Privacy gate compliant: all default values use generic placeholders
 
 **WSKMGMT-FR-66: WORKSPACE_SETUP_REPORT_TEMPLATE.md**
-- New file in `DevSystemV4.3/skills/workspace-management/`
+- New file in `PromptSystemV4.4/skills/workspace-management/`
 - Report structure mirrors questionnaire sections 1-6 using same field IDs
 - Per-section table: Field ID | Current | Default | Status | Proposed Fix
 - Summary section: workspace type, mode, sync relationship, counts (OK/GAP/STALE/DEVIATION/N/A)
@@ -799,23 +804,23 @@ Direction definitions:
 
 **WSKMGMT-FR-72: Rename and deprecate files**
 - Rename `WORKSPACE_CREATION_QUESTIONNAIRE.md` → `WORKSPACE_SETUP_QUESTIONNAIRE.md` in:
-  - `DevSystemV4.3/skills/workspace-management/` (source)
+  - `PromptSystemV4.4/skills/workspace-management/` (source)
   - `.devin/skills/workspace-management/` (sync target, updated via sync)
   - All references in SKILL.md, SPEC, workflow, README.md
 - Deprecate `workspace-create.md`:
-  - Already renamed to `workspace-setup.md` in `DevSystemV4.3/workflows/`
+  - Already renamed to `workspace-setup.md` in `PromptSystemV4.4/workflows/`
   - Old `workspace-create.md` in `.devin/workflows/` is stale sync copy
   - Add `workspace-create.md` to `deprecated` array in `promptsystem-sync.json` so sync deletes it
   - Update SPEC WSKMGMT-SP01 FR-42 to reflect new workflow scope (amend existing FR)
 - Update `README.md` workflow reference (already says `workspace-setup` — verify link target)
 - Update all internal references from `WORKSPACE_CREATION_QUESTIONNAIRE` to `WORKSPACE_SETUP_QUESTIONNAIRE` across:
-  - `DevSystemV4.3/workflows/workspace-setup.md`
-  - `DevSystemV4.3/skills/workspace-management/SKILL.md`
+  - `PromptSystemV4.4/workflows/workspace-setup.md`
+  - `PromptSystemV4.4/skills/workspace-management/SKILL.md`
   - `specs/_SPEC_WORKFLOW-MANAGEMENT_SKILL.md`
   - `.devin/` copies (via sync)
 
 **WSKMGMT-FR-73: compare-workspace-setup.md workflow**
-- New workflow file in `DevSystemV4.3/workflows/compare-workspace-setup.md`
+- New workflow file in `PromptSystemV4.4/workflows/compare-workspace-setup.md`
 - Follows WORKFLOW_TEMPLATE.md structure (WF-HD-01 through WF-BR-04)
 - Thin workflow — dispatches to Procedure 7 in SKILL.md, no embedded comparison logic
 - Frontmatter: description, auto_execution_mode
@@ -934,11 +939,11 @@ Direction definitions:
 
 **WSKMGMT-DD-17:** [WORKSPACE_FOLDER] and [WORKSPACE_FILE] are distinct concepts. [WORKSPACE_FOLDER] is the filesystem path. [WORKSPACE_FILE] is the main.code-workspace file that defines workspace membership. Repos in the workspace file may be outside the workspace folder. Commit scope is determined by [WORKSPACE_FILE], not by physical location inside [WORKSPACE_FOLDER]. Rationale: GLOB-FL-041 showed that conflating these concepts leads to incorrectly excluding ProductRepo/CompanyRepo from commit scope, or incorrectly including linked repos. The distinction must be explicit in guides, rules, and templates.
 
-**WSKMGMT-DD-18:** Sync configuration lives entirely at target in `promptsystem-sync.json` at `[WORKSPACE_FOLDER]` root. No bundle definitions or sync config at source. Rationale: Previous architecture had sync-bundles.json at source defining what is available, and sync-config.json at target declaring what it wants. This created a split-brain: source had to know about bundle definitions, target had to know about source. The corrected architecture puts everything in one file at target — each source entry carries its own complete sync configuration (bundle definitions, include/exclude refiners, deprecated, never_overwrite). Source only maintains a list of relative paths to repos it syncs to (for push operations). This is true single source of truth: target owns its sync config, source is purely a content provider. Adding a new repo requires zero source-side changes. Changing bundles requires editing only the target's promptsystem-sync.json.
+**WSKMGMT-DD-18:** Sync configuration lives entirely at target in `promptsystem-sync.json` at `[WORKSPACE_FOLDER]` root. No bundle definitions or sync config at source. Rationale: Previous architecture had sync-bundles.json at source defining what is available, and sync-config.json at target declaring what it wants. This created a split-brain: source had to know about bundle definitions, target had to know about source. The corrected architecture puts everything in one file at target — each target entry carries its own complete sync configuration (source path, include/exclude, never_overwrite). `bundles` and `selected_bundles` were removed because all 10 downstream configs used exactly one bundle, making the two-layer include/exclude redundant. The target-level include/exclude is the single filter layer. `deprecated` is top-level (shared across all targets in the repo). Source only maintains a list of relative repo paths in NOTES.md [LINKED_REPOS] (for push operations). This is true single source of truth: target owns its sync config, source is purely a content provider. Adding a new repo requires zero source-side changes.
 
-**WSKMGMT-DD-19:** Single sync.ps1 script with -diff and -execute modes instead of separate diff.ps1 and sync.ps1. Rationale: The diff and execute operations share identical config reading, filtering, and evaluation logic. Splitting them into two scripts duplicates this logic and risks divergence. A single script with mode flag is simpler, has fewer files to maintain, and ensures diff preview always matches execute behavior. Array parameters (-sources, -targets, -configs) enable batch operations in a single call, reducing script invocations for multi-target sync.
+**WSKMGMT-DD-19:** Single sync.ps1 script with -diff and -execute modes instead of separate diff.ps1 and sync.ps1. Rationale: The diff and execute operations share identical config reading, filtering, and evaluation logic. Splitting them into two scripts duplicates this logic and risks divergence. A single script with mode flag is simpler, has fewer files to maintain, and ensures diff preview always matches execute behavior. The `-config` parameter reads all targets from a single JSON file, enabling multi-target sync in a single call. The `-preview_file` parameter outputs markdown formatted per `PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md`, which the agent reads and presents in chat directly — no JSON-to-markdown conversion step needed.
 
-**WSKMGMT-DD-20:** Source repo only references downstream repos by relative paths in its synced repos list. Rationale: Absolute paths (e.g., `e:\Dev\Lana-V2-Dev`) are machine-specific and break when repos are cloned to different locations. Relative paths (e.g., `../Lana-V2-Dev`) are portable and work across machines, drive layouts, and CI environments. sync.ps1 resolves relative paths against the source repo root at runtime. The source's synced repos list is informational — it tells `/sync to targets` workflows which repos to push to. The actual sync configuration (bundles, filters, never_overwrite) lives in each target's promptsystem-sync.json.
+**WSKMGMT-DD-20:** Source repo only references downstream repos by relative paths in its synced repos list. Rationale: Absolute paths (e.g., `e:\Dev\Lana-V2-Dev`) are machine-specific and break when repos are cloned to different locations. Relative paths (e.g., `../Lana-V2-Dev`) are portable and work across machines, drive layouts, and CI environments. sync.ps1 resolves relative paths against the source repo root at runtime. The source's synced repos list is informational — it tells `/sync to targets` workflows which repos to push to. The actual sync configuration (include, exclude, never_overwrite) lives in each target's promptsystem-sync.json.
 
 **WSKMGMT-DD-21:** `rules` folder renamed to `specs` with subfolders `sops/` and `guides/`. Rationale: The `rules` folder name is misleading — it contains specifications, implementation plans, test plans, SOPs, and guides, not just rules. The `specs` name better reflects the content. Subfolders `sops/` and `guides/` provide structure for advanced SOPs (referenced by SOPS.md) and how-to guides (e.g., UX design guidelines).
 
@@ -946,9 +951,9 @@ Direction definitions:
 
 **WSKMGMT-DD-23:** Condition syntax limited to `==` and `AND`. Rationale: OR and negation introduce ambiguity in evaluation order and make condition chains harder to trace. The questionnaire's conditional sections (e.g., "if WORKSPACE mode, ask Section 2") are all expressible with `==` and `AND`. Keeping the syntax minimal ensures LLM can evaluate conditions reliably without a parser.
 
-**WSKMGMT-DD-24:** Three field types only: `single`, `list`, `enum`. Rationale: These cover all questionnaire field types. `single` for strings/paths/names. `list` for arrays (never_overwrite patterns, knowledge bundles). `enum` for finite option sets (workspace type, mode, version source). No `object` or `nested` type — complexity is unnecessary for workspace configuration.
+**WSKMGMT-DD-24:** Three field types only: `single`, `list`, `enum`. Rationale: These cover all questionnaire field types. `single` for strings/paths/names. `list` for arrays (never_overwrite patterns, include/exclude patterns). `enum` for finite option sets (workspace type, mode, version source). No `object` or `nested` type — complexity is unnecessary for workspace configuration.
 
-**WSKMGMT-DD-25:** List fields use set comparison (missing/extra), not ordered comparison. Rationale: Lists in workspace configuration (never_overwrite patterns, knowledge bundles) are unordered sets. Comparing as sets (items in default not in current = missing, items in current not in default = extra) is the correct semantic. Order does not matter.
+**WSKMGMT-DD-25:** List fields use set comparison (missing/extra), not ordered comparison. Rationale: Lists in workspace configuration (never_overwrite patterns, include/exclude patterns) are unordered sets. Comparing as sets (items in default not in current = missing, items in current not in default = extra) is the correct semantic. Order does not matter.
 
 **WSKMGMT-DD-26:** `DEVIATION` is a valid user choice, not a gap. Rationale: Users legitimately choose non-default values (e.g., WORKSPACE mode instead of SINGLE-PROJECT). Reporting these as gaps would prompt unnecessary fixes. DEVIATION status informs the user without suggesting action. Only GAP and STALE trigger proposed fixes.
 
@@ -1027,7 +1032,8 @@ Detect workspace mode:
 Resolve sync config:
 ├─> Check target [WORKSPACE_FOLDER] root for promptsystem-sync.json?
 │   ├─ Found -> Read promptsystem-sync.json
-│   │   └─> Each source entry defines: source (relative path), selected_bundles, bundles, include, exclude, deprecated, never_overwrite
+│   │   └─> Top-level: last_sync, deprecated (shared), targets array
+│   │   └─> Each target entry: path (relative, e.g., .devin), source, include, exclude, never_overwrite
 │   └─ Not found
 │       └─> No sync configured for this repo (SELF-CONTAINED)
 ```
@@ -1036,14 +1042,14 @@ Resolve sync config:
 
 ```
 User runs /sync workspace (or /sync knowledge, /sync specs)
-├─> Read promptsystem-sync.json from target [WORKSPACE_FOLDER] root
-├─> For each source in config:
-│   ├─> All config from promptsystem-sync.json source entry (bundles, refiners, deprecated, never_overwrite)
-│   ├─> Run sync.ps1 -diff -sources <source> -targets <target> -configs promptsystem-sync.json
-│   └─> Collect diff results (add/overwrite/delete/excluded)
-├─> Show preview: files to add, modify, delete, skip (with reason)
+├─> Read NOTES.md [LINKED_REPOS] for repo roots
+├─> For each repo root:
+│   ├─> Read <repo_root>/promptsystem-sync.json
+│   ├─> Run sync.ps1 -diff -config <path> -preview_file <path>
+│   └─> Collect markdown preview results (per target: adds, modifies, deletes, skips, unchanged)
+├─> Agent reads markdown preview file, presents in chat using PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md
 ├─> Prompt for confirmation
-│   ├─> Confirmed -> Run sync.ps1 -execute with same params
+│   ├─> Confirmed -> Run sync.ps1 -execute -config <path> for each repo
 │   │   ├─> Create backups of files to overwrite
 │   │   ├─> Execute copy/delete operations
 │   │   ├─> Write last_sync timestamp to promptsystem-sync.json
@@ -1107,13 +1113,14 @@ User runs /verify workspace (or /verify setup)
 
 ```
 /sync workspace
-├─> Read promptsystem-sync.json from target [WORKSPACE_FOLDER] root
-├─> For each source in config:
-│   ├─> Run sync.ps1 -diff -sources <source> -targets <target> -configs promptsystem-sync.json
-│   └─> Collect diff results (add/overwrite/delete/locally-modified/excluded)
-├─> Show preview: files to add, modify, delete, skip (with reason)
+├─> Read NOTES.md [LINKED_REPOS] for repo roots
+├─> For each repo root:
+│   ├─> Read <repo_root>/promptsystem-sync.json
+│   ├─> Run sync.ps1 -diff -config <path> -preview_file <path>
+│   └─> Collect markdown preview results (per target: adds, modifies, deletes, skips, locally_modified, unchanged)
+├─> Agent reads markdown preview, presents in chat using PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md
 ├─> Prompt for confirmation
-│   ├─> Confirmed -> Run sync.ps1 -execute with same params
+│   ├─> Confirmed -> Run sync.ps1 -execute -config <path> for each repo
 │   │   ├─> Execute copy/delete operations
 │   │   ├─> Write last_sync timestamp to promptsystem-sync.json
 │   │   └─> Report results
@@ -1124,7 +1131,7 @@ User runs /verify workspace (or /verify setup)
 
 ```
 /sync workspace upstream
-├─> Upstream sync = run sync.ps1 with swapped -sources and -targets parameters
+├─> Upstream sync = swap source and target in promptsystem-sync.json
 ├─> The target repo becomes the source, the original source becomes the target
 ├─> Config is read from the other repo's promptsystem-sync.json
 ├─> Same diff/confirm/execute flow as downstream
@@ -1160,7 +1167,7 @@ User runs /verify workspace (or /verify setup)
 │   └─> Restore selected version
 ├─> area = PROMPTSYSTEM
 │   ├─> Option A: Show recent committed versions of agent folder
-│   ├─> Option B: List _OldDevSystemVersions/ archives
+│   ├─> Option B: List _OldVersions/ archives
 │   └─> User selects -> restore from git or archive
 ├─> area = KNOWLEDGE
 │   ├─> Show recent committed versions of knowledge folder
@@ -1242,58 +1249,59 @@ Diff Report: [Source] vs [Target]
 
 ```json
 {
-  "sources": [
+  "last_sync": "2026-09-06T13:20:00Z",
+  "deprecated": [
+    "specs/commit-rules.md",
+    "workflows/go-autonomous.md",
+    "skills/edird-phase-model"
+  ],
+  "targets": [
     {
-      "source": "../IPPS/DevSystemV4.3",
-      "selected_bundles": ["Development"],
-      "bundles": {
-        "Development": {
-          "include": ["skills/coding-conventions", "skills/git", "skills/write-documents", "workflows/*", "specs/*"],
-          "exclude": ["skills/google-account", "skills/travel-info", "workflows/conversation-start.md", "workflows/conversation-update.md"]
-        },
-        "Personal": {
-          "include": ["skills/google-account", "skills/travel-info", "workflows/conversation-start.md", "workflows/conversation-update.md"],
-          "exclude": []
-        }
-      },
-      "include": ["skills/*", "workflows/*", "specs/*"],
-      "exclude": ["__pycache__/*", "*.pyc", "skills/llm-evaluation/model-sources/*"],
-      "deprecated": ["specs/commit-rules.md", "workflows/go-autonomous.md", "skills/edird-phase-model"],
+      "path": ".devin",
+      "source": "../IPPS/.devin",
+      "include": ["*"],
+      "exclude": [
+        "skills/google-account/*",
+        "skills/travel-info/*",
+        "workflows/conversation-start.md",
+        "workflows/conversation-update.md"
+      ],
       "never_overwrite": ["specs/sops/project-release.md"]
     },
     {
-      "source": "../Company/knowledge",
-      "selected_bundles": ["all"],
-      "bundles": {
-        "all": {
-          "include": ["*"],
-          "exclude": []
-        }
-      },
+      "path": ".lana",
+      "source": "../IPPS/.devin",
       "include": ["*"],
-      "exclude": [],
-      "deprecated": [],
-      "never_overwrite": []
+      "exclude": ["__pycache__/*", "*.pyc"],
+      "never_overwrite": ["skills/selftest/*"]
     }
-  ],
-  "last_sync": "2026-09-06T13:20:00"
+  ]
 }
 ```
+
+### Preview output (written to -preview_file)
+
+Preview is markdown formatted per `PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md` in workspace-management skill. Structure:
+- Header: source path and target count
+- Deprecated files section (from top-level `deprecated` array)
+- Per-target blocks: Add count + file list, Overwrite count + file list, Delete count + file list, Skipped with reason, Locally modified, Excluded skills
+- Summary: aggregate counts across all targets
+- Paths use Windows backslashes, relative to target agent folder
 
 ### sync.ps1 usage examples
 
 ```powershell
-# Diff mode - preview to console
-sync.ps1 -diff -sources "../IPPS/DevSystemV4.3" -targets "." -configs "promptsystem-sync.json"
+# Diff mode - preview markdown to file
+sync.ps1 -diff -config "[WORKSPACE_FOLDER]\promptsystem-sync.json" -preview_file ".tmp_sync_preview.md"
 
-# Diff mode - output to file, console summarizes
-sync.ps1 -diff -sources "../IPPS/DevSystemV4.3" -targets "." -configs "promptsystem-sync.json" -output-file "sync-report.txt"
+# Diff mode - full text report to file
+sync.ps1 -diff -config "[WORKSPACE_FOLDER]\promptsystem-sync.json" -output_file "sync-report.txt"
 
 # Execute mode - apply changes
-sync.ps1 -execute -sources "../IPPS/DevSystemV4.3" -targets "." -configs "promptsystem-sync.json"
+sync.ps1 -execute -config "[WORKSPACE_FOLDER]\promptsystem-sync.json"
 
-# Multi-target batch
-sync.ps1 -diff -sources '["../IPPS/DevSystemV4.3"]' -targets '["../Lana-V2-Dev", "../USTVA"]' -configs '["promptsystem-sync.json"]'
+# Diff mode - console output only
+sync.ps1 -diff -config "[WORKSPACE_FOLDER]\promptsystem-sync.json"
 ```
 
 ### main.code-workspace Structure
@@ -1337,24 +1345,27 @@ N/A: No UI components. All interaction is via CLI/workflow commands and console 
 =============================== START: WORKSPACE SYNC PREVIEW ===============================
 [2026-09-06 13:35:00]
 
-Syncing from '../IPPS/DevSystemV4.3' to '.'...
+Syncing from '../IPPS/.devin' to '.devin'...
   Reading 'promptsystem-sync.json'...
-    OK.
-  Comparing files...
-    [ 1 / 3 ] Adding 'skills/workspace-management/SKILL.md'...
-    [ 2 / 3 ] Adding 'skills/workspace-management/WORKSPACE-GUIDES.md'...
-    [ 3 / 3 ] Adding 'skills/workspace-management/WORKSPACE-RULES.md'...
-    3 new files found.
-  Comparing modified files...
-    [ 1 / 2 ] 'specs/promptsystem-core.md' differs...
-    [ 2 / 2 ] 'workflows/verify.md' differs...
-    2 modified files found.
-  Checking deprecated files...
-    0 deprecated files found.
-  Checking never-overwrite files...
-    1 file protected: 'specs/sops/project-release.md'
+    OK. 2 targets found.
+  Target: .devin
+    Comparing files...
+      [ 1 / 3 ] Adding 'skills/workspace-management/SKILL.md'...
+      [ 2 / 3 ] Adding 'skills/workspace-management/WORKSPACE-GUIDES.md'...
+      [ 3 / 3 ] Adding 'skills/workspace-management/WORKSPACE-RULES.md'...
+      3 new files found.
+    Comparing modified files...
+      [ 1 / 2 ] 'specs/promptsystem-core.md' differs...
+      [ 2 / 2 ] 'workflows/verify.md' differs...
+      2 modified files found.
+    Checking deprecated files...
+      0 deprecated files found.
+    Checking never-overwrite files...
+      1 file protected: 'specs/sops/project-release.md'
+  Target: .lana
+    [UP TO DATE] 285 files unchanged
 
-Summary: 3 add, 2 modify, 0 delete, 1 skip, 45 unchanged.
+Summary: 3 add, 2 modify, 0 delete, 1 skip, 330 unchanged.
 RESULT: CHANGES FOUND
 ================================ END: WORKSPACE SYNC PREVIEW =================================
 [2026-09-06 13:35:02] (2.0 secs)
@@ -1431,10 +1442,37 @@ RESULT: PASSED WITH FIXES
 - sync.md integration adds a new context section, does not modify existing contexts
 - promptsystem-core.md edits add `<!-- START: Core/Skill: X -->` ... `<!-- END: ... -->` markers to existing sections, no content changes, no workflow modifications
 - ID-REGISTRY.md states reorganized under skill headings (bare enumerations, no descriptions)
-- Skill must be registered in `promptsystem-sync.json` Development bundle
+- Skill must be included in `promptsystem-sync.json` target include patterns
 - All skill files must pass privacy gate (no real identifiers, addresses, names, project-specific data)
 
 ## 15. Document History
+
+**[2026-09-10 01:35]**
+- Fixed: FR-52, FR-53 — stale "bundle include/exclude rules" → "target include/exclude patterns"
+- Fixed: DD-20 — stale "(bundles, filters, never_overwrite)" → "(include, exclude, never_overwrite)"
+- Fixed: DD-24, DD-25 — stale "knowledge bundles" in list type examples → "include/exclude patterns"
+- Fixed: FR-21, Workspace Rollback — `_OldDevSystemVersions/` → `_OldVersions/` (actual folder name)
+- Fixed: FR-41 — "7 sections" → "6 sections" (Skill Categories removed per FR-60), conditional sections updated
+- Fixed: FR-20 — "skill category filtering" → "include/exclude filtering"
+- Fixed: Scenario, FR-12, FR-26, FR-49 — stale "skill categories" and "bundles" references cleaned
+- Fixed: All target file paths — `DevSystemV4.3/` → `PromptSystemV4.4/` (current folder name)
+- Fixed: Document history entry RV-011 — "Skill Categories" → "Skill discovery"
+
+**[2026-09-10 01:25]**
+- Redesigned: FR-44 — `sources` array replaced with `targets` array; each target entry is self-contained with `path`, `source`, `include`, `exclude`, `never_overwrite`
+- Removed: `bundles` and `selected_bundles` from FR-44, FR-46, DD-18 — redundant two-layer filtering collapsed to single target-level include/exclude
+- Moved: `deprecated` from per-source to top-level in promptsystem-sync.json (shared across all targets in repo)
+- Redesigned: FR-46 — CLI simplified to `-config` (single JSON path), `-preview_file` (markdown preview per PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md), `-output_file` (text report); removed `-sources`, `-targets`, `-configs`, `-deprecated` params
+- Added: Preview output structure to FR-46 and Data Structures section (markdown per template, not custom JSON)
+- Updated: FR-49 — sync workflow reads NOTES.md [LINKED_REPOS] for repo roots, reads each repo's promptsystem-sync.json for targets
+- Updated: DD-18, DD-19 — rationale updated for targets-based architecture and simplified CLI
+- Updated: Key Mechanisms (Sync Config Resolution, Diff and Sync Flow) for new schema
+- Updated: Action Flow (Workspace Sync downstream/upstream) for new CLI
+- Updated: Data Structures — new promptsystem-sync.json example, preview markdown description, sync.ps1 usage examples
+- Updated: Logging example — multi-target output with relative paths
+- Updated: Technical Constraints — "Development bundle" → "target include patterns"
+- Updated: MNF — targets array, no bundles, top-level deprecated, -config only CLI
+- Changed: Preview output from custom JSON to markdown per `PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md`
 
 **[2026-09-08 20:50]**
 - Added: FR-65 to FR-75, DD-22 to DD-32, IG-12 to IG-19 from WSKMGMT-SP02
@@ -1532,7 +1570,7 @@ RESULT: PASSED WITH FIXES
 - Added: IG-07 rollback safety guidance for shared branches (from critique RV-004)
 - Added: DD-09 dev repo ordering rationale (from critique RV-014)
 - Added: DD-04 `[COMPANY_REPO_FOLDER]` to constants list
-- Added: Skill Categories data structure example in section 10 (from critique RV-011)
+- Added: Skill discovery data structure example in section 10 (from critique RV-011)
 - Updated: Technical Constraints - hash-based comparison preferred (from critique RV-007)
 - Updated: CompanyRepo domain object storage to use `[COMPANY_REPO_FOLDER]`
 - Updated: Workspace Constants data structure to include `[COMPANY_REPO_FOLDER]`

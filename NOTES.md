@@ -17,13 +17,13 @@
 - Specs folder containing shared specifications, design guidelines, SOPs.
 
 [PRODUCT_VERSION]: `4.4`
-- Current DevSystem version. Update on version changes (SOPS SOP 4/7).
+- Current PromptSystem version. Update on version changes (SOPS SOP 4/7).
 
-[DEVSYSTEM_FOLDER]: `[WORKSPACE_FOLDER]\DevSystem[PRODUCT_VERSION]`
+[PROMPTSYSTEM_FOLDER]: `[WORKSPACE_FOLDER]\.devin`
 - Source of truth for all rules, workflows, skills. Never edit `.devin/` directly. Repo-specific — not in template.
 
 [AGENT_FOLDER]: `[WORKSPACE_FOLDER]\.devin`
-- Sync target. Copy of [DEVSYSTEM_FOLDER] content.
+- Sync target. Copy of [PROMPTSYSTEM_FOLDER] content.
 
 [SESSIONS_FOLDER]: `[WORKSPACE_FOLDER]\_PrivateSessions_gitignore`
 - Base folder for session folders.
@@ -32,7 +32,7 @@
 - Archive folder for closed sessions.
 
 [SKILL_TOOLS_FOLDER]: `[WORKSPACE_FOLDER]\..\.tools\`
-- Command line tools used by various DevSystem skills. Shared across workspaces. Not the agent built-in tools.
+- Command line tools used by various PromptSystem skills. Shared across workspaces. Not the agent built-in tools.
 
 [API_KEYS_FILE]: `[SKILL_TOOLS_FOLDER]\.api-keys.txt`
 - API keys file for skill scripts. Pass via `--keys-file [API_KEYS_FILE]`.
@@ -46,7 +46,7 @@
 ## Project Info
 
 - Project name: IPPS
-- Project goal: DevSystem source repository — rules, workflows, skills for agentic development
+- Project goal: PromptSystem source repository — rules, workflows, skills for agentic development
 - Workspace type: SOFTWARE-DEV
 - Workspace mode: SINGLE-PROJECT
 - Version strategy: SINGLE-VERSION
@@ -58,24 +58,24 @@
 - **Safety First**: UI automation scripts MUST have a `-DryRun` mode. Preview changes before sending irreversible keyboard events.
 - **Playwriter Timeouts**: ALWAYS pass `timeout: 1500` (default is 20000ms!). Lower to 500ms when fast.
 
-## DevSystem Source/Sync Rules
+## PromptSystem Source/Sync Rules
 
-**CRITICAL: [DEVSYSTEM_FOLDER] is the SOURCE. .devin is the SYNC TARGET.**
+**CRITICAL: [PROMPTSYSTEM_FOLDER] is the SOURCE. .devin is the SYNC TARGET.**
 **CRITICAL: Never leak project-specific or private data into workflows, skills, or rules.** These are reusable across projects. Use generic examples and placeholders only.
 
-- **Creating new rules, workflows, skills** -> Create in [DEVSYSTEM_FOLDER] first, then sync
-- **Editing existing content** -> Edit in [DEVSYSTEM_FOLDER] first, then sync
+- **Creating new rules, workflows, skills** -> Create in [PROMPTSYSTEM_FOLDER] first, then sync
+- **Editing existing content** -> Edit in [PROMPTSYSTEM_FOLDER] first, then sync
 - **NEVER create or edit directly in `.devin/`** (except for temp testing)
 
 **Sync direction:**
 ```
-[DEVSYSTEM_FOLDER] ---(sync to)---> .devin/
-[DEVSYSTEM_FOLDER]\workflows ---(copy to)---> .claude/commands/
+[PROMPTSYSTEM_FOLDER] ---(sync to)---> .devin/
+[PROMPTSYSTEM_FOLDER]\workflows ---(copy to)---> .claude/commands/
 ```
 
-**Claude Code commands:** All workflows from `[DEVSYSTEM_FOLDER]\workflows` are also copied to `.claude/commands/` (Devin CLI imports these as slash commands via Claude Code compatibility).
+**Claude Code commands:** All workflows from `[PROMPTSYSTEM_FOLDER]\workflows` are also copied to `.claude/commands/` (Devin CLI imports these as slash commands via Claude Code compatibility).
 
-**Exception:** If user edits .devin directly, sync BACK to [DEVSYSTEM_FOLDER] first.
+**Exception:** If user edits .devin directly, sync BACK to [PROMPTSYSTEM_FOLDER] first.
 
 **README.md Link Convention (2026-03-19):**
 - **ALWAYS use `.devin/` paths in README.md** - Never reference `DevSystemV3.6/` or any version folder
@@ -100,11 +100,11 @@
 
 ## Platform Notes
 
-**Release archive**: `[WORKSPACE_FOLDER]\_OldDevSystemVersions\` — all prior DevSystem version folders are preserved here before deletion. Never delete a version folder without backing it up.
+**Release archive**: `[WORKSPACE_FOLDER]\_OldPromptSystemVersions\` — all prior PromptSystem version folders are preserved here before deletion. Never delete a version folder without backing it up.
 
-**Windows:** No symlinks. `.devin/` is a copy of `[DEVSYSTEM_FOLDER]`. Sync command and procedures: see `SOPS.md`.
+**Windows:** No symlinks. `.devin/` is a copy of `[PROMPTSYSTEM_FOLDER]`. Sync command and procedures: see `SOPS.md`.
 
-**"deploy" keyword:** When user says "deploy", sync `[DEVSYSTEM_FOLDER]` to `.devin/` per `SOPS.md` → Quick Reference: Sync Command.
+**"deploy" keyword:** When user says "deploy", sync `[PROMPTSYSTEM_FOLDER]` to `.devin/` per `SOPS.md` → Quick Reference: Sync Command.
 
 Automatically push commits to GitHub.
 
@@ -128,25 +128,26 @@ Automatically push commits to GitHub.
 - All params are JSON arrays but also support single strings
 - If `-output-file` present, console just summarizes numbers; full report goes to file
 
-**devsystem-sync.json at target `[WORKSPACE_FOLDER]` root**:
+**promptsystem-sync.json at target `[WORKSPACE_FOLDER]` root**:
 - Single source of truth for ALL sync configuration
-- Each source entry carries its own complete config: bundle definitions, selected_bundles, include/exclude refiners, deprecated, never_overwrite
+- Each source entry carries its own complete config: bundle definitions, selected_bundles, include/exclude refiners, never_overwrite
+- Deprecated files are source-level (from NOTES.md [DEPRECATED_FILES]), not per-target config
 - NO sync-bundles.json at source — source is purely a content provider
 - Source repo only maintains a list of relative paths to synced repos (for push operations)
 
 **Source repo**: Only references RELATIVE downstream repo paths (e.g., `../Lana-V2-Dev`), never absolute
 
 **Use cases** (implemented in `sync.md` workflow):
-- `/sync workspace settings from repo xyz` — merges/replicates NOTES.md + devsystem-sync.json into current repo
-- `/sync workspace settings to repo xyz` — merges/replicates NOTES.md + devsystem-sync.json into target repo
-- `/sync sync settings from repo xyz` — only devsystem-sync.json into current repo
-- `/sync sync settings to repo xyz` — only devsystem-sync.json into target repo
-- `/sync knowledge from source` — reads source from devsystem-sync.json, runs sync.ps1 -diff, preview, auto-execute on confirm
+- `/sync workspace settings from repo xyz` — merges/replicates NOTES.md + promptsystem-sync.json into current repo
+- `/sync workspace settings to repo xyz` — merges/replicates NOTES.md + promptsystem-sync.json into target repo
+- `/sync sync settings from repo xyz` — only promptsystem-sync.json into current repo
+- `/sync sync settings to repo xyz` — only promptsystem-sync.json into target repo
+- `/sync knowledge from source` — reads source from promptsystem-sync.json, runs sync.ps1 -diff, preview, auto-execute on confirm
 - `/sync knowledge to targets` — reads targets from source NOTES.md synced repos list, runs sync.ps1 -diff, preview, auto-execute on confirm
 - `/sync specs from source` — same flow for specs
 - `/sync specs to targets` — same flow for specs
 
-## DevSystem 5.0 Planning
+## PromptSystem 5.0 Planning
 
 **Investigate workflow** (created 2026-09-09 in DevSystemV4.3, ready for 5.0 inclusion):
 - `specs/_SPEC_INVESTIGATE_WORKFLOW.md [INVESTIGATE-SP01]` - Specification
@@ -163,44 +164,23 @@ Workflow behavior: formulates goal, collects premises, analyzes problem nature, 
 - conversation-start.md
 - conversation-update.md
 
+## [DEPRECATED_FILES] (deleted from all targets during sync)
+
+- rules/devsystem-core.md
+- rules/devsystem-ids.md
+- workflows/workspace-create.md
+- skills/workspace-management/WORKSPACE_CREATION_QUESTIONNAIRE.md
+
 **[LINKED_REPOS]**:
-- e:\Dev\KarstensWorkspace
-  - Skills: All
-  - Overwrite everything
-  - Delete deprecated or renamed files from older DevSystem versions
-  - Don't delete unrelated existing files
-- e:\Dev\OpenAI-BackendTools
-  - Skills: Development
-  - Overwrite everything
-  - Delete deprecated or renamed files from older DevSystem versions
-  - Don't delete unrelated existing files
-- e:\Dev\PRXL\src
-  - Skills: Development
-  - Overwrite everything
-  - Delete deprecated or renamed files from older DevSystem versions
-  - Don't delete unrelated existing files
-- e:\Dev\SharePoint-GPT-Middleware
-  - Skills: Development
-  - Overwrite everything
-  - Never overwrite: workflows/project-release.md (project-specific)
-  - Delete deprecated or renamed files from older DevSystem versions
-  - Don't delete unrelated existing files
-- e:\Dev\USTVA
-  - Skills: All
-  - Overwrite everything
-  - Delete deprecated or renamed files from older DevSystem versions
-  - Don't delete unrelated existing files
-- e:\Dev\openclaw\workspace
-  - Skills: All
-  - Overwrite: rules/, workflows/, skills/ folders
-  - Create: WORKFLOWS.md, _Sessions/ (if not exists)
-  - Never overwrite: AGENTS.md, HEARTBEAT.md, memory/, MEMORY.md
-  - Special: Copy _OPENCLAW-AGENTS.md to AGENTS.md, copy _OPENCLAW_WORKFLOWS.md to WORKFLOWS.md (always sync both)
-- e:\Dev\LLM-Research
-  - Skills: Development
-  - Overwrite everything
-  - Delete deprecated or renamed files from older DevSystem versions
-  - Don't delete unrelated existing files
+- ../KarstensWorkspace
+- ../OpenAI-BackendTools
+- ../PRXL/src
+- ../SharePoint-GPT-Middleware
+- ../USTVA
+- ../openclaw/workspace
+- ../LLM-Research
+- ../Lana-V1
+- ../Lana-V1-Dev
 
 ## Release Configuration
 
@@ -218,9 +198,9 @@ tag_annotation_template: Release {TAG}: {SUMMARY}
 path: [WORKSPACE_FOLDER]
 role: product
 tag_format: semver
-version_source: devsystem_folder
-post_release_bump: devsystem_rename
+version_source: promptsystem_folder
+post_release_bump: promptsystem_rename
 github_release: true
 ```
 
-Instructions: SINGLE-PROJECT mode — one repo, one `[RELEASE_REPO]` block. Semver tags (`vX.Y`). Version source is `devsystem_folder` (parsed from `[PRODUCT_VERSION]` line above). Post-release bump renames `DevSystemVX.Y` folder to next minor version per SOPS SOP 7. No binary build, no version gate. Release notes go in `docs/ReleaseNotes/` per existing convention (see `[RELEASE_NOTES_FOLDER]` constant above).
+Instructions: SINGLE-PROJECT mode — one repo, one `[RELEASE_REPO]` block. Semver tags (`vX.Y`). Version source is `promptsystem_folder` (parsed from `[PRODUCT_VERSION]` line above). Post-release bump renames `PromptSystemVX.Y` folder to next minor version per SOPS SOP 7. No binary build, no version gate. Release notes go in `docs/ReleaseNotes/` per existing convention (see `[RELEASE_NOTES_FOLDER]` constant above).
