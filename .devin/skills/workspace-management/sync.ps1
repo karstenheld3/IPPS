@@ -2,45 +2,35 @@
 .SYNOPSIS
     Generic PromptSystem sync script with -diff and -execute modes.
 .DESCRIPTION
-    Reads all sync configuration from target's promptsystem-sync.json.
+    Reads all sync configuration from promptsystem-sync.json (-config parameter).
+    Uses targets array with per-target include/exclude/never_overwrite.
+    Top-level deprecated array shared across all targets.
     Source repo is purely a content provider (read-only during sync).
-    Supports multi-source, multi-target, multi-config in a single call.
 .PARAMETER diff
     Preview mode: show changes, modify nothing.
 .PARAMETER execute
     Apply mode: copy, delete, update last_sync timestamp.
-.PARAMETER sources
-    Source repo paths to filter on (JSON array or single string).
-    Filters which source entries in config to sync.
-.PARAMETER targets
-    Target repo paths (JSON array or single string).
-.PARAMETER configs
-    Paths to promptsystem-sync.json files, paired 1:1 with targets.
+.PARAMETER config
+    Path to promptsystem-sync.json file (required).
 .PARAMETER output_file
     File path for full diff report. Default: console.
-.PARAMETER deprecated
-    JSON array of deprecated file paths to delete at targets (relative to agent folder).
-    Source-level concern — passed from NOTES.md [DEPRECATED_FILES], not per-target config.
 .PARAMETER preview_file
-    File path for template-formatted preview report (compact per-target blocks).
-    Use with -diff: produces PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md format for chat presentation.
+    File path for markdown preview (PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md format).
+    Use with -diff: produces per-target blocks for chat presentation.
 .PARAMETER showVerbose
     Show excluded files and skip reasons in output.
 .EXAMPLE
-    sync.ps1 -diff -sources "../IPPS/.devin" -targets "." -configs "promptsystem-sync.json"
+    sync.ps1 -diff -config "promptsystem-sync.json" -preview_file ".tmp_sync_preview.md"
 .EXAMPLE
-    sync.ps1 -execute -sources '["../IPPS/.devin"]' -targets '["e:\\Dev\\Lana-V1-Dev\\.devin"]' -configs '["promptsystem-sync.json"]' -deprecated '["workflows/workspace-create.md"]'
+    sync.ps1 -execute -config "promptsystem-sync.json"
 #>
 
 [CmdletBinding()]
 param(
     [switch]$diff,
     [switch]$execute,
-    [string]$sources,
-    [string]$targets,
-    [string]$configs,
+    [string]$config,
     [string]$output_file,
-    [string]$deprecated,
     [string]$preview_file,
     [switch]$showVerbose
 )
@@ -49,50 +39,23 @@ param(
 # Functions
 # ============================================================
 
-function Resolve-PathParam {
-    param([string]$Value, [string]$ParamName)
-    if ([string]::IsNullOrWhiteSpace($Value)) {
-        Write-Error "Parameter -$ParamName is required."
-        exit 2
-    }
-    $trimmed = $Value.Trim()
-    if ($trimmed.StartsWith('[') -and $trimmed.EndsWith(']')) {
-        try {
-            $array = $trimmed | ConvertFrom-Json
-            $resolved = @()
-            foreach ($item in $array) {
-                $resolved += [System.IO.Path]::GetFullPath($item)
-            }
-            return $resolved
-        } catch {
-            Write-Error "Parameter -$ParamName contains invalid JSON: $trimmed"
-            exit 2
-        }
-    }
-    $fullPath = [System.IO.Path]::GetFullPath($trimmed)
-    return , $fullPath
-}
-
 function Test-SyncConfig {
     param([object]$Config, [string]$ConfigPath)
     $errors = @()
-    if (-not $Config.sources) {
-        $errors += "Missing 'sources' array in '$ConfigPath'."
+    if (-not $Config.targets) {
+        $errors += "Missing 'targets' array in '$ConfigPath'."
     }
-    foreach ($src in $Config.sources) {
-        if (-not $src.source) { $errors += "Source entry missing 'source' field in '$ConfigPath'." }
-        if (-not $src.selected_bundles) { $errors += "Source '$($src.source)' missing 'selected_bundles' array." }
-        if (-not $src.bundles) { $errors += "Source '$($src.source)' missing 'bundles' definitions." }
-        if (-not $src.include) { $errors += "Source '$($src.source)' missing 'include' array." }
-        foreach ($field in @('selected_bundles', 'include', 'exclude', 'never_overwrite')) {
-            $val = $src.$field
+    if ($Config.deprecated -and $Config.deprecated -isnot [array]) {
+        $errors += "Top-level 'deprecated' must be an array in '$ConfigPath'."
+    }
+    foreach ($tgt in $Config.targets) {
+        if (-not $tgt.path) { $errors += "Target entry missing 'path' field in '$ConfigPath'." }
+        if (-not $tgt.source) { $errors += "Target '$($tgt.path)' missing 'source' field." }
+        if (-not $tgt.include) { $errors += "Target '$($tgt.path)' missing 'include' array." }
+        foreach ($field in @('include', 'exclude', 'never_overwrite')) {
+            $val = $tgt.$field
             if ($null -ne $val -and $val -isnot [array]) {
-                $errors += "Source '$($src.source)' field '$field' must be an array, got $($val.GetType().Name)."
-            }
-        }
-        foreach ($bundleName in $src.selected_bundles) {
-            if (-not $src.bundles.$bundleName) {
-                $errors += "Source '$($src.source)' selects bundle '$bundleName' but bundle not defined in 'bundles'."
+                $errors += "Target '$($tgt.path)' field '$field' must be an array, got $($val.GetType().Name)."
             }
         }
     }
@@ -104,6 +67,7 @@ function Test-SyncConfig {
 
 function Test-GlobMatch {
     param([string]$Path, [string[]]$Patterns)
+    if (-not $Patterns -or $Patterns.Count -eq 0) { return $false }
     $options = if ($IsLinux -or $IsMacOS) {
         [System.Management.Automation.WildcardOptions]::None
     } else {
@@ -125,6 +89,21 @@ function Get-FileHash256 {
     return (Get-FileHash -Path $Path -Algorithm SHA256).Hash
 }
 
+function Get-RelativePath {
+    param([string]$BasePath, [string]$FullPath)
+    $baseFull = [System.IO.Path]::GetFullPath($BasePath)
+    if (-not $baseFull.EndsWith('\') -and -not $baseFull.EndsWith('/')) {
+        $baseFull += '\'
+    }
+    $fullFull = $FullPath
+    if ($fullFull.StartsWith($baseFull, [System.StringComparison]::OrdinalIgnoreCase)) {
+        $rel = $fullFull.Substring($baseFull.Length)
+    } else {
+        $rel = [System.IO.Path]::GetFileName($FullPath)
+    }
+    return $rel
+}
+
 function Get-SourceFiles {
     param([string]$SourceRoot)
     $files = @()
@@ -135,7 +114,7 @@ function Get-SourceFiles {
         [System.IO.SearchOption]::AllDirectories
     )
     foreach ($fullPath in $enumerated) {
-        $relativePath = [System.IO.Path]::GetRelativePath($sourceRootFull, $fullPath)
+        $relativePath = Get-RelativePath -BasePath $sourceRootFull -FullPath $fullPath
         $relativePath = $relativePath -replace '\\', '/'
         $files += [PSCustomObject]@{
             FullPath     = $fullPath
@@ -147,7 +126,7 @@ function Get-SourceFiles {
 
 function Invoke-FileFilter {
     param(
-        [object]$SourceEntry,
+        [object]$TargetEntry,
         [array]$Files
     )
     $result = @{
@@ -155,55 +134,30 @@ function Invoke-FileFilter {
         Excluded = @()
     }
 
-    $bundleIncludes = @()
-    $bundleExcludes = @()
-    foreach ($bundleName in $SourceEntry.selected_bundles) {
-        $bundle = $SourceEntry.bundles.$bundleName
-        if ($bundle.include) { $bundleIncludes += @($bundle.include) }
-        if ($bundle.exclude) { $bundleExcludes += @($bundle.exclude) }
-    }
+    $includePatterns = @($TargetEntry.include)
+    $excludePatterns = @($TargetEntry.exclude)
+    if (-not $excludePatterns) { $excludePatterns = @() }
 
     foreach ($file in $Files) {
         $relPath = $file.RelativePath
         $excludeReason = $null
 
-        # Step 1: source include
+        # Step 1: target include (whitelist)
         $passesInclude = $false
-        foreach ($pattern in $SourceEntry.include) {
+        foreach ($pattern in $includePatterns) {
             if (Test-GlobMatch -Path $relPath -Patterns @($pattern)) {
                 $passesInclude = $true
                 break
             }
         }
         if (-not $passesInclude) {
-            $excludeReason = 'source include'
+            $excludeReason = 'target include'
         }
 
-        # Step 2: source exclude
-        if ($excludeReason -eq $null) {
-            if (Test-GlobMatch -Path $relPath -Patterns @($SourceEntry.exclude)) {
-                $excludeReason = 'source exclude'
-            }
-        }
-
-        # Step 3: bundle include (union)
-        if ($excludeReason -eq $null -and $bundleIncludes.Count -gt 0) {
-            $passesBundleInclude = $false
-            foreach ($pattern in $bundleIncludes) {
-                if (Test-GlobMatch -Path $relPath -Patterns @($pattern)) {
-                    $passesBundleInclude = $true
-                    break
-                }
-            }
-            if (-not $passesBundleInclude) {
-                $excludeReason = 'bundle include'
-            }
-        }
-
-        # Step 4: bundle exclude (union)
-        if ($excludeReason -eq $null -and $bundleExcludes.Count -gt 0) {
-            if (Test-GlobMatch -Path $relPath -Patterns @($bundleExcludes)) {
-                $excludeReason = 'bundle exclude'
+        # Step 2: target exclude (blacklist)
+        if ($excludeReason -eq $null -and $excludePatterns.Count -gt 0) {
+            if (Test-GlobMatch -Path $relPath -Patterns $excludePatterns) {
+                $excludeReason = 'target exclude'
             }
         }
 
@@ -222,15 +176,12 @@ function Invoke-FileFilter {
 
 function Test-BreakingChange {
     param([string]$SourcePath, [string]$TargetPath)
-    # Heuristic: detect structural changes (removed headers/sections) in source vs target
-    # A breaking change is when source has removed structural markers that target still has
     $structuralPattern = '^\s{0,3}(#{1,6}\s|-\s\*\*\[|##\s)'
     try {
         $sourceLines = Get-Content -Path $SourcePath -Encoding UTF8
         $targetLines = Get-Content -Path $TargetPath -Encoding UTF8
         $sourceStructural = $sourceLines | Where-Object { $_ -match $structuralPattern } | ForEach-Object { $_.Trim() }
         $targetStructural = $targetLines | Where-Object { $_ -match $structuralPattern } | ForEach-Object { $_.Trim() }
-        # If target has structural markers that source no longer has -> breaking change
         $removedFromSource = $targetStructural | Where-Object { $_ -notin $sourceStructural }
         return $removedFromSource.Count -gt 0
     } catch {
@@ -252,7 +203,7 @@ function Compare-Files {
     # Classify source files
     foreach ($file in $SourceFiles) {
         $relPath = $file.RelativePath
-        $targetPath = [System.IO.Path]::Join($targetRootFull, ($relPath -replace '/', '\'))
+        $targetPath = [System.IO.Path]::Combine($targetRootFull, ($relPath -replace '/', '\'))
         $isNeverOverwrite = Test-GlobMatch -Path $relPath -Patterns $NeverOverwrite
 
         if (Test-Path $targetPath -PathType Leaf) {
@@ -275,7 +226,6 @@ function Compare-Files {
                         TargetPath = $targetPath
                     }
                 } else {
-                    # Check if target was locally modified after last_sync (NFR-02, FR-14)
                     $isLocallyModified = $false
                     if ($LastSync) {
                         try {
@@ -290,7 +240,6 @@ function Compare-Files {
                     }
 
                     if ($isLocallyModified) {
-                        # Check for breaking change (FR-16): source removed structural markers
                         $isBreaking = Test-BreakingChange -SourcePath $file.FullPath -TargetPath $targetPath
                         if ($isBreaking) {
                             $results += [PSCustomObject]@{
@@ -348,7 +297,7 @@ function Compare-Files {
             )
         }
         foreach ($targetFullPath in $targetFiles) {
-            $relPath = [System.IO.Path]::GetRelativePath($targetRootFull, $targetFullPath)
+            $relPath = Get-RelativePath -BasePath $targetRootFull -FullPath $targetFullPath
             $relPath = $relPath -replace '\\', '/'
             if (Test-GlobMatch -Path $relPath -Patterns $Deprecated) {
                 $isNeverOverwrite = Test-GlobMatch -Path $relPath -Patterns $NeverOverwrite
@@ -379,7 +328,7 @@ function Get-Header {
     param([string]$Title)
     $line = "=" * 100
     $startIdx = $line.IndexOf('=') + 30
-    $headerText = "START: $Title"
+    $headerText = " START: $Title "
     $endIdx = $startIdx + $headerText.Length
     $header = $line.Substring(0, $startIdx) + $headerText + $line.Substring($endIdx)
     if ($header.Length -gt 100) { $header = $header.Substring(0, 100) }
@@ -390,7 +339,7 @@ function Get-Header {
 function Get-Footer {
     param([string]$Title)
     $line = "=" * 100
-    $footerText = "END: $Title"
+    $footerText = " END: $Title "
     $startIdx = 32
     $endIdx = $startIdx + $footerText.Length
     $footer = $line.Substring(0, $startIdx) + $footerText + $line.Substring($endIdx)
@@ -404,9 +353,14 @@ function Format-Duration {
     if ($Seconds -lt 60) {
         return "$([math]::Round($Seconds, 1)) secs"
     }
-    $mins = [int]($Seconds / 60)
-    $secs = [int]($Seconds % 60)
-    return "$mins min $secs secs"
+    if ($Seconds -lt 3600) {
+        $mins = [int]($Seconds / 60)
+        $secs = [int]($Seconds % 60)
+        return "$mins mins $secs secs"
+    }
+    $hours = [int]($Seconds / 3600)
+    $mins = [int](($Seconds % 3600) / 60)
+    return "$hours hour$(if ($hours -ne 1) {'s'}) $mins mins"
 }
 
 function New-PreviewReport {
@@ -426,7 +380,7 @@ function New-PreviewReport {
 
     $totalChanges = $adds.Count + $modifies.Count + $locallyModified.Count + $deletes.Count + $skips.Count
 
-    if ($totalChanges -eq 0) {
+    if ($totalChanges -eq 0 -and $Excluded.Count -eq 0) {
         [void]$sb.AppendLine("$TargetPath")
         [void]$sb.AppendLine("  [UP TO DATE] $($unchanged.Count) files unchanged")
         return $sb.ToString()
@@ -485,10 +439,59 @@ function New-PreviewReport {
         }
         if ($excludedSkills.Count -gt 0) {
             [void]$sb.AppendLine("  - Excluded skills: $($excludedSkills -join ', ')")
-        } else {
-            [void]$sb.AppendLine("  - Excluded: $($Excluded.Count) files by bundle rules")
         }
     }
+
+    return $sb.ToString()
+}
+
+function New-MarkdownPreview {
+    param(
+        [array]$AllTargetResults,
+        [array]$DeprecatedFiles,
+        [string]$SourcePath,
+        [int]$TargetCount
+    )
+    $sb = [System.Text.StringBuilder]::new()
+
+    [void]$sb.AppendLine("# Sync Preview: $SourcePath to $TargetCount target(s)")
+    [void]$sb.AppendLine('')
+
+    # Deprecated files section
+    if ($DeprecatedFiles -and $DeprecatedFiles.Count -gt 0) {
+        [void]$sb.AppendLine('## Deprecated Files (from promptsystem-sync.json top-level)')
+        [void]$sb.AppendLine('')
+        foreach ($dep in $DeprecatedFiles) {
+            $depPath = $dep -replace '/', '\'
+            [void]$sb.AppendLine("- $depPath")
+        }
+        [void]$sb.AppendLine('')
+    }
+
+    # Per-target preview
+    [void]$sb.AppendLine('## Per-Target Preview')
+    [void]$sb.AppendLine('')
+
+    $totalDeploy = 0
+    $totalDelete = 0
+
+    foreach ($tgtResult in $AllTargetResults) {
+        $preview = New-PreviewReport -Results $tgtResult.Results -TargetPath $tgtResult.Path -Excluded $tgtResult.Excluded
+        [void]$sb.AppendLine($preview)
+        [void]$sb.AppendLine('')
+
+        $adds = $tgtResult.Results | Where-Object { $_.Action -eq 'ADD' }
+        $modifies = $tgtResult.Results | Where-Object { $_.Action -eq 'MODIFY' }
+        $locallyModified = $tgtResult.Results | Where-Object { $_.Action -eq 'LOCALLY_MODIFIED' }
+        $deletes = $tgtResult.Results | Where-Object { $_.Action -eq 'DELETE' }
+        $totalDeploy += $adds.Count + $modifies.Count + $locallyModified.Count
+        $totalDelete += $deletes.Count
+    }
+
+    # Summary
+    [void]$sb.AppendLine('## Summary')
+    [void]$sb.AppendLine('')
+    [void]$sb.AppendLine("$TargetCount repos to process, $totalDeploy files to deploy, $totalDelete files to delete.")
 
     return $sb.ToString()
 }
@@ -506,13 +509,13 @@ function New-DiffReport {
     $sb = [System.Text.StringBuilder]::new()
     $timestamp = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss')
 
-    $adds = $Results | Where-Object { $_.Action -eq 'ADD' }
-    $modifies = $Results | Where-Object { $_.Action -eq 'MODIFY' }
-    $deletes = $Results | Where-Object { $_.Action -eq 'DELETE' }
-    $skips = $Results | Where-Object { $_.Action -eq 'SKIP' }
-    $unchanged = $Results | Where-Object { $_.Action -eq 'UNCHANGED' }
-    $locallyModified = $Results | Where-Object { $_.Action -eq 'LOCALLY_MODIFIED' }
-    $breakingChanges = $Results | Where-Object { $_.Action -eq 'BREAKING_CHANGE' }
+    $adds = @($Results | Where-Object { $_.Action -eq 'ADD' })
+    $modifies = @($Results | Where-Object { $_.Action -eq 'MODIFY' })
+    $deletes = @($Results | Where-Object { $_.Action -eq 'DELETE' })
+    $skips = @($Results | Where-Object { $_.Action -eq 'SKIP' })
+    $unchanged = @($Results | Where-Object { $_.Action -eq 'UNCHANGED' })
+    $locallyModified = @($Results | Where-Object { $_.Action -eq 'LOCALLY_MODIFIED' })
+    $breakingChanges = @($Results | Where-Object { $_.Action -eq 'BREAKING_CHANGE' })
 
     [void]$sb.AppendLine((Get-Header -Title 'WORKSPACE SYNC PREVIEW'))
     [void]$sb.AppendLine("[$timestamp]")
@@ -624,12 +627,12 @@ function Invoke-Execute {
     $timestamp = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss')
     $startTime = Get-Date
 
-    $adds = $Results | Where-Object { $_.Action -eq 'ADD' }
-    $modifies = $Results | Where-Object { $_.Action -eq 'MODIFY' }
-    $deletes = $Results | Where-Object { $_.Action -eq 'DELETE' }
-    $skips = $Results | Where-Object { $_.Action -eq 'SKIP' }
-    $locallyModified = $Results | Where-Object { $_.Action -eq 'LOCALLY_MODIFIED' }
-    $breakingChanges = $Results | Where-Object { $_.Action -eq 'BREAKING_CHANGE' }
+    $adds = @($Results | Where-Object { $_.Action -eq 'ADD' })
+    $modifies = @($Results | Where-Object { $_.Action -eq 'MODIFY' })
+    $deletes = @($Results | Where-Object { $_.Action -eq 'DELETE' })
+    $skips = @($Results | Where-Object { $_.Action -eq 'SKIP' })
+    $locallyModified = @($Results | Where-Object { $_.Action -eq 'LOCALLY_MODIFIED' })
+    $breakingChanges = @($Results | Where-Object { $_.Action -eq 'BREAKING_CHANGE' })
 
     [void]$sb.AppendLine((Get-Header -Title 'WORKSPACE SYNC EXECUTE'))
     [void]$sb.AppendLine("[$timestamp]")
@@ -772,7 +775,7 @@ function Write-VerboseLog {
 # Main Execution
 # ============================================================
 
-# IS-02: Mode validation
+# Mode validation
 if ($diff -and $execute) {
     Write-Error 'Cannot specify both -diff and -execute.'
     exit 2
@@ -782,139 +785,129 @@ if (-not $diff -and -not $execute) {
     exit 2
 }
 
-# IS-01: Parse parameters
-$sourceList = @(Resolve-PathParam -Value $sources -ParamName 'sources')
-$targetList = @(Resolve-PathParam -Value $targets -ParamName 'targets')
-$configList = @(Resolve-PathParam -Value $configs -ParamName 'configs')
-
-# IS-14: Target-config pairing
-if ($configList.Count -eq 1 -and $targetList.Count -gt 1) {
-    $configList = @($configList) * $targetList.Count
-}
-if ($targetList.Count -ne $configList.Count) {
-    Write-Error "Number of targets ($($targetList.Count)) must match number of configs ($($configList.Count)), or provide a single config."
+# Config parameter validation
+if ([string]::IsNullOrWhiteSpace($config)) {
+    Write-Error 'Parameter -config is required.'
     exit 2
+}
+
+# Resolve config path
+$configPath = [System.IO.Path]::GetFullPath($config)
+
+# Read config
+if (-not (Test-Path $configPath -PathType Leaf)) {
+    Write-Error "Config file not found: '$configPath'."
+    exit 2
+}
+try {
+    $configRaw = Get-Content -Path $configPath -Raw -Encoding UTF8
+    $syncConfig = $configRaw | ConvertFrom-Json
+} catch {
+    Write-Error "Invalid JSON in config: '$configPath'."
+    exit 2
+}
+
+# Validate config
+Test-SyncConfig -Config $syncConfig -ConfigPath $configPath
+
+# Config directory for resolving relative paths
+$configDir = [System.IO.Path]::GetDirectoryName($configPath)
+
+# Top-level deprecated array (shared across all targets)
+$deprecatedList = @()
+if ($syncConfig.deprecated) {
+    $deprecatedList = @($syncConfig.deprecated)
 }
 
 $startTime = Get-Date
 $allOutput = [System.Text.StringBuilder]::new()
-$previewOutput = [System.Text.StringBuilder]::new()
+$allTargetResults = @()
 $hasAnyChanges = $false
 $hasAnyErrors = $false
 
-for ($t = 0; $t -lt $targetList.Count; $t++) {
-    $targetPath = $targetList[$t]
-    $configPath = $configList[$t]
-
-    # IS-03: Read config
-    if (-not (Test-Path $configPath -PathType Leaf)) {
-        Write-Error "Config file not found: '$configPath'."
-        exit 2
-    }
-    try {
-        $configRaw = Get-Content -Path $configPath -Raw -Encoding UTF8
-        $config = $configRaw | ConvertFrom-Json
-    } catch {
-        Write-Error "Invalid JSON in config: '$configPath'."
-        exit 2
+# Iterate targets array
+foreach ($tgtEntry in $syncConfig.targets) {
+    # Resolve target path relative to config file's directory
+    $targetPath = if ([System.IO.Path]::IsPathRooted($tgtEntry.path)) {
+        $tgtEntry.path
+    } else {
+        [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($configDir, $tgtEntry.path))
     }
 
-    # IS-04: Validate config
-    Test-SyncConfig -Config $config -ConfigPath $configPath
-
-    # IS-04: Check target exists
-    if (-not (Test-Path $targetPath -PathType Container)) {
-        Write-Error "Target path not found: '$targetPath'."
-        exit 4
+    # Resolve source path relative to config file's directory
+    $sourcePath = if ([System.IO.Path]::IsPathRooted($tgtEntry.source)) {
+        $tgtEntry.source
+    } else {
+        [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($configDir, $tgtEntry.source))
     }
 
-    $configDir = [System.IO.Path]::GetDirectoryName($configPath)
+    # Check source exists
+    if (-not (Test-Path $sourcePath -PathType Container)) {
+        Write-Error "Source path not found: '$sourcePath' for target '$($tgtEntry.path)'."
+        exit 3
+    }
 
-    foreach ($srcEntry in $config.sources) {
-        # Resolve source path relative to config file's directory
-        $sourcePath = if ([System.IO.Path]::IsPathRooted($srcEntry.source)) {
-            $srcEntry.source
-        } else {
-            [System.IO.Path]::GetFullPath([System.IO.Path]::Join($configDir, $srcEntry.source))
-        }
+    # Check target exists (create if missing for execute mode)
+    $targetExists = Test-Path $targetPath -PathType Container
+    if (-not $targetExists -and $execute) {
+        New-Item -ItemType Directory -Path $targetPath -Force | Out-Null
+        $targetExists = $true
+    }
 
-        # IS-14: Source filtering
-        $sourceMatches = $false
-        foreach ($filterSource in $sourceList) {
-            $filterFull = [System.IO.Path]::GetFullPath($filterSource)
-            if ($sourcePath -ieq $filterFull) {
-                $sourceMatches = $true
-                break
-            }
-        }
-        if (-not $sourceMatches) { continue }
+    # Discover and filter source files
+    $allFiles = Get-SourceFiles -SourceRoot $sourcePath
+    $filterResult = Invoke-FileFilter -TargetEntry $tgtEntry -Files $allFiles
 
-        # IS-03: Check source exists
-        if (-not (Test-Path $sourcePath -PathType Container)) {
-            Write-Error "Source path not found: '$sourcePath'."
-            exit 3
-        }
+    Write-VerboseLog "Target: '$($tgtEntry.path)'"
+    Write-VerboseLog "  Source: '$sourcePath'"
+    Write-VerboseLog "  Total files: $($allFiles.Count)"
+    Write-VerboseLog "  Included: $($filterResult.Included.Count)"
+    Write-VerboseLog "  Excluded: $($filterResult.Excluded.Count)"
 
-        # IS-05: Discover and filter source files
-        $allFiles = Get-SourceFiles -SourceRoot $sourcePath
-        $filterResult = Invoke-FileFilter -SourceEntry $srcEntry -Files $allFiles
+    # Compare against target
+    $neverOverwrite = @($tgtEntry.never_overwrite)
+    if (-not $neverOverwrite) { $neverOverwrite = @() }
 
-        Write-VerboseLog "Source: '$sourcePath'"
-        Write-VerboseLog "  Total files: $($allFiles.Count)"
-        Write-VerboseLog "  Included: $($filterResult.Included.Count)"
-        Write-VerboseLog "  Excluded: $($filterResult.Excluded.Count)"
+    $results = Compare-Files -SourceFiles $filterResult.Included -TargetRoot $targetPath -Deprecated $deprecatedList -NeverOverwrite $neverOverwrite -LastSync $syncConfig.last_sync
 
-        # IS-07, IS-08: Compare against target
-        # Deprecated files come from -deprecated parameter (source-level), not per-target config
-        $deprecatedList = @()
-        if ($deprecated) {
-            $deprecatedList = $deprecated | ConvertFrom-Json
-        }
-        $neverOverwrite = @($srcEntry.never_overwrite)
-        $results = Compare-Files -SourceFiles $filterResult.Included -TargetRoot $targetPath -Deprecated $deprecatedList -NeverOverwrite $neverOverwrite -LastSync $config.last_sync
+    # Collect for markdown preview
+    $allTargetResults += @{
+        Path = $tgtEntry.path
+        Results = $results
+        Excluded = $filterResult.Excluded
+    }
 
-        # Check for changes
-        $changes = $results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE', 'SKIP') }
-        if ($changes.Count -gt 0) { $hasAnyChanges = $true }
+    # Check for changes
+    $changes = @($results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE', 'SKIP') })
+    if ($changes.Count -gt 0) { $hasAnyChanges = $true }
 
-        if ($diff) {
-            # IS-20: Generate diff report
-            $report = New-DiffReport -Results $results -SourcePath $srcEntry.source -TargetPath $targetPath -ConfigPath $configPath -Excluded $filterResult.Excluded -VerboseMode:$showVerbose -StartTime $startTime
-            [void]$allOutput.AppendLine($report)
-            [void]$allOutput.AppendLine('')
-
-            # Generate template-formatted preview
-            $preview = New-PreviewReport -Results $results -TargetPath $targetPath -Excluded $filterResult.Excluded
-            [void]$previewOutput.AppendLine($preview)
-        } elseif ($execute) {
-            # IS-11, IS-21: Execute operations
-            $execResult = Invoke-Execute -Results $results -SourcePath $srcEntry.source -TargetPath $targetPath -ConfigPath $configPath
-            [void]$allOutput.AppendLine($execResult.Output)
-            [void]$allOutput.AppendLine('')
-            if ($execResult.HasErrors) { $hasAnyErrors = $true }
-        }
+    if ($diff) {
+        $report = New-DiffReport -Results $results -SourcePath $tgtEntry.source -TargetPath $tgtEntry.path -ConfigPath $configPath -Excluded $filterResult.Excluded -VerboseMode:$showVerbose -StartTime $startTime
+        [void]$allOutput.AppendLine($report)
+        [void]$allOutput.AppendLine('')
+    } elseif ($execute) {
+        $execResult = Invoke-Execute -Results $results -SourcePath $tgtEntry.source -TargetPath $tgtEntry.path -ConfigPath $configPath
+        [void]$allOutput.AppendLine($execResult.Output)
+        [void]$allOutput.AppendLine('')
+        if ($execResult.HasErrors) { $hasAnyErrors = $true }
     }
 }
 
 # Output
 $outputContent = $allOutput.ToString().TrimEnd()
 
-# Write preview file if requested (template-formatted, for chat presentation)
+# Write markdown preview file if requested (diff mode only)
 if ($preview_file -and $diff) {
     $previewFileFull = [System.IO.Path]::GetFullPath($preview_file)
-    $previewContent = $previewOutput.ToString().TrimEnd()
-    $previewContent | Set-Content -Path $previewFileFull -Encoding UTF8
-    Write-Output "Preview written to: '$previewFileFull'"
+    $firstSource = if ($syncConfig.targets.Count -gt 0) { $syncConfig.targets[0].source } else { 'unknown' }
+    $markdownPreview = New-MarkdownPreview -AllTargetResults $allTargetResults -DeprecatedFiles $deprecatedList -SourcePath $firstSource -TargetCount $syncConfig.targets.Count
+    $markdownPreview | Set-Content -Path $previewFileFull -Encoding UTF8
+    Write-Output "Preview written to: '$previewFileFull'."
 }
 
 if ($output_file) {
     $outputFileFull = [System.IO.Path]::GetFullPath($output_file)
     $outputContent | Set-Content -Path $outputFileFull -Encoding UTF8
-
-    # Print summary to stdout
-    $adds = ($outputContent | Select-String '(\d+) add' -AllMatches).Matches
-    $totalAdds = 0
-    foreach ($m in $adds) { $totalAdds += [int]$m.Groups[1].Value }
     Write-Output "Summary: see full report at '$outputFileFull'."
 } else {
     Write-Output $outputContent
