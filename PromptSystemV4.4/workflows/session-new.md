@@ -17,13 +17,19 @@ Check if the user has given you a [SESSION_FOLDER] to work in.
 
 If path already contains NOTES.md, PROGRESS.md, PROBLEMS.md and no new work stream requested: Execute `/session-load` instead.
 
-## Step 2: Create Session Folder
+## Step 2: Collect Session Goal
 
-If no [SESSION_FOLDER] provided, create one in the default sessions folder with naming scheme:
+If no [SESSION_FOLDER] provided, the user MUST provide a brief description of the session goal or topic. This is required to create a correctly named session folder.
+
+If the user invokes `/session-new` without specifying a goal or topic, infer it from the conversation context (user's current request, open files, recent messages). If no goal can be inferred, state: "Please provide a brief description of the session goal or topic for the session folder name."
+
+## Step 3: Create Session Folder
+
+Create a session folder in the default sessions folder with naming scheme:
 `_YYYY-MM-DD_[PROBLEM_DESCRIPTION]/`
-[PROBLEM_DESCRIPTION] should contain only alphanumerical characters without spaces.
+[PROBLEM_DESCRIPTION] is derived from the session goal collected in Step 2. Should contain only alphanumerical characters without spaces.
 
-## Step 3: Create Session Documents
+## Step 4: Create Session Documents
 
 In the [SESSION_FOLDER], create tracking files from @skills:session-management templates:
 
@@ -31,7 +37,7 @@ In the [SESSION_FOLDER], create tracking files from @skills:session-management t
 - `PROGRESS.md` - Include "Phase Plan" section with 5 phases
 - `PROBLEMS.md` - Derive and list all problems from user's initial request. Each problem gets unique ID `[TOPIC]-PR-[NNN]` and goes in "Open" section
 
-## Step 4: Initialize Phase Tracking
+## Step 5: Initialize Phase Tracking
 
 Add to NOTES.md:
 ```markdown
@@ -50,7 +56,7 @@ Add to PROGRESS.md:
 - [ ] **DESIGN** - pending
 ```
 
-## Step 5: Document Agent Instructions
+## Step 6: Document Agent Instructions
 
 **Session documents**: See `promptsystem-core.md` sections "Document Types" and "Tracking Documents" for full list and usage.
 
