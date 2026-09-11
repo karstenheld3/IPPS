@@ -208,5 +208,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **WSWN** - What? So What? Now What? (reflective framework deep research, Borton/Driscoll/Rolfe) - 2026-04-12
 - **WSTKTRAC** - Windsurf Token Logging (token usage tracking via hooks) - 2026-01-17
 - **WRTPRMPT** - Write Prompts Workflow (prompt queue file generation for sequential headless execution) - 2026-08-31
+- **ASCIIART** - ASCII Art Guidelines (creation guidelines, rules, and helper scripts for ASCII art in markdown) - 2026-09-10
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow) - 2026-05-05
 - **ZAIINT** - Z.AI Integration (GLM model integration into llm-evaluation skill) - 2026-01-17
+- **PWRSKILL** - Playwright MCP Skill Improvements (download handling, upload button fixes) - 2026-09-11
