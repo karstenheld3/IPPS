@@ -36,7 +36,7 @@ Core definitions and structure for the development system.
 - **[RULES]**: The current set of agent specs in `[AGENT_FOLDER]/specs/`
 - **[WORKFLOWS]**: The current set of agent workflows in `[AGENT_FOLDER]/workflows/`
 - **[SKILLS]**: Agent Skills in `[AGENT_FOLDER]/skills/`
-- **[GRUC]**: Guides, Rules, Checks - pre-calculated compliance criteria. GUIDE + RULES in each skill folder; CHECKS in each skill folder (for skills) or `drift-correction/` (for workflows). Exception: `write-documents` keeps all GRUC types in its own folder.
+- **[GRUC]**: Guides, Rules, Checks - pre-calculated compliance criteria. GUIDE + RULES in each skill folder; CHECKS in each skill folder (for skills) or `drift-control/` (for workflows). Exception: `write-documents` keeps all GRUC types in its own folder.
 
 ### Document Types
 

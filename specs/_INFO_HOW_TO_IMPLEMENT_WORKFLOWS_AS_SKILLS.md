@@ -124,7 +124,7 @@ Combined with ~8-12 domain skills (model-triggered) for auto-discovery:
 **20 skills** (file counts):
 - Heavy: `write-documents` (30), `deep-research` (23), `travel-info` (14), `coding-conventions` (13), `llm-transcription` (12)
 - Medium: `llm-computer-use` (9), `ms-playwright-mcp` (8), `pdf-tools` (8), `windsurf-auto-model-switcher` (8), `session-management` (7), `youtube-downloader` (7)
-- Light: `drift-correction` (5), `google-account` (3), `playwriter-mcp` (3), `git` (2), `github` (2), `windows-desktop-control` (2), `edird-phase-planning` (1), `git-conventions` (1)
+- Light: `drift-control` (5), `google-account` (3), `playwriter-mcp` (3), `git` (2), `github` (2), `windows-desktop-control` (2), `edird-phase-planning` (1), `git-conventions` (1)
 - Data-heavy: `llm-evaluation` (154, mostly model-sources JSON)
 
 **44 workflows** (line counts range 13-495, median ~88 lines)
@@ -362,7 +362,7 @@ One per workflow. Each has `disable-model-invocation: true` / `triggers: ["user"
 
 **`coding-conventions` (existing, 13 files)** - Auto-match: "review code style", "check conventions"
 
-**`drift-correction` (existing, 5 files)** - Auto-match: "check for drift", "correct drift"
+**`drift-control` (existing, 5 files)** - Auto-match: "check for drift", "correct drift"
 
 **`git-conventions` (existing, 1 file)** - Auto-match: "commit this", "prepare commit"
 
@@ -397,7 +397,7 @@ disable-model-invocation: true
 **From `write-documents` domain:** `write-spec`, `write-info`, `write-impl-plan`, `write-test-plan`, `write-strut`, `write-tasks-plan`, `write-minto`, `propose-minto`, `conversation-start`, `conversation-update`, `conversation-draft`
 **From `session-management` domain:** `session-new`, `session-save`, `session-load`, `session-finalize`, `session-archive`
 **From `deep-research` domain:** `research`
-**From `drift-correction` domain:** `drift-detect`, `drift-correct`
+**From `drift-control` domain:** `drift-detect`, `drift-correct`
 **From `git-conventions` domain:** `commit`
 **From `coding-conventions` domain:** `rename`
 **From `quality-assurance` domain:** `critique`, `reconcile`, `verify`, `improve`

@@ -46,7 +46,7 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
    - Where do they apply, how are exceptions or overwrites handled?
 
 5. **How to implement GRUC for each document writing skill?**
-   - More and better `_TEMPLATE.md` files - standardized output across documents, better drift-correction
+   - More and better `_TEMPLATE.md` files - standardized output across documents, better drift-control
    - More and better `_GUIDES.md` files - explain cognitive concepts, goals, processes and approaches to agent
    - More and better `_RULES.md` files - better low-level instruction following by explaining each rule with GOOD and BAD examples
    - More and better `_CHECKS.md` files - better output quality control after generation that is consistent with `_GUIDES.md` files

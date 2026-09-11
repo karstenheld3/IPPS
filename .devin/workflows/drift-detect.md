@@ -19,7 +19,7 @@ Usage:
 
 ## Required Skills
 
-- @skills:drift-correction for drift lenses, context detection, DoD extraction rules, and templates
+- @skills:drift-control for drift lenses, context detection, DoD extraction rules, and templates
 
 ## MUST-NOT-FORGET
 
@@ -45,7 +45,7 @@ Usage:
 
 # CONTEXT-SPECIFIC
 
-Context detection and DoD extraction rules are in `@skills:drift-correction` `DRIFT_DETECTION.md`. Read sections "Context Detection", "Default Sources", and the matching context section.
+Context detection and DoD extraction rules are in `@skills:drift-control` `DRIFT_DETECTION.md`. Read sections "Context Detection", "Default Sources", and the matching context section.
 
 ## No Context Match
 
@@ -94,14 +94,14 @@ Working directory = session folder (SESSION-MODE) or project folder (PROJECT-MOD
 
 **Normal mode** (`/drift-detect` or `/drift-detect [directive]`):
 
-Create `__DRIFT_[TOPIC].md` in working directory using template from `@skills:drift-correction` `DRIFT_TEMPLATE.md`.
+Create `__DRIFT_[TOPIC].md` in working directory using template from `@skills:drift-control` `DRIFT_TEMPLATE.md`.
 
 **Log mode** (`/drift-detect log`):
 
 After writing `__DRIFT_[TOPIC].md` (same as normal mode), ALSO:
 
 1. Append all FAIL and MISSED items to `DRIFTS.md` in current working directory
-2. Use format from `@skills:drift-correction` `DRIFTS_TEMPLATE.md`
+2. Use format from `@skills:drift-control` `DRIFTS_TEMPLATE.md`
 3. If DRIFTS.md does not exist, create with header from template
 
 ### Step 5: REPORT

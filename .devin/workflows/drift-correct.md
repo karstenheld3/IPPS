@@ -20,7 +20,7 @@ Usage:
 
 ## Required Skills
 
-- @skills:drift-correction `DRIFT_CORRECTION.md` for gap closure strategies and correction boundaries
+- @skills:drift-control `DRIFT_CORRECTION.md` for gap closure strategies and correction boundaries
 
 ## MUST-NOT-FORGET
 

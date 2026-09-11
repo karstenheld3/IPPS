@@ -135,7 +135,7 @@ For each DoD item, verify against actual output:
 
 Used by `/drift-detect log` mode. Append-only file that accumulates deviations across multiple runs for later heuristic analysis. Structured for pattern detection across sessions.
 
-Format specification is in `@skills:drift-correction` `DRIFTS_TEMPLATE.md`.
+Format specification is in `@skills:drift-control` `DRIFTS_TEMPLATE.md`.
 
 **Rules:**
 - Append new entries at the end (chronological order, oldest first)

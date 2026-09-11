@@ -1,10 +1,10 @@
-# Drift Correction Skill
+# Drift Control Skill
 
 **Goal**: Drift detection knowledge, correction guidance, and process discipline audit criteria for `/drift-detect` and `/drift-correct`
 
 ## Overview
 
-Drift Correction ensures agents follow instructions completely. This skill provides drift detection knowledge, correction guidance, and CHECKS files used by `/drift-detect` and `/drift-correct` after task completion.
+Drift Control ensures agents follow instructions completely. This skill provides drift detection knowledge, correction guidance, and CHECKS files used by `/drift-detect` and `/drift-correct` after task completion.
 
 ## GRUC File Placement
 
@@ -22,7 +22,7 @@ GRUC (Guides, Rules, Checks) files are distributed by consumer alignment:
 ## File Structure
 
 ```
-drift-correction/
+drift-control/
 ├── SKILL.md                       # This file
 ├── DRIFT_DETECTION.md             # Detection knowledge (drift lenses, DoD extraction)
 ├── DRIFT_CORRECTION.md            # Correction knowledge (gap closure strategies)

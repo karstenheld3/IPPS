@@ -820,7 +820,7 @@ For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) dec
 - [`/drift-detect`](.devin/workflows/drift-detect.md) - Post-execution drift detection
   - **Creates**: `__DRIFT_[TARGET].md` with detected gaps between rules and actual output
   - **Edits**: nothing (creates drift file only)
-  - **When**: After completing a task, to check if the agent followed all rules. Uses drift lenses from `drift-correction/` skill.
+  - **When**: After completing a task, to check if the agent followed all rules. Uses drift lenses from `drift-control/` skill.
 - [`/drift-correct`](.devin/workflows/drift-correct.md) - Close drift gaps identified by `/drift-detect`
   - **Creates**: nothing (applies corrections)
   - **Edits**: the files where drift was detected (fixes rule violations from `__DRIFT_*.md`)
@@ -949,7 +949,7 @@ For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) dec
 
 24 skills in `.devin/skills/`. Skills are knowledge bases the agent reads before executing tasks. They do not run as workflows - they provide procedures, rules, and tool guidance.
 
-- **drift-correction** - Drift detection/correction knowledge for `/drift-detect` and `/drift-correct`. **Effect**: No files. Provides drift lenses and templates consumed by `/drift-detect`. CHECKS files for workflows designed for future use, created on demand.
+- **drift-control** - Drift detection/correction knowledge for `/drift-detect` and `/drift-correct`. **Effect**: No files. Provides drift lenses and templates consumed by `/drift-detect`. CHECKS files for workflows designed for future use, created on demand.
 - **coding-conventions** - Python, PowerShell coding style rules, MECT coding rules. **Effect**: No files. Rules consumed by `/verify` and `/improve` when checking code.
 - **deep-research** - Deep research strategies (MEPI/MCPI), domain-specific patterns. **Effect**: No files. Knowledge consumed by `/deep-research` workflow.
 - **edird-phase-planning** - EDIRD phase model with effort allocation, planning guidance, gates. **Effect**: No files. Rules consumed by `/go` workflow.
@@ -981,7 +981,7 @@ GRUC (Guides, Rules, Checks) files are distributed by consumer alignment:
 - **GUIDE** files - in each skill folder (consumed by working agent before execution)
 - **RULES** files - in each skill folder (consumed by `/verify`, `/improve` after execution)
 - **CHECKS** files for skills - in each skill folder (alongside GUIDE and RULES)
-- **CHECKS** files for workflows - in `drift-correction/` (designed for `/drift-detect` after execution, created on demand per auditable workflow)
+- **CHECKS** files for workflows - in `drift-control/` (designed for `/drift-detect` after execution, created on demand per auditable workflow)
 
 Exception: `write-documents` keeps all GRUC types in its own folder.
 
