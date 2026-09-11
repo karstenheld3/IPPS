@@ -1,11 +1,11 @@
 # INFO: Bundling Workflows with Skills
 
 **Doc ID**: SKLWRKFL-IN01
-**Goal**: Research how to migrate 44 Cascade workflows into a skill-based architecture without folder bloat, given that workflows are deprecated in Devin Local
+**Goal**: Research how to migrate 48 Cascade workflows into a skill-based architecture without folder bloat, given that workflows are deprecated in Devin Local
 
 ## Summary
 
-**Problem:** IPPS has 44 workflows and 20 skills. Devin Local does not support workflows - only skills. Naively migrating each workflow to its own skill = folder bloat + context bloat + detection ceiling exceeded.
+**Problem:** IPPS has 48 workflows and 24 skills. Devin Local does not support workflows - only skills. Naively migrating each workflow to its own skill = folder bloat + context bloat + detection ceiling exceeded.
 
 **The core tension:** Workflows had near-zero context cost (filename listed as available command). Skills load name+description into agent context for every skill, even those never invoked. With 44+ skills, the detection ceiling (32-36) is exceeded and agent selection accuracy degrades.
 
@@ -121,13 +121,13 @@ Combined with ~8-12 domain skills (model-triggered) for auto-discovery:
 
 ## Current IPPS State
 
-**20 skills** (file counts):
+**24 skills** (file counts):
 - Heavy: `write-documents` (30), `deep-research` (23), `travel-info` (14), `coding-conventions` (13), `llm-transcription` (12)
-- Medium: `llm-computer-use` (9), `ms-playwright-mcp` (8), `pdf-tools` (8), `devin-auto-model-switcher` (8), `session-management` (7), `youtube-downloader` (7)
-- Light: `drift-control` (5), `google-account` (3), `playwriter-mcp` (3), `git` (2), `github` (2), `windows-desktop-control` (2), `edird-phase-planning` (1), `git-conventions` (1)
+- Medium: `llm-computer-use` (9), `ms-playwright-mcp` (8), `pdf-tools` (8), `devin-auto-model-switcher` (8), `session-management` (7), `youtube-downloader` (7), `hosting` (19), `seo-tools` (9)
+- Light: `drift-control` (5), `google-account` (3), `playwriter-mcp` (3), `image-tools` (3), `git` (2), `github` (2), `windows-desktop-control` (2), `edird-phase-planning` (1), `git-conventions` (1)
 - Data-heavy: `llm-evaluation` (154, mostly model-sources JSON)
 
-**44 workflows** (line counts range 13-495, median ~88 lines)
+**48 workflows** (line counts range 13-495, median ~88 lines)
 
 **Existing router patterns in IPPS:**
 - `write-documents` SKILL.md lists 12 verbs with "Read template X, guide Y, rules Z" instructions per verb. Workflows like `/write-spec` currently invoke this skill via `@skills:write-documents`.
@@ -155,7 +155,7 @@ Combined with ~8-12 domain skills (model-triggered) for auto-discovery:
 **Pros:**
 - Minimal folders (~10-12 total)
 - Knowledge collocated with router
-- Already working in IPPS V4.2
+- Already working in IPPS V4.4
 
 **Cons:**
 - No per-command autocomplete (user must know subcommands exist)
@@ -242,7 +242,7 @@ Same as Option A, but SKILL.md uses `argument-hint`.
 
 **Token cost:** Same as A (~1000-1200)
 
-### Option E: Domain Router + Selective Wrappers (Recommended)
+### Option E: Domain Router + Selective Wrappers
 
 Hybrid of A and C. Domain skills handle most routing internally. Thin wrappers ONLY for the highest-frequency commands where dedicated autocomplete and description add measurable value.
 
@@ -394,20 +394,20 @@ disable-model-invocation: true
 [full workflow content here, loaded ONLY when user types /verify]
 ```
 
-**From `write-documents` domain:** `write-spec`, `write-info`, `write-impl-plan`, `write-test-plan`, `write-strut`, `write-tasks-plan`, `write-minto`, `propose-minto`, `conversation-start`, `conversation-update`, `conversation-draft`
+**From `write-documents` domain:** `write-spec`, `write-info`, `write-impl-plan`, `write-test-plan`, `write-strut`, `write-tasks-plan`, `write-minto`, `propose-minto`, `write-prompts`, `write-template`, `conversation-start`, `conversation-update`, `conversation-draft`
 **From `session-management` domain:** `session-new`, `session-save`, `session-load`, `session-finalize`, `session-archive`
-**From `deep-research` domain:** `research`
+**From `deep-research` domain:** `research`, `deep-research`
 **From `drift-control` domain:** `drift-detect`, `drift-correct`
 **From `git-conventions` domain:** `commit`
 **From `coding-conventions` domain:** `rename`
-**From `quality-assurance` domain:** `critique`, `reconcile`, `verify`, `improve`
+**From `quality-assurance` domain:** `critique`, `reconcile`, `verify`, `improve`, `fact-check`
 **From `content-processing` domain:** `transcribe`, `translate`
-**From `workspace-management` domain:** `prime`, `cleanup`, `sync`, `remove`, `project-release`
-**From `development` domain:** `build`, `solve`, `implement`, `test`, `bugfix`, `fix`, `partition`
+**From `workspace-management` domain:** `prime`, `cleanup`, `sync`, `remove`, `project-release`, `workspace-setup`, `compare-workspace-setup`, `deploy`
+**From `development` domain:** `implement`, `test`, `bugfix`, `fix`, `investigate`
 **From `knowledge-management` domain:** `fail`, `learn`
 **Standalone:** `go`, `switch-model`
 
-Count: 44 procedure skills (zero context cost on Claude Code)
+Count: 48 procedure skills (zero context cost on Claude Code)
 
 ### Existing Platform/Tool Skills (unchanged, model-triggered)
 
@@ -418,10 +418,10 @@ Count: 12 tool skills in context (~1200 tokens)
 ### Totals
 
 - Model-triggered skills in context: **23** (11 domain + 12 tool) = ~2300 tokens
-- User-only skills NOT in context: **44** (zero tokens on Claude Code)
-- **Grand total: 67 skill folders**, but only **23 consume context tokens**
+- User-only skills NOT in context: **48** (zero tokens on Claude Code)
+- **Grand total: 71 skill folders**, but only **23 consume context tokens**
 - Detection ceiling: 23 model-triggered skills, well under 32-36 limit
-- 44 workflows fully absorbed (0 remaining)
+- 48 workflows fully absorbed (0 remaining)
 
 ## Cross-Platform Strategy
 
@@ -526,6 +526,14 @@ Source: `e:\Dev\KarstensWorkspace\docs\AI-Standards\ACP-AgentClientProtocol_2026
 - SKLWRKFL-IN01-SC-IPPS-ACPR: `e:\Dev\KarstensWorkspace\docs\AI-Standards\ACP-AgentClientProtocol_2026-06-12` [ACP-IN01] - ACP protocol has no skill/workflow/command concept
 
 ## Document History
+
+**[2026-09-11 17:15]**
+- Fixed: Workflow count 44 → 48, skill count 20 → 24 throughout
+- Fixed: Added missing skills to Current IPPS State (hosting, seo-tools, image-tools, playwriter-mcp)
+- Fixed: Procedure skill mapping - removed non-existent workflows (build, solve, partition), added 8 missing workflows (deep-research, deploy, fact-check, investigate, write-prompts, write-template, workspace-setup, compare-workspace-setup)
+- Fixed: Grand total 67 → 71, user-only count 44 → 48
+- Fixed: Version reference V4.2 → V4.4
+- Fixed: Removed stale "(Recommended)" from Option E heading (Option F is the recommendation)
 
 **[2026-08-04 17:50]**
 - Added: ACP section - protocol has no concept of skills/workflows/commands, not a factor in architecture decision
