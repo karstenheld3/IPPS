@@ -136,6 +136,12 @@ Or use the `/sync` workflow which wraps these commands:
 
 <!-- Instructions: Replace placeholder values with your project information. -->
 
+## Prevention Rules (from session fails)
+
+<!-- Instructions: Add project-specific prevention rules here. These are lessons learned from session failures that must be applied going forward. Each rule has a bold label and a one-line description. -->
+
+- **No Ask Tool**: NEVER use the `ask_user_question` tool. Resolve ambiguity through prompt analysis, not interactive prompts. See `agent-behavior.md` Attitude section.
+
 <!-- Conditional: Omit Build/Test, Runtime Environment, and Release Configuration for GENERAL workspaces (WS-CT-09). -->
 
 ## Build/Test Rules
