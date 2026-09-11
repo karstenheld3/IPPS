@@ -217,7 +217,7 @@ You type: /prime, then /session-load
 - [`/write-prompts`](.devin/workflows/write-prompts.md) - Create prompt queue files for sequential headless execution
   - **Creates**: `_PROMPTS_[Topic].md` with numbered prompts for sequential LLM execution
   - **Edits**: nothing (creates new file only)
-  - **When**: Batch operations where each prompt picks up where the last left off (e.g., multi-document transcription, bulk API docs update).
+  - **When**: Batch operations where each prompt picks up where the last left off (e.g., multi-document transcription, bulk API docs update). Also used to give agents more budget per step (see [Agent Budget and Prompt Sequences](#agent-budget-and-prompt-sequences)).
 - [`/propose-minto`](.devin/workflows/propose-minto.md) - Generate 3 scored Agentic Minto (AMINTON) argument candidates
   - **Creates**: `_MINTO_DRAFT_[TOPIC].md` with 3 scored argument trees in AMINTON notation
   - **Edits**: nothing (creates new file only)
@@ -484,7 +484,7 @@ Start a SOLVE task (research, analysis, decisions):
 ```
 **Creates**: session folder, `_INFO_*.md` research document, `__STRUT_*.md` plan. **Edits**: session tracking files. No source code (SOLVE mode produces knowledge, not code).
 
-**When to use**: `/go` is the primary entry point for any task. Use BUILD mode for code changes, new features, bug fixes. Use SOLVE mode for research, technology evaluation, architecture decisions. The agent handles session creation, planning, execution, and cleanup automatically.
+**When to use**: `/go` is the primary entry point for any task. Use BUILD mode for code changes, new features, bug fixes. Use SOLVE mode for research, technology evaluation, architecture decisions. The agent handles session creation, planning, execution, and cleanup automatically. For complex tasks on low-budget agents, consider [`/write-prompts`](#agent-budget-and-prompt-sequences) to decompose work into sequential prompts with more budget each.
 
 ### Session Workflows
 
@@ -781,7 +781,7 @@ I need to update our API docs after the Stripe API revision - all endpoint categ
 /session-archive
 ```
 
-**What happens**: The agent creates 50+ topic files (one per API endpoint category), each with TypeScript and Python examples, verification labels, and source links. The prompt pipeline enables headless execution - each prompt picks up where the last one left off. `/verify` checks that all files have both language examples, correct version dates, and no duplicate topic numbers.
+**What happens**: The agent creates 50+ topic files (one per API endpoint category), each with TypeScript and Python examples, verification labels, and source links. The prompt pipeline enables headless execution - each prompt picks up where the last one left off, giving each step its own model budget (see [Agent Budget and Prompt Sequences](#agent-budget-and-prompt-sequences)). `/verify` checks that all files have both language examples, correct version dates, and no duplicate topic numbers.
 
 **Files created**: `_YYYY-MM-DD_ApiDocsUpdate/` session folder; `_INFO_*.md` research findings; `_PROMPTS_ApiDocsUpdate.md` prompt queue; 50+ topic `.md` files in session subfolders. **Files edited**: `NOTES.md`, `PROGRESS.md` (session tracking); `FAILS.md` (if failures occur).
 
@@ -891,7 +891,7 @@ I need to review a series of cloud cost optimization blog posts and check their 
 #          /sync updates dependent docs
 ```
 
-**Output**: A fully implemented, tested, and documented authentication system. The spec, implementation plan, test plan, and task list are all cross-referenced by ID. If a future session needs to modify the auth system, the agent reads the spec first and understands the design decisions.
+**Output**: A fully implemented, tested, and documented authentication system. The spec, implementation plan, test plan, and task list are all cross-referenced by ID. If a future session needs to modify the auth system, the agent reads the spec first and understands the design decisions. For COMPLEXITY-HIGH tasks like this, low-budget agents may benefit from [`/write-prompts`](#agent-budget-and-prompt-sequences) to decompose EDIRD phases into individual prompts.
 
 **Files created**: `_SPEC_AUTH-SP01.md`, `_IMPL_AUTH-IP01.md`, `_TEST_AUTH-TP01.md`, `TASKS_AUTH.md` in session folder; `__STRUT_*.md` plan; source code in `src/` (auth module, JWT handling, rate limiting). **Files edited**: session tracking files; `FAILS.md` (if failures); existing source files (if modifying existing auth).
 
@@ -944,9 +944,23 @@ I need to review a series of cloud cost optimization blog posts and check their 
 /session-archive
 ```
 
-**What happens**: Each session picks up where the last one left off. The agent reads `PROGRESS.md` to understand current state, `FAILS.md` to avoid past mistakes, and `NOTES.md` for key decisions. Sessions are archived after finalization, but their findings (failures, learnings, decisions) are synced to workspace level and persist forever.
+**What happens**: Each session picks up where the last one left off. The agent reads `PROGRESS.md` to understand current state, `FAILS.md` to avoid past mistakes, and `NOTES.md` for key decisions. Sessions are archived after finalization, but their findings (failures, learnings, decisions) are synced to workspace level and persist forever. For multi-session projects, [`/write-prompts`](#agent-budget-and-prompt-sequences) can decompose each session's work into budgeted prompt sequences.
 
 **Files created**: 3 session folders (`_YYYY-MM-DD_*`); SPEC/IMPL/TEST/TASKS in each; source code in `src/` (routing, auth, pagination). **Files edited**: workspace `FAILS.md`, `LEARNINGS.md` (synced on `/session-finalize`); session `PROGRESS.md` (updated each session).
+
+### Agent Budget and Prompt Sequences
+
+IPPS supports two agent profiles with different budget characteristics:
+
+1. **High budget per prompt** - Agents with large context windows and auto-continue capabilities (e.g., Claude Fable 5 generation, Auto-Continue agents). These agents can handle complex multi-step tasks in a single `/go` execution, maintaining deep context across all EDIRD phases.
+
+2. **Low budget per prompt** - Agents with smaller context windows or per-turn compute limits (e.g., Claude Code with Sonnet 4.x generation models). These agents may hit budget limits during complex tasks, reducing execution depth, completion rate, and instruction following.
+
+For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) decomposes complex work into a `_PROMPTS_[Topic].md` file where each prompt is a separate turn. Each prompt receives the agent's full context engineering and compute budget, as if it were a fresh submission. This gives the agent more budget per step without sacrificing sequence coherence - later prompts see all earlier conversation history.
+
+**When to use prompt sequences**: Complex tasks with many steps (50+ file creations, multi-phase research, bulk transformations). The prompt file ensures each step gets full model budget instead of competing for a shrinking budget pool within a single `/go` run.
+
+**When NOT to use**: Simple tasks (single file edit, quick research, one-shot generation). The overhead of writing a prompt file outweighs the budget benefit.
 
 ## Agentic English
 
