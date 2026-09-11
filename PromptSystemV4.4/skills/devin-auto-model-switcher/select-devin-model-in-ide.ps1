@@ -1,4 +1,4 @@
-# Windsurf Auto Model Switcher - Select specific model by query
+# Devin Auto Model Switcher - Select specific model by query
 # Opens model selector (Ctrl+Shift+F9), types query, selects first match
 
 param(
