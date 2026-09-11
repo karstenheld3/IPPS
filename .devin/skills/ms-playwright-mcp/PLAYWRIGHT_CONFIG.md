@@ -139,12 +139,12 @@ Workspace hash derived from MCP client's workspace root - different projects get
 
 **Stdio (default)** - MCP client spawns server:
 ```json
-{"mcpServers": {"playwright": {"command": "npx", "args": ["@playwright/mcp@latest"]}}}
+{"mcpServers": {"playwright": {"command": "npx", "args": ["@playwright/mcp@latest", "--allow-unrestricted-file-access"]}}}
 ```
 
 **HTTP/SSE** - Standalone server (for headed browser on headless systems):
 ```bash
-npx @playwright/mcp@latest --port 8931
+npx @playwright/mcp@latest --allow-unrestricted-file-access --port 8931
 ```
 Client: `{"mcpServers": {"playwright": {"url": "http://localhost:8931/mcp"}}}`
 

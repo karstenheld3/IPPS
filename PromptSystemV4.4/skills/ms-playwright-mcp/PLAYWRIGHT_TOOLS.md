@@ -16,7 +16,7 @@ Complete tool catalog for `@playwright/mcp` v0.0.70 (21 core + 40 opt-in). Tool 
 - `browser_drag` - Drag and drop between two elements
 - `browser_select_option` - Select dropdown option(s) by value text
 - `browser_press_key` - Press keyboard key (e.g., "Enter", "Control+A", "End")
-- `browser_file_upload` - Upload files by path
+- `browser_file_upload` - Upload files by path. **File chooser interceptor**: click upload button FIRST to open native dialog, then call this with `paths` (array of ABSOLUTE paths). No `ref`/`selector` param. See SKILL.md procedure #8
 - `browser_handle_dialog` - Accept/dismiss alert, confirm, or prompt dialogs
 
 **Inspection (read-only):**

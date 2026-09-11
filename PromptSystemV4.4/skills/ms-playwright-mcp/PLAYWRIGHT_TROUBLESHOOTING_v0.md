@@ -65,7 +65,6 @@ Common issues ordered by frequency.
 - Calling `browser_file_upload` without clicking upload button first (no dialog to intercept)
 - Using relative paths (must be absolute)
 - Trying to pass `ref` or `selector` (tool only accepts `paths` array)
-- Path outside workspace roots without `--allow-unrestricted-file-access` flag
 
 ## Downloaded file not found
 

@@ -26,7 +26,7 @@ Workflow guidance for Microsoft Playwright MCP server. Tool parameters are deliv
 6. `browser_fill_form` takes `fields` array (NOT `browser_fill`). `browser_take_screenshot` (NOT `browser_screenshot`)
 7. Opt-in tools need `--caps` flag. Cookie read needs `--caps=storage`. Route mocking needs `--caps=network`
 8. `browser_evaluate` runs in browser (no Node.js APIs). `browser_run_code` runs server-side with Playwright `page` object
-9. Downloads go to `--output-dir` path. Default: `.playwright-mcp/` under the IDE installation folder (e.g., `[LOCALAPPDATA]\Programs\Devin\.playwright-mcp\`). NOT the system Downloads folder. File names are typically UUIDs (e.g., `765984ac-5fcb-4bad-9aa3-e4163a93fa5d`) or descriptive names from the server. Use `Get-ChildItem "[LOCALAPPDATA]\Programs\Devin\.playwright-mcp" -File | Sort-Object LastWriteTime -Descending | Select-Object -First 10 FullName, Length, LastWriteTime` to find recent downloads. For PDFs, extract text with poppler: `& "[TOOLS]\poppler\Library\bin\pdftotext.exe" "<path>" -`
+9. Downloads go to `--output-dir` (NOT system Downloads). File names are UUIDs. After downloading, locate in output dir, then MOVE + RENAME. See [Download a File](#7-download-a-file). NEVER search in `~/Downloads` or `%USERPROFILE%\Downloads`
 10. Extension mode: Chrome/Edge only, uses Chrome Web Store extension, NOT `--remote-debugging-port`
 11. **`fullPage: true` + `type: "jpeg"` is MANDATORY for research, archival, or source-validation screenshots.** Viewport-only (`fullPage: false`) captures ~900px of a 5,000-20,000px page - missing 80-95% of content. PNG produces 3-5x larger files than JPEG with no benefit for text pages. Only use viewport for UI debugging or above-the-fold checks. (GLOB-FL-0042)
 
@@ -40,7 +40,8 @@ Workflow guidance for Microsoft Playwright MCP server. Tool parameters are deliv
 - **Use an already logged-in browser** → Extension mode (`--extension`). See [PLAYWRIGHT_AUTHENTICATION.md](PLAYWRIGHT_AUTHENTICATION.md)
 - **Scrape data** → `browser_evaluate` with JS to extract DOM content, or `browser_snapshot` for structured text
 - **Test a web UI** → Navigate, snapshot, assert elements present, use `--caps=testing` for verification tools
-- **Download a file** → Find link with snapshot, click to download, check output dir
+- **Download a file** → Click download link, find file in output dir (NOT Downloads), move + rename. See [Download a File](#7-download-a-file)
+- **Upload a file** → Click upload button to trigger file chooser, then `browser_file_upload` with absolute paths. See [Upload a File](#8-upload-a-file)
 - **Interact with a map / canvas / custom widget** → Need `--caps=vision` for coordinate-based click/drag
 - **Mock API responses** → Need `--caps=network`, use `browser_route` with URL pattern
 - **Handle cookie/General Data Protection Regulation (GDPR) popups** → Snapshot, find accept/reject button, click it. See [Dismiss Cookie Popup](#5-dismiss-cookiegdpr-popup)
@@ -120,6 +121,40 @@ If popup uses iframe: snapshot may show it nested. Try clicking by text selector
 
 For infinite scroll: repeat scroll+wait+snapshot in a loop until content stops changing.
 
+### 7. Download a File
+
+```
+1. browser_snapshot()                              # Find download link/button
+2. browser_click(ref: "e15", element: "Download PDF")
+3. browser_wait_for(time: 3)                        # Wait for download to complete
+4. # Find the file in the output dir (NOT Downloads folder):
+   #   Get-ChildItem "$env:LOCALAPPDATA\Programs\Devin\.playwright-mcp" -File |
+   #     Sort-Object LastWriteTime -Descending | Select-Object -First 1 FullName
+5. # Move + rename to desired location:
+   #   Move-Item "$env:LOCALAPPDATA\Programs\Devin\.playwright-mcp\<uuid-name>" "C:\Desired\Path\meaningful-name.pdf"
+```
+
+Downloads go to `--output-dir` with random UUID filenames. ALWAYS locate there, then move + rename. NEVER search in `~/Downloads` or `%USERPROFILE%\Downloads`.
+
+For PDFs, extract text with poppler: `& "[TOOLS]\poppler\Library\bin\pdftotext.exe" "<path>" -`
+
+### 8. Upload a File
+
+```
+1. browser_snapshot()                              # Find upload button
+2. browser_click(ref: "e10", element: "Upload button")
+   # ^ This triggers a native file chooser dialog
+3. browser_file_upload(paths: ["C:\\path\\to\\file.pdf"])
+   # ^ Provides the file to the dialog. MUST use ABSOLUTE paths.
+4. browser_snapshot()                              # Verify upload started/completed
+```
+
+`browser_file_upload` is a **file chooser interceptor** - it responds to the native dialog opened by clicking an upload button. It takes ONLY `paths` (array of absolute file paths) - no `ref` or `selector`.
+
+**Critical**: You MUST click the upload button FIRST to trigger the file chooser, THEN call `browser_file_upload`. Calling it without a dialog open does nothing. Calling it with relative paths fails silently.
+
+**Path restriction**: Without `--allow-unrestricted-file-access`, uploads restricted to MCP workspace roots. All Quick Config examples include this flag by default.
+
 ## Element Targeting
 
 Two methods (v0.0.69+):
@@ -159,22 +194,25 @@ Enable all: `--caps vision,pdf,devtools,network,storage,testing,config`. Tool de
 - **`--no-sandbox` warning is cosmetic** - Browser works correctly. Required in Docker/WSL2
 - **Default screenshot format is PNG** - Always specify `type: "jpeg"` for smaller files
 - **Profile lock error** - Previous Chrome didn't shut down cleanly. Close Chrome instances or delete lock file
+- **Downloads NOT in Downloads folder** - Playwright saves to `--output-dir` with UUID filenames, NOT system Downloads. See [Download a File](#7-download-a-file)
+- **Upload requires click THEN file_upload** - `browser_file_upload` intercepts file chooser dialog. No `ref`/`selector` - just `paths` array. See [Upload a File](#8-upload-a-file)
+- **Uploads restricted to workspace roots** - Without `--allow-unrestricted-file-access`, `browser_file_upload` only accepts paths within MCP workspace roots. All Quick Config examples include this flag by default. See [Upload a File](#8-upload-a-file)
 
 ## Quick Config
 
 **Basic (persistent profile, default):**
 ```json
-{"mcpServers": {"playwright": {"command": "npx", "args": ["@playwright/mcp@latest"]}}}
+{"mcpServers": {"playwright": {"command": "npx", "args": ["@playwright/mcp@latest", "--allow-unrestricted-file-access"]}}}
 ```
 
 **Persistent profile with all capabilities:**
 ```json
-{"mcpServers": {"playwright": {"command": "npx", "args": ["@playwright/mcp@latest", "--caps", "vision,pdf,devtools,network,storage,testing,config"]}}}
+{"mcpServers": {"playwright": {"command": "npx", "args": ["@playwright/mcp@latest", "--allow-unrestricted-file-access", "--caps", "vision,pdf,devtools,network,storage,testing,config"]}}}
 ```
 
 **Extension mode (existing browser):**
 ```json
-{"mcpServers": {"playwright": {"command": "npx", "args": ["@playwright/mcp@latest", "--extension"]}}}
+{"mcpServers": {"playwright": {"command": "npx", "args": ["@playwright/mcp@latest", "--extension", "--allow-unrestricted-file-access"]}}}
 ```
 
 Full config reference: [PLAYWRIGHT_CONFIG.md](PLAYWRIGHT_CONFIG.md)

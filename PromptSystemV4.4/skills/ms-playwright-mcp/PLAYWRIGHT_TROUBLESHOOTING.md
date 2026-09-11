@@ -53,6 +53,31 @@ Common issues ordered by frequency.
 **Cause:** Opt-in tools need `--caps` flag.
 **Fix:** Add required capability: `--caps storage` for cookie tools, `--caps network` for route mocking, `--caps vision` for coordinate-based interactions.
 
+## Upload button does nothing
+
+**Cause:** `browser_file_upload` is a file chooser interceptor, not a click action. Calling it without a dialog open does nothing.
+**Fix:** Click the upload button FIRST to trigger the native file chooser, THEN call `browser_file_upload` with absolute paths:
+```
+1. browser_click(ref: "e10", element: "Upload button")  # Opens file chooser
+2. browser_file_upload(paths: ["C:\\path\\to\\file.pdf"])  # Provides file to dialog
+```
+**Common mistakes:**
+- Calling `browser_file_upload` without clicking upload button first (no dialog to intercept)
+- Using relative paths (must be absolute)
+- Trying to pass `ref` or `selector` (tool only accepts `paths` array)
+- Path outside workspace roots without `--allow-unrestricted-file-access` flag
+
+## Downloaded file not found
+
+**Cause:** Playwright saves downloads to `--output-dir` (default: `[LOCALAPPDATA]\Programs\Devin\.playwright-mcp\`) with UUID filenames. NOT the system Downloads folder.
+**Fix:** Search the output dir for the most recent file, then move + rename:
+```powershell
+Get-ChildItem "$env:LOCALAPPDATA\Programs\Devin\.playwright-mcp" -File |
+  Sort-Object LastWriteTime -Descending | Select-Object -First 1 FullName
+# Then: Move-Item "<source>" "C:\Desired\Path\meaningful-name.ext"
+```
+NEVER search in `~/Downloads` or `%USERPROFILE%\Downloads`.
+
 ## Automation detected by website
 
 **Mitigations:**
