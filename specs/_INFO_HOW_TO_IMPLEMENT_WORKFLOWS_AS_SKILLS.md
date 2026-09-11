@@ -123,7 +123,7 @@ Combined with ~8-12 domain skills (model-triggered) for auto-discovery:
 
 **20 skills** (file counts):
 - Heavy: `write-documents` (30), `deep-research` (23), `travel-info` (14), `coding-conventions` (13), `llm-transcription` (12)
-- Medium: `llm-computer-use` (9), `ms-playwright-mcp` (8), `pdf-tools` (8), `windsurf-auto-model-switcher` (8), `session-management` (7), `youtube-downloader` (7)
+- Medium: `llm-computer-use` (9), `ms-playwright-mcp` (8), `pdf-tools` (8), `devin-auto-model-switcher` (8), `session-management` (7), `youtube-downloader` (7)
 - Light: `drift-control` (5), `google-account` (3), `playwriter-mcp` (3), `git` (2), `github` (2), `windows-desktop-control` (2), `edird-phase-planning` (1), `git-conventions` (1)
 - Data-heavy: `llm-evaluation` (154, mostly model-sources JSON)
 

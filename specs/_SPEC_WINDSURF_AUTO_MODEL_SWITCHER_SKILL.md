@@ -1,4 +1,4 @@
-# SPEC: Windsurf Auto Model Switcher
+# SPEC: Devin Auto Model Switcher
 
 **Doc ID**: AMSW-SP01
 **Goal**: Document the model switching system for Windsurf Cascade
@@ -14,7 +14,7 @@
 ## Table of Contents
 
 1. [Components](#components)
-2. [Skill: windsurf-auto-model-switcher](#skill-windsurf-auto-model-switcher)
+2. [Skill: devin-auto-model-switcher](#skill-devin-auto-model-switcher)
 3. [Workflow: switch-model](#workflow-switch-model)
 4. [Rule: cascade-model-switching](#rule-cascade-model-switching)
 5. [PromptSystem Integration](#promptsystem-integration)
@@ -25,14 +25,14 @@
 
 The model switching system consists of three PromptSystem pieces:
 
-- **Skill** (`windsurf-auto-model-switcher`) - Scripts and registry for model switching mechanics
+- **Skill** (`devin-auto-model-switcher`) - Scripts and registry for model switching mechanics
 - **Workflow** (`switch-model.md`) - User-facing workflow for manual tier switching
 - **Rule** (`cascade-model-switching.md`) - Guidelines for autonomous agent switching
 
-## Skill: windsurf-auto-model-switcher
+## Skill: devin-auto-model-switcher
 
 **Source**: `DevSystemV3.2/skills/windsurf-auto-model-switcher/`
-**Deployed**: `.devin/skills/windsurf-auto-model-switcher/`
+**Deployed**: `.devin/skills/devin-auto-model-switcher/`
 
 ### Files
 
@@ -180,7 +180,7 @@ Hints are recommendations - agent decides based on actual task.
 
 ### Implemented [TESTED]
 
-- Skill: `windsurf-auto-model-switcher` with fuzzy matching and dry-run
+- Skill: `devin-auto-model-switcher` with fuzzy matching and dry-run
 - Workflow: `/switch-model` with HIGH/MID/LOW tiers
 - Rule: `cascade-model-switching.md` with safety conditions
 - Registry: `windsurf-model-registry.json` with 68 models and costs
