@@ -48,7 +48,7 @@ Document Placement (DP)
 - WS-DP-03: Document type prefix must match folder placement
 - WS-DP-04: Unprefixed rules files with enforceable IDs belong in specs/
 - WS-DP-05: INFO files may reside in specs/ only if referenced as SPEC dependency
-- WS-DP-06: specs/ and docs/ folders are optional, not auto-created
+- WS-DP-06: Folder enforcement tiers (optional by default, enforced with workspace-management)
 
 ## WS-FL-01: Required DevRepo Files
 
