@@ -86,16 +86,17 @@ AMINTON provides arguments    → Tree notation for structured, verifiable Minto
 - [Core Concepts](#core-concepts)
 - [Overview](#overview)
 - [How to Add to Your Project](#how-to-add-to-your-project)
+- [Usage Examples](#usage-examples)
 - [Workflows Reference](#workflows-reference)
 - [Skills Reference](#skills-reference)
 - [File Naming Conventions](#file-naming-conventions)
-- [Usage Examples](#usage-examples)
 - [Agentic English](#agentic-english)
 - [EDIRD Phase Model](#edird-phase-model---explore-design-implement-refine-deliver)
 - [STRUT - Structured Thinking](#strut---structured-thinking)
 - [TRACTFUL - Document Framework](#tractful---document-framework)
 - [Agentic Concepts and Strategies](#agentic-concepts-and-strategies)
 - [Key Conventions](#key-conventions)
+- [Skill Details](#skill-details)
 - [Agent Tools](#agent-tools)
 - [Project Structure](#project-structure)
 - [Workspaces and Sessions](#workspaces-and-sessions)
@@ -136,20 +137,21 @@ your-project/
 ```
 
 Then configure workspace files:
-1. **NOTES.md** — Copy from [DEV_REPO_NOTES_TEMPLATE.md](.devin/skills/workspace-management/DEV_REPO_NOTES_TEMPLATE.md), set `[WORKSPACE_FOLDER]` and other constants
-2. **ID-REGISTRY.md** — Copy from [ID-REGISTRY_TEMPLATE.md](.devin/skills/workspace-management/ID-REGISTRY_TEMPLATE.md), add your project topics
-3. **SOPS.md** — Create standard operating procedures for your project
-4. **SETUP.md** — Run in each skill folder that requires external tools (pdf-tools, llm-evaluation, github, etc.)
+1. **NOTES.md** — Write project name, goal, and any instructions for the agent. Similar to `AGENTS.md` - just write whatever you want the agent to know. Tip: Add `read AGENTS.md` if you already have an AGENTS.md file.
+2. **ID-REGISTRY.md** (optional) — Copy from [ID-REGISTRY_TEMPLATE.md](.devin/skills/workspace-management/ID-REGISTRY_TEMPLATE.md). Will be used by agent to avoid ID conflicts.
+3. **SOPS.md** (optional) — Create standard operating procedures for your project
+4. **SETUP.md** (optional) — Run in each skill folder that requires external tools (pdf-tools, llm-evaluation, github, etc.)
 
-Or run [`/workspace-setup`](.devin/workflows/workspace-setup.md) for an interactive guided setup.
+For complex software development projects and multi-repo workspaces use [`/prime /workspace-setup`](.devin/workflows/workspace-setup.md) for an interactive guided setup using the [workspace questionnaire](.devin/skills/workspace-management/WORKSPACE_SETUP_QUESTIONNAIRE.md) to generate all required files interactively.
 
-### Quick Start (3 steps)
+### Quick Start
 
-1. **Copy `.devin/` to your project root** - That's it. The agent now has rules, workflows, and skills.
-2. **Create `NOTES.md`** - Copy the template, fill in your project name and goal. This is the first file the agent reads.
+Choose one of three setup options:
+
+**Option 1: Manual setup with NOTES.md** (full control)
+1. **Copy `.devin/` to your project root** - The agent now has rules, workflows, and skills.
+2. **Create `NOTES.md`** - Write project name, goal, and any instructions for the agent. This is the first file the agent reads. Similar to `AGENTS.md` - just write whatever you want the agent to know.
 3. **Start working** - Type `/prime` in your IDE chat, then `/go "your task description"`. The agent handles the rest.
-
-### What happens after setup?
 
 ```
 You type: /prime
@@ -167,284 +169,52 @@ You type: /prime, then /session-load
   → Agent reads session PROGRESS.md, picks up where it left off
 ```
 
-## Workflows Reference
-
-48 workflows in `.devin/workflows/`. Workflows are invoked by typing the slash command in your IDE chat (e.g., `/go`, `/verify`).
-
-**Entry Points** - Start here. Use `/prime` at session start, `/go` for any task.
-- [`/go`](.devin/workflows/go.md) - Autonomous loop until goal reached (BUILD or SOLVE mode, auto-creates session, follows EDIRD)
-  - **Creates**: session folder (`_YYYY-MM-DD_Topic/`) with `NOTES.md`, `PROBLEMS.md`, `PROGRESS.md`; SPEC/IMPL/TEST/TASKS documents in session folder; `__STRUT_*.md` plan files; source code files in `src/`
-  - **Edits**: source code, session tracking files, `FAILS.md` (on failures), `LEARNINGS.md` (on learning)
-  - **When**: Primary entry point for any task. Pass a goal string: `/go "Add user auth"`. Run without arguments to resume.
-- [`/prime`](.devin/workflows/prime.md) - Prime context with workspace files
-  - **Creates**: nothing (read-only)
-  - **Edits**: nothing (read-only)
-  - **When**: At the start of every session. Reads `!NOTES.md`, `PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`, `ID-REGISTRY.md`, all `.devin/rules/*.md`
-
-**Document Cycle** - Spec-Driven Development pipeline. Use for COMPLEXITY-MEDIUM/HIGH features.
-- [`/research`](.devin/workflows/research.md) - Structured research with verification labels and source retention
-  - **Creates**: `_INFO_[TOPIC].md` in session folder (research findings with `[VERIFIED]`/`[ASSUMED]` labels, source links)
-  - **Edits**: nothing (creates new file only)
-  - **When**: Gathering information before writing a spec. Use for any research that needs source tracking.
-- [`/deep-research`](.devin/workflows/deep-research.md) - Deep research (MEPI or MCPI) with domain-specific patterns
-  - **Creates**: `_INFO_[TOPIC].md` with multi-source analysis; `__TASKS_[TOPIC]_RESEARCH.md` (scaffolding for research tracking)
-  - **Edits**: nothing (creates new files only)
-  - **When**: Multi-source technology evaluation, product comparison, or any question requiring thorough investigation with MEPI (curated options) or MCPI (exhaustive options) patterns.
-- [`/write-info`](.devin/workflows/write-info.md) - Create INFO document from research
-  - **Creates**: `_INFO_[TOPIC].md` from template, populated with research findings
-  - **Edits**: nothing (creates new file only)
-  - **When**: Formalize research findings into a structured document with source IDs and verification labels.
-- [`/write-spec`](.devin/workflows/write-spec.md) - Create specification from requirements
-  - **Creates**: `_SPEC_[TOPIC].md` with FR (requirements), DD (design decisions), IG (implementation guarantees), AC (acceptance criteria)
-  - **Edits**: nothing (creates new file only)
-  - **When**: Before implementation. Defines WHAT to build, not HOW. Required for COMPLEXITY-MEDIUM/HIGH.
-- [`/write-impl-plan`](.devin/workflows/write-impl-plan.md) - Create implementation plan from spec
-  - **Creates**: `_IMPL_[TOPIC].md` with IS (implementation steps), EC (edge cases), VC (verification checklist)
-  - **Edits**: nothing (creates new file only)
-  - **When**: After `/write-spec`. Defines HOW to build. References spec by Doc ID.
-- [`/write-test-plan`](.devin/workflows/write-test-plan.md) - Create test plan from spec
-  - **Creates**: `_TEST_[TOPIC].md` with TC (test cases), test phases, setup/teardown
-  - **Edits**: nothing (creates new file only)
-  - **When**: After `/write-spec`, before or after `/write-impl-plan`. References spec requirements by FR-XX IDs.
-- [`/write-tasks-plan`](.devin/workflows/write-tasks-plan.md) - Create tasks plan from IMPL/TEST
-  - **Creates**: `TASKS_[TOPIC].md` with TK (task items) partitioned from IMPL steps
-  - **Edits**: nothing (creates new file only)
-  - **When**: After `/write-impl-plan` and `/write-test-plan`. Mandatory before `/implement`. Partitions work into executable items.
-- [`/write-strut`](.devin/workflows/write-strut.md) - Create STRUT plans with proper format
-  - **Creates**: `__STRUT_[TOPIC].md` (standalone scaffolding) or embeds STRUT in `_IMPL_*.md` / `_TASKS_*.md`
-  - **Edits**: existing IMPL/TASKS documents if embedding STRUT into them
-  - **When**: Complex multi-step plans with dependencies, parallel work, or conditional transitions.
-- [`/write-prompts`](.devin/workflows/write-prompts.md) - Create prompt queue files for sequential headless execution
-  - **Creates**: `_PROMPTS_[Topic].md` with numbered prompts for sequential LLM execution
-  - **Edits**: nothing (creates new file only)
-  - **When**: Batch operations where each prompt picks up where the last left off (e.g., multi-document transcription, bulk API docs update). Also used to give agents more budget per step (see [Agent Budget and Prompt Sequences](#agent-budget-and-prompt-sequences)).
-- [`/propose-minto`](.devin/workflows/propose-minto.md) - Generate 3 scored Agentic Minto (AMINTON) argument candidates
-  - **Creates**: `_MINTO_DRAFT_[TOPIC].md` with 3 scored argument trees in AMINTON notation
-  - **Edits**: nothing (creates new file only)
-  - **When**: After research, before writing a structured argumentative article. You select the best candidate.
-- [`/write-minto`](.devin/workflows/write-minto.md) - Develop full Minto Pyramid article from draft
-  - **Creates**: `_MINTO_[TOPIC].md` with tree-first structure, then prose
-  - **Edits**: the draft from `/propose-minto` (develops selected candidate into full article)
-  - **When**: After `/propose-minto` and candidate selection. Produces the final article.
-- [`/implement`](.devin/workflows/implement.md) - Implement approved changes
-  - **Creates**: source code files in `src/` (or session folder for IMPL-ISOLATED); may create `_REVIEW.md` files from review pipelines
-  - **Edits**: source code, configuration files, existing documents (if review pipeline context)
-  - **When**: After `/write-tasks-plan`. Executes tasks from TASKS document. Detects context: Build (SPEC/IMPL to code) or Review Pipeline (`*_REVIEW.md` to corrections).
-- [`/test`](.devin/workflows/test.md) - Run tests based on scope and context
-  - **Creates**: nothing (runs existing tests, reports results)
-  - **Edits**: nothing (read-only execution)
-  - **When**: After `/implement`, before `/commit`. Agent detects test scope from context (unit, integration, full suite).
-
-**Quality** - Use after implementation or document creation. `/verify` is the most common.
-- [`/verify`](.devin/workflows/verify.md) - Verify work against specs and rules
-  - **Creates**: nothing (read-only check, reports findings in chat)
-  - **Edits**: nothing (read-only)
-  - **When**: After implementation or document creation. Checks code against SPEC, documents against rules, IDs against registry.
-- [`/critique`](.devin/workflows/critique.md) - Find flawed assumptions, logic errors, hidden risks
-  - **Creates**: `_CRITIQUE_REVIEW.md` or `[TARGET]-RV01.md` review document with findings (risk, evidence, suggested action)
-  - **Edits**: nothing (creates review document only)
-  - **When**: After writing specs or design docs. Adversarial review for design flaws, not code bugs.
-- [`/fact-check`](.devin/workflows/fact-check.md) - Verify factual claims against external reality
-  - **Creates**: `_FACTCHECK_REVIEW.md` or `[TARGET]-RV01.md` review document with source/fact/conclusion verdicts
-  - **Edits**: nothing (creates review document only)
-  - **When**: When documents make concrete claims about external reality (URLs, attributions, counts, file paths). Non-destructive: does not modify the target.
-- [`/reconcile`](.devin/workflows/reconcile.md) - Pragmatic review of critique and fact-check findings
-  - **Creates**: nothing (produces actionable improvement list in chat)
-  - **Edits**: source documents referenced in the review (applies corrections from critique/fact-check findings)
-  - **When**: After `/critique` or `/fact-check`. Turns review findings into concrete fixes. Bridges review and implementation.
-- [`/drift-detect`](.devin/workflows/drift-detect.md) - Post-execution drift detection
-  - **Creates**: `__DRIFT_[TARGET].md` with detected gaps between rules and actual output
-  - **Edits**: nothing (creates drift file only)
-  - **When**: After completing a task, to check if the agent followed all rules. Uses CHECKS files from `drift-correction/`.
-- [`/drift-correct`](.devin/workflows/drift-correct.md) - Close drift gaps identified by `/drift-detect`
-  - **Creates**: nothing (applies corrections)
-  - **Edits**: the files where drift was detected (fixes rule violations from `__DRIFT_*.md`)
-  - **When**: After `/drift-detect`. Reads the drift file and applies fixes.
-- [`/improve`](.devin/workflows/improve.md) - Depth-first improvement (one proven change per run)
-  - **Creates**: versioned backup of target file (e.g., `SKILL_v0.md` before improving `SKILL.md`)
-  - **Edits**: the target document or skill file (one improvement per run, using lenses and web research)
-  - **When**: Quality improvement of any document, skill, or workflow. Always backs up first so you can compare.
-- [`/sync`](.devin/workflows/sync.md) - Document synchronization
-  - **Creates**: nothing (propagates changes between existing documents)
-  - **Edits**: dependent documents (e.g., IMPL when SPEC changes, TEST when IMPL changes, README when features change)
-  - **When**: After changes to one document affect others. Keeps cross-references and IDs consistent.
-- [`/rename`](.devin/workflows/rename.md) - Global and local refactoring with exhaustive search
-  - **Creates**: nothing (renames in place)
-  - **Edits**: all files containing the old pattern (exhaustive search across workspace, with preview)
-  - **When**: Renaming variables, functions, concepts, or any identifier that appears in multiple files. Shows all occurrences before applying.
-
-**Problem Fixing** - Use when something is broken. `/bugfix` for code, `/fix` for anything.
-- [`/fix`](.devin/workflows/fix.md) - Fix any problem by reading relevant PromptSystem knowledge
-  - **Creates**: nothing (reads knowledge, applies fix)
-  - **Edits**: the file(s) where the problem occurs (classifies: CODE, DOCUMENT, DESIGN, UNDERSTANDING, PROCESS, CONFIG)
-  - **When**: Any problem where the agent needs to consult PromptSystem rules first. Lighter than `/bugfix`.
-- [`/bugfix`](.devin/workflows/bugfix.md) - Fix bugs with full traceability
-  - **Creates**: `_BugFixes/[BUG_ID]/` folder with `PROBLEMS.md`, investigation log (append-only), fix documentation
-  - **Edits**: source code (the fix), `FAILS.md` (records the bug as a failure for future prevention)
-  - **When**: Code defects needing full traceability (root cause, fix, test, commit). Heavier than `/fix`.
-
-**Learning** - Use `/fail` immediately after mistakes. Use `/learn` after resolution.
-- [`/fail`](.devin/workflows/fail.md) - Record a failure in FAILS.md
-  - **Creates**: new entry in `FAILS.md` with unique ID (`[TOPIC]-FL-NNNN`), description, prevention rule
-  - **Edits**: `FAILS.md` (appends new failure entry)
-  - **When**: Immediately when the agent makes a mistake. Fresher context = better prevention rule. Feeds back into `/prime`.
-- [`/learn`](.devin/workflows/learn.md) - Extract lessons from resolved problems
-  - **Creates**: `LEARNINGS.md` entry with reusable pattern (`[TOPIC]-LN-NNNN`)
-  - **Edits**: `LEARNINGS.md` (appends new learning entry)
-  - **When**: After a problem is resolved. Extracts the pattern that worked, so future sessions can apply it.
-
-**Sessions** - Lifecycle management. `/go` handles these automatically for most tasks.
-- [`/session-new`](.devin/workflows/session-new.md) - Initialize a new development session
-  - **Creates**: `_YYYY-MM-DD_[Topic]/` folder with `NOTES.md`, `PROBLEMS.md`, `PROGRESS.md` from templates
-  - **Edits**: nothing (creates new session only)
-  - **When**: Manual session control instead of `/go`. Use when you want to manage phases yourself.
-  - **How to specify goal/type**: `/session-new` takes no arguments. Describe your task in the chat first (e.g., "I need to fix the login bug in auth module"), then run `/session-new`. The agent derives the session folder name from your description and extracts initial problems from your request. Session type (BUILD vs SOLVE) is determined later by EDIRD assessment.
-- [`/session-save`](.devin/workflows/session-save.md) - Save session progress
-  - **Creates**: nothing (updates existing tracking files)
-  - **Edits**: session `NOTES.md`, `PROGRESS.md`, `PROBLEMS.md` (updates with current state)
-  - **When**: Before closing IDE, taking a break, or switching tasks. Persists current state for resume.
-- [`/session-load`](.devin/workflows/session-load.md) - Resume a development session
-  - **Creates**: nothing (read-only)
-  - **Edits**: nothing (read-only, loads context into agent memory)
-  - **When**: Resuming work in a new session. Reads session tracking files to pick up where left off.
-- [`/session-finalize`](.devin/workflows/session-finalize.md) - Finalize session, sync findings
-  - **Creates**: nothing (syncs existing content to workspace level)
-  - **Edits**: workspace `FAILS.md` (syncs [MEDIUM]/[HIGH] failures), `LEARNINGS.md` (syncs patterns), `PROBLEMS.md` (syncs deferred items)
-  - **When**: Session goal reached. Syncs findings so future sessions benefit. Prepares for archive.
-- [`/session-archive`](.devin/workflows/session-archive.md) - Archive a completed session folder
-  - **Creates**: moves session folder to `_Archive/` (or `_Sessions/_Archive/`)
-  - **Edits**: nothing (moves folder, does not modify files)
-  - **When**: After `/session-finalize`. Moves session out of active workspace. Findings already synced.
-
-**Communication** - Draft and track external communications. Agent drafts, user sends.
-- [`/conversation-start`](.devin/workflows/conversation-start.md) - Create new conversation tracking file
-  - **Creates**: `CONVERSATION_[COUNTERPARTY].md` with message history, attachments, metadata
-  - **Edits**: nothing (creates new file only)
-  - **When**: Starting to track a new email thread, WhatsApp conversation, or other external communication.
-- [`/conversation-update`](.devin/workflows/conversation-update.md) - Update existing conversation
-  - **Creates**: nothing (appends to existing file)
-  - **Edits**: `CONVERSATION_*.md` (appends new messages, updates attachments)
-  - **When**: New messages arrive in a tracked conversation. Keeps the conversation file current.
-- [`/conversation-draft`](.devin/workflows/conversation-draft.md) - Draft messages AS the user
-  - **Creates**: draft text in chat (user reviews and sends manually)
-  - **Edits**: nothing (produces draft in chat only)
-  - **When**: You need the agent to draft an email, WhatsApp message, or other text in your voice.
-- [`/transcribe`](.devin/workflows/transcribe.md) - Transcribe PDFs and web pages to markdown
-  - **Creates**: `.md` file with transcribed content (100% content preservation, no metadata)
-  - **Edits**: nothing (creates new file only)
-  - **When**: Converting PDFs, images, or web pages into editable markdown. Handles PDF-to-image conversion and LLM-based transcription.
-- [`/translate`](.devin/workflows/translate.md) - Translate markdown, PDF, or subtitle files
-  - **Creates**: translated `.md` file (or subtitle file) in target language
-  - **Edits**: nothing (creates new file only)
-  - **When**: Translating documentation, articles, or subtitles to one or more target languages.
-
-**Utility** - Infrastructure and maintenance.
-- [`/commit`](.devin/workflows/commit.md) - Create conventional commits
-  - **Creates**: git commits with conventional messages (`type(scope): description`)
-  - **Edits**: nothing (stages and commits existing changes, does not modify file content)
-  - **When**: After implementation, before pushing. Groups changes by type (feat, fix, docs, test, chore).
-- [`/deploy`](.devin/workflows/deploy.md) - Deploy project to configured hosting platform
-  - **Creates**: deployment on Netlify, Vercel, Azure, or SharePoint
-  - **Edits**: deployment configuration files if needed
-  - **When**: Deploying a web application. Reads deployment config, builds, deploys.
-- [`/switch-model`](.devin/workflows/switch-model.md) - Switch Cascade AI model tier
-  - **Creates**: nothing (changes agent configuration)
-  - **Edits**: Cascade model configuration (switches between HIGH, MID, LOW tier)
-  - **When**: When task complexity changes. HIGH for analysis, MID for implementation, LOW for chores.
-- [`/project-release`](.devin/workflows/project-release.md) - Create a dated release
-  - **Creates**: release notes, git tag, GitHub release (if configured)
-  - **Edits**: version files, `PROGRESS.md` (milestone completion)
-  - **When**: Reaching a version milestone. Generates comprehensive release notes from commit history.
-- [`/workspace-setup`](.devin/workflows/workspace-setup.md) - Create or modify workspace setup
-  - **Creates**: `NOTES.md`, `ID-REGISTRY.md`, `promptsystem-sync.json` from templates
-  - **Edits**: workspace configuration files (interactive questionnaire)
-  - **When**: Setting up a new workspace or modifying existing workspace configuration.
-- [`/cleanup`](.devin/workflows/cleanup.md) - Delete temporary files and artifacts
-  - **Creates**: nothing (deletes files)
-  - **Edits**: nothing (deletes `.tmp_*` files, `__*` scaffolding, other temp artifacts)
-  - **When**: After reaching a goal, to remove temporary files. Deletes by category (temp, scaffolding, backups).
-- [`/remove`](.devin/workflows/remove.md) - Remove session content or specific files
-  - **Creates**: nothing (deletes files with preview)
-  - **Edits**: nothing (shows preview, user confirms, then deletes)
-  - **When**: Removing session content, conversation files, or specific files. Always previews first.
-- [`/write-template`](.devin/workflows/write-template.md) - Create purpose-built document templates
-  - **Creates**: template `.md` file with placeholders, instructions, and formatting rules
-  - **Edits**: nothing (creates new file only)
-  - **When**: When you need consistent, comparable document instances (e.g., review templates, analysis templates).
-- [`/investigate`](.devin/workflows/investigate.md) - Structured investigation with STRUT plan
-  - **Creates**: `__STRUT_*.md` plan, append-only investigation log
-  - **Edits**: investigation log (appends findings, does not modify previous entries)
-  - **When**: Deep investigation of complex issues. STRUT plan structures the investigation, log preserves findings.
-- [`/compare-workspace-setup`](.devin/workflows/compare-workspace-setup.md) - Compare workspace setup
-  - **Creates**: comparison report in chat (differences between two workspaces)
-  - **Edits**: nothing (read-only comparison)
-  - **When**: Comparing workspace settings, sync configs, or NOTES.md between two workspaces.
-
-## Skills Reference
-
-24 skills in `.devin/skills/`. Skills are knowledge bases the agent reads before executing tasks. They do not run as workflows - they provide procedures, rules, and tool guidance.
-
-- **drift-correction** - Drift detection/correction knowledge and CHECKS files for `/drift-detect` and `/drift-correct`. **Effect**: No files. Provides CHECKS files consumed by `/drift-detect`.
-- **coding-conventions** - Python, PowerShell coding style rules, MECT coding rules. **Effect**: No files. Rules consumed by `/verify` and `/improve` when checking code.
-- **deep-research** - Deep research strategies (MEPI/MCPI), domain-specific patterns. **Effect**: No files. Knowledge consumed by `/deep-research` workflow.
-- **edird-phase-planning** - EDIRD phase model with effort allocation, planning guidance, gates. **Effect**: No files. Rules consumed by `/go` workflow.
-- **git** - Commit history navigation, file recovery from previous commits. **Effect**: No files. Procedures for git operations (log, checkout, diff, revert).
-- **git-conventions** - Commit message format, .gitignore rules. **Effect**: No files. Rules consumed by `/commit` workflow.
-- **github** - GitHub CLI operations (repos, issues, PRs, releases). **Effect**: No files. Procedures for `gh` CLI commands.
-- **google-account** - Google services (Gmail, Calendar, Drive, Tasks) via gogcli CLI. **Effect**: No files. Procedures for gogcli commands.
-- **hosting** - Platform-specific deployment to Netlify, Vercel, Azure App Service, SharePoint. **Effect**: No files. Procedures consumed by `/deploy` workflow.
-- **image-tools** - Image conversion, resizing, compression, batch processing (ImageMagick, Pillow). **Effect**: Creates converted/resized image files. Edits images in place (batch operations).
-- **llm-computer-use** - Desktop automation via LLM vision (click, type, navigate). **Effect**: No files. Procedures for desktop automation via screenshots and mouse/keyboard.
-- **llm-evaluation** - LLM evaluation pipeline (questions, answers, scoring, cost analysis). **Effect**: Creates evaluation result files (JSON, CSV). Edits evaluation config.
-- **llm-transcription** - Image/audio to markdown transcription (ensemble + judge + refinement). **Effect**: Creates `.md` transcription files. Edits nothing (creates new files).
-- **ms-playwright-mcp** - Browser automation via Microsoft Playwright MCP server. **Effect**: No files directly. Provides procedures for browser automation (navigate, click, type, screenshot). Downloads go to default browser location.
-- **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF. **Effect**: Creates converted PDF/image files. Edits PDFs in place (compression, optimization).
-- **playwriter-mcp** - Real browser automation with existing logins via Playwriter extension. **Effect**: No files directly. Provides procedures for browser automation with existing sessions.
-- **seo-tools** - SEO data APIs and search engine tools for keyword research and rank tracking. **Effect**: Creates SEO report files (CSV, JSON). Edits nothing (creates new files).
-- **session-management** - Session init, save, resume, finalize, archive. **Effect**: No files directly. Procedures consumed by `/session-*` workflows. Templates for NOTES.md, PROBLEMS.md, PROGRESS.md.
-- **travel-info** - Travel lookups: flights, trains, transit, country-specific info. **Effect**: Creates travel info `.md` files. Edits nothing (creates new files).
-- **windows-desktop-control** - Windows screenshots, window management, keyboard/mouse. **Effect**: Creates screenshot files (PNG). Edits nothing (creates new files).
-- **windsurf-auto-model-switcher** - Switch Cascade AI model tier programmatically. **Effect**: No files. Procedures for model switching via config files.
-- **workspace-management** - Multi-repo workspace setup, PromptSystem synchronization, knowledge distribution. **Effect**: Creates `NOTES.md`, `ID-REGISTRY.md`, `promptsystem-sync.json` from templates. Edits workspace config files. Runs `sync.ps1` to sync PromptSystem across repos.
-- **write-documents** - Document templates (INFO, SPEC, IMPL, TEST, TASKS, STRUT, MINTO), writing rules (APAPALAN, MECT, SOCAS). **Effect**: No files directly. Templates consumed by write-* workflows. Rules consumed by `/verify`, `/improve`.
-- **youtube-downloader** - Download YouTube content as MP3 or video, extract metadata. **Effect**: Creates MP3/video files in download folder. Creates `.md` metadata files. Edits nothing (creates new files).
-
-### GRUC File Placement
-
-GRUC (Guides, Rules, Checks) files are distributed by consumer alignment:
-
-- **GUIDE** files - in each skill folder (consumed by working agent before execution)
-- **RULES** files - in each skill folder (consumed by `/verify`, `/improve` after execution)
-- **CHECKS** files for skills - in each skill folder (alongside GUIDE and RULES)
-- **CHECKS** files for workflows - in `drift-correction/` (consumed by `/drift-detect` after execution)
-
-Exception: `write-documents` keeps all GRUC types in its own folder.
-
-## File Naming Conventions
-
-IPPS uses special prefixes to control how files are processed:
-
-- **`!` prefix** - Priority files (e.g., `!NOTES.md`). Read first during [`/prime`](.devin/workflows/prime.md). Contains critical project information. **Effect**: Read first by `/prime`. Agent never creates `!` files - these are manually authored.
-- **`_` prefix** - Deliverables ignored by automatic priming (e.g., `_SPEC_*.md`, `_INFO_*.md`). Session-specific, WIP, or archived content. Single `_` = user-created deliverable. **Effect**: Created by write-* workflows. Never auto-deleted. Survives session boundaries.
-- **`__` prefix** - Workflow scaffolding (e.g., `__STRUT_TOPIC.md`, `__TASKS_TOPIC.md`). Auto-created by workflows for self-tracking. Deleted by [`/cleanup`](.devin/workflows/cleanup.md) after goal reached. Gitignored. **Effect**: Created by `/write-strut`, `/go`, `/deep-research`. Auto-deleted by `/cleanup`.
-- **`.tmp_` prefix** - Single-run temp files (e.g., `.tmp_fix_quotes.ps1`). Deleted within same workflow or by `/cleanup`. Gitignored. **Effect**: Created by agent for scripts/metadata. Deleted within same workflow run.
-- **`.` prefix** - Hidden files following Unix convention (e.g., `.devin/`, `.gitignore`). **Effect**: Standard Unix behavior - hidden from directory listings.
-
-### Lifecycle Tiers
+**Option 2: Manual setup with session** (leave project root as-is)
+1. **Copy `.devin/` to your project root** - The agent now has rules, workflows, and skills.
+2. **Prime and start a session** - Type `/prime`, then describe your task and run `/session-new`. The agent creates a session folder with tracking files. No `NOTES.md` needed at workspace root - the agent works from session context.
+3. **Start working** - Type `/go "your task description"` or continue working in the session.
 
 ```
-.tmp_  = single-run temp (scripts, metadata) → deleted within workflow or by /cleanup
-__     = multi-run scaffolding (STRUTs, TASKS, templates) → deleted by /cleanup after goal
-_      = deliverable (INFO, SPEC, IMPL, TEST, TASKS) → never auto-deleted
+You type: /prime
+  → Agent reads rules, FAILS.md, ID-REGISTRY.md
+  → Agent knows your project conventions and past mistakes
+
+You type: /session-new
+  → Agent creates session folder with NOTES.md, PROGRESS.md, PROBLEMS.md
+
+You type: /go "Add user registration endpoint"
+  → Agent follows EDIRD: research → spec → plan → implement → test → commit
+  → Agent implements the code, runs tests, commits
+
+You close IDE, come back next day:
+You type: /prime, then /session-load
+  → Agent reads session PROGRESS.md, picks up where it left off
 ```
 
-**Key distinction**: User-explicit = deliverable (no `__`). Workflow/skill-implicit = scaffolding (`__`).
-- `/write-tasks-plan` output → `TASKS_[TOPIC].md` (user asked for it, deliverable)
-- `/deep-research` auto-creates → `__TASKS_[TOPIC]_RESEARCH.md` (scaffolding, deletable)
+**Option 3: Guided setup** (interactive)
+1. **Copy `.devin/` to your project root** - The agent now has rules, workflows, and skills.
+2. **Run `/workspace-setup`** - The agent asks workspace type (SINGLE-PROJECT, WORKSPACE, GENERAL), version strategy, and other questions. It generates `NOTES.md`, `ID-REGISTRY.md`, `PROBLEMS.md`, `PROGRESS.md`, `FAILS.md`, `SOPS.md`, creates folder structure, and syncs PromptSystem files to `.devin/`.
+3. **Start working** - Type `/prime` in your IDE chat, then `/go "your task description"`. The agent handles the rest.
 
-### Suffix Conventions
+```
+You type: /workspace-setup
+  → Agent asks workspace type, version strategy, sync sources
+  → Agent generates NOTES.md, ID-REGISTRY.md, tracking files, folder structure
+  → Agent syncs PromptSystem files to .devin/
 
-- **`_gitignore` suffix** - Append before extension to exclude any file or folder from git (e.g., `data_gitignore.json`, `scratch_gitignore/`). Useful for per-file exclusion without editing `.gitignore`.
+You type: /prime
+  → Agent reads NOTES.md, rules, FAILS.md, ID-REGISTRY.md
+  → Agent knows your project name, conventions, and past mistakes
+
+You type: /go "Add user registration endpoint"
+  → Agent creates a session folder
+  → Agent follows EDIRD: research → spec → plan → implement → test → commit
+  → Agent implements the code, runs tests, commits
+
+You close IDE, come back next day:
+You type: /prime, then /session-load
+  → Agent reads session PROGRESS.md, picks up where it left off
+```
 
 ## Usage Examples
 
@@ -954,13 +724,292 @@ IPPS supports two agent profiles with different budget characteristics:
 
 1. **High budget per prompt** - Agents with large context windows and auto-continue capabilities (e.g., Claude Fable 5 generation, Auto-Continue agents). These agents can handle complex multi-step tasks in a single `/go` execution, maintaining deep context across all EDIRD phases.
 
-2. **Low budget per prompt** - Agents with smaller context windows or per-turn compute limits (e.g., Claude Code with Sonnet 4.x generation models). These agents may hit budget limits during complex tasks, reducing execution depth, completion rate, and instruction following.
+2. **Low budget per prompt** - Agents with smaller context windows or per-turn compute limits (e.g., Claude Code with Sonnet 4.x generation models). These agents may hit budget limits during complex tasks, reducing execution depth, completion rate, and instruction following. Some agents also have maximum tool calls per run (a "run" is one execution cycle from prompt to response), further limiting the amount of workable steps per prompt.
 
 For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) decomposes complex work into a `_PROMPTS_[Topic].md` file where each prompt is a separate turn. Each prompt receives the agent's full context engineering and compute budget, as if it were a fresh submission. This gives the agent more budget per step without sacrificing sequence coherence - later prompts see all earlier conversation history.
 
 **When to use prompt sequences**: Complex tasks with many steps (50+ file creations, multi-phase research, bulk transformations). The prompt file ensures each step gets full model budget instead of competing for a shrinking budget pool within a single `/go` run.
 
 **When NOT to use**: Simple tasks (single file edit, quick research, one-shot generation). The overhead of writing a prompt file outweighs the budget benefit.
+
+## Workflows Reference
+
+48 workflows in `.devin/workflows/`. Workflows are invoked by typing the slash command in your IDE chat (e.g., `/go`, `/verify`).
+
+**Entry Points** - Start here. Use `/prime` at session start, `/go` for any task.
+- [`/go`](.devin/workflows/go.md) - Autonomous loop until goal reached (BUILD or SOLVE mode, auto-creates session, follows EDIRD)
+  - **Creates**: session folder (`_YYYY-MM-DD_Topic/`) with `NOTES.md`, `PROBLEMS.md`, `PROGRESS.md`; SPEC/IMPL/TEST/TASKS documents in session folder; `__STRUT_*.md` plan files; source code files in `src/`
+  - **Edits**: source code, session tracking files, `FAILS.md` (on failures), `LEARNINGS.md` (on learning)
+  - **When**: Primary entry point for any task. Pass a goal string: `/go "Add user auth"`. Run without arguments to resume.
+- [`/prime`](.devin/workflows/prime.md) - Prime context with workspace files
+  - **Creates**: nothing (read-only)
+  - **Edits**: nothing (read-only)
+  - **When**: At the start of every session. Reads `!NOTES.md`, `PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`, `ID-REGISTRY.md`, all `.devin/rules/*.md`
+
+**Document Cycle** - Spec-Driven Development pipeline. Use for COMPLEXITY-MEDIUM/HIGH features.
+- [`/research`](.devin/workflows/research.md) - Structured research with verification labels and source retention
+  - **Creates**: `_INFO_[TOPIC].md` in session folder (research findings with `[VERIFIED]`/`[ASSUMED]` labels, source links)
+  - **Edits**: nothing (creates new file only)
+  - **When**: Gathering information before writing a spec. Use for any research that needs source tracking.
+- [`/deep-research`](.devin/workflows/deep-research.md) - Deep research (MEPI or MCPI) with domain-specific patterns
+  - **Creates**: `_INFO_[TOPIC].md` with multi-source analysis; `__TASKS_[TOPIC]_RESEARCH.md` (scaffolding for research tracking)
+  - **Edits**: nothing (creates new files only)
+  - **When**: Multi-source technology evaluation, product comparison, or any question requiring thorough investigation with MEPI (curated options) or MCPI (exhaustive options) patterns.
+- [`/write-info`](.devin/workflows/write-info.md) - Create INFO document from research
+  - **Creates**: `_INFO_[TOPIC].md` from template, populated with research findings
+  - **Edits**: nothing (creates new file only)
+  - **When**: Formalize research findings into a structured document with source IDs and verification labels.
+- [`/write-spec`](.devin/workflows/write-spec.md) - Create specification from requirements
+  - **Creates**: `_SPEC_[TOPIC].md` with FR (requirements), DD (design decisions), IG (implementation guarantees), AC (acceptance criteria)
+  - **Edits**: nothing (creates new file only)
+  - **When**: Before implementation. Defines WHAT to build, not HOW. Required for COMPLEXITY-MEDIUM/HIGH.
+- [`/write-impl-plan`](.devin/workflows/write-impl-plan.md) - Create implementation plan from spec
+  - **Creates**: `_IMPL_[TOPIC].md` with IS (implementation steps), EC (edge cases), VC (verification checklist)
+  - **Edits**: nothing (creates new file only)
+  - **When**: After `/write-spec`. Defines HOW to build. References spec by Doc ID.
+- [`/write-test-plan`](.devin/workflows/write-test-plan.md) - Create test plan from spec
+  - **Creates**: `_TEST_[TOPIC].md` with TC (test cases), test phases, setup/teardown
+  - **Edits**: nothing (creates new file only)
+  - **When**: After `/write-spec`, before or after `/write-impl-plan`. References spec requirements by FR-XX IDs.
+- [`/write-tasks-plan`](.devin/workflows/write-tasks-plan.md) - Create tasks plan from IMPL/TEST
+  - **Creates**: `TASKS_[TOPIC].md` with TK (task items) partitioned from IMPL steps
+  - **Edits**: nothing (creates new file only)
+  - **When**: After `/write-impl-plan` and `/write-test-plan`. Mandatory before `/implement`. Partitions work into executable items.
+- [`/write-strut`](.devin/workflows/write-strut.md) - Create STRUT plans with proper format
+  - **Creates**: `__STRUT_[TOPIC].md` (standalone scaffolding) or embeds STRUT in `_IMPL_*.md` / `_TASKS_*.md`
+  - **Edits**: existing IMPL/TASKS documents if embedding STRUT into them
+  - **When**: Complex multi-step plans with dependencies, parallel work, or conditional transitions.
+- [`/write-prompts`](.devin/workflows/write-prompts.md) - Create prompt queue files for sequential headless execution
+  - **Creates**: `_PROMPTS_[Topic].md` with numbered prompts for sequential LLM execution
+  - **Edits**: nothing (creates new file only)
+  - **When**: Batch operations where each prompt picks up where the last left off (e.g., multi-document transcription, bulk API docs update). Also used to give agents more budget per step (see [Agent Budget and Prompt Sequences](#agent-budget-and-prompt-sequences)).
+- [`/propose-minto`](.devin/workflows/propose-minto.md) - Generate 3 scored Agentic Minto (AMINTON) argument candidates
+  - **Creates**: `_MINTO_DRAFT_[TOPIC].md` with 3 scored argument trees in AMINTON notation
+  - **Edits**: nothing (creates new file only)
+  - **When**: After research, before writing a structured argumentative article. You select the best candidate.
+- [`/write-minto`](.devin/workflows/write-minto.md) - Develop full Minto Pyramid article from draft
+  - **Creates**: `_MINTO_[TOPIC].md` with tree-first structure, then prose
+  - **Edits**: the draft from `/propose-minto` (develops selected candidate into full article)
+  - **When**: After `/propose-minto` and candidate selection. Produces the final article.
+- [`/implement`](.devin/workflows/implement.md) - Implement approved changes
+  - **Creates**: source code files in `src/` (or session folder for IMPL-ISOLATED); may create `_REVIEW.md` files from review pipelines
+  - **Edits**: source code, configuration files, existing documents (if review pipeline context)
+  - **When**: After `/write-tasks-plan`. Executes tasks from TASKS document. Detects context: Build (SPEC/IMPL to code) or Review Pipeline (`*_REVIEW.md` to corrections).
+- [`/test`](.devin/workflows/test.md) - Run tests based on scope and context
+  - **Creates**: nothing (runs existing tests, reports results)
+  - **Edits**: nothing (read-only execution)
+  - **When**: After `/implement`, before `/commit`. Agent detects test scope from context (unit, integration, full suite).
+
+**Quality** - Use after implementation or document creation. `/verify` is the most common.
+- [`/verify`](.devin/workflows/verify.md) - Verify work against specs and rules
+  - **Creates**: nothing (read-only check, reports findings in chat)
+  - **Edits**: nothing (read-only)
+  - **When**: After implementation or document creation. Checks code against SPEC, documents against rules, IDs against registry.
+- [`/critique`](.devin/workflows/critique.md) - Find flawed assumptions, logic errors, hidden risks
+  - **Creates**: `_CRITIQUE_REVIEW.md` or `[TARGET]-RV01.md` review document with findings (risk, evidence, suggested action)
+  - **Edits**: nothing (creates review document only)
+  - **When**: After writing specs or design docs. Adversarial review for design flaws, not code bugs.
+- [`/fact-check`](.devin/workflows/fact-check.md) - Verify factual claims against external reality
+  - **Creates**: `_FACTCHECK_REVIEW.md` or `[TARGET]-RV01.md` review document with source/fact/conclusion verdicts
+  - **Edits**: nothing (creates review document only)
+  - **When**: When documents make concrete claims about external reality (URLs, attributions, counts, file paths). Non-destructive: does not modify the target.
+- [`/reconcile`](.devin/workflows/reconcile.md) - Pragmatic review of critique and fact-check findings
+  - **Creates**: nothing (produces actionable improvement list in chat)
+  - **Edits**: source documents referenced in the review (applies corrections from critique/fact-check findings)
+  - **When**: After `/critique` or `/fact-check`. Turns review findings into concrete fixes. Bridges review and implementation.
+- [`/drift-detect`](.devin/workflows/drift-detect.md) - Post-execution drift detection
+  - **Creates**: `__DRIFT_[TARGET].md` with detected gaps between rules and actual output
+  - **Edits**: nothing (creates drift file only)
+  - **When**: After completing a task, to check if the agent followed all rules. Uses drift lenses from `drift-correction/` skill.
+- [`/drift-correct`](.devin/workflows/drift-correct.md) - Close drift gaps identified by `/drift-detect`
+  - **Creates**: nothing (applies corrections)
+  - **Edits**: the files where drift was detected (fixes rule violations from `__DRIFT_*.md`)
+  - **When**: After `/drift-detect`. Reads the drift file and applies fixes.
+- [`/improve`](.devin/workflows/improve.md) - Depth-first improvement (one proven change per run)
+  - **Creates**: versioned backup of target file (e.g., `SKILL_v0.md` before improving `SKILL.md`)
+  - **Edits**: the target document or skill file (one improvement per run, using lenses and web research)
+  - **When**: Quality improvement of any document, skill, or workflow. Always backs up first so you can compare.
+- [`/sync`](.devin/workflows/sync.md) - Document synchronization
+  - **Creates**: nothing (propagates changes between existing documents)
+  - **Edits**: dependent documents (e.g., IMPL when SPEC changes, TEST when IMPL changes, README when features change)
+  - **When**: After changes to one document affect others. Keeps cross-references and IDs consistent.
+- [`/rename`](.devin/workflows/rename.md) - Global and local refactoring with exhaustive search
+  - **Creates**: nothing (renames in place)
+  - **Edits**: all files containing the old pattern (exhaustive search across workspace, with preview)
+  - **When**: Renaming variables, functions, concepts, or any identifier that appears in multiple files. Shows all occurrences before applying.
+
+**Problem Fixing** - Use when something is broken. `/bugfix` for code, `/fix` for anything.
+- [`/fix`](.devin/workflows/fix.md) - Fix any problem by reading relevant PromptSystem knowledge
+  - **Creates**: nothing (reads knowledge, applies fix)
+  - **Edits**: the file(s) where the problem occurs (classifies: CODE, DOCUMENT, DESIGN, UNDERSTANDING, PROCESS, CONFIG)
+  - **When**: Any problem where the agent needs to consult PromptSystem rules first. Lighter than `/bugfix`.
+- [`/bugfix`](.devin/workflows/bugfix.md) - Fix bugs with full traceability
+  - **Creates**: `_BugFixes/[BUG_ID]/` folder with `PROBLEMS.md`, investigation log (append-only), fix documentation
+  - **Edits**: source code (the fix), `FAILS.md` (records the bug as a failure for future prevention)
+  - **When**: Code defects needing full traceability (root cause, fix, test, commit). Heavier than `/fix`.
+
+**Learning** - Use `/fail` immediately after mistakes. Use `/learn` after resolution.
+- [`/fail`](.devin/workflows/fail.md) - Record a failure in FAILS.md
+  - **Creates**: new entry in `FAILS.md` with unique ID (`[TOPIC]-FL-NNNN`), description, prevention rule
+  - **Edits**: `FAILS.md` (appends new failure entry)
+  - **When**: Immediately when the agent makes a mistake. Fresher context = better prevention rule. Feeds back into `/prime`.
+- [`/learn`](.devin/workflows/learn.md) - Extract lessons from resolved problems
+  - **Creates**: `LEARNINGS.md` entry with reusable pattern (`[TOPIC]-LN-NNNN`)
+  - **Edits**: `LEARNINGS.md` (appends new learning entry)
+  - **When**: After a problem is resolved. Extracts the pattern that worked, so future sessions can apply it.
+
+**Sessions** - Lifecycle management. `/go` handles these automatically for most tasks.
+- [`/session-new`](.devin/workflows/session-new.md) - Initialize a new development session
+  - **Creates**: `_YYYY-MM-DD_[Topic]/` folder with `NOTES.md`, `PROBLEMS.md`, `PROGRESS.md` from templates
+  - **Edits**: nothing (creates new session only)
+  - **When**: Manual session control instead of `/go`. Use when you want to manage phases yourself.
+  - **How to specify goal/type**: `/session-new` takes no arguments. Describe your task in the chat first (e.g., "I need to fix the login bug in auth module"), then run `/session-new`. The agent derives the session folder name from your description and extracts initial problems from your request. Session type (BUILD vs SOLVE) is determined later by EDIRD assessment.
+- [`/session-save`](.devin/workflows/session-save.md) - Save session progress
+  - **Creates**: nothing (updates existing tracking files)
+  - **Edits**: session `NOTES.md`, `PROGRESS.md`, `PROBLEMS.md` (updates with current state)
+  - **When**: Before closing IDE, taking a break, or switching tasks. Persists current state for resume.
+- [`/session-load`](.devin/workflows/session-load.md) - Resume a development session
+  - **Creates**: nothing (read-only)
+  - **Edits**: nothing (read-only, loads context into agent memory)
+  - **When**: Resuming work in a new session. Reads session tracking files to pick up where left off.
+- [`/session-finalize`](.devin/workflows/session-finalize.md) - Finalize session, sync findings
+  - **Creates**: nothing (syncs existing content to workspace level)
+  - **Edits**: workspace `FAILS.md` (syncs [MEDIUM]/[HIGH] failures), `LEARNINGS.md` (syncs patterns), `PROBLEMS.md` (syncs deferred items)
+  - **When**: Session goal reached. Syncs findings so future sessions benefit. Prepares for archive.
+- [`/session-archive`](.devin/workflows/session-archive.md) - Archive a completed session folder
+  - **Creates**: moves session folder to `_Archive/` (or `_Sessions/_Archive/`)
+  - **Edits**: nothing (moves folder, does not modify files)
+  - **When**: After `/session-finalize`. Moves session out of active workspace. Findings already synced.
+
+**Communication** - Draft and track external communications. Agent drafts, user sends.
+- [`/conversation-start`](.devin/workflows/conversation-start.md) - Create new conversation tracking file
+  - **Creates**: `CONVERSATION_[COUNTERPARTY].md` with message history, attachments, metadata
+  - **Edits**: nothing (creates new file only)
+  - **When**: Starting to track a new email thread, WhatsApp conversation, or other external communication.
+- [`/conversation-update`](.devin/workflows/conversation-update.md) - Update existing conversation
+  - **Creates**: nothing (appends to existing file)
+  - **Edits**: `CONVERSATION_*.md` (appends new messages, updates attachments)
+  - **When**: New messages arrive in a tracked conversation. Keeps the conversation file current.
+- [`/conversation-draft`](.devin/workflows/conversation-draft.md) - Draft messages AS the user
+  - **Creates**: draft text in chat (user reviews and sends manually)
+  - **Edits**: nothing (produces draft in chat only)
+  - **When**: You need the agent to draft an email, WhatsApp message, or other text in your voice.
+- [`/transcribe`](.devin/workflows/transcribe.md) - Transcribe PDFs and web pages to markdown
+  - **Creates**: `.md` file with transcribed content (100% content preservation, no metadata)
+  - **Edits**: nothing (creates new file only)
+  - **When**: Converting PDFs, images, or web pages into editable markdown. Handles PDF-to-image conversion and LLM-based transcription.
+- [`/translate`](.devin/workflows/translate.md) - Translate markdown, PDF, or subtitle files
+  - **Creates**: translated `.md` file (or subtitle file) in target language
+  - **Edits**: nothing (creates new file only)
+  - **When**: Translating documentation, articles, or subtitles to one or more target languages.
+
+**Utility** - Infrastructure and maintenance.
+- [`/commit`](.devin/workflows/commit.md) - Create conventional commits
+  - **Creates**: git commits with conventional messages (`type(scope): description`)
+  - **Edits**: nothing (stages and commits existing changes, does not modify file content)
+  - **When**: After implementation, before pushing. Groups changes by type (feat, fix, docs, test, chore).
+- [`/deploy`](.devin/workflows/deploy.md) - Deploy project to configured hosting platform
+  - **Creates**: deployment on Netlify, Vercel, Azure, or SharePoint
+  - **Edits**: deployment configuration files if needed
+  - **When**: Deploying a web application. Reads deployment config, builds, deploys.
+- [`/switch-model`](.devin/workflows/switch-model.md) - Switch Cascade AI model tier
+  - **Creates**: nothing (changes agent configuration)
+  - **Edits**: Cascade model configuration (switches between HIGH, MID, LOW tier)
+  - **When**: When task complexity changes. HIGH for analysis, MID for implementation, LOW for chores.
+- [`/project-release`](.devin/workflows/project-release.md) - Create a dated release
+  - **Creates**: release notes, git tag, GitHub release (if configured)
+  - **Edits**: version files, `PROGRESS.md` (milestone completion)
+  - **When**: Reaching a version milestone. Generates comprehensive release notes from commit history.
+- [`/workspace-setup`](.devin/workflows/workspace-setup.md) - Create or modify workspace setup
+  - **Creates**: `NOTES.md`, `ID-REGISTRY.md`, `promptsystem-sync.json` from templates
+  - **Edits**: workspace configuration files (interactive questionnaire)
+  - **When**: Setting up a new workspace or modifying existing workspace configuration.
+- [`/cleanup`](.devin/workflows/cleanup.md) - Delete temporary files and artifacts
+  - **Creates**: nothing (deletes files)
+  - **Edits**: nothing (deletes `.tmp_*` files, `__*` scaffolding, other temp artifacts)
+  - **When**: After reaching a goal, to remove temporary files. Deletes by category (temp, scaffolding, backups).
+- [`/remove`](.devin/workflows/remove.md) - Remove session content or specific files
+  - **Creates**: nothing (deletes files with preview)
+  - **Edits**: nothing (shows preview, user confirms, then deletes)
+  - **When**: Removing session content, conversation files, or specific files. Always previews first.
+- [`/write-template`](.devin/workflows/write-template.md) - Create purpose-built document templates
+  - **Creates**: template `.md` file with placeholders, instructions, and formatting rules
+  - **Edits**: nothing (creates new file only)
+  - **When**: When you need consistent, comparable document instances (e.g., review templates, analysis templates).
+- [`/investigate`](.devin/workflows/investigate.md) - Structured investigation with STRUT plan
+  - **Creates**: `__STRUT_*.md` plan, append-only investigation log
+  - **Edits**: investigation log (appends findings, does not modify previous entries)
+  - **When**: Deep investigation of complex issues. STRUT plan structures the investigation, log preserves findings.
+- [`/compare-workspace-setup`](.devin/workflows/compare-workspace-setup.md) - Compare workspace setup
+  - **Creates**: comparison report in chat (differences between two workspaces)
+  - **Edits**: nothing (read-only comparison)
+  - **When**: Comparing workspace settings, sync configs, or NOTES.md between two workspaces.
+
+## Skills Reference
+
+24 skills in `.devin/skills/`. Skills are knowledge bases the agent reads before executing tasks. They do not run as workflows - they provide procedures, rules, and tool guidance.
+
+- **drift-correction** - Drift detection/correction knowledge for `/drift-detect` and `/drift-correct`. **Effect**: No files. Provides drift lenses and templates consumed by `/drift-detect`. CHECKS files for workflows designed for future use, created on demand.
+- **coding-conventions** - Python, PowerShell coding style rules, MECT coding rules. **Effect**: No files. Rules consumed by `/verify` and `/improve` when checking code.
+- **deep-research** - Deep research strategies (MEPI/MCPI), domain-specific patterns. **Effect**: No files. Knowledge consumed by `/deep-research` workflow.
+- **edird-phase-planning** - EDIRD phase model with effort allocation, planning guidance, gates. **Effect**: No files. Rules consumed by `/go` workflow.
+- **git** - Commit history navigation, file recovery from previous commits. **Effect**: No files. Procedures for git operations (log, checkout, diff, revert).
+- **git-conventions** - Commit message format, .gitignore rules. **Effect**: No files. Rules consumed by `/commit` workflow.
+- **github** - GitHub CLI operations (repos, issues, PRs, releases). **Effect**: No files. Procedures for `gh` CLI commands.
+- **google-account** - Google services (Gmail, Calendar, Drive, Tasks) via gogcli CLI. **Effect**: No files. Procedures for gogcli commands.
+- **hosting** - Platform-specific deployment to Netlify, Vercel, Azure App Service, SharePoint. **Effect**: No files. Procedures consumed by `/deploy` workflow.
+- **image-tools** - Image conversion, resizing, compression, batch processing (ImageMagick, Pillow). **Effect**: Creates converted/resized image files. Edits images in place (batch operations).
+- **llm-computer-use** - Desktop automation via LLM vision (click, type, navigate). **Effect**: No files. Procedures for desktop automation via screenshots and mouse/keyboard.
+- **llm-evaluation** - LLM evaluation pipeline (questions, answers, scoring, cost analysis). **Effect**: Creates evaluation result files (JSON, CSV). Edits evaluation config.
+- **llm-transcription** - Image/audio to markdown transcription (ensemble + judge + refinement). **Effect**: Creates `.md` transcription files. Edits nothing (creates new files).
+- **ms-playwright-mcp** - Browser automation via Microsoft Playwright MCP server. **Effect**: No files directly. Provides procedures for browser automation (navigate, click, type, screenshot). Downloads go to default browser location.
+- **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF. **Effect**: Creates converted PDF/image files. Edits PDFs in place (compression, optimization).
+- **playwriter-mcp** - Real browser automation with existing logins via Playwriter extension. **Effect**: No files directly. Provides procedures for browser automation with existing sessions.
+- **seo-tools** - SEO data APIs and search engine tools for keyword research and rank tracking. **Effect**: Creates SEO report files (CSV, JSON). Edits nothing (creates new files).
+- **session-management** - Session init, save, resume, finalize, archive. **Effect**: No files directly. Procedures consumed by `/session-*` workflows. Templates for NOTES.md, PROBLEMS.md, PROGRESS.md.
+- **travel-info** - Travel lookups: flights, trains, transit, country-specific info. **Effect**: Creates travel info `.md` files. Edits nothing (creates new files).
+- **windows-desktop-control** - Windows screenshots, window management, keyboard/mouse. **Effect**: Creates screenshot files (PNG). Edits nothing (creates new files).
+- **windsurf-auto-model-switcher** - Switch Cascade AI model tier programmatically. **Effect**: No files. Procedures for model switching via config files.
+- **workspace-management** - Multi-repo workspace setup, PromptSystem synchronization, knowledge distribution. **Effect**: Creates `NOTES.md`, `ID-REGISTRY.md`, `promptsystem-sync.json` from templates. Edits workspace config files. Runs `sync.ps1` to sync PromptSystem across repos.
+- **write-documents** - Document templates (INFO, SPEC, IMPL, TEST, TASKS, STRUT, MINTO), writing rules (APAPALAN, MECT, SOCAS). **Effect**: No files directly. Templates consumed by write-* workflows. Rules consumed by `/verify`, `/improve`.
+- **youtube-downloader** - Download YouTube content as MP3 or video, extract metadata. **Effect**: Creates MP3/video files in download folder. Creates `.md` metadata files. Edits nothing (creates new files).
+
+### GRUC File Placement
+
+GRUC (Guides, Rules, Checks) files are distributed by consumer alignment:
+
+- **GUIDE** files - in each skill folder (consumed by working agent before execution)
+- **RULES** files - in each skill folder (consumed by `/verify`, `/improve` after execution)
+- **CHECKS** files for skills - in each skill folder (alongside GUIDE and RULES)
+- **CHECKS** files for workflows - in `drift-correction/` (designed for `/drift-detect` after execution, created on demand per auditable workflow)
+
+Exception: `write-documents` keeps all GRUC types in its own folder.
+
+## File Naming Conventions
+
+IPPS uses special prefixes to control how files are processed:
+
+- **`!` prefix** - Priority files (e.g., `!NOTES.md`). Read first during [`/prime`](.devin/workflows/prime.md). Contains critical project information. **Effect**: Read first by `/prime`. Agent never creates `!` files - these are manually authored.
+- **`_` prefix** - Deliverables ignored by automatic priming (e.g., `_SPEC_*.md`, `_INFO_*.md`). Session-specific, WIP, or archived content. Single `_` = user-created deliverable. **Effect**: Created by write-* workflows. Never auto-deleted. Survives session boundaries.
+- **`__` prefix** - Workflow scaffolding (e.g., `__STRUT_TOPIC.md`, `__TASKS_TOPIC.md`). Auto-created by workflows for self-tracking. Deleted by [`/cleanup`](.devin/workflows/cleanup.md) after goal reached. Gitignored. **Effect**: Created by `/write-strut`, `/go`, `/deep-research`. Auto-deleted by `/cleanup`.
+- **`.tmp_` prefix** - Single-run temp files (e.g., `.tmp_fix_quotes.ps1`). Deleted within same workflow or by `/cleanup`. Gitignored. **Effect**: Created by agent for scripts/metadata. Deleted within same workflow run.
+- **`.` prefix** - Hidden files following Unix convention (e.g., `.devin/`, `.gitignore`). **Effect**: Standard Unix behavior - hidden from directory listings.
+
+### Lifecycle Tiers
+
+```
+.tmp_  = single-run temp (scripts, metadata) → deleted within workflow or by /cleanup
+__     = multi-run scaffolding (STRUTs, TASKS, templates) → deleted by /cleanup after goal
+_      = deliverable (INFO, SPEC, IMPL, TEST, TASKS) → never auto-deleted
+```
+
+**Key distinction**: User-explicit = deliverable (no `__`). Workflow/skill-implicit = scaffolding (`__`).
+- `/write-tasks-plan` output → `TASKS_[TOPIC].md` (user asked for it, deliverable)
+- `/deep-research` auto-creates → `__TASKS_[TOPIC]_RESEARCH.md` (scaffolding, deletable)
+
+### Suffix Conventions
+
+- **`_gitignore` suffix** - Append before extension to exclude any file or folder from git (e.g., `data_gitignore.json`, `scratch_gitignore/`). Useful for per-file exclusion without editing `.gitignore`.
 
 ## Agentic English
 
@@ -1208,7 +1257,7 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - [Coding Conventions](.devin/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
 - [Workflow Rules](.devin/skills/write-documents/WORKFLOW_RULES.md) - Workflow document structure and formatting
 
-## Skills
+## Skill Details
 
 Agent skills in `.devin/skills/`. Each skill contains scripts, documentation, and optional setup.
 
@@ -1494,7 +1543,7 @@ Located in workspace root (or project root in monorepos):
 | File             | Required     | Purpose                                                    | Created by | Edited by |
 |------------------|--------------|------------------------------------------------------------|-----------|-----------|
 | `!NOTES.md`      | Yes          | Critical project info, agent instructions, key patterns    | `/workspace-setup` | Agent during sessions, `/sync` |
-| `PROBLEMS.md`   | Optional     | Known issues across the project                            | Manually | `/session-finalize` (syncs deferred items) |
+| `PROBLEMS.md`    | Optional     | Known issues across the project                            | Manually | `/session-finalize` (syncs deferred items) |
 | `!PROGRESS.md`   | Optional     | Overall project progress                                   | Manually | `/go`, `/session-save`, `/project-release` |
 | `FAILS.md`       | Auto-created | Lessons learned from past mistakes (via `/fail` workflow)  | `/fail` (auto) | `/fail` (appends), `/session-finalize` (syncs from session) |
 | `LEARNINGS.md`   | Auto-created | Reusable patterns (via `/learn` workflow analyzing fails)  | `/learn` (auto) | `/learn` (appends), `/session-finalize` (syncs from session) |
