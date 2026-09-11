@@ -48,6 +48,7 @@ Document Placement (DP)
 - WS-DP-03: Document type prefix must match folder placement
 - WS-DP-04: Unprefixed rules files with enforceable IDs belong in specs/
 - WS-DP-05: INFO files may reside in specs/ only if referenced as SPEC dependency
+- WS-DP-06: specs/ and docs/ folders are optional, not auto-created
 
 ## WS-FL-01: Required DevRepo Files
 
@@ -203,7 +204,7 @@ GOOD: [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\[product-repo-name]
 
 ## WS-DP-01: specs/ Folder Contains Verifiable Agent Instructions Only
 
-specs/ contains structured documents the agent reads to execute work. The agent can verify compliance against them. Includes: _SPEC_*, _IMPL_*, _TEST_*, _TASKS_* files, and unprefixed rules files with enforceable IDs (e.g., AI_WRITING_DETECTION_RULES.md).
+specs/ contains structured documents the agent reads to execute work. The agent can verify compliance against them. Includes: _SPEC_*, _IMPL_*, _TEST_* files, and unprefixed rules files with enforceable IDs (e.g., AI_WRITING_DETECTION_RULES.md). _TASKS_* files are session-scoped and stay in session folders, not in specs/.
 
 BAD: _INFO_HOW_TO_DETECT_AI_ASSISTED_WRITING.md in specs/ - explanatory, not verifiable
 GOOD: _SPEC_EDIRD_PHASE_MODEL.md in specs/ - structured spec with FR/DD/IG items
@@ -217,7 +218,7 @@ GOOD: _INFO_HOW_CLAUDE_CODE_WORKS.md in docs/ - explains how a tool works
 
 ## WS-DP-03: Document Type Prefix Must Match Folder Placement
 
-_SPEC_*, _IMPL_*, _TEST_*, _TASKS_* files MUST be in specs/. _INFO_* files MUST be in docs/ unless exception WS-DP-05 applies.
+_SPEC_*, _IMPL_*, _TEST_* files MUST be in specs/. _TASKS_* files MUST be in session folders (or specs/ only if no session exists). _INFO_* files MUST be in docs/ unless exception WS-DP-05 applies.
 
 BAD: _INFO_MECT_PHILOSOPHY.md in specs/ (no SPEC references it as dependency)
 GOOD: _INFO_MECT_PHILOSOPHY.md in docs/
@@ -235,3 +236,10 @@ _INFO_* files may reside in specs/ only if directly referenced as a dependency b
 
 BAD: _INFO_MNF_TECHNIQUE.md in specs/ - no SPEC lists it as Depends on
 GOOD: _INFO_TRANSCRIPTION_EVALUATION.md in specs/ - _SPEC_LLM_TRANSCRIPTION_SKILL.md lists it in Depends on
+
+## WS-DP-06: specs/ and docs/ Folders Are Optional, Not Auto-Created
+
+/prime does not create these folders. If folders exist, documents MUST be placed per WS-DP-01 through WS-DP-05. If folders do not exist and no session is active, the agent places documents directly in the workspace folder root. If a session is active, session-scoped documents (_IMPL_*, _TEST_*, _TASKS_*) go in the session folder.
+
+BAD: Agent creates specs/ folder during /prime without user request
+GOOD: Agent checks if specs/ exists, places _SPEC_*.md there if yes, in workspace root if no
