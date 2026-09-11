@@ -816,7 +816,7 @@ Direction definitions:
 - Update all internal references from `WORKSPACE_CREATION_QUESTIONNAIRE` to `WORKSPACE_SETUP_QUESTIONNAIRE` across:
   - `PromptSystemV4.4/workflows/workspace-setup.md`
   - `PromptSystemV4.4/skills/workspace-management/SKILL.md`
-  - `specs/_SPEC_WORKFLOW-MANAGEMENT_SKILL.md`
+  - `specs/_SPEC_WORKSPACE-MANAGEMENT_SKILL.md`
   - `.devin/` copies (via sync)
 
 **WSKMGMT-FR-73: compare-workspace-setup.md workflow**

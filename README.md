@@ -100,6 +100,7 @@ AMINTON provides arguments    → Tree notation for structured, verifiable Minto
 - [Agent Tools](#agent-tools)
 - [Project Structure](#project-structure)
 - [Workspaces and Sessions](#workspaces-and-sessions)
+- [Workspace Management](#workspace-management)
 - [PromptSystem Versions](#promptsystem-versions)
 - [Agent Compatibility](#agent-compatibility)
 
@@ -1596,6 +1597,22 @@ When [`/session-finalize`](.devin/workflows/session-finalize.md) runs:
 - **PROBLEMS.md** - Open/deferred problems sync to workspace `PROBLEMS.md`
 
 This ensures lessons learned survive session boundaries and prevent repeated mistakes.
+
+## Workspace Management
+
+The **workspace-management** skill handles multi-repo workspace setup, PromptSystem synchronization, and knowledge distribution across product/dev/company repo architectures. It replaces the legacy `deploy-to-all-repos.md` with a generic, config-driven sync system.
+
+**Key concepts:**
+
+- **Repo types**: DevRepo (private, specs/sessions/knowledge), ProductRepo (public, shipped code), CompanyRepo (central source for knowledge/specs)
+- **Sync relationship**: SYNCED repos receive updates from upstream sources via `promptsystem-sync.json`; SELF-CONTAINED repos manage content locally
+- **Sync operations**: Compare (diff preview), Update (execute sync), Rollback (git revert), Integrity (verify consistency)
+- **Sync config**: `promptsystem-sync.json` at workspace root defines targets, include/exclude filters, and never-overwrite patterns. Single source of truth - no hardcoded paths in scripts
+- **Workspace setup**: Interactive questionnaire (`/workspace-setup`) generates all required files from templates based on workspace type (SOFTWARE-DEV or GENERAL)
+
+**Workflows**: [`/workspace-setup`](.devin/workflows/workspace-setup.md), [`/compare-workspace-setup`](.devin/workflows/compare-workspace-setup.md), [`/sync`](.devin/workflows/sync.md), [`/prime`](.devin/workflows/prime.md)
+
+**Full specification**: [`_SPEC_WORKSPACE-MANAGEMENT_SKILL.md`](specs/_SPEC_WORKSPACE-MANAGEMENT_SKILL.md)
 
 ## PromptSystem Versions
 

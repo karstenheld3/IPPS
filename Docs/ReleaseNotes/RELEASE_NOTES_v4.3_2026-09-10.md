@@ -45,7 +45,7 @@ This release covers work from 2026-08-30 to 2026-09-10, spanning 55 commits acro
 
 ### Specs
 
-- **_SPEC_WORKFLOW-MANAGEMENT_SKILL.md**: 1646 lines — workspace management skill specification with FR-41 through FR-75
+- **_SPEC_WORKSPACE-MANAGEMENT_SKILL.md**: 1646 lines — workspace management skill specification with FR-41 through FR-75
 - **_SPEC_INVESTIGATE_WORKFLOW.md**: Investigate workflow specification
 - **_SPEC_IPPS_PROMPT_FILE_FORMAT.md**: Prompt file format specification
 
