@@ -2,7 +2,7 @@
 
 **Doc ID**: AMSW-SP01
 **Goal**: Document the model switching system for Windsurf Cascade
-**Timeline**: Created 2026-01-26, updated 3x
+**Timeline**: Created 2026-01-26, updated 2026-09-11
 
 ## MUST-NOT-FORGET
 
@@ -27,7 +27,7 @@ The model switching system consists of three PromptSystem pieces:
 
 - **Skill** (`devin-auto-model-switcher`) - Scripts and registry for model switching mechanics
 - **Workflow** (`switch-model.md`) - User-facing workflow for manual tier switching
-- **Rule** (`cascade-model-switching.md`) - Guidelines for autonomous agent switching
+- **Rule** (`cascade-model-switching.md`) - Guidelines for autonomous agent switching (historical, not in current PromptSystem)
 
 ## Skill: devin-auto-model-switcher
 
@@ -81,9 +81,9 @@ The model switching system consists of three PromptSystem pieces:
 ### Configuration (in workflow file)
 
 ```
-MODEL-HIGH = "Claude Opus 4.5 (Thinking)"  [5x]
-MODEL-MID  = "Claude Sonnet 4.5"           [2x]
-MODEL-LOW  = "Gemini 3 Flash Medium"       [1x]
+MODEL-HIGH = "Claude Opus 4.6 Thinking"  [5x]
+MODEL-MID  = "Claude Sonnet 4.6 Thinking"  [2x]
+MODEL-LOW  = "Gemini 3 Flash High"         [1x]
 ```
 
 ### Usage
@@ -103,7 +103,7 @@ MODEL-LOW  = "Gemini 3 Flash Medium"       [1x]
 ## Rule: cascade-model-switching
 
 **Source**: `DevSystemV3.2/rules/cascade-model-switching.md`
-**Deployed**: `.devin/rules/cascade-model-switching.md`
+**Status**: Historical - not in current PromptSystem (V4.4). Content preserved in `_OldVersions/`.
 
 ### Purpose
 
@@ -139,21 +139,21 @@ Hints are recommendations - agent decides based on actual task.
 
 ### Tier Definitions (from !NOTES.md)
 
-- **MODEL-HIGH** - Claude Opus 4.5 (Thinking) [5x] - Complex reasoning, specs, architecture
-- **MODEL-MID** - Claude Sonnet 4.5 [2x] - Code verification, bug fixes, refactoring
-- **MODEL-LOW** - Gemini 3 Flash Medium [1x] - Scripts, git, file ops (372 TPS, 78% SWE-Bench)
+- **MODEL-HIGH** - Claude Opus 4.6 Thinking [5x] - Complex reasoning, specs, architecture
+- **MODEL-MID** - Claude Sonnet 4.6 Thinking [2x] - Code verification, bug fixes, refactoring
+- **MODEL-LOW** - Gemini 3 Flash High [1x] - Scripts, git, file ops (372 TPS, 78% SWE-Bench)
 
 ### Workflow to Tier Mapping
 
 - `/prime`, `/commit`, `/session-*` - LOW (mechanical operations)
 - `/recap`, `/verify`, `/test`, `/implement` - MID (standard tasks)
-- `/build`, `/solve`, `/critique`, `/reconcile` - HIGH (complex reasoning)
-- `/continue`, `/go` - varies (depends on task type)
+- `/critique`, `/reconcile`, `/deep-research`, `/investigate` - HIGH (complex reasoning)
+- `/go` - varies (depends on task type)
 
 ### Integration Points
 
 1. **User invokes** `/switch-model` workflow -> calls skill script -> model changes
-2. **Agent follows** `cascade-model-switching.md` rule -> safety check -> calls script
+2. **Agent follows** safety conditions from this SPEC (historical rule `cascade-model-switching.md` not deployed in V4.4) -> safety check -> calls script
 3. **STRUT plans** may include model hints in Strategy section
 4. **!NOTES.md** defines tier-to-model mapping (single source of truth)
 
@@ -201,6 +201,14 @@ Hints are recommendations - agent decides based on actual task.
 - **AMSW-DD-05**: Fuzzy matching + cost priority - Partial names work, prefer cheaper on tie.
 
 ## Document History
+
+**[2026-09-11 17:20]**
+- Fixed: Model versions synced to actual workflow file (Opus 4.5→4.6, Sonnet 4.5→4.6, Gemini Flash Medium→High)
+- Fixed: Workflow-to-tier mapping - removed non-existent workflows (/build, /solve, /continue), added actual workflows (/deep-research, /investigate)
+- Fixed: Marked cascade-model-switching.md rule as historical (not deployed in V4.4)
+- Fixed: Timeline updated to 2026-09-11
+- Renamed: File from _SPEC_WINDSURF_AUTO_MODEL_SWITCHER_SKILL.md to _SPEC_DEVIN_AUTO_MODEL_SWITCHER_SKILL.md
+- Renamed: Title and all skill references from windsurf-auto-model-switcher to devin-auto-model-switcher
 
 **[2026-01-26 16:43]**
 - Fixed: Locations now show Source (DevSystemV3.2) vs Deployed (.devin)
