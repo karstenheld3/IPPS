@@ -1257,6 +1257,7 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - [Git Conventions](.devin/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
 - [Coding Conventions](.devin/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
 - [Workflow Rules](.devin/skills/write-documents/WORKFLOW_RULES.md) - Workflow document structure and formatting
+- **Document placement**: `specs/` for verifiable agent instructions (_SPEC_*, _IMPL_*, _TEST_*, rules with IDs), `docs/` for explanatory knowledge (_INFO_*, research). _TASKS_* stays in session folders. Folders are optional by default, enforced when workspace-management is active (WS-DP-06). Decision rule: can the agent verify compliance? -> specs/. Does it explain why/how? -> docs/. See workspace-management WORKSPACE-RULES.md WS-DP-01 through WS-DP-06.
 
 ## Skill Details
 

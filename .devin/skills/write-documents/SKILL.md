@@ -49,6 +49,7 @@ This skill implements:
 - Document History section at end, reverse chronological
 - Use box-drawing characters (├── └── │) for trees
 - SPEC, IMPL, TEST documents MUST have MUST-NOT-FORGET section (after header block, before TOC)
+- Place documents per workspace-management WORKSPACE-RULES.md WS-DP rules: _SPEC_*, _IMPL_*, _TEST_* in specs/, _INFO_* in docs/ (unless referenced as SPEC dependency). _TASKS_* in session folders. Folders are optional by default, enforced when workspace-management is active (WS-DP-06).
 
 ## Document Types and When to Use
 
