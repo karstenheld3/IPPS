@@ -42,6 +42,13 @@ Privacy (PR)
 - WS-PR-01: No real identifiers, project names, or paths in skill files
 - WS-PR-02: No real identifiers in template examples or placeholder values
 
+Document Placement (DP)
+- WS-DP-01: specs/ folder contains verifiable agent instructions only
+- WS-DP-02: docs/ folder contains explanatory knowledge documents only
+- WS-DP-03: Document type prefix must match folder placement
+- WS-DP-04: Unprefixed rules files with enforceable IDs belong in specs/
+- WS-DP-05: INFO files may reside in specs/ only if referenced as SPEC dependency
+
 ## WS-FL-01: Required DevRepo Files
 
 DevRepo must contain:
@@ -193,3 +200,38 @@ No real identifiers, project names, paths, names of real people, or session-spec
 
 BAD: [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\MyRealProject
 GOOD: [PRODUCT_REPO_FOLDER]: [WORKSPACE_FOLDER]\..\[product-repo-name]
+
+## WS-DP-01: specs/ Folder Contains Verifiable Agent Instructions Only
+
+specs/ contains structured documents the agent reads to execute work. The agent can verify compliance against them. Includes: _SPEC_*, _IMPL_*, _TEST_*, _TASKS_* files, and unprefixed rules files with enforceable IDs (e.g., AI_WRITING_DETECTION_RULES.md).
+
+BAD: _INFO_HOW_TO_DETECT_AI_ASSISTED_WRITING.md in specs/ - explanatory, not verifiable
+GOOD: _SPEC_EDIRD_PHASE_MODEL.md in specs/ - structured spec with FR/DD/IG items
+
+## WS-DP-02: docs/ Folder Contains Explanatory Knowledge Documents Only
+
+docs/ contains documents that explain concepts, research, how-tos, and background. Read for understanding, not for execution verification. Includes: _INFO_* files and unprefixed research articles.
+
+BAD: _SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md in docs/ - verifiable spec, not explanatory
+GOOD: _INFO_HOW_CLAUDE_CODE_WORKS.md in docs/ - explains how a tool works
+
+## WS-DP-03: Document Type Prefix Must Match Folder Placement
+
+_SPEC_*, _IMPL_*, _TEST_*, _TASKS_* files MUST be in specs/. _INFO_* files MUST be in docs/ unless exception WS-DP-05 applies.
+
+BAD: _INFO_MECT_PHILOSOPHY.md in specs/ (no SPEC references it as dependency)
+GOOD: _INFO_MECT_PHILOSOPHY.md in docs/
+
+## WS-DP-04: Unprefixed Rules Files with Enforceable IDs Belong in specs/
+
+Files like AI_WRITING_DETECTION_RULES.md contain measurable criteria with rule IDs (AD-SO-01, etc.) and are verifiable. They go in specs/ despite lacking the _SPEC_ prefix.
+
+BAD: AI_WRITING_DETECTION_RULES.md in docs/ - has enforceable rule IDs
+GOOD: AI_WRITING_DETECTION_RULES.md in specs/ - verifiable agent rules
+
+## WS-DP-05: INFO Files May Reside in specs/ Only If Referenced as SPEC Dependency
+
+_INFO_* files may reside in specs/ only if directly referenced as a dependency by a _SPEC_* file in the same workspace via "Depends on:" header block. This exception keeps co-located INFO+SPEC pairs together.
+
+BAD: _INFO_MNF_TECHNIQUE.md in specs/ - no SPEC lists it as Depends on
+GOOD: _INFO_TRANSCRIPTION_EVALUATION.md in specs/ - _SPEC_LLM_TRANSCRIPTION_SKILL.md lists it in Depends on
