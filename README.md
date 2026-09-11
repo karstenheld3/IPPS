@@ -1054,10 +1054,13 @@ Tree notation for planning and tracking complex autonomous work.
 
 **Effect**: Creates `__STRUT_[TOPIC].md` (standalone scaffolding, deleted by `/cleanup`) or embeds STRUT in `_IMPL_*.md` / `_TASKS_*.md`. The `/write-strut` workflow creates STRUT plans. The `/go` workflow auto-creates STRUT plans during DESIGN phase.
 
-**Core elements**:
-- **Plan ID** - Unique identifier (e.g., `P1`, `P2`)
-- **Step ID** - Plan + sequence (e.g., `P1-S1`, `P1-S2`)
-- **Deliverable ID** - Plan + deliverable (e.g., `P1-D1`, `P1-D2`)
+**Core elements** (five node types):
+- **Phase ID** - Unique identifier per phase (e.g., `P1`, `P2`)
+- **Objectives** - Goals linked to deliverables: `[ ] Goal ← P1-D1, P1-D2` (evidence-based verification)
+- **Strategy** - Free text approach, may include AWT estimates and model hints
+- **Step ID** - Phase + sequence (e.g., `P1-S1`, `P1-S2`), uses AGEN verbs: `[ ] P1-S1 [VERB](params)`
+- **Deliverable ID** - Phase + deliverable (e.g., `P1-D1`, `P1-D2`)
+- **Transitions** - Flow control at phase end: `- Condition → Target` (targets: `[PHASE-NAME]`, `[CONSULT]`, `[END]`)
 - **Checkbox states** - `[ ]` pending, `[x]` done, `[N]` done N times (retry count)
 - **Concurrent blocks** - Group parallel steps under `Concurrent: <strategy>`
 - **Dependencies** - `← Px-Sy` suffix for explicit wait conditions
@@ -1104,7 +1107,7 @@ Tree notation for planning and tracking complex autonomous work.
     - No clear winner → [CONSULT]
 ```
 
-**Key difference**: BUILD plans use `[IMPLEMENT]`, `[TEST]`, `[FIX]`, `[COMMIT]` verbs. SOLVE plans use `[RESEARCH]`, `[EVALUATE]`, `[RECOMMEND]` verbs. Both use the same tree structure with IDs, checkboxes, and transitions.
+**Key difference**: BUILD plans typically use verbs like `[IMPLEMENT]`, `[TEST]`, `[FIX]`, `[COMMIT]`. SOLVE plans typically use verbs like `[RESEARCH]`, `[EVALUATE]`, `[RECOMMEND]`, `[GATHER]`, `[DEFINE]`, `[WRITE-INFO]`. Both use the same tree structure with IDs, checkboxes, and transitions.
 
 ## TRACTFUL - Document Framework
 
