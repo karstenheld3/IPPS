@@ -115,7 +115,7 @@ Dispatches to existing creation flow. Preserves the original workspace creation 
    - Create NOTES.md (SINGLE-PROJECT, GENERAL) or !NOTES.md (WORKSPACE) at workspace root
    - Create PROBLEMS.md, PROGRESS.md, ID-REGISTRY.md, SOPS.md, FAILS.md
    - Copy WORKSPACE_SETUP_QUESTIONNAIRE.md from `[AGENT_FOLDER]/skills/workspace-management/` to workspace root as `_WORKSPACE_SETUP_QUESTIONNAIRE.md`
-   - Create empty folders: [AGENT_FOLDER], _sessions, _sessions/_archive
+   - Create empty folders: [AGENT_FOLDER], _sessions, _sessions/_archive, docs/
    - For WORKSPACE: also create main.code-workspace, product repo README.md, knowledge/, specs/
 5. Sync PromptSystem files from source to [AGENT_FOLDER] using @skills:workspace-management Procedure 2
 6. Run `/verify workspace` to confirm all required files and constants are present

@@ -28,6 +28,7 @@ References (loaded on demand):
 4. Rollback on shared branches (main, master, remote-tracked) requires explicit confirmation - advise revert commit instead
 5. Privacy gate - no real identifiers, project names, or paths in any skill file
 6. Sync config is JSON-based: promptsystem-sync.json at target [WORKSPACE_FOLDER] root is single source of truth - no NOTES.md prose lookup
+7. Document placement: specs/ for verifiable agent instructions (_SPEC_*, _IMPL_*, _TEST_*, rules files with IDs), docs/ for explanatory knowledge (_INFO_*, research articles). _TASKS_* stays in session folders. Folders are optional by default, enforced when workspace-management is active (WS-DP-06). See WORKSPACE-RULES.md WS-DP-01 through WS-DP-06.
 
 ## Intent Lookup
 
@@ -49,6 +50,7 @@ User wants to...
 - Commit across multiple repos → Procedure 5, FR-30
 - Analyze workspace setup and generate report → Procedure 6, FR-67
 - Compare workspace setup between two workspaces → Procedure 7, FR-74
+- Check document placement → Procedure 4 (Integrity), WS-DP rules
 
 ## Core Procedures
 
