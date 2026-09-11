@@ -237,9 +237,15 @@ _INFO_* files may reside in specs/ only if directly referenced as a dependency b
 BAD: _INFO_MNF_TECHNIQUE.md in specs/ - no SPEC lists it as Depends on
 GOOD: _INFO_TRANSCRIPTION_EVALUATION.md in specs/ - _SPEC_LLM_TRANSCRIPTION_SKILL.md lists it in Depends on
 
-## WS-DP-06: specs/ and docs/ Folders Are Optional, Not Auto-Created
+## WS-DP-06: Folder Enforcement Tiers
 
-/prime does not create these folders. If folders exist, documents MUST be placed per WS-DP-01 through WS-DP-05. If folders do not exist and no session is active, the agent places documents directly in the workspace folder root. If a session is active, session-scoped documents (_IMPL_*, _TEST_*, _TASKS_*) go in the session folder.
+Two tiers of folder enforcement:
+
+- **Default (no workspace-management)**: specs/ and docs/ are optional. /prime does not create them. If folders exist, documents MUST be placed per WS-DP-01 through WS-DP-05. If folders do not exist and no session is active, the agent places documents directly in the workspace folder root. If a session is active, session-scoped documents (_IMPL_*, _TEST_*, _TASKS_*) go in the session folder.
+- **Workspace-management active**: specs/ and docs/ are enforced. /workspace-setup creates both folders during workspace initialization. All documents MUST be placed per WS-DP-01 through WS-DP-05. No documents in workspace root (except tracking files: NOTES.md, PROBLEMS.md, PROGRESS.md, FAILS.md, ID-REGISTRY.md).
 
 BAD: Agent creates specs/ folder during /prime without user request
 GOOD: Agent checks if specs/ exists, places _SPEC_*.md there if yes, in workspace root if no
+
+BAD: Workspace created via /workspace-setup but _SPEC_*.md left in workspace root
+GOOD: Workspace created via /workspace-setup, all _SPEC_*.md in specs/ folder
