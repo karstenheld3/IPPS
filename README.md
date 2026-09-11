@@ -295,9 +295,10 @@ You type: /prime, then /session-load
 
 **Sessions** - Lifecycle management. `/go` handles these automatically for most tasks.
 - [`/session-new`](.devin/workflows/session-new.md) - Initialize a new development session
-  - **Creates**: `_YYYY-MM-DD_Topic/` folder with `NOTES.md`, `PROBLEMS.md`, `PROGRESS.md` from templates
+  - **Creates**: `_YYYY-MM-DD_[Topic]/` folder with `NOTES.md`, `PROBLEMS.md`, `PROGRESS.md` from templates
   - **Edits**: nothing (creates new session only)
   - **When**: Manual session control instead of `/go`. Use when you want to manage phases yourself.
+  - **How to specify goal/type**: `/session-new` takes no arguments. Describe your task in the chat first (e.g., "I need to fix the login bug in auth module"), then run `/session-new`. The agent derives the session folder name from your description and extracts initial problems from your request. Session type (BUILD vs SOLVE) is determined later by EDIRD assessment.
 - [`/session-save`](.devin/workflows/session-save.md) - Save session progress
   - **Creates**: nothing (updates existing tracking files)
   - **Edits**: session `NOTES.md`, `PROGRESS.md`, `PROBLEMS.md` (updates with current state)
@@ -489,11 +490,13 @@ Start a SOLVE task (research, analysis, decisions):
 
 **Workflows:** [`/session-new`](.devin/workflows/session-new.md), [`/session-save`](.devin/workflows/session-save.md), [`/session-load`](.devin/workflows/session-load.md), [`/session-finalize`](.devin/workflows/session-finalize.md)
 
-Start a new work session:
+Start a new work session (describe your task first, then run the command):
 ```
+I need to fix the login bug in the auth module - users get 500 errors when password contains special characters
+
 /session-new
 ```
-Creates a session folder with NOTES.md, PROBLEMS.md, PROGRESS.md.
+Creates a session folder (e.g., `_2026-09-11_FixLoginBug/`) with `NOTES.md`, `PROBLEMS.md`, `PROGRESS.md`. The agent derives the folder name from your description and extracts initial problems from your request. Session type (BUILD vs SOLVE) is determined later by EDIRD assessment.
 
 Save progress during work:
 ```
@@ -513,7 +516,7 @@ Finalize session and sync findings:
 ```
 Syncs FAILS and LEARNINGS to workspace level, prepares session for archive.
 
-**When to use**: Use `/session-new` when you want manual control instead of `/go`. Use `/session-save` before closing your IDE or taking a break. Use `/session-load` to resume work in a new session. Use `/session-finalize` when the session goal is reached - it syncs failures and learnings to workspace level so future sessions benefit.
+**When to use**: Use `/session-new` when you want manual control instead of `/go` - describe your task in the chat first so the agent can name the session and extract problems. Use `/session-save` before closing your IDE or taking a break. Use `/session-load` to resume work in a new session. Use `/session-finalize` when the session goal is reached - it syncs failures and learnings to workspace level so future sessions benefit.
 
 ### Autonomous Execution
 
@@ -755,6 +758,9 @@ The following use cases illustrate how IPPS workflows chain together in practice
 /prime
 
 # 2. Start a session for the update
+#    (describe the task first, then /session-new derives folder name and problems)
+I need to update our API docs after the Stripe API revision - all endpoint categories need TypeScript and Python examples
+
 /session-new
 
 # 3. Research what changed since the last version
@@ -835,6 +841,9 @@ The following use cases illustrate how IPPS workflows chain together in practice
 /prime
 
 # 2. Start session
+#    (describe the task first, then /session-new derives folder name and problems)
+I need to review a series of cloud cost optimization blog posts and check their claims against sources
+
 /session-new
 
 # 3. Scrape article list and present for selection
