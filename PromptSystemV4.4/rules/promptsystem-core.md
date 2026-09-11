@@ -162,6 +162,7 @@ Five dimensions define how the agent should behave:
 │   ├── PROBLEMS.md         # Session problems
 │   ├── PROGRESS.md         # Session progress
 │   └── FAILS.md            # Lessons learned
+├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
 ├── src/                    # Source code
 ├── !NOTES.md               # Workspace notes (priority file)
 ├── PROBLEMS.md            # Known problems
@@ -178,6 +179,7 @@ Five dimensions define how the agent should behave:
 │   ├── workflows/          # Workspace-level workflows
 │   └── skills/             # Workspace-level skills
 ├── _Archive/               # Archived sessions (all projects)
+├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
 ├── [PROJECT_A]/
 │   ├── _Archive/           # Project A archived sessions
 │   ├── _[SESSION_FOLDER]/   # Project A sessions
@@ -193,6 +195,44 @@ Five dimensions define how the agent should behave:
 ├── !PROGRESS.md            # Workspace-level progress
 └── FAILS.md                # Lessons learned (workspace-level)
 ```
+
+### Multi-Repo Workspace
+
+```
+[WORKSPACE_FOLDER]/
+├── [AGENT_FOLDER]/
+│   ├── specs/               # Agent specs (.md files)
+│   ├── workflows/          # Agent workflows (.md files)
+│   └── skills/             # Agent Skills (folders with SKILL.md)
+├── _Archive/               # Archived sessions
+├── _[SESSION_FOLDER]/       # Session folders start with underscore
+├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
+├── main.code-workspace      # References ProductRepo (may be outside [WORKSPACE_FOLDER])
+├── !NOTES.md               # Workspace notes (priority file)
+├── PROBLEMS.md            # Known problems
+├── !PROGRESS.md            # Overall progress
+└── FAILS.md                # Lessons learned (workspace-level)
+
+[PRODUCT_REPO_FOLDER]/
+├── src/                    # Product source code
+├── docs/                   # Product documentation
+└── README.md              # Product README
+```
+
+## Document Placement
+
+Two folders for workspace-level documents:
+
+- **specs/** - Verifiable agent instructions: _SPEC_*, _IMPL_*, _TEST_* files, and unprefixed rules files with enforceable IDs. The agent can verify compliance against these documents. _TASKS_* files are session-scoped and stay in session folders.
+- **docs/** - Explanatory knowledge: _INFO_* files and unprefixed research articles. Read for understanding, not for execution verification.
+
+Decision rule: "Can the agent verify compliance against this document?" If yes, specs/. Does it explain why/how something works? docs/.
+
+Exception: _INFO_* files may reside in specs/ if directly referenced as a dependency by a _SPEC_* file in the same workspace (Depends on: header block).
+
+See workspace-management WORKSPACE-RULES.md WS-DP-01 through WS-DP-06 for enforceable rules.
+
+These folders are optional by default (see WS-DP-06). /prime does not create them. If folders exist, documents MUST be placed per the rules above. If folders do not exist and no session is active, the agent places documents directly in the workspace folder root. If a session is active, session-scoped documents (_IMPL_*, _TEST_*, _TASKS_*) go in the session folder.
 
 <!-- END: Skill: workspace-management -->
 
