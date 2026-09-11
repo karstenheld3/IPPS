@@ -27,7 +27,7 @@ Structure (ST)
 
 Sync (SY)
 - WS-SY-01: promptsystem-sync.json source paths must be relative
-- WS-SY-02: promptsystem-sync.json must define source, selected_bundles, bundles, include, exclude, deprecated, never_overwrite per source entry
+- WS-SY-02: promptsystem-sync.json must define last_sync, deprecated, targets per entry (path, source, include, exclude, never_overwrite)
 - WS-SY-03: never_overwrite files must not be overwritten or deleted during sync
 - WS-SY-04: last_sync timestamp must be updated after successful execute
 - WS-SY-05: Source repo is read-only during downstream sync
@@ -140,12 +140,12 @@ promptsystem-sync.json source paths must be relative (e.g., `../IPPS/DevSystemV4
 BAD: source: "e:\\Dev\\IPPS\\DevSystemV4.3" - machine-specific, breaks portability
 GOOD: source: "../IPPS/DevSystemV4.3" - portable across machines
 
-## WS-SY-02: promptsystem-sync.json Source Entry Validation
+## WS-SY-02: promptsystem-sync.json Target Entry Validation
 
-Each source entry in promptsystem-sync.json must define: source, selected_bundles, bundles, include, exclude, deprecated, never_overwrite.
+promptsystem-sync.json must define top-level `last_sync`, `deprecated` (array), and `targets` (array). Each target entry must define: `path`, `source`, `include`, `exclude`, `never_overwrite`.
 
-BAD: Source entry missing 'never_overwrite' array - sync script cannot protect files from overwrite
-GOOD: All 7 required fields present per source entry
+BAD: Target entry missing 'never_overwrite' array - sync script cannot protect files from overwrite
+GOOD: All 5 required fields present per target entry, deprecated at top level shared across targets
 
 ## WS-SY-03: never_overwrite Enforcement
 
