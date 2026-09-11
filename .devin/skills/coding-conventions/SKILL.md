@@ -33,3 +33,11 @@ python reindent.py folder/ --to 2 --recursive
 python reindent.py folder/ --to 2 --recursive --dry-run
 python reindent.py script.py --to 2
 ```
+
+reindent.ps1 - Convert PowerShell indentation to target spaces
+
+```powershell
+pwsh reindent.ps1 folder/ --to 2 --recursive
+pwsh reindent.ps1 folder/ --to 2 --recursive --dry-run
+pwsh reindent.ps1 script.ps1 --to 2
+```
