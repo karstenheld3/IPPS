@@ -1054,13 +1054,19 @@ Tree notation for planning and tracking complex autonomous work.
 
 **Effect**: Creates `__STRUT_[TOPIC].md` (standalone scaffolding, deleted by `/cleanup`) or embeds STRUT in `_IMPL_*.md` / `_TASKS_*.md`. The `/write-strut` workflow creates STRUT plans. The `/go` workflow auto-creates STRUT plans during DESIGN phase.
 
-**Core elements** (five node types):
-- **Phase ID** - Unique identifier per phase (e.g., `P1`, `P2`)
+**Five node types** (per phase, in order):
 - **Objectives** - Goals linked to deliverables: `[ ] Goal ← P1-D1, P1-D2` (evidence-based verification)
 - **Strategy** - Free text approach, may include AWT estimates and model hints
-- **Step ID** - Phase + sequence (e.g., `P1-S1`, `P1-S2`), uses AGEN verbs: `[ ] P1-S1 [VERB](params)`
-- **Deliverable ID** - Phase + deliverable (e.g., `P1-D1`, `P1-D2`)
+- **Steps** - Actions using AGEN verbs: `[ ] P1-S1 [VERB](params)` (flat list with checkboxes)
+- **Deliverables** - Expected outputs: `[ ] P1-D1: Description` (checkboxes with IDs)
 - **Transitions** - Flow control at phase end: `- Condition → Target` (targets: `[PHASE-NAME]`, `[CONSULT]`, `[END]`)
+
+**ID formats**:
+- **Phase ID** - `P1`, `P2`, `P3`... (unique within plan)
+- **Step ID** - `P1-S1`, `P1-S2`, `P2-S1`...
+- **Deliverable ID** - `P1-D1`, `P1-D2`, `P2-D1`...
+
+**Notation features**:
 - **Checkbox states** - `[ ]` pending, `[x]` done, `[N]` done N times (retry count)
 - **Concurrent blocks** - Group parallel steps under `Concurrent: <strategy>`
 - **Dependencies** - `← Px-Sy` suffix for explicit wait conditions
