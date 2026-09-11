@@ -37,17 +37,17 @@ Based on tier argument, run from `.devin/skills/devin-auto-model-switcher/`:
 
 **MODEL-HIGH:**
 ```powershell
-.\select-windsurf-model-in-ide.ps1 -Query "[MODEL-HIGH-QUERY]"
+.\select-devin-model-in-ide.ps1 -Query "[MODEL-HIGH-QUERY]"
 ```
 
 **MODEL-MID:**
 ```powershell
-.\select-windsurf-model-in-ide.ps1 -Query "[MODEL-MID-QUERY]"
+.\select-devin-model-in-ide.ps1 -Query "[MODEL-MID-QUERY]"
 ```
 
 **MODEL-LOW:**
 ```powershell
-.\select-windsurf-model-in-ide.ps1 -Query "[MODEL-LOW-QUERY]"
+.\select-devin-model-in-ide.ps1 -Query "[MODEL-LOW-QUERY]"
 ```
 
 See `@skills:devin-auto-model-switcher` for script details.

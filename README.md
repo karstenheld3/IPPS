@@ -1466,13 +1466,13 @@ Switch Windsurf Cascade AI models programmatically.
 **Setup**: Run `SETUP.md` to install keybindings, restart Windsurf.
 
 **Scripts**:
-- `select-windsurf-model-in-ide.ps1` - Select model by search query
+- `select-devin-model-in-ide.ps1` - Select model by search query
 - `windsurf-model-registry.json` - Available models and costs
 
 **Quick examples**:
 ```powershell
 # Select Claude Sonnet 4.5
-.\.devin\skills\devin-auto-model-switcher\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
+.\.devin\skills\devin-auto-model-switcher\select-devin-model-in-ide.ps1 -Query "sonnet 4.5"
 ```
 
 ### write-documents

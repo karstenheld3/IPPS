@@ -31,7 +31,7 @@ Model hints are recommendations - agent decides based on actual task.
 
 ## Files
 
-- `select-windsurf-model-in-ide.ps1` - Select a model by search query
+- `select-devin-model-in-ide.ps1` - Select a model by search query
 - `windsurf-model-registry.json` - All available models and costs
 - `update-model-registry/UPDATE_WINDSURF_MODEL_REGISTRY.md` - Workflow to update the registry
 
@@ -39,13 +39,13 @@ Model hints are recommendations - agent decides based on actual task.
 
 ```powershell
 # Select Claude Sonnet 4.5
-.\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
+.\select-devin-model-in-ide.ps1 -Query "sonnet 4.5"
 
 # Select Claude Opus 4.5 (Thinking)
-.\select-windsurf-model-in-ide.ps1 -Query "opus 4.5 thinking"
+.\select-devin-model-in-ide.ps1 -Query "opus 4.5 thinking"
 
 # Select GPT-5.2 Low Reasoning
-.\select-windsurf-model-in-ide.ps1 -Query "gpt-5.2 low"
+.\select-devin-model-in-ide.ps1 -Query "gpt-5.2 low"
 ```
 
 ## Model Registry

@@ -39,11 +39,11 @@ The model switching system consists of three PromptSystem pieces:
 - `SKILL.md` - Skill documentation and usage
 - `SETUP.md` - Keybinding installation (Ctrl+Shift+F9/F10)
 - `UNINSTALL.md` - Removal instructions
-- `select-windsurf-model-in-ide.ps1` - Main script for model selection
+- `select-devin-model-in-ide.ps1` - Main script for model selection
 - `windsurf-model-registry.json` - 68 models with costs
 - `update-model-registry/` - Workflow to refresh registry from UI
 
-### Script: select-windsurf-model-in-ide.ps1
+### Script: select-devin-model-in-ide.ps1
 
 **Parameters:**
 - `-Query` (required) - Model name or partial match
@@ -59,12 +59,12 @@ The model switching system consists of three PromptSystem pieces:
 **Usage:**
 ```powershell
 # Select by partial name
-.\select-windsurf-model-in-ide.ps1 -Query "opus 4.5 thinking"
-.\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
-.\select-windsurf-model-in-ide.ps1 -Query "gemini 3 flash medium"
+.\select-devin-model-in-ide.ps1 -Query "opus 4.5 thinking"
+.\select-devin-model-in-ide.ps1 -Query "sonnet 4.5"
+.\select-devin-model-in-ide.ps1 -Query "gemini 3 flash medium"
 
 # Preview without executing
-.\select-windsurf-model-in-ide.ps1 -Query "haiku" -DryRun
+.\select-devin-model-in-ide.ps1 -Query "haiku" -DryRun
 ```
 
 ### Prerequisites
@@ -97,7 +97,7 @@ MODEL-LOW  = "Gemini 3 Flash High"         [1x]
 ### Behavior
 
 1. Maps tier argument to configured model query
-2. Calls `select-windsurf-model-in-ide.ps1 -Query "[MODEL-*-QUERY]"`
+2. Calls `select-devin-model-in-ide.ps1 -Query "[MODEL-*-QUERY]"`
 3. Reports: "Switched to [MODEL-*]. Takes effect on next message."
 
 ## Rule: cascade-model-switching
