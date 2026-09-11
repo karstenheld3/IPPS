@@ -1,9 +1,9 @@
 ---
-name: windsurf-auto-model-switcher
+name: devin-auto-model-switcher
 description: Switch Windsurf Cascade AI models programmatically. Apply when needing to change models from workflows or scripts.
 ---
 
-# Windsurf Auto Model Switcher
+# Devin Auto Model Switcher
 
 Switch Windsurf Cascade AI models programmatically using keyboard simulation.
 

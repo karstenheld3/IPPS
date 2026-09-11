@@ -21,7 +21,7 @@ MODEL-LOW-QUERY = "gemini 3 flash high"
 
 ## Required Skills
 
-- `@skills:windsurf-auto-model-switcher` for model switching
+- `@skills:devin-auto-model-switcher` for model switching
 
 ## Usage
 
@@ -33,7 +33,7 @@ MODEL-LOW-QUERY = "gemini 3 flash high"
 
 ## Execute
 
-Based on tier argument, run from `.devin/skills/windsurf-auto-model-switcher/`:
+Based on tier argument, run from `.devin/skills/devin-auto-model-switcher/`:
 
 **MODEL-HIGH:**
 ```powershell
@@ -50,7 +50,7 @@ Based on tier argument, run from `.devin/skills/windsurf-auto-model-switcher/`:
 .\select-windsurf-model-in-ide.ps1 -Query "[MODEL-LOW-QUERY]"
 ```
 
-See `@skills:windsurf-auto-model-switcher` for script details.
+See `@skills:devin-auto-model-switcher` for script details.
 
 ## Confirm
 

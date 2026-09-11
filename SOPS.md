@@ -251,7 +251,7 @@ These locations contain replicas that must be kept in sync:
 - **External repo**: `E:/Dev/LLM-Research/_Sessions/_2026-03-05_TabularDataFormatsForLLMs/01_CSVScaleLimits/_Scripts/` (3 JSON files)
 - **External repo**: `E:/Dev/LLM-Research/_Sessions/_2026-03-05_TabularDataFormatsForLLMs/02_FormatComparison/_Scripts/` (3 JSON files)
 
-**Not a replica**: `[PROMPTSYSTEM_FOLDER]/skills/windsurf-auto-model-switcher/windsurf-model-registry.json` — different format (Windsurf UI credit multipliers), not API model data.
+**Not a replica**: `[PROMPTSYSTEM_FOLDER]/skills/devin-auto-model-switcher/windsurf-model-registry.json` — different format (Windsurf UI credit multipliers), not API model data.
 
 ### Steps
 

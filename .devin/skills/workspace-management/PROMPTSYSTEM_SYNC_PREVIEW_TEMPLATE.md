@@ -86,7 +86,7 @@ e:\Dev\Lana-V1-Dev\.devin
       workflows\cleanup.md
       skills\coding-conventions\SKILL.md
       skills\coding-conventions\PYTHON-RULES.md
-  - Excluded skills: llm-transcription, youtube-downloader, travel-info, hosting, seo-tools, pdf-tools, image-tools, google-account, llm-computer-use, llm-evaluation, ms-playwright-mcp, playwriter-mcp, windows-desktop-control, windsurf-auto-model-switcher
+  - Excluded skills: llm-transcription, youtube-downloader, travel-info, hosting, seo-tools, pdf-tools, image-tools, google-account, llm-computer-use, llm-evaluation, ms-playwright-mcp, playwriter-mcp, windows-desktop-control, devin-auto-model-switcher
 
 e:\Dev\USTVA\.devin
   [UP TO DATE] 287 files unchanged

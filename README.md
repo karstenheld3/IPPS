@@ -969,7 +969,7 @@ For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) dec
 - **session-management** - Session init, save, resume, finalize, archive. **Effect**: No files directly. Procedures consumed by `/session-*` workflows. Templates for NOTES.md, PROBLEMS.md, PROGRESS.md.
 - **travel-info** - Travel lookups: flights, trains, transit, country-specific info. **Effect**: Creates travel info `.md` files. Edits nothing (creates new files).
 - **windows-desktop-control** - Windows screenshots, window management, keyboard/mouse. **Effect**: Creates screenshot files (PNG). Edits nothing (creates new files).
-- **windsurf-auto-model-switcher** - Switch Cascade AI model tier programmatically. **Effect**: No files. Procedures for model switching via config files.
+- **devin-auto-model-switcher** - Switch Cascade AI model tier programmatically. **Effect**: No files. Procedures for model switching via config files.
 - **workspace-management** - Multi-repo workspace setup, PromptSystem synchronization, knowledge distribution. **Effect**: Creates `NOTES.md`, `ID-REGISTRY.md`, `promptsystem-sync.json` from templates. Edits workspace config files. Runs `sync.ps1` to sync PromptSystem across repos.
 - **write-documents** - Document templates (INFO, SPEC, IMPL, TEST, TASKS, STRUT, MINTO), writing rules (APAPALAN, MECT, SOCAS). **Effect**: No files directly. Templates consumed by write-* workflows. Rules consumed by `/verify`, `/improve`.
 - **youtube-downloader** - Download YouTube content as MP3 or video, extract metadata. **Effect**: Creates MP3/video files in download folder. Creates `.md` metadata files. Edits nothing (creates new files).
@@ -1459,7 +1459,7 @@ Windows desktop automation utilities.
 .\.devin\skills\windows-desktop-control\simple-screenshot.ps1 -OutputPath "C:\temp\screenshot.jpg"
 ```
 
-### windsurf-auto-model-switcher
+### devin-auto-model-switcher
 
 Switch Windsurf Cascade AI models programmatically.
 
@@ -1472,7 +1472,7 @@ Switch Windsurf Cascade AI models programmatically.
 **Quick examples**:
 ```powershell
 # Select Claude Sonnet 4.5
-.\.devin\skills\windsurf-auto-model-switcher\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
+.\.devin\skills\devin-auto-model-switcher\select-windsurf-model-in-ide.ps1 -Query "sonnet 4.5"
 ```
 
 ### write-documents

@@ -14,7 +14,7 @@ param(
 
 # Default output folder if not specified
 if (-not $OutputFolder) {
-    # Navigate up: script -> update-model-registry -> windsurf-auto-model-switcher -> skills -> .devin -> workspace
+    # Navigate up: script -> update-model-registry -> devin-auto-model-switcher -> skills -> .devin -> workspace
     $workspaceRoot = (Get-Item $PSScriptRoot).Parent.Parent.Parent.Parent.Parent.FullName
     $OutputFolder = Join-Path $workspaceRoot "..\.tools\_screenshots"
 }
