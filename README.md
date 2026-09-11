@@ -30,17 +30,17 @@ IPPS is built on ten integrated concepts that enable autonomous agent operation:
 
 - **[TRACTFUL - Document Framework](specs/_SPEC_TRACTFUL_DOCUMENT_FRAMEWORK.md)** - Document types (INFO, SPEC, IMPL, TEST, TASKS) with unique IDs and traceability. Defines how documents reference each other and track progress. **When**: Specification-driven development - research → spec → plan → test → implement.
 
-- **[MNF - MUST-NOT-FORGET Technique](specs/_INFO_MNF_TECHNIQUE.md)** - Checklist technique preventing critical oversights. Workflows and documents declare MNF items; agent verifies compliance before completion. **When**: Tasks where skipping a step causes data loss, security issues, or broken deployments.
+- **[MNF - MUST-NOT-FORGET Technique](docs/_INFO_MNF_TECHNIQUE.md)** - Checklist technique preventing critical oversights. Workflows and documents declare MNF items; agent verifies compliance before completion. **When**: Tasks where skipping a step causes data loss, security issues, or broken deployments.
 
-- **[APAPALAN - Writing Principle](specs/_INFO_APAPALAN_PRINCIPLE.md)** - As Precise As Possible (Priority 1), As Little As Necessary (Priority 2). Enforceable rules in [`APAPALAN_RULES.md`](.devin/skills/write-documents/APAPALAN_RULES.md) for precision, brevity, structure, and naming. **When**: Writing any document, code comment, or agent instruction.
+- **[APAPALAN - Writing Principle](docs/_INFO_APAPALAN_PRINCIPLE.md)** - As Precise As Possible (Priority 1), As Little As Necessary (Priority 2). Enforceable rules in [`APAPALAN_RULES.md`](.devin/skills/write-documents/APAPALAN_RULES.md) for precision, brevity, structure, and naming. **When**: Writing any document, code comment, or agent instruction.
 
-- **[MECT - Minimal Explicit Consistent Terminology](specs/_INFO_MECT_PHILOSOPHY.md)** - Writing quality philosophy. Rules in [`MECT_WRITING_RULES.md`](.devin/skills/write-documents/MECT_WRITING_RULES.md) (voice, word choice, terminology, headings, lists) and [`MECT_CODING_RULES.md`](.devin/skills/coding-conventions/MECT_CODING_RULES.md) (naming, functions, comments, logs, errors). **When**: Naming variables, writing headings, ensuring one term per concept.
+- **[MECT - Minimal Explicit Consistent Terminology](docs/_INFO_MECT_PHILOSOPHY.md)** - Writing quality philosophy. Rules in [`MECT_WRITING_RULES.md`](.devin/skills/write-documents/MECT_WRITING_RULES.md) (voice, word choice, terminology, headings, lists) and [`MECT_CODING_RULES.md`](.devin/skills/coding-conventions/MECT_CODING_RULES.md) (naming, functions, comments, logs, errors). **When**: Naming variables, writing headings, ensuring one term per concept.
 
-- **[SOCAS - Signs of Confusion and Sloppiness](specs/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md)** - 17 criteria for ranking web search results and evaluating agent output quality. Rules in [`SOCAS_RULES.md`](.devin/skills/write-documents/SOCAS_RULES.md). Used by `/deep-research`, `/improve`, and `/verify`. **When**: Evaluating research quality, reviewing agent output, ranking search results.
+- **[SOCAS - Signs of Confusion and Sloppiness](docs/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md)** - 17 criteria for ranking web search results and evaluating agent output quality. Rules in [`SOCAS_RULES.md`](.devin/skills/write-documents/SOCAS_RULES.md). Used by `/deep-research`, `/improve`, and `/verify`. **When**: Evaluating research quality, reviewing agent output, ranking search results.
 
-- **[GRUC - Guides, Rules, Checks](specs/_INFO_GRUC_GUIDES_RULES_CHECKS.md)** - Drift-prevention technique using three file types: GUIDE (before execution, planning strategy), RULES (whole lifecycle, output verification), CHECKS (after execution, process audit). Separation prevents gaming: CHECKS invisible during work, GUIDE invisible during audit. **When**: Building skills that need quality enforcement without self-gaming.
+- **[GRUC - Guides, Rules, Checks](docs/_INFO_GRUC_GUIDES_RULES_CHECKS.md)** - Drift-prevention technique using three file types: GUIDE (before execution, planning strategy), RULES (whole lifecycle, output verification), CHECKS (after execution, process audit). Separation prevents gaming: CHECKS invisible during work, GUIDE invisible during audit. **When**: Building skills that need quality enforcement without self-gaming.
 
-- **[AMINTON - Agentic MINTO Notation](specs/_INFO_AGENTIC_MINTO_ARTICLES.md)** - Tree notation for Minto Pyramid articles. Node types: A (root argument), Q (questions), QnAn (answers), QnAn-Sn (sub-questions), QnAn-SnEn (evidence). Enables machine verification of argument completeness. Used by `/propose-minto` and `/write-minto`. **When**: Writing structured argumentative articles with verifiable completeness.
+- **[AMINTON - Agentic MINTO Notation](docs/_INFO_AGENTIC_MINTO_ARTICLES.md)** - Tree notation for Minto Pyramid articles. Node types: A (root argument), Q (questions), QnAn (answers), QnAn-Sn (sub-questions), QnAn-SnEn (evidence). Enables machine verification of argument completeness. Used by `/propose-minto` and `/write-minto`. **When**: Writing structured argumentative articles with verifiable completeness.
 
 **How they work together:**
 ```
@@ -1228,22 +1228,22 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - **AGEN** - Agentic English. PREN enriched with semantics: `@mentions`, `/workflow`, `[VERB]`, `[PLACEHOLDER]`. **Effect**: No files. Controls vocabulary in all workflows and specs.
 - **HWT** - Human Work Time. Partition target: max 0.5h per task for predictable progress. **Effect**: No files. Guides task partitioning in `/write-tasks-plan`.
 - **AWT** - Agentic Work Time. Agent time estimate for planning and capacity. **Effect**: No files. Used in STRUT strategy sections for time estimates.
-- [**MEPI**](specs/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Executable Point of Information. Present 2-3 curated options aligned with implicit intentions. **Effect**: No files. Controls how options are presented in chat.
-- [**MCPI**](specs/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Complete Point of Information. Present exhaustive options when thoroughness is explicitly required. **Effect**: No files. Controls option presentation (exhaustive vs curated).
-- [**SOCAS**](specs/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md) - Signs Of Confusion And Sloppiness. 17 criteria for detecting agent degradation. **Effect**: No files. Used by `/verify`, `/improve`, `/deep-research` to evaluate output quality.
-- [**MNF**](specs/_INFO_MNF_TECHNIQUE.md) - Must Not Forget. Technique for critical item tracking during task execution. **Effect**: No files directly. MNF items embedded in workflows and STRUT plans. Agent verifies compliance before completion.
+- [**MEPI**](docs/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Executable Point of Information. Present 2-3 curated options aligned with implicit intentions. **Effect**: No files. Controls how options are presented in chat.
+- [**MCPI**](docs/_INFO_MEPI_MCPI_PRINCIPLE.md) - Most Complete Point of Information. Present exhaustive options when thoroughness is explicitly required. **Effect**: No files. Controls option presentation (exhaustive vs curated).
+- [**SOCAS**](docs/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md) - Signs Of Confusion And Sloppiness. 17 criteria for detecting agent degradation. **Effect**: No files. Used by `/verify`, `/improve`, `/deep-research` to evaluate output quality.
+- [**MNF**](docs/_INFO_MNF_TECHNIQUE.md) - Must Not Forget. Technique for critical item tracking during task execution. **Effect**: No files directly. MNF items embedded in workflows and STRUT plans. Agent verifies compliance before completion.
 - **APAPALAN** - As Precise As Possible, As Little As Necessary. Conciseness principle for workflows and documents. **Effect**: No files. 35 enforceable rules in `APAPALAN_RULES.md`. Applied by `/verify` and `/improve`.
 - **VCRIV** - Verify-Critique-Reconcile-Implement-Verify. Quality pipeline for logic and design review: `/verify` → `/critique` → `/reconcile` → `/implement` → `/verify`. **Effect**: Creates `_CRITIQUE_REVIEW.md`. Edits source documents (via `/reconcile` and `/implement`).
 - **FACRIV** - Fact-check-Reconcile-Implement-Verify. Quality pipeline for factual claim verification: `/fact-check` → `/reconcile` → `/implement` → `/verify`. **Effect**: Creates `_FACTCHECK_REVIEW.md`. Edits source documents (via `/reconcile` and `/implement`).
 
-**Agent Drift Prevention**: [ADP Approach](specs/_INFO_AGENT_DRIFT_PREVENTION_APPROACH.md) - How the PromptSystem prevents agent drift through TRACTFUL, SMAP, EDIRD, STRUT, GRUC, and MNF across three scopes
+**Agent Drift Prevention**: [ADP Approach](docs/_INFO_AGENT_DRIFT_PREVENTION_APPROACH.md) - How the PromptSystem prevents agent drift through TRACTFUL, SMAP, EDIRD, STRUT, GRUC, and MNF across three scopes
 
 **How-To Guides**:
-- [How to Write Good Document Templates](specs/_INFO_HOW_TO_WRITE_GOOD_DOCUMENT_TEMPLATES.md) - Patterns and rules for unambiguous templates that agents reliably instantiate
-- [How to Create Auditable Research Summaries](specs/_INFO_HOW_TO_CREATE_AUDITABLE_RESEARCH_SUMMARIES.md) - Citation and source-linking standard for 100% audit chain
-- [How to Detect AI-Assisted Writing](specs/_INFO_HOW_TO_DETECT_AI_ASSISTED_WRITING.md) - Detection signals for AI-assisted writing across style, structure, reasoning, and sourcing
-- [How to Check Factuality](specs/_INFO_HOW_TO_CHECK_FACTUALITY.md) - Epistemological framework, claim taxonomy, trust hierarchy, and verification methods for AI agent fact-checking
-- [Bundling Workflows with Skills](specs/_INFO_HOW_TO_IMPLEMENT_WORKFLOWS_AS_SKILLS.md) - Research on migrating workflows into skill-based architecture
+- [How to Write Good Document Templates](docs/_INFO_HOW_TO_WRITE_GOOD_DOCUMENT_TEMPLATES.md) - Patterns and rules for unambiguous templates that agents reliably instantiate
+- [How to Create Auditable Research Summaries](docs/_INFO_HOW_TO_CREATE_AUDITABLE_RESEARCH_SUMMARIES.md) - Citation and source-linking standard for 100% audit chain
+- [How to Detect AI-Assisted Writing](docs/_INFO_HOW_TO_DETECT_AI_ASSISTED_WRITING.md) - Detection signals for AI-assisted writing across style, structure, reasoning, and sourcing
+- [How to Check Factuality](docs/_INFO_HOW_TO_CHECK_FACTUALITY.md) - Epistemological framework, claim taxonomy, trust hierarchy, and verification methods for AI agent fact-checking
+- [Bundling Workflows with Skills](docs/_INFO_HOW_TO_IMPLEMENT_WORKFLOWS_AS_SKILLS.md) - Research on migrating workflows into skill-based architecture
 
 **Full registry**: [ID-REGISTRY.md](ID-REGISTRY.md) - All acronyms, TOPICs, states, and named concepts
 
@@ -1497,7 +1497,7 @@ Document templates for INFO, SPEC, IMPL, TEST, TASKS, and STRUT plans.
 
 Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.md` in each skill folder to install.
 
-- **[MinifyIPPS](specs/_INFO_HOW_TO_MINIFY_IPPS.md)** - LLM-based compression pipeline for PromptSystem markdown files. Reduces token count while preserving meaning. Pipeline: bundle → analyze → compress → verify. **Effect**: Creates minified `.md` files in output folder. Edits nothing (creates new compressed files).
+- **[MinifyIPPS](docs/_INFO_HOW_TO_MINIFY_IPPS.md)** - LLM-based compression pipeline for PromptSystem markdown files. Reduces token count while preserving meaning. Pipeline: bundle → analyze → compress → verify. **Effect**: Creates minified `.md` files in output folder. Edits nothing (creates new compressed files).
 
 ## Project Structure
 
