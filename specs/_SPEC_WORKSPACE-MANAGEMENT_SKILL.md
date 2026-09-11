@@ -3,9 +3,9 @@
 **Doc ID**: WSKMGMT-SP01
 **Feature**: workspace-management-skill
 **Goal**: Specify a skill that manages agentic workspace setup, PromptSystem synchronization, and knowledge distribution across product/dev/company repo architectures
-**Timeline**: Created 2026-09-03, Updated 11 times (2026-09-03 - 2026-09-10)
+**Timeline**: Created 2026-09-03, Updated 12 times (2026-09-03 - 2026-09-11)
 **Target file(s)**:
-- `PromptSystemV4.4/specs/promptsystem-core.md` (Operation Modes, Workspace Scenarios)
+- `PromptSystemV4.4/rules/promptsystem-core.md` (Operation Modes, Workspace Scenarios)
 - `PromptSystemV4.4/skills/workspace-management/SKILL.md`
 - `PromptSystemV4.4/skills/workspace-management/WORKSPACE-GUIDES.md`
 - `PromptSystemV4.4/skills/workspace-management/WORKSPACE-RULES.md`
@@ -25,9 +25,11 @@
 - `PromptSystemV4.4/workflows/commit.md` (multi-repo commit support)
 - `PromptSystemV4.4/workflows/prime.md` (Dimension 5 detection)
 - `ID-REGISTRY.md` (skill-tagged state enumerations)
+- `PromptSystemV4.4/rules/promptsystem-core.md` (Document Placement subsection, docs/ in folder structure)
+- `PromptSystemV4.4/skills/write-documents/SKILL.md` (WS-DP reference in MUST-NOT-FORGET)
 
 **Depends on:**
-- `PromptSystemV4.4/specs/promptsystem-core.md` for existing operation modes and workspace scenarios
+- `PromptSystemV4.4/rules/promptsystem-core.md` for existing operation modes and workspace scenarios
 - `PromptSystemV4.4/skills/session-management/SKILL.md` for session folder structure (T##/S##)
 - `PromptSystemV4.4/workflows/prime.md` for workspace scenario detection (Dimension 1 values)
 
@@ -58,6 +60,7 @@
 - Single sync.ps1 script with -diff and -execute modes; params are -config (path to promptsystem-sync.json), -preview_file (markdown preview per PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md), -output_file (full text report)
 - Source repo only references RELATIVE downstream repo paths (e.g., ../Lana-V2-Dev), never absolute paths
 - promptsystem-sync.json uses `targets` array (not `sources`); each target entry is self-contained with path, source, include, exclude, never_overwrite
+- Document placement: specs/ for verifiable agent instructions, docs/ for explanatory knowledge. Folders optional by default, enforced when workspace-management is active (WS-DP-06). /prime does not create them.
 - `bundles` and `selected_bundles` are removed — include/exclude on each target entry is the single filter layer
 - `deprecated` is top-level in promptsystem-sync.json (shared across all targets in that repo)
 - Include/exclude refiners are glob patterns evaluated in order: target include → target exclude → target never_overwrite → deprecated
@@ -857,6 +860,29 @@ Direction definitions:
 - If target workspace missing NOTES.md or promptsystem-sync.json: report ONLY_A status for affected fields, continue comparison
 - After report: user can request `/workspace-setup sync from [path]` or `/workspace-setup sync to [path]` to apply differences
 
+### Document Placement Rules
+
+**WSKMGMT-FR-76: Document placement rules in WORKSPACE-RULES.md**
+- Add WS-DP-01 through WS-DP-06 to WORKSPACE-RULES.md
+- WS-DP-01: specs/ folder contains verifiable agent instructions only (_SPEC_*, _IMPL_*, _TEST_*, unprefixed rules files with enforceable IDs)
+- WS-DP-02: docs/ folder contains explanatory knowledge documents only (_INFO_*, research articles)
+- WS-DP-03: Document type prefix must match folder placement
+- WS-DP-04: Unprefixed rules files with enforceable IDs belong in specs/
+- WS-DP-05: INFO files may reside in specs/ only if referenced as SPEC dependency
+- WS-DP-06: Folder enforcement tiers - optional by default, enforced when workspace-management is active
+- _TASKS_* files are session-scoped, stay in session folders, never in specs/
+
+**WSKMGMT-FR-77: Document placement in promptsystem-core.md**
+- Add docs/ folder to all folder structure diagrams (Single Project, Monorepo, Multi-Repo Workspace)
+- Add Multi-Repo Workspace diagram showing DevRepo with main.code-workspace and ProductRepo
+- Add Document Placement subsection after Folder Structure, before File Naming Conventions
+- Subsection defines: specs/ vs docs/ purpose, decision rule, WS-DP-05 exception, folder awareness policy (optional by default)
+
+**WSKMGMT-FR-78: Document placement in skill files**
+- workspace-management SKILL.md: Add MNF item 7 (document placement), Intent Lookup entry (Check document placement), docs/ folder creation in workspace-setup procedure
+- write-documents SKILL.md: Add WS-DP placement rule to MUST-NOT-FORGET section
+- Both files synced to PromptSystemV4.4 copies
+
 ## 5. Non-Functional Requirements
 
 **WSKMGMT-NFR-01: Performance - Diff execution time**
@@ -1447,6 +1473,13 @@ RESULT: PASSED WITH FIXES
 
 ## 15. Document History
 
+**[2026-09-11 18:05]**
+- Added: FR-76 Document placement rules in WORKSPACE-RULES.md (WS-DP-01 through WS-DP-06)
+- Added: FR-77 Document placement in promptsystem-core.md (docs/ in folder structure, Document Placement subsection)
+- Added: FR-78 Document placement in skill files (workspace-management SKILL.md MNF + Intent Lookup, write-documents SKILL.md MNF)
+- Added: Target files — promptsystem-core.md (Document Placement subsection, docs/ in folder structure), write-documents/SKILL.md (WS-DP reference)
+- Added: MNF item — document placement folder awareness, not enforcement by default
+
 **[2026-09-10 01:35]**
 - Fixed: FR-52, FR-53 — stale "bundle include/exclude rules" → "target include/exclude patterns"
 - Fixed: DD-20 — stale "(bundles, filters, never_overwrite)" → "(include, exclude, never_overwrite)"
@@ -1479,6 +1512,12 @@ RESULT: PASSED WITH FIXES
 - Amended: FR-42 — added 5 use cases as sub-requirements (verify, sync from, sync to, compare, default analysis)
 - Amended: FR-27 — added note that `/workspace-setup verify` is an alternative entry point to the same verification logic
 - Updated: Target files — renamed WORKSPACE_CREATION_QUESTIONNAIRE.md to WORKSPACE_SETUP_QUESTIONNAIRE.md, added WORKSPACE_SETUP_REPORT_TEMPLATE.md and compare-workspace-setup.md
+
+**[2026-09-06 17:05]**
+- Renamed: workspace-create.md → workspace-setup.md (workflow handles creation AND modification)
+- Updated: FR-42 - added scope note for dual purpose (create + modify)
+- Updated: DD-11 - workflow name updated to workspace-setup.md
+- Updated: Target files - workspace-create.md → workspace-setup.md
 
 **[2026-09-06 16:15]**
 - Added: FR-61 Skill-tagged sections in promptsystem-core.md and ID-REGISTRY.md (START/END markers for organization)
@@ -1522,59 +1561,6 @@ RESULT: PASSED WITH FIXES
 - Fixed: Section 13 logging example — "OK. 1 source, 1 bundle selected." to "OK." to match implementation [IMPLEMENTED from /critique CRIT-14]
 - Updated: Timeline to reflect 8 updates
 
-**[2026-09-05 15:00]**
-- Added: FR-40 [WORKSPACE_FOLDER] vs [WORKSPACE_FILE] distinction
-- Added: DD-16 rationale for the distinction (from GLOB-FL-041)
-- Updated: FR-30 commit.md multi-repo support - exclude repos not in [WORKSPACE_FILE]
-- Updated: WS-CT-01 changed from "all 8" to "all required" (conditional constants)
-- Added: WS-CT-04 rule for [WORKSPACE_FOLDER] vs [WORKSPACE_FILE]
-- Updated: DEV_REPO_NOTES_TEMPLATE.md includes [WORKSPACE_FILE] constant
-- Updated: WORKSPACE-GUIDES.md includes [WORKSPACE_FOLDER] vs [WORKSPACE_FILE] section
-
-**[2026-09-04 16:10]**
-- Merged: Sync Relationship Dimension (SYNCREL-SP01) into this spec as FR-32..39, NFR-07..08, DD-11..15, IG-08..11, and new Key Mechanisms sections
-- Added: SyncRelationship and DetectionMarkers domain objects
-- Updated: Workspace Constants data structure now shows conditional split (5 base + 3 SYNCED-only)
-- Added: MNF items for Dimension 4 (deterministic detection, SELF-CONTAINED verify pass, auto-detection)
-- Source: Merged from `_SPEC_SYNCRELATION_01.md [SYNCREL-SP01]` (deleted)
-
-**[2026-09-04 15:26]**
-- Added: Dependency Tree ASCII art diagram in Context section showing upstream/downstream relationships and Dev-to-Dev sync chains
-- Added: Direction definitions (downstream = source to all targets, upstream = here back to source)
-
-**[2026-09-03 17:35]**
-- Fixed: Script filenames in target files updated to use `_template` suffix (SK-FL-07) and underscore naming: `workspace_diff_template.ps1`, `workspace_sync_template.ps1`
-
-**[2026-09-03 17:30]**
-- Added: FR-31 SKILL.md entry point (frontmatter, MNF, Intent Lookup, Core Procedures, References, Gotchas)
-- Updated: DD-06 clarified - checks embedded in verify.md (FR-27), not separate WORKSPACE-CHECKS.md file
-
-**[2026-09-03 17:15]**
-- Fixed: SOCAS-01 - logging example missing `[COMPANY_REPO_FOLDER]` in workspace constants list
-- Fixed: SOCAS-01 - logging example used `[WORKSPACE_FOLDER]\..\Company\knowledge` instead of `[COMPANY_REPO_FOLDER]\knowledge`
-- Fixed: Privacy gate - removed remaining real project references from FR-13, FR-14, domain objects, and Document History
-
-**[2026-09-03 17:00]**
-- Fixed: Privacy gate - removed real project names from DD-01, DD-03, DD-05, FR-07, Context, Scenario, MUST-NOT-FORGET
-- Added: DD-10 clarifying relationship between new diff/sync scripts and existing deploy-to-all-repos.md (generalize, not duplicate)
-- Replaced: real project names with generic terms ("PromptSystem source", "Real-world workspaces") throughout
-
-**[2026-09-03 16:45]**
-- Added: FR-14 locally-modified warning and `.sync-timestamp` tracking (from critique RV-001)
-- Added: FR-30 failure recovery and `git -C` repo resolution (from critique RV-002, RV-005)
-- Added: FR-16 breaking change and content migration definitions (from critique RV-008)
-- Added: FR-27 fix actions per gap type (from critique RV-010)
-- Added: FR-06 `[COMPANY_REPO_FOLDER]` constant (from critique RV-009)
-- Added: NFR-02 locally-modified file marking in diff preview (from critique RV-001)
-- Added: NFR-06 SyncPolicy validation (from critique RV-006)
-- Added: IG-07 rollback safety guidance for shared branches (from critique RV-004)
-- Added: DD-09 dev repo ordering rationale (from critique RV-014)
-- Added: DD-04 `[COMPANY_REPO_FOLDER]` to constants list
-- Added: Skill discovery data structure example in section 10 (from critique RV-011)
-- Updated: Technical Constraints - hash-based comparison preferred (from critique RV-007)
-- Updated: CompanyRepo domain object storage to use `[COMPANY_REPO_FOLDER]`
-- Updated: Workspace Constants data structure to include `[COMPANY_REPO_FOLDER]`
-
 **[2026-09-06 13:50]**
 - Fixed: Section 13 logging examples — stale `rules/` → `specs/`, `[RULES_SOURCE_FOLDER]` → `[SPECS_SOURCE_FOLDER]`, `[RULES_FOLDER]` → `[SPECS_FOLDER]` [VERIFIED]
 - Fixed: Section 13 logging examples — rewritten to comply with LOG-UF-01 (timestamps), LOG-UF-02 (progress indicators), LOG-UF-06 (100-char headers), LOG-GN-02 (quoted paths), LOG-GN-08 (two-level errors), LOG-GN-10 (ellipsis), LOG-GN-11 (sentence endings), LOG-SC-07 (RESULT keyword) [VERIFIED]
@@ -1596,12 +1582,6 @@ RESULT: PASSED WITH FIXES
 - Updated: Data structures — promptsystem-sync.json with complete per-source config, source synced repos list
 - Updated: sync.ps1 usage examples — all use promptsystem-sync.json
 - Updated: Timeline to reflect 6 updates
-
-**[2026-09-06 17:05]**
-- Renamed: workspace-create.md → workspace-setup.md (workflow handles creation AND modification)
-- Updated: FR-42 - added scope note for dual purpose (create + modify)
-- Updated: DD-11 - workflow name updated to workspace-setup.md
-- Updated: Target files - workspace-create.md → workspace-setup.md
 
 **[2026-09-06 13:30]**
 - Fixed: IG-11 - updated stale `sync-config.json` reference to per-content-type `*-sync.json` [VERIFIED]
@@ -1667,6 +1647,59 @@ RESULT: PASSED WITH FIXES
 - Added: workspace-setup.md to target files
 - Updated: Timeline to reflect 3 updates
 - Added: 3 MNF items (impact per question, non-destructive creation, thin workflow)
+
+**[2026-09-05 15:00]**
+- Added: FR-40 [WORKSPACE_FOLDER] vs [WORKSPACE_FILE] distinction
+- Added: DD-16 rationale for the distinction (from GLOB-FL-041)
+- Updated: FR-30 commit.md multi-repo support - exclude repos not in [WORKSPACE_FILE]
+- Updated: WS-CT-01 changed from "all 8" to "all required" (conditional constants)
+- Added: WS-CT-04 rule for [WORKSPACE_FOLDER] vs [WORKSPACE_FILE]
+- Updated: DEV_REPO_NOTES_TEMPLATE.md includes [WORKSPACE_FILE] constant
+- Updated: WORKSPACE-GUIDES.md includes [WORKSPACE_FOLDER] vs [WORKSPACE_FILE] section
+
+**[2026-09-04 16:10]**
+- Merged: Sync Relationship Dimension (SYNCREL-SP01) into this spec as FR-32..39, NFR-07..08, DD-11..15, IG-08..11, and new Key Mechanisms sections
+- Added: SyncRelationship and DetectionMarkers domain objects
+- Updated: Workspace Constants data structure now shows conditional split (5 base + 3 SYNCED-only)
+- Added: MNF items for Dimension 4 (deterministic detection, SELF-CONTAINED verify pass, auto-detection)
+- Source: Merged from `_SPEC_SYNCRELATION_01.md [SYNCREL-SP01]` (deleted)
+
+**[2026-09-04 15:26]**
+- Added: Dependency Tree ASCII art diagram in Context section showing upstream/downstream relationships and Dev-to-Dev sync chains
+- Added: Direction definitions (downstream = source to all targets, upstream = here back to source)
+
+**[2026-09-03 17:35]**
+- Fixed: Script filenames in target files updated to use `_template` suffix (SK-FL-07) and underscore naming: `workspace_diff_template.ps1`, `workspace_sync_template.ps1`
+
+**[2026-09-03 17:30]**
+- Added: FR-31 SKILL.md entry point (frontmatter, MNF, Intent Lookup, Core Procedures, References, Gotchas)
+- Updated: DD-06 clarified - checks embedded in verify.md (FR-27), not separate WORKSPACE-CHECKS.md file
+
+**[2026-09-03 17:15]**
+- Fixed: SOCAS-01 - logging example missing `[COMPANY_REPO_FOLDER]` in workspace constants list
+- Fixed: SOCAS-01 - logging example used `[WORKSPACE_FOLDER]\..\Company\knowledge` instead of `[COMPANY_REPO_FOLDER]\knowledge`
+- Fixed: Privacy gate - removed remaining real project references from FR-13, FR-14, domain objects, and Document History
+
+**[2026-09-03 17:00]**
+- Fixed: Privacy gate - removed real project names from DD-01, DD-03, DD-05, FR-07, Context, Scenario, MUST-NOT-FORGET
+- Added: DD-10 clarifying relationship between new diff/sync scripts and existing deploy-to-all-repos.md (generalize, not duplicate)
+- Replaced: real project names with generic terms ("PromptSystem source", "Real-world workspaces") throughout
+
+**[2026-09-03 16:45]**
+- Added: FR-14 locally-modified warning and `.sync-timestamp` tracking (from critique RV-001)
+- Added: FR-30 failure recovery and `git -C` repo resolution (from critique RV-002, RV-005)
+- Added: FR-16 breaking change and content migration definitions (from critique RV-008)
+- Added: FR-27 fix actions per gap type (from critique RV-010)
+- Added: FR-06 `[COMPANY_REPO_FOLDER]` constant (from critique RV-009)
+- Added: NFR-02 locally-modified file marking in diff preview (from critique RV-001)
+- Added: NFR-06 SyncPolicy validation (from critique RV-006)
+- Added: IG-07 rollback safety guidance for shared branches (from critique RV-004)
+- Added: DD-09 dev repo ordering rationale (from critique RV-014)
+- Added: DD-04 `[COMPANY_REPO_FOLDER]` to constants list
+- Added: Skill discovery data structure example in section 10 (from critique RV-011)
+- Updated: Technical Constraints - hash-based comparison preferred (from critique RV-007)
+- Updated: CompanyRepo domain object storage to use `[COMPANY_REPO_FOLDER]`
+- Updated: Workspace Constants data structure to include `[COMPANY_REPO_FOLDER]`
 
 **[2026-09-03 16:10]**
 - Fixed: Privacy gate - replaced real project paths with generic placeholders in Context, Domain Objects, NFRs, "What we don't want", and logging examples
