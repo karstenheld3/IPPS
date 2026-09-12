@@ -102,15 +102,8 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
 
 12. **ASCII art diagrams, UX designs, and markdown formatting in write-documents skill**
    - Guides, rules, templates, and scripts to create and update ASCII art diagrams and UX designs in markdown documents
-   - **Workflow**: `ascii-art.md` → creates, edits, transforms ASCII art diagrams and visualizations
-   - **Script**: `md.py` → comprehensive markdown formatting and extraction CLI tool
-     - Detects frame glitches in ASCII art diagrams and UX designs and fixes them
-     - Detects markdown table glitches and fixes them
-     - Adds chapter links to table of contents
-     - Detects unexpanded acronyms and lists them with contextual information (lines, positions, sentences)
-     - Outputs markdown file structure and outline
-     - Formatting style extraction for LLMs to insert content with consistent formatting
-   - **Goal**: Ensure consistent formatting of markdown files that are easily readable by humans (equal-width formatted columns in tables) and editable by agents (extracted formatting and content)
+   - **Status**: GRUC files created 2026-09-12. Deliverables: `ASCII_ART_GUIDES.md`, `ASCII_ART_RULES.md`, `ASCII_ART_CHECKS.md`, 4 EXAMPLES files, `SetAsciiBoxStyle.ps1` (with -DryRun), `ascii-diagram.md` workflow, `[ASCII-DIAGRAM]` verb in SKILL.md. Topic `ASCIIART` registered. Session: `_PrivateSessions_gitignore/_2026-09-10_AsciiArtGuidelines/`. Deferred improvements logged in `docs/_DEFERRED_ASCII_ART_IMPROVEMENTS.md`.
+   - **Remaining**: `md.py` comprehensive markdown formatting CLI tool (postponed - develop individual PowerShell scripts per problem, consolidate later)
 
 13. **Deep-research and research update compatibility (re-run over existing output)**
    - Make `deep-research.md` (+ skill) and `research.md` support re-running over existing research output
