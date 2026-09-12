@@ -48,6 +48,7 @@ _INFO_[TOPIC]-IN[NN]_[Title].md
 - [ ] Exclusions documented
 - [ ] No unverified contradictions remaining
 - [ ] SOCAS applied to source evaluation
+- [ ] Diagrams present where structure has 3+ levels or parallel elements
 
 **Source Retention Rule:** ALL sources must be kept. Never discard - even if findings were minimal or contradictory, document what was checked to prevent re-checking.
 
@@ -103,6 +104,7 @@ Detect by: research subject is NOT a person, organization, or company.
    - Can I remove duplicates or contradictions?
    - Is this information actionable? If not, cut it.
 4. Review each new section against existing ones - remove redundancies, ambiguities, unverified claims
+4.5. **Add Diagrams** - If findings describe hierarchical, layered, or sequential structures (3+ levels or parallel elements), add Unicode diagram per `SD-ES-05` and `ASCII_ART_GUIDES.md`
 5. If no verified solution exists: think outside the box - missing perspectives? Clever alternatives?
 6. Write sources section (all URLs with primary findings)
 7. Write summary section at document top (copy/paste ready)

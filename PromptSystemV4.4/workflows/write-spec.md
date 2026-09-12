@@ -16,6 +16,7 @@ Create technical specifications from requirements.
 - Run `/verify` after spec complete
 - **NEVER modify tracking documents** (PROGRESS.md, PROBLEMS.md, NOTES.md, FAILS.md). Write-* workflows create NEW files only. Tracking docs are session state, not agent operation artifacts.
 - Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content in any file → examples generic. Assess context BEFORE writing.
+- Architecture and UX specs MUST include diagrams per `ASCII_ART_GUIDES.md`
 
 ## Prerequisites
 
@@ -46,10 +47,11 @@ Create technical specifications from requirements.
      - Design Decisions (numbered: XXXX-DD-01)
      - Key Mechanisms
      - Technical Constraints (facts constraining implementation - NO code, line numbers, or function signatures)
+   - If 2+ domain objects or multi-tier architecture, add component or layer diagram per `ASCII_ART_GUIDES.md`. Mandatory for architecture and UX specs.
 
 4. **For UI Specs** (`_SPEC_[COMPONENT]_UI.md`)
    - Add User Actions section
-   - Add UX Design with ASCII diagrams
+   - Add UX Design with ASCII diagrams per `ASCII_ART_GUIDES.md`
    - Show ALL buttons and interactive elements
 
 5. **Verify**

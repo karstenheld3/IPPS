@@ -6,6 +6,8 @@
 **Source**: __MINTO-DRAFT_[Article].md
 **Argument**: [Root argument A restated]
 
+<!-- Conditional: insert Structure section when AMINTON tree has 3+ Q-branches. Unicode tree diagram per ASCII_ART_GUIDES.md. -->
+
 ## Executive Summary
 
 [Situation: what reader already knows - 1-2 sentences. Uncontroversial, reader agrees without question.]

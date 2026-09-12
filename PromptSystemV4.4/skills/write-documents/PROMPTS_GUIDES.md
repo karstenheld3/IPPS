@@ -25,11 +25,52 @@ Before writing complex prompts or prompt sequences, scan `[AGENT_FOLDER]/workflo
 
 **Why**: Workflows encode standardized processes with GLOBAL-RULES, context-specific sections, and quality gates. Reinventing workflow logic in prompt prose bypasses these standards, produces inconsistent output, and creates maintenance burden when workflows evolve.
 
-**Workflow execution vs reference**: When a prompt instructs the agent to execute a workflow, use the slash command on a standalone line without backticks (PRMT-CT-08). When a prompt mentions a workflow or prompt system command as a reference (not executing it), wrap in backticks (PRMT-CT-10). Examples:
-- Execute: `/sync` on its own line inside the fence
-- Reference: "Use the `/sync` workflow" in prose inside the fence
+**Workflow execution vs reference**:
+- **Execution** (PRMT-CT-08): Prompt requires the agent to execute the workflow — workflow file MUST be read, steps MUST be followed, output MUST be produced. Slash command on standalone line WITHOUT backticks. Signal: execution verb present (run, use, execute, call, invoke, perform, apply, do).
+- **Reference** (PRMT-CT-10): Prompt mentions a workflow as context — no execution requirement, model may load if needed. Wrap in backticks in prose. Signal: no execution verb.
+
+Examples inside fences:
+- Execute: /sync on its own line, arguments on next line (no backticks around it)
+- Reference: "The `/sync` workflow handles synchronization" (backticks, no execution verb)
+- BAD: "Use the `/sync` workflow to sync" (execution verb + backticks = PRMT-CT-08 violation)
 
 **Exception**: If the user explicitly requests prompt system independence, omit `prompt_system` from frontmatter (PRMT-FT-09) and do not reference workflows. The prompts must then be self-contained.
+
+## 1c. Effort-Based Partitioning
+
+The effort level in the frontmatter determines the practical scope of each prompt. Effort is not an inference-time cap but a trained behavioral profile: the model learns different judgment at each level during RL training.
+
+Effort defines two things:
+
+1. **How much work the model can do in one run**: higher effort means the model thinks longer, reads more files, uses more tools, and takes more steps before checking back. Low effort means the model acts fast with minimal exploration
+2. **How to partition work into prompts**: at low effort, each prompt must be tightly scoped — one file, one edit, one search. At high effort, a single prompt can handle multi-file analysis, planning, and implementation
+
+The model name, context window size, and effort level together determine how many prompts a task needs. A task that requires 8 prompts at low effort on a model with 8K context may require 2 prompts at high effort on a model with 200K context.
+
+When partitioning, match the prompt count to the effort budget. Mismatched effort and prompt count produces either overloaded prompts (low effort, too many steps per prompt) or underutilized prompts (high effort, unnecessary fragmentation). The frontmatter `effort` and `context_window_size` keys encode this budget (PRMT-SC-05).
+
+## 1d. Planning Document Anchor
+
+A prompt sequence without a persisted planning document is unanchored: the agent cannot determine progress, maintain state, or detect drift. A TASKS or STRUT document is essential because it provides:
+
+1. **Progress tracking**: checkboxes mark step completion. The start-of-prompt protocol reads these to detect already-done steps and skip them. Without this, the agent re-executes completed work or skips unfinished work
+2. **State persistence**: the planning document survives context reset. On a fresh session, the agent reads the plan, progress notes, and append-only record to reconstruct "where am I" without replaying conversation
+3. **Drift control**: the planning document is the reference point. If the agent's output diverges from the plan, the discrepancy is detectable by comparing against the persisted steps. Without an anchor, drift is invisible — there is no baseline to compare against
+
+Good prompt sequences are anchored by a persisted planning document. The prompts execute steps defined in the plan; the plan tracks which steps are done; the agent reads the plan on resume to determine where to continue. The plan, not the conversation, is the source of truth for sequence state. Each prompt references the planning document by filename and step ID (PRMT-SC-06).
+
+## 1e. Chain Length Limits
+
+Error rates compound across steps. A 5% per-step error rate yields:
+
+- 3 steps: 14% end-to-end failure rate
+- 6 steps: 26% end-to-end failure rate
+- 10 steps: 40% end-to-end failure rate
+- 15 steps: 54% end-to-end failure rate
+
+Keep sequences under 6 steps. For longer workflows, split into sub-chains with checkpoints between them. Each sub-chain completes, commits, and the next sub-chain starts fresh with its own self-contained opening. This limits the blast radius of a single step failure to its sub-chain, not the entire workflow (PRMT-SC-04).
+
+Common mistake: splitting every task into 5 prompts. Static decomposition with no conditional logic costs more than a monolithic prompt if early steps fail and force reruns of all downstream steps. Balance chain length against the effort budget (Section 1c).
 
 ## 2. Decide Decomposition
 
@@ -60,13 +101,14 @@ When a prompt must produce output in a specific format, add an optional 5th elem
 
 ## 4. Plan State Flow
 
-In a `_PROMPTS_[Topic].md` file, all prompts run as turns of ONE session. Later prompts see all earlier conversation.
+In a `_PROMPTS_[Topic].md` file, prompts run as turns of one session but must not rely on conversation history. Each prompt must be self-contained: it names its dependencies by file path, not by conversation reference. The chain holds the state through files, not through model memory of prior prompts.
 
 Plan what each prompt produces that the next one needs:
-- Name artifacts explicitly: "Using the analysis from the previous step..."
-- Do not assume the model will infer which prior output matters
-- Do not restate facts already established - they are in conversation history
+- Name artifacts explicitly by file path: "Using the analysis in `_INFO_DatabaseDesign.md` section 2..."
+- Do not reference "the previous step" or "as discussed above" without naming where the output lives in a file (PRMT-SC-02)
+- Do not assume the model remembers prior conversation — treat earlier conversation as compacted; reconstruct state from files
 - Never contradict constraints from earlier prompts
+- Use commentary sections to document expected state for human readers, not to carry model context
 
 Use commentary sections (before the first prompt or between `---` and next fence) to document expected state for human readers. Commentary notes MUST be wrapped in HTML comments (`<!-- ... -->`). Commentary density depends on file type:
 
@@ -90,6 +132,36 @@ For prompts that perform actions (file changes, API calls, installations):
 - Specify stop conditions: "If no matching files found, report and stop - do not create placeholder files"
 
 Prompts without failure handling produce agents that either loop indefinitely or silently suppress errors and continue on broken state.
+
+## 6a. Self-Contained Prompt Pattern
+
+Every prompt in a sequence must be self-contained: it carries all information needed to execute after agent context reset. A prompt that assumes context from previous prompts breaks when execution is interrupted and resumed.
+
+The core principle: treat earlier conversation as compacted. Prior conversation is not in context; reconstruct state from files, not from memory. Each prompt opens with a context-loading directive that names the files to read before doing anything else. The prompt never relies on model memory of prior prompts (PRMT-SC-01).
+
+Every prompt begins with three elements:
+
+1. A context-loading directive naming the files or cards to read
+2. An explicit statement that earlier conversation is not in context: "Treat earlier conversation as compacted"
+3. A step identifier (STRUT step, task ID, or sequence position) for progress tracking
+
+Shared information between prompts is either referenced (document path + line numbers) or stored in context cards (`__CARD_*.md` files) that each prompt reads and updates. Use references when information has a stable home in a file. Use context cards when shared information does not have a stable home.
+
+For a complete example of a self-contained prompt sequence, see `PROMPTS_EXAMPLE_01-SelfContainedSequence.md`.
+
+## 6b. Idempotency in Prompts
+
+Idempotency means re-running a prompt produces the same result without corrupting state or wasting cost. A prompt sequence must be safe to re-run after interruption, partial execution, or accidental double-execution (PRMT-SC-03).
+
+Key idempotency practices:
+
+- **Pre-execution check**: detect already-done steps and stop before doing work. This is the primary idempotency guard — it prevents re-execution entirely when the step completed successfully
+- **Partial execution recovery**: if a prompt was interrupted mid-execution, the next run must detect partial state and recover. Check for output artifacts before creating them: if the file exists and passes structural validation, skip; if it exists but fails validation, overwrite; if it does not exist, create
+- **Write-to-temp-then-rename**: write output to a `.tmp` file first, verify it, then atomically rename to the final filename. If interrupted between delete and create, the original is lost — this pattern prevents that
+- **Cost guard**: before re-running expensive operations (API calls, builds, test suites), check if the output already exists and is valid. Cache results to files so a re-run reads the cache instead of re-calling the API
+- **No destructive operations without backup**: never delete a file then recreate it. Write to a temp file, verify, then atomically rename
+
+Implementation prompts should include an idempotency constraint in the Constraints section stating that re-running the prompt must not corrupt state or waste cost.
 
 ## 7. Select Fence Length
 
@@ -200,7 +272,7 @@ Omit frontmatter when:
 
 - `intended_model`: Model identifier (e.g., `claude-sonnet-4-5`, `gpt-4o`)
 - `context_window_size`: Context window size (e.g., `200k`, `128k`, `1M`)
-- `reasoning_settings`: Reasoning effort (`medium` | `high` | `extra-high`)
+- `effort`: Effort level (`low` | `medium` | `high` | `extra-high`)
 - `prompt_system`: Prompt system identifier (e.g., `IPPS`)
 
 ### 10.3 Key Principles
@@ -240,7 +312,7 @@ After writing a prompt file:
 Before considering the prompts file complete:
 
 - [ ] Existing workflows scanned and referenced where applicable (PRMT-CT-11)
-- [ ] Workflow execution vs reference distinction: execute = slash on standalone line without backticks (PRMT-CT-08); reference = backticks in prose (PRMT-CT-10)
+- [ ] Workflow execution vs reference distinction: execution verb (run, use, execute, call, invoke, perform, apply, do) + workflow name = execution on standalone line without backticks, arguments on following line (PRMT-CT-08); no execution verb + workflow name = reference in backticks (PRMT-CT-10)
 - [ ] `prompt_system` frontmatter empty/omitted if user requested independence (PRMT-FT-09)
 - [ ] First non-empty line is optional frontmatter (PRMT-FT-08), Commentary, or opening fence (no other frontmatter)
 - [ ] Each prompt has a clear objective (verifiable from artifact per PRMT-ST-01)
@@ -257,4 +329,10 @@ Before considering the prompts file complete:
 - [ ] Signal redundancy preserved: explicit referents, not pronouns for ambiguous antecedents (PRMT-CT-06)
 - [ ] Format-critical prompts use examples instead of prose descriptions (PRMT-CT-07)
 - [ ] Commentary notes wrapped in HTML comments (`<!-- ... -->`), headings as plain Markdown (PRMT-FT-04)
+- [ ] Each prompt has a self-contained opening: context-loading directive, "treat earlier conversation as compacted", step identifier (PRMT-SC-01)
+- [ ] No prompt references "the previous step" or "as discussed above" without naming where output lives in a file (PRMT-SC-02)
+- [ ] Implementation prompts include idempotency constraint: re-running must not corrupt state or waste cost (PRMT-SC-03)
+- [ ] Sequence stays under 6 steps; longer workflows use sub-chains with checkpoints (PRMT-SC-04)
+- [ ] Frontmatter specifies effort level; prompt count matches effort budget (PRMT-SC-05)
+- [ ] Prompt sequences from planning documents reference the document by filename and step ID (PRMT-SC-06)
 - [ ] Agent does not self-execute the prompt file (PRMT-EX-02): file is delivered, not run in one response

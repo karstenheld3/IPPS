@@ -17,15 +17,14 @@ Populated by `/session-new` workflow. Tracks implementation progress and task co
 
 ## To Do
 
-- [ ] IPPSGAP-PR-0001: Map LLM best practices articles to IPPS concepts
-- [ ] IPPSGAP-PR-0002: Identify gaps where IPPS lacks coverage
-- [ ] IPPSGAP-PR-0003: Identify concept deviations
-- [ ] IPPSGAP-PR-0004: Identify improvement opportunities
-- [ ] Write _INFO_PREFLIGHT_ANALYSIS.md with full mapping and gap analysis
+- [ ] IPPSGAP-PR-0001: Map LLM best practices articles to IPPS concepts (mapping done, needs final review)
+- [ ] IPPSGAP-PR-0002: Identify gaps where IPPS lacks coverage (13 gaps identified and verified)
+- [ ] IPPSGAP-PR-0003: Identify concept deviations (12 deviations identified and verified)
+- [ ] IPPSGAP-PR-0004: Identify improvement opportunities (13 improvements identified and verified)
 
 ## In Progress
 
-- [ ] IPPSGAP-PR-0001: Reading and categorizing LLM best practices articles (preflight done, full analysis pending prompt execution)
+(none - P3 IMPLEMENT phase complete)
 
 ## Done
 
@@ -40,6 +39,15 @@ Populated by `/session-new` workflow. Tracks implementation progress and task co
 - [x] Create reusable template (__TEMPLATE_GapAnalysisMapping.md) via /write-template
 - [x] Create prompt file 1 (_PROMPTS_IPPSGapAnalysisImplement.md) - 5 prompts for P3
 - [x] Create prompt file 2 (_PROMPTS_IPPSGapAnalysisRefine.md) - 4 prompts for P4-P5
+- [x] P3-S1: Read 11 additional high-value articles (_INFO_IPPSGAP-IN03_ArticleSummaries.md)
+- [x] P3-S2: Write mapping file (_INFO_MAPPING_LLMBP_TO_IPPS.md, 52 articles mapped)
+- [x] P3-S3: Verify and expand gaps (13 gaps verified against actual IPPS files)
+- [x] P3-S4: Verify and expand deviations (12 deviations verified, DEV-03/04 fixed, DEV-12 added)
+- [x] P3-S5: Verify and expand improvements (13 improvements verified as actionable)
+- [x] P3-S6: Verify and expand overlaps (13 overlaps verified as genuine)
+- [x] P3-S7: Write full gap analysis report (_INFO_GAP_ANALYSIS_REPORT.md, 10 sections)
+- [x] /verify on _INFO_GAP_ANALYSIS_REPORT.md - passed, no issues
+- [x] /fact-check on sections 1, 4, 5, 6, 10 - 0 factual errors found
 
 ## Tried But Not Used
 
@@ -58,6 +66,12 @@ Populated by `/session-new` workflow. Tracks implementation progress and task co
 (none)
 
 ## Progress Changes
+
+**[2026-09-12 17:55]**
+- P3-S3/S4: Verified 13 gaps and 12 deviations against actual IPPS files. GAP-07 reclassified to partial. GAP-13 and DEV-12 added. DEV-03 fixed (5 GRUC types), DEV-04 fixed (17 SOCAS criteria)
+- P3-S5/S6: Verified 13 improvements (all actionable) and 13 overlaps (all genuine)
+- P3-S7: Created _INFO_GAP_ANALYSIS_REPORT.md with all 10 sections. /verify passed. /fact-check passed (0 errors)
+- All P3 deliverables (P3-D1 through P3-D4) marked done in STRUT
 
 **[2026-09-12 17:30]**
 - Created scope assessment (_INFO_IPPSGAP-IN01_ScopeAssessment.md)
@@ -78,6 +92,6 @@ Populated by `/session-new` workflow. Tracks implementation progress and task co
 - [x] **PREFLIGHT** - done (wrote _INFO_PREFLIGHT_ANALYSIS.md)
 - [x] **STRUT** - done (created and verified __STRUT_IPPSGAP.md)
 - [x] **PROMPTS** - done (created and verified 2 prompt files, 9 prompts total)
-- [ ] **IMPLEMENT** - pending (execute _PROMPTS_IPPSGapAnalysisImplement.md)
+- [x] **IMPLEMENT** - done (P3-S1 through P3-S7 complete, all deliverables produced)
 - [ ] **REFINE** - pending (execute _PROMPTS_IPPSGapAnalysisRefine.md)
 - [ ] **DELIVER** - pending (user review of final report)

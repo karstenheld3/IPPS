@@ -4,6 +4,26 @@ Populated by `/session-new` workflow. Captures session context, decisions, and a
 
 **Doc ID**: [TOPIC]-NOTES
 
+## MUST-NOT-FORGET
+
+- [PROMPTSYSTEM_FOLDER] is the source of truth. Never edit [AGENT_FOLDER] directly
+- Use placeholders in all workspace/session files, never ephemeral version strings or repo names
+- Record the user's session-starting prompt verbatim in Initial Request below
+
+## Table of Contents
+
+- [MUST-NOT-FORGET](#must-not-forget)
+- [Initial Request](#initial-request)
+- [Session Info](#session-info)
+- [Agent Instructions](#agent-instructions)
+- [Key Decisions](#key-decisions)
+- [Important Findings](#important-findings)
+- [Topic Registry](#topic-registry)
+- [Topic Folders](#topic-folders)
+- [Step Folders](#step-folders)
+- [Bug List](#bug-list)
+- [Significant Prompts Log](#significant-prompts-log)
+
 ## Initial Request
 
 **MANDATORY**: Record the user's session-starting prompt verbatim. This preserves intent and prevents drift.

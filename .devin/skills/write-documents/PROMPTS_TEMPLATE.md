@@ -13,11 +13,11 @@ Execution model (PRMT-EX-01/02): Each prompt is a separate turn for an execution
 <!-- Optional Execution Frontmatter (PRMT-FT-08): YAML block at file start.
 Provides execution hints to the execution engine. The engine MAY honor or override.
 Omit entirely if no execution hints needed. Remove this block if not used.
-Supported keys: intended_model, context_window_size, reasoning_settings, prompt_system -->
+Supported keys: intended_model, context_window_size, effort, prompt_system -->
 ---
 intended_model: [model identifier, e.g., claude-sonnet-4-5]
 context_window_size: [e.g., 200k, 128k, 1M]
-reasoning_settings: [medium | high | extra-high]
+effort: [low | medium | high | extra-high]
 prompt_system: [e.g., IPPS]
 ---
 
@@ -26,11 +26,15 @@ Heading before the fence is optional but recommended (PRMT-FT-07). -->
 ## Prompt 1 - [short title]
 
 ```
+Read [context-loading directive: files or cards to read]. Treat earlier conversation as compacted. Step [step identifier].
+Planning document: [TASKS or STRUT filename], step [ID].
+
 [Objective: what the finished state looks like (1-3 sentences)]
 
 Constraints:
 - [What NOT to do]
 - [Boundaries to respect]
+- Re-running this prompt must not corrupt state or waste cost
 
 Verify: [Machine-checkable done criteria]
 ```
@@ -47,6 +51,9 @@ Remove if no commentary needed. -->
 <!-- [Expected state from previous step and purpose of this prompt. Max 1 sentence in final files.] -->
 
 ````
+Read [context-loading directive: files or cards to read]. Treat earlier conversation as compacted. Step [step identifier].
+Planning document: [TASKS or STRUT filename], step [ID].
+
 [Objective referencing output from previous prompt explicitly]
 
 Example output format:
@@ -56,6 +63,7 @@ Example output format:
 
 Constraints:
 - [What NOT to do]
+- Re-running this prompt must not corrupt state or waste cost
 
 Verify: [Observable success criteria]
 ````
@@ -68,19 +76,23 @@ Verify: [Observable success criteria]
 ---
 intended_model: claude-sonnet-4-5
 context_window_size: 200k
-reasoning_settings: high
+effort: high
 prompt_system: IPPS
 ---
 
 ## Prompt 1 - Security analysis
 
 ```
+Read `src/auth/` directory and `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P1-S1.
+Planning document: `__STRUT_SecurityFix.md`, step P1-S1.
+
 Analyze the authentication module in src/auth/ for security vulnerabilities.
 Focus on: token validation, session management, and password hashing.
 
 Constraints:
 - Do not modify any code in this step
 - Limit analysis to src/auth/ directory only
+- Re-running this prompt must not corrupt state or waste cost
 
 Verify: Output a numbered list of findings with severity (HIGH/MEDIUM/LOW) and file location.
 ```
@@ -92,7 +104,10 @@ Verify: Output a numbered list of findings with severity (HIGH/MEDIUM/LOW) and f
 <!-- Previous step produced a numbered findings list. Fix the highest-severity item. -->
 
 ````
-Using the analysis from the previous step, fix the highest-severity vulnerability identified.
+Read `src/auth/` and the findings list from `_INFO_SecurityAnalysis.md`. Treat earlier conversation as compacted. Step P1-S2.
+Planning document: `__STRUT_SecurityFix.md`, step P1-S2.
+
+Fix the highest-severity vulnerability identified in `_INFO_SecurityAnalysis.md`.
 
 Example fix pattern:
 ```typescript
@@ -107,6 +122,7 @@ Constraints:
 - Fix only the single highest-severity issue
 - Do not change the public API of any exported function
 - Do not add new dependencies
+- Re-running this prompt must not corrupt state or waste cost
 
 Verify: Run `pnpm test:auth`. All tests pass. The specific vulnerability from step 1 is no longer present.
 ````

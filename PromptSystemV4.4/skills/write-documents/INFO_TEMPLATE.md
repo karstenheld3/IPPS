@@ -22,6 +22,8 @@
 - [Key finding 2] [LABEL]
 - [Key finding 3] [LABEL]
 
+<!-- Conditional: insert Diagrams section when structure has 3+ levels, 3+ parallel elements, or describes a flow. Use Unicode box-drawing per ASCII_ART_GUIDES.md. -->
+
 ## Table of Contents
 
 1. [Section 1](#1-section-1)

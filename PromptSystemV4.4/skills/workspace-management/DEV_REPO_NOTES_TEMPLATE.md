@@ -2,6 +2,43 @@
 
 # NOTES
 
+## MUST-NOT-FORGET
+
+- [PROMPTSYSTEM_FOLDER] is the source of truth. Never edit [AGENT_FOLDER] directly
+- Sync order: 1) [PROMPTSYSTEM_FOLDER] → [AGENT_FOLDER] (robocopy /MIR), 2) [AGENT_FOLDER] → [LINKED_REPOS] (sync.ps1 -execute). Stage 2 requires stage 1 complete. Stage 3 (linked repo local mirror) is NOT automatic from source repo
+- Downstream repos pull from [AGENT_FOLDER], NOT from [PROMPTSYSTEM_FOLDER]. The local mirror is the published source for linked repos
+- Use placeholders in all workspace/session files, never ephemeral version strings or repo names
+
+## Table of Contents
+
+- [MUST-NOT-FORGET](#must-not-forget)
+- [Project Info](#project-info)
+- [Workspace Constants](#workspace-constants)
+- [Sync Sources](#sync-sources)
+- [Prevention Rules](#prevention-rules-from-session-fails)
+- [Full Stack and Dependencies](#full-stack-and-dependencies)
+- [Build/Test Rules](#buildtest-rules)
+- [Scripts](#scripts)
+- [Runtime Environment](#runtime-environment)
+- [Architecture Decisions](#architecture-decisions)
+- [Source Control](#source-control)
+- [Agent Safety Rules](#agent-safety-rules)
+- [Key References](#key-references)
+- [Knowledge Map](#knowledge-map)
+- [Docs Map](#docs-map)
+- [Specs Map](#specs-map)
+- [Release Configuration](#release-configuration)
+
+## Project Info
+
+- Project name: [project-name]
+- Project goal: [one-sentence-description]
+- Workspace type: [SOFTWARE-DEV|GENERAL]
+- Workspace mode: [SINGLE-PROJECT|MONOREPO|WORKSPACE] (omit if GENERAL)
+- Version strategy: [SINGLE-VERSION|MULTI-VERSION] (omit if GENERAL)
+
+<!-- Instructions: Replace placeholder values with your project information. -->
+
 ## Workspace Constants
 
 [WORKSPACE_FOLDER]: `[current workspace root path]`
@@ -80,61 +117,37 @@
 
 ### How Syncing Works
 
-Sync configuration lives in `promptsystem-sync.json` at `[WORKSPACE_FOLDER]` root. This file defines:
-- **Sources**: upstream repos to sync from (relative paths)
-- **Bundles**: named content groups (e.g., `Windsurf`, `AI-Standards`) with include/exclude file patterns
-- **never_overwrite**: glob patterns protecting local files from being overwritten or deleted
-- **deprecated**: files that have been renamed or removed and should be cleaned up in targets
+Sync configuration lives in `promptsystem-sync.json` at `[WORKSPACE_FOLDER]` root (PULL model). This file defines:
+- **targets** array: each entry is self-contained (path, source, include, exclude, never_overwrite)
+- **deprecated**: top-level array (shared across all targets in repo)
+- Source is purely a content provider — no config at source
 
 The `sync.ps1` script in `@skills:workspace-management` performs the actual sync. Always preview with `-diff` before executing.
 
-### Sync Streams
+### Sync Order (3 stages)
 
-Three content streams sync independently, each from its source to its target:
-
-- **Prompt System**: `[promptsystem-source]\PromptSystem*` → `[AGENT_FOLDER]` — rules, workflows, skills
-- **Knowledge**: `[KNOWLEDGE_SOURCE_FOLDER]` → `[DEV_KNOWLEDGE_FOLDER]` — reference documents by topic
-- **Specs**: `[SPECS_SOURCE_FOLDER]` → `[DEV_SPECS_FOLDER]` — shared specifications and SOPs
+1. **[PROMPTSYSTEM_FOLDER] → local [AGENT_FOLDER]** — robocopy /MIR (after every edit to source)
+2. **[AGENT_FOLDER] → [LINKED_REPOS]** — sync.ps1 -execute at each target (explicit user confirmation only). Source for targets: `../[source-repo]/[AGENT_FOLDER]`
+3. **[LINKED_REPOS] local mirror** — robocopy /MIR at each linked repo (NOT automatic from source repo)
 
 ### Usage Examples
 
 Preview changes (no files modified):
 ```powershell
-# Preview sync from a single source
-& sync.ps1 -diff -sources "../MyDevRepo/PromptSystem1.0" -targets "." -configs "promptsystem-sync.json"
-
-# Preview sync to a single target
-& sync.ps1 -diff -sources "../MyDevRepo/PromptSystem1.0" -targets "../ProductRepo" -configs "promptsystem-sync.json"
+& sync.ps1 -diff -config "promptsystem-sync.json"
 ```
 
 Apply changes (copies, overwrites, deletes deprecated files):
 ```powershell
-# Execute sync from a single source
-& sync.ps1 -execute -sources "../MyDevRepo/PromptSystem1.0" -targets "." -configs "promptsystem-sync.json"
-
-# Execute sync to multiple targets in one call
-& sync.ps1 -execute -sources '["../MyDevRepo/PromptSystem1.0"]' -targets '["../ProductRepo", "../OtherRepo"]' -configs '["promptsystem-sync.json", "promptsystem-sync.json"]'
+& sync.ps1 -execute -config "promptsystem-sync.json"
 ```
 
-Or use the `/sync` workflow which wraps these commands:
-- `/sync workspace` — preview and sync all streams from configured sources
-- `/sync knowledge from source` — sync only knowledge bundles
-- `/sync specs to targets` — push specs to downstream repos
+Or use the `/sync` workflow which wraps these commands.
 
 <!-- Instructions:
-- Adjust source paths in promptsystem-sync.json if your PromptSystem source or Company folder is in a different location
-- All bundle definitions, filters, deprecated, and never_overwrite patterns are defined in promptsystem-sync.json
+- Adjust source paths in promptsystem-sync.json if your PromptSystem source is in a different location
+- All include/exclude, deprecated, and never_overwrite patterns are defined in promptsystem-sync.json
 - See WSKMGMT-SP01 section 10 for the JSON schema -->
-
-## Project Info
-
-- Project name: [project-name]
-- Project goal: [one-sentence-description]
-- Workspace type: [SOFTWARE-DEV|GENERAL]
-- Workspace mode: [SINGLE-PROJECT|MONOREPO|WORKSPACE] (omit if GENERAL)
-- Version strategy: [SINGLE-VERSION|MULTI-VERSION] (omit if GENERAL)
-
-<!-- Instructions: Replace placeholder values with your project information. -->
 
 ## Prevention Rules (from session fails)
 
@@ -154,6 +167,22 @@ Or use the `/sync` workflow which wraps these commands:
 
 <!-- Conditional: Applies to ProductRepo only. DevRepo and CompanyRepo are exempt (no buildable source code). -->
 
+## Scripts
+
+<!-- Instructions: List all build, test, deploy, and utility scripts. Include batch file wrappers and what they do. Omit section if no scripts. -->
+
+**Build/Compile:**
+- `[script-name].bat` — [description]
+
+**Test:**
+- `[script-name].bat` — [description]
+
+**Deploy:**
+- `[script-name].bat` — [description]
+
+**Configuration:**
+- `[script-name].bat` — [description]
+
 ## Runtime Environment
 
 - Runtime: [node|bun|deno|python|rust|zig]
@@ -168,6 +197,83 @@ Or use the `/sync` workflow which wraps these commands:
 - Gitignore the environment directory -->
 
 <!-- Conditional: Omit for GENERAL workspaces. -->
+
+## Full Stack and Dependencies
+
+<!-- Instructions: List the full technology stack, key dependencies, and lock files. Omit section if no product code. -->
+
+**Stack:**
+- Language: [language]
+- Framework: [framework]
+- Runtime: [runtime]
+- Package manager: [npm|bun|pip|uv|cargo]
+
+**Key Dependencies:**
+- `[package-name]` — [purpose]
+
+**Lock file:** [package-lock.json|requirements.txt|Cargo.lock]
+**Dependency install command:** [command]
+**Dependency update command:** [command]
+
+## Architecture Decisions
+
+<!-- Instructions: Record key architecture and design decisions. Include date and rationale. Omit section if no significant decisions. -->
+
+- **[Decision title]** ([date]): [decision and rationale]
+
+## Source Control
+
+<!-- Instructions: Document what is tracked vs gitignored, git conventions, and any special gitignore patterns. Omit section if standard git workflow. -->
+
+**Tracked in git:**
+- [what is tracked]
+
+**Gitignored:**
+- [what is gitignored and why]
+
+**Git conventions:**
+- `_gitignore` suffix: Append `_gitignore` before extension to exclude files/folders from git without editing `.gitignore`. Patterns `*_gitignore.*` and `*_gitignore/` already in `.gitignore`.
+- [any other conventions]
+
+## Agent Safety Rules
+
+<!-- Instructions: Rules to prevent agent from causing harm. Add project-specific safety rules. Omit section if none. -->
+
+- **NEVER** [specific unsafe action]
+- **Safe alternative**: [safe approach]
+
+## Key References
+
+<!-- Instructions: List important reference files the agent should read for context. Omit section if none. -->
+
+- `[path/to/file]` — [what it contains]
+
+## Knowledge Map
+
+<!-- Instructions: For repos with a knowledge/ folder, describe the local reference structure. Omit section if no knowledge folder. -->
+
+Local research base under `[DEV_KNOWLEDGE_FOLDER]`.
+
+**[Topic area]:**
+- `[folder/path]` — [description, topic count, key files]
+
+## Docs Map
+
+<!-- Instructions: For repos with a docs/ folder, describe the local documentation structure. Omit section if no docs folder. -->
+
+Local documentation under `[WORKSPACE_FOLDER]\docs`.
+
+**[Document type]:**
+- `[path/to/file]` — [description, purpose, key content]
+
+## Specs Map
+
+<!-- Instructions: For repos with a specs/ folder, describe the local specs structure. Omit section if no specs folder. -->
+
+Local specs under `[DEV_SPECS_FOLDER]`.
+
+**[Spec type]:**
+- `[path/to/file]` — [description, Doc ID, status]
 
 ## Release Configuration
 

@@ -215,7 +215,104 @@ Files that serve as templates (copied and adapted per project) MUST use a `_TEMP
 
 This prevents confusion between operational files and templates that require adaptation. Without the suffix, a user or agent may attempt to run a template directly (missing placeholder substitution).
 
-## 8. Review Checklist
+## 8. GRUC File Set
+
+Every skill needs a GRUC (Guides, Rules, Checks) file set. The set depends on skill type and complexity. See `specs/_SPEC_IPPS_SKILLS.md [IPPSSKLS-SP01]` for the full specification.
+
+### 8.1 Required: SKILL_RULES.md
+
+Always required. Defines output standards for artifacts produced using this skill.
+
+1. Write Rule Index at top with all rule IDs and one-line descriptions
+2. Write BAD/GOOD example pairs for every non-trivial rule
+3. Use consistent rule ID format: `[PREFIX]-[CATEGORY]-[NN]`
+4. Make rules testable (answerable yes/no for any given artifact)
+5. Do not include Document History section
+
+Reference: `SKILL_RULES.md` (SK-* IDs), `IPPSSKLS-FR-02`
+
+### 8.2 Conditional: SKILL_GUIDES.md
+
+Required when skill involves complex decision-making, multi-step strategies, or trade-offs.
+
+**Trigger question**: Does the agent need to make decisions about HOW to approach the task?
+
+If yes:
+1. Write numbered decision steps (not free prose)
+2. Make each section actionable (tell agent what to DO, not what to know)
+3. Link to EXAMPLE files if they exist
+4. Reference companion SKILL_RULES.md for verification
+5. Do not include verification checklists (those belong in RULES)
+
+Reference: `IPPSSKLS-FR-04`, `IPPSSKLS-DD-04`
+
+### 8.3 Conditional: SKILL_CHECKS.md
+
+Required when skill produces quality-critical output or when process discipline matters.
+
+**Trigger question**: Does it matter HOW the agent arrived at the output, or only that the output is correct?
+
+If process matters:
+1. Write Process Discipline (PD) items: action + evidence + failure indicator
+2. Write Quality Improvement (QI) items: quality question + improvement tip
+3. PD items reference rule IDs from SKILL_RULES.md they verify
+4. QI items are judgment-based, not binary pass/fail
+5. Order items by execution sequence
+
+The working agent must NOT see this file during execution. CHECKS are consumed by `/drift-detect` (PD) and `/improve` (QI) after execution.
+
+Reference: `IPPSSKLS-FR-05`, `IPPSSKLS-DD-05`, `SKILL_CHECKS.md`
+
+### 8.4 Optional: EXAMPLE Files
+
+Show larger GOOD examples that go beyond simple BAD/GOOD pairs in RULES.
+
+1. Name files: `[TOPIC]_EXAMPLE_[NN]-[ExampleName].md`
+2. Show complete or substantial documents demonstrating the GOOD approach
+3. Make each example use-case-specific (solves a specific problem type)
+4. Document key decisions and rationale
+5. Do not include BAD examples (BAD/GOOD pairs stay in RULES)
+6. Link from SKILL_GUIDES.md, not from SKILL.md or SKILL_RULES.md
+
+Reference: `IPPSSKLS-FR-06`
+
+### 8.5 Optional: SKILL_TEMPLATE.md
+
+Provides skeleton structure for documents created with this skill. Agents copy the template, fill in placeholders, and strip XML comments.
+
+**Trigger question**: Does this skill produce a specific document type that benefits from a skeleton?
+
+If yes:
+1. Use `_TEMPLATE.md` suffix (SK-FL-07)
+2. Template IS the document - every line is template content or XML comment
+3. Placeholders use bracket notation `[BRACKETS]`
+4. Complex rules in companion `*_RULES.md` or `*_GUIDES.md`, not inline
+5. Consumed by `/verify` alongside SKILL_RULES.md for template adherence
+
+Reference: `GRUC-FR-01`, `GRUC-FR-19`, `IPPSSKLS-FR-08`
+
+### 8.6 GRUC File Discovery
+
+SKILL.md References section must list all GRUC companion files so consumers know what exists:
+
+```
+**References** (loaded on demand):
+- SKILL_RULES.md - Output standards for [domain] documents
+- SKILL_GUIDES.md - Process guidance for [domain] decisions
+- SKILL_CHECKS.md - Process discipline and quality checks
+- SKILL_TEMPLATE.md - Template for [document type]
+```
+
+### 8.7 GRUC Separation Rules
+
+- RULES define output standards. No process guidance.
+- GUIDES define process strategy. No output standards.
+- CHECKS define process audit and improvement. No output standards or process guidance.
+- TEMPLATE files contain only structural skeleton and placeholders. No rules, no guidance, no audit items.
+- No content replication between GRUC files. Reference by rule ID.
+- CHECKS invisible to working agent during execution (gaming prevention).
+
+## 9. Review Checklist
 
 Before publishing:
 
@@ -230,3 +327,10 @@ Before publishing:
 - [ ] Token optimization applied (no visual-only formatting in LLM-consumed files)
 - [ ] Template files use `_TEMPLATE`/`_template` suffix (SK-FL-07)
 - [ ] References link to primary sources
+- [ ] SKILL_RULES.md exists with Rule Index and BAD/GOOD pairs
+- [ ] SKILL.md References section lists all GRUC companion files
+- [ ] If skill has complex decisions: SKILL_GUIDES.md exists with numbered decision steps
+- [ ] If skill has quality-critical process: SKILL_CHECKS.md exists with PD + QI sections
+- [ ] No content replication between GRUC files (reference by ID only)
+- [ ] EXAMPLE files (if any) linked from SKILL_GUIDES.md, not from SKILL.md
+- [ ] If skill has a template: SKILL_TEMPLATE.md exists with `_TEMPLATE` suffix

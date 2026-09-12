@@ -5,13 +5,13 @@
 
 # Sync Preview: [SOURCE_PATH] to [N] target(s)
 
-<!-- Source path is the -sources parameter value (e.g., ../IPPS/.devin). -->
-<!-- N = number of targets in [LINKED_REPOS] list. -->
+<!-- Source path is the `source` field from the first target entry in promptsystem-sync.json (e.g., ../IPPS/.devin). -->
+<!-- N = number of target entries in promptsystem-sync.json `targets` array. -->
 
-## Deprecated Files (source-level, from NOTES.md [DEPRECATED_FILES])
+## Deprecated Files (from promptsystem-sync.json top-level)
 
-<!-- List all entries from NOTES.md [DEPRECATED_FILES] section. -->
-<!-- These are deleted from ALL targets regardless of bundle config. -->
+<!-- List all entries from top-level `deprecated` array in promptsystem-sync.json. -->
+<!-- These are deleted from ALL targets regardless of target include/exclude patterns. -->
 
 - [deprecated_file_path_1]
 - [deprecated_file_path_2]
@@ -19,22 +19,27 @@
 
 ## Per-Target Preview
 
-<!-- Repeat this block for EACH target repo. One block per target, never aggregate. -->
+<!-- Repeat this block for EACH target entry. One block per target, never aggregate. -->
+<!-- Use the `path` field from the target entry (relative, e.g., .devin). -->
 <!-- Use Windows backslash paths in file listings. -->
 
-[TARGET_REPO_PATH]
+[TARGET_PATH]
   - Add: [N] new files
       [folder]\[subfolder]\[file.ext]
       [folder]\[subfolder]\[file.ext]
   - Overwrite: [N] older files
       [folder]\[subfolder]\[file.ext]
+  - Overwrite: [N] locally-modified files
+      [folder]\[subfolder]\[file.ext]
   - Delete: [N] deprecated files
       [folder]\[subfolder]\[file.ext]
   - Skipped: [reason]
+      [folder]\[subfolder]\[file.ext]
   - Excluded skills: [skill1, skill2]
 
 <!-- Conditional: include Add block only when add count > 0. -->
-<!-- Conditional: include Overwrite block only when modify count > 0. -->
+<!-- Conditional: include Overwrite (older) block only when modify count > 0. -->
+<!-- Conditional: include Overwrite (locally-modified) block only when locally_modified count > 0. -->
 <!-- Conditional: include Delete block only when delete count > 0. -->
 <!-- Conditional: include Skipped block only when skip count > 0. -->
 <!-- Conditional: include Excluded skills block only when excluded count > 0. -->
@@ -54,7 +59,7 @@
 ```markdown
 # Sync Preview: ../IPPS/.devin to 3 target(s)
 
-## Deprecated Files (source-level, from NOTES.md [DEPRECATED_FILES])
+## Deprecated Files (from promptsystem-sync.json top-level)
 
 - rules\devsystem-core.md
 - rules\devsystem-ids.md
@@ -63,21 +68,25 @@
 
 ## Per-Target Preview
 
-e:\Dev\KarstensWorkspace\.devin
-  - Add: 2 new files
+.devin
+  - Add: 3 new files
       rules\promptsystem-core.md
       rules\promptsystem-ids.md
+      skills\workspace-management\WORKSPACE_SETUP_QUESTIONNAIRE.md
   - Overwrite: 34 older files
       rules\agentic-english.md
       rules\core-conventions.md
       workflows\sync.md
       skills\workspace-management\sync.ps1
+  - Overwrite: 2 locally-modified files
+      NOTES.md
+      workflows\commit.md
   - Delete: 2 deprecated files
       workflows\workspace-create.md
       skills\workspace-management\WORKSPACE_CREATION_QUESTIONNAIRE.md
   - Excluded skills: llm-transcription, youtube-downloader, travel-info
 
-e:\Dev\Lana-V1-Dev\.devin
+.devin
   - Add: 158 new files
       rules\agent-behavior.md
       rules\agentic-english.md
@@ -88,7 +97,7 @@ e:\Dev\Lana-V1-Dev\.devin
       skills\coding-conventions\PYTHON-RULES.md
   - Excluded skills: llm-transcription, youtube-downloader, travel-info, hosting, seo-tools, pdf-tools, image-tools, google-account, llm-computer-use, llm-evaluation, ms-playwright-mcp, playwriter-mcp, windows-desktop-control, devin-auto-model-switcher
 
-e:\Dev\USTVA\.devin
+.devin
   [UP TO DATE] 287 files unchanged
 
 ## Summary

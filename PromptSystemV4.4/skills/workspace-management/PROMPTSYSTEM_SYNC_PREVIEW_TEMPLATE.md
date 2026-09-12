@@ -69,9 +69,10 @@
 ## Per-Target Preview
 
 .devin
-  - Add: 2 new files
+  - Add: 3 new files
       rules\promptsystem-core.md
       rules\promptsystem-ids.md
+      skills\workspace-management\WORKSPACE_SETUP_QUESTIONNAIRE.md
   - Overwrite: 34 older files
       rules\agentic-english.md
       rules\core-conventions.md

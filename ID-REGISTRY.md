@@ -220,3 +220,8 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **IPPSTMPL** - IPPS Templates (template structure and GRUC implementation requirements) - 2026-09-12
 - **PRMTSCN** - Prompt Self-Contained Architecture (self-contained prompts, context cards, start/end-of-prompt protocols) - 2026-09-12
 - **IPPSGAP** - IPPS Gap Analysis (LLM best practices comparison against llmbestpractices.com) - 2026-09-12
+- **APIGWYPAT** - API Gateway Patterns (comparison of reverse proxy, API abstraction, edge computing patterns) - 2026-09-12
+- **NOTIFSYS** - Notification System (multi-tier notification delivery system with domain objects) - 2026-09-12
+- **MICROCOM** - Microservices Communication Patterns (synchronous, asynchronous, event-driven layer comparison) - 2026-09-12
+- **TYPESAFE** - Type-Safe APIs (MINTO article on type safety adoption for API design) - 2026-09-12
+- **AUTHPROT** - Authentication Protocols (OAuth 2.0, OpenID Connect, SAML, JWT comparison research) - 2026-09-12

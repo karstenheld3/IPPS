@@ -49,6 +49,8 @@
 - [Anti-pattern 1]
 - [Anti-pattern 2]
 
+<!-- Mandatory for specs with 2+ domain objects: add Architecture Diagram subsection here. Use component or layer diagram per ASCII_ART_GUIDES.md. -->
+
 ## 2. Context
 
 [Project background, related systems, how this component fits]

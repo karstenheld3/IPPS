@@ -16,6 +16,7 @@ Create research and analysis documents following INFO_TEMPLATE.md structure.
 - Run `/verify` after document complete
 - **NEVER modify tracking documents** (PROGRESS.md, PROBLEMS.md, NOTES.md, FAILS.md). Write-* workflows create NEW files only. Tracking docs are session state, not agent operation artifacts.
 - Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content in any file → examples generic. Assess context BEFORE writing.
+- Apply diagram auto-trigger per SKILL.md
 
 ## Prerequisites
 
@@ -44,6 +45,10 @@ Create research and analysis documents following INFO_TEMPLATE.md structure.
      - Is this information really helpful? If yes, why?
    - Review new sections in context of existing ones
    - Remove cognitive overload, redundancies, ambiguities
+
+3.5. **Add Diagrams**
+   - When a section describes 3+ components, layers, flows, or parallel options, insert a Unicode diagram
+   - Read `ASCII_ART_GUIDES.md` section 1 for type selection
 
 4. **Think Outside the Box**
    - If no verified solution exists, reconsider the problem

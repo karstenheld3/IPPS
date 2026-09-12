@@ -326,7 +326,10 @@ Direction definitions:
 
 **WSKMGMT-FR-10: DEV_REPO_NOTES_TEMPLATE.md**
 - Template for DevRepo NOTES.md with all workspace constants
-- Includes: workspace constants section, sync sources section, project info section, build/test rules section
+- Section order (priority-first): MUST-NOT-FORGET, Table of Contents, Project Info, Workspace Constants, Sync Sources, Prevention Rules, Full Stack and Dependencies, Build/Test Rules, Scripts, Runtime Environment, Architecture Decisions, Source Control, Agent Safety Rules, Key References, Knowledge Map, Docs Map, Specs Map, Release Configuration
+- MUST-NOT-FORGET section at top with sync rules and placeholder usage rules
+- Table of Contents with clickable links to all sections
+- New sections from real-world target repos: Full Stack and Dependencies (language, framework, runtime, key dependencies, lock files), Scripts (build/test/deploy/config batch files), Architecture Decisions (key design choices with dates), Source Control (tracked vs gitignored, _gitignore convention), Agent Safety Rules (project-specific safety rules), Key References (important reference files), Knowledge Map (local reference structure for repos with knowledge folders), Docs Map (local documentation structure for repos with docs/ folder), Specs Map (local specs structure for repos with specs/ folder)
 - Constants have default values and inline instructions for customization
 - Follows TEMPLATE_RULES.md (all TMPL-* rules)
 
@@ -338,9 +341,11 @@ Direction definitions:
 
 **WSKMGMT-FR-12: COMPANY_REPO_NOTES_TEMPLATE.md**
 - Template for CompanyRepo NOTES.md
+- MUST-NOT-FORGET section at top with sync rules and placeholder usage rules
+- Table of Contents with clickable links to all sections
 - Tracks downstream repositories and sync policy
-- Per downstream repo: repo path, knowledge folders, specs, workflows, PromptSystem specs to sync
-- Defines overwrite rules and content filters per repo
+- Per downstream repo: repo path, sync sources used, include patterns, exclude patterns, PromptSystem version
+- Source content: knowledge folders and specs folders available for sync (downstream repos include in their promptsystem-sync.json targets array)
 - Follows TEMPLATE_RULES.md
 
 **WSKMGMT-FR-13: Diff scripts**
@@ -545,7 +550,9 @@ Direction definitions:
 
 **WSKMGMT-FR-41: WORKSPACE_SETUP_QUESTIONNAIRE.md**
 - Interactive questionnaire for creating new single-repo and multi-repo workspaces
+- Table of Contents with clickable links to all sections
 - 6 sections: Workspace Mode, Product Repo, Dev Repo, Version Strategy, Sync Sources, Release Configuration
+- Section 5 questions 5f/5g use include patterns (not deprecated selected_bundles): knowledge_include_patterns, specs_include_patterns with default ["*"]
 - Each question shows default value in brackets and impact description explaining consequences
 - Conditional sections: SINGLE-PROJECT skips Product Repo, Sync Sources sections
 - Output section lists exact files to generate per workspace mode
@@ -738,7 +745,9 @@ Direction definitions:
 
 **WSKMGMT-FR-66: WORKSPACE_SETUP_REPORT_TEMPLATE.md**
 - New file in `PromptSystemV4.4/skills/workspace-management/`
+- Table of Contents with clickable links to main sections
 - Report structure mirrors questionnaire sections 1-6 using same field IDs
+- Section 5 uses knowledge_include_patterns/specs_include_patterns (not deprecated knowledge_bundles/specs_bundles)
 - Per-section table: Field ID | Current | Default | Status | Proposed Fix
 - Summary section: workspace type, mode, sync relationship, counts (OK/GAP/STALE/DEVIATION/N/A)
 - List field details section: expanded missing/extra items for list-type fields
@@ -1472,6 +1481,15 @@ RESULT: PASSED WITH FIXES
 - All skill files must pass privacy gate (no real identifiers, addresses, names, project-specific data)
 
 ## 15. Document History
+
+**[2026-09-12 15:45]**
+- Updated: FR-10 — DEV_REPO_NOTES_TEMPLATE.md section order (priority-first), MNF at top, TOC, new sections (Full Stack and Dependencies, Scripts, Architecture Decisions, Source Control, Agent Safety Rules, Key References, Knowledge Map, Docs Map, Specs Map)
+- Updated: FR-12 — COMPANY_REPO_NOTES_TEMPLATE.md MNF, TOC, targets format (include/exclude patterns replacing deprecated selected_bundles)
+- Updated: FR-41 — WORKSPACE_SETUP_QUESTIONNAIRE.md TOC, 5f/5g use include patterns (not deprecated selected_bundles)
+- Updated: FR-66 — WORKSPACE_SETUP_REPORT_TEMPLATE.md TOC, Section 5 uses include patterns (not deprecated bundles)
+- Added: ID-REGISTRY_TEMPLATE.md TOC
+- Fixed: WORKSPACE_SETUP_QUESTIONNAIRE.md Section 7 comment — selected_bundles → targets array include/exclude
+- Fixed: WORKSPACE_SETUP_QUESTIONNAIRE.md 5d/5e — bundle configuration → targets configuration
 
 **[2026-09-11 18:05]**
 - Added: FR-76 Document placement rules in WORKSPACE-RULES.md (WS-DP-01 through WS-DP-06)

@@ -37,10 +37,18 @@ Content (CT)
 - PRMT-CT-05: Precision over token savings (APAPALAN priority order)
 - PRMT-CT-06: Signal redundancy preserved (MECT deliberate redundancy)
 - PRMT-CT-07: Examples over descriptions for format and behavior
-- PRMT-CT-08: Workflow execution on standalone lines without backticks
+- PRMT-CT-08: Workflow execution on standalone lines without backticks (execution verb = execution required)
 - PRMT-CT-09: Formatting discipline inside fences (no tables, no emojis, structure over decoration)
-- PRMT-CT-10: Workflow references in backticks when not executing (distinct from PRMT-CT-08 execution)
+- PRMT-CT-10: Workflow references in backticks when not executing (no execution verb = reference only)
 - PRMT-CT-11: Leverage existing workflows whenever possible
+
+Self-Contained (SC)
+- PRMT-SC-01: Self-contained opening — context-loading directive, "treat earlier conversation as compacted", step identifier
+- PRMT-SC-02: No conversation dependency — no "the previous step" or "as discussed above" without naming where output lives in a file
+- PRMT-SC-03: Idempotency constraint — implementation prompts must include idempotency constraint
+- PRMT-SC-04: Chain length limit — sequences under 6 steps; longer workflows split into sub-chains with checkpoints
+- PRMT-SC-05: Effort and model specification — frontmatter must specify intended_model, context_window_size, effort level; prompts scoped to effort budget
+- PRMT-SC-06: Planning document reference — prompt sequences from planning documents must reference the document by filename and step ID
 
 Execution (EX)
 - PRMT-EX-01: One prompt per turn - prompts are never concatenated into a single model submission
@@ -70,7 +78,7 @@ Create a new Next.js project with TypeScript.
 ---
 intended_model: claude-sonnet-4-5
 context_window_size: 200k
-reasoning_settings: high
+effort: high
 prompt_system: IPPS
 ---
 
@@ -639,12 +647,21 @@ Use environment variables for secrets.
 
 ## PRMT-CT-08: Workflow Execution on Standalone Lines Without Backticks
 
-When a prompt instructs the agent to execute a workflow, the slash command MUST appear on its own line without backticks. This signals execution, not reference. Enables quick human scanning for workflow invocations in prompt content.
+When a prompt requires the agent to EXECUTE a workflow, the slash command MUST appear on its own line without backticks. Any arguments or additional text go on the following line(s), never on the same line as the slash command. Execution means: the workflow file MUST be read, its steps MUST be followed, and its output MUST be produced. No exceptions.
+
+**Decision procedure**: If the sentence containing the workflow name uses an execution verb (run, use, execute, call, invoke, perform, apply, do), the workflow is being EXECUTED. Move it to a standalone line without backticks. Backticks in prose with an execution verb = PRMT-CT-08 violation, regardless of article usage or parenthetical paths.
 
 **BAD** (workflow execution buried in sentence with backticks):
 `````markdown
 ```
 After implementing the fix, make sure to run `/verify` against the spec and then `/commit`.
+```
+`````
+
+**BAD** (execution verb with backticks — looks like reference but is execution):
+`````markdown
+```
+Use the `/sync` workflow to sync PromptSystemV4.4/ to .devin/.
 ```
 `````
 
@@ -655,13 +672,26 @@ After implementing the fix, make sure to run /verify against the spec and then /
 ```
 `````
 
-**GOOD** (workflow execution on standalone lines, no backticks):
+**GOOD** (workflow execution on standalone lines, no backticks, arguments on next line):
 `````markdown
 ```
 After implementing the fix:
 
-/verify against specs/_SPEC_LANA_MVP-1.md
-/commit with conventional format
+/verify
+against specs/_SPEC_LANA_MVP-1.md
+
+/commit
+with conventional format
+```
+`````
+
+**GOOD** (execution verb rewritten as standalone call):
+`````markdown
+```
+Sync PromptSystemV4.4/ to .devin/:
+
+/sync
+PromptSystemV4.4/ to .devin/
 ```
 `````
 
@@ -706,27 +736,35 @@ Finding status:
 
 ## PRMT-CT-10: Workflow References in Backticks When Not Executing
 
-When a workflow or prompt system command appears in prompt prose as a reference (not as an actual call to execute), it MUST be wrapped in backticks. This distinguishes references from executable calls (PRMT-CT-08: standalone lines without backticks).
+When a prompt mentions a workflow as context — naming it, describing it, pointing to it — without requiring execution, the workflow name MUST be wrapped in backticks. Reference means: no execution requirement. The model may load the referenced workflow into context if it feels necessary, but is not required to execute it.
+
+**Decision procedure**: If the sentence containing the workflow name has NO execution verb (run, use, execute, call, invoke, perform, apply, do), it is a reference. Wrap in backticks. If an execution verb IS present, it is execution (PRMT-CT-08), not reference — regardless of how the sentence is phrased.
 
 **BAD** (workflow referenced in prose without backticks):
 `````markdown
 ```
-Then use /write-prompts to write the remaining prompts into a file.
-
-/session-new
+The /sync workflow handles file synchronization between source and target folders.
 ```
 `````
 
-**GOOD** (reference in backticks, call without backticks on standalone line):
+**GOOD** (reference in backticks — no execution verb):
 `````markdown
 ```
-Then use `/write-prompts` to write the remaining prompts into a file.
-
-/session-new
+The `/sync` workflow handles file synchronization between source and target folders.
 ```
 `````
 
-Applies to all workflow names mentioned in prose: `/deep-research`, `/fact-check`, `/go`, `/verify`, `/write-prompts`, etc. When the workflow is actually being called (PRMT-CT-08), it appears on its own line without backticks.
+**GOOD** (reference in backticks + execution on standalone line):
+`````markdown
+```
+The `/sync` workflow handles file synchronization. To sync now:
+
+/sync
+PromptSystemV4.4/ to .devin/
+```
+`````
+
+Applies to all workflow names mentioned in prose: `/deep-research`, `/fact-check`, `/go`, `/verify`, `/write-prompts`, etc. When the workflow is being executed (PRMT-CT-08), it appears on its own line without backticks. Execution verb present = execution (PRMT-CT-08). No execution verb = reference (PRMT-CT-10).
 
 ## PRMT-CT-11: Leverage Existing Workflows Whenever Possible
 
@@ -765,7 +803,7 @@ An optional YAML block at the very top of the file (before any Commentary or Ope
 **Supported keys:**
 - `intended_model`: Model identifier (e.g., `claude-sonnet-4-5`, `gpt-4o`)
 - `context_window_size`: Context window size (e.g., `200k`, `128k`, `1M`)
-- `reasoning_settings`: Reasoning effort (`medium` | `high` | `extra-high`)
+- `effort`: Effort level (`low` | `medium` | `high` | `extra-high`)
 - `prompt_system`: Prompt system identifier (e.g., `IPPS`)
 
 **Rules:**
@@ -781,7 +819,7 @@ An optional YAML block at the very top of the file (before any Commentary or Ope
 ---
 intended_model: claude-sonnet-4-5
 context_window_size: 200k
-reasoning_settings: high
+effort: high
 prompt_system: IPPS
 ---
 
@@ -892,3 +930,246 @@ The Topic in the filename describes the prompts file purpose, not the project or
 **BAD:** `_PROMPTS_MyProject.md`, `_PROMPTS_Session3.md`
 
 **GOOD:** `_PROMPTS_SetupCICD.md`, `_PROMPTS_RefactorAuthModule.md`
+
+## PRMT-SC-01: Self-Contained Opening
+
+Every prompt in a sequence must begin with a self-contained opening that enables execution after context reset. The opening contains three elements:
+
+1. A context-loading directive naming the files or cards to read before doing anything else
+2. An explicit statement that earlier conversation is not in context: "Treat earlier conversation as compacted"
+3. A step identifier (STRUT step, task ID, or sequence position) for progress tracking
+
+All three elements must appear at the start of the prompt, before the objective. A prompt that omits any element breaks on context reset: without the directive, the model does not know what to read; without the compacted statement, the model may assume prior context; without the step identifier, progress tracking fails.
+
+**BAD** (assumes prior context, no opening):
+`````markdown
+```
+Using the analysis from the previous step, fix the authentication bug in the token validator.
+```
+`````
+
+**GOOD** (self-contained opening with all three elements):
+`````markdown
+```
+Read `__CARD_00-Rules.md` and `src/auth/validator.ts` lines 45-80. Treat earlier conversation as compacted. Step P2-S3.
+
+Fix the token validation bug where expired tokens crash the server instead of returning 401.
+```
+`````
+
+**BAD** (has directive but no compacted statement, no step ID):
+`````markdown
+```
+Read `src/auth/validator.ts`. Fix the token validation bug where expired tokens crash the server.
+```
+`````
+
+## PRMT-SC-02: No Conversation Dependency
+
+No prompt may reference "the previous step", "as discussed above", "the earlier analysis", or any prior conversation content without naming where that content lives in a file. Prompts must reconstruct state from files, not from model memory of prior prompts.
+
+Verifiable from artifact: scan each prompt for conversation-reference phrases ("previous step", "as discussed", "earlier", "above", "the analysis from"). If found, check whether the prompt also names a file path where the referenced content lives. If no file path accompanies the reference, the prompt violates this rule.
+
+**BAD** (conversation reference without file location):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P3-S1.
+
+Using the findings from the previous step, implement the database schema.
+```
+`````
+
+**GOOD** (references prior output by file path):
+`````markdown
+```
+Read `__CARD_00-Rules.md` and `_INFO_DatabaseDesign.md` section 2. Treat earlier conversation as compacted. Step P3-S1.
+
+Implement the database schema defined in `_INFO_DatabaseDesign.md` section 2. Create the migration file `migrations/001_init_schema.sql`.
+```
+`````
+
+## PRMT-SC-03: Idempotency Constraint
+
+Implementation prompts (prompts that modify files, install packages, or change configuration) must include an idempotency constraint in the Constraints section. The constraint states that re-running the prompt must not corrupt state, duplicate work, or waste cost.
+
+The idempotency constraint is a negative constraint (PRMT-CT-02) that prevents a specific failure class: partial execution followed by re-run producing inconsistent state.
+
+Verifiable from artifact: check the Constraints section of each implementation prompt for an idempotency statement. Research or analysis prompts (no file modifications) are exempt.
+
+**BAD** (implementation prompt without idempotency constraint):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P2-S1.
+
+Create the user model in `src/models/user.ts` with fields: id, email, name, created_at.
+
+Constraints:
+- Do not modify the existing database connection file
+- Use TypeScript strict mode
+```
+`````
+
+**GOOD** (idempotency constraint present):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P2-S1.
+
+Create the user model in `src/models/user.ts` with fields: id, email, name, created_at.
+
+Constraints:
+- Do not modify the existing database connection file
+- Use TypeScript strict mode
+- Re-running this prompt must not corrupt state or waste cost: if `src/models/user.ts` already exists and passes validation, skip creation
+```
+`````
+
+## PRMT-SC-04: Chain Length Limit
+
+Prompt sequences must stay under 6 steps. For longer workflows, split into sub-chains with checkpoints between them. Each sub-chain completes, commits, and the next sub-chain starts fresh with its own self-contained opening.
+
+Error rates compound across steps. A 5% per-step error rate yields 14% end-to-end failure at 3 steps, 26% at 6 steps, 40% at 10 steps. Keeping sequences under 6 steps limits the blast radius of a single step failure.
+
+Verifiable from artifact: count the number of prompts (fenced blocks separated by `---`) in the file. If the count exceeds 6, check whether the file is explicitly documented as a sub-chain with a checkpoint reference to the next sub-chain.
+
+**BAD** (10-prompt sequence with no sub-chain structure):
+`````markdown
+## Prompt 1 - Analyze
+```
+...
+```
+---
+## Prompt 2 - Design
+```
+...
+```
+---
+## Prompt 3 - Setup
+```
+...
+```
+---
+## Prompt 4 - Implement model
+```
+...
+```
+---
+## Prompt 5 - Implement API
+```
+...
+```
+---
+## Prompt 6 - Implement UI
+```
+...
+```
+---
+## Prompt 7 - Write tests
+```
+...
+```
+---
+## Prompt 8 - Integration test
+```
+...
+```
+---
+## Prompt 9 - Deploy
+```
+...
+```
+---
+## Prompt 10 - Verify deployment
+```
+...
+```
+`````
+
+**GOOD** (sub-chain with checkpoint, under 6 steps):
+`````markdown
+<!-- Sub-chain 1 of 2: Setup and implementation. Checkpoint after Prompt 4 commits. Sub-chain 2 starts fresh. -->
+
+## Prompt 1 - Analyze requirements
+```
+...
+```
+---
+## Prompt 2 - Design schema
+```
+...
+```
+---
+## Prompt 3 - Implement model
+```
+...
+```
+---
+## Prompt 4 - Implement API and commit checkpoint
+```
+...
+```
+`````
+
+## PRMT-SC-05: Effort and Model Specification
+
+Prompt file frontmatter must specify `intended_model`, `context_window_size`, and `effort` level. The effort level determines the practical scope of each prompt: at low effort, each prompt must be tightly scoped (one file, one edit); at high effort, a single prompt can handle multi-file analysis and implementation.
+
+The prompt count must match the effort budget. A task that requires 8 prompts at low effort may require 2 prompts at high effort. Mismatched effort and prompt count produces either overloaded prompts (low effort, too many steps) or underutilized prompts (high effort, unnecessary fragmentation).
+
+Verifiable from artifact: check frontmatter for `intended_model`, `context_window_size`, and `effort` keys. Check that prompt count is consistent with the effort level (low effort = more prompts, high effort = fewer prompts).
+
+**BAD** (no effort specification, prompt count mismatch):
+`````markdown
+---
+intended_model: claude-sonnet-4-5
+context_window_size: 200k
+prompt_system: IPPS
+---
+
+## Prompt 1 - Do everything
+```
+Analyze the codebase, design the schema, implement all models, write all tests, and deploy.
+```
+`````
+
+**GOOD** (effort specified, prompt count matches):
+`````markdown
+---
+intended_model: claude-sonnet-4-5
+context_window_size: 200k
+effort: high
+prompt_system: IPPS
+---
+
+## Prompt 1 - Analyze and design
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P1-S1.
+
+Analyze the codebase and design the database schema. Write the schema design to `_INFO_SchemaDesign.md`.
+```
+`````
+
+## PRMT-SC-06: Planning Document Reference
+
+Prompt sequences generated from planning documents (TASKS, STRUT, IMPL) must reference the planning document by filename and step ID. The reference appears in the self-contained opening (PRMT-SC-01) as part of the step identifier.
+
+The planning document is the source of truth for sequence state. Without an explicit reference, the agent cannot determine progress, maintain state, or detect drift on resume.
+
+Verifiable from artifact: check each prompt's opening for a planning document filename and step ID. Sequences not generated from a planning document (ad-hoc sequences) are exempt but should reference their own file as the tracking document.
+
+**BAD** (no planning document reference):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted.
+
+Implement the user authentication module with JWT tokens.
+```
+`````
+
+**GOOD** (planning document referenced by filename and step):
+`````markdown
+```
+Read `__CARD_00-Rules.md` and `__STRUT_AuthImplementation.md` step P2-S3. Treat earlier conversation as compacted. Step P2-S3.
+
+Implement the user authentication module with JWT tokens as specified in `__STRUT_AuthImplementation.md` step P2-S3.
+```
+`````

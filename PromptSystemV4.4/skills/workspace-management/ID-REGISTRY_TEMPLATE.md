@@ -2,6 +2,21 @@
 
 Inventory of all IDs, acronyms, and named concepts in the PromptSystem.
 
+## Table of Contents
+
+- [Frameworks](#frameworks)
+- [Core Identifiers](#core-identifiers)
+- [Document Type IDs](#document-type-ids)
+- [Spec-Level Item IDs](#spec-level-item-ids)
+- [Plan-Level Item IDs](#plan-level-item-ids)
+- [Tracking Item IDs](#tracking-item-ids)
+- [Source IDs (INFO documents)](#source-ids-info-documents)
+- [Agentic concepts and strategies](#agentic-concepts-and-strategies)
+- [States](#states-no-brackets)
+- [Labels](#labels)
+- [Tracking Documents](#tracking-documents)
+- [Project Topics](#project-topics)
+
 ## Frameworks
 
 - **AGEN** - Agentic English. Controlled vocabulary for agent-human communication

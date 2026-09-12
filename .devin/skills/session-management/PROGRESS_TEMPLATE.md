@@ -6,6 +6,17 @@ Populated by `/session-new` workflow. Tracks implementation progress and task co
 
 Track implementation progress and decisions.
 
+## Table of Contents
+
+- [To Do](#to-do)
+- [In Progress](#in-progress)
+- [Done](#done)
+- [Tried But Not Used](#tried-but-not-used)
+- [Topic Folders](#topic-folders)
+- [Step Folders](#step-folders)
+- [Test Coverage](#test-coverage)
+- [Progress Changes](#progress-changes)
+
 ## To Do
 
 - [ ] AUTHSYST-PR-0001: Implement token refresh mutex to prevent race conditions

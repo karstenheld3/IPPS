@@ -36,6 +36,7 @@ The Summary file (`_INFO_[TOPIC]-01_Summary.md`) is the master index and cross-d
    - Cover scope, main findings, and significance to overall research
    - Include verification labels on Key Findings
    - Goal: reader understands each topic without opening the file
+8.5. **Add Structure Diagrams** - Scan summary for structures with 3+ levels or parallel elements. Add Unicode diagrams per `ASCII_ART_GUIDES.md` section 1 and `SD-ES-05`
 9. **Write Conclusions** (Phase 4, when applicable):
    - Derive actionable conclusions from cross-topic analysis
    - Reference supporting topics by IN-number

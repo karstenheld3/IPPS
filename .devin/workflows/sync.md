@@ -244,27 +244,27 @@ Read @skills:workspace-management SKILL.md before syncing.
 ### Sync Procedure
 
 1. Read `promptsystem-sync.json` from target `[WORKSPACE_FOLDER]` root
-2. Read `[DEPRECATED_FILES]` section from source NOTES.md — parse list of deprecated file paths
-3. For each source entry in config:
-   - Read `source` path (relative) and `selected_bundles` array
-   - Bundle definitions, include/exclude refiners, never_overwrite come from the source entry
-   - Deprecated files come from NOTES.md `[DEPRECATED_FILES]` (source-level), not per-target config
-   - Run `sync.ps1 -diff -sources <source> -targets <target> -configs promptsystem-sync.json -deprecated '<JSON array>' -preview_file <path>` for preview
+2. For each target entry in config:
+   - Read `path` (relative agent folder, e.g., `.devin`), `source` (relative path to source agent folder)
+   - `include`/`exclude` patterns, `never_overwrite` patterns come from the target entry
+   - Deprecated files come from top-level `deprecated` array in promptsystem-sync.json
+   - Run `sync.ps1 -diff -config <path> -preview_file <path>` for preview
    - Review structured diff report (add/overwrite/delete/unchanged/excluded)
-4. Read preview file and show to user using `PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md` format from @skills:workspace-management:
+3. Read preview file (markdown formatted per `PROMPTSYSTEM_SYNC_PREVIEW_TEMPLATE.md` from @skills:workspace-management):
    - One section per target (never aggregate across targets)
    - Files to add, modify, delete, skip (with reason)
-   - Excluded files (filtered by bundle include/exclude rules)
+   - Excluded files (filtered by target include/exclude patterns)
    - Deprecated files marked for deletion
+   - Locally modified files (target modified after last_sync)
    - Group file lists by top-level folder when 10+ files
-5. Prompt user for confirmation:
+4. Prompt user for confirmation:
    - Confirmation keywords: @rules:core-conventions.md [CONFIRMATION_KEYWORDS]
    - Non-confirmation keywords: no, cancel, abort, stop
-6. If confirmed:
-   - Run `sync.ps1 -execute -sources <source> -targets <target> -configs promptsystem-sync.json -deprecated '<JSON array>'`
+5. If confirmed:
+   - Run `sync.ps1 -execute -config <path>`
    - Verify `last_sync` timestamp updated in target config
    - Report results: X added, Y modified, Z deleted, W skipped
-7. If not confirmed: abort, no changes made
+6. If not confirmed: abort, no changes made
 
 Sync direction:
 - Downstream = sync from source to all targets (distribute content to dependent repos)

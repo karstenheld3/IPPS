@@ -1,3 +1,39 @@
+# NOTES
+
+## MUST-NOT-FORGET
+
+- [PROMPTSYSTEM_FOLDER] is the source of truth. Never edit [AGENT_FOLDER] directly
+- Sync order: 1) [PROMPTSYSTEM_FOLDER] → [AGENT_FOLDER] (robocopy /MIR), 2) [AGENT_FOLDER] → [LINKED_REPOS] (sync.ps1 -execute). Stage 2 requires stage 1 complete. Stage 3 (linked repo local mirror) is NOT automatic from source repo
+- Downstream repos pull from [AGENT_FOLDER], NOT from [PROMPTSYSTEM_FOLDER]. The local mirror is the published source for linked repos
+- Use placeholders in all workspace/session files, never ephemeral version strings or repo names
+
+## Table of Contents
+
+- [MUST-NOT-FORGET](#must-not-forget)
+- [Project Info](#project-info)
+- [Workspace Constants](#workspace-constants)
+- [Prevention Rules](#prevention-rules-from-session-fails)
+- [PromptSystem Source/Sync Rules](#promptsystem-sourcesync-rules)
+- [Workflow Design Rules](#workflow-design-rules)
+- [Platform Notes](#platform-notes)
+- [Special Workflows](#special-workflows-workspace-root)
+- [Sync Architecture](#sync-architecture-2026-09-06-revised-2026-09-12)
+- [PromptSystem 5.0 Planning](#promptsystem-50-planning)
+- [PERSONAL_WORKFLOWS](#personal_workflows-excluded-from-development-only-repos-deployed-only-to-all-repos)
+- [LINKED_REPOS](#linked_repos)
+- [Release Configuration](#release-configuration)
+
+## Project Info
+
+- Project name: IPPS
+- Project goal: PromptSystem source repository — rules, workflows, skills for agentic development
+- Workspace type: SOFTWARE-DEV
+- Workspace mode: SINGLE-PROJECT
+- Version strategy: SINGLE-VERSION
+
+
+## Workspace Constants
+
 [WORKSPACE_FOLDER]: `E:\Dev\IPPS`
 - Root folder of the workspace. All other paths compose from this.
 
@@ -19,7 +55,7 @@
 [PRODUCT_VERSION]: `4.4`
 - Current PromptSystem version. Update on version changes (SOPS SOP 4/7).
 
-[PROMPTSYSTEM_FOLDER]: `[WORKSPACE_FOLDER]\.devin`
+[PROMPTSYSTEM_FOLDER]: `[WORKSPACE_FOLDER]\PromptSystemV4.4`
 - Source of truth for all rules, workflows, skills. Never edit `.devin/` directly. Repo-specific — not in template.
 
 [AGENT_FOLDER]: `[WORKSPACE_FOLDER]\.devin`
@@ -43,14 +79,6 @@
 [RELEASE_NOTES_FOLDER]: `[PRODUCT_DOCS_FOLDER]\ReleaseNotes`
 - Release notes directory. Naming: `RELEASE_NOTES_v{VERSION}_{DATE}.md`.
 
-## Project Info
-
-- Project name: IPPS
-- Project goal: PromptSystem source repository — rules, workflows, skills for agentic development
-- Workspace type: SOFTWARE-DEV
-- Workspace mode: SINGLE-PROJECT
-- Version strategy: SINGLE-VERSION
-
 
 ## Prevention Rules (from session fails)
 
@@ -64,15 +92,31 @@
 **CRITICAL: [PROMPTSYSTEM_FOLDER] is the SOURCE. .devin is the SYNC TARGET.**
 **CRITICAL: Never leak project-specific or private data into workflows, skills, or rules.** These are reusable across projects. Use generic examples and placeholders only.
 
+**Sync order (3 stages, each depends on the previous):**
+```
+1. [PROMPTSYSTEM_FOLDER] → local [AGENT_FOLDER]
+   Method: robocopy /MIR (see command below)
+   When: after every edit to source
+
+2. [AGENT_FOLDER] → [LINKED_REPOS] .devin/
+   Method: sync.ps1 -execute at each target (reads promptsystem-sync.json)
+   When: explicit user confirmation only
+   Source for targets: ../IPPS/[AGENT_FOLDER] (the local mirror, not [PROMPTSYSTEM_FOLDER])
+
+3. [LINKED_REPOS] .devin/ → agent folder in each linked repo
+   Method: robocopy /MIR at each linked repo (same as stage 1, local to that repo)
+   When: each linked repo's own procedure (NOT automatic from IPPS)
+```
+
 - **Creating new rules, workflows, skills** -> Create in [PROMPTSYSTEM_FOLDER] first, then sync
 - **Editing existing content** -> Edit in [PROMPTSYSTEM_FOLDER] first, then sync
 - **NEVER create or edit directly in `.devin/`** (except for temp testing)
 
-**Sync direction:**
+**Local mirror sync (robocopy /MIR):**
+```powershell
+robocopy "[PROMPTSYSTEM_FOLDER]" "[AGENT_FOLDER]" /MIR /XD .git
 ```
-[PROMPTSYSTEM_FOLDER] ---(sync to)---> .devin/
-[PROMPTSYSTEM_FOLDER]\workflows ---(copy to)---> .claude/commands/
-```
+`/MIR` = mirror mode (copies new/changed, deletes files at target not in source). `/XD .git` = exclude .git folder. This is the only command for local `[PROMPTSYSTEM_FOLDER]` → `.devin/` sync. Not `sync.ps1` — that is for cross-repo downstream sync only.
 
 **Claude Code commands:** All workflows from `[PROMPTSYSTEM_FOLDER]\workflows` are also copied to `.claude/commands/` (Devin CLI imports these as slash commands via Claude Code compatibility).
 
@@ -103,9 +147,9 @@
 
 **Release archive**: `[WORKSPACE_FOLDER]\_OldPromptSystemVersions\` — all prior PromptSystem version folders are preserved here before deletion. Never delete a version folder without backing it up.
 
-**Windows:** No symlinks. `.devin/` is a copy of `[PROMPTSYSTEM_FOLDER]`. Sync command and procedures: see `SOPS.md`.
+**Windows:** No symlinks. `.devin/` is a copy of `[PROMPTSYSTEM_FOLDER]`. Local mirror sync: see robocopy command above. SOPS.md procedures reference this command.
 
-**"deploy" keyword:** When user says "deploy", sync `[PROMPTSYSTEM_FOLDER]` to `.devin/` per `SOPS.md` → Quick Reference: Sync Command.
+**"deploy" keyword:** When user says "deploy", run the robocopy /MIR command above to sync `[PROMPTSYSTEM_FOLDER]` to `.devin/`.
 
 Automatically push commits to GitHub.
 
@@ -117,36 +161,29 @@ Automatically push commits to GitHub.
 
 **CRITICAL: NEVER auto-sync to downstream repos without explicit user confirmation.** Sync to downstream repos is a separate, explicit action.
 
-## Sync Architecture Revision (2026-09-06)
+## Sync Architecture (2026-09-06, revised 2026-09-12)
 
 **Folder rename**: `[WORKSPACE_FOLDER]\rules` → `[WORKSPACE_FOLDER]\specs` (completed 2026-09-06)
 - `\specs` contains all SPEC, IMPL, TEST, INFO concept files
 - `\docs` contains product documentation, tool research, release notes
 
-**Single script**: `sync.ps1` in workspace-management skill
-- `-diff -sources [array] -targets [array] -configs [array] -output-file [path]` → produces additions, changes, deletions
-- `-execute [same params]` → executes sync
-- All params are JSON arrays but also support single strings
-- If `-output-file` present, console just summarizes numbers; full report goes to file
+**Local mirror**: `robocopy /MIR` (see PromptSystem Source/Sync Rules above). Not `sync.ps1`.
 
-**promptsystem-sync.json at target `[WORKSPACE_FOLDER]` root**:
-- Single source of truth for ALL sync configuration
-- Each source entry carries its own complete config: bundle definitions, selected_bundles, include/exclude refiners, never_overwrite
-- Deprecated files are source-level (from NOTES.md [DEPRECATED_FILES]), not per-target config
-- NO sync-bundles.json at source — source is purely a content provider
-- Source repo only maintains a list of relative paths to synced repos (for push operations)
+**Cross-repo sync**: `sync.ps1` in workspace-management skill
+- `-diff -config <path-to-promptsystem-sync.json>` → produces additions, changes, deletions
+- `-execute -config <path-to-promptsystem-sync.json>` → executes sync
+- `-preview_file <path>` → markdown preview for chat presentation
+- `-output_file <path>` → full text report to file
+
+**promptsystem-sync.json at target `[WORKSPACE_FOLDER]` root** (PULL model):
+- Single source of truth for ALL cross-repo sync configuration
+- `targets` array: each entry is self-contained (path, source, include, exclude, never_overwrite)
+- `deprecated`: top-level array (shared across all targets in repo)
+- `bundles` and `selected_bundles` removed — include/exclude per target is the single filter layer
+- Source is purely a content provider — no config at source
+- Source repo maintains `[LINKED_REPOS]` list in NOTES.md (for push operations)
 
 **Source repo**: Only references RELATIVE downstream repo paths (e.g., `../Lana-V2-Dev`), never absolute
-
-**Use cases** (implemented in `sync.md` workflow):
-- `/sync workspace settings from repo xyz` — merges/replicates NOTES.md + promptsystem-sync.json into current repo
-- `/sync workspace settings to repo xyz` — merges/replicates NOTES.md + promptsystem-sync.json into target repo
-- `/sync sync settings from repo xyz` — only promptsystem-sync.json into current repo
-- `/sync sync settings to repo xyz` — only promptsystem-sync.json into target repo
-- `/sync knowledge from source` — reads source from promptsystem-sync.json, runs sync.ps1 -diff, preview, auto-execute on confirm
-- `/sync knowledge to targets` — reads targets from source NOTES.md synced repos list, runs sync.ps1 -diff, preview, auto-execute on confirm
-- `/sync specs from source` — same flow for specs
-- `/sync specs to targets` — same flow for specs
 
 ## PromptSystem 5.0 Planning
 
@@ -165,13 +202,9 @@ Workflow behavior: formulates goal, collects premises, analyzes problem nature, 
 - conversation-start.md
 - conversation-update.md
 
-## [DEPRECATED_FILES] (deleted from all targets during sync)
+## [LINKED_REPOS]
 
-- rules/devsystem-core.md
-- rules/devsystem-ids.md
-- workflows/workspace-create.md
-- skills/workspace-management/WORKSPACE_CREATION_QUESTIONNAIRE.md
-- skills/workspace-management/LOCAL_ENVIRONMENTS_REVIEW.md
+Downstream repos that pull from this source. Each repo has its own `promptsystem-sync.json` defining what it pulls.
 
 **[LINKED_REPOS]**:
 - ../KarstensWorkspace

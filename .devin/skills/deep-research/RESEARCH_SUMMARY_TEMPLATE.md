@@ -30,6 +30,8 @@ A2: [Answer] [LABEL]
 
 [5-15 sentences of cross-document synthesis. Not a compressed table of contents but a standalone overview answering "what did we learn?" Include: purpose, key findings with confidence labels, main patterns, important limitations, actionable recommendations. Scale with complexity.]
 
+<!-- Conditional: insert Diagrams section when SD-ES-05 applies (3+ levels, 3+ parallel elements, flow/timeline). Use Unicode box-drawing per ASCII_ART_GUIDES.md. -->
+
 <!-- Sections below are numbered and navigable via TOC. Sections above (Goals, Questions, Summary) are executive-level and visible without navigation. -->
 
 ## Table of Contents

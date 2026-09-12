@@ -24,11 +24,12 @@ Enrichment Sections (ES) - conditional, present when applicable
 - SD-ES-02: Entity Index section when 5+ named entities across topic files
 - SD-ES-03: Contradictions and Tensions section when competing forces or paradoxes found
 - SD-ES-04: Open Questions and Research Gaps section aggregated from topic files
-- SD-ES-05: Unicode diagrams for complex structures (market maps, regulatory layers, timelines)
+- SD-ES-05: Unicode diagrams MANDATORY when structure has 3+ levels, 3+ parallel elements, or describes a flow/timeline
 - SD-ES-06: Reading Guide section when 3+ audience types benefit from different reading orders
 - SD-ES-07: Problem -> Solution Lookup when research evaluates multiple options for distinct needs
 - SD-ES-08: Recommendations section when research produces actionable advice beyond conclusions
 - SD-ES-09: Risk Assessment section when evaluated options carry categorized risks
+- SD-ES-10: Read `ASCII_ART_GUIDES.md` section 1 before drawing summary diagrams
 
 ## SD-CD-01: Per-Topic Summary Data Density
 

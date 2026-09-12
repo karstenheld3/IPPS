@@ -95,6 +95,10 @@ For each sub-question (S-node), select evidence that:
 - Maximum 3 evidence items per sub-question (QnAn-S1E1...E3) - fewer is acceptable
 - These are cognitive load limits, not minimum requirements
 
+## 3.5. Structure Visualization
+
+When the AMINTON tree has 3+ Q-branches, add a tree diagram before the Executive Summary. The diagram uses Unicode box-drawing characters per `ASCII_ART_GUIDES.md`. Purpose: reader sees the argument structure at a glance before reading prose. The tree diagram supplements the AMINTON tree appendix (machine-readable) with a visual rendering for human readers.
+
 ## 4. Writing the Prose Article
 
 Prose is DERIVED FROM the completed tree, not written independently. Every paragraph must map to an AMINTON node. If prose drifts from the tree, the fix is always: update the tree first, then regenerate prose from it.

@@ -34,6 +34,19 @@ This skill implements:
 - [WRITE-CONVERSATION] - Create conversation files (use `CONVERSATION_TEMPLATE.md`, read `CONVERSATION_RULES.md`)
 - [UPDATE-CONVERSATION] - Update existing conversation files (read `CONVERSATION_RULES.md`)
 
+## Diagram Auto-Trigger
+
+When creating any document, evaluate diagram triggers before finalizing. Diagrams are mandatory when triggers apply:
+1. 3+ components with connections → component diagram
+2. Multi-tier architecture → layer diagram
+3. UI screens or forms → UX mockup
+4. State transitions or cycles → state machine
+5. Sequential process with 3+ stages → pipeline or flowchart
+6. Research findings with 3+ parallel options → comparison or chart
+7. MINTO tree with 3+ Q-branches → tree diagram in appendix
+
+Read `ASCII_ART_GUIDES.md` before drawing. Use Unicode box-drawing characters per `core-conventions.md`.
+
 ## MUST-NOT-FORGET
 
 - Read `APAPALAN_RULES.md` before writing - precision first, then brevity

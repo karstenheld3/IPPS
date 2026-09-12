@@ -4,11 +4,18 @@ Populated by `/fail` workflow. Records mistakes and lessons learned to prevent r
 
 **Goal**: Document failures, mistakes, and lessons learned to prevent repetition
 
+## MUST-NOT-FORGET
+
+- Never delete entries - mark as [RESOLVED] with date and solution
+- Include in /prime workflow to load lessons learned
+- Most recent entries at top
+
 ## Table of Contents
 
-1. [Active Issues](#active-issues)
-2. [Resolved Issues](#resolved-issues)
-3. [Document History](#document-history)
+1. [MUST-NOT-FORGET](#must-not-forget)
+2. [Active Issues](#active-issues)
+3. [Resolved Issues](#resolved-issues)
+4. [Document History](#document-history)
 
 ## Active Issues
 

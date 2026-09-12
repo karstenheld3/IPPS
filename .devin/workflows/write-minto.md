@@ -81,6 +81,10 @@ Generate closing section:
 
 Update `__MINTO-DRAFT_[Article].md` with full AMINTON tree (all levels through E-nodes) and closing section.
 
+### 5.5. Add Structure Diagram
+
+If AMINTON tree has 3+ Q-branches, render a tree diagram using Unicode box-drawing characters before the Executive Summary. Reader sees argument structure before reading prose. Read `ASCII_ART_GUIDES.md` for tree diagram patterns.
+
 ### 6. Article Rendering (FR-09)
 
 Convert complete AMINTON tree into prose article. Structure:
@@ -130,6 +134,7 @@ Write to `_MINTO_[Article].md`. If file exists: confirm with user before overwri
 - [ ] Every E-node references source material (IG-01)
 - [ ] Closing section present with one line per answer
 - [ ] Closing introduces no new claims (IG-03)
+- [ ] Structure diagram present when 3+ Q-branches
 - [ ] MECE at all levels (IG-04)
 - [ ] AMINTON tree appendix matches prose structure
 - [ ] Prose follows top-down order: conclusion, arguments, evidence

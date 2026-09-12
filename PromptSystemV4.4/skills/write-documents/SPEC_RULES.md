@@ -20,6 +20,8 @@ Rules for writing specification documents with GOOD/BAD examples.
 - **SPEC-DG-05**: UX text fidelity - button/label text must match implementation 1:1
 - **SPEC-DG-06**: Unicode box-drawing for UI mockups (not ASCII +/-/|)
 - **SPEC-DG-07**: Modal footer buttons: Primary LEFT, Secondary RIGHT, both right-aligned
+- **SPEC-DG-08**: Architecture specs with 2+ domain objects MUST include a component or layer diagram. UI specs MUST include UX mockup. Diagrams are mandatory, not optional.
+- **SPEC-DG-09**: Read `ASCII_ART_GUIDES.md` section 1 before drawing any diagram for type selection.
 
 **Content (CT)**
 - **SPEC-CT-01**: Summarize styling - avoid CSS detail

@@ -6,6 +6,13 @@ Populated by `/session-new` workflow. Tracks ALL problems to be addressed in thi
 
 **Purpose**: Comprehensive problem tracking - initial prompts, questions, feature requests, bugs, strange behavior, investigation topics. Everything that can be stated as a problem should be recorded here with a unique ID.
 
+## Table of Contents
+
+- [Open](#open)
+- [Resolved](#resolved)
+- [Deferred](#deferred)
+- [Problems Changes](#problems-changes)
+
 **What goes here:**
 - Initial user requests (derived from large prompts in NOTES.md)
 - Questions requiring investigation

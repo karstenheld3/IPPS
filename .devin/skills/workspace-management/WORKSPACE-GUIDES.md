@@ -57,23 +57,28 @@ Three sync sources, each with downstream and upstream directions:
    - Source: PromptSystem source (latest PromptSystemV* folder)
    - Target: [AGENT_FOLDER] in DevRepo and/or ProductRepo
    - Content: specs, workflows, skills
-   - Filter: skill categories (not all repos get all skills)
+   - Filter: include/exclude glob patterns per target entry in promptsystem-sync.json
 
 2. Knowledge
    - Source: [KNOWLEDGE_SOURCE_FOLDER] (CompanyRepo)
    - Target: [KNOWLEDGE_FOLDER] (DevRepo)
    - Content: knowledge bundles (topic folders with reference documents)
-   - Filter: bundle names from sync policy
+   - Filter: include/exclude glob patterns per target entry
 
 3. Specs
    - Source: [SPECS_SOURCE_FOLDER] (CompanyRepo)
    - Target: [SPECS_FOLDER] (DevRepo)
    - Content: specs, workflows, design guidelines, SOPs
-   - Filter: file patterns from promptsystem-sync.json
+   - Filter: include/exclude glob patterns per target entry
 
 Sync config lookup:
 1. promptsystem-sync.json at target [WORKSPACE_FOLDER] root (single source of truth)
 2. No fallback - if promptsystem-sync.json is missing, repo is SELF-CONTAINED
+
+promptsystem-sync.json structure:
+- Top-level: `last_sync` (timestamp), `deprecated` (array, shared), `targets` (array)
+- Each target entry: `path` (relative, e.g., `.devin`), `source` (relative path), `include`, `exclude`, `never_overwrite`
+- No `bundles` or `selected_bundles` — include/exclude is the single filter layer
 
 ## How to Manage Knowledge Bundles
 
@@ -82,11 +87,11 @@ A knowledge bundle is a folder of reference documents for a specific topic (e.g.
 To add a new knowledge bundle:
 1. Create folder in [KNOWLEDGE_SOURCE_FOLDER] (CompanyRepo)
 2. Add reference documents (.md files) to the folder
-3. Update promptsystem-sync.json at target to include the new bundle in selected_bundles
+3. Update promptsystem-sync.json at target to include the new bundle in target `include` patterns
 4. Run sync to distribute to downstream repos
 
 To remove a knowledge bundle:
-1. Remove from selected_bundles in promptsystem-sync.json
+1. Remove from target `include` patterns in promptsystem-sync.json
 2. Run sync - bundle will be marked for deletion in downstream repos
 3. Confirm deletion during sync preview
 

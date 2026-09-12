@@ -44,6 +44,7 @@ Article Structure (AS)
 - MINTO-AS-06: Section headings state ideas, not categories (reading headings alone tells the story)
 - MINTO-AS-07: Executive Summary uses SCQA structure (Situation → Complication → Answer)
 - MINTO-AS-08: Article follows `MINTO_TEMPLATE.md` structure
+- MINTO-AS-09: Articles with 3+ Q-branches MUST include a structure tree diagram before the Executive Summary
 
 Closing (CL)
 - MINTO-CL-01: Closing section present with summary lines grouped by parent Q

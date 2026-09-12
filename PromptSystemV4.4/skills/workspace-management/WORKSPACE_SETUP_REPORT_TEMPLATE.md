@@ -3,6 +3,11 @@
 
 Guide for generating workspace setup analysis and comparison reports. Agent generates report in chat following this structure — not a fill-in form. References field IDs from the Setup Schema section in WORKSPACE_SETUP_QUESTIONNAIRE.md.
 
+## Table of Contents
+
+- [Analysis Report (Procedure 6)](#analysis-report-procedure-6)
+- [Comparison Report (Procedure 7)](#comparison-report-procedure-7)
+
 ## Analysis Report (Procedure 6)
 
 Single-workspace analysis report. One row per applicable schema field.
@@ -62,8 +67,8 @@ OK: [N] | GAP: [N] | STALE: [N] | DEVIATION: [N] | N/A: [N]
 | company_folder_path | [value] | [default] | [status] | [fix or none] |
 | knowledge_folder | [value] | [default] | [status] | [fix or none] |
 | specs_folder | [value] | [default] | [status] | [fix or none] |
-| knowledge_bundles | [value] | [] | [status] | [fix or none] |
-| specs_bundles | [value] | [] | [status] | [fix or none] |
+| knowledge_include_patterns | [value] | ["*"] | [status] | [fix or none] |
+| specs_include_patterns | [value] | ["*"] | [status] | [fix or none] |
 | never_overwrite | [value] | [default] | [status] | [fix or none] |
 
 ### Section 6: Release Configuration

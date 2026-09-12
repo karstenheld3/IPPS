@@ -2,6 +2,19 @@
 
 Interactive questionnaire for creating new single-repo and multi-repo workspaces. Agent presents questions to user, collects answers, then generates workspace files from templates.
 
+## Table of Contents
+
+- [How to Use](#how-to-use)
+- [Section 1: Workspace Type and Mode](#section-1-workspace-type-and-mode)
+- [Section 2: Product Repo](#section-2-product-repo)
+- [Section 3: Dev Repo / Workspace Root](#section-3-dev-repo--workspace-root)
+- [Section 4: Version Strategy](#section-4-version-strategy)
+- [Section 5: Sync Sources](#section-5-sync-sources)
+- [Section 6: Release Configuration](#section-6-release-configuration)
+- [Section 7: Skill Categories](#section-7-skill-categories)
+- [Output: Files to Generate](#output-files-to-generate)
+- [Setup Schema](#setup-schema)
+
 ## How to Use
 
 1. Present questions to user one section at a time
@@ -186,27 +199,27 @@ Questions for WORKSPACE mode:
 5d) Knowledge folder: [WORKSPACE_FOLDER]\knowledge
     Default: [WORKSPACE_FOLDER]\knowledge
     Impact: Where reference documents are stored in dev repo. Synced from
-    Company knowledge folder via promptsystem-sync.json bundle configuration.
+    Company knowledge folder via promptsystem-sync.json targets configuration.
     Created as empty folder during workspace generation.
 
 5e) Specs folder: [WORKSPACE_FOLDER]\specs
     Default: [WORKSPACE_FOLDER]\specs
     Impact: Where shared specs, design guidelines, and SOPs are stored in
     dev repo. Synced from Company specs folder via promptsystem-sync.json
-    bundle configuration. Created as empty folder during workspace generation.
+    targets configuration. Created as empty folder during workspace generation.
     Replaces the former 'rules' folder.
 
-5f) Knowledge bundles to select:
-    Default: [] (empty - select during first /sync workspace)
-    Impact: Bundle names from Company knowledge folder to sync to this repo.
-    Configured in promptsystem-sync.json selected_bundles array. Can be changed
-    later by editing the JSON config. Skip if SELF-CONTAINED.
+5f) Knowledge include patterns:
+    Default: ["*"] (all knowledge folders)
+    Impact: Glob patterns for knowledge content to sync to this repo.
+    Configured in promptsystem-sync.json targets array include field.
+    Skip if SELF-CONTAINED.
 
-5g) Specs bundles to select:
-    Default: [] (empty - select during first /sync workspace)
-    Impact: Bundle names from Company specs folder to sync to this repo.
-    Configured in promptsystem-sync.json selected_bundles array. Can be changed
-    later by editing the JSON config. Skip if SELF-CONTAINED.
+5g) Specs include patterns:
+    Default: ["*"] (all specs folders)
+    Impact: Glob patterns for specs content to sync to this repo.
+    Configured in promptsystem-sync.json targets array include field.
+    Skip if SELF-CONTAINED.
 
 5h) Files to protect from overwrite (never_overwrite):
     Default: ["NOTES.md", "!NOTES.md", "PROBLEMS.md", "!PROGRESS.md", "FAILS.md", "ID-REGISTRY.md", "SOPS.md", "_SOPS.md", "promptsystem-sync.json"]
@@ -249,7 +262,7 @@ Questions for WORKSPACE mode:
 ## Section 7: Skill Categories
 
 <!-- Removed: Skills are discovered by scanning skills/ folder at startup. Sync selection
-     is controlled by promptsystem-sync.json selected_bundles. No manual skill category list needed. -->
+     is controlled by promptsystem-sync.json targets array include/exclude. No manual skill category list needed. -->
 
 ## Output: Files to Generate
 
@@ -473,17 +486,17 @@ Status values for analysis: OK, GAP, STALE, DEVIATION, N/A.
   default: [WORKSPACE_FOLDER]\specs
   report_label: Specs Folder
 
-- id: knowledge_bundles
+- id: knowledge_include_patterns
   type: list
   condition: workspace_mode == WORKSPACE AND sync_relationship == SYNCED
-  default: []
-  report_label: Knowledge Bundles
+  default: ["*"]
+  report_label: Knowledge Include Patterns
 
-- id: specs_bundles
+- id: specs_include_patterns
   type: list
   condition: workspace_mode == WORKSPACE AND sync_relationship == SYNCED
-  default: []
-  report_label: Specs Bundles
+  default: ["*"]
+  report_label: Specs Include Patterns
 
 - id: never_overwrite
   type: list

@@ -37,6 +37,7 @@ Format (FT)
 - INFO-FT-02: Document History present, reverse chronological, with action prefixes
 - INFO-FT-03: Diagrams use Unicode box-drawing characters per `core-conventions.md`
 - INFO-FT-04: Foreign terms always translated into document language at point of use
+- INFO-FT-05: Documents describing 3+ components, layers, or flows MUST include at least one Unicode diagram
 
 ## INFO-HD-01: Header Block
 

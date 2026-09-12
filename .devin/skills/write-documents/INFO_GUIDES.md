@@ -45,4 +45,10 @@ Skip when: no hypotheses emerged, or all findings directly sourced.
 
 ## 4. Diagrams
 
-Prefer diagrams over prose when 3+ components interact, hierarchical relationships exist, or flow has branching logic. Character rules: see `core-conventions.md`.
+Insert diagrams when any trigger applies:
+- 3+ components interact or connect
+- Hierarchical relationships (layers, containment, inheritance)
+- Flow with branching logic or decision points
+- 3+ parallel options or alternatives compared
+
+Read `ASCII_ART_GUIDES.md` section 1 for diagram type selection. Character rules: see `core-conventions.md`.

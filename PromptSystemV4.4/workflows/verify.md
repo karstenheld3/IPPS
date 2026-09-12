@@ -358,16 +358,12 @@ Detect by: filename pattern `*_TEMPLATE.md` in skill or workflow folder, or `__T
 
 Detect by: filename pattern `_PROMPTS_*.md` or file starts with a fenced code block (opening fence as first non-empty line) and contains `---` separators between fenced blocks.
 
-**Read**: @skills:write-documents `PROMPTS_RULES.md` (all PRMT-*), `PROMPTS_GUIDES.md`
+**Read**: @skills:write-documents `PROMPTS_RULES.md` (all PRMT-* rules), `PROMPTS_GUIDES.md`, `APAPALAN_RULES.md`
 
-- Verify against all PRMT-* rules in `PROMPTS_RULES.md` (Format, Structure, Sequence, Content categories)
-- Verify fence depth per prompt: outer fence exceeds deepest inner fence (PRMT-FT-02)
-- Verify no model-intended content outside fences (PRMT-FT-06)
-- Verify `---` separator between every pair of consecutive prompts (PRMT-FT-03)
-- Verify existing workflows are referenced or invoked when matching workflows exist (PRMT-CT-11): scan `[AGENT_FOLDER]/workflows/` frontmatters, check that prompts with sync/verify/test/deploy/commit/session actions reference the corresponding workflow instead of reinventing logic
-- Verify workflow execution vs reference distinction: workflows intended to execute use slash command on standalone line without backticks (PRMT-CT-08); workflows mentioned as references use backticks (PRMT-CT-10). Check every workflow name occurrence in prompt prose for correct formatting
-- Verify `prompt_system` frontmatter is empty or omitted when user requested workflow independence (PRMT-FT-09)
-- Verify against @skills:write-documents `APAPALAN_RULES.md` (precision, brevity)
+- Verify against all PRMT-* rules in `PROMPTS_RULES.md` — all categories: FT, ST, SQ, CT, SC, EX, NM
+- Verify against `APAPALAN_RULES.md` (precision, brevity)
+- For PRMT-CT-08/CT-10 (workflow call formatting): check every backtick-wrapped workflow name inside a fence for execution verbs (run, use, execute, call, invoke, perform, apply, do). If found → violation. If no execution verb → correct reference.
+- For PRMT-CT-11 (existing workflows): scan `[AGENT_FOLDER]/workflows/` frontmatters to verify prompts reference or invoke matching workflows instead of reinventing logic
 
 ## Minto Documents
 
