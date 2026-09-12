@@ -212,3 +212,11 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **XLATE** - Translation quality (LLM translation improvement methods, DeepL integration, reflection workflow) - 2026-05-05
 - **ZAIINT** - Z.AI Integration (GLM model integration into llm-evaluation skill) - 2026-01-17
 - **PWRSKILL** - Playwright MCP Skill Improvements (download handling, upload button fixes) - 2026-09-11
+- **DVNSWE2** - Devin SWE-2 Model (Cognition SWE-2 coding model analysis, instruction-following implications for IPPS) - 2026-09-12
+- **EFRTPRDM** - Effort Parameter Paradigm (industry-wide shift from sampling parameters to effort levels across OpenAI, Anthropic, Google, Cognition) - 2026-09-12
+- **GRUC** - Guides Rules Checks (pre-calculated compliance criteria: GUIDE, RULES, CHECKS, EXAMPLE file types) - 2026-09-12
+- **IPPSSKLS** - IPPS Skills (skill structure and GRUC implementation requirements) - 2026-09-12
+- **IPPSWFLW** - IPPS Workflows (workflow structure and GRUC consumption requirements) - 2026-09-12
+- **IPPSTMPL** - IPPS Templates (template structure and GRUC implementation requirements) - 2026-09-12
+- **PRMTSCN** - Prompt Self-Contained Architecture (self-contained prompts, context cards, start/end-of-prompt protocols) - 2026-09-12
+- **IPPSGAP** - IPPS Gap Analysis (LLM best practices comparison against llmbestpractices.com) - 2026-09-12
