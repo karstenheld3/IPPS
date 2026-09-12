@@ -33,6 +33,7 @@ This skill implements:
 - [WRITE-SKILL] - Create/update skill folders (use `SKILL_TEMPLATE.md`, read `SKILL_RULES.md`)
 - [WRITE-CONVERSATION] - Create conversation files (use `CONVERSATION_TEMPLATE.md`, read `CONVERSATION_RULES.md`)
 - [UPDATE-CONVERSATION] - Update existing conversation files (read `CONVERSATION_RULES.md`)
+- [ASCII-DIAGRAM] - Create or fix ASCII art diagrams (read `ASCII_ART_GUIDES.md` before execution; `ASCII_ART_RULES.md` consumed by `/verify` post-execution)
 
 ## Diagram Auto-Trigger
 

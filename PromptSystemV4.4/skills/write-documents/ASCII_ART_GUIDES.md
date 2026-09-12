@@ -1,8 +1,8 @@
 # ASCII Art Diagram Guide
 
-Read before creating or fixing ASCII art diagrams. Consumer: working agent (before), `/critique` (after).
+Read before creating or fixing ASCII art diagrams. Consumer: working agent (before), `/critique` (after). For post-execution verification rules, see companion `ASCII_ART_RULES.md`.
 
-**Writing quality:** Apply `APAPALAN_RULES.md`. Key rules: AP-ST-01 (goal first), AP-PR-07 (be specific), AP-NM-01 (one name per concept).
+Writing quality: Apply `APAPALAN_RULES.md`. Key rules: AP-ST-01 (goal first), AP-PR-07 (be specific), AP-NM-01 (one name per concept).
 
 ## 1. Choose the Diagram Type
 
@@ -55,25 +55,37 @@ Never mix tiers within one diagram. Never use `▼` (U+25BC); use `v` instead. A
 10. 3-7 primary elements per diagram (max 6 for image generation)
 11. Add title line, art block, legend line, and notes below the art
 
-## 4. Common Problems and Solutions
+## 4. Route Connectors
 
-**Frame glitch (broken corners, disconnected lines):**
+After boxes are placed, route connectors between them. Connectors carry the diagram's flow information.
+
+1. Use ASCII arrowheads inside grids: `>` `<` `^` `v` (not Unicode `→ ↓`)
+2. Route connectors in the gutter between boxes, never through a box
+3. Label connectors with one word on the line: `submit`, `publish`, `Yes`
+4. Return paths: draw below the forward path, or omit and state in legend (`<-- response omitted`)
+5. Sync vs async: solid line `──>` for sync, dashed `┄┄>` for async; state distinction in legend
+6. Vertical connectors: compute center column of each box, attach line at that column
+7. Branching connectors: use `┬` or `┴` at the junction, label each branch
+
+## 5. Common Problems and Solutions
+
+Frame glitch (broken corners, disconnected lines):
 - Cause: mixed character tiers or misaligned junctions
 - Fix: use one tier only; verify every corner uses matching glyphs (`┌ ┐ └ ┘`)
 
-**Mixed characters (`-` next to `─`, `|` next to `│`):**
+Mixed characters (`-` next to `─`, `|` next to `│`):
 - Cause: copy-paste from different sources or tier confusion
 - Fix: convert all line characters to one tier; run `SetAsciiBoxStyle.ps1` if available
 
-**Drifting verticals (connector shifts column between rows):**
+Drifting verticals (connector shifts column between rows):
 - Cause: miscounted columns or tab characters
 - Fix: count columns, replace tabs with spaces, verify center column held on every row
 
-**Diagram too wide (wraps on mobile or in side panes):**
+Diagram too wide (wraps on mobile or in side panes):
 - Cause: too many boxes in one row
 - Fix: snake layout (wrap to next row), split into two diagrams, or group into named clusters
 
-## 5. Example Lookup
+## 6. Example Lookup
 
 Example files show complete GOOD diagrams for specific topics. Load when facing unfamiliar diagram types or complex layouts. Not mandatory for simple diagrams.
 
@@ -97,3 +109,6 @@ Available example files:
 - [ ] Width within limit (70 for Markdown, 120 for documents, 180 max)
 - [ ] Title line, legend line, and notes present
 - [ ] 3-7 primary elements, one flow direction
+- [ ] Connectors routed in gutters, not through boxes
+- [ ] Arrowheads are ASCII (`>` `<` `^` `v`) inside grids
+- [ ] Connectors labeled with one word on the line

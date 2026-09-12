@@ -64,10 +64,10 @@ Legend: / \ = decision   Yes/No = branch   2^n = exponential backoff
 
 ```
 Call API
-├── Succeeded?  Yes -> Return
-└── No
-    ├── Attempts < 3?  No -> Fail
-    └── Yes -> Wait 2^n s -> back to Call API
+├─> Succeeded?  Yes -> Return
+└─> No
+    ├─> Attempts < 3?  No -> Fail
+    └─> Yes -> Wait 2^n s -> back to Call API
 ```
 
 ### Event Flow Tree

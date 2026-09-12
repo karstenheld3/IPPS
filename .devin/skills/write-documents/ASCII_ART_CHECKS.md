@@ -2,7 +2,7 @@
 
 Process discipline audit and quality improvement for ASCII art diagrams. Consumer: `/drift-detect` (PD), `/improve` (QI).
 
-**Evidence sources:** target document containing diagram, session conversation, `ASCII_ART_GUIDES.md` read log.
+Evidence sources: target document containing diagram, session conversation, `ASCII_ART_GUIDES.md` read log.
 
 ## Process Discipline (PD)
 
@@ -18,7 +18,7 @@ Process discipline audit and quality improvement for ASCII art diagrams. Consume
 - Action: agent identified the question the diagram answers and selected type from GUIDES section 1
 - Evidence: session conversation states diagram type choice with rationale
 - Failure indicator: diagram type does not match content (e.g., cycle drawn as tree, sequence drawn as component diagram)
-- References: AA-ST-02
+- References: AA-DI-01, AA-DI-03
 
 ### AA-PD-03: Chose Character Tier
 
@@ -32,7 +32,7 @@ Process discipline audit and quality improvement for ASCII art diagrams. Consume
 - Action: agent verified box widths, vertical column alignment, and text padding before inserting diagram
 - Evidence: session conversation mentions self-verification or review checklist run
 - Failure indicator: drifting verticals, unequal box widths, text touching frame
-- References: AA-AL-01, AA-AL-02, AA-ST-03
+- References: AA-AL-01, AA-AL-02, AA-AL-03
 
 ### AA-PD-05: Verified Width Limit
 
