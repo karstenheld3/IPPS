@@ -26,7 +26,7 @@ Create `_PROMPTS_[Topic].md` files containing an ordered list of prompts. Each p
 - `---` separator between every pair of consecutive prompts
 - Commentary (headings, notes) only between `---` and next fence - never sent to model. Commentary notes MUST be in HTML comments (`<!-- ... -->`), headings as plain Markdown
 - Heading recommendation (PRMT-FT-07): use `## Prompt N - [title]` before each prompt. If headings are used, ALL prompts MUST have headings
-- Position marker (PRMT-FT-10): sequences with 5+ prompts MUST include `Prompt [ NN / NN ]` as first line inside each prompt's fence, not in the heading. When using a planning document (PRMT-SC-06), marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
+- Prompt Marker (PRMT-FT-10): all prompt sequences MUST include a human-readable prefix `[ NN / NN ]` as first line inside each prompt's fence, not in the heading. When using a planning document (PRMT-SC-06), marker includes plan summary: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
 - At least one prompt per file
 - **NEVER modify tracking documents** (PROGRESS.md, PROBLEMS.md, NOTES.md, FAILS.md). Write-* workflows create NEW files only.
 - Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content → examples generic.
@@ -265,7 +265,7 @@ Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. All te
 4. `---` on its own line between consecutive prompts
 5. Commentary (headings, paragraphs, lists) allowed before the first prompt and between `---` and next opening fence. Commentary notes MUST be in HTML comments (`<!-- ... -->`), headings as plain Markdown
 6. Heading recommendation (PRMT-FT-07): use `## Prompt N - [title]` before each prompt. If headings are used, ALL prompts MUST have headings
-7. Position marker (PRMT-FT-10): sequences with 5+ prompts MUST include `Prompt [ NN / NN ]` as first line inside each prompt's fence. When using a planning document (PRMT-SC-06), marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`. Optional for shorter sequences
+7. Prompt Marker (PRMT-FT-10): all prompt sequences MUST include a human-readable prefix `[ NN / NN ]` as first line inside each prompt's fence. When using a planning document (PRMT-SC-06), marker includes plan summary: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
 8. Info string after opening fence (e.g. `` ```text ``) is optional and ignored by executor
 9. Prompts execute in file order
 10. Execution Frontmatter is optional - omit entirely if no execution hints needed
@@ -392,7 +392,7 @@ The filled file must pass all PRMT-* rules as a standalone prompts file:
 - [ ] PRMT-FT-04: Commentary notes in HTML comments (`<!-- ... -->`), headings as plain Markdown, only between separator and next fence (or before first fence)
 - [ ] PRMT-FT-07: If headings are used, all prompts have headings (MUST)
 - [ ] PRMT-FT-08: If frontmatter present, it is at file start with valid keys
-- [ ] PRMT-FT-10: If 5+ prompts, each prompt includes `Prompt [ NN / NN ]` position marker as first line inside fence; when using a planning document, marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
+- [ ] PRMT-FT-10: Each prompt includes a human-readable prefix `[ NN / NN ]` Prompt Marker as first line inside fence; when using a planning document, marker includes plan summary: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
 - [ ] PRMT-ST-01..05: Each prompt has objective, constraints (if implementation), verification, single reasoning mode, density limit
 - [ ] PRMT-SQ-01..04: No contradictions, explicit dependencies, commentary documents state, interleaved verification prompts for 4+ implementation prompt sequences
 - [ ] PRMT-CT-01..14: Specific objectives, negative constraints, observable verification, workflow execution vs reference distinction (execution verb = standalone without backticks, no execution verb = backticks), existing workflows leveraged, agent tools over shell for file operations, timestamp from request metadata, banned-term sweep recording

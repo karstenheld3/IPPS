@@ -12,7 +12,7 @@ Process Discipline (PD)
 - PRMT-PD-03: Agent checked effort budget when partitioning prompts
 - PRMT-PD-04: Agent referenced planning document in prompt sequence
 - PRMT-PD-05: Agent verified prompt file against PRMT-* rules after writing
-- PRMT-PD-06: Agent included position markers in sequences with 5+ prompts
+- PRMT-PD-06: Agent included Prompt Markers in all prompt sequences
 
 Quality Improvement (QI)
 - PRMT-QI-01: Is each prompt self-contained?
@@ -66,11 +66,11 @@ Quality Improvement (QI)
 - Failure indicator: no verification evidence; prompt file contains rule violations that a verify pass would have caught (missing separators, no constraints, no verification criteria)
 - References: PRMT-ST-01 through PRMT-ST-05
 
-### PRMT-PD-06: Position Markers in Long Sequences
+### PRMT-PD-06: Prompt Markers in All Sequences
 
-- Action: Agent included `Prompt [ NN / NN ] - [brief summary]` position markers inside each prompt's fence as first line for sequences with 5+ prompts; the summary matches the heading text; when using a planning document (PRMT-SC-06), the summary includes plan phase/step references: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
-- Evidence: each prompt's first line inside the fence contains a zero-padded position marker with current count, total count, and a summary; an empty line follows the marker before the prompt content; when a planning document is referenced, the summary includes plan phase/step references matching the heading text
-- Failure indicator: 5+ prompt sequence with no position marker inside fence; marker in heading instead of inside fence; marker without summary; inconsistent zero-padding; no empty line after marker; planning document used but summary lacks plan phase/step references
+- Action: Agent included `Human Readable Prefix [ NN / NN ] - [brief summary]` Prompt Markers inside each prompt's fence as first line for all prompt sequences; the summary matches the heading text; when using a planning document (PRMT-SC-06), the summary includes plan phase/step references: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
+- Evidence: each prompt's first line inside the fence contains a zero-padded Prompt Marker with current count, total count, and a summary; an empty line follows the marker before the prompt content; when a planning document is referenced, the summary includes plan phase/step references matching the heading text
+- Failure indicator: any prompt sequence with no Prompt Marker inside fence; marker in heading instead of inside fence; marker without summary; inconsistent zero-padding; no empty line after marker; planning document used but summary lacks plan phase/step references
 - References: PRMT-FT-10
 
 ## Quality Improvement (QI)

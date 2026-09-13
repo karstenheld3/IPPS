@@ -16,7 +16,7 @@ Format (FT)
 - PRMT-FT-07: Heading consistency - headings recommended (SHOULD); if used, all prompts MUST have headings
 - PRMT-FT-08: Optional execution frontmatter - YAML block at file start with execution hints
 - PRMT-FT-09: prompt_system frontmatter empty when user requests workflow independence
-- PRMT-FT-10: Prompt position marker inside fence in long sequences (5+ prompts); with plan summary when using planning document
+- PRMT-FT-10: Prompt Marker inside fence in all sequences; with plan summary when using planning document
 
 Structure (ST)
 - PRMT-ST-01: Every prompt has an identifiable objective
@@ -893,11 +893,11 @@ Second prompt.
 ```
 `````
 
-## PRMT-FT-10: Prompt Position Marker in Long Sequences
+## PRMT-FT-10: Prompt Marker
 
-Prompt files with 5 or more prompts MUST include a position marker as the first line inside each prompt's fence. The marker shows the current prompt number and total prompt count in zero-padded format: `Prompt [ NN / NN ]`, followed by a summary of the prompt's purpose.
+Every prompt in a prompt file MUST include a Prompt Marker as the first line inside each prompt's fence. The marker shows the current prompt number and total prompt count in zero-padded format: `Human Readable Prefix [ NN / NN ]`, followed by a summary of the prompt's purpose.
 
-The summary matches the heading text. When the prompt sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the summary MUST include plan phase/step references: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`. Without a planning document, the summary is the heading text: `Prompt [ NN / NN ] - [brief summary]`. The summary gives the model the same orientation the heading gives the human reader.
+The summary matches the heading text. The marker format is: `Human Readable Prefix [ NN / NN ] - [brief summary]` where the prefix is a short human-readable label (max 4 words) describing the prompt sequence topic. When the prompt sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the summary MUST include plan phase/step references: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`. Without a planning document, the summary is the heading text: `Human Readable Prefix [ NN / NN ] - [brief summary]`. The summary gives the model the same orientation the heading gives the human reader.
 
 The marker goes inside the fence, as the first line of prompt content, followed by an empty line before the self-contained opening:
 
@@ -905,13 +905,13 @@ The marker goes inside the fence, as the first line of prompt content, followed 
 ## Prompt 1 - Analyze requirements
 
 ```
-Prompt [ 01 / 05 ] - Analyze requirements
+Setup API Module [ 01 / 05 ] - Analyze requirements
 
 Read `__CARD_00-Rules.md`...
 ```
 `````
 
-For sequences with fewer than 5 prompts, the marker is OPTIONAL.
+There is no minimum prompt count threshold. The marker is required for all sequences, including single-prompt files.
 
 **Rules:**
 1. Zero-padded to match the width of the total count (e.g., 5 prompts → 2 digits, 23 prompts → 2 digits, 100+ → 3 digits)
@@ -919,16 +919,17 @@ For sequences with fewer than 5 prompts, the marker is OPTIONAL.
 3. If the file uses sub-chains with checkpoints (PRMT-SC-04), the total count is the number of prompts in the current sub-chain file
 4. The marker appears inside the fence as first line of prompt content — the model sees it for progress tracking
 5. The marker is updated when prompts are added or removed
-6. The marker line MUST include a summary: `Prompt [ NN / NN ] - [brief summary]`. The summary matches the heading text
-7. When using a planning document (PRMT-SC-06), the summary MUST include plan phase/step references: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
+6. The marker line MUST include a summary: `Human Readable Prefix [ NN / NN ] - [brief summary]`. The summary matches the heading text
+7. When using a planning document (PRMT-SC-06), the summary MUST include plan phase/step references: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
 8. An empty line MUST follow the marker line, separating it from the prompt content (self-contained opening)
+9. The marker prefix is a short human-readable label (max 4 words), not the literal word 'Prompt'. Derive from the task domain, planning document, or filename topic. Examples: `Setup API Module`, `Security Fix`, `Write Prompts Workflow`. When no clear topic is available, use a concise descriptive label.
 
 **GOOD** (5-prompt sequence with markers and summary inside fence, no planning document):
 `````markdown
 ## Prompt 1 - Analyze requirements
 
 ```
-Prompt [ 01 / 05 ] - Analyze requirements
+Setup API Module [ 01 / 05 ] - Analyze requirements
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -938,7 +939,7 @@ Read `__CARD_00-Rules.md`...
 ## Prompt 2 - Implement module
 
 ```
-Prompt [ 02 / 05 ] - Implement module
+Setup API Module [ 02 / 05 ] - Implement module
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -949,7 +950,7 @@ Read `__CARD_00-Rules.md`...
 ## Prompt 1 - P4-S1 U10 stage A: untrusted-content delimiters in specs
 
 ```
-Prompt [ 01 / 05 ] - P4-S1 U10 stage A: untrusted-content delimiters in specs
+Security Fix [ 01 / 05 ] - P4-S1 U10 stage A: untrusted-content delimiters in specs
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -959,7 +960,7 @@ Read `__CARD_00-Rules.md`...
 ## Prompt 2 - P4-S2 U10 stage B-C: renderToolResult, wrapped tools, commit
 
 ```
-Prompt [ 02 / 05 ] - P4-S2 U10 stage B-C: renderToolResult, wrapped tools, commit
+Security Fix [ 02 / 05 ] - P4-S2 U10 stage B-C: renderToolResult, wrapped tools, commit
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -970,7 +971,7 @@ Read `__CARD_00-Rules.md`...
 ## Prompt 1 - P4-S1 U10 stage A: untrusted-content delimiters in specs
 
 ```
-Prompt [ 01 / 05 ]
+Security Fix [ 01 / 05 ]
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -981,7 +982,7 @@ Read `__CARD_00-Rules.md`...
 ## Prompt 1 - Analyze requirements
 
 ```
-Prompt [ 01 / 05 ]
+Setup API Module [ 01 / 05 ]
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -998,7 +999,7 @@ Read `__CARD_00-Rules.md`...
 
 **BAD** (marker in heading instead of inside fence):
 `````markdown
-## Prompt [ 01 / 05 ] - Analyze requirements
+## Setup API Module [ 01 / 05 ] - Analyze requirements
 
 ```
 Read `__CARD_00-Rules.md`...

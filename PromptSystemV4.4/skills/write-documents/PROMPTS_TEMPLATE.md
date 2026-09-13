@@ -7,7 +7,7 @@ Read PROMPTS_GUIDES.md BEFORE writing. Verify against all PRMT-* rules in PROMPT
 Remove ALL XML comments after creating the document. First non-empty line must be frontmatter (optional), Commentary, or opening fence.
 Heading recommendation (PRMT-FT-07): use `## Prompt N - [title]` before each prompt for readability.
 If headings are used, ALL prompts MUST have headings (consistency enforced).
-Position marker (PRMT-FT-10): sequences with 5+ prompts MUST include `Prompt [ NN / NN ]` as first line inside each prompt's fence. When using a planning document (PRMT-SC-06), marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`.
+Prompt Marker (PRMT-FT-10): all prompt sequences MUST include a human-readable prefix `[ NN / NN ]` as first line inside each prompt's fence. When using a planning document (PRMT-SC-06), marker includes plan summary: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`.
 
 Execution model (PRMT-EX-01/02): Each prompt is a separate turn for an execution engine. NEVER self-execute prompt files by running all prompts in one response. The writing agent creates the file; the execution engine runs it. -->
 
@@ -79,7 +79,7 @@ Verify: [Observable success criteria]
 
 <!-- EXAMPLE: Reference only. Do not copy into new documents. Shows a completed 2-prompt file with optional frontmatter and headings (PRMT-FT-07/08). -->
 
-## Full Example (2-prompt sequence, markers optional under 5 prompts)
+## Full Example (2-prompt sequence, markers required (PRMT-FT-10))
 
 `````markdown
 ---

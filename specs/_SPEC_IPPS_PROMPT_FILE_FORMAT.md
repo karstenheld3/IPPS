@@ -222,7 +222,7 @@ Content quality is governed by `PROMPTS_RULES.md` (PRMT-* rules). This spec does
 
 **IPPSPRMTFMT-DD-08:** Heading consistency. Rationale: Markdown headings before each prompt improve human readability - scan structure, locate prompts, understand flow. Using headings is recommended (SHOULD) but not required. However, if headings are used for any prompt's Commentary, all prompts MUST have headings for consistency. Mixed files (some prompts with headings, some without) are invalid. Enforced by PRMT-FT-07.
 
-**IPPSPRMTFMT-DD-11:** Prompt position markers in long sequences. Rationale: Sequences with 5+ prompts benefit from a `Prompt [ NN / NN ]` marker as the first line inside each prompt's fence. The marker provides orientation (how far along), progress tracking (complements STRUT step IDs), and resume support (which prompt is next without counting fences). When the sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the marker line MUST also include a summary with plan phase/step references: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`. The summary matches the heading text, giving the model the same orientation the heading gives the human reader — without requiring the model to read the heading (which is commentary, never sent). The marker is model content (inside fence), not commentary. Optional for sequences under 5 prompts. Enforced by PRMT-FT-10.
+**IPPSPRMTFMT-DD-11:** Prompt Markers. Rationale: Every prompt benefits from a `Human Readable Prefix [ NN / NN ] - [brief summary]` marker as the first line inside each prompt's fence, followed by an empty line before the prompt content. The marker provides orientation (how far along), progress tracking (complements STRUT step IDs), and resume support (which prompt is next without counting fences). The prefix is a short human-readable label (max 4 words) describing the prompt sequence topic. The summary matches the heading text, giving the model the same orientation the heading gives the human reader. When the sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the summary MUST include plan phase/step references: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`. The marker is model content (inside fence), not commentary. Required for all sequences, including single-prompt files. Enforced by PRMT-FT-10.
 
 **IPPSPRMTFMT-DD-09:** Optional Execution Frontmatter. Rationale: Execution hints (intended model, context window, reasoning settings) help the execution engine select appropriate configuration. Frontmatter is OPTIONAL - the execution engine decides whether to honor it or use its own configuration. This enables portability: the same prompt file can run on different engines with different models. Frontmatter is unambiguous with Separators because it only appears at the file start (before any fence), while Separators only appear between Prompt Blocks (after a Closing Fence).
 
@@ -378,6 +378,18 @@ Verify: Run `pnpm test:auth`. All tests pass.
 - Maximum file size is limited by the agent's context window, not by the format
 
 ## 9. Document History
+
+**[2026-09-14 00:50]**
+- Changed: DD-11 updated — Prompt Markers required for ALL prompt counts, not just 5+. Format changed to `Human Readable Prefix [ NN / NN ] - [brief summary]` with max 4 word prefix. Term renamed from "position marker" to "Prompt Marker"
+- Changed: PRMT-FT-10 rule 9 added — prefix is human-readable label (max 4 words), not literal word 'Prompt'
+
+**[2026-09-13 13:20]**
+- Changed: DD-11 updated — summary is always required in marker line, plan phases only when using planning document
+- Changed: PRMT-FT-10 rules 6-7 restructured — rule 6: summary always, rule 7: plan phases when using plan
+
+**[2026-09-13 13:15]**
+- Changed: DD-11 updated — empty line MUST follow marker line before prompt content
+- Changed: PRMT-FT-10 rule 7 added — empty line after marker line
 
 **[2026-09-13 13:10]**
 - Changed: DD-11 corrected — marker goes inside fence (not heading), added plan summary requirement when using planning document (PRMT-SC-06)

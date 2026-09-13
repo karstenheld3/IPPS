@@ -417,12 +417,12 @@ Omit frontmatter when:
 - **Never sent to model**: Frontmatter is metadata for the execution engine, not prompt content
 - **File start only**: Frontmatter must be the first content in the file (no blank lines before opening `---`)
 
-## 11. Prompt Position Markers in Long Sequences
+## 11. Prompt Markers
 
-Sequences with 5 or more prompts MUST include a position marker as the first line inside each prompt's fence, followed by an empty line before the prompt content (PRMT-FT-10). The marker shows the current prompt number and total count in zero-padded format, followed by a summary of the prompt's purpose:
+Every prompt MUST include a Prompt Marker as the first line inside each prompt's fence, followed by an empty line before the prompt content (PRMT-FT-10). The marker shows the current prompt number and total count in zero-padded format, followed by a summary of the prompt's purpose:
 
 ```
-Prompt [ 01 / 23 ] - Analyze requirements
+Setup API Module [ 01 / 23 ] - Analyze requirements
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -430,12 +430,12 @@ Read `__CARD_00-Rules.md`...
 The summary matches the heading text. When the sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the summary MUST include plan phase/step references:
 
 ```
-Prompt [ 01 / 07 ] - P4-S1 U10 stage A: untrusted-content delimiters in specs
+Security Fix [ 01 / 07 ] - P4-S1 U10 stage A: untrusted-content delimiters in specs
 
 Read `__CARD_00-Rules.md`...
 ```
 
-### 11.1 Why Position Markers Matter
+### 11.1 Why Prompt Markers Matter
 
 - **Orientation**: The agent knows how far along the sequence is at a glance
 - **Progress tracking**: The marker complements STRUT step IDs — STRUT tracks the plan, the marker tracks the file
@@ -450,9 +450,9 @@ Read `__CARD_00-Rules.md`...
 - Total count is the number of prompts in the file, not STRUT steps
 - For sub-chains (PRMT-SC-04): total count is the number of prompts in the current sub-chain file
 - The marker goes inside the fence as the first line of prompt content, followed by an empty line before the prompt content — the model sees it for progress tracking
-- The marker line MUST include a summary: `Prompt [ NN / NN ] - [brief summary]`. The summary matches the heading text
-- When using a planning document (PRMT-SC-06), the summary MUST include plan phase/step references: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
-- Optional for sequences with fewer than 5 prompts
+- The marker line MUST include a summary: `Human Readable Prefix [ NN / NN ] - [brief summary]`. The summary matches the heading text
+- When using a planning document (PRMT-SC-06), the summary MUST include plan phase/step references: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
+- Required for all sequences, including single-prompt files
 
 ## 12. Execution Model: One Prompt Per Turn
 
@@ -496,7 +496,7 @@ Before considering the prompts file complete:
 - [ ] Fence lengths exceed all inner fence lengths within each prompt
 - [ ] `---` separator between every pair of consecutive prompts
 - [ ] If headings are used, ALL prompts have headings (PRMT-FT-07)
-- [ ] If 5+ prompts, each prompt includes `Prompt [ NN / NN ]` position marker as first line inside fence (PRMT-FT-10); when using a planning document, marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
+- [ ] Each prompt includes a human-readable prefix `[ NN / NN ]` Prompt Marker as first line inside fence (PRMT-FT-10); when using a planning document, marker includes plan summary: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
 - [ ] No prompt content outside fences (would be silently dropped)
 - [ ] Precision tokens preserved: constraints, verification, disambiguation not cut for brevity (PRMT-CT-05)
 - [ ] Signal redundancy preserved: explicit referents, not pronouns for ambiguous antecedents (PRMT-CT-06)

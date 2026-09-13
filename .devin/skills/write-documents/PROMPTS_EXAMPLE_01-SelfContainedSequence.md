@@ -27,6 +27,8 @@ Read the STRUT plan and __CARD_00-Rules.md before starting each prompt. -->
 <!-- P1 [ANALYZE]: Read requirements and design the API module structure -->
 
 ```
+Setup API Module [ 01 / 03 ] - Analyze API requirements
+
 Read `__CARD_00-Rules.md` and `__STRUT_SetupApiModule.md` step P1-S1. Treat earlier conversation as compacted. Step P1-S1.
 Planning document: `__STRUT_SetupApiModule.md`, step P1-S1.
 
@@ -50,6 +52,8 @@ Verify: `_INFO_ApiDesign.md` exists with sections for endpoints, schemas, error 
 <!-- P2 [IMPLEMENT]: Create the API module based on the design from P1 -->
 
 ```
+Setup API Module [ 02 / 03 ] - Implement API module
+
 Read `__CARD_00-Rules.md`, `__STRUT_SetupApiModule.md` step P2-S1, and `_INFO_ApiDesign.md` section 1. Treat earlier conversation as compacted. Step P2-S1.
 Planning document: `__STRUT_SetupApiModule.md`, step P2-S1.
 
@@ -75,6 +79,8 @@ Verify: `src/modules/users/routes.ts` and `src/modules/users/validator.ts` exist
 <!-- P3 [TEST]: Write integration tests for the API module and run them -->
 
 ```
+Setup API Module [ 03 / 03 ] - Write and run tests
+
 Read `__CARD_00-Rules.md`, `__STRUT_SetupApiModule.md` step P3-S1, `_INFO_ApiDesign.md` section 2, and `src/modules/users/routes.ts`. Treat earlier conversation as compacted. Step P3-S1.
 Planning document: `__STRUT_SetupApiModule.md`, step P3-S1.
 
