@@ -212,13 +212,6 @@ Example fix:
 - BAD: "Use the `/sync` workflow to sync files."
 - GOOD: "Sync files:" + standalone `/sync` line + arguments on next line
 
-### Step 5d: Tool Preference and Test Scope Pass
-
-Scan every fenced prompt for shell commands used for file operations and full-suite test runs:
-
-1. **Tool preference** (PRMT-CT-12): Scan prompt bodies (excluding Verify sections) for shell file-operation commands: `Select-String`, `Get-ChildItem`, `Get-Content`, `cat`, `grep`, `find`, `rg.exe`. If found outside Verify sections, rewrite as agent tool directives ("Search for X using the grep_search tool", "Read `file.ts`", "Find all .ts files using the find_by_name tool").
-2. **Test scope** (PRMT-HS-09): Scan Verify sections for bare `bun test`, `npm test`, or equivalent full-suite commands in implementation prompts. If found, replace with specific test file paths. Full suite is acceptable only in a prompt explicitly marked as final verification.
-
 ### Step 5c: Self-Contained Opening Pass
 
 Scan every fenced prompt for the self-contained opening (PRMT-SC-01). Each prompt must contain:
@@ -228,6 +221,13 @@ Scan every fenced prompt for the self-contained opening (PRMT-SC-01). Each promp
 3. A step identifier (STRUT step, task ID, or sequence position)
 
 If any prompt is missing any of the three elements, add them. Check that no prompt references "the previous step" or "as discussed above" without naming where the output lives in a file (PRMT-SC-02).
+
+### Step 5d: Tool Preference and Test Scope Pass
+
+Scan every fenced prompt for shell commands used for file operations and full-suite test runs:
+
+1. **Tool preference** (PRMT-CT-12): Scan prompt bodies (excluding Verify sections) for shell file-operation commands: `Select-String`, `Get-ChildItem`, `Get-Content`, `cat`, `grep`, `find`, `rg.exe`. If found outside Verify sections, rewrite as agent tool directives ("Search for X using the grep_search tool", "Read `file.ts`", "Find all .ts files using the find_by_name tool").
+2. **Test scope** (PRMT-HS-09): Scan Verify sections for bare `bun test`, `npm test`, or equivalent full-suite commands in implementation prompts. If found, replace with specific test file paths. Full suite is acceptable only in a prompt explicitly marked as final verification.
 
 # FROM TEMPLATE MODE
 
