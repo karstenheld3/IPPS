@@ -34,6 +34,7 @@ Create `_PROMPTS_[Topic].md` files containing an ordered list of prompts. Each p
 - **Workflow references** (PRMT-CT-10): When a workflow appears in prompt prose as a reference (no execution verb, no execution requirement), wrap in backticks (`/write-prompts`). When calling a workflow to execute (execution verb present: run, use, execute, call, invoke, perform, apply, do), use a standalone line with the slash command without backticks (PRMT-CT-08). Execution verb + backticks = violation.
 - **Leverage existing workflows** (PRMT-CT-11): Before writing prompts, scan `[AGENT_FOLDER]/workflows/` frontmatters to find workflows relevant to the task. Load matching workflows entirely. Design prompts that reference or invoke existing workflows instead of reinventing their logic in prompt prose. If user explicitly requests prompt system independence, omit `prompt_system` from frontmatter (PRMT-FT-09) and do not reference workflows.
 - **NEVER self-execute prompt files** (PRMT-EX-02): After writing a prompt file, deliver it to the user or execution engine. Do NOT run all prompts in a single response. Each prompt is a separate turn for an execution engine (Lana, headless runner). Self-executing circumvents per-turn context engineering and compute allocation, defeating the purpose of prompt files.
+- **Execution authority** (PRMT-EX-03): Prompts in `_PROMPTS_*.md` files carry implicit execution authority. Agent must complete without asking for confirmation. Confirmation pauses hang the sequence.
 - **Self-contained prompts** (PRMT-SC-01): Every prompt must start with a context-loading directive, "treat earlier conversation as compacted" statement, and step identifier. No prompt may reference "the previous step" without naming where output lives in a file (PRMT-SC-02).
 - **Idempotency constraints** (PRMT-SC-03): Implementation prompts must include "re-running this prompt must not corrupt state or waste cost" in constraints.
 - **Chain length limit** (PRMT-SC-04): Sequences must stay under 6 steps. Longer workflows split into sub-chains with checkpoints.
@@ -127,6 +128,7 @@ First prompt text. Plain instruction, no code blocks inside.
 
 Constraints:
 - [What NOT to do]
+- Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
 - Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
@@ -151,6 +153,7 @@ print("hello")
 
 Constraints:
 - [What NOT to do]
+- Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
 - Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
@@ -189,6 +192,7 @@ Third implementation prompt.
 
 Constraints:
 - [What NOT to do]
+- Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
 - Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
@@ -208,6 +212,7 @@ Fourth implementation prompt.
 
 Constraints:
 - [What NOT to do]
+- Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
 - Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
@@ -245,6 +250,7 @@ Planning document: [TASKS or STRUT filename], step [ID].
 Final verification prompt. Run the full test suite to confirm no regressions.
 
 Constraints:
+- Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
 - Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
@@ -301,10 +307,10 @@ Check output against all PRMT-* rules in `PROMPTS_RULES.md`:
 - [ ] Format (FT): PRMT-FT-01 through PRMT-FT-10
 - [ ] Structure (ST): PRMT-ST-01 through PRMT-ST-05
 - [ ] Sequence (SQ): PRMT-SQ-01 through PRMT-SQ-04
-- [ ] Content (CT): PRMT-CT-01 through PRMT-CT-12
+- [ ] Content (CT): PRMT-CT-01 through PRMT-CT-14
 - [ ] Self-Contained (SC): PRMT-SC-01 (self-contained opening), PRMT-SC-02 (no conversation dependency), PRMT-SC-03 (idempotency constraint), PRMT-SC-04 (chain length under 6), PRMT-SC-05 (effort and model specification), PRMT-SC-06 (planning document reference)
-- [ ] Execution (EX): PRMT-EX-01 (one prompt per turn), PRMT-EX-02 (no self-execution)
-- [ ] Hang Safety (HS): PRMT-HS-01 through PRMT-HS-09
+- [ ] Execution (EX): PRMT-EX-01 (one prompt per turn), PRMT-EX-02 (no self-execution), PRMT-EX-03 (execution authority)
+- [ ] Hang Safety (HS): PRMT-HS-01 through PRMT-HS-10
 - [ ] Robustness (RB): PRMT-RB-01 through PRMT-RB-07 (findings card designated, directive in every implementation prompt, card read at startup, glitches filed before commit, entry format, card system integration, PROBLEMS.md distinction)
 
 ### Step 5b: Workflow Call Formatting Pass
@@ -389,13 +395,14 @@ The filled file must pass all PRMT-* rules as a standalone prompts file:
 - [ ] PRMT-FT-10: If 5+ prompts, each prompt includes `Prompt [ NN / NN ]` position marker as first line inside fence; when using a planning document, marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
 - [ ] PRMT-ST-01..05: Each prompt has objective, constraints (if implementation), verification, single reasoning mode, density limit
 - [ ] PRMT-SQ-01..04: No contradictions, explicit dependencies, commentary documents state, interleaved verification prompts for 4+ implementation prompt sequences
-- [ ] PRMT-CT-01..12: Specific objectives, negative constraints, observable verification, workflow execution vs reference distinction (execution verb = standalone without backticks, no execution verb = backticks), existing workflows leveraged, agent tools over shell for file operations
-- [ ] PRMT-EX-01..02: One prompt per turn, no self-execution by writing agent
+- [ ] PRMT-CT-01..14: Specific objectives, negative constraints, observable verification, workflow execution vs reference distinction (execution verb = standalone without backticks, no execution verb = backticks), existing workflows leveraged, agent tools over shell for file operations, timestamp from request metadata, banned-term sweep recording
+- [ ] PRMT-EX-01..03: One prompt per turn, no self-execution by writing agent, execution authority
 - [ ] PRMT-HS-01: Implementation prompts include hang-safety clause
 - [ ] PRMT-HS-02: Banned command list is project-specific
 - [ ] PRMT-HS-03..06: Time caps, on-cap behavior, process cleanup, no interactive commands
 - [ ] PRMT-HS-07..08: Specific test files in verification, prior-step verification
 - [ ] PRMT-HS-09: Targeted test scope — specific test files, not full suite, in implementation prompts
+- [ ] PRMT-HS-10: Spec-code consistency check in Verify when prompt changes code with associated spec
 - [ ] PRMT-CT-12: No shell commands for file search/read in prompt bodies — agent tools only
 - [ ] PRMT-RB-01: Findings card designated for the sequence
 - [ ] PRMT-RB-02: Findings-card directive in every implementation prompt
@@ -417,7 +424,7 @@ Validated `_PROMPTS_[Topic]_[Instance].md` file with all placeholders resolved, 
 
 ## Quality Gate
 
-- [ ] All PRMT-* rules pass (FT-01 through FT-10, ST, SQ, CT-01 through CT-12, SC, EX, HS-01 through HS-09, RB, NM)
+- [ ] All PRMT-* rules pass (FT-01 through FT-10, ST, SQ, CT-01 through CT-14, SC, EX-01 through EX-03, HS-01 through HS-10, RB, NM)
 - [ ] Workflow call formatting: no execution verb + backticks combinations remain (PRMT-CT-08)
 - [ ] Self-contained opening in every prompt (PRMT-SC-01): context-loading directive, "treat earlier conversation as compacted", step identifier
 - [ ] No conversation dependency: no "the previous step" without file path (PRMT-SC-02)

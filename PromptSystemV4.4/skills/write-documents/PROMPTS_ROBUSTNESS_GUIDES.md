@@ -132,10 +132,11 @@ The card system reference:
 ## 3. Start-of-prompt protocol (resume detection)
 
 1. Read this card and the cards the prompt names
-2. Read session PROGRESS.md "Done" section. If the prompt's STRUT step ID is already listed as done: verify its artifacts exist, report "step already done", and stop
+2. Read session PROGRESS.md "Done" section. If the prompt's STRUT step ID is already listed as done: verify its artifacts exist, report "step already done", and stop. If the step is not listed as done, verify that artifacts from the prior step exist on disk before starting new work. Checkbox state alone is insufficient — deleted or missing artifacts mean the step must be redone.
 3. Read the STRUT step line and unit block; read the clause-map rows
 4. Load `__CARD_[TOPIC]-Findings.md` for unresolved entries from prior prompts
 5. Run git status --short in both repos; uncommitted work from a previous, interrupted prompt is finished or reverted before new work starts
+6. This prompt has execution authority (PRMT-EX-03). Do not ask for confirmation before executing. Execute within the Constraints section boundaries.
 
 ## 4. End-of-prompt protocol
 
@@ -626,8 +627,12 @@ Before considering a prompt file complete, verify robustness:
 - [ ] No prompt contains `git log`, `git diff`, `git show` without `--no-pager` (PRMT-HS-06)
 - [ ] Hang-risky commands without native safe parameters use the Start-Process + WaitForExit timeout pattern (PRMT-HS-03)
 - [ ] No shell commands for file search/read in prompt bodies — agent tools only (PRMT-CT-12)
+- [ ] Document History timestamps use request metadata, not extrapolated times (PRMT-CT-13)
+- [ ] Banned-term sweep recordings describe pattern shape, do not spell banned literals (PRMT-CT-14)
 - [ ] Verification runs specific test files, not full suite, during implementation steps (PRMT-HS-09)
+- [ ] Verify section checks spec-code consistency when prompt changes code with associated spec (PRMT-HS-10)
 - [ ] Sequences with 4+ implementation prompts include interleaved verification prompts every 2-3 prompts (PRMT-SQ-04)
+- [ ] Every implementation prompt includes "Execute without asking for confirmation" in Constraints (PRMT-EX-03)
 
 **Verification depth**:
 - [ ] Verification sections name specific test files when code changes affect tests (PRMT-HS-07)

@@ -35,7 +35,10 @@ Analyze the requirements for a generic REST API module with user endpoints (GET 
 Constraints:
 - Do not write any implementation code in this step
 - Do not modify existing project configuration files
+- Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost: if `_INFO_ApiDesign.md` already exists and contains the endpoint list, skip
+
+Findings card: `__CARD_SetupApi-Findings.md`
 
 Verify: `_INFO_ApiDesign.md` exists with sections for endpoints, schemas, error codes, and data model.
 ```
@@ -56,7 +59,11 @@ Constraints:
 - Do not modify files outside `src/modules/users/`
 - Do not add new npm dependencies
 - Follow the existing project patterns in `src/modules/`
+- Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost: if `src/modules/users/routes.ts` already exists and passes type checking, skip
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_01-Robustness.md`. 10 min cap. On cap: kill, record in PROBLEMS.md, continue.
+
+Findings card: `__CARD_SetupApi-Findings.md`
 
 Verify: `src/modules/users/routes.ts` and `src/modules/users/validator.ts` exist. Run `npx tsc --noEmit`. No type errors.
 ```
@@ -77,7 +84,11 @@ Constraints:
 - Do not modify the implementation files in `src/modules/users/`
 - Do not modify existing test files
 - Use the existing test framework and patterns in `tests/`
+- Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost: if `tests/modules/users.test.ts` already exists and tests pass, skip
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_01-Robustness.md`. 10 min cap. On cap: kill, record in PROBLEMS.md, continue.
+
+Findings card: `__CARD_SetupApi-Findings.md`
 
 Verify: Run `npx jest tests/modules/users.test.ts`. All tests pass. Test file covers all 5 endpoints with success and error cases.
 ```
@@ -91,3 +102,6 @@ Verify: Run `npx jest tests/modules/users.test.ts`. All tests pass. Test file co
 - **Design document as inter-prompt dependency**: Prompt 2 and 3 reference `_INFO_ApiDesign.md` by filename and section, not "the previous step". This satisfies the no-conversation-dependency rule (PRMT-SC-02).
 - **Idempotency constraints in implementation prompts**: Prompts 2 and 3 include "if the output file already exists and passes validation, skip" as idempotency constraints. Prompt 1 is an analysis prompt (no file modifications beyond writing a design doc) but still includes idempotency for the design file (PRMT-SC-03).
 - **5-backtick outer fence**: The document uses 5 backticks for the outer fence because the inner prompts use 3-backtick fences. This satisfies PRMT-FT-02 (outer exceeds deepest inner).
+- **Execution authority** (PRMT-EX-03): All 3 prompts include "Execute without asking for confirmation" in Constraints. This prevents the agent from pausing to ask for confirmation, which hangs the sequence.
+- **Hang-safety clause in implementation prompts**: Prompts 2 and 3 include a hang-safety clause referencing `__CARD_01-Robustness.md` for the banned command list. Prompt 1 is analysis-only (no commands that could hang) so no hang-safety clause is needed (PRMT-HS-01).
+- **Findings card directive**: All 3 prompts include `Findings card: __CARD_SetupApi-Findings.md` after Constraints. This ensures glitches are filed in the card before end-of-prompt commit (PRMT-RB-02).

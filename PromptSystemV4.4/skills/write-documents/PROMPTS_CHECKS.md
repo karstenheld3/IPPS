@@ -25,6 +25,9 @@ Quality Improvement (QI)
 - PRMT-QI-08: Do prompt bodies use agent tool directives instead of shell commands for file operations?
 - PRMT-QI-09: Do verification sections run specific test files instead of full suite during implementation?
 - PRMT-QI-10: Do sequences with 4+ implementation prompts include interleaved verification checkpoints?
+- PRMT-QI-11: Do implementation prompts include "Execute without asking for confirmation" in Constraints?
+- PRMT-QI-12: Do Document History timestamps use request metadata, not extrapolated times?
+- PRMT-QI-13: Does the Verify section check spec-code consistency when the prompt changes code with an associated spec?
 
 ## Process Discipline (PD)
 
@@ -130,3 +133,27 @@ Quality Improvement (QI)
 - Failure indicator: 5 implementation prompts with no verification checkpoint between them; verification only at the end of the sequence; verification prompt containing implementation content (code, tests, builds)
 - Improvement tip: Insert a `## Verification Checkpoint N` prompt after every 2-3 implementation prompts. Each checkpoint runs `/verify` against the planning document and `/fix` for gaps. Verification prompts are self-contained (read rules card and planning document), do NOT count toward chain length limit, and use `## Verification Checkpoint N` heading (not `## Prompt N`).
 - References: PRMT-SQ-04
+
+### PRMT-QI-11: Execution Authority Quality
+
+- Question: Do implementation prompts include "Execute without asking for confirmation" in Constraints?
+- Evidence: scan each implementation prompt's Constraints section for the phrase
+- Failure indicator: implementation prompt missing the execution authority constraint
+- Improvement tip: add "Execute without asking for confirmation" to Constraints (PRMT-EX-03)
+- References: PRMT-EX-03
+
+### PRMT-QI-12: Timestamp Source Quality
+
+- Question: Do Document History timestamps use request metadata, not extrapolated times?
+- Evidence: check that Document History timestamps in files modified by the prompt match the timestamp from the prompt's request metadata
+- Failure indicator: Document History timestamp is ahead of or behind the prompt submission time, indicating the agent estimated the timestamp
+- Improvement tip: add "Use the timestamp from this prompt's request metadata for the Document History entry" to the prompt (PRMT-CT-13)
+- References: PRMT-CT-13
+
+### PRMT-QI-13: Spec-Code Consistency Quality
+
+- Question: Does the Verify section check spec-code consistency when the prompt changes code with an associated spec?
+- Evidence: check that the Verify section of prompts modifying code with an associated spec names the spec file and the clauses affected by the code change
+- Failure indicator: prompt changes code but Verify section does not mention the spec file; spec drifts without detection
+- Improvement tip: add spec-code consistency check to Verify section: "Check `_SPEC_[Name].md` section [N] still matches the code change. Update spec if drifted." (PRMT-HS-10)
+- References: PRMT-HS-10

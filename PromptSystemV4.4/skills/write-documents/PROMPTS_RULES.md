@@ -44,6 +44,8 @@ Content (CT)
 - PRMT-CT-10: Workflow references in backticks when not executing (no execution verb = reference only)
 - PRMT-CT-11: Leverage existing workflows whenever possible
 - PRMT-CT-12: Prefer agent tools over shell commands for file search and read operations
+- PRMT-CT-13: Timestamp from request metadata, not extrapolated or estimated
+- PRMT-CT-14: Banned-term sweep recording must not spell banned literals
 
 Self-Contained (SC)
 - PRMT-SC-01: Self-contained opening — context-loading directive, "treat earlier conversation as compacted", step identifier
@@ -56,6 +58,7 @@ Self-Contained (SC)
 Execution (EX)
 - PRMT-EX-01: One prompt per turn - prompts are never concatenated into a single model submission
 - PRMT-EX-02: Agent must not self-execute prompt files - writing a prompt file and running all prompts in one response circumvents the format
+- PRMT-EX-03: Execution authority - prompts in _PROMPTS_*.md files carry implicit execution authority, agent must complete without asking for confirmation
 
 Hang Safety (HS)
 - PRMT-HS-01: Hang-safety clause required in implementation prompts
@@ -67,6 +70,7 @@ Hang Safety (HS)
 - PRMT-HS-07: Verification names specific test files and residual sweeps
 - PRMT-HS-08: Prior-step verification for dependent prompts
 - PRMT-HS-09: Targeted test scope — specific test files during implementation, full suite only in final verification
+- PRMT-HS-10: Spec-code consistency check in Verify when prompt changes code with associated spec
 
 Robustness (RB)
 - PRMT-RB-01: Findings card designated for the sequence
@@ -1049,6 +1053,41 @@ Prompt files are authored for an execution engine (e.g., Lana) that submits prom
 - Agent delivers the file to the user or execution engine
 - Execution engine (Lana, headless runner, or human submitting one prompt at a time) processes each prompt as a separate turn
 
+## PRMT-EX-03: Execution Authority
+
+Prompts in `_PROMPTS_*.md` files carry implicit execution authority. The agent must complete the prompt's objective without pausing to ask the user for confirmation. Confirmation pauses hang the sequence: the execution engine treats the paused prompt as complete and advances to the next prompt, skipping work and corrupting state.
+
+This rule overrides default confirmation gates (e.g., `agent-behavior.md` confirmation rules) for the duration of prompt file execution. The prompt's Constraints section defines boundaries — what NOT to do. Within those boundaries, the agent executes without asking.
+
+Verifiable from artifact: check that implementation prompts include "Execute without asking for confirmation" or equivalent in Constraints.
+
+**BAD** (no execution authority constraint):
+`````markdown
+```
+Read `src/auth/validator.ts`. Treat earlier conversation as compacted. Step P2-S3.
+
+Fix the token validation bug where expired tokens crash the server.
+
+Constraints:
+- Do not modify the token generation logic
+- Re-running this prompt must not corrupt state or waste cost
+```
+`````
+
+**GOOD** (execution authority constraint present):
+`````markdown
+```
+Read `src/auth/validator.ts`. Treat earlier conversation as compacted. Step P2-S3.
+
+Fix the token validation bug where expired tokens crash the server.
+
+Constraints:
+- Do not modify the token generation logic
+- Execute without asking for confirmation
+- Re-running this prompt must not corrupt state or waste cost
+```
+`````
+
 ## PRMT-NM-01: Filename Pattern
 
 `_PROMPTS_[Topic].md` where Topic is CamelCase.
@@ -1729,3 +1768,91 @@ Final verification: run the full test suite to confirm no regressions.
 Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. All tests pass.
 ```
 `````
+
+## PRMT-CT-13: Timestamp from Request Metadata
+
+Document History timestamps must match the wall clock from the current prompt's request metadata, not extrapolated or estimated. When a prompt generates timestamps for Document History entries, use the timestamp from the request or prompt submission metadata.
+
+Agents often generate timestamps by estimating the current time from their training data or internal clock. These estimates drift — sometimes by hours or days. The request metadata contains the actual submission timestamp, which is the authoritative source for Document History entries.
+
+Verifiable from artifact: check that Document History timestamps in files modified by the prompt match the timestamp from the prompt's request metadata. If timestamps are ahead of or behind the request time, the prompt violated this rule.
+
+**BAD** (timestamp extrapolated, runs ahead of wall clock):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P2-S1.
+
+Update the Document History section of `_SPEC_Auth.md` with today's changes.
+```
+`````
+Result: Document History entry reads `[2026-03-20 14:30]` but the prompt was submitted at `2026-03-19 10:15`. The agent estimated the timestamp and was off by over a day.
+
+**GOOD** (timestamp from request metadata):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P2-S1.
+
+Update the Document History section of `_SPEC_Auth.md` with today's changes. Use the timestamp from this prompt's request metadata for the Document History entry.
+```
+`````
+Result: Document History entry reads `[2026-03-19 10:15]` matching the prompt submission timestamp.
+
+## PRMT-CT-14: Banned-Term Sweep Recording
+
+When recording a banned-term sweep in Document History or findings, describe the pattern shape (e.g., "swept for banned terms in filenames"), not the literal banned pattern. Spelling banned literals in the recording plants them in the document.
+
+Banned terms are banned because they should not appear in the document. Recording the literal banned pattern in a Document History entry or findings card defeats the purpose of the sweep — the banned term is now in the document, in the sweep record itself.
+
+Verifiable from artifact: check Document History entries and findings card entries that record banned-term sweeps. If the entry contains the literal banned pattern instead of a description of the pattern shape, the prompt violated this rule.
+
+**BAD** (sweep record spells the banned literal):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P2-S1.
+
+Sweep the codebase for banned terms. Record the sweep in Document History.
+```
+`````
+Result: Document History entry reads "Swept for `deprecated_api_v2` in filenames" — the banned term `deprecated_api_v2` is now in the document.
+
+**GOOD** (sweep record describes pattern shape, does not spell the literal):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P2-S1.
+
+Sweep the codebase for banned terms. Record the sweep in Document History. Describe the pattern shape, do not spell the banned literal.
+```
+`````
+Result: Document History entry reads "Swept for banned terms in filenames" — no banned literal appears in the record.
+
+## PRMT-HS-10: Spec-Code Consistency Check
+
+When a prompt changes code that has an associated spec, the Verify section must include a spec-code consistency check for the changed clauses. The Verify section names the spec file and the clauses affected by the code change.
+
+Specs and code drift apart when one changes without the other. A prompt that modifies code without checking the spec leaves the spec stale. The spec-code consistency check ensures the prompt verifies that the spec still accurately describes the code after the change.
+
+Verifiable from artifact: check that the Verify section of prompts modifying code with an associated spec names the spec file and the clauses affected by the code change. If the Verify section does not mention the spec file, the prompt violates this rule.
+
+**BAD** (code change without spec consistency check):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P2-S1.
+
+Change the token expiration from 30 minutes to 60 minutes in `src/auth/issuer.ts`.
+
+Verify: Run `npx jest tests/unit/auth.test.ts`. All tests pass.
+```
+`````
+Result: Code changed, spec `_SPEC_Auth.md` still says "tokens expire after 30 minutes". Spec is now stale.
+
+**GOOD** (code change with spec consistency check):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P2-S1.
+
+Change the token expiration from 30 minutes to 60 minutes in `src/auth/issuer.ts`.
+
+Verify: Run `npx jest tests/unit/auth.test.ts`. All tests pass. Check `_SPEC_Auth.md` section 3.2 (Token Expiration) still matches the new 60-minute TTL. Update spec if drifted.
+```
+`````
+Result: Code changed, spec verified and updated if needed. Spec-code consistency maintained.

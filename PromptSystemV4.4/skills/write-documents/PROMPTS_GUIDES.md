@@ -261,6 +261,43 @@ Shell commands are for process execution only: builds, tests, git operations, an
 - Instead of "Run `Get-Content file.ts`", write "Read `file.ts`"
 - Instead of "Run `Get-ChildItem -Recurse -Filter *.ts`", write "Find all .ts files in src/ using the find_by_name tool"
 
+## 6e. Execution Authority in Prompts
+
+Prompt sequences run unattended. If the agent stops to ask for confirmation before executing, the execution engine treats the paused prompt as complete and advances to the next prompt. Work is skipped, state is corrupted, and the sequence fails silently.
+
+Every implementation prompt MUST include "Execute without asking for confirmation" in the Constraints section (PRMT-EX-03). This overrides default confirmation gates for the duration of prompt file execution. The Constraints section defines the boundaries — what NOT to do. Within those boundaries, the agent executes without asking.
+
+**Why this matters**: agent rules (e.g., `agent-behavior.md` confirmation rules) are designed for interactive pair programming. In headless prompt execution, the same rules cause indefinite hangs. The execution authority constraint explicitly disables confirmation gates for the current prompt.
+
+**Where to place it**: in the Constraints section, alongside idempotency and hang-safety. It is a negative constraint (PRMT-CT-02): it states what the agent must NOT do (ask for confirmation).
+
+**Example**:
+```
+Constraints:
+- Do not modify the token generation logic
+- Execute without asking for confirmation
+- Re-running this prompt must not corrupt state or waste cost
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child
+```
+
+## 6f. Timestamp Source
+
+Document History timestamps must come from the prompt's request metadata, not from the agent's internal clock or training data. Agents estimate timestamps poorly — sometimes drifting by hours or days. The request metadata contains the actual submission timestamp, which is the authoritative source.
+
+**Example**: A prompt submitted at `2026-03-19 10:15` must produce a Document History entry reading `[2026-03-19 10:15]`, not `[2026-03-20 14:30]` (extrapolated). Instruct the prompt: "Use the timestamp from this prompt's request metadata for the Document History entry." (PRMT-CT-13)
+
+## 6g. Banned-Term Sweep Recording
+
+When recording a banned-term sweep in Document History or findings, describe the pattern shape (e.g., "swept for banned terms in filenames"), not the literal banned pattern. Spelling the banned literal in the recording plants it in the document, defeating the purpose of the sweep.
+
+**Example**: Instead of "Swept for `deprecated_api_v2` in filenames", write "Swept for banned terms in filenames". The banned term never appears in the recording. (PRMT-CT-14)
+
+## 6h. Spec-Code Consistency Check
+
+When a prompt changes code that has an associated spec, the Verify section must check that the spec still matches the code. The Verify section names the spec file and the clauses affected by the code change. Without this check, specs drift and become stale.
+
+**Example**: A prompt changing token expiration from 30 to 60 minutes in `src/auth/issuer.ts` must verify: "Check `_SPEC_Auth.md` section 3.2 (Token Expiration) still matches the new 60-minute TTL. Update spec if drifted." (PRMT-HS-10)
+
 ## 7. Select Fence Length
 
 Examine each prompt for inner fenced code blocks:
@@ -471,6 +508,7 @@ Before considering the prompts file complete:
 - [ ] Sequence stays under 6 steps; longer workflows use sub-chains with checkpoints (PRMT-SC-04)
 - [ ] Frontmatter specifies effort level; prompt count matches effort budget (PRMT-SC-05)
 - [ ] Prompt sequences from planning documents reference the document by filename and step ID (PRMT-SC-06)
+- [ ] Implementation prompts include execution authority constraint: "Execute without asking for confirmation" (PRMT-EX-03)
 - [ ] Agent does not self-execute the prompt file (PRMT-EX-02): file is delivered, not run in one response
 - [ ] Every implementation prompt includes a hang-safety clause: prohibition, banned list, cap behavior (PRMT-HS-01)
 - [ ] Banned command list is project-specific, not generic only (PRMT-HS-02)
@@ -492,3 +530,6 @@ Before considering the prompts file complete:
 - [ ] Commentary documents expected state between prompts (PRMT-SQ-03)
 - [ ] Sequences with 4+ implementation prompts include interleaved verification prompts (PRMT-SQ-04)
 - [ ] Verification runs specific test files, not full suite, during implementation steps (PRMT-HS-09)
+- [ ] Document History timestamps use request metadata, not extrapolated times (PRMT-CT-13)
+- [ ] Banned-term sweep recordings describe pattern shape, do not spell banned literals (PRMT-CT-14)
+- [ ] Verify section checks spec-code consistency when prompt changes code with associated spec (PRMT-HS-10)

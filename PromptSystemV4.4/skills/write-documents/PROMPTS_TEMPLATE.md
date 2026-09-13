@@ -35,6 +35,7 @@ Planning document: [TASKS or STRUT filename], step [ID].
 Constraints:
 - [What NOT to do]
 - [Boundaries to respect]
+- Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
 - Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
@@ -67,6 +68,7 @@ Example output format:
 
 Constraints:
 - [What NOT to do]
+- Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
 - Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
@@ -99,6 +101,7 @@ Focus on: token validation, session management, and password hashing.
 Constraints:
 - Do not modify any code in this step
 - Limit analysis to src/auth/ directory only
+- Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
 - Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
@@ -132,6 +135,7 @@ Constraints:
 - Fix only the single highest-severity issue
 - Do not change the public API of any exported function
 - Do not add new dependencies
+- Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
 - Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 

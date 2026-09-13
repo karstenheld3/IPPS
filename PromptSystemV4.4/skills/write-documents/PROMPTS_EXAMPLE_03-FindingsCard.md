@@ -58,6 +58,20 @@ The scenario: a 3-prompt sequence implementing a REST API module. Prompt 1 analy
 **Resolution**: Renamed to `created_at` in `src/modules/users/routes.ts` line 47. Added the convention to Constraints in the prompt: "Use snake_case for all API response field names, not TypeScript camelCase."
 
 **Prevention**: When a prompt introduces naming conventions, include the convention in the Constraints section explicitly. Do not rely on the agent inferring conventions from the language.
+
+### 4. Confirmation-pause hang
+
+**Severity**: HIGH
+
+**Expected state** (from prompt P2-S1): "Execute without asking for confirmation"
+
+**Actual state**: Agent asked for confirmation before modifying `src/modules/users/routes.ts`. Execution engine treated the paused prompt as complete and advanced to the next prompt. The implementation was skipped, and prompt 3 failed because `routes.ts` did not exist.
+
+**Root cause**: Agent applied interactive confirmation gates to headless prompt execution. The default confirmation rules from `agent-behavior.md` were not overridden by the prompt's execution authority constraint.
+
+**Resolution**: Added "Execute without asking for confirmation" to Constraints in all implementation prompts per PRMT-EX-03. This overrides default confirmation gates for the duration of prompt file execution.
+
+**Prevention**: Always include the execution authority constraint in implementation prompts. The constraint is the signal that the prompt carries implicit authority and the agent must complete without pausing.
 `````
 
 ## Key Decisions
