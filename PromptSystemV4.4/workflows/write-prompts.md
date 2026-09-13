@@ -16,6 +16,7 @@ Create `_PROMPTS_[Topic].md` files containing an ordered list of prompts. Each p
 - @skills:write-documents `PROMPTS_TEMPLATE.md` for file skeleton (copy and fill)
 - @skills:write-documents `PROMPTS_GUIDES.md` for strategic approach (read BEFORE writing)
 - @skills:write-documents `PROMPTS_RULES.md` for output verification (PRMT-* rules)
+- @skills:write-documents `PROMPTS_ROBUSTNESS_GUIDES.md` for hang-prevention clause template, banned command lists, and inter-prompt problem filing
 
 ## MUST-NOT-FORGET
 
@@ -25,6 +26,7 @@ Create `_PROMPTS_[Topic].md` files containing an ordered list of prompts. Each p
 - `---` separator between every pair of consecutive prompts
 - Commentary (headings, notes) only between `---` and next fence - never sent to model. Commentary notes MUST be in HTML comments (`<!-- ... -->`), headings as plain Markdown
 - Heading recommendation (PRMT-FT-07): use `## Prompt N - [title]` before each prompt. If headings are used, ALL prompts MUST have headings
+- Position marker (PRMT-FT-10): sequences with 5+ prompts MUST include `Prompt [ NN / NN ]` as first line inside each prompt's fence, not in the heading. When using a planning document (PRMT-SC-06), marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
 - At least one prompt per file
 - **NEVER modify tracking documents** (PROGRESS.md, PROBLEMS.md, NOTES.md, FAILS.md). Write-* workflows create NEW files only.
 - Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content → examples generic.
@@ -37,6 +39,9 @@ Create `_PROMPTS_[Topic].md` files containing an ordered list of prompts. Each p
 - **Chain length limit** (PRMT-SC-04): Sequences must stay under 6 steps. Longer workflows split into sub-chains with checkpoints.
 - **Effort-based partitioning** (PRMT-SC-05): Frontmatter must specify `effort` level. Prompt count must match effort budget (low effort = more tightly scoped prompts, high effort = fewer broader prompts). See `PROMPTS_GUIDES.md` Section 1c.
 - **Planning document anchor** (PRMT-SC-06): Prompt sequences from planning documents (TASKS, STRUT) must reference the document by filename and step ID. See `PROMPTS_GUIDES.md` Section 1d.
+- **Hang-safety clause** (PRMT-HS-01): Every implementation prompt MUST include a hang-safety clause in Constraints: prohibition (no stdin/pager/unbounded child), project-specific banned list, time caps, on-cap behavior. See `PROMPTS_ROBUSTNESS_GUIDES.md` for template, project-specific banned lists, and problem-filing directive.
+- **Verification specificity** (PRMT-HS-07): Verification sections must name specific test files when code changes affect tests, include residual sweeps when concepts are removed, and confirm prior steps when dependencies exist.
+- **Prior-step verification** (PRMT-HS-08): Dependent prompts must verify the prior step is done before proceeding.
 
 ## Context Branching
 
@@ -69,6 +74,10 @@ This workflow has two modes. Determine the mode from the user's request:
 ## Step 1: Read PROMPTS_GUIDES.md and Scan Existing Workflows
 
 Read `PROMPTS_GUIDES.md` from @skills:write-documents. Classify the task, decide decomposition, plan state flow between prompts.
+
+**Hang-safety planning**: Read `PROMPTS_ROBUSTNESS_GUIDES.md` from @skills:write-documents. Identify project-specific hang risks (commands that wait on stdin, launch pagers, run unbounded children). Build the banned command list for the hang-safety clause. Determine time caps for each command type in the sequence.
+
+**Findings-card planning**: Designate a `__CARD_[TOPIC]-Findings.md` card for the sequence. Every implementation prompt includes a `Findings card:` directive pointing to this card. The card is loaded at prompt startup and updated at end-of-prompt with glitches, spec-code mismatches, and unexpected findings. Session PROBLEMS.md records problems encountered during prompt execution that must be approached later (blockers, deferred issues).
 
 **Effort-based partitioning**: Read the frontmatter `effort` level (PRMT-SC-05). Scope prompts to the effort budget: at low effort, each prompt handles one file or one edit; at high effort, a single prompt can handle multi-file analysis and implementation. Match prompt count to effort level. See `PROMPTS_GUIDES.md` Section 1c.
 
@@ -115,6 +124,7 @@ First prompt text. Plain instruction, no code blocks inside.
 Constraints:
 - [What NOT to do]
 - Re-running this prompt must not corrupt state or waste cost
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
 Verify: [Machine-checkable done criteria]
 ```
@@ -137,6 +147,7 @@ print("hello")
 Constraints:
 - [What NOT to do]
 - Re-running this prompt must not corrupt state or waste cost
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
 Verify: [Observable success criteria]
 ````
@@ -154,6 +165,7 @@ Third prompt. Simple again.
 Constraints:
 - [What NOT to do]
 - Re-running this prompt must not corrupt state or waste cost
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
 Verify: [Machine-checkable done criteria]
 ```
@@ -166,20 +178,23 @@ Verify: [Machine-checkable done criteria]
 4. `---` on its own line between consecutive prompts
 5. Commentary (headings, paragraphs, lists) allowed before the first prompt and between `---` and next opening fence. Commentary notes MUST be in HTML comments (`<!-- ... -->`), headings as plain Markdown
 6. Heading recommendation (PRMT-FT-07): use `## Prompt N - [title]` before each prompt. If headings are used, ALL prompts MUST have headings
-7. Info string after opening fence (e.g. `` ```text ``) is optional and ignored by executor
-8. Prompts execute in file order
-9. Execution Frontmatter is optional - omit entirely if no execution hints needed
+7. Position marker (PRMT-FT-10): sequences with 5+ prompts MUST include `Prompt [ NN / NN ]` as first line inside each prompt's fence. When using a planning document (PRMT-SC-06), marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`. Optional for shorter sequences
+8. Info string after opening fence (e.g. `` ```text ``) is optional and ignored by executor
+9. Prompts execute in file order
+10. Execution Frontmatter is optional - omit entirely if no execution hints needed
 
 ## Step 5: Verify
 
 Check output against all PRMT-* rules in `PROMPTS_RULES.md`:
 
-- [ ] Format (FT): PRMT-FT-01 through PRMT-FT-08
+- [ ] Format (FT): PRMT-FT-01 through PRMT-FT-10
 - [ ] Structure (ST): PRMT-ST-01 through PRMT-ST-05
 - [ ] Sequence (SQ): PRMT-SQ-01 through PRMT-SQ-03
 - [ ] Content (CT): PRMT-CT-01 through PRMT-CT-11
 - [ ] Self-Contained (SC): PRMT-SC-01 (self-contained opening), PRMT-SC-02 (no conversation dependency), PRMT-SC-03 (idempotency constraint), PRMT-SC-04 (chain length under 6), PRMT-SC-05 (effort and model specification), PRMT-SC-06 (planning document reference)
 - [ ] Execution (EX): PRMT-EX-01 (one prompt per turn), PRMT-EX-02 (no self-execution)
+- [ ] Hang Safety (HS): PRMT-HS-01 through PRMT-HS-08
+- [ ] Robustness (RB): PRMT-RB-01 through PRMT-RB-07 (findings card designated, directive in every implementation prompt, card read at startup, glitches filed before commit, entry format, card system integration, PROBLEMS.md distinction)
 
 ### Step 5b: Workflow Call Formatting Pass
 
@@ -244,10 +259,19 @@ The filled file must pass all PRMT-* rules as a standalone prompts file:
 - [ ] PRMT-FT-04: Commentary notes in HTML comments (`<!-- ... -->`), headings as plain Markdown, only between separator and next fence (or before first fence)
 - [ ] PRMT-FT-07: If headings are used, all prompts have headings (MUST)
 - [ ] PRMT-FT-08: If frontmatter present, it is at file start with valid keys
+- [ ] PRMT-FT-10: If 5+ prompts, each prompt includes `Prompt [ NN / NN ]` position marker as first line inside fence; when using a planning document, marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
 - [ ] PRMT-ST-01..05: Each prompt has objective, constraints (if implementation), verification, single reasoning mode, density limit
 - [ ] PRMT-SQ-01..03: No contradictions, explicit dependencies, commentary documents state
 - [ ] PRMT-CT-01..11: Specific objectives, negative constraints, observable verification, workflow execution vs reference distinction (execution verb = standalone without backticks, no execution verb = backticks), existing workflows leveraged
 - [ ] PRMT-EX-01..02: One prompt per turn, no self-execution by writing agent
+- [ ] PRMT-HS-01: Implementation prompts include hang-safety clause
+- [ ] PRMT-HS-02: Banned command list is project-specific
+- [ ] PRMT-HS-03..06: Time caps, on-cap behavior, process cleanup, no interactive commands
+- [ ] PRMT-HS-07..08: Specific test files in verification, prior-step verification
+- [ ] PRMT-RB-01: Findings card designated for the sequence
+- [ ] PRMT-RB-02: Findings-card directive in every implementation prompt
+- [ ] PRMT-RB-03..06: Card read at startup, glitches filed before commit, entry format, card system integration
+- [ ] PRMT-RB-07: Session PROBLEMS.md records deferred problems, not detailed glitch logs
 - [ ] No unresolved `[PLACEHOLDER]` values remain in the output
 - [ ] No XML comments remain in the output
 - [ ] Privacy gate: no real user data leaked into the filled instance
@@ -264,7 +288,7 @@ Validated `_PROMPTS_[Topic]_[Instance].md` file with all placeholders resolved, 
 
 ## Quality Gate
 
-- [ ] All PRMT-* rules pass (FT-01 through FT-09, ST, SQ, CT, SC, EX, NM)
+- [ ] All PRMT-* rules pass (FT-01 through FT-10, ST, SQ, CT, SC, EX, HS, RB, NM)
 - [ ] Workflow call formatting: no execution verb + backticks combinations remain (PRMT-CT-08)
 - [ ] Self-contained opening in every prompt (PRMT-SC-01): context-loading directive, "treat earlier conversation as compacted", step identifier
 - [ ] No conversation dependency: no "the previous step" without file path (PRMT-SC-02)

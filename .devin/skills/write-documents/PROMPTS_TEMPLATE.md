@@ -7,6 +7,7 @@ Read PROMPTS_GUIDES.md BEFORE writing. Verify against all PRMT-* rules in PROMPT
 Remove ALL XML comments after creating the document. First non-empty line must be frontmatter (optional), Commentary, or opening fence.
 Heading recommendation (PRMT-FT-07): use `## Prompt N - [title]` before each prompt for readability.
 If headings are used, ALL prompts MUST have headings (consistency enforced).
+Position marker (PRMT-FT-10): sequences with 5+ prompts MUST include `Prompt [ NN / NN ]` as first line inside each prompt's fence. When using a planning document (PRMT-SC-06), marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`.
 
 Execution model (PRMT-EX-01/02): Each prompt is a separate turn for an execution engine. NEVER self-execute prompt files by running all prompts in one response. The writing agent creates the file; the execution engine runs it. -->
 
@@ -35,6 +36,9 @@ Constraints:
 - [What NOT to do]
 - [Boundaries to respect]
 - Re-running this prompt must not corrupt state or waste cost
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+
+Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
 Verify: [Machine-checkable done criteria]
 ```
@@ -64,13 +68,16 @@ Example output format:
 Constraints:
 - [What NOT to do]
 - Re-running this prompt must not corrupt state or waste cost
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+
+Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
 Verify: [Observable success criteria]
 ````
 
 <!-- EXAMPLE: Reference only. Do not copy into new documents. Shows a completed 2-prompt file with optional frontmatter and headings (PRMT-FT-07/08). -->
 
-## Full Example
+## Full Example (2-prompt sequence, markers optional under 5 prompts)
 
 `````markdown
 ---
@@ -93,13 +100,16 @@ Constraints:
 - Do not modify any code in this step
 - Limit analysis to src/auth/ directory only
 - Re-running this prompt must not corrupt state or waste cost
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+
+Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
 Verify: Output a numbered list of findings with severity (HIGH/MEDIUM/LOW) and file location.
 ```
 
 ---
 
-## Step 2 - Fix highest-severity finding
+## Prompt 2 - Fix highest-severity finding
 
 <!-- Previous step produced a numbered findings list. Fix the highest-severity item. -->
 
@@ -123,6 +133,9 @@ Constraints:
 - Do not change the public API of any exported function
 - Do not add new dependencies
 - Re-running this prompt must not corrupt state or waste cost
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+
+Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
 Verify: Run `pnpm test:auth`. All tests pass. The specific vulnerability from step 1 is no longer present.
 ````

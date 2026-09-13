@@ -16,6 +16,7 @@ Format (FT)
 - PRMT-FT-07: Heading consistency - headings recommended (SHOULD); if used, all prompts MUST have headings
 - PRMT-FT-08: Optional execution frontmatter - YAML block at file start with execution hints
 - PRMT-FT-09: prompt_system frontmatter empty when user requests workflow independence
+- PRMT-FT-10: Prompt position marker inside fence in long sequences (5+ prompts); with plan summary when using planning document
 
 Structure (ST)
 - PRMT-ST-01: Every prompt has an identifiable objective
@@ -53,6 +54,24 @@ Self-Contained (SC)
 Execution (EX)
 - PRMT-EX-01: One prompt per turn - prompts are never concatenated into a single model submission
 - PRMT-EX-02: Agent must not self-execute prompt files - writing a prompt file and running all prompts in one response circumvents the format
+
+Hang Safety (HS)
+- PRMT-HS-01: Hang-safety clause required in implementation prompts
+- PRMT-HS-02: Banned command list must be project-specific
+- PRMT-HS-03: Time caps on all command executions
+- PRMT-HS-04: On-cap behavior: kill, record, continue
+- PRMT-HS-05: Process cleanup after command execution
+- PRMT-HS-06: No interactive commands (stdin, pager, key wait, 2>&1 blocking)
+- PRMT-HS-07: Verification names specific test files and residual sweeps
+- PRMT-HS-08: Prior-step verification for dependent prompts
+
+Robustness (RB)
+- PRMT-RB-01: Findings card designated for the sequence
+- PRMT-RB-02: Findings-card directive in every implementation prompt
+- PRMT-RB-03: Findings card read at prompt startup for unresolved entries
+- PRMT-RB-04: Glitches filed in findings card before end-of-prompt commit
+- PRMT-RB-05: Glitch entry format: what, expected, actual, root cause, resolution, prevention
+- PRMT-RB-06: Card system end-of-prompt protocol includes findings-card update step
 
 Naming (NM)
 - PRMT-NM-01: Filename follows `_PROMPTS_[Topic].md` pattern
@@ -867,6 +886,99 @@ Second prompt.
 ```
 `````
 
+## PRMT-FT-10: Prompt Position Marker in Long Sequences
+
+Prompt files with 5 or more prompts MUST include a position marker as the first line inside each prompt's fence. The marker shows the current prompt number and total prompt count in zero-padded format: `Prompt [ NN / NN ]`.
+
+When the prompt sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the marker line MUST also include a summary with plan phase/step references: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`. The summary matches the heading text, giving the model the same orientation the heading gives the human reader.
+
+The marker goes inside the fence, as the first line of prompt content before the self-contained opening:
+
+`````markdown
+## Prompt 1 - Analyze requirements
+
+```
+Prompt [ 01 / 05 ]
+Read `__CARD_00-Rules.md`...
+```
+`````
+
+For sequences with fewer than 5 prompts, the marker is OPTIONAL.
+
+**Rules:**
+1. Zero-padded to match the width of the total count (e.g., 5 prompts → 2 digits, 23 prompts → 2 digits, 100+ → 3 digits)
+2. Total count is the number of prompts in the file, not the number of STRUT steps
+3. If the file uses sub-chains with checkpoints (PRMT-SC-04), the total count is the number of prompts in the current sub-chain file
+4. The marker appears inside the fence as first line of prompt content — the model sees it for progress tracking
+5. The marker is updated when prompts are added or removed
+6. When using a planning document (PRMT-SC-06), the marker line includes a summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`. The summary matches the heading text
+
+**GOOD** (5-prompt sequence with markers inside fence, no planning document):
+`````markdown
+## Prompt 1 - Analyze requirements
+
+```
+Prompt [ 01 / 05 ]
+Read `__CARD_00-Rules.md`...
+```
+
+---
+
+## Prompt 2 - Implement module
+
+```
+Prompt [ 02 / 05 ]
+Read `__CARD_00-Rules.md`...
+```
+`````
+
+**GOOD** (5-prompt sequence with markers and plan summary inside fence):
+`````markdown
+## Prompt 1 - P4-S1 U10 stage A: untrusted-content delimiters in specs
+
+```
+Prompt [ 01 / 05 ] - P4-S1 U10 stage A: untrusted-content delimiters in specs
+Read `__CARD_00-Rules.md`...
+```
+
+---
+
+## Prompt 2 - P4-S2 U10 stage B-C: renderToolResult, wrapped tools, commit
+
+```
+Prompt [ 02 / 05 ] - P4-S2 U10 stage B-C: renderToolResult, wrapped tools, commit
+Read `__CARD_00-Rules.md`...
+```
+`````
+
+**BAD** (5-prompt sequence with plan, marker without summary):
+`````markdown
+## Prompt 1 - P4-S1 U10 stage A: untrusted-content delimiters in specs
+
+```
+Prompt [ 01 / 05 ]
+Read `__CARD_00-Rules.md`...
+```
+`````
+
+**BAD** (5-prompt sequence without markers):
+`````markdown
+## Prompt 1 - Analyze requirements
+
+```
+Read `__CARD_00-Rules.md`...
+```
+`````
+
+**BAD** (marker in heading instead of inside fence):
+`````markdown
+## Prompt [ 01 / 05 ] - Analyze requirements
+
+```
+Read `__CARD_00-Rules.md`...
+```
+`````
+
 ## PRMT-EX-01: One Prompt Per Turn
 
 Each Prompt Block in a prompt file is a separate turn: submitted individually to the model, with the model response received before the next prompt is submitted. Concatenating all prompts into a single model submission is a format violation.
@@ -1173,3 +1285,255 @@ Read `__CARD_00-Rules.md` and `__STRUT_AuthImplementation.md` step P2-S3. Treat 
 Implement the user authentication module with JWT tokens as specified in `__STRUT_AuthImplementation.md` step P2-S3.
 ```
 `````
+
+## PRMT-HS-01: Hang-Safety Clause Required
+
+Implementation prompts (prompts that run commands, execute builds, run tests, or spawn processes) MUST include a hang-safety clause in the Constraints section. The clause states that no command may wait for a key, stdin, a pager, or an unbounded child. One hung command stops the entire prompt sequence — the execution engine cannot skip it.
+
+Research or analysis prompts that only read files are exempt. Prompts that run any command beyond file reads must include the clause.
+
+See `PROMPTS_ROBUSTNESS_GUIDES.md` for the clause template, project-specific banned lists, safe command patterns, and inter-prompt problem filing.
+
+Verifiable from artifact: check the Constraints section of each implementation prompt for a hang-safety statement. Prompts without any command execution are exempt.
+
+**BAD** (implementation prompt without hang-safety clause):
+`````markdown
+```
+Run the test suite and verify all tests pass.
+
+Constraints:
+- Do not modify test files
+- Re-running this prompt must not corrupt state or waste cost
+```
+`````
+
+**GOOD** (hang-safety clause present):
+`````markdown
+```
+Run the test suite and verify all tests pass.
+
+Constraints:
+- Do not modify test files
+- Re-running this prompt must not corrupt state or waste cost
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: git log without --no-pager. Test suites run with a 10-minute cap. On cap: kill, record in PROBLEMS.md, continue.
+```
+`````
+
+## PRMT-HS-02: Banned Command List Must Be Project-Specific
+
+The hang-safety clause must list project-specific commands known to hang. Generic hang risks (stdin, pager, unbounded children) apply to all projects, but the specific commands that trigger them vary by project. The banned list is built by scanning the project for scripts containing `pause`, `Read-Host`, `ReadKey`, CLI tools reading stdin without arguments, and `--watch` flags.
+
+Verifiable from artifact: check that the hang-safety clause names at least one project-specific banned command or explicitly states "no project-specific hang risks identified."
+
+**BAD** (generic only, no project-specific entries):
+`````markdown
+Hang safety: no command may wait for stdin or a pager.
+```
+`````
+
+**GOOD** (project-specific banned commands listed):
+`````markdown
+Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Banned: build.bat (contains pause), app.exe without -p (interactive console), 2>&1 with Blocking:true (pipe deadlock). Test suites run with a 10-minute cap. On cap: kill, record in PROBLEMS.md, continue.
+```
+`````
+
+## PRMT-HS-03: Time Caps on All Command Executions
+
+Every command that runs a process (test suites, builds, application runs, long-running scripts) must specify a time cap in the hang-safety clause or verification section. The cap prevents indefinite waits when a process hangs. Caps depend on command type: single test files (3 min), full suites (10 min), builds (15 min), application runs (3 min).
+
+Verifiable from artifact: check that each command-execution prompt specifies a time cap for long-running commands. Prompts that only run instant commands (git status, file reads) are exempt.
+
+**BAD** (no time cap on test suite execution):
+`````markdown
+Verify: Run `bun test`. All tests pass.
+```
+`````
+
+**GOOD** (time cap specified):
+`````markdown
+Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. All tests pass. On cap: kill, record in PROBLEMS.md, continue.
+```
+`````
+
+## PRMT-HS-04: On-Cap Behavior
+
+The hang-safety clause must specify what happens when a command exceeds its time cap: (1) kill the process tree, (2) record the command and cap in PROBLEMS.md, (3) continue with the next step. Never re-run the same command blocking after a cap.
+
+Verifiable from artifact: check that the hang-safety clause or verification section includes on-cap behavior: kill, record, continue.
+
+**BAD** (no on-cap behavior):
+`````markdown
+Hang safety: no command may wait for stdin. Test suites run with a 10-minute cap.
+```
+`````
+
+**GOOD** (on-cap behavior specified):
+`````markdown
+Hang safety: no command may wait for stdin. Test suites run with a 10-minute cap. On cap: stop the process tree, record command and cap in PROBLEMS.md, continue with the next step. Never re-run the same command blocking.
+```
+`````
+
+## PRMT-HS-05: Process Cleanup After Command Execution
+
+Prompts that spawn processes (test runners, builds, application runs) must specify process cleanup after execution. The clause must verify no orphan processes remain and stop them if found. This prevents orphaned processes from accumulating across prompts and consuming resources.
+
+Verifiable from artifact: check that prompts spawning processes include a cleanup statement: verify no orphans, stop if found.
+
+**BAD** (no cleanup after process-spawning command):
+`````markdown
+Verify: Run `bun test`. All tests pass.
+```
+`````
+
+**GOOD** (cleanup specified):
+`````markdown
+Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. After completion: `Get-Process [name]* -ErrorAction SilentlyContinue` returns nothing. Orphans stopped, count recorded in PROGRESS.md.
+```
+`````
+
+## PRMT-HS-06: No Interactive Commands
+
+No prompt may contain commands that wait for interactive input. This includes: stdin reads (`Read-Host`, `pause`, `Get-Credential`, `read`, `select`), pagers (`git log` without `--no-pager`, `less`, `more`), unbounded children (`--watch` flags, `Start-Process` of GUI applications), and `2>&1` with blocking execution (PowerShell pipe deadlock).
+
+Verifiable from artifact: scan each prompt for interactive command patterns. If found, check whether the prompt also specifies a non-interactive alternative or explicitly bans the interactive form.
+
+**BAD** (bare git log, launches pager):
+`````markdown
+Verify: Run `git log` to confirm the commit history.
+```
+`````
+
+**GOOD** (non-interactive git command):
+`````markdown
+Verify: Run `git --no-pager log -n 20` to confirm the commit history.
+```
+`````
+
+## PRMT-HS-07: Verification Names Specific Tests and Sweeps
+
+When a prompt changes code that has associated tests, the Verify section must name the specific test file(s) affected, not just "run tests." When a prompt removes concepts (old protocol, old naming), the Verify section must include a residual sweep command. When a prompt depends on prior steps, the Verify section must confirm the prior step is done.
+
+This prevents three glitches observed in the Lana-V2-Dev session: (1) test regressions surviving multiple prompts because "bun test green" did not name the affected test file, (2) removed concepts silently persisting, (3) implementation proceeding without spec prerequisites.
+
+Verifiable from artifact: check that verification sections name specific test files when code changes affect tests, include residual sweeps when concepts are removed, and confirm prior steps when dependencies exist.
+
+**BAD** (generic verification, no specific test file):
+`````markdown
+Verify: bun test green, bun tsc --noEmit green.
+```
+`````
+
+**GOOD** (specific test file named, residual sweep included):
+`````markdown
+Verify: Run `bun test tests/unit/prompt_assemble.test.ts`. All tests pass. `bun tsc --noEmit` — no type errors. `Select-String -Pattern 'guard_request' -Path src/` returns zero matches. STRUT step P3-S4 is `[x]` in `__STRUT_LANAV2HRNS.md`.
+```
+`````
+
+## PRMT-HS-08: Prior-Step Verification for Dependent Prompts
+
+When a prompt depends on a prior step (spec amendment before implementation, fixture creation before equivalence test), the prompt must verify the prior step is done before proceeding. This prevents STRUT sequencing violations where implementation runs without spec backing.
+
+Verifiable from artifact: check that dependent prompts include a prior-step verification in the opening or verify section: "Confirm STRUT step [ID] is `[x]` in [filename]."
+
+**BAD** (no prior-step check):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P3-S5.
+
+Implement the gate socket for all 15 tools.
+```
+`````
+
+**GOOD** (prior-step verification):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P3-S5.
+
+Confirm in PROGRESS.md that STRUT step P3-S4 is `[x]`. Stop if it is not.
+
+Implement the gate socket for all 15 tools.
+```
+`````
+
+## PRMT-RB-01: Findings Card Designated
+
+Every prompt sequence that risks encountering problems MUST designate a findings card — a card file loaded and updated by every prompt that needs it. The card records glitches, spec-code mismatches, and unexpected findings between prompts. The card is created once and appended to by every implementation prompt in the sequence. No prompt creates a new findings card; all append to the same one.
+
+Session PROBLEMS.md records problems encountered during prompt execution that must be approached later (blockers, deferred issues). The findings card captures ALL glitches including those fixed in-prompt, not just blockers. See PRMT-RB-07 for the PROBLEMS.md distinction.
+
+Verifiable from artifact: check that the prompt sequence names a `__CARD_[TOPIC]-Findings.md` card in at least one prompt or in the session setup.
+
+**BAD** (no findings card designated):
+`````markdown
+```
+Implement the authentication module. Run tests.
+```
+`````
+
+**GOOD** (findings card designated):
+`````markdown
+```
+Implement the authentication module. Run tests.
+
+Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
+```
+`````
+
+## PRMT-RB-02: Findings-Card Directive in Every Implementation Prompt
+
+Every implementation prompt MUST include a `Findings card:` directive pointing to the shared findings card. The directive goes after the hang-safety clause and before the closing protocol. Research prompts that run no commands are exempt but should include the directive if they might encounter unexpected findings.
+
+Verifiable from artifact: check that each implementation prompt contains a `Findings card:` line referencing the shared card.
+
+## PRMT-RB-03: Findings Card Read at Prompt Startup
+
+Each prompt loads the findings card at startup, after reading session cards and before starting work. The agent scans for unresolved entries from prior prompts that affect the current prompt's scope. Full entries are read only when a title matches the current prompt's work.
+
+Verifiable from artifact: check that the prompt's self-contained opening includes a directive to load the findings card, or that the card system start-of-prompt protocol includes a findings-card read step.
+
+## PRMT-RB-04: Glitches Filed in Findings Card Before End-of-Prompt Commit
+
+Glitches and findings are filed in the findings card before the end-of-prompt commit. The agent records what happened, why, and how to prevent it. Filing happens after verification and before the STRUT step is marked done.
+
+Verifiable from artifact: check that the card system end-of-prompt protocol or the prompt body includes a findings-card update step before the commit step.
+
+## PRMT-RB-05: Glitch Entry Format
+
+Each glitch entry in the findings card MUST record: title, severity (HIGH/MEDIUM/LOW), expected state (with prompt step ID and line), actual state, root cause, resolution (or PROBLEMS.md reference), and prevention note. Entries without all six fields are incomplete.
+
+Verifiable from artifact: check that entries in the findings card follow the six-field format.
+
+## PRMT-RB-06: Card System End-of-Prompt Protocol Includes Findings-Card Update
+
+When a prompt sequence uses a card system, the end-of-prompt protocol (card 00 Section 4) MUST include a findings-card update step: file glitches and findings in the findings card before marking the STRUT step done and committing. The start-of-prompt protocol (card 00 Section 3) MUST include a findings-card read step for unresolved entries from prior prompts.
+
+Verifiable from artifact: check that card 00 Section 3 includes a findings-card read step and Section 4 includes a findings-card update step.
+
+**BAD** (card 00 Section 4 without findings-card update):
+`````markdown
+## 4. End-of-prompt protocol
+1. Verification named in the prompt passed
+2. Mark the STRUT step [ ] -> [x]
+3. Append one line to session PROGRESS.md
+4. Record blockers in session PROBLEMS.md
+5. Commit both repos where changed
+```
+`````
+
+**GOOD** (card 00 Section 4 with findings-card update):
+`````markdown
+## 4. End-of-prompt protocol
+1. Verification named in the prompt passed
+2. File glitches and findings in __CARD_[TOPIC]-Findings.md
+3. Mark the STRUT step [ ] -> [x]
+4. Append one line to session PROGRESS.md
+5. Record blockers in session PROBLEMS.md
+6. Commit both repos where changed
+```
+`````
+
+## PRMT-RB-07: Session PROBLEMS.md Records Deferred Problems
+
+Session PROBLEMS.md records problems encountered during prompt execution that must be approached later. This includes: blockers that stopped a prompt from completing, deferred issues that could not be fixed in-prompt, and timeouts or hangs that require investigation. PROBLEMS.md does NOT replace the findings card — it records problems that need later attention, while the findings card captures ALL glitches including those fixed in-prompt.
+
+Verifiable from artifact: check that PROBLEMS.md entries describe problems requiring later attention, not detailed glitch logs. Glitch details belong in the findings card.

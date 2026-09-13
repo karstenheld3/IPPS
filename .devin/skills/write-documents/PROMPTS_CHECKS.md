@@ -12,6 +12,7 @@ Process Discipline (PD)
 - PRMT-PD-03: Agent checked effort budget when partitioning prompts
 - PRMT-PD-04: Agent referenced planning document in prompt sequence
 - PRMT-PD-05: Agent verified prompt file against PRMT-* rules after writing
+- PRMT-PD-06: Agent included position markers in sequences with 5+ prompts
 
 Quality Improvement (QI)
 - PRMT-QI-01: Is each prompt self-contained?
@@ -19,6 +20,8 @@ Quality Improvement (QI)
 - PRMT-QI-03: Are prompts scoped to the effort budget?
 - PRMT-QI-04: Do implementation prompts include idempotency constraints?
 - PRMT-QI-05: Does the sequence use context cards for shared state?
+- PRMT-QI-06: Does every implementation prompt include a hang-safety clause?
+- PRMT-QI-07: Does the sequence designate a findings card for inter-prompt problem filing?
 
 ## Process Discipline (PD)
 
@@ -57,6 +60,13 @@ Quality Improvement (QI)
 - Failure indicator: no verification evidence; prompt file contains rule violations that a verify pass would have caught (missing separators, no constraints, no verification criteria)
 - References: PRMT-ST-01 through PRMT-ST-05
 
+### PRMT-PD-06: Position Markers in Long Sequences
+
+- Action: Agent included `Prompt [ NN / NN ]` position markers inside each prompt's fence as first line for sequences with 5+ prompts; when using a planning document (PRMT-SC-06), marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
+- Evidence: each prompt's first line inside the fence contains a zero-padded position marker with current and total count; when a planning document is referenced, the marker line includes a summary with plan phase/step references matching the heading text
+- Failure indicator: 5+ prompt sequence with no position marker inside fence; marker in heading instead of inside fence; inconsistent zero-padding; planning document used but marker lacks plan summary
+- References: PRMT-FT-10
+
 ## Quality Improvement (QI)
 
 ### PRMT-QI-01: Self-Containment Quality
@@ -83,3 +93,13 @@ Quality Improvement (QI)
 
 - Question: Does the sequence use context cards for shared state instead of conversation references? Is shared information stored in durable files?
 - Improvement tip: Create `__CARD_*.md` files for shared information that does not have a stable home in an existing document. Each prompt reads and updates the relevant cards. Use references (document path + line numbers) when information has a stable home. Avoid duplicating content across prompts — store once, reference by path.
+
+### PRMT-QI-06: Hang-Safety Clause Quality
+
+- Question: Does every implementation prompt include a hang-safety clause with project-specific banned commands, time caps, and on-cap behavior?
+- Improvement tip: Add a hang-safety clause to the Constraints section of each implementation prompt. Reference `__CARD_01-Robustness.md` for the banned list instead of repeating it in every prompt. See `PROMPTS_EXAMPLE_02-RobustnessCard.md` for a complete robustness card example.
+
+### PRMT-QI-07: Findings Card Quality
+
+- Question: Does the sequence designate a findings card? Do prompts load it at startup and file glitches before commit?
+- Improvement tip: Create `__CARD_[TOPIC]-Findings.md` at sequence start. Add a `Findings card:` directive to every implementation prompt. File glitches in the card before end-of-prompt commit. Use the six-field entry format (severity, expected, actual, root cause, resolution, prevention). See `PROMPTS_EXAMPLE_03-FindingsCard.md` for a complete findings card example.

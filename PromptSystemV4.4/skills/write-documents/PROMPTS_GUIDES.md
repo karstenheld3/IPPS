@@ -147,7 +147,10 @@ Every prompt begins with three elements:
 
 Shared information between prompts is either referenced (document path + line numbers) or stored in context cards (`__CARD_*.md` files) that each prompt reads and updates. Use references when information has a stable home in a file. Use context cards when shared information does not have a stable home.
 
-For a complete example of a self-contained prompt sequence, see `PROMPTS_EXAMPLE_01-SelfContainedSequence.md`.
+For complete examples, see:
+- `PROMPTS_EXAMPLE_01-SelfContainedSequence.md` — 3-prompt self-contained sequence with STRUT anchor and context cards
+- `PROMPTS_EXAMPLE_02-RobustnessCard.md` — complete robustness card with banned commands, time caps, always rules
+- `PROMPTS_EXAMPLE_03-FindingsCard.md` — complete findings card with resolved glitches, unresolved blocker, six-field entry format
 
 ## 6b. Idempotency in Prompts
 
@@ -162,6 +165,43 @@ Key idempotency practices:
 - **No destructive operations without backup**: never delete a file then recreate it. Write to a temp file, verify, then atomically rename
 
 Implementation prompts should include an idempotency constraint in the Constraints section stating that re-running the prompt must not corrupt state or waste cost.
+
+## 6c. Hang-Safety in Prompts
+
+Prompt sequences run unattended. One command waiting for a keypress, stdin, a pager, or an unbounded child process blocks every later prompt in the file. The execution engine cannot skip a hung prompt. The entire sequence is dead.
+
+A well-structured prompt sequence with precise objectives, clean state flow, and verified idempotency is worthless if the agent issues a single hanging command in prompt 3 of 5. Hangs are the most common failure mode in unattended prompt execution.
+
+**Every implementation prompt** (any prompt that runs commands) MUST include a hang-safety clause in the Constraints section. The clause has three parts:
+
+1. **Prohibition**: no command may wait for a key, stdin, a pager, or an unbounded child
+2. **Banned list**: project-specific commands known to hang
+3. **Cap behavior**: what to do when a command exceeds its time cap
+
+See `PROMPTS_ROBUSTNESS_GUIDES.md` for the clause template, project-specific banned lists, safe command patterns, findings-card mechanism, and lessons from a harness rewrite session. Verify against PRMT-HS-01 through PRMT-HS-08 and PRMT-RB-01 through PRMT-RB-07 in `PROMPTS_RULES.md`.
+
+### Hang-Safety Clause Template
+
+```
+Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Banned: [project-specific list]. Test suites run non-blocking with a [N]-minute cap. On cap: kill the process tree, record command and cap in PROBLEMS.md, continue.
+```
+
+### Common Hang Risks
+
+- `2>&1` with `Blocking: true` — PowerShell pipe deadlock (reading one stream to completion before the other deadlocks when the unread stream fills its pipe buffer)
+- `git log` without `--no-pager` — launches a pager
+- `build.bat`, `ship.bat` — often contain `pause`
+- `bun --watch`, `npm run dev` — never terminate
+- `Read-Host`, `pause`, `Get-Credential` — wait for stdin
+- Sequential `run_command` approvals — agent appears frozen between commands
+
+### Verification Gaps Beyond Hangs
+
+A harness rewrite session revealed verification gaps that silently pass as "done." Include these in Verify sections:
+
+- **Name specific test files** when code changes affect tests (prevents regressions surviving multiple prompts)
+- **Residual sweeps** when concepts are removed (prevents old terms persisting in code)
+- **Prior-step confirmation** when a prompt depends on a prior step (prevents STRUT sequencing violations)
 
 ## 7. Select Fence Length
 
@@ -282,11 +322,44 @@ Omit frontmatter when:
 - **Never sent to model**: Frontmatter is metadata for the execution engine, not prompt content
 - **File start only**: Frontmatter must be the first content in the file (no blank lines before opening `---`)
 
-## 11. Execution Model: One Prompt Per Turn
+## 11. Prompt Position Markers in Long Sequences
+
+Sequences with 5 or more prompts MUST include a position marker as the first line inside each prompt's fence (PRMT-FT-10). The marker shows the current prompt number and total count in zero-padded format:
+
+```
+Prompt [ 01 / 23 ]
+Read `__CARD_00-Rules.md`...
+```
+
+When the sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the marker line MUST also include a summary with plan phase/step references. The summary matches the heading text, giving the model the same orientation the heading gives the human reader:
+
+```
+Prompt [ 01 / 07 ] - P4-S1 U10 stage A: untrusted-content delimiters in specs
+Read `__CARD_00-Rules.md`...
+```
+
+### 11.1 Why Position Markers Matter
+
+- **Orientation**: The agent knows how far along the sequence is at a glance
+- **Progress tracking**: The marker complements STRUT step IDs — STRUT tracks the plan, the marker tracks the file
+- **Resume after interruption**: When reloading a prompt file after context reset, the marker shows which prompt is next without counting fences
+- **Human readability**: When reviewing a long prompt file, the marker makes navigation immediate
+- **Plan summary**: When using a planning document, the summary in the marker line gives the model the same phase/step context the heading gives the human reader — without requiring the model to read the heading (which is commentary, never sent)
+
+### 11.2 Format Rules
+
+- Zero-padded to match the width of the total count (5 prompts → 2 digits, 23 prompts → 2 digits)
+- Total count is the number of prompts in the file, not STRUT steps
+- For sub-chains (PRMT-SC-04): total count is the number of prompts in the current sub-chain file
+- The marker goes inside the fence as the first line of prompt content — the model sees it for progress tracking
+- When using a planning document (PRMT-SC-06), the marker line includes a summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`. The summary matches the heading text
+- Optional for sequences with fewer than 5 prompts
+
+## 12. Execution Model: One Prompt Per Turn
 
 Prompt files are NOT executed as a single run. Each Prompt Block is a separate turn: submitted individually to the model, with the model response received before the next prompt is submitted.
 
-### 11.1 Why Separate Turns Matter
+### 12.1 Why Separate Turns Matter
 
 Each turn receives the agent's full context engineering, input rendering, and compute budget. This is the entire point of prompt files - working around the context, compute, and output limits of a single model run:
 
@@ -294,20 +367,20 @@ Each turn receives the agent's full context engineering, input rendering, and co
 - **Compute budget**: Each turn gets fresh reasoning compute. A 3-prompt sequence gets 3x the compute when run as separate turns vs one concatenated run.
 - **Execution depth**: A single run produces one response with limited depth. Separate turns allow each step to produce a full response, building on prior turns.
 
-### 11.2 Agent Role vs Execution Engine Role
+### 12.2 Agent Role vs Execution Engine Role
 
 The writing agent creates the prompt file. The execution engine (Lana, headless runner, or human submitting one prompt at a time) runs it. These are separate roles.
 
 An agent that writes a prompt file and then immediately executes all prompts in a single response is NOT executing the prompt file - it is circumventing the format. The agent collapses the sequence into one turn, losing per-turn context engineering and compute allocation.
 
-### 11.3 What to Do Instead
+### 12.3 What to Do Instead
 
 After writing a prompt file:
 - Deliver the file to the user or execution engine
 - Do NOT self-execute the prompts in the same response
 - If the user asks to execute, hand off to the execution engine or guide the user to run it
 
-## 12. Review Checklist
+## 13. Review Checklist
 
 Before considering the prompts file complete:
 
@@ -324,6 +397,7 @@ Before considering the prompts file complete:
 - [ ] Fence lengths exceed all inner fence lengths within each prompt
 - [ ] `---` separator between every pair of consecutive prompts
 - [ ] If headings are used, ALL prompts have headings (PRMT-FT-07)
+- [ ] If 5+ prompts, each prompt includes `Prompt [ NN / NN ]` position marker as first line inside fence (PRMT-FT-10); when using a planning document, marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
 - [ ] No prompt content outside fences (would be silently dropped)
 - [ ] Precision tokens preserved: constraints, verification, disambiguation not cut for brevity (PRMT-CT-05)
 - [ ] Signal redundancy preserved: explicit referents, not pronouns for ambiguous antecedents (PRMT-CT-06)
@@ -336,3 +410,17 @@ Before considering the prompts file complete:
 - [ ] Frontmatter specifies effort level; prompt count matches effort budget (PRMT-SC-05)
 - [ ] Prompt sequences from planning documents reference the document by filename and step ID (PRMT-SC-06)
 - [ ] Agent does not self-execute the prompt file (PRMT-EX-02): file is delivered, not run in one response
+- [ ] Every implementation prompt includes a hang-safety clause: prohibition, banned list, cap behavior (PRMT-HS-01)
+- [ ] Banned command list is project-specific, not generic only (PRMT-HS-02)
+- [ ] Time caps specified for all command executions (PRMT-HS-03)
+- [ ] On-cap behavior: kill, record in PROBLEMS.md, continue (PRMT-HS-04)
+- [ ] Process cleanup after command execution: verify no orphans (PRMT-HS-05)
+- [ ] No interactive commands: no stdin reads, pagers, unbounded children, 2>&1 blocking (PRMT-HS-06)
+- [ ] Verification names specific test files when code changes affect tests (PRMT-HS-07)
+- [ ] Verification includes residual sweeps when concepts are removed (PRMT-HS-07)
+- [ ] Dependent prompts verify prior step is done before proceeding (PRMT-HS-08)
+- [ ] Findings card designated for the sequence (PRMT-RB-01)
+- [ ] Every implementation prompt includes a Findings card directive (PRMT-RB-02)
+- [ ] Findings card loaded at prompt startup for unresolved entries (PRMT-RB-03)
+- [ ] Glitches filed in findings card before end-of-prompt commit (PRMT-RB-04)
+- [ ] Session PROBLEMS.md records deferred problems, not detailed glitch logs (PRMT-RB-07)

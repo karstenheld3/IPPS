@@ -173,11 +173,13 @@ These rules define what makes a file syntactically valid. A parser MUST reject f
 
 Content quality is governed by `PROMPTS_RULES.md` (PRMT-* rules). This spec does not replicate those rules. Key categories:
 
-- **PRMT-FT-***: Format rules (overlap with FR-01 through FR-06 above)
+- **PRMT-FT-***: Format rules (overlap with FR-01 through FR-06 above, plus PRMT-FT-10 position markers with plan summary for 5+ prompt sequences)
 - **PRMT-ST-***: Structure rules (objective, constraints, verification, reasoning mode, density)
 - **PRMT-SQ-***: Sequence rules (no contradictions, explicit dependencies, commentary)
 - **PRMT-CT-***: Content rules (specificity, negative constraints, observable verification, precision)
 - **PRMT-EX-***: Execution rules (one prompt per turn, no self-execution)
+- **PRMT-HS-***: Hang safety rules (hang-safety clause, banned commands, time caps, process cleanup, timeout execution pattern)
+- **PRMT-RB-***: Robustness rules (findings card designated, findings-card directive, card read at startup, glitches filed before commit, entry format, card system integration, PROBLEMS.md distinction)
 - **PRMT-NM-***: Naming rules (filename pattern, topic naming)
 
 ### Naming Convention
@@ -220,7 +222,15 @@ Content quality is governed by `PROMPTS_RULES.md` (PRMT-* rules). This spec does
 
 **IPPSPRMTFMT-DD-08:** Heading consistency. Rationale: Markdown headings before each prompt improve human readability - scan structure, locate prompts, understand flow. Using headings is recommended (SHOULD) but not required. However, if headings are used for any prompt's Commentary, all prompts MUST have headings for consistency. Mixed files (some prompts with headings, some without) are invalid. Enforced by PRMT-FT-07.
 
+**IPPSPRMTFMT-DD-11:** Prompt position markers in long sequences. Rationale: Sequences with 5+ prompts benefit from a `Prompt [ NN / NN ]` marker as the first line inside each prompt's fence. The marker provides orientation (how far along), progress tracking (complements STRUT step IDs), and resume support (which prompt is next without counting fences). When the sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the marker line MUST also include a summary with plan phase/step references: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`. The summary matches the heading text, giving the model the same orientation the heading gives the human reader — without requiring the model to read the heading (which is commentary, never sent). The marker is model content (inside fence), not commentary. Optional for sequences under 5 prompts. Enforced by PRMT-FT-10.
+
 **IPPSPRMTFMT-DD-09:** Optional Execution Frontmatter. Rationale: Execution hints (intended model, context window, reasoning settings) help the execution engine select appropriate configuration. Frontmatter is OPTIONAL - the execution engine decides whether to honor it or use its own configuration. This enables portability: the same prompt file can run on different engines with different models. Frontmatter is unambiguous with Separators because it only appears at the file start (before any fence), while Separators only appear between Prompt Blocks (after a Closing Fence).
+
+**IPPSPRMTFMT-DD-12:** Hang-safety clause in implementation prompts. Rationale: Implementation prompts run commands that can hang indefinitely (pipe deadlocks, pagers, interactive prompts, unbounded child processes). A hang-safety clause with project-specific banned commands, time caps, and on-cap behavior prevents indefinite hangs from blocking the entire sequence. The clause is a negative constraint in the Constraints section. Enforced by PRMT-HS-01 through PRMT-HS-08.
+
+**IPPSPRMTFMT-DD-13:** Findings card for inter-prompt problem filing. Rationale: Glitches fixed in-prompt are invisible to later prompts without a shared record. A findings card (`__CARD_[TOPIC]-Findings.md`) loaded and updated by every prompt captures ALL glitches (including those fixed in-prompt), root causes, resolutions, and prevention notes. Session PROBLEMS.md records only deferred problems (blockers, deferred issues) — not detailed glitch logs. The findings card is a card, not a session file. Enforced by PRMT-RB-01 through PRMT-RB-07.
+
+**IPPSPRMTFMT-DD-14:** Timeout execution pattern for hang-risky commands. Rationale: Commands without native safe parameters (e.g., `Get-Content` on locked files) can hang indefinitely even with always rules in place. A `Start-Process` + `WaitForExit` wrapper with recursive `Stop-ProcessTree` provides a safety net: separate process isolation (main session unblocked), stderr-to-file redirection (no pipe deadlock), recursive child process kill (grandchildren included), and null-safe output reading. This is the second tier in a two-tier defense — always rules prevent (tier 1), timeout cap catches (tier 2). Tested with 17 cases covering basic hangs, stdin waits, orphaned children, 3-level recursive trees, race conditions, and dead-PID safety. Enforced by PRMT-HS-03.
 
 ## 6. Key Mechanisms
 
@@ -368,6 +378,21 @@ Verify: Run `pnpm test:auth`. All tests pass.
 - Maximum file size is limited by the agent's context window, not by the format
 
 ## 9. Document History
+
+**[2026-09-13 13:10]**
+- Changed: DD-11 corrected — marker goes inside fence (not heading), added plan summary requirement when using planning document (PRMT-SC-06)
+- Changed: PRMT-FT-* reference updated to mention plan summary in position markers
+
+**[2026-09-12 20:05]**
+- Added: DD-14 Timeout execution pattern for hang-risky commands (Start-Process + WaitForExit with recursive Stop-ProcessTree, two-tier defense, tested with 17 cases)
+- Changed: PRMT-HS-* description updated to include timeout execution pattern
+
+**[2026-09-12 19:35]**
+- Added: DD-11 Prompt position markers in long sequences (5+ prompts MUST include `Prompt [ NN / NN ]` in headings)
+- Added: DD-12 Hang-safety clause in implementation prompts (PRMT-HS-01 through PRMT-HS-08)
+- Added: DD-13 Findings card for inter-prompt problem filing (PRMT-RB-01 through PRMT-RB-07)
+- Added: PRMT-HS-* and PRMT-RB-* rule categories in Content Quality Rules section
+- Changed: PRMT-FT-* reference updated to include PRMT-FT-10
 
 **[2026-09-05 16:56]**
 - Changed: FR-05 commentary notes MUST be wrapped in HTML comments (`<!-- ... -->`), headings remain plain Markdown
