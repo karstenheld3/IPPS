@@ -610,7 +610,7 @@ function New-DiffReport {
     $summaryParts += "$($deletes.Count) delete"
     $summaryParts += "$($skips.Count) skip"
     $summaryParts += "$($unchanged.Count) unchanged"
-    [void]$sb.AppendLine("Summary: $($summaryParts -join ', ').")
+    [void]$sb.AppendLine("Summary: '$TargetPath' - $($summaryParts -join ', ').")
 
     if ($hasChanges) {
         [void]$sb.AppendLine('RESULT: CHANGES FOUND')
@@ -745,7 +745,7 @@ function Invoke-Execute {
     $summaryParts += "$($deletes.Count) deleted"
     $summaryParts += "$($skips.Count) skipped"
     [void]$sb.AppendLine('')
-    [void]$sb.AppendLine("Summary: $($summaryParts -join ', ').")
+    [void]$sb.AppendLine("Summary: '$TargetPath' - $($summaryParts -join ', ').")
 
     if ($hasErrors) {
         [void]$sb.AppendLine('RESULT: PARTIAL FAIL')
@@ -882,8 +882,6 @@ foreach ($tgtEntry in $syncConfig.targets) {
         # Source files come from targetPath (downstream), compare against sourcePath (upstream)
         $enumPath = $targetPath
         $compareRoot = $sourcePath
-        $displaySource = $tgtEntry.path
-        $displayTarget = $tgtEntry.source
 
         # Check enum path exists and is a directory
         if (-not (Test-Path -LiteralPath $enumPath)) {
@@ -926,11 +924,11 @@ foreach ($tgtEntry in $syncConfig.targets) {
         if ($changes.Count -gt 0) { $hasAnyChanges = $true }
 
         if ($diff) {
-            $report = New-DiffReport -Results $results -SourcePath $displaySource -TargetPath $displayTarget -ConfigPath $configPath -Excluded @() -VerboseMode:$showVerbose -StartTime $startTime
+            $report = New-DiffReport -Results $results -SourcePath $targetPath -TargetPath $sourcePath -ConfigPath $configPath -Excluded @() -VerboseMode:$showVerbose -StartTime $startTime
             [void]$allOutput.AppendLine($report)
             [void]$allOutput.AppendLine('')
         } elseif ($execute) {
-            $execResult = Invoke-Execute -Results $results -SourcePath $displaySource -TargetPath $displayTarget -ConfigPath $configPath
+            $execResult = Invoke-Execute -Results $results -SourcePath $targetPath -TargetPath $sourcePath -ConfigPath $configPath
             [void]$allOutput.AppendLine($execResult.Output)
             [void]$allOutput.AppendLine('')
             if ($execResult.HasErrors) { $hasAnyErrors = $true }
@@ -986,11 +984,11 @@ foreach ($tgtEntry in $syncConfig.targets) {
         if ($changes.Count -gt 0) { $hasAnyChanges = $true }
 
         if ($diff) {
-            $report = New-DiffReport -Results $results -SourcePath $tgtEntry.source -TargetPath $tgtEntry.path -ConfigPath $configPath -Excluded $filterResult.Excluded -VerboseMode:$showVerbose -StartTime $startTime
+            $report = New-DiffReport -Results $results -SourcePath $sourcePath -TargetPath $targetPath -ConfigPath $configPath -Excluded $filterResult.Excluded -VerboseMode:$showVerbose -StartTime $startTime
             [void]$allOutput.AppendLine($report)
             [void]$allOutput.AppendLine('')
         } elseif ($execute) {
-            $execResult = Invoke-Execute -Results $results -SourcePath $tgtEntry.source -TargetPath $tgtEntry.path -ConfigPath $configPath
+            $execResult = Invoke-Execute -Results $results -SourcePath $sourcePath -TargetPath $targetPath -ConfigPath $configPath
             [void]$allOutput.AppendLine($execResult.Output)
             [void]$allOutput.AppendLine('')
             if ($execResult.HasErrors) { $hasAnyErrors = $true }

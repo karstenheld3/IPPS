@@ -21,6 +21,7 @@ Autonomous self-improvement in four phases: scan with pre-flight research, fix v
 
 - **BACKUP FIRST (GATE)** - Create `_vN` backups of ALL scoped files BEFORE any modification. No backup = no edit. Verify backups exist before entering Phase 2. Never delete backups - only user may delete them. **EXCEPTION: Code files** - NEVER create `_vN` copies of source code. Instead, ensure clean working tree (commit unrelated changes first if dirty), then commit improvements AFTER applying them via `/commit` workflow. The improvement commit's diff IS the change record (revert via `git revert HEAD` or `git checkout HEAD~1 -- <file>`)
 - **NEVER ask questions** - Derive goal or best option from the previous prompt, or from conversation context. Act on best inference
+- **Session goal focus** - Derive session goal from NOTES.md, PROGRESS.md, or conversation context. Phase 1 prioritizes findings related to the session goal. Phase 3 selects improvements aligned with the session goal. Unrelated findings → defer to `[DEFERRED_FILE]` with "not aligned with session goal" rationale
 - **Depth over breadth** - Improve ONE thing exhaustively and prove it justified, not a large list of half-baked, assumed, untested improvements
 - **STRUT self-tracking** - Create STRUT plan at start via `/write-strut`, track progress, delete STRUT file after completion
 - Phase 1 (scan) → Phase 2 (fix violations) → Phase 3 (focused improvement) → Phase 4 (polish) - strict order
@@ -445,7 +446,8 @@ Detection: determine context from file naming and content, then apply matching s
 ## Setup
 
 1. **Scope**: file path → that file; folder → all .md/code; none → conversation context
-2. **Detect context** per file:
+2. **Derive session goal** - Read NOTES.md (session or project), PROGRESS.md, and conversation context. Extract the current session goal in one sentence. If no session goal is derivable, use the scoped artifact's purpose as the goal. State the derived goal in output: `Session goal: <one sentence>`
+3. **Detect context** per file:
    - `_INFO_*` or Sources section with source IDs → Research Output
    - `_SPEC_*` or FR-XX/DD-XX IDs → SPEC Document
    - `_IMPL_*` or IS-XX IDs → IMPL Plan
@@ -460,20 +462,20 @@ Detection: determine context from file naming and content, then apply matching s
    - `_PROMPTS_*` or first non-empty line is opening fence with `---` separators → Prompts Files
    - Solution approaches in tracking docs → Problem Solving
    - No match → No Context Match
-3. **Re-read dependencies**:
+4. **Re-read dependencies**:
    - Rules: `[AGENT_FOLDER]/rules/*.md`
    - Context-specific templates and rules (see Phase 1 reads per context)
    - Writing quality: `APAPALAN_RULES.md` + `MECT_WRITING_RULES.md` (@skills:write-documents)
    - Code quality: `MECT_CODING_RULES.md` (@skills:coding-conventions)
    - Workspace: README, NOTES, ID-REGISTRY, FAILS, LEARNINGS
    - Session: NOTES, PROBLEMS, PROGRESS (if SESSION-MODE)
-4. **Derive `[DEFERRED_FILE]`** - Unique per improve chain to enable parallel runs. Uses `__` prefix (scaffolding convention). Create from @skills:write-documents `DEFERRED_IMPROVEMENTS_TEMPLATE.md` with proper header block (Doc ID, Goal, Target file, Timeline, Depends on):
+5. **Derive `[DEFERRED_FILE]`** - Unique per improve chain to enable parallel runs. Uses `__` prefix (scaffolding convention). Create from @skills:write-documents `DEFERRED_IMPROVEMENTS_TEMPLATE.md` with proper header block (Doc ID, Goal, Target file, Timeline, Depends on):
    - **Single file**: `__<filename_without_ext>_DEFERRED_IMPROVEMENTS.md` in same directory
    - **Folder**: `__<foldername>_DEFERRED_IMPROVEMENTS.md` in that folder
    - **Conversation context**: `__<session_topic_or_timestamp>_DEFERRED_IMPROVEMENTS.md` in session folder
    - Example: scope `_INFO_CRAWLER_SOURCES.md` → `__INFO_CRAWLER_SOURCES_DEFERRED_IMPROVEMENTS.md`
-5. **Create STRUT plan** via `/write-strut` - Track phases 1-4 with checkboxes. Save as `.tmp_STRUT_IMPROVE_<YYYY-MM-DD_HH-MM>.md` in scope folder (or session folder in SESSION-MODE).
-6. **Backup scoped files** - MANDATORY. Execute IMMEDIATELY after step 5, BEFORE Phase 1:
+6. **Create STRUT plan** via `/write-strut` - Track phases 1-4 with checkboxes. Save as `.tmp_STRUT_IMPROVE_<YYYY-MM-DD_HH-MM>.md` in scope folder (or session folder in SESSION-MODE).
+7. **Backup scoped files** - MANDATORY. Execute IMMEDIATELY after step 6, BEFORE Phase 1:
    - **Code files** (`.py`, `.ps1`, `.js`, `.ts`, `.jsx`, `.tsx`, `.css`, `.html`, etc.):
      - **NEVER create `_vN` copies** of source code files
      - **CLEAN WORKING TREE GATE**: Verify scoped code files have no uncommitted changes (`git status`). If dirty, execute `/commit` workflow on those files first with an appropriate message (NOT the improvement commit - that comes after)
@@ -495,19 +497,21 @@ Lightweight pass to discover what CAN be improved and how easily.
 
 1. **Scan** - Apply GLOBAL Issue Categories (SOCAS) + context-specific specialized issues. Classify each finding as:
    - **Rule violation** - Broken ref, ID error, SOCAS violation, formatting issue → bucket for Phase 2
-   - **Improvement candidate** - Enrichment opportunity requiring research → bucket for Phase 3
-2. **Pre-flight research** - Execute context-specific Phase 1 research (see each context section) to understand effort and impact of each improvement candidate. Code: research only, no generation.
-3. **Rank candidates** - Order improvement candidates by impact-to-effort ratio based on research findings. Each candidate gets a one-line summary: what, why, estimated effort.
+   - **Goal-aligned improvement** - Enrichment opportunity related to session goal → bucket for Phase 3
+   - **Unrelated improvement** - Valid but not aligned with session goal → bucket for `[DEFERRED_FILE]` with "not aligned with session goal" rationale
+2. **Pre-flight research** - Execute context-specific Phase 1 research (see each context section) to understand effort and impact of each goal-aligned improvement candidate. Code: research only, no generation.
+3. **Rank candidates** - Order goal-aligned improvement candidates by impact-to-effort ratio based on research findings. Each candidate gets a one-line summary: what, why, estimated effort, goal alignment.
 
-**Output**: Two lists - rule violations (Phase 2) and ranked improvement candidates (Phase 3).
+**Output**: Two lists - rule violations (Phase 2) and ranked goal-aligned improvement candidates (Phase 3). Unrelated improvements already deferred to `[DEFERRED_FILE]`.
 
 ### Gate: Phase 1 → Phase 2
 
 - [ ] All files in scope scanned
 - [ ] Rule violations separated from improvement candidates
-- [ ] Pre-flight research completed for improvement candidates
+- [ ] Unrelated improvements deferred to `[DEFERRED_FILE]` with rationale
+- [ ] Pre-flight research completed for goal-aligned candidates
 - [ ] Candidates ranked by impact-to-effort ratio
-- [ ] **BACKUP GATE**: Safety net exists for EVERY file in scope (created in Setup step 6). Code files: working tree is clean (HEAD = baseline). Non-code files: `_vN` backup exists. If missing, STOP and fix now. Do NOT proceed to Phase 2 without safety net.
+- [ ] **BACKUP GATE**: Safety net exists for EVERY file in scope (created in Setup step 7). Code files: working tree is clean (HEAD = baseline). Non-code files: `_vN` backup exists. If missing, STOP and fix now. Do NOT proceed to Phase 2 without safety net.
 
 Pass: Proceed to Phase 2 | Fail: Continue Phase 1 or create missing backups
 
@@ -533,7 +537,7 @@ Pass: Proceed to Phase 3 | Fail: Continue Phase 2
 
 Select ONE improvement. Research exhaustively. Prove justification. Apply or defer.
 
-1. **Select** - Pick highest-ranked candidate from Phase 1. If previous `[DEFERRED_FILE]` exists, check it to avoid re-proposing deferred items.
+1. **Select** - Pick highest-ranked goal-aligned candidate from Phase 1. If previous `[DEFERRED_FILE]` exists, check it to avoid re-proposing deferred items. Skip any candidate not aligned with the session goal.
 2. **Deep research** - Execute context-specific Adversarial Collaborator techniques for the selected improvement only. Gather evidence: web research, local codebase analysis, examples, tests.
 3. **Pragmatic filter** - Run the 6 pragmatic questions (see GLOBAL-RULES). Requires evidence for question 6 (Proven?).
 4. **Decision**:
