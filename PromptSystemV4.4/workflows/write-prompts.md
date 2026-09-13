@@ -119,6 +119,7 @@ prompt_system: IPPS
 ## Prompt 1 - Setup
 
 ```
+Prompt [ 01 / 07 ] - [plan step ID] [brief summary]
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
@@ -139,6 +140,7 @@ Verify: [Machine-checkable done criteria]
 <!-- Optional notes explaining the next prompt's purpose. -->
 
 ````
+Prompt [ 02 / 07 ] - [plan step ID] [brief summary]
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
@@ -162,6 +164,7 @@ Verify: [Observable success criteria]
 <!-- Verify prompts 1-2 against STRUT before continuing. -->
 
 ```
+Prompt [ 03 / 07 ] - Verification checkpoint after prompts 1-2
 Read [rules card] and [STRUT filename]. Treat earlier conversation as compacted. Verification checkpoint after prompts 1-2.
 
 /verify
@@ -178,6 +181,7 @@ all gaps and remaining work.
 ## Prompt 3 - Implement Next Feature
 
 ```
+Prompt [ 04 / 07 ] - [plan step ID] [brief summary]
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
@@ -196,6 +200,7 @@ Verify: [Machine-checkable done criteria]
 ## Prompt 4 - Finalize
 
 ```
+Prompt [ 05 / 07 ] - [plan step ID] [brief summary]
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
@@ -216,6 +221,7 @@ Verify: [Machine-checkable done criteria]
 <!-- Verify prompts 3-4 against STRUT before final prompt. -->
 
 ```
+Prompt [ 06 / 07 ] - Verification checkpoint after prompts 3-4
 Read [rules card] and [STRUT filename]. Treat earlier conversation as compacted. Verification checkpoint after prompts 3-4.
 
 /verify
@@ -232,10 +238,15 @@ all gaps and remaining work.
 ## Prompt 5 - Final Verification
 
 ```
+Prompt [ 07 / 07 ] - [plan step ID] [brief summary]
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
 Final verification prompt. Run the full test suite to confirm no regressions.
+
+Constraints:
+- Re-running this prompt must not corrupt state or waste cost
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
 Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. All tests pass.
 ```
@@ -326,6 +337,15 @@ Scan every fenced prompt for shell commands used for file operations and full-su
 
 1. **Tool preference** (PRMT-CT-12): Scan prompt bodies (excluding Verify sections) for shell file-operation commands: `Select-String`, `Get-ChildItem`, `Get-Content`, `cat`, `grep`, `find`, `rg.exe`. If found outside Verify sections, rewrite as agent tool directives ("Search for X using the grep_search tool", "Read `file.ts`", "Find all .ts files using the find_by_name tool").
 2. **Test scope** (PRMT-HS-09): Scan Verify sections for bare `bun test`, `npm test`, or equivalent full-suite commands in implementation prompts. If found, replace with specific test file paths. Full suite is acceptable only in a prompt explicitly marked as final verification.
+
+### Step 5e: Interleaved Verification Pass
+
+Check whether the sequence needs interleaved verification prompts (PRMT-SQ-04):
+
+1. Count implementation prompts (exclude verification prompts from the count)
+2. If 4+ implementation prompts: check for `## Verification Checkpoint N` headings between implementation prompts containing `/verify` and `/fix` workflow calls
+3. If missing: insert verification checkpoints every 2-3 implementation prompts using the template from Step 4a
+4. Verify checkpoint prompts are self-contained (PRMT-SC-01), do NOT count toward chain length (PRMT-SC-04), and use `## Verification Checkpoint N` heading (not `## Prompt N`)
 
 # FROM TEMPLATE MODE
 
