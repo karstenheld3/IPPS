@@ -99,6 +99,42 @@ Not every prompt needs all four. A simple "list all Python files" needs only the
 
 When a prompt must produce output in a specific format, add an optional 5th element: **Example** (between Constraints and Verification). See section 9 for when examples are worth the tokens.
 
+## 3a. Interleaved Verification Prompts
+
+Sequences with 4 or more implementation prompts must include interleaved verification prompts every 2-3 implementation prompts (PRMT-SQ-04). A verification prompt runs `/verify` against the planning document (STRUT or TASKS) and the prompts file for prompts executed so far, then runs `/fix` to address gaps and remaining work.
+
+**Why interleave verification**: Without checkpoints, spec-code drift accumulates across prompts. A Lana-V2-Dev SecurityRemediation sequence had 5 sub-chains with 3-5 prompts each. Drift was only caught at the end, requiring expensive rework across the full sequence. Interleaved verification catches drift at the point of occurrence, limiting blast radius to 2-3 prompts.
+
+**Verification prompt structure**:
+- Self-contained opening (PRMT-SC-01): reads rules card and planning document
+- `/verify` workflow call on standalone line (PRMT-CT-08): verifies current state against planning document for prompts executed so far
+- `/fix` workflow call on standalone line (PRMT-CT-08): fixes all gaps and remaining work
+- No implementation content — no code, tests, or builds
+- Does NOT count toward chain length limit (PRMT-SC-04)
+
+**Placement**: Insert after every 2-3 implementation prompts. For a 5-prompt sequence: after prompt 2 and after prompt 4. For a 3-prompt sequence: no interleaved verification needed (final verification suffices).
+
+**Example verification prompt**:
+`````markdown
+## Verification Checkpoint 1
+
+<!-- Verify prompts 1-2 against STRUT before continuing. -->
+
+```
+Read `__CARD_00-Rules.md` and `__STRUT_[Topic].md`. Treat earlier conversation as compacted. Verification checkpoint after prompts 1-2.
+
+/verify
+
+current state against `__STRUT_[Topic].md` for prompts executed so far.
+
+/fix
+
+all gaps and remaining work.
+```
+`````
+
+**Heading convention**: Use `## Verification Checkpoint N` (not `## Prompt N`) to distinguish verification prompts from implementation prompts. This makes it easy to count implementation prompts for chain length and identify which prompts are checkpoints.
+
 ## 4. Plan State Flow
 
 In a `_PROMPTS_[Topic].md` file, prompts run as turns of one session but must not rely on conversation history. Each prompt must be self-contained: it names its dependencies by file path, not by conversation reference. The chain holds the state through files, not through model memory of prior prompts.
@@ -451,4 +487,8 @@ Before considering the prompts file complete:
 - [ ] Glitches filed in findings card before end-of-prompt commit (PRMT-RB-04)
 - [ ] Session PROBLEMS.md records deferred problems, not detailed glitch logs (PRMT-RB-07)
 - [ ] No shell commands for file search/read in prompt bodies — agent tools only (PRMT-CT-12)
+- [ ] No contradictions between prompts in the same file (PRMT-SQ-01)
+- [ ] Dependent prompts reference prior output by file path (PRMT-SQ-02)
+- [ ] Commentary documents expected state between prompts (PRMT-SQ-03)
+- [ ] Sequences with 4+ implementation prompts include interleaved verification prompts (PRMT-SQ-04)
 - [ ] Verification runs specific test files, not full suite, during implementation steps (PRMT-HS-09)

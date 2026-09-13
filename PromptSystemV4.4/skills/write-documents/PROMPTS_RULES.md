@@ -29,6 +29,7 @@ Sequence (SQ)
 - PRMT-SQ-01: No contradiction between prompts
 - PRMT-SQ-02: Dependent prompts reference prior output explicitly
 - PRMT-SQ-03: Commentary documents expected state between prompts
+- PRMT-SQ-04: Interleaved verification prompts in sequences with 4+ implementation prompts
 
 Content (CT)
 - PRMT-CT-01: Objectives are specific and verifiable
@@ -1558,6 +1559,104 @@ Verifiable from artifact: check that card 00 Section 3 includes a findings-card 
 Session PROBLEMS.md records problems encountered during prompt execution that must be approached later. This includes: blockers that stopped a prompt from completing, deferred issues that could not be fixed in-prompt, and timeouts or hangs that require investigation. PROBLEMS.md does NOT replace the findings card — it records problems that need later attention, while the findings card captures ALL glitches including those fixed in-prompt.
 
 Verifiable from artifact: check that PROBLEMS.md entries describe problems requiring later attention, not detailed glitch logs. Glitch details belong in the findings card.
+
+## PRMT-SQ-04: Interleaved Verification Prompts
+
+Sequences with 4 or more implementation prompts must include interleaved verification prompts every 2-3 implementation prompts. A verification prompt runs `/verify` against the planning document (STRUT or TASKS) and the prompts file for prompts executed so far, then runs `/fix` to address gaps and remaining work. This catches drift early — before downstream prompts build on incorrect state.
+
+Rationale: A Lana-V2-Dev SecurityRemediation sequence had 5 sub-chains with 3-5 prompts each. Without interleaved verification, spec-code mismatches accumulated across prompts and were only caught at the end, requiring expensive rework. Interleaved verification prompts inserted after every 2 implementation prompts would have caught drift at the point of occurrence, limiting blast radius to 2 prompts instead of the full sequence.
+
+Verification prompts are NOT implementation prompts — they do not run code, tests, or builds. They run `/verify` and `/fix` workflows only. They do not count toward the chain length limit (PRMT-SC-04).
+
+Verifiable from artifact: check that sequences with 4+ implementation prompts contain at least one verification prompt (containing `/verify` and `/fix` workflow calls) between implementation prompts, not only at the end.
+
+**BAD** (5 implementation prompts, no interleaved verification):
+`````markdown
+## Prompt 1 - Setup
+```
+[implementation prompt]
+```
+---
+## Prompt 2 - Implement Auth
+```
+[implementation prompt]
+```
+---
+## Prompt 3 - Implement Token Validation
+```
+[implementation prompt]
+```
+---
+## Prompt 4 - Implement Rate Limiting
+```
+[implementation prompt]
+```
+---
+## Prompt 5 - Finalize
+```
+[implementation prompt]
+```
+`````
+
+**GOOD** (5 implementation prompts with interleaved verification after prompt 2 and prompt 4):
+`````markdown
+## Prompt 1 - Setup
+```
+[implementation prompt]
+```
+---
+## Prompt 2 - Implement Auth
+```
+[implementation prompt]
+```
+---
+## Verification Checkpoint 1
+
+<!-- Verify prompts 1-2 against STRUT before continuing. -->
+
+```
+Read `__CARD_00-Rules.md` and `__STRUT_[Topic].md`. Treat earlier conversation as compacted. Verification checkpoint after prompts 1-2.
+
+/verify
+
+current state against `__STRUT_[Topic].md` for prompts executed so far.
+
+/fix
+
+all gaps and remaining work.
+```
+---
+## Prompt 3 - Implement Token Validation
+```
+[implementation prompt]
+```
+---
+## Prompt 4 - Implement Rate Limiting
+```
+[implementation prompt]
+```
+---
+## Verification Checkpoint 2
+
+<!-- Verify prompts 1-4 against STRUT before final prompt. -->
+
+```
+Read `__CARD_00-Rules.md` and `__STRUT_[Topic].md`. Treat earlier conversation as compacted. Verification checkpoint after prompts 3-4.
+
+/verify
+
+current state against `__STRUT_[Topic].md` for prompts executed so far.
+
+/fix
+
+all gaps and remaining work.
+```
+---
+## Prompt 5 - Finalize
+```
+[implementation prompt]
+```
+`````
 
 ## PRMT-CT-12: Prefer Agent Tools Over Shell Commands for File Operations
 

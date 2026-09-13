@@ -390,6 +390,32 @@ When a prompt depends on a prior step, verify the prior step is done:
 Verify: Confirm STRUT step [prior step ID] is `[x]` in [STRUT filename].
 ```
 
+### 7.6 Interleaved Verification Prompts as Drift Prevention
+
+Sequences with 4 or more implementation prompts must include interleaved verification prompts every 2-3 implementation prompts (PRMT-SQ-04). These are verification-only prompts that run `/verify` against the planning document and `/fix` to address gaps — not implementation prompts with verification sections.
+
+**Why this is a robustness concern**: Without interleaved checkpoints, spec-code drift accumulates silently. A Lana-V2-Dev SecurityRemediation sequence had 5 sub-chains where drift was only caught at the end, requiring rework across the full sequence. Interleaved verification limits blast radius to 2-3 prompts.
+
+**Verification prompt template**:
+```
+Read `__CARD_00-Rules.md` and `__STRUT_[Topic].md`. Treat earlier conversation as compacted. Verification checkpoint after prompts [N]-[M].
+
+/verify
+
+current state against `__STRUT_[Topic].md` for prompts executed so far.
+
+/fix
+
+all gaps and remaining work.
+```
+
+**Key properties**:
+- Self-contained opening reads rules card and planning document (PRMT-SC-01)
+- `/verify` and `/fix` are standalone workflow calls (PRMT-CT-08)
+- No implementation content — no code, tests, or builds
+- Does NOT count toward chain length limit (PRMT-SC-04)
+- Heading: `## Verification Checkpoint N` (not `## Prompt N`)
+
 ## 8. Project-Specific Banned Lists
 
 The hang-safety clause needs a project-specific banned list. Build it by scanning the project for commands that wait on stdin, launch pagers, or run unbounded children.
@@ -601,6 +627,7 @@ Before considering a prompt file complete, verify robustness:
 - [ ] Hang-risky commands without native safe parameters use the Start-Process + WaitForExit timeout pattern (PRMT-HS-03)
 - [ ] No shell commands for file search/read in prompt bodies — agent tools only (PRMT-CT-12)
 - [ ] Verification runs specific test files, not full suite, during implementation steps (PRMT-HS-09)
+- [ ] Sequences with 4+ implementation prompts include interleaved verification prompts every 2-3 prompts (PRMT-SQ-04)
 
 **Verification depth**:
 - [ ] Verification sections name specific test files when code changes affect tests (PRMT-HS-07)

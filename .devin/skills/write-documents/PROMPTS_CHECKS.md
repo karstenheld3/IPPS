@@ -24,6 +24,7 @@ Quality Improvement (QI)
 - PRMT-QI-07: Does the sequence designate a findings card for inter-prompt problem filing?
 - PRMT-QI-08: Do prompt bodies use agent tool directives instead of shell commands for file operations?
 - PRMT-QI-09: Do verification sections run specific test files instead of full suite during implementation?
+- PRMT-QI-10: Do sequences with 4+ implementation prompts include interleaved verification checkpoints?
 
 ## Process Discipline (PD)
 
@@ -121,3 +122,11 @@ Quality Improvement (QI)
 - Failure indicator: implementation prompt Verify section contains bare `bun test` or `npm test` without specific file paths; full suite run during implementation steps
 - Improvement tip: Replace bare `bun test` with `bun test tests/unit/auth.test.ts tests/unit/token_validator.test.ts` (specific files). Reserve full suite for the final verification step of the sequence, with a time cap and non-blocking execution.
 - References: PRMT-HS-09
+
+### PRMT-QI-10: Interleaved Verification Prompts Quality
+
+- Question: If the sequence has 4+ implementation prompts, does it include verification checkpoints every 2-3 implementation prompts?
+- Evidence: count implementation prompts (excluding verification prompts); if 4+, check for `## Verification Checkpoint N` headings between implementation prompts containing `/verify` and `/fix` workflow calls
+- Failure indicator: 5 implementation prompts with no verification checkpoint between them; verification only at the end of the sequence; verification prompt containing implementation content (code, tests, builds)
+- Improvement tip: Insert a `## Verification Checkpoint N` prompt after every 2-3 implementation prompts. Each checkpoint runs `/verify` against the planning document and `/fix` for gaps. Verification prompts are self-contained (read rules card and planning document), do NOT count toward chain length limit, and use `## Verification Checkpoint N` heading (not `## Prompt N`).
+- References: PRMT-SQ-04

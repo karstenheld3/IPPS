@@ -44,6 +44,7 @@ Create `_PROMPTS_[Topic].md` files containing an ordered list of prompts. Each p
 - **Prior-step verification** (PRMT-HS-08): Dependent prompts must verify the prior step is done before proceeding.
 - **Agent tools over shell** (PRMT-CT-12): Prompt bodies must use agent tool directives (grep_search, read_file, find_by_name, code_search) for file search/read, not shell commands. Shell commands for file operations only in Verify sections for residual sweeps.
 - **Targeted test scope** (PRMT-HS-09): Verification must run specific test files during implementation, not the full suite. Full suite only in final verification.
+- **Interleaved verification** (PRMT-SQ-04): Sequences with 4+ implementation prompts must include verification prompts every 2-3 implementation prompts. Verification prompts run `/verify` against the planning document and `/fix` for gaps. They do NOT count toward chain length limit.
 
 ## Context Branching
 
@@ -105,7 +106,7 @@ For each prompt, find the deepest inner fence and set the outer fence one longer
 
 ## Step 4: Write Prompts File
 
-**Format overview** (3-prompt example with optional frontmatter and headings, per PRMT-FT-07/08):
+**Format overview** (5-prompt example with interleaved verification, optional frontmatter and headings, per PRMT-FT-07/08, PRMT-SQ-04):
 
 `````markdown
 ---
@@ -133,7 +134,7 @@ Verify: [Machine-checkable done criteria]
 
 ---
 
-## Step 2 - commentary heading (never sent to the model)
+## Prompt 2 - Implement Core
 
 <!-- Optional notes explaining the next prompt's purpose. -->
 
@@ -156,13 +157,31 @@ Verify: [Observable success criteria]
 
 ---
 
-## Prompt 3 - Finalize
+## Verification Checkpoint 1
+
+<!-- Verify prompts 1-2 against STRUT before continuing. -->
+
+```
+Read [rules card] and [STRUT filename]. Treat earlier conversation as compacted. Verification checkpoint after prompts 1-2.
+
+/verify
+
+current state against [STRUT filename] for prompts executed so far.
+
+/fix
+
+all gaps and remaining work.
+```
+
+---
+
+## Prompt 3 - Implement Next Feature
 
 ```
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
-Third prompt. Simple again.
+Third implementation prompt.
 
 Constraints:
 - [What NOT to do]
@@ -170,6 +189,55 @@ Constraints:
 - Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
 Verify: [Machine-checkable done criteria]
+```
+
+---
+
+## Prompt 4 - Finalize
+
+```
+Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
+Planning document: [TASKS or STRUT filename], step [ID].
+
+Fourth implementation prompt.
+
+Constraints:
+- [What NOT to do]
+- Re-running this prompt must not corrupt state or waste cost
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+
+Verify: [Machine-checkable done criteria]
+```
+
+---
+
+## Verification Checkpoint 2
+
+<!-- Verify prompts 3-4 against STRUT before final prompt. -->
+
+```
+Read [rules card] and [STRUT filename]. Treat earlier conversation as compacted. Verification checkpoint after prompts 3-4.
+
+/verify
+
+current state against [STRUT filename] for prompts executed so far.
+
+/fix
+
+all gaps and remaining work.
+```
+
+---
+
+## Prompt 5 - Final Verification
+
+```
+Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
+Planning document: [TASKS or STRUT filename], step [ID].
+
+Final verification prompt. Run the full test suite to confirm no regressions.
+
+Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. All tests pass.
 ```
 `````
 
@@ -184,6 +252,36 @@ Verify: [Machine-checkable done criteria]
 8. Info string after opening fence (e.g. `` ```text ``) is optional and ignored by executor
 9. Prompts execute in file order
 10. Execution Frontmatter is optional - omit entirely if no execution hints needed
+11. Verification prompts (PRMT-SQ-04): sequences with 4+ implementation prompts MUST include verification checkpoints every 2-3 implementation prompts. Use heading `## Verification Checkpoint N`. Verification prompts do NOT count toward chain length limit (PRMT-SC-04)
+
+## Step 4a: Insert Verification Checkpoints
+
+If the sequence has 4 or more implementation prompts, insert verification checkpoints every 2-3 implementation prompts (PRMT-SQ-04):
+
+1. Count implementation prompts (exclude verification prompts from the count)
+2. Insert a `## Verification Checkpoint N` prompt after every 2-3 implementation prompts
+3. Each checkpoint runs `/verify` against the planning document and `/fix` for gaps
+4. Verification prompts are self-contained (PRMT-SC-01): read rules card and planning document
+5. Verification prompts do NOT count toward chain length limit (PRMT-SC-04)
+6. Use `## Verification Checkpoint N` heading (not `## Prompt N`) to distinguish from implementation prompts
+
+**Checkpoint placement examples**:
+- 4 implementation prompts: checkpoint after prompt 2
+- 5 implementation prompts: checkpoints after prompt 2 and after prompt 4
+- 6 implementation prompts: checkpoints after prompt 2 and after prompt 4 (or split into sub-chains per PRMT-SC-04)
+
+**Checkpoint prompt template**:
+```
+Read [rules card] and [STRUT filename]. Treat earlier conversation as compacted. Verification checkpoint after prompts [N]-[M].
+
+/verify
+
+current state against [STRUT filename] for prompts executed so far.
+
+/fix
+
+all gaps and remaining work.
+```
 
 ## Step 5: Verify
 
@@ -191,7 +289,7 @@ Check output against all PRMT-* rules in `PROMPTS_RULES.md`:
 
 - [ ] Format (FT): PRMT-FT-01 through PRMT-FT-10
 - [ ] Structure (ST): PRMT-ST-01 through PRMT-ST-05
-- [ ] Sequence (SQ): PRMT-SQ-01 through PRMT-SQ-03
+- [ ] Sequence (SQ): PRMT-SQ-01 through PRMT-SQ-04
 - [ ] Content (CT): PRMT-CT-01 through PRMT-CT-12
 - [ ] Self-Contained (SC): PRMT-SC-01 (self-contained opening), PRMT-SC-02 (no conversation dependency), PRMT-SC-03 (idempotency constraint), PRMT-SC-04 (chain length under 6), PRMT-SC-05 (effort and model specification), PRMT-SC-06 (planning document reference)
 - [ ] Execution (EX): PRMT-EX-01 (one prompt per turn), PRMT-EX-02 (no self-execution)
@@ -270,7 +368,7 @@ The filled file must pass all PRMT-* rules as a standalone prompts file:
 - [ ] PRMT-FT-08: If frontmatter present, it is at file start with valid keys
 - [ ] PRMT-FT-10: If 5+ prompts, each prompt includes `Prompt [ NN / NN ]` position marker as first line inside fence; when using a planning document, marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
 - [ ] PRMT-ST-01..05: Each prompt has objective, constraints (if implementation), verification, single reasoning mode, density limit
-- [ ] PRMT-SQ-01..03: No contradictions, explicit dependencies, commentary documents state
+- [ ] PRMT-SQ-01..04: No contradictions, explicit dependencies, commentary documents state, interleaved verification prompts for 4+ implementation prompt sequences
 - [ ] PRMT-CT-01..12: Specific objectives, negative constraints, observable verification, workflow execution vs reference distinction (execution verb = standalone without backticks, no execution verb = backticks), existing workflows leveraged, agent tools over shell for file operations
 - [ ] PRMT-EX-01..02: One prompt per turn, no self-execution by writing agent
 - [ ] PRMT-HS-01: Implementation prompts include hang-safety clause
@@ -309,6 +407,7 @@ Validated `_PROMPTS_[Topic]_[Instance].md` file with all placeholders resolved, 
 - [ ] Planning document referenced by filename and step ID (PRMT-SC-06)
 - [ ] No shell commands for file search/read in prompt bodies — agent tools only (PRMT-CT-12)
 - [ ] Verification runs specific test files, not full suite, during implementation steps (PRMT-HS-09)
+- [ ] Sequences with 4+ implementation prompts include interleaved verification checkpoints (PRMT-SQ-04)
 - [ ] Privacy gate applied (no real project data in examples)
 - [ ] Fence depths verified (outer > deepest inner per prompt)
 - [ ] **From Template mode**: Zero unresolved placeholders
