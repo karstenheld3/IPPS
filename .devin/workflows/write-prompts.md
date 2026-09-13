@@ -42,6 +42,8 @@ Create `_PROMPTS_[Topic].md` files containing an ordered list of prompts. Each p
 - **Hang-safety clause** (PRMT-HS-01): Every implementation prompt MUST include a hang-safety clause in Constraints: prohibition (no stdin/pager/unbounded child), project-specific banned list, time caps, on-cap behavior. See `PROMPTS_ROBUSTNESS_GUIDES.md` for template, project-specific banned lists, and problem-filing directive.
 - **Verification specificity** (PRMT-HS-07): Verification sections must name specific test files when code changes affect tests, include residual sweeps when concepts are removed, and confirm prior steps when dependencies exist.
 - **Prior-step verification** (PRMT-HS-08): Dependent prompts must verify the prior step is done before proceeding.
+- **Agent tools over shell** (PRMT-CT-12): Prompt bodies must use agent tool directives (grep_search, read_file, find_by_name, code_search) for file search/read, not shell commands. Shell commands for file operations only in Verify sections for residual sweeps.
+- **Targeted test scope** (PRMT-HS-09): Verification must run specific test files during implementation, not the full suite. Full suite only in final verification.
 
 ## Context Branching
 
@@ -190,10 +192,10 @@ Check output against all PRMT-* rules in `PROMPTS_RULES.md`:
 - [ ] Format (FT): PRMT-FT-01 through PRMT-FT-10
 - [ ] Structure (ST): PRMT-ST-01 through PRMT-ST-05
 - [ ] Sequence (SQ): PRMT-SQ-01 through PRMT-SQ-03
-- [ ] Content (CT): PRMT-CT-01 through PRMT-CT-11
+- [ ] Content (CT): PRMT-CT-01 through PRMT-CT-12
 - [ ] Self-Contained (SC): PRMT-SC-01 (self-contained opening), PRMT-SC-02 (no conversation dependency), PRMT-SC-03 (idempotency constraint), PRMT-SC-04 (chain length under 6), PRMT-SC-05 (effort and model specification), PRMT-SC-06 (planning document reference)
 - [ ] Execution (EX): PRMT-EX-01 (one prompt per turn), PRMT-EX-02 (no self-execution)
-- [ ] Hang Safety (HS): PRMT-HS-01 through PRMT-HS-08
+- [ ] Hang Safety (HS): PRMT-HS-01 through PRMT-HS-09
 - [ ] Robustness (RB): PRMT-RB-01 through PRMT-RB-07 (findings card designated, directive in every implementation prompt, card read at startup, glitches filed before commit, entry format, card system integration, PROBLEMS.md distinction)
 
 ### Step 5b: Workflow Call Formatting Pass
@@ -209,6 +211,13 @@ Execution verbs: run, use, execute, call, invoke, perform, apply, do
 Example fix:
 - BAD: "Use the `/sync` workflow to sync files."
 - GOOD: "Sync files:" + standalone `/sync` line + arguments on next line
+
+### Step 5d: Tool Preference and Test Scope Pass
+
+Scan every fenced prompt for shell commands used for file operations and full-suite test runs:
+
+1. **Tool preference** (PRMT-CT-12): Scan prompt bodies (excluding Verify sections) for shell file-operation commands: `Select-String`, `Get-ChildItem`, `Get-Content`, `cat`, `grep`, `find`, `rg.exe`. If found outside Verify sections, rewrite as agent tool directives ("Search for X using the grep_search tool", "Read `file.ts`", "Find all .ts files using the find_by_name tool").
+2. **Test scope** (PRMT-HS-09): Scan Verify sections for bare `bun test`, `npm test`, or equivalent full-suite commands in implementation prompts. If found, replace with specific test file paths. Full suite is acceptable only in a prompt explicitly marked as final verification.
 
 ### Step 5c: Self-Contained Opening Pass
 
@@ -262,12 +271,14 @@ The filled file must pass all PRMT-* rules as a standalone prompts file:
 - [ ] PRMT-FT-10: If 5+ prompts, each prompt includes `Prompt [ NN / NN ]` position marker as first line inside fence; when using a planning document, marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
 - [ ] PRMT-ST-01..05: Each prompt has objective, constraints (if implementation), verification, single reasoning mode, density limit
 - [ ] PRMT-SQ-01..03: No contradictions, explicit dependencies, commentary documents state
-- [ ] PRMT-CT-01..11: Specific objectives, negative constraints, observable verification, workflow execution vs reference distinction (execution verb = standalone without backticks, no execution verb = backticks), existing workflows leveraged
+- [ ] PRMT-CT-01..12: Specific objectives, negative constraints, observable verification, workflow execution vs reference distinction (execution verb = standalone without backticks, no execution verb = backticks), existing workflows leveraged, agent tools over shell for file operations
 - [ ] PRMT-EX-01..02: One prompt per turn, no self-execution by writing agent
 - [ ] PRMT-HS-01: Implementation prompts include hang-safety clause
 - [ ] PRMT-HS-02: Banned command list is project-specific
 - [ ] PRMT-HS-03..06: Time caps, on-cap behavior, process cleanup, no interactive commands
 - [ ] PRMT-HS-07..08: Specific test files in verification, prior-step verification
+- [ ] PRMT-HS-09: Targeted test scope — specific test files, not full suite, in implementation prompts
+- [ ] PRMT-CT-12: No shell commands for file search/read in prompt bodies — agent tools only
 - [ ] PRMT-RB-01: Findings card designated for the sequence
 - [ ] PRMT-RB-02: Findings-card directive in every implementation prompt
 - [ ] PRMT-RB-03..06: Card read at startup, glitches filed before commit, entry format, card system integration
@@ -288,7 +299,7 @@ Validated `_PROMPTS_[Topic]_[Instance].md` file with all placeholders resolved, 
 
 ## Quality Gate
 
-- [ ] All PRMT-* rules pass (FT-01 through FT-10, ST, SQ, CT, SC, EX, HS, RB, NM)
+- [ ] All PRMT-* rules pass (FT-01 through FT-10, ST, SQ, CT-01 through CT-12, SC, EX, HS-01 through HS-09, RB, NM)
 - [ ] Workflow call formatting: no execution verb + backticks combinations remain (PRMT-CT-08)
 - [ ] Self-contained opening in every prompt (PRMT-SC-01): context-loading directive, "treat earlier conversation as compacted", step identifier
 - [ ] No conversation dependency: no "the previous step" without file path (PRMT-SC-02)
@@ -296,6 +307,8 @@ Validated `_PROMPTS_[Topic]_[Instance].md` file with all placeholders resolved, 
 - [ ] Chain length under 6 steps or sub-chains with checkpoints (PRMT-SC-04)
 - [ ] Effort level in frontmatter, prompt count matches effort budget (PRMT-SC-05)
 - [ ] Planning document referenced by filename and step ID (PRMT-SC-06)
+- [ ] No shell commands for file search/read in prompt bodies — agent tools only (PRMT-CT-12)
+- [ ] Verification runs specific test files, not full suite, during implementation steps (PRMT-HS-09)
 - [ ] Privacy gate applied (no real project data in examples)
 - [ ] Fence depths verified (outer > deepest inner per prompt)
 - [ ] **From Template mode**: Zero unresolved placeholders

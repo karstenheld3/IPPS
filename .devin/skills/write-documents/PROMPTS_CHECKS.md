@@ -22,6 +22,8 @@ Quality Improvement (QI)
 - PRMT-QI-05: Does the sequence use context cards for shared state?
 - PRMT-QI-06: Does every implementation prompt include a hang-safety clause?
 - PRMT-QI-07: Does the sequence designate a findings card for inter-prompt problem filing?
+- PRMT-QI-08: Do prompt bodies use agent tool directives instead of shell commands for file operations?
+- PRMT-QI-09: Do verification sections run specific test files instead of full suite during implementation?
 
 ## Process Discipline (PD)
 
@@ -62,9 +64,9 @@ Quality Improvement (QI)
 
 ### PRMT-PD-06: Position Markers in Long Sequences
 
-- Action: Agent included `Prompt [ NN / NN ]` position markers inside each prompt's fence as first line for sequences with 5+ prompts; when using a planning document (PRMT-SC-06), marker includes plan summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
-- Evidence: each prompt's first line inside the fence contains a zero-padded position marker with current and total count; when a planning document is referenced, the marker line includes a summary with plan phase/step references matching the heading text
-- Failure indicator: 5+ prompt sequence with no position marker inside fence; marker in heading instead of inside fence; inconsistent zero-padding; planning document used but marker lacks plan summary
+- Action: Agent included `Prompt [ NN / NN ] - [brief summary]` position markers inside each prompt's fence as first line for sequences with 5+ prompts; the summary matches the heading text; when using a planning document (PRMT-SC-06), the summary includes plan phase/step references: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
+- Evidence: each prompt's first line inside the fence contains a zero-padded position marker with current count, total count, and a summary; an empty line follows the marker before the prompt content; when a planning document is referenced, the summary includes plan phase/step references matching the heading text
+- Failure indicator: 5+ prompt sequence with no position marker inside fence; marker in heading instead of inside fence; marker without summary; inconsistent zero-padding; no empty line after marker; planning document used but summary lacks plan phase/step references
 - References: PRMT-FT-10
 
 ## Quality Improvement (QI)
@@ -103,3 +105,19 @@ Quality Improvement (QI)
 
 - Question: Does the sequence designate a findings card? Do prompts load it at startup and file glitches before commit?
 - Improvement tip: Create `__CARD_[TOPIC]-Findings.md` at sequence start. Add a `Findings card:` directive to every implementation prompt. File glitches in the card before end-of-prompt commit. Use the six-field entry format (severity, expected, actual, root cause, resolution, prevention). See `PROMPTS_EXAMPLE_03-FindingsCard.md` for a complete findings card example.
+
+### PRMT-QI-08: Tool Preference Quality
+
+- Question: Do prompt bodies use agent tool directives (grep_search, read_file, find_by_name, code_search) for file search/read operations instead of shell commands?
+- Evidence: scan prompt bodies (excluding Verify sections) for shell file-operation commands (Select-String, Get-ChildItem, Get-Content, cat, grep, find, rg.exe); none found outside Verify sections
+- Failure indicator: prompt body contains `Select-String -Recurse`, `Get-ChildItem -Recurse`, `Get-Content` for file reading; shell commands used where agent tools exist
+- Improvement tip: Replace shell file-operation commands in prompt bodies with agent tool directives: "Search for X using the grep_search tool", "Read `file.ts`", "Find all .ts files using the find_by_name tool". Reserve shell commands for Verify sections (residual sweeps) and process execution (builds, tests, git).
+- References: PRMT-CT-12
+
+### PRMT-QI-09: Targeted Test Scope Quality
+
+- Question: Do verification sections in implementation prompts run specific test files instead of the full suite?
+- Evidence: scan Verify sections for bare `bun test`, `npm test`, or equivalent full-suite commands in implementation prompts; full suite only in explicitly marked final verification
+- Failure indicator: implementation prompt Verify section contains bare `bun test` or `npm test` without specific file paths; full suite run during implementation steps
+- Improvement tip: Replace bare `bun test` with `bun test tests/unit/auth.test.ts tests/unit/token_validator.test.ts` (specific files). Reserve full suite for the final verification step of the sequence, with a time cap and non-blocking execution.
+- References: PRMT-HS-09

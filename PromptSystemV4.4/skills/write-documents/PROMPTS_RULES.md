@@ -42,6 +42,7 @@ Content (CT)
 - PRMT-CT-09: Formatting discipline inside fences (no tables, no emojis, structure over decoration)
 - PRMT-CT-10: Workflow references in backticks when not executing (no execution verb = reference only)
 - PRMT-CT-11: Leverage existing workflows whenever possible
+- PRMT-CT-12: Prefer agent tools over shell commands for file search and read operations
 
 Self-Contained (SC)
 - PRMT-SC-01: Self-contained opening — context-loading directive, "treat earlier conversation as compacted", step identifier
@@ -64,6 +65,7 @@ Hang Safety (HS)
 - PRMT-HS-06: No interactive commands (stdin, pager, key wait, 2>&1 blocking)
 - PRMT-HS-07: Verification names specific test files and residual sweeps
 - PRMT-HS-08: Prior-step verification for dependent prompts
+- PRMT-HS-09: Targeted test scope — specific test files during implementation, full suite only in final verification
 
 Robustness (RB)
 - PRMT-RB-01: Findings card designated for the sequence
@@ -888,17 +890,18 @@ Second prompt.
 
 ## PRMT-FT-10: Prompt Position Marker in Long Sequences
 
-Prompt files with 5 or more prompts MUST include a position marker as the first line inside each prompt's fence. The marker shows the current prompt number and total prompt count in zero-padded format: `Prompt [ NN / NN ]`.
+Prompt files with 5 or more prompts MUST include a position marker as the first line inside each prompt's fence. The marker shows the current prompt number and total prompt count in zero-padded format: `Prompt [ NN / NN ]`, followed by a summary of the prompt's purpose.
 
-When the prompt sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the marker line MUST also include a summary with plan phase/step references: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`. The summary matches the heading text, giving the model the same orientation the heading gives the human reader.
+The summary matches the heading text. When the prompt sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the summary MUST include plan phase/step references: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`. Without a planning document, the summary is the heading text: `Prompt [ NN / NN ] - [brief summary]`. The summary gives the model the same orientation the heading gives the human reader.
 
-The marker goes inside the fence, as the first line of prompt content before the self-contained opening:
+The marker goes inside the fence, as the first line of prompt content, followed by an empty line before the self-contained opening:
 
 `````markdown
 ## Prompt 1 - Analyze requirements
 
 ```
-Prompt [ 01 / 05 ]
+Prompt [ 01 / 05 ] - Analyze requirements
+
 Read `__CARD_00-Rules.md`...
 ```
 `````
@@ -911,14 +914,17 @@ For sequences with fewer than 5 prompts, the marker is OPTIONAL.
 3. If the file uses sub-chains with checkpoints (PRMT-SC-04), the total count is the number of prompts in the current sub-chain file
 4. The marker appears inside the fence as first line of prompt content — the model sees it for progress tracking
 5. The marker is updated when prompts are added or removed
-6. When using a planning document (PRMT-SC-06), the marker line includes a summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`. The summary matches the heading text
+6. The marker line MUST include a summary: `Prompt [ NN / NN ] - [brief summary]`. The summary matches the heading text
+7. When using a planning document (PRMT-SC-06), the summary MUST include plan phase/step references: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
+8. An empty line MUST follow the marker line, separating it from the prompt content (self-contained opening)
 
-**GOOD** (5-prompt sequence with markers inside fence, no planning document):
+**GOOD** (5-prompt sequence with markers and summary inside fence, no planning document):
 `````markdown
 ## Prompt 1 - Analyze requirements
 
 ```
-Prompt [ 01 / 05 ]
+Prompt [ 01 / 05 ] - Analyze requirements
+
 Read `__CARD_00-Rules.md`...
 ```
 
@@ -927,7 +933,8 @@ Read `__CARD_00-Rules.md`...
 ## Prompt 2 - Implement module
 
 ```
-Prompt [ 02 / 05 ]
+Prompt [ 02 / 05 ] - Implement module
+
 Read `__CARD_00-Rules.md`...
 ```
 `````
@@ -938,6 +945,7 @@ Read `__CARD_00-Rules.md`...
 
 ```
 Prompt [ 01 / 05 ] - P4-S1 U10 stage A: untrusted-content delimiters in specs
+
 Read `__CARD_00-Rules.md`...
 ```
 
@@ -947,6 +955,7 @@ Read `__CARD_00-Rules.md`...
 
 ```
 Prompt [ 02 / 05 ] - P4-S2 U10 stage B-C: renderToolResult, wrapped tools, commit
+
 Read `__CARD_00-Rules.md`...
 ```
 `````
@@ -957,6 +966,18 @@ Read `__CARD_00-Rules.md`...
 
 ```
 Prompt [ 01 / 05 ]
+
+Read `__CARD_00-Rules.md`...
+```
+`````
+
+**BAD** (5-prompt sequence without plan, marker without summary):
+`````markdown
+## Prompt 1 - Analyze requirements
+
+```
+Prompt [ 01 / 05 ]
+
 Read `__CARD_00-Rules.md`...
 ```
 `````
@@ -1537,3 +1558,75 @@ Verifiable from artifact: check that card 00 Section 3 includes a findings-card 
 Session PROBLEMS.md records problems encountered during prompt execution that must be approached later. This includes: blockers that stopped a prompt from completing, deferred issues that could not be fixed in-prompt, and timeouts or hangs that require investigation. PROBLEMS.md does NOT replace the findings card — it records problems that need later attention, while the findings card captures ALL glitches including those fixed in-prompt.
 
 Verifiable from artifact: check that PROBLEMS.md entries describe problems requiring later attention, not detailed glitch logs. Glitch details belong in the findings card.
+
+## PRMT-CT-12: Prefer Agent Tools Over Shell Commands for File Operations
+
+Prompts must direct the agent to use built-in tools (grep_search, read_file, find_by_name, code_search) for file search, read, and list operations. Shell commands (Select-String, Get-ChildItem -Recurse, Get-Content, cat, grep, find, rg.exe) must not appear in prompt bodies for file exploration or reading. Shell commands are for process execution only: builds, tests, git operations, and explicit residual sweeps in verification sections.
+
+Rationale: Agent built-in tools are faster, non-hanging, and respect workspace permissions. Shell commands for file operations risk hangs (Get-Content -Wait, Get-ChildItem -Recurse on large trees, pipe deadlocks) and bypass the agent's file access layer. A Lana-V2-Dev session documented over 20 consecutive grep_search failures, forcing fallback to read_file. The prompts caused this by embedding shell search commands instead of letting the agent use its own tools.
+
+Verifiable from artifact: scan prompt bodies (excluding Verify sections) for shell file-operation commands (Select-String, Get-ChildItem, Get-Content, cat, grep, find, rg). If found outside Verify sections, the prompt violates this rule. Verify sections may use shell commands for residual sweeps and explicit command-based checks.
+
+**BAD** (prompt body uses shell command for file search):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P2-S1.
+
+Search for all references to `validateToken` in src/ using `Select-String -Pattern 'validateToken' -Path src/ -Recurse`.
+```
+`````
+
+**GOOD** (prompt body uses agent tool directive):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P2-S1.
+
+Search for all references to `validateToken` in src/ using the grep_search tool.
+```
+`````
+
+**GOOD** (Verify section uses shell command for residual sweep — acceptable):
+`````markdown
+```
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P2-S1.
+
+Remove all references to `guard_request` from src/.
+
+Verify: `Select-String -Pattern 'guard_request' -Path src/` returns zero matches.
+```
+`````
+
+## PRMT-HS-09: Targeted Test Scope
+
+Verification sections must run specific test files, not the full test suite, during implementation steps. Full test suite runs are reserved for final verification steps only. Running the full suite during implementation risks hangs from long-running integration tests, flaky timing-dependent tests, and process accumulation.
+
+This rule strengthens PRMT-HS-07 (which requires naming specific test files) by also requiring that only those files are executed, not the full suite. A Lana-V2-Dev session documented the full `bun test` suite hanging indefinitely, while targeted test files completed in seconds. Another session documented a flaky test that failed in the full suite but passed in isolation due to timing pressure from other tests in the same run.
+
+Verifiable from artifact: check that verification sections in implementation prompts run specific test files (e.g., `bun test tests/unit/auth.test.ts`), not bare `bun test` or `npm test` (full suite). Final verification steps may run the full suite if explicitly marked as such.
+
+**BAD** (full suite during implementation):
+`````markdown
+```
+Fix the token validation bug where expired tokens crash the server.
+
+Verify: Run `bun test`. All tests pass.
+```
+`````
+
+**GOOD** (targeted test files during implementation):
+`````markdown
+```
+Fix the token validation bug where expired tokens crash the server.
+
+Verify: Run `bun test tests/unit/auth.test.ts tests/unit/token_validator.test.ts`. All tests pass.
+```
+`````
+
+**GOOD** (full suite in final verification — acceptable when explicitly marked):
+`````markdown
+```
+Final verification: run the full test suite to confirm no regressions.
+
+Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. All tests pass.
+```
+`````

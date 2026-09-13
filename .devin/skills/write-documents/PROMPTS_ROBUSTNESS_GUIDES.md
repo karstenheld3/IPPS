@@ -272,6 +272,26 @@ For grepping and file search in large folder structures, use `rg.exe` (ripgrep) 
 
 For full usage examples (grep, file search, ignoring `.gitignore`), see `PROMPTS_EXAMPLE_02-RobustnessCard.md` Section "Search tools".
 
+### 5.7 Agent Tools Over Shell Commands for File Operations
+
+Prompts must direct the agent to use built-in tools (grep_search, read_file, find_by_name, code_search) for file search, read, and list operations (PRMT-CT-12). Shell commands for file operations are a hang source and bypass the agent's file access layer.
+
+**Why this is a robustness concern**: Shell commands like `Get-ChildItem -Recurse`, `Select-String -Recurse`, and `Get-Content` were primary hang sources in a Lana-V2-Dev session. `Get-ChildItem -Recurse` on large trees enumerates every file before returning. `Select-String -Recurse` has the same problem. `Get-Content -Wait` streams indefinitely. Agent built-in tools are non-hanging by design.
+
+**Rule**: Shell commands (Select-String, Get-ChildItem, Get-Content, cat, grep, find, rg.exe) must not appear in prompt bodies for file exploration or reading. They may appear in Verify sections for residual sweeps and explicit command-based checks only.
+
+**Prompt body — use agent tool directives**:
+```
+Search for 'validateToken' in src/ using the grep_search tool.
+Read `src/auth/validator.ts`.
+Find all .ts files in src/ using the find_by_name tool.
+```
+
+**Verify section — shell commands acceptable for residual sweeps**:
+```
+Verify: `Select-String -Pattern 'guard_request' -Path src/` returns zero matches.
+```
+
 ## 6. Timeout and Cap Patterns
 
 ### 6.1 Setting Caps
@@ -307,6 +327,24 @@ Tests that spawn processes must set explicit per-test timeouts and kill their pr
 ```
 New tests that spawn processes set an explicit per-test timeout and kill their process tree in afterEach. A spawning test without both is a defect to fix in the same prompt.
 ```
+
+### 6.4 Targeted Test Scope
+
+Verification sections must run specific test files, not the full test suite, during implementation steps (PRMT-HS-09). Full test suite runs are reserved for final verification steps only.
+
+**Why targeted scope matters**: A Lana-V2-Dev session documented the full `bun test` suite hanging indefinitely, while targeted test files completed in seconds. The full suite includes long-running integration tests, timing-dependent tests, and process-spawning tests that may not terminate cleanly. Another session documented a flaky test that failed in the full suite but passed in isolation due to timing pressure from other tests in the same run.
+
+**Implementation prompts — run specific test files**:
+```
+Verify: Run `bun test tests/unit/auth.test.ts tests/unit/token_validator.test.ts`. All tests pass.
+```
+
+**Final verification — full suite acceptable with cap**:
+```
+Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. All tests pass.
+```
+
+**Rule**: Bare `bun test` or `npm test` (full suite) in implementation prompt verification is a PRMT-HS-09 violation. Always scope to specific test files during implementation. Full suite only in the final verification step of a sequence.
 
 ## 7. Verification Gap Prevention
 
@@ -561,6 +599,8 @@ Before considering a prompt file complete, verify robustness:
 - [ ] No prompt contains a bare `2>&1` without noting the `Blocking: false` requirement (PRMT-HS-06)
 - [ ] No prompt contains `git log`, `git diff`, `git show` without `--no-pager` (PRMT-HS-06)
 - [ ] Hang-risky commands without native safe parameters use the Start-Process + WaitForExit timeout pattern (PRMT-HS-03)
+- [ ] No shell commands for file search/read in prompt bodies — agent tools only (PRMT-CT-12)
+- [ ] Verification runs specific test files, not full suite, during implementation steps (PRMT-HS-09)
 
 **Verification depth**:
 - [ ] Verification sections name specific test files when code changes affect tests (PRMT-HS-07)

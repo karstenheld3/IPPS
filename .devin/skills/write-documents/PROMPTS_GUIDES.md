@@ -203,6 +203,28 @@ A harness rewrite session revealed verification gaps that silently pass as "done
 - **Residual sweeps** when concepts are removed (prevents old terms persisting in code)
 - **Prior-step confirmation** when a prompt depends on a prior step (prevents STRUT sequencing violations)
 
+## 6d. Tool Preference in Prompts
+
+Prompts must direct the agent to use built-in tools (grep_search, read_file, find_by_name, code_search) for file search, read, and list operations. Shell commands (Select-String, Get-ChildItem -Recurse, Get-Content, cat, grep, find, rg.exe) must not appear in prompt bodies for file exploration or reading (PRMT-CT-12).
+
+Shell commands are for process execution only: builds, tests, git operations, and explicit residual sweeps in verification sections. The prompt body describes objectives and constraints, not implementation steps (PRMT-CT-04). Embedding shell commands for file search in the prompt body is micromanagement that also creates hang risks.
+
+**Why agent tools over shell commands**:
+- Agent built-in tools are non-hanging by design — no pipe deadlocks, no recursive enumeration hangs
+- Agent tools respect workspace permissions and gitignore rules
+- Agent tools are faster for single-file reads and targeted searches
+- Shell commands for file operations were a primary hang source in a Lana-V2-Dev session: `Get-ChildItem -Recurse` on large trees, `Select-String -Recurse`, `Get-Content -Wait`
+
+**Where shell commands ARE acceptable**:
+- Verify sections: residual sweeps (`Select-String -Pattern 'old_term' -Path src/` returns zero matches)
+- Build/test/git commands: `bun test`, `npm run build`, `git --no-pager log`
+- Commands that have no agent-tool equivalent
+
+**How to write file operations in prompt bodies**:
+- Instead of "Run `Select-String -Pattern 'foo' -Path src/ -Recurse`", write "Search for 'foo' in src/ using the grep_search tool"
+- Instead of "Run `Get-Content file.ts`", write "Read `file.ts`"
+- Instead of "Run `Get-ChildItem -Recurse -Filter *.ts`", write "Find all .ts files in src/ using the find_by_name tool"
+
 ## 7. Select Fence Length
 
 Examine each prompt for inner fenced code blocks:
@@ -324,17 +346,19 @@ Omit frontmatter when:
 
 ## 11. Prompt Position Markers in Long Sequences
 
-Sequences with 5 or more prompts MUST include a position marker as the first line inside each prompt's fence (PRMT-FT-10). The marker shows the current prompt number and total count in zero-padded format:
+Sequences with 5 or more prompts MUST include a position marker as the first line inside each prompt's fence, followed by an empty line before the prompt content (PRMT-FT-10). The marker shows the current prompt number and total count in zero-padded format, followed by a summary of the prompt's purpose:
 
 ```
-Prompt [ 01 / 23 ]
+Prompt [ 01 / 23 ] - Analyze requirements
+
 Read `__CARD_00-Rules.md`...
 ```
 
-When the sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the marker line MUST also include a summary with plan phase/step references. The summary matches the heading text, giving the model the same orientation the heading gives the human reader:
+The summary matches the heading text. When the sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the summary MUST include plan phase/step references:
 
 ```
 Prompt [ 01 / 07 ] - P4-S1 U10 stage A: untrusted-content delimiters in specs
+
 Read `__CARD_00-Rules.md`...
 ```
 
@@ -344,15 +368,17 @@ Read `__CARD_00-Rules.md`...
 - **Progress tracking**: The marker complements STRUT step IDs — STRUT tracks the plan, the marker tracks the file
 - **Resume after interruption**: When reloading a prompt file after context reset, the marker shows which prompt is next without counting fences
 - **Human readability**: When reviewing a long prompt file, the marker makes navigation immediate
-- **Plan summary**: When using a planning document, the summary in the marker line gives the model the same phase/step context the heading gives the human reader — without requiring the model to read the heading (which is commentary, never sent)
+- **Summary**: The marker line always includes a summary matching the heading text, giving the model the same orientation the heading gives the human reader — without requiring the model to read the heading (which is commentary, never sent)
+- **Plan summary**: When using a planning document, the summary includes plan phase/step references for additional context
 
 ### 11.2 Format Rules
 
 - Zero-padded to match the width of the total count (5 prompts → 2 digits, 23 prompts → 2 digits)
 - Total count is the number of prompts in the file, not STRUT steps
 - For sub-chains (PRMT-SC-04): total count is the number of prompts in the current sub-chain file
-- The marker goes inside the fence as the first line of prompt content — the model sees it for progress tracking
-- When using a planning document (PRMT-SC-06), the marker line includes a summary: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`. The summary matches the heading text
+- The marker goes inside the fence as the first line of prompt content, followed by an empty line before the prompt content — the model sees it for progress tracking
+- The marker line MUST include a summary: `Prompt [ NN / NN ] - [brief summary]`. The summary matches the heading text
+- When using a planning document (PRMT-SC-06), the summary MUST include plan phase/step references: `Prompt [ NN / NN ] - [plan step ID] [brief summary]`
 - Optional for sequences with fewer than 5 prompts
 
 ## 12. Execution Model: One Prompt Per Turn
@@ -424,3 +450,5 @@ Before considering the prompts file complete:
 - [ ] Findings card loaded at prompt startup for unresolved entries (PRMT-RB-03)
 - [ ] Glitches filed in findings card before end-of-prompt commit (PRMT-RB-04)
 - [ ] Session PROBLEMS.md records deferred problems, not detailed glitch logs (PRMT-RB-07)
+- [ ] No shell commands for file search/read in prompt bodies — agent tools only (PRMT-CT-12)
+- [ ] Verification runs specific test files, not full suite, during implementation steps (PRMT-HS-09)
