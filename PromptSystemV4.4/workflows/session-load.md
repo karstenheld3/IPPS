@@ -13,6 +13,7 @@ auto_execution_mode: 3
 
 - Run `/prime` workflow BEFORE reading session documents
 - `/prime` loads FAILS.md, ID-REGISTRY.md, !NOTES.md - critical workspace context
+- Record user's resume prompt verbatim if >120 tokens (Step 4)
 
 ## Step 1: Identify Session
 
@@ -38,7 +39,11 @@ Restore phase state from NOTES.md "Current Phase" section.
 
 Make sure all state progress is documented in `NOTES.md` and `PROGRESS.md` and `PROBLEMS.md`
 
-## Step 4: Summarize and Propose
+## Step 4: Record Resume Prompt
+
+If user provides large prompts (>120 tokens), record them verbatim in NOTES.md "Significant Prompts Log" section using format from @skills:session-management NOTES_TEMPLATE.md.
+
+## Step 5: Summarize and Propose
 Start with single row: "Read [a] .md files ([b] priority), [c] code files ( [d] .py, [e] ...). Mode: [scenario]"
 
 Example: "Read 5 .md files (2 priority), 12 code files (10 .py, 2 .html). Mode: SINGLE-PROJECT + SINGLE-VERSION + SESSION-MODE"
@@ -47,6 +52,6 @@ Then:
 - Summarize findings and propose next steps.
 - Answer with max 20 short lines of text.
 
-## Step 5: Verify MUST-NOT-FORGET
+## Step 6: Verify MUST-NOT-FORGET
 
 Review each MNF item above and confirm compliance.

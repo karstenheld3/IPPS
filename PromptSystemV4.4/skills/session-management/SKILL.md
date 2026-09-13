@@ -198,7 +198,7 @@ When creating a new topic folder inside an existing session:
 
 Use templates from this skill folder:
 
-- **NOTES.md** (`NOTES_TEMPLATE.md`): Key information, agent instructions, working patterns, large initial prompts (>120 tokens)
+- **NOTES.md** (`NOTES_TEMPLATE.md`): Key information, agent instructions, working patterns, large initial prompts (>120 tokens). Do NOT record prompts from `_PROMPTS_*.md` files in the Significant Prompts Log — those are already documented in the file itself.
 - **PROBLEMS.md** (`PROBLEMS_TEMPLATE.md`): All problems to be addressed - initial prompts, questions, feature requests, bugs, strange behavior, investigation topics. Each problem gets a unique ID and tracks status (Open/Resolved/Deferred)
 - **PROGRESS.md** (`PROGRESS_TEMPLATE.md`): Task execution tracking - to-do list, done items, tried-but-not-used approaches
 

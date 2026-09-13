@@ -94,7 +94,7 @@ Example: AUTHSYST-BG-0001 - Token refresh race condition - Resolved
 
 ## Significant Prompts Log
 
-**Agent rule**: Record prompts that change direction, add requirements, or clarify intent. Use 4-backtick fence with `text` language tag.
+**Agent rule**: Record prompts that change direction, add requirements, or clarify intent. Use 4-backtick fence with `text` language tag. Do NOT record prompts from `_PROMPTS_*.md` files — those are already documented in the file itself.
 
 **Format**: `[YYYY-MM-DD HH:MM]` + one-line context, then fenced prompt.
 
