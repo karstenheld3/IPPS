@@ -289,6 +289,7 @@ sessions_folder: [SESSIONS_FOLDER]
 release_notes_dir: [RELEASE_NOTES_FOLDER]
 release_notes_naming: RELEASE_NOTES_v{VERSION}_{DATE}.md
 tag_annotation_template: Release {TAG}: {SUMMARY}
+# github_release_confirm: false  # Uncomment to create GitHub releases without the y/n question (default true)
 
 # Single-repo: one [RELEASE_REPO] block
 # Multi-repo: product block first, then dev block(s)

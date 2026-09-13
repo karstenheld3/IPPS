@@ -130,6 +130,7 @@ A configuration block in workspace NOTES.md that defines all release parameters 
 - `release_notes_naming` - Filename pattern for release notes files
 - `sessions_folder` - Session folder path, typically `[SESSIONS_FOLDER]`
 - `tag_annotation_template` - Optional template for git tag annotation message
+- `github_release_confirm` - Optional boolean, default `true`. `false` = GitHub releases are created without the yes/no question (FR-12)
 
 ### RepoConfig
 
@@ -253,8 +254,9 @@ Markdown document summarizing sessions, artifacts, and changes since last releas
 
 **RLSPROJ-FR-12: User Confirmation Before GitHub Release**
 - Workflow MUST present summary to user: version, sessions count, key artifacts, tag name, binary path (if applicable)
-- Workflow MUST ask explicit yes/no before creating GitHub release(s)
-- No GitHub release created without explicit user confirmation
+- Workflow MUST ask explicit yes/no before creating GitHub release(s), unless `github_release_confirm: false` is set in `[RELEASE_CONFIG]`
+- No GitHub release created without explicit user confirmation; `github_release_confirm: false` counts as confirmation given once, by config
+- If `github_release_confirm: false`: workflow presents the summary, skips the question, proceeds as confirmed
 - If user declines: workflow skips GitHub release, proceeds to post-release version bump (FR-15)
 
 **RLSPROJ-FR-13: Create GitHub Releases**
@@ -293,6 +295,7 @@ Markdown document summarizing sessions, artifacts, and changes since last releas
 **RLSPROJ-FR-18: Config Validation**
 - After parsing `[RELEASE_CONFIG]`, workflow MUST validate config before proceeding
 - Required global keys MUST be present: `sops_file`, `sessions_folder`, `release_notes_dir`
+- Optional global key `github_release_confirm` MUST be `true` or `false` when present
 - Each `[RELEASE_REPO]` block MUST have all required keys: `path`, `role`, `tag_format`, `version_source`, `post_release_bump`
 - Enum values MUST be valid: `tag_format` in [`date`, `semver`], `role` in [`product`, `dev`], `version_source` in [`promptsystem_folder`, `pyproject_toml`, `package_json`, `none`], `post_release_bump` in [`promptsystem_rename`, `patch_bump`, `minor_bump`, `none`]
 - Conditional keys MUST be present when parent key requires: `version_file` when `version_source` is file-based, `binary_path_pattern` when `binary_build` is true
@@ -366,7 +369,7 @@ Rationale: SOPS files are workspace-specific and already maintained. The workflo
 
 **RLSPROJ-IG-02:** No git tag is created before release notes are committed to the product repo.
 
-**RLSPROJ-IG-03:** No GitHub release is created without explicit user confirmation.
+**RLSPROJ-IG-03:** No GitHub release is created without explicit user confirmation. `github_release_confirm: false` in `[RELEASE_CONFIG]` is that confirmation, given once by config.
 
 **RLSPROJ-IG-04:** Post-release version bump executes only after all tags are pushed and GitHub releases are created.
 
@@ -473,7 +476,7 @@ User invokes /project-release
 ├─> Create git tag in product repo (FR-10)
 ├─> Push tag and commits to remote
 ├─> Present summary to user (FR-12)
-│   └─> Ask: "Create GitHub release? (y/n)"
+│   └─> Ask: "Create GitHub release? (y/n)" (skip question if github_release_confirm: false → treat as confirmed)
 ├─> [If confirmed]
 │   └─> Create GitHub release with notes and assets (FR-13)
 ├─> Execute post-release version bump without asking (FR-15)
@@ -518,7 +521,7 @@ User invokes /project-release
 │   ├─> Phase 2: Push all tags to remote (product first, then dev)
 │   │   └─> Use git push --atomic for tag + commit per repo
 │   └─> Present summary to user (FR-12)
-│       └─> Ask: "Create GitHub releases? (y/n)"
+│       └─> Ask: "Create GitHub releases? (y/n)" (skip question if github_release_confirm: false → treat as confirmed)
 │
 ├─> [If confirmed]
 │   ├─> Check for existing GitHub releases (FR-13 idempotency)
@@ -545,6 +548,7 @@ The `[RELEASE_CONFIG]` section uses a simple text-based key-value format readabl
 - `release_notes_dir` - (required) Path relative to product repo root where release notes are stored. May use `[PRODUCT_DOCS_FOLDER]` constant
 - `release_notes_naming` - (optional) Filename pattern. Default: `RELEASE_NOTES_v{VERSION}_{DATE}.md`. Placeholders: `{VERSION}`, `{DATE}`
 - `tag_annotation_template` - (optional) Template for git tag annotation. Default: `Release {TAG}: {SUMMARY}`
+- `github_release_confirm` - (optional) `true` or `false`. Default: `true`. `false` = create GitHub releases without asking
 
 ### Per-Repo Config Keys
 
@@ -667,6 +671,7 @@ sessions_folder: [SESSIONS_FOLDER]
 release_notes_dir: [RELEASE_NOTES_FOLDER]
 release_notes_naming: RELEASE_NOTES_v{VERSION}_{DATE}.md
 tag_annotation_template: Release {TAG}: {SUMMARY}
+# github_release_confirm: false  # Uncomment to create GitHub releases without the y/n question (default true)
 
 # Single-repo: one [RELEASE_REPO] block
 # Multi-repo: product block first, then dev block(s)
@@ -787,6 +792,9 @@ This workflow produces user-facing output (progress messages, summaries, error r
 - Recovery: Tags and GitHub releases (if created) are immutable. Report failure. If folder rename partially completed: user manually finishes rename and updates NOTES.md. If version file write failed: no state changed, user fixes and re-invokes. If commit failed: user resolves and commits manually. Re-run detects existing tag, skips tagging, retries bump
 
 ## 14. Document History
+
+**[2026-09-13 12:45]**
+- Added: global config key `github_release_confirm` (default `true`); FR-12, FR-18, IG-03, ReleaseConfig, Global Config Keys, and both flow diagrams updated so `false` skips the GitHub release question
 
 **[2026-09-06 23:35]**
 - Added: `@skills:session-management` dependency for `[SESSIONS_FOLDER]` constant

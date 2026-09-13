@@ -19,7 +19,7 @@ Create a config-driven project release supporting single-repo and multi-repo wor
 6. Post-release version bump is mandatory, automatic, and the LAST step - never ask for confirmation
 7. Read SOPS file (name from config) for workspace-specific procedures and deviations
 8. No git tag is created before release notes are committed to the product repo
-9. No GitHub release is created without explicit user confirmation
+9. No GitHub release is created without explicit user confirmation, unless `github_release_confirm: false` is set in `[RELEASE_CONFIG]` (confirmation then given once, by config)
 10. All paths in config use workspace constants - no absolute paths
 
 ## Prerequisites
@@ -46,6 +46,7 @@ Before any release steps, detect workspace context:
 After parsing `[RELEASE_CONFIG]`, validate before proceeding:
 
 - Required global keys MUST be present: `sops_file`, `sessions_folder`, `release_notes_dir`
+- Optional global key `github_release_confirm` in [`true`, `false`], default `true`. `false` = create GitHub releases for every repo with `github_release: true` without asking
 - Each `[RELEASE_REPO]` block MUST have all required keys: `path`, `role`, `tag_format`, `version_source`, `post_release_bump`
 - Enum values MUST be valid:
   - `tag_format` in [`date`, `semver`]
@@ -115,7 +116,7 @@ User invokes /project-release
 ├─> Create git tag in product repo
 ├─> Push tag and commits to remote
 ├─> Present summary to user
-│   └─> Ask: "Create GitHub release? (y/n)"
+│   └─> Ask: "Create GitHub release? (y/n)" (skip question if github_release_confirm: false → treat as confirmed)
 ├─> [If confirmed]
 │   ├─> Check if GitHub release already exists for tag
 │   └─> Create GitHub release with notes and assets (or skip if exists)
@@ -163,7 +164,7 @@ User invokes /project-release
 │   ├─> Phase 2: Push all tags to remote (product first, then dev)
 │   │   └─> Use git push --atomic for tag + commit per repo
 │   └─> Present summary to user
-│       └─> Ask: "Create GitHub releases? (y/n)"
+│       └─> Ask: "Create GitHub releases? (y/n)" (skip question if github_release_confirm: false → treat as confirmed)
 │
 ├─> [If confirmed]
 │   ├─> Check for existing GitHub releases (skip if exists)
