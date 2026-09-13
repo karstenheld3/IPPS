@@ -28,7 +28,7 @@ This skill implements:
 - [WRITE-FAIL] - Create/update FAILS.md (use `FAILS_TEMPLATE.md`)
 - [WRITE-REVIEW] - Create _REVIEW.md documents (use `CRITIQUE_REVIEW_TEMPLATE.md` for `/critique`, `FACT-CHECK_REVIEW_TEMPLATE.md` for `/fact-check`)
 - [WRITE-TASKS-PLAN] - Create TASKS documents (use `TASKS_TEMPLATE.md`)
-- [WRITE-PROMPTS] - Create prompt queue files (use `PROMPTS_TEMPLATE.md`, read `PROMPTS_GUIDES.md`, `PROMPTS_RULES.md`)
+- [WRITE-PROMPTS] - Create prompt queue files (use `PROMPTS_TEMPLATE.md`, read `PROMPTS_GUIDES.md`, `PROMPTS_RULES.md`, `PROMPTS_ROBUSTNESS_GUIDES.md`; see `PROMPTS_EXAMPLE_*.md` for worked examples)
 - [WRITE-STRUT] - Create/insert STRUT plans (use `STRUT_TEMPLATE.md`)
 - [WRITE-SKILL] - Create/update skill folders (use `SKILL_TEMPLATE.md`, read `SKILL_RULES.md`)
 - [WRITE-CONVERSATION] - Create conversation files (use `CONVERSATION_TEMPLATE.md`, read `CONVERSATION_RULES.md`)
@@ -78,7 +78,7 @@ Read `ASCII_ART_GUIDES.md` before drawing. Use Unicode box-drawing characters pe
 - **TASKS** (`TASKS_[TOPIC].md`) - Partitioned task lists from IMPL/TEST plans. Use to break plans into discrete work items. Read template: `TASKS_TEMPLATE.md`
 
 **Execution:**
-- **PROMPTS** (`_PROMPTS_[Topic].md`) - Prompt queue files for headless agent execution. Use to define sequential prompts that execute as turns of one session. Read template: `PROMPTS_TEMPLATE.md`, guide: `PROMPTS_GUIDES.md`, rules: `PROMPTS_RULES.md`
+- **PROMPTS** (`_PROMPTS_[Topic].md`) - Prompt queue files for headless agent execution. Use to define sequential prompts that execute as turns of one session. Read template: `PROMPTS_TEMPLATE.md`, guide: `PROMPTS_GUIDES.md`, rules: `PROMPTS_RULES.md`, robustness: `PROMPTS_ROBUSTNESS_GUIDES.md`. Examples: `PROMPTS_EXAMPLE_01-SelfContainedSequence.md`, `PROMPTS_EXAMPLE_02-RobustnessCard.md`, `PROMPTS_EXAMPLE_03-FindingsCard.md`
 
 **Execution Tracking:**
 - **STRUT** (embedded in any document) - Structured execution plans with checkboxes. Use for phased work with verification gates. Read template: `STRUT_TEMPLATE.md`
@@ -120,7 +120,7 @@ Each document type builds on the previous. INFO informs SPEC decisions. SPEC def
 7. For WORKFLOW documents: also read `WORKFLOW_RULES.md` (required)
 8. For SKILL documents: also read `SKILL_RULES.md` (required)
 9. For CONVERSATION documents: also read `CONVERSATION_RULES.md` (required)
-10. For PROMPTS files: also read `PROMPTS_GUIDES.md` (before writing) and `PROMPTS_RULES.md` (required)
+10. For PROMPTS files: also read `PROMPTS_GUIDES.md` (before writing), `PROMPTS_RULES.md` (required), and `PROMPTS_ROBUSTNESS_GUIDES.md` (before writing). See `PROMPTS_EXAMPLE_*.md` for worked examples
 11. For creating/modifying templates: also read `TEMPLATE_GUIDES.md` (before writing) and `TEMPLATE_RULES.md` (required)
 12. Follow the template structure exactly, except when user requests exceptions
 
