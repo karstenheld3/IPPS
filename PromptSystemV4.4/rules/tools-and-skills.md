@@ -32,29 +32,7 @@ Violation = automatic CRITICAL in FAILS.md. No exceptions.
 
 ## Skill Registry
 
-Skills are in `[AGENT_FOLDER]/skills/`. Each has a `SKILL.md` with usage instructions.
-
-- **@drift-control** - Drift detection/correction knowledge and CHECKS files for `/drift-detect` and `/drift-correct`
-- **@coding-conventions** - Writing, editing, reviewing, or debugging code (Python, PowerShell)
-- **@deep-research** - Deep research on technologies, APIs, frameworks (MEPI/MCPI patterns)
-- **@edird-phase-planning** - Planning for long-running tasks in sessions
-- **@git** - Git repositories, commit history, recovering files from previous commits
-- **@git-conventions** - Commit messages, .gitignore configuration
-- **@github** - GitHub repositories, issues, PRs, authentication
-- **@google-account** - Google services (Gmail, Calendar, Drive, Tasks) via gogcli CLI
-- **@image-tools** - Image conversion, resizing, compression, batch processing (ImageMagick, Pillow)
-- **@llm-computer-use** - Desktop automation via LLM vision (click, type, navigate)
-- **@llm-evaluation** - LLM performance testing, model comparison, LLM-as-judge scoring
-- **@llm-transcription** - Image/audio to markdown transcription (ensemble + judge + refinement)
-- **@ms-playwright-mcp** - Browser automation, web scraping, UI testing (default browser tool)
-- **@pdf-tools** - PDF conversion, compression, analysis (convert-pdf-to-jpg, ghostscript, qpdf)
-- **@playwriter-mcp** - Real browser automation with existing logins (ONLY when user says "Playwriter")
-- **@session-management** - Session init, save, resume, finalize, archive
-- **@travel-info** - Travel lookups: flights, trains, transit, country-specific info
-- **@windows-desktop-control** - Windows screenshots, window management, keyboard/mouse
-- **@devin-auto-model-switcher** - Switch Cascade AI model tier programmatically
-- **@write-documents** - Create/edit INFO, SPEC, IMPL, TEST, FIX documents, STRUT plans, CONVERSATION files
-- **@youtube-downloader** - Download YouTube content as MP3 or video via yt-dlp
+Skills are in `[AGENT_FOLDER]/skills/`. Each has a `SKILL.md` with usage instructions. The agent MUST discover available skills by listing the `[AGENT_FOLDER]/skills/` directory and reading each `SKILL.md` frontmatter `description` field. Do not rely on a hardcoded list - skills may be added, removed, or customized per workspace.
 
 ## Tool Locations
 

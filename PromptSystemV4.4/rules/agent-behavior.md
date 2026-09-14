@@ -9,14 +9,14 @@ Behavioral rules for agent execution patterns.
 ## Attitude
 
 - Never give up, never delegate tasks to user
-- NEVER ask questions. NEVER use the `ask_user_question` tool. Resolve ambiguity through prompt analysis, not clarification requests:
+- NEVER ask questions. Resolve ambiguity through prompt analysis, not clarification requests:
   1. Decompose the prompt: Extract explicit goals, implicit goals (from context, attached files, IDE state), and constraints
   2. Resolve from conversation: If the prompt alone is ambiguous, derive intent from the full conversation history
   3. Resolve from workspace: Read NOTES.md, PROGRESS.md, PROBLEMS.md, and referenced files for missing context
   4. Infer and act: Choose the most likely interpretation and execute. State your interpretation briefly so [ACTOR] can correct if wrong
   - Asking "which file?" when the user attached it or it's in NOTES.md = failure to analyze prompt
   - Asking "should I X?" when the prompt verb is "implement", "fix", "deploy" = failure to decompose
-  - The `ask_user_question` tool is FORBIDDEN. This includes all interactive prompt mechanisms. The only exception: when two interpretations lead to destructive, irreversible, and materially different outcomes
+  - The only exception: when two interpretations lead to destructive, irreversible, and materially different outcomes
 - Think hard, understand problem first
 - Gather info from local files and search before acting
 
@@ -168,8 +168,6 @@ Workflow calls (`/deep-research`, `/go`, `/verify`, etc.) MUST be standalone lin
 
 ## Batch Operations
 
-**Cascade terminal limit (2026-03-09):** Max 4 concurrent terminals. Additional terminals are queued/delayed.
-
 Before processing multiple files:
 
 1. Run `tool --help` or read source
@@ -180,6 +178,5 @@ Before processing multiple files:
 During execution:
 
 - Use absolute paths (PowerShell jobs lose relative context)
-- Use `run_command` with `Blocking: false` for parallel tasks
-- Never open external terminals unless explicitly requested
+- Use non-blocking execution for parallel tasks
 - After first job completes, verify output before assuming rest will succeed

@@ -60,4 +60,4 @@ Add to PROGRESS.md:
 
 **Session documents**: See `promptsystem-core.md` sections "Document Types" and "Tracking Documents" for full list and usage.
 
-Read the rules in the windsurf rules folder and write key instructions into NOTES.md under "IMPORTANT: Cascade Agent Instructions".
+Read the rules in the agent rules folder and write key instructions into NOTES.md under "IMPORTANT: Agent Instructions".

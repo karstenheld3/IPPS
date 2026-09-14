@@ -59,7 +59,7 @@ No brackets for tokens in **conditions** - things the agent checks for branching
 - **[PROJECT_FOLDER]** - Absolute path of project folder (same as workspace if no monorepo)
 - **[SESSION_FOLDER]** - Absolute path of currently active session folder
 - **[SRC_FOLDER]** - Absolute path of source folder
-- **[AGENT_FOLDER]** - Agent config folder (`.devin/` or `.claude/`)
+- **[AGENT_FOLDER]** - Agent config folder (agent-specific, e.g., `.devin/`, `.claude/`, `.agent/`)
 
 ### Configuration
 
