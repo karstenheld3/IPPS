@@ -11,7 +11,7 @@ Core definitions and structure for the development system.
 ### Core Concepts
 
 <!-- START: Core -->
-- **[WORKSPACE]**: The Windsurf/VSCode workspace root folder
+- **[WORKSPACE]**: The workspace root folder
 - **[PROJECT]**: If Monorepo (workspace contains multiple projects), the project subfolder. No Monorepo: Workspace = Project
 - **[SESSION]**: All context belonging to a work session - folder, files, conversations, commits, and tracking files (notes, problems, progress)
 <!-- END: Core -->
@@ -19,7 +19,7 @@ Core definitions and structure for the development system.
 <!-- START: Skill: workspace-management -->
 - **[PRODUCT_VERSION]**: Current product version string (e.g., `4.3`, `1.2.0`, `2026-03-15`). Used to compose `[PROMPTSYSTEM_FOLDER]` as `[WORKSPACE_FOLDER]\PromptSystem[PRODUCT_VERSION]` and for release version extraction. A workspace may be SYNCED (receives PromptSystem updates from an upstream source) or SELF-CONTAINED (manages its own PromptSystem locally)
 - **[DEV_SPECS_FOLDER]**: Folder at `[WORKSPACE_FOLDER]/specs/` containing shared specifications, design guidelines, and SOPs synced from an upstream source via `promptsystem-sync.json`. Replaces the former `rules/` folder. Specs are read-only from the agent's perspective during sync - local modifications are preserved via `never_overwrite` patterns. In SELF-CONTAINED repos, specs are authored locally without sync
-- **[DEV_KNOWLEDGE_FOLDER]**: Folder at `[WORKSPACE_FOLDER]/knowledge/` containing reference documents organized as knowledge bundles (topic folders with `.md` files). Synced from an upstream source via `promptsystem-sync.json` bundle configuration. Knowledge bundles are topic-specific (e.g., `Windsurf/`, `AI-Standards/`) and selected per-repo via `selected_bundles` in the sync config. In SELF-CONTAINED repos, knowledge is authored locally
+- **[DEV_KNOWLEDGE_FOLDER]**: Folder at `[WORKSPACE_FOLDER]/knowledge/` containing reference documents organized as knowledge bundles (topic folders with `.md` files). Synced from an upstream source via `promptsystem-sync.json` bundle configuration. Knowledge bundles are topic-specific (e.g., `IDE-Tips/`, `AI-Standards/`) and selected per-repo via `selected_bundles` in the sync config. In SELF-CONTAINED repos, knowledge is authored locally
 - **[PROMPTSYSTEM_SYNC_CONFIG]**: `promptsystem-sync.json` file at `[WORKSPACE_FOLDER]` root. Single source of truth for sync configuration: defines source paths, bundle definitions, include/exclude filters, deprecated files, and never_overwrite patterns. Only present in SYNCED repos. Managed by `sync.ps1` script and `/sync workspace` workflow
 <!-- END: Skill: workspace-management -->
 
@@ -27,13 +27,11 @@ Core definitions and structure for the development system.
 
 ### Agent Folder
 
-**[AGENT_FOLDER]** location depends on agent:
-- Devin: `.devin/`
-- Claude Code: `.claude/`
+**[AGENT_FOLDER]** location depends on agent (e.g., `.devin/`, `.claude/`, `.agent/`). See agent-specific rules for details.
 
 ### Configuration
 
-- **[RULES]**: The current set of agent specs in `[AGENT_FOLDER]/specs/`
+- **[RULES]**: The current set of agent rules in `[AGENT_FOLDER]/rules/`
 - **[WORKFLOWS]**: The current set of agent workflows in `[AGENT_FOLDER]/workflows/`
 - **[SKILLS]**: Agent Skills in `[AGENT_FOLDER]/skills/`
 - **[GRUC]**: Guides, Rules, Checks - pre-calculated compliance criteria. GUIDE + RULES in each skill folder; CHECKS in each skill folder (for skills) or `drift-control/` (for workflows). Exception: `write-documents` keeps all GRUC types in its own folder.
@@ -149,7 +147,7 @@ Five dimensions define how the agent should behave:
 ```
 [WORKSPACE_FOLDER]/
 ├── [AGENT_FOLDER]/
-│   ├── specs/               # Agent specs (.md files)
+│   ├── rules/              # Agent rules (.md files)
 │   ├── workflows/          # Agent workflows (.md files)
 │   └── skills/             # Agent Skills (folders with SKILL.md)
 ├── _Archive/               # Archived sessions
@@ -162,6 +160,7 @@ Five dimensions define how the agent should behave:
 │   ├── PROBLEMS.md         # Session problems
 │   ├── PROGRESS.md         # Session progress
 │   └── FAILS.md            # Lessons learned
+├── specs/                   # Workspace-level specs ([DEV_SPECS_FOLDER])
 ├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
 ├── src/                    # Source code
 ├── !NOTES.md               # Workspace notes (priority file)
@@ -175,10 +174,11 @@ Five dimensions define how the agent should behave:
 ```
 [WORKSPACE_FOLDER]/
 ├── [AGENT_FOLDER]/
-│   ├── specs/               # Workspace-level specs
-│   ├── workflows/          # Workspace-level workflows
-│   └── skills/             # Workspace-level skills
+│   ├── rules/              # Agent rules (.md files)
+│   ├── workflows/          # Agent workflows (.md files)
+│   └── skills/             # Agent Skills (folders with SKILL.md)
 ├── _Archive/               # Archived sessions (all projects)
+├── specs/                   # Workspace-level specs ([DEV_SPECS_FOLDER])
 ├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
 ├── [PROJECT_A]/
 │   ├── _Archive/           # Project A archived sessions
@@ -201,11 +201,12 @@ Five dimensions define how the agent should behave:
 ```
 [WORKSPACE_FOLDER]/
 ├── [AGENT_FOLDER]/
-│   ├── specs/               # Agent specs (.md files)
+│   ├── rules/              # Agent rules (.md files)
 │   ├── workflows/          # Agent workflows (.md files)
 │   └── skills/             # Agent Skills (folders with SKILL.md)
 ├── _Archive/               # Archived sessions
 ├── _[SESSION_FOLDER]/       # Session folders start with underscore
+├── specs/                   # Workspace-level specs ([DEV_SPECS_FOLDER])
 ├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
 ├── main.code-workspace      # References ProductRepo (may be outside [WORKSPACE_FOLDER])
 ├── !NOTES.md               # Workspace notes (priority file)
@@ -280,7 +281,7 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 
 ## Placeholders
 
-- **[WORKSPACE_FOLDER]**: Absolute path of root folder where Windsurf operates
+- **[WORKSPACE_FOLDER]**: Absolute path of root folder where agent operates
 - **[PROJECT_FOLDER]**: Absolute path of project folder (same as workspace if no monorepo)
 - **[SRC_FOLDER]**: Absolute path of source folder
 <!-- END: Skill: workspace-management -->
@@ -326,7 +327,6 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 - `/session-load` - Resume existing session
 - `/session-new` - Initialize new session
 - `/session-save` - Save session progress
-- `/switch-model` - Switch Cascade AI model tier (HIGH, MID, LOW)
 - `/sync` - Document synchronization
 - `/test` - Run tests based on scope
 - `/transcribe` - PDF/web to markdown transcription

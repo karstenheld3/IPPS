@@ -21,7 +21,7 @@ Constants (CT)
 - WS-CT-09: GENERAL workspaces must omit dev-only constants and sections
 
 Structure (ST)
-- WS-ST-01: Agent folder must contain specs/, workflows/, skills/ subfolders
+- WS-ST-01: Agent folder must contain rules/, workflows/, skills/ subfolders
 - WS-ST-02: Workspace structure must match declared mode
 - WS-ST-04: No deprecated files in agent folder
 
@@ -118,10 +118,10 @@ GOOD: promptsystem-sync.json at [WORKSPACE_FOLDER] root with sources, bundles, a
 
 ## WS-ST-01: Agent Folder Structure
 
-Agent folder must contain specs/, workflows/, skills/ subfolders.
+Agent folder must contain rules/, workflows/, skills/ subfolders. The `rules/` subfolder holds agent rules (.md files). The workspace-level `specs/` folder ([DEV_SPECS_FOLDER]) is separate and NOT part of the agent folder.
 
-BAD: Agent folder has specs/ and workflows/ but no skills/ - skills cannot be loaded
-GOOD: Agent folder has all three subfolders with content
+BAD: Agent folder has rules/ and workflows/ but no skills/ - skills cannot be loaded
+GOOD: Agent folder has all three subfolders (rules/, workflows/, skills/) with content
 
 ## WS-ST-02: Workspace Structure Matches Declared Mode
 

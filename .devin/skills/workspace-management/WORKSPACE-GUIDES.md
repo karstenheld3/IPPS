@@ -28,7 +28,7 @@ DevRepo structure:
 - main.code-workspace (references ProductRepo and other repos)
 - NOTES.md (workspace constants, project info, build/test rules)
 - PROBLEMS.md, PROGRESS.md, ID-REGISTRY.md, SOPS.md, FAILS.md
-- [AGENT_FOLDER]/ (specs, workflows, skills)
+- [AGENT_FOLDER]/ (rules, workflows, skills)
 - knowledge/ (knowledge bundles)
 - specs/ (specs bundles from Company)
 - _sessions/ (session folders)
@@ -225,7 +225,7 @@ User runs /verify workspace
 ├─> If SELF-CONTAINED:
 │   ├─> Check base constants only (skip sync source constants)
 │   └─> Skip sync source constant checks
-├─> Check agent folder structure (specs/, workflows/, skills/)
+├─> Check agent folder structure (rules/, workflows/, skills/)
 ├─> Report gaps:
 │   ├─> Missing constant -> add with template default
 │   ├─> Missing required file -> create from template

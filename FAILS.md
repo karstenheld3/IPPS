@@ -1,5 +1,21 @@
 # Failure Log
 
+## 2026-09-14 - Incorrectly Flagged Agent Folder rules/ as Non-Compliant
+
+### [MEDIUM] `GLOB-FL-0002` Incorrectly flagged `.devin/rules/` as needing rename to `specs/` during /workspace-setup verification
+
+- **When**: 2026-09-14 23:34 UTC+02:00
+- **Where**: `!NOTES.md` WS-ST-01 finding in `/workspace-setup` verification report
+- **What**: Flagged `.devin/rules/` as non-compliant with WS-ST-01 ("Agent folder must contain specs/, workflows/, skills/ subfolders"), proposed renaming `rules/` to `specs/` in `.devin/` and `Hera-V1/.agent/`. User corrected: `.devin/rules/` is the standard Devin agent folder structure set by Devin company. The `specs/` in WS-ST-01 refers to `[WORKSPACE_FOLDER]\specs` (workspace-level folder, [DEV_SPECS_FOLDER]), NOT the agent folder's internal `rules/` subfolder
+- **Why it went wrong**:
+  - Read WS-ST-01 literally without distinguishing between agent-folder internal structure (`rules/` - Devin standard) and workspace-level folder (`specs/` - IPPS standard)
+  - Did not verify against actual Devin agent folder conventions before proposing rename
+  - Assumed `specs/` in the rule applied to the agent folder, when it applies to the workspace root
+  - Root cause: `promptsystem-core.md` itself used `specs/` for agent folder internal structure in Configuration section and all 3 folder structure diagrams, propagating the ambiguity to WS-ST-01 and WORKSPACE-GUIDES.md
+- **Evidence**: WS-ST-01 text said "Agent folder must contain specs/, workflows/, skills/ subfolders" - but `.devin/rules/` is the synced structure from `e:\Dev\IPPS\.devin` (Devin source). Source has `rules/` not `specs/`
+- **Suggested fix**: Fixed `promptsystem-core.md` [RULES] definition from `[AGENT_FOLDER]/specs/` to `[AGENT_FOLDER]/rules/`. Fixed all 3 folder structure diagrams to show `rules/` inside agent folder and `specs/` as workspace-level. Fixed WS-ST-01 rule text to say `rules/` not `specs/`. Fixed WORKSPACE-GUIDES.md agent folder references. Do NOT rename `.devin/rules/` to `.devin/specs/`. The workspace root `rules/` to `specs/` rename was correct (that folder is workspace-level, not agent-level)
+- **Prevention rule**: Before proposing any rename based on a rule, verify the rule text against the actual agent platform conventions. The agent folder internal structure is set by the agent platform (Devin uses `rules/`), not by IPPS. IPPS only controls workspace-level folders (`specs/`, `docs/`)
+
 ## 2026-09-12 - Sync Executed Without Preview or Confirmation (Repeat)
 
 ### [HIGH] `GLOB-FL-044` Executed sync.ps1 -execute to 10 target repos without presenting diff preview in chat or waiting for separate confirmation
