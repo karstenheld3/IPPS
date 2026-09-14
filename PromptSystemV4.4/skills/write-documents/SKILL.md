@@ -78,7 +78,7 @@ Read `ASCII_ART_GUIDES.md` before drawing. Use Unicode box-drawing characters pe
 - **TASKS** (`TASKS_[TOPIC].md`) - Partitioned task lists from IMPL/TEST plans. Use to break plans into discrete work items. Read template: `TASKS_TEMPLATE.md`
 
 **Execution:**
-- **PROMPTS** (`_PROMPTS_[Topic].md`) - Prompt queue files for headless agent execution. Use to define sequential prompts that execute as turns of one session. Read template: `PROMPTS_TEMPLATE.md`, guide: `PROMPTS_GUIDES.md`, rules: `PROMPTS_RULES.md`, robustness: `PROMPTS_ROBUSTNESS_GUIDES.md`. Examples: `PROMPTS_EXAMPLE_01-SelfContainedSequence.md`, `PROMPTS_EXAMPLE_02-RobustnessCard.md`, `PROMPTS_EXAMPLE_03-FindingsCard.md`
+- **PROMPTS** (`_PROMPTS_[NN]-[Topic].md`) - Prompt queue files for headless agent execution. Use to define sequential prompts that execute as turns of one session. Read template: `PROMPTS_TEMPLATE.md`, guide: `PROMPTS_GUIDES.md`, rules: `PROMPTS_RULES.md`, robustness: `PROMPTS_ROBUSTNESS_GUIDES.md`. Examples: `PROMPTS_EXAMPLE_01-SelfContainedSequence.md`, `PROMPTS_EXAMPLE_02-RobustnessCard.md`, `PROMPTS_EXAMPLE_03-FindingsCard.md`
 
 **Execution Tracking:**
 - **STRUT** (embedded in any document) - Structured execution plans with checkboxes. Use for phased work with verification gates. Read template: `STRUT_TEMPLATE.md`

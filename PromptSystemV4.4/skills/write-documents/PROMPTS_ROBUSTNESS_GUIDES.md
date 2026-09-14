@@ -1,6 +1,6 @@
 # Prompts Robustness Guide
 
-Read BEFORE writing `_PROMPTS_[Topic].md` files. Pairs with `PROMPTS_GUIDES.md` and `PROMPTS_RULES.md` (PRMT-HS-* and PRMT-RB-* rules).
+Read BEFORE writing `_PROMPTS_[NN]-[Topic].md` files. Pairs with `PROMPTS_GUIDES.md` and `PROMPTS_RULES.md` (PRMT-HS-* and PRMT-RB-* rules).
 
 ## 1. Why Robustness Matters
 

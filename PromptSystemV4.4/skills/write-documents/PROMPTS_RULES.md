@@ -1,6 +1,6 @@
 # Prompts File Rules
 
-Rules for `_PROMPTS_[Topic].md` files. Verifiable from the artifact alone.
+Rules for `_PROMPTS_[NN]-[Topic].md` files. Verifiable from the artifact alone.
 
 **Writing quality:** Apply `APAPALAN_RULES.md` to all prompt content. Key rules: AP-PR-07 (be specific), AP-BR-02 (sacrifice grammar for brevity), AP-ST-01 (goal first), AP-NM-01 (one name per concept).
 
@@ -81,8 +81,9 @@ Robustness (RB)
 - PRMT-RB-06: Card system end-of-prompt protocol includes findings-card update step
 
 Naming (NM)
-- PRMT-NM-01: Filename follows `_PROMPTS_[Topic].md` pattern
+- PRMT-NM-01: Filename follows `_PROMPTS_[NN]-[Topic].md` pattern
 - PRMT-NM-02: Topic is CamelCase description of purpose
+- PRMT-NM-03: [NN] is zero-padded sequence number starting at 01, enforcing execution order across multiple files
 
 ## PRMT-FT-01: Leading Fence Required
 
@@ -186,7 +187,7 @@ Commentary (headings, notes, explanations) is allowed between prompts and before
 - Plain prose commentary between prompts is a violation - it must be in HTML comments
 
 **Density rule:**
-- **Final output files** (`_PROMPTS_[Topic].md`): heading + max 1 sentence in one HTML comment per prompt
+- **Final output files** (`_PROMPTS_[NN]-[Topic].md`): heading + max 1 sentence in one HTML comment per prompt
 - **Template files** (`_PROMPTS_[Topic]_TEMPLATE.md`): no limit (authoring instructions need detail)
 
 **BAD** (verbose prose commentary in final file, not in HTML comments):
@@ -1045,12 +1046,12 @@ An agent that writes a prompt file and then immediately executes all prompts in 
 Prompt files are authored for an execution engine (e.g., Lana) that submits prompts one at a time. The writing agent creates the file; the execution engine runs it. These are separate roles.
 
 **BAD** (agent writes prompt file, then runs all prompts in one response):
-- Agent creates `_PROMPTS_FixAuth.md` with 3 prompts
+- Agent creates `_PROMPTS_01-FixAuth.md` with 3 prompts
 - Agent immediately processes all 3 prompts in a single response, as if they were one instruction
 - Result: single-run depth limit, no per-turn context engineering
 
 **GOOD** (agent writes prompt file for later execution):
-- Agent creates `_PROMPTS_FixAuth.md` with 3 prompts
+- Agent creates `_PROMPTS_01-FixAuth.md` with 3 prompts
 - Agent delivers the file to the user or execution engine
 - Execution engine (Lana, headless runner, or human submitting one prompt at a time) processes each prompt as a separate turn
 
@@ -1091,19 +1092,29 @@ Constraints:
 
 ## PRMT-NM-01: Filename Pattern
 
-`_PROMPTS_[Topic].md` where Topic is CamelCase.
+`_PROMPTS_[NN]-[Topic].md` where [NN] is a zero-padded sequence number and Topic is CamelCase.
 
-**BAD:** `prompts.md`, `PROMPTS-setup.md`, `_PROMPTS_setup project.md`
+**BAD:** `prompts.md`, `PROMPTS-setup.md`, `_PROMPTS_setup project.md`, `_PROMPTS_SetupProject.md`
 
-**GOOD:** `_PROMPTS_SetupProject.md`, `_PROMPTS_MigrateAuth.md`, `_PROMPTS_AnalyzePerformance.md`
+**GOOD:** `_PROMPTS_01-SetupProject.md`, `_PROMPTS_02-MigrateAuth.md`, `_PROMPTS_01-AnalyzePerformance.md`
 
 ## PRMT-NM-02: Topic Describes Purpose
 
 The Topic in the filename describes the prompts file purpose, not the project or session.
 
-**BAD:** `_PROMPTS_MyProject.md`, `_PROMPTS_Session3.md`
+**BAD:** `_PROMPTS_01-MyProject.md`, `_PROMPTS_01-Session3.md`
 
-**GOOD:** `_PROMPTS_SetupCICD.md`, `_PROMPTS_RefactorAuthModule.md`
+**GOOD:** `_PROMPTS_01-SetupCICD.md`, `_PROMPTS_02-RefactorAuthModule.md`
+
+## PRMT-NM-03: Sequence Number Enforces Execution Order
+
+[NN] is a zero-padded 2-digit sequence number starting at `01`. When multiple prompt files exist in the same folder, the number enforces execution order. Single-file sequences still require the number (`01`).
+
+**BAD:** `_PROMPTS_SetupProject.md` (no number), `_PROMPTS_1-SetupProject.md` (not zero-padded)
+
+**GOOD:** `_PROMPTS_01-SetupProject.md`, `_PROMPTS_02-MigrateAuth.md`
+
+When a chain is split into sub-chains (PRMT-SC-04), each sub-chain file gets its own number in the same sequence: `_PROMPTS_01-ImplCore.md`, `_PROMPTS_02-ImplAuth.md`, `_PROMPTS_03-Verify.md`.
 
 ## PRMT-SC-01: Self-Contained Opening
 
