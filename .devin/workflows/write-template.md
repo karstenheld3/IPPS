@@ -135,7 +135,7 @@ Write the template file following the skeleton from `TEMPLATE_GUIDES.md` Section
 
 1. Write top comment block with:
    - Filename convention: `_PROMPTS_[Topic]_TEMPLATE.md`
-   - Instance naming convention: how filled copies should be named
+   - Instance naming convention: how filled copies should be named (pattern: `_PROMPTS_[NN]-[Topic]-[Instance].md` per PRMT-NM-01/03)
    - Purpose: what pipeline or process the prompts enforce
    - Placeholder registry: list ALL placeholders with descriptions and examples
    - Usage instructions: copy, fill, remove comments, paste into queue

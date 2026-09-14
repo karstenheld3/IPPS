@@ -1,13 +1,13 @@
 ---
-description: Create prompt queue files (_PROMPTS_[Topic].md) for sequential headless execution
+description: Create prompt queue files (_PROMPTS_[NN]-[Topic].md) for sequential headless execution
 auto_execution_mode: 3
 ---
 
 # Write Prompts Workflow
 
-Create `_PROMPTS_[Topic].md` files containing an ordered list of prompts. Each prompt is a fenced code block. Prompts execute sequentially as turns of ONE session.
+Create `_PROMPTS_[NN]-[Topic].md` files containing an ordered list of prompts. Each prompt is a fenced code block. Prompts execute sequentially as turns of ONE session.
 
-**Goal**: Validated `_PROMPTS_[Topic].md` file with focused, verifiable prompts
+**Goal**: Validated `_PROMPTS_[NN]-[Topic].md` file with focused, verifiable prompts
 
 **Why**: Headless prompts must be complete on first submission - no human correction loop
 
@@ -59,7 +59,7 @@ This workflow has two modes. Determine the mode from the user's request:
   - Trigger: `/write-prompts from template [path/to/template]`
   - Steps: read template, collect placeholder values, generate filled instance, verify
   - The template's top comment block contains the placeholder registry and usage instructions
-  - Output: `_PROMPTS_[Topic]_[Instance].md` following the template's naming convention
+  - Output: `_PROMPTS_[NN]-[Topic]-[Instance].md` following the template's naming convention
 
 ## Prerequisites
 
@@ -91,10 +91,11 @@ Then scan `[AGENT_FOLDER]/workflows/` frontmatters (the `description` field) to 
 
 ## Step 2: Determine File Location and Name
 
-- Filename: `_PROMPTS_[Topic].md`
+- Filename: `_PROMPTS_[NN]-[Topic].md`
+- `[NN]` = zero-padded 2-digit sequence number starting at `01` (PRMT-NM-03). When creating multiple files in one invocation, assign sequential numbers. When adding to a folder with existing prompt files, continue from the highest existing number + 1
 - `[Topic]` = CamelCase description of prompt purpose
 - Location: session folder (default), workspace root, or user-specified path
-- Examples: `_PROMPTS_SetupProject.md`, `_PROMPTS_MigrateAuth.md`, `_PROMPTS_AnalyzePerformance.md`
+- Examples: `_PROMPTS_01-SetupProject.md`, `_PROMPTS_02-MigrateAuth.md`, `_PROMPTS_01-AnalyzePerformance.md`
 
 ## Step 3: Select Fence Length Per Prompt
 
@@ -312,6 +313,7 @@ Check output against all PRMT-* rules in `PROMPTS_RULES.md`:
 - [ ] Execution (EX): PRMT-EX-01 (one prompt per turn), PRMT-EX-02 (no self-execution), PRMT-EX-03 (execution authority)
 - [ ] Hang Safety (HS): PRMT-HS-01 through PRMT-HS-10
 - [ ] Robustness (RB): PRMT-RB-01 through PRMT-RB-07 (findings card designated, directive in every implementation prompt, card read at startup, glitches filed before commit, entry format, card system integration, PROBLEMS.md distinction)
+- [ ] Naming (NM): PRMT-NM-01 (filename pattern `_PROMPTS_[NN]-[Topic].md`), PRMT-NM-02 (Topic describes purpose), PRMT-NM-03 ([NN] zero-padded sequence number)
 
 ### Step 5b: Workflow Call Formatting Pass
 
@@ -380,7 +382,7 @@ For each placeholder in the registry:
 3. Replace ALL `[PLACEHOLDER]` values with the collected case-specific data
 4. Resolve conditional sections: remove the branch that does not apply based on the collected values (e.g., remove BUG pipeline when category = CHANGE)
 5. Verify fence depths are still correct after modifications (PRMT-FT-02)
-6. Save as `_PROMPTS_[Topic]_[Instance].md` following the template's naming convention
+6. Save as `_PROMPTS_[NN]-[Topic]-[Instance].md` following the template's naming convention
 
 ## Step T4: Verify Filled Instance
 
@@ -416,15 +418,16 @@ The filled file must pass all PRMT-* rules as a standalone prompts file:
 
 ## Compose mode
 
-Validated `_PROMPTS_[Topic].md` file in target location.
+Validated `_PROMPTS_[NN]-[Topic].md` file in target location.
 
 ## From Template mode
 
-Validated `_PROMPTS_[Topic]_[Instance].md` file with all placeholders resolved, ready for sequential execution.
+Validated `_PROMPTS_[NN]-[Topic]-[Instance].md` file with all placeholders resolved, ready for sequential execution.
 
 ## Quality Gate
 
-- [ ] All PRMT-* rules pass (FT-01 through FT-10, ST, SQ, CT-01 through CT-14, SC, EX-01 through EX-03, HS-01 through HS-10, RB, NM)
+- [ ] All PRMT-* rules pass (FT-01 through FT-10, ST, SQ, CT-01 through CT-14, SC, EX-01 through EX-03, HS-01 through HS-10, RB, NM-01 through NM-03)
+- [ ] Filename includes zero-padded sequence number `_PROMPTS_[NN]-[Topic].md` (PRMT-NM-03)
 - [ ] Workflow call formatting: no execution verb + backticks combinations remain (PRMT-CT-08)
 - [ ] Self-contained opening in every prompt (PRMT-SC-01): context-loading directive, "treat earlier conversation as compacted", step identifier
 - [ ] No conversation dependency: no "the previous step" without file path (PRMT-SC-02)

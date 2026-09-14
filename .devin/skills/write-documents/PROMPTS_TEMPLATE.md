@@ -1,5 +1,5 @@
 <!-- PROMPTS TEMPLATE
-Filename: _PROMPTS_[Topic].md
+Filename: _PROMPTS_[NN]-[Topic].md
 Location: session folder (default), workspace root, or user-specified path
 Topic: CamelCase description (e.g., SetupProject, MigrateAuth, AnalyzePerformance)
 

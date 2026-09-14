@@ -212,11 +212,11 @@ Downstream repos that pull from this source. Each repo has its own `promptsystem
 - ../PRXL/src
 - ../SharePoint-GPT-Middleware
 - ../USTVA
-- ../openclaw/workspace
 - ../LLM-Research
 - ../Lana-V1
 - ../Lana-V1-Dev
-- ../Lana-V2-Dev
+- ../Hera-V1-Dev (agent folder: `.devin`)
+- ../Hera-V1 (agent folder: `.agent`)
 
 ## Release Configuration
 

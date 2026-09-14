@@ -1,6 +1,6 @@
 # Prompts File Guide
 
-Read BEFORE writing `_PROMPTS_[Topic].md` files. Follow `PROMPTS_RULES.md` for verification.
+Read BEFORE writing `_PROMPTS_[NN]-[Topic].md` files. Follow `PROMPTS_RULES.md` for verification.
 
 ## 1. Classify the Task
 
@@ -137,7 +137,7 @@ all gaps and remaining work.
 
 ## 4. Plan State Flow
 
-In a `_PROMPTS_[Topic].md` file, prompts run as turns of one session but must not rely on conversation history. Each prompt must be self-contained: it names its dependencies by file path, not by conversation reference. The chain holds the state through files, not through model memory of prior prompts.
+In a `_PROMPTS_[NN]-[Topic].md` file, prompts run as turns of one session but must not rely on conversation history. Each prompt must be self-contained: it names its dependencies by file path, not by conversation reference. The chain holds the state through files, not through model memory of prior prompts.
 
 Plan what each prompt produces that the next one needs:
 - Name artifacts explicitly by file path: "Using the analysis in `_INFO_DatabaseDesign.md` section 2..."
@@ -533,3 +533,4 @@ Before considering the prompts file complete:
 - [ ] Document History timestamps use request metadata, not extrapolated times (PRMT-CT-13)
 - [ ] Banned-term sweep recordings describe pattern shape, do not spell banned literals (PRMT-CT-14)
 - [ ] Verify section checks spec-code consistency when prompt changes code with associated spec (PRMT-HS-10)
+- [ ] Filename includes zero-padded sequence number `_PROMPTS_[NN]-[Topic].md` (PRMT-NM-03)
