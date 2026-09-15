@@ -1,5 +1,16 @@
 # Failure Log
 
+## 2026-09-15 - Document History Claimed Removal That Was Not Completed
+
+### [LOW] `IPPSKBNDL-FL-0001` History entry "Removed: All mentions of ZipDoc" while four mentions remain in the spec
+
+- **When**: 2026-09-15 20:50 UTC+02:00 (discovered 2026-09-15 21:55 during `/critique`)
+- **Where**: `specs/_SPEC_IPPS_KNOWLEDGE_BUNDLE_FORMAT.md` line 24, 28, 334, 599 vs Document History entry at line 699-700
+- **What**: Document History records "Removed: All mentions of ZipDoc, Delphios, and Infrafin - spec is now self-contained". Four ZipDoc references remain: MNF line 24 ("primary improvement over ZipDoc"), MNF line 28 ("provenance attributes from ZipDoc"), FR-08 line 334 ("integrated from ZipDoc"), Data Structures line 599 ("with all ZipDoc attributes").
+- **Why it went wrong**: Same pattern as `GLOB-FL-037` - the removal was applied where the term was first noticed, not propagated by grep across the whole file before writing the history claim. The history entry asserted completion without verification.
+- **Evidence**: `_SPEC_IPPS_KNOWLEDGE_BUNDLE_FORMAT_REVIEW.md [IPPSKBNDL-SP01-RV01]` finding `IPPSKBNDL-RV-023`
+- **Suggested fix**: Before writing a "Removed: All mentions of X" history entry, grep the file for X and confirm zero hits. Remove the four remaining mentions or amend the history entry.
+
 ## 2026-09-14 - Incorrectly Flagged Agent Folder rules/ as Non-Compliant
 
 ### [MEDIUM] `GLOB-FL-0002` Incorrectly flagged `.devin/rules/` as needing rename to `specs/` during /workspace-setup verification

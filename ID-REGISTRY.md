@@ -227,3 +227,4 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **AUTHPROT** - Authentication Protocols (OAuth 2.0, OpenID Connect, SAML, JWT comparison research) - 2026-09-12
 - **ANTBLGTRNS** - Anthropic Blog Transcription and Evaluation (225 articles transcribed, 14 selected for gap analysis vs IPPS) - 2026-09-13
 - **DVNFUSION** - Devin Fusion Harness (Cognition's multi-model lead+sidekick agent architecture for token-efficient coding) - 2026-09-15
+- **IPPSKBNDL** - IPPS Knowledge Bundle Format (folder-and-document format for agent-optimized knowledge retrieval with progressive disclosure) - 2026-09-15
