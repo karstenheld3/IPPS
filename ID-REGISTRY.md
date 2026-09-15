@@ -225,3 +225,5 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **MICROCOM** - Microservices Communication Patterns (synchronous, asynchronous, event-driven layer comparison) - 2026-09-12
 - **TYPESAFE** - Type-Safe APIs (MINTO article on type safety adoption for API design) - 2026-09-12
 - **AUTHPROT** - Authentication Protocols (OAuth 2.0, OpenID Connect, SAML, JWT comparison research) - 2026-09-12
+- **ANTBLGTRNS** - Anthropic Blog Transcription and Evaluation (225 articles transcribed, 14 selected for gap analysis vs IPPS) - 2026-09-13
+- **DVNFUSION** - Devin Fusion Harness (Cognition's multi-model lead+sidekick agent architecture for token-efficient coding) - 2026-09-15
