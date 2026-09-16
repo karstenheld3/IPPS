@@ -42,6 +42,16 @@ Follow `SKILL_TEMPLATE.md` structure. Key decisions:
 
 **Core Procedures**: Numbered steps with tool invocations. One procedure per common task.
 
+**Technical Depth** (for tool/MCP skills): Include sufficient detail for the agent to use the skill without external docs:
+- Architecture: how components connect (diagram preferred)
+- Tool actions/API: all available actions with parameters
+- Dependencies: what libraries/tools are used under the hood
+- Platform specifics: OS-specific behavior (Windows, macOS, Linux)
+- Capabilities and Limitations: what the skill enables and what it cannot do
+- Sources: links to official docs, repos, research
+
+Without sufficient technical detail, the agent cannot know which actions are available, anticipate limitations, or troubleshoot failures.
+
 **Gotchas**: Non-obvious behavior. Format: `**Short label** - explanation and fix`
 
 ## 4. Token Optimization
