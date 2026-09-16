@@ -228,3 +228,4 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **ANTBLGTRNS** - Anthropic Blog Transcription and Evaluation (225 articles transcribed, 14 selected for gap analysis vs IPPS) - 2026-09-13
 - **DVNFUSION** - Devin Fusion Harness (Cognition's multi-model lead+sidekick agent architecture for token-efficient coding) - 2026-09-15
 - **IPPSKBNDL** - IPPS Knowledge Bundle Format (folder-and-document format for agent-optimized knowledge retrieval with progressive disclosure) - 2026-09-15
+- **TRNSKILRW** - Transcription Skill Rewrite (complete rewrite of transcribe.md workflow and llm-transcription skill for two output types: markdown transcription and IPPS knowledge bundles) - 2026-09-16

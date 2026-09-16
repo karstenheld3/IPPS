@@ -13,9 +13,10 @@
 
 ## Summary
 
-- 4 categories, 5 failure modes, 1 instance recorded
-- Categories: Attention Dilution, Context Processing Variance, Hallucination, Probabilistic Variance
-- Failure Modes: Constraint Decay, Process Discipline Collapse, Budget Misallocation, Self-Correction Shortcutting, Context Bleeding
+- 5 categories, 6 failure modes, 2 instances recorded
+- Categories: Attention Dilution, Context Processing Variance, Hallucination, Probabilistic Variance, Output Scale Miscalibration
+- Failure Modes: Constraint Decay, Process Discipline Collapse, Budget Misallocation, Self-Correction Shortcutting, Context Bleeding, Regeneration Overhead
+- Large tool calls that exceed execution limits force content regeneration in smaller edits, duplicating generation cost [OBSERVED]
 
 ## Table of Contents
 
@@ -56,6 +57,14 @@ Same input produces different outputs across runs due to sampling mechanics (tem
 **Mechanism**: LLM inference involves stochastic sampling from probability distributions. Even at low temperature, multiple tokens may have near-equal probability, creating branching points where different runs diverge. These divergences compound through the generation, producing structurally different outputs from identical inputs.
 
 **Distinguishing feature**: Nothing changed in the input, rules, or context. The output simply differed between runs.
+
+### CAT-05: Output Scale Miscalibration
+
+The model misjudges the maximum output size that can be successfully delivered through a single tool call. It generates content exceeding tool execution limits, causing the tool call to fail and the generated content to be lost.
+
+**Mechanism**: Models lack reliable internal estimates of output token limits for tool calls. They generate content based on task requirements without calibrating against tool execution constraints. When the generated content exceeds the limit, the tool call fails and the content is lost, requiring regeneration in smaller pieces. The cost is amplified when using expensive models: the same content is generated twice - once in the failed large call, once across multiple smaller calls.
+
+**Distinguishing feature**: The content was correct and complete. The failure was in the delivery mechanism (tool call exceeded size limits), not in the generation quality.
 
 ## 2. Failure Modes
 
@@ -98,6 +107,13 @@ Information from user-provided artifacts (screenshots, conversation history, exa
 - **Observable**: Private paths, names, project-specific identifiers, or user-provided examples appear in reusable templates, generic documentation, or outputs intended for different audiences.
 - **Caused by**: CAT-01 (Attention Dilution)
 
+### FM-06: Regeneration Overhead
+
+When a large tool call fails due to output size limits, the model must regenerate the same content in smaller pieces, duplicating generation cost. The expensive model pays twice for the same output: once in the failed large call (content lost), once across multiple smaller calls (content delivered).
+
+- **Observable**: Model generates a large file in a single tool call, call fails, model re-generates the same content across multiple smaller edits. Generation cost is effectively doubled.
+- **Caused by**: CAT-05 (Output Scale Miscalibration)
+
 ## 3. Instances
 
 ### INST-001: Private path leaked into reusable template
@@ -109,6 +125,15 @@ Information from user-provided artifacts (screenshots, conversation history, exa
 - **What happened**: Agent added CV-LN-04 rule to CONVERSATION_TEMPLATE.md requiring absolute file links. Used a real private Dropbox filesystem path as the example, copied from the user's screenshot. The template is a reusable skill file deployed to all linked repositories.
 - **Rule violated**: `agent-behavior.md` L63: "Never leak project-specific or private data into workflows, skills, or rules."
 
+### INST-002: Large file tool call failure requiring regeneration
+
+- **FAILS ref**: (none)
+- **Date**: 2026-09-16
+- **Categories**: CAT-05 (Output Scale Miscalibration)
+- **Failure modes**: FM-06 (Regeneration Overhead)
+- **What happened**: When using expensive models to write large amounts of data into a single file, the Cascade agent frequently fails to execute the tool call. The model then has to re-generate the same content in multiple smaller edits, effectively duplicating the generation cost. The content was correct in the first attempt but exceeded the tool call execution limit.
+- **Rule violated**: N/A (no existing rule addresses output scale calibration for tool calls)
+
 ## Sources
 
 - `AGNTPROB-IN01-SC-IPPS-FAILS`: `E:\Dev\IPPS\FAILS.md` - 34 failure entries (GLOB-FL-001 through GLOB-FL-034)
@@ -116,6 +141,12 @@ Information from user-provided artifacts (screenshots, conversation history, exa
 - `AGNTPROB-IN01-SC-KWRK-DRAFT`: `E:\Dev\KarstensWorkspace\_Sessions\_2026-07-02_AgentischesDesignVortrag\DRAFT_VORTRAG.md` - Presentation draft identifying 4 root causes and compliance measurements
 
 ## Document History
+
+**[2026-09-16 00:32]**
+- Added: CAT-05 (Output Scale Miscalibration)
+- Added: FM-06 (Regeneration Overhead)
+- Added: INST-002 (large file tool call failure requiring regeneration)
+- Updated: Summary with new counts and key finding
 
 **[2026-07-08 11:48]**
 - Restructured: 3-tier model (Categories, Failure Modes, Instances)

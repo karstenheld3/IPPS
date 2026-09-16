@@ -20,6 +20,7 @@
 - [Sync Architecture](#sync-architecture-2026-09-06-revised-2026-09-12)
 - [PromptSystem 5.0 Planning](#promptsystem-50-planning)
 - [PERSONAL_WORKFLOWS](#personal_workflows-excluded-from-development-only-repos-deployed-only-to-all-repos)
+- [Agentic Problems Notepad](#agentic-problems-notepad)
 - [LINKED_REPOS](#linked_repos)
 - [Release Configuration](#release-configuration)
 
@@ -201,6 +202,10 @@ Workflow behavior: formulates goal, collects premises, analyzes problem nature, 
 
 - conversation-start.md
 - conversation-update.md
+
+## Agentic Problems Notepad
+
+`docs/_INFO_AGENTIC_PROBLEMS.md` is the central notepad for collecting all agentic failure patterns, PromptSystem problems, and shortcomings. Add new categories, failure modes, and instances as they are observed. Do NOT record fix suggestions in this file - only record and categorize the problem.
 
 ## [LINKED_REPOS]
 
