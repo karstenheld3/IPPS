@@ -112,7 +112,7 @@ Five dimensions define how the agent should behave:
 
 - **SINGLE-PROJECT** - Workspace contains one project
 - **MONOREPO** - Workspace contains multiple independent projects
-- **WORKSPACE** - Workspace root with multiple independent repos (not monorepo). Detected by presence of `main.code-workspace` file
+- **WORKSPACE** - Workspace root with multiple independent repos (not monorepo). Detected by presence of a `*.code-workspace` file
 
 ### Dimension 2: Version Strategy
 
@@ -208,7 +208,7 @@ Five dimensions define how the agent should behave:
 ├── _[SESSION_FOLDER]/       # Session folders start with underscore
 ├── specs/                   # Workspace-level specs ([DEV_SPECS_FOLDER])
 ├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
-├── main.code-workspace      # References ProductRepo (may be outside [WORKSPACE_FOLDER])
+├── [folder-name].code-workspace  # References ProductRepo (may be outside [WORKSPACE_FOLDER])
 ├── !NOTES.md               # Workspace notes (priority file)
 ├── PROBLEMS.md            # Known problems
 ├── !PROGRESS.md            # Overall progress
