@@ -1,4 +1,4 @@
-# _INFO_HOW_TO_CREATE_EFFECTIVE_PROMPT_SEQUENCES_REVIEW.md
+# _INFO_HOW_TO_CREATE_EFFECTIVE_PROMPT_SEQUENCES_CRITIQUE.md
 
 **Doc ID**: PRMTSCN-IN02-RV01
 **Goal**: Document potential issues, risks, and suggestions for improvement
@@ -182,7 +182,7 @@
 
 **Categories and Labels**: See FAILS_TEMPLATE.md for severity categories and assumption labels.
 
-**File Naming**: Document review: `_INFO_HOW_TO_CREATE_EFFECTIVE_PROMPT_SEQUENCES_REVIEW.md`
+**File Naming**: Document review: `_INFO_HOW_TO_CREATE_EFFECTIVE_PROMPT_SEQUENCES_CRITIQUE.md`
 
 **Management**: Create fresh each review. Can be discarded after issues addressed.
 
