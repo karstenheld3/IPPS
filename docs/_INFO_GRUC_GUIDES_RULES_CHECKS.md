@@ -322,7 +322,7 @@ This creates a feedback loop where past failures become future prevention criter
 ## 8. Current Implementation Status
 
 **Realized:**
-- `*_RULES.md` files exist in `@skills:write-documents` (14 files), `@skills:coding-conventions` (10 files, `*-RULES.md` dash pattern), `@skills:deep-research` (6 files)
+- `*_RULES.md` files exist in `@skills:write-documents` (14 files), `@skills:coding-conventions` (10 files, `*-RULES.md` dash pattern), `@skills:research-methods` (6 files)
 - `*_GUIDES.md` files exist in `@skills:write-documents` (6 files)
 - `/verify` consumes RULES files (structural compliance only)
 - `/critique` deployed (switching to GUIDES-driven review)
@@ -566,6 +566,9 @@ When writing a complete GRUC set for a skill:
 8. **EXAMPLES reference neither** - EXAMPLES are standalone demonstrations. They do not reference RULES or CHECKS. They may reference the GUIDE that links to them.
 
 ## Document History
+
+**[2026-09-23 15:10]**
+- Fixed: section 8 skill reference updated from `@skills:deep-research` to `@skills:research-methods` (skill rename, file count unchanged at 6)
 
 **[2026-09-12 14:55]**
 - Added: TEMPLATE as fifth GRUC file type (section 2.5) - skeleton structure for document creation
