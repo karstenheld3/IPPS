@@ -3,7 +3,7 @@
 **Doc ID**: DVDT-IN01
 **Goal**: Comprehensive reference for Devin Desktop (formerly Windsurf) - agent harnesses, AI models, customization, developer tools, enterprise controls, and architecture internals
 **Version scope**: Devin Desktop 3.8.20+ / Devin Local 2026.5.26+ / Devin Next 3.8.1020 and 3.9.1018
-**Timeline**: Created 2026-08-27, Updated 4 times (2026-08-27 - 2026-09-09)
+**Timeline**: Created 2026-08-27, Updated 5 times (2026-08-27 - 2026-09-17)
 
 ## Summary
 
@@ -38,6 +38,7 @@
 - Cascade UI built into app shell (`workbench.desktop.main.js`), not extension.js [TESTED 2026-09-09]
 - `devin.cascade.enabled` setting is dead code: registered in package.json but never read in extension.js [TESTED 2026-09-09]
 - Auto-update controlled by `product.json` `updateUrl` field, not `update.mode` setting [TESTED 2026-09-09]
+- Running user-scope Windows install as Administrator disables updates entirely (inherited VS Code OSS behavior) [TESTED 2026-09-17]
 
 **Version Differences (3.8.1020 vs 3.9.1018):**
 - 3.9 adds multimodal support: DocumentData, VideoData protobuf types, ChatMessagePrompt fields 20-21, ModelFeatures fields 27-30 [VERIFIED]
@@ -1125,6 +1126,8 @@ C:\Users\<User>\
 
 **Auto-update control (3.8.1020, Next channel):** `product.json` at `resources/app/product.json` contains `updateUrl` field pointing to `https://windsurf-next.codeium.com`. Setting this to empty string blocks auto-updates reliably. The standard VS Code `update.mode: "none"` setting in settings.json may not be respected by this fork. `product.json` also contains `windsurfVersion` (e.g., `3.8.1020+next.2d9020110a`), `commit` hash, `date`, and `quality` fields. [TESTED 2026-09-09]
 
+**Admin-elevation update block (Windows):** Launching the user-scope installation (`%LOCALAPPDATA%\Programs\Devin` or `Devin Next`) as Administrator disables updates entirely. The app shows a notification: "Updates are disabled because you are running the user-scope installation of Devin as Administrator" with "Learn More" and "Don't Show Again" actions. Behavior inherited unchanged from VS Code OSS - the user-scope updater refuses to run elevated (no UAC elevation support, unlike the system-scope installer). Relaunching as a normal user restores update functionality. [TESTED 2026-09-17]
+
 **Key files reference:**
 
 **User config:**
@@ -1218,7 +1221,7 @@ Devin.exe (Electron main process)
 
 **Telemetry:** Opt-out via Settings > Telemetry. Categories: usage analytics, crash reports, extension telemetry. No code content transmitted in telemetry payloads. [VERIFIED]
 
-**Update mechanism:** Two channels: Stable (default) and Next (pre-release). Auto-update enabled by default. Enterprise can disable auto-update via GPO/MDM policy. Update URL in `product.json` controls update source; nullifying it blocks updates. [VERIFIED]
+**Update mechanism:** Two channels: Stable (default) and Next (pre-release). Auto-update enabled by default. Enterprise can disable auto-update via GPO/MDM policy. Update URL in `product.json` controls update source; nullifying it blocks updates. On Windows, running the user-scope installation as Administrator also disables updates (VS Code OSS inherited; see Section 16.2). [VERIFIED]
 
 **Binary analysis (3.8.1020 vs 3.9.1018):**
 
@@ -1423,8 +1426,15 @@ The client extension never checks these fields to show/hide Cascade UI. Cascade 
 - `DVDT-IN01-SC-LOCAL-V39`: Devin Next 3.9.1018 extension.js, package.json, language_server binary - Extracted from installer ZIP [TESTED 2026-09-09]
 - `DVDT-IN01-SC-LOCAL-BIN`: Binary string extraction and comparison using PowerShell `[regex]::Matches` on Go binary [TESTED 2026-09-09]
 - `DVDT-IN01-SC-LOCAL-WS`: `workbench.desktop.main.js` Cascade view registration analysis [TESTED 2026-09-09]
+- `DVDT-IN01-SC-LOCAL-ADM`: User-scope install launched as Administrator - update-disabled notification observed on Devin Desktop [TESTED 2026-09-17]
 
 ## 20. Document History
+
+**[2026-09-17]**
+- Added: Section 16.2 admin-elevation update block -- user-scope Windows install run as Administrator disables updates, notification observed, inherited VS Code OSS behavior
+- Added: Summary architecture bullet and Section 17 update mechanism note for admin-elevation update block
+- Added: Local investigation source DVDT-IN01-SC-LOCAL-ADM
+- Changed: Timeline updated to 5 updates
 
 **[2026-09-09 20:30]**
 - Added: Section 18 "Version Differences: 3.8 vs 3.9" -- file size deltas, multimodal support (DocumentData, VideoData, ChatMessagePrompt fields 20-21, ModelFeatures fields), ACP metadata expansion (80+ cognition.ai/* keys), configuration changes, error codes, server-side cascade controls, modification options assessment
