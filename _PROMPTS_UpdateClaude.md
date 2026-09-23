@@ -11,14 +11,14 @@ prompt_system: IPPS
 ```
 Update Claude [ 01 / 07 ] - Preflight: inventory and clean target
 
-Read `__CARD_UpdateClaude-Findings.md` in the repository root (create it in this prompt if missing) and `_PROMPTS_UpdateClaude.md` for sequence context. Treat earlier conversation as compacted. Step 1 of 7 of the Claude Code deployment. Working directory: repository root (the folder containing `PromptSystemV4.4\` and `NOTES.md`).
+Read `__CARD_UpdateClaude-Findings.md` in the repository root (create it in this prompt if missing) and `_PROMPTS_UpdateClaude.md` for sequence context. Treat earlier conversation as compacted. Step 1 of 7 of the Claude Code deployment. Working directory: repository root (the folder containing `PromptSystemV4.5\` and `NOTES.md`).
 
 Objective: source inventory recorded and the deployment target reset so the migration prompts (2, 3, and 5) rebuild `.claude\` from a clean state.
 
-Count with the find_by_name tool: markdown files in `PromptSystemV4.4\rules\` (expected 8), markdown files in `PromptSystemV4.4\workflows\` (expected 49), skill folders in `PromptSystemV4.4\skills\` (expected 24). Record the three actual counts and any deviation from the expected counts in `__CARD_UpdateClaude-Findings.md`. Delete `.claude\rules\` and `.claude\skills\` if they exist (full rebuild semantics).
+Count with the find_by_name tool: markdown files in `PromptSystemV4.5\rules\` (expected 8), markdown files in `PromptSystemV4.5\workflows\` (expected 49), skill folders in `PromptSystemV4.5\skills\` (expected 24). Record the three actual counts and any deviation from the expected counts in `__CARD_UpdateClaude-Findings.md`. Delete `.claude\rules\` and `.claude\skills\` if they exist (full rebuild semantics).
 
 Constraints:
-- Do not modify anything under `PromptSystemV4.4\` - it is the read-only source of truth
+- Do not modify anything under `PromptSystemV4.5\` - it is the read-only source of truth
 - Do not delete any `.claude\` content other than the `rules\` and `skills\` subtrees (leave `settings.json` and any other content untouched)
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
@@ -40,9 +40,9 @@ Update Claude [ 02 / 07 ] - Migrate rules
 
 Read `__CARD_UpdateClaude-Findings.md` and confirm the rule inventory count is recorded (prior-step verification). Treat earlier conversation as compacted. Step 2 of 7. Authority: `_PROMPTS_UpdateClaude.md` Prompt 2 design (source: CLAUDEIPPS-IN02 section 3.1).
 
-Objective: `.claude\rules\` contains exact copies of every agent-agnostic rule file from `PromptSystemV4.4\rules\`; `devin.md` is not deployed.
+Objective: `.claude\rules\` contains exact copies of every agent-agnostic rule file from `PromptSystemV4.5\rules\`; `devin.md` is not deployed.
 
-Copy each rule file from `PromptSystemV4.4\rules\` to `.claude\rules\` except `devin.md` (Devin/Cascade-specific tool constraints, meaningless for Claude Code). No content transform - the deployed rules are agent-agnostic by design and the `[AGENT_FOLDER]` placeholder resolves per agent.
+Copy each rule file from `PromptSystemV4.5\rules\` to `.claude\rules\` except `devin.md` (Devin/Cascade-specific tool constraints, meaningless for Claude Code). No content transform - the deployed rules are agent-agnostic by design and the `[AGENT_FOLDER]` placeholder resolves per agent.
 
 Constraints:
 - Do not modify the source files
@@ -67,7 +67,7 @@ Update Claude [ 03 / 07 ] - Migrate workflows
 
 Read `__CARD_UpdateClaude-Findings.md` and confirm `.claude\rules\` holds 7 files (prior-step verification). Treat earlier conversation as compacted. Step 3 of 7. Authority: `_PROMPTS_UpdateClaude.md` Prompt 3 design (source: CLAUDEIPPS-IN02 sections 3.2 and 4).
 
-Objective: every agent-agnostic workflow from `PromptSystemV4.4\workflows\` is deployed as a user-invocable skill `.claude\skills\<name>\SKILL.md` with transformed frontmatter, the workflow body unchanged, and the collision rename applied. `switch-model.md` is not deployed (agent-specific, see exclusion note below).
+Objective: every agent-agnostic workflow from `PromptSystemV4.5\workflows\` is deployed as a user-invocable skill `.claude\skills\<name>\SKILL.md` with transformed frontmatter, the workflow body unchanged, and the collision rename applied. `switch-model.md` is not deployed (agent-specific, see exclusion note below).
 
 Per workflow file: create `.claude\skills\<name>\SKILL.md` containing the transformed frontmatter followed by the original workflow body. Transform: keep `description`; add `name` (the deployed folder name) and `disable-model-invocation: true`; drop `auto_execution_mode`.
 
@@ -128,9 +128,9 @@ Update Claude [ 05 / 07 ] - Migrate skills
 
 Read `__CARD_UpdateClaude-Findings.md` and confirm the workflow-derived skill folders exist in `.claude\skills\` (prior-step verification). Treat earlier conversation as compacted. Step 5 of 7. Authority: `_PROMPTS_UpdateClaude.md` Prompt 5 design (source: CLAUDEIPPS-IN02 sections 3.3 and 5).
 
-Objective: every agent-agnostic skill from `PromptSystemV4.4\skills\` is deployed to `.claude\skills\<name>\` with all supporting files and the invocation classification frontmatter applied. `devin-auto-model-switcher` is not deployed (agent-specific: drives the Devin Cascade model selector via keyboard simulation; Claude Code has native `/model`).
+Objective: every agent-agnostic skill from `PromptSystemV4.5\skills\` is deployed to `.claude\skills\<name>\` with all supporting files and the invocation classification frontmatter applied. `devin-auto-model-switcher` is not deployed (agent-specific: drives the Devin Cascade model selector via keyboard simulation; Claude Code has native `/model`).
 
-Copy each skill folder from `PromptSystemV4.4\skills\` to `.claude\skills\<name>\` except `devin-auto-model-switcher`, including supporting files (progressive disclosure). Keep existing `name` and `description` frontmatter. Add `disable-model-invocation: true` to the 14 user-only skills; the 9 model-triggered skills stay without it. 6 source skills have no frontmatter at all (5 user-only: travel-info, windows-desktop-control, llm-computer-use, llm-evaluation, llm-transcription; 1 model-triggered: drift-control) - prepend frontmatter to their deployed copies only (name = folder name, description derived from the file's intro line); do not modify the sources.
+Copy each skill folder from `PromptSystemV4.5\skills\` to `.claude\skills\<name>\` except `devin-auto-model-switcher`, including supporting files (progressive disclosure). Keep existing `name` and `description` frontmatter. Add `disable-model-invocation: true` to the 14 user-only skills; the 9 model-triggered skills stay without it. 6 source skills have no frontmatter at all (5 user-only: travel-info, windows-desktop-control, llm-computer-use, llm-evaluation, llm-transcription; 1 model-triggered: drift-control) - prepend frontmatter to their deployed copies only (name = folder name, description derived from the file's intro line); do not modify the sources.
 
 Model-triggered (9): write-documents, session-management, coding-conventions, research-methods, workspace-management, drift-control, edird-phase-planning, git-conventions, ms-playwright-mcp
 
@@ -189,7 +189,7 @@ the `.claude\` rules and skills deployment, the NOTES.md mechanism update, and `
 Report to the user: deployed counts (rules, skills), the rename (`ipps-verify`), and that already-running Claude Code sessions pick up regenerated skills only after a restart or `/reload-skills`.
 
 Constraints:
-- Do not modify anything under `PromptSystemV4.4\`
+- Do not modify anything under `PromptSystemV4.5\`
 - Do not commit `__CARD_UpdateClaude-Findings.md` (runtime scaffolding, removed later by `/cleanup`)
 - Do not change NOTES.md beyond the mechanism line
 - Execute without asking for confirmation

@@ -7,12 +7,12 @@
 **Timeline**: Created 2026-09-12
 
 **Target file(s)**:
-- `PromptSystemV4.4/workflows/ascii-diagram.md`
-- `PromptSystemV4.4/skills/write-documents/ASCII_ART_GUIDES.md`
-- `PromptSystemV4.4/skills/write-documents/ASCII_ART_RULES.md`
-- `PromptSystemV4.4/skills/write-documents/ASCII_ART_CHECKS.md`
-- `PromptSystemV4.4/skills/write-documents/ASCII_ART_EXAMPLES_*.md`
-- `PromptSystemV4.4/skills/write-documents/SetAsciiBoxStyle.ps1`
+- `PromptSystemV4.5/workflows/ascii-diagram.md`
+- `PromptSystemV4.5/skills/write-documents/ASCII_ART_GUIDES.md`
+- `PromptSystemV4.5/skills/write-documents/ASCII_ART_RULES.md`
+- `PromptSystemV4.5/skills/write-documents/ASCII_ART_CHECKS.md`
+- `PromptSystemV4.5/skills/write-documents/ASCII_ART_EXAMPLES_*.md`
+- `PromptSystemV4.5/skills/write-documents/SetAsciiBoxStyle.ps1`
 
 **Depends on:**
 - `specs/_SPEC_GRUC_STANDARD.md [GRUC-SP01]` for GRUC file type definitions, structure, and consumer mapping
@@ -81,7 +81,7 @@ PROBLEMS.md item 12 (DVSYS-FT-0001) defines the original requirements: guides, r
 
 A **GRUC File Set** is the collection of GUIDE, RULES, CHECKS, and EXAMPLE files for one domain within a skill.
 
-**Storage:** `PromptSystemV4.4/skills/write-documents/`
+**Storage:** `PromptSystemV4.5/skills/write-documents/`
 **Definition:** This SPEC
 
 **Key properties:**
@@ -119,7 +119,7 @@ A **Reference INFO Document** contains the deep research material, too large for
 
 A **Helper Script** is a PowerShell script for automated ASCII art formatting tasks.
 
-**Storage:** `PromptSystemV4.4/skills/write-documents/`
+**Storage:** `PromptSystemV4.5/skills/write-documents/`
 **Key properties:**
 - `SetAsciiBoxStyle.ps1` - Detects and converts box styles (plain/unicode, normal/dotted/dashed/double/heavy/rounded)
 - Future scripts added per-problem, consolidated into md.py later
@@ -134,7 +134,7 @@ The `ascii-diagram.md` workflow must support two modes determined by verb semant
 
 **ASCIIART-FR-02: GRUC File Set in write-documents**
 
-All GRUC files must reside in `PromptSystemV4.4/skills/write-documents/`:
+All GRUC files must reside in `PromptSystemV4.5/skills/write-documents/`:
 - `ASCII_ART_GUIDES.md` - High-level tips, common problems with solutions, example lookup references
 - `ASCII_ART_RULES.md` - Concrete verification rules with BAD/GOOD pairs, checkable from output alone
 - `ASCII_ART_CHECKS.md` - PD items (process discipline) and QI items (quality improvement with tips)
@@ -168,7 +168,7 @@ The deep research material must be moved to `docs/_INFO_ASCII_ART_DIAGRAMS.md` w
 
 **ASCIIART-FR-08: Helper Scripts in write-documents**
 
-PowerShell scripts must reside in `PromptSystemV4.4/skills/write-documents/` alongside the GRUC files. Scripts are called by the fix mode of the workflow.
+PowerShell scripts must reside in `PromptSystemV4.5/skills/write-documents/` alongside the GRUC files. Scripts are called by the fix mode of the workflow.
 
 **ASCIIART-FR-09: SKILL.md Verb Mapping**
 
@@ -286,7 +286,7 @@ User says "fix", "change", "modify", or "set" diagram
 
 ### ASCIIART-AC-01: GRUC File Set Complete
 
-- [ ] `ASCII_ART_GUIDES.md` exists in `PromptSystemV4.4/skills/write-documents/`
+- [ ] `ASCII_ART_GUIDES.md` exists in `PromptSystemV4.5/skills/write-documents/`
 - [ ] `ASCII_ART_RULES.md` exists in same folder
 - [ ] `ASCII_ART_CHECKS.md` exists in same folder
 - [ ] At least one `ASCII_ART_EXAMPLES_*.md` file exists

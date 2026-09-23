@@ -102,10 +102,10 @@ When adding workflows later:
 
 ## 7. For Maintainers
 
-`.claude/` is generated from `PromptSystemV4.4/` - never edit it directly, changes are lost on the next regeneration. Edit `PromptSystemV4.4/`, then regenerate:
+`.claude/` is generated from `PromptSystemV4.5/` - never edit it directly, changes are lost on the next regeneration. Edit `PromptSystemV4.5/`, then regenerate:
 
 ```
-PromptSystemV4.4/ (source of truth, edit here)
+PromptSystemV4.5/ (source of truth, edit here)
   ├─> robocopy /MIR ──────────> .devin/   (Devin, 1:1 mirror)
   └─> _PROMPTS_UpdateClaude.md prompts ──> .claude/  (Claude Code, transformed)
 ```
@@ -119,7 +119,7 @@ Transform per workflow file: keep `description`, add `name` (folder name) and `d
 Open maintainer tasks:
 
 1. Live-test the deployment in a real Claude Code session: `/prime`, `/go` on a small task, `/ipps-verify`
-2. Fix the 6 source skills lacking frontmatter in `PromptSystemV4.4/skills/` so regeneration needs no frontmatter patching
+2. Fix the 6 source skills lacking frontmatter in `PromptSystemV4.5/skills/` so regeneration needs no frontmatter patching
 3. Extend `README.md` "Agent Compatibility" section - its Claude Code column still documents the pre-migration `.claude/commands/` approach
 
 ## 8. Sources

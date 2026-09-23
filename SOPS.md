@@ -21,7 +21,7 @@
 - Sync `[PROMPTSYSTEM_FOLDER]` → `.devin/` BEFORE running `/sync workspace`
 - `robocopy /MIR` deletes files at target not in source — no manual cleanup needed for local `.devin/` sync
 - Every SOP ends with a verification step before you can consider the change complete
-- All prior PromptSystem releases MUST be backed up in `[WORKSPACE]\_OldDevSystemVersions\` before deletion (SOP 4 step 6)
+- All prior PromptSystem releases MUST be backed up in `[WORKSPACE]\_OldVersions\` before deletion (SOP 4 step 6)
 - **NEVER mention private sessions folder in public artifacts**: release notes, git commit messages, GitHub releases, README, or any publicly visible file. Use generic "internal session" or omit entirely. Session inventories in release notes must only include sessions from `_Sessions/` (tracked sessions), never from the private sessions folder.
 - **Release naming convention**: All releases use `vX.Y` format everywhere — git tags, GitHub release titles, release notes headers. Format: `release vX.Y` for GitHub release title, `# Release Notes: vX.Y (YYYY-MM-DD)` for release notes header. No date-based tags, no descriptive suffixes in titles.
 
@@ -175,9 +175,9 @@ Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "\b<skill>\b"  # should retu
 
 6. **Archive old version** (MANDATORY before deletion):
    ```powershell
-   Move-Item "[WORKSPACE]\PromptSystem[OLD_VERSION]" "[WORKSPACE]\_OldDevSystemVersions\PromptSystem[OLD_VERSION]"
+   Move-Item "[WORKSPACE]\PromptSystem[OLD_VERSION]" "[WORKSPACE]\_OldVersions\PromptSystem[OLD_VERSION]"
    ```
-   All prior releases MUST be preserved in `[WORKSPACE]\_OldDevSystemVersions\`. Never delete a version folder without moving it there first.
+   All prior releases MUST be preserved in `[WORKSPACE]\_OldVersions\`. Never delete a version folder without moving it there first.
 
 7. **Run workflow reference check** (MANDATORY):
    ```powershell
@@ -364,9 +364,9 @@ Immediately after `git tag` and `git push --tags` for a release. This is the LAS
    # Restore the released version from git at the tag commit
    git archive [TAG] -- "PromptSystem[OLD_VERSION]/" | tar -x -C .
    # Move to archive
-   Move-Item "[WORKSPACE]\PromptSystem[OLD_VERSION]" "[WORKSPACE]\_OldDevSystemVersions\PromptSystem[OLD_VERSION]"
+   Move-Item "[WORKSPACE]\PromptSystem[OLD_VERSION]" "[WORKSPACE]\_OldVersions\PromptSystem[OLD_VERSION]"
    ```
-   All prior releases MUST be preserved in `[WORKSPACE]\_OldDevSystemVersions\`. Never rename a version folder without backing it up first.
+   All prior releases MUST be preserved in `[WORKSPACE]\_OldVersions\`. Never rename a version folder without backing it up first.
 
 3. **Rename working folder**:
    ```powershell
@@ -392,7 +392,7 @@ Immediately after `git tag` and `git push --tags` for a release. This is the LAS
 Test-Path "[WORKSPACE]\PromptSystem[NEW_VERSION]"
 
 # 2. Released version backed up
-Test-Path "[WORKSPACE]\_OldDevSystemVersions\PromptSystem[OLD_VERSION]"
+Test-Path "[WORKSPACE]\_OldVersions\PromptSystem[OLD_VERSION]"
 
 # 3. NOTES.md references new version
 Select-String -Path "[WORKSPACE]\NOTES.md" -Pattern "Current \[PROMPTSYSTEM\]: PromptSystem[NEW_VERSION]"

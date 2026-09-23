@@ -5,33 +5,33 @@
 **Goal**: Specify a skill that manages agentic workspace setup, PromptSystem synchronization, and knowledge distribution across product/dev/company repo architectures
 **Timeline**: Created 2026-09-03, Updated 12 times (2026-09-03 - 2026-09-11)
 **Target file(s)**:
-- `PromptSystemV4.4/rules/promptsystem-core.md` (Operation Modes, Workspace Scenarios)
-- `PromptSystemV4.4/skills/workspace-management/SKILL.md`
-- `PromptSystemV4.4/skills/workspace-management/WORKSPACE-GUIDES.md`
-- `PromptSystemV4.4/skills/workspace-management/WORKSPACE-RULES.md`
-- `PromptSystemV4.4/skills/workspace-management/WORKSPACE_SETUP_QUESTIONNAIRE.md` (renamed from WORKSPACE_CREATION_QUESTIONNAIRE.md)
-- `PromptSystemV4.4/skills/workspace-management/WORKSPACE_SETUP_REPORT_TEMPLATE.md` (new)
-- `PromptSystemV4.4/skills/workspace-management/DEV_REPO_NOTES_TEMPLATE.md`
-- `PromptSystemV4.4/skills/workspace-management/PRODUCT_REPO_README_TEMPLATE.md`
-- `PromptSystemV4.4/skills/workspace-management/COMPANY_REPO_NOTES_TEMPLATE.md`
-- `PromptSystemV4.4/skills/workspace-management/workspace_diff_template.ps1` (deleted, replaced by sync.ps1)
-- `PromptSystemV4.4/skills/workspace-management/workspace_sync_template.ps1` (deleted, replaced by sync.ps1)
-- `PromptSystemV4.4/skills/workspace-management/sync.ps1` (single generic sync script with -diff and -execute modes)
+- `PromptSystemV4.5/rules/promptsystem-core.md` (Operation Modes, Workspace Scenarios)
+- `PromptSystemV4.5/skills/workspace-management/SKILL.md`
+- `PromptSystemV4.5/skills/workspace-management/WORKSPACE-GUIDES.md`
+- `PromptSystemV4.5/skills/workspace-management/WORKSPACE-RULES.md`
+- `PromptSystemV4.5/skills/workspace-management/WORKSPACE_SETUP_QUESTIONNAIRE.md` (renamed from WORKSPACE_CREATION_QUESTIONNAIRE.md)
+- `PromptSystemV4.5/skills/workspace-management/WORKSPACE_SETUP_REPORT_TEMPLATE.md` (new)
+- `PromptSystemV4.5/skills/workspace-management/DEV_REPO_NOTES_TEMPLATE.md`
+- `PromptSystemV4.5/skills/workspace-management/PRODUCT_REPO_README_TEMPLATE.md`
+- `PromptSystemV4.5/skills/workspace-management/COMPANY_REPO_NOTES_TEMPLATE.md`
+- `PromptSystemV4.5/skills/workspace-management/workspace_diff_template.ps1` (deleted, replaced by sync.ps1)
+- `PromptSystemV4.5/skills/workspace-management/workspace_sync_template.ps1` (deleted, replaced by sync.ps1)
+- `PromptSystemV4.5/skills/workspace-management/sync.ps1` (single generic sync script with -diff and -execute modes)
 - `[WORKSPACE_FOLDER]\promptsystem-sync.json` (target-side sync config, single source of truth)
-- `PromptSystemV4.4/workflows/workspace-setup.md` (new workflow)
-- `PromptSystemV4.4/workflows/compare-workspace-setup.md` (new workflow for compare use case)
-- `PromptSystemV4.4/workflows/verify.md` (new context section)
-- `PromptSystemV4.4/workflows/sync.md` (new context section)
-- `PromptSystemV4.4/workflows/commit.md` (multi-repo commit support)
-- `PromptSystemV4.4/workflows/prime.md` (Dimension 5 detection)
+- `PromptSystemV4.5/workflows/workspace-setup.md` (new workflow)
+- `PromptSystemV4.5/workflows/compare-workspace-setup.md` (new workflow for compare use case)
+- `PromptSystemV4.5/workflows/verify.md` (new context section)
+- `PromptSystemV4.5/workflows/sync.md` (new context section)
+- `PromptSystemV4.5/workflows/commit.md` (multi-repo commit support)
+- `PromptSystemV4.5/workflows/prime.md` (Dimension 5 detection)
 - `ID-REGISTRY.md` (skill-tagged state enumerations)
-- `PromptSystemV4.4/rules/promptsystem-core.md` (Document Placement subsection, docs/ in folder structure)
-- `PromptSystemV4.4/skills/write-documents/SKILL.md` (WS-DP reference in MUST-NOT-FORGET)
+- `PromptSystemV4.5/rules/promptsystem-core.md` (Document Placement subsection, docs/ in folder structure)
+- `PromptSystemV4.5/skills/write-documents/SKILL.md` (WS-DP reference in MUST-NOT-FORGET)
 
 **Depends on:**
-- `PromptSystemV4.4/rules/promptsystem-core.md` for existing operation modes and workspace scenarios
-- `PromptSystemV4.4/skills/session-management/SKILL.md` for session folder structure (T##/S##)
-- `PromptSystemV4.4/workflows/prime.md` for workspace scenario detection (Dimension 1 values)
+- `PromptSystemV4.5/rules/promptsystem-core.md` for existing operation modes and workspace scenarios
+- `PromptSystemV4.5/skills/session-management/SKILL.md` for session folder structure (T##/S##)
+- `PromptSystemV4.5/workflows/prime.md` for workspace scenario detection (Dimension 1 values)
 
 **Does not depend on:**
 - Any project-specific SPEC (this skill is generic, reusable across all PromptSystem workspaces)
@@ -744,7 +744,7 @@ Direction definitions:
 - Privacy gate compliant: all default values use generic placeholders
 
 **WSKMGMT-FR-66: WORKSPACE_SETUP_REPORT_TEMPLATE.md**
-- New file in `PromptSystemV4.4/skills/workspace-management/`
+- New file in `PromptSystemV4.5/skills/workspace-management/`
 - Table of Contents with clickable links to main sections
 - Report structure mirrors questionnaire sections 1-6 using same field IDs
 - Section 5 uses knowledge_include_patterns/specs_include_patterns (not deprecated knowledge_bundles/specs_bundles)
@@ -816,23 +816,23 @@ Direction definitions:
 
 **WSKMGMT-FR-72: Rename and deprecate files**
 - Rename `WORKSPACE_CREATION_QUESTIONNAIRE.md` → `WORKSPACE_SETUP_QUESTIONNAIRE.md` in:
-  - `PromptSystemV4.4/skills/workspace-management/` (source)
+  - `PromptSystemV4.5/skills/workspace-management/` (source)
   - `.devin/skills/workspace-management/` (sync target, updated via sync)
   - All references in SKILL.md, SPEC, workflow, README.md
 - Deprecate `workspace-create.md`:
-  - Already renamed to `workspace-setup.md` in `PromptSystemV4.4/workflows/`
+  - Already renamed to `workspace-setup.md` in `PromptSystemV4.5/workflows/`
   - Old `workspace-create.md` in `.devin/workflows/` is stale sync copy
   - Add `workspace-create.md` to `deprecated` array in `promptsystem-sync.json` so sync deletes it
   - Update SPEC WSKMGMT-SP01 FR-42 to reflect new workflow scope (amend existing FR)
 - Update `README.md` workflow reference (already says `workspace-setup` — verify link target)
 - Update all internal references from `WORKSPACE_CREATION_QUESTIONNAIRE` to `WORKSPACE_SETUP_QUESTIONNAIRE` across:
-  - `PromptSystemV4.4/workflows/workspace-setup.md`
-  - `PromptSystemV4.4/skills/workspace-management/SKILL.md`
+  - `PromptSystemV4.5/workflows/workspace-setup.md`
+  - `PromptSystemV4.5/skills/workspace-management/SKILL.md`
   - `specs/_SPEC_WORKSPACE-MANAGEMENT_SKILL.md`
   - `.devin/` copies (via sync)
 
 **WSKMGMT-FR-73: compare-workspace-setup.md workflow**
-- New workflow file in `PromptSystemV4.4/workflows/compare-workspace-setup.md`
+- New workflow file in `PromptSystemV4.5/workflows/compare-workspace-setup.md`
 - Follows WORKFLOW_TEMPLATE.md structure (WF-HD-01 through WF-BR-04)
 - Thin workflow — dispatches to Procedure 7 in SKILL.md, no embedded comparison logic
 - Frontmatter: description, auto_execution_mode
@@ -890,7 +890,7 @@ Direction definitions:
 **WSKMGMT-FR-78: Document placement in skill files**
 - workspace-management SKILL.md: Add MNF item 7 (document placement), Intent Lookup entry (Check document placement), docs/ folder creation in workspace-setup procedure
 - write-documents SKILL.md: Add WS-DP placement rule to MUST-NOT-FORGET section
-- Both files synced to PromptSystemV4.4 copies
+- Both files synced to PromptSystemV4.5 copies
 
 ## 5. Non-Functional Requirements
 

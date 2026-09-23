@@ -54,10 +54,10 @@
 [DEV_SPECS_FOLDER]: `[WORKSPACE_FOLDER]\specs`
 - Specs folder containing shared specifications, design guidelines, SOPs.
 
-[PRODUCT_VERSION]: `4.4`
+[PRODUCT_VERSION]: `4.5`
 - Current PromptSystem version. Update on version changes (SOPS SOP 4/7).
 
-[PROMPTSYSTEM_FOLDER]: `[WORKSPACE_FOLDER]\PromptSystemV4.4`
+[PROMPTSYSTEM_FOLDER]: `[WORKSPACE_FOLDER]\PromptSystemV4.5`
 - Source of truth for all rules, workflows, skills. Never edit `.devin/` directly. Repo-specific — not in template.
 
 [AGENT_FOLDER]: `[WORKSPACE_FOLDER]\.devin`
@@ -147,7 +147,7 @@ robocopy "[PROMPTSYSTEM_FOLDER]" "[AGENT_FOLDER]" /MIR /XD .git
 
 ## Platform Notes
 
-**Release archive**: `[WORKSPACE_FOLDER]\_OldPromptSystemVersions\` — all prior PromptSystem version folders are preserved here before deletion. Never delete a version folder without backing it up.
+**Release archive**: `[WORKSPACE_FOLDER]\_OldVersions\` — all prior PromptSystem version folders are preserved here before deletion. Never delete a version folder without backing it up.
 
 **Windows:** No symlinks. `.devin/` is a copy of `[PROMPTSYSTEM_FOLDER]`. Local mirror sync: see robocopy command above. SOPS.md procedures reference this command.
 
