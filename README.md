@@ -2,7 +2,7 @@
 
 A development system for AI-assisted coding workflows, optimized for a single programmer working with AI agents.
 
-**Philosophy:** One programmer, structured workflows, AI handling the cognitive overhead. Inspired by Douglas Engelbart's intelligence augmentation and Frederick Brooks' "surgical team" concept - but replacing the support team entirely with AI. No sync meetings, no communication costs, minimum coordination necessary.
+**Philosophy:** One programmer working in many repos, using sessions to structure work. AI handles the cognitive overhead and keeps everything in sync. Inspired by Douglas Engelbart's intelligence augmentation and Frederick Brooks' "surgical team" concept - but replacing the support team entirely with AI. Information is synchronized as "Docs", "Specs" and "Knowledge" between repos and workspaces. IPPS implements spec-driven (SDD), and test-driven development (TDD) by enforcing the writing of standardized specifications and test / implementation / task plans so you dont have to think about it and keep the agent on its rails. All commands and skills are generalized, that means you can use it to write code or an eBook - your decision.
 
 **Why all this structure?** AI agents are powerful but inconsistent. Without constraints, they:
 - Interpret instructions differently each time
