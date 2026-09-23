@@ -163,6 +163,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **AMSW** - Auto Model SWitcher (Windsurf model switching automation) - 2026-01-26
 - **AXCEL** - Agent Excel Skill (Excel automation from Cascade agent) - 2026-01-17
 - **BNCL** - Binoculars Cross-Perplexity Detection (zero-shot AI text detection via cross-model perplexity ratio) - 2026-06-05
+- **CLCD** - Claude Code reference (cross-agent compatibility: `Docs/_INFO_HOW_CLAUDE_CODE_WORKS.md`) - 2026-01-15
 - **DOCWRITEFW** - Document Writing Frameworks (analytical/communication frameworks for IPPS document quality) - 2026-04-12
 - **DRPRF** - Deep Research Profile Templates (personal, company, organization, network profile research) - 2026-05-25
 - **DVDT** - Devin Desktop (Windsurf IDE renamed to Devin Desktop; INFO_HOW_DEVIN_WORKS reference doc) - 2026-05-27
@@ -231,3 +232,5 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **CDNGTSTS** - Coding Conventions Test Optimization (GRUC files for test guides, rules, and checks in the coding-conventions skill) - 2026-09-16
 - **DEVTESTS** - Development Tests Optimization (patterns for structuring and running large test suites in agentic workflows) - 2026-09-16
 - **TRNSKILRW** - Transcription Skill Rewrite (complete rewrite of transcribe.md workflow and llm-transcription skill for two output types: markdown transcription and IPPS knowledge bundles) - 2026-09-16
+- **MDRSRCH** - Markdown Deep Research (standardized markdown format, syntax extensions, dialects, parsers/libraries for creating and parsing markdown) - 2026-09-16
+- **CLAUDEIPPS** - Claude Code IPPS Release and Skill-Based Prompt System Migration (IPPS release for latest Claude Code; workflow-to-skill migration per SKLWRKFL-IN01 Option F) - 2026-09-21
