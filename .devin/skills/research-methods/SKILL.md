@@ -1,5 +1,5 @@
 ---
-name: deep-research
+name: research-methods
 description: Apply when conducting deep research on technologies, APIs, frameworks, people, companies, organizations, networks, or other topics requiring systematic investigation
 ---
 

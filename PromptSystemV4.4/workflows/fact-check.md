@@ -16,7 +16,7 @@ Verify factual claims in documents by extracting sources, facts, and conclusions
 ## Required Skills
 
 - @skills:write-documents for review document output (use `FACT-CHECK_TEMPLATE.md`)
-- @skills:deep-research for source collection tools (use `RESEARCH_TOOLS.md`)
+- @skills:research-methods for source collection tools (use `RESEARCH_TOOLS.md`)
 - @skills:pdf-tools for PDF processing pipeline
 - @skills:llm-transcription for image and scanned document transcription
 - @skills:ms-playwright-mcp for web page access and full-page capture

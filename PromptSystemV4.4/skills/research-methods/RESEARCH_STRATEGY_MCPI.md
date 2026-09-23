@@ -85,7 +85,7 @@ Before collecting sources, test each discovery platform from Q7:
   - Community: `[TOPIC]-SC-[PLATFORM]-[DOCREF]` (e.g., `GRPH-SC-SO-RATELMT`)
 - Group sources by category (domain-specific)
 - Include "Related" section listing similar or easily confused alternatives
-- **Source processing**: Process all PDF sources through transcription pipeline. Read `deep-research-config.json` for settings.
+  - **Source processing**: Process all PDF sources through transcription pipeline. Read `research-methods-config.json` for settings.
 - **Done when**: (a) Official docs main navigation fully enumerated, (b) 15-30 sources collected (minimum 15), (c) All sources have IDs, (d) PDF sources transcribed
 
 ### Step 5: Verify and Correct Assumptions

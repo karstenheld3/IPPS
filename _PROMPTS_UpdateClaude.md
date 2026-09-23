@@ -80,7 +80,7 @@ disable-model-invocation: true
 ---
 ```
 
-Renames (bundled-skill collisions): `verify.md` deploys to `.claude\skills\ipps-verify\` because the bundled Claude Code `/verify` skill writes its recipes to `.claude/skills/verify/`, which would clobber an IPPS copy. `deep-research.md` deploys to `.claude\skills\deep-research-run\` because the `deep-research` folder is reserved for the domain skill deployed in step 5. The `name` field matches the renamed folder (`ipps-verify`, `deep-research-run`).
+Rename (bundled-skill collision): `verify.md` deploys to `.claude\skills\ipps-verify\` because the bundled Claude Code `/verify` skill writes its recipes to `.claude/skills/verify/`, which would clobber an IPPS copy. The `name` field matches the renamed folder (`ipps-verify`).
 
 Constraints:
 - Do not modify workflow sources
@@ -92,7 +92,7 @@ Constraints:
 
 Findings card: Load and update `__CARD_UpdateClaude-Findings.md`. File glitches and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
-Verify: workflow-derived folder count equals the workflow inventory count from `__CARD_UpdateClaude-Findings.md` (expected 49). `.claude\skills\ipps-verify\` and `.claude\skills\deep-research-run\` exist; `.claude\skills\verify\` does not. A grep_search for `auto_execution_mode` in `.claude\skills\` returns zero matches. Every workflow-derived SKILL.md contains `disable-model-invocation: true`.
+Verify: workflow-derived folder count equals the workflow inventory count from `__CARD_UpdateClaude-Findings.md` (expected 49). `.claude\skills\ipps-verify\` exists; `.claude\skills\verify\` does not. A grep_search for `auto_execution_mode` in `.claude\skills\` returns zero matches. Every workflow-derived SKILL.md contains `disable-model-invocation: true`.
 ````
 
 ---
@@ -130,13 +130,12 @@ Objective: every skill from `PromptSystemV4.4\skills\` is deployed to `.claude\s
 
 Copy each skill folder from `PromptSystemV4.4\skills\` to `.claude\skills\<name>\` including supporting files (progressive disclosure). Keep existing `name` and `description` frontmatter. Add `disable-model-invocation: true` to the 15 user-only skills; the 9 model-triggered skills stay without it. 6 source skills have no frontmatter at all (5 user-only: travel-info, windows-desktop-control, llm-computer-use, llm-evaluation, llm-transcription; 1 model-triggered: drift-control) - prepend frontmatter to their deployed copies only (name = folder name, description derived from the file's intro line); do not modify the sources.
 
-Model-triggered (9): write-documents, session-management, coding-conventions, deep-research, workspace-management, drift-control, edird-phase-planning, git-conventions, ms-playwright-mcp
+Model-triggered (9): write-documents, session-management, coding-conventions, research-methods, workspace-management, drift-control, edird-phase-planning, git-conventions, ms-playwright-mcp
 
 User-only (15): travel-info, youtube-downloader, seo-tools, google-account, image-tools, pdf-tools, windows-desktop-control, playwriter-mcp, llm-computer-use, llm-evaluation, llm-transcription, github, git, hosting, devin-auto-model-switcher
 
 Constraints:
 - Do not modify skill sources
-- Do not rename the `deep-research` skill folder - the workflow-derived `deep-research-run` from step 3 is separate and both coexist
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost (folders overwritten)
 - Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: Read-Host, pause, Get-Credential, Get-Content -Wait, 2>&1 with Blocking:true. File operations use agent tools. 1-minute cap per command. On cap: stop the process, record command and cap in PROBLEMS.md, continue.
@@ -185,7 +184,7 @@ Update the deployment mechanism section in `NOTES.md`: replace the line stating 
 
 the `.claude\` rules and skills deployment, the NOTES.md mechanism update, and `_PROMPTS_UpdateClaude.md`
 
-Report to the user: deployed counts (rules, skills), the two renames (`ipps-verify`, `deep-research-run`), and that already-running Claude Code sessions pick up regenerated skills only after a restart or `/reload-skills`.
+Report to the user: deployed counts (rules, skills), the rename (`ipps-verify`), and that already-running Claude Code sessions pick up regenerated skills only after a restart or `/reload-skills`.
 
 Constraints:
 - Do not modify anything under `PromptSystemV4.4\`
