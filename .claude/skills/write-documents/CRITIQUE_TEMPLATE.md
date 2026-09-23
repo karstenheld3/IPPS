@@ -1,4 +1,4 @@
-# [Filename]_REVIEW.md
+# [Filename]_CRITIQUE.md
 
 **Doc ID**: [SOURCE-DOC-ID]-RV[NN]
 <!-- Topic IDs: 7-14 uppercase chars. Review IDs use source doc ID + -RV suffix. -->
@@ -88,9 +88,9 @@
 **Categories and Labels**: See FAILS_TEMPLATE.md for severity categories and assumption labels.
 
 **File Naming**:
-- Document review: `_INFO_CRAWLER_REVIEW.md`, `_SPEC_AUTH_REVIEW.md`
-- Code review: `auth_handler_REVIEW.md`
-- Conversation review: `_PROBLEMS_REVIEW.md`
+- Document review: `_INFO_CRAWLER_CRITIQUE.md`, `_SPEC_AUTH_CRITIQUE.md`
+- Code review: `auth_handler_CRITIQUE.md`
+- Conversation review: `_PROBLEMS_CRITIQUE.md`
 
 **Management**: Create fresh each review. Can be discarded after issues addressed.
 

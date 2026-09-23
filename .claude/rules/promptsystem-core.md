@@ -350,7 +350,7 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 **Fact-check-Reconcile-Implement-Verify (FACRIV)** - factual claim verification:
 `/fact-check` → `/reconcile` → `/implement` → `/verify`
 
-**Roles:** `/critique` and `/fact-check` = JUDGE (produce `*_REVIEW.md` only, never modify originals). `/reconcile` = TRIAGE (chat output only). `/implement` = EXECUTOR (applies approved corrections to source documents).
+**Roles:** `/critique` and `/fact-check` = JUDGE (produce `*_CRITIQUE.md` / `*_FACT-CHECK.md` only, never modify originals). `/reconcile` = TRIAGE (chat output only). `/implement` = EXECUTOR (applies approved corrections to source documents).
 
 **Rules:** Sequential execution. When user says "run VCRIV" or "run FACRIV", execute full pipeline in order.
 
