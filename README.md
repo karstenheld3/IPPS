@@ -400,13 +400,13 @@ Devil's Advocate review (find flaws):
 ```
 /critique
 ```
-**Creates**: `_CRITIQUE_REVIEW.md` with findings (risk, evidence, suggested action). **Edits**: nothing. Non-destructive.
+**Creates**: `[filename]_CRITIQUE.md` with findings (risk, evidence, suggested action). **Edits**: nothing. Non-destructive.
 
 Fact-check document claims against external reality:
 ```
 /fact-check
 ```
-**Creates**: `_FACTCHECK_REVIEW.md` with source/fact/conclusion verdicts. **Edits**: nothing. Non-destructive.
+**Creates**: `[filename]_FACT-CHECK.md` with source/fact/conclusion verdicts. **Edits**: nothing. Non-destructive.
 
 Pragmatic review of critique and fact-check findings:
 ```
@@ -635,7 +635,7 @@ I need to review a series of cloud cost optimization blog posts and check their 
 
 **What happens**: Each article gets its own folder with the original text, images, and a standardized review. The review pipeline extracts claims, verifies them against cited sources, searches for contradicting evidence, analyzes rhetoric and bias, and synthesizes a structured review. The template ensures consistent quality across all reviews.
 
-**Files created**: `_YYYY-MM-DD_ArticleReviews/` session folder; review template `.md`; one subfolder per article with `original.md`, `images/`, `review.md`; `_FACTCHECK_REVIEW.md` from `/fact-check`. **Files edited**: session `NOTES.md`, `PROGRESS.md`.
+**Files created**: `_YYYY-MM-DD_ArticleReviews/` session folder; review template `.md`; one subfolder per article with `original.md`, `images/`, `review.md`; `[filename]_FACT-CHECK.md` from `/fact-check`. **Files edited**: session `NOTES.md`, `PROGRESS.md`.
 
 #### Use Case 5: Build a Feature with Full Documentation
 
@@ -793,9 +793,9 @@ For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) dec
   - **Edits**: the draft from `/propose-minto` (develops selected candidate into full article)
   - **When**: After `/propose-minto` and candidate selection. Produces the final article.
 - [`/implement`](.devin/workflows/implement.md) - Implement approved changes
-  - **Creates**: source code files in `src/` (or session folder for IMPL-ISOLATED); may create `_REVIEW.md` files from review pipelines
+  - **Creates**: source code files in `src/` (or session folder for IMPL-ISOLATED); may create review files (`*_CRITIQUE.md`, `*_FACT-CHECK.md`) from review pipelines
   - **Edits**: source code, configuration files, existing documents (if review pipeline context)
-  - **When**: After `/write-tasks-plan`. Executes tasks from TASKS document. Detects context: Build (SPEC/IMPL to code) or Review Pipeline (`*_REVIEW.md` to corrections).
+  - **When**: After `/write-tasks-plan`. Executes tasks from TASKS document. Detects context: Build (SPEC/IMPL to code) or Review Pipeline (`*_CRITIQUE.md` / `*_FACT-CHECK.md` to corrections).
 - [`/test`](.devin/workflows/test.md) - Run tests based on scope and context
   - **Creates**: nothing (runs existing tests, reports results)
   - **Edits**: nothing (read-only execution)
@@ -807,11 +807,11 @@ For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) dec
   - **Edits**: nothing (read-only)
   - **When**: After implementation or document creation. Checks code against SPEC, documents against rules, IDs against registry.
 - [`/critique`](.devin/workflows/critique.md) - Find flawed assumptions, logic errors, hidden risks
-  - **Creates**: `_CRITIQUE_REVIEW.md` or `[TARGET]-RV01.md` review document with findings (risk, evidence, suggested action)
+  - **Creates**: `[filename]_CRITIQUE.md` review document with findings (risk, evidence, suggested action)
   - **Edits**: nothing (creates review document only)
   - **When**: After writing specs or design docs. Adversarial review for design flaws, not code bugs.
 - [`/fact-check`](.devin/workflows/fact-check.md) - Verify factual claims against external reality
-  - **Creates**: `_FACTCHECK_REVIEW.md` or `[TARGET]-RV01.md` review document with source/fact/conclusion verdicts
+  - **Creates**: `[filename]_FACT-CHECK.md` review document with source/fact/conclusion verdicts
   - **Edits**: nothing (creates review document only)
   - **When**: When documents make concrete claims about external reality (URLs, attributions, counts, file paths). Non-destructive: does not modify the target.
 - [`/reconcile`](.devin/workflows/reconcile.md) - Pragmatic review of critique and fact-check findings
@@ -1233,8 +1233,8 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 - [**SOCAS**](docs/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md) - Signs Of Confusion And Sloppiness. 17 criteria for detecting agent degradation. **Effect**: No files. Used by `/verify`, `/improve`, `/deep-research` to evaluate output quality.
 - [**MNF**](docs/_INFO_MNF_TECHNIQUE.md) - Must Not Forget. Technique for critical item tracking during task execution. **Effect**: No files directly. MNF items embedded in workflows and STRUT plans. Agent verifies compliance before completion.
 - **APAPALAN** - As Precise As Possible, As Little As Necessary. Conciseness principle for workflows and documents. **Effect**: No files. 35 enforceable rules in `APAPALAN_RULES.md`. Applied by `/verify` and `/improve`.
-- **VCRIV** - Verify-Critique-Reconcile-Implement-Verify. Quality pipeline for logic and design review: `/verify` → `/critique` → `/reconcile` → `/implement` → `/verify`. **Effect**: Creates `_CRITIQUE_REVIEW.md`. Edits source documents (via `/reconcile` and `/implement`).
-- **FACRIV** - Fact-check-Reconcile-Implement-Verify. Quality pipeline for factual claim verification: `/fact-check` → `/reconcile` → `/implement` → `/verify`. **Effect**: Creates `_FACTCHECK_REVIEW.md`. Edits source documents (via `/reconcile` and `/implement`).
+- **VCRIV** - Verify-Critique-Reconcile-Implement-Verify. Quality pipeline for logic and design review: `/verify` → `/critique` → `/reconcile` → `/implement` → `/verify`. **Effect**: Creates `[filename]_CRITIQUE.md`. Edits source documents (via `/reconcile` and `/implement`).
+- **FACRIV** - Fact-check-Reconcile-Implement-Verify. Quality pipeline for factual claim verification: `/fact-check` → `/reconcile` → `/implement` → `/verify`. **Effect**: Creates `[filename]_FACT-CHECK.md`. Edits source documents (via `/reconcile` and `/implement`).
 
 **Agent Drift Prevention**: [ADP Approach](docs/_INFO_AGENT_DRIFT_PREVENTION_APPROACH.md) - How the PromptSystem prevents agent drift through TRACTFUL, SMAP, EDIRD, STRUT, GRUC, and MNF across three scopes
 

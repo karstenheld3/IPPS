@@ -181,9 +181,9 @@ verify → critique → reconcile → implement → verify
 ```
 
 - **V** - Verify: Formal correctness check (`/verify` workflow)
-- **C** - Critique: Find gaps, reasoning flaws; produces `*_REVIEW.md` (`/critique` workflow)
+- **C** - Critique: Find gaps, reasoning flaws; produces `*_CRITIQUE.md` (`/critique` workflow)
 - **R** - Reconcile: Prioritize findings (`/reconcile` workflow)
-- **I** - Implement: Apply findings, delete `*_REVIEW.md` (`/implement` workflow)
+- **I** - Implement: Apply findings, delete `*_CRITIQUE.md` (`/implement` workflow)
 - **V** - Verify (final): Confirm corrections complete
 
 **Four mandatory checkpoints:**

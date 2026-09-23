@@ -1,4 +1,4 @@
-# [Filename]_REVIEW.md
+# [Filename]_FACT-CHECK.md
 
 **Doc ID**: [SOURCE-DOC-ID]-RV[NN]
 <!-- Topic IDs: 7-14 uppercase chars. Review IDs use source doc ID + -RV suffix. -->
@@ -145,9 +145,9 @@ These appear in a separate section to distinguish them from verified/unverified 
 ## Reference
 
 **File Naming**:
-- INFO review: `_INFO_CRAWLER_REVIEW.md`
-- SPEC review: `_SPEC_AUTH_REVIEW.md`
-- Code review: `auth_handler_REVIEW.md`
+- INFO review: `_INFO_CRAWLER_FACT-CHECK.md`
+- SPEC review: `_SPEC_AUTH_FACT-CHECK.md`
+- Code review: `auth_handler_FACT-CHECK.md`
 
 **Companion Artifacts**:
 - `_SOURCES/` - Transcribed source content (checked in). Naming: `[SOURCE_ID]_[descriptive-name].md`

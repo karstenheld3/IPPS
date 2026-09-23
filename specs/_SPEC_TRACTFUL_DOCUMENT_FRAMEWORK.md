@@ -238,7 +238,7 @@ Tracking:   ^[A-Z]{2,14}-(PR|FL|LN|BG|FT)-\d{3,4}$
 
 - **REVIEW** - Potential issues and improvement suggestions
   - Template: `CRITIQUE_REVIEW_TEMPLATE.md` (for `/critique`), `FACT-CHECK_REVIEW_TEMPLATE.md` (for `/fact-check`)
-  - Naming: `_REVIEW.md` or `[SOURCE]-RV[NN].md`
+  - Naming: `[SOURCE]_CRITIQUE.md` or `[SOURCE]_FACT-CHECK.md` (Doc ID: `[SOURCE-DOC-ID]-RV[NN]`)
   - Contains: RV (Review findings) categorized by priority
 
 ## 6. Document Lifecycle

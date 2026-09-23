@@ -76,9 +76,9 @@ Additional checks for DEFAULT domain quality pipeline:
 Quality assurance cycle (runs per scope-based granularity):
 
 - `V` - Verify: Run `/verify` workflow - formal and rule-based correctness
-- `C` - Critique: Run `/critique` workflow - find gaps, produces `_REVIEW.md`
+- `C` - Critique: Run `/critique` workflow - find gaps, produces `*_CRITIQUE.md`
 - `R` - Reconcile: Run `/reconcile` workflow - prioritize findings
-- `I` - Implement: Apply findings, delete `_REVIEW.md`
+- `I` - Implement: Apply findings, delete `*_CRITIQUE.md`
 - `V` - Verify (final): Confirm corrections complete
 
 ## MUST-NOT-FORGET
