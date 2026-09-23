@@ -1488,8 +1488,8 @@ Document templates for INFO, SPEC, IMPL, TEST, TASKS, and STRUT plans.
 - `TEST_TEMPLATE.md` - Test plans
 - `TASKS_TEMPLATE.md` - Task plans
 - `STRUT_TEMPLATE.md` - STRUT plans
-- `CRITIQUE_REVIEW_TEMPLATE.md` - Review documents from `/critique` (findings with risk/evidence/suggested action)
-- `FACT-CHECK_REVIEW_TEMPLATE.md` - Review documents from `/fact-check` (source/fact/conclusion verdicts)
+- `CRITIQUE_TEMPLATE.md` - Review documents from `/critique` (findings with risk/evidence/suggested action)
+- `FACT-CHECK_TEMPLATE.md` - Review documents from `/fact-check` (source/fact/conclusion verdicts)
 
 **Usage**: Invoked by `/write-spec`, `/write-impl-plan`, `/write-test-plan`, `/write-tasks-plan`, `/critique`, `/fact-check`.
 

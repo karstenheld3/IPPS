@@ -15,7 +15,7 @@ Verify factual claims in documents by extracting sources, facts, and conclusions
 
 ## Required Skills
 
-- @skills:write-documents for review document output (use `FACT-CHECK_REVIEW_TEMPLATE.md`)
+- @skills:write-documents for review document output (use `FACT-CHECK_TEMPLATE.md`)
 - @skills:deep-research for source collection tools (use `RESEARCH_TOOLS.md`)
 - @skills:pdf-tools for PDF processing pipeline
 - @skills:llm-transcription for image and scanned document transcription
@@ -183,7 +183,7 @@ For each conclusion, evaluate based on supporting fact verdicts:
 
 ## Phase 4: Report
 
-Generate `[filename]_FACT-CHECK.md` following @skills:write-documents `FACT-CHECK_REVIEW_TEMPLATE.md`.
+Generate `[filename]_FACT-CHECK.md` following @skills:write-documents `FACT-CHECK_TEMPLATE.md`.
 
 1. Header: Doc ID (`[SOURCE-DOC-ID]-RV[NN]`), review date, context summary (document type, source/fact/conclusion counts)
 2. Fact-Check Summary: verdict counts per category, overall recommendation
@@ -226,7 +226,7 @@ If 3 consecutive verification attempts fail for the same source or fact:
 ## Verification
 
 Run `/verify` on generated `[filename]_FACT-CHECK.md` to check:
-1. Review follows `FACT-CHECK_REVIEW_TEMPLATE.md` structure
+1. Review follows `FACT-CHECK_TEMPLATE.md` structure
 2. All verdict categories used correctly
 3. No original files modified
 4. MUST-NOT-FORGET (MNF) items addressed

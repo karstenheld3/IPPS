@@ -15,7 +15,7 @@ Pragmatic review of critique and fact-check findings with actionable improvement
 ## Required Skills
 
 Invoke based on context:
-- @write-documents for reading FAILS.md and critique/fact-check reviews (use FAILS_TEMPLATE.md, CRITIQUE_REVIEW_TEMPLATE.md, FACT-CHECK_REVIEW_TEMPLATE.md)
+- @write-documents for reading FAILS.md and critique/fact-check reviews (use FAILS_TEMPLATE.md, CRITIQUE_TEMPLATE.md, FACT-CHECK_TEMPLATE.md)
 - @coding-conventions for code improvements
 
 ## Input Files
