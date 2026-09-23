@@ -249,7 +249,7 @@ After all tags pushed and GitHub releases created (or skipped), execute post-rel
 
 Bump strategy per repo:
 
-- `promptsystem_rename`: Read current version from NOTES.md, increment minor, rename `PromptSystemVX.Y` folder to `PromptSystemVX.Y+1`, update NOTES.md, sync to `.devin/`, commit, push. Follow SOPS SOP 7 or equivalent procedure in workspace's SOPS file
+- `promptsystem_rename`: Read current version from NOTES.md, increment minor, rename `PromptSystemVX.Y` folder to `PromptSystemVX.Y+1`, update NOTES.md, sync to `[AGENT_FOLDER]/`, commit, push. Follow SOPS SOP 7 or equivalent procedure in workspace's SOPS file
 - `patch_bump`: Read version from `version_file`, increment patch, write back, commit, push
 - `minor_bump`: Read version from `version_file`, increment minor, reset patch to 0, write back, commit, push
 - `none`: Skip

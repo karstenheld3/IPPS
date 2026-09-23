@@ -13,7 +13,7 @@ Create conventional commits for staged changes.
 
 ## MUST-NOT-FORGET
 
-- **Suppress git noise**: Use `2>$null` on `git add` (CRLF warnings go to stderr) and `-q` on `git commit` (suppresses rename/summary output). Without this, large repos produce hundreds of lines that cause Cascade blocking commands to hang or time out.
+- **Suppress git noise**: Use `2>$null` on `git add` (CRLF warnings go to stderr) and `-q` on `git commit` (suppresses rename/summary output). Without this, large repos produce hundreds of lines that cause agent blocking commands to hang or time out.
 - **Use non-blocking execution** (`Blocking: false`, `WaitMsBeforeAsync: 5000`) for `git add -A` when many files are affected (e.g., version bumps, bulk renames). Check completion with `command_status`.
 - **Workspace-only scope**: Only commit and push the workspace repo(s). In WORKSPACE mode (*.code-workspace file exists), commit repos referenced in the workspace file - these may be physically outside `[WORKSPACE_FOLDER]` (e.g., ProductRepo at `[WORKSPACE_FOLDER]\..`). In SINGLE-PROJECT and MONOREPO modes, commit only the workspace repo itself. Never commit or push sync targets (repos in promptsystem-sync.json), or any repo not part of the workspace unless [ACTOR] explicitly requests it. "all push" means "push all changes in the workspace repo(s)", not "push all repos that received files".
 

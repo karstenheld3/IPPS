@@ -180,7 +180,7 @@ Always required workspace constants in DevRepo NOTES.md:
 - [DEV_KNOWLEDGE_FOLDER]: [WORKSPACE_FOLDER]\knowledge
 - [DEV_SPECS_FOLDER]: [WORKSPACE_FOLDER]\specs
 - [PRODUCT_DOCS_FOLDER]: [PRODUCT_REPO_FOLDER]\docs
-- [AGENT_FOLDER]: [WORKSPACE_FOLDER]\.devin
+- [AGENT_FOLDER]: [WORKSPACE_FOLDER]\[AGENT_FOLDER_NAME] (e.g., .devin, .claude)
 - [SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_sessions
 ```
 

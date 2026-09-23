@@ -7,7 +7,7 @@ Step-by-step guide for creating well-structured agent skills.
 Before writing any skill:
 
 1. Understand the technology - how does it actually work?
-2. Verify compatibility - does it work with the target agent (Windsurf/Cascade)?
+2. Verify compatibility - does it work with the target agent (Devin, Claude Code, Codex)?
 3. Identify dependencies - what must be installed? What versions?
 4. Find known issues - check GitHub issues, forums, community reports
 5. Test manually first - run commands yourself before documenting them
@@ -111,9 +111,15 @@ Expected: [what success looks like]
 3. Provide rollback instructions inline
 4. Show expected results after each step
 
-### 5.3 MCP Config Modification Pattern (Windsurf)
+### 5.3 MCP Config Modification Pattern (per agent)
 
-For skills modifying `~/.codeium/windsurf/mcp_config.json`:
+MCP server registration differs per agent - branch by target agent:
+
+- Devin: `~/.codeium/windsurf/mcp_config.json` (legacy Windsurf path, verify current location on new Devin versions)
+- Claude Code: `claude mcp add <name> -- npx package-name` (CLI-managed; or `.mcp.json` at project root for project scope)
+- Codex: `~/.codex/config.toml` under `[mcp_servers.<name>]`
+
+For JSON-config agents (Devin), use this PowerShell pattern:
 
 ```powershell
 $configPath = "$env:USERPROFILE\.codeium\windsurf\mcp_config.json"

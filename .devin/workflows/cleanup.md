@@ -105,7 +105,7 @@ Delete files and directories matching these patterns:
 ### 4. MCP Config Backups [AUTO-DELETE]
 
 - **Pattern**: `mcp_config.json._beforeRemoving*`, `mcp_config.json._backup_*`
-- **Location**: MCP config directory (resolve from Windsurf/Codeium config path)
+- **Location**: MCP config directory (resolve from agent-specific MCP config path - see @skills:coding-conventions AGENT-SKILL-RULES.md section 3.2.1)
 - **Source**: MCP server install/uninstall scripts (ms-playwright-mcp, playwriter-mcp)
 
 ### 5. Review Output Files [AUTO-DELETE]

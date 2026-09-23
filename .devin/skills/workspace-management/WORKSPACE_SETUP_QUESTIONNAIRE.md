@@ -97,8 +97,8 @@ Questions for WORKSPACE mode:
 3b) Project goal (one sentence): [Describe what this project does]
     Impact: Recorded in NOTES.md. Guides agent context and release notes.
 
-3c) Agent folder name: [.devin]
-    Default: [.devin]
+3c) Agent folder name: [.devin or .claude - per agent]
+    Default: [.devin for Devin, .claude for Claude Code]
     Impact: Folder where rules, workflows, skills are synced from PromptSystem source.
     Some projects use a custom name (e.g., .lana) for product-bundled prompt systems.
 
@@ -147,7 +147,7 @@ Questions for WORKSPACE mode:
 
 4c) Post-release bump strategy:
     1) promptsystem_rename - Rename PromptSystemVX.Y to PromptSystemVX.Y+1
-       Impact: Folder rename + NOTES.md update + sync to .devin/. 
+       Impact: Folder rename + NOTES.md update + sync to [AGENT_FOLDER]/. 
        Only valid with promptsystem_folder version source.
     
     2) patch_bump - Increment patch (X.Y.Z -> X.Y.Z+1)
@@ -186,7 +186,7 @@ Questions for WORKSPACE mode:
 5b) PromptSystem source path: [WORKSPACE_FOLDER]\..\[promptsystem-source-name]\PromptSystemV*
     Default: [WORKSPACE_FOLDER]\..\IPPS\PromptSystemV*
     Impact: Where rules, workflows, skills are synced FROM. Agent folder
-    (.devin) is the sync TARGET. /sync workspace updates agent folder
+    (agent folder, e.g., .devin) is the sync TARGET. /sync workspace updates agent folder
     from this source. Configured as a source entry in promptsystem-sync.json.
     Skip if SELF-CONTAINED.
 
@@ -426,7 +426,7 @@ Status values for analysis: OK, GAP, STALE, DEVIATION, N/A.
 - id: agent_folder_name
   type: single
   condition: (always)
-  default: .devin
+  default: .devin (Devin) / .claude (Claude Code)
   report_label: Agent Folder Name
 
 - id: sessions_folder_name

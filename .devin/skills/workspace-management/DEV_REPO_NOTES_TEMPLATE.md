@@ -67,7 +67,7 @@
 [DEV_SPECS_FOLDER]: `[WORKSPACE_FOLDER]\specs`
 - Specs folder containing shared specifications, design guidelines, SOPs.
 
-[AGENT_FOLDER]: `[WORKSPACE_FOLDER]\.devin`
+[AGENT_FOLDER]: `[WORKSPACE_FOLDER]\[AGENT_FOLDER_NAME]` (e.g., .devin, .claude)
 - Agent config folder. Sync target — copy of PromptSystem source content.
 
 [SESSIONS_FOLDER]: `[WORKSPACE_FOLDER]\_PrivateSessions_gitignore`

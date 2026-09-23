@@ -78,12 +78,12 @@ Sync config lookup:
 
 promptsystem-sync.json structure:
 - Top-level: `last_sync` (timestamp), `deprecated` (array, shared), `targets` (array)
-- Each target entry: `path` (relative, e.g., `.devin`), `source` (relative path), `include`, `exclude`, `never_overwrite`
+- Each target entry: `path` (relative, e.g., `.devin`, `.claude`), `source` (relative path), `include`, `exclude`, `never_overwrite`
 - No `bundles` or `selected_bundles` — include/exclude is the single filter layer
 
 ## How to Manage Knowledge Bundles
 
-A knowledge bundle is a folder of reference documents for a specific topic (e.g., Windsurf/, AI-Standards/, OpenAI/).
+A knowledge bundle is a folder of reference documents for a specific topic (e.g., Devin/, AI-Standards/, OpenAI/).
 
 To add a new knowledge bundle:
 1. Create folder in [KNOWLEDGE_SOURCE_FOLDER] (CompanyRepo)
@@ -96,7 +96,7 @@ To remove a knowledge bundle:
 2. Run sync - bundle will be marked for deletion in downstream repos
 3. Confirm deletion during sync preview
 
-Sub-bundles (nested folders) are supported (e.g., Windsurf/HowCascadeWorks/).
+Sub-bundles (nested folders) are supported (e.g., Devin/HowCascadeWorks/).
 
 ## [WORKSPACE_FOLDER] vs [WORKSPACE_FILE]
 
@@ -189,7 +189,7 @@ Always required workspace constants in DevRepo NOTES.md:
 - [DEV_KNOWLEDGE_FOLDER]: [WORKSPACE_FOLDER]\knowledge
 - [DEV_SPECS_FOLDER]: [WORKSPACE_FOLDER]\specs
 - [PRODUCT_DOCS_FOLDER]: [PRODUCT_REPO_FOLDER]\docs
-- [AGENT_FOLDER]: [WORKSPACE_FOLDER]\.devin
+- [AGENT_FOLDER]: [WORKSPACE_FOLDER]\[AGENT_FOLDER_NAME] (e.g., .devin, .claude)
 - [SESSIONS_FOLDER]: [WORKSPACE_FOLDER]\_sessions
 ```
 
