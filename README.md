@@ -961,7 +961,7 @@ For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) dec
 
 - **drift-control** - Drift detection/correction knowledge for `/drift-detect` and `/drift-correct`. **Effect**: No files. Provides drift lenses and templates consumed by `/drift-detect`. CHECKS files for workflows designed for future use, created on demand.
 - **coding-conventions** - Python, PowerShell coding style rules, MECT coding rules. **Effect**: No files. Rules consumed by `/verify` and `/improve` when checking code.
-- **deep-research** - Deep research strategies (MEPI/MCPI), domain-specific patterns. **Effect**: No files. Knowledge consumed by `/deep-research` workflow.
+- **research-methods** - Deep research strategies (MEPI/MCPI), domain-specific patterns. **Effect**: No files. Knowledge consumed by `/deep-research` workflow.
 - **edird-phase-planning** - EDIRD phase model with effort allocation, planning guidance, gates. **Effect**: No files. Rules consumed by `/go` workflow.
 - **git** - Commit history navigation, file recovery from previous commits. **Effect**: No files. Procedures for git operations (log, checkout, diff, revert).
 - **git-conventions** - Commit message format, .gitignore rules. **Effect**: No files. Rules consumed by `/commit` workflow.

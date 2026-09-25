@@ -34,7 +34,7 @@ drift-control/
 
 Skill CHECKS reside in their own skill folder:
 ```
-deep-research/
+research-methods/
 ├── SKILL.md
 ├── RESEARCH_RULES.md
 └── RESEARCH_CHECKS.md             # Process checks for research skill

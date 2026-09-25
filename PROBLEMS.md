@@ -113,7 +113,7 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
    - **Update output**: Merge verified updates into existing INFO documents, preserving original findings with `[UPDATED YYYY-MM-DD]` markers and adding new findings with access dates
    - **Source diff**: Compare existing `_SOURCES/` transcriptions against current web content to detect staleness
    - **Detection**: Workflow detects existing research output by checking for `_INFO_*.md` files matching the topic in the target folder
-   - **Affected files**: `deep-research.md` workflow, `research.md` workflow, `deep-research` skill (SKILL.md, RESEARCH_STRATEGY_MEPI.md, RESEARCH_STRATEGY_MCPI.md), `fact-check.md` workflow (as dependency)
+   - **Affected files**: `deep-research.md` workflow, `research.md` workflow, `research-methods` skill (SKILL.md, RESEARCH_STRATEGY_MEPI.md, RESEARCH_STRATEGY_MCPI.md), `fact-check.md` workflow (as dependency)
 
 14. **Deep-research reusable templates via write-template workflow**
    - Deep-research should use proper reusable templates created via `write-template.md` workflow (+ guides + rules)
@@ -124,7 +124,7 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
      - Easy comparison across topic files (same section layout)
      - Easy updates (change template, re-apply across files)
      - Better drift detection (structural deviations stand out)
-   - **Affected files**: `deep-research` skill (new template files in skill folder), `write-template.md` workflow (must support research template creation), `RESEARCH_STRATEGY_MEPI.md` and `RESEARCH_STRATEGY_MCPI.md` (reference templates instead of inline structure)
+   - **Affected files**: `research-methods` skill (new template files in skill folder), `write-template.md` workflow (must support research template creation), `RESEARCH_STRATEGY_MEPI.md` and `RESEARCH_STRATEGY_MCPI.md` (reference templates instead of inline structure)
 
 ## Resolved
 

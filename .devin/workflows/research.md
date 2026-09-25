@@ -67,8 +67,8 @@ Apply to ALL branches below (profiles and general topics alike):
 
 Detect by: research subject is a **person** (name, email address, contact).
 
-1. Read @deep-research `profiles/PERSONAL_PROFILE_TEMPLATE.md` for document structure
-2. Read @deep-research `profiles/PERSONAL_PROFILE_RULES.md` for quality rules (PP-* rules)
+1. Read @skills:research-methods `profiles/PERSONAL_PROFILE_TEMPLATE.md` for document structure
+2. Read @skills:research-methods `profiles/PERSONAL_PROFILE_RULES.md` for quality rules (PP-* rules)
 3. Follow template section by section, applying all PP-* rules
 4. Skip sections with no findings (PP-AC-02) but fill all others (PP-HD-01)
 5. Apply MUST-NOT-FORGET items (verification labels, source retention, SOCAS)
@@ -77,8 +77,8 @@ Detect by: research subject is a **person** (name, email address, contact).
 
 Detect by: research subject is a **non-commercial organization** (university, association, NGO, government agency, foundation, standards body, research institute, professional network).
 
-1. Read @deep-research `profiles/ORGA_PROFILE_TEMPLATE.md` for document structure
-2. Read @deep-research `profiles/ORGA_PROFILE_RULES.md` for quality rules (OP-* rules)
+1. Read @skills:research-methods `profiles/ORGA_PROFILE_TEMPLATE.md` for document structure
+2. Read @skills:research-methods `profiles/ORGA_PROFILE_RULES.md` for quality rules (OP-* rules)
 3. Follow template section by section, applying all OP-* rules
 4. Skip sections with no findings but fill all others
 5. Apply MUST-NOT-FORGET items (verification labels, source retention, SOCAS)
@@ -87,8 +87,8 @@ Detect by: research subject is a **non-commercial organization** (university, as
 
 Detect by: research subject is a **commercial company** (startup, corporation, GmbH, LLC, AG, Ltd, SaaS vendor, consultancy, agency).
 
-1. Read @deep-research `profiles/COMPANY_PROFILE_TEMPLATE.md` for document structure
-2. Read @deep-research `profiles/COMPANY_PROFILE_RULES.md` for quality rules (CP-* rules)
+1. Read @skills:research-methods `profiles/COMPANY_PROFILE_TEMPLATE.md` for document structure
+2. Read @skills:research-methods `profiles/COMPANY_PROFILE_RULES.md` for quality rules (CP-* rules)
 3. Follow template section by section, applying all CP-* rules
 4. Skip sections with no findings but fill all others
 5. Apply MUST-NOT-FORGET items (verification labels, source retention, SOCAS)

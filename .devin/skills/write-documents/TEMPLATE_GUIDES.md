@@ -111,4 +111,4 @@ Design these active guidance elements before construction. They determine how we
 Study these for the correct pattern:
 - `INFO_TEMPLATE.md` - Clean header, MNF with `<!-- Remove this section -->`, Sources
 - `DEFERRED_IMPROVEMENTS_TEMPLATE.md` - Top comment block for naming convention, inline XML comments for field options
-- `RESEARCH_SUMMARY_TEMPLATE.md` (deep-research skill) - Conditional sections with `<!-- Conditional: ... -->` XML comments
+- `RESEARCH_SUMMARY_TEMPLATE.md` (research-methods skill) - Conditional sections with `<!-- Conditional: ... -->` XML comments
