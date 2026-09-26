@@ -42,6 +42,33 @@ Behavioral rules for agent execution patterns.
 - Cognitive load limit: Max 7 ungrouped items per list. Beyond 7: group into named clusters
 - Important first: Answer or outcome → method → edge cases. Never bury the result after 3 paragraphs of explanation
 
+## Presenting Decisions
+
+When [ACTOR] must choose between options (design decisions, open questions, a/b/c problem resolutions), present every decision in this format. Bare option labels ("Outcome A", "option c", "confirm or override") without this structure are insufficient for a decision and count as a failed presentation.
+
+```text
+# [Decision ID]: [Question as a plain sentence]
+
+**Problem**: What is wrong or undecided today, observable by the user
+**Context**: Why the problem exists - the constraint, spec clause, or prior finding that created it
+
+**Options**
+- **1) [Short name]** (recommended - only one option carries this)
+  - What: The concrete change or behaviour
+  - Why it works: The mechanism or evidence that makes it solve the problem
+  - Implication: Cost, side effects, what breaks or must be reverse-updated
+  - Why recommended: One sentence, only on the recommended option
+- **2) [Short name]**
+  - What / Why it works / Implication
+```
+
+Rules:
+- Exactly one recommendation per decision, stated on the option itself, never in a separate summary
+- List every viable option, including "do nothing" when it is viable; omit options only when they violate a spec clause and say which clause
+- Decisions the agent can take alone (engineering choices with no user-visible trade-off) are NOT presented - the agent decides and records them. Present only decisions where options differ in cost, quality, scope, or user-facing behaviour
+- Close with the exact reply format expected: `DD-04 2, DD-05 1`
+- Fixed points (constraints no option can change) go under Context, not as pseudo-options
+
 ## Confirmation Rules
 
 - MUST NOT transition from planning (SPEC, IMPL, TASKS, TEST) to implementation without [ACTOR] confirmation

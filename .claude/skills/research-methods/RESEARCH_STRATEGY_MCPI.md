@@ -50,6 +50,18 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 - Document inferred details with [ASSUMED] label
 - Proceed with best interpretation - do NOT ask unless genuinely ambiguous
 
+### Candidate Universe Gate (entity-comparison research only)
+
+Apply when the research compares entities (vendors, tools, products, services) rather than documenting a single subject:
+- Enumerate the candidate universe from three orthogonal angles:
+  1. Major platform vendors active in the domain (e.g., big-tech AI platforms)
+  2. Category leaders named by analyst/comparison sources ("best X" roundups, leaderboards)
+  3. Candidates from prior scoping documents (pre-flight, NOTES.md)
+- Build an exclusion ledger: every enumerated candidate marked PROFILED or EXCLUDED with a one-line rationale
+- Inherited candidate lists (pre-flight scoping) do NOT satisfy this gate - they are one input, not the universe
+- Store the ledger in `_INFO_[TOPIC]-02_Sources.md`
+- **Done when**: every major player has a PROFILED or EXCLUDED disposition in the ledger
+
 ### Step 3: Test Discovery Platforms
 
 Before collecting sources, test each discovery platform from Q7:
@@ -182,6 +194,7 @@ Run quality pipeline as defined in STRUT (scope-based from SKILL.md):
 - Compare against Summary file - identify missed topics
 - For each gap: assess priority (High/Medium/Low), create INFO files for High/Medium
 - Document coverage percentage in Summary file header
+- **Candidate completeness (entity-comparison research)**: re-run the Candidate Universe Gate against the delivered profile set; any major candidate without a PROFILED or EXCLUDED disposition blocks completion
 
 ### Sync and Metadata
 
@@ -217,6 +230,7 @@ Run quality pipeline on complete research set.
 ## Scoring Model (When Ranking Requested)
 
 If user intent includes ranking (e.g., "best", "top", "recommend", "which should I"):
+0. **Verify option set completeness** - for entity comparisons, the Candidate Universe Gate must show every major candidate as PROFILED or EXCLUDED before scoring
 1. **Define scoring dimensions** - 3-5 criteria relevant to user's goal (document in output)
 2. **Score each option** - 0-3 per dimension, calculate total
 3. **Present results in ranked order** - most useful on top
