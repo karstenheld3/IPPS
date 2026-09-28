@@ -165,6 +165,12 @@ Lifecycle:
 - `__` = multi-run scaffolding. Persists during active work, deleted by `/cleanup` after goal reached
 - Commit both along with task or session files. Only delete after final goal is reached.
 
+## Large File Writes
+
+- If a single file write exceeds ~4000 tokens, MUST split it into multiple smaller edits (e.g., create file with first part, append remaining parts via follow-up edits)
+- Reason: large single writes frequently fail, forcing re-generation of the entire content. Smaller edits fail less and cost less to retry
+- If a multi-edit tool is available, prefer it: multiple small edits in one tool call are more reliable than one large write
+
 ## Prompt Templates in NOTES.md
 
 Workflow calls (`/deep-research`, `/go`, `/verify`, etc.) MUST be standalone lines inside fenced prompt blocks.
