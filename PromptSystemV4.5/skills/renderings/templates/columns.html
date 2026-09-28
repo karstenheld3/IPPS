@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<!-- Template options. columns: key:Label pairs in order. markers: one regex per column that starts its stream. scope: document (markers once) or entry (markers inside each entry heading block). -->
+<meta name="render-options" content="columns=A:Language A,B:Language B,C:Language C; markers=^###\s*A\b,^###\s*B\b,^###\s*C\b; scope=document; entryLevel=2; sectionLevels=1-4; wideColumns=4">
+<style>
+{{FILE:shared/tokens.css}}
+
+/* Template: columns - parallel streams rendered as aligned columns per section */
+@page { size: A4 portrait; margin: 14mm 12mm 18mm 12mm;
+  @bottom-center { content: "Page " counter(page) " of " counter(pages); font-family: "Segoe UI", "Noto Sans", Arial, sans-serif; font-size: 8pt; color: #536078; } }
+@page :first { @top-center { content: none; } }
+html { font-size: 13px; }
+body { padding: var(--s-6); }
+.preamble { max-width: 1100px; margin: 0 auto var(--s-6); }
+.card { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 1px; background: var(--c-border-light); border: 1px solid var(--c-border); border-radius: var(--r-md); overflow: hidden; margin-bottom: var(--s-5); box-shadow: var(--shadow-card); break-inside: avoid; }
+.card.tall { break-inside: auto; }
+.card-title { grid-column: 1 / -1; background: var(--c-bg-highlight); padding: var(--s-2) var(--s-3); font-weight: 600; font-size: 14px; border: 0; border-bottom: 1px solid var(--c-border); margin: 0; line-height: 1.4; }
+.card-title.level-1 { background: var(--c-border-light); font-size: 15px; }
+.card-title .sep { color: var(--c-muted); margin: 0 var(--s-1); font-weight: 400; }
+.card-title .role-0 { color: var(--c-ink); } .card-title .role-1 { color: var(--c-accent); } .card-title .role-2 { color: var(--c-muted); }
+.col { background: var(--c-surface); padding: var(--s-3); min-width: 0; overflow: hidden; }
+.col-label { font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--s-2); padding-bottom: var(--s-1); border-bottom: 1px solid; white-space: nowrap; }
+.role-0 .col-label { color: var(--c-ink); border-color: var(--c-ink); } .role-1 .col-label { color: var(--c-accent); border-color: var(--c-accent); } .role-2 .col-label { color: var(--c-muted); border-color: var(--c-muted); }
+.col h1, .col h2, .col h3, .col h4, .col h5, .col h6 { font-size: 13px; margin: var(--s-1) 0; border: 0; padding: 0; }
+.col p { margin: var(--s-1) 0; }
+.col ul, .col ol { padding-left: 1.4em; margin: var(--s-1) 0; }
+.col table { table-layout: fixed; font-size: 11px; margin: var(--s-2) 0; }
+.col th, .col td { padding: var(--s-1) var(--s-2); word-break: break-word; }
+.col pre { font-size: 11px; padding: var(--s-2); }
+.col-empty { color: var(--c-muted); font-style: italic; font-size: 12px; }
+.notice { margin-bottom: var(--s-4); }
+/* Cards with wide tables stack their columns (print always, screen when narrow) so tables keep readable column widths */
+.card.stack .col { border-top: 1px solid var(--c-border-light); }
+@media screen and (max-width: 1100px) { .card { grid-template-columns: 1fr; } }
+@media print {
+  html { font-size: 9pt; }
+  body { padding: 0; }
+  .card { box-shadow: none; margin-bottom: 4mm; }
+  .card.stack { grid-template-columns: 1fr; }
+  .card.stack .col table { font-size: 8.5pt; }
+  .card-title { font-size: 10pt; } .card-title.level-1 { font-size: 11pt; }
+  .col table { font-size: 8pt; } .col pre { font-size: 7.5pt; }
+}
+</style>
+<script>{{FILE:shared/markdown-it.min.js}}</script>
+<script type="text/markdown" id="source">{{MARKDOWN}}</script>
+</head>
+<body data-rendered="false">
+<div id="content"></div>
+<script>
+{{FILE:shared/render-common.js}}
+
+function parseRenderOptions() {
+  var raw = readRenderOptions();
+  var retVal = { columns: [], markers: [], scope: "document", entryLevel: 2, sectionLevels: [1, 2, 3, 4], wideColumns: 4, raw: raw };
+  for (var key in raw) {
+    if (!raw.hasOwnProperty(key)) continue;
+    var value = raw[key];
+    if (key === "columns") {
+      var items = value.split(",");
+      for (var c = 0; c < items.length; c++) {
+        var kv = items[c].split(":");
+        retVal.columns.push({ key: kv[0].trim(), label: (kv[1] || kv[0]).trim() });
+      }
+    } else if (key === "markers") {
+      var patterns = value.split(",");
+      for (var m = 0; m < patterns.length; m++) retVal.markers.push(new RegExp(patterns[m].trim()));
+    } else if (key === "scope") {
+      retVal.scope = value;
+    } else if (key === "entryLevel") {
+      retVal.entryLevel = parseInt(value, 10) || 2;
+    } else if (key === "wideColumns") {
+      retVal.wideColumns = parseInt(value, 10) || 4;
+    } else if (key === "sectionLevels") {
+      var range = value.split("-");
+      var low = parseInt(range[0], 10) || 1;
+      var high = parseInt(range[1] || range[0], 10) || low;
+      retVal.sectionLevels = [];
+      for (var level = low; level <= high; level++) retVal.sectionLevels.push(level);
+    }
+  }
+  return retVal;
+}
+
+function headingOf(line) {
+  var match = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
+  return match ? { level: match[1].length, text: match[2] } : null;
+}
+
+function trimBlock(lines) {
+  var retVal = lines.slice();
+  while (retVal.length > 0 && retVal[0].trim() === "") retVal.shift();
+  while (retVal.length > 0 && (retVal[retVal.length - 1].trim() === "" || retVal[retVal.length - 1].trim() === "---")) retVal.pop();
+  return retVal;
+}
+
+function splitStreams(lines, options) {
+  var streams = [];
+  for (var c = 0; c < options.columns.length; c++) streams.push([]);
+  var preamble = [];
+  var current = -1;
+  var inFence = false;
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (/^\s*(```|~~~)/.test(line)) inFence = !inFence;
+    var matched = -1;
+    if (!inFence) {
+      for (var m = 0; m < options.markers.length; m++) { if (options.markers[m].test(line)) { matched = m; break; } }
+    }
+    if (matched >= 0) { current = matched; continue; }
+    if (current < 0) preamble.push(line); else streams[current].push(line);
+  }
+  return { preamble: preamble, streams: streams, found: current >= 0 };
+}
+
+function splitSections(lines, levels) {
+  var sections = [];
+  var current = { heading: "", level: 0, lines: [] };
+  var inFence = false;
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (/^\s*(```|~~~)/.test(line)) inFence = !inFence;
+    var heading = inFence ? null : headingOf(line);
+    if (heading && levels.indexOf(heading.level) >= 0) {
+      if (current.lines.length > 0 || current.heading) sections.push(current);
+      current = { heading: heading.text, level: heading.level, lines: [] };
+    } else {
+      current.lines.push(line);
+    }
+  }
+  if (current.lines.length > 0 || current.heading) sections.push(current);
+  return sections;
+}
+
+function splitEntries(lines, entryLevel) {
+  var retVal = { preamble: [], entries: [] };
+  var current = null;
+  var inFence = false;
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (/^\s*(```|~~~)/.test(line)) inFence = !inFence;
+    var heading = inFence ? null : headingOf(line);
+    if (heading && heading.level === entryLevel) {
+      current = { heading: heading.text, lines: [] };
+      retVal.entries.push(current);
+    } else if (current) {
+      current.lines.push(line);
+    } else {
+      retVal.preamble.push(line);
+    }
+  }
+  return retVal;
+}
+
+function roleClass(index) { return "role-" + Math.min(index, 2); }
+
+function buildTitle(md, titles, options) {
+  var parts = [];
+  var seen = {};
+  for (var i = 0; i < titles.length; i++) {
+    var text = (titles[i] || "").trim();
+    if (!text || seen[text]) continue;
+    seen[text] = true;
+    parts.push('<span class="' + roleClass(i) + '">' + md.renderInline(text) + "</span>");
+  }
+  return parts.join('<span class="sep">/</span>');
+}
+
+function buildCard(md, title, level, cells, options) {
+  var tag = level <= 1 ? "h2" : "h3";
+  var html = '<section class="card"><' + tag + ' class="card-title level-' + (level <= 1 ? 1 : 2) + '">' + (title || "&nbsp;") + "</" + tag + ">";
+  for (var c = 0; c < options.columns.length; c++) {
+    var body = cells[c] && cells[c].length > 0 ? md.render(cells[c].join("\n")) : '<p class="col-empty">(empty)</p>';
+    html += '<div class="col ' + roleClass(c) + '"><div class="col-label">' + options.columns[c].label + "</div>" + body + "</div>";
+  }
+  return html + "</section>";
+}
+
+function buildCardsForStreams(md, streams, options, titlePrefix) {
+  var perStream = [];
+  var maxSections = 0;
+  for (var s = 0; s < streams.length; s++) {
+    var sections = splitSections(trimBlock(streams[s]), options.sectionLevels);
+    perStream.push(sections);
+    if (sections.length > maxSections) maxSections = sections.length;
+  }
+  var html = "";
+  if (maxSections <= 1 && titlePrefix) {
+    var cells = [];
+    for (var s2 = 0; s2 < streams.length; s2++) cells.push(trimBlock(streams[s2]));
+    return buildCard(md, md.renderInline(titlePrefix), 1, cells, options);
+  }
+  for (var i = 0; i < maxSections; i++) {
+    var titles = [];
+    var cellLines = [];
+    var level = 2;
+    for (var t = 0; t < perStream.length; t++) {
+      var section = perStream[t][i] || { heading: "", level: 2, lines: [] };
+      titles.push(section.heading);
+      cellLines.push(trimBlock(section.lines));
+      if (t === 0 && section.level) level = section.level;
+    }
+    var title = buildTitle(md, titles, options);
+    if (titlePrefix) title = md.renderInline(titlePrefix) + (title ? ' <span class="sep">-</span> ' + title : "");
+    html += buildCard(md, title, level, cellLines, options);
+  }
+  return html;
+}
+
+function markWideCards(wideColumns) {
+  var cards = document.querySelectorAll(".card");
+  for (var k = 0; k < cards.length; k++) {
+    var tables = cards[k].querySelectorAll("table");
+    for (var t = 0; t < tables.length; t++) {
+      var firstRow = tables[t].querySelector("tr");
+      if (firstRow && firstRow.children.length >= wideColumns) { cards[k].classList.add("stack"); break; }
+    }
+  }
+}
+
+function alignColumns() {
+  var cards = document.querySelectorAll(".card");
+  for (var k = 0; k < cards.length; k++) {
+    var cols = cards[k].querySelectorAll(".col");
+    if (cols.length < 2 || cards[k].classList.contains("stack")) { if (cards[k].offsetHeight > 600) cards[k].classList.add("tall"); continue; }
+    var tableLists = [];
+    var maxTables = 0;
+    for (var c = 0; c < cols.length; c++) { var tables = cols[c].querySelectorAll("table"); tableLists.push(tables); if (tables.length > maxTables) maxTables = tables.length; }
+    for (var ti = 0; ti < maxTables; ti++) {
+      var rowLists = [];
+      var maxRows = 0;
+      for (var c2 = 0; c2 < tableLists.length; c2++) {
+        if (ti >= tableLists[c2].length) continue;
+        var rows = tableLists[c2][ti].querySelectorAll("tr");
+        rowLists.push(rows);
+        if (rows.length > maxRows) maxRows = rows.length;
+      }
+      if (rowLists.length < 2) continue;
+      for (var ri = 0; ri < maxRows; ri++) {
+        var maxHeight = 0;
+        for (var r = 0; r < rowLists.length; r++) { var row = rowLists[r][ri]; if (row) { var h = row.getBoundingClientRect().height; if (h > maxHeight) maxHeight = h; } }
+        for (var r2 = 0; r2 < rowLists.length; r2++) { var row2 = rowLists[r2][ri]; if (row2) row2.style.height = maxHeight + "px"; }
+      }
+    }
+    var childLists = [];
+    var maxChildren = 0;
+    for (var c3 = 0; c3 < cols.length; c3++) {
+      var children = [];
+      for (var n = 0; n < cols[c3].children.length; n++) { var child = cols[c3].children[n]; if (!child.classList.contains("col-label")) children.push(child); }
+      childLists.push(children);
+      if (children.length > maxChildren) maxChildren = children.length;
+    }
+    for (var ci = 0; ci < maxChildren; ci++) {
+      var elements = [];
+      var maxH = 0;
+      for (var l = 0; l < childLists.length; l++) {
+        var el = childLists[l][ci];
+        if (!el || el.tagName === "TABLE" || el.tagName === "HR") continue;
+        var height = el.getBoundingClientRect().height;
+        if (height > maxH) maxH = height;
+        elements.push(el);
+      }
+      for (var e = 0; e < elements.length; e++) elements[e].style.minHeight = maxH + "px";
+    }
+    if (cards[k].offsetHeight > 600) cards[k].classList.add("tall");
+  }
+}
+
+(function () {
+  var options = parseRenderOptions();
+  var md = createMarkdown();
+  var content = document.getElementById("content");
+  measureCodeLineHeight();
+  var source = readSource();
+  var parts = splitFrontMatter(source);
+  var lines = parts.body.replace(/\r/g, "").split("\n");
+  document.documentElement.style.setProperty("--cols", String(options.columns.length));
+  if (options.columns.length > 3) {
+    var landscape = document.createElement("style");
+    landscape.textContent = "@page { size: A4 landscape; }";
+    document.head.appendChild(landscape);
+  }
+  var html = "";
+  var found = false;
+  if (options.scope === "entry") {
+    var split = splitEntries(lines, options.entryLevel);
+    var preambleLines = trimBlock(split.preamble);
+    if (preambleLines.length > 0) html += '<div class="preamble">' + md.render(preambleLines.join("\n")) + "</div>";
+    for (var i = 0; i < split.entries.length; i++) {
+      var entryStreams = splitStreams(split.entries[i].lines, options);
+      if (!entryStreams.found) continue;
+      found = true;
+      html += buildCardsForStreams(md, entryStreams.streams, options, split.entries[i].heading);
+    }
+  } else {
+    var result = splitStreams(lines, options);
+    found = result.found;
+    if (found) {
+      var pre = trimBlock(result.preamble);
+      if (pre.length > 0) html += '<div class="preamble">' + md.render(pre.join("\n")) + "</div>";
+      html += buildCardsForStreams(md, result.streams, options, "");
+    }
+  }
+  if (!found) {
+    html = '<div class="preamble"><p class="notice">No column markers found - rendered as a single column.</p>' + md.render(parts.body) + "</div>";
+  }
+  content.innerHTML = html;
+  postProcess(content, options.raw);
+  markWideCards(options.wideColumns);
+  var title = document.title || parts.frontMatter.title || firstHeadingText(content) || "Document";
+  document.title = title;
+  addPageHeader(title, { skipFirstPage: true });
+  alignColumns();
+  finishRendering();
+})();
+</script>
+</body>
+</html>

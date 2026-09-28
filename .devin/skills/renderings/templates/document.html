@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<!-- Template options. tableFont: condensed (dense tables use the condensed font stack). landscapeTables: N (tables with N+ columns print on their own landscape page; 0 = off). -->
+<meta name="render-options" content="tableFont=default; landscapeTables=0">
+<style>
+{{FILE:shared/tokens.css}}
+
+/* Template: document - single reading column */
+@page { size: A4 portrait; margin: 20mm 18mm 22mm 18mm;
+  @bottom-center { content: "Page " counter(page) " of " counter(pages); font-family: "Segoe UI", "Noto Sans", Arial, sans-serif; font-size: 8pt; color: #536078; } }
+@page :first { @top-center { content: none; } }
+@page wide { size: A4 landscape; margin: 16mm 18mm 18mm 18mm; }
+table.landscape { page: wide; }
+main { padding: var(--s-6) 0; }
+@media screen {
+  body { padding: var(--s-8) var(--s-4); }
+  main { max-width: 860px; margin: 0 auto; background: var(--c-surface); border: 1px solid var(--c-border-light); border-radius: var(--r-md); box-shadow: var(--shadow-card); padding: var(--s-10) var(--s-12); }
+}
+@media print {
+  main { max-width: none; padding: 0; }
+}
+</style>
+<script>{{FILE:shared/markdown-it.min.js}}</script>
+<script type="text/markdown" id="source">{{MARKDOWN}}</script>
+</head>
+<body data-rendered="false">
+<main id="content"></main>
+<script>
+{{FILE:shared/render-common.js}}
+
+(function () {
+  var options = readRenderOptions();
+  var source = readSource();
+  var parts = splitFrontMatter(source);
+  var md = createMarkdown();
+  var content = document.getElementById("content");
+  measureCodeLineHeight();
+  content.innerHTML = md.render(parts.body);
+  postProcess(content, options);
+  var title = document.title || parts.frontMatter.title || firstHeadingText(content) || "Document";
+  document.title = title;
+  addPageHeader(title, { skipFirstPage: true });
+  finishRendering();
+})();
+</script>
+</body>
+</html>

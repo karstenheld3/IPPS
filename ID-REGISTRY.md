@@ -234,3 +234,4 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **TRNSKILRW** - Transcription Skill Rewrite (complete rewrite of transcribe.md workflow and llm-transcription skill for two output types: markdown transcription and IPPS knowledge bundles) - 2026-09-16
 - **MDRSRCH** - Markdown Deep Research (standardized markdown format, syntax extensions, dialects, parsers/libraries for creating and parsing markdown) - 2026-09-16
 - **CLAUDEIPPS** - Claude Code IPPS Release and Skill-Based Prompt System Migration (IPPS release for latest Claude Code; workflow-to-skill migration per SKLWRKFL-IN01 Option F) - 2026-09-21
+- **MDRENDER** - Markdown Rendering (render.md workflow, renderings skill, render.py for Markdown to HTML/PDF in Python; supersedes MDPDF research) - 2026-09-28

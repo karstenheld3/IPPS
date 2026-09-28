@@ -1,0 +1,90 @@
+/* Shared design tokens and base element rules for all rendering templates. Layout (columns, @page) lives in each template. */
+:root {
+  /* Palette */
+  --c-ink: #14213A; --c-ink-2: #283552; --c-muted: #536078;
+  --c-accent: #2C5ED6; --c-accent-dark: #1D4ED8; --c-accent-text: #003EDA; --c-accent-light: #C3D9F0; --c-accent-subtle: #EAF3FC;
+  --c-bg: #F7FAFC; --c-bg-highlight: #E8F0FA; --c-surface: #FFFFFF;
+  --c-border: #C8D6E5; --c-border-light: #E2EAF2; --c-border-accent: #A3BFE8;
+  /* Semantic */
+  --c-success: #16A34A; --c-success-bg: #F0FDF4; --c-warning: #EA580C; --c-warning-bg: #FFF7ED;
+  --c-caution: #CA8A04; --c-caution-bg: #FAF8EB; --c-critical: #EA2A2A; --c-critical-bg: #FEF2F2; --c-neutral: #6B7280; --c-neutral-bg: #F3F4F6;
+  /* Fonts: sans first, static monospace first (variable fonts embed as Type3 in PDF), emoji fallback last */
+  --font-sans: Inter, "Segoe UI", system-ui, -apple-system, "Noto Sans", Arial, "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  --font-mono: Consolas, "JetBrains Mono", "DejaVu Sans Mono", "Cascadia Mono", "Segoe UI Emoji", "Noto Color Emoji", monospace;
+  /* Condensed stack for dense tables (opt-in via render option tableFont=condensed); falls back to the sans stack when none is installed */
+  --font-table-dense: "Arial Narrow", "Roboto Condensed", "Bahnschrift SemiCondensed", var(--font-sans);
+  /* Type scale (screen) */
+  --t-xs: 12px; --t-sm: 14px; --t-base: 16px; --t-lg: 18px; --t-xl: 20px; --t-2xl: 24px; --t-3xl: 30px; --t-4xl: 36px;
+  /* Spacing, radii, shadow */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px;
+  --r-sm: 6px; --r-md: 8px; --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08);
+  /* Print sizes */
+  --print-body-pt: 10.5pt; --print-code-pt: 8.2pt; --print-table-pt: 9pt; --print-line-height: 1.45;
+  /* Code wrap threshold in characters (templates read this via getComputedStyle) */
+  --code-wrap-threshold: 110;
+  /* Code line box = monospace font box so box-drawing rows touch; render-common.js overwrites this with the measured ratio of the resolved font */
+  --code-line-height: 1.2;
+}
+
+* { box-sizing: border-box; }
+html { font-family: var(--font-sans); font-size: var(--t-base); line-height: 1.5; color: var(--c-ink); background: var(--c-bg); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; }
+
+h1, h2, h3, h4, h5, h6 { color: var(--c-ink); font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; margin: 1.4em 0 0.5em; break-after: avoid; overflow-wrap: anywhere; }
+h1 { font-size: var(--t-3xl); margin-top: 0; padding-bottom: var(--s-2); border-bottom: 2px solid var(--c-border); }
+h2 { font-size: var(--t-2xl); }
+h3 { font-size: var(--t-xl); }
+h4 { font-size: var(--t-lg); }
+h5, h6 { font-size: var(--t-base); }
+p { margin: 0.6em 0; }
+a { color: var(--c-accent); text-decoration: none; }
+a:hover { color: var(--c-accent-dark); text-decoration: underline; }
+strong { font-weight: 600; }
+hr { border: 0; border-top: 1px solid var(--c-border-light); margin: var(--s-6) 0; }
+img { max-width: 100%; height: auto; border-radius: var(--r-md); break-inside: avoid; }
+
+ul, ol { padding-left: 1.6em; margin: 0.5em 0; }
+li { margin: 0.2em 0; }
+li > p { margin: 0.2em 0; }
+li.task-list-item { list-style: none; margin-left: -1.4em; }
+li.task-list-item input { margin-right: 0.5em; vertical-align: middle; }
+
+blockquote { margin: 0.8em 0; padding: var(--s-3) var(--s-5); background: var(--c-bg-highlight); border-left: 4px solid var(--c-border-accent); border-radius: 0 var(--r-md) var(--r-md) 0; color: var(--c-ink); }
+blockquote p { margin: 0.3em 0; }
+
+pre, code { font-family: var(--font-mono); }
+code { font-size: 0.9em; background: var(--c-bg-highlight); border-radius: var(--r-sm); padding: 1px 5px; color: var(--c-ink-2); }
+pre { position: relative; font-size: var(--t-sm); line-height: var(--code-line-height); background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-md); padding: var(--s-3) var(--s-4); overflow-x: auto; white-space: pre; break-inside: avoid; }
+pre code { font-size: inherit; background: none; border-radius: 0; padding: 0; color: inherit; }
+pre.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+pre.tall { break-inside: auto; }
+pre[data-lang]::before { content: attr(data-lang); position: absolute; top: 4px; right: 8px; font-family: var(--font-sans); font-size: var(--t-xs); color: var(--c-muted); }
+
+table { width: 100%; border-collapse: collapse; margin: 0.8em 0; font-size: var(--t-sm); }
+thead { display: table-header-group; }
+th, td { border: 1px solid var(--c-border); padding: var(--s-1) var(--s-2); vertical-align: top; text-align: left; overflow-wrap: break-word; }
+th { background: var(--c-bg-highlight); color: var(--c-ink); font-weight: 600; }
+tbody tr:nth-child(even) td { background: var(--c-bg); }
+tr { break-inside: avoid; }
+table.fixed { table-layout: fixed; }
+/* Table fitting (render-common.js fitTables): dense-1..3 step the font down until the table fits its container; wide = 6+ columns, starts at dense-2 */
+table.dense-1 { font-size: 13px; } table.dense-2 { font-size: 12px; } table.dense-3 { font-size: 11px; }
+table.condensed { font-family: var(--font-table-dense); }
+table.overflow { display: block; overflow-x: auto; }
+
+.emphasis { color: var(--c-accent-text); font-weight: 600; }
+.notice { background: var(--c-caution-bg); border-left: 4px solid var(--c-caution); padding: var(--s-2) var(--s-4); border-radius: 0 var(--r-md) var(--r-md) 0; color: var(--c-ink); font-size: var(--t-sm); }
+.muted { color: var(--c-muted); }
+
+@media print {
+  html { font-size: var(--print-body-pt); line-height: var(--print-line-height); background: #FFFFFF; }
+  h1 { font-size: 20pt; } h2 { font-size: 15pt; } h3 { font-size: 12.5pt; } h4, h5, h6 { font-size: 11pt; }
+  pre { font-size: var(--print-code-pt); line-height: var(--code-line-height); overflow: visible; box-shadow: none; }
+  pre[data-lang]::before { font-size: 7pt; }
+  table { font-size: var(--print-table-pt); }
+  table.dense-1 { font-size: 8.5pt; } table.dense-2 { font-size: 8pt; } table.dense-3 { font-size: 7.5pt; }
+  table.overflow { display: table; overflow: visible; }
+  code { font-size: 0.92em; }
+  a { color: var(--c-accent); }
+  img { break-inside: avoid; }
+}
