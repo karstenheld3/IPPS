@@ -3,7 +3,7 @@
 **Doc ID**: DVDT-IN01
 **Goal**: Comprehensive reference for Devin Desktop (formerly Windsurf) - agent harnesses, AI models, customization, developer tools, enterprise controls, and architecture internals
 **Version scope**: Devin Desktop 3.8.20+ / Devin Local 2026.5.26+ / Devin Next 3.8.1020 and 3.9.1018
-**Timeline**: Created 2026-08-27, Updated 5 times (2026-08-27 - 2026-09-17)
+**Timeline**: Created 2026-08-27, Updated 6 times (2026-08-27 - 2026-09-26)
 
 ## Summary
 
@@ -39,6 +39,7 @@
 - `devin.cascade.enabled` setting is dead code: registered in package.json but never read in extension.js [TESTED 2026-09-09]
 - Auto-update controlled by `product.json` `updateUrl` field, not `update.mode` setting [TESTED 2026-09-09]
 - Running user-scope Windows install as Administrator disables updates entirely (inherited VS Code OSS behavior) [TESTED 2026-09-17]
+- Agent Windows are untitled workspaces (`workbenchMode: windsurf-agent-window`) restored by Devin's own `WindsurfWindowsMainManager`, not by VS Code `window.restoreWindows` [TESTED 2026-09-26]
 
 **Version Differences (3.8.1020 vs 3.9.1018):**
 - 3.9 adds multimodal support: DocumentData, VideoData protobuf types, ChatMessagePrompt fields 20-21, ModelFeatures fields 27-30 [VERIFIED]
@@ -1077,13 +1078,19 @@ C:\Users\<User>\
 ├── .config\devin\config.json      # Devin Local user-level config
 ├── AppData\Local\Programs\Devin\  # Main installation (was Windsurf)
 │   └── resources\app\extensions\
-├── AppData\Local\Programs\Devin Next\  # Preview channel
-└── AppData\Roaming\Devin\User\    # User data
-    ├── settings.json
-    ├── keybindings.json
-    └── globalStorage\state.vscdb
+├── AppData\Local\Programs\Devin Next\  # Preview channel (no dash), exe = Devin - Next.exe
+├── AppData\Roaming\Devin\User\    # User data
+│   ├── settings.json
+│   ├── keybindings.json
+│   └── globalStorage\state.vscdb
+└── AppData\Roaming\Devin - Next\   # Preview channel user data (with dash)
+    ├── User\globalStorage\storage.json   # Main-process state (windowsState, backupWorkspaces, windsurf.*State)
+    ├── Workspaces\<timestamp>\workspace.json  # Untitled workspaces incl. Agent Windows
+    └── logs\<timestamp>\main.log       # Main-process log (window open/close events)
 ```
 [VERIFIED]
+
+**Windows folder naming (Next channel):** Install folder `%LOCALAPPDATA%\Programs\Devin Next\` has no dash; user-data folder `%APPDATA%\Devin - Next\` has a dash. Same pattern for Windsurf Next (`Programs\Windsurf Next\` vs `%APPDATA%\Windsurf - Next\`). Scripts that copy themes (install folder) and settings (user-data folder) need both spellings. [TESTED 2026-09-26]
 
 **macOS paths:**
 - Installation: `/Applications/Devin.app`
@@ -1105,6 +1112,8 @@ C:\Users\<User>\
 **Two settings systems:**
 - **Editor settings** - JSON at `%APPDATA%\Devin\User\settings.json`. Editable via text editor. Includes `windsurf.*` keys for agent settings
 - **Agent settings** (UI-only subset) - Protobuf at `%USERPROFILE%\.codeium\windsurf\user_settings.pb`. Many settings also writable via `windsurf.*` keys [VERIFIED]
+
+**`autoWebRequestPolicy` divergence:** `windsurf.autoWebRequestPolicy`/`devin.autoWebRequestPolicy` in `settings.json` did not match the "Auto web requests" dropdown shown in the Settings UI (JSON said `turbo`, UI showed `Allowlist`). `user_settings.pb` timestamp updates independently of `settings.json` edits and is the value the UI panel actually reads/writes; the JSON key does not reliably drive this particular UI control. Fix is to change the value in the UI panel directly, not in `settings.json`. [TESTED 2026-09-26]
 
 **Key agent settings:** Both `windsurf.*` and `devin.*` prefixes work.
 
@@ -1249,6 +1258,21 @@ Devin.exe (Electron main process)
 - 1 new event key: `PRE_UPLOADED_META_KEY` (metadata key for uploaded content, not a hook)
 - 10,876 unique quoted strings (vs 10,685 in 3.8). 171 meaningful new strings, 1 removed (`devin.cascade.enabled`)
 - No changes to commands, keybindings, menus, authentication, languages, or jsonValidation in package.json [TESTED 2026-09-09]
+
+**Window management (main.js, Devin Next 3.8.1020) [TESTED 2026-09-26]:**
+
+Devin adds two main-process services on top of stock VS Code window handling. Both live in `resources/app/out/main.js`.
+
+- **`windsurfAgentWindowMainService`** - Opens Agent Windows. `openAgentWindow()` calls `workspacesManagementMainService.createUntitledWorkspace()`, writes `{"folders": [], "workbenchMode": "windsurf-agent-window"}` to `%APPDATA%\Devin - Next\Workspaces\<timestamp>\workspace.json`, then opens it with `forceNewWindow: true, noRecentEntry: true`. Window kind (0 = agent, 1 = editor) tracked in-memory only. IPC channel `vscode:windsurfShowAgentMode`
+- **`WindsurfWindowsMainManager`** - Groups a parent window with up to 3 child windows (`MAX_CHILDREN_PER_GROUP = 3`). Persists via `IStateService` under key `windsurf.windowGroupsState` (`storage.json`). Hooks `onWillLoadWindow` (calls `_tryRestoreWindowGroup`), `onBeforeCloseWindow`, `onBeforeShutdown` (commits all group states). Has `resetAllStates()` which clears the key. Log lines in `main.log`: `WindsurfWindowsMainManager: Window will load`, `Window will close`, `Shutdown initiated, capturing current window group state`
+- **Stock VS Code restore logic unchanged** - `getRestoreWindowsSetting()` identical to upstream: `wasRestarted` forces `all`, otherwise `window.restoreWindows` (default `all`). `preserve` is the only value that prepends last-session paths when a folder is passed on the CLI
+
+**Observed symptom:** Launching `Devin - Next.exe <folder>` from a `.bat` opened two windows: the CLI folder plus a stale Agent Window (untitled workspace created 2 days earlier, containing a different folder). `main.log` showed the Agent Window loading before the CLI folder window. The following did NOT prevent it:
+- `"window.restoreWindows": "none"` in settings.json
+- `"windsurf.openRecentConversation": false` in settings.json
+- Clearing `windowsState.lastActiveWindow` and `backupWorkspaces` in `User\globalStorage\storage.json`
+
+Stale Agent Window references were found in: `Local Storage\leveldb\*.ldb`, `User\workspaceStorage\<workspace-id>\state.vscdb`, `User\History\<hash>\entries.json`, and `User\globalStorage\storage.json` (`backupWorkspaces`, `profileAssociations`, `windowSplashWorkspaceOverride`). Symptom stopped after both windows were closed manually via the window close button (not via `.bat` relaunch) and the app was restarted; which change resolved it was not isolated. [TESTED 2026-09-26]
 
 ## 18. Version Differences: 3.8 vs 3.9
 
@@ -1427,8 +1451,16 @@ The client extension never checks these fields to show/hide Cascade UI. Cascade 
 - `DVDT-IN01-SC-LOCAL-BIN`: Binary string extraction and comparison using PowerShell `[regex]::Matches` on Go binary [TESTED 2026-09-09]
 - `DVDT-IN01-SC-LOCAL-WS`: `workbench.desktop.main.js` Cascade view registration analysis [TESTED 2026-09-09]
 - `DVDT-IN01-SC-LOCAL-ADM`: User-scope install launched as Administrator - update-disabled notification observed on Devin Desktop [TESTED 2026-09-17]
+- `DVDT-IN01-SC-LOCAL-WIN`: Devin Next 3.8.1020 `main.js` string extraction (`WindsurfWindowsMainManager`, `windsurfAgentWindowMainService`, `getRestoreWindowsSetting`), `main.log`, `storage.json`, `Workspaces\*\workspace.json` - double-window launch investigation [TESTED 2026-09-26]
 
 ## 20. Document History
+
+**[2026-09-26 16:35]**
+- Added: Section 17 window management -- `windsurfAgentWindowMainService`, `WindsurfWindowsMainManager`, `windsurf.windowGroupsState` key, `workbenchMode: windsurf-agent-window`, stock `restoreWindows` logic, double-window symptom and non-working mitigations
+- Added: Section 16.1 install vs. user-data folder naming (`Devin Next` vs `Devin - Next`)
+- Added: Summary architecture bullet for Agent Window restore
+- Added: Local investigation source DVDT-IN01-SC-LOCAL-WIN
+- Changed: Timeline updated to 6 updates
 
 **[2026-09-17]**
 - Added: Section 16.2 admin-elevation update block -- user-scope Windows install run as Administrator disables updates, notification observed, inherited VS Code OSS behavior
