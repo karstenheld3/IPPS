@@ -40,6 +40,7 @@ Word Choice (WC)
 - MW-WC-06: No inverted semantics - name direction must match value direction
 - MW-WC-07: No premature label compression - short labels require legend in sight, mnemonic, or establishment
 - MW-WC-08: Document language is sovereign - foreign terms must be translated inline at every use
+- MW-WC-09: Acronym meaning comes from context - never invented, never adopted from training data
 
 Terminology Design (TD)
 - MW-TD-01: Naming structure method (explicit -> specifiers -> states -> mnemonics)
@@ -387,6 +388,17 @@ Fusing a foreign root with a native suffix creates a term that exists in no lang
 **Repetition rule:** Translate at EVERY use, not just first mention. Unlike abbreviations (where "define once, use short form after"), foreign terms do not stick in memory across a multi-page document. A reader scanning to page 5 must not need to hunt page 1 for the translation.
 
 **Exception:** When the foreign term IS the established term in the reader's language (e.g., "kindergarten" in English, "software" in German), no translation needed.
+
+### MW-WC-09: Acronym Meaning Comes From Context
+
+Acronyms have multiple meanings; the one defined in context (document, referenced sources, defining file, `ID-REGISTRY.md`) overrules all others. Never invent an expansion, never adopt one from training data, never copy one from a secondary file unchecked. No definition in context: leave unexpanded, mark `[UNVERIFIED]`.
+
+**Why:** A guessed expansion is a wrong name (MW-WC-05) that looks authoritative and propagates.
+
+**BAD:** `AMINTON (Argument, Main claim, Insight, Node, Tree, Opposition, Nuance)` - backronym from the letters
+**GOOD:** `AMINTON (Agentic MINTO Notation)` - from the defining section `MINTO_GUIDES.md` Section 1
+
+**Test:** Point to the line that defines it. No line = no expansion.
 
 ## Terminology Design Rules (TD)
 

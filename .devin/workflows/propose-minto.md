@@ -24,11 +24,11 @@ Generate 3 candidate arguments with full AMINTON Root Sections from source mater
 
 - Selection funnel: 8 candidates → 3 selected (scored), 5 questions → 3 selected (scored), 5 answers → 3 selected
 - Magnet Rule: every candidate A must connect to a listener motivator - eliminate before scoring
-- Question ordering: must follow a stated logical method (see MINTO_GUIDES.md Section 3.1); Why-How-What is default for persuasion
+- Question ordering: must follow a stated logical method (see MINTO_GUIDES.md Section 4.1); Why-How-What is default for persuasion
 - One-Argument Test: can tree collapse to 1Q with 3 answers? If yes, restructure
 - Evidence traceability: every answer must be supportable from findings inventory
 - MECE (Mutually Exclusive, Collectively Exhaustive) at every level: no overlapping questions, no overlapping answers
-- Reference `_INFO_AGENTIC_MINTO_ARTICLES.md [MINTO-IN01]` for AMINTON notation and tree structure
+- Reference @skills:write-documents `MINTO_GUIDES.md` Section 1 for AMINTON notation and tree structure
 
 ## Trigger
 

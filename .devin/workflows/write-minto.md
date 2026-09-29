@@ -31,7 +31,7 @@ Develop a selected argument into a complete Minto Pyramid article with drill-dow
 - Structure: 3-5 questions, max 3 answers each (DD-03)
 - Bottom-up synthesis (thinking) precedes top-down communication (writing)
 - Confirm before overwriting existing `_MINTO_*.md`
-- Reference `_INFO_AGENTIC_MINTO_ARTICLES.md [MINTO-IN01]` for AMINTON notation and tree structure
+- Reference @skills:write-documents `MINTO_GUIDES.md` Section 1 for AMINTON notation and tree structure
 
 ## Trigger
 

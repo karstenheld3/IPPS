@@ -16,7 +16,7 @@ Precision (PR) - Priority 1
 - AP-PR-03: Standardized contact information format
 - AP-PR-04: Standardized link and reference format
 - AP-PR-05: Referenceable IDs on all trackable items
-- AP-PR-06: Write out acronyms on first use
+- AP-PR-06: Write out acronyms on first use; expansion from context, never from training data
 - AP-PR-07: Be specific - no generic or abstract writing
 - AP-PR-08: Every non-obvious rule or format needs examples
 - AP-PR-09: Consistent patterns (repeat established structures)
@@ -234,6 +234,8 @@ Per CRWL-FR-01, the crawler must...
 ### AP-PR-06: Write Out Acronyms on First Use
 
 Format: `Full Term (ACRONYM)`. After first use, acronym alone is acceptable within same document.
+
+Expansion source: research the meaning in context (document, referenced sources, agent rules, conversation, defining file, specifications, `ID-REGISTRY.md`) - never invent it, never adopt a probable meaning from training data. Reason: acronyms have multiple meanings; the one defined in context overrules all others, and a guessed expansion is a wrong name that propagates (MW-WC-09).
 
 **BAD:**
 ```

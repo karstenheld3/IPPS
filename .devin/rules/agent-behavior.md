@@ -212,4 +212,5 @@ During execution:
 
 - Use absolute paths (PowerShell jobs lose relative context)
 - Use non-blocking execution for parallel tasks
+- Redirect command output to a `.tmp_` file in [SESSION_FOLDER] and read it with read_file - never build long PowerShell pipelines with `Select-Object` / `Select-String` / `Where-Object`; they hang the terminal. One redirect per command, delete the `.tmp_` file after use
 - After first job completes, verify output before assuming rest will succeed

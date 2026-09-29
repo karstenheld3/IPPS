@@ -57,7 +57,7 @@ Invoke based on context:
 
 Apply to ALL document types and contexts:
 
-- Avoid excessive acronyms. Write out acronyms on first usage.
+- Avoid excessive acronyms. Write out acronyms on first usage. Take the expansion from the context, never from training data: acronyms have multiple meanings and a guessed one is a wrong name that propagates (MW-WC-09).
   - BAD: `SPN not supported.`
   - GOOD: `Service Principal Name (SPN) not supported.`
 - Use verification labels consistently (see below)
@@ -388,7 +388,7 @@ Detect by: filename pattern `__MINTO-DRAFT_*.md` (draft) or `_MINTO_*.md` (artic
   - One section per Q with idea-stating heading (not category label)
   - Bold claim per answer, evidence woven into paragraphs
   - Conclusion: one summary line per Q + restated A
-  - Appendix: full AMINTON (Argument, Main claim, Insight, Node, Tree, Opposition, Nuance) tree (A through E-nodes with source Fnn refs)
+  - Appendix: full AMINTON (Agentic MINTO Notation) tree (A through E-nodes with source Fnn refs)
 - Verify against MINTO-TI-* rules (sub-questions, evidence, no orphans, source references)
 - Verify against MINTO-AS-* rules (Doc ID, SCQA Executive Summary, section per Q, appendix, top-down order)
 - Verify against MINTO-CL-* rules (closing present, one line per answer, no new claims)
