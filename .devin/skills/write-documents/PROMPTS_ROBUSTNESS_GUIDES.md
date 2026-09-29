@@ -162,7 +162,9 @@ Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File every test fai
 
 ## 4. Command-Specific Hang Risks
 
-Banned lists, mechanisms, and per-tool behavior are maintained in @skills:terminal-robustness (agent variants: `ClaudeCode/` minimum, `DevinCascade/` full findings). Build the project banned list into the robustness card (that skill's guide, Section 4.3), then reference the card from the hang-safety clause - do not inline command-by-command risk lists into prompts.
+Before using @skills:terminal-robustness content, determine the executing agent and load the matching variant subfolder (see SKILL.md Agent Dispatch): `ClaudeCode/` (minimum - generic patterns, no tool-internals claims) or `DevinCascade/` (full empirical findings, tested patterns). The variant's `ROBUSTNESS_CARD_TEMPLATE.md` is the copy source for the project card; the variant guide carries the agent-specific execution patterns.
+
+Banned lists, mechanisms, and per-tool behavior are maintained in the skill (agent variants as above). Build the project banned list into the robustness card (that skill's guide, Section 4.3), then reference the card from the hang-safety clause - do not inline command-by-command risk lists into prompts.
 
 ## 5. Safe Command Patterns
 
