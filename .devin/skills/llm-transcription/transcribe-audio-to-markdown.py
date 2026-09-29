@@ -178,7 +178,7 @@ def process_single(input_path: Path, output_path: Path, api_keys: dict,
     
   # Write output
   output_path.parent.mkdir(parents=True, exist_ok=True)
-  with open(output_path, 'w', encoding='utf-8') as f:
+  with open(output_path, 'w', encoding='utf-8-sig') as f:
     f.write(text)
     
   elapsed = (datetime.now(timezone.utc) - start_time).total_seconds()
