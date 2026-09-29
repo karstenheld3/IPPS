@@ -214,3 +214,25 @@ During execution:
 - Use non-blocking execution for parallel tasks
 - Redirect command output to a `.tmp_` file in [SESSION_FOLDER] and read it with read_file - never build long PowerShell pipelines with `Select-Object` / `Select-String` / `Where-Object`; they hang the terminal. One redirect per command, delete the `.tmp_` file after use
 - After first job completes, verify output before assuming rest will succeed
+
+## Long-Running Commands (over 60 seconds)
+
+Applies to git filter-repo, full-repo gc/repack, mass file operations, pip/npm installs, large downloads - anything expected to run over 60 seconds.
+
+Before starting:
+- State the estimated duration to the user and that the terminal will appear busy meanwhile. A silent multi-minute command is indistinguishable from a hang
+- For repo-wide operations (filter-repo, gc, reflog expire): they end with reset --hard + reflog expire + gc. Check for concurrent activity first (running git/python processes via Get-Process, non-empty `git status`, other active sessions committing to the same repo). Never run while another session works in the repo
+- Warn that canceling the Cascade step does NOT kill the spawned process
+
+During execution:
+- Do not poll with fixed waits and no new information. If the `.tmp_` log has not grown for 2 minutes, check liveness first: Get-Process git, python (CPU, StartTime). Python buffers stdout to files - an empty log does not mean a dead process
+- If runtime exceeds 2x the estimate: kill the process tree by PID, report, propose alternatives
+
+After canceling or completing:
+- Verify the process is dead (Get-Process). A canceled step leaves the process running in the background
+- After history rewrites: verify HEAD, refs, `git status`, and worktree content before any push
+
+## Terminal Hang Prevention
+
+Three hard bans, no exceptions: (1) no `2>&1` on commands writing more than a few KB of stderr - redirect to a file instead; (2) no unbounded background children (`--watch`, dev servers, daemons inheriting std handles); (3) no stdin/pager waits (`Read-Host`, `pause`, pagers, `Get-Content -Wait`).
+Before process-running commands, load `@skills:terminal-robustness TERMINAL_ROBUSTNESS_GUIDES.md` (mechanisms, safe patterns) and the project's `__CARD_*-Robustness.md` if one exists. Time-cap everything; on cap kill the process tree and record in PROBLEMS.md.

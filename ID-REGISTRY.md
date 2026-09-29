@@ -235,3 +235,4 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **MDRSRCH** - Markdown Deep Research (standardized markdown format, syntax extensions, dialects, parsers/libraries for creating and parsing markdown) - 2026-09-16
 - **CLAUDEIPPS** - Claude Code IPPS Release and Skill-Based Prompt System Migration (IPPS release for latest Claude Code; workflow-to-skill migration per SKLWRKFL-IN01 Option F) - 2026-09-21
 - **MDRENDER** - Markdown Rendering (render.md workflow, renderings skill, render.py for Markdown to HTML/PDF in Python; supersedes MDPDF research) - 2026-09-28
+- **TERMROBUSTNESS** - Terminal Robustness Skill (placement, structure, and linkage of terminal-robustness skill with agent variants in IPPS) - 2026-09-29

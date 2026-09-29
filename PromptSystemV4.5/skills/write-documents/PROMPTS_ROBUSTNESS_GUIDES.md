@@ -1,6 +1,6 @@
 # Prompts Robustness Guide
 
-Read BEFORE writing `_PROMPTS_[NN]-[Topic].md` files. Pairs with `PROMPTS_GUIDES.md` and `PROMPTS_RULES.md` (PRMT-HS-* and PRMT-RB-* rules).
+Read BEFORE writing `_PROMPTS_[NN]-[Topic].md` files. Pairs with `PROMPTS_GUIDES.md` and `PROMPTS_RULES.md` (PRMT-HS-* and PRMT-RB-* rules). Mechanism depth, safe command patterns, and robustness card templates live in @skills:terminal-robustness; this guide carries the prompt-integration layer (clause, findings card, verification depth).
 
 ## 1. Why Robustness Matters
 
@@ -21,15 +21,15 @@ A well-structured prompt sequence with precise objectives, clean state flow, and
 Every implementation prompt (any prompt that runs commands) MUST include a hang-safety clause in the Constraints section. The clause has three parts:
 
 1. **Prohibition**: no command may wait for a key, stdin, a pager, or an unbounded child
-2. **Banned list**: project-specific commands known to hang (see Section 4)
+2. **Banned list**: referenced from the project robustness card by filename
 3. **Cap behavior**: what to do when a command exceeds its time cap
 
 ### Clause Template
 
-Adapt the banned list to the project. The template below lists generic hang risks; add project-specific entries from Section 4.
+Adapt the banned list and caps from the project robustness card (`__CARD_[TOPIC]-Robustness.md`, created and extended via @skills:terminal-robustness). The clause references the card instead of repeating the full list:
 
 ```
-Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Banned: [project-specific list]. Test suites run non-blocking with a [N]-minute cap. On a cap: kill the process tree, record command and cap in PROBLEMS.md, continue.
+Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Banned: see `__CARD_[TOPIC]-Robustness.md`. Test suites run non-blocking with a [N]-minute cap. On a cap: kill the process tree, record command and cap in PROBLEMS.md, continue.
 ```
 
 ### Where to Place the Clause
@@ -162,118 +162,13 @@ Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File every test fai
 
 ## 4. Command-Specific Hang Risks
 
-### 4.1 Generic Hang Risks (All Projects)
-
-These commands hang in any project. The banned list should always include them unless the prompt explicitly requires and safeguards them.
-
-**Interactive prompts**:
-- `Read-Host`, `pause`, `Get-Credential` (PowerShell) — wait for stdin
-- `read`, `select` (bash) — wait for stdin
-- Any CLI tool launched without `--non-interactive`, `--yes`, or equivalent flag
-
-**Pagers**:
-- `git log`, `git diff`, `git show`, `git blame` without `--no-pager` — launch a pager
-- `less`, `more`, `man` — launch a pager
-- `Get-Content -Wait`, `tail -f` — stream indefinitely
-
-**Unbounded children**:
-- `bun --watch`, `bun test --watch`, `npm run dev`, any `--watch` flag — never terminate
-- `Start-Process` of an editor, browser, or console window — opens a GUI, never returns
-- `Wait-Process` without `-Timeout` — waits forever if the process hangs
-
-**Approval pipelines**:
-- Sequential `run_command` calls where each requires user approval — the agent appears frozen between commands. Batch related commands into a single script or warn the user that multiple approvals will follow
-
-### 4.2 PowerShell-Specific Risks
-
-- `2>&1` with `Blocking: true` in the terminal tool — PowerShell stream merge creates a pipe deadlock. The process exits but the merged buffer never drains. Use `Blocking: false` or drop `2>&1`. For capturing stderr, redirect to a file (`2>err.txt`) and read it after
-- `Invoke-WebRequest` without `-UseBasicParsing` — may launch IE component on older systems
-- `Start-Job` without `Wait-Job -Timeout` — job runs indefinitely
-- `Get-ChildItem -Recurse` on large directory trees — enumerates every file before returning, can take minutes or hang on network shares. Use `rg.exe` instead (see Section 5.6)
-- `Select-String -Path *.md -Recurse` on large trees — same recursive enumeration problem. Use `rg.exe` instead
-
-### 4.3 Build Tool Risks
-
-- `build.bat`, `ship.bat` — often contain `pause` at the end
-- `build.ps1` without `-NonInteractive` — may call `Read-Host` or `ReadKey`
-- `npm install` without `--yes` or `--no-audit` — may prompt for audit, fund, or peer dependency resolution
-- `bunx`, `npx` — may prompt to install a package
-
-### 4.4 Test Runner Risks
-
-- Test suites without `--timeout` — a hanging test hangs the entire suite
-- `bun test` without `--timeout` — default timeout may be too long or absent
-- Integration tests that spawn processes without per-test timeouts and `afterEach` cleanup — orphaned processes accumulate
-
-### 4.5 Git Risks
-
-- `git commit` without `-m` — opens an editor
-- `git rebase -i` — opens an editor
-- `git push` — may wait for credentials
-- `git log`, `git diff`, `git show`, `git blame` without `--no-pager` — launch a pager
+Banned lists, mechanisms, and per-tool behavior are maintained in @skills:terminal-robustness (agent variants: `ClaudeCode/` minimum, `DevinCascade/` full findings). Build the project banned list into the robustness card (that skill's guide, Section 4.3), then reference the card from the hang-safety clause - do not inline command-by-command risk lists into prompts.
 
 ## 5. Safe Command Patterns
 
-### 5.1 Non-Blocking Execution with Caps
+Safe command patterns (non-blocking execution with caps, process cleanup, git flags, non-interactive builds, stderr redirection, ripgrep usage) are maintained in @skills:terminal-robustness `TERMINAL_ROBUSTNESS_GUIDES.md` and the agent card templates. Reference them from the robustness card; prompts never repeat the full pattern text.
 
-Run commands non-blocking (if the terminal tool supports it) and poll for completion with a time cap:
-
-```
-Run the test suite as `bun test --timeout 20000 tests/unit tests/integration` non-blocking with a 10-minute cap. Poll for completion. On cap: stop the process tree, record command and cap in PROBLEMS.md, continue.
-```
-
-### 5.2 Process Cleanup
-
-After any command that spawns processes, verify no orphans remain:
-
-```
-After every suite run: `Get-Process [process-name]* -ErrorAction SilentlyContinue` must return nothing. Orphans are stopped and their count goes into the PROGRESS.md line.
-```
-
-### 5.3 Git Commands
-
-Always use `--no-pager` and `-n <N>` for log:
-
-```
-git --no-pager log -n 20
-git --no-pager diff
-git --no-pager show HEAD
-```
-
-### 5.4 Build Commands
-
-Always use non-interactive flags:
-
-```
-pwsh -NoProfile -File build.ps1 -NonInteractive
-npm install --yes --no-audit
-```
-
-### 5.5 Redirecting stderr
-
-Never use `2>&1` with blocking execution. Redirect to a file instead:
-
-```
-bun test --timeout 20000 2>err.txt
-# Read err.txt after completion
-```
-
-### 5.6 Ripgrep for Search Operations
-
-For grepping and file search in large folder structures, use `rg.exe` (ripgrep) instead of `Get-ChildItem -Recurse`, `Select-String -Recurse`, or `Get-Content` pipelines. Ripgrep is a fast, non-hanging search tool that:
-
-- Respects `.gitignore` by default (no scanning `node_modules`, `bin`, `dist`)
-- Returns results incrementally (no full enumeration before output)
-- Handles binary files gracefully (skips them, never hangs)
-- Completes in milliseconds where `Get-ChildItem -Recurse` takes minutes
-
-`rg.exe` is bundled with VS Code-based editors (Devin, Cursor, etc.) at `[EDITOR_INSTALL]\resources\app\node_modules\@vscode\ripgrep-universal\bin\[platform]\rg.exe` where `[platform]` is `win32-x64`, `darwin-x64`, `darwin-arm64`, or `linux-x64`.
-
-**Why not `Get-ChildItem -Recurse`**: PowerShell's `Get-ChildItem -Recurse` enumerates every file in the tree before returning results. On large projects (10k+ files) or network shares, this can take minutes or hang. `Select-String -Recurse` has the same problem — it enumerates first, then searches. Ripgrep walks the tree lazily and returns matches as it finds them.
-
-For full usage examples (grep, file search, ignoring `.gitignore`), see `PROMPTS_EXAMPLE_02-RobustnessCard.md` Section "Search tools".
-
-### 5.7 Agent Tools Over Shell Commands for File Operations
+### 5.1 Agent Tools Over Shell Commands for File Operations
 
 Prompts must direct the agent to use built-in tools (grep_search, read_file, find_by_name, code_search) for file search, read, and list operations (PRMT-CT-12). Shell commands for file operations are a hang source and bypass the agent's file access layer.
 
@@ -297,13 +192,7 @@ Verify: `Select-String -Pattern 'guard_request' -Path src/` returns zero matches
 
 ### 6.1 Setting Caps
 
-Every command that runs a process gets a time cap. The cap depends on the command type:
-
-- **Single test file**: 3-minute cap
-- **Full test suite**: 10-minute cap
-- **Build**: 15-minute cap
-- **Headless application run**: 3-minute cap
-- **Git operations**: 30-second cap (most operations complete in seconds)
+Every command that runs a process gets a time cap. Default caps per command type live in the agent robustness card templates (@skills:terminal-robustness); the project card carries the tuned values.
 
 **Heuristic**: Set the cap to roughly 3x the command's average duration. If a test suite normally runs in 8 minutes, set the cap to 25 minutes. This gives headroom for slow runs without letting a hung process run indefinitely.
 
@@ -419,31 +308,7 @@ all gaps and remaining work.
 
 ## 8. Project-Specific Banned Lists
 
-The hang-safety clause needs a project-specific banned list. Build it by scanning the project for commands that wait on stdin, launch pagers, or run unbounded children.
-
-### 8.1 How to Build the Banned List
-
-1. Search the project for scripts containing `pause`, `Read-Host`, `ReadKey`, `Get-Credential`
-2. Search for CLI entry points that read stdin when no arguments are provided
-3. Search for `--watch` flags in package.json scripts
-4. Search for `.bat` files (often contain `pause`)
-5. Test each suspicious command with a 5-second timeout — if it hangs, add it to the banned list
-
-### 8.2 Banned List Format in Prompts
-
-List banned commands by their invocation pattern, not by filename:
-
-```
-Banned: build.bat, ship.bat (contain pause); app.exe without -p or --prompt-file (interactive console); bun --watch (never terminates); 2>&1 with Blocking:true (pipe deadlock)
-```
-
-### 8.3 Always-Rules
-
-After the banned list, include "always" rules for safe alternatives:
-
-```
-Always: test suites run as `bun test --timeout 20000` non-blocking with 10-minute cap; builds run as `pwsh -NoProfile -File build.ps1 -NonInteractive`; git commands use `--no-pager`; stray processes stopped after every run.
-```
+The banned list lives in the project robustness card, not in the prompt. `/write-prompts` Step 1 creates or loads the card via @skills:terminal-robustness (copy the agent's `ROBUSTNESS_CARD_TEMPLATE.md`, extend with project entries, follow the card's build procedure). The hang-safety clause references the card by filename; prompts never inline the full list.
 
 ## 9. Lessons from a Harness Rewrite Session
 
@@ -453,7 +318,7 @@ A harness rewrite session (2026-09-07) used 5 prompt files with 25+ prompts. One
 
 **What**: `bun test --timeout 20000 tests/unit/prompt_assemble.test.ts 2>&1` with `Blocking: true` caused an indefinite hang. The same command without `2>&1` completed in 182ms.
 
-**Root cause**: PowerShell `2>&1` merges stderr into stdout at the OS pipe level. The terminal tool reads stdout to completion before returning, but the merged stream's buffering behavior creates a deadlock where the process has exited but the pipe buffer is not fully drained. This is a well-documented Windows pipe deadlock pattern: reading one stream to completion before starting the other deadlocks when the unread stream fills its pipe buffer.
+**Root cause**: confirmed empirically - the pwsh merge-point mechanism (backpressure hang or OutOfMemoryException with corrupted exit code). Mechanism and evidence: @skills:terminal-robustness `DevinCascade/TERMINAL_ROBUSTNESS_GUIDES.md`.
 
 **Prevention**: The banned list must include `2>&1` with `Blocking: true`. For capturing stderr, redirect to a file.
 
@@ -505,7 +370,7 @@ Without the card, these issues would have been discovered only at the final vali
 ### 10.1 Minimal Clause (Simple Project)
 
 ```
-Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: git log without --no-pager, npm install without --yes. Test suites run with a 5-minute cap. On cap: kill, record in PROBLEMS.md, continue.
+Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_[TOPIC]-Robustness.md`. Test suites run with a 5-minute cap. On cap: kill, record in PROBLEMS.md, continue.
 
 Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 ```
@@ -513,7 +378,7 @@ Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec
 ### 10.2 Full Clause (Complex Project with Build Tools and Cards)
 
 ```
-Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Banned: build.bat, ship.bat (contain pause); app.exe without -p or --prompt-file (interactive console); bun --watch (never terminates); 2>&1 with Blocking:true (pipe deadlock); git log without --no-pager; Read-Host, pause, Get-Credential. Always: test suites run as `bun test --timeout 20000` non-blocking with 10-minute cap; builds run as `pwsh -NoProfile -File build.ps1 -NonInteractive`; git commands use `--no-pager`; stray processes stopped after every run. On a cap: stop the process tree, record command and cap in PROBLEMS.md, continue.
+Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Banned and always rules: see `__CARD_01-Robustness.md` (banned list, time caps, always rules, on-cap behavior). On a cap: stop the process tree, record command and cap in PROBLEMS.md, continue.
 
 Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File every test failure that required a code fix, every spec-code mismatch, every naming convention violation, and every STRUT sequencing issue. Read the card at prompt startup for unresolved entries from prior prompts.
 ```
@@ -528,90 +393,7 @@ Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File unexpected fin
 
 ## 11. Timeout Execution Pattern
 
-When a command has no native safe parameter (e.g., `Get-Content` on a large or locked file), wrap it in a separate process with a timeout. This is the safety net below the always rules — it catches hangs that the banned list and safe alternatives don't prevent.
-
-### 11.1 Standard Pattern: Start-Process + WaitForExit
-
-This is the most robust pattern for prompt sequences. It runs the command in a separate process, redirects stderr to a file (no pipe deadlock), and kills the process tree on timeout.
-
-**Helper function** (define once at top of prompt or in robustness card):
-
-```powershell
-function Stop-ProcessTree {
-  param([int]$ProcessId)
-  $children = Get-CimInstance Win32_Process | Where-Object { $_.ParentProcessId -eq $ProcessId }
-  foreach ($child in $children) { Stop-ProcessTree -ProcessId $child.ProcessId }
-  try { Stop-Process -Id $ProcessId -Force } catch {}
-}
-```
-
-**Timeout wrapper**:
-
-```powershell
-$proc = Start-Process -FilePath "pwsh" -ArgumentList "-NoProfile","-Command", "<command>" -PassThru -NoNewWindow -RedirectStandardOutput ".tmp_cmd_stdout.txt" -RedirectStandardError ".tmp_cmd_stderr.txt"
-if (-not $proc.WaitForExit(<cap_ms>)) {
-  Stop-ProcessTree -ProcessId $proc.Id
-  Write-Host "TIMEOUT: <command> exceeded <cap> cap"
-} else {
-  (Get-Content ".tmp_cmd_stdout.txt" -Raw) ?? ''
-}
-```
-
-### 11.2 Why This Pattern
-
-- **Recursive process tree kill** `[TESTED]`: `Stop-ProcessTree` recurses through children and grandchildren. `Stop-Job` does not kill children. A flat `Get-CimInstance` query only gets direct children — grandchildren survive.
-- **No pipe deadlock** `[TESTED]`: stderr goes to file via `-RedirectStandardError`, never merged with `2>&1` (see Section 5.5 for the principle).
-- **Self-contained** `[TESTED]`: timeout + kill + record happens in one block. No agent cooperation needed. Works in headless prompt sequences.
-- **Separate process isolation** `[TESTED]`: if the command hangs, the main session is not blocked.
-- **Null-safe output** `[TESTED]`: `Get-Content -Raw` returns `$null` on empty files (e.g., command produced no stdout). Use `?? ''` to avoid method-call-on-null errors.
-- **Dead-PID safe** `[TESTED]`: `Stop-ProcessTree` wraps `Stop-Process` in `try/catch` — if the process already exited between the timeout check and the kill, no crash.
-- **Direct kill, no SIGTERM escalation**: unlike Section 6.2's general on-cap pattern (SIGTERM → wait 5s → SIGKILL), the timeout pattern kills immediately with `Stop-Process -Force` (PowerShell equivalent of `taskkill /T /F`). Rationale: the process is already hung — a 5-second grace period only delays the inevitable and risks re-hang on cleanup.
-
-### 11.3 Two-Tier Defense
-
-The timeout pattern is the **second tier**. The first tier is the always rules in the robustness card:
-
-1. **Always rules** (prevent the hang): use `-TotalCount` for `Get-Content`, `--no-pager` for git, `--ci` for jest, `--yes` for npx
-2. **Timeout cap** (catch the unexpected): wrap commands that have no native safe parameter, or where the safe parameter might not be enough (locked files, network hangs)
-
-### 11.4 Example: Get-Content Hang
-
-`Get-Content` with `| Select-Object -First 50` can hang on large or locked files because the pipeline buffers internally before `Select-Object` can signal "stop".
-
-**Root-cause fix** (tier 1): use `-TotalCount` — stops reading at the provider level:
-```powershell
-Get-Content "file.md" -TotalCount 50
-```
-
-**Timeout wrapper** (tier 2): when `-TotalCount` is not available or the file might be locked:
-```powershell
-$proc = Start-Process -FilePath "pwsh" -ArgumentList "-NoProfile","-Command", "Get-Content 'file.md' -TotalCount 50" -PassThru -NoNewWindow -RedirectStandardOutput ".tmp_gc_stdout.txt" -RedirectStandardError ".tmp_gc_stderr.txt"
-if (-not $proc.WaitForExit(30000)) {
-  Stop-ProcessTree -ProcessId $proc.Id
-  Write-Host "TIMEOUT: Get-Content exceeded 30s cap — file may be locked"
-} else {
-  (Get-Content ".tmp_gc_stdout.txt" -Raw) ?? ''
-}
-```
-
-### 11.5 Gotchas `[TESTED]`
-
-- **Quote escaping** `[TESTED]`: `Start-Process -ArgumentList` strips double quotes inside the `-Command` string. Use single quotes for string literals inside the command: `'Get-Content ''file.md'' -TotalCount 50'` (doubled single quotes in single-quoted strings).
-- **Write-Error vs stderr** `[TESTED]`: PowerShell `Write-Error` writes to the error stream, not OS stderr. `[Console]::Error.WriteLine()` writes to actual stderr (captured by `-RedirectStandardError`).
-- **Orphaned children** `[TESTED]`: when a parent exits fast (e.g., `cmd /c start /b pwsh ...`), children become orphaned — their parent PID no longer maps to a running process. `Stop-ProcessTree` cannot find them. After killing the tree, sweep for survivors by command-line pattern: `Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*<pattern>*' }` and kill them.
-- **Empty output files** `[TESTED]`: `Get-Content -Raw` on an empty file returns `$null`, not `''`. Always use `?? ''` before calling `.Trim()` or other string methods.
-
-### 11.6 Pattern in the Robustness Card
-
-The robustness card includes the timeout pattern in an `Execution pattern` section so prompts reference it instead of repeating the full PowerShell block:
-
-```markdown
-## Execution pattern
-
-Hang-risky commands execute via Start-Process + WaitForExit with process-tree kill on timeout. See timeout pattern in this card. Time caps per command type listed above.
-```
-
-The prompt's hang-safety clause references this: "Hang-risky commands use the timeout pattern from `__CARD_01-Robustness.md`."
+The tested timeout pattern (Start-Process + WaitForExit with redirect-to-file, recursive process-tree kill, orphan sweep, gotchas: quote stripping, Write-Error vs stderr, null-safe output) is maintained in @skills:terminal-robustness `DevinCascade/TERMINAL_ROBUSTNESS_GUIDES.md` and carried by the agent card templates' Execution pattern section. Prompts reference the pattern via the robustness card instead of repeating the PowerShell block: "Hang-risky commands use the timeout pattern from `__CARD_01-Robustness.md`."
 
 ## 12. Review Checklist
 
@@ -652,7 +434,7 @@ Before considering a prompt file complete, verify robustness:
 
 Worked examples for card types referenced in this guide:
 
-- `PROMPTS_EXAMPLE_02-RobustnessCard.md` — complete `__CARD_01-Robustness.md` with banned commands, time caps, always rules, on-cap behavior
+- Robustness card structure and defaults: @skills:terminal-robustness `ROBUSTNESS_CARD_SKELETON.md` + agent `ROBUSTNESS_CARD_TEMPLATE.md`
 - `PROMPTS_EXAMPLE_03-FindingsCard.md` — complete `__CARD_[TOPIC]-Findings.md` with resolved glitches, unresolved blocker, six-field entry format
 
 Load these when authoring cards for a new prompt sequence. The examples are not mandatory reads — load them when unfamiliar with card structure or when a sequence has complex robustness requirements.

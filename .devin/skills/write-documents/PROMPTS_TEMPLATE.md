@@ -37,7 +37,7 @@ Constraints:
 - [Boundaries to respect]
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_[TOPIC]-Robustness.md`. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
 Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
@@ -70,7 +70,7 @@ Constraints:
 - [What NOT to do]
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_[TOPIC]-Robustness.md`. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
 Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
@@ -103,7 +103,7 @@ Constraints:
 - Limit analysis to src/auth/ directory only
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_[TOPIC]-Robustness.md`. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
 Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
@@ -137,7 +137,7 @@ Constraints:
 - Do not add new dependencies
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_[TOPIC]-Robustness.md`. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
 
 Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 

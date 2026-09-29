@@ -1438,7 +1438,7 @@ Implementation prompts (prompts that run commands, execute builds, run tests, or
 
 Research or analysis prompts that only read files are exempt. Prompts that run any command beyond file reads must include the clause.
 
-See `PROMPTS_ROBUSTNESS_GUIDES.md` for the clause template, project-specific banned lists, safe command patterns, and inter-prompt problem filing.
+See `PROMPTS_ROBUSTNESS_GUIDES.md` for the clause template and inter-prompt problem filing; @skills:terminal-robustness for mechanisms, safe command patterns, and robustness card templates.
 
 Verifiable from artifact: check the Constraints section of each implementation prompt for a hang-safety statement. Prompts without any command execution are exempt.
 
@@ -1461,31 +1461,31 @@ Run the test suite and verify all tests pass.
 Constraints:
 - Do not modify test files
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: git log without --no-pager. Test suites run with a 10-minute cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_01-Robustness.md`. Test suites run with a 10-minute cap. On cap: kill, record in PROBLEMS.md, continue.
 ```
 `````
 
 ## PRMT-HS-02: Banned Command List Must Be Project-Specific
 
-The hang-safety clause must list project-specific commands known to hang. Generic hang risks (stdin, pager, unbounded children) apply to all projects, but the specific commands that trigger them vary by project. The banned list is built by scanning the project for scripts containing `pause`, `Read-Host`, `ReadKey`, CLI tools reading stdin without arguments, and `--watch` flags.
+The hang-safety clause references the project robustness card (`__CARD_[TOPIC]-Robustness.md`) for the banned list. Generic hang risks (stdin, pager, unbounded children) apply to all projects; the specific commands that trigger them vary by project and live in the card. The card is built by the procedure in @skills:terminal-robustness (guide Section 4.3).
 
-Verifiable from artifact: check that the hang-safety clause names at least one project-specific banned command or explicitly states "no project-specific hang risks identified."
+Verifiable from artifact: check that the hang-safety clause references the project robustness card by filename, and that the card contains at least one project-specific banned command or explicitly states "no project-specific hang risks identified."
 
-**BAD** (generic only, no project-specific entries):
+**BAD** (generic only, no card reference):
 `````markdown
 Hang safety: no command may wait for stdin or a pager.
 ```
 `````
 
-**GOOD** (project-specific banned commands listed):
+**GOOD** (card-referenced banned list):
 `````markdown
-Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Banned: build.bat (contains pause), app.exe without -p (interactive console), 2>&1 with Blocking:true (pipe deadlock). Test suites run with a 10-minute cap. On cap: kill, record in PROBLEMS.md, continue.
+Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Banned: see `__CARD_01-Robustness.md`. Test suites run with a 10-minute cap. On cap: kill, record in PROBLEMS.md, continue.
 ```
 `````
 
 ## PRMT-HS-03: Time Caps on All Command Executions
 
-Every command that runs a process (test suites, builds, application runs, long-running scripts) must specify a time cap in the hang-safety clause or verification section. The cap prevents indefinite waits when a process hangs. Caps depend on command type: single test files (3 min), full suites (10 min), builds (15 min), application runs (3 min).
+Every command that runs a process (test suites, builds, application runs, long-running scripts) must specify a time cap in the hang-safety clause or verification section. The cap prevents indefinite waits when a process hangs. Default caps per command type live in the agent robustness card templates (@skills:terminal-robustness); the project card carries the tuned values.
 
 Verifiable from artifact: check that each command-execution prompt specifies a time cap for long-running commands. Prompts that only run instant commands (git status, file reads) are exempt.
 

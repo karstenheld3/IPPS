@@ -48,7 +48,7 @@
 [PRODUCT_DOCS_FOLDER]: `[WORKSPACE_FOLDER]\docs`
 - Product documentation folder.
 
-[DEV_KNOWLEDGE_FOLDER]: `E:\Dev\Delphios\knowledge`
+[DEV_KNOWLEDGE_FOLDER]: `[WORKSPACE_FOLDER]\..\Delphios\knowledge`
 - Knowledge bundles folder. External — shared across workspaces via Delphios repo.
 
 [DEV_SPECS_FOLDER]: `[WORKSPACE_FOLDER]\specs`
@@ -66,7 +66,7 @@
 [SESSIONS_FOLDER]: `[WORKSPACE_FOLDER]\_PrivateSessions_gitignore`
 - Base folder for session folders.
 
-[SESSION_ARCHIVE_FOLDER]: `[SESSIONS_FOLDER]\..\Archive`
+[SESSION_ARCHIVE_FOLDER]: `[SESSIONS_FOLDER]\_Archive`
 - Archive folder for closed sessions.
 
 [SKILL_TOOLS_FOLDER]: `[WORKSPACE_FOLDER]\..\.tools\`
@@ -191,11 +191,11 @@ Automatically push commits to GitHub.
 
 **Investigate workflow** (created 2026-09-09 in DevSystemV4.3, ready for 5.0 inclusion):
 - `specs/_SPEC_INVESTIGATE_WORKFLOW.md [INVESTIGATE-SP01]` - Specification
-- `DevSystemV4.3/workflows/investigate.md` - Workflow file
-- `DevSystemV4.3/skills/write-documents/INVESTIGATION_LOG_TEMPLATE.md` - Log template
-- `DevSystemV4.3/skills/write-documents/INVESTIGATION_GUIDES.md` - Entry type guidance
-- `DevSystemV4.3/skills/write-documents/INVESTIGATION_LOG_RULES.md` - Verification rules (IL-* rule IDs)
-- `DevSystemV4.3/workflows/verify.md` - Updated with Investigation Logs section
+- `[PROMPTSYSTEM_FOLDER]/workflows/investigate.md` - Workflow file
+- `[PROMPTSYSTEM_FOLDER]/skills/write-documents/INVESTIGATION_LOG_TEMPLATE.md` - Log template
+- `[PROMPTSYSTEM_FOLDER]/skills/write-documents/INVESTIGATION_GUIDES.md` - Entry type guidance
+- `[PROMPTSYSTEM_FOLDER]/skills/write-documents/INVESTIGATION_LOG_RULES.md` - Verification rules (IL-* rule IDs)
+- `[PROMPTSYSTEM_FOLDER]/workflows/verify.md` - Updated with Investigation Logs section
 
 Workflow behavior: formulates goal, collects premises, analyzes problem nature, lists known knowns and unknowns, writes STRUT with phased approaches (Phase 1 first), creates append-only investigation log, executes phases with mandatory log checkpoints, updates log with handover state and STRUT with progress after each phase.
 
@@ -235,6 +235,7 @@ sessions_folder: [SESSIONS_FOLDER]
 release_notes_dir: [RELEASE_NOTES_FOLDER]
 release_notes_naming: RELEASE_NOTES_v{VERSION}_{DATE}.md
 tag_annotation_template: Release {TAG}: {SUMMARY}
+run_tests_before_release: no
 
 [RELEASE_REPO: product]
 path: [WORKSPACE_FOLDER]

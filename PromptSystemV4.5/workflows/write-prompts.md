@@ -16,7 +16,8 @@ Create `_PROMPTS_[NN]-[Topic].md` files containing an ordered list of prompts. E
 - @skills:write-documents `PROMPTS_TEMPLATE.md` for file skeleton (copy and fill)
 - @skills:write-documents `PROMPTS_GUIDES.md` for strategic approach (read BEFORE writing)
 - @skills:write-documents `PROMPTS_RULES.md` for output verification (PRMT-* rules)
-- @skills:write-documents `PROMPTS_ROBUSTNESS_GUIDES.md` for hang-prevention clause template, banned command lists, and inter-prompt problem filing
+- @skills:write-documents `PROMPTS_ROBUSTNESS_GUIDES.md` for hang-prevention clause template and inter-prompt problem filing
+- @skills:terminal-robustness for hang mechanisms, safe command patterns, and robustness card templates (agent variants: ClaudeCode minimum, DevinCascade full findings)
 
 ## MUST-NOT-FORGET
 
@@ -41,7 +42,7 @@ Create `_PROMPTS_[NN]-[Topic].md` files containing an ordered list of prompts. E
 - **Effort-based partitioning** (PRMT-SC-05): Frontmatter must specify `effort` level. Prompt count must match effort budget (low effort = more tightly scoped prompts, high effort = fewer broader prompts). See `PROMPTS_GUIDES.md` Section 1c.
 - **Planning document anchor** (PRMT-SC-06): Prompt sequences from planning documents (TASKS, STRUT) must reference the document by filename and step ID. See `PROMPTS_GUIDES.md` Section 1d.
 - **Load-based workflow partitioning** (PRMT-SC-07): Prompts invoking workflows must group invocations by assessed load against the run budget. See `PROMPTS_GUIDES.md` Section 1f for the assessment procedure.
-- **Hang-safety clause** (PRMT-HS-01): Every implementation prompt MUST include a hang-safety clause in Constraints: prohibition (no stdin/pager/unbounded child), project-specific banned list, time caps, on-cap behavior. See `PROMPTS_ROBUSTNESS_GUIDES.md` for template, project-specific banned lists, and problem-filing directive.
+- **Hang-safety clause** (PRMT-HS-01): Every implementation prompt MUST include a hang-safety clause in Constraints: prohibition (no stdin/pager/unbounded child), project-specific banned list, time caps, on-cap behavior. Banned list and caps come from the project robustness card; if none exists, create one from the agent's `ROBUSTNESS_CARD_TEMPLATE.md` (@skills:terminal-robustness). See `PROMPTS_ROBUSTNESS_GUIDES.md` for the clause template and problem-filing directive.
 - **Verification specificity** (PRMT-HS-07): Verification sections must name specific test files when code changes affect tests, include residual sweeps when concepts are removed, and confirm prior steps when dependencies exist.
 - **Prior-step verification** (PRMT-HS-08): Dependent prompts must verify the prior step is done before proceeding.
 - **Agent tools over shell** (PRMT-CT-12): Prompt bodies must use agent tool directives (grep_search, read_file, find_by_name, code_search) for file search/read, not shell commands. Shell commands for file operations only in Verify sections for residual sweeps.
@@ -80,7 +81,7 @@ This workflow has two modes. Determine the mode from the user's request:
 
 Read `PROMPTS_GUIDES.md` from @skills:write-documents. Classify the task, decide decomposition, plan state flow between prompts.
 
-**Hang-safety planning**: Read `PROMPTS_ROBUSTNESS_GUIDES.md` from @skills:write-documents. Identify project-specific hang risks (commands that wait on stdin, launch pagers, run unbounded children). Build the banned command list for the hang-safety clause. Determine time caps for each command type in the sequence.
+**Hang-safety planning**: Read `PROMPTS_ROBUSTNESS_GUIDES.md` from @skills:write-documents for the clause template. Then load @skills:terminal-robustness (agent variant per SKILL.md dispatch). If the project has a robustness card (`__CARD_*-Robustness.md`), build the hang-safety clause from its banned list and caps. If not, copy the agent's `ROBUSTNESS_CARD_TEMPLATE.md` to the project root, extend it with project-specific entries (commands that wait on stdin, launch pagers, run unbounded children), and use it. The clause references the card by filename instead of repeating the full list.
 
 **Findings-card planning**: Designate a `__CARD_[TOPIC]-Findings.md` card for the sequence. Every implementation prompt includes a `Findings card:` directive pointing to this card. The card is loaded at prompt startup and updated at end-of-prompt with glitches, spec-code mismatches, and unexpected findings. Session PROBLEMS.md records problems encountered during prompt execution that must be approached later (blockers, deferred issues).
 

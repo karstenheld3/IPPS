@@ -103,7 +103,7 @@ Quality Improvement (QI)
 ### PRMT-QI-06: Hang-Safety Clause Quality
 
 - Question: Does every implementation prompt include a hang-safety clause with project-specific banned commands, time caps, and on-cap behavior?
-- Improvement tip: Add a hang-safety clause to the Constraints section of each implementation prompt. Reference `__CARD_01-Robustness.md` for the banned list instead of repeating it in every prompt. See `PROMPTS_EXAMPLE_02-RobustnessCard.md` for a complete robustness card example.
+- Improvement tip: Add a hang-safety clause to the Constraints section of each implementation prompt. Reference the project's `__CARD_*-Robustness.md` for the banned list instead of repeating it in every prompt. Card structure and agent defaults: @skills:terminal-robustness `ROBUSTNESS_CARD_TEMPLATE.md`.
 
 ### PRMT-QI-07: Findings Card Quality
 

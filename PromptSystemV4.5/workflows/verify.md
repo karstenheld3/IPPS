@@ -16,6 +16,7 @@ Verify work against specs, rules, and quality standards.
 Invoke based on context:
 - @skills:write-documents for document verification
 - @skills:coding-conventions for code verification
+- @skills:terminal-robustness for robustness cards and terminal command patterns - verify `__CARD_*-Robustness.md` instances against `ROBUSTNESS_CARD_SKELETON.md` and TERMROBUSTNESS-CD rules
 
 **CRITICAL**: Skill invocation returns instructions only. You MUST also read the supporting files listed in skill output (e.g., `PYTHON-RULES.md`, `WORKFLOW-RULES.md`) to get actual verification rules.
 

@@ -222,8 +222,8 @@ Shared information between prompts is either referenced (document path + line nu
 
 For complete examples, see:
 - `PROMPTS_EXAMPLE_01-SelfContainedSequence.md` — 3-prompt self-contained sequence with STRUT anchor and context cards
-- `PROMPTS_EXAMPLE_02-RobustnessCard.md` — complete robustness card with banned commands, time caps, always rules
 - `PROMPTS_EXAMPLE_03-FindingsCard.md` — complete findings card with resolved glitches, unresolved blocker, six-field entry format
+- Robustness card structure and defaults — @skills:terminal-robustness `ROBUSTNESS_CARD_SKELETON.md` + agent `ROBUSTNESS_CARD_TEMPLATE.md`
 
 ## 6b. Idempotency in Prompts
 
@@ -248,25 +248,18 @@ A well-structured prompt sequence with precise objectives, clean state flow, and
 **Every implementation prompt** (any prompt that runs commands) MUST include a hang-safety clause in the Constraints section. The clause has three parts:
 
 1. **Prohibition**: no command may wait for a key, stdin, a pager, or an unbounded child
-2. **Banned list**: project-specific commands known to hang
+2. **Banned list**: referenced from the project robustness card by filename
 3. **Cap behavior**: what to do when a command exceeds its time cap
 
-See `PROMPTS_ROBUSTNESS_GUIDES.md` for the clause template, project-specific banned lists, safe command patterns, findings-card mechanism, and lessons from a harness rewrite session. Verify against PRMT-HS-01 through PRMT-HS-08 and PRMT-RB-01 through PRMT-RB-07 in `PROMPTS_RULES.md`.
+See `PROMPTS_ROBUSTNESS_GUIDES.md` for the clause template, findings-card mechanism, verification depth, and lessons from a harness rewrite session; @skills:terminal-robustness for mechanisms, safe command patterns, and robustness card templates. Verify against PRMT-HS-01 through PRMT-HS-08 and PRMT-RB-01 through PRMT-RB-07 in `PROMPTS_RULES.md`.
 
 ### Hang-Safety Clause Template
 
-```
-Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Banned: [project-specific list]. Test suites run non-blocking with a [N]-minute cap. On cap: kill the process tree, record command and cap in PROBLEMS.md, continue.
-```
+The authoritative clause template lives in `PROMPTS_ROBUSTNESS_GUIDES.md` Section 2 - card-driven: the banned list and caps come from the project robustness card (`__CARD_[TOPIC]-Robustness.md`), never inlined into the prompt.
 
 ### Common Hang Risks
 
-- `2>&1` with `Blocking: true` — PowerShell pipe deadlock (reading one stream to completion before the other deadlocks when the unread stream fills its pipe buffer)
-- `git log` without `--no-pager` — launches a pager
-- `build.bat`, `ship.bat` — often contain `pause`
-- `bun --watch`, `npm run dev` — never terminate
-- `Read-Host`, `pause`, `Get-Credential` — wait for stdin
-- Sequential `run_command` approvals — agent appears frozen between commands
+Mechanisms, per-tool behavior, and generic banned lists are maintained in @skills:terminal-robustness; project-specific entries live in the robustness card. Build the clause from the card, never from an inline risk list.
 
 ### Verification Gaps Beyond Hangs
 

@@ -173,7 +173,7 @@ Strip all PromptSystem artifacts from a markdown file to produce publishable cle
 3. `## MUST-NOT-FORGET` section: heading and all content until next `## ` heading
 4. `## Document History` section: heading and all content until next `## ` heading or EOF
 5. Workspace constants: `[WORKSPACE_FOLDER]`, `[SESSION_FOLDER]`, `[PROMPTSYSTEM_FOLDER]`, `[AGENT_FOLDER]`, `[SESSIONS_FOLDER]`, `[SKILL_TOOLS_FOLDER]`, `[DEV_KNOWLEDGE_FOLDER]`, `[DEV_SPECS_FOLDER]`, `[PRODUCT_VERSION]`, `[PRODUCT_REPO_FOLDER]`, `[PRODUCT_SOURCE_FOLDER]`, `[PRODUCT_DOCS_FOLDER]`, `[SESSION_ARCHIVE_FOLDER]`, `[API_KEYS_FILE]`, `[SOPS_FILE]`, `[RELEASE_NOTES_FOLDER]`
-6. Annotation labels: `[VERIFIED]`, `[TESTED]`, `[LITERAL]`, `[ASSUMED]`, `[PROVEN]`, `[CRITICAL]`, `[HIGH]`, `[MEDIUM]`, `[LOW]`, `[RESOLVED]`, `[WONT-FIX]`, `[NEEDS-DISCUSSION]`, `[CONTRADICTS]`, `[OUTDATED]`, `[INCOMPLETE]`, `[UNVERIFIED]`
+6. Annotation labels: `[VERIFIED]`, `[TESTED]`, `[LITERAL]`, `[ASSUMED]`, `[PROVEN]`, `[CRITICAL]`, `[HIGH]`, `[MEDIUM]`, `[LOW]`, `[RESOLVED]`, `[WONT-FIX]`, `[NEEDS-DISCUSSION]`, `[CONTRADICTS]`, `[OUTDATED]`, `[INCOMPLETE]`, `[UNVERIFIED]` - including any content inside the brackets when the label is a prefix (e.g., `[UNVERIFIED - Einzelfallprüfung]` → remove entire bracket construct)
 7. Skill references: `@skills:...`, `@rules:...`
 8. Rule IDs: `AP-PR-*`, `AP-NM-*`, `AP-BR-*`, `AP-ST-*`, `CV-DT-*`, `CV-TR-*`, `CV-LN-*`, `SPEC-CT-*`, `IL-*`
 9. PromptSystem concept references used as rule citations: `APAPALAN`, `MECT`, `SOCAS`, `MNF`, `MEPI`, `MCPI`, `VCRIV`, `FACRIV`, `GRUC`, `EDIRD`, `STRUT`, `TRACT`
@@ -467,7 +467,7 @@ Transform the target file:
 10. Remove session tracking references when used as workflow instructions
 11. Remove `[CONFIRMATION_KEYWORDS]` and system placeholders
 12. Remove session metadata lines (`**Phase**:`, `**Operation Mode**:`, etc.)
-13. Clean up: remove empty headings, double blank lines, orphaned list markers
+13. Clean up: remove empty headings, double blank lines, orphaned list markers, empty parenthetical constructs (`()` or `[]` left after annotation stripping), dangling separators (` -` at end of line, `, ;` sequences)
 14. Update `## Table of Contents` to remove entries pointing to deleted sections
 15. **Code fence integrity check**: count ``` occurrences before and after transformation; counts must be equal. If mismatched, a regex collapsed a fence - revert and fix the regex
 16. Write cleaned content back to the target file (not the original when `to [newfile]`)
