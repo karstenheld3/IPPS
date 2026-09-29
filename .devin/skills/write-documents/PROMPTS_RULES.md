@@ -54,6 +54,7 @@ Self-Contained (SC)
 - PRMT-SC-04: Chain length limit — sequences under 6 steps; longer workflows split into sub-chains with checkpoints
 - PRMT-SC-05: Effort and model specification — frontmatter must specify intended_model, context_window_size, effort level; prompts scoped to effort budget
 - PRMT-SC-06: Planning document reference — prompt sequences from planning documents must reference the document by filename and step ID
+- PRMT-SC-07: Load-based workflow partitioning — before writing a prompt that invokes workflows, assess the load of each workflow invocation (files read, artifacts produced, reasoning depth) against the run budget given by intended_model, context_window_size, and effort; group workflows into prompts so each run is neither overloaded (multiple heavy workflows squeezed into one run) nor underloaded (one light workflow alone in a run); the assessment and the resulting grouping are stated in the prompts file commentary
 
 Execution (EX)
 - PRMT-EX-01: One prompt per turn - prompts are never concatenated into a single model submission
@@ -1356,6 +1357,78 @@ Implement the user authentication module with JWT tokens.
 Read `__CARD_00-Rules.md` and `__STRUT_AuthImplementation.md` step P2-S3. Treat earlier conversation as compacted. Step P2-S3.
 
 Implement the user authentication module with JWT tokens as specified in `__STRUT_AuthImplementation.md` step P2-S3.
+```
+`````
+
+## PRMT-SC-07: Load-Based Workflow Partitioning
+
+Prompts that invoke workflows must group invocations by assessed load against the run budget so that no run is overloaded or underloaded. The grouping rationale must be stated in the sub-chain commentary. See `PROMPTS_GUIDES.md` Section 1f for the assessment procedure.
+
+Verifiable from artifact: count workflow invocations (standalone slash-command lines per PRMT-CT-08) per fence; check sub-chain commentary for a grouping rationale. A fence with three or more workflow invocations each reading and writing multiple files, or a fence invoking both a detection and a correction workflow on the same target, is overloaded regardless of budget. A fence with one light workflow alone in a high-effort large-context run with no grouping rationale is underloaded.
+
+**BAD** (five workflows in one fence, no grouping rationale in commentary):
+`````markdown
+```
+Run the five workflows in order, each fully:
+
+/verify
+
+`__STRUT_Topic.md` and `02_SourceRegistry.md`.
+
+/critique
+
+`__STRUT_Topic.md` and `02_SourceRegistry.md`. Output `__STRUT_Topic_CRITIQUE.md`.
+
+/reconcile
+
+the findings in `__STRUT_Topic_CRITIQUE.md` and the `/verify` output.
+
+/implement
+
+the reconciled corrections, then delete `__STRUT_Topic_CRITIQUE.md`.
+
+/verify
+
+`__STRUT_Topic.md` again - zero open findings.
+```
+`````
+
+**GOOD** (same pipeline grouped into 2 prompts, commentary states the rationale):
+`````markdown
+<!-- Load grouping: verify + critique share identical inputs (2 files) and only critique is deep - one prompt. Reconcile + implement: reconcile output feeds implement directly, both light on input - one prompt. Final verify is the checkpoint. -->
+
+## Prompt 1 - Verify and critique
+
+```
+Topic [ 01 / 03 ] - P1-S8a Verify and critique STRUT and SourceRegistry
+
+Read `__CARD_00-Rules.md`, then `__STRUT_Topic.md` and `02_SourceRegistry.md`. Treat earlier conversation as compacted. Step P1-S8 part a.
+
+/verify
+
+`__STRUT_Topic.md` and `02_SourceRegistry.md`.
+
+/critique
+
+`__STRUT_Topic.md` and `02_SourceRegistry.md`. Output `__STRUT_Topic_CRITIQUE.md`.
+```
+
+---
+
+## Prompt 2 - Reconcile and implement
+
+```
+Topic [ 02 / 03 ] - P1-S8b Reconcile and implement corrections
+
+Read `__CARD_00-Rules.md`, then `__STRUT_Topic_CRITIQUE.md`. Treat earlier conversation as compacted. Step P1-S8 part b.
+
+/reconcile
+
+the findings in `__STRUT_Topic_CRITIQUE.md`.
+
+/implement
+
+the APPLY findings into `__STRUT_Topic.md` and `02_SourceRegistry.md`, then delete `__STRUT_Topic_CRITIQUE.md`.
 ```
 `````
 

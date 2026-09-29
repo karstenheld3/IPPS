@@ -72,6 +72,43 @@ Keep sequences under 6 steps. For longer workflows, split into sub-chains with c
 
 Common mistake: splitting every task into 5 prompts. Static decomposition with no conditional logic costs more than a monolithic prompt if early steps fail and force reruns of all downstream steps. Balance chain length against the effort budget (Section 1c).
 
+## 1f. Load-Based Workflow Partitioning
+
+Each run has one budget: context window, reasoning compute, and output length for the given `intended_model` and `effort` (Section 1c). The purpose of a prompt sequence is to give each unit of work a full run - not to squeeze as much as possible into one run, and not to spend a whole run on a trivial step. Both directions waste budget: an overloaded run truncates or skips the middle of its task; an underloaded run pays fixed context-loading cost for little work (PRMT-SC-07).
+
+Workflows are the main load carriers. `/verify`, `/critique`, `/reconcile`, `/implement`, `/fact-check`, `/improve`, `/drift-detect`, `/drift-correct` each have their own multi-step pipeline, read their own inputs, and produce their own artifacts. Chaining several of them in one prompt multiplies the load.
+
+**Assessment procedure** - do this before writing any prompt that invokes workflows:
+
+1. List every workflow invocation the STRUT step or task requires
+2. Estimate the load of each invocation on three axes:
+   - **Input volume**: files the workflow must read (a STRUT + one registry = light; 47 topic documents = heavy)
+   - **Output volume**: artifacts it writes (a verdict list = light; corrections applied across many files = heavy)
+   - **Reasoning depth**: judgment required (rule conformance check = shallow; finding flawed assumptions or reconciling conflicting findings = deep)
+3. Compare the summed load of a candidate grouping against the run budget from the frontmatter
+4. Group so each prompt lands in the productive range: one heavy workflow alone, or two to three light ones together
+5. Record the grouping and its rationale in the sub-chain commentary so a reviewer sees why the split was chosen
+
+**Examples of the same pipeline partitioned differently by load:**
+
+- VCRIV on a 400-line STRUT plus one registry, high effort, 200k context: `/verify` + `/critique` in one prompt (both read the same two files, critique is the only deep step), `/reconcile` + `/implement` in a second (reconcile output feeds implement directly, both light on input), final `/verify` as the checkpoint. Three prompts
+- VCRIV on the same inputs, medium effort or 128k context: one workflow per prompt. Five prompts
+- VCRIV on a folder of six legal documents with `/fact-check` added: `/fact-check` alone (heavy input, deep reasoning, one artifact per document), `/reconcile` alone (reads every fact-check artifact), `/implement` alone (writes into every document), `/verify` as checkpoint. Four prompts even at high effort
+- `/drift-detect` + `/drift-correct` on a complete research bundle: always separate - detection reads the whole output tree against the STRUT, correction rewrites documents. Merging them means correction runs on a truncated detection
+
+**Signals that a prompt is overloaded:**
+- More than one workflow with heavy input or deep reasoning in the same fence
+- The prompt's Verify section lists artifacts from three or more distinct workflow pipelines
+- The run would need to hold both the inputs of workflow A and the outputs of workflow A as inputs of workflow B simultaneously
+- Constraint lines like "do not run a third cycle" appear because a cycle is already implied inside one prompt
+
+**Signals that a prompt is underloaded:**
+- The workflow reads fewer than three files and writes one small artifact, and the run is high effort with a large context
+- Two consecutive prompts read identical inputs and the second only consumes a small artifact from the first
+- The prompt fits in a single verification checkpoint's `/verify` + `/fix` pattern
+
+Load assessment is a judgment for the writing agent, made per sequence. The frontmatter encodes the budget; the writing agent must reason about the load against it rather than applying a fixed prompts-per-workflow ratio.
+
 ## 2. Decide Decomposition
 
 Split into multiple prompts when:
@@ -508,6 +545,7 @@ Before considering the prompts file complete:
 - [ ] Sequence stays under 6 steps; longer workflows use sub-chains with checkpoints (PRMT-SC-04)
 - [ ] Frontmatter specifies effort level; prompt count matches effort budget (PRMT-SC-05)
 - [ ] Prompt sequences from planning documents reference the document by filename and step ID (PRMT-SC-06)
+- [ ] Workflow invocations grouped by assessed load against the run budget; no prompt overloaded with several heavy workflows, none underloaded with one light workflow; grouping rationale stated in commentary (PRMT-SC-07)
 - [ ] Implementation prompts include execution authority constraint: "Execute without asking for confirmation" (PRMT-EX-03)
 - [ ] Agent does not self-execute the prompt file (PRMT-EX-02): file is delivered, not run in one response
 - [ ] Every implementation prompt includes a hang-safety clause: prohibition, banned list, cap behavior (PRMT-HS-01)

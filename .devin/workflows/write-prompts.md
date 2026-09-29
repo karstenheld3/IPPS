@@ -40,6 +40,7 @@ Create `_PROMPTS_[NN]-[Topic].md` files containing an ordered list of prompts. E
 - **Chain length limit** (PRMT-SC-04): Sequences must stay under 6 steps. Longer workflows split into sub-chains with checkpoints.
 - **Effort-based partitioning** (PRMT-SC-05): Frontmatter must specify `effort` level. Prompt count must match effort budget (low effort = more tightly scoped prompts, high effort = fewer broader prompts). See `PROMPTS_GUIDES.md` Section 1c.
 - **Planning document anchor** (PRMT-SC-06): Prompt sequences from planning documents (TASKS, STRUT) must reference the document by filename and step ID. See `PROMPTS_GUIDES.md` Section 1d.
+- **Load-based workflow partitioning** (PRMT-SC-07): Prompts invoking workflows must group invocations by assessed load against the run budget. See `PROMPTS_GUIDES.md` Section 1f for the assessment procedure.
 - **Hang-safety clause** (PRMT-HS-01): Every implementation prompt MUST include a hang-safety clause in Constraints: prohibition (no stdin/pager/unbounded child), project-specific banned list, time caps, on-cap behavior. See `PROMPTS_ROBUSTNESS_GUIDES.md` for template, project-specific banned lists, and problem-filing directive.
 - **Verification specificity** (PRMT-HS-07): Verification sections must name specific test files when code changes affect tests, include residual sweeps when concepts are removed, and confirm prior steps when dependencies exist.
 - **Prior-step verification** (PRMT-HS-08): Dependent prompts must verify the prior step is done before proceeding.
@@ -84,6 +85,8 @@ Read `PROMPTS_GUIDES.md` from @skills:write-documents. Classify the task, decide
 **Findings-card planning**: Designate a `__CARD_[TOPIC]-Findings.md` card for the sequence. Every implementation prompt includes a `Findings card:` directive pointing to this card. The card is loaded at prompt startup and updated at end-of-prompt with glitches, spec-code mismatches, and unexpected findings. Session PROBLEMS.md records problems encountered during prompt execution that must be approached later (blockers, deferred issues).
 
 **Effort-based partitioning**: Read the frontmatter `effort` level (PRMT-SC-05). Scope prompts to the effort budget: at low effort, each prompt handles one file or one edit; at high effort, a single prompt can handle multi-file analysis and implementation. Match prompt count to effort level. See `PROMPTS_GUIDES.md` Section 1c.
+
+**Workflow load assessment**: Assess workflow invocations and group them into prompts by load against the run budget. Follow `PROMPTS_GUIDES.md` Section 1f (PRMT-SC-07). State the grouping rationale in the sub-chain commentary.
 
 **Planning document check**: Verify a TASKS or STRUT planning document exists for the task. If it exists, reference it by filename and step ID in each prompt's self-contained opening (PRMT-SC-06). If no planning document exists, the prompt file itself serves as the tracking document. See `PROMPTS_GUIDES.md` Section 1d.
 
