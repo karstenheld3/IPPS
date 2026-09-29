@@ -80,6 +80,10 @@ copy agent ROBUSTNESS_CARD_TEMPLATE.md
 
 Tier 1 covers the known; tier 2 catches the unknown. Both live in the agent card templates.
 
+### 6.1 On-Cap Kill Escalation
+
+For processes that may still exit cleanly: SIGTERM first (`Stop-Process -Id <pid> -Force` on Windows, `kill -TERM` on POSIX), wait 5 seconds, then SIGKILL (`taskkill /T /F /PID <pid>` on Windows, `kill -KILL` on POSIX), then sweep orphan processes by name. Why: SIGTERM lets the process flush buffers, release locks, write state; direct SIGKILL can leave resources locked, files half-written, ports dirty. For confirmed hangs (the tested timeout pattern, DevinCascade guide Section 3), kill directly - the grace period only delays and risks re-hang during cleanup.
+
 ## Review Checklist
 
 - [ ] Classified the command risk before running (interactive / volume / child)

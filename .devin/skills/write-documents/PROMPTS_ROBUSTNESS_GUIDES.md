@@ -198,17 +198,9 @@ Every command that runs a process gets a time cap. Default caps per command type
 
 ### 6.2 On-Cap Behavior
 
-When a command hits its cap:
+When a command hits its cap, the hang-safety clause must specify: kill the process tree, record the command, the cap, and the last output lines in PROBLEMS.md, continue with the next step - never re-run the same command unbounded. If the same command hangs twice, stop the prompt with a PROBLEMS.md entry.
 
-1. Send SIGTERM (graceful stop request) — `Stop-Process -Id <pid> -Force` on Windows, `kill -TERM <pid>` on POSIX
-2. Wait 5 seconds for the process to exit cleanly
-3. If still running, send SIGKILL (force-kill, cannot be caught) — `taskkill /T /F /PID <pid>` on Windows, `kill -KILL <pid>` on POSIX
-4. Kill any project-specific orphan processes by name
-5. Record the command, the cap, and the last output lines in PROBLEMS.md
-6. Continue with the next step of the prompt — never re-run the same command blocking
-7. If the same command hangs twice, stop the prompt with a PROBLEMS.md entry
-
-**Why escalation**: SIGTERM gives the process a chance to clean up (flush buffers, release locks, write state). SIGKILL is immediate and cannot be caught — the process gets no cleanup opportunity. Direct SIGKILL can leave resources locked, files half-written, and ports in a dirty state. The `timeout` command uses this exact pattern: SIGTERM first, then SIGKILL after a grace period.
+Kill and escalation mechanics (SIGTERM grace period, orphan sweep, direct kill for confirmed hangs) live in @skills:terminal-robustness shared guide Section 6 and the card templates' Kill procedure.
 
 ### 6.3 Per-Test Timeouts
 
