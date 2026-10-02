@@ -61,6 +61,9 @@ Apply to ALL document types and contexts:
 - Avoid excessive acronyms. Write out acronyms on first usage. Take the expansion from the context, never from training data: acronyms have multiple meanings and a guessed one is a wrong name that propagates (MW-WC-09).
   - BAD: `SPN not supported.`
   - GOOD: `Service Principal Name (SPN) not supported.`
+- **Explicit over figurative (MW-WC-10)** - Audience: international readers who are not native speakers, unless the document declares otherwise. Scan prose for idioms, slang, and region-dependent phrases that carry a claim without stating it. Rewrite each as the explicit claim (number, condition, consequence). Keep established precise terms (onboarding, break-even). Exempt: quotations, transcriptions, conversation drafts written AS the user
+  - BAD: `Caching hedges against API outages.`
+  - GOOD: `When the API is down, the cache serves the last response for up to 10 minutes.`
 - Use verification labels consistently (see below)
 - Re-read relevant rules and session files before verifying
 - Make internal "MUST-NOT-FORGET" list and check after each step
