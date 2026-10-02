@@ -10,6 +10,8 @@
 {{FILE:shared/tokens.css}}
 
 /* Template: columns - parallel streams rendered as aligned columns per section */
+/* Print image limit = page content height 265mm minus 15mm reserve; the landscape switch (4+ columns) sets 163mm */
+:root { --print-image-max-height: 250mm; }
 @page { size: A4 portrait; margin: 14mm 12mm 18mm 12mm;
   @bottom-center { content: "Page " counter(page) " of " counter(pages); font-family: "Segoe UI", "Noto Sans", Arial, sans-serif; font-size: 8pt; color: #536078; } }
 @page :first { @top-center { content: none; } }
@@ -22,7 +24,7 @@ body { padding: var(--s-6); }
 .card-title.level-1 { background: var(--c-border-light); font-size: 15px; }
 .card-title .sep { color: var(--c-muted); margin: 0 var(--s-1); font-weight: 400; }
 .card-title .role-0 { color: var(--c-ink); } .card-title .role-1 { color: var(--c-accent); } .card-title .role-2 { color: var(--c-muted); }
-.col { background: var(--c-surface); padding: var(--s-3); min-width: 0; overflow: hidden; }
+.col { background: var(--c-surface); padding: var(--s-3); min-width: 0; overflow: visible; }
 .col-label { font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--s-2); padding-bottom: var(--s-1); border-bottom: 1px solid; white-space: nowrap; }
 .role-0 .col-label { color: var(--c-ink); border-color: var(--c-ink); } .role-1 .col-label { color: var(--c-accent); border-color: var(--c-accent); } .role-2 .col-label { color: var(--c-muted); border-color: var(--c-muted); }
 .col h1, .col h2, .col h3, .col h4, .col h5, .col h6 { font-size: 13px; margin: var(--s-1) 0; border: 0; padding: 0; }
@@ -44,6 +46,8 @@ body { padding: var(--s-6); }
   .card.stack .col table { font-size: 8.5pt; }
   .card-title { font-size: 10pt; } .card-title.level-1 { font-size: 11pt; }
   .col table { font-size: 8pt; } .col pre { font-size: 7.5pt; }
+  /* Card title bar and column label take about 20mm of the page */
+  .col img { max-height: calc(var(--print-image-max-height) - 20mm); }
 }
 </style>
 <script>{{FILE:shared/markdown-it.min.js}}</script>
@@ -281,7 +285,7 @@ function alignColumns() {
   document.documentElement.style.setProperty("--cols", String(options.columns.length));
   if (options.columns.length > 3) {
     var landscape = document.createElement("style");
-    landscape.textContent = "@page { size: A4 landscape; }";
+    landscape.textContent = "@page { size: A4 landscape; } :root { --print-image-max-height: 163mm; }";
     document.head.appendChild(landscape);
   }
   var html = "";
@@ -309,13 +313,16 @@ function alignColumns() {
     html = '<div class="preamble"><p class="notice">No column markers found - rendered as a single column.</p>' + md.render(parts.body) + "</div>";
   }
   content.innerHTML = html;
-  postProcess(content, options.raw);
-  markWideCards(options.wideColumns);
+  // --- is a stream separator here; a page break would split the aligned cards
+  delete options.raw.hrPageBreak;
   var title = document.title || parts.frontMatter.title || firstHeadingText(content) || "Document";
-  document.title = title;
-  addPageHeader(title, { skipFirstPage: true });
-  alignColumns();
-  finishRendering();
+  postProcess(content, options.raw).then(function () {
+    markWideCards(options.wideColumns);
+    document.title = title;
+    addPageHeader(title, { skipFirstPage: true });
+    alignColumns();
+    finishRendering();
+  });
 })();
 </script>
 </body>

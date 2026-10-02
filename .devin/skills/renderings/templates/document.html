@@ -4,12 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{TITLE}}</title>
-<!-- Template options. tableFont: condensed (dense tables use the condensed font stack). landscapeTables: N (tables with N+ columns print on their own landscape page; 0 = off). -->
-<meta name="render-options" content="tableFont=default; landscapeTables=0">
+<!-- Template options. tableFont: condensed (dense tables use the condensed font stack). landscapeTables: N (tables with N+ columns print on their own landscape page; 0 = off). hrPageBreak: true (--- / *** / ___ start a new page in print; screen keeps the divider). -->
+<meta name="render-options" content="tableFont=default; landscapeTables=0; hrPageBreak=false">
 <style>
 {{FILE:shared/tokens.css}}
 
 /* Template: document - single reading column */
+/* Print image limit = page content height 255mm minus 15mm reserve for paragraph margin and a caption line */
+:root { --print-image-max-height: 240mm; }
 @page { size: A4 portrait; margin: 20mm 18mm 22mm 18mm;
   @bottom-center { content: "Page " counter(page) " of " counter(pages); font-family: "Segoe UI", "Noto Sans", Arial, sans-serif; font-size: 8pt; color: #536078; } }
 @page :first { @top-center { content: none; } }
@@ -40,11 +42,12 @@ main { padding: var(--s-6) 0; }
   var content = document.getElementById("content");
   measureCodeLineHeight();
   content.innerHTML = md.render(parts.body);
-  postProcess(content, options);
   var title = document.title || parts.frontMatter.title || firstHeadingText(content) || "Document";
-  document.title = title;
-  addPageHeader(title, { skipFirstPage: true });
-  finishRendering();
+  postProcess(content, options).then(function () {
+    document.title = title;
+    addPageHeader(title, { skipFirstPage: true });
+    finishRendering();
+  });
 })();
 </script>
 </body>

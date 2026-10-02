@@ -13,16 +13,16 @@ Two-step renderer: `render.py` injects Markdown into an HTML template that carri
 - [templates/document.html](templates/document.html) - single reading column
 - [templates/columns.html](templates/columns.html) - parallel streams (languages, versions) as aligned columns per section
 - [templates/shared/tokens.css](templates/shared/tokens.css) - palette, fonts, type scale, base element rules
-- [templates/shared/render-common.js](templates/shared/render-common.js) - shared template helpers (front matter, anchors, task lists, code classes, page header, done signal)
+- [templates/shared/render-common.js](templates/shared/render-common.js) - shared template helpers (front matter, anchors, task lists, code classes, page breaks, image wait, table fitting, page header, done signal)
 
 ## MUST-NOT-FORGET
 
 1. Run with the venv Python: `& "[SKILL_TOOLS_FOLDER]\llm-venv\Scripts\python.exe" [AGENT_FOLDER]\skills\renderings\render.py ...`
 2. Pick the template first: documents with parallel language streams (`### DE (Original)` style markers) → `columns` with `--options`; everything else → `document`
 3. Output goes next to the input unless `--output-dir` is given; existing files are skipped unless `--overwrite`
-4. Relative image paths break when `--output-dir` differs from the input folder (a warning is printed)
+4. Images stay linked files (never embedded): keep them in `_assets/` next to the Markdown and link `![Alt](_assets/name.png)`. The HTML keeps the same relative `src` (GitHub-compatible); with `--output-dir` the referenced images are copied to the same relative path. Ship the HTML together with its `_assets/` folder
 5. Templates must set `body[data-rendered="true"]` when done; `render.py` waits for it before printing. A template that never sets it fails after `--render-timeout` seconds
-6. Output HTML is self-contained (no external scripts, fonts, or styles); do not add CDN links to templates
+6. Output HTML is self-contained except linked local images (no external scripts, fonts, or styles); do not add CDN links to templates. The PDF embeds every image
 
 ## Intent Lookup
 
@@ -32,6 +32,7 @@ Two-step renderer: `render.py` injects Markdown into an HTML template that carri
 - **Render a multilingual document side by side** → Procedure 2
 - **Only HTML, or only PDF** → `--format html` or `--format pdf` (`--keep-html` keeps the intermediate file)
 - **Letter paper or landscape** → `--paper Letter`, `--landscape`
+- **`---` should start a new page in the PDF** → `--options "hrPageBreak=true"` (document template)
 - **Wide tables print too small or wrap too much** → `--options "landscapeTables=7"` (tables with 7+ columns get their own landscape page) or `--options "tableFont=condensed"` (see Template Catalog)
 - **Create a new layout** → Procedure 3
 
@@ -68,6 +69,8 @@ Options (`;`-separated `key=value` pairs, override the template's `<meta name="r
 Options of the `document` template (same `--options` syntax):
 - `tableFont` - `default` or `condensed`; `condensed` renders tables in the condensed font stack (`Arial Narrow`, `Roboto Condensed`, `Bahnschrift SemiCondensed`, falling back to the sans stack when none is installed)
 - `landscapeTables` - `0` (off, default) or N; tables with N or more columns print on their own A4 landscape page
+- `hrPageBreak` - `false` (default) or `true`; every thematic break (`---`, `***`, `___`) starts a new page in print, the screen keeps the divider line. A break as first or last block or directly after another break is dropped (no empty pages). Ignored by the `columns` template (`---` separates streams there)
+- When passing `--options`, repeat every option you want: the value replaces the whole template default
 
 ### 3. Write a new template
 
@@ -81,8 +84,8 @@ Options of the `document` template (same `--options` syntax):
 
 Placeholder contract:
 - `{{MARKDOWN}}` - replaced by a JSON string literal of the Markdown (with `<` escaped), read via `JSON.parse(document.getElementById("source").textContent)`
-- `{{TITLE}}` - HTML-escaped document title (first `# ` heading, front matter `title:`, or file stem; `--title` overrides for a single input)
-- `{{LANG}}` - `--lang` value (default `en`)
+- `{{TITLE}}` - HTML-escaped document title: `--title` (single input) → front matter `title:` → first `# ` heading → file stem
+- `{{LANG}}` - `--lang` → front matter `lang:` → `en`
 - `{{FILE:relative/path}}` - inlined file content from the templates folder (one level, no recursion, no `..`)
 - `--paper` / `--landscape` inject a final `@page { size: ... }` rule before `</head>`
 
@@ -105,7 +108,8 @@ render.py <inputs...> [--format html|pdf|both] [--template NAME|PATH] [--options
 - **document** - single column, A4 portrait, margins 20/18/22/18 mm, static title header on pages 2+, "Page N of M" footer, GitHub-compatible heading ids (TOC links work), task lists, code blocks unwrapped up to 110 characters per line then soft-wrapped, language label on fenced code, code line box measured from the monospace font so box-drawing diagrams have no row gaps, headings wrap anywhere (long file-name titles stay inside the page)
   - Tables: full width, repeated header rows, words break only when a single word is wider than its column; tables with 6+ columns start one size smaller; a table wider than the page steps its font down (13 / 12 / 11 px, 8.5 / 8 / 7.5 pt) until it fits; a table that still does not fit gets a horizontal scrollbar on screen, is clipped in PDF, and is reported as `WARNING: N tables wider than the page ...` on the file's report line. Opt-ins: `tableFont=condensed`, `landscapeTables=N`
   - Color: accent only on links; list markers and checkboxes use the text color
-- **columns** - one card per section with N language columns, combined section title colored per column, block and table-row height alignment across columns, wide-table cards stacked vertically in print, landscape when more than 3 columns, single-column fallback with a notice when no marker matches
+  - Images: never cropped (no rounded corners, no clipping); block and centered, scaled to the column width and to 90% of the window height on screen, to 240 mm in print (fits one A4 page); images next to text in a paragraph stay inline; table fitting runs after all images loaded. Opt-in: `hrPageBreak=true`
+- **columns** - one card per section with N language columns, combined section title colored per column, block and table-row height alignment across columns (measured after images loaded), wide-table cards stacked vertically in print, landscape when more than 3 columns, single-column fallback with a notice when no marker matches; images follow the document rules with a print limit of 230 mm portrait and 143 mm landscape inside a column
 
 Both templates: no external resources, `-webkit-print-color-adjust: exact`, PDF bookmarks from headings (`outline=True`), tagged PDF.
 
@@ -117,6 +121,8 @@ Both templates: no external resources, `-webkit-print-color-adjust: exact`, PDF 
 - **Markers inside code fences** are ignored by the columns template; markers must be plain lines
 - **Commas in marker regexes** are not possible (comma separates patterns); use `\s` or character classes instead
 - **`<PromptSystem .../>` lines** are removed before rendering; other raw HTML passes through unchanged
+- **Image WARNING lines** on the file's report line (exit code stays 0; singular for 1): `WARNING: 2 images not found (first: src)` - local file missing; `WARNING: 1 image path outside the input folder (first: src)` - `../` or absolute path with `--output-dir` elsewhere, not copied, will not resolve from the HTML; `WARNING: 1 image failed to load (first: src)` - PDF pass, image missing or not decodable (remote images need network access). Image syntax inside code fences and code spans is ignored
+- **Spaces and non-ASCII characters in image paths** - markdown-it percent-encodes Markdown image links (`my file.png` -> `my%20file.png`); the browser decodes them, so they resolve. Raw `<img src>` stays as written
 - **Single newlines** render as line breaks (`breaks: true`) so header blocks keep their lines; hard-wrapped paragraphs therefore also break per source line
 - **No hyphenation** - the Playwright Chromium build ships without hyphenation dictionaries; `hyphens: auto` would have no effect, so table fitting relies on font size, not on breaking words
 - **Braille art** - Consolas has no Braille glyphs; they fall back to the next monospace font with a different advance width and drift against box-drawing characters in the same block

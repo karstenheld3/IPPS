@@ -4,7 +4,7 @@ Step 1: inject the Markdown into an HTML template that renders it in the browser
 Step 2: print the HTML with headless Chromium (Playwright) to PDF.
 
 Usage:
-  python render.py <inputs...> [--format html|pdf|both] [--template NAME|PATH] [--output-dir DIR] [--paper A4|Letter] [--landscape]
+  python render.py <inputs...> [--format html|pdf|both] [--template NAME|PATH] [--options TEXT] [--output-dir DIR] [--paper A4|Letter] [--landscape]
                    [--lang xx] [--title TEXT] [--render-timeout S] [--keep-html] [--overwrite] [--recursive] [--quiet] [--list-templates]
 
 Exit codes: 0 all ok or skipped, 1 at least one input failed, 2 setup or argument error.
@@ -14,8 +14,10 @@ import glob
 import html
 import json
 import re
+import shutil
 import sys
 import time
+import urllib.parse
 from pathlib import Path
 
 SCRIPT_FOLDER = Path(__file__).resolve().parent
@@ -24,7 +26,10 @@ INCLUDE_PATTERN = re.compile(r"\{\{FILE:([^}]+)\}\}")
 PLACEHOLDER_PATTERN = re.compile(r"\{\{[A-Z_]+(?::[^}]*)?\}\}")
 RENDER_OPTIONS_PATTERN = re.compile(r'(<meta\s+name="render-options"\s+content=")([^"]*)(")')
 PROMPTSYSTEM_LINE_PATTERN = re.compile(r"^[ \t]*<PromptSystem\b[^>]*>[ \t]*\r?\n?", re.MULTILINE)
-RELATIVE_IMAGE_PATTERN = re.compile(r"!\[[^\]]*\]\((?!https?://|data:|/|[A-Za-z]:)([^)\s]+)")
+# Image sources: ![alt](<path with spaces>), ![alt](path "title"), raw <img src="path">
+IMAGE_SOURCE_PATTERNS = [re.compile(r"!\[[^\]]*\]\(\s*<([^>]+)>"), re.compile(r"!\[[^\]]*\]\(\s*([^)\s<][^)\s]*)"), re.compile(r"<img\b[^>]*?\bsrc\s*=\s*[\"']([^\"']+)[\"']", re.IGNORECASE)]
+CODE_SPAN_PATTERN = re.compile(r"(`+)(.+?)\1")
+FENCE_PATTERN = re.compile(r"^[ \t]*(`{3,}|~{3,})")
 INSTALL_HINT = 'Run: "{python}" -m playwright install chromium-headless-shell'
 
 
@@ -41,7 +46,7 @@ def parse_arguments():
   parser.add_argument("--output-dir", help="output folder (default: next to each input)")
   parser.add_argument("--paper", choices=["A4", "Letter"], help="override template page size")
   parser.add_argument("--landscape", action="store_true", help="override template orientation")
-  parser.add_argument("--lang", default="en", help="html lang attribute (default en)")
+  parser.add_argument("--lang", default=None, help="html lang attribute (default: front matter lang:, else en)")
   parser.add_argument("--title", help="override document title (single input)")
   parser.add_argument("--render-timeout", type=float, default=30.0, help="seconds to wait for the template to finish rendering")
   parser.add_argument("--keep-html", action="store_true", help="keep HTML when --format pdf")
@@ -109,13 +114,15 @@ def resolve_includes(text):
   return INCLUDE_PATTERN.sub(replace, text)
 
 
-def read_document(path, lang, title_override):
+def read_document(path, lang_override, title_override):
   raw = path.read_bytes()
   text = raw.decode("utf-8-sig")
   text = text.replace("\r\n", "\n").replace("\r", "\n")
   text = PROMPTSYSTEM_LINE_PATTERN.sub("", text)
-  title = title_override or first_heading(text) or front_matter_title(text) or path.stem
-  return {"path": path, "title": title, "lang": lang, "text": text}
+  front = read_front_matter(text)
+  lang = lang_override or front.get("lang") or "en"
+  title = title_override or front.get("title") or first_heading(text) or path.stem
+  return {"path": path, "title": title, "lang": lang, "text": text, "images": find_image_sources(text)}
 
 
 def first_heading(text):
@@ -130,16 +137,108 @@ def first_heading(text):
   return ""
 
 
-def front_matter_title(text):
+def read_front_matter(text):
+  retVal = {}
+  # Same block boundaries as splitFrontMatter() in render-common.js, so only a block the template hides supplies lang/title
   if not text.startswith("---\n"):
-    return ""
+    return retVal
   end = text.find("\n---\n", 4)
   if end < 0:
-    return ""
+    return retVal
   for line in text[4:end].split("\n"):
-    if line.lower().startswith("title:"):
-      return line.split(":", 1)[1].strip().strip("\"'")
-  return ""
+    if ":" not in line:
+      continue
+    key, value = line.split(":", 1)
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+      value = value[1:-1].strip()
+    if key.strip() and value:
+      retVal[key.strip().lower()] = value
+  return retVal
+
+
+def blank_code(text):
+  # Image syntax inside code fences and code spans is an example, not an image
+  lines = []
+  fence = ""
+  for line in text.split("\n"):
+    match = FENCE_PATTERN.match(line)
+    if fence:
+      if match and match.group(1)[0] == fence[0] and len(match.group(1)) >= len(fence) and line.strip() == match.group(1):
+        fence = ""
+      lines.append("")
+      continue
+    if match:
+      fence = match.group(1)
+      lines.append("")
+      continue
+    lines.append(CODE_SPAN_PATTERN.sub("", line))
+  retVal = "\n".join(lines)
+  return retVal
+
+
+def find_image_sources(text):
+  retVal = []
+  scanned = blank_code(text)
+  found = []
+  for pattern in IMAGE_SOURCE_PATTERNS:
+    for match in pattern.finditer(scanned):
+      found.append((match.start(), match.group(1)))
+  found.sort()
+  for item in found:
+    source = item[1].strip()
+    lowered = source.lower()
+    if lowered.startswith(("http://", "https://", "//", "data:")):
+      continue
+    for separator in ("?", "#"):
+      if separator in source:
+        source = source.split(separator, 1)[0]
+    source = urllib.parse.unquote(source)
+    if source and source not in retVal:
+      retVal.append(source)
+  return retVal
+
+
+def copy_images(document, output_dir, overwrite):
+  retVal = []
+  input_folder = document["path"].parent.resolve()
+  output_folder = Path(output_dir).resolve() if output_dir else input_folder
+  elsewhere = output_folder != input_folder
+  not_found = []
+  outside = []
+  for source in document["images"]:
+    local = source[len("file:///"):] if source.lower().startswith("file:///") else source
+    absolute = local.startswith(("/", "\\")) or re.match(r"^[A-Za-z]:", local) is not None
+    image_path = (Path(local) if absolute else input_folder / local).resolve()
+    if not image_path.is_file():
+      not_found.append(source)
+      continue
+    if absolute or input_folder not in image_path.parents:
+      if elsewhere:
+        outside.append(source)
+      continue
+    if not elsewhere:
+      continue
+    target = output_folder / image_path.relative_to(input_folder)
+    if target.exists():
+      source_stat = image_path.stat()
+      target_stat = target.stat()
+      if source_stat.st_size == target_stat.st_size and int(source_stat.st_mtime) == int(target_stat.st_mtime):
+        continue
+      if not overwrite:
+        continue
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(image_path, target)
+  if not_found:
+    retVal.append(f"WARNING: {len(not_found)} image{'s' if len(not_found) != 1 else ''} not found (first: {not_found[0]})")
+  if outside:
+    retVal.append(f"WARNING: {len(outside)} image path{'s' if len(outside) != 1 else ''} outside the input folder (first: {outside[0]})")
+  return retVal
+
+
+def add_warning(entry, warning):
+  if warning:
+    entry["warning"] = f"{entry['warning']} | {warning}" if entry["warning"] else warning
 
 
 def encode_markdown(text):
@@ -172,15 +271,6 @@ def inject(template_text, document, paper, landscape):
 def output_path_for(document, output_dir, suffix):
   folder = Path(output_dir).resolve() if output_dir else document["path"].parent
   return folder / (document["path"].stem + suffix)
-
-
-def relative_image_warning(document, output_dir):
-  if not output_dir or Path(output_dir).resolve() == document["path"].parent:
-    return ""
-  matches = RELATIVE_IMAGE_PATTERN.findall(document["text"])
-  if not matches:
-    return ""
-  return f"WARNING: {len(matches)} relative image paths (first: {matches[0]}) will not resolve from output folder"
 
 
 def write_html(html_text, target, overwrite):
@@ -219,8 +309,9 @@ def print_pdf(page, html_path, pdf_path, render_timeout):
   page.evaluate("() => document.fonts.ready")
   pdf_path.parent.mkdir(parents=True, exist_ok=True)
   page.pdf(path=str(pdf_path), print_background=True, prefer_css_page_size=True, outline=True, tagged=True)
-  retVal = page.evaluate("() => parseInt(document.body.dataset.tableOverflow || '0', 10)")
-  return retVal or 0
+  facts = page.evaluate("() => [parseInt(document.body.dataset.tableOverflow || '0', 10), parseInt(document.body.dataset.imageBroken || '0', 10), document.body.dataset.imageBrokenFirst || '']")
+  retVal = {"table_overflow": facts[0] or 0, "image_broken": facts[1] or 0, "image_broken_first": facts[2]}
+  return retVal
 
 
 def pdf_page_count(pdf_path):
@@ -266,7 +357,8 @@ def main():
     artifacts.append(entry)
     try:
       document = read_document(path, args.lang, args.title if len(documents_paths) == 1 else None)
-      entry["warning"] = relative_image_warning(document, args.output_dir)
+      for warning in copy_images(document, args.output_dir, args.overwrite):
+        add_warning(entry, warning)
       entry["html"] = output_path_for(document, args.output_dir, ".html")
       entry["pdf"] = output_path_for(document, args.output_dir, ".pdf")
       html_text = inject(template_text, document, args.paper, args.landscape)
@@ -302,11 +394,14 @@ def main():
           for entry in pending:
             started = time.perf_counter()
             try:
-              overflowing_tables = print_pdf(page, entry["html"], entry["pdf"], args.render_timeout)
+              facts = print_pdf(page, entry["html"], entry["pdf"], args.render_timeout)
               entry["pdf_status"] = "ok"
+              overflowing_tables = facts["table_overflow"]
               if overflowing_tables:
-                warning = f"WARNING: {overflowing_tables} table{'s' if overflowing_tables != 1 else ''} wider than the page after font step-down (clipped in PDF)"
-                entry["warning"] = f"{entry['warning']} | {warning}" if entry["warning"] else warning
+                add_warning(entry, f"WARNING: {overflowing_tables} table{'s' if overflowing_tables != 1 else ''} wider than the page after font step-down (clipped in PDF)")
+              if facts["image_broken"]:
+                broken = facts["image_broken"]
+                add_warning(entry, f"WARNING: {broken} image{'s' if broken != 1 else ''} failed to load (first: {facts['image_broken_first']})")
             except Exception as error:
               message = str(error).splitlines()[0]
               if "wait_for_selector" in message or "Timeout" in message:

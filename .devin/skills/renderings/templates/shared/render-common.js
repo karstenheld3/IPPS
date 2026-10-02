@@ -156,11 +156,61 @@ function fitTables(root, options) {
   return retVal;
 }
 
+/* Render option hrPageBreak=true: body.hr-page-break turns every hr into a print page break (tokens.css).
+   An hr that is the first block, the last block, or follows another hr is removed so no page is empty. */
+function applyHrPageBreak(root, options) {
+  if (!options || String(options.hrPageBreak) !== "true") return;
+  document.body.classList.add("hr-page-break");
+  var children = Array.prototype.slice.call(root.children);
+  var previous = null;
+  for (var i = 0; i < children.length; i++) {
+    var node = children[i];
+    if (node.tagName === "HR" && (previous === null || previous.tagName === "HR")) { node.remove(); continue; }
+    previous = node;
+  }
+  var last = root.lastElementChild;
+  while (last && last.tagName === "HR") { last.remove(); last = root.lastElementChild; }
+}
+
+/* Images that share a paragraph, list item, or cell with text stay inline; all others are centered blocks (tokens.css). */
+function classifyImages(root) {
+  var images = root.querySelectorAll("img");
+  for (var i = 0; i < images.length; i++) {
+    var container = images[i].closest("p, li, td, th");
+    if (container && container.textContent.trim() !== "") images[i].classList.add("inline");
+  }
+}
+
+/* Resolves after every image decoded or failed; failed images are counted in body[data-image-broken] (first src in data-image-broken-first). */
+function waitForImages(root) {
+  var images = Array.prototype.slice.call(root.querySelectorAll("img"));
+  var waits = [];
+  for (var i = 0; i < images.length; i++) {
+    waits.push(images[i].decode().then(function () { return false; }, function () { return true; }));
+  }
+  return Promise.all(waits).then(function (failures) {
+    var broken = 0;
+    var first = "";
+    for (var k = 0; k < images.length; k++) {
+      if (failures[k] || (images[k].complete && images[k].naturalWidth === 0 && !/\.svg$/i.test(images[k].getAttribute("src") || ""))) {
+        broken++;
+        if (!first) first = images[k].getAttribute("src") || "";
+      }
+    }
+    document.body.dataset.imageBroken = String(broken);
+    document.body.dataset.imageBrokenFirst = first;
+    return broken;
+  });
+}
+
+/* Returns a Promise: synchronous steps first, then table fitting after all images decoded (layout is final). */
 function postProcess(root, options) {
   addHeadingAnchors(root);
   convertTaskLists(root);
   classifyCodeBlocks(root);
-  fitTables(root, options);
+  applyHrPageBreak(root, options);
+  classifyImages(root);
+  return waitForImages(root).then(function () { fitTables(root, options); });
 }
 
 function firstHeadingText(root) {
