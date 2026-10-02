@@ -9,6 +9,7 @@ Universal formatting and writing conventions for all documents.
 ## Text Style (Exception: transcribed or external documents)
 
 - Use ASCII "double quotes" or 'single quotes'. Never use Non-ASCII quotes unless explicitly asked.
+- Expect international readers who are not native speakers. Write the explicit claim, not a figurative stand-in: rewrite idioms, slang, and region-dependent phrases as the claim they carry; keep established precise terms (MW-WC-10 in @skills:write-documents `MECT_WRITING_RULES.md`)
 - No emojis in documentation (see Document Rule Exceptions below)
 - Avoid Markdown tables; use unnumbered lists with indented properties (see Document Rule Exceptions below)
 - Use Unicode box-drawing characters for structures:
@@ -167,6 +168,14 @@ Documents may opt-in to use Markdown tables or emojis by adding a PromptSystem t
 - Comparison documents where tables improve readability
 - Feature matrices and compatibility charts
 - Status dashboards
+
+**Excluded from the no-tables default (tables ALWAYS allowed, no opt-in tag needed):**
+- The following document types are exempt from the default "no tables" rule. They may use Markdown tables freely without `<PromptSystem MarkdownTablesAllowed=true />`:
+  - Minto Pyramid articles (output of `/write-minto`, `/propose-minto`)
+  - Blog posts and essays
+  - Whitepapers and publication-ready reports
+  - Any document whose primary purpose is to be read as prose (not reference/lookup)
+- Reason: tables in prose-oriented content are acceptable for structured data presentation within articles
 
 ## Confirmation Keywords
 

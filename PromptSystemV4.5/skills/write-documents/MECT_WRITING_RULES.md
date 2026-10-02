@@ -41,6 +41,7 @@ Word Choice (WC)
 - MW-WC-07: No premature label compression - short labels require legend in sight, mnemonic, or establishment
 - MW-WC-08: Document language is sovereign - foreign terms must be translated inline at every use
 - MW-WC-09: Acronym meaning comes from context - never invented, never adopted from training data
+- MW-WC-10: Explicit over figurative - write the claim an idiom, slang, or region-dependent phrase stands for; keep established precise terms
 
 Terminology Design (TD)
 - MW-TD-01: Naming structure method (explicit -> specifiers -> states -> mnemonics)
@@ -399,6 +400,38 @@ Acronyms have multiple meanings; the one defined in context (document, reference
 **GOOD:** `AMINTON (Agentic MINTO Notation)` - from the defining section `MINTO_GUIDES.md` Section 1
 
 **Test:** Point to the line that defines it. No line = no expansion.
+
+### MW-WC-10: Explicit Over Figurative
+
+**Audience:** Expect international readers who are not native speakers of the document language. This is the default for every document unless it declares a different audience (MW-HS-03).
+
+Idioms, slang, and region-dependent phrases compress a claim into an image. The reader must decode the image and guess the claim behind it. Non-native readers, readers from another region, and machine translation guess differently. Write the claim itself: number, actor, condition, consequence.
+
+**BAD:**
+```
+The two vendors are a wash on price; support tips it.
+The deadline cannot slip.
+Caching hedges against API outages.
+Migrating to the new database is a no-brainer.
+Let's table the proposal.
+```
+
+**GOOD:**
+```
+Both vendors cost EUR 40-42 per user per month; vendor B wins because only B offers 24/7 support.
+The filing must reach the authority by 2026-01-15; a late filing loses the benefit for the whole year.
+When the API is down, the cache serves the last response for up to 10 minutes.
+Migrating to the new database cuts query time from 2 s to 0.2 s and takes 3 days of work.
+Postpone the proposal to the Q3 meeting.
+```
+
+"Table the proposal" means "discuss it now" in UK English and "postpone it" in US English - one phrase, opposite instructions.
+
+**Not a word ban:** A word stays when it is the established, most precise term and the sentence states the claim around it: "onboarding takes 2 days", "the investment pays off after 14 months", "break-even", "bottleneck". Replacing a precise term with a vaguer paraphrase violates MW-WC-01.
+
+**Test:** Ask what exactly the phrase claims. If the answer contains a number, condition, or consequence the sentence does not state, write the answer instead of the phrase.
+
+**Exempt:** quotations, transcriptions, conversation drafts written AS the user (`CONVERSATION_HUMANIZING_RULES.md` governs voice), established technical terms (bottleneck, firewall, break-even).
 
 ## Terminology Design Rules (TD)
 
