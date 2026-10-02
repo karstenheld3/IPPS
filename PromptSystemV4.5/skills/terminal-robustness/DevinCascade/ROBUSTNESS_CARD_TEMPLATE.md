@@ -11,6 +11,7 @@ Re-usable card for Devin/Cascade agents. Copy to project root as `__CARD_[TOPIC]
 - `git log` / `git diff` / `git show` / `git blame` without `--no-pager` - launches pager, blocks on stdin - generic pager rule
 - `npm install` without `--yes` or `--ci` - prompts on stdin - generic stdin rule
 - `npx <tool>` without `--yes` - prompts to install package - generic stdin rule
+- `npm create <tool> ... -- <flags> --yes` - `--yes` after `--` reaches the scaffold tool, not the runner; "Ok to proceed?" install prompt still waits on stdin - evidence: @I001.025
 - `node` without a script argument - starts REPL, waits on stdin - generic stdin rule
 - `Read-Host`, `pause`, `Get-Credential` - wait for stdin - generic stdin rule
 - `bun --watch`, `npm run dev`, any `--watch` flag - unbounded child; tool waits for pipe EOF until the child dies - evidence: @I001.012-013
@@ -34,7 +35,7 @@ Re-usable card for Devin/Cascade agents. Copy to project root as `__CARD_[TOPIC]
 - Verbose output (>few KB) runs as .tmp_ script + redirect to file + read_file - defeats pipe buffer, drain throttle, merge point, and handle inheritance - evidence: @I001.019
 - Test suites run with `--ci` / `--timeout` (non-blocking, no watch mode)
 - Git commands use `--no-pager`
-- `npx` commands use `--yes`
+- `npx` commands use `--yes`; in two-layer commands (`npm create` / `npx` + `--`) the runner-level `--yes` goes BEFORE `--` - evidence: @I001.025
 - Stderr redirected to file, never merged with `2>&1`
 - File and content search uses rg.exe instead of recursive shell enumeration
 - Stray processes stopped after every command execution

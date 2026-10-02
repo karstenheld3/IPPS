@@ -11,6 +11,7 @@ Re-usable card for Claude Code agents. Copy to project root as `__CARD_[TOPIC]-R
 - `git log` / `git diff` / `git show` without `--no-pager` - launches pager, waits on stdin - generic pager rule
 - `npm install` without `--yes` - prompts for confirmation on stdin - generic stdin rule
 - `npx <tool>` without `--yes` - prompts to install package - generic stdin rule
+- `npm create <tool> ... -- <flags> --yes` - `--yes` after `--` reaches the scaffold tool, not the runner's install prompt - generic stdin rule
 - `Read-Host`, `pause`, `Get-Credential` - wait for stdin - generic stdin rule
 - Any `--watch` flag, `npm run dev`, `bun --watch` - never terminates - generic unbounded-child rule
 - `Wait-Process` without `-Timeout` - waits forever - generic unbounded-child rule
@@ -30,7 +31,7 @@ Re-usable card for Claude Code agents. Copy to project root as `__CARD_[TOPIC]-R
 
 - Test suites run with non-interactive flags, non-blocking, under cap
 - Git commands use `--no-pager`
-- `npx`/`npm` commands use `--yes`
+- `npx`/`npm` commands use `--yes`, placed before `--` in two-layer commands (`npm create`, `npx`)
 - Stderr redirected to file, never merged with `2>&1`
 - File and content search uses rg.exe instead of recursive shell enumeration
 - Stray processes stopped after every command execution

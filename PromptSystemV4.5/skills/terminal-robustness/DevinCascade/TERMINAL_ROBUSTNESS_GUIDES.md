@@ -23,7 +23,7 @@ With `2>&1`, pwsh must drain child stderr at full speed, wrap records as red-ANS
 
 ### 1.4 Long command lines echo mangled
 
-Long commands echo duplicated and char-truncated in the tool output - observed live twice [@I001.011]. Cosmetic but misleading: do not parse the echo to verify what ran; check artifacts on disk instead.
+Long commands echo duplicated and char-truncated in the tool output - observed live three times [@I001.011, @I001.025]. Cosmetic but misleading: do not parse the echo to verify what ran; check artifacts on disk instead.
 
 ### 1.5 stdin/pager waits behave as everywhere
 

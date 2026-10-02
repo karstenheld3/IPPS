@@ -47,6 +47,18 @@ git log
 git --no-pager log -n 20
 ```
 
+**BAD:**
+```powershell
+npm create astro@latest .tmp_astro_test -- --template minimal --yes
+```
+
+**GOOD:**
+```powershell
+npm create --yes astro@latest .tmp_astro_test -- --template minimal
+```
+
+The `--yes` after `--` reaches the scaffold tool, not npm - the runner's own "Ok to proceed?" install prompt still waits on stdin.
+
 ## TERMROBUSTNESS-HG-03: No unbounded background children
 
 **BAD:**

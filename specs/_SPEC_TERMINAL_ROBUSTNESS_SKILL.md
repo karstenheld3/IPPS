@@ -89,7 +89,7 @@ IPPS
 
 ## 2. Context
 
-- The empirical basis is the TERMROBUSTNESS investigation (`_LOG_TERMROBUSTNESS.md`, session `_2026-09-29_TerminalRobustnessSkill`): 24 log entries (I001.001-I001.020 investigation, I001.021-I001.024 process notes), cause-effect matrix in I001.020, confirmed mechanisms with probe evidence
+- The empirical basis is the TERMROBUSTNESS investigation (`_LOG_TERMROBUSTNESS.md`, session `_2026-09-29_TerminalRobustnessSkill`): 25 log entries (I001.001-I001.020 investigation, I001.021-I001.024 process notes, I001.025 field evidence), cause-effect matrix in I001.020, confirmed mechanisms with probe evidence
 - IPPS is the sync source: content is authored in `PromptSystemV4.5/`, mirrored to `.devin/`, and synced downstream to consumer workspaces. Placement decisions here propagate to all agents
 - The GRUC standard (`_SPEC_GRUC_STANDARD.md`) constrains file placement: GUIDE → working agent + `/critique`; RULES + TEMPLATE → `/verify`; CHECKS PD → `/drift-detect`; CHECKS QI → `/improve`. GRUC files live in the skill folder they belong to
 - `PROMPTS_ROBUSTNESS_GUIDES.md` already contains the hang-safety clause template and findings-card directive consumed by `write-prompts.md` (PRMT-HS-01). The clause stays there; mechanism depth moves to the new skill
@@ -291,7 +291,7 @@ PROMPTS_ROBUSTNESS_GUIDES.md ── concept reference to cards (no file-level cr
 
 ### Content sources
 
-- Mechanisms and evidence: `_LOG_TERMROBUSTNESS.md` I001.001-I001.024 (session `_2026-09-29_TerminalRobustnessSkill`)
+- Mechanisms and evidence: `_LOG_TERMROBUSTNESS.md` I001.001-I001.025 (session `_2026-09-29_TerminalRobustnessSkill`)
 - Investigation list and cross-repo context: `_INFO_TERMROBUSTNESS-01_HangingCommandInvestigation.md` (TERMROBUSTNESS-IN01)
 - Card default content: `[TESTED]` patterns from the retired `PROMPTS_EXAMPLE_02-RobustnessCard.md`, absorbed into `DevinCascade/ROBUSTNESS_CARD_TEMPLATE.md` (DD-06 executed)
 - Clause template (stays): `PROMPTS_ROBUSTNESS_GUIDES.md` Section 2
@@ -348,6 +348,10 @@ Verification flow:
 - Documented exceptions to `SKILL_RULES.md` (SK-FL-01, SK-FL-07): agent variant subfolders (`ClaudeCode/`, `DevinCascade/`) override the flat-layout rule per TERMROBUSTNESS-DD-03 - the agent dimension requires subfolders regardless of file count; `ROBUSTNESS_CARD_TEMPLATE.md` and `ROBUSTNESS_CARD_SKELETON.md` use [ACTOR]-mandated names instead of the `_TEMPLATE` suffix convention - the TEMPLATE marker is present and distinguishes template from operational file, satisfying the rule's intent
 
 ## 12. Document History
+
+**[2026-09-29 17:00]**
+- Added: two-layer scaffold flag placement (runner `--yes` before `--`) - shared guide Section 3.3, HG-02 BAD/GOOD pair, both agent card templates (banned + always rules) - based on field evidence I001.025 (npm create "Ok to proceed?" prompt not suppressed by tool-level `--yes`)
+- Changed: DevinCascade guide echo-mangling observation count twice -> three times [@I001.025]
 
 **[2026-09-29 15:50]**
 - Verified (/verify, skill context): 5 findings fixed - F1 private session path in DevinCascade guide replaced with spec-based provenance; F2 log-filename citations genericized in RULES CD-03 and DevinCascade template; F3+F4 SK-FL-01/SK-FL-07 exceptions documented in Technical Constraints; F5 meaningless `compatibility: all` frontmatter removed. All SK-*, IPPSSKLS-FR, GRUC-FR/AC, TERMROBUSTNESS-FR/IG/NFR checks pass

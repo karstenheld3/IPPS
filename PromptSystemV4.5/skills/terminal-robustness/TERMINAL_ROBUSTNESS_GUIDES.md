@@ -32,11 +32,12 @@ This is mechanical, not folklore. Prefer it whenever a command writes more than 
 
 1. **Agent tools over shell** - grep_search, read_file, find_by_name for file operations; shell only for process execution
 2. **Non-interactive flags** - `--yes`, `--no-pager`, `--ci`, `-NonInteractive`; git log/diff/show always with `--no-pager` and `-n <N>`
-3. **No stdin waits** - ban `Read-Host`, `pause`, `Get-Credential`, REPLs launched without input, `Get-Content -Wait`, `tail -f`
-4. **No unbounded children** - ban `--watch` flags, `Wait-Process` without `-Timeout`; stop spawned processes after use
-5. **Recursive enumeration** - prefer `rg.exe` (ripgrep, bundled with VS Code-based editors) over `Get-ChildItem -Recurse` / `Select-String -Recurse` on large trees
-6. **Time caps** - every process-running command gets a cap ~3x its expected duration; on cap: kill the process tree, record in PROBLEMS.md, continue
-7. **Timeout wrapper** - commands with no native safe parameter run via a separate process with redirect-to-file and process-tree kill on timeout (see the agent card template for the tested PowerShell pattern)
+3. **Runner flags before `--`** - `npm create` / `npx` / `pnpm dlx` / `yarn create` are two-layer commands: the runner prompts on stdin ("Need to install ... Ok to proceed? (y)") before the scaffold tool starts, and everything after the `--` separator is forwarded to the tool, not the runner. Runner-level `--yes` must sit BEFORE `--`: `npm create --yes astro@latest . -- --template minimal` runs prompt-free; `npm create astro@latest . -- --template minimal --yes` still waits on stdin
+4. **No stdin waits** - ban `Read-Host`, `pause`, `Get-Credential`, REPLs launched without input, `Get-Content -Wait`, `tail -f`
+5. **No unbounded children** - ban `--watch` flags, `Wait-Process` without `-Timeout`; stop spawned processes after use
+6. **Recursive enumeration** - prefer `rg.exe` (ripgrep, bundled with VS Code-based editors) over `Get-ChildItem -Recurse` / `Select-String -Recurse` on large trees
+7. **Time caps** - every process-running command gets a cap ~3x its expected duration; on cap: kill the process tree, record in PROBLEMS.md, continue
+8. **Timeout wrapper** - commands with no native safe parameter run via a separate process with redirect-to-file and process-tree kill on timeout (see the agent card template for the tested PowerShell pattern)
 
 ## 4. The Robustness Card
 
