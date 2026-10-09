@@ -68,9 +68,9 @@ Quality Improvement (QI)
 
 ### PRMT-PD-06: Prompt Markers in All Sequences
 
-- Action: Agent included `Human Readable Prefix [ NN / NN ] - [brief summary]` Prompt Markers inside each prompt's fence as first line for all prompt sequences; the summary matches the heading text; when using a planning document (PRMT-SC-06), the summary includes plan phase/step references: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
-- Evidence: each prompt's first line inside the fence contains a zero-padded Prompt Marker with current count, total count, and a summary; an empty line follows the marker before the prompt content; when a planning document is referenced, the summary includes plan phase/step references matching the heading text
-- Failure indicator: any prompt sequence with no Prompt Marker inside fence; marker in heading instead of inside fence; marker without summary; inconsistent zero-padding; no empty line after marker; planning document used but summary lacks plan phase/step references
+- Action: Agent included `[NN]-[Topic] [ NN / NN ] - [brief summary]` Prompt Markers inside each prompt's fence as first line for all prompt sequences; `[NN]-[Topic]` is the file identifier derived from the filename `_PROMPTS_[NN]-[Topic].md`; the summary matches the heading text; when using a planning document (PRMT-SC-06), the summary includes plan phase/step references: `[NN]-[Topic] [ NN / NN ] - [plan step ID] [brief summary]`
+- Evidence: each prompt's first line inside the fence contains a file identifier prefix `[NN]-[Topic]` matching the filename, a zero-padded Prompt Marker with current count, total count, and a summary; an empty line follows the marker before the prompt content; when a planning document is referenced, the summary includes plan phase/step references matching the heading text
+- Failure indicator: any prompt sequence with no Prompt Marker inside fence; marker in heading instead of inside fence; marker without summary; inconsistent zero-padding; no empty line after marker; planning document used but summary lacks plan phase/step references; generic topic label instead of file identifier prefix; file identifier does not match the filename
 - References: PRMT-FT-10
 
 ## Quality Improvement (QI)

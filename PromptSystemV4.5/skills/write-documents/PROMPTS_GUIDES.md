@@ -449,24 +449,25 @@ Omit frontmatter when:
 
 ## 11. Prompt Markers
 
-Every prompt MUST include a Prompt Marker as the first line inside each prompt's fence, followed by an empty line before the prompt content (PRMT-FT-10). The marker shows the current prompt number and total count in zero-padded format, followed by a summary of the prompt's purpose:
+Every prompt MUST include a Prompt Marker as the first line inside each prompt's fence, followed by an empty line before the prompt content (PRMT-FT-10). The marker identifies the source file, shows the current prompt number and total count in zero-padded format, and summarizes the prompt's purpose:
 
 ```
-Setup API Module [ 01 / 23 ] - Analyze requirements
+01-SetupApiModule [ 01 / 23 ] - Analyze requirements
 
 Read `__CARD_00-Rules.md`...
 ```
 
-The summary matches the heading text. When the sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the summary MUST include plan phase/step references:
+The prefix `[NN]-[Topic]` is the file identifier derived from the filename `_PROMPTS_[NN]-[Topic].md`. This ensures every prompt is traceable to its source file — when a prompt appears in an execution log or conversation, the file identifier immediately reveals which prompts file it came from. The summary matches the heading text. When the sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the summary MUST include plan phase/step references:
 
 ```
-Security Fix [ 01 / 07 ] - P4-S1 U10 stage A: untrusted-content delimiters in specs
+01-SecurityFix [ 01 / 07 ] - P4-S1 U10 stage A: untrusted-content delimiters in specs
 
 Read `__CARD_00-Rules.md`...
 ```
 
 ### 11.1 Why Prompt Markers Matter
 
+- **File identification**: The `[NN]-[Topic]` prefix identifies the source file unambiguously — every prompt is traceable to its origin `_PROMPTS_*.md` file
 - **Orientation**: The agent knows how far along the sequence is at a glance
 - **Progress tracking**: The marker complements STRUT step IDs — STRUT tracks the plan, the marker tracks the file
 - **Resume after interruption**: When reloading a prompt file after context reset, the marker shows which prompt is next without counting fences
@@ -476,12 +477,13 @@ Read `__CARD_00-Rules.md`...
 
 ### 11.2 Format Rules
 
+- The marker prefix is the file identifier `[NN]-[Topic]` from the filename `_PROMPTS_[NN]-[Topic].md`, used verbatim — do not abbreviate, rephrase, or replace with a topic label
 - Zero-padded to match the width of the total count (5 prompts → 2 digits, 23 prompts → 2 digits)
 - Total count is the number of prompts in the file, not STRUT steps
 - For sub-chains (PRMT-SC-04): total count is the number of prompts in the current sub-chain file
 - The marker goes inside the fence as the first line of prompt content, followed by an empty line before the prompt content — the model sees it for progress tracking
-- The marker line MUST include a summary: `Human Readable Prefix [ NN / NN ] - [brief summary]`. The summary matches the heading text
-- When using a planning document (PRMT-SC-06), the summary MUST include plan phase/step references: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
+- The marker line MUST include a summary: `[NN]-[Topic] [ NN / NN ] - [brief summary]`. The summary matches the heading text
+- When using a planning document (PRMT-SC-06), the summary MUST include plan phase/step references: `[NN]-[Topic] [ NN / NN ] - [plan step ID] [brief summary]`
 - Required for all sequences, including single-prompt files
 
 ## 12. Execution Model: One Prompt Per Turn
@@ -526,7 +528,7 @@ Before considering the prompts file complete:
 - [ ] Fence lengths exceed all inner fence lengths within each prompt
 - [ ] `---` separator between every pair of consecutive prompts
 - [ ] If headings are used, ALL prompts have headings (PRMT-FT-07)
-- [ ] Each prompt includes a human-readable prefix `[ NN / NN ]` Prompt Marker as first line inside fence (PRMT-FT-10); when using a planning document, marker includes plan summary: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
+- [ ] Each prompt includes a file identifier prefix `[NN]-[Topic] [ NN / NN ]` Prompt Marker as first line inside fence (PRMT-FT-10); when using a planning document, marker includes plan summary: `[NN]-[Topic] [ NN / NN ] - [plan step ID] [brief summary]`
 - [ ] No prompt content outside fences (would be silently dropped)
 - [ ] Precision tokens preserved: constraints, verification, disambiguation not cut for brevity (PRMT-CT-05)
 - [ ] Signal redundancy preserved: explicit referents, not pronouns for ambiguous antecedents (PRMT-CT-06)
@@ -564,4 +566,4 @@ Before considering the prompts file complete:
 - [ ] Document History timestamps use request metadata, not extrapolated times (PRMT-CT-13)
 - [ ] Banned-term sweep recordings describe pattern shape, do not spell banned literals (PRMT-CT-14)
 - [ ] Verify section checks spec-code consistency when prompt changes code with associated spec (PRMT-HS-10)
-- [ ] Filename includes zero-padded sequence number `_PROMPTS_[NN]-[Topic].md` (PRMT-NM-03)
+- [ ] Filename includes zero-padded sequence number `_PROMPTS_[NN]-[Topic].md` (PRMT-NM-03); [Topic] contains domain prefix ensuring [NN]-[Topic] uniqueness across session (PRMT-NM-04)

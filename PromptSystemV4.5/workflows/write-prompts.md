@@ -27,7 +27,7 @@ Create `_PROMPTS_[NN]-[Topic].md` files containing an ordered list of prompts. E
 - `---` separator between every pair of consecutive prompts
 - Commentary (headings, notes) only between `---` and next fence - never sent to model. Commentary notes MUST be in HTML comments (`<!-- ... -->`), headings as plain Markdown
 - Heading recommendation (PRMT-FT-07): use `## Prompt N - [title]` before each prompt. If headings are used, ALL prompts MUST have headings
-- Prompt Marker (PRMT-FT-10): all prompt sequences MUST include a human-readable prefix `[ NN / NN ]` as first line inside each prompt's fence, not in the heading. When using a planning document (PRMT-SC-06), marker includes plan summary: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
+- Prompt Marker (PRMT-FT-10): all prompt sequences MUST include a file identifier prefix `[NN]-[Topic] [ NN / NN ]` as first line inside each prompt's fence, where `[NN]-[Topic]` is derived from the filename `_PROMPTS_[NN]-[Topic].md`. Not in the heading. When using a planning document (PRMT-SC-06), marker includes plan summary: `[NN]-[Topic] [ NN / NN ] - [plan step ID] [brief summary]`
 - At least one prompt per file
 - **NEVER modify tracking documents** (PROGRESS.md, PROBLEMS.md, NOTES.md, FAILS.md). Write-* workflows create NEW files only.
 - Pre-Write Privacy Gate (`agent-behavior.md`): General-purpose documents → all content generic. ILLUSTRATIVE content → examples generic.
@@ -97,9 +97,9 @@ Then scan `[AGENT_FOLDER]/workflows/` frontmatters (the `description` field) to 
 
 - Filename: `_PROMPTS_[NN]-[Topic].md`
 - `[NN]` = zero-padded 2-digit sequence number starting at `01` (PRMT-NM-03). When creating multiple files in one invocation, assign sequential numbers. When adding to a folder with existing prompt files, continue from the highest existing number + 1
-- `[Topic]` = CamelCase description of prompt purpose
+- `[Topic]` = `[DomainShort]-[Purpose]` where DomainShort is 2-8 CamelCase chars abbreviated from the STRUT topic or approach name (PRMT-NM-04), and Purpose is a short CamelCase description of what the prompts do (max 20 chars). Total topic under 30 chars. [NN]-[Topic] must be unique across all _PROMPTS_*.md files in the session
 - Location: session folder (default), workspace root, or user-specified path
-- Examples: `_PROMPTS_01-SetupProject.md`, `_PROMPTS_02-MigrateAuth.md`, `_PROMPTS_01-AnalyzePerformance.md`
+- Examples: `_PROMPTS_01-WlSeg-Preflight.md`, `_PROMPTS_05-WlSeg-S1-Inheritors.md`, `_PROMPTS_01-Mmnts-Preflight.md`
 
 ## Step 3: Select Fence Length Per Prompt
 
@@ -125,7 +125,7 @@ prompt_system: IPPS
 ## Prompt 1 - Setup
 
 ```
-Prompt [ 01 / 07 ] - [plan step ID] [brief summary]
+[NN]-[Topic] [ 01 / 07 ] - [plan step ID] [brief summary]
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
@@ -147,7 +147,7 @@ Verify: [Machine-checkable done criteria]
 <!-- Optional notes explaining the next prompt's purpose. -->
 
 ````
-Prompt [ 02 / 07 ] - [plan step ID] [brief summary]
+[NN]-[Topic] [ 02 / 07 ] - [plan step ID] [brief summary]
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
@@ -172,7 +172,7 @@ Verify: [Observable success criteria]
 <!-- Verify prompts 1-2 against STRUT before continuing. -->
 
 ```
-Prompt [ 03 / 07 ] - Verification checkpoint after prompts 1-2
+[NN]-[Topic] [ 03 / 07 ] - Verification checkpoint after prompts 1-2
 Read [rules card] and [STRUT filename]. Treat earlier conversation as compacted. Verification checkpoint after prompts 1-2.
 
 /verify
@@ -189,7 +189,7 @@ all gaps and remaining work.
 ## Prompt 3 - Implement Next Feature
 
 ```
-Prompt [ 04 / 07 ] - [plan step ID] [brief summary]
+[NN]-[Topic] [ 04 / 07 ] - [plan step ID] [brief summary]
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
@@ -209,7 +209,7 @@ Verify: [Machine-checkable done criteria]
 ## Prompt 4 - Finalize
 
 ```
-Prompt [ 05 / 07 ] - [plan step ID] [brief summary]
+[NN]-[Topic] [ 05 / 07 ] - [plan step ID] [brief summary]
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
@@ -231,7 +231,7 @@ Verify: [Machine-checkable done criteria]
 <!-- Verify prompts 3-4 against STRUT before final prompt. -->
 
 ```
-Prompt [ 06 / 07 ] - Verification checkpoint after prompts 3-4
+[NN]-[Topic] [ 06 / 07 ] - Verification checkpoint after prompts 3-4
 Read [rules card] and [STRUT filename]. Treat earlier conversation as compacted. Verification checkpoint after prompts 3-4.
 
 /verify
@@ -248,7 +248,7 @@ all gaps and remaining work.
 ## Prompt 5 - Final Verification
 
 ```
-Prompt [ 07 / 07 ] - [plan step ID] [brief summary]
+[NN]-[Topic] [ 07 / 07 ] - [plan step ID] [brief summary]
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
@@ -270,7 +270,7 @@ Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. All te
 4. `---` on its own line between consecutive prompts
 5. Commentary (headings, paragraphs, lists) allowed before the first prompt and between `---` and next opening fence. Commentary notes MUST be in HTML comments (`<!-- ... -->`), headings as plain Markdown
 6. Heading recommendation (PRMT-FT-07): use `## Prompt N - [title]` before each prompt. If headings are used, ALL prompts MUST have headings
-7. Prompt Marker (PRMT-FT-10): all prompt sequences MUST include a human-readable prefix `[ NN / NN ]` as first line inside each prompt's fence. When using a planning document (PRMT-SC-06), marker includes plan summary: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
+7. Prompt Marker (PRMT-FT-10): all prompt sequences MUST include a file identifier prefix `[NN]-[Topic] [ NN / NN ]` as first line inside each prompt's fence, where `[NN]-[Topic]` is derived from the filename `_PROMPTS_[NN]-[Topic].md`. When using a planning document (PRMT-SC-06), marker includes plan summary: `[NN]-[Topic] [ NN / NN ] - [plan step ID] [brief summary]`
 8. Info string after opening fence (e.g. `` ```text ``) is optional and ignored by executor
 9. Prompts execute in file order
 10. Execution Frontmatter is optional - omit entirely if no execution hints needed
@@ -317,7 +317,7 @@ Check output against all PRMT-* rules in `PROMPTS_RULES.md`:
 - [ ] Execution (EX): PRMT-EX-01 (one prompt per turn), PRMT-EX-02 (no self-execution), PRMT-EX-03 (execution authority)
 - [ ] Hang Safety (HS): PRMT-HS-01 through PRMT-HS-10
 - [ ] Robustness (RB): PRMT-RB-01 through PRMT-RB-07 (findings card designated, directive in every implementation prompt, card read at startup, glitches filed before commit, entry format, card system integration, PROBLEMS.md distinction)
-- [ ] Naming (NM): PRMT-NM-01 (filename pattern `_PROMPTS_[NN]-[Topic].md`), PRMT-NM-02 (Topic describes purpose), PRMT-NM-03 ([NN] zero-padded sequence number)
+- [ ] Naming (NM): PRMT-NM-01 (filename pattern `_PROMPTS_[NN]-[Topic].md`), PRMT-NM-02 (Topic describes purpose), PRMT-NM-03 ([NN] zero-padded sequence number), PRMT-NM-04 (Topic contains domain prefix ensuring [NN]-[Topic] uniqueness across session; topic under 30 chars)
 
 ### Step 5b: Workflow Call Formatting Pass
 
@@ -398,7 +398,7 @@ The filled file must pass all PRMT-* rules as a standalone prompts file:
 - [ ] PRMT-FT-04: Commentary notes in HTML comments (`<!-- ... -->`), headings as plain Markdown, only between separator and next fence (or before first fence)
 - [ ] PRMT-FT-07: If headings are used, all prompts have headings (MUST)
 - [ ] PRMT-FT-08: If frontmatter present, it is at file start with valid keys
-- [ ] PRMT-FT-10: Each prompt includes a human-readable prefix `[ NN / NN ]` Prompt Marker as first line inside fence; when using a planning document, marker includes plan summary: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
+- [ ] PRMT-FT-10: Each prompt includes a file identifier prefix `[NN]-[Topic] [ NN / NN ]` Prompt Marker as first line inside fence; when using a planning document, marker includes plan summary: `[NN]-[Topic] [ NN / NN ] - [plan step ID] [brief summary]`
 - [ ] PRMT-ST-01..05: Each prompt has objective, constraints (if implementation), verification, single reasoning mode, density limit
 - [ ] PRMT-SQ-01..04: No contradictions, explicit dependencies, commentary documents state, interleaved verification prompts for 4+ implementation prompt sequences
 - [ ] PRMT-CT-01..14: Specific objectives, negative constraints, observable verification, workflow execution vs reference distinction (execution verb = standalone without backticks, no execution verb = backticks), existing workflows leveraged, agent tools over shell for file operations, timestamp from request metadata, banned-term sweep recording
@@ -430,8 +430,8 @@ Validated `_PROMPTS_[NN]-[Topic]-[Instance].md` file with all placeholders resol
 
 ## Quality Gate
 
-- [ ] All PRMT-* rules pass (FT-01 through FT-10, ST, SQ, CT-01 through CT-14, SC, EX-01 through EX-03, HS-01 through HS-10, RB, NM-01 through NM-03)
-- [ ] Filename includes zero-padded sequence number `_PROMPTS_[NN]-[Topic].md` (PRMT-NM-03)
+- [ ] All PRMT-* rules pass (FT-01 through FT-10, ST, SQ, CT-01 through CT-14, SC, EX-01 through EX-03, HS-01 through HS-10, RB, NM-01 through NM-04)
+- [ ] Filename includes zero-padded sequence number `_PROMPTS_[NN]-[Topic].md` (PRMT-NM-03); [Topic] contains domain prefix ensuring [NN]-[Topic] uniqueness across session (PRMT-NM-04)
 - [ ] Workflow call formatting: no execution verb + backticks combinations remain (PRMT-CT-08)
 - [ ] Self-contained opening in every prompt (PRMT-SC-01): context-loading directive, "treat earlier conversation as compacted", step identifier
 - [ ] No conversation dependency: no "the previous step" without file path (PRMT-SC-02)

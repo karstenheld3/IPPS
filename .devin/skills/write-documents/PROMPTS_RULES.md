@@ -16,7 +16,7 @@ Format (FT)
 - PRMT-FT-07: Heading consistency - headings recommended (SHOULD); if used, all prompts MUST have headings
 - PRMT-FT-08: Optional execution frontmatter - YAML block at file start with execution hints
 - PRMT-FT-09: prompt_system frontmatter empty when user requests workflow independence
-- PRMT-FT-10: Prompt Marker inside fence in all sequences; with plan summary when using planning document
+- PRMT-FT-10: Prompt Marker with file ID inside fence in all sequences; with plan summary when using planning document
 
 Structure (ST)
 - PRMT-ST-01: Every prompt has an identifiable objective
@@ -85,6 +85,7 @@ Naming (NM)
 - PRMT-NM-01: Filename follows `_PROMPTS_[NN]-[Topic].md` pattern
 - PRMT-NM-02: Topic is CamelCase description of purpose
 - PRMT-NM-03: [NN] is zero-padded sequence number starting at 01, enforcing execution order across multiple files
+- PRMT-NM-04: Topic contains domain prefix ensuring [NN]-[Topic] uniqueness across session; topic under 30 chars
 
 ## PRMT-FT-01: Leading Fence Required
 
@@ -897,9 +898,9 @@ Second prompt.
 
 ## PRMT-FT-10: Prompt Marker
 
-Every prompt in a prompt file MUST include a Prompt Marker as the first line inside each prompt's fence. The marker shows the current prompt number and total prompt count in zero-padded format: `Human Readable Prefix [ NN / NN ]`, followed by a summary of the prompt's purpose.
+Every prompt in a prompt file MUST include a Prompt Marker as the first line inside each prompt's fence. The marker identifies the source file, shows the current prompt number and total prompt count in zero-padded format, and summarizes the prompt's purpose.
 
-The summary matches the heading text. The marker format is: `Human Readable Prefix [ NN / NN ] - [brief summary]` where the prefix is a short human-readable label (max 4 words) describing the prompt sequence topic. When the prompt sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the summary MUST include plan phase/step references: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`. Without a planning document, the summary is the heading text: `Human Readable Prefix [ NN / NN ] - [brief summary]`. The summary gives the model the same orientation the heading gives the human reader.
+The marker format is: `[NN]-[Topic] [ NN / NN ] - [brief summary]` where `[NN]-[Topic]` is the file identifier derived from the filename `_PROMPTS_[NN]-[Topic].md`. This ensures every prompt is traceable to its source file. When the prompt sequence is derived from a planning document (STRUT, TASKS, IMPL per PRMT-SC-06), the summary MUST include plan phase/step references: `[NN]-[Topic] [ NN / NN ] - [plan step ID] [brief summary]`. Without a planning document, the summary is the heading text: `[NN]-[Topic] [ NN / NN ] - [brief summary]`. The summary gives the model the same orientation the heading gives the human reader.
 
 The marker goes inside the fence, as the first line of prompt content, followed by an empty line before the self-contained opening:
 
@@ -907,7 +908,7 @@ The marker goes inside the fence, as the first line of prompt content, followed 
 ## Prompt 1 - Analyze requirements
 
 ```
-Setup API Module [ 01 / 05 ] - Analyze requirements
+01-SetupApiModule [ 01 / 05 ] - Analyze requirements
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -921,17 +922,17 @@ There is no minimum prompt count threshold. The marker is required for all seque
 3. If the file uses sub-chains with checkpoints (PRMT-SC-04), the total count is the number of prompts in the current sub-chain file
 4. The marker appears inside the fence as first line of prompt content — the model sees it for progress tracking
 5. The marker is updated when prompts are added or removed
-6. The marker line MUST include a summary: `Human Readable Prefix [ NN / NN ] - [brief summary]`. The summary matches the heading text
-7. When using a planning document (PRMT-SC-06), the summary MUST include plan phase/step references: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
+6. The marker line MUST include a summary: `[NN]-[Topic] [ NN / NN ] - [brief summary]`. The summary matches the heading text
+7. When using a planning document (PRMT-SC-06), the summary MUST include plan phase/step references: `[NN]-[Topic] [ NN / NN ] - [plan step ID] [brief summary]`
 8. An empty line MUST follow the marker line, separating it from the prompt content (self-contained opening)
-9. The marker prefix is a short human-readable label (max 4 words), not the literal word 'Prompt'. Derive from the task domain, planning document, or filename topic. Examples: `Setup API Module`, `Security Fix`, `Write Prompts Workflow`. When no clear topic is available, use a concise descriptive label.
+9. The marker prefix is the file identifier `[NN]-[Topic]` from the filename `_PROMPTS_[NN]-[Topic].md`. This identifies the source file unambiguously — every prompt is traceable to its origin file. The file identifier is used verbatim from the filename; do not abbreviate, rephrase, or replace with a topic label. Examples: `01-SetupProject`, `05-WlSegment-S1-Inheritors`, `01-PreflightAndMomentGate`
 
 **GOOD** (5-prompt sequence with markers and summary inside fence, no planning document):
 `````markdown
 ## Prompt 1 - Analyze requirements
 
 ```
-Setup API Module [ 01 / 05 ] - Analyze requirements
+01-SetupApiModule [ 01 / 05 ] - Analyze requirements
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -941,7 +942,7 @@ Read `__CARD_00-Rules.md`...
 ## Prompt 2 - Implement module
 
 ```
-Setup API Module [ 02 / 05 ] - Implement module
+01-SetupApiModule [ 02 / 05 ] - Implement module
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -952,7 +953,7 @@ Read `__CARD_00-Rules.md`...
 ## Prompt 1 - P4-S1 U10 stage A: untrusted-content delimiters in specs
 
 ```
-Security Fix [ 01 / 05 ] - P4-S1 U10 stage A: untrusted-content delimiters in specs
+01-SecurityFix [ 01 / 05 ] - P4-S1 U10 stage A: untrusted-content delimiters in specs
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -962,7 +963,7 @@ Read `__CARD_00-Rules.md`...
 ## Prompt 2 - P4-S2 U10 stage B-C: renderToolResult, wrapped tools, commit
 
 ```
-Security Fix [ 02 / 05 ] - P4-S2 U10 stage B-C: renderToolResult, wrapped tools, commit
+01-SecurityFix [ 02 / 05 ] - P4-S2 U10 stage B-C: renderToolResult, wrapped tools, commit
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -973,7 +974,7 @@ Read `__CARD_00-Rules.md`...
 ## Prompt 1 - P4-S1 U10 stage A: untrusted-content delimiters in specs
 
 ```
-Security Fix [ 01 / 05 ]
+01-SecurityFix [ 01 / 05 ]
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -984,7 +985,7 @@ Read `__CARD_00-Rules.md`...
 ## Prompt 1 - Analyze requirements
 
 ```
-Setup API Module [ 01 / 05 ]
+01-SetupApiModule [ 01 / 05 ]
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -1001,9 +1002,20 @@ Read `__CARD_00-Rules.md`...
 
 **BAD** (marker in heading instead of inside fence):
 `````markdown
-## Setup API Module [ 01 / 05 ] - Analyze requirements
+## 01-SetupApiModule [ 01 / 05 ] - Analyze requirements
 
 ```
+Read `__CARD_00-Rules.md`...
+```
+`````
+
+**BAD** (generic topic label instead of file identifier — cannot trace to source file):
+`````markdown
+## Prompt 1 - Analyze requirements
+
+```
+Setup API Module [ 01 / 05 ] - Analyze requirements
+
 Read `__CARD_00-Rules.md`...
 ```
 `````
@@ -1116,6 +1128,44 @@ The Topic in the filename describes the prompts file purpose, not the project or
 **GOOD:** `_PROMPTS_01-SetupProject.md`, `_PROMPTS_02-MigrateAuth.md`
 
 When a chain is split into sub-chains (PRMT-SC-04), each sub-chain file gets its own number in the same sequence: `_PROMPTS_01-ImplCore.md`, `_PROMPTS_02-ImplAuth.md`, `_PROMPTS_03-Verify.md`.
+
+## PRMT-NM-04: Topic Uniqueness and Brevity
+
+The `[Topic]` MUST ensure the file identifier `[NN]-[Topic]` is unique across all `_PROMPTS_*.md` files in the same session. `[NN]` is only unique within one folder — across approaches or sub-folders, multiple files share the same `[NN]`. The `[Topic]` is the cross-folder disambiguator.
+
+Topic structure: `[DomainShort]-[Purpose]`
+
+- [DomainShort]: 2-8 CamelCase chars, abbreviated from the STRUT topic, approach name, or session topic. Chosen when the first prompts file for an approach is created and reused for all subsequent files in that approach. Distinct across approaches in the same session.
+- [Purpose]: short CamelCase description of what the prompts do (max 20 chars). Describes the work, not STRUT step IDs.
+- Total `[Topic]`: under 30 chars. Abbreviate words if needed, keeping them recognizable. Prefer 2-3 word topics over longer descriptions.
+- Uniqueness check: before writing, scan the session folder and sibling approach folders for existing `_PROMPTS_*.md` files. If any has the same `[NN]`, the `[Topic]` MUST differ in `[DomainShort]` or `[Purpose]`.
+
+The domain prefix makes the prompt marker self-identifying: when a marker appears in an execution log or conversation, the folder context is lost, but `[DomainShort]` reveals which approach it belongs to.
+
+**GOOD** (unique across approaches, short topics):
+```
+_PROMPTS_01-WlSeg-Preflight.md       → marker: 01-WlSeg-Preflight [ 01 / 04 ]
+_PROMPTS_05-WlSeg-S1-Inheritors.md  → marker: 05-WlSeg-S1-Inheritors [ 01 / 06 ]
+_PROMPTS_01-Mmnts-Preflight.md      → marker: 01-Mmnts-Preflight [ 01 / 06 ]
+_PROMPTS_01-FnStk-Preflight.md      → marker: 01-FnStk-Preflight [ 01 / 07 ]
+```
+
+**BAD** (no domain prefix — ambiguous across approaches):
+```
+_PROMPTS_01-PreflightAndMomentGate.md  → cannot distinguish from other approaches' preflight
+_PROMPTS_01-P1-Preflight.md            → cannot distinguish from other approaches' preflight
+```
+
+**BAD** (domain prefix too long — wastes marker space):
+```
+_PROMPTS_01-WlSegment-Baseline-GatherTranscribeExtract.md  → 40-char topic, marker too long
+```
+
+**BAD** (same domain prefix across different approaches):
+```
+_PROMPTS_01-Preflight.md  (in T01 folder)
+_PROMPTS_01-Preflight.md  (in T02 folder)  → same [NN]-[Topic], not unique
+```
 
 ## PRMT-SC-01: Self-Contained Opening
 

@@ -1,13 +1,13 @@
 <!-- PROMPTS TEMPLATE
 Filename: _PROMPTS_[NN]-[Topic].md
 Location: session folder (default), workspace root, or user-specified path
-Topic: CamelCase description (e.g., SetupProject, MigrateAuth, AnalyzePerformance)
+Topic: [DomainShort]-[Purpose] where DomainShort is 2-8 CamelCase chars from STRUT/approach name, Purpose is short CamelCase description (PRMT-NM-04). Total under 30 chars. [NN]-[Topic] must be unique across session.
 
 Read PROMPTS_GUIDES.md BEFORE writing. Verify against all PRMT-* rules in PROMPTS_RULES.md.
 Remove ALL XML comments after creating the document. First non-empty line must be frontmatter (optional), Commentary, or opening fence.
 Heading recommendation (PRMT-FT-07): use `## Prompt N - [title]` before each prompt for readability.
 If headings are used, ALL prompts MUST have headings (consistency enforced).
-Prompt Marker (PRMT-FT-10): all prompt sequences MUST include a human-readable prefix `[ NN / NN ]` as first line inside each prompt's fence. When using a planning document (PRMT-SC-06), marker includes plan summary: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`.
+Prompt Marker (PRMT-FT-10): all prompt sequences MUST include a file identifier prefix `[NN]-[Topic] [ NN / NN ]` as first line inside each prompt's fence, where `[NN]-[Topic]` is derived from the filename `_PROMPTS_[NN]-[Topic].md`. When using a planning document (PRMT-SC-06), marker includes plan summary: `[NN]-[Topic] [ NN / NN ] - [plan step ID] [brief summary]`.
 
 Execution model (PRMT-EX-01/02): Each prompt is a separate turn for an execution engine. NEVER self-execute prompt files by running all prompts in one response. The writing agent creates the file; the execution engine runs it. -->
 
@@ -27,6 +27,8 @@ Heading before the fence is optional but recommended (PRMT-FT-07). -->
 ## Prompt 1 - [short title]
 
 ```
+[NN]-[Topic] [ 01 / NN ] - [short title]
+
 Read [context-loading directive: files or cards to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
@@ -56,6 +58,8 @@ Remove if no commentary needed. -->
 <!-- [Expected state from previous step and purpose of this prompt. Max 1 sentence in final files.] -->
 
 ````
+[NN]-[Topic] [ 02 / NN ] - [short title]
+
 Read [context-loading directive: files or cards to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
@@ -92,6 +96,8 @@ prompt_system: IPPS
 ## Prompt 1 - Security analysis
 
 ```
+01-SecFix-Analysis [ 01 / 02 ] - Security analysis
+
 Read `src/auth/` directory and `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P1-S1.
 Planning document: `__STRUT_SecurityFix.md`, step P1-S1.
 
@@ -117,6 +123,8 @@ Verify: Output a numbered list of findings with severity (HIGH/MEDIUM/LOW) and f
 <!-- Previous step produced a numbered findings list. Fix the highest-severity item. -->
 
 ````
+01-SecFix-Analysis [ 02 / 02 ] - Fix highest-severity finding
+
 Read `src/auth/` and the findings list from `_INFO_SecurityAnalysis.md`. Treat earlier conversation as compacted. Step P1-S2.
 Planning document: `__STRUT_SecurityFix.md`, step P1-S2.
 
