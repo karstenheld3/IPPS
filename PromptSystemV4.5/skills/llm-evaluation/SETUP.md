@@ -63,13 +63,15 @@ deactivate
 Create `.env` file in your working directory (where you run scripts). Use `--keys-file` parameter if running scripts from a different directory:
 
 ```powershell
-$envFile = ".env"
+$envFile = Join-Path (Get-Location).Path ".env"
 if (-not (Test-Path $envFile)) {
-    @"
+    $envContent = @"
 # LLM API Keys
 OPENAI_API_KEY=sk-proj-your-key-here
 ANTHROPIC_API_KEY=sk-ant-api03-your-key-here
-"@ | Set-Content $envFile
+
+"@
+    [System.IO.File]::WriteAllText($envFile, $envContent, (New-Object System.Text.UTF8Encoding $false))   # UTF-8 without BOM, as the Python scripts read it
     Write-Host "Created $envFile - edit with your API keys" -ForegroundColor Yellow
 } else {
     Write-Host "$envFile already exists" -ForegroundColor Green
@@ -78,11 +80,11 @@ ANTHROPIC_API_KEY=sk-ant-api03-your-key-here
 
 **IMPORTANT:** Add `.env` to `.gitignore`:
 ```powershell
-$gitignore = ".gitignore"
+$gitignore = Join-Path (Get-Location).Path ".gitignore"
 if (Test-Path $gitignore) {
-    $content = Get-Content $gitignore -Raw
+    $content = Get-Content -LiteralPath $gitignore -Raw -Encoding UTF8
     if ($content -notmatch "\.env") {
-        Add-Content $gitignore "`n# API Keys`n.env"
+        [System.IO.File]::AppendAllText($gitignore, "`n# API Keys`n.env`n", (New-Object System.Text.UTF8Encoding $false))
         Write-Host "Added .env to .gitignore" -ForegroundColor Green
     }
 }

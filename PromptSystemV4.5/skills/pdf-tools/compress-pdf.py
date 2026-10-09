@@ -58,7 +58,7 @@ def analyze_pdf(input_path: str) -> dict:
   try:
     result = subprocess.run(
       [PDFINFO_PATH, input_path],
-      capture_output=True, text=True, timeout=30
+      capture_output=True, encoding='utf-8', errors='replace', timeout=30   # pdfinfo writes UTF-8 (-enc default)
     )
     for line in result.stdout.splitlines():
       if line.startswith("Pages:"):
@@ -72,7 +72,7 @@ def analyze_pdf(input_path: str) -> dict:
   try:
     result = subprocess.run(
       [PDFIMAGES_PATH, "-list", input_path],
-      capture_output=True, text=True, timeout=60
+      capture_output=True, encoding='utf-8', errors='replace', timeout=60
     )
     lines = result.stdout.splitlines()
     image_lines = [l for l in lines if l.strip() and not l.startswith("page") and not l.startswith("-")]
@@ -151,7 +151,7 @@ def run_ghostscript(input_path: str, output_path: str, preset: str, extra_flags:
   args.extend([f"-sOutputFile={output_path}", input_path])
     
   try:
-    result = subprocess.run(args, capture_output=True, text=True, timeout=600)
+    result = subprocess.run(args, capture_output=True, encoding='utf-8', errors='replace', timeout=600)
     return result.returncode == 0
   except Exception as e:
     print(f"  Error running Ghostscript: {e}")
@@ -170,7 +170,7 @@ def run_qpdf_optimize(input_path: str, output_path: str) -> bool:
   ]
     
   try:
-    result = subprocess.run(args, capture_output=True, text=True, timeout=300)
+    result = subprocess.run(args, capture_output=True, encoding='utf-8', errors='replace', timeout=300)
     return result.returncode == 0
   except Exception as e:
     print(f"  Error running QPDF: {e}")

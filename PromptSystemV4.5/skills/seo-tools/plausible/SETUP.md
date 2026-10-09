@@ -23,7 +23,7 @@ PLAUSIBLE_BASE_URL=https://plausible.io
 ## Verify Connection
 
 ```powershell
-$token = (Get-Content "E:\Dev\.tools\.api-keys.txt" | Where-Object { $_ -match "^PLAUSIBLE_API_KEY=" }) -replace "PLAUSIBLE_API_KEY=", ""
+$token = (Get-Content -LiteralPath "E:\Dev\.tools\.api-keys.txt" -Encoding UTF8 | Where-Object { $_ -match "^PLAUSIBLE_API_KEY=" }) -replace "PLAUSIBLE_API_KEY=", ""
 $headers = @{ Authorization = "Bearer $token" }
 Invoke-RestMethod -Uri "https://plausible.io/api/v2/query" -Headers $headers -Method Post -Body '{"site_id":"yourdomain.com","metrics":["visitors"],"date_range":"7d"}' -ContentType "application/json"
 ```

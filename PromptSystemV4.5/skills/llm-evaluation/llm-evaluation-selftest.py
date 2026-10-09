@@ -63,7 +63,7 @@ class TestResult:
 def run_script(script: str, args: List[str], cwd: Path) -> Tuple[int, str, str]:
   """Run a Python script and return exit code, stdout, stderr"""
   cmd = [sys.executable, str(cwd / script)] + args
-  result = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
+  result = subprocess.run(cmd, capture_output=True, encoding='utf-8', env={**os.environ, 'PYTHONUTF8': '1'}, cwd=cwd)   # child writes UTF-8 to the pipe
   return result.returncode, result.stdout, result.stderr
 
 def create_test_fixtures(temp_dir: Path) -> Dict[str, Path]:

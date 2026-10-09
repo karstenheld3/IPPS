@@ -11,7 +11,7 @@ $keybindingsPath = "$env:APPDATA\Windsurf\User\keybindings.json"
 
 # Read existing keybindings or create empty array
 if (Test-Path $keybindingsPath) {
-    $keybindings = Get-Content $keybindingsPath -Raw | ConvertFrom-Json
+    $keybindings = Get-Content -LiteralPath $keybindingsPath -Raw -Encoding UTF8 | ConvertFrom-Json
 } else {
     $keybindings = @()
 }
@@ -44,8 +44,8 @@ foreach ($binding in $newBindings) {
     }
 }
 
-# Save
-$keybindings | ConvertTo-Json -Depth 10 | Set-Content $keybindingsPath -Encoding UTF8
+# Save: UTF-8 without BOM (Set-Content -Encoding UTF8 adds a BOM in 5.1); -InputObject keeps a 1-element list a JSON array
+[System.IO.File]::WriteAllText($keybindingsPath, (ConvertTo-Json -InputObject @($keybindings) -Depth 10), (New-Object System.Text.UTF8Encoding $false))
 Write-Host "`nKeybindings saved to: $keybindingsPath"
 Write-Host "Restart Windsurf to apply changes."
 ```

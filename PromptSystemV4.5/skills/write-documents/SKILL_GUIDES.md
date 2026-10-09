@@ -131,7 +131,7 @@ $targetServer = @{
 
 # Read existing config
 if (Test-Path $configPath) {
-    $config = Get-Content $configPath -Raw | ConvertFrom-Json -AsHashtable
+    $config = Get-Content -LiteralPath $configPath -Raw -Encoding utf8 | ConvertFrom-Json -AsHashtable
 } else {
     $config = @{ mcpServers = @{} }
 }
@@ -159,7 +159,7 @@ Copy-Item $configPath $backupPath -ErrorAction SilentlyContinue
 
 # Add/update server
 $config.mcpServers["server-name"] = $targetServer
-$config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
+$config | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $configPath -Encoding utf8NoBOM   # PowerShell 7 (-AsHashtable); JSON without BOM
 ```
 
 Requirements: idempotent, backup first, handle PSCustomObject, compare before write.

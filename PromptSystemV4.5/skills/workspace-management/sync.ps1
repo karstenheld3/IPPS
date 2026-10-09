@@ -770,7 +770,8 @@ function Update-LastSync {
     $configRaw = Get-Content -LiteralPath $ConfigPath -Raw -Encoding UTF8
     $config = $configRaw | ConvertFrom-Json
     $config.last_sync = $Timestamp
-    $config | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $ConfigPath -Encoding UTF8
+    $configFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ConfigPath)
+    [System.IO.File]::WriteAllText($configFull, ($config | ConvertTo-Json -Depth 10) + [Environment]::NewLine, (New-Object System.Text.UTF8Encoding $false))   # JSON without BOM
 }
 
 function Write-VerboseLog {
@@ -1001,16 +1002,16 @@ $outputContent = $allOutput.ToString().TrimEnd()
 
 # Write markdown preview file if requested (diff mode only)
 if ($preview_file -and $diff) {
-    $previewFileFull = [System.IO.Path]::GetFullPath($preview_file)
+    $previewFileFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($preview_file)   # [IO.Path]::GetFullPath ignores the PowerShell location
     $firstSource = if ($syncConfig.targets.Count -gt 0) { $syncConfig.targets[0].source } else { 'unknown' }
     $markdownPreview = New-MarkdownPreview -AllTargetResults $allTargetResults -DeprecatedFiles $deprecatedList -SourcePath $firstSource -TargetCount $syncConfig.targets.Count
-    $markdownPreview | Set-Content -Path $previewFileFull -Encoding UTF8
+    [System.IO.File]::WriteAllText($previewFileFull, (@($markdownPreview) -join [Environment]::NewLine) + [Environment]::NewLine, (New-Object System.Text.UTF8Encoding $false))
     Write-Output "Preview written to: '$previewFileFull'."
 }
 
 if ($output_file) {
-    $outputFileFull = [System.IO.Path]::GetFullPath($output_file)
-    $outputContent | Set-Content -Path $outputFileFull -Encoding UTF8
+    $outputFileFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($output_file)
+    [System.IO.File]::WriteAllText($outputFileFull, $outputContent + [Environment]::NewLine, (New-Object System.Text.UTF8Encoding $false))
     Write-Output "Summary: see full report at '$outputFileFull'."
 } else {
     Write-Output $outputContent

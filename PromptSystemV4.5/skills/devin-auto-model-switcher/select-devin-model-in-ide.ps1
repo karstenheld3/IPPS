@@ -31,7 +31,7 @@ if (-not (Test-Path $registryPath)) {
     Write-Host "Tip: Run update-model-registry workflow to get full model list" -ForegroundColor Cyan
     $registry = @{models = $safeFallbackModels}
 } else {
-    $registry = Get-Content $registryPath -Raw | ConvertFrom-Json
+    $registry = Get-Content -LiteralPath $registryPath -Raw -Encoding UTF8 | ConvertFrom-Json
 }
 
 # Fuzzy match: score by word matches, prefer lower cost when tied

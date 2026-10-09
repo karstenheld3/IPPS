@@ -92,7 +92,7 @@ $targetServer = @{
 $needsUpdate = $false
 if (Test-Path $configPath) {
     try {
-        $configContent = Get-Content $configPath -Raw
+        $configContent = Get-Content -LiteralPath $configPath -Raw -Encoding utf8
         if ([string]::IsNullOrWhiteSpace($configContent)) {
             $config = @{ mcpServers = @{} }
             $needsUpdate = $true
@@ -179,7 +179,7 @@ if ($needsUpdate) {
     }
     
     try {
-        $config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8 -ErrorAction Stop
+        $config | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $configPath -Encoding utf8NoBOM -ErrorAction Stop
         Write-Host "Added Playwright MCP to Devin MCP config" -ForegroundColor Green
     } catch {
         Write-Host "[FAIL] Could not write config: $_" -ForegroundColor Red

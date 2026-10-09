@@ -353,11 +353,13 @@ Delete all found items immediately after preview (normal mode only):
 - INFO markers: strip `[VERIFIED]` and `VERIFIED, ` via text replacement
 
 ```powershell
-# Strip verification markers from INFO documents
-$content = Get-Content -Path $file -Raw -Encoding UTF8
+# Strip verification markers from INFO documents (UTF-8 without BOM; Set-Content -Encoding UTF8 adds a BOM in PowerShell 5.1)
+$utf8NoBom = New-Object System.Text.UTF8Encoding $false
+$fullPath = (Resolve-Path -LiteralPath $file).ProviderPath
+$content = [System.IO.File]::ReadAllText($fullPath, $utf8NoBom)
 $content = $content -replace ' \[VERIFIED\]', ''
 $content = $content -replace 'VERIFIED, ', ''
-Set-Content -Path $file -Value $content -Encoding UTF8 -NoNewline
+[System.IO.File]::WriteAllText($fullPath, $content, $utf8NoBom)
 ```
 
 ## Step 5: Report

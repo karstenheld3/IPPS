@@ -106,7 +106,7 @@ Available example files:
 - [ ] Verticals stay in one column
 - [ ] Text does not touch frame (min 1 space padding)
 - [ ] Labels are 1-3 words, one concept per box
-- [ ] Width within limit (70 for Markdown, 120 for documents, 180 max)
+- [ ] Width within limit (70 for Markdown, 100 for articles for publishing, 120 for documents, 180 max)
 - [ ] Title line, legend line, and notes present
 - [ ] 3-7 primary elements, one flow direction
 - [ ] Connectors routed in gutters, not through boxes

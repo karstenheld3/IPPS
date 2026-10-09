@@ -26,7 +26,7 @@ BASE_URL_SANDBOX = "https://sandbox.dataforseo.com/v3"
 def load_credentials(path: str = API_KEYS_PATH) -> dict:
     """Load API keys from .api-keys.txt file."""
     keys = {}
-    with open(path) as f:
+    with open(path, encoding="utf-8-sig") as f:
         for line in f:
             line = line.strip()
             if "=" in line and not line.startswith("#"):

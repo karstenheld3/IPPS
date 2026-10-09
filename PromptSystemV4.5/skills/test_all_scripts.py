@@ -110,7 +110,7 @@ def run_script(script_path, args, timeout=30, cwd=None):
   cmd = [sys.executable, str(script_path)] + args
   try:
     r = subprocess.run(
-      cmd, capture_output=True, text=True, timeout=timeout,
+      cmd, capture_output=True, encoding='utf-8', env={**os.environ, 'PYTHONUTF8': '1'}, timeout=timeout,   # child writes UTF-8 to the pipe
       cwd=cwd or str(script_path.parent)
     )
     return r.returncode, r.stdout, r.stderr
@@ -169,7 +169,7 @@ def test_2_help(R):
   try:
     r = subprocess.run(
       [sys.executable, "-m", "llm_computer_use", "--version"],
-      capture_output=True, text=True, timeout=10, cwd=str(cu_dir)
+      capture_output=True, encoding='utf-8', env={**os.environ, 'PYTHONUTF8': '1'}, timeout=10, cwd=str(cu_dir)
     )
     if r.returncode == 0 and "llm-computer-use" in (r.stdout + r.stderr):
       R.ok("--version: llm-computer-use (package)")

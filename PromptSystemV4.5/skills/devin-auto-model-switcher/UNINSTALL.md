@@ -15,7 +15,7 @@ if (-not (Test-Path $keybindingsPath)) {
 }
 
 # Read existing keybindings
-$keybindings = Get-Content $keybindingsPath -Raw | ConvertFrom-Json
+$keybindings = Get-Content -LiteralPath $keybindingsPath -Raw -Encoding UTF8 | ConvertFrom-Json
 
 # Commands to remove
 $commandsToRemove = @(
@@ -25,12 +25,13 @@ $commandsToRemove = @(
 
 # Filter out our keybindings
 $originalCount = $keybindings.Count
-$keybindings = $keybindings | Where-Object { $_.command -notin $commandsToRemove }
+$keybindings = @($keybindings | Where-Object { $_.command -notin $commandsToRemove })
 $removedCount = $originalCount - $keybindings.Count
 
 if ($removedCount -gt 0) {
     # Save
-    $keybindings | ConvertTo-Json -Depth 10 | Set-Content $keybindingsPath -Encoding UTF8
+    # UTF-8 without BOM (Set-Content -Encoding UTF8 adds a BOM in 5.1); -InputObject keeps 0 or 1 elements a JSON array
+    [System.IO.File]::WriteAllText($keybindingsPath, (ConvertTo-Json -InputObject $keybindings -Depth 10), (New-Object System.Text.UTF8Encoding $false))
     Write-Host "Removed $removedCount keybinding(s)"
     Write-Host "Restart Windsurf to apply changes."
 } else {

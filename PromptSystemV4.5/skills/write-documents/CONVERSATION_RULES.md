@@ -20,9 +20,10 @@ Translation (TR)
 
 Email (EM)
 - CV-EM-01: Email header format with all fields on one line
-- CV-EM-02: Send via Playwright Gmail UI, never CLI tools
+- CV-EM-02: Compose via Playwright Gmail UI, never CLI tools
 - CV-EM-03: Email signature included only on first occurrence per sender
 - CV-EM-04: Draft emails marked with `**STATUS: DRAFT - NOT SENT**`
+- CV-EM-05: NEVER SEND - agent drafts, user sends. Applies to email, WhatsApp, Signal, contact forms, and every other outbound message
 
 Effective Writing - see `APAPALAN_RULES.md` Communication (CM) section: AP-CM-01, AP-CM-02, AP-CM-03
 
@@ -86,6 +87,7 @@ Humanizing (HM) - see [CONVERSATION_HUMANIZING_RULES.md](CONVERSATION_HUMANIZING
 - [Native Characters](#native-characters)
 - [Email Header Format](#email-header-format)
 - [Email Sending](#email-sending)
+- [Never Send](#never-send)
 - [Draft Emails](#draft-emails)
 - [WhatsApp Message Format](#whatsapp-message-format)
 - [WhatsApp Section Heading](#whatsapp-section-heading)
@@ -229,7 +231,23 @@ Always use Playwright Gmail UI. CLI send tools have body encoding failures.
 
 **BAD:** `cli-tool send --to "contact@example.com" --subject "Re: Meeting" --body "..."`
 
-**GOOD:** Open Gmail in Playwright, compose and send via UI.
+**GOOD:** Open Gmail in Playwright, compose via UI, leave as draft. The user clicks Send (CV-EM-05).
+
+## Never Send
+
+The agent never sends, submits, or posts any outbound message. It drafts (in the conversation file, in chat, or as a Gmail draft via Playwright) and stops. The user reviews and sends. No exception for "send it", "go ahead", or autonomous workflows (`/go`).
+
+**BAD:**
+```
+Agent composes the reply in Gmail and clicks Send.
+Agent fills the contact form and clicks Submit.
+```
+
+**GOOD:**
+```
+Agent composes the reply in Gmail, attaches files, saves the draft, and reports:
+"Draft ready in Gmail - review and send."
+```
 
 ## Draft Emails
 
