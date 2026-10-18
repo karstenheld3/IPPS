@@ -31,6 +31,7 @@ Verify factual claims in documents by extracting sources, facts, and conclusions
 - Download source files to `_DOWNLOADS_gitignore/` (not checked in)
 - Transcribe sources to `_SOURCES/` (checked in - preserves evidence)
 - Full-page screenshots MUST use `fullPage: true, type: "jpeg"` per @skills:ms-playwright-mcp
+- **Cascade: `gesetze-im-internet.de` Playwright only** - `search_web` / `read_url_content` crash the conversation
 - Run `/verify` after workflow complete
 
 ## Mandatory Re-read
@@ -139,7 +140,7 @@ Download and transcribe URL sources to local storage for reliable verification.
 
 1. Create `_DOWNLOADS_gitignore/` and `_SOURCES/` subfolders adjacent to review output location
 2. For each URL source:
-   - Web pages: `read_url_content` (preferred) or ms-playwright-mcp `browser_navigate` + `browser_snapshot` (fallback). Save text to `_SOURCES/[SOURCE_ID]_[name].md`. Visual archive: `browser_take_screenshot(fullPage: true, type: "jpeg")` to `_DOWNLOADS_gitignore/`
+   - Web pages: `read_url_content` (preferred; Cascade: not for `gesetze-im-internet.de`) or ms-playwright-mcp `browser_navigate` + `browser_snapshot` (fallback). Save text to `_SOURCES/[SOURCE_ID]_[name].md`. Visual archive: `browser_take_screenshot(fullPage: true, type: "jpeg")` to `_DOWNLOADS_gitignore/`
    - PDFs: download to `_DOWNLOADS_gitignore/[SOURCE_ID]_[name].pdf`, process via @skills:pdf-tools (`pdftotext` for text-native, `convert-pdf-to-jpg` + @skills:llm-transcription for scanned). Save transcription to `_SOURCES/`
    - Images: download to `_DOWNLOADS_gitignore/`, transcribe via @skills:llm-transcription to `_SOURCES/`
 3. For file/document sources: read directly (no download needed)

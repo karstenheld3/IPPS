@@ -29,7 +29,7 @@ Read before proceeding:
 - Deep beats wide - tokens on 2-3 well-researched options over 10+ superficial ones
 - Document exclusions - what was NOT considered and why
 - Keep ALL sources - even if findings were minimal
-- Site exceptions - use Playwright browser (NOT `search_web`/`read_url_content`) for: `gesetze-im-internet.de`
+- **Cascade: `gesetze-im-internet.de` Playwright only** - `search_web` / `read_url_content` crash the conversation
 
 ## Output
 

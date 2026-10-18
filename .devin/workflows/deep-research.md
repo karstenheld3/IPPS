@@ -9,6 +9,10 @@ description: Execute deep research (MEPI or MCPI) with domain-specific patterns 
 - @skills:research-methods for research strategies, domain profiles, source processing
 - @skills:session-management for Topic Folder creation and session detection
 
+## MUST-NOT-FORGET
+
+- **Cascade: `gesetze-im-internet.de` Playwright only** - `search_web` / `read_url_content` crash the conversation
+
 ## Execution
 
 1. Read @skills:research-methods SKILL.md for core principles and phase model

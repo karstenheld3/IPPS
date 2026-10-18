@@ -28,7 +28,7 @@ $ErrorActionPreference = "Stop"
 $baseUrl = "https://api.dataforseo.com/v3"
 
 # --- Load credentials ---
-$base64 = (Get-Content $ApiKeysPath | Where-Object { $_ -match "^DATAFORSEO_BASE64=" }) -replace "DATAFORSEO_BASE64=", ""
+$base64 = (Get-Content -LiteralPath $ApiKeysPath -Encoding UTF8 | Where-Object { $_ -match "^DATAFORSEO_BASE64=" }) -replace "DATAFORSEO_BASE64=", ""
 if (-not $base64) {
     Write-Error "Credential load failed -> DATAFORSEO_BASE64 not found in '$ApiKeysPath'"
     exit 1
@@ -36,7 +36,18 @@ if (-not $base64) {
 
 $headers = @{
     "Authorization" = "Basic $base64"
-    "Content-Type"  = "application/json"
+}
+$utf8NoBom = New-Object System.Text.UTF8Encoding $false
+
+# --- Helper: HTTP request with UTF-8 body and response ---
+# Windows PowerShell 5.1 encodes string bodies and decodes responses without charset as ISO-8859-1 (non-ASCII keywords break)
+function Invoke-DfsRequest {
+    param([string]$Uri, [string]$Method, [string]$JsonBody, [int]$TimeoutSec)
+
+    $parameters = @{ Uri = $Uri; Headers = $headers; Method = $Method; TimeoutSec = $TimeoutSec; UseBasicParsing = $true }
+    if ($JsonBody) { $parameters.Body = $utf8NoBom.GetBytes($JsonBody); $parameters.ContentType = "application/json; charset=utf-8" }
+    $rawResponse = Invoke-WebRequest @parameters
+    return ($utf8NoBom.GetString($rawResponse.RawContentStream.ToArray()) | ConvertFrom-Json)
 }
 
 # --- Helper: POST to API ---
@@ -46,7 +57,7 @@ function Invoke-DfsApi {
     Write-Host "Querying '$Endpoint'..." -ForegroundColor DarkGray
     $jsonBody = ConvertTo-Json -InputObject $Body -Depth 10 -Compress
     try {
-        $response = Invoke-RestMethod -Uri "$baseUrl/$Endpoint" -Headers $headers -Method Post -Body $jsonBody -TimeoutSec 30
+        $response = Invoke-DfsRequest -Uri "$baseUrl/$Endpoint" -Method Post -JsonBody $jsonBody -TimeoutSec 30
     }
     catch {
         $statusCode = $_.Exception.Response.StatusCode.value__
@@ -77,7 +88,7 @@ function Invoke-DfsApi {
 switch ($Action) {
     "balance" {
         Write-Host "Fetching account balance..." -ForegroundColor DarkGray
-        $userData = Invoke-RestMethod -Uri "$baseUrl/appendix/user_data" -Headers $headers -Method Get -TimeoutSec 15
+        $userData = Invoke-DfsRequest -Uri "$baseUrl/appendix/user_data" -Method Get -TimeoutSec 15
         $money = $userData.tasks[0].result[0].money
         Write-Host "Balance:      `$$($money.balance)" -ForegroundColor Cyan
         Write-Host "Total spent:  `$$($money.total)"

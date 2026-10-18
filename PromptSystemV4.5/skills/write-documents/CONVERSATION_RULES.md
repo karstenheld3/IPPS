@@ -24,6 +24,7 @@ Email (EM)
 - CV-EM-03: Email signature included only on first occurrence per sender
 - CV-EM-04: Draft emails marked with `**STATUS: DRAFT - NOT SENT**`
 - CV-EM-05: NEVER SEND - agent drafts, user sends. Applies to email, WhatsApp, Signal, contact forms, and every other outbound message
+- CV-EM-06: No Markdown in draft bodies - plain text only, no bold/italic/bullets/headers
 
 Effective Writing - see `APAPALAN_RULES.md` Communication (CM) section: AP-CM-01, AP-CM-02, AP-CM-03
 
@@ -247,6 +248,26 @@ Agent fills the contact form and clicks Submit.
 ```
 Agent composes the reply in Gmail, attaches files, saves the draft, and reports:
 "Draft ready in Gmail - review and send."
+```
+
+## No Markdown in Draft Bodies
+
+Email and message draft bodies are plain text. No Markdown formatting: no bold (**text**), no italic (*text*), no bullet lists (- item), no numbered lists (1. item), no Markdown headers (##). Structural formatting (paragraphs, blank lines) only. Markdown is lost on copy/paste into email clients and reads as formatting artifacts.
+
+**BAD:**
+```
+**Question:** Does Tuesday work?
+
+- **Point 1:** First item
+- **Point 2:** Second item
+```
+
+**GOOD:**
+```
+Question: Does Tuesday work?
+
+Point 1: First item
+Point 2: Second item
 ```
 
 ## Draft Emails

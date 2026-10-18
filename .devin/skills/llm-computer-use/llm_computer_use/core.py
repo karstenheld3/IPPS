@@ -451,7 +451,7 @@ class AgentSession:
   def save_log(self, path: str = None):
     if path is None:
       path = f"session_{self.session_id}.json"
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
       json.dump({"session_id": self.session_id, "task_prompt": self.task_prompt, "status": self.status.value,
              "iterations": self.current_iteration, "dry_run": self.dry_run,
              "tokens": {"input": self.total_input_tokens, "output": self.total_output_tokens},

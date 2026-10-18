@@ -184,6 +184,7 @@ if (-not $Styles.ContainsKey($TargetStyle)) {
 }
 
 $enc = [System.Text.UTF8Encoding]::new($false)
+$Path = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)   # absolute: [IO.File] ignores the PowerShell location
 $allLines = [System.IO.File]::ReadAllLines($Path, $enc)
 
 if ($FirstLine -lt 1 -or $FirstLine -gt $allLines.Count) {
@@ -212,7 +213,7 @@ if ($DryRun) {
     Write-Host "  $($FirstLine+$i): $($converted[$i])"
   }
 } else {
-  $outPath = if ($OutputFile) { $OutputFile } else { $Path }
+  $outPath = if ($OutputFile) { $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputFile) } else { $Path }
   [System.IO.File]::WriteAllLines($outPath, $allLines, $enc)
   Write-Host "Converted lines $FirstLine-$LastLine : $SourceStyle -> $TargetStyle -> $outPath"
 }

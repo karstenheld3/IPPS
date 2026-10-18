@@ -36,9 +36,9 @@ Evidence sources: target document containing diagram, session conversation, `ASC
 
 ### AA-PD-05: Verified Width Limit
 
-- Action: agent checked diagram width against consumer limit (70 Markdown, 120 documents, 180 max)
-- Evidence: diagram fits within stated width without wrapping
-- Failure indicator: diagram wraps or exceeds 180 chars
+- Action: agent checked diagram width against consumer limit (70 Markdown, 100 articles for publishing, 120 documents, 180 max)
+- Evidence: diagram fits within stated width without wrapping; in articles for publishing every code-block line is <= 100 chars
+- Failure indicator: diagram wraps, exceeds 180 chars, or a code-block line in an article for publishing exceeds 100 chars
 - References: AA-WD-01
 
 ### AA-PD-06: Verified Arrow Formatting

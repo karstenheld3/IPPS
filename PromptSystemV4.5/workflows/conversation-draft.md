@@ -50,6 +50,7 @@ Layer 3 - CONVERSATION_HUMANIZING_RULES.md (voice)
 - Never invent greetings/closings - use user's habitual forms (CV-HM-06)
 - Structural sections (Log, Todos, Status) = zero humanizing (CV-HM-01)
 - When a CONVERSATION file is referenced or loaded, ALWAYS write draft to that file (Step 6)
+- NO MARKDOWN in draft bodies - plain text only, no bold/italic/bullets/headers (CV-EM-06)
 
 ## Trigger
 

@@ -19,6 +19,7 @@ Re-usable card for Devin/Cascade agents. Copy to project root as `__CARD_[TOPIC]
 - `Get-Content -Wait`, `tail -f` - stream indefinitely - generic stream rule
 - `Get-ChildItem -Recurse` / `Select-String -Recurse` on large trees - full enumeration before return; use rg.exe - generic enumeration rule
 - `Get-Content | Select-Object -First N` on large or locked files - pipeline buffers before stop; use `-TotalCount` - tested
+- Cascade `search_web` / `read_url_content` on `gesetze-im-internet.de` - crashes the conversation; use Playwright
 - [project-specific: build.bat / ship.bat containing pause; CLI tools without non-interactive flags; dev servers]
 
 ## Time caps

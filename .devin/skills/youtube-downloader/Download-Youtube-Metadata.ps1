@@ -52,6 +52,7 @@ begin {
 
     # Output file path
     $OutputFile = Join-Path $OutputFolder ".tmp_${Topic}_youtube-metadata.json"
+    $OutputFile = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputFile)   # absolute: [IO.File] ignores the PowerShell location
 
     # Check existing file
     if ((Test-Path $OutputFile) -and -not $Force) {
@@ -183,9 +184,9 @@ end {
         videos  = $allVideos.ToArray()
     }
 
-    # Write JSON with UTF-8 encoding
+    # Write JSON as UTF-8 without BOM ([Text.Encoding]::UTF8 writes a BOM)
     $jsonText = $output | ConvertTo-Json -Depth 4
-    [System.IO.File]::WriteAllText($OutputFile, $jsonText, [System.Text.Encoding]::UTF8)
+    [System.IO.File]::WriteAllText($OutputFile, $jsonText, (New-Object System.Text.UTF8Encoding $false))
 
     # Summary
     $videoWord = if ($allVideos.Count -eq 1) { "video" } else { "videos" }

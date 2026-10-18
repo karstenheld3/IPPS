@@ -115,6 +115,42 @@ For each sub-question (S-node), select evidence that:
 
 When the AMINTON tree has 3+ Q-branches, add a tree diagram before the Executive Summary. The diagram uses Unicode box-drawing characters per `ASCII_ART_GUIDES.md`. Purpose: reader sees the argument structure at a glance before reading prose. The tree diagram supplements the AMINTON tree appendix (machine-readable) with a visual rendering for human readers.
 
+**Format rules:**
+- Label the root argument `Argument:` (not `A`) - readable without AMINTON knowledge
+- Continue multi-line argument text with `│` prefix, not blank-space indentation
+- Separate argument from questions with a bare `│` line
+- Use `├─ Qn  ` (2 spaces after Qn) for question branches
+- Wrap long evidence lines with `│   │       ` continuation
+- Precede the diagram with one sentence explaining what A and Q1-Q4 mean and how the parts map to the article structure
+- Keep all lines up to 100 chars to avoid wrapping on narrow viewports
+- Example:
+
+```
+The article argues one governing thesis (A) and answers four questions (Q1-Q4)
+a reader would raise against it. Part I provides the evidence base, Part II makes
+the argument, Part III turns it into a playbook.
+
+PART I   Situation: [one-line summary]
+            │
+            v
+Argument:  [Root argument A - first line]
+│          [continuation lines with │ prefix]
+│
+├─ Q1  [Question 1]
+│   ├─ [evidence - keep up to 100 chars, wrap with │   │       ]
+│   ├─ [evidence]
+│   └─ [evidence]
+├─ Q2  [Question 2]
+│   ├─ [evidence]
+│   └─ [evidence]
+└─ Q3  [Question 3]
+    ├─ [evidence]
+    └─ [evidence]
+            │
+            v
+PART III [one-line summary]
+```
+
 ## 5. Writing the Prose Article
 
 Prose is DERIVED FROM the completed tree, not written independently. Every paragraph must map to an AMINTON node. If prose drifts from the tree, the fix is always: update the tree first, then regenerate prose from it.

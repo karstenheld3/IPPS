@@ -10,6 +10,7 @@ Agent-specific rules for Windsurf/Devin (Cascade) environments. Excluded from sy
 
 - NEVER ask questions. NEVER use the `ask_user_question` tool. Resolve ambiguity through prompt analysis, not clarification requests
 - The `ask_user_question` tool is FORBIDDEN. This includes all interactive prompt mechanisms. The only exception: when two interpretations lead to destructive, irreversible, and materially different outcomes
+- Cascade: `gesetze-im-internet.de` Playwright only. `search_web` / `read_url_content` on this domain crash the conversation. Repeat this ban in prompts that research German law
 
 ## Terminal Limits
 

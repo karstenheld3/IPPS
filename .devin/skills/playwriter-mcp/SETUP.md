@@ -115,7 +115,7 @@ $targetServer = @{
 # Read existing config
 if (Test-Path $configPath) {
     try {
-        $configContent = Get-Content $configPath -Raw
+        $configContent = Get-Content -LiteralPath $configPath -Raw -Encoding utf8
         if ([string]::IsNullOrWhiteSpace($configContent)) {
             $config = @{ mcpServers = @{} }
         } else {
@@ -158,7 +158,7 @@ if (Test-Path $configPath) {
     Write-Host "Backup: $backupPath" -ForegroundColor Cyan
 }
 
-$config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
+$config | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $configPath -Encoding utf8NoBOM
 Write-Host "Added Playwriter to Devin MCP config" -ForegroundColor Green
 
 # === Installation Summary ===

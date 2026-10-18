@@ -7,7 +7,7 @@ __version__ = "0.5.0"
 def load_api_key(keys_file: str = None) -> str:
   """Load API key from file or environment."""
   if keys_file and os.path.exists(keys_file):
-    with open(keys_file, "r") as f:
+    with open(keys_file, "r", encoding="utf-8-sig") as f:
       for line in f:
         if line.startswith("ANTHROPIC_API_KEY="):
           return line.split("=", 1)[1].strip()

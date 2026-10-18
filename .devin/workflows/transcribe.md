@@ -227,11 +227,12 @@ foreach ($file in $files) {
     } else {
         $content += "`n---`n<!-- Page {0:D3} -->`n`n" -f $pageNum
     }
-    $content += (Get-Content $file.FullName -Raw).TrimEnd()
+    $content += (Get-Content -LiteralPath $file.FullName -Raw -Encoding UTF8).TrimEnd()   # without -Encoding, PowerShell 5.1 reads UTF-8 as ANSI
     $pageNum++
 }
 $finalContent = ($content -join "").TrimEnd()
-$finalContent | Out-File $output -Encoding UTF8
+$outputFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($output)   # .NET resolves relative paths against the process directory
+[System.IO.File]::WriteAllText($outputFull, $finalContent + "`n", (New-Object System.Text.UTF8Encoding $false))   # Out-File -Encoding UTF8 adds a BOM in 5.1
 Write-Output "Merged $($files.Count) files to $output"
 ```
 

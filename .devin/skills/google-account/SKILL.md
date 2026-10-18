@@ -372,7 +372,7 @@ export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/
 **Cause**: Using wrong client_id in OAuth URL
 **Fix**: Get correct client_id from your client secret file:
 ```powershell
-Get-Content "<CLIENT_SECRET_PATH>" | ConvertFrom-Json | Select-Object -ExpandProperty installed | Select-Object client_id
+Get-Content -LiteralPath "<CLIENT_SECRET_PATH>" -Raw -Encoding UTF8 | ConvertFrom-Json | Select-Object -ExpandProperty installed | Select-Object client_id
 # Client secret path is in [WORKSPACE_FOLDER]/!NOTES.md under "gogcli" section
 ```
 

@@ -385,7 +385,7 @@ read_url_content("https://github.com/[org]/[repo]/issues/...")
 
 Mandatory tool overrides for specific websites. These rules take precedence over the default tool selection flowchart.
 
-- **`gesetze-im-internet.de`** - MUST use Playwright browser (ms-playwright-mcp). Never use `search_web` or `read_url_content` for this domain. The `search_web` tool produces UTF-8 parsing errors on German legal text encoding and stops the agent. Navigate directly via `browser_navigate`, extract content via `browser_snapshot` or `browser_evaluate`.
+- **`gesetze-im-internet.de`** (Cascade) - Playwright only (`browser_navigate` + `browser_snapshot`). `search_web` / `read_url_content` on this domain crash the conversation (UTF-8 parsing error).
 
 ## Anti-Patterns
 

@@ -8,7 +8,7 @@ Usage:
   python test-call-llm.py --keys-file path/to/keys.txt --model gpt-5.4
 """
 
-import sys, json, argparse, subprocess
+import sys, os, json, argparse, subprocess
 from pathlib import Path
 from datetime import datetime
 
@@ -143,7 +143,8 @@ def run_test(model: str, effort: str, output_len: str, verbosity: str, method: s
       cmd,
       cwd=str(script_dir),
       capture_output=True,
-      text=True,
+      encoding='utf-8',
+      env={**os.environ, 'PYTHONUTF8': '1'},   # child writes UTF-8 to the pipe instead of the ANSI code page
       timeout=120
     )
         

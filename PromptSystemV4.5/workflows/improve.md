@@ -32,6 +32,7 @@ Autonomous self-improvement in four phases: scan with pre-flight research, fix v
 - Preserve existing IDs (FR-XX, NFR-XX, DD-XX, IS-XX, TC-XX, TK-XX, etc.)
 - Never replicate `/verify` (rule-based formal verification) or `/critique` (logic flaw detection)
 - Research enrichment adds value through new evidence, not fault-finding
+- **Cascade: `gesetze-im-internet.de` Playwright only** - `search_web` / `read_url_content` crash the conversation
 
 ## Mandatory Re-read
 

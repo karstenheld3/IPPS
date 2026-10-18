@@ -120,6 +120,8 @@ For each review, identify topics where external knowledge would strengthen the a
 
 ### Executing Research
 
+**Cascade: `gesetze-im-internet.de` Playwright only** - `search_web` / `read_url_content` crash the conversation
+
 For each topic:
 1. **Web search** for industry patterns, blog posts, case studies
 2. **Look for failure examples** - post-mortems, Stack Overflow issues, GitHub issues

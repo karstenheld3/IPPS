@@ -6,7 +6,34 @@
 **Source**: __MINTO-DRAFT_[Article].md
 **Argument**: [Root argument A restated]
 
-<!-- Conditional: insert Structure section when AMINTON tree has 3+ Q-branches. Unicode tree diagram per ASCII_ART_GUIDES.md. -->
+<!-- Conditional: insert Structure section when AMINTON tree has 3+ Q-branches. -->
+<!-- Format rules in MINTO_GUIDES.md Section 4.5: "Argument:" label, │ continuation, intro sentence, lines up to 100 chars -->
+
+## Structure
+
+The article argues one governing thesis (**A**) and answers [N] questions (**Q1-Q[N]**) a reader would raise against it. [One sentence mapping parts to article structure.]
+
+```
+PART I   [one-line situation summary]
+            │
+            v
+Argument:  [Root argument A - first line, keep up to 100 chars]
+│          [continuation lines with │ prefix]
+│
+├─ Q1  [Question 1]
+│   ├─ [evidence summary - wrap long lines with │   │       ]
+│   ├─ [evidence summary]
+│   └─ [evidence summary]
+├─ Q2  [Question 2]
+│   ├─ [evidence summary]
+│   └─ [evidence summary]
+└─ Q3  [Question 3]
+    ├─ [evidence summary]
+    └─ [evidence summary]
+            │
+            v
+PART III [one-line playbook summary]
+```
 
 ## Executive Summary
 
