@@ -36,6 +36,7 @@ Create `_PROMPTS_[NN]-[Topic].md` files containing an ordered list of prompts. E
 - **Leverage existing workflows** (PRMT-CT-11): Before writing prompts, scan `[AGENT_FOLDER]/workflows/` frontmatters to find workflows relevant to the task. Load matching workflows entirely. Design prompts that reference or invoke existing workflows instead of reinventing their logic in prompt prose. If user explicitly requests prompt system independence, omit `prompt_system` from frontmatter (PRMT-FT-09) and do not reference workflows.
 - **NEVER self-execute prompt files** (PRMT-EX-02): After writing a prompt file, deliver it to the user or execution engine. Do NOT run all prompts in a single response. Each prompt is a separate turn for an execution engine (Lana, headless runner). Self-executing circumvents per-turn context engineering and compute allocation, defeating the purpose of prompt files.
 - **Execution authority** (PRMT-EX-03): Prompts in `_PROMPTS_*.md` files carry implicit execution authority. Agent must complete without asking for confirmation. Confirmation pauses hang the sequence.
+- **Session Anchor** (PRMT-SC-08): Every prompt must declare absolute session folder and working folder after the Prompt Marker. Implementation prompts include "All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt" as first constraint. `/write-prompts` resolves both paths from the current session context at write time.
 - **Self-contained prompts** (PRMT-SC-01): Every prompt must start with a context-loading directive, "treat earlier conversation as compacted" statement, and step identifier. No prompt may reference "the previous step" without naming where output lives in a file (PRMT-SC-02).
 - **Idempotency constraints** (PRMT-SC-03): Implementation prompts must include "re-running this prompt must not corrupt state or waste cost" in constraints.
 - **Chain length limit** (PRMT-SC-04): Sequences must stay under 6 steps. Longer workflows split into sub-chains with checkpoints.
@@ -126,12 +127,17 @@ prompt_system: IPPS
 
 ```
 [NN]-[Topic] [ 01 / 07 ] - [plan step ID] [brief summary]
+
+Session: `[ABSOLUTE_SESSION_FOLDER_PATH]`
+Working folder: `[ABSOLUTE_WORKING_FOLDER_PATH]`
+
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
 First prompt text. Plain instruction, no code blocks inside.
 
 Constraints:
+- All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
 - [What NOT to do]
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
@@ -148,6 +154,10 @@ Verify: [Machine-checkable done criteria]
 
 ````
 [NN]-[Topic] [ 02 / 07 ] - [plan step ID] [brief summary]
+
+Session: `[ABSOLUTE_SESSION_FOLDER_PATH]`
+Working folder: `[ABSOLUTE_WORKING_FOLDER_PATH]`
+
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
@@ -157,6 +167,7 @@ print("hello")
 ```
 
 Constraints:
+- All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
 - [What NOT to do]
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
@@ -173,6 +184,10 @@ Verify: [Observable success criteria]
 
 ```
 [NN]-[Topic] [ 03 / 07 ] - Verification checkpoint after prompts 1-2
+
+Session: `[ABSOLUTE_SESSION_FOLDER_PATH]`
+Working folder: `[ABSOLUTE_WORKING_FOLDER_PATH]`
+
 Read [rules card] and [STRUT filename]. Treat earlier conversation as compacted. Verification checkpoint after prompts 1-2.
 
 /verify
@@ -190,12 +205,17 @@ all gaps and remaining work.
 
 ```
 [NN]-[Topic] [ 04 / 07 ] - [plan step ID] [brief summary]
+
+Session: `[ABSOLUTE_SESSION_FOLDER_PATH]`
+Working folder: `[ABSOLUTE_WORKING_FOLDER_PATH]`
+
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
 Third implementation prompt.
 
 Constraints:
+- All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
 - [What NOT to do]
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
@@ -210,12 +230,17 @@ Verify: [Machine-checkable done criteria]
 
 ```
 [NN]-[Topic] [ 05 / 07 ] - [plan step ID] [brief summary]
+
+Session: `[ABSOLUTE_SESSION_FOLDER_PATH]`
+Working folder: `[ABSOLUTE_WORKING_FOLDER_PATH]`
+
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
 Fourth implementation prompt.
 
 Constraints:
+- All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
 - [What NOT to do]
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
@@ -232,6 +257,10 @@ Verify: [Machine-checkable done criteria]
 
 ```
 [NN]-[Topic] [ 06 / 07 ] - Verification checkpoint after prompts 3-4
+
+Session: `[ABSOLUTE_SESSION_FOLDER_PATH]`
+Working folder: `[ABSOLUTE_WORKING_FOLDER_PATH]`
+
 Read [rules card] and [STRUT filename]. Treat earlier conversation as compacted. Verification checkpoint after prompts 3-4.
 
 /verify
@@ -249,12 +278,17 @@ all gaps and remaining work.
 
 ```
 [NN]-[Topic] [ 07 / 07 ] - [plan step ID] [brief summary]
+
+Session: `[ABSOLUTE_SESSION_FOLDER_PATH]`
+Working folder: `[ABSOLUTE_WORKING_FOLDER_PATH]`
+
 Read [context-loading directive: files to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
 Final verification prompt. Run the full test suite to confirm no regressions.
 
 Constraints:
+- All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
 - Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
@@ -294,6 +328,9 @@ If the sequence has 4 or more implementation prompts, insert verification checkp
 
 **Checkpoint prompt template**:
 ```
+Session: `[ABSOLUTE_SESSION_FOLDER_PATH]`
+Working folder: `[ABSOLUTE_WORKING_FOLDER_PATH]`
+
 Read [rules card] and [STRUT filename]. Treat earlier conversation as compacted. Verification checkpoint after prompts [N]-[M].
 
 /verify
@@ -313,7 +350,7 @@ Check output against all PRMT-* rules in `PROMPTS_RULES.md`:
 - [ ] Structure (ST): PRMT-ST-01 through PRMT-ST-05
 - [ ] Sequence (SQ): PRMT-SQ-01 through PRMT-SQ-04
 - [ ] Content (CT): PRMT-CT-01 through PRMT-CT-14
-- [ ] Self-Contained (SC): PRMT-SC-01 (self-contained opening), PRMT-SC-02 (no conversation dependency), PRMT-SC-03 (idempotency constraint), PRMT-SC-04 (chain length under 6), PRMT-SC-05 (effort and model specification), PRMT-SC-06 (planning document reference)
+- [ ] Self-Contained (SC): PRMT-SC-01 (self-contained opening), PRMT-SC-02 (no conversation dependency), PRMT-SC-03 (idempotency constraint), PRMT-SC-04 (chain length under 6), PRMT-SC-05 (effort and model specification), PRMT-SC-06 (planning document reference), PRMT-SC-08 (session anchor with absolute paths)
 - [ ] Execution (EX): PRMT-EX-01 (one prompt per turn), PRMT-EX-02 (no self-execution), PRMT-EX-03 (execution authority)
 - [ ] Hang Safety (HS): PRMT-HS-01 through PRMT-HS-10
 - [ ] Robustness (RB): PRMT-RB-01 through PRMT-RB-07 (findings card designated, directive in every implementation prompt, card read at startup, glitches filed before commit, entry format, card system integration, PROBLEMS.md distinction)
@@ -358,6 +395,18 @@ Check whether the sequence needs interleaved verification prompts (PRMT-SQ-04):
 2. If 4+ implementation prompts: check for `## Verification Checkpoint N` headings between implementation prompts containing `/verify` and `/fix` workflow calls
 3. If missing: insert verification checkpoints every 2-3 implementation prompts using the template from Step 4a
 4. Verify checkpoint prompts are self-contained (PRMT-SC-01), do NOT count toward chain length (PRMT-SC-04), and use `## Verification Checkpoint N` heading (not `## Prompt N`)
+
+### Step 5f: Session Anchor Pass
+
+Scan every fenced prompt for the Session Anchor (PRMT-SC-08):
+
+1. Each prompt must contain a `Session:` line and a `Working folder:` line with absolute paths
+2. The anchor must be placed after the Prompt Marker and empty line, before the context-loading directive
+3. Paths must be absolute (start with drive letter on Windows, `/` on Unix) - relative paths are a violation
+4. If no subfolder is active, working folder must equal the session folder
+5. Implementation prompts must include "All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt" as first constraint
+
+If any prompt is missing the anchor or uses relative paths, add the anchor with absolute paths resolved from the current session context.
 
 # FROM TEMPLATE MODE
 
@@ -408,6 +457,7 @@ The filled file must pass all PRMT-* rules as a standalone prompts file:
 - [ ] PRMT-HS-03..06: Time caps, on-cap behavior, process cleanup, no interactive commands
 - [ ] PRMT-HS-07..08: Specific test files in verification, prior-step verification
 - [ ] PRMT-HS-09: Targeted test scope — specific test files, not full suite, in implementation prompts
+- [ ] PRMT-SC-08: Session anchor with absolute paths in every prompt; working-folder constraint in implementation prompts
 - [ ] PRMT-HS-10: Spec-code consistency check in Verify when prompt changes code with associated spec
 - [ ] PRMT-CT-12: No shell commands for file search/read in prompt bodies — agent tools only
 - [ ] PRMT-RB-01: Findings card designated for the sequence
@@ -433,6 +483,7 @@ Validated `_PROMPTS_[NN]-[Topic]-[Instance].md` file with all placeholders resol
 - [ ] All PRMT-* rules pass (FT-01 through FT-10, ST, SQ, CT-01 through CT-14, SC, EX-01 through EX-03, HS-01 through HS-10, RB, NM-01 through NM-04)
 - [ ] Filename includes zero-padded sequence number `_PROMPTS_[NN]-[Topic].md` (PRMT-NM-03); [Topic] contains domain prefix ensuring [NN]-[Topic] uniqueness across session (PRMT-NM-04)
 - [ ] Workflow call formatting: no execution verb + backticks combinations remain (PRMT-CT-08)
+- [ ] Session anchor in every prompt (PRMT-SC-08): absolute session folder and working folder after Prompt Marker; working-folder constraint in implementation prompts
 - [ ] Self-contained opening in every prompt (PRMT-SC-01): context-loading directive, "treat earlier conversation as compacted", step identifier
 - [ ] No conversation dependency: no "the previous step" without file path (PRMT-SC-02)
 - [ ] Idempotency constraints in implementation prompts (PRMT-SC-03)

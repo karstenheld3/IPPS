@@ -55,6 +55,7 @@ Self-Contained (SC)
 - PRMT-SC-05: Effort and model specification — frontmatter must specify intended_model, context_window_size, effort level; prompts scoped to effort budget
 - PRMT-SC-06: Planning document reference — prompt sequences from planning documents must reference the document by filename and step ID
 - PRMT-SC-07: Load-based workflow partitioning — before writing a prompt that invokes workflows, assess the load of each workflow invocation (files read, artifacts produced, reasoning depth) against the run budget given by intended_model, context_window_size, and effort; group workflows into prompts so each run is neither overloaded (multiple heavy workflows squeezed into one run) nor underloaded (one light workflow alone in a run); the assessment and the resulting grouping are stated in the prompts file commentary
+- PRMT-SC-08: Session Anchor — every prompt must declare absolute session folder and working folder after the Prompt Marker; all file operations stay within the declared working folder unless the prompt explicitly names an absolute path outside it
 
 Execution (EX)
 - PRMT-EX-01: One prompt per turn - prompts are never concatenated into a single model submission
@@ -1479,6 +1480,77 @@ the findings in `__STRUT_Topic_CRITIQUE.md`.
 /implement
 
 the APPLY findings into `__STRUT_Topic.md` and `02_SourceRegistry.md`, then delete `__STRUT_Topic_CRITIQUE.md`.
+```
+`````
+
+## PRMT-SC-08: Session Anchor
+
+Every prompt must declare its session folder and working folder as absolute paths, placed after the Prompt Marker and empty line, before the context-loading directive. The anchor prevents session spill when multiple prompt sequences execute in parallel — without it, the agent may resolve relative file references against the wrong session.
+
+The anchor has two lines:
+
+```
+Session: `[ABSOLUTE_SESSION_FOLDER_PATH]`
+Working folder: `[ABSOLUTE_WORKING_FOLDER_PATH]`
+```
+
+`/write-prompts` resolves these from the current session context at write time. If no subfolder is active, working folder equals the session folder.
+
+Implementation prompts MUST include a working-folder constraint in the Constraints section: "All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt." This makes the anchor enforceable, not just informational.
+
+Verifiable from artifact: check that every prompt contains a `Session:` line and a `Working folder:` line with absolute paths between the Prompt Marker and the context-loading directive. Check that implementation prompts include the working-folder constraint.
+
+**BAD** (no session anchor — agent may resolve files against wrong session):
+`````markdown
+```
+01-SetupApiModule [ 01 / 03 ] - Analyze requirements
+
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P1-S1.
+```
+`````
+
+**BAD** (relative session path — ambiguous when multiple sessions exist):
+`````markdown
+```
+01-SetupApiModule [ 01 / 03 ] - Analyze requirements
+
+Session: `_2026-10-18_SecurityRemediation`
+Working folder: `T01_AuthFix`
+
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P1-S1.
+```
+`````
+
+**GOOD** (absolute paths, working-folder constraint):
+`````markdown
+```
+01-SetupApiModule [ 01 / 03 ] - Analyze requirements
+
+Session: `E:\Dev\ProjectX\_2026-10-18_SecurityRemediation`
+Working folder: `E:\Dev\ProjectX\_2026-10-18_SecurityRemediation\T01_AuthFix`
+
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P1-S1.
+Planning document: `__STRUT_SetupApiModule.md`, step P1-S1.
+
+Analyze the API requirements.
+
+Constraints:
+- All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
+- Do not write any implementation code in this step
+- Execute without asking for confirmation
+- Re-running this prompt must not corrupt state or waste cost
+```
+`````
+
+**GOOD** (no subfolder — working folder equals session folder):
+`````markdown
+```
+01-FixAuth [ 01 / 02 ] - Analyze auth module
+
+Session: `E:\Dev\ProjectX\_2026-10-18_AuthBugfix`
+Working folder: `E:\Dev\ProjectX\_2026-10-18_AuthBugfix`
+
+Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P1-S1.
 ```
 `````
 

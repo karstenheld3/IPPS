@@ -28,6 +28,7 @@ Quality Improvement (QI)
 - PRMT-QI-11: Do implementation prompts include "Execute without asking for confirmation" in Constraints?
 - PRMT-QI-12: Do Document History timestamps use request metadata, not extrapolated times?
 - PRMT-QI-13: Does the Verify section check spec-code consistency when the prompt changes code with an associated spec?
+- PRMT-QI-14: Does every prompt declare absolute session folder and working folder after the Prompt Marker?
 
 ## Process Discipline (PD)
 
@@ -157,3 +158,11 @@ Quality Improvement (QI)
 - Failure indicator: prompt changes code but Verify section does not mention the spec file; spec drifts without detection
 - Improvement tip: add spec-code consistency check to Verify section: "Check `_SPEC_[Name].md` section [N] still matches the code change. Update spec if drifted." (PRMT-HS-10)
 - References: PRMT-HS-10
+
+### PRMT-QI-14: Session Anchor Quality
+
+- Question: Does every prompt declare absolute session folder and working folder after the Prompt Marker? Do implementation prompts include the working-folder constraint?
+- Evidence: scan each prompt for `Session:` and `Working folder:` lines with absolute paths between the Prompt Marker and the context-loading directive; scan implementation prompt Constraints for the working-folder boundary
+- Failure indicator: prompt missing `Session:` or `Working folder:` line; paths are relative instead of absolute; implementation prompt missing working-folder constraint; anchor placed after context-loading directive instead of before it
+- Improvement tip: add `Session:` and `Working folder:` lines with absolute paths after the Prompt Marker and empty line, before the context-loading directive. Add "All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt" as first constraint in implementation prompts.
+- References: PRMT-SC-08

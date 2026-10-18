@@ -29,12 +29,16 @@ Read the STRUT plan and __CARD_00-Rules.md before starting each prompt. -->
 ```
 01-ApiMod-Setup [ 01 / 03 ] - Analyze API requirements
 
+Session: `E:\Dev\ProjectX\_2026-10-18_ApiSetup`
+Working folder: `E:\Dev\ProjectX\_2026-10-18_ApiSetup`
+
 Read `__CARD_00-Rules.md` and `__STRUT_SetupApiModule.md` step P1-S1. Treat earlier conversation as compacted. Step P1-S1.
 Planning document: `__STRUT_SetupApiModule.md`, step P1-S1.
 
 Analyze the requirements for a generic REST API module with user endpoints (GET /users, POST /users, GET /users/:id, PUT /users/:id, DELETE /users/:id). Write the API design to `_INFO_ApiDesign.md` including: endpoint list, request/response schemas, error codes, and data model.
 
 Constraints:
+- All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
 - Do not write any implementation code in this step
 - Do not modify existing project configuration files
 - Execute without asking for confirmation
@@ -54,12 +58,16 @@ Verify: `_INFO_ApiDesign.md` exists with sections for endpoints, schemas, error 
 ```
 01-ApiMod-Setup [ 02 / 03 ] - Implement API module
 
+Session: `E:\Dev\ProjectX\_2026-10-18_ApiSetup`
+Working folder: `E:\Dev\ProjectX\_2026-10-18_ApiSetup`
+
 Read `__CARD_00-Rules.md`, `__STRUT_SetupApiModule.md` step P2-S1, and `_INFO_ApiDesign.md` section 1. Treat earlier conversation as compacted. Step P2-S1.
 Planning document: `__STRUT_SetupApiModule.md`, step P2-S1.
 
 Implement the REST API module in `src/modules/users/` based on the design in `_INFO_ApiDesign.md` section 1. Create the route handlers, validation middleware, and error handling. Write the implementation to `src/modules/users/routes.ts` and `src/modules/users/validator.ts`.
 
 Constraints:
+- All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
 - Do not modify files outside `src/modules/users/`
 - Do not add new npm dependencies
 - Follow the existing project patterns in `src/modules/`
@@ -81,12 +89,16 @@ Verify: `src/modules/users/routes.ts` and `src/modules/users/validator.ts` exist
 ```
 01-ApiMod-Setup [ 03 / 03 ] - Write and run tests
 
+Session: `E:\Dev\ProjectX\_2026-10-18_ApiSetup`
+Working folder: `E:\Dev\ProjectX\_2026-10-18_ApiSetup`
+
 Read `__CARD_00-Rules.md`, `__STRUT_SetupApiModule.md` step P3-S1, `_INFO_ApiDesign.md` section 2, and `src/modules/users/routes.ts`. Treat earlier conversation as compacted. Step P3-S1.
 Planning document: `__STRUT_SetupApiModule.md`, step P3-S1.
 
 Write integration tests for the user API endpoints in `tests/modules/users.test.ts`. Cover: valid request for each endpoint, invalid input validation, not found cases, and error response format. Run the test suite after writing.
 
 Constraints:
+- All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
 - Do not modify the implementation files in `src/modules/users/`
 - Do not modify existing test files
 - Use the existing test framework and patterns in `tests/`
@@ -111,3 +123,4 @@ Verify: Run `npx jest tests/modules/users.test.ts`. All tests pass. Test file co
 - **Execution authority** (PRMT-EX-03): All 3 prompts include "Execute without asking for confirmation" in Constraints. This prevents the agent from pausing to ask for confirmation, which hangs the sequence.
 - **Hang-safety clause in implementation prompts**: Prompts 2 and 3 include a hang-safety clause referencing `__CARD_01-Robustness.md` for the banned command list. Prompt 1 is analysis-only (no commands that could hang) so no hang-safety clause is needed (PRMT-HS-01).
 - **Findings card directive**: All 3 prompts include `Findings card: __CARD_SetupApi-Findings.md` after Constraints. This ensures glitches are filed in the card before end-of-prompt commit (PRMT-RB-02).
+- **Session Anchor**: All 3 prompts declare `Session:` and `Working folder:` with absolute paths after the Prompt Marker. Implementation prompts (2 and 3) include the working-folder constraint as first constraint line. This prevents session spill when other prompt sequences run in parallel (PRMT-SC-08).

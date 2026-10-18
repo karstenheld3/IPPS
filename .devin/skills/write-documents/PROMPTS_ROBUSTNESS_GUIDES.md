@@ -42,6 +42,8 @@ The hang-safety clause goes in the Constraints section of each implementation pr
 - **Research/analysis prompts** (read files, write findings): include if the prompt runs any commands beyond file reads
 - **Pure generation prompts** (write a document from scratch, no command execution): exempt, but include if the prompt might trigger commands indirectly (e.g., `/verify` workflow call)
 
+**Cascade site ban**: prompts that may touch German law add to Constraints: `gesetze-im-internet.de: Playwright only, no search_web / read_url_content (crashes conversation).`
+
 ## 3. The Findings-Card Directive
 
 Every prompt sequence that risks encountering problems MUST designate a findings card — a card file loaded and updated by every prompt that needs it. The card records glitches, spec-code mismatches, and unexpected findings between prompts. This is the findings-card directive.
@@ -131,12 +133,13 @@ The card system reference:
 ```
 ## 3. Start-of-prompt protocol (resume detection)
 
-1. Read this card and the cards the prompt names
-2. Read session PROGRESS.md "Done" section. If the prompt's STRUT step ID is already listed as done: verify its artifacts exist, report "step already done", and stop. If the step is not listed as done, verify that artifacts from the prior step exist on disk before starting new work. Checkbox state alone is insufficient — deleted or missing artifacts mean the step must be redone.
-3. Read the STRUT step line and unit block; read the clause-map rows
-4. Load `__CARD_[TOPIC]-Findings.md` for unresolved entries from prior prompts
-5. Run git status --short in both repos; uncommitted work from a previous, interrupted prompt is finished or reverted before new work starts
-6. This prompt has execution authority (PRMT-EX-03). Do not ask for confirmation before executing. Execute within the Constraints section boundaries.
+1. Verify the Session Anchor: confirm the `Session:` and `Working folder:` paths in this prompt match the current working directory. If they do not match, navigate to the declared working folder before proceeding (PRMT-SC-08)
+2. Read this card and the cards the prompt names
+3. Read session PROGRESS.md "Done" section. If the prompt's STRUT step ID is already listed as done: verify its artifacts exist, report "step already done", and stop. If the step is not listed as done, verify that artifacts from the prior step exist on disk before starting new work. Checkbox state alone is insufficient — deleted or missing artifacts mean the step must be redone.
+4. Read the STRUT step line and unit block; read the clause-map rows
+5. Load `__CARD_[TOPIC]-Findings.md` for unresolved entries from prior prompts
+6. Run git status --short in both repos; uncommitted work from a previous, interrupted prompt is finished or reverted before new work starts
+7. This prompt has execution authority (PRMT-EX-03). Do not ask for confirmation before executing. Execute within the Constraints section boundaries.
 
 ## 4. End-of-prompt protocol
 
@@ -403,6 +406,7 @@ Before considering a prompt file complete, verify robustness:
 - [ ] No prompt contains `git log`, `git diff`, `git show` without `--no-pager` (PRMT-HS-06)
 - [ ] Hang-risky commands without native safe parameters use the Start-Process + WaitForExit timeout pattern (PRMT-HS-03)
 - [ ] No shell commands for file search/read in prompt bodies — agent tools only (PRMT-CT-12)
+- [ ] Cascade: prompts touching German law carry the `gesetze-im-internet.de` site ban (Section 2)
 - [ ] Document History timestamps use request metadata, not extrapolated times (PRMT-CT-13)
 - [ ] Banned-term sweep recordings describe pattern shape, do not spell banned literals (PRMT-CT-14)
 - [ ] Verification runs specific test files, not full suite, during implementation steps (PRMT-HS-09)

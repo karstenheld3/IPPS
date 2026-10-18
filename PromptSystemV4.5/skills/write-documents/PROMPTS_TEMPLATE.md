@@ -29,12 +29,16 @@ Heading before the fence is optional but recommended (PRMT-FT-07). -->
 ```
 [NN]-[Topic] [ 01 / NN ] - [short title]
 
+Session: `[ABSOLUTE_SESSION_FOLDER_PATH]`
+Working folder: `[ABSOLUTE_WORKING_FOLDER_PATH]`
+
 Read [context-loading directive: files or cards to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
 [Objective: what the finished state looks like (1-3 sentences)]
 
 Constraints:
+- All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
 - [What NOT to do]
 - [Boundaries to respect]
 - Execute without asking for confirmation
@@ -60,6 +64,9 @@ Remove if no commentary needed. -->
 ````
 [NN]-[Topic] [ 02 / NN ] - [short title]
 
+Session: `[ABSOLUTE_SESSION_FOLDER_PATH]`
+Working folder: `[ABSOLUTE_WORKING_FOLDER_PATH]`
+
 Read [context-loading directive: files or cards to read]. Treat earlier conversation as compacted. Step [step identifier].
 Planning document: [TASKS or STRUT filename], step [ID].
 
@@ -71,6 +78,7 @@ Example output format:
 ```
 
 Constraints:
+- All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
 - [What NOT to do]
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
@@ -98,6 +106,9 @@ prompt_system: IPPS
 ```
 01-SecFix-Analysis [ 01 / 02 ] - Security analysis
 
+Session: `E:\Dev\ProjectX\_2026-10-18_SecurityRemediation`
+Working folder: `E:\Dev\ProjectX\_2026-10-18_SecurityRemediation`
+
 Read `src/auth/` directory and `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P1-S1.
 Planning document: `__STRUT_SecurityFix.md`, step P1-S1.
 
@@ -105,6 +116,7 @@ Analyze the authentication module in src/auth/ for security vulnerabilities.
 Focus on: token validation, session management, and password hashing.
 
 Constraints:
+- All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
 - Do not modify any code in this step
 - Limit analysis to src/auth/ directory only
 - Execute without asking for confirmation
@@ -125,6 +137,9 @@ Verify: Output a numbered list of findings with severity (HIGH/MEDIUM/LOW) and f
 ````
 01-SecFix-Analysis [ 02 / 02 ] - Fix highest-severity finding
 
+Session: `E:\Dev\ProjectX\_2026-10-18_SecurityRemediation`
+Working folder: `E:\Dev\ProjectX\_2026-10-18_SecurityRemediation`
+
 Read `src/auth/` and the findings list from `_INFO_SecurityAnalysis.md`. Treat earlier conversation as compacted. Step P1-S2.
 Planning document: `__STRUT_SecurityFix.md`, step P1-S2.
 
@@ -140,6 +155,7 @@ try {
 ```
 
 Constraints:
+- All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
 - Fix only the single highest-severity issue
 - Do not change the public API of any exported function
 - Do not add new dependencies

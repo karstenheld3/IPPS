@@ -291,6 +291,8 @@ Shell commands are for process execution only: builds, tests, git operations, an
 - Instead of "Run `Get-Content file.ts`", write "Read `file.ts`"
 - Instead of "Run `Get-ChildItem -Recurse -Filter *.ts`", write "Find all .ts files in src/ using the find_by_name tool"
 
+**Cascade site ban**: `gesetze-im-internet.de` - Playwright only; `search_web` / `read_url_content` crash the conversation. Put into Constraints of prompts touching German law.
+
 ## 6e. Execution Authority in Prompts
 
 Prompt sequences run unattended. If the agent stops to ask for confirmation before executing, the execution engine treats the paused prompt as complete and advances to the next prompt. Work is skipped, state is corrupted, and the sequence fails silently.
@@ -327,6 +329,29 @@ When recording a banned-term sweep in Document History or findings, describe the
 When a prompt changes code that has an associated spec, the Verify section must check that the spec still matches the code. The Verify section names the spec file and the clauses affected by the code change. Without this check, specs drift and become stale.
 
 **Example**: A prompt changing token expiration from 30 to 60 minutes in `src/auth/issuer.ts` must verify: "Check `_SPEC_Auth.md` section 3.2 (Token Expiration) still matches the new 60-minute TTL. Update spec if drifted." (PRMT-HS-10)
+
+## 6i. Session Anchor in Prompts
+
+When multiple prompt sequences execute in parallel (e.g., two Lana instances running different sequences), the agent may resolve relative file references against the wrong session folder. This is session spill — the agent "forgets" which session it operates in and starts reading or writing files in a different session.
+
+The Session Anchor (PRMT-SC-08) prevents this by declaring the absolute session folder and working folder in every prompt. The anchor is placed after the Prompt Marker and empty line, before the context-loading directive:
+
+```
+01-ApiMod-Setup [ 02 / 03 ] - P2-S1 Implement API module
+
+Session: `E:\Dev\ProjectX\_2026-10-18_SecurityRemediation`
+Working folder: `E:\Dev\ProjectX\_2026-10-18_SecurityRemediation\T01_AuthFix`
+
+Read `__CARD_00-Rules.md`...
+```
+
+**Placement rationale**: The agent reads its identity (Prompt Marker), then its location (Session Anchor), then its inputs (context-loading directive), then its task (objective). Location comes before inputs because the agent must know WHERE to resolve file references before it reads them.
+
+**When working folder differs from session folder**: If the prompt operates inside a `T##_` or `S##_` subfolder, the working folder is the subfolder path. If no subfolder is active, working folder equals the session folder.
+
+**Working-folder constraint**: Implementation prompts include "All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt" as the first constraint. This makes the anchor enforceable — not just a hint the agent might ignore, but a boundary it must respect.
+
+**`/write-prompts` responsibility**: The workflow resolves both paths from the current session context at write time and inserts them into every prompt. The prompt author does not need to determine the paths manually.
 
 ## 7. Select Fence Length
 
@@ -535,6 +560,7 @@ Before considering the prompts file complete:
 - [ ] Format-critical prompts use examples instead of prose descriptions (PRMT-CT-07)
 - [ ] Commentary notes wrapped in HTML comments (`<!-- ... -->`), headings as plain Markdown (PRMT-FT-04)
 - [ ] Each prompt has a self-contained opening: context-loading directive, "treat earlier conversation as compacted", step identifier (PRMT-SC-01)
+- [ ] Each prompt declares absolute session folder and working folder after the Prompt Marker (PRMT-SC-08); implementation prompts include working-folder constraint
 - [ ] No prompt references "the previous step" or "as discussed above" without naming where output lives in a file (PRMT-SC-02)
 - [ ] Implementation prompts include idempotency constraint: re-running must not corrupt state or waste cost (PRMT-SC-03)
 - [ ] Sequence stays under 6 steps; longer workflows use sub-chains with checkpoints (PRMT-SC-04)
