@@ -1,0 +1,61 @@
+{
+  "_source": "https://metr.org/time-horizons/",
+  "_yaml_source": "https://metr.org/assets/benchmark_results_1_1.yaml",
+  "_benchmark_name": "METR-Horizon-v1.1",
+  "_last_updated": "2026-09-08",
+  "_extracted_at": "2026-10-28",
+  "_page_status": "This page is no longer actively updated (last updated September 8, 2026). Measurements above 16 hrs (960 min) are marked unreliable with current task suite.",
+  "_units": {
+    "raw_yaml_unit": "minutes (human expert completion time)",
+    "converted_unit": "hours (HWH-equivalent: human expert completion time in hours = raw_minutes / 60)",
+    "reliability_levels": ["p50_horizon_length (50% success probability)", "p80_horizon_length (80% success probability)"]
+  },
+  "_coverage_of_28_inventory_models": {
+    "exact_match_count": 6,
+    "exact_plus_family_prefix_count": 7,
+    "total_inventory_models": 28,
+    "coverage_exact": "6/28",
+    "coverage_with_family_prefix": "7/28",
+    "matched_28_models": [
+      { "inventory_model": "claude-opus-4-6", "metr_key": "claude_opus_4_6_inspect", "match_type": "exact", "release_date": "2026-02-05", "p50_min": 718.81, "p50_hr": 11.98, "p80_min": 69.87, "p80_hr": 1.16 },
+      { "inventory_model": "gpt-5.4", "metr_key": "gpt_5_4", "match_type": "exact", "release_date": "2026-03-05", "p50_min": 341.74, "p50_hr": 5.70, "p80_min": 53.88, "p80_hr": 0.90 },
+      { "inventory_model": "gpt-5.2", "metr_key": "gpt_5_2", "match_type": "exact", "release_date": "2025-12-11", "p50_min": 352.25, "p50_hr": 5.87, "p80_min": 66.00, "p80_hr": 1.10 },
+      { "inventory_model": "claude-opus-4-5", "metr_key": "claude_opus_4_5_inspect", "match_type": "exact", "release_date": "2025-11-24", "p50_min": 292.99, "p50_hr": 4.88, "p80_min": 49.43, "p80_hr": 0.82 },
+      { "inventory_model": "gpt-5.1", "metr_key": "gpt_5_1_codex_max_inspect", "match_type": "family_prefix_variant", "release_date": "2025-11-19", "p50_min": 223.71, "p50_hr": 3.73, "p80_min": 50.63, "p80_hr": 0.84 },
+      { "inventory_model": "gpt-5", "metr_key": "gpt_5_2025_08_07_inspect", "match_type": "exact", "release_date": "2025-08-07", "p50_min": 203.01, "p50_hr": 3.38, "p80_min": 38.31, "p80_hr": 0.64 },
+      { "inventory_model": "o3", "metr_key": "o3_inspect", "match_type": "exact", "release_date": "2025-04-16", "p50_min": 119.73, "p50_hr": 2.00, "p80_min": 29.98, "p80_hr": 0.50 }
+    ],
+    "additional_section_3_2_devin_models_matched": [
+      { "inventory_model": "GPT-5.3-Codex", "metr_key": "gpt_5_3_codex", "release_date": "2026-02-05", "p50_min": 349.53, "p50_hr": 5.83, "p80_min": 54.74, "p80_hr": 0.91 },
+      { "inventory_model": "Gemini 3.1 Pro", "metr_key": "gemini_3_1_pro", "release_date": "2026-02-19", "p50_min": 384.15, "p50_hr": 6.40, "p80_min": 89.80, "p80_hr": 1.50 }
+    ]
+  },
+  "all_metr_models": [
+    { "metr_key": "claude_mythos_preview_early_inspect", "release_date": "2026-04-07", "average_score": 0.85205, "p50_min": 1044.780145, "p50_ci_low_min": 508.876789, "p50_ci_high_min": 3304.261235, "p50_hr": 17.41, "p80_min": 185.911829, "p80_ci_low_min": 97.30292, "p80_ci_high_min": 398.514614, "p80_hr": 3.10 },
+    { "metr_key": "claude_opus_4_6_inspect", "release_date": "2026-02-05", "average_score": 0.788644, "p50_min": 718.80683, "p50_ci_low_min": 316.685725, "p50_ci_high_min": 3633.786163, "p50_hr": 11.98, "p80_min": 69.874587, "p80_ci_low_min": 27.026521, "p80_ci_high_min": 170.437873, "p80_hr": 1.16 },
+    { "metr_key": "gemini_3_1_pro", "release_date": "2026-02-19", "average_score": 0.77035, "p50_min": 384.147435, "p50_ci_low_min": 233.50073, "p50_ci_high_min": 694.750898, "p50_hr": 6.40, "p80_min": 89.801503, "p80_ci_low_min": 52.025934, "p80_ci_high_min": 158.618017, "p80_hr": 1.50 },
+    { "metr_key": "gpt_5_2", "release_date": "2025-12-11", "average_score": 0.752875, "p50_min": 352.249302, "p50_ci_low_min": 198.067494, "p50_ci_high_min": 815.177445, "p50_hr": 5.87, "p80_min": 66.002649, "p80_ci_low_min": 31.665111, "p80_ci_high_min": 131.730719, "p80_hr": 1.10 },
+    { "metr_key": "gpt_5_3_codex", "release_date": "2026-02-05", "average_score": 0.745439, "p50_min": 349.530732, "p50_ci_low_min": 194.913134, "p50_ci_high_min": 816.351994, "p50_hr": 5.83, "p80_min": 54.739407, "p80_ci_low_min": 22.361504, "p80_ci_high_min": 122.058963, "p80_hr": 0.91 },
+    { "metr_key": "gpt_5_4", "release_date": "2026-03-05", "average_score": 0.743443, "p50_min": 341.735276, "p50_ci_low_min": 186.581591, "p50_ci_high_min": 768.779526, "p50_hr": 5.70, "p80_min": 53.877851, "p80_ci_low_min": 23.957027, "p80_ci_high_min": 108.679232, "p80_hr": 0.90 },
+    { "metr_key": "claude_opus_4_5_inspect", "release_date": "2025-11-24", "average_score": 0.73007, "p50_min": 292.994594, "p50_ci_low_min": 161.717714, "p50_ci_high_min": 623.704698, "p50_hr": 4.88, "p80_min": 49.430584, "p80_ci_low_min": 20.660485, "p80_ci_high_min": 104.641318, "p80_hr": 0.82 },
+    { "metr_key": "gemini_3_pro", "release_date": "2025-11-18", "average_score": 0.709822, "p50_min": 224.325884, "p50_ci_low_min": 139.565157, "p50_ci_high_min": 379.235434, "p50_hr": 3.74, "p80_min": 54.142849, "p80_ci_low_min": 25.650451, "p80_ci_high_min": 103.295501, "p80_hr": 0.90 },
+    { "metr_key": "gpt_5_1_codex_max_inspect", "release_date": "2025-11-19", "average_score": 0.708301, "p50_min": 223.714694, "p50_ci_low_min": 134.31077, "p50_ci_high_min": 396.206723, "p50_hr": 3.73, "p80_min": 50.632499, "p80_ci_low_min": 27.30204, "p80_ci_high_min": 88.365435, "p80_hr": 0.84 },
+    { "metr_key": "gpt_5_2025_08_07_inspect", "release_date": "2025-08-07", "average_score": 0.693697, "p50_min": 203.012577, "p50_ci_low_min": 112.641357, "p50_ci_high_min": 405.551565, "p50_hr": 3.38, "p80_min": 38.312431, "p80_ci_low_min": 19.184874, "p80_ci_high_min": 70.093125, "p80_hr": 0.64 },
+    { "metr_key": "o3_inspect", "release_date": "2025-04-16", "average_score": 0.636235, "p50_min": 119.732634, "p50_ci_low_min": 74.615398, "p50_ci_high_min": 190.943818, "p50_hr": 2.00, "p80_min": 29.981603, "p80_ci_low_min": 15.127348, "p80_ci_high_min": 57.823511, "p80_hr": 0.50 },
+    { "metr_key": "claude_4_1_opus_inspect", "release_date": "2025-08-05", "average_score": 0.615713, "p50_min": 100.472004, "p50_ci_low_min": 59.272391, "p50_ci_high_min": 159.451918, "p50_hr": 1.67, "p80_min": 23.455761, "p80_ci_low_min": 10.538456, "p80_ci_high_min": 47.785951, "p80_hr": 0.39 },
+    { "metr_key": "claude_4_opus_inspect", "release_date": "2025-05-22", "average_score": 0.615452, "p50_min": 100.366123, "p50_ci_low_min": 59.994073, "p50_ci_high_min": 163.454074, "p50_hr": 1.67, "p80_min": 20.429752, "p80_ci_low_min": 8.483125, "p80_ci_high_min": 41.937268, "p80_hr": 0.34 },
+    { "metr_key": "claude_3_7_sonnet_inspect", "release_date": "2025-02-24", "average_score": 0.558217, "p50_min": 60.388937, "p50_ci_low_min": 33.006168, "p50_ci_high_min": 104.226017, "p50_hr": 1.01, "p80_min": 12.09179, "p80_ci_low_min": 4.575608, "p80_ci_high_min": 28.889879, "p80_hr": 0.20 },
+    { "metr_key": "o1_inspect", "release_date": "2024-12-05", "average_score": 0.510512, "p50_min": 38.831588, "p50_ci_low_min": 21.164512, "p50_ci_high_min": 64.95249, "p50_hr": 0.65, "p80_min": 7.090121, "p80_ci_low_min": 3.036033, "p80_ci_high_min": 16.640636, "p80_hr": 0.12 },
+    { "metr_key": "claude_3_5_sonnet_20241022_inspect", "release_date": "2024-10-22", "average_score": 0.452356, "p50_min": 20.522872, "p50_ci_low_min": 10.144026, "p50_ci_high_min": 40.82028, "p50_hr": 0.34, "p80_min": 2.595677, "p80_ci_low_min": 0.89379, "p80_ci_high_min": 7.363864, "p80_hr": 0.04 },
+    { "metr_key": "o1_preview", "release_date": "2024-09-12", "average_score": 0.451441, "p50_min": 20.326586, "p50_ci_low_min": 11.716193, "p50_ci_high_min": 33.379877, "p50_hr": 0.34, "p80_min": 4.420545, "p80_ci_low_min": 2.012646, "p80_ci_high_min": 8.912444, "p80_hr": 0.07 },
+    { "metr_key": "claude_3_5_sonnet_20240620_inspect", "release_date": "2024-06-20", "average_score": 0.401502, "p50_min": 11.395377, "p50_ci_low_min": 5.489734, "p50_ci_high_min": 22.384214, "p50_hr": 0.19, "p80_min": 1.671757, "p80_ci_low_min": 0.57927, "p80_ci_high_min": 4.573519, "p80_hr": 0.03 },
+    { "metr_key": "gpt_4o_inspect", "release_date": "2024-05-13", "average_score": 0.338424, "p50_min": 6.991195, "p50_ci_low_min": 4.001482, "p50_ci_high_min": 12.905741, "p50_hr": 0.12, "p80_min": 1.267009, "p80_ci_low_min": 0.562997, "p80_ci_high_min": 3.01517, "p80_hr": 0.02 },
+    { "metr_key": "gpt_4_1106_inspect", "release_date": "2023-11-06", "average_score": 0.28905, "p50_min": 4.044959, "p50_ci_low_min": 1.866859, "p50_ci_high_min": 8.443226, "p50_hr": 0.07, "p80_min": 0.783032, "p80_ci_low_min": 0.276599, "p80_ci_high_min": 2.358414, "p80_hr": 0.01 },
+    { "metr_key": "gpt_4", "release_date": "2023-03-14", "average_score": 0.293044, "p50_min": 3.987428, "p50_ci_low_min": 1.93292, "p50_ci_high_min": 7.995283, "p50_hr": 0.07, "p80_min": 0.889561, "p80_ci_low_min": 0.342984, "p80_ci_high_min": 2.523746, "p80_hr": 0.01 },
+    { "metr_key": "claude_3_opus_inspect", "release_date": "2024-03-04", "average_score": 0.294753, "p50_min": 3.952262, "p50_ci_low_min": 1.706313, "p50_ci_high_min": 8.76484, "p50_hr": 0.07, "p80_min": 0.638973, "p80_ci_low_min": 0.190491, "p80_ci_high_min": 2.118276, "p80_hr": 0.01 },
+    { "metr_key": "gpt_4_turbo_inspect", "release_date": "2024-04-09", "average_score": 0.271786, "p50_min": 3.732787, "p50_ci_low_min": 1.980046, "p50_ci_high_min": 6.736613, "p50_hr": 0.06, "p80_min": 0.927933, "p80_ci_low_min": 0.428277, "p80_ci_high_min": 2.196806, "p80_hr": 0.02 },
+    { "metr_key": "gpt_3_5_turbo_instruct", "release_date": "2022-03-15", "average_score": 0.214611, "p50_min": 0.599247, "p50_ci_low_min": 0.255148, "p50_ci_high_min": 1.115905, "p50_hr": 0.01, "p80_min": 0.25538, "p80_ci_low_min": 0.141649, "p80_ci_high_min": 0.492933, "p80_hr": 0.004 },
+    { "metr_key": "davinci_002", "release_date": "2020-05-28", "average_score": 0.161869, "p50_min": 0.144057, "p50_ci_low_min": 0.093319, "p50_ci_high_min": 0.221209, "p50_hr": 0.002, "p80_min": 0.056238, "p80_ci_low_min": 0.034813, "p80_ci_high_min": 0.105813, "p80_hr": 0.001 },
+    { "metr_key": "gpt2", "release_date": "2019-02-14", "average_score": 0.101046, "p50_min": 0.053778, "p50_ci_low_min": 0.009994, "p50_ci_high_min": 0.141825, "p50_hr": 0.001, "p80_min": 0.0128, "p80_ci_low_min": 0.001589, "p80_ci_high_min": 0.068612, "p80_hr": 0.0002 }
+  ]
+}

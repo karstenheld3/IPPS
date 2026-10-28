@@ -10,12 +10,7 @@
 
 ## To Do
 
-- [ ] P1-S4 [RESEARCH] Epoch ECI: table shape, coverage of the 28 registry models, snapshot date, extraction method
-- [ ] P1-S5 [RESEARCH] METR time horizons: per-model table, 50% and 80% values, coverage, how HWH-like the unit is
-- [ ] P1-S6 [RESEARCH] Google Gemini API pricing and models pages: table shape for DOM extraction, effort levels, context
-- [ ] P1-S7 [RESEARCH] provider pages A1-A4, O1-O3, Z1-Z2 still resolve; note changed URLs
-- [ ] P1-S8 [EVALUATE] methods for "work per prompt": ECI-band to HWH, METR horizon, model-agnostic limits, keep YY-L formula
-- [ ] P1-S9 [WRITE-INFO] Summary -01, Sources -02, Audit -03, Sources per Field -04, Work-per-Prompt Options -05
+(none - all P1-P4 steps and deliverables P1-D1..D5, P3-D1, P4-D1..D2 complete; P2-D1 and P5 gated on ACTOR DD-01..05 reply)
 
 ## In Progress
 
@@ -23,6 +18,10 @@
 
 ## Done
 
+- [x] **[2026-10-28 20:22]** P4-S1..S3 [VERIFY+STATUS+COMMIT]: verified STRUT and T02 research set (`IN01`-`IN05`) against `RESEARCH_RULES.md` (fixed 4 `TF-*` items in `IN03`), updated `NOTES.md`, `__STRUT_MDLINVNTRY.md` (including `Computed vs actual` Time Log analysis), `PROGRESS.md`, and `PROBLEMS.md`, and committed + pushed session files (P4-D1, P4-D2 checked)
+- [x] **[2026-10-28 20:22]** P3-S1..S5 [READ+WRITE+VERIFY]: created `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md` (8 prompts, 20 registered placeholders, FULL/PRICES/NEWMODEL modes, PRICES full example in XML comment, verified against TMPL-* and PRMT-*, P3-D1 checked)
+- [x] **[2026-10-28 20:22]** P1-S8+S9 [EVALUATE+WRITE]: evaluated 5 work-per-prompt options (`a`-`e`) in `_INFO_MDLRGUP-MDLINVNTRY-05_WorkPerPromptOptions.md` (P1-D4 checked), finalized `_INFO_MDLRGUP-MDLINVNTRY-01_Summary.md` (P1-D5 checked), and presented `DD-01..05` in chat
+- [x] **[2026-10-28 20:21]** P1-S4..S7 [RESEARCH]: ECI match (28/28), METR horizons (6/28 exact, 7/28 with family prefix), Google Pricing and Models DOM extraction, provider URLs A1-A4/O1-O3/Z1-Z2 batch check (5 checked, 4 redirected, 0 dead), `_INFO_MDLRGUP-MDLINVNTRY-04_SourcesPerField.md` written (P1-D3 checked), preflight assumptions closed (7/7 verified)
 - [x] **[2026-10-28 19:12]** P1-S1 part 1: T02 folder, `_agent_work\`, NOTES.md, PROGRESS.md
 - [x] **[2026-10-28 19:19]** P1-S1 part 2: PROBLEMS.md, research STRUT with decomposition and assumptions
 - [x] **[2026-10-28 19:19]** P1-S1 complete, P1-D1 checked
@@ -30,6 +29,16 @@
 - [x] **[2026-10-28 19:12]** P1-S3: inventory audit, 82 rows classified (S18 D27 A37), P1-D2 checked
 
 ## Progress Changes
+
+**[2026-10-28 20:22]**
+- Added: P4-S1..S3 to Done (STRUT + T02 research set verified, session state recorded in `NOTES.md` and `__STRUT_MDLINVNTRY.md`, committed and pushed, P4-D1 and P4-D2 checked)
+- Added: P3-S1..S5 to Done (`_PROMPTS_ModelInventoryUpdate_TEMPLATE.md` created and verified against TMPL-* and PRMT-*, P3-D1 checked)
+- Added: P1-S8+S9 to Done (`_INFO_MDLRGUP-MDLINVNTRY-05_WorkPerPromptOptions.md`, `_INFO_MDLRGUP-MDLINVNTRY-01_Summary.md`, P1-D4 and P1-D5 checked, `DD-01..05` presented)
+- Moved: P1-S8, P1-S9 from To Do
+
+**[2026-10-28 20:21]**
+- Added: P1-S4..S7 to Done (`_SOURCES/` JSON extracts, `_INFO_MDLRGUP-MDLINVNTRY-04_SourcesPerField.md`, P1-D3 checked, assumptions closed)
+- Moved: P1-S4, P1-S5, P1-S6, P1-S7 from To Do
 
 **[2026-10-28 19:12]**
 - Added: P1-S3 to Done (audit file created, 82 rows, P1-D2 checked)

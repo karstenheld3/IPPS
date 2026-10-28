@@ -20,14 +20,22 @@ Fetch current model data from Anthropic and OpenAI provider websites, update can
 
 ## Current Phase
 
-**[2026-10-28 18:55]** EXPLORE (P1 not started). Plan: `_agent_work/__STRUT_MDLINVNTRY.md [MDLRGUP-MDLINVNTRY-STRUT]`, budget 1 AWH for P1-P4.
-- Trigger: `MODEL_INVENTORY.md`, `TASKS_GUIDES.md`, `PROMPTS_GUIDES.md` 1g (all rewritten 2026-10-28 via `__TASKS_LLMCAPCLS.md`) rest on unmeasured values; review findings in STRUT "Known Knowns"
-- Next: P1 `/deep-research` MEPI FOCUSED into `T02_MDLINVNTRY_ReliableModelInventory_2026-10-28/`, then P2 decisions DD-01..05 to user, then P3 `/write-template` prompts branch
-- Gate: P5 (edits to PromptSystem files) only after the user answers DD-01..05
+**[2026-10-28 20:22]** P1-P4 done (`60 / 60 min` net 1 AWH budget complete); **P5 gated on DD-01..05 answers**.
+- **Plan**: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_agent_work\__STRUT_MDLINVNTRY.md [MDLRGUP-MDLINVNTRY-STRUT]` (`P1`, `P3`, `P4` `[x]`; `P2` waiting for `[ACTOR]` reply on `DD-01..05`; `P5` gated)
+- **Research Summary & Decisions (`DD-01..05`)**: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\T02_MDLINVNTRY_ReliableModelInventory_2026-10-28\_INFO_MDLRGUP-MDLINVNTRY-01_Summary.md [MDLRGUP-MDLINVNTRY-IN01]` (Section 5)
+- **Recurring Update Prompts Template (`P3-D1`)**: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`
+- **Open items before/during P5**:
+  1. `[ACTOR]` replies with `DD-01..05` decisions (format: `DD-01 a, DD-02 c, DD-03 a, DD-04 a, DD-05 a`) → record in `## Key Decisions` below and check `P2-D1` in `__STRUT_MDLINVNTRY.md`
+  2. Execute STRUT `P5` (`P5-S1..S9`, ~45 min outside the 1 AWH budget): apply `DD-01..05` to `PromptSystemV4.5/skills/write-documents/MODEL_INVENTORY.md`, `TASKS_GUIDES.md`, `PROMPTS_GUIDES.md`, `PROMPTS_RULES.md` (`PRMT-SC-05`), `write-prompts.md`, `edird-phase-planning/SKILL.md`, `llm-evaluation/model-registry.json`, `update-model-registry.md` (Phase 9.4 + Google source group `G1`-`G3` + redirected URLs `A1`/`A2`/`A3`/`O3`/`Z3`), and `LLMCAPCLS-IN01`, then mirror `PromptSystemV4.5` → `.devin` and commit
 
 ## Key Decisions
 
-- (DD-01..05 pending, see STRUT P2)
+- `DD-01..05 presented 2026-10-28 20:22; answers pending`:
+  - `DD-01` (Capability representation): recommended `a` (Reuse `UC-1..5` + `ECI band` + `Generation equivalent`) | `b` (Keep `YY-L`) | `c` (METR horizon only)
+  - `DD-02` (Work per prompt): recommended `c` (Model-agnostic fixed limits without WF, scored `13/15`) | runner-up `a` (ECI-band → HWH table, scored `12/15`) | `e` (UC → HWH, `10/15`) | `b` (METR 80% + fallback, `7/15`) | `d` (Keep `YY-L` formula, `6/15`)
+  - `DD-03` (Behavior profile): recommended `a` (Drop profiles and ledger; use `Notes` column for observations only) | `b` (Keep profiles and ledger)
+  - `DD-04` (Environment data): recommended `a` (Remove `Devin cost` and Devin-only rows from `MODEL_INVENTORY.md`; keep in `windsurf-model-registry.json`) | `b` (Keep in `MODEL_INVENTORY.md`)
+  - `DD-05` (Inventory scope): recommended `a` (Anthropic, OpenAI, Google Gemini, Z.AI) | `b` (Add xAI, DeepSeek, Mistral, Moonshot) | `c` (Current 3 providers)
 
 ## Topic Registry
 
@@ -42,7 +50,7 @@ Fetch current model data from Anthropic and OpenAI provider websites, update can
 ## Topic Folders
 
 - **T01_MDLBHVPRM_BehavioralParameterBenchmarks_2026-10-19** - Research benchmarks for eagerness and instruction_following model parameters
-- **T02_MDLINVNTRY_ReliableModelInventory_2026-10-28** - (planned, STRUT P1) audit of inventory values, reliable sources per field, work-per-prompt options
+- **T02_MDLINVNTRY_ReliableModelInventory_2026-10-28** - Audit of inventory values (`IN03`), reliable sources per field (`IN04`), work-per-prompt options (`IN05`), and synthesis + `DD-01..05` (`IN01`, `IN02`)
 
 ## Related External Design
 

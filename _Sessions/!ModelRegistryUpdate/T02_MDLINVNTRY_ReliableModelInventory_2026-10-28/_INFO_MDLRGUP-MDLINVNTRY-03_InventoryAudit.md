@@ -4,6 +4,7 @@
 
 **Doc ID**: MDLRGUP-MDLINVNTRY-IN03
 **Goal**: Classify every value and rule in the four audited scopes as SOURCED, DERIVED, or ASSUMED
+**Timeline**: Created 2026-10-28, Updated 2 times (2026-10-28 - 2026-10-28)
 **Version scope**: 2026-10-28
 
 **Depends on:**
@@ -11,11 +12,11 @@
 
 ## Summary
 
-- **ASSUMED share**: MODEL_INVENTORY.md 59% (26/44), TASKS_GUIDES.md 40% (4/10), PROMPTS_GUIDES.md 29% (6/21), PROMPTS_RULES.md 14% (1/7). The inventory file carries the highest assumption density because it defines all base values
-- **Most load-bearing assumption**: the WF formula (MODEL_INVENTORY.md L33). Every WF column value, prompt count calculation, checkpoint interval, and PRMT-SC-05 sizing check derives from it. Removing it collapses the entire partitioning system
-- **If ASSUMED rows removed**: Model IDs, Context windows, effort support flags, Devin cost multipliers, provider prices, and observed AWH survive as SOURCED. All partitioning formulas, sizing rules, profile parameters, label assignments, and verification numeric checks lose their basis
-- **DERIVED propagates assumptions**: most DERIVED rows compute from the WF formula or profile parameters, both ASSUMED. DERIVED class overstates confidence; 20 of 27 DERIVED rows depend on at least one ASSUMED input
-- **Volume**: 4717 words across four scopes; MODEL_INVENTORY.md Section 2 (37 lines, L28-64) contains 60% of all ASSUMED items
+- **ASSUMED share**: `MODEL_INVENTORY.md` 59% (`26/44`), `TASKS_GUIDES.md` 40% (`4/10`), `PROMPTS_GUIDES.md` 29% (`6/21`), `PROMPTS_RULES.md` 14% (`1/7`). The inventory file carries the highest assumption density because it defines all base values `[VERIFIED] (MDLRGUP-MDLINVNTRY-SC-IPPS-MDLINV | e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md)`
+- **Most load-bearing assumption**: the Workload Factor (WF) formula (`MODEL_INVENTORY.md` L33). Every WF column value, prompt count calculation, checkpoint interval, and `PRMT-SC-05` sizing check derives from it. Removing it collapses the entire partitioning system `[VERIFIED] (MDLRGUP-MDLINVNTRY-SC-IPPS-MDLINV | e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md)`
+- **If ASSUMED rows removed**: Model IDs, Context windows, effort support flags, Devin cost multipliers, provider prices, and observed Agent Work Hours (AWH) survive as `SOURCED`. All partitioning formulas, sizing rules, profile parameters, label assignments, and verification numeric checks lose their basis `[VERIFIED] (MDLRGUP-MDLINVNTRY-SC-IPPS-MREG | e:\dev\IPPS\PromptSystemV4.5\skills\llm-evaluation\model-registry.json)`
+- **DERIVED propagates assumptions**: most `DERIVED` rows compute from the WF formula or profile parameters, both `ASSUMED`. `DERIVED` class overstates confidence; `20 of 27` `DERIVED` rows depend on at least one `ASSUMED` input `[VERIFIED] (MDLRGUP-MDLINVNTRY-SC-IPPS-PRMGD | e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\PROMPTS_GUIDES.md)`
+- **Volume**: `4,717` words (`315` lines) across four scopes; `MODEL_INVENTORY.md` Section 2 (`37` lines, L28-64) contains `60%` of all `ASSUMED` items `[VERIFIED] (MDLRGUP-MDLINVNTRY-SC-IPPS-MDLINV | e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md)`
 
 ## Table of Contents
 
@@ -26,6 +27,9 @@
 - [PROMPTS_RULES.md PRMT-SC-05](#prompts_rulesmd-prmt-sc-05)
 - [Counts](#counts)
 - [Goal Violations](#goal-violations)
+- [Limitations and Known Issues](#limitations-and-known-issues)
+- [Sources](#sources)
+- [Document History](#document-history)
 
 ## MODEL_INVENTORY.md
 
@@ -160,7 +164,27 @@
 | PROMPTS_GUIDES.md   | 1c,1f,1g,3a,5 | Partitioning spread over 5 sections          | Overlapping: 1c (effort), 1f (load), 1g (model), 3a (checkpoints), 5 (density) all address "how many items per prompt" |
 | PROMPTS_RULES.md    | L1355-1361 | PRMT-SC-05 verifies against unmeasured numbers  | Verification rule checking prompts against ASSUMED values; precision theater |
 
+## Limitations and Known Issues
+
+- **Scope limited to 4 target files (`315` lines, `4,717` words)**: Sibling files that reference `YY-L` or `WF` (`write-prompts.md` Step 1, `update-model-registry.md` 9.4, `edird-phase-planning` `SKILL.md`) were inventoried for P5 propagation in `__STRUT_MDLINVNTRY.md` (`GLOB-FL-037`) rather than line-counted in this table `[VERIFIED] (MDLRGUP-MDLINVNTRY-SC-IPPS-MDLINV | e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md)`
+- **Granularity of row grouping**: Multi-row tables in `MODEL_INVENTORY.md` Section 3.1 (28 rows) and Section 3.2 (9 rows) are grouped by column/rule rather than counted as 37 separate rows per column, preventing table row count from skewing rule-level percentages `[VERIFIED] (MDLRGUP-MDLINVNTRY-SC-IPPS-MDLINV | e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md)`
+
+## Sources
+
+- **MDLRGUP-MDLINVNTRY-SC-IPPS-MDLINV**: `e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md` - Primary audit target (`127` lines, `2,151` words, `44` classified rows: `11` SOURCED, `7` DERIVED, `26` ASSUMED) (Accessed: 2026-10-28) `[VERIFIED]`
+- **MDLRGUP-MDLINVNTRY-SC-IPPS-TSKGD**: `e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\TASKS_GUIDES.md` - Task sizing and HWH/AWH rules (`60` lines, `633` words, `10` classified rows: `1` SOURCED, `5` DERIVED, `4` ASSUMED) (Accessed: 2026-10-28) `[VERIFIED]`
+- **MDLRGUP-MDLINVNTRY-SC-IPPS-PRMGD**: `e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\PROMPTS_GUIDES.md` - Sections 1c, 1f, 1g, 3a, 5 (`115` lines, `1,685` words, `21` classified rows: `6` SOURCED, `9` DERIVED, `6` ASSUMED) (Accessed: 2026-10-28) `[VERIFIED]`
+- **MDLRGUP-MDLINVNTRY-SC-IPPS-PRMRL**: `e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\PROMPTS_RULES.md` - `PRMT-SC-05` (`13` lines, `248` words, `7` classified rows: `0` SOURCED, `6` DERIVED, `1` ASSUMED) (Accessed: 2026-10-28) `[VERIFIED]`
+- **MDLRGUP-MDLINVNTRY-SC-IPPS-MREG**: `e:\dev\IPPS\PromptSystemV4.5\skills\llm-evaluation\model-registry.json` - Canonical registry for `context_window`, `max_output`, and `effort_levels` (Accessed: 2026-10-28) `[VERIFIED]`
+- **MDLRGUP-MDLINVNTRY-SC-IPPS-MPRC**: `e:\dev\IPPS\PromptSystemV4.5\skills\llm-evaluation\model-pricing.json` - Canonical per-1M-token pricing source (Accessed: 2026-10-28) `[VERIFIED]`
+- **MDLRGUP-MDLINVNTRY-SC-IPPS-MPRMP**: `e:\dev\IPPS\PromptSystemV4.5\skills\llm-evaluation\model-parameter-mapping.json` - Canonical effort parameter mapping (`anthropic_thinking_factor`) (Accessed: 2026-10-28) `[VERIFIED]`
+- **MDLRGUP-MDLINVNTRY-SC-IPPS-WMREG**: `e:\dev\IPPS\PromptSystemV4.5\skills\devin-auto-model-switcher\windsurf-model-registry.json` - Devin environment registry (`Devin cost` source) (Accessed: 2026-10-28) `[VERIFIED]`
+- **MDLRGUP-MDLINVNTRY-SC-LOCAL-LLMCAP**: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_INFO_HOW_TO_ORGANIZE_LLMS_BY_CAPABILITY.md` - `LLMCAPCLS-IN01` Section 6 circular label derivation and L416 unmeasured profile parameters (Accessed: 2026-10-28) `[VERIFIED]`
+
 ## Document History
+
+**[2026-10-28 20:22]**
+- Fixed: Added `Timeline` header field, `[VERIFIED]` inline citations in Summary, `Limitations and Known Issues` section (`TF-05`), and `Sources` section (`TF-06`) during P4-S1 verification
 
 **[2026-10-28 19:13]**
 - Fixed: Added `Depends on:` field to header block (verify checkpoint F3)

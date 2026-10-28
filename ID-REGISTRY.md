@@ -70,8 +70,8 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 
 - **PREN** - "Proper english" - precise natural language avoiding confusion, ambiguities, term conflicts 
 - **AGEN** - "Agentic english" - proper english, enriched with semantics like `@mentions`, `/workflow`, `[INSTRUCTION]`, etc.
-- **HWT** - Human Work Time. Example: "max 0.5h HWT per task"
-- **AWT** - Agentic Work Time. Agent time estimate. Example: "complete in < 5mins AWT"
+- **HWH** - Human Work Hours. Human equivalent effort estimate. Example: "max 0.5 HWH per task"
+- **AWH** - Agent Work Hours. Agent time estimate. Example: "complete in < 5mins AWH"
 - **MEPI** - Most Executable Point of Information (used for research and decision making)
 - **MCPI** - Most Complete Point of Information (used for research)
 - **SOCAS** - Signs Of Confusion And Sloppiness (15 criteria)
@@ -236,3 +236,8 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **CLAUDEIPPS** - Claude Code IPPS Release and Skill-Based Prompt System Migration (IPPS release for latest Claude Code; workflow-to-skill migration per SKLWRKFL-IN01 Option F) - 2026-09-21
 - **MDRENDER** - Markdown Rendering (render.md workflow, renderings skill, render.py for Markdown to HTML/PDF in Python; supersedes MDPDF research) - 2026-09-28
 - **TERMROBUSTNESS** - Terminal Robustness Skill (placement, structure, and linkage of terminal-robustness skill with agent variants in IPPS) - 2026-09-29
+- **DRSYNART** - Deep Research Synthesis to Article (post-research pipeline: data scanning, pattern detection, hypothesis development, article/report writing with storytelling) - 2026-10-19
+- **MDLBHVPRM** - Model Behavioral Parameters (eagerness and instruction-following benchmarks for LLM model registry population) - 2026-10-19
+- **MDLRGUP** - Model Registry Update (permanent session `!ModelRegistryUpdate`: provider data extraction, canonical model JSONs, MODEL_INVENTORY.md; parent topic for nested T##_ subtopics such as MDLBHVPRM, MDLINVNTRY) - 2026-08-30
+- **LLMCAPCLS** - LLM Capability Classes (time-stable year-letter labels YY-L for workload factor sizing in MODEL_INVENTORY.md) - 2026-10-28
+- **MUSICPROMO** - Music Promotion Guide (German Ratgeber on placing and promoting melodic house tracks with labels, playlists, DJ pools, promoters; first live run of the DRSYNART three-layer pipeline) - 2026-10-28
