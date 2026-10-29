@@ -47,7 +47,7 @@ Effort defines two things:
 
 The model name, context window size, and effort level together determine how many prompts a task needs. A task that requires 8 prompts at low effort on a model with 8K context may require 2 prompts at high effort on a model with 200K context.
 
-When partitioning, match the prompt count to the effort budget. Mismatched effort and prompt count produces either overloaded prompts (low effort, too many steps per prompt) or underutilized prompts (high effort, unnecessary fragmentation). The frontmatter `effort` and `context_window_size` keys encode this budget (PRMT-SC-05).
+When partitioning, match the prompt count to the effort budget. Mismatched effort and prompt count produces either overloaded prompts (low effort, too many steps per prompt) or underutilized prompts (high effort, unnecessary fragmentation). The frontmatter `effort` and `context_window_size` keys encode this budget (PRMT-SC-05). `MODEL_INVENTORY.md` holds the data: capability label, behavior profile, context window, workload factor in HWH (Human Work Hours) per effort level, and price per model. Section 1g turns this data into prompt count, checkpoints, and scope guard.
 
 ## 1d. Planning Document Anchor
 
@@ -85,7 +85,7 @@ Workflows are the main load carriers. `/verify`, `/critique`, `/reconcile`, `/im
    - **Input volume**: files the workflow must read (a STRUT + one registry = light; 47 topic documents = heavy)
    - **Output volume**: artifacts it writes (a verdict list = light; corrections applied across many files = heavy)
    - **Reasoning depth**: judgment required (rule conformance check = shallow; finding flawed assumptions or reconciling conflicting findings = deep)
-3. Compare the summed load of a candidate grouping against the run budget from the frontmatter
+3. Compare the summed load of a candidate grouping against the run budget from the frontmatter. Quantify the budget with the workload factor (WF) of the `intended_model` row at the chosen `effort` in `MODEL_INVENTORY.md`: the HWH of the steps grouped into one prompt must not exceed WF
 4. Group so each prompt lands in the productive range: one heavy workflow alone, or two to three light ones together
 5. Record the grouping and its rationale in the sub-chain commentary so a reviewer sees why the split was chosen
 
@@ -108,6 +108,26 @@ Workflows are the main load carriers. `/verify`, `/critique`, `/reconcile`, `/im
 - The prompt fits in a single verification checkpoint's `/verify` + `/fix` pattern
 
 Load assessment is a judgment for the writing agent, made per sequence. The frontmatter encodes the budget; the writing agent must reason about the load against it rather than applying a fixed prompts-per-workflow ratio.
+
+## 1g. Model-Aware Partitioning
+
+Size the sequence to the executing model with the data in `MODEL_INVENTORY.md`. Task HWH comes from the planning document (`TASKS_GUIDES.md` Section 2). Follow the steps in order:
+
+1. Resolve `intended_model` to a `MODEL_INVENTORY.md` row by longest prefix. Not listed: use the UC default band of the release year (`MODEL_INVENTORY.md` Section 2) and profile `standard`, and state "model not in MODEL_INVENTORY.md" in the file commentary
+2. Set `context_window_size` from the Context column (`1000K` becomes `1M`, `200K` becomes `200k`). Devin-only models without a value: keep the value given by the user or omit the key
+3. Check that `effort` is listed in the Efforts column (`L M H X MX`). If not listed, choose the nearest listed level and state the change in the commentary. Notes `Medium may skip reasoning`: do not plan Medium for structured-data work
+4. Take task HWH as the sum of the `Est: [N] HWH` values of the TASKS items the sequence covers. STRUT steps or tasks without `Est`: estimate each step with the buckets in `TASKS_GUIDES.md` Section 2 and state the estimates in the commentary
+5. Count implementation prompts: `prompt_count = max(ceil(task_HWH / WF), ceil(total_items / max_items), ceil(total_files / max_files))`. WF = the row's `WF` column (High) times the effort multiplier from `MODEL_INVENTORY.md` Section 2 (Low 0.25, Medium 0.5, High 1.0, XHigh 1.5, Max 2.0); max_items and max_files from the row's behavior profile. If the count exceeds the chain length limit (PRMT-SC-04), split into sub-chains
+6. Insert a `/verify` + `/fix` checkpoint after every `checkpoint_interval` implementation prompts (PRMT-SQ-04), plus the final checkpoint
+7. Profile `guarded`: add this scope guard to every implementation prompt: "Do ONLY the numbered items below. Do not refactor, rename, add tests, or touch files not listed. Report any item you could not complete as NOT DONE". Profile `standard`: list the files each implementation prompt may change
+8. Check context fit: input read by one prompt stays at or below 50% of the Context value. Long-context benchmarks show effective context of about half the claimed window for most tested models
+9. State in the opening commentary: model row, Label (not Comp, which changes every May 1), profile, effort, WF at that effort, task HWH, prompt count, estimated cost (`task_HWH * (0.8 * In USD + 0.2 * Out USD)`)
+
+Which limit drives the count depends on the model. Example with task 3 HWH, 18 numbered items, 7 files, High effort:
+- `claude-opus-5` (`26-B`, `standard`, WF 1.5): `max(2, 3, 3)` = 3 implementation prompts, checkpoint after prompt 2, about $27. Items drive the count
+- `glm-5.2` (`26-E`, `guarded`, WF 0.5): `max(6, 5, 4)` = 6 prompts, checkpoint after every prompt, strict scope guard, about $6. Capacity drives the count
+
+Common mistake: sizing by effort level alone. Two models at the same effort can differ by a factor of 8 in WF and need different item limits.
 
 ## 2. Decide Decomposition
 
@@ -190,7 +210,7 @@ Use commentary sections (before the first prompt or between `---` and next fence
 
 ## 5. Manage Prompt Density
 
-Practitioner heuristic: limit each prompt to 5-8 high-priority rules or instructions. Beyond that, the model tends to skip items in the middle of long lists (lost-in-the-middle effect). The exact threshold varies by model and task.
+Practitioner heuristic: limit each prompt to 5-8 high-priority rules or instructions. Beyond that, the model tends to skip items in the middle of long lists (lost-in-the-middle effect). The exact threshold varies by model: the behavior profile's `max_items` in `MODEL_INVENTORY.md` takes precedence over this heuristic.
 
 If a prompt needs more than 8 instructions:
 - Split into two prompts (first sets up, second executes)
@@ -565,6 +585,7 @@ Before considering the prompts file complete:
 - [ ] Implementation prompts include idempotency constraint: re-running must not corrupt state or waste cost (PRMT-SC-03)
 - [ ] Sequence stays under 6 steps; longer workflows use sub-chains with checkpoints (PRMT-SC-04)
 - [ ] Frontmatter specifies effort level; prompt count matches effort budget (PRMT-SC-05)
+- [ ] Prompt count, checkpoints, and scope guard follow Section 1g; opening commentary states model row, label, profile, WF, task HWH, prompt count, cost (PRMT-SC-05)
 - [ ] Prompt sequences from planning documents reference the document by filename and step ID (PRMT-SC-06)
 - [ ] Workflow invocations grouped by assessed load against the run budget; no prompt overloaded with several heavy workflows, none underloaded with one light workflow; grouping rationale stated in commentary (PRMT-SC-07)
 - [ ] Implementation prompts include execution authority constraint: "Execute without asking for confirmation" (PRMT-EX-03)

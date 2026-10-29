@@ -1,118 +1,2836 @@
 {
-  "_version": "1.9.0",
-  "_updated": "2026-09-05",
-  "_comment": "Model properties and boundaries. context_window = max input tokens, max_output in tokens, temp_max for temperature models, thinking_max for extended thinking models.",
-  
+  "_version": "1.11.0",
+  "_updated": "2026-10-29",
+  "_comment": "Model properties and boundaries. context_window = max input tokens, max_output in tokens, temp_max for temperature models, thinking_max for extended thinking models. release_date = provider announcement date (release_date_assumed = family-head date, verify in next FULL run). uc_class = Universal Class (UC-1..5), eci_band = 5-point Epoch Capabilities Index band frozen at first assignment (snapshot 2026-10-28), eci_score = raw Epoch ECI score at snapshot, eci_band_source present = fallback band (sibling:<model_id> or uc_default) replaced once Epoch publishes a score; absent = Epoch. gen_equivalent = highest reference UC-1/UC-2 model with ECI <= model ECI. capability_label YY-L is script-derived: YY = release_date year, letter index = (anchor(YY) - eci_band) / 5 with anchor(YY) = 170 + 15 * (YY - 26), letters A-Z; set for every text model not retired. capability_note records R4 observation downgrades. behavior_profile per MODEL_INVENTORY.md Section 2.",
   "models": [
-    {"provider": "openai", "model_id": "gpt-6-astra", "name": "GPT-6 Astra", "context_window": 1050000, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "gpt-5.6-sol", "name": "GPT-5.6 Sol", "context_window": 1050000, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-5.6-terra", "name": "GPT-5.6 Terra", "context_window": 1050000, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-5.6-luna", "name": "GPT-5.6 Luna", "context_window": 1050000, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-5.6-cyber", "name": "GPT-5.6 Cyber", "context_window": null, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "gpt-5.5", "name": "GPT-5.5", "context_window": 1050000, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-5.5-pro", "name": "GPT-5.5 Pro", "context_window": 1050000, "enabled": false, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-5.4", "name": "GPT-5.4", "context_window": 1047576, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-5.4-pro", "name": "GPT-5.4 Pro", "context_window": 1047576, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "gpt-5.4-mini", "name": "GPT-5.4 Mini", "context_window": 272000, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "gpt-5.4-nano", "name": "GPT-5.4 Nano", "context_window": 272000, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "gpt-5.2", "name": "GPT-5.2", "context_window": null, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-5.1", "name": "GPT-5.1", "context_window": null, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-5", "name": "GPT-5", "context_window": null, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-5-mini", "name": "GPT-5 Mini", "context_window": null, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-5-nano", "name": "GPT-5 Nano", "context_window": null, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-5.2-pro", "name": "GPT-5.2 Pro", "context_window": null, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "gpt-5-pro", "name": "GPT-5 Pro", "context_window": null, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "gpt-4.1", "name": "GPT-4.1", "context_window": 1047576, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-4.1-mini", "name": "GPT-4.1 Mini", "context_window": 1047576, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-4.1-nano", "name": "GPT-4.1 Nano", "context_window": 1047576, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-4o", "name": "GPT-4o", "context_window": 128000, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-4o-mini", "name": "GPT-4o Mini", "context_window": 128000, "enabled": true, "status": "available"},
-    {"provider": "openai", "model_id": "gpt-4o-2024-05-13", "name": "GPT-4o (2024-05-13)", "context_window": 128000, "enabled": false, "status": "legacy"},
-    {"provider": "openai", "model_id": "o1", "name": "O1", "context_window": 200000, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "o1-pro", "name": "O1 Pro", "context_window": 200000, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "o1-mini", "name": "O1 Mini", "context_window": 128000, "enabled": false, "status": "no_access"},
-    {"provider": "openai", "model_id": "o3", "name": "O3", "context_window": 200000, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "o3-pro", "name": "O3 Pro", "context_window": 200000, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "o3-mini", "name": "O3 Mini", "context_window": 200000, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "o3-deep-research", "name": "O3 Deep Research", "context_window": 200000, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "o4-mini", "name": "O4 Mini", "context_window": 200000, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "o4-mini-deep-research", "name": "O4 Mini Deep Research", "context_window": 200000, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "computer-use-preview", "name": "Computer Use Preview", "context_window": 128000, "enabled": false, "status": "untested"},
-    {"provider": "openai", "model_id": "gpt-image-1.5", "name": "GPT Image 1.5", "context_window": null, "enabled": false, "status": "untested"},
-    {"provider": "anthropic", "model_id": "claude-fable-5", "name": "Claude Fable 5", "context_window": 1000000, "enabled": false, "status": "untested"},
-    {"provider": "anthropic", "model_id": "claude-mythos-5", "name": "Claude Mythos 5", "context_window": 1000000, "enabled": false, "status": "no_access"},
-    {"provider": "anthropic", "model_id": "claude-opus-5", "name": "Claude Opus 5", "context_window": 1000000, "enabled": false, "status": "untested"},
-    {"provider": "anthropic", "model_id": "claude-sonnet-5", "name": "Claude Sonnet 5", "context_window": 1000000, "enabled": false, "status": "untested"},
-    {"provider": "anthropic", "model_id": "claude-opus-4-8", "name": "Claude Opus 4.8", "context_window": 1000000, "enabled": false, "status": "untested"},
-    {"provider": "anthropic", "model_id": "claude-opus-4-7", "name": "Claude Opus 4.7", "context_window": 1000000, "enabled": false, "status": "untested"},
-    {"provider": "anthropic", "model_id": "claude-opus-4-6", "name": "Claude Opus 4.6", "context_window": 1000000, "enabled": false, "status": "untested"},
-    {"provider": "anthropic", "model_id": "claude-sonnet-4-6", "name": "Claude Sonnet 4.6", "context_window": 1000000, "enabled": false, "status": "untested"},
-    {"provider": "anthropic", "model_id": "claude-opus-4-5-20251101", "name": "Claude Opus 4.5", "context_window": 200000, "enabled": true, "status": "available"},
-    {"provider": "anthropic", "model_id": "claude-opus-4-1-20250805", "name": "Claude Opus 4.1", "context_window": 200000, "enabled": false, "status": "retired"},
-    {"provider": "anthropic", "model_id": "claude-sonnet-4-5-20250929", "name": "Claude Sonnet 4.5", "context_window": 200000, "enabled": true, "status": "available"},
-    {"provider": "anthropic", "model_id": "claude-haiku-4-5-20251001", "name": "Claude Haiku 4.5", "context_window": 200000, "enabled": true, "status": "available"},
-    {"provider": "anthropic", "model_id": "claude-opus-4-20250514", "name": "Claude Opus 4", "context_window": 200000, "enabled": false, "status": "retired"},
-    {"provider": "anthropic", "model_id": "claude-sonnet-4-20250514", "name": "Claude Sonnet 4", "context_window": 200000, "enabled": false, "status": "retired"},
-    {"provider": "anthropic", "model_id": "claude-3-7-sonnet-20250219", "name": "Claude 3.7 Sonnet", "context_window": 200000, "enabled": false, "status": "retired"},
-    {"provider": "anthropic", "model_id": "claude-3-5-sonnet-20241022", "name": "Claude 3.5 Sonnet", "context_window": 200000, "enabled": false, "status": "deprecated"},
-    {"provider": "anthropic", "model_id": "claude-3-5-haiku-20241022", "name": "Claude 3.5 Haiku", "context_window": 200000, "enabled": false, "status": "retired"},
-    {"provider": "anthropic", "model_id": "claude-3-haiku-20240307", "name": "Claude 3 Haiku", "context_window": 200000, "enabled": false, "status": "retired"},
-    {"provider": "zai", "model_id": "glm-5.3", "name": "GLM-5.3", "context_window": 1000000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-5.3-flash", "name": "GLM-5.3 Flash", "context_window": 1000000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-5.2", "name": "GLM-5.2", "context_window": 1000000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-5.1", "name": "GLM-5.1", "context_window": 200000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-5", "name": "GLM-5", "context_window": 200000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-4.7", "name": "GLM-4.7", "context_window": 200000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-4.7-flashx", "name": "GLM-4.7 FlashX", "context_window": 200000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-4.7-flash", "name": "GLM-4.7 Flash", "context_window": 200000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-4.6", "name": "GLM-4.6", "context_window": 200000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-4.6v", "name": "GLM-4.6V", "context_window": 128000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-4.5v", "name": "GLM-4.5V", "context_window": 64000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-4.5-x", "name": "GLM-4.5-X", "context_window": 128000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-4.5-flash", "name": "GLM-4.5 Flash", "context_window": 200000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-4.5-airx", "name": "GLM-4.5 AirX", "context_window": 128000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-4.5", "name": "GLM-4.5", "context_window": 128000, "enabled": true, "status": "available"},
-    {"provider": "zai", "model_id": "glm-4-air", "name": "GLM-4 Air", "context_window": 128000, "enabled": true, "status": "available"}
+    {
+      "provider": "openai",
+      "model_id": "gpt-6.1-sol",
+      "name": "GPT-6.1 Sol",
+      "context_window": 1050000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-A",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E170",
+      "eci_score": 168.37,
+      "gen_equivalent": "≈ GPT-6.1 Sol",
+      "release_date": "2026-10-08"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-6.1-terra",
+      "name": "GPT-6.1 Terra",
+      "context_window": 1050000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E155",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2026-10-08",
+      "eci_band_source": "uc_default"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-6-sol",
+      "name": "GPT-6 Sol",
+      "context_window": 1050000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-B",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E165",
+      "eci_score": 163.73,
+      "gen_equivalent": "≈ GPT-6 Sol",
+      "release_date": "2026-09-22"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-6-luna",
+      "name": "GPT-6 Luna",
+      "context_window": 1050000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E155",
+      "eci_score": 156.75,
+      "gen_equivalent": "≈ Claude Opus 4.6",
+      "release_date": "2026-09-23"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.5-cyber",
+      "name": "GPT-5.5 Cyber",
+      "context_window": null,
+      "enabled": false,
+      "status": "untested",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E165",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2026-04-23",
+      "release_date_assumed": true,
+      "eci_band_source": "sibling:gpt-5.5-pro",
+      "capability_label": "26-B",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.3-codex",
+      "name": "GPT-5.3 Codex",
+      "context_window": null,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E155",
+      "eci_score": 157.09,
+      "gen_equivalent": "≈ Claude Opus 4.7",
+      "release_date": "2026-02-05"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-6-astra",
+      "name": "GPT-6 Astra",
+      "context_window": 1050000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-A",
+      "behavior_profile": "standard",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E170",
+      "eci_score": 168.81,
+      "gen_equivalent": "≈ GPT-6 Astra",
+      "release_date": "2026-09-04"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.6-sol",
+      "name": "GPT-5.6 Sol",
+      "context_window": 1050000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-B",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E165",
+      "eci_score": 162.79,
+      "gen_equivalent": "≈ GPT-5.6 Sol",
+      "release_date": "2026-07-09"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.6-terra",
+      "name": "GPT-5.6 Terra",
+      "context_window": 1050000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-C",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E160",
+      "eci_score": 160.09,
+      "gen_equivalent": "≈ GPT-5.5",
+      "release_date": "2026-07-09"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.6-luna",
+      "name": "GPT-5.6 Luna",
+      "context_window": 1050000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E155",
+      "eci_score": 156.5,
+      "gen_equivalent": "≈ Claude Opus 4.6",
+      "release_date": "2026-07-09"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.6-cyber",
+      "name": "GPT-5.6 Cyber",
+      "context_window": null,
+      "enabled": false,
+      "status": "untested",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E165",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2026-07-09",
+      "release_date_assumed": true,
+      "eci_band_source": "uc_default",
+      "capability_label": "26-B",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.5",
+      "name": "GPT-5.5",
+      "context_window": 1050000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-C",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E160",
+      "eci_score": 159.68,
+      "gen_equivalent": "≈ GPT-5.5",
+      "release_date": "2026-04-23"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.5-pro",
+      "name": "GPT-5.5 Pro",
+      "context_window": 1050000,
+      "enabled": false,
+      "status": "available",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E165",
+      "eci_score": 162.91,
+      "gen_equivalent": "≈ GPT-5.6 Sol",
+      "release_date": "2026-04-23",
+      "release_date_assumed": true,
+      "capability_label": "26-B",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.4",
+      "name": "GPT-5.4",
+      "context_window": 1047576,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E155",
+      "eci_score": 157.31,
+      "gen_equivalent": "≈ GPT-5.4",
+      "release_date": "2026-03-05"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.4-pro",
+      "name": "GPT-5.4 Pro",
+      "context_window": 1047576,
+      "enabled": false,
+      "status": "untested",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E160",
+      "eci_score": 159.57,
+      "gen_equivalent": "≈ Claude Opus 4.8",
+      "release_date": "2026-03-05",
+      "release_date_assumed": true,
+      "capability_label": "26-C",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.4-mini",
+      "name": "GPT-5.4 Mini",
+      "context_window": 272000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-E",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E150",
+      "eci_score": 148.7,
+      "gen_equivalent": "≈ o3",
+      "release_date": "2026-03-17"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.4-nano",
+      "name": "GPT-5.4 Nano",
+      "context_window": 272000,
+      "enabled": false,
+      "status": "untested",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E145",
+      "eci_score": 146.03,
+      "gen_equivalent": "≈ Gemini 2.5 Pro",
+      "release_date": "2026-03-17",
+      "release_date_assumed": true,
+      "capability_label": "26-F",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.2",
+      "name": "GPT-5.2",
+      "context_window": 256000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "25-A",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E155",
+      "eci_score": 153.66,
+      "gen_equivalent": "≈ GPT-5.2",
+      "release_date": "2025-12-11"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.1",
+      "name": "GPT-5.1",
+      "context_window": 256000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "25-B",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E150",
+      "eci_score": 149.76,
+      "gen_equivalent": "≈ GPT-5.1",
+      "release_date": "2025-11-12"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5",
+      "name": "GPT-5",
+      "context_window": 256000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "25-B",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E150",
+      "eci_score": 150.0,
+      "gen_equivalent": "≈ GPT-5",
+      "release_date": "2025-08-07"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5-mini",
+      "name": "GPT-5 Mini",
+      "context_window": 256000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "25-C",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E145",
+      "eci_score": 145.34,
+      "gen_equivalent": "≈ Gemini 2.5 Pro",
+      "release_date": "2025-08-07"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5-nano",
+      "name": "GPT-5 Nano",
+      "context_window": 128000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E140",
+      "eci_score": 139.21,
+      "gen_equivalent": "≈ GPT-4.1",
+      "release_date": "2025-08-07",
+      "capability_label": "25-D",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.2-pro",
+      "name": "GPT-5.2 Pro",
+      "context_window": 256000,
+      "enabled": false,
+      "status": "untested",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E155",
+      "eci_score": 156.33,
+      "gen_equivalent": "≈ Claude Opus 4.6",
+      "release_date": "2025-12-11",
+      "release_date_assumed": true,
+      "capability_label": "25-A",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5-pro",
+      "name": "GPT-5 Pro",
+      "context_window": 256000,
+      "enabled": false,
+      "status": "untested",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E150",
+      "eci_score": 150.59,
+      "gen_equivalent": "≈ Claude Opus 4.5",
+      "release_date": "2025-08-07",
+      "release_date_assumed": true,
+      "capability_label": "25-B",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4.1",
+      "name": "GPT-4.1",
+      "context_window": 1047576,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "25-E",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E135",
+      "eci_score": 136.65,
+      "gen_equivalent": "≈ GPT-4.1",
+      "release_date": "2025-04-14"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4.1-mini",
+      "name": "GPT-4.1 Mini",
+      "context_window": 1047576,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E135",
+      "eci_score": 134.89,
+      "gen_equivalent": "≈ Claude 3.5 Sonnet",
+      "release_date": "2025-04-14",
+      "capability_label": "25-E",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4.1-nano",
+      "name": "GPT-4.1 Nano",
+      "context_window": 1047576,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E130",
+      "eci_score": 129.54,
+      "gen_equivalent": "≈ GPT-4o",
+      "release_date": "2025-04-14",
+      "capability_label": "25-F",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4o",
+      "name": "GPT-4o",
+      "context_window": 128000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E130",
+      "eci_score": 128.99,
+      "gen_equivalent": "≈ GPT-4o",
+      "release_date": "2024-05-13",
+      "capability_label": "24-C",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4o-mini",
+      "name": "GPT-4o Mini",
+      "context_window": 128000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E125",
+      "eci_score": 126.46,
+      "gen_equivalent": "≈ Claude 3 Opus",
+      "release_date": "2024-07-18",
+      "release_date_assumed": true,
+      "capability_label": "24-D",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4o-2024-05-13",
+      "name": "GPT-4o (2024-05-13)",
+      "context_window": 128000,
+      "enabled": false,
+      "status": "legacy",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E130",
+      "eci_score": 128.99,
+      "gen_equivalent": "≈ GPT-4o",
+      "release_date": "2024-05-13",
+      "capability_label": "24-C",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o1",
+      "name": "O1",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "untested",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E140",
+      "eci_score": 141.72,
+      "gen_equivalent": "≈ o1",
+      "release_date": "2024-12-05",
+      "capability_label": "24-A",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o1-pro",
+      "name": "O1 Pro",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "untested",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E140",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2025-03-19",
+      "release_date_assumed": true,
+      "eci_band_source": "sibling:o1",
+      "capability_label": "25-D",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o1-mini",
+      "name": "O1 Mini",
+      "context_window": 128000,
+      "enabled": false,
+      "status": "no_access",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E135",
+      "eci_score": 135.7,
+      "gen_equivalent": "≈ Claude 3.5 Sonnet",
+      "release_date": "2024-09-12",
+      "capability_label": "24-B",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o3",
+      "name": "O3",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "25-C",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E145",
+      "eci_score": 146.73,
+      "gen_equivalent": "≈ o3",
+      "release_date": "2025-04-16"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o3-pro",
+      "name": "O3 Pro",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "untested",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E145",
+      "eci_score": 147.33,
+      "gen_equivalent": "≈ o3",
+      "release_date": "2025-06-10",
+      "release_date_assumed": true,
+      "capability_label": "25-C",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o3-mini",
+      "name": "O3 Mini",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "untested",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E140",
+      "eci_score": 140.2,
+      "gen_equivalent": "≈ GPT-4.1",
+      "release_date": "2025-01-31",
+      "release_date_assumed": true,
+      "capability_label": "25-D",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o3-deep-research",
+      "name": "O3 Deep Research",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "untested",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E145",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2025-06-26",
+      "release_date_assumed": true,
+      "eci_band_source": "sibling:o3",
+      "capability_label": "25-C",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o4-mini",
+      "name": "O4 Mini",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "untested",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E145",
+      "eci_score": 145.46,
+      "gen_equivalent": "≈ Gemini 2.5 Pro",
+      "release_date": "2025-04-16",
+      "capability_label": "25-C",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o4-mini-deep-research",
+      "name": "O4 Mini Deep Research",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "untested",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E145",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2025-06-26",
+      "release_date_assumed": true,
+      "eci_band_source": "sibling:o4-mini",
+      "capability_label": "25-C",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "openai",
+      "model_id": "computer-use-preview",
+      "name": "Computer Use Preview",
+      "context_window": 128000,
+      "enabled": false,
+      "status": "untested",
+      "release_date": "2025-03-11",
+      "release_date_assumed": true
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-image-1.5",
+      "name": "GPT Image 1.5",
+      "context_window": null,
+      "enabled": false,
+      "status": "untested",
+      "release_date": "2026-01-01",
+      "release_date_assumed": true
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-fable-5-1",
+      "name": "Claude Fable 5.1",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-B",
+      "behavior_profile": "standard",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E165",
+      "eci_score": 166.49,
+      "gen_equivalent": "≈ Claude Fable 5.1",
+      "release_date": "2026-09-25"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-mythos-5-1",
+      "name": "Claude Mythos 5.1",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "no_access",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E165",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2026-09-25",
+      "release_date_assumed": true,
+      "eci_band_source": "sibling:claude-fable-5-1",
+      "capability_label": "26-B",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-5-5",
+      "name": "Claude Opus 5.5",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-A",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E170",
+      "eci_score": 168.83,
+      "gen_equivalent": "≈ Claude Opus 5.5",
+      "release_date": "2026-10-14"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-sonnet-5-5",
+      "name": "Claude Sonnet 5.5",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-B",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E165",
+      "eci_score": 166.18,
+      "gen_equivalent": "≈ Claude Opus 5",
+      "release_date": "2026-10-14"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-haiku-5-5",
+      "name": "Claude Haiku 5.5",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-C",
+      "behavior_profile": "standard",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E160",
+      "eci_score": 159.32,
+      "gen_equivalent": "≈ Claude Opus 4.8",
+      "release_date": "2026-10-14"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-fable-5",
+      "name": "Claude Fable 5",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-B",
+      "behavior_profile": "standard",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E165",
+      "eci_score": 163.42,
+      "gen_equivalent": "≈ Claude Fable 5",
+      "release_date": "2026-06-09"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-mythos-5",
+      "name": "Claude Mythos 5",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "no_access",
+      "uc_class": "UC-1 Apex",
+      "eci_band": "E165",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2026-06-09",
+      "release_date_assumed": true,
+      "eci_band_source": "sibling:claude-fable-5",
+      "capability_label": "26-B",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-5",
+      "name": "Claude Opus 5",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-B",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E165",
+      "eci_score": 163.94,
+      "gen_equivalent": "≈ Claude Opus 5",
+      "release_date": "2026-07-24"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-sonnet-5",
+      "name": "Claude Sonnet 5",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E155",
+      "eci_score": 156.88,
+      "gen_equivalent": "≈ Claude Opus 4.7",
+      "release_date": "2026-06-30"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-4-8",
+      "name": "Claude Opus 4.8",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-C",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E160",
+      "eci_score": 159.01,
+      "gen_equivalent": "≈ Claude Opus 4.8",
+      "release_date": "2026-05-28"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-4-7",
+      "name": "Claude Opus 4.7",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E155",
+      "eci_score": 156.79,
+      "gen_equivalent": "≈ Claude Opus 4.7",
+      "release_date": "2026-04-16"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-4-6",
+      "name": "Claude Opus 4.6",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E155",
+      "eci_score": 155.66,
+      "gen_equivalent": "≈ Claude Opus 4.6",
+      "release_date": "2026-02-05"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-sonnet-4-6",
+      "name": "Claude Sonnet 4.6",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E155",
+      "eci_score": 152.79,
+      "gen_equivalent": "≈ Claude Opus 4.5",
+      "release_date": "2026-02-17"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-4-5-20251101",
+      "name": "Claude Opus 4.5",
+      "context_window": 200000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "25-B",
+      "capability_note": "R5 not triggered: registry max_output 8192 is a request limit; Anthropic evaluated with 64K thinking budget",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E150",
+      "eci_score": 150.11,
+      "gen_equivalent": "≈ Claude Opus 4.5",
+      "release_date": "2025-11-24"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-4-1-20250805",
+      "name": "Claude Opus 4.1",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "retired",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E145",
+      "eci_score": 144.07,
+      "gen_equivalent": "≈ Claude Opus 4.1",
+      "release_date": "2025-08-05"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-sonnet-4-5-20250929",
+      "name": "Claude Sonnet 4.5",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "deprecated",
+      "capability_label": "25-C",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E145",
+      "eci_score": 146.74,
+      "gen_equivalent": "≈ o3",
+      "release_date": "2025-09-29"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-haiku-4-5-20251001",
+      "name": "Claude Haiku 4.5",
+      "context_window": 200000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "25-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E140",
+      "eci_score": 142.15,
+      "gen_equivalent": "≈ o1",
+      "release_date": "2025-10-15"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-4-20250514",
+      "name": "Claude Opus 4",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "retired",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E145",
+      "eci_score": 142.52,
+      "gen_equivalent": "≈ Claude Opus 4",
+      "release_date": "2025-05-22"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-sonnet-4-20250514",
+      "name": "Claude Sonnet 4",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "retired",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E140",
+      "eci_score": 141.56,
+      "gen_equivalent": "≈ GPT-4.1",
+      "release_date": "2025-05-22"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-3-7-sonnet-20250219",
+      "name": "Claude 3.7 Sonnet",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "retired",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E140",
+      "eci_score": 141.03,
+      "gen_equivalent": "≈ GPT-4.1",
+      "release_date": "2025-02-19"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-3-5-sonnet-20241022",
+      "name": "Claude 3.5 Sonnet",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "deprecated",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E135",
+      "eci_score": 133.43,
+      "gen_equivalent": "≈ Claude 3.5 Sonnet",
+      "release_date": "2024-10-22",
+      "capability_label": "24-B",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-3-5-haiku-20241022",
+      "name": "Claude 3.5 Haiku",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "retired",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E125",
+      "eci_score": 127.07,
+      "gen_equivalent": "≈ Claude 3 Opus",
+      "release_date": "2024-10-22"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-3-haiku-20240307",
+      "name": "Claude 3 Haiku",
+      "context_window": 200000,
+      "enabled": false,
+      "status": "retired",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E120",
+      "eci_score": 118.85,
+      "gen_equivalent": "≈ Claude 3 Opus",
+      "release_date": "2024-03-07"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-4-argon",
+      "name": "Gemini 4 Argon",
+      "context_window": 1048576,
+      "enabled": false,
+      "status": "no_access",
+      "capability_label": "26-B",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E165",
+      "eci_score": 166.45,
+      "gen_equivalent": "≈ Gemini 4 Argon",
+      "release_date": "2026-10-13"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-3.8-flash",
+      "name": "Gemini 3.8 Flash",
+      "context_window": 1048576,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E155",
+      "eci_score": 157.44,
+      "gen_equivalent": "≈ GPT-5.4",
+      "release_date": "2026-09-11"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-3.6-flash",
+      "name": "Gemini 3.6 Flash",
+      "context_window": 1048576,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E155",
+      "eci_score": 154.53,
+      "gen_equivalent": "≈ GPT-5.2",
+      "release_date": "2026-07-31"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-3.5-flash-lite",
+      "name": "Gemini 3.5 Flash-Lite",
+      "context_window": 1048576,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-F",
+      "behavior_profile": "standard",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E145",
+      "eci_score": 144.91,
+      "gen_equivalent": "≈ Claude Opus 4.1",
+      "release_date": "2026-06-01"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "Gemini 3.1 Flash-Lite",
+      "context_window": 1048576,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-F",
+      "behavior_profile": "standard",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E145",
+      "eci_score": 144.26,
+      "gen_equivalent": "≈ Claude Opus 4.1",
+      "release_date": "2026-02-10"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-3.1-pro-preview",
+      "name": "Gemini 3.1 Pro Preview",
+      "context_window": 1048576,
+      "enabled": false,
+      "status": "no_access",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E155",
+      "eci_score": 155.34,
+      "gen_equivalent": "≈ Gemini 3.1 Pro",
+      "release_date": "2026-02-19"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-3-flash-preview",
+      "name": "Gemini 3 Flash Preview",
+      "context_window": 1048576,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "25-B",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E150",
+      "eci_score": 151.88,
+      "gen_equivalent": "≈ Claude Opus 4.5",
+      "release_date": "2025-12-17"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-2.5-pro",
+      "name": "Gemini 2.5 Pro",
+      "context_window": 1048576,
+      "enabled": false,
+      "status": "legacy",
+      "capability_label": "25-C",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E145",
+      "eci_score": 145.13,
+      "gen_equivalent": "≈ Gemini 2.5 Pro",
+      "release_date": "2025-03-25"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-2.5-flash",
+      "name": "Gemini 2.5 Flash",
+      "context_window": 1048576,
+      "enabled": false,
+      "status": "legacy",
+      "capability_label": "25-C",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E145",
+      "eci_score": 142.9,
+      "gen_equivalent": "≈ Claude Opus 4",
+      "release_date": "2025-05-20"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-2.5-flash-lite",
+      "name": "Gemini 2.5 Flash-Lite",
+      "context_window": 1048576,
+      "enabled": false,
+      "status": "legacy",
+      "capability_label": "25-E",
+      "behavior_profile": "standard",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E135",
+      "eci_score": 133.82,
+      "gen_equivalent": "≈ Claude 3.5 Sonnet",
+      "release_date": "2025-09-10"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5.3-flashx",
+      "name": "GLM-5.3 FlashX",
+      "context_window": 1000000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E155",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2026-08-26",
+      "release_date_assumed": true,
+      "eci_band_source": "sibling:glm-5.3-flash"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5.3-flashx-legal",
+      "name": "GLM-5.3 FlashX Legal",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "no_access",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E155",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2026-08-26",
+      "release_date_assumed": true,
+      "eci_band_source": "sibling:glm-5.3-flash"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5.3",
+      "name": "GLM-5.3",
+      "context_window": 1000000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E155",
+      "eci_score": 155.99,
+      "gen_equivalent": "≈ Claude Opus 4.6",
+      "release_date": "2026-08-18"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5.3-flash",
+      "name": "GLM-5.3 Flash",
+      "context_window": 1000000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E155",
+      "eci_score": 153.08,
+      "gen_equivalent": "≈ Gemini 3 Pro",
+      "release_date": "2026-08-26"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5.2",
+      "name": "GLM-5.2",
+      "context_window": 1000000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-E",
+      "capability_note": "UC-2 Flagship; over-eagerness (OverAct SIR 2.00) changes behavior_profile to guarded only (R4 does not apply: no item skipping observed)",
+      "behavior_profile": "guarded",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E150",
+      "eci_score": 151.94,
+      "gen_equivalent": "≈ Claude Opus 4.5",
+      "release_date": "2026-06-16"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5.1",
+      "name": "GLM-5.1",
+      "context_window": 200000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-E",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E150",
+      "eci_score": 149.82,
+      "gen_equivalent": "≈ GPT-5.1",
+      "release_date": "2026-04-07"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5",
+      "name": "GLM-5",
+      "context_window": 200000,
+      "enabled": true,
+      "status": "available",
+      "capability_label": "26-F",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E145",
+      "eci_score": 145.8,
+      "gen_equivalent": "≈ Gemini 2.5 Pro",
+      "release_date": "2026-02-11"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.7",
+      "name": "GLM-4.7",
+      "context_window": 200000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E145",
+      "eci_score": 143.59,
+      "gen_equivalent": "≈ Claude Opus 4",
+      "release_date": "2025-12-22",
+      "release_date_assumed": true,
+      "capability_label": "25-C",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.7-flashx",
+      "name": "GLM-4.7 FlashX",
+      "context_window": 200000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E150",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2026-01-19",
+      "release_date_assumed": true,
+      "eci_band_source": "uc_default",
+      "capability_label": "26-E",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.7-flash",
+      "name": "GLM-4.7 Flash",
+      "context_window": 200000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E150",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2026-01-19",
+      "release_date_assumed": true,
+      "eci_band_source": "uc_default",
+      "capability_label": "26-E",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.6",
+      "name": "GLM-4.6",
+      "context_window": 200000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E145",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2025-09-30",
+      "release_date_assumed": true,
+      "eci_band_source": "uc_default",
+      "capability_label": "25-C",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.6v",
+      "name": "GLM-4.6V",
+      "context_window": 128000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E140",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2025-12-08",
+      "release_date_assumed": true,
+      "eci_band_source": "uc_default",
+      "capability_label": "25-D",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.5v",
+      "name": "GLM-4.5V",
+      "context_window": 64000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E140",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2025-08-11",
+      "release_date_assumed": true,
+      "eci_band_source": "uc_default",
+      "capability_label": "25-D",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.5-x",
+      "name": "GLM-4.5-X",
+      "context_window": 128000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E145",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2025-07-28",
+      "release_date_assumed": true,
+      "eci_band_source": "uc_default",
+      "capability_label": "25-C",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.5-flash",
+      "name": "GLM-4.5 Flash",
+      "context_window": 200000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E135",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2025-07-28",
+      "release_date_assumed": true,
+      "eci_band_source": "uc_default",
+      "capability_label": "25-E",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.5-airx",
+      "name": "GLM-4.5 AirX",
+      "context_window": 128000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E140",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2025-07-28",
+      "release_date_assumed": true,
+      "eci_band_source": "uc_default",
+      "capability_label": "25-D",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.5",
+      "name": "GLM-4.5",
+      "context_window": 128000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E145",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2025-07-28",
+      "release_date_assumed": true,
+      "eci_band_source": "uc_default",
+      "capability_label": "25-C",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4-air",
+      "name": "GLM-4 Air",
+      "context_window": 128000,
+      "enabled": true,
+      "status": "available",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E120",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2024-06-05",
+      "release_date_assumed": true,
+      "eci_band_source": "uc_default",
+      "capability_label": "24-E",
+      "behavior_profile": "standard"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.7",
+      "name": "Grok 4.7",
+      "context_window": 500000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E155",
+      "eci_score": 154.37,
+      "gen_equivalent": "≈ GPT-5.2",
+      "release_date": "2026-09-18"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.6",
+      "name": "Grok 4.6",
+      "context_window": 500000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E155",
+      "eci_score": 156.57,
+      "gen_equivalent": "≈ Claude Opus 4.6",
+      "release_date": "2026-08-01"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.5",
+      "name": "Grok 4.5",
+      "context_window": 500000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-2 Flagship",
+      "eci_band": "E155",
+      "eci_score": 154.07,
+      "gen_equivalent": "≈ GPT-5.2",
+      "release_date": "2026-06-14"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.3",
+      "name": "Grok 4.3",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-E",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E150",
+      "eci_score": 148.81,
+      "gen_equivalent": "≈ Claude Sonnet 4.5",
+      "release_date": "2026-05-08"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-build-0.1",
+      "name": "Grok Build 0.1",
+      "context_window": 256000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-D",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E155",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2026-07-01",
+      "release_date_assumed": true,
+      "eci_band_source": "uc_default"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.20-multi-agent-0309",
+      "name": "Grok 4.20 Multi-Agent (0309)",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-E",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E150",
+      "eci_score": 152.11,
+      "gen_equivalent": "≈ Claude Opus 4.5",
+      "release_date": "2026-03-09"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.20-0309-reasoning",
+      "name": "Grok 4.20 Reasoning (0309)",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-E",
+      "behavior_profile": "standard",
+      "uc_class": "UC-3 Balanced",
+      "eci_band": "E150",
+      "eci_score": 152.11,
+      "gen_equivalent": "≈ Claude Opus 4.5",
+      "release_date": "2026-03-09"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.20-0309-non-reasoning",
+      "name": "Grok 4.20 Non-Reasoning (0309)",
+      "context_window": 1000000,
+      "enabled": false,
+      "status": "untested",
+      "capability_label": "26-E",
+      "behavior_profile": "standard",
+      "uc_class": "UC-4 Efficient",
+      "eci_band": "E150",
+      "eci_score": null,
+      "gen_equivalent": null,
+      "release_date": "2026-03-09",
+      "eci_band_source": "uc_default"
+    }
   ],
-  
   "model_id_startswith": [
-    { "prefix": "gpt-3.5", "provider": "openai", "method": "temperature", "max_input": 16385, "max_output": 4096, "temp_max": 2.00, "seed": true, "api": "chat_completions", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "gpt-4o", "provider": "openai", "method": "temperature", "max_input": 128000, "max_output": 16384, "temp_max": 2.00, "seed": true, "api": "chat_completions", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "gpt-4.1", "provider": "openai", "method": "temperature", "max_input": 1047576, "max_output": 32768, "temp_max": 2.00, "seed": true, "api": "chat_completions", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "gpt-4", "provider": "openai", "method": "temperature", "max_input": 128000, "max_output": 8192, "temp_max": 2.00, "seed": true, "api": "chat_completions", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "o1", "provider": "openai", "method": "reasoning_effort", "max_input": 200000, "max_output": 32768, "effort": ["low", "medium", "high"], "default": "medium", "seed": false, "api": "responses", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "o3", "provider": "openai", "method": "reasoning_effort", "max_input": 200000, "max_output": 32768, "effort": ["low", "medium", "high"], "default": "medium", "seed": false, "api": "responses", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "o4", "provider": "openai", "method": "reasoning_effort", "max_input": 200000, "max_output": 32768, "effort": ["low", "medium", "high"], "default": "medium", "seed": false, "api": "responses", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "gpt-5-pro", "provider": "openai", "method": "reasoning_effort", "max_input": null, "max_output": 32768, "effort": ["high"], "default": "high", "seed": false, "api": "responses", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "gpt-5.1-codex-max", "provider": "openai", "method": "reasoning_effort", "max_input": null, "max_output": 65536, "effort": ["none", "minimal", "low", "medium", "high", "xhigh"], "default": "none", "seed": false, "api": "responses", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "gpt-5.1", "provider": "openai", "method": "reasoning_effort", "max_input": null, "max_output": 32768, "effort": ["none", "minimal", "low", "medium", "high"], "default": "none", "seed": false, "api": "responses", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "gpt-6", "provider": "openai", "method": "reasoning_effort", "max_input": 1050000, "max_output": 128000, "effort": ["low", "medium", "high", "xhigh", "max"], "default": "low", "seed": false, "api": "responses", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "min_prefix_tokens": 1024, "write_factor": 1.25} },
-    { "prefix": "gpt-5.6", "provider": "openai", "method": "reasoning_effort", "max_input": 1050000, "max_output": 128000, "effort": ["none", "low", "medium", "high", "xhigh"], "default": "none", "seed": false, "api": "responses", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "min_prefix_tokens": 1024, "write_factor": 1.25} },
-    { "prefix": "gpt-5.5", "provider": "openai", "method": "reasoning_effort", "max_input": 1050000, "max_output": 128000, "effort": ["none", "low", "medium", "high", "xhigh"], "default": "none", "seed": false, "api": "responses", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "gpt-5.4", "provider": "openai", "method": "reasoning_effort", "max_input": 1047576, "max_output": 32768, "effort": ["none", "low", "medium", "high", "xhigh"], "default": "none", "seed": false, "api": "responses", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "gpt-5.2", "provider": "openai", "method": "reasoning_effort", "max_input": null, "max_output": 32768, "effort": ["none", "low", "medium", "high", "xhigh"], "default": "none", "seed": false, "api": "responses", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "gpt-5", "provider": "openai", "method": "reasoning_effort", "max_input": null, "max_output": 32768, "effort": ["minimal", "low", "medium", "high"], "default": "medium", "seed": false, "api": "responses", "vision": {"max_long_edge_px": 2048, "patch_px": 32, "max_patches": 2500, "tokens_per_patch": 1, "max_images_per_request": 1500, "default_images_per_batch": 3}, "caching": {"mode": "auto", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-fable-5", "provider": "anthropic", "method": "adaptive_thinking", "max_input": 1000000, "max_output": 128000, "effort": ["low", "medium", "high", "xhigh", "max"], "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-mythos-5", "provider": "anthropic", "method": "adaptive_thinking", "max_input": 1000000, "max_output": 128000, "effort": ["low", "medium", "high", "xhigh", "max"], "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-opus-5", "provider": "anthropic", "method": "adaptive_thinking", "max_input": 1000000, "max_output": 128000, "effort": ["low", "medium", "high", "xhigh", "max"], "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-sonnet-5", "provider": "anthropic", "method": "adaptive_thinking", "max_input": 1000000, "max_output": 128000, "effort": ["low", "medium", "high", "xhigh", "max"], "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-opus-4-8", "provider": "anthropic", "method": "adaptive_thinking", "max_input": 1000000, "max_output": 128000, "effort": ["low", "medium", "high", "xhigh", "max"], "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-opus-4-7", "provider": "anthropic", "method": "adaptive_thinking", "max_input": 1000000, "max_output": 128000, "effort": ["low", "medium", "high", "xhigh", "max"], "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-opus-4-6", "provider": "anthropic", "method": "adaptive_thinking", "max_input": 1000000, "max_output": 128000, "effort": ["low", "medium", "high", "max"], "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-opus-4-5", "provider": "anthropic", "method": "effort", "max_input": 200000, "max_output": 8192, "effort": ["low", "medium", "high"], "default": "high", "beta": "effort-2025-11-24", "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-opus-4", "provider": "anthropic", "method": "thinking", "max_input": 200000, "max_output": 8192, "thinking_max": 100000, "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-sonnet-4-5", "provider": "anthropic", "method": "thinking", "max_input": 200000, "max_output": 16384, "thinking_max": 100000, "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-sonnet-4", "provider": "anthropic", "method": "thinking", "max_input": 200000, "max_output": 8192, "thinking_max": 100000, "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-3.7", "provider": "anthropic", "method": "thinking", "max_input": 200000, "max_output": 8192, "thinking_max": 100000, "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-3.5", "provider": "anthropic", "method": "temperature", "max_input": 200000, "max_output": 8192, "temp_max": 1.00, "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-3", "provider": "anthropic", "method": "temperature", "max_input": 200000, "max_output": 4096, "temp_max": 1.00, "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "claude-haiku-4-5", "provider": "anthropic", "api": "messages", "method": "thinking", "max_input": 200000, "max_output": 8192, "thinking_max": 100000, "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 2048} },
-    { "prefix": "claude-", "provider": "anthropic", "method": "temperature", "max_input": 200000, "max_output": 4096, "temp_max": 1.00, "api": "messages", "vision": {"max_long_edge_px": 1568, "image_token_divisor": 750, "max_images_per_request": 100, "default_images_per_batch": 3}, "caching": {"mode": "explicit", "ttl": "5m", "min_prefix_tokens": 1024} },
-    { "prefix": "glm-5.3-flash", "provider": "zai", "method": "reasoning_effort", "max_input": 1000000, "max_output": 16384, "effort": ["low", "high", "max"], "default": "high", "seed": false, "api": "chat_completions", "vision": {"max_long_edge_px": 2048, "image_token_divisor": 750, "max_images_per_request": 20, "default_images_per_batch": 2, "_note": "probed 2026-09-26 (BG-0092): effort medium -> 400 code 1210; effort high text-only and one image -> 200; effort is clamped to this list; batch values still assumed"}, "caching": {"mode": "implicit"} },
-    { "prefix": "glm-5.3", "provider": "zai", "method": "reasoning_effort", "max_input": 1000000, "max_output": 16384, "effort": ["low", "high", "max"], "default": "high", "seed": false, "api": "chat_completions", "vision": {"max_long_edge_px": 2048, "image_token_divisor": 750, "max_images_per_request": 20, "default_images_per_batch": 2, "_note": "effort list confirmed via glm-5.3-flash probe 2026-09-26 (BG-0092, 400 code 1210 on medium); effort is clamped to this list; batch values still assumed"}, "caching": {"mode": "implicit"} },
-    { "prefix": "glm-5.2", "provider": "zai", "method": "reasoning_effort", "max_input": 1000000, "max_output": 16384, "effort": ["none", "minimal", "low", "medium", "high", "xhigh", "max"], "default": "high", "seed": false, "api": "chat_completions", "vision": {"max_long_edge_px": 2048, "image_token_divisor": 750, "max_images_per_request": 20, "default_images_per_batch": 2, "_note": "not tested in P8 pilot (HTTP 400); values assumed"}, "caching": {"mode": "implicit"} },
-    { "prefix": "glm-5", "provider": "zai", "method": "thinking", "max_input": 200000, "max_output": 16384, "seed": false, "api": "chat_completions", "vision": {"max_long_edge_px": 2048, "image_token_divisor": 750, "max_images_per_request": 20, "default_images_per_batch": 2, "_note": "not tested in P8 pilot (HTTP 400); values assumed"}, "caching": {"mode": "implicit"} },
-    { "prefix": "glm-4.5-flash", "provider": "zai", "method": "thinking", "max_input": 200000, "max_output": 8192, "seed": false, "api": "chat_completions", "vision": {"max_long_edge_px": 2048, "image_token_divisor": 750, "max_images_per_request": 20, "default_images_per_batch": 2, "_note": "not tested in P8 pilot (HTTP 400); values assumed"}, "caching": {"mode": "implicit"} },
-    { "prefix": "glm-4", "provider": "zai", "method": "thinking", "max_input": 200000, "max_output": 8192, "seed": false, "api": "chat_completions", "vision": {"max_long_edge_px": 2048, "image_token_divisor": 750, "max_images_per_request": 20, "default_images_per_batch": 2, "_note": "not tested in P8 pilot (HTTP 400); values assumed"}, "caching": {"mode": "implicit"} }
+    {
+      "prefix": "gpt-3.5",
+      "provider": "openai",
+      "method": "temperature",
+      "max_input": 16385,
+      "max_output": 4096,
+      "temp_max": 2.0,
+      "seed": true,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "gpt-4o",
+      "provider": "openai",
+      "method": "temperature",
+      "max_input": 128000,
+      "max_output": 16384,
+      "temp_max": 2.0,
+      "seed": true,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "gpt-4.1",
+      "provider": "openai",
+      "method": "temperature",
+      "max_input": 1047576,
+      "max_output": 32768,
+      "temp_max": 2.0,
+      "seed": true,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "gpt-4",
+      "provider": "openai",
+      "method": "temperature",
+      "max_input": 128000,
+      "max_output": 8192,
+      "temp_max": 2.0,
+      "seed": true,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "o1",
+      "provider": "openai",
+      "method": "reasoning_effort",
+      "max_input": 200000,
+      "max_output": 32768,
+      "effort": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "o3",
+      "provider": "openai",
+      "method": "reasoning_effort",
+      "max_input": 200000,
+      "max_output": 32768,
+      "effort": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "o4",
+      "provider": "openai",
+      "method": "reasoning_effort",
+      "max_input": 200000,
+      "max_output": 32768,
+      "effort": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "gpt-5-pro",
+      "provider": "openai",
+      "method": "reasoning_effort",
+      "max_input": 256000,
+      "max_output": 32768,
+      "effort": [
+        "high"
+      ],
+      "default": "high",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "gpt-5.1-codex-max",
+      "provider": "openai",
+      "method": "reasoning_effort",
+      "max_input": null,
+      "max_output": 65536,
+      "effort": [
+        "none",
+        "minimal",
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "default": "none",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "gpt-5.1",
+      "provider": "openai",
+      "method": "reasoning_effort",
+      "max_input": 256000,
+      "max_output": 32768,
+      "effort": [
+        "none",
+        "minimal",
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "none",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "gpt-6",
+      "provider": "openai",
+      "method": "reasoning_effort",
+      "max_input": 1050000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "default": "low",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "min_prefix_tokens": 1024,
+        "write_factor": 1.25
+      }
+    },
+    {
+      "prefix": "gpt-5.6",
+      "provider": "openai",
+      "method": "reasoning_effort",
+      "max_input": 1050000,
+      "max_output": 128000,
+      "effort": [
+        "none",
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "default": "none",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "min_prefix_tokens": 1024,
+        "write_factor": 1.25
+      }
+    },
+    {
+      "prefix": "gpt-5.5",
+      "provider": "openai",
+      "method": "reasoning_effort",
+      "max_input": 1050000,
+      "max_output": 128000,
+      "effort": [
+        "none",
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "default": "none",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "gpt-5.4",
+      "provider": "openai",
+      "method": "reasoning_effort",
+      "max_input": 1047576,
+      "max_output": 32768,
+      "effort": [
+        "none",
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "default": "none",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "gpt-5.2",
+      "provider": "openai",
+      "method": "reasoning_effort",
+      "max_input": 256000,
+      "max_output": 32768,
+      "effort": [
+        "none",
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "default": "none",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "gpt-5",
+      "provider": "openai",
+      "method": "reasoning_effort",
+      "max_input": 256000,
+      "max_output": 32768,
+      "effort": [
+        "minimal",
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "patch_px": 32,
+        "max_patches": 2500,
+        "tokens_per_patch": 1,
+        "max_images_per_request": 1500,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-fable-5",
+      "provider": "anthropic",
+      "method": "adaptive_thinking",
+      "max_input": 1000000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-mythos-5",
+      "provider": "anthropic",
+      "method": "adaptive_thinking",
+      "max_input": 1000000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-opus-5",
+      "provider": "anthropic",
+      "method": "adaptive_thinking",
+      "max_input": 1000000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-sonnet-5",
+      "provider": "anthropic",
+      "method": "adaptive_thinking",
+      "max_input": 1000000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-opus-4-8",
+      "provider": "anthropic",
+      "method": "adaptive_thinking",
+      "max_input": 1000000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-opus-4-7",
+      "provider": "anthropic",
+      "method": "adaptive_thinking",
+      "max_input": 1000000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-opus-4-6",
+      "provider": "anthropic",
+      "method": "adaptive_thinking",
+      "max_input": 1000000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high",
+        "max"
+      ],
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-opus-4-5",
+      "provider": "anthropic",
+      "method": "effort",
+      "max_input": 200000,
+      "max_output": 8192,
+      "effort": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "high",
+      "beta": "effort-2025-11-24",
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-opus-4",
+      "provider": "anthropic",
+      "method": "thinking",
+      "max_input": 200000,
+      "max_output": 8192,
+      "thinking_max": 100000,
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-sonnet-4-5",
+      "provider": "anthropic",
+      "method": "thinking",
+      "max_input": 200000,
+      "max_output": 16384,
+      "thinking_max": 100000,
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-sonnet-4",
+      "provider": "anthropic",
+      "method": "thinking",
+      "max_input": 200000,
+      "max_output": 8192,
+      "thinking_max": 100000,
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-3.7",
+      "provider": "anthropic",
+      "method": "thinking",
+      "max_input": 200000,
+      "max_output": 8192,
+      "thinking_max": 100000,
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-3.5",
+      "provider": "anthropic",
+      "method": "temperature",
+      "max_input": 200000,
+      "max_output": 8192,
+      "temp_max": 1.0,
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-3",
+      "provider": "anthropic",
+      "method": "temperature",
+      "max_input": 200000,
+      "max_output": 4096,
+      "temp_max": 1.0,
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "claude-haiku-5",
+      "provider": "anthropic",
+      "method": "adaptive_thinking",
+      "max_input": 1000000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 2048
+      }
+    },
+    {
+      "prefix": "claude-haiku-4-5",
+      "provider": "anthropic",
+      "api": "messages",
+      "method": "thinking",
+      "max_input": 200000,
+      "max_output": 8192,
+      "thinking_max": 100000,
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 2048
+      }
+    },
+    {
+      "prefix": "claude-",
+      "provider": "anthropic",
+      "method": "temperature",
+      "max_input": 200000,
+      "max_output": 4096,
+      "temp_max": 1.0,
+      "api": "messages",
+      "vision": {
+        "max_long_edge_px": 1568,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "explicit",
+        "ttl": "5m",
+        "min_prefix_tokens": 1024
+      }
+    },
+    {
+      "prefix": "glm-5.3-flashx",
+      "provider": "zai",
+      "method": "reasoning_effort",
+      "max_input": 1000000,
+      "max_output": 16384,
+      "effort": [
+        "low",
+        "high",
+        "max"
+      ],
+      "default": "high",
+      "seed": false,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 20,
+        "default_images_per_batch": 2,
+        "_note": "probed 2026-10-28: effort medium -> 400 code 1210; low/high/max -> 200"
+      },
+      "caching": {
+        "mode": "implicit"
+      }
+    },
+    {
+      "prefix": "glm-5.3-flash",
+      "provider": "zai",
+      "method": "reasoning_effort",
+      "max_input": 1000000,
+      "max_output": 16384,
+      "effort": [
+        "low",
+        "high",
+        "max"
+      ],
+      "default": "high",
+      "seed": false,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 20,
+        "default_images_per_batch": 2,
+        "_note": "probed 2026-09-26 (BG-0092): effort medium -> 400 code 1210; effort high text-only and one image -> 200; effort is clamped to this list; batch values still assumed"
+      },
+      "caching": {
+        "mode": "implicit"
+      }
+    },
+    {
+      "prefix": "glm-5.3",
+      "provider": "zai",
+      "method": "reasoning_effort",
+      "max_input": 1000000,
+      "max_output": 16384,
+      "effort": [
+        "low",
+        "high",
+        "max"
+      ],
+      "default": "high",
+      "seed": false,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 20,
+        "default_images_per_batch": 2,
+        "_note": "effort list confirmed via glm-5.3-flash probe 2026-09-26 (BG-0092, 400 code 1210 on medium); effort is clamped to this list; batch values still assumed"
+      },
+      "caching": {
+        "mode": "implicit"
+      }
+    },
+    {
+      "prefix": "glm-5.2",
+      "provider": "zai",
+      "method": "reasoning_effort",
+      "max_input": 1000000,
+      "max_output": 16384,
+      "effort": [
+        "none",
+        "minimal",
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "default": "high",
+      "seed": false,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 20,
+        "default_images_per_batch": 2,
+        "_note": "not tested in P8 pilot (HTTP 400); values assumed"
+      },
+      "caching": {
+        "mode": "implicit"
+      }
+    },
+    {
+      "prefix": "glm-5",
+      "provider": "zai",
+      "method": "thinking",
+      "max_input": 200000,
+      "max_output": 16384,
+      "seed": false,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 20,
+        "default_images_per_batch": 2,
+        "_note": "not tested in P8 pilot (HTTP 400); values assumed"
+      },
+      "caching": {
+        "mode": "implicit"
+      }
+    },
+    {
+      "prefix": "glm-4.5-flash",
+      "provider": "zai",
+      "method": "thinking",
+      "max_input": 200000,
+      "max_output": 8192,
+      "seed": false,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 20,
+        "default_images_per_batch": 2,
+        "_note": "not tested in P8 pilot (HTTP 400); values assumed"
+      },
+      "caching": {
+        "mode": "implicit"
+      }
+    },
+    {
+      "prefix": "glm-4",
+      "provider": "zai",
+      "method": "thinking",
+      "max_input": 200000,
+      "max_output": 8192,
+      "seed": false,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 20,
+        "default_images_per_batch": 2,
+        "_note": "not tested in P8 pilot (HTTP 400); values assumed"
+      },
+      "caching": {
+        "mode": "implicit"
+      }
+    },
+    {
+      "prefix": "gemini-3.6-flash",
+      "provider": "google",
+      "method": "reasoning_effort",
+      "max_input": 1048576,
+      "max_output": 65536,
+      "effort": [
+        "minimal",
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium",
+      "seed": false,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "implicit"
+      }
+    },
+    {
+      "prefix": "gemini-3.5-flash-lite",
+      "provider": "google",
+      "method": "reasoning_effort",
+      "max_input": 1048576,
+      "max_output": 65536,
+      "effort": [
+        "minimal",
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "minimal",
+      "seed": false,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "implicit"
+      }
+    },
+    {
+      "prefix": "gemini-3.1-flash-lite",
+      "provider": "google",
+      "method": "reasoning_effort",
+      "max_input": 1048576,
+      "max_output": 65536,
+      "effort": [
+        "minimal",
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "minimal",
+      "seed": false,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "implicit"
+      }
+    },
+    {
+      "prefix": "gemini-3-flash",
+      "provider": "google",
+      "method": "reasoning_effort",
+      "max_input": 1048576,
+      "max_output": 65536,
+      "effort": [
+        "minimal",
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "high",
+      "seed": false,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "implicit"
+      }
+    },
+    {
+      "prefix": "gemini-",
+      "provider": "google",
+      "method": "reasoning_effort",
+      "max_input": 1048576,
+      "max_output": 65536,
+      "effort": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium",
+      "seed": false,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "implicit"
+      }
+    },
+    {
+      "prefix": "grok-4.7",
+      "provider": "xai",
+      "method": "reasoning_effort",
+      "max_input": 500000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "default": "high",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto"
+      }
+    },
+    {
+      "prefix": "grok-4.6",
+      "provider": "xai",
+      "method": "reasoning_effort",
+      "max_input": 500000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "default": "high",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto"
+      }
+    },
+    {
+      "prefix": "grok-4.5",
+      "provider": "xai",
+      "method": "reasoning_effort",
+      "max_input": 500000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "high",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto"
+      }
+    },
+    {
+      "prefix": "grok-4.3",
+      "provider": "xai",
+      "method": "reasoning_effort",
+      "max_input": 1000000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "high",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto"
+      }
+    },
+    {
+      "prefix": "grok-build",
+      "provider": "xai",
+      "method": "reasoning_effort",
+      "max_input": 256000,
+      "max_output": 65536,
+      "effort": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "high",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto"
+      }
+    },
+    {
+      "prefix": "grok-4.20-multi-agent",
+      "provider": "xai",
+      "method": "reasoning_effort",
+      "max_input": 1000000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "default": "high",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto"
+      }
+    },
+    {
+      "prefix": "grok-4.20-0309-non-reasoning",
+      "provider": "xai",
+      "method": "temperature",
+      "max_input": 1000000,
+      "max_output": 65536,
+      "temp_max": 2.0,
+      "seed": false,
+      "api": "chat_completions",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto"
+      }
+    },
+    {
+      "prefix": "grok-",
+      "provider": "xai",
+      "method": "reasoning_effort",
+      "max_input": 1000000,
+      "max_output": 128000,
+      "effort": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "high",
+      "seed": false,
+      "api": "responses",
+      "vision": {
+        "max_long_edge_px": 2048,
+        "image_token_divisor": 750,
+        "max_images_per_request": 100,
+        "default_images_per_batch": 3
+      },
+      "caching": {
+        "mode": "auto"
+      }
+    }
   ]
 }

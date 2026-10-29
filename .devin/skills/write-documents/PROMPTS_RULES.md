@@ -52,7 +52,7 @@ Self-Contained (SC)
 - PRMT-SC-02: No conversation dependency — no "the previous step" or "as discussed above" without naming where output lives in a file
 - PRMT-SC-03: Idempotency constraint — implementation prompts must include idempotency constraint
 - PRMT-SC-04: Chain length limit — sequences under 6 steps; longer workflows split into sub-chains with checkpoints
-- PRMT-SC-05: Effort and model specification — frontmatter must specify intended_model, context_window_size, effort level; prompts scoped to effort budget
+- PRMT-SC-05: Effort and model specification — frontmatter must specify intended_model, context_window_size, effort level; prompts scoped to effort budget; values and per-prompt scope consistent with MODEL_INVENTORY.md
 - PRMT-SC-06: Planning document reference — prompt sequences from planning documents must reference the document by filename and step ID
 - PRMT-SC-07: Load-based workflow partitioning — before writing a prompt that invokes workflows, assess the load of each workflow invocation (files read, artifacts produced, reasoning depth) against the run budget given by intended_model, context_window_size, and effort; group workflows into prompts so each run is neither overloaded (multiple heavy workflows squeezed into one run) nor underloaded (one light workflow alone in a run); the assessment and the resulting grouping are stated in the prompts file commentary
 - PRMT-SC-08: Session Anchor — every prompt must declare absolute session folder and working folder after the Prompt Marker; all file operations stay within the declared working folder unless the prompt explicitly names an absolute path outside it
@@ -1352,7 +1352,13 @@ Prompt file frontmatter must specify `intended_model`, `context_window_size`, an
 
 The prompt count must match the effort budget. A task that requires 8 prompts at low effort may require 2 prompts at high effort. Mismatched effort and prompt count produces either overloaded prompts (low effort, too many steps) or underutilized prompts (high effort, unnecessary fragmentation).
 
-Verifiable from artifact: check frontmatter for `intended_model`, `context_window_size`, and `effort` keys. Check that prompt count is consistent with the effort level (low effort = more prompts, high effort = fewer prompts).
+Verifiable from artifact: check frontmatter for `intended_model`, `context_window_size`, and `effort` keys. Check that prompt count is consistent with the effort level (low effort = more prompts, high effort = fewer prompts). Check against the `MODEL_INVENTORY.md` row of `intended_model`:
+- `intended_model` resolves to a row, or the commentary states "model not in MODEL_INVENTORY.md"
+- `context_window_size` matches the Context column; `effort` is listed in the Efforts column (`L M H X MX`)
+- Opening commentary states model row, Label (permanent `YY-L`, not the Comp column), profile, effort, WF (workload factor = `WF` column times the effort multiplier), task HWH (Human Work Hours), prompt count, and estimated cost
+- No implementation prompt carries more than WF HWH, more numbered items than the profile's `max_items`, or more changed files than its `max_files`
+- Prompt count is not below `max(ceil(task_HWH / WF), ceil(total_items / max_items), ceil(total_files / max_files))` (overloaded) and not above twice that value (fragmented)
+- Checkpoints follow the profile's `checkpoint_interval`; `guarded` profile prompts carry the strict scope guard (`PROMPTS_GUIDES.md` Section 1g step 7)
 
 **BAD** (no effort specification, prompt count mismatch):
 `````markdown

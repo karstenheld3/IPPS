@@ -16,11 +16,13 @@ Provides execution hints to the execution engine. The engine MAY honor or overri
 Omit entirely if no execution hints needed. Remove this block if not used.
 Supported keys: intended_model, context_window_size, effort, prompt_system -->
 ---
-intended_model: [model identifier, e.g., claude-sonnet-4-5]
+intended_model: [model identifier, e.g., claude-sonnet-5]
 context_window_size: [e.g., 200k, 128k, 1M]
 effort: [low | medium | high | extra-high]
 prompt_system: [e.g., IPPS]
 ---
+
+<!-- Budget (PROMPTS_GUIDES.md Section 1g): model row [row], label [YY-L], profile [precise | standard | guarded], effort [level], WF (workload factor) [N] HWH (Human Work Hours), task [N] HWH, [N] implementation prompts, estimated cost $[N] -->
 
 <!-- Simple prompt: 3-backtick fence when no inner code blocks.
 Heading before the fence is optional but recommended (PRMT-FT-07). -->
@@ -95,11 +97,13 @@ Verify: [Observable success criteria]
 
 `````markdown
 ---
-intended_model: claude-sonnet-4-5
-context_window_size: 200k
+intended_model: claude-sonnet-5
+context_window_size: 1M
 effort: high
 prompt_system: IPPS
 ---
+
+<!-- Budget (PROMPTS_GUIDES.md Section 1g): model row claude-sonnet-5, label 26-D, profile standard, effort high, WF 0.75 HWH, task 1.0 HWH, 2 implementation prompts, estimated cost $3.60 -->
 
 ## Prompt 1 - Security analysis
 

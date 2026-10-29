@@ -2,7 +2,7 @@
 
 **Doc ID**: LLMCAPCLS-IN01
 **Goal**: Define time-stable model capability labels, a behavior profile per model, and how `MODEL_INVENTORY.md` is produced from them and used to partition TASKS, STRUT, and prompts files by model, effort, and context window
-**Timeline**: Created 2026-10-28, Updated 7 times (2026-10-28 - 2026-10-28)
+**Timeline**: Created 2026-10-28, Updated 9 times (2026-10-28 - 2026-10-29)
 **Target file**: `PromptSystemV4.5/skills/write-documents/MODEL_INVENTORY.md`, `PromptSystemV4.5/skills/llm-evaluation/model-registry.json`, `update-model-registry.md`
 
 **Depends on:**
@@ -12,28 +12,27 @@
 ## Summary
 
 - **Generation-relative classes go stale**: the former `MODEL_INVENTORY.md` Class A-D was defined as "frontier" / "previous frontier generation", so every release cycle forced a re-grade of the whole table [VERIFIED - LLMCAPCLS-IN01-SC-IPPS-MINV]
-- **Applied on 2026-10-28**: `MODEL_INVENTORY.md` now uses labels, profiles, and the three-limit prompt count; `model-registry.json` 1.10.0 carries `capability_label`, `capability_note`, `behavior_profile` for 28 models; `update-model-registry.md` step 9.4 maintains them [VERIFIED - LLMCAPCLS-IN01-SC-IPPS-MINV, LLMCAPCLS-IN01-SC-IPPS-MREG]
-- **Year-letter labels `YY-L` are permanent**: `YY` = release year, `L` = capability bucket within that year (A = top, H = small local models). A label never changes because a newer model appears [ASSUMED]
-- **One letter equals one year of progress**: `26-B ≈ 25-A`. This makes the workload factor (WF, Human Work Hours one prompt completes) absolute: `WF_high = 2.0 * 0.5^letter_index * 2^(YY - 26)` [ASSUMED - calibrate with ledger]
-- **YY-A is assignable only from October of YY**: until end of September the highest label of year YY is `YY-B`. On the October review the year's top models are promoted to `YY-A`, regardless of release month. Labels of year YY are provisional until December 31; promotion is the only upward change and errs conservative (WF underestimated before October) [ASSUMED - rule design]
-- **Release timing supports the October cut only partly**: 2024 and 2025 flagships ([OpenAI GPT-5.2](https://openai.com/index/introducing-gpt-5-2/), [Google Gemini 3](https://blog.google/products-and-platforms/products/gemini/gemini-3/), [Anthropic models](https://www.anthropic.com/news/models)) clustered in September to December (o1, Gemini 3 Pro, GPT-5.1, Claude Opus 4.5, GPT-5.2). 2026 flagships shipped June to September (Claude Fable 5, Claude Opus 5, GPT-6 Astra). Promotion instead of release date covers both patterns [VERIFIED - LLMCAPCLS-IN01-SC-OAI-GPT52, LLMCAPCLS-IN01-SC-GOOG-GEM3, LLMCAPCLS-IN01-SC-ANTH-OPUS45, LLMCAPCLS-IN01-SC-ANTH-FABLE5, LLMCAPCLS-IN01-SC-ANTH-OPUS5, LLMCAPCLS-IN01-SC-NAIM-TMLN]
-- **Labels can encode the current inventory**: 35 of 37 rows keep their WF; `gpt-5.2` and `claude-opus-4-5` change (0.5 → 1.0 at High). Labels were chosen to reproduce current values, so this shows compatibility, not independent validation [ASSUMED - Section 6]
+- **Applied on 2026-10-29**: `MODEL_INVENTORY.md` lists 92 API models (every text model except `retired`) plus 4 Devin-only models with Label, Comp, Profile, Efforts, WF, prices; `model-registry.json` 1.11.0 carries `release_date`, frozen `eci_band`, script-derived `capability_label`; `update-model-inventory.py` regenerates the tables [VERIFIED - LLMCAPCLS-IN01-SC-IPPS-MINV, LLMCAPCLS-IN01-SC-IPPS-MREG]
+- **The letter is the Epoch ECI band relative to a year anchor**: `letter_index = (anchor(YY) - eci_band) / 5`, letters `A`-`Z`, one letter per 5 ECI points. Measured, not judged; vendor tiers no longer decide the letter. 2026 spreads over `A`-`F` (was `B`-`E`) [VERIFIED - band source; anchor ASSUMED]
+- **Year anchors rise 15 ECI per year**: top bands 2024 `E140` (o1), 2025 `E155` (gpt-5.2), 2026 `E170` (gpt-6.1-sol, gpt-6-astra, claude-opus-5-5) → `anchor(YY) = 170 + 15 * (YY - 26)` [VERIFIED for 2024-2026 - LLMCAPCLS-IN01-SC-IPPS-MREG; constant for later years ASSUMED]
+- **Label is permanent, Comp compares across years**: Label uses the release year; Comp uses the comparison year (`year(today)` from May 1, else the previous year) and shifts three letters at each May 1 wrap. Same band = same Comp, so `gpt-5.2` (`25-A`) and `gpt-5.4` (`26-D`) both show Comp `26-D` [ASSUMED - rule design]
+- **WF comes from the band, not the letter**: `WF_high = 2.0 * 2^(-(170 - eci_band) / 10)` halves every two letters (1.5 doublings per year, inside METR's 1-4). WF does not move at the wrap [ASSUMED - anchor and slope]
+- **In-house measurement cross-check**: LLM-Research `TBLF-IN02` CSV extraction limits show effort and thinking method dominate (`claude-opus-4-6` 6 rows at Medium, 667 at High) and do not order models within E145-E160; used as Notes marker and Medium warning for adaptive-thinking models, not as letter source [VERIFIED - LLMCAPCLS-IN01-SC-TBLF-IN02]
 - **Two independent dimensions per model**: capability label (how much work per prompt, WF) and behavior profile `precise` / `standard` / `guarded` (prompt shape: max_items, max_files, checkpoint_interval, scope_guard). Profile comes from ledger instruction following (IF) and eagerness (EG), then documented observations, then benchmarks; no data = `standard` [VERIFIED - LLMCAPCLS-IN01-SC-IPPS-IN06, LLMCAPCLS-IN01-SC-IPPS-IN07]
-- **Prompt count = maximum of three limits**: `ceil(task_HWH / WF)`, `ceil(items / max_items)`, `ceil(files / max_files)`. For a task of 3 Human Work Hours (HWH) Claude Opus 5 is limited by items (3 prompts), GLM-5.2 by capacity (12 prompts) [ASSUMED - Section 9.3]
-- **MODEL_INVENTORY.md is generated from the registries**: registry holds `capability_label`, `behavior_profile`, `observed`; inventory adds WF per effort and price; agents read only the inventory [ASSUMED - design, Section 8]
+- **Prompt count = maximum of three limits**: `ceil(task_HWH / WF)`, `ceil(items / max_items)`, `ceil(files / max_files)`. For a task of 3 Human Work Hours (HWH) Claude Opus 5 is limited by items (3 prompts), GLM-5.2 by capacity (6 prompts) [ASSUMED - Section 9.3]
+- **MODEL_INVENTORY.md is generated from the registries**: registry holds `release_date`, `eci_band`, `capability_label`, `behavior_profile`, `observed`; `update-model-inventory.py` adds Comp, Efforts, WF, and price; agents read only the inventory [VERIFIED - script in session `!ModelRegistryUpdate`]
 - **HWH, WF, AWH answer three questions**: HWH = how big is the job (human expert hours, model-independent, same unit as [METR](https://metr.org/) (Model Evaluation and Threat Research) and [Anthropic](https://www.anthropic.com/research/estimating-productivity-gains)); WF = how much fits in one prompt; Agent Work Hours (AWH) = how long the agent runs. Estimate HWH in buckets 0.25 / 0.5 / 1 / 2 HWH, split at 4 [VERIFIED - unit definition; buckets ASSUMED]
 - **AWH starts at 0.2 × HWH, then gets measured**: default from Anthropic's estimated 80% task-time reduction; replaced by observed minutes per prompt from STRUT Time Logs. Not valid for large familiar codebases, where METR's randomized controlled trial (RCT) measured AI-assisted work as up to 19% slower [VERIFIED - LLMCAPCLS-IN01-SC-ANTH-PROD, LLMCAPCLS-IN01-SC-METR-RCT; default ratio ASSUMED]
-- **WF values are plausible against METR**: Claude Opus 4.5 80%-reliability horizon about 1 h (derived from the 50% horizon) vs WF 1.0 HWH for its proposed label `25-A`; METR's 1-4 doublings per year make the one-doubling-per-year label rate conservative [VERIFIED - LLMCAPCLS-IN01-SC-METR-LIMIT, LLMCAPCLS-IN01-SC-METR-BLOG]
-- **Registry is behind**: GPT-6 Sol (2026-09-22), Claude Opus 5.5 (2026-09-22), Gemini 4 Argon (2026-10-13) are released but missing from `model-registry.json` 1.9.0 [VERIFIED - LLMCAPCLS-IN01-SC-NAIM-TMLN]
+- **WF values are plausible against METR**: Claude Opus 4.5 80%-reliability horizon about 1 h (derived from the 50% horizon) vs WF 0.5 HWH for its band `E150`; both within METR's factor-2 error bars, and METR's 1-4 doublings per year make the 1.5-doublings slope conservative [VERIFIED - LLMCAPCLS-IN01-SC-METR-LIMIT, LLMCAPCLS-IN01-SC-METR-BLOG]
 
 ## Table of Contents
 
 1. [Problem with Generation-Relative Classes](#1-problem-with-generation-relative-classes)
 2. [Year-Letter Label Format](#2-year-letter-label-format)
-3. [Release Timing and the October Rule](#3-release-timing-and-the-october-rule)
+3. [Year Anchor, Comparison Year, and the May 1 Wrap](#3-year-anchor-comparison-year-and-the-may-1-wrap)
 4. [Workload Factor Formula](#4-workload-factor-formula)
 5. [Assignment Rules](#5-assignment-rules)
-6. [Proposed Labels for the Current Inventory](#6-proposed-labels-for-the-current-inventory)
+6. [Labels for the Current Inventory](#6-labels-for-the-current-inventory)
 7. [Behavior Profile: Assessing How a Prompt Must Be Shaped](#7-behavior-profile-assessing-how-a-prompt-must-be-shaped)
 8. [Producing MODEL_INVENTORY.md](#8-producing-model_inventorymd)
 9. [Using the Inventory in Partitioned Documents](#9-using-the-inventory-in-partitioned-documents)
@@ -63,37 +62,35 @@ Requirement for a replacement: the label of a model must be assigned once and st
 
 Format: `YY-L`
 
-- `YY` - two-digit release year (general availability via API or product)
+- `YY` - two-digit release year (general availability via API or product; `release_date` in `model-registry.json`)
 - `-` - separator (readability; `26-C` instead of `26C`)
-- `L` - capability letter within that year, A (highest) to H (lowest)
+- `L` - letter `A`..`Z` for the model's Epoch ECI band relative to the year anchor (Section 3): `letter_index = (anchor(YY) - eci_band) / 5`. One letter = one 5-point ECI band. No floor; an index below 0 clamps to `A`
 
-Letter meaning within one year:
+The letter is measured, not judged: the ECI band comes from `https://epoch.ai/eci` (score rounded to the nearest 5) and is frozen at first assignment. Vendor tier words (Apex, Flagship, Balanced, Efficient) are not part of the definition; they remain in `uc_class` for the ECI-pending fallback (Section 5).
 
-- **A** - top models of the year (assignable only from October, see Section 3)
-- **B** - flagship models; highest label before October
-- **C** - mid models (balanced price and capability)
-- **D** - small models (mini variants, fast models)
-- **E** - very small models (nano variants)
-- **F, G, H** - very small optimized models that can run locally
+Two labels per model:
+
+- **Label** - `YY` = release year. Permanent (R1, R2)
+- **Comp** - `YY` = comparison year (Section 3.2). Same band = same Comp regardless of release year. Regenerated at every inventory update
 
 ```
-         Letter:  A      B      C      D      E      F      G      H
-                  │      │      │      │      │      │      │      │
-  25-L  WF_high:  1.0    0.5    0.25   0.13   0.06   0.03   0.02   0.01
-  26-L  WF_high:  2.0    1.0    0.5    0.25   0.13   0.06   0.03   0.02
-  27-L  WF_high:  4.0    2.0    1.0    0.5    0.25   0.13   0.06   0.03
-  Cross-year link: 26-B (1.0) = 25-A (1.0), 27-B (2.0) = 26-A (2.0). One letter step = one year
+  Band:        E170  E165  E160  E155  E150  E145  E140  E135  E130  E125  E120
+  Label 2024:  -     -     -     -     -     -     A     B     C     D     E
+  Label 2025:  -     -     -     A     B     C     D     E     F     G     H
+  Label 2026:  A     B     C     D     E     F     G     H     I     J     K
+  Comp 26:     A     B     C     D     E     F     G     H     I     J     K
+  WF_high:     2.0   1.5   1.0   0.75  0.5   0.38  0.25  0.19  0.13  0.09  0.06
 ```
 
-Examples from the 2025 OpenAI lineup:
+Examples (registry 1.11.0):
 
-- `25-A` - GPT-5.2 (top 2025 OpenAI model, December release)
-- `25-B` - GPT-5 (August flagship)
-- `25-C` - GPT-5 Mini
-- `25-D` - GPT-5 Nano
-- `25-E` - less capable models of 2025
+- `gpt-5.2` - ECI 153.66, `E155`, released 2025-12-11 → Label `25-A`, Comp `26-D`
+- `gpt-5.4` - ECI 157.31, `E155`, released 2026-03-05 → Label `26-D`, Comp `26-D` (same band as `gpt-5.2`, same Comp)
+- `gpt-5-nano` - ECI 139.21, `E140`, released 2025-08-07 → Label `25-D`, Comp `26-G`
+- `gpt-4o` - ECI 128.99, `E130`, released 2024-05-13 → Label `24-C`, Comp `26-I`
+- `o1` - ECI 141.72, `E140`, released 2024-12-05 → Label `24-A`, Comp `26-G`
 
-## 3. Release Timing and the October Rule
+## 3. Year Anchor, Comparison Year, and the May 1 Wrap
 
 ### 3.1 Evidence
 
@@ -103,95 +100,77 @@ Major releases per year, from [Next AI Model timeline](https://www.nextaimodel.c
 - **2025**: Gemini 2.5 Pro 2025-03-25, o3 2025-04-16, Claude Opus 4 2025-05-22, GPT-5 2025-08-07, Claude Sonnet 4.5 2025-09-29, Claude Haiku 4.5 2025-10-15, GPT-5.1 2025-11-12, Gemini 3 Pro 2025-11-18, Claude Opus 4.5 2025-11-24, GPT-5.2 2025-12-11 [VERIFIED - LLMCAPCLS-IN01-SC-NAIM-TMLN; primary: LLMCAPCLS-IN01-SC-OAI-GPT5, LLMCAPCLS-IN01-SC-ANTH-HAIKU45, LLMCAPCLS-IN01-SC-GOOG-GEM3, LLMCAPCLS-IN01-SC-ANTH-OPUS45, LLMCAPCLS-IN01-SC-OAI-GPT52]
 - **2026**: Claude Opus 4.6 2026-02-05, GPT-5.4 2026-03-05, GPT-5.5 2026-04-23, Claude Opus 4.8 2026-05-28, Claude Fable 5 2026-06-09, GPT-5.6 Sol 2026-07-09, Claude Opus 5 2026-07-24, GPT-6 Astra 2026-09-04, GPT-6 Sol 2026-09-22, Claude Opus 5.5 2026-09-22, Gemini 4 Argon 2026-10-13 [VERIFIED - LLMCAPCLS-IN01-SC-NAIM-TMLN; primary for Claude Fable 5 and Claude Opus 5: LLMCAPCLS-IN01-SC-ANTH-FABLE5, LLMCAPCLS-IN01-SC-ANTH-OPUS5]
 
-Findings (dates verified; "strongest" is a judgment) [ASSUMED]:
+Top Epoch ECI band per release year (snapshot 2026-10-28, `model-registry.json` 1.11.0) [VERIFIED - LLMCAPCLS-IN01-SC-IPPS-MREG]:
 
-- In 2024 and 2025 the strongest model of the year shipped between September and December (o1, GPT-5.2, Claude Opus 4.5, Gemini 3 Pro)
-- In 2026 the strongest models shipped between June and September (Claude Fable 5, Claude Opus 5, GPT-6 Astra). Only Gemini 4 Argon is an October release
-- Conclusion: "yearly top releases come after September" held for 2024-2025, not for 2026. The October rule must not depend on release month
+- **2024**: `E140` - o1 141.72
+- **2025**: `E155` - gpt-5.2 153.66 (next: gpt-5.2-pro 156.33, also `E155`)
+- **2026**: `E170` - claude-opus-5-5 168.83, gpt-6-astra 168.81, gpt-6.1-sol 168.37
+
+The top band rose by exactly 15 ECI points per year for three consecutive years. Release month no longer matters: the strongest 2026 models shipped June to October, the strongest 2024 and 2025 models September to December, and the band-based letter is the same either way.
 
 ### 3.2 Rule Design
 
-The October rule is about **when A is assigned**, not when the model was released:
-
-- Before October 1 of year YY: the highest label any YY model can receive is `YY-B`. Reason: the year's top is not yet known, and assigning A early leaves no label for a stronger later release
-- October review of year YY: the top models of YY are promoted from `YY-B` to `YY-A`. Release month does not matter (Claude Fable 5, released June 2026, becomes `26-A` on review)
-- Models released October to December of YY: may receive `YY-A` directly
-- After December 31 of YY: all `YY-*` labels are frozen. Only observation downgrades (Section 5, R4) change them
+- **Anchor**: `anchor(YY) = 170 + 15 * (YY - 26)` → 2024 `E140`, 2025 `E155`, 2026 `E170`, 2027 `E185`. The +15 slope is [ASSUMED] for future years (3 data points). Anchors of past years never change; the anchor of a new year is appended when its first model is registered
+- **Comparison year**: `year(today)` if today is on or after May 1, else `year(today) - 1`. On 2026-10-29 the comparison year is `26`; it becomes `27` on 2027-05-01
+- **Comp** = letter for the model's band against `anchor(comparison year)`. Every Comp shifts by three letters at each wrap (15 ECI = 3 bands); Labels do not move
+- **Why May 1**: by May the new year has shipped enough models to make the new anchor meaningful, and the previous year's top band can be recorded here as the measured check of the +15 slope
+- **What replaced the October rule**: no letter is reserved for late releases. A model released in January 2027 with `E185` gets `27-A` on day one; if 2027 never reaches `E185`, `27-A` stays empty. Labels of a year never need a promotion review
 
 ```
-  Jan ─────────────────────── Sep │ Oct ─────────── Dec │ next year
-  max label: YY-B                 │ review: promote     │ YY labels frozen
-  (A reserved)                    │ top to YY-A         │ (R4 downgrades only)
+  Label  = letter(anchor(release year)    - band)   permanent, cite in prompts files
+  Comp   = letter(anchor(comparison year) - band)   regenerated, use to choose a model
+  Wrap   = May 1: comparison year + 1, anchor + 15, every Comp + 3 letters
 ```
 
 ## 4. Workload Factor Formula
 
-WF definition (from `MODEL_INVENTORY.md` Section 1): HWH (Human Work Hours) one prompt can complete in one run at a given effort level without skipping items or truncating.
+WF definition (from `MODEL_INVENTORY.md` Section 1): HWH (Human Work Hours) one prompt can complete in one run at High effort without skipping items or truncating.
 
-Formula at High effort:
+Formula at High effort, from the ECI band (not from the letter, so WF does not move at the wrap):
 
 ```
-WF_high = 2.0 * 0.5^letter_index * 2^(YY - 26)
-letter_index: A=0, B=1, C=2, D=3, E=4, F=5, G=6, H=7
+WF_high = 2.0 * 2^(-(170 - eci_band) / 10)
+E170 2.0 | E165 1.5 | E160 1.0 | E155 0.75 | E150 0.5 | E145 0.38 | E140 0.25 | E135 0.19 | E130 0.13 | E125 0.09 | E120 0.06
 ```
 
-- Anchor: `26-A` = 2.0 HWH (same value as current Class A)
-- Within a year: each letter step halves WF (same ratio as current Class A → B → C → D)
-- Across years: each year doubles WF at the same letter, so `26-B` (1.0) = `25-A` (1.0) [ASSUMED - capability doubling per year is not measured; checkpoint ledger in IN07 calibrates it]
-- Effort multipliers stay unchanged: Low 0.25, Medium 0.5, High 1.0, XHigh 1.5, Max 2.0 (relative to High)
-- Labels are absolute: when 2027 models arrive, `26-A` keeps WF 2.0. Nothing is re-graded
-- Exception within the year: a model labeled `YY-B` before October and promoted to `YY-A` doubles its WF. Prompt files written before the promotion used the lower WF and stay valid (more prompts than needed, no skipped work)
+- Anchor: `E170` = 2.0 HWH (the value the former Class A carried) [ASSUMED]
+- Slope: WF halves every 10 ECI points = every two letters = 1.5 doublings per year at the +15 anchor rate. METR measured 1-4 time-horizon doublings per year (Section 10.4), so the slope is at the conservative end [ASSUMED - slope]
+- Effort multipliers relative to High: Low 0.25, Medium 0.5, High 1.0, XHigh 1.5, Max 2.0 [ASSUMED]. `MODEL_INVENTORY.md` shows one `WF` column (High) and an `Efforts` column with the supported levels; models with a single mode (`M` or `-`) show `WF_high * 0.5`
+- Medium on adaptive-thinking Claude models: `TBLF-IN02` measured `claude-opus-4-6` 6 rows and `claude-opus-4-7` 12 rows at Medium against 667 and 843+ at High on CSV extraction; `TBLF-IN03` E1 traces it to adaptive thinking skipping the reasoning phase. The Notes column warns for every `adaptive_thinking` prefix; for structured-data work plan Low or High [VERIFIED for 4.6/4.7 - LLMCAPCLS-IN01-SC-TBLF-IN02; inheritance by other adaptive models ASSUMED]
+- Nothing is re-graded when new models arrive: band, Label, and WF of existing rows stay; only Comp moves at the wrap
 
 ## 5. Assignment Rules
 
-- **R1 - Year**: `YY` = year of general availability. Never changes
-- **R2 - Letter**: `L` = capability bucket: choose the letter whose `WF_high` (Section 4) best matches the model's estimated capability, checked against the cross-year link (`YY-B ≈ (YY-1)-A`) and, where available, METR time horizons (Section 10.4). The rank descriptions in Section 2 (top, flagship, mid, mini) are heuristics, not the definition: a year with a large gap between top and flagship may leave a letter empty
-- **R3 - October cap**: before October 1 of YY the highest assignable letter is B. October review promotes the year's top models to A. Labels freeze after December 31 of YY
-- **R4 - Observation downgrade**: a documented observation (FAILS.md entry or findings-card ledger entry naming model and skipped items or out-of-scope actions) lowers the letter by one step within the same year. Notes column records the evidence. Labels never move up by observation (MDLBHVPRM-DD-01: observation overrides benchmark only toward stricter)
-- **R5 - Hard limit cap**: provider-documented max output below 32K tokens caps the letter at B of its year [ASSUMED - threshold from current Class C definition "max output 8K-32K"]. Use the provider's models page, not `model-registry.json` `max_output`: registry values are configured request limits (for example 8K for `claude-haiku-4-5` while the [Anthropic models overview](https://docs.anthropic.com/en/docs/about-claude/models/whats-new-claude-4-5) documents 64K) [VERIFIED - LLMCAPCLS-IN01-SC-IPPS-MREG, LLMCAPCLS-IN01-SC-ANTH-MODELS]
+- **R1 - Year**: `YY` = year of general availability (`release_date`). Never changes
+- **R2 - Band freeze**: the ECI band is read once from the Epoch snapshot at registration and never re-read; `match-epoch-eci.py` reports `band_action: keep` for such models. Newer models or Epoch re-estimates do not move existing labels
+- **R3 - ECI pending fallback**: a model without an Epoch score (fewer than 4 benchmarks) takes the band of its nearest same-tier sibling (`glm-5.3-flashx` ← `glm-5.3-flash`, `claude-mythos-5` ← `claude-fable-5`) or, without a sibling, the UC default `anchor(YY) - 5 / 10 / 15 / 20 / 25` for `UC-1..5` (2026 medians of the measured UC tiers). `eci_band_source` marks the fallback; the band is replaced once Epoch publishes a score (`band_action: replace_fallback`). This is the only label change besides R4
+- **R4 - Observation downgrade**: a documented observation (FAILS.md entry or findings-card ledger entry naming model and skipped items) lowers the letter by one step within the same year. `capability_note` and the Notes column record the evidence. Labels never move up by observation (MDLBHVPRM-DD-01: observation overrides benchmark only toward stricter). Over-eagerness alone changes the behavior profile, not the letter (`glm-5.2`)
+- **Removed**: the former R2 (UC tier → letter), R3 (October cap), and R5 (max-output cap) are obsolete. Max output stays a Notes item (`claude-opus-4-5`: registry 8K is a request limit, provider documents 64K) [VERIFIED - LLMCAPCLS-IN01-SC-ANTH-MODELS]
 
-## 6. Proposed Labels for the Current Inventory
+## 6. Labels for the Current Inventory
 
-Release dates from Section 3.1 sources and provider release notes (all verified). Labels applied in `MODEL_INVENTORY.md` and `model-registry.json` 1.10.0 on 2026-10-28. "Old" = former `MODEL_INVENTORY.md` class and WF at High. For models with one effort level only, WF_high is the High equivalent of the listed Medium value (Medium × 2).
+Applied in `model-registry.json` 1.11.0 and `MODEL_INVENTORY.md` on 2026-10-29 (`update-model-inventory.py`): 92 API rows (every text model except `status: retired`) plus 4 Devin-only rows, grouped by Comp 26. Release dates from Section 3.1 sources, provider release notes, and model ID date suffixes; 29 rows carry `release_date_assumed` where only the family-head or an unverified announcement date is known (re-checked in the next FULL template run). "Was" = label under the former UC-tier rule (registry 1.10.2).
 
-**26-A (WF_high 2.0)** - October 2026 review promotes the year's top models:
-- `claude-fable-5` (2026-06-09) - old A 2.0
-- `claude-opus-5` (2026-07-24) - old A 2.0
-- `gpt-6-astra` (2026-09-04) - old A 2.0
-- `gpt-5.6-sol` (2026-07-09) - old A 2.0
-- `gpt-5.5` (2026-04-23) - old A 2.0
+- **Comp A, E170, WF 2.0** (3): `claude-opus-5-5` (was 26-C), `gpt-6-astra` (was 26-B), `gpt-6.1-sol` (was 26-C)
+- **Comp B, E165, WF 1.5** (12): `claude-fable-5`, `claude-fable-5-1` (unchanged 26-B), `claude-opus-5`, `gpt-6-sol`, `gpt-5.6-sol`, `gemini-4-argon` (were 26-C), `claude-sonnet-5-5` (was 26-D), `gpt-5.5-pro`, `gpt-5.5-cyber`, `gpt-5.6-cyber`, `claude-mythos-5`, `claude-mythos-5-1` (new)
+- **Comp C, E160, WF 1.0** (5 + 2 Devin): `gpt-5.5`, `claude-opus-4-8` (were 26-C), `gpt-5.6-terra` (was 26-D), `claude-haiku-5-5` (was 26-E), `gpt-5.4-pro` (new); `Kimi K3`, `Gemini 3.7 Flash`
+- **Comp D, E155, WF 0.75** (22 + 2 Devin): `gpt-5.4`, `claude-opus-4-6`, `claude-opus-4-7`, `gemini-3.1-pro-preview`, `glm-5.3`, `grok-4.5`, `grok-4.6`, `grok-4.7`, `gpt-5.3-codex` (were 26-C), `claude-sonnet-4-6`, `claude-sonnet-5`, `gemini-3.6-flash`, `gemini-3.8-flash`, `glm-5.3-flash`, `glm-5.3-flashx`, `glm-5.3-flashx-legal`, `gpt-6.1-terra`, `grok-build-0.1` (unchanged 26-D), `gpt-5.6-luna`, `gpt-6-luna` (were 26-E), `gpt-5.2` (25-A, unchanged letter), `gpt-5.2-pro` (new 25-A); `Gemini 3.5 Flash`, `SWE-1.7`
+- **Comp E, E150, WF 0.5** (14): `glm-5.2` (was 26-C, profile `guarded` unchanged), `glm-5.1` (was 26-C), `gpt-5.4-mini`, `grok-4.3`, `grok-4.20-*` (were 26-D), `glm-4.7-flash`, `glm-4.7-flashx` (new 26-E), `claude-opus-4-5` (25-A to 25-B), `gpt-5`, `gpt-5.1` (unchanged 25-B), `gemini-3-flash-preview` (25-C to 25-B), `gpt-5-pro` (new 25-B)
+- **Comp F, E145, WF 0.38** (17): `glm-5` (was 26-C), `gemini-3.1-flash-lite`, `gemini-3.5-flash-lite` (were 26-E), `gpt-5.4-nano` (new 26-F), `claude-sonnet-4-5`, `gpt-5-mini`, `gemini-2.5-flash` (unchanged 25-C), `o3`, `gemini-2.5-pro` (25-B to 25-C), `o3-pro`, `o4-mini`, `o3-deep-research`, `o4-mini-deep-research`, `glm-4.5`, `glm-4.5-x`, `glm-4.6`, `glm-4.7` (new 25-C)
+- **Comp G, E140, WF 0.25** (8): `claude-haiku-4-5` (unchanged 25-D), `gpt-5-nano`, `o3-mini`, `o1-pro`, `glm-4.5-airx`, `glm-4.5v`, `glm-4.6v` (new 25-D), `o1` (new 24-A)
+- **Comp H, E135, WF 0.19** (6): `gpt-4.1` (25-B to 25-E), `gemini-2.5-flash-lite` (25-D to 25-E), `gpt-4.1-mini`, `glm-4.5-flash` (new 25-E), `claude-3-5-sonnet`, `o1-mini` (new 24-B)
+- **Comp I-K, E130-E120, WF 0.13-0.03** (5): `gpt-4.1-nano` (25-F), `gpt-4o`, `gpt-4o-2024-05-13` (24-C), `gpt-4o-mini` (24-D), `glm-4-air` (24-E)
 
-**26-B (WF_high 1.0)**:
-- `claude-opus-4-8` (2026-05-28), `claude-opus-4-7` (2026-04-16), `claude-opus-4-6` (2026-02-05) - old B 1.0
-- `claude-sonnet-5` (2026-06-30), `gpt-5.6-terra` (2026-07-09), `gpt-5.4` (2026-03-05) - old B 1.0
-- `GPT-5.3-Codex` (2026-02-05), `Gemini 3.1 Pro` (2026-02-19) - Devin-only, old B 1.0 [VERIFIED - LLMCAPCLS-IN01-SC-OAI-GPT53C]
+Largest moves: `gpt-4.1` down three letters (E135 was hidden in `25-B` by its flagship tier), `claude-haiku-5-5` up two (E160 sits with `gpt-5.5`), `glm-5.2` and `glm-5.1` down two (E150 next to `gpt-5`). 2026 now spreads over six letters (A-F) instead of four (B-E).
 
-**26-C (WF_high 0.5)**:
-- `claude-sonnet-4-6` (2026-02-17) - old C 0.5
-- `glm-5.3` (2026-08-18) - old C 0.5; registry lists 16K max output, provider value unverified (R5 would cap at B, no effect at C)
-- `Kimi K3` (2026-07-16) - Devin-only, old C 0.5; Moonshot states it trails only Claude Fable 5 and GPT-5.6 Sol. Vendor self-assessment, not used for a higher letter [VERIFIED - LLMCAPCLS-IN01-SC-KIMI-K3]
+### 6.1 Cross-Check against Measured CSV Extraction (TBLF-IN02)
 
-**26-D (WF_high 0.25)**:
-- `glm-5.2` (2026-06-16) - base 26-C, R4 downgrade to 26-D (observed skipping and over-eagerness) - old D 0.25
-- `glm-5.3-flash` (2026-08-26), `glm-5.1` (2026-04-07), `glm-5` (2026-02-11) - old D 0.25 [VERIFIED - LLMCAPCLS-IN01-SC-ZAI-RELN]
-- `gpt-5.4-mini` (2026-03-17), `gpt-5.6-luna` (2026-07-09) - old D 0.25
-- `Gemini 3.5 Flash` (2026-05-19), `Gemini 3.6 Flash` (2026-07-31), `Gemini 3.7 Flash` (2026-08-13), `SWE-1.7` (2026-07-08) - Devin-only, old D 0.25. The Gemini API routes 3.5 Flash to 3.6 Flash and 3.7 Flash to 3.8 Flash since 2026-10-08 [VERIFIED - LLMCAPCLS-IN01-SC-GOOG-GEM37, LLMCAPCLS-IN01-SC-GOOG-APICHG, LLMCAPCLS-IN01-SC-COG-SWE17]
+LLM-Research measured confirmed reliable row counts for 7-column CSV extraction per model and effort (binary search, n=3, about 28% variance between runs, May 2026) [VERIFIED - LLMCAPCLS-IN01-SC-TBLF-IN02]. The `CSV rows` Notes marker in `MODEL_INVENTORY.md` carries these values.
 
-**25-A (WF_high 1.0)**:
-- `gpt-5.2` (2025-12-11) - old C 0.5. **Changed value**: December 2025 top model; registry request limit 32K, so R5 is not triggered with either registry or provider value
-- `claude-opus-4-5` (2025-11-24) - old C 0.5. **Changed value**: top 2025 model; the old "max output 8K" is a registry request limit, [Anthropic evaluated it](https://www.anthropic.com/news/claude-opus-4-5) with a 64K thinking budget (R5 not triggered) [VERIFIED - LLMCAPCLS-IN01-SC-ANTH-OPUS45]
-
-**25-B (WF_high 0.5)**:
-- `gpt-5.1` (2025-11-12), `gpt-5` (2025-08-07) - old C 0.5
-- `claude-sonnet-4-5` (2025-09-29) - flagship, not top of year - old C 0.5
-- `o3` (2025-04-16), `gpt-4.1` (2025-04-14, no effort: Medium 0.25) - old C 0.5
-- `Gemini 2.5 Pro` (2025-03-25, no effort: Medium 0.25) - Devin-only, old C 0.5
-
-**25-C (WF_high 0.25)**:
-- `claude-haiku-4-5` (2025-10-15), `gpt-5-mini` (2025-08-07) - old D 0.25
-- `Gemini 3 Flash` (2025-12-17) - Devin-only, old D 0.25
-
-Result: 35 of 37 rows keep their WF. The labels were chosen to reproduce the current table, so this shows the scheme can encode it; it does not validate the WF values themselves.
+- **Effort and thinking method dominate**: `gpt-5-mini` L65 / M500 / H675+; `claude-opus-4-6` M6 / H667; `claude-opus-4-7` M12 / H843+; `gpt-5` L356 / M450 / H492. A one-step effort change moves the result more than two ECI bands do
+- **Within E145-E160 the test does not order models**: `gpt-5-mini` (E145) M500, `gpt-5.4` (E155) M492, `gpt-5` (E150) H492, `claude-opus-4-8` (E160) H492, `gpt-5.5` (E160) M437, `gpt-5.2` (E155) M215. The test measures attention over structured data, not general capability, so it is not used as the letter source
+- **Temperature models fall off**: `gpt-4o` 4, `gpt-4o-mini` 6, `claude-haiku-4-5` 9 (run without thinking). The low tail (Comp I-K, WF 0.13 and below) is real, not an artifact of the formula
+- **Use in the inventory**: Notes marker per tested configuration, Medium warning for `adaptive_thinking` prefixes (Section 4), no letter changes (a single-task result with 28% variance is below the R4 evidence bar of skipped items in agentic work)
 
 ## 7. Behavior Profile: Assessing How a Prompt Must Be Shaped
 
@@ -249,9 +228,9 @@ Parameter meaning:
 
 Label and profile are set independently. Examples:
 
-- `claude-opus-5` - `26-A`, `standard` (no behavior data) → few, broad prompts with checkpoints every 2
-- `claude-haiku-4-5` - `25-C`, `standard` (no behavior data) → many small prompts, checkpoints every 2
-- `glm-5.2` - `26-D` (R4 downgrade), `guarded` (documented observation) → many small prompts, 4 items each, checkpoint after every prompt, strict scope guard
+- `claude-opus-5` - `26-B` (E165, WF 1.5), `standard` (no behavior data) → few, broad prompts with checkpoints every 2
+- `claude-haiku-4-5` - `25-D` (E140, WF 0.25), `standard` (no behavior data) → many small prompts, checkpoints every 2
+- `glm-5.2` - `26-E` (E150, WF 0.5), `guarded` (documented over-eagerness) → 4 items per prompt, checkpoint after every prompt, strict scope guard
 
 R4 (Section 5) and the profile use the same evidence but answer different questions: skipped items lower the letter (less work completes per prompt) and move the profile toward `guarded` (prompt shape). Over-eagerness alone changes only the profile.
 
@@ -276,8 +255,10 @@ R4 (Section 5) and the profile use the same evidence but answer different questi
 
 Per `model-registry.json` model entry (replaces IN07 `tier`, `tier_note`, `tier_suggested`):
 
-- `capability_label` - `YY-L`, human-set by R1-R5
-- `capability_note` - evidence for R4 downgrades or R5 caps; only when present
+- `release_date` - provider announcement date; `release_date_assumed: true` when only the family-head date is verified
+- `eci_band`, `eci_score` - Epoch band frozen at first assignment (R2); `eci_band_source` marks a fallback band (R3)
+- `capability_label` - `YY-L`, script-derived from `release_date` and `eci_band`; `update-model-inventory.py` refuses a mismatch
+- `capability_note` - evidence for R4 downgrades; only when present
 - `behavior_profile` - `precise` | `standard` | `guarded`, human-set by Section 7.2
 - `observed` - script-written ledger aggregate: sums, `if`, `eg`, `sequences`, `self_audited_prompts`, `profile_suggested`
 
@@ -287,9 +268,9 @@ Devin-only models have no registry entry; their label and profile live in `MODEL
 
 `MODEL_INVENTORY.md` holds data only (GRUC separation: data file, techniques in GUIDES, checks in RULES):
 1. Definitions - HWH, WF, label, profile, context
-2. Value Derivation - WF formula, R1-R5, profile thresholds, evidence priority, change rule, profile parameters (Section 7.3), effort multipliers, price
-3. Model table - one row per model, columns below (3.1 API models, 3.2 Devin-only models)
-4. Maintenance and Calibration - registry consistency, R4 and profile calibration, October review
+2. Value Derivation - year anchor, Label and Comp derivation, R1-R4, WF formula, profile thresholds, evidence priority, change rule, profile parameters (Section 7.3), effort multipliers, price
+3. Model table - one row per model, columns below (3.1 API models, 3.2 Devin-only models), sorted by Comp
+4. Maintenance and Calibration - script regeneration, May 1 wrap, R4 and profile calibration
 
 Techniques and checks live in skill resource files:
 - `PROMPTS_GUIDES.md` Section 1g - prompt partitioning (Section 9 formulas, checkpoints, scope guard, context fit)
@@ -299,18 +280,21 @@ Techniques and checks live in skill resource files:
 ### 8.3 Model Table Columns
 
 - **Model** - registry `model_id` without date suffix; resolution by longest prefix
-- **Label** - `capability_label`
+- **Label** - `capability_label` (release year + band letter)
+- **Comp YY** - band letter against the comparison year's anchor; header carries the comparison year
 - **Profile** - `behavior_profile`
 - **Context** - `context_window / 1000` with `K` suffix
-- **Low / Medium / High / XHigh / Max** - `WF_high * effort multiplier` for supported levels, `-` for unsupported. Thinking-budget models: Max = XHigh. Models without effort: Medium column only, value `WF_high * 0.5`
-- **USD per WF 1** - API: `0.8 * input_per_1m + 0.2 * output_per_1m`; Devin-only: `cost_multiplier * 2.50 * 0.36`
+- **Efforts** - supported levels from `model_id_startswith`: `L M H X MX`; `M` for thinking on/off models, `-` for temperature models
+- **WF** - `WF_high` from the band; `WF_high * 0.5` when Efforts is `M` or `-`
+- **In USD / Cache USD / Out USD** - standard-tier prices per 1M tokens; Devin-only: `cost_multiplier * 0.50` / `-` / `cost_multiplier * 2.50`
 - **Devin cost** - multiplier from `windsurf-model-registry.json`
-- **Notes** - R4/R5 evidence, unsupported effort quirks, missing data
+- **Notes** - `UC`, band and score (or `fallback` source), status, R4 evidence, effort quirks, `CSV rows` marker, adaptive-thinking Medium warning
 
 ### 8.4 Regeneration Triggers
 
-- **New model or price change** - `update-model-registry.md` step 9.4: add rows, recompute USD per WF 1
-- **October to December** - promotion review: top models of the year from `YY-B` to `YY-A`
+- **New model or price change** - `update-model-registry.md` step 9.4: add `release_date` and Epoch band (or fallback) to the registry, run `update-model-inventory.py`
+- **Fallback band received an Epoch score** - `match-epoch-eci.py` reports `replace_fallback`; registry band and label updated once
+- **May 1** - comparison year advances; append `anchor(YY)` for the new year; regenerate Comp; record the previous year's measured top band in Section 3.1
 - **`profile_suggested` differs from `behavior_profile`** - human review during `update-model-registry.md`; on change update profile and Notes
 - **Ledger IF < 0.75 with `sequences >= 3`** - R4 review of the label
 
@@ -343,10 +327,10 @@ If `prompt_count` exceeds the chain length limit (PRMT-SC-04), split into sub-ch
 
 Task: 3 HWH, 18 numbered items, 7 files, High effort.
 
-- **`claude-opus-5`** (`26-A`, `standard`, WF 2.0): `max(ceil(3/2.0), ceil(18/6), ceil(7/3))` = `max(2, 3, 3)` = 3 prompts; checkpoint after prompt 2, then Final Checkpoint; cost 3 × 9.00 = $27
-- **`glm-5.2`** (`26-D`, `guarded`, WF 0.25): `max(ceil(3/0.25), ceil(18/4), ceil(7/2))` = `max(12, 5, 4)` = 12 prompts; checkpoint after every prompt, strict scope guard, split into sub-chains; cost 3 × 2.00 = $6
+- **`claude-opus-5`** (`26-B`, `standard`, WF 1.5): `max(ceil(3/1.5), ceil(18/6), ceil(7/3))` = `max(2, 3, 3)` = 3 prompts; checkpoint after prompt 2, then Final Checkpoint; cost 3 × 9.00 = $27
+- **`glm-5.2`** (`26-E`, `guarded`, WF 0.5): `max(ceil(3/0.5), ceil(18/4), ceil(7/2))` = `max(6, 5, 4)` = 6 prompts; checkpoint after every prompt, strict scope guard; cost 3 × 2.00 = $6
 
-Capacity drives GLM-5.2; instruction items drive Claude Opus 5. Neither dimension alone gives the right count.
+Capacity drives GLM-5.2; instruction items drive Claude Opus 5. Neither dimension alone gives the right count. The MDLINVNTRY run of 2026-10-28 completed about 4.5 HWH on `glm-5.2` High in 8 implementation prompts with no skipped items, consistent with WF 0.5 (the former `26-D` WF 0.25 predicted 18).
 
 ## 10. Explaining and Converting HWH and AWH Estimates
 
@@ -392,9 +376,9 @@ METR's time horizon is the HWH of tasks a model completes with a given success p
 
 - 80% horizons are about 5x shorter than 50% horizons [VERIFIED - LLMCAPCLS-IN01-SC-METR-PAPER]
 - Claude Opus 4.5: 50% horizon about 4 h 49 min (95% confidence interval 1 h 49 min to 20 h 25 min, [METR limitations note](https://metr.org/notes/2026-01-22-time-horizon-limitations/)) [VERIFIED - LLMCAPCLS-IN01-SC-METR-LIMIT] → 80% horizon about 1 h (derived with the 5x rule, not measured)
-- Proposed label `25-A` for `claude-opus-4-5` gives WF 1.0 HWH at High (current inventory: 0.5). Both lie within a factor of 2 of the derived 1 h, which is the precision METR itself states [ASSUMED - interpretation]
+- Band `E150` for `claude-opus-4-5` gives WF 0.5 HWH at High (label `25-B`, Comp `26-E`). Within a factor of 2 of the derived 1 h, which is the precision METR itself states [ASSUMED - interpretation]
 
-Cross-year rate check: METR measured a 50%-horizon doubling time ([paper](https://arxiv.org/abs/2503.14499), [Time Horizon 1.1](https://metr.org/blog/2026-01-29-time-horizon-1-1/), [blog](https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/)) of about 7 months for 2019-2025 and about 89 days since 2024 (Time Horizon 1.1), and calls the trend "around 1-4 doublings per year" [VERIFIED - LLMCAPCLS-IN01-SC-METR-PAPER, LLMCAPCLS-IN01-SC-METR-TH11, LLMCAPCLS-IN01-SC-METR-BLOG]. The Section 4 rate of one doubling per year is at the conservative end. Conservative is acceptable: underestimated WF produces extra prompts (cost), overestimated WF produces skipped items (failure)
+Cross-year rate check: METR measured a 50%-horizon doubling time ([paper](https://arxiv.org/abs/2503.14499), [Time Horizon 1.1](https://metr.org/blog/2026-01-29-time-horizon-1-1/), [blog](https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/)) of about 7 months for 2019-2025 and about 89 days since 2024 (Time Horizon 1.1), and calls the trend "around 1-4 doublings per year" [VERIFIED - LLMCAPCLS-IN01-SC-METR-PAPER, LLMCAPCLS-IN01-SC-METR-TH11, LLMCAPCLS-IN01-SC-METR-BLOG]. The Section 4 slope (WF halves every 10 ECI, anchors rise 15 ECI per year = 1.5 doublings per year) is at the conservative end. Conservative is acceptable: underestimated WF produces extra prompts (cost), overestimated WF produces skipped items (failure)
 
 ### 10.5 How to Explain It in One Paragraph
 
@@ -408,14 +392,14 @@ Cross-year rate check: METR measured a 50%-horizon doubling time ([paper](https:
 
 ## 11. Limitations
 
-- **Cross-year rate is conservative, not measured for WF**: "one letter per year" (WF doubling per year) is below METR's 1-4 time-horizon doublings per year (Section 10.4). A different measured factor changes WF values, not labels
-- **Letter assignment is judgment**: R2 places models in capability buckets without a measured metric until ledger data exists. Mitigation: document the reason per row in the Notes column; benchmarks (IN06 Section 3) as tie-breaker
-- **Promotion requires a second review**: R3 requires one manual review per year between October and December
+- **Anchor slope and WF slope are extrapolations**: +15 ECI per year holds for three measured years; WF halving per 10 ECI is an assumption inside METR's range (Section 10.4). A different measured slope changes anchors of future years and WF values, not existing labels
+- **ECI measures general capability, not agentic completion**: Epoch's index aggregates benchmarks; `TBLF-IN02` (Section 6.1) shows effort level and thinking method can outweigh two bands on a structured-data task. The ledger remains the calibration path for WF
+- **ECI pending models carry fallback bands**: 22 of 92 rows (`eci_band_source`) use a sibling or UC default band until Epoch publishes a score; `release_date_assumed` marks 29 dates not yet verified against a provider page (label year could shift for `glm-4.7-flash`, `glm-4.7-flashx` if the January 2026 date is wrong)
+- **Comp changes at every wrap**: documents that cite Comp instead of Label go stale on May 1; `MODEL_INVENTORY.md` Section 4 requires Label in prompts files
 - **Observations depend on the execution framework**: framework explains 56% of over-eagerness variance, base model 21% ([SNARE study](https://arxiv.org/abs/2605.28122)). Ledger lines carry `engine`; profiles derived from `cascade` runs may not hold in `claude-code` or `lana` runs [VERIFIED - LLMCAPCLS-IN01-SC-IPPS-IN06 Section 3, LLMCAPCLS-IN01-SC-SNARE]
 - **Self-audit bias**: if the Final Checkpoint runs on the audited model, `guarded` models under-report skips. `self_audited_prompts` in `observed` lets the reviewer discount them [ASSUMED - IN07 Section 9]
 - **Profile parameter values are unmeasured**: max_items 8/6/4 and the other Section 7.3 values come from IN06 reasoning, not from runs
-- **Missing registry entries**: GPT-6 Sol, Claude Opus 5.5, Gemini 4 Argon are released but not in `model-registry.json` 1.10.0 and have no label. Adding them requires a full `update-model-registry.md` run (pricing extraction and distribution to external configuration targets)
-- **Registry max output values are request limits**: `model-registry.json` `max_output` (for example 8K for `claude-opus-4-5` and `claude-haiku-4-5`) does not reflect provider-documented limits; R5 reads provider values at label assignment and records the decision in `capability_note` (Section 5)
+- **Registry max output values are request limits**: `model-registry.json` `max_output` (for example 8K for `claude-opus-4-5` and `claude-haiku-4-5`) does not reflect provider-documented limits; the Notes column records provider values where they matter
 
 ## 12. Sources
 
@@ -450,12 +434,27 @@ Cross-year rate check: METR measured a 50%-horizon doubling time ([paper](https:
 - `LLMCAPCLS-IN01-SC-ANTH-PROD`: https://www.anthropic.com/research/estimating-productivity-gains - 100,000 Claude.ai conversations; tasks about 1.4 h without AI; Claude estimates about 80% time reduction; Claude time estimates imperfect but usable (accessed 2026-10-28) [VERIFIED]
 - `LLMCAPCLS-IN01-SC-ANTH-MODELS`: https://docs.anthropic.com/en/docs/about-claude/models/whats-new-claude-4-5 - models overview: Claude Haiku 4.5 max output 64K, Claude Fable 5 / Opus 5 / Sonnet 5 max output 128K (accessed 2026-10-28) [VERIFIED]
 - `LLMCAPCLS-IN01-SC-ANTH-OPUS45`: https://www.anthropic.com/news/claude-opus-4-5 - Claude Opus 4.5 published 2025-11-24; evaluations run with 64K thinking budget, 200K context (accessed 2026-10-28) [VERIFIED]
-- `LLMCAPCLS-IN01-SC-IPPS-MINV`: `PromptSystemV4.5/skills/write-documents/MODEL_INVENTORY.md` - former Class A-D definitions and WF values (kept in `MODEL_INVENTORY_v0.md`); current version with labels, profiles, partition formulas [VERIFIED]
-- `LLMCAPCLS-IN01-SC-IPPS-MREG`: `PromptSystemV4.5/skills/llm-evaluation/model-registry.json` 1.10.0 - dated Anthropic model IDs, max output request limit per prefix, `capability_label` and `behavior_profile` per model [VERIFIED]
+- `LLMCAPCLS-IN01-SC-IPPS-MINV`: `PromptSystemV4.5/skills/write-documents/MODEL_INVENTORY.md` - former Class A-D definitions and WF values (kept in `MODEL_INVENTORY_v0.md`); current version with Label, Comp, Efforts, WF, 92 + 4 rows [VERIFIED]
+- `LLMCAPCLS-IN01-SC-IPPS-MREG`: `PromptSystemV4.5/skills/llm-evaluation/model-registry.json` 1.11.0 - `release_date`, `eci_band`, `eci_score` (Epoch snapshot 2026-10-28), `eci_band_source`, `capability_label`, `behavior_profile` per model; top bands per year [VERIFIED]
+- `LLMCAPCLS-IN01-SC-TBLF-IN02`: `e:\Dev\LLM-Research\_Sessions\_2026-03-05_TabularDataFormatsForLLMs\01_CSVScaleLimits\_INFO_01_CSVScaleLimits-TestResults.md` [TBLF-IN02] Section 5.1 and `_INFO_02_CSVScaleLimits-Findings.md` [TBLF-IN03] E1 - confirmed CSV extraction rows per model and effort (20 configurations, n=3, about 28% variance, May 2026); adaptive thinking at Medium skips reasoning (accessed 2026-10-29) [VERIFIED]
 - `LLMCAPCLS-IN01-SC-IPPS-IN06`: `T01_MDLBHVPRM_BehavioralParameterBenchmarks_2026-10-19/_INFO_MDLBHVPRM-06_ModelAwarePartitioning.md` - behavior axes, partition parameters, IFEval mismatch for GLM-5.2, decision MDLBHVPRM-DD-01 [VERIFIED]
 - `LLMCAPCLS-IN01-SC-IPPS-IN07`: `T01_MDLBHVPRM_BehavioralParameterBenchmarks_2026-10-19/_INFO_MDLBHVPRM-07_PromptFeedbackLoop.md` - observation ledger, IF/EG formulas, suggestion thresholds, registry properties, open points [VERIFIED]
 
 ## 13. Document History
+
+**[2026-10-29 14:30]**
+- Changed: letter definition from UC tier to Epoch ECI band relative to a year anchor (`anchor(YY) = 170 + 15 * (YY - 26)`, letters `A`-`Z`); Sections 2-6 rewritten
+- Added: Comp (comparison-year label), May 1 wrap, `release_date` and `eci_band_source` registry fields, Section 6.1 TBLF cross-check, source `LLMCAPCLS-IN01-SC-TBLF-IN02`
+- Changed: WF derived from the band (`2.0 * 2^(-(170 - band) / 10)`), one `WF` column plus `Efforts` column in the inventory
+- Removed: October cap (former R3), UC-tier letters (former R2), max-output cap (former R5); replaced by R2 band freeze and R3 ECI-pending fallback
+- Changed: inventory row set to every text model except `retired` (92 API rows); Summary, Sections 7.4, 8.1-8.4, 9.3, 10.4, 11 aligned
+
+**[2026-10-29 13:37]**
+- Changed: `R2` maps UC tiers to letters (`B` Apex, `C` Flagship, `D` Balanced, `E` Efficient) instead of WF-matching heuristic
+- Changed: Section 6 labels updated to match `model-registry.json` 1.10.2 (40 label changes, R2 UC-tier separation, R3 pre-October `26-A` ban, added `25-D` tier)
+- Fixed: `R3` changed from retroactive October promotion to a strict release-month gate (`YY-A` never assigned to models released before October 1 of `YY`)
+- Fixed: `glm-5.2` moved from `26-D` (R4 downgrade) to `26-C` (UC-2 Flagship, over-eagerness changes profile only)
+- Fixed: Fable/Opus/Sonnet no longer share `26-A`; each UC tier occupies its own letter
 
 **[2026-10-28 20:10]**
 - Changed: Section 8.2 - `MODEL_INVENTORY.md` holds data only; prompt partitioning moved to `PROMPTS_GUIDES.md` Section 1g, HWH/AWH estimation and task sizing to new `TASKS_GUIDES.md`, verification checks to `PROMPTS_RULES.md` PRMT-SC-05 (GRUC separation)

@@ -4,7 +4,7 @@
 
 **Doc ID**: MDLRGUP-MDLINVNTRY-IN01
 **Goal**: Cross-document synthesis, source-backed model inventory evaluation, and design decisions DD-01..05 for Reliable Model Inventory research
-**Timeline**: Created 2026-10-28, Updated 0 times
+**Timeline**: Created 2026-10-28, Updated 1 time (2026-10-28 - 2026-10-29)
 **Version scope**: 2026-10-28
 **Strategy & Domain**: MEPI (curated, actionable; reversible inventory schema decisions within a 30 min P1 research budget) | DEFAULT (spans provider documentation, benchmark databases Epoch and METR, and practical prompt planning)
 **Research stats**: 32 sources (16 local files, 10 provider documentation URLs, 5 capability/benchmark web sources, 1 environment registry), 3 topic files (IN03-IN05), 4 DOM/CSV JSON extracts in `_SOURCES/`, 7/7 preflight assumptions verified (3 CORRECT, 4 PARTIAL, 0 WRONG), 48 min net working time across 8 prompts
@@ -43,7 +43,7 @@ This research audited the model inventory and prompt-partitioning rules introduc
 ### Key Findings (Cross-Document Synthesis)
 
 - **KF-01 (`IN03` — High assumption density in `MODEL_INVENTORY.md`)**: Across 82 classified items (315 lines, 4,717 words) in the four audited scopes, `37` (45%) are `ASSUMED`, `27` (33%) are `DERIVED` (`20/27` depending on `ASSUMED` inputs), and `18` (22%) are `SOURCED`; `MODEL_INVENTORY.md` Section 2 alone (37 lines) holds `60%` of all `ASSUMED` items in the file `[VERIFIED] (MDLRGUP-MDLINVNTRY-SC-IPPS-MDLINV | e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md)`
-- **KF-02 (`IN03` — Circular `YY-L` derivation and duplicate tiering)**: `LLMCAPCLS-IN01` Section 6 explicitly states that `YY-L` labels (`25-A`..`26-D`) were assigned to reproduce the previous unmeasured WF table (`35/37` rows unchanged), creating a second model tiering scheme alongside the time-independent `AINWSRCH` 4-field tier record (`Vendor generation`, `UC-1..5`, `ECI band`, `Generation equivalent`) `[VERIFIED] (MDLRGUP-MDLINVNTRY-SC-LOCAL-LLMCAP | e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_INFO_HOW_TO_ORGANIZE_LLMS_BY_CAPABILITY.md)`
+- **KF-02 (`IN03` — Circular `YY-L` derivation, retroactive October promotion bug, and tier-collapse errors)**: `LLMCAPCLS-IN01` Section 6 assigned `YY-L` labels (`25-A`..`26-D`) circularly to reproduce the previous unmeasured WF table, rewrote `R3` as a retroactive October promotion (wrongly assigning `26-A` to 10 models released between April and September 2026), and collapsed vendor tiers in the `2026-10-28_PRICES` update by placing `claude-sonnet-5-5` (`UC-3`) and `claude-opus-5`/`5-5` (`UC-2`) in the same `26-A` bucket as `claude-fable-5`/`5-1` (`UC-1`) while dropping `glm-5.2` (`UC-2 Flagship`) to `26-D`. Enforcing strict `R3` (`YY-A` only for `UC-1` models released Oct–Dec of `YY`) and strict `R2` vendor-tier separation (`UC-1 Apex → 26-B`, `UC-2 Flagship → 26-C`, `UC-3 Balanced → 26-D`, `UC-4 Efficient → 26-E`) separates `Fable` (`26-B`), `Opus` / `GLM-5.2` (`26-C`), `Sonnet` (`26-D`), and `Haiku` (`26-E`) `[VERIFIED] (MDLRGUP-MDLINVNTRY-SC-LOCAL-LLMCAP | e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_INFO_HOW_TO_ORGANIZE_LLMS_BY_CAPABILITY.md)`
 - **KF-03 (`IN04` — 100% Epoch ECI coverage across all 28 inventory models)**: Every one of the 28 API models in `MODEL_INVENTORY.md` Section 3.1 matches a row in [Epoch's ECI leaderboard CSV](https://epoch.ai/eci) (`eci-leaderboard-general.csv`, 270 models) by exact name (`24/28`), case variant (`2/28`: `o3`, `GPT-5 mini`), hyphen variant (`1/28`: `GLM-5.3-Flash`), or scale anchor (`1/28`: `GPT-5 = 150.00`), spanning eight 5-point bands from `E135` (`gpt-4.1` `136.65`) to `E170` (`gpt-6-astra` `168.81`) (`_SOURCES/2026-10-28_Epoch-ECI-Match.json`) `[VERIFIED] (MDLRGUP-MDLINVNTRY-SC-EPOCH-ECI | https://epoch.ai/eci)`
 - **KF-04 (`IN04` — METR Time Horizons is frozen and covers only 21-25% of inventory)**: [METR Time Horizons](https://metr.org/time-horizons/) (`benchmark_results_1_1.yaml`, 26 models, raw values in minutes) displays the banner `"This page is no longer actively updated. LAST UPDATED September 8, 2026"` and covers only `6/28` exact (`7/28` with `gpt-5.1` prefix) of the 28 inventory models, with `0/5` Z.AI models and `0` mid/late-2026 flagships (`_SOURCES/2026-10-28_METR-TimeHorizons-DOM.json`) `[VERIFIED] (MDLRGUP-MDLINVNTRY-SC-METR-TMHOR | https://metr.org/time-horizons/)`
 - **KF-05 (`IN04` — Near-zero behavioral benchmark coverage makes `Profile` column redundant)**: In `_INFO_MDLBHVPRM-05_CoverageMatrix.md`, `IFEval-Hard` covers `0/28` inventory models and `OverAct SIR` covers `1/28` (`glm-5.2` = `2.00`), causing `27 of 28` rows in `MODEL_INVENTORY.md` to default to `standard` profile `[VERIFIED] (MDLRGUP-MDLINVNTRY-SC-LOCAL-COVMTX | e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\T01_MDLBHVPRM_BehavioralParameterBenchmarks_2026-10-19\_INFO_MDLBHVPRM-05_CoverageMatrix.md)`
@@ -125,6 +125,8 @@ This research audited the model inventory and prompt-partitioning rules introduc
 
 # DD-01: Which capability representation should MODEL_INVENTORY.md and model-registry.json use?
 
+**Decided 2026-10-29 14:17 by [ACTOR]: b-variant** - keep `YY-L`, derive the letter from the Epoch ECI band against a year anchor (`anchor(YY) = 170 + 15 * (YY - 26)`, one letter per 5 ECI points, A-Z) instead of UC tiers; add a `Comp YY` column that expresses the same band against the comparison year (wraps May 1). This keeps the `YY-L` schema (option b) while sourcing the letter from the same 100% sourced ECI data option a proposed. Applied in `model-registry.json` 1.11.0 and `MODEL_INVENTORY.md` (see `LLMCAPCLS-IN01` Sections 2-6).
+
 **Problem**: `MODEL_INVENTORY.md` and `model-registry.json` currently use `YY-L` (`25-A`..`26-D`), a circularly fitted judgment scheme (`LLMCAPCLS-IN01` Section 6) that requires a manual October re-grading review (`R3`) and duplicates the 4-field model tier record already established in `AINWSRCH` (`MDLRGUP-MDLINVNTRY-IN03`).
 **Context**: MECT requires one scheme per concept across workspaces. Fixed points: Epoch ECI (`https://epoch.ai/eci`) is the sole external capability index (`QS-12` bans Artificial Analysis and LMArena Elo), and `eci-leaderboard-general.csv` covers `28/28` current inventory models (`MDLRGUP-MDLINVNTRY-IN04`).
 
@@ -134,10 +136,10 @@ This research audited the model inventory and prompt-partitioning rules introduc
   - Why it works: `100%` of the 28 inventory models have both a sourced `UC` and a sourced `ECI` score (`28/28`), fields never drift when newer models ship, and no October calendar review is needed (`IN04`).
   - Implication: Replaces `capability_label` in `model-registry.json`, `MODEL_INVENTORY.md`, `TASKS_GUIDES.md`, `PROMPTS_GUIDES.md`, and `update-model-registry.md` 9.4 during Phase P5.
   - Why recommended: Eliminates circular `YY-L` labels and unifies IPPS and `KarstensWorkspace` on a single 100% sourced, time-independent capability record.
-- **b) Keep YY-L**
-  - What: Keep `25-A`..`26-D` labels and rules `R1`-`R5` in `MODEL_INVENTORY.md` and `model-registry.json`.
-  - Why it works: Already written into the files on `2026-10-28` (`__TASKS_LLMCAPCLS.md`); zero P5 migration effort for label names.
-  - Implication: Retains 6 `ASSUMED` assignment rules (`R2`, `R3` manual October review), preserves a duplicate tiering scheme alongside `AINWSRCH` (violates MECT), and keeps judgment-assigned letters (`IN03`).
+- **b) Keep YY-L (with fixed R2/R3 rules)**
+  - What: Keep `YY-L` (`25-A`..`26-E`) labels and rules `R1`-`R5` in `MODEL_INVENTORY.md` and `model-registry.json`, with `R3` fixed so `YY-A` is assigned only to `UC-1` models released in Oct–Dec of `YY` (never to pre-October models) and `R2` enforcing strict vendor-tier separation (`UC-1 Apex → 26-B`, `UC-2 Flagship → 26-C` including `Opus` and `glm-5.2`, `UC-3 Balanced → 26-D` including `Sonnet`, `UC-4 Efficient → 26-E` including `Haiku`).
+  - Why it works: Preserves the existing `MODEL_INVENTORY.md` and `PROMPTS_GUIDES.md` schema while fixing the pre-October `26-A` assignment error and separating `Fable` (`26-B`), `Opus`/`glm-5.2` (`26-C`), `Sonnet` (`26-D`), and `Haiku` (`26-E`).
+  - Implication: Retains `ASSUMED` WF formulas and preserves a second tiering scheme alongside `AINWSRCH` (`IN03`).
 - **c) METR horizon only**
   - What: Use [METR Time Horizons](https://metr.org/time-horizons/) (`p50` / `p80` in human hours) as the sole capability column in `MODEL_INVENTORY.md`.
   - Why it works: Directly expresses autonomous task duration in human expert hours for evaluated models (`claude-opus-4-6`, `gpt-5.4`, `gpt-5.2`, `claude-opus-4-5`, `gpt-5.1`, `gpt-5`, `o3`).
@@ -223,7 +225,13 @@ This research audited the model inventory and prompt-partitioning rules introduc
   - Why it works: Zero new provider extraction rules in `update-model-registry.md`.
   - Implication: Leaves Google Gemini API models (`gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.1-pro-preview`) completely absent from the general-purpose inventory despite Google being one of the Big 3 frontier labs (`IN04`).
 
-Reply format: `DD-01 a, DD-02 c, DD-03 a, DD-04 a, DD-05 a`
+# DD-06 to DD-08 (presented and decided 2026-10-29)
+
+- **DD-06 Row set = 1**: every text model in `model-registry.json` except `status: retired` (92 rows + 4 Devin-only). Supersedes the Goal 3 "under 60 lines" target for the table; compensated by DD-07
+- **DD-07 WF columns = 1**: one `WF` column (High, from the band) plus an `Efforts` column (`L M H X MX`); the five per-effort columns removed. Applies only while WF stays (`DD-02` open)
+- **DD-08 Letter range = A-Z**: no floor letter; `gpt-4o` is `24-C` / Comp `26-I`, `glm-4-air` `24-E` / Comp `26-K`
+
+Reply format for the open decisions: `DD-02 c, DD-03 a, DD-04 a, DD-05 a`
 
 ## 6. Recommendations
 
@@ -244,6 +252,13 @@ Reply format: `DD-01 a, DD-02 c, DD-03 a, DD-04 a, DD-05 a`
 - **Epoch ECI minimum-4-benchmark gate**: Brand-new models require at least 4 evaluated benchmarks in Epoch's database before receiving an ECI score (`claude-mythos-5` is absent from `eci-leaderboard-general.csv`), requiring `UC` as a release-day fallback (`IN04`, `IN05`).
 
 ## 8. Document History
+
+**[2026-10-29 14:30]**
+- Added: `DD-01` decision (b-variant: ECI-band letters with year anchor and Comp column) and decided `DD-06..08`
+- Changed: reply format reduced to the open `DD-02..05`
+
+**[2026-10-29 13:37]**
+- Fixed: Documented `R3` pre-October release rule (`26-A` not assigned to models released before October) and `R2` strict vendor-tier separation (`UC-1 Apex` Fable/Astra `26-B` != `UC-2 Flagship` Opus/Sol/GLM-5.2 `26-C` != `UC-3 Balanced` Sonnet/Terra/Flash `26-D` != `UC-4 Efficient` Haiku/Luna/Flash-Lite `26-E`) in `KF-02` and `DD-01 b`
 
 **[2026-10-28 20:22]**
 - Initial Summary created with 3 topic files (`IN03`-`IN05`), 32 sources (`IN02`), 10 cross-document Key Findings (`KF-01`..`KF-10`), and design decisions `DD-01`..`DD-05` in Presenting Decisions format
