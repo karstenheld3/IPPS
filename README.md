@@ -1,4 +1,4 @@
-# IPPS - Insanely Productive Programming System
+# IPPS - Insanely Productive Prompt System
 
 A development system for AI-assisted coding workflows, optimized for a single programmer working with AI agents.
 
@@ -150,7 +150,7 @@ Then configure workspace files:
 1. **NOTES.md** — Write project name, goal, and any instructions for the agent. Similar to `AGENTS.md` - just write whatever you want the agent to know. Tip: Add `read AGENTS.md` if you already have an AGENTS.md file.
 2. **ID-REGISTRY.md** (optional) — Copy from [ID-REGISTRY_TEMPLATE.md](.devin/skills/workspace-management/ID-REGISTRY_TEMPLATE.md). Will be used by agent to avoid ID conflicts.
 3. **SOPS.md** (optional) — Create standard operating procedures for your project
-4. **SETUP.md** (optional) — Run in each skill folder that requires external tools (pdf-tools, llm-evaluation, github, etc.)
+4. **SETUP.md** (optional) — Run in each skill folder that requires external tools (pdf-tools, llm-tools, github, etc.)
 
 For complex software development projects and multi-repo workspaces use [`/prime /workspace-setup`](.devin/workflows/workspace-setup.md) for an interactive guided setup using the [workspace questionnaire](.devin/skills/workspace-management/WORKSPACE_SETUP_QUESTIONNAIRE.md) to generate all required files interactively.
 
@@ -969,9 +969,7 @@ For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) dec
 - **google-account** - Google services (Gmail, Calendar, Drive, Tasks) via gogcli CLI. **Effect**: No files. Procedures for gogcli commands.
 - **hosting** - Platform-specific deployment to Netlify, Vercel, Azure App Service, SharePoint. **Effect**: No files. Procedures consumed by `/deploy` workflow.
 - **image-tools** - Image conversion, resizing, compression, batch processing (ImageMagick, Pillow). **Effect**: Creates converted/resized image files. Edits images in place (batch operations).
-- **llm-computer-use** - Desktop automation via LLM vision (click, type, navigate). **Effect**: No files. Procedures for desktop automation via screenshots and mouse/keyboard.
-- **llm-evaluation** - LLM evaluation pipeline (questions, answers, scoring, cost analysis). **Effect**: Creates evaluation result files (JSON, CSV). Edits evaluation config.
-- **llm-transcription** - Image/audio to markdown transcription (ensemble + judge + refinement). **Effect**: Creates `.md` transcription files. Edits nothing (creates new files).
+- **llm-tools** - Single source of truth for script-based LLM work: shared call scripts, canonical model data (`model-registry.json`, `model-pricing.json`, `model-parameter-mapping.json`, `MODEL_INVENTORY.md`), and three functions in subfolders - `evaluation/` (questions, answers, LLM-as-judge scoring, cost analysis), `transcription/` (image/audio to markdown, ensemble + judge + refinement), `computer-use/` (desktop automation via LLM vision). **Effect**: Creates evaluation result files (JSON) and `.md` transcriptions. Computer-use edits nothing on disk but controls mouse/keyboard.
 - **ms-playwright-mcp** - Browser automation via Microsoft Playwright MCP server. **Effect**: No files directly. Provides procedures for browser automation (navigate, click, type, screenshot). Downloads go to default browser location.
 - **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF. **Effect**: Creates converted PDF/image files. Edits PDFs in place (compression, optimization).
 - **playwriter-mcp** - Real browser automation with existing logins via Playwriter extension. **Effect**: No files directly. Provides procedures for browser automation with existing sessions.
@@ -1272,79 +1270,50 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 
 Agent skills in `.devin/skills/`. Each skill contains scripts, documentation, and optional setup.
 
-### llm-evaluation
+### llm-tools
 
-Evaluate LLM output quality by generating questions, collecting answers, and scoring with a judge model.
+One skill for every script-based LLM activity. `SKILL.md` routes to three function subfolders; the root holds what all of them share.
 
-**Setup**: Run `SETUP.md` to install Python venv with OpenAI/Anthropic SDKs in `../.tools/llm-venv/`.
+**Setup**: Run `SETUP.md` once to install the Python venv in `../.tools/llm-venv/` (openai, anthropic, httpx; plus mss, pillow, pyautogui for computer-use).
 
-**Scripts**:
+**Shared (root)**:
+- `model-registry.json`, `model-pricing.json`, `model-parameter-mapping.json` - canonical model data (only copy in the PromptSystem, see `SOPS.md` SOP 5)
+- `MODEL_INVENTORY.md` - planning view (capability label, behavior profile, context, efforts, workload factor, prices) used by `/write-prompts`, `/write-tasks-plan`, `/verify`
 - `call-llm.py` - Single LLM call (image or text input)
 - `call-llm-batch.py` - Batch processing with parallel workers and resume
-- `generate-questions.py` - Generate evaluation questions from source content
-- `generate-answers.py` - Generate answers from transcribed content
-- `evaluate-answers.py` - Score answers with LLM-as-judge or OpenAI Eval API
-- `analyze-costs.py` - Calculate token costs from usage files
+- `find-workers-limit.py` - Probe max concurrent workers per provider
+- `test-call-llm.py`, `llm-tools-selftest.py` - API matrix test and structural self-test
+
+**evaluation/**: `generate-questions.py`, `generate-answers.py`, `evaluate-answers.py` (LLM-as-judge or OpenAI Eval API), `compare-transcription-runs.py`, `analyze-costs.py`, `prompts/`, `schemas/`
+
+**transcription/**: `transcribe-image-to-markdown.py` (ensemble + judge + refinement), `transcribe-audio-to-markdown.py` (Whisper), `prompts/`
+
+**computer-use/**: `cli.py` (entry point), `core.py` (ScreenCapture, Actions, Session, Anthropic provider). Pricing from the shared `model-pricing.json`.
 
 **Quick examples**:
 ```powershell
 $venv = "../.tools/llm-venv/Scripts/python.exe"
-$skill = ".devin\skills\llm-evaluation"
+$skill = ".devin\skills\llm-tools"
+$keys = "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt"
 
-# Transcribe images
-& $venv "$skill\call-llm-batch.py" --model gpt-4o --input-folder images/ --output-folder out/ --prompt-file "$skill\prompts\transcribe-page.md"
+# Batch call (shared)
+& $venv "$skill\call-llm-batch.py" --model gpt-4o --input-folder images/ --output-folder out/ --prompt-file "$skill\evaluation\prompts\transcribe-page.md" --keys-file $keys
 
 # Evaluate answers
-& $venv "$skill\evaluate-answers.py" --model gpt-4o --method openai-eval --input-folder answers/ --output-folder scores/
+& $venv "$skill\evaluation\evaluate-answers.py" --model gpt-4o --method openai-eval --input-folder answers/ --output-folder scores/ --keys-file $keys
+
+# Transcribe an image (ensemble of 3)
+& $venv "$skill\transcription\transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --model gpt-5-mini --initial-candidates 3 --keys-file $keys
+
+# Computer use: dry-run, then execute
+& $venv "$skill\computer-use\cli.py" -k $keys "Click the Start button"
+& $venv "$skill\computer-use\cli.py" -x -m claude-haiku-4-5 -k $keys "Open Calculator"
+
+# Self-test
+& $venv "$skill\llm-tools-selftest.py" --skip-api-calls
 ```
 
-### llm-transcription
-
-High-quality image-to-markdown transcription using ensemble generation, LLM judging, and conditional refinement.
-
-**Setup**: Uses shared venv from llm-evaluation (`../.tools/llm-venv/`).
-
-**Scripts**:
-- `transcribe-image-to-markdown.py` - Ensemble pipeline with judge and refinement
-- `transcribe-audio-to-markdown.py` - Audio transcription with Whisper API
-
-**Quick examples**:
-```powershell
-$venv = "../.tools/llm-venv/Scripts/python.exe"
-$skill = ".devin/skills/llm-transcription"
-
-# Basic usage
-& $venv "$skill/transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]/../.tools/.api-keys.txt
-
-# With custom model and ensemble size
-& $venv "$skill/transcribe-image-to-markdown.py" --input-file doc.png --output-file doc.md --keys-file [WORKSPACE_FOLDER]/../.tools/.api-keys.txt --model gpt-5-mini --initial-candidates 3
-```
-
-### llm-computer-use
-
-Desktop automation via LLM vision. The AI sees your screen, decides what to click/type, and executes actions.
-
-**Setup**: Uses shared venv from llm-evaluation (`../.tools/llm-venv/`). Requires Anthropic API key.
-
-**Files**:
-- `llm_computer_use/core.py` - ScreenCapture, Actions, Session, Provider
-- `llm_computer_use/cli.py` - CLI entry point
-
-**Quick examples**:
-```powershell
-cd .devin/skills/llm-computer-use
-
-# Dry-run (safe, no actions executed)
-python -m llm_computer_use -k [WORKSPACE_FOLDER]/../.tools/.api-keys.txt "Click the Start button"
-
-# Execute mode
-python -m llm_computer_use -x -k [WORKSPACE_FOLDER]/../.tools/.api-keys.txt "Open Notepad and type Hello World"
-
-# Use cheaper model
-python -m llm_computer_use -x -m claude-haiku-4-5 "Open Calculator"
-```
-
-**Cost**: ~$0.01-0.02 per iteration (Sonnet), ~$0.003-0.005 (Haiku). Default max 10 iterations.
+**Cost (computer-use)**: ~$0.01-0.02 per iteration (Sonnet), ~$0.004-0.007 (Haiku). Default max 10 iterations.
 
 ### pdf-tools
 

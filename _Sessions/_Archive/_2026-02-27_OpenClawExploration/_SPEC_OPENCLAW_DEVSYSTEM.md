@@ -33,7 +33,7 @@
 
 ## 1. Scenario
 
-**Problem:** OpenClaw has its own workspace structure (AGENTS.md, SOUL.md, BOOTSTRAP.md, etc.) that differs from IPPS (Insanely Productive Programming System) DevSystem conventions. We want OpenClaw agents to use our DevSystem rules, workflows, and skills while preserving OpenClaw's unique features (heartbeat, memory system, WhatsApp integration).
+**Problem:** OpenClaw has its own workspace structure (AGENTS.md, SOUL.md, BOOTSTRAP.md, etc.) that differs from IPPS (Insanely Productive Prompt System) DevSystem conventions. We want OpenClaw agents to use our DevSystem rules, workflows, and skills while preserving OpenClaw's unique features (heartbeat, memory system, WhatsApp integration).
 
 **Solution:**
 - Adapt AGENTS.md to read WORKFLOWS.md (tells agent about available workflows)
