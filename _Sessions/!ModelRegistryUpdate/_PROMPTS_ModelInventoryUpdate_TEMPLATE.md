@@ -63,7 +63,7 @@ Placeholder registry:
 - [TARGET_MODELS] - Target model IDs for NEWMODEL mode, or ALL for FULL and PRICES modes
 - [INCLUDE_SCREENSHOTS] - Include Prompt 3 screenshot capture and transcription (YES | NO)
 - [CAPABILITY_SCHEME] - Capability representation mode (LADDER | NONE); LADDER per DD-10 option 3 and [MDLRGUP-MDLINVNTRY-SP01]
-- [TOTAL_PROMPTS] - Total prompt count in the generated instance after conditional prompt removal (e.g., 08 for FULL, 07 for PRICES)
+- [TOTAL_PROMPTS] - Total prompt count in the generated instance after excluding Bootstrap and removing conditional prompts (07 for FULL, 06 for PRICES and NEWMODEL)
 - [VENV_PYTHON] - Shared Python executable path (e.g., e:\dev\.tools\llm-venv\Scripts\python.exe)
 - [KEYS_FILE] - API keys file path (e:\dev\.tools\.api-keys.txt)
 - [TRANSCRIPTION_SCRIPT] - Image-to-markdown transcription script ([AGENT_FOLDER]\skills\llm-tools\transcription\transcribe-image-to-markdown.py)
@@ -81,7 +81,7 @@ Load-based partition table (PRMT-SC-07 assessment for [MODEL] at [EFFORT] effort
 Conditional prompts:
 - Prompt 3 (Phases 3-4 Screenshots and Transcription) - remove when [INCLUDE_SCREENSHOTS] = NO (default for PRICES and NEWMODEL).
 - Prompt 4 (Capability Evidence) - remove when [CAPABILITY_SCHEME] = NONE. With NONE, Prompt 5 writes no capability fields and Prompt 6 skips the layering; existing depth values stay untouched.
-- After removing any conditional prompt, renumber remaining prompts sequentially in the generated instance file and update [TOTAL_PROMPTS] in every Prompt Marker (e.g., removing Prompt 3 yields [ 01 / 07 ] through [ 07 / 07 ]).
+- After removing any conditional prompt, renumber remaining prompts sequentially in the generated instance file and update [TOTAL_PROMPTS] in every Prompt Marker (e.g., excluding Bootstrap and removing Prompt 3 yields [ 01 / 06 ] through [ 06 / 06 ]).
 
 CRITICAL - Manual execution only:
 - Prompts are designed for manual copy-paste, one prompt per turn, with user review at each gate.
@@ -312,7 +312,7 @@ Constraints:
 
 Findings card: Load and update `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and record any prefix gaps or new effort methods.
 
-Verify: `[RUN_FOLDER]\[DATE]_ChangeSet.json` exists; Gates 5, 6, and 7 pass with exit code 0; `format-model-registry.py --check` passes; `_updated` / `last_updated` in modified `[SKILL_FOLDER]` JSONs equal `[DATE]`; `git diff --stat -- "[SKILL_FOLDER]\model-registry.json"` shows no line where a `"depth":` value changed.
+Verify: `[RUN_FOLDER]\[DATE]_ChangeSet.json` exists; Gates 5, 6, and 7 pass with exit code 0; `format-model-registry.py --check` passes; `_updated` / `last_updated` in modified `[SKILL_FOLDER]` JSONs equal `[DATE]`; `git --no-pager diff --stat -- "[SKILL_FOLDER]\model-registry.json"` shows no line where a `"depth":` value changed.
 
 **STOP.** Report: items DONE / NOT DONE, `newRegistryIds` count, `newPricingIds` count, `changedPricingIds` count, `deeper_than` items written, `eci_ci` values refreshed, any prefix gaps, and Gate 5-7 results.
 ```
