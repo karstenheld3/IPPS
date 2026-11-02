@@ -1,0 +1,59 @@
+{
+  "_date": "2026-11-02",
+  "_run_mode": "PRICES",
+  "_target_providers": [
+    "Anthropic",
+    "OpenAI",
+    "Google",
+    "Z.AI",
+    "xAI"
+  ],
+  "newRegistryIds": [
+    "gpt-6-rosalind",
+    "gpt-rosalind-discovery",
+    "gpt-rosalind-research",
+    "gpt-5-search-api",
+    "gpt-4-turbo-2024-04-09",
+    "gpt-4-0613",
+    "gpt-3.5-turbo",
+    "gpt-3.5-turbo-0125",
+    "grok-4.20-multi-agent",
+    "glm-4-32b-0414-128k",
+    "glm-4.5-air",
+    "glm-4.6v-flash",
+    "glm-4.6v-flashx",
+    "glm-ocr"
+  ],
+  "newPricingIds": [
+    "gpt-6-rosalind",
+    "gpt-rosalind-discovery",
+    "gpt-rosalind-research",
+    "gpt-5-search-api",
+    "gpt-4-turbo-2024-04-09",
+    "gpt-4-0613",
+    "gpt-3.5-turbo",
+    "gpt-3.5-turbo-0125",
+    "grok-4.20-multi-agent",
+    "glm-4-32b-0414-128k",
+    "glm-4.5-air",
+    "glm-4.6v-flash",
+    "glm-4.6v-flashx",
+    "glm-ocr"
+  ],
+  "changedPricingIds": [],
+  "changedPricingDetails": {},
+  "ec9_corrections": [
+    {
+      "model_id": "claude-sonnet-5-5",
+      "old_release_date": "2026-10-14",
+      "new_release_date": "2026-09-28",
+      "source": "https://platform.claude.com/docs/en/about-claude/model-deprecations"
+    },
+    {
+      "model_id": "claude-haiku-5-5",
+      "old_release_date": "2026-10-14",
+      "new_release_date": "2026-10-07",
+      "source": "https://platform.claude.com/docs/en/about-claude/model-deprecations"
+    }
+  ]
+}

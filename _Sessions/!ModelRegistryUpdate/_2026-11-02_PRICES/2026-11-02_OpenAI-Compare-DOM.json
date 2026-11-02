@@ -1,0 +1,43 @@
+{
+  "_source": "https://developers.openai.com/api/docs/models/compare",
+  "_redirected_from": "https://platform.openai.com/docs/models/compare",
+  "_extracted": "2026-11-02",
+  "_method": "Playwright innerText card extraction (0 HTML tables on page)",
+  "cards": [
+    {
+      "name": "GPT-6 Astra",
+      "model_id": "gpt-6-astra",
+      "input_per_1m": "$10.00",
+      "cached_per_1m": "$1.00",
+      "output_per_1m": "$50.00",
+      "context_window": 1050000,
+      "max_output_tokens": 128000,
+      "knowledge_cutoff": "Apr 30, 2026"
+    },
+    {
+      "name": "GPT-6.1 Sol",
+      "model_id": "gpt-6.1-sol",
+      "input_per_1m": "$2.00",
+      "cached_per_1m": "$0.10",
+      "output_per_1m": "$10.00",
+      "context_window": 1050000,
+      "max_output_tokens": 128000,
+      "knowledge_cutoff": "Apr 30, 2026"
+    },
+    {
+      "name": "GPT-6 Luna",
+      "model_id": "gpt-6-luna",
+      "input_per_1m": "$0.10",
+      "cached_per_1m": "$0.01",
+      "output_per_1m": "$0.50",
+      "context_window": 1050000,
+      "max_output_tokens": 128000,
+      "knowledge_cutoff": "May 18, 2026"
+    }
+  ],
+  "window_matches": [
+    "Input / 1M tokens\n$10.00\nCached input / 1M tokens\n$1.00\nCache writes / 1M tokens\n$12.50\nOutput / 1M tokens\n$50.00\nCONTEXT\nWindow\n1,050,000\nMax Output Tokens\n128,000\nKnowledge Cutoff\nApr 30, 2026",
+    "Input / 1M tokens\n$2.00\nCached input / 1M tokens\n$0.10\nCache writes / 1M tokens\n$2.50\nOutput / 1M tokens\n$10.00\nCONTEXT\nWindow\n1,050,000\nMax Output Tokens\n128,000\nKnowledge Cutoff\nApr 30, 2026",
+    "Input / 1M tokens\n$0.10\nCached input / 1M tokens\n$0.01\nCache writes / 1M tokens\n$0.125\nOutput / 1M tokens\n$0.50\nCONTEXT\nWindow\n1,050,000\nMax Output Tokens\n128,000\nKnowledge Cutoff\nMay 18, 2026"
+  ]
+}

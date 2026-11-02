@@ -5,7 +5,7 @@ effort: high
 prompt_system: IPPS
 ---
 
-<!-- Model: glm-5.2 (effort: high, context: 1M). Load grouping (PRMT-SC-07): 10 phases of the model inventory update pipeline partitioned into 06 prompts (<= 7 items, <= 4 modified files, <= 1 heavy workflow per prompt) so Playwright DOM scraping, Epoch matching and vendor edge research, JSON updates, depth layering, API testing, and confirmation-gated distribution stay within single-turn budgets. -->
+<!-- Model: glm-5.2 (effort: high, context: 1M). Load grouping (PRMT-SC-07): 10 phases of the model inventory update pipeline partitioned into 06 prompts (<= 7 items, <= 4 modified files, <= 1 heavy workflow per prompt) so Playwright DOM scraping, Epoch matching and vendor edge research, JSON updates, depth layering, API testing, and distribution stay within single-turn budgets. -->
 
 <!-- Budget (PROMPTS_GUIDES.md Section 1g): model row glm-5.2, depth D6, effort high, effective rung D6, explicitness step-level, Items 5 (default, unmeasured), scope guard strict, 06 prompts (template partition; Prompt 01 holds 7 items and is logged as a Partition Observation for Items calibration), about 155k tokens, estimated cost $0.31 (0.8 * 1.40 + 0.2 * 4.40 USD per 1M) -->
 
@@ -175,14 +175,14 @@ Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026
 
 Verify: Gate 8 and Gate 9.4 pass; `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES\2026-11-02_DepthLadder.log` ends with `OK:` (0 cycles, 0 rejected); `e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools\MODEL_INVENTORY.md` `Top rung` equals the maximum `depth` in the registry; `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES\2026-11-02_RunReport.md` exists with all 12 Phase 10 report sections.
 
-**STOP.** Report: items DONE / NOT DONE, Phase 8 test pass/fail summary, inserted rungs (model, `D[n]`, evidence), squeezes and contradictions, Gate 9.4 status, and path to `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES\2026-11-02_RunReport.md`. Ask user to confirm whether Prompt 5 should include external config distribution (`e:\Dev\Lana-V1\config`, `e:\Dev\Lana-V2\config`).
+**STOP.** Report: items DONE / NOT DONE, Phase 8 test pass/fail summary, inserted rungs (model, `D[n]`, evidence), squeezes and contradictions, Gate 9.4 status, and path to `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES\2026-11-02_RunReport.md`.
 ```
 
 ---
 
-## Prompt 5 - Phase 9 Distribution and Gate 9 Sync Check (Confirmation-Gated)
+## Prompt 5 - Phase 9 Distribution and Gate 9 Sync Check
 
-<!-- Expected state: Phase 8 tests, Phase 9.4 layering and MODEL_INVENTORY.md update, and Phase 10 report are complete; distributes updated files to in-workspace targets and (only if confirmed) external Lana targets, then verifies Gate 9. -->
+<!-- Expected state: Phase 8 tests, Phase 9.4 layering and MODEL_INVENTORY.md update, and Phase 10 report are complete; distributes updated files to `.devin` and the Lana-V1 runtime config, then verifies Gate 9. -->
 
 ```
 01-MdlInv-PRICES [ 05 / 06 ] - Phase 9 Distribute canonical JSONs and MODEL_INVENTORY.md and verify Gate 9
@@ -195,12 +195,13 @@ Planning document: `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`, Prompt 7 (Phase 
 
 Distribute the updated canonical JSON files (`model-pricing.json`, `model-registry.json`, `model-parameter-mapping.json`) and `e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools\MODEL_INVENTORY.md` from `e:\dev\IPPS\PromptSystemV4.5` to all authorized distribution targets and verify file-hash identity via Gate 9.
 
-1. Execute Phases 9.1 (`e:\dev\IPPS\.devin\skills\llm-tools\`: 3 JSONs, `test-call-llm.py`, `MODEL_INVENTORY.md`), 9.3 (external targets only if user confirmed; Phase 9.2 dependent-skill replicas no longer exist since the 2026-10-29 `llm-tools` merge), and Gate 9 via `& "e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\verify-and-distribute-registry.ps1" -Mode Distribute -RunFolder "e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES" -Date "2026-11-02" -SkillFolder "e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools" -InventoryFile "e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools\MODEL_INVENTORY.md" -AgentFolder "e:\dev\IPPS\.devin" -PromptSystemFolder "e:\dev\IPPS\PromptSystemV4.5"` (append `-IncludeExternal` ONLY if user explicitly confirmed external target distribution to `e:\Dev\Lana-V1\config` and `e:\Dev\Lana-V2\config`)
-2. Append the Phase 9 distribution and Gate 9 sync verification result (noting whether Phase 9.3 external targets were synced or skipped) to `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES\2026-11-02_RunReport.md`
+1. Execute Phases 9.1 (`e:\dev\IPPS\.devin\skills\llm-tools\`: 3 JSONs, `test-call-llm.py`, `MODEL_INVENTORY.md`), 9.3 (3 JSONs to `e:\Dev\Lana-V1\.agent-data\config`; Phase 9.2 dependent-skill replicas no longer exist since the 2026-10-29 `llm-tools` merge), and Gate 9 via `& "e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\verify-and-distribute-registry.ps1" -Mode Distribute -RunFolder "e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES" -Date "2026-11-02" -SkillFolder "e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools" -InventoryFile "e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools\MODEL_INVENTORY.md" -AgentFolder "e:\dev\IPPS\.devin" -PromptSystemFolder "e:\dev\IPPS\PromptSystemV4.5" -IncludeExternal`
+2. Append the Phase 9 distribution and Gate 9 sync verification result (targets synced, SHA-256 match count) to `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES\2026-11-02_RunReport.md`
 
 Constraints:
-- All file operations MUST stay within `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES`, `e:\dev\IPPS\.devin\skills\llm-tools\`, and (only when explicitly confirmed by user) `e:\Dev\Lana-V1\config` and `e:\Dev\Lana-V2\config`
-- CONFIRMATION GATE: Never copy files to `e:\Dev\Lana-V1\config` or `e:\Dev\Lana-V2\config` without explicit user confirmation
+- All file operations MUST stay within `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES`, `e:\dev\IPPS\.devin\skills\llm-tools\`, and `e:\Dev\Lana-V1\.agent-data\config` (3 model JSONs only; never touch other files there, e.g. `agent-config.json`, `.api-keys.txt`)
+- External distribution to `e:\Dev\Lana-V1\.agent-data\config` is pre-authorized by the user (DD-14, 2026-11-02); do not ask
+- Execute without asking for confirmation
 - Distribution requires Gate 9.4 passed in Prompt 4; if `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES\2026-11-02_DepthLadder.log` does not end with `OK:`, stop and report
 - Do ONLY the numbered items above. Do not refactor, rename, add tests, or touch files not listed. Report any item you could not complete as NOT DONE
 - Re-running this prompt must not corrupt state: `Copy-Item -Force` and hash verification are idempotent
@@ -210,7 +211,7 @@ Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026
 
 Verify: Gate 9 passes with zero SHA-256 hash mismatches across all synced targets; `e:\dev\IPPS\.devin\skills\llm-tools\MODEL_INVENTORY.md` hash matches `e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools\MODEL_INVENTORY.md`.
 
-**STOP.** Report: items DONE / NOT DONE, targets synced (with SHA-256 match count), whether Phase 9.3 external targets were synced or skipped, and Gate 9 status.
+**STOP.** Report: items DONE / NOT DONE, targets synced (with SHA-256 match count), and Gate 9 status.
 ```
 
 ---
@@ -232,14 +233,14 @@ Verify all outputs of the `2026-11-02` `PRICES` model inventory update run again
 
 /verify
 
-1. Run `& "e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\verify-and-distribute-registry.ps1" -Mode VerifyAll -RunFolder "e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES" -Date "2026-11-02" -SkillFolder "e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools" -InventoryFile "e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools\MODEL_INVENTORY.md" -AgentFolder "e:\dev\IPPS\.devin" -PromptSystemFolder "e:\dev\IPPS\PromptSystemV4.5"` to verify Gates 2, 5, 6, 7, 9, and 9.4, `2026-11-02_RunReport.md`, and zero leftover `.tmp_*` scripts in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES\_agent_work\`
+1. Run `& "e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\verify-and-distribute-registry.ps1" -Mode VerifyAll -RunFolder "e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES" -Date "2026-11-02" -SkillFolder "e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools" -InventoryFile "e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools\MODEL_INVENTORY.md" -AgentFolder "e:\dev\IPPS\.devin" -PromptSystemFolder "e:\dev\IPPS\PromptSystemV4.5" -IncludeExternal` to verify Gates 2, 5, 6, 7, 9 (incl. Lana-V1 config), and 9.4, `2026-11-02_RunReport.md`, and zero leftover `.tmp_*` scripts in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES\_agent_work\`
 2. Check that `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES\_agent_work\__CARD_MDLRGUP-Findings.md` `## Unresolved` is empty (or copied to `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`) and that every Pending resolution item of `2026-11-02_RunReport.md` Section 9 (squeezes, contradictions, silent-source ties) has a `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md` entry
-3. Fix any verification gaps inline (max 2 gate cycles; on second failure record in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md` and stop); commit `e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools`, `e:\dev\IPPS\.devin\skills\llm-tools\`, and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES` with message `chore(llm-tools): model inventory PRICES run 2026-11-02` (the next run's Gate 9.4 compares `depth` against this commit); update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\NOTES.md` with a 1-line entry recording `2026-11-02 PRICES` completion, `Top rung`, and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES` path
+3. Fix any verification gaps inline (max 2 gate cycles; on second failure record in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md` and stop); commit `e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools`, `e:\dev\IPPS\.devin\skills\llm-tools\`, and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES` with message `chore(llm-tools): model inventory PRICES run 2026-11-02` (the next run's Gate 9.4 compares `depth` against this commit); in repo `e:\Dev\Lana-V1` commit only `.agent-data/config/model-pricing.json`, `.agent-data/config/model-registry.json`, `.agent-data/config/model-parameter-mapping.json` with message `chore(config): model registry update 2026-11-02` (skip when unchanged); update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\NOTES.md` with a 1-line entry recording `2026-11-02 PRICES` completion, `Top rung`, and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES` path
 
 Constraints:
-- All file operations MUST stay within `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\NOTES.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`, `e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools`, `e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools\MODEL_INVENTORY.md`, and `e:\dev\IPPS\.devin\skills\`
+- All file operations MUST stay within `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\NOTES.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`, `e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools`, `e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools\MODEL_INVENTORY.md`, `e:\dev\IPPS\.devin\skills\`, and the 3 model JSONs in `e:\Dev\Lana-V1\.agent-data\config`
 - Do ONLY the numbered items above. Do not refactor, rename, add tests, or touch files not listed. Report any item you could not complete as NOT DONE
-- Do NOT run unconfirmed external distribution to `e:\Dev\Lana-V1\config` or `e:\Dev\Lana-V2\config`
+- In `e:\Dev\Lana-V1`, stage only the 3 model JSONs by explicit path; never `git add -A` or commit other changes in that repo
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state: verification and `NOTES.md` status update are idempotent; the commit is skipped when the working tree is clean
 - Hang safety: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES\_agent_work\__CARD_MDLRGUP-Robustness.md`

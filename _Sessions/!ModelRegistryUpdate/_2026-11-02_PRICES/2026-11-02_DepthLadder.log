@@ -1,0 +1,28 @@
+Layering depth ladder (insert-only) from model-registry.json 1.12.1 and 2026-11-02_Epoch-ECI-Match.json...
+  106 models, 92 with depth.
+  Manual edges: 3 valid, 0 rejected.
+  Edges: E1 85, E2 73, E3 1783, E5 8, manual 3.
+  14 models to insert.
+  [ 1 / 14 ] gpt-3.5-turbo: D1* (unplaced)
+  [ 2 / 14 ] gpt-4-0613: D1* (unplaced)
+  [ 3 / 14 ] gpt-3.5-turbo-0125: D1* (unplaced)
+  [ 4 / 14 ] gpt-4-turbo-2024-04-09: D1* (unplaced)
+  [ 5 / 14 ] glm-4-32b-0414-128k: D1* (unplaced)
+  [ 6 / 14 ] glm-4.5-air: D1* (E6 from glm-4.5-airx)
+  [ 7 / 14 ] gpt-5-search-api: D6 (E1 > gpt-5-mini)
+  [ 8 / 14 ] glm-4.6v-flash: D1* (E6 from glm-4.6)
+  [ 9 / 14 ] glm-4.6v-flashx: D1* (E6 from glm-4.6)
+  [ 10 / 14 ] glm-ocr: D1* (unplaced)
+  [ 11 / 14 ] grok-4.20-multi-agent: D7 (E1 > grok-4.20-0309-reasoning)
+  [ 12 / 14 ] gpt-6-rosalind: D12 (E1m > gpt-6-astra)
+  [ 13 / 14 ] gpt-rosalind-discovery: D11 (E2 >= gpt-6-astra)
+  [ 14 / 14 ] gpt-rosalind-research: D11 (E2 >= gpt-6-astra)
+  Existing rungs consistent: 88 / 92.
+    INCONSISTENT o4-mini D4 E3> o1 D4 (report only, rung kept)
+    INCONSISTENT claude-opus-4-8 D8 E3> grok-4.7 D8 (report only, rung kept)
+    INCONSISTENT claude-haiku-5-5 D8 E3> grok-4.7 D8 (report only, rung kept)
+    INCONSISTENT gpt-6.1-terra D9 E3> gpt-5.4-pro D9 (report only, rung kept)
+    INCONSISTENT gpt-6.1-terra D9 E3> gpt-5.5 D9 (report only, rung kept)
+    INCONSISTENT gpt-6.1-terra D9 E3> gpt-5.6-terra D9 (report only, rung kept)
+  Wrote e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools\model-registry.json.
+OK: 14 inserted, 0 squeezed, 0 cycles.

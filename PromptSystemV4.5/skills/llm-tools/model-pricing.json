@@ -3,6 +3,14 @@
   "_context_window_k": "context window in thousands of tokens",
   "pricing": {
     "openai": {
+      "gpt-6-rosalind": {"input_per_1m": 15.0, "cached_per_1m": 1.5, "output_per_1m": 75.0, "context_window_k": 1050, "currency": "USD"},
+      "gpt-rosalind-discovery": {"input_per_1m": 5.0, "cached_per_1m": 0.5, "output_per_1m": 25.0, "context_window_k": 1050, "currency": "USD"},
+      "gpt-rosalind-research": {"input_per_1m": 5.0, "cached_per_1m": 0.5, "output_per_1m": 25.0, "context_window_k": 1050, "currency": "USD"},
+      "gpt-5-search-api": {"input_per_1m": 1.25, "cached_per_1m": 0.125, "output_per_1m": 10.0, "context_window_k": 256, "currency": "USD"},
+      "gpt-4-turbo-2024-04-09": {"input_per_1m": 10.0, "output_per_1m": 30.0, "context_window_k": 128, "currency": "USD"},
+      "gpt-4-0613": {"input_per_1m": 30.0, "output_per_1m": 60.0, "context_window_k": 8, "currency": "USD"},
+      "gpt-3.5-turbo": {"input_per_1m": 0.5, "output_per_1m": 1.5, "context_window_k": 16, "currency": "USD"},
+      "gpt-3.5-turbo-0125": {"input_per_1m": 0.5, "output_per_1m": 1.5, "context_window_k": 16, "currency": "USD"},
       "gpt-6-astra": {"input_per_1m": 10.0, "cached_per_1m": 1.0, "output_per_1m": 50.0, "long_context": {"input_per_1m": 20.0, "cached_per_1m": 2.0, "output_per_1m": 100.0, "threshold_k": null}, "context_window_k": 1050, "currency": "USD"},
       "gpt-6.1-sol": {"input_per_1m": 2.0, "cached_per_1m": 0.1, "output_per_1m": 10.0, "long_context": {"input_per_1m": 4.0, "cached_per_1m": 0.2, "output_per_1m": 20.0, "threshold_k": null}, "context_window_k": 1050, "currency": "USD"},
       "gpt-6.1-terra": {"input_per_1m": 1.0, "cached_per_1m": 0.05, "output_per_1m": 5.0, "long_context": {"input_per_1m": 2.0, "cached_per_1m": 0.1, "output_per_1m": 10.0, "threshold_k": null}, "context_window_k": 1050, "currency": "USD"},
@@ -83,6 +91,11 @@
       "gemini-2.5-flash-lite": {"input_per_1m": 0.1, "cached_per_1m": 0.01, "output_per_1m": 0.4, "context_window_k": 1048, "currency": "USD"}
     },
     "zai": {
+      "glm-4-32b-0414-128k": {"input_per_1m": 0.1, "output_per_1m": 0.1, "context_window_k": 128, "currency": "USD"},
+      "glm-4.5-air": {"input_per_1m": 0.2, "cached_per_1m": 0.03, "output_per_1m": 1.1, "context_window_k": 128, "currency": "USD"},
+      "glm-4.6v-flash": {"input_per_1m": 0.0, "output_per_1m": 0.0, "context_window_k": 128, "currency": "USD"},
+      "glm-4.6v-flashx": {"input_per_1m": 0.04, "cached_per_1m": 0.004, "output_per_1m": 0.4, "context_window_k": 128, "currency": "USD"},
+      "glm-ocr": {"input_per_1m": 0.03, "output_per_1m": 0.03, "context_window_k": 8, "currency": "USD"},
       "glm-5.3": {"input_per_1m": 1.4, "cached_per_1m": 0.26, "output_per_1m": 4.4, "context_window_k": 1000, "currency": "USD"},
       "glm-5.3-flash": {"input_per_1m": 0.15, "cached_per_1m": 0.03, "output_per_1m": 0.5, "context_window_k": 1000, "currency": "USD"},
       "glm-5.3-flashx": {"input_per_1m": 0.37, "cached_per_1m": 0.075, "output_per_1m": 1.25, "context_window_k": 1000, "currency": "USD"},
@@ -103,6 +116,7 @@
       "glm-4-air": {"input_per_1m": 0.2, "cached_per_1m": 0.03, "output_per_1m": 1.1, "context_window_k": 128, "currency": "USD"}
     },
     "xai": {
+      "grok-4.20-multi-agent": {"input_per_1m": 1.25, "cached_per_1m": 0.2, "output_per_1m": 2.5, "long_context": {"input_per_1m": 2.5, "cached_per_1m": 0.4, "output_per_1m": 5.0, "threshold_k": 200}, "context_window_k": 1000, "currency": "USD"},
       "grok-4.7": {"input_per_1m": 2.0, "cached_per_1m": 0.5, "output_per_1m": 6.0, "long_context": {"input_per_1m": 4.0, "cached_per_1m": 1.0, "output_per_1m": 12.0, "threshold_k": 200}, "context_window_k": 500, "currency": "USD"},
       "grok-build-0.1": {"input_per_1m": 1.0, "cached_per_1m": 0.2, "output_per_1m": 2.0, "long_context": {"input_per_1m": 2.0, "cached_per_1m": 0.4, "output_per_1m": 4.0, "threshold_k": 200}, "context_window_k": 256, "currency": "USD"},
       "grok-4.6": {"input_per_1m": 2.0, "cached_per_1m": 0.5, "output_per_1m": 6.0, "long_context": {"input_per_1m": 4.0, "cached_per_1m": 1.0, "output_per_1m": 12.0, "threshold_k": 200}, "context_window_k": 500, "currency": "USD"},
@@ -113,7 +127,7 @@
       "grok-4.20-0309-non-reasoning": {"input_per_1m": 1.25, "cached_per_1m": 0.2, "output_per_1m": 2.5, "long_context": {"input_per_1m": 2.5, "cached_per_1m": 0.4, "output_per_1m": 5.0, "threshold_k": 200}, "context_window_k": 1000, "currency": "USD"}
     }
   },
-  "last_updated": "2026-10-28",
+  "last_updated": "2026-11-02",
   "sources": [
     "https://platform.claude.com/docs/en/about-claude/pricing",
     "https://developers.openai.com/api/docs/pricing?latest-pricing=standard",

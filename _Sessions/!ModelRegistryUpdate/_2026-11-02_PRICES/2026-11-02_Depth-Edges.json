@@ -1,0 +1,249 @@
+{
+  "_source": "e:\\dev\\IPPS\\_Sessions\\!ModelRegistryUpdate\\_2026-11-02_PRICES\\2026-11-02_*-DOM.json",
+  "_date": "2026-11-02",
+  "_extracted": "2026-11-02",
+  "new_models": {
+    "gpt-6-rosalind": {
+      "model_id": "gpt-6-rosalind",
+      "provider": "openai",
+      "release_date": "2026-10-30",
+      "release_date_assumed": true,
+      "uc_class": "UC-1 Apex",
+      "source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard#specialized-models",
+      "accessed": "2026-11-02"
+    },
+    "gpt-rosalind-discovery": {
+      "model_id": "gpt-rosalind-discovery",
+      "provider": "openai",
+      "release_date": "2026-10-30",
+      "release_date_assumed": true,
+      "uc_class": "UC-1 Apex",
+      "source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard#specialized-models",
+      "accessed": "2026-11-02"
+    },
+    "gpt-rosalind-research": {
+      "model_id": "gpt-rosalind-research",
+      "provider": "openai",
+      "release_date": "2026-10-30",
+      "release_date_assumed": true,
+      "uc_class": "UC-1 Apex",
+      "source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard#specialized-models",
+      "accessed": "2026-11-02"
+    },
+    "gpt-5-search-api": {
+      "model_id": "gpt-5-search-api",
+      "provider": "openai",
+      "release_date": "2025-08-07",
+      "release_date_assumed": true,
+      "uc_class": "UC-2 Flagship",
+      "source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard#specialized-models",
+      "accessed": "2026-11-02"
+    },
+    "gpt-4-turbo-2024-04-09": {
+      "model_id": "gpt-4-turbo-2024-04-09",
+      "provider": "openai",
+      "release_date": "2024-04-09",
+      "release_date_assumed": false,
+      "uc_class": "UC-2 Flagship",
+      "source": "https://developers.openai.com/api/docs/models/gpt-4-turbo-2024-04-09",
+      "accessed": "2026-11-02"
+    },
+    "gpt-4-0613": {
+      "model_id": "gpt-4-0613",
+      "provider": "openai",
+      "release_date": "2023-06-13",
+      "release_date_assumed": false,
+      "uc_class": "UC-2 Flagship",
+      "source": "https://developers.openai.com/api/docs/models",
+      "accessed": "2026-11-02"
+    },
+    "gpt-3.5-turbo": {
+      "model_id": "gpt-3.5-turbo",
+      "provider": "openai",
+      "release_date": "2023-03-01",
+      "release_date_assumed": false,
+      "uc_class": "UC-3 Balanced",
+      "source": "https://developers.openai.com/api/docs/models",
+      "accessed": "2026-11-02"
+    },
+    "gpt-3.5-turbo-0125": {
+      "model_id": "gpt-3.5-turbo-0125",
+      "provider": "openai",
+      "release_date": "2024-01-25",
+      "release_date_assumed": false,
+      "uc_class": "UC-3 Balanced",
+      "source": "https://developers.openai.com/api/docs/models",
+      "accessed": "2026-11-02"
+    },
+    "grok-4.20-multi-agent": {
+      "model_id": "grok-4.20-multi-agent",
+      "provider": "xai",
+      "release_date": "2026-03-09",
+      "release_date_assumed": false,
+      "uc_class": "UC-2 Flagship",
+      "source": "https://docs.x.ai/developers/models",
+      "accessed": "2026-11-02"
+    },
+    "glm-4-32b-0414-128k": {
+      "model_id": "glm-4-32b-0414-128k",
+      "provider": "zai",
+      "release_date": "2024-04-14",
+      "release_date_assumed": false,
+      "uc_class": "UC-4 Efficient",
+      "source": "https://docs.z.ai/guides/overview/pricing",
+      "accessed": "2026-11-02"
+    },
+    "glm-4.5-air": {
+      "model_id": "glm-4.5-air",
+      "provider": "zai",
+      "release_date": "2025-06-30",
+      "release_date_assumed": true,
+      "uc_class": "UC-4 Efficient",
+      "source": "https://docs.z.ai/guides/overview/pricing",
+      "accessed": "2026-11-02"
+    },
+    "glm-4.6v-flash": {
+      "model_id": "glm-4.6v-flash",
+      "provider": "zai",
+      "release_date": "2025-10-15",
+      "release_date_assumed": true,
+      "uc_class": "UC-4 Efficient",
+      "source": "https://docs.z.ai/guides/overview/pricing",
+      "accessed": "2026-11-02"
+    },
+    "glm-4.6v-flashx": {
+      "model_id": "glm-4.6v-flashx",
+      "provider": "zai",
+      "release_date": "2025-10-15",
+      "release_date_assumed": true,
+      "uc_class": "UC-4 Efficient",
+      "source": "https://docs.z.ai/guides/overview/pricing",
+      "accessed": "2026-11-02"
+    },
+    "glm-ocr": {
+      "model_id": "glm-ocr",
+      "provider": "zai",
+      "release_date": "2025-10-15",
+      "release_date_assumed": true,
+      "uc_class": "UC-4 Efficient",
+      "source": "https://docs.z.ai/guides/overview/pricing",
+      "accessed": "2026-11-02"
+    }
+  },
+  "deeper_than_candidates": [
+    {
+      "x": "gpt-6-rosalind",
+      "model": "gpt-6-astra",
+      "kind": "E1",
+      "source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard#specialized-models",
+      "accessed": "2026-11-02",
+      "statement": "Specialized life sciences Apex model priced above gpt-6-astra ($15.00/$75.00 vs $10.00/$50.00) for approved organizations (EC-4)"
+    }
+  ],
+  "ties": [
+    {
+      "x": "gpt-rosalind-discovery",
+      "model": "gpt-rosalind-research",
+      "kind": "E5",
+      "source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard#specialized-models",
+      "accessed": "2026-11-02",
+      "reason": "Equal price domain variant ($5.00/$25.00) in life sciences lineup; vendor source silent on dominance (EC-4)"
+    },
+    {
+      "x": "gpt-rosalind-research",
+      "model": "gpt-rosalind-discovery",
+      "kind": "E5",
+      "source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard#specialized-models",
+      "accessed": "2026-11-02",
+      "reason": "Equal price domain variant ($5.00/$25.00) in life sciences lineup; vendor source silent on dominance (EC-4)"
+    },
+    {
+      "x": "gpt-5-search-api",
+      "model": "gpt-5",
+      "kind": "E5",
+      "source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard#specialized-models",
+      "accessed": "2026-11-02",
+      "reason": "Search endpoint variant priced identically to gpt-5 ($1.25/$10.00/$0.125) (EC-3/EC-4)"
+    },
+    {
+      "x": "gpt-4-turbo-2024-04-09",
+      "model": "gpt-4o",
+      "kind": "E2",
+      "source": "https://developers.openai.com/api/docs/models",
+      "accessed": "2026-11-02",
+      "reason": "Predecessor flagship snapshot to GPT-4o; source silent on dominance (EC-2)"
+    },
+    {
+      "x": "gpt-4-0613",
+      "model": "gpt-4.1",
+      "kind": "E2",
+      "source": "https://developers.openai.com/api/docs/models",
+      "accessed": "2026-11-02",
+      "reason": "Legacy GPT-4 snapshot; vendor source silent on dominance (EC-2)"
+    },
+    {
+      "x": "gpt-3.5-turbo-0125",
+      "model": "gpt-3.5-turbo",
+      "kind": "E5",
+      "source": "https://developers.openai.com/api/docs/models",
+      "accessed": "2026-11-02",
+      "reason": "Snapshot of gpt-3.5-turbo at identical pricing ($0.50/$1.50) (EC-3)"
+    },
+    {
+      "x": "grok-4.20-multi-agent",
+      "model": "grok-4.20-multi-agent-0309",
+      "kind": "E5",
+      "source": "https://docs.x.ai/developers/models",
+      "accessed": "2026-11-02",
+      "reason": "Direct alias for grok-4.20-multi-agent-0309 with identical capability and pricing (EC-3)"
+    }
+  ],
+  "estimates": [
+    {
+      "model": "gpt-3.5-turbo",
+      "sibling": "gpt-4o",
+      "note": "E6"
+    },
+    {
+      "model": "glm-4-32b-0414-128k",
+      "sibling": "glm-4.5",
+      "note": "E6"
+    },
+    {
+      "model": "glm-4.5-air",
+      "sibling": "glm-4.5",
+      "note": "E6"
+    },
+    {
+      "model": "glm-4.6v-flash",
+      "sibling": "glm-4.6v",
+      "note": "E6"
+    },
+    {
+      "model": "glm-4.6v-flashx",
+      "sibling": "glm-4.6v",
+      "note": "E6"
+    },
+    {
+      "model": "glm-ocr",
+      "sibling": "glm-4.6v",
+      "note": "E6"
+    }
+  ],
+  "ec9_corrections": [
+    {
+      "model_id": "claude-sonnet-5-5",
+      "registry_release_date": "2026-10-14",
+      "vendor_release_date": "2026-09-28",
+      "source": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "accessed": "2026-11-02"
+    },
+    {
+      "model_id": "claude-haiku-5-5",
+      "registry_release_date": "2026-10-14",
+      "vendor_release_date": "2026-10-07",
+      "source": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "accessed": "2026-11-02"
+    }
+  ]
+}
