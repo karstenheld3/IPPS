@@ -10,10 +10,9 @@
 
 ## To Do
 
-- [ ] P2-D1 remainder: `DD-02..05` answers (WF method, behavior profile, Devin data, provider scope)
-- [ ] P5-S2/S3 after `DD-02`/`DD-03`: `TASKS_GUIDES.md` and `PROMPTS_GUIDES.md` consolidation (1c, 1f, 1g, 3a, 5)
-- [ ] P5-S4 after `DD-03`: `PRMT-SC-05` profile checks, `write-prompts.md` Step 1, `edird-phase-planning` SKILL.md sizing
-- [ ] Next FULL template run: verify the 29 `release_date_assumed` dates on provider pages; replace fallback bands that received an Epoch score
+- [ ] `DD-04` (Devin data in inventory) and `DD-05` (provider scope) still open; current state keeps Devin cost column and Section 3.2, 5 providers
+- [ ] Next FULL template run: verify the `release_date_assumed` dates on provider pages
+- [ ] EC-4 announcement statements for specialized Apex models (`gpt-5.6-cyber`, `gpt-5.5-cyber`, `o3-deep-research`, `o1-pro`, `o4-mini-deep-research`) not yet cited in `deeper_than`; rungs currently from automatic E1
 
 ## In Progress
 
@@ -21,6 +20,13 @@
 
 ## Done
 
+- [x] **[2026-11-02 13:37]** `MDLRGUP-MDLINVNTRY-SP01` implemented (`/go`): `layer-depth-ladder.py` (bootstrap + insert-only, E1-E6, manual edge validation, EC-8 precedence, cycle abort) + `test-layer-depth-ladder.py` (8/8, NFR-01 92/92 rungs); `match-epoch-eci.py` (FR-06: score + interval, `unmatched`, `new_models`, `missing_metadata`); `model-registry.json` 1.12.0 (FR-05 fields, 2 `deeper_than`, `scope_guard` glm-5.2, EC-9 dates, bootstrap top D12, 7 estimated); `update-model-inventory.py` + `MODEL_INVENTORY.md` (FR-08/FR-13, NFR-02 34 lines); Gate 9.4 (FR-10) + Gate 6 all providers; FR-12 consumers (`PROMPTS_GUIDES.md` 1c/1f/1g/5, `PROMPTS_RULES.md` PRMT-SC-05, `PROMPTS_TEMPLATE.md`, `PROMPTS_EXAMPLE_01`, `TASKS_GUIDES.md`, `write-prompts.md`, `llm-tools/SKILL.md`); mirrored to `.devin`
+  - [DECISION] New hand-maintained registry field `inventory_note` holds Notes text that is not derivable (price schedules, Devin-only effort limits, API quirks, scope guard source) - IG-04 forbids inventory values outside the registries - SP01 IG-04, FR-07
+  - [DECISION] Devin cost column carried over from the previous inventory row (as before), not recomputed from `windsurf-model-registry.json` display names - no reliable name mapping exists; out of SP01 scope - SP01 FR-08
+  - [DECISION] EC-9 release-date corrections applied in the migration (`claude-fable-5-1` 2026-09-01, `claude-opus-5-5` 2026-09-22); NFR-01 test still 92/92 - SP01 FR-04 EC-9
+  - [DECISION] Direct conflicts resolved in the script by precedence E4 > E1 > E3 with a `CONTRADICTION` log line; longer cycles abort - SP01 Key Mechanisms, IG-05
+  - [DECISION] `glm-5.2` Items stays default 5 (2 ledger sequences < 3 required); `scope_guard: strict` set - SP01 FR-07
+  - [DECISION] E6 applies to unscored models without E5 tie whose layered rung is D1; nearest-class sibling with evidence-based rung - reproduces LLMCAPCLS-IN01 Section 3 (7 estimates) - SP01 FR-01
 - [x] **[2026-10-29 14:30]** P2 (partial) + P5-S1/S5/S6 (partial): `DD-01` b-variant, `DD-06 1`, `DD-07 1`, `DD-08 A-Z` applied: `model-registry.json` 1.11.0 (`release_date` x100, fallback `eci_band` x22, derived `capability_label` x92, 71 label changes), `update-model-inventory.py` rewritten (Label/Comp/WF from band, Efforts column, all text rows, `CSV rows` + adaptive Medium markers), `MODEL_INVENTORY.md` Sections 1-4 rewritten and regenerated (92 + 4 rows, Comp 26), `match-epoch-eci.py` band freeze, Gate 9.4 derivation check (PASS 92 rows), `LLMCAPCLS-IN01` Sections 2-6 + 6.1 TBLF cross-check, `PROMPTS_GUIDES.md` 1g, `TASKS_GUIDES.md`, `PRMT-SC-05`, prompts template Prompt 4/6, `PROMPTS_TEMPLATE.md` and `PROMPTS_EXAMPLE_01` rows
 - [x] **[2026-10-29 13:37]** `/fix` `MDLRGUP-MDLINVNTRY-PR-0002`: corrected `R3` (no `26-A` for models released before October) and `R2` (strict `UC-1..4` tier separation: `26-B` Apex `Fable`/`Astra` > `26-C` Flagship `Opus`/`Sol`/`glm-5.2` > `26-D` Balanced `Sonnet`/`Terra`/`Flash` > `26-E` Efficient `Haiku`/`Luna`/`Flash-Lite`) in `T02`, `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`, `_INFO_HOW_TO_ORGANIZE_LLMS_BY_CAPABILITY.md`, `update-model-inventory.py`, `model-registry.json`, and `MODEL_INVENTORY.md`
 - [x] **[2026-10-28 20:22]** P4-S1..S3 [VERIFY+STATUS+COMMIT]: verified STRUT and T02 research set (`IN01`-`IN05`) against `RESEARCH_RULES.md` (fixed 4 `TF-*` items in `IN03`), updated `NOTES.md`, `__STRUT_MDLINVNTRY.md` (including `Computed vs actual` Time Log analysis), `PROGRESS.md`, and `PROBLEMS.md`, and committed + pushed session files (P4-D1, P4-D2 checked)

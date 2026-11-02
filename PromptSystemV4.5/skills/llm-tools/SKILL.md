@@ -1,6 +1,6 @@
 ---
 name: llm-tools
-description: Single source of truth for all skill-based LLM activities - shared LLM call scripts (single, batch, worker-limit probe), canonical model data (model-registry.json, model-pricing.json, model-parameter-mapping.json, MODEL_INVENTORY.md), and three functions - evaluation (LLM-as-judge pipelines, cost analysis), transcription (image/audio to markdown), computer-use (desktop automation via LLM vision). Apply when calling LLM APIs from scripts, looking up model capabilities, context windows, effort levels, prices, or workload factors for PROMPTS/TASKS planning, evaluating LLM output quality, transcribing images or audio, or automating the desktop with an LLM.
+description: Single source of truth for all skill-based LLM activities - shared LLM call scripts (single, batch, worker-limit probe), canonical model data (model-registry.json, model-pricing.json, model-parameter-mapping.json, MODEL_INVENTORY.md), and three functions - evaluation (LLM-as-judge pipelines, cost analysis), transcription (image/audio to markdown), computer-use (desktop automation via LLM vision). Apply when calling LLM APIs from scripts, looking up model capabilities, context windows, effort levels, prices, depth rungs, or Items for PROMPTS/TASKS planning, evaluating LLM output quality, transcribing images or audio, or automating the desktop with an LLM.
 ---
 
 # LLM Tools Skill
@@ -12,7 +12,7 @@ One skill for every LLM activity that runs from scripts or needs model data. Roo
 Read this file, then jump to exactly one target:
 
 - **Call an LLM from a script** (single file, batch folder, find max workers) → root scripts below, parameters in `evaluation/LLM_EVALUATION_SCRIPTS.md`
-- **Look up model data** (context window, max output, effort levels, method, price, capability label, behavior profile, workload factor) → `MODEL_INVENTORY.md` (human/planning view), `model-registry.json` + `model-pricing.json` + `model-parameter-mapping.json` (script view)
+- **Look up model data** (context window, max output, effort levels, method, price, depth rung, Items, scope guard) → `MODEL_INVENTORY.md` (human/planning view), `model-registry.json` + `model-pricing.json` + `model-parameter-mapping.json` (script view)
 - **Size PROMPTS or TASKS to a model** (`intended_model`, `effort`, `context_window_size`, prompt count, checkpoints) → `MODEL_INVENTORY.md` Sections 1-2, then `@skills:write-documents` `PROMPTS_GUIDES.md` Section 1g / `TASKS_GUIDES.md` Section 2
 - **Evaluate LLM output** (questions, answers, LLM-as-judge scoring, run comparison, cost analysis) → `evaluation/EVALUATION.md`
 - **Transcribe images or audio to markdown** (ensemble + judge + refinement) → `transcription/TRANSCRIPTION.md`
@@ -33,7 +33,7 @@ llm-tools/
 ├── SKILL.md                         this file (routing)
 ├── SETUP.md, UNINSTALL.md           shared venv [SKILL_TOOLS_FOLDER]/llm-venv/, keys file
 ├── MODEL_INVENTORY.md               planning view of all models (generated from the 3 JSONs)
-├── model-registry.json              model IDs, prefix routing, context/output limits, methods, efforts, capability labels
+├── model-registry.json              model IDs, prefix routing, context/output limits, methods, efforts, depth ladder
 ├── model-pricing.json               USD per 1M tokens (standard tier, long-context tier)
 ├── model-parameter-mapping.json     effort level → API parameter mapping
 ├── call-llm.py                      single call, auto-detects image/text input

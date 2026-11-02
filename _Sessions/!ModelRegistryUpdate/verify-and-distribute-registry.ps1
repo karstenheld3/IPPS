@@ -82,9 +82,11 @@ function Invoke-Gate567 {
     $cs = Get-Content $csPath -Raw -Encoding UTF8 | ConvertFrom-Json
     $newIds = @($cs.newPricingIds) + @($cs.changedPricingIds) | Select-Object -Unique
     foreach ($id in $newIds) {
-      if (-not $p.pricing.anthropic.$id -and -not $p.pricing.openai.$id -and -not $p.pricing.google.$id -and -not $p.pricing.zai.$id) {
-        throw "Gate 6 FAIL: Missing $id in model-pricing.json"
+      $found = $false
+      foreach ($providerName in $p.pricing.PSObject.Properties.Name) {
+        if ($p.pricing.$providerName.$id) { $found = $true }
       }
+      if (-not $found) { throw "Gate 6 FAIL: Missing $id in model-pricing.json" }
     }
     Write-Output "Gate 6: PASS (verified $($newIds.Count) new/changed pricing IDs)"
   } else {
@@ -126,54 +128,79 @@ function Invoke-Gate94 {
     throw "Gate 9.4 FAIL: model-parameter-mapping.json version/date in MODEL_INVENTORY.md does not match $($m._version) ($($m._updated))"
   }
 
-  if ($inv -notmatch "\|\s*Model\s*\|\s*Label\s*\|\s*Comp (\d{2})\s*\|\s*Profile\s*\|\s*Context\s*\|\s*Efforts\s*\|\s*WF\s*\|\s*In USD\s*\|\s*Cache USD\s*\|\s*Out USD\s*\|") {
-    throw "Gate 9.4 FAIL: MODEL_INVENTORY.md header is not 'Model | Label | Comp YY | Profile | Context | Efforts | WF | In USD | Cache USD | Out USD | ...'"
+  if ($inv -notmatch "\|\s*Model\s*\|\s*Depth\s*\|\s*Items\s*\|\s*Context\s*\|\s*Efforts\s*\|\s*In USD\s*\|\s*Cache USD\s*\|\s*Out USD\s*\|\s*Devin cost\s*\|\s*Notes\s*\|") {
+    throw "Gate 9.4 FAIL: MODEL_INVENTORY.md header is not 'Model | Depth | Items | Context | Efforts | In USD | Cache USD | Out USD | Devin cost | Notes'"
   }
-  $compYear = [int]$Matches[1]
-  $runDate = [datetime]::ParseExact($Date, "yyyy-MM-dd", $null)
-  $expectedCompYear = if ($runDate -ge [datetime]::new($runDate.Year, 5, 1)) { $runDate.Year % 100 } else { ($runDate.Year - 1) % 100 }
-  if ($compYear -ne $expectedCompYear) {
-    throw "Gate 9.4 FAIL: Comp header year $compYear does not match the comparison year $expectedCompYear for $Date (wraps May 1)"
+
+  # Registry: every non-retired text model has depth; every deeper_than item has all five fields (FR-10, IG-03)
+  $knownNonText = @("computer-use-preview", "gpt-image-1.5")
+  $mismatches = @()
+  $textModels = @($r.models | Where-Object { ($knownNonText -notcontains $_.model_id) -and ($_.status -ne "retired") })
+  $maxDepth = 0
+  foreach ($model in $textModels) {
+    if ($null -eq $model.depth) { $mismatches += "No depth: $($model.model_id)"; continue }
+    if ([int]$model.depth -gt $maxDepth) { $maxDepth = [int]$model.depth }
+    foreach ($item in @($model.deeper_than)) {
+      if ($null -eq $item) { continue }
+      foreach ($field in @("model", "kind", "source", "accessed", "statement")) {
+        if (-not $item.$field) { $mismatches += "deeper_than on $($model.model_id) > $($item.model) lacks '$field'" }
+      }
+      if (@("E1", "E4") -notcontains $item.kind) { $mismatches += "deeper_than on $($model.model_id) has kind '$($item.kind)' (E1 or E4 only)" }
+    }
   }
+
+  # Registry: no depth differs from git HEAD except depth_estimated -> measured (IG-01)
+  $previousOutputEncoding = [Console]::OutputEncoding
+  [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+  $headText = (& git -C $SkillFolder show "HEAD:./model-registry.json" 2>$null) -join "`n"
+  $gitExit = $LASTEXITCODE
+  [Console]::OutputEncoding = $previousOutputEncoding
+  $comparedCount = 0
+  if ($gitExit -eq 0 -and $headText) {
+    $head = $headText | ConvertFrom-Json
+    foreach ($headModel in $head.models) {
+      if ($null -eq $headModel.depth) { continue }
+      $current = $r.models | Where-Object { $_.model_id -eq $headModel.model_id } | Select-Object -First 1
+      if (-not $current) { $mismatches += "Model removed since HEAD: $($headModel.model_id)"; continue }
+      $comparedCount++
+      if ([int]$current.depth -ne [int]$headModel.depth) {
+        $wasEstimate = [bool]$headModel.depth_estimated
+        $nowMeasured = -not [bool]$current.depth_estimated
+        if (-not ($wasEstimate -and $nowMeasured)) { $mismatches += "Depth changed since HEAD on $($headModel.model_id): D$($headModel.depth) -> D$($current.depth)" }
+      }
+    }
+  } else {
+    Write-Warning "Gate 9.4: git HEAD registry not readable from $SkillFolder; depth stability not compared"
+  }
+
+  if ($inv -notmatch "Top rung: D(\d+) \(\d{4}-\d{2}-\d{2}\)") { throw "Gate 9.4 FAIL: 'Top rung: D[n] (YYYY-MM-DD)' line missing in MODEL_INVENTORY.md" }
+  if ([int]$Matches[1] -ne $maxDepth) { $mismatches += "Top rung D$($Matches[1]) != maximum registry depth D$maxDepth" }
 
   $sec31 = ($inv -split "### 3\.1 API Models")[1] -split "### 3\.2|## 4\." | Select-Object -First 1
   $rows = $sec31 -split "`r?`n" | Where-Object { $_ -cmatch "^\| [a-z0-9]" }
-  $mismatches = @()
+  if (@($rows).Count -ne $textModels.Count) { $mismatches += "Section 3.1 has $(@($rows).Count) rows, registry has $($textModels.Count) non-retired text models" }
   $prevKey = $null
   foreach ($row in $rows) {
     $cols = ($row -split "\|") | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne "" }
     $mid = $cols[0]
-    $lbl = $cols[1]
-    $comp = $cols[2]
-    $prof = $cols[3]
-    $inUsd = $cols[7]
-    $cacheUsd = $cols[8]
-    $outUsd = $cols[9]
+    $depthCell = $cols[1]
+    $itemsCell = $cols[2]
+    $inUsd = $cols[5]
+    $cacheUsd = $cols[6]
+    $outUsd = $cols[7]
 
     $regEntry = $r.models | Where-Object { $_.model_id -eq $mid } | Select-Object -First 1
     if (-not $regEntry) {
-      $regEntry = $r.models | Where-Object { $_.model_id.StartsWith("$mid-") } | Select-Object -First 1
+      $regEntry = $r.models | Where-Object { $_.model_id -match "^$([regex]::Escape($mid))-\d{8}$" } | Select-Object -First 1
     }
     if (-not $regEntry) {
       $mismatches += "Missing in registry: $mid"
     } else {
-      if ($regEntry.capability_label -ne $lbl -or $regEntry.behavior_profile -ne $prof) {
-        $mismatches += "Mismatch on ${mid}: inv=($lbl,$prof) vs reg=($($regEntry.capability_label),$($regEntry.behavior_profile))"
-      }
-      if ($regEntry.release_date -and $regEntry.eci_band) {
-        $yy = [int]$regEntry.release_date.Substring(2, 2)
-        $band = [int]$regEntry.eci_band.Substring(1)
-        $idx = [int][math]::Floor((170 + 15 * ($yy - 26) - $band) / 5)
-        if ($idx -lt 0) { $idx = 0 }
-        $expLbl = "{0:D2}-{1}" -f $yy, [char][int](65 + $idx)
-        $cidx = [int][math]::Floor((170 + 15 * ($compYear - 26) - $band) / 5)
-        if ($cidx -lt 0) { $cidx = 0 }
-        $expComp = "{0:D2}-{1}" -f $compYear, [char][int](65 + $cidx)
-        if ($expLbl -ne $lbl -or $expComp -ne $comp) {
-          $mismatches += "Derivation mismatch on ${mid}: inv=($lbl,$comp) vs release_date+eci_band=($expLbl,$expComp)"
-        }
-      } else {
-        $mismatches += "Registry entry ${mid} lacks release_date or eci_band"
+      $expDepth = "D$($regEntry.depth)" + $(if ($regEntry.depth_estimated) { "*" } else { "" })
+      $d = [int]$regEntry.depth
+      $expItems = if ($regEntry.items) { "$($regEntry.items)m" } elseif ($d -ge 10) { "8" } elseif ($d -ge 7) { "6" } elseif ($d -ge 4) { "5" } else { "4" }
+      if ($depthCell -ne $expDepth -or $itemsCell -ne $expItems) {
+        $mismatches += "Mismatch on ${mid}: inv=($depthCell,$itemsCell) vs registry=($expDepth,$expItems)"
       }
       $prov = $regEntry.provider
       $pMap = $p.pricing.$prov
@@ -190,29 +217,15 @@ function Invoke-Gate94 {
       }
     }
 
-    $parts = $lbl -split "-"
-    $curKey = [pscustomobject]@{
-      Model = $mid; CompRank = [int][char](($comp -split "-")[1]); YearRank = -[int]$parts[0]; LetterRank = [int][char]$parts[1]
-      NameKey = $mid.ToLowerInvariant()
-    }
+    $curKey = [pscustomobject]@{ Model = $mid; Depth = [int]($depthCell.TrimStart("D").TrimEnd("*")); NameKey = $mid.ToLowerInvariant() }
     if ($prevKey) {
-      $outOfOrder = $false
-      if ($curKey.CompRank -lt $prevKey.CompRank) { $outOfOrder = $true }
-      elseif ($curKey.CompRank -eq $prevKey.CompRank) {
-        if ($curKey.YearRank -lt $prevKey.YearRank) { $outOfOrder = $true }
-        elseif ($curKey.YearRank -eq $prevKey.YearRank) {
-          if ($curKey.LetterRank -lt $prevKey.LetterRank) { $outOfOrder = $true }
-          elseif ($curKey.LetterRank -eq $prevKey.LetterRank -and [string]::CompareOrdinal($curKey.NameKey, $prevKey.NameKey) -lt 0) { $outOfOrder = $true }
-        }
-      }
-      if ($outOfOrder) {
-        $mismatches += "Sort order violation (1. Comp, 2. Label year desc, 3. Model asc): '$($prevKey.Model)' before '$($curKey.Model)'"
-      }
+      $outOfOrder = ($curKey.Depth -gt $prevKey.Depth) -or (($curKey.Depth -eq $prevKey.Depth) -and ([string]::CompareOrdinal($curKey.NameKey, $prevKey.NameKey) -lt 0))
+      if ($outOfOrder) { $mismatches += "Sort order violation (1. Depth desc, 2. Model asc): '$($prevKey.Model)' before '$($curKey.Model)'" }
     }
     $prevKey = $curKey
   }
   if ($mismatches.Count -gt 0) { throw "Gate 9.4 FAIL: $($mismatches -join '; ')" }
-  Write-Output "Gate 9.4: PASS (verified $($rows.Count) Section 3.1 rows, Label/Comp derivation for comparison year $compYear, In/Cache/Out USD prices, sort order, and source versions/dates)"
+  Write-Output "Gate 9.4: PASS ($($textModels.Count) models with depth, $comparedCount compared against git HEAD, Top rung D$maxDepth, $(@($rows).Count) Section 3.1 rows with Depth/Items/prices, sort order, and source versions/dates)"
 }
 
 function Invoke-Distribute {

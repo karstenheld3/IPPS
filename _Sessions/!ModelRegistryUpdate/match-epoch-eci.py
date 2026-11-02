@@ -1,30 +1,29 @@
 #!/usr/bin/env python3
 """
-match-epoch-eci.py - Download Epoch ECI CSV and match inventory models to ECI bands, Universal Classes, and Generation Equivalents.
+match-epoch-eci.py - Download the Epoch ECI CSV and match every registry model to its score and 95% interval (MDLRGUP-MDLINVNTRY-SP01 FR-06).
 
-Band freeze (MODEL_INVENTORY.md R2): a band read from Epoch is never replaced. band_action per match: "set" (no band yet), "replace_fallback" (registry band came from eci_band_source), "keep" (Epoch band exists; new score reported only).
+Output [DATE]_Epoch-ECI-Match.json:
+  matches[]           one entry per registry text model: model_id, epoch_name, eci_score, eci_ci_low, eci_ci_high (null without an Epoch row)
+  unmatched[]         registry model IDs without an Epoch row (eci_ci null in the registry)
+  new_models[]        model IDs found in [DATE]_*-DOM.json of the run folder but absent from the registry (candidates for Prompts 4 and 5)
+  missing_metadata[]  registry models without uc_class or release_date (complete from the vendor model overview)
+No band, no generation equivalent, no class inference: uc_class and release_date are hand-maintained registry inputs.
 
 Usage:
   python match-epoch-eci.py --run-folder <path> --date <YYYY-MM-DD> --registry-file <path> [--download]
 """
 
-import argparse
-import csv
-import json
-import sys
-import urllib.request
+import argparse, csv, json, re, sys, urllib.request
 from pathlib import Path
 
-ECI_CSV_URL = "https://epoch.ai/data/eci_scores.csv"
+if hasattr(sys.stdout, "reconfigure"):
+  sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+  sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-REFERENCE_UC12_MODELS = [
-  "Claude Opus 5.5", "GPT-6 Astra", "GPT-6.1 Sol", "Claude Fable 5.1", "Gemini 4 Argon",
-  "Claude Opus 5", "GPT-6 Sol", "Claude Fable 5", "GPT-5.6 Sol", "GPT-5.5",
-  "Claude Opus 4.8", "GPT-5.4", "Claude Opus 4.7", "Claude Opus 4.6", "Gemini 3.1 Pro",
-  "GPT-5.2", "Gemini 3 Pro", "Claude Opus 4.5", "GPT-5", "GPT-5.1",
-  "o3", "Gemini 2.5 Pro (Jun 2025)", "Claude Opus 4.1", "Claude Opus 4", "o1",
-  "GPT-4.1", "Claude 3.5 Sonnet (October 2024)", "Claude 3.5 Sonnet", "GPT-4o (May 2024)", "Claude 3 Opus"
-]
+ECI_CSV_URL = "https://epoch.ai/data/eci_scores.csv"
+NON_TEXT = {"computer-use-preview", "gpt-image-1.5"}
+MODEL_ID_PATTERN = re.compile(r"^(claude|gpt|o\d|gemini|glm|grok)[-a-z0-9.]*$")
+SKIPPED_DOM_PATHS = ("shut_down", "retired", "specialized_endpoints")
 
 ExplicitNameMap = {
   "gpt-5-mini": "GPT-5 mini",
@@ -55,30 +54,17 @@ ExplicitNameMap = {
   "gemini-2.5-pro": "Gemini 2.5 Pro (Jun 2025)",
   "gemini-2.5-flash": "Gemini 2.5 Flash (Sep 2025)",
   "gemini-2.5-flash-lite": "Gemini 2.5 Flash-Lite (Jun 2025)",
-  "glm-5.3-flash": "GLM-5.3-Flash"
+  "glm-5.3-flash": "GLM-5.3-Flash",
+  "grok-4.3": "Grok 4.3 Beta",
+  "grok-4.20-0309-reasoning": "Grok 4.20",
+  "grok-4.20-multi-agent-0309": "Grok 4.20"
 }
 
-def infer_uc_class(model_id: str, existing_uc: str = None) -> str:
-  if existing_uc:
-    return existing_uc
-  mid = model_id.lower()
-  if any(k in mid for k in ("astra", "fable", "mythos", "-pro", "cyber", "deep-research")) and not mid.startswith("gemini-"):
-    return "UC-1 Apex"
-  if any(k in mid for k in ("opus", "-sol", "argon", "gemini-3.1-pro", "gemini-2.5-pro", "codex", "glm-5.3", "glm-5.2", "glm-5.1", "glm-4.7", "glm-4.6", "glm-4.5-x")) and "flash" not in mid:
-    return "UC-2 Flagship"
-  if mid in ("gpt-5.5", "gpt-5.4", "gpt-5.2", "gpt-5.1", "gpt-5", "gpt-4.1", "gpt-4o", "gpt-4o-2024-05-13", "o1", "o3", "glm-5", "glm-4.5"):
-    return "UC-2 Flagship"
-  if any(k in mid for k in ("sonnet", "terra", "-mini", "flash-lite", "haiku", "luna", "-nano", "air")):
-    if any(k in mid for k in ("haiku", "luna", "-nano", "flash-lite", "glm-4.7-flash", "glm-4.5-flash", "glm-4-air")):
-      return "UC-4 Efficient"
-    return "UC-3 Balanced"
-  if "flash" in mid or "4.6v" in mid or "4.5v" in mid:
-    return "UC-3 Balanced"
-  return "UC-3 Balanced"
+def base_id(model_id):
+  return re.sub(r"-\d{8}$", "", model_id)
 
-def round_band(score: float) -> str:
-  retVal = f"E{int(round(score / 5.0) * 5)}"
-  return retVal
+def to_float(value):
+  return float(value) if value not in (None, "") else None
 
 def download_csv(csv_path: Path, url: str = ECI_CSV_URL) -> bool:
   req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
@@ -88,127 +74,83 @@ def download_csv(csv_path: Path, url: str = ECI_CSV_URL) -> bool:
   retVal = csv_path.exists() and csv_path.stat().st_size > 1000
   return retVal
 
-def match_models(csv_path: Path, reg_path: Path, out_path: Path, snapshot_date: str) -> dict:
-  with csv_path.open("r", encoding="utf-8") as f:
-    csv_rows = list(csv.DictReader(f))
+# Collect model-ID-like strings from every DOM extract of the run; display names such as "GLM-5.3 Flash" are normalized to "glm-5.3-flash"
+def collect_dom_model_ids(run_folder: Path, date: str) -> list:
+  found = {}
+  pending = []
+  for dom_file in sorted(run_folder.glob(f"{date}_*-DOM.json")):
+    pending.append((json.loads(dom_file.read_text(encoding="utf-8")), ""))
+  while pending:
+    node, path = pending.pop()
+    if isinstance(node, dict):
+      for key, value in node.items():
+        pending.append((value, path + "." + str(key).lower()))
+    elif isinstance(node, list):
+      for value in node:
+        pending.append((value, path))
+    elif isinstance(node, str):
+      skipped = False
+      for marker in SKIPPED_DOM_PATHS:
+        if marker in path: skipped = True
+      candidate = node.strip()
+      if candidate.upper().startswith("GLM-") or candidate.startswith("Grok "): candidate = candidate.lower().replace(" ", "-")
+      if not skipped and MODEL_ID_PATTERN.match(candidate): found[candidate] = True
+  return sorted(found.keys())
 
-  by_name = {}
-  by_lower = {}
-  for r in csv_rows:
-    m = r["Model"].strip()
-    by_name[m] = r
-    by_lower[m.lower()] = r
-    by_lower[m.lower().replace("-", " ")] = r
-
-  ref_ladder = []
-  for rn in REFERENCE_UC12_MODELS:
-    if rn in by_name and by_name[rn].get("eci"):
-      score = float(by_name[rn]["eci"])
-      clean_label = rn.replace(" (Jun 2025)", "").replace(" (October 2024)", "").replace(" (May 2024)", "")
-      ref_ladder.append((score, clean_label))
-  ref_ladder.sort(key=lambda x: x[0], reverse=True)
-
-  def get_gen_equiv(score: float) -> str:
-    for ref_score, ref_label in ref_ladder:
-      if ref_score <= score + 1e-9:
-        return f"≈ {ref_label}"
-    return "≈ Claude 3 Opus"
-
+def match_models(csv_path: Path, reg_path: Path, out_path: Path, run_folder: Path, snapshot_date: str) -> dict:
+  with csv_path.open("r", encoding="utf-8", newline="") as handle:
+    csv_rows = list(csv.DictReader(handle))
+  by_name, by_lower = {}, {}
+  for row in csv_rows:
+    name = row["Model"].strip()
+    by_name[name] = row
+    by_lower[name.lower()] = row
+    by_lower[name.lower().replace("-", " ")] = row
   reg = json.loads(reg_path.read_text(encoding="utf-8"))
-  matches = []
-  matched_count = 0
-  unmatched_ids = []
-
-  for m in reg["models"]:
-    mid = m["model_id"]
-    provider = m["provider"]
-    display_name = m.get("name", mid)
-    uc_class = infer_uc_class(mid, m.get("uc_class"))
-
-    # Resolve CSV row
+  matches, unmatched_ids, missing_metadata = [], [], []
+  registry_ids = {}
+  for model in reg["models"]:
+    registry_ids[model["model_id"]] = True
+    registry_ids[base_id(model["model_id"])] = True
+    mid = model["model_id"]
+    if mid in NON_TEXT or model.get("status") == "retired": continue
+    display_name = model.get("name", mid)
     csv_row = None
-    if mid in ExplicitNameMap and ExplicitNameMap[mid] in by_name:
-      csv_row = by_name[ExplicitNameMap[mid]]
-    elif display_name in by_name:
-      csv_row = by_name[display_name]
-    elif display_name.lower() in by_lower:
-      csv_row = by_lower[display_name.lower()]
-    elif mid.lower() in by_lower:
-      csv_row = by_lower[mid.lower()]
-
+    if mid in ExplicitNameMap and ExplicitNameMap[mid] in by_name: csv_row = by_name[ExplicitNameMap[mid]]
+    elif display_name in by_name: csv_row = by_name[display_name]
+    elif display_name.lower() in by_lower: csv_row = by_lower[display_name.lower()]
+    elif mid.lower() in by_lower: csv_row = by_lower[mid.lower()]
+    entry = {"provider": model["provider"], "model_id": mid, "name": display_name, "epoch_name": None, "eci_score": None, "eci_ci_low": None, "eci_ci_high": None}
     if csv_row and csv_row.get("eci"):
-      score = float(csv_row["eci"])
-      ci_low = float(csv_row["eci_ci_low"]) if csv_row.get("eci_ci_low") else None
-      ci_high = float(csv_row["eci_ci_high"]) if csv_row.get("eci_ci_high") else None
-      band = round_band(score)
-      gen_eq = get_gen_equiv(score)
-      matched_count += 1
-      existing_band = m.get("eci_band")
-      if not existing_band:
-        band_action = "set"
-      elif m.get("eci_band_source"):
-        band_action = "replace_fallback"
-      else:
-        band_action = "keep"
-      matches.append({
-        "provider": provider,
-        "model_id": mid,
-        "name": display_name,
-        "uc_class": uc_class,
-        "eci_model": csv_row["Model"].strip(),
-        "eci_score": score,
-        "eci_ci_low": ci_low,
-        "eci_ci_high": ci_high,
-        "eci_band": band if band_action != "keep" else existing_band,
-        "eci_band_new_score": band,
-        "band_action": band_action,
-        "gen_equivalent": gen_eq,
-        "release_date_in_eci": csv_row.get("date") or None,
-        "snapshot_date": snapshot_date
-      })
+      entry.update({"epoch_name": csv_row["Model"].strip(), "eci_score": to_float(csv_row["eci"]), "eci_ci_low": to_float(csv_row.get("eci_ci_low")), "eci_ci_high": to_float(csv_row.get("eci_ci_high"))})
+      entry["release_date_in_eci"] = csv_row.get("date") or None
     else:
       unmatched_ids.append(mid)
-      matches.append({
-        "provider": provider,
-        "model_id": mid,
-        "name": display_name,
-        "uc_class": uc_class,
-        "eci_model": None,
-        "eci_score": None,
-        "eci_ci_low": None,
-        "eci_ci_high": None,
-        "eci_band": None,
-        "gen_equivalent": None,
-        "fallback_note": f"No Epoch ECI row (<4 benchmarks or specialized/older SKU); use {uc_class} fallback",
-        "snapshot_date": snapshot_date
-      })
-
+    matches.append(entry)
+    missing = []
+    for field in ("uc_class", "release_date"):
+      if not model.get(field): missing.append(field)
+    if missing: missing_metadata.append({"model_id": mid, "missing": missing})
+  new_models = []
+  for candidate in collect_dom_model_ids(run_folder, snapshot_date):
+    if candidate not in registry_ids and base_id(candidate) not in registry_ids: new_models.append(candidate)
   retVal = {
-    "_source": str(csv_path),
-    "_url": "https://epoch.ai/eci",
-    "_direct_csv_url": ECI_CSV_URL,
-    "_snapshot_date": snapshot_date,
-    "_total_csv_models": len(csv_rows),
-    "_total_models_evaluated": len(matches),
-    "_matched_with_eci_score": matched_count,
-    "_unmatched_fallback_to_uc": len(unmatched_ids),
-    "_unmatched_model_ids": unmatched_ids,
-    "matches": matches
+    "_source": str(csv_path), "_url": "https://epoch.ai/eci", "_direct_csv_url": ECI_CSV_URL, "_snapshot_date": snapshot_date,
+    "_total_csv_models": len(csv_rows), "_total_models_evaluated": len(matches), "_matched_with_eci_score": len(matches) - len(unmatched_ids),
+    "unmatched": unmatched_ids, "new_models": new_models, "missing_metadata": missing_metadata, "matches": matches
   }
   out_path.write_text(json.dumps(retVal, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
   return retVal
 
 def main():
-  parser = argparse.ArgumentParser(description="Download Epoch ECI CSV and match registry models")
+  parser = argparse.ArgumentParser(description="Download Epoch ECI CSV and match registry models to score and 95% interval")
   parser.add_argument("--run-folder", type=Path, required=True, help="Run folder path")
   parser.add_argument("--date", type=str, required=True, help="Run date YYYY-MM-DD")
   parser.add_argument("--registry-file", type=Path, required=True, help="Path to model-registry.json")
   parser.add_argument("--download", action="store_true", help="Download fresh CSV from epoch.ai")
   args = parser.parse_args()
-
   csv_path = args.run_folder / f"{args.date}_eci-leaderboard.csv"
   out_path = args.run_folder / f"{args.date}_Epoch-ECI-Match.json"
-
   if args.download or not csv_path.exists():
     try:
       download_csv(csv_path)
@@ -216,10 +158,15 @@ def main():
       if not csv_path.exists():
         print(f"ERROR: Failed to download ECI CSV and no local file exists: {exc}", file=sys.stderr)
         sys.exit(1)
-      print(f"WARN: Download failed ({exc}); using existing {csv_path}", file=sys.stderr)
-
-  res = match_models(csv_path, args.registry_file, out_path, args.date)
-  print(f"OK: Matched {res['_matched_with_eci_score']}/{res['_total_models_evaluated']} models ({res['_unmatched_fallback_to_uc']} UC fallbacks) -> {out_path}")
+      print(f"WARNING: Download failed ({exc}); using existing {csv_path}", file=sys.stderr)
+  result = match_models(csv_path, args.registry_file, out_path, args.run_folder, args.date)
+  with_interval = 0
+  for entry in result["matches"]:
+    if entry["eci_ci_low"] is not None: with_interval += 1
+  print(f"Matched {result['_matched_with_eci_score']} / {result['_total_models_evaluated']} registry models ({with_interval} with interval, {len(result['unmatched'])} unmatched).")
+  print(f"New model candidates in DOM: {len(result['new_models'])}" + (f" ({', '.join(result['new_models'])})" if result["new_models"] else ""))
+  print(f"Registry models missing uc_class or release_date: {len(result['missing_metadata'])}")
+  print(f"OK: {out_path}")
 
 if __name__ == "__main__":
   main()

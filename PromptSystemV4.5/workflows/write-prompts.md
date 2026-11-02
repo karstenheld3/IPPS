@@ -17,6 +17,7 @@ Create `_PROMPTS_[NN]-[Topic].md` files containing an ordered list of prompts. E
 - @skills:write-documents `PROMPTS_GUIDES.md` for strategic approach (read BEFORE writing)
 - @skills:write-documents `PROMPTS_RULES.md` for output verification (PRMT-* rules)
 - @skills:write-documents `PROMPTS_ROBUSTNESS_GUIDES.md` for hang-prevention clause template and inter-prompt problem filing
+- @skills:llm-tools `MODEL_INVENTORY.md` for model data (read BEFORE partitioning)
 - @skills:terminal-robustness for hang mechanisms, safe command patterns, and robustness card templates (agent variants: ClaudeCode minimum, DevinCascade full findings)
 
 ## MUST-NOT-FORGET
@@ -40,7 +41,7 @@ Create `_PROMPTS_[NN]-[Topic].md` files containing an ordered list of prompts. E
 - **Self-contained prompts** (PRMT-SC-01): Every prompt must start with a context-loading directive, "treat earlier conversation as compacted" statement, and step identifier. No prompt may reference "the previous step" without naming where output lives in a file (PRMT-SC-02).
 - **Idempotency constraints** (PRMT-SC-03): Implementation prompts must include "re-running this prompt must not corrupt state or waste cost" in constraints.
 - **Chain length limit** (PRMT-SC-04): Sequences must stay under 6 steps. Longer workflows split into sub-chains with checkpoints.
-- **Effort-based partitioning** (PRMT-SC-05): Frontmatter must specify `effort` level. Prompt count must match effort budget (low effort = more tightly scoped prompts, high effort = fewer broader prompts). See `PROMPTS_GUIDES.md` Section 1c.
+- **Effort-based partitioning** (PRMT-SC-05): Frontmatter must specify `effort` level. Prompt count must match effort budget (low effort = more tightly scoped prompts, high effort = fewer broader prompts). Take `context_window_size`, supported effort levels, Depth, Items, and Notes (scope guard) from `MODEL_INVENTORY.md`. See `PROMPTS_GUIDES.md` Sections 1c and 1g.
 - **Planning document anchor** (PRMT-SC-06): Prompt sequences from planning documents (TASKS, STRUT) must reference the document by filename and step ID. See `PROMPTS_GUIDES.md` Section 1d.
 - **Load-based workflow partitioning** (PRMT-SC-07): Prompts invoking workflows must group invocations by assessed load against the run budget. See `PROMPTS_GUIDES.md` Section 1f for the assessment procedure.
 - **Hang-safety clause** (PRMT-HS-01): Every implementation prompt MUST include a hang-safety clause in Constraints: prohibition (no stdin/pager/unbounded child), project-specific banned list, time caps, on-cap behavior. Banned list and caps come from the project robustness card; if none exists, create one from the agent's `ROBUSTNESS_CARD_TEMPLATE.md` (@skills:terminal-robustness). See `PROMPTS_ROBUSTNESS_GUIDES.md` for the clause template and problem-filing directive.
@@ -87,6 +88,8 @@ Read `PROMPTS_GUIDES.md` from @skills:write-documents. Classify the task, decide
 **Findings-card planning**: Designate a `__CARD_[TOPIC]-Findings.md` card for the sequence. Every implementation prompt includes a `Findings card:` directive pointing to this card. The card is loaded at prompt startup and updated at end-of-prompt with glitches, spec-code mismatches, and unexpected findings. Session PROBLEMS.md records problems encountered during prompt execution that must be approached later (blockers, deferred issues).
 
 **Effort-based partitioning**: Read the frontmatter `effort` level (PRMT-SC-05). Scope prompts to the effort budget: at low effort, each prompt handles one file or one edit; at high effort, a single prompt can handle multi-file analysis and implementation. Match prompt count to effort level. See `PROMPTS_GUIDES.md` Section 1c.
+
+**Model-aware partitioning**: Follow `PROMPTS_GUIDES.md` Section 1g with the `MODEL_INVENTORY.md` row of `intended_model` (PRMT-SC-05).
 
 **Workflow load assessment**: Assess workflow invocations and group them into prompts by load against the run budget. Follow `PROMPTS_GUIDES.md` Section 1f (PRMT-SC-07). State the grouping rationale in the sub-chain commentary.
 
@@ -350,7 +353,7 @@ Check output against all PRMT-* rules in `PROMPTS_RULES.md`:
 - [ ] Structure (ST): PRMT-ST-01 through PRMT-ST-05
 - [ ] Sequence (SQ): PRMT-SQ-01 through PRMT-SQ-04
 - [ ] Content (CT): PRMT-CT-01 through PRMT-CT-14
-- [ ] Self-Contained (SC): PRMT-SC-01 (self-contained opening), PRMT-SC-02 (no conversation dependency), PRMT-SC-03 (idempotency constraint), PRMT-SC-04 (chain length under 6), PRMT-SC-05 (effort and model specification), PRMT-SC-06 (planning document reference), PRMT-SC-08 (session anchor with absolute paths)
+- [ ] Self-Contained (SC): PRMT-SC-01 (self-contained opening), PRMT-SC-02 (no conversation dependency), PRMT-SC-03 (idempotency constraint), PRMT-SC-04 (chain length under 6), PRMT-SC-05 (effort and model specification, model-data checks against the `MODEL_INVENTORY.md` row), PRMT-SC-06 (planning document reference), PRMT-SC-08 (session anchor with absolute paths)
 - [ ] Execution (EX): PRMT-EX-01 (one prompt per turn), PRMT-EX-02 (no self-execution), PRMT-EX-03 (execution authority)
 - [ ] Hang Safety (HS): PRMT-HS-01 through PRMT-HS-10
 - [ ] Robustness (RB): PRMT-RB-01 through PRMT-RB-07 (findings card designated, directive in every implementation prompt, card read at startup, glitches filed before commit, entry format, card system integration, PROBLEMS.md distinction)
@@ -488,7 +491,7 @@ Validated `_PROMPTS_[NN]-[Topic]-[Instance].md` file with all placeholders resol
 - [ ] No conversation dependency: no "the previous step" without file path (PRMT-SC-02)
 - [ ] Idempotency constraints in implementation prompts (PRMT-SC-03)
 - [ ] Chain length under 6 steps or sub-chains with checkpoints (PRMT-SC-04)
-- [ ] Effort level in frontmatter, prompt count matches effort budget (PRMT-SC-05)
+- [ ] Effort level in frontmatter, prompt count matches effort budget (PRMT-SC-05); frontmatter and per-prompt scope pass the PRMT-SC-05 model-data checks
 - [ ] Planning document referenced by filename and step ID (PRMT-SC-06)
 - [ ] No shell commands for file search/read in prompt bodies — agent tools only (PRMT-CT-12)
 - [ ] Verification runs specific test files, not full suite, during implementation steps (PRMT-HS-09)

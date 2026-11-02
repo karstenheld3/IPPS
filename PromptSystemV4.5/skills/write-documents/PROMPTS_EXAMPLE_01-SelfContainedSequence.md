@@ -19,7 +19,7 @@ prompt_system: IPPS
 ---
 
 <!-- Planning document: __STRUT_SetupApiModule.md, phases P1-P3
-Budget (PROMPTS_GUIDES.md Section 1g): model row claude-sonnet-5, label 26-D, profile standard, effort high, WF (workload factor) 0.75 HWH (Human Work Hours), task 1.5 HWH (P1 0.5, P2 0.5, P3 0.5), 3 implementation prompts, estimated cost $5.40
+Budget (PROMPTS_GUIDES.md Section 1g): model row claude-sonnet-5, depth D8, effort high, effective rung D8, explicitness outcome, Items 6, task 1.5 HWH (Human Work Hours) (P1 0.5, P2 0.5, P3 0.5), 3 implementation prompts, estimated cost $5.40
 Each prompt implements one phase of the STRUT plan.
 Read the STRUT plan and __CARD_00-Rules.md before starting each prompt. -->
 

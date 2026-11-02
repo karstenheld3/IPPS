@@ -22,7 +22,7 @@ effort: [low | medium | high | extra-high]
 prompt_system: [e.g., IPPS]
 ---
 
-<!-- Budget (PROMPTS_GUIDES.md Section 1g): model row [row], label [YY-L], profile [precise | standard | guarded], effort [level], WF (workload factor) [N] HWH (Human Work Hours), task [N] HWH, [N] implementation prompts, estimated cost $[N] -->
+<!-- Budget (PROMPTS_GUIDES.md Section 1g): model row [row], depth [D n], effort [level], effective rung [D n], explicitness [keystroke | step | outcome | goal], Items [N], task [N] HWH (Human Work Hours), [N] implementation prompts, estimated cost $[N] -->
 
 <!-- Simple prompt: 3-backtick fence when no inner code blocks.
 Heading before the fence is optional but recommended (PRMT-FT-07). -->
@@ -103,7 +103,7 @@ effort: high
 prompt_system: IPPS
 ---
 
-<!-- Budget (PROMPTS_GUIDES.md Section 1g): model row claude-sonnet-5, label 26-D, profile standard, effort high, WF 0.75 HWH, task 1.0 HWH, 2 implementation prompts, estimated cost $3.60 -->
+<!-- Budget (PROMPTS_GUIDES.md Section 1g): model row claude-sonnet-5, depth D8, effort high, effective rung D8, explicitness outcome, Items 6, task 1.0 HWH, 2 implementation prompts, estimated cost $3.60 -->
 
 ## Prompt 1 - Security analysis
 

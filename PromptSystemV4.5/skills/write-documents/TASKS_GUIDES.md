@@ -1,6 +1,6 @@
 # TASKS Guide
 
-Read BEFORE writing TASKS documents or sizing STRUT steps. Follow `TASKS_TEMPLATE.md` for mandatory sections. Model data comes from `MODEL_INVENTORY.md`.
+Read BEFORE writing TASKS documents or sizing STRUT steps. Follow `TASKS_TEMPLATE.md` for mandatory sections. Model data comes from @skills:llm-tools `MODEL_INVENTORY.md`.
 
 ## 1. Classify the Planning Document
 
@@ -10,7 +10,7 @@ Decide who executes each task or step. Classification determines which sizing ru
 2. Executed as one prompt of a prompts file: estimate HWH (Section 2) and size to the executing model (Section 3)
 3. STRUT step executed as one prompt: same as 2. STRUT steps not executed as prompts keep the minute-based scope calibration in @skills:edird-phase-planning
 
-If the executing model is unknown, size for the model named in the session NOTES.md model switching section; if none is named, use profile `standard` and WF 0.75 (band `E155`, the median 2026 row in `MODEL_INVENTORY.md`).
+If the executing model is unknown, size for the model named in the session NOTES.md model switching section; if none is named, size for an outcome-level row (`D7-D9`, Items 6, 3 files per prompt in `MODEL_INVENTORY.md`).
 
 ## 2. Estimate HWH
 
@@ -33,10 +33,10 @@ Common mistake: estimating agent time instead of human time. HWH stays the same 
 
 Applies to classification 2 and 3 (Section 1).
 
-1. Look up the executing model's row in `MODEL_INVENTORY.md`: WF (workload factor) = `WF` column times the effort multiplier of the chosen effort (`MODEL_INVENTORY.md` Section 2), behavior profile, and the profile's max_items and max_files
-2. Check each task or step: `Est <= WF`, numbered instructions <= max_items, changed files <= max_files
+1. Look up the executing model's row in `MODEL_INVENTORY.md`: Depth, Items, and Notes. Shift Depth by the chosen effort to the effective rung and read its explicitness level and max_files (`MODEL_INVENTORY.md` Section 2)
+2. Check each task or step: `Est <= 1 HWH`, numbered instructions after explicitness expansion <= Items, changed files <= max_files
 3. If a check fails, split the task into tasks that each pass all three checks. Split along files first, then along instruction groups
-4. Keep tasks larger than 2 HWH out of single prompts even when WF allows it; the same task at lower effort or on a smaller model would fail
+4. Write task instructions at the explicitness level of the effective rung; a shallower rung needs more, smaller items, not longer prose
 
 ## 4. Estimate AWH
 
@@ -56,5 +56,5 @@ AWH (Agent Work Hours) = wall-clock time the agent runs, excluding user wait. Us
 - [ ] Every task classified by executor (Section 1)
 - [ ] Every task has `Est: [N] HWH` from the bucket list; `Estimated total` equals the sum
 - [ ] No task near 4 HWH or more remains unsplit
-- [ ] Prompt-executed tasks pass `Est <= WF`, items <= max_items, files <= max_files for the executing model
+- [ ] Prompt-executed tasks pass `Est <= 1 HWH`, expanded items <= Items, files <= max_files for the executing model
 - [ ] AWH used only for scheduling, not for task size

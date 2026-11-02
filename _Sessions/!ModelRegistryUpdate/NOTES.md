@@ -12,9 +12,10 @@ Fetch current model data from Anthropic and OpenAI provider websites, update can
 
 - **Workflow Template**: `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md` (replaces former `[WORKSPACE_FOLDER]/update-model-registry.md`)
 - **Reusable Session Scripts**:
-  - `match-epoch-eci.py` — Downloads Epoch ECI CSV and matches registry models to 5-point ECI bands, `UC-1..5`, and `Generation equivalent`
-  - `update-model-inventory.py` — Regenerates `MODEL_INVENTORY.md` Sections 3.1 and 3.2: Label from `release_date` + `eci_band`, `Comp YY` (`--today`, wraps May 1), Efforts, WF from the band, prices; sorted by `1) Comp`, `2) Label year desc`, `3) Model`
+  - `match-epoch-eci.py` — Downloads Epoch ECI CSV and matches registry models to score and 95% interval; lists `unmatched`, `new_models` (from run DOM files), `missing_metadata`
+  - `update-model-inventory.py` — Regenerates `MODEL_INVENTORY.md` Section 3.1 (Depth, Items, Context, Efforts, prices, Devin cost, Notes; sorted Depth desc, Model asc) and recomputes Section 3.2 Items and prices; `Top rung` line
   - `verify-and-distribute-registry.ps1` — Deterministic runner for Gates 1, 2, 5, 6, 7, 9, 9.4, `VerifyAll`, and Phase 9 distribution
+  - `layer-depth-ladder.py` — Append-only depth layering (insert-only per run; `--bootstrap` used once on 2026-11-02); regression test `test-layer-depth-ladder.py` (8 cases, NFR-01)
   - `format-model-registry.py` — Re-serializes `model-registry.json` to the 1-line-per-entry layout (`--check` for verify-only). Run after every scripted registry write; never write the registry with `json.dump(indent=N)` or `ConvertTo-Json`
 - **Canonical JSONs**: `[PROMPTSYSTEM_FOLDER]/skills/llm-tools/` (since 2026-10-29; was `skills/llm-evaluation/` with a replica in `skills/llm-transcription/`)
   - `model-registry.json`
@@ -26,6 +27,7 @@ Fetch current model data from Anthropic and OpenAI provider websites, update can
 
 ## Current Phase
 
+**[2026-11-02 13:37]** `DD-13 1` (user) + `/go`: SP01 implemented (details: `T02/PROGRESS.md` Done 2026-11-02). Registry `1.12.0` with depth ladder (top D12, 92 models, 7 estimated), inventory regenerated, Gate 9.4 PASS, FR-12 consumers updated, mirrored to `.devin`. Next: commit, then Prompt 1 Bootstrap for `glm-5.2` (high, 1000k, PRICES).
 **[2026-11-02 13:27]** Session reloaded to prepare a template run with `glm-5.2`. State found: `DD-10` option 3 (depth ladder), `DD-11`, `DD-12` decided; `_SPEC_MDLRGUP-MDLINVNTRY-01_DepthLadder.md [MDLRGUP-MDLINVNTRY-SP01]` written (T02, untracked); `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md` rewritten to the ladder pipeline (v0 kept as `_PROMPTS_ModelInventoryUpdate_TEMPLATE_v0.md`). **Implementation not started**: `layer-depth-ladder.py` missing; `update-model-inventory.py`, `verify-and-distribute-registry.ps1` have no ladder code; `model-registry.json` still `1.11.0` (no `depth`, `eci_ci`, `deeper_than`); registry and 20 `llm-tools` files uncommitted (template Prompt 1 stops on uncommitted registry). Run preparation blocked; decision `DD-13` presented in chat.
 **[2026-11-02 11:46]** Session reloaded. User rejects the ECI-band letter as capability metric (Opus 5.5 `26-A` above Fable 5 `26-B`; late-2026 models enter `A`). Request: propose 3 improvement options for a two-axis metric (reasoning depth, single-shot workload) that a prompt-writing agent can use to segment work and set prompt explicitness. Proposal presented in chat as `DD-09`; no files changed. Supersedes the open `DD-02..05` framing if accepted.
 **[2026-10-29 15:40]** Skill merge (session `_2026-10-29_UnifyLlmToolsSkill`, `LLMTOOLS-IN01`): `llm-evaluation`, `llm-transcription`, `llm-computer-use` became `skills/llm-tools/`. Canonical JSONs and `MODEL_INVENTORY.md` now in `llm-tools/` root; `update-model-inventory.py` (paths, heading `### 3.1 API Models (llm-tools registry)`) and `verify-and-distribute-registry.ps1` (Distribute + Gate 9 targets) updated; `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md` placeholders `[SKILL_FOLDER]`, `[INVENTORY_FILE]`, `[TRANSCRIPTION_SCRIPT]` and Prompt 9 paths updated. Next run must pass `-SkillFolder [PROMPTSYSTEM_FOLDER]\skills\llm-tools -InventoryFile [PROMPTSYSTEM_FOLDER]\skills\llm-tools\MODEL_INVENTORY.md`.
@@ -38,17 +40,16 @@ Fetch current model data from Anthropic and OpenAI provider websites, update can
 - **Recurring Update Prompts Template (`P3-D1`)**: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`
 - **Completed Update Runs**:
   - **[2026-10-28 PRICES]**: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES` (23 models added across OpenAI, Anthropic, Google Gemini, Z.AI; 12 price/long-context updates; 90 models matched against Epoch ECI CSV; `model-registry.json` `1.10.1`, `model-pricing.json`, and `MODEL_INVENTORY.md` updated and mirrored to `.devin`; Gates 1-9.4 PASS)
-- **Open items before/during P5**:
-  1. `[ACTOR]` replies with `DD-02..05` decisions (format: `DD-02 c, DD-03 a, DD-04 a, DD-05 a`) → record in `## Key Decisions` below and check `P2-D1` in `__STRUT_MDLINVNTRY.md`
-  2. Execute STRUT `P5` remainder (`P5-S2..S4`, `S7..S9`): apply `DD-02..05` to `PromptSystemV4.5/skills/llm-tools/MODEL_INVENTORY.md`, `write-documents/TASKS_GUIDES.md`, `PROMPTS_GUIDES.md`, `PROMPTS_RULES.md` (`PRMT-SC-05`), `write-prompts.md`, `edird-phase-planning/SKILL.md`, `llm-tools/model-registry.json`, `update-model-registry.md` (Phase 9.4 + Google source group `G1`-`G3` + redirected URLs `A1`/`A2`/`A3`/`O3`/`Z3`), and `LLMCAPCLS-IN01`, then mirror `PromptSystemV4.5` → `.devin` and commit
+- **Open items** (2026-11-02): `DD-04` (Devin data in inventory) and `DD-05` (provider scope) undecided, current state unchanged; EC-4 citations for specialized Apex models pending (see `T02/PROGRESS.md` To Do)
 
 ## Key Decisions
 
+- **[2026-11-02 13:37] DD-13 = 1** (user): implement the depth ladder (SP01) before the first ladder run; run executes with `glm-5.2` (high, 1000k)
 - **[2026-11-02] DD-10 = option 3** (user): capability as append-only ordinal depth ladder `D1`, `D2`, ... with evidence kinds E1-E6, plus measured Items axis; replaces year-letter labels, ECI bands, Comp, WF, behavior profiles. Supersedes `DD-01`; absorbs `DD-02`, `DD-03` (`LLMCAPCLS-IN01` lines 16, 341)
 - **[2026-11-02] DD-11 closed**: `claude-fable-5` and `claude-fable-5-1` recorded above `claude-opus-5-5` from Anthropic model-selection guidance; ladder top `D12` (`LLMCAPCLS-IN01` line 385)
 - **[2026-11-02] DD-12 approved**: `MDLRGUP-MDLINVNTRY-SP01` carries `LLMCAPCLS-IN01` Sections 2, 4, 5 as requirements; `/write-impl-plan` follows (`LLMCAPCLS-IN01` line 386)
 - **[2026-10-29 14:17] DD-01 = b-variant, DD-06 = 1, DD-07 = 1, DD-08 = A-Z** (user): `YY-L` kept; letter = Epoch ECI band against `anchor(YY) = 170 + 15 * (YY - 26)` (5 ECI per letter, A-Z); `Comp YY` column = same band against the comparison year (`year(today)` from May 1, else previous year); every text model not `retired` listed; one `WF` column (`2.0 * 2^(-(170 - band) / 10)`) plus `Efforts`. Former R2/R3/R5 removed. Details: `T02/NOTES.md` Key Decisions, `LLMCAPCLS-IN01` Sections 2-6
-- `DD-02..05` still open (`DD-01..05 presented 2026-10-28 20:22`):
+- `DD-02`, `DD-03` absorbed by `DD-10`; `DD-04`, `DD-05` still open (`DD-01..05 presented 2026-10-28 20:22`):
   - `DD-02` (Work per prompt): recommended `c` (Model-agnostic fixed limits without WF, scored `13/15`) | runner-up `a` (ECI-band → HWH table, scored `12/15`) | `e` (UC → HWH, `10/15`) | `b` (METR 80% + fallback, `7/15`) | `d` (Keep `YY-L` formula, `6/15`)
   - `DD-03` (Behavior profile): recommended `a` (Drop profiles and ledger; use `Notes` column for observations only) | `b` (Keep profiles and ledger)
   - `DD-04` (Environment data): recommended `a` (Remove `Devin cost` and Devin-only rows from `MODEL_INVENTORY.md`; keep in `windsurf-model-registry.json`) | `b` (Keep in `MODEL_INVENTORY.md`)

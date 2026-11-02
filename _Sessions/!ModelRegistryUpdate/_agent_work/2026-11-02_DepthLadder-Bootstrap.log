@@ -1,0 +1,98 @@
+Layering depth ladder (bootstrap) from model-registry.json 1.12.0 and 2026-10-28_Epoch-ECI-Match.json...
+  92 models, 0 with depth.
+  Manual edges: 2 valid, 0 rejected.
+  Edges: E1 69, E2 59, E3 1763, E5 6, manual 2.
+  D12  claude-fable-5                 E1m > claude-opus-5-5
+  D12  claude-fable-5-1               E1m > claude-opus-5-5
+  D12  claude-mythos-5                E5 = claude-fable-5
+  D12  claude-mythos-5-1              E2 >= claude-fable-5-1
+  D11  claude-opus-5-5                E1 > claude-sonnet-5-5
+  D11  gpt-5.6-cyber                  E1 > gpt-5.6-sol
+  D11  gpt-6-astra                    E1 > gpt-6-sol
+  D10  claude-sonnet-5-5              E3 > gpt-5.4-pro
+  D10  gemini-4-argon                 E3 > gpt-5.4-pro
+  D10  gpt-5.5-cyber                  E1 > gpt-5.5
+  D10  gpt-5.5-pro                    E1 > gpt-5.5
+  D10  gpt-5.6-sol                    E1 > gpt-5.6-terra
+  D10  gpt-6-sol                      E2 >= gpt-5.6-sol
+  D10  gpt-6.1-sol                    E3 > gpt-5.4-pro
+  D9  claude-opus-5                  E3 > gpt-5.2-pro
+  D9  gpt-5.4-pro                    E1 > gpt-5.4
+  D9  gpt-5.5                        E3 > grok-4.7
+  D9  gpt-5.6-terra                  E1 > gpt-5.6-luna
+  D9  gpt-6.1-terra                  E2 >= gpt-5.6-terra
+  D8  claude-haiku-5-5               E3 > gpt-5-pro
+  D8  claude-opus-4-6                E3 > gemini-3-flash-preview
+  D8  claude-opus-4-7                E3 > gpt-5-pro
+  D8  claude-opus-4-8                E3 > gpt-5-pro
+  D8  claude-sonnet-5                E3 > gemini-3-flash-preview
+  D8  gemini-3.8-flash               E3 > gpt-5-pro
+  D8  glm-5.3                        E3 > gemini-3-flash-preview
+  D8  gpt-5.2-pro                    E1 > gpt-5.2
+  D8  gpt-5.4                        E3 > gpt-5-pro
+  D8  gpt-5.6-luna                   E3 > gpt-5-pro
+  D8  gpt-6-luna                     E3 > gpt-5-pro
+  D8  grok-4.6                       E3 > gpt-5-pro
+  D8  grok-4.7                       E2 >= grok-4.6
+  D7  claude-sonnet-4-6              E3 > o3-pro
+  D7  gemini-3-flash-preview         E3 > o3-pro
+  D7  gemini-3.1-pro-preview         E3 > o3-pro
+  D7  gemini-3.6-flash               E3 > o3-pro
+  D7  glm-5.3-flash                  E3 > o3-pro
+  D7  glm-5.3-flashx                 E5 = glm-5.3-flash
+  D7  glm-5.3-flashx-legal           E5 = glm-5.3-flash
+  D7  gpt-5-pro                      E1 > gpt-5
+  D7  gpt-5.2                        E3 > o3-pro
+  D7  gpt-5.3-codex                  E3 > o3-pro
+  D7  grok-4.5                       E3 > o3-pro
+  D6  claude-opus-4-5                E3 > gemini-2.5-pro
+  D6  glm-5.1                        E3 > gemini-2.5-pro
+  D6  glm-5.2                        E3 > gemini-2.5-pro
+  D6  gpt-5                          E1 > gpt-5-mini
+  D6  gpt-5.1                        E3 > gemini-2.5-pro
+  D6  gpt-5.4-mini                   E3 > gemini-2.5-pro
+  D6  grok-4.20-0309-reasoning       E3 > gemini-2.5-pro
+  D6  grok-4.20-multi-agent-0309     E3 > gemini-2.5-pro
+  D6  grok-4.3                       E3 > gemini-2.5-pro
+  D6  o3-deep-research               E1 > o3
+  D6  o3-pro                         E1 > o3
+  D5  claude-sonnet-4-5              E3 > o1
+  D5  gemini-2.5-pro                 E3 > o1
+  D5  glm-5                          E3 > o1
+  D5  gpt-5-mini                     E3 > o1
+  D5  gpt-5.4-nano                   E3 > o1
+  D5* grok-4.20-0309-non-reasoning   E6 from grok-4.20-0309-reasoning
+  D5  o1-pro                         E1 > o1
+  D5  o3                             E3 > o1
+  D5  o4-mini-deep-research          E1 > o4-mini
+  D4  claude-haiku-4-5               E3 > gpt-4.1
+  D4  gemini-2.5-flash               E3 > gpt-4.1
+  D4  gemini-3.1-flash-lite          E3 > o3-mini
+  D4  gemini-3.5-flash-lite          E3 > o3-mini
+  D4  glm-4.7                        E3 > gpt-4.1
+  D4  o1                             E3 > gpt-4.1
+  D4  o4-mini                        E3 > o3-mini
+  D3  glm-4.5                        E1 > glm-4.5-airx
+  D3  glm-4.5-x                      E1 > glm-4.5-airx
+  D3  glm-4.6                        E1 > glm-4.6v
+  D3  gpt-4.1                        E1 > gpt-4.1-mini
+  D3  o3-mini                        E3 > gpt-4.1-mini
+  D2  claude-3-5-sonnet              E3 > gpt-4o-mini
+  D2  gemini-2.5-flash-lite          E3 > gpt-4o-mini
+  D2  glm-4.5-airx                   E1 > glm-4.5-flash
+  D2  glm-4.5v                       E1 > glm-4.5-flash
+  D2* glm-4.6v                       E6 from glm-4.6
+  D2* glm-4.7-flash                  E6 from glm-4.7
+  D2* glm-4.7-flashx                 E6 from glm-4.7
+  D2  gpt-4.1-mini                   E3 > gpt-4o-mini
+  D2  gpt-5-nano                     E3 > gpt-4o
+  D2  o1-mini                        E3 > gpt-4o
+  D1* glm-4-air                      unplaced
+  D1* glm-4.5-flash                  E6 from glm-4.5-airx
+  D1  gpt-4.1-nano                   bottom
+  D1  gpt-4o                         bottom
+  D1  gpt-4o-2024-05-13              bottom
+  D1  gpt-4o-mini                    bottom
+  D1* grok-build-0.1                 unplaced
+  Wrote e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools\model-registry.json.
+OK: 92 models layered, top D12, 7 estimated, 0 cycles.
