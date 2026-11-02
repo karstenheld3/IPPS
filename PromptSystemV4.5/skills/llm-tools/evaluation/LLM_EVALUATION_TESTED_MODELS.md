@@ -4,7 +4,7 @@ Session testing from **2026-01-22 to 2026-05-22**.
 
 ## Self-Test Passed (18 models)
 
-All passed 15/15 API integration tests via `llm-evaluation-selftest.py`:
+All passed 15/15 API integration tests via `../llm-tools-selftest.py`:
 
 **OpenAI - Reasoning Models:**
 - `gpt-5.5` (2026-05-22, 1050K context, long-context pricing tier)

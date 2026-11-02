@@ -1,0 +1,108 @@
+{
+  "_source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard",
+  "_extracted": "2026-10-28",
+  "_method": "Playwright DOM Table Extraction (Standard tier + Long Context tables)",
+  "tables": [
+    {
+      "idx": 0,
+      "caption": "Frontier & Latest Models - Standard Tier (<=272k context)",
+      "headers": ["Model", "Input", "Output", "Cached input", "30m write", "12h write"],
+      "rows": [
+        ["gpt-6-astra", "$10.00", "$50.00", "$1.00", "$12.50", "$25.00"],
+        ["gpt-6.1-sol", "$2.00", "$10.00", "$0.10", "$2.50", "$5.00"],
+        ["gpt-6.1-terra", "$1.00", "$5.00", "$0.05", "$1.25", "$2.50"],
+        ["gpt-6-luna", "$0.10", "$0.50", "$0.01", "$0.125", "$0.25"],
+        ["gpt-6-sol", "$2.00", "$10.00", "$0.20", "$2.50", "$5.00"],
+        ["gpt-5.6-sol", "$4.00", "$20.00", "$0.40", "$5.00", "$10.00"],
+        ["gpt-5.6-terra", "$2.00", "$12.00", "$0.20", "$2.50", "$5.00"],
+        ["gpt-5.6-luna", "$0.20", "$1.20", "$0.02", "$0.25", "$0.50"],
+        ["gpt-5.5", "$5.00", "$30.00", "$0.50", "-", "-"],
+        ["gpt-5.5-pro", "$30.00", "$180.00", "-", "-", "-"],
+        ["gpt-5.4", "$2.50", "$15.00", "$0.25", "-", "-"],
+        ["gpt-5.4-pro", "$30.00", "$180.00", "-", "-", "-"]
+      ]
+    },
+    {
+      "idx": 1,
+      "caption": "Other Text Models - Standard Tier",
+      "headers": ["Model", "Input", "Output", "Cached input"],
+      "rows": [
+        ["gpt-5.4-mini", "$0.75", "$4.50", "$0.075"],
+        ["gpt-5.4-nano", "$0.20", "$1.25", "$0.02"],
+        ["gpt-5.2", "$1.75", "$14.00", "$0.175"],
+        ["gpt-5.2-pro", "$21.00", "$168.00", "-"],
+        ["gpt-5.1", "$1.25", "$10.00", "$0.125"],
+        ["gpt-5", "$1.25", "$10.00", "$0.125"],
+        ["gpt-5-mini", "$0.25", "$2.00", "$0.025"],
+        ["gpt-5-nano", "$0.05", "$0.40", "$0.005"],
+        ["gpt-5-pro", "$15.00", "$120.00", "-"],
+        ["gpt-4.1", "$2.00", "$8.00", "$0.50"],
+        ["gpt-4.1-mini", "$0.40", "$1.60", "$0.10"],
+        ["gpt-4.1-nano", "$0.10", "$0.40", "$0.025"],
+        ["gpt-4o", "$2.50", "$10.00", "$1.25"],
+        ["gpt-4o-mini", "$0.15", "$0.60", "$0.075"],
+        ["o4-mini", "$1.10", "$4.40", "$0.275"],
+        ["o3", "$2.00", "$8.00", "$0.50"],
+        ["o3-mini", "$1.10", "$4.40", "$0.55"],
+        ["o3-pro", "$20.00", "$80.00", "-"],
+        ["o1", "$15.00", "$60.00", "$7.50"],
+        ["o1-pro", "$150.00", "$600.00", "-"],
+        ["gpt-4o-2024-05-13", "$5.00", "$15.00", "-"],
+        ["gpt-4-turbo-2024-04-09", "$10.00", "$30.00", "-"],
+        ["gpt-4-0613", "$30.00", "$60.00", "-"],
+        ["gpt-3.5-turbo", "$0.50", "$1.50", "-"],
+        ["gpt-3.5-turbo-0125", "$0.50", "$1.50", "-"]
+      ]
+    },
+    {
+      "idx": 5,
+      "caption": "Long Context Pricing (>272k context) - Standard Tier",
+      "headers": ["Model", "Input (Long)", "Output (Long)", "Cached input (Long)", "30m write", "12h write"],
+      "rows": [
+        ["gpt-6-astra", "$20.00", "$100.00", "$2.00", "$25.00", "$50.00"],
+        ["gpt-6.1-sol", "$4.00", "$20.00", "$0.20", "$5.00", "$10.00"],
+        ["gpt-6.1-terra", "$2.00", "$10.00", "$0.10", "$2.50", "$5.00"],
+        ["gpt-6-luna", "$0.20", "$1.00", "$0.02", "$0.25", "$0.50"],
+        ["gpt-6-sol", "$4.00", "$20.00", "$0.40", "$5.00", "$10.00"],
+        ["gpt-5.6-sol", "$8.00", "$40.00", "$0.80", "$10.00", "$20.00"],
+        ["gpt-5.6-terra", "$4.00", "$24.00", "$0.40", "$5.00", "$10.00"],
+        ["gpt-5.6-luna", "$0.40", "$2.40", "$0.04", "$0.50", "$1.00"],
+        ["gpt-5.5", "$12.50", "$75.00", "$1.25", "-", "-"],
+        ["gpt-5.4", "$5.00", "$30.00", "$0.50", "-", "-"]
+      ]
+    },
+    {
+      "idx": 8,
+      "caption": "Cyber models",
+      "headers": ["Model", "Input", "Output", "Cached input", "30m write", "12h write"],
+      "rows": [
+        ["gpt-5.6-sol", "$4.00", "$20.00", "$0.40", "$5.00", "$10.00"],
+        ["gpt-5.6-cyber", "$12.50", "$75.00", "$1.25", "$15.625", "$31.25"],
+        ["gpt-5.5-cyber", "$12.50", "$75.00", "$1.25", "-", "-"]
+      ]
+    },
+    {
+      "idx": 9,
+      "caption": "Life sciences models",
+      "headers": ["Model", "Input", "Output", "Cached input"],
+      "rows": [
+        ["gpt-rosalind-research", "$5.00", "$25.00", "$0.50"],
+        ["gpt-rosalind-discovery", "$5.00", "$25.00", "$0.50"]
+      ]
+    },
+    {
+      "idx": 16,
+      "caption": "Specialized & Codex models",
+      "headers": ["Category", "Model", "Input", "Output", "Cached input"],
+      "rows": [
+        ["ChatGPT", "chat-latest", "$5.00", "$30.00", "$0.50"],
+        ["Codex", "gpt-5.3-codex", "$1.75", "$14.00", "$0.175"],
+        ["Search", "gpt-5-search-api", "$1.25", "$10.00", "$0.125"]
+      ]
+    }
+  ],
+  "_notes": [
+    "New frontier models vs 2026-09-05: gpt-6.1-sol ($2/$10, cached $0.10, long $4/$20), gpt-6.1-terra ($1/$5, cached $0.05, long $2/$10), gpt-6-luna ($0.10/$0.50, cached $0.01, long $0.20/$1.00), gpt-6-sol ($2/$10, cached $0.20, long $4/$20), gpt-5.3-codex ($1.75/$14.00, cached $0.175)",
+    "Long context output price changes on O1 idx 5: gpt-6-astra long output is $100.00 (was $75.00), gpt-5.6-sol long output $40.00 (was $30.00), gpt-5.6-terra long output $24.00 (was $18.00), gpt-5.6-luna long output $2.40 (was $1.80), gpt-5.5 long input/cached/output $12.50/$1.25/$75.00 (was $10/$1/$45), gpt-5.4 long output $30.00 (was $22.50)"
+  ]
+}

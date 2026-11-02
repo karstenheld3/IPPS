@@ -1,5 +1,6 @@
 """Core module - Screen capture, actions, session, and Anthropic provider."""
 import os, time, base64, json
+from pathlib import Path
 from io import BytesIO
 from datetime import datetime
 from typing import Dict, Any, List, Optional, Callable, Tuple
@@ -9,6 +10,28 @@ import mss
 from PIL import Image
 import pyautogui
 import anthropic
+
+FALLBACK_PRICING = {"claude-sonnet-4-5": (3.0, 15.0), "claude-opus-4-5": (5.0, 25.0), "claude-haiku-4-5": (1.0, 5.0)}
+
+def load_model_pricing(model: str) -> Tuple[float, float]:
+  """Return (input_per_1m, output_per_1m) from shared llm-tools/model-pricing.json by longest prefix match; fallback to FALLBACK_PRICING."""
+  pricing_file = Path(__file__).resolve().parent.parent / "model-pricing.json"
+  retVal = FALLBACK_PRICING.get(model, FALLBACK_PRICING["claude-sonnet-4-5"])
+  if not pricing_file.exists():
+    return retVal
+  try:
+    with open(pricing_file, "r", encoding="utf-8") as f:
+      anthropic_pricing = json.load(f).get("pricing", {}).get("anthropic", {})
+  except (OSError, json.JSONDecodeError):
+    return retVal
+  best_key = ""
+  for key in anthropic_pricing:
+    if (key.startswith(model) or model.startswith(key)) and len(key) > len(best_key):
+      best_key = key
+  if best_key:
+    entry = anthropic_pricing[best_key]
+    retVal = (float(entry["input_per_1m"]), float(entry["output_per_1m"]))
+  return retVal
 
 class ScreenCapture:
   """Fast screenshot capture with resize for LLM APIs."""
@@ -435,8 +458,7 @@ class AgentSession:
     return self._get_summary()
     
   def _estimate_cost(self) -> float:
-    pricing = {"claude-sonnet-4-5": (3.0, 15.0), "claude-opus-4-5": (15.0, 75.0), "claude-haiku-4-5": (0.80, 4.0)}
-    in_rate, out_rate = pricing.get(self.model, (3.0, 15.0))
+    in_rate, out_rate = load_model_pricing(self.model)
     return round((self.total_input_tokens / 1_000_000) * in_rate + (self.total_output_tokens / 1_000_000) * out_rate, 6)
     
   def _get_summary(self, error: str = None) -> Dict[str, Any]:

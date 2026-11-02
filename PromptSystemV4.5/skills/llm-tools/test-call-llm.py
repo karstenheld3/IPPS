@@ -61,6 +61,12 @@ OPENAI_TESTS = [
   ("gpt-5.6-terra", "high", "none", None, "reasoning_effort"),
   ("gpt-5.6-luna", "none", "none", None, "reasoning_effort"),
   ("gpt-5.6-luna", "high", "none", None, "reasoning_effort"),
+
+  # Reasoning models - gpt-6 / gpt-6.1 family
+  ("gpt-6.1-sol", "low", "none", None, "reasoning_effort"),
+  ("gpt-6.1-terra", "low", "none", None, "reasoning_effort"),
+  ("gpt-6-sol", "low", "none", None, "reasoning_effort"),
+  ("gpt-6-luna", "low", "none", None, "reasoning_effort"),
 ]
 
 ANTHROPIC_TESTS = [
@@ -87,6 +93,12 @@ ANTHROPIC_TESTS = [
   ("claude-opus-4-8", "high", "none", None, "reasoning_effort"),
   ("claude-opus-4-8", "xhigh", "none", None, "reasoning_effort"),
   ("claude-opus-4-8", "max", "none", None, "reasoning_effort"),
+
+  # Adaptive thinking models - Claude 5.5 / 5.1 family
+  ("claude-fable-5-1", "low", "none", None, "reasoning_effort"),
+  ("claude-opus-5-5", "low", "none", None, "reasoning_effort"),
+  ("claude-sonnet-5-5", "low", "none", None, "reasoning_effort"),
+  ("claude-haiku-5-5", "low", "none", None, "reasoning_effort"),
 ]
 
 # Fallback tests - verify fallback mapping works
@@ -99,18 +111,38 @@ FALLBACK_TESTS = [
 ZAI_TESTS = [
   # reasoning_effort method (Z.AI: reasoning_effort + thinking via extra_body)
   ("glm-5.2", "high", "none", None, "reasoning_effort"),       # 7 effort levels
+  ("glm-5.3", "low", "none", None, "reasoning_effort"),        # limited: low/high/max only
   ("glm-5.3-flash", "low", "none", None, "reasoning_effort"),  # limited: low/high/max only
+  ("glm-5.3-flashx", "low", "none", None, "reasoning_effort"), # limited: low/high/max only
   # thinking method (Z.AI: thinking enabled/disabled via extra_body)
+  ("glm-4.7-flash", "medium", "none", None, "reasoning_effort"), # free model, thinking enabled
   ("glm-4.5-flash", "medium", "none", None, "reasoning_effort"), # free model, thinking enabled
   ("glm-4.5", "high", "none", None, "reasoning_effort"),        # standard thinking model
+]
+
+GOOGLE_TESTS = [
+  ("gemini-3.8-flash", "low", "none", None, "reasoning_effort"),
+  ("gemini-3.8-flash", "medium", "none", None, "reasoning_effort"),
+  ("gemini-3.8-flash", "high", "none", None, "reasoning_effort"),
+  ("gemini-3.6-flash", "minimal", "none", None, "reasoning_effort"),
+  ("gemini-3.6-flash", "low", "none", None, "reasoning_effort"),
+  ("gemini-3.5-flash-lite", "low", "none", None, "reasoning_effort"),
+  ("gemini-3.1-flash-lite", "low", "none", None, "reasoning_effort"),
+  ("gemini-3-flash-preview", "low", "none", None, "reasoning_effort"),
+]
+
+XAI_TESTS = [
+  ("grok-4.7", "low", "none", None, "reasoning_effort"),
+  ("grok-4.7", "high", "none", None, "reasoning_effort"),
+  ("grok-4.6", "low", "none", None, "reasoning_effort"),
+  ("grok-4.5", "low", "none", None, "reasoning_effort"),
 ]
 
 def get_script_dir() -> Path:
   return Path(__file__).parent
 
 def create_test_prompt_file(script_dir: Path) -> Path:
-  prompt_file = script_dir / "prompts" / "_test_auto.md"
-  prompt_file.parent.mkdir(parents=True, exist_ok=True)
+  prompt_file = script_dir / f"_test_auto_{os.getpid()}.md"
   prompt_file.write_text(TEST_PROMPT, encoding='utf-8')
   return prompt_file
 
@@ -227,7 +259,7 @@ def run_tests(tests: list, keys_file: Path, prompt_file: Path, script_dir: Path,
 def parse_args():
   parser = argparse.ArgumentParser(description='Test all LLM models with parameter combinations')
   parser.add_argument('--keys-file', type=Path, required=True, help='Path to API keys file')
-  parser.add_argument('--provider', choices=['openai', 'anthropic', 'zai', 'all'], default='all',
+  parser.add_argument('--provider', choices=['openai', 'anthropic', 'zai', 'google', 'xai', 'all'], default='all',
             help='Provider to test (default: all)')
   parser.add_argument('--model', type=str, help='Test specific model only')
   parser.add_argument('--include-fallback', action='store_true', help='Include fallback tests')
@@ -264,9 +296,13 @@ def main():
       openai_tests = [t for t in OPENAI_TESTS if t[0] == args.model]
       anthropic_tests = [t for t in ANTHROPIC_TESTS if t[0] == args.model]
       zai_tests = [t for t in ZAI_TESTS if t[0] == args.model]
+      google_tests = [t for t in GOOGLE_TESTS if t[0] == args.model]
+      xai_tests = [t for t in XAI_TESTS if t[0] == args.model]
       fallback_tests = [t for t in FALLBACK_TESTS if t[0] == args.model]
     else:
       zai_tests = ZAI_TESTS
+      google_tests = GOOGLE_TESTS
+      xai_tests = XAI_TESTS
         
     # Run OpenAI tests
     if args.provider in ['openai', 'all'] and openai_tests:
@@ -283,6 +319,20 @@ def main():
     # Run Z.AI tests
     if args.provider in ['zai', 'all'] and zai_tests:
       passed, failed = run_tests(zai_tests, args.keys_file, prompt_file, script_dir, "Z.AI")
+      total_passed += passed
+      total_failed += failed
+
+    # Run Google Gemini tests
+    if args.provider in ['google', 'all'] and google_tests:
+      passed, failed = run_tests(google_tests, args.keys_file, prompt_file, script_dir, "Google")
+      total_passed += passed
+      total_failed += failed
+
+    # Run xAI tests (only in --provider xai or --model mode unless XAI_API_KEY present)
+    keys_text = args.keys_file.read_text(encoding='utf-8')
+    has_xai_key = 'XAI_API_KEY=' in keys_text
+    if (args.provider == 'xai' or (args.provider == 'all' and (has_xai_key or args.model))) and xai_tests:
+      passed, failed = run_tests(xai_tests, args.keys_file, prompt_file, script_dir, "xAI")
       total_passed += passed
       total_failed += failed
         

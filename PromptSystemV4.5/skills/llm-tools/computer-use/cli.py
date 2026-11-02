@@ -1,8 +1,9 @@
-"""CLI entry point for LLM Computer Use v2."""
+"""CLI entry point for LLM Computer Use (llm-tools/computer-use)."""
 import argparse, sys, os
-from .core import AgentSession
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from core import AgentSession
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 def load_api_key(keys_file: str = None) -> str:
   """Load API key from file or environment."""
@@ -19,9 +20,9 @@ def main():
     formatter_class=argparse.RawDescriptionHelpFormatter,
     epilog="""
 Examples:
-  python -m llm_computer_use_v2 "Click the Start button"
-  python -m llm_computer_use_v2 -x "Open Notepad"
-  python -m llm_computer_use_v2 -n 5 -k ../.tools/.api-keys.txt "What time is it?"
+  python cli.py "Click the Start button"
+  python cli.py -x "Open Notepad"
+  python cli.py -n 5 -k ../../../.tools/.api-keys.txt "What time is it?"
     """
   )
     
@@ -32,7 +33,7 @@ Examples:
   parser.add_argument("--keys-file", "-k", help="API keys file path")
   parser.add_argument("--quiet", "-q", action="store_true", help="Minimal output")
   parser.add_argument("--save-log", "-s", action="store_true", help="Save session log")
-  parser.add_argument("--version", "-V", action="version", version=f"llm-computer-use {__version__}")
+  parser.add_argument("--version", "-V", action="version", version=f"llm-tools computer-use {__version__}")
     
   args = parser.parse_args()
     

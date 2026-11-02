@@ -66,6 +66,12 @@ def detect_provider(model_id: str) -> str:
     return 'openai'
   if model_lower.startswith('claude'):
     return 'anthropic'
+  if model_lower.startswith('glm-'):
+    return 'zai'
+  if model_lower.startswith(('gemini-', 'gemma-')):
+    return 'google'
+  if model_lower.startswith('grok-'):
+    return 'xai'
   return 'unknown'
 
 def calculate_cost(model: str, input_tokens: int, output_tokens: int, pricing: dict, calls: int = 1) -> dict:

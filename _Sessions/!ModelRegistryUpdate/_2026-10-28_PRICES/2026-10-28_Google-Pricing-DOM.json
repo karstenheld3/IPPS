@@ -1,0 +1,205 @@
+{
+  "_source": "https://ai.google.dev/gemini-api/docs/pricing",
+  "_last_updated_on_page": "2026-10-27 UTC",
+  "_extracted_at": "2026-10-28",
+  "_dom_structure": {
+    "uses_html_tables": true,
+    "total_tables_in_dom": 88,
+    "layout_pattern": "Per-model H2 section containing a devsite-selector tab group (Standard, Batch, Flex, Priority, Contributor) where each tab holds one HTML <table>",
+    "table_columns": ["Pricing dimension (row header: Input price, Output price (including thinking tokens), Context caching price, Grounding, Used to improve our products)", "Free Tier", "Paid Tier, per 1M tokens in USD"],
+    "extraction_gap_vs_existing_providers": [
+      "Inverted table orientation: Anthropic, OpenAI, and Z.AI list models as rows and price dimensions (Input, Cached, Output) as columns in a single table; Google uses one H2 section per model with price dimensions as rows and Free/Paid tiers as columns.",
+      "Multiple tier tables per model H2: 4-5 <table> elements per model (Standard, Batch, Flex, Priority, Contributor); generic Table Extraction in update-model-registry.md loses the parent H2 model name because t.closest('section,div')?.querySelector('h1,h2,h3,h4') returns 'Enterprise' (an H3 inside the tab) rather than the preceding H2 model name.",
+      "Dual promotional/scheduled pricing in single cell: Gemini 4 Argon, 3.8 Flash, and 3.6 Flash list two date-bounded prices in the same cell (e.g., '$2.00 through November 30, 2026. $4.00 starting December 1, 2026'), requiring date-aware or first/second number parsing.",
+      "Modality-split and long-context pricing in single cell: Flash-Lite and 2.5 Flash split text/image/video vs audio in one cell; Gemini 3.1 Pro Preview and 2.5 Pro split <=200k vs >200k tokens in one cell without separate columns (unlike OpenAI's separate Input (Long) columns)."
+    ]
+  },
+  "text_and_multimodal_models": [
+    {
+      "model_heading": "Gemini 4 Argon",
+      "model_id": "gemini-4-argon",
+      "tier_tables_in_section": 5,
+      "tiers_available": ["Standard", "Batch", "Flex", "Priority", "Contributor"],
+      "standard_tier": {
+        "free_tier": "Not available",
+        "input_per_1m_usd": 2.00,
+        "input_scheduled_change": "$2.00 through 2026-11-30; $4.00 starting 2026-12-01",
+        "output_per_1m_usd": 10.00,
+        "output_scheduled_change": "$10.00 through 2026-11-30; $20.00 starting 2026-12-01",
+        "cached_per_1m_usd": 0.10,
+        "cached_scheduled_change": "$0.10 through 2026-11-30; $0.20 starting 2026-12-01 (implicit caching only)"
+      },
+      "batch_tier": { "input_per_1m_usd": 1.00, "output_per_1m_usd": 5.00, "cached_per_1m_usd": 0.05 },
+      "priority_tier": { "input_per_1m_usd": 3.60, "output_per_1m_usd": 18.00, "cached_per_1m_usd": 0.18 }
+    },
+    {
+      "model_heading": "Gemini 3.8 Flash",
+      "model_id": "gemini-3.8-flash",
+      "tier_tables_in_section": 5,
+      "standard_tier": {
+        "free_tier": "Free of charge",
+        "input_per_1m_usd": 0.75,
+        "input_scheduled_change": "$0.75 through 2026-12-31; $1.50 starting 2027-01-01",
+        "output_per_1m_usd": 3.75,
+        "output_scheduled_change": "$3.75 through 2026-12-31; $7.50 starting 2027-01-01",
+        "cached_per_1m_usd": 0.075,
+        "cached_scheduled_change": "$0.075 through 2026-12-31; $0.15 starting 2027-01-01 ($0.50/1M/hr storage)"
+      },
+      "batch_tier": { "input_per_1m_usd": 0.375, "output_per_1m_usd": 1.875, "cached_per_1m_usd": 0.0375 },
+      "priority_tier": { "input_per_1m_usd": 1.35, "output_per_1m_usd": 6.75, "cached_per_1m_usd": 0.135 }
+    },
+    {
+      "model_heading": "Gemini 3.6 Flash",
+      "model_id": "gemini-3.6-flash",
+      "tier_tables_in_section": 4,
+      "standard_tier": {
+        "free_tier": "Free of charge",
+        "input_per_1m_usd": 0.75,
+        "input_scheduled_change": "$0.75 through 2026-12-31; $1.50 starting 2027-01-01",
+        "output_per_1m_usd": 3.75,
+        "output_scheduled_change": "$3.75 through 2026-12-31; $7.50 starting 2027-01-01",
+        "cached_per_1m_usd": 0.075
+      },
+      "batch_tier": { "input_per_1m_usd": 0.375, "output_per_1m_usd": 1.875, "cached_per_1m_usd": 0.0375 }
+    },
+    {
+      "model_heading": "Gemini 3.5 Flash-Lite",
+      "model_id": "gemini-3.5-flash-lite",
+      "tier_tables_in_section": 5,
+      "standard_tier": {
+        "free_tier": "Free of charge",
+        "input_per_1m_usd": 0.30,
+        "output_per_1m_usd": 2.50,
+        "cached_per_1m_usd": 0.03
+      }
+    },
+    {
+      "model_heading": "Gemini 3.1 Flash-Lite",
+      "model_id": "gemini-3.1-flash-lite",
+      "tier_tables_in_section": 4,
+      "standard_tier": {
+        "free_tier": "Free of charge",
+        "input_per_1m_usd": 0.25,
+        "input_audio_per_1m_usd": 0.50,
+        "output_per_1m_usd": 1.50,
+        "cached_per_1m_usd": 0.025
+      }
+    },
+    {
+      "model_heading": "Gemini 3.1 Pro Preview",
+      "model_id": "gemini-3.1-pro-preview",
+      "tier_tables_in_section": 5,
+      "standard_tier": {
+        "free_tier": "Not available",
+        "input_per_1m_usd": 2.00,
+        "output_per_1m_usd": 12.00,
+        "cached_per_1m_usd": 0.20,
+        "long_context": {
+          "threshold_k": 200,
+          "input_per_1m_usd": 4.00,
+          "output_per_1m_usd": 18.00,
+          "cached_per_1m_usd": 0.40
+        }
+      }
+    },
+    {
+      "model_heading": "Gemini 3 Flash Preview",
+      "model_id": "gemini-3-flash-preview",
+      "tier_tables_in_section": 4,
+      "standard_tier": {
+        "free_tier": "Free of charge",
+        "input_per_1m_usd": 0.50,
+        "input_audio_per_1m_usd": 1.00,
+        "output_per_1m_usd": 3.00,
+        "cached_per_1m_usd": 0.05
+      }
+    },
+    {
+      "model_heading": "Gemini 2.5 Pro",
+      "model_id": "gemini-2.5-pro",
+      "tier_tables_in_section": 4,
+      "standard_tier": {
+        "free_tier": "Free of charge",
+        "input_per_1m_usd": 1.25,
+        "output_per_1m_usd": 10.00,
+        "cached_per_1m_usd": 0.125,
+        "long_context": {
+          "threshold_k": 200,
+          "input_per_1m_usd": 2.50,
+          "output_per_1m_usd": 15.00,
+          "cached_per_1m_usd": 0.25
+        }
+      }
+    },
+    {
+      "model_heading": "Gemini 2.5 Flash",
+      "model_id": "gemini-2.5-flash",
+      "tier_tables_in_section": 4,
+      "standard_tier": {
+        "free_tier": "Free of charge",
+        "input_per_1m_usd": 0.30,
+        "input_audio_per_1m_usd": 1.00,
+        "output_per_1m_usd": 2.50,
+        "cached_per_1m_usd": 0.03
+      }
+    },
+    {
+      "model_heading": "Gemini 2.5 Flash-Lite",
+      "model_id": "gemini-2.5-flash-lite",
+      "tier_tables_in_section": 4,
+      "standard_tier": {
+        "free_tier": "Free of charge",
+        "input_per_1m_usd": 0.10,
+        "input_audio_per_1m_usd": 0.30,
+        "output_per_1m_usd": 0.40,
+        "cached_per_1m_usd": 0.01
+      }
+    },
+    {
+      "model_heading": "Gemma 4",
+      "model_id": "gemma-4",
+      "tier_tables_in_section": 1,
+      "standard_tier": {
+        "free_tier": "Free of charge",
+        "paid_tier": "Not available"
+      }
+    }
+  ],
+  "all_h2_sections_on_page": [
+    "Gemini 4 Argon",
+    "Gemini 3.8 Flash",
+    "Gemini 3.6 Flash",
+    "Gemini 3.8 Live, Gemini 3.8 Live Extended Thinking, and Gemini 3.1 Flash Live Preview",
+    "Gemini 3.5 Live Translate",
+    "Gemini 3.5 Transcribe Live",
+    "Gemini 3.5 Transcribe",
+    "Gemini 3.5 Flash-Lite",
+    "Gemini 3.1 Flash-Lite",
+    "Gemini Omni Flash",
+    "Gemini 3.1 Pro Preview",
+    "Gemini Nano Banana 2.1",
+    "Gemini 3.1 Flash Image (Nano Banana 2)",
+    "Gemini 3.1 Flash Lite Image (Nano Banana 2 Lite)",
+    "Gemini 3.8 Flash TTS",
+    "Gemini 3.8 Flash-Lite TTS",
+    "Gemini 3.1 Flash TTS Preview",
+    "Gemini 3 Flash Preview",
+    "Gemini 3 Pro Image (Nano Banana Pro)",
+    "Gemini 2.5 Pro",
+    "Gemini 2.5 Flash",
+    "Gemini 2.5 Flash-Lite",
+    "Gemini 2.5 Flash Native Audio (Live API)",
+    "Gemini 2.5 Flash Image (Nano Banana)",
+    "Gemini 2.5 Flash Preview TTS",
+    "Gemini 2.5 Pro Preview TTS",
+    "Lyria 3.5",
+    "Lyria 3",
+    "Gemini Embedding 2",
+    "Gemini Robotics ER 2 Preview",
+    "Gemini Robotics ER 2 Streaming Preview",
+    "Gemma 4",
+    "Pricing for tools",
+    "Pricing for agents",
+    "Notes"
+  ]
+}

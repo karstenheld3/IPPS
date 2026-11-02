@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-update-model-inventory.py - Regenerate the model tables in MODEL_INVENTORY.md from the llm-evaluation registries.
+update-model-inventory.py - Regenerate the model tables in MODEL_INVENTORY.md from the llm-tools registries.
 
 Label  = YY-L from release_date year and eci_band (anchor(YY) = 170 + 15 * (YY - 26), one letter per 5 ECI points, A-Z)
 Comp   = same band expressed in the comparison year (wraps on May 1)
 WF     = 2.0 * 2^(-(170 - eci_band) / 10) at High effort (halved for models without effort levels)
 
 Usage:
-  python update-model-inventory.py --skill-folder <skills/llm-evaluation> --inventory-file <MODEL_INVENTORY.md> [--today YYYY-MM-DD]
+  python update-model-inventory.py --skill-folder <skills/llm-tools> --inventory-file <skills/llm-tools/MODEL_INVENTORY.md> [--today YYYY-MM-DD]
 """
 import argparse
 import datetime
@@ -218,8 +218,8 @@ def sort_key(row):
 
 def main():
   parser = argparse.ArgumentParser(description="Regenerate MODEL_INVENTORY.md tables")
-  parser.add_argument("--skill-folder", required=True, help="Path to skills/llm-evaluation")
-  parser.add_argument("--inventory-file", required=True, help="Path to MODEL_INVENTORY.md")
+  parser.add_argument("--skill-folder", required=True, help="Path to skills/llm-tools (holds the 3 model JSONs)")
+  parser.add_argument("--inventory-file", required=True, help="Path to MODEL_INVENTORY.md (default location: skills/llm-tools/MODEL_INVENTORY.md)")
   parser.add_argument("--today", default=None, help="Comparison date YYYY-MM-DD (default: today)")
   args = parser.parse_args()
 
@@ -236,7 +236,7 @@ def main():
   prc = prc_doc["pricing"]
   inv_text = inv_path.read_text(encoding="utf-8")
 
-  sec31_text = inv_text.split("### 3.1 API Models (llm-evaluation registry)")[1].split("### 3.2 Devin-Only Models")[0]
+  sec31_text = inv_text.split("### 3.1 API Models (llm-tools registry)")[1].split("### 3.2 Devin-Only Models")[0]
   existing_31 = parse_table(sec31_text)
   sec32_text = inv_text.split("### 3.2 Devin-Only Models (no API registry entry)")[1].split("\nModels not listed:")[0]
   existing_32 = parse_table(sec32_text)
@@ -284,11 +284,11 @@ def main():
   table_31 = format_markdown_table(headers, rows_31)
   table_32 = format_markdown_table(headers, rows_32)
 
-  inv_text = re.sub(r"- `skills/llm-evaluation/model-registry\.json` [0-9.]+ \(\d{4}-\d{2}-\d{2}\)", f"- `skills/llm-evaluation/model-registry.json` {reg['_version']} ({reg['_updated']})", inv_text)
-  inv_text = re.sub(r"- `skills/llm-evaluation/model-pricing\.json` \(\d{4}-\d{2}-\d{2}\)", f"- `skills/llm-evaluation/model-pricing.json` ({prc_doc['last_updated']})", inv_text)
-  inv_text = re.sub(r"- `skills/llm-evaluation/model-parameter-mapping\.json` [0-9.]+ \(\d{4}-\d{2}-\d{2}\)", f"- `skills/llm-evaluation/model-parameter-mapping.json` {map_doc['_version']} ({map_doc['_updated']})", inv_text)
+  inv_text = re.sub(r"- `skills/llm-tools/model-registry\.json` [0-9.]+ \(\d{4}-\d{2}-\d{2}\)", f"- `skills/llm-tools/model-registry.json` {reg['_version']} ({reg['_updated']})", inv_text)
+  inv_text = re.sub(r"- `skills/llm-tools/model-pricing\.json` \(\d{4}-\d{2}-\d{2}\)", f"- `skills/llm-tools/model-pricing.json` ({prc_doc['last_updated']})", inv_text)
+  inv_text = re.sub(r"- `skills/llm-tools/model-parameter-mapping\.json` [0-9.]+ \(\d{4}-\d{2}-\d{2}\)", f"- `skills/llm-tools/model-parameter-mapping.json` {map_doc['_version']} ({map_doc['_updated']})", inv_text)
   inv_text = re.sub(r"Comparison year: `\d{2}` \(generated \d{4}-\d{2}-\d{2}\)", f"Comparison year: `{cyy:02d}` (generated {today.isoformat()})", inv_text)
-  inv_text = re.sub(r"(### 3\.1 API Models \(llm-evaluation registry\)\r?\n\r?\n)(\|[\s\S]*?)(\r?\n\r?\n### 3\.2 Devin-Only Models)", lambda mm: mm.group(1) + table_31 + mm.group(3), inv_text)
+  inv_text = re.sub(r"(### 3\.1 API Models \(llm-tools registry\)\r?\n\r?\n)(\|[\s\S]*?)(\r?\n\r?\n### 3\.2 Devin-Only Models)", lambda mm: mm.group(1) + table_31 + mm.group(3), inv_text)
   inv_text = re.sub(r"(### 3\.2 Devin-Only Models \(no API registry entry\)\r?\n\r?\n.*?\r?\n\r?\n)(\|[\s\S]*?)(\r?\n\r?\nModels not listed:)", lambda mm: mm.group(1) + table_32 + mm.group(3), inv_text)
 
   inv_path.write_text(inv_text, encoding="utf-8")

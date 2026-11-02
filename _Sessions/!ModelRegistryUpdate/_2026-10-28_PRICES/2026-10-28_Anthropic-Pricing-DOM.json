@@ -1,0 +1,68 @@
+{
+  "_source": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "_extracted": "2026-10-28",
+  "_method": "Playwright DOM Table Extraction (isolated browser.newContext())",
+  "tables": [
+    {
+      "idx": 0,
+      "caption": "Standard pricing - per 1M tokens",
+      "headers": ["Model", "Base Input Tokens", "Output Tokens", "5m Cache Writes", "1h Cache Writes", "Cache Hits & Refreshes"],
+      "rows": [
+        ["Claude Fable 5.1", "$10 / MTok", "$50 / MTok", "$12.50 / MTok", "$20 / MTok", "$0.25 / MTok"],
+        ["Claude Opus 5.5", "$4 / MTok", "$20 / MTok", "$5 / MTok", "$8 / MTok", "$0.20 / MTok"],
+        ["Claude Sonnet 5.5", "$2 / MTok", "$10 / MTok", "$2.50 / MTok", "$4 / MTok", "$0.10 / MTok"],
+        ["Claude Haiku 5.5 (<=100k tokens)", "$0.10 / MTok", "$0.50 / MTok", "$0.125 / MTok", "$0.20 / MTok", "$0.01 / MTok"],
+        ["Claude Haiku 5.5 (>100k tokens)", "$0.50 / MTok", "$2.50 / MTok", "$0.625 / MTok", "$1 / MTok", "$0.05 / MTok"],
+        ["Claude Mythos 5.1 (limited availability)", "$10 / MTok", "$50 / MTok", "$12.50 / MTok", "$20 / MTok", "$0.25 / MTok"],
+        ["Claude Fable 5", "$10 / MTok", "$50 / MTok", "$12.50 / MTok", "$20 / MTok", "$1 / MTok"],
+        ["Claude Mythos 5 (limited availability)", "$10 / MTok", "$50 / MTok", "$12.50 / MTok", "$20 / MTok", "$1 / MTok"],
+        ["Claude Opus 5", "$5 / MTok", "$25 / MTok", "$6.25 / MTok", "$10 / MTok", "$0.50 / MTok"],
+        ["Claude Opus 4.8", "$5 / MTok", "$25 / MTok", "$6.25 / MTok", "$10 / MTok", "$0.50 / MTok"],
+        ["Claude Opus 4.7", "$5 / MTok", "$25 / MTok", "$6.25 / MTok", "$10 / MTok", "$0.50 / MTok"],
+        ["Claude Opus 4.6", "$5 / MTok", "$25 / MTok", "$6.25 / MTok", "$10 / MTok", "$0.50 / MTok"],
+        ["Claude Opus 4.5", "$5 / MTok", "$25 / MTok", "$6.25 / MTok", "$10 / MTok", "$0.50 / MTok"],
+        ["Claude Opus 4.1 (retired)", "$15 / MTok", "$75 / MTok", "$18.75 / MTok", "$30 / MTok", "$1.50 / MTok"],
+        ["Claude Opus 4 (retired)", "$15 / MTok", "$75 / MTok", "$18.75 / MTok", "$30 / MTok", "$1.50 / MTok"],
+        ["Claude Sonnet 5", "$2 / MTok", "$10 / MTok", "$2.50 / MTok", "$4 / MTok", "$0.20 / MTok"],
+        ["Claude Sonnet 4.6", "$3 / MTok", "$15 / MTok", "$3.75 / MTok", "$6 / MTok", "$0.30 / MTok"],
+        ["Claude Sonnet 4.5 (deprecated)", "$3 / MTok", "$15 / MTok", "$3.75 / MTok", "$6 / MTok", "$0.30 / MTok"],
+        ["Claude Sonnet 4 (retired)", "$3 / MTok", "$15 / MTok", "$3.75 / MTok", "$6 / MTok", "$0.30 / MTok"],
+        ["Claude Haiku 4.5", "$1 / MTok", "$5 / MTok", "$1.25 / MTok", "$2 / MTok", "$0.10 / MTok"],
+        ["Claude Haiku 3.5 (retired)", "$0.80 / MTok", "$4 / MTok", "$1 / MTok", "$1.60 / MTok", "$0.08 / MTok"]
+      ]
+    },
+    {
+      "idx": 5,
+      "caption": "Batch processing pricing - per 1M tokens",
+      "headers": ["Model", "Batch Input Tokens", "Batch Output Tokens"],
+      "rows": [
+        ["Claude Fable 5.1", "$5 / MTok", "$25 / MTok"],
+        ["Claude Opus 5.5", "$2 / MTok", "$10 / MTok"],
+        ["Claude Sonnet 5.5", "$1 / MTok", "$5 / MTok"],
+        ["Claude Haiku 5.5 (<=100k tokens)", "$0.05 / MTok", "$0.25 / MTok"],
+        ["Claude Haiku 5.5 (>100k tokens)", "$0.25 / MTok", "$1.25 / MTok"],
+        ["Claude Mythos 5.1 (limited availability)", "$5 / MTok", "$25 / MTok"],
+        ["Claude Fable 5", "$5 / MTok", "$25 / MTok"],
+        ["Claude Mythos 5 (limited availability)", "$5 / MTok", "$25 / MTok"],
+        ["Claude Opus 5", "$2.50 / MTok", "$12.50 / MTok"],
+        ["Claude Opus 4.8", "$2.50 / MTok", "$12.50 / MTok"],
+        ["Claude Opus 4.7", "$2.50 / MTok", "$12.50 / MTok"],
+        ["Claude Opus 4.6", "$2.50 / MTok", "$12.50 / MTok"],
+        ["Claude Opus 4.5", "$2.50 / MTok", "$12.50 / MTok"],
+        ["Claude Opus 4.1 (retired)", "$7.50 / MTok", "$37.50 / MTok"],
+        ["Claude Opus 4 (retired)", "$7.50 / MTok", "$37.50 / MTok"],
+        ["Claude Sonnet 5", "$1 / MTok", "$5 / MTok"],
+        ["Claude Sonnet 4.6", "$1.50 / MTok", "$7.50 / MTok"],
+        ["Claude Sonnet 4.5 (deprecated)", "$1.50 / MTok", "$7.50 / MTok"],
+        ["Claude Sonnet 4 (retired)", "$1.50 / MTok", "$7.50 / MTok"],
+        ["Claude Haiku 4.5", "$0.50 / MTok", "$2.50 / MTok"],
+        ["Claude Haiku 3.5 (retired)", "$0.40 / MTok", "$2 / MTok"]
+      ]
+    }
+  ],
+  "_notes": [
+    "New models vs 2026-09-05: claude-fable-5-1 ($10/$50, cache hit $0.25 = 0.025x), claude-mythos-5-1 ($10/$50, cache hit $0.25), claude-opus-5-5 ($4/$20, cache hit $0.20 = 0.05x), claude-sonnet-5-5 ($2/$10, cache hit $0.10 = 0.05x), claude-haiku-5-5 ($0.10/$0.50 <=100k, $0.50/$2.50 >100k, cache hit $0.01 <=100k / $0.05 >100k)",
+    "Price change vs 2026-09-05: Claude Sonnet 5 changed from $3.00/$15.00/$0.30 to $2.00/$10.00/$0.20 (retained introductory rate permanently)",
+    "Fast mode pricing table (idx 4): Claude Opus 5.5 $8/$40; Claude Opus 5 / Claude Opus 4.8 $10/$50"
+  ]
+}

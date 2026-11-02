@@ -216,27 +216,16 @@ function Invoke-Gate94 {
 }
 
 function Invoke-Distribute {
+  # Since 2026-10-29 the three model JSONs and MODEL_INVENTORY.md live only in skills/llm-tools/ (no replicas in other skills).
   $jsonFiles = @("model-pricing.json", "model-registry.json", "model-parameter-mapping.json")
-  $agentEvalDst = "$AgentFolder\skills\llm-evaluation"
+  $agentToolsDst = "$AgentFolder\skills\llm-tools"
   foreach ($f in $jsonFiles) {
-    Copy-Item "$SkillFolder\$f" "$agentEvalDst\$f" -Force
+    Copy-Item "$SkillFolder\$f" "$agentToolsDst\$f" -Force
   }
   if (Test-Path "$SkillFolder\test-call-llm.py") {
-    Copy-Item "$SkillFolder\test-call-llm.py" "$agentEvalDst\test-call-llm.py" -Force
+    Copy-Item "$SkillFolder\test-call-llm.py" "$agentToolsDst\test-call-llm.py" -Force
   }
-  Copy-Item $InventoryFile "$AgentFolder\skills\write-documents\MODEL_INVENTORY.md" -Force
-
-  $dependentSkills = @(
-    "$AgentFolder\skills\llm-transcription",
-    "$PromptSystemFolder\skills\llm-transcription"
-  )
-  foreach ($dst in $dependentSkills) {
-    foreach ($f in $jsonFiles) {
-      if (Test-Path "$dst\$f") {
-        Copy-Item "$SkillFolder\$f" "$dst\$f" -Force
-      }
-    }
-  }
+  Copy-Item $InventoryFile "$agentToolsDst\MODEL_INVENTORY.md" -Force
 
   $externalTargets = @("e:\Dev\Lana-V1\config", "e:\Dev\Lana-V2\config")
   if ($IncludeExternal) {
@@ -255,9 +244,7 @@ function Invoke-Distribute {
 function Invoke-Gate9 {
   $jsonFiles = @("model-pricing.json", "model-registry.json", "model-parameter-mapping.json")
   $targets = @(
-    "$AgentFolder\skills\llm-evaluation",
-    "$AgentFolder\skills\llm-transcription",
-    "$PromptSystemFolder\skills\llm-transcription"
+    "$AgentFolder\skills\llm-tools"
   )
   if ($IncludeExternal) {
     $targets += @("e:\Dev\Lana-V1\config", "e:\Dev\Lana-V2\config")
@@ -273,7 +260,7 @@ function Invoke-Gate9 {
       }
     }
   }
-  if ((Get-FileHash $InventoryFile).Hash -ne (Get-FileHash "$AgentFolder\skills\write-documents\MODEL_INVENTORY.md").Hash) {
+  if ((Get-FileHash $InventoryFile).Hash -ne (Get-FileHash "$AgentFolder\skills\llm-tools\MODEL_INVENTORY.md").Hash) {
     throw "Gate 9 FAIL: SHA-256 mismatch on MODEL_INVENTORY.md"
   }
   $matchCount++

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-LLM Evaluation Skill Self-Test
+LLM Tools Skill Self-Test
 
-Validates that all scripts work correctly with minimal API calls.
+Validates shared scripts (llm-tools/), evaluation/ and transcription/ scripts, and the shared model JSONs with minimal API calls.
 Detects breaking changes during development.
 
 Usage:
-  python llm-evaluation-selftest.py [--skip-api-calls] [--model MODEL] [--keys-file PATH]
+  python llm-tools-selftest.py [--skip-api-calls] [--model MODEL] [--keys-file PATH]
     
 Options:
   --skip-api-calls    Skip actual API integration tests
@@ -212,17 +212,23 @@ def test_script_help(skill_dir: Path, results: TestResult):
   scripts = [
     "call-llm.py",
     "call-llm-batch.py",
-    "generate-questions.py",
-    "generate-answers.py",
-    "evaluate-answers.py",
-    "analyze-costs.py",
-    "compare-transcription-runs.py"
+    "find-workers-limit.py",
+    "evaluation/generate-questions.py",
+    "evaluation/generate-answers.py",
+    "evaluation/evaluate-answers.py",
+    "evaluation/analyze-costs.py",
+    "evaluation/compare-transcription-runs.py",
+    "transcription/transcribe-image-to-markdown.py",
+    "transcription/transcribe-audio-to-markdown.py",
+    "computer-use/cli.py"
   ]
     
   for script in scripts:
     code, out, err = run_script(script, ["--help"], skill_dir)
     if code == 0 and "usage:" in out.lower():
       results.add_pass(f"{script} --help")
+    elif "ModuleNotFoundError" in err:
+      results.add_skip(f"{script} --help (missing dependency: {err.strip().splitlines()[-1]}; see SETUP.md)")
     else:
       results.add_fail(f"{script} --help", "No help text or error")
 
@@ -303,7 +309,7 @@ def test_api_integration(skill_dir: Path, temp_dir: Path, fixtures: Dict, result
     results.add_fail("Single API call", err or "Output file not created")
 
 def main():
-  print("LLM Evaluation Skill Self-Test")
+  print("LLM Tools Skill Self-Test")
   print("=" * 50)
     
   # Locate skill directory

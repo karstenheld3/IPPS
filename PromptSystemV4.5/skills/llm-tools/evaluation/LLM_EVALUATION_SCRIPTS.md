@@ -156,10 +156,10 @@ python compare-transcription-runs.py --files run1/*.md run2/*.md --output-file c
 - Effort level control: temperature, reasoning_effort, output_length
 - Model-aware parameter building (temperature vs reasoning models)
 
-## llm-evaluation-selftest.py - Self-Test
+## llm-tools-selftest.py - Self-Test (in `llm-tools/` root)
 
 ```powershell
-python llm-evaluation-selftest.py [--skip-api-calls]
+python ..\llm-tools-selftest.py [--skip-api-calls]
 ```
 
 **Tests:**
@@ -191,22 +191,23 @@ python llm-evaluation-selftest.py [--skip-api-calls]
 
 ```powershell
 $venv = "..\.tools\llm-venv\Scripts\python.exe"
-$skill = "[AGENT_FOLDER]\skills\llm-evaluation"
+$skill = "[AGENT_FOLDER]\skills\llm-tools"
+$eval = "$skill\evaluation"
 
 # 1. Transcribe images
-& $venv "$skill\call-llm-batch.py" --model gpt-4o --input-folder images/ --output-folder transcriptions/ --prompt-file "$skill\prompts\transcribe-page.md" --runs 3
+& $venv "$skill\call-llm-batch.py" --model gpt-4o --input-folder images/ --output-folder transcriptions/ --prompt-file "$eval\prompts\transcribe-page.md" --runs 3
 
 # 2. Generate questions from original images
-& $venv "$skill\generate-questions.py" --model claude-opus-4-20250514 --input-folder images/ --output-file questions.json
+& $venv "$eval\generate-questions.py" --model claude-opus-4-20250514 --input-folder images/ --output-file questions.json
 
 # 3. Generate answers from transcriptions
-& $venv "$skill\generate-answers.py" --model gpt-5-mini --input-folder transcriptions/ --output-folder answers/ --questions-file questions.json
+& $venv "$eval\generate-answers.py" --model gpt-5-mini --input-folder transcriptions/ --output-folder answers/ --questions-file questions.json
 
 # 4. Score answers
-& $venv "$skill\evaluate-answers.py" --model gpt-5 --input-folder answers/ --output-folder scores/
+& $venv "$eval\evaluate-answers.py" --model gpt-5 --input-folder answers/ --output-folder scores/
 
 # 5. Analyze costs
-& $venv "$skill\analyze-costs.py" --input-folder transcriptions/ --output-file cost_analysis.json
+& $venv "$eval\analyze-costs.py" --input-folder transcriptions/ --output-file cost_analysis.json --pricing "$skill\model-pricing.json"
 ```
 
 ## Key Patterns

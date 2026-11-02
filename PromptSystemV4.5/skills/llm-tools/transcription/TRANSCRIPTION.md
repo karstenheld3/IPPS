@@ -1,8 +1,10 @@
-# LLM Transcription Skill
+# LLM Tools - Transcription
 
-Universal transcription tools using LLMs with optimized prompts for each purpose.
+Function of `@skills:llm-tools`. Universal transcription tools using LLMs with optimized prompts for each purpose.
 
-## When to Use This Skill
+Model JSONs are read from `llm-tools/` root (override with `--config-folder`). Prompts (`prompts/transcription.md`, `prompts/judge.md`) live here.
+
+## When to Use This Function
 
 **Apply when:**
 - Converting images (screenshots, documents, diagrams) to markdown
@@ -11,13 +13,13 @@ Universal transcription tools using LLMs with optimized prompts for each purpose
 - Preserving document structure in markdown format
 
 **Do NOT apply when:**
-- Evaluating LLM performance (use @llm-evaluation)
+- Evaluating LLM performance (use `../evaluation/EVALUATION.md`)
 - Simple text extraction without formatting needs
 - Real-time transcription (these are batch tools)
 
 ## Quick Start
 
-1. Run `SETUP.md` once to install dependencies
+1. Run `../SETUP.md` once to install dependencies
 2. Choose your script:
    - **Image to Markdown**: `transcribe-image-to-markdown.py` - Ensemble + judge + refinement
    - **Audio to Markdown**: `transcribe-audio-to-markdown.py`
@@ -84,6 +86,6 @@ Tested on EU AI Act (144 pages, German legal text, 2024-02-04):
 
 ## Configuration
 
-API keys required in `~/.llm-keys` or environment variables:
+API keys via `--keys-file [API_KEYS_FILE]` (default `.env` in working directory) or environment variables:
 - `OPENAI_API_KEY` - For GPT models and Whisper
 - `ANTHROPIC_API_KEY` - For Claude models

@@ -1,0 +1,96 @@
+{
+  "_source": "https://docs.x.ai/developers/models",
+  "_reasoning_source": "https://docs.x.ai/developers/model-capabilities/text/reasoning",
+  "_detail_source": "https://docs.x.ai/developers/grok-4-7",
+  "_last_updated_on_page": "2026-10-10",
+  "_extracted_at": "2026-10-28",
+  "_dom_structure": {
+    "uses_html_tables": true,
+    "reasoning_page_table_count": 2,
+    "reasoning_summary_table_idx": 1,
+    "detail_page_table_count": 1,
+    "openai_sdk_base_url": "https://api.x.ai/v1",
+    "preferred_api": "responses"
+  },
+  "models": [
+    {
+      "model_id": "grok-4.7",
+      "name": "Grok 4.7",
+      "context_window": 500000,
+      "max_output_note": "No text output limit (shares 500k context window; default request limit 128000)",
+      "knowledge_cutoff": "2026-05",
+      "modalities": "Text and image input; text output",
+      "method": "reasoning_effort",
+      "effort_levels": ["low", "medium", "high", "xhigh"],
+      "default_effort": "high",
+      "reasoning_behavior": "Controls reasoning depth (cannot be disabled)",
+      "api": "responses"
+    },
+    {
+      "model_id": "grok-4.6",
+      "name": "Grok 4.6",
+      "context_window": 500000,
+      "method": "reasoning_effort",
+      "effort_levels": ["low", "medium", "high", "xhigh"],
+      "default_effort": "high",
+      "reasoning_behavior": "Controls reasoning depth (cannot be disabled)",
+      "api": "responses"
+    },
+    {
+      "model_id": "grok-4.5",
+      "name": "Grok 4.5",
+      "context_window": 500000,
+      "method": "reasoning_effort",
+      "effort_levels": ["low", "medium", "high"],
+      "default_effort": "high",
+      "reasoning_behavior": "Controls reasoning depth (cannot be disabled; xhigh treated as high)",
+      "api": "responses"
+    },
+    {
+      "model_id": "grok-4.3",
+      "name": "Grok 4.3",
+      "context_window": 1000000,
+      "method": "reasoning_effort",
+      "effort_levels": ["low", "medium", "high"],
+      "default_effort": "high",
+      "api": "responses"
+    },
+    {
+      "model_id": "grok-build-0.1",
+      "name": "Grok Build 0.1",
+      "context_window": 256000,
+      "method": "reasoning_effort",
+      "effort_levels": ["low", "medium", "high"],
+      "default_effort": "high",
+      "api": "responses"
+    },
+    {
+      "model_id": "grok-4.20-multi-agent-0309",
+      "name": "Grok 4.20 Multi-Agent (0309)",
+      "alias": "grok-4.20-multi-agent",
+      "context_window": 1000000,
+      "method": "reasoning_effort",
+      "effort_levels": ["low", "medium", "high", "xhigh"],
+      "default_effort": "high",
+      "reasoning_behavior": "Controls agent count (4 or 16)",
+      "api": "responses"
+    },
+    {
+      "model_id": "grok-4.20-0309-reasoning",
+      "name": "Grok 4.20 Reasoning (0309)",
+      "context_window": 1000000,
+      "method": "reasoning_effort",
+      "effort_levels": ["low", "medium", "high"],
+      "default_effort": "high",
+      "api": "responses"
+    },
+    {
+      "model_id": "grok-4.20-0309-non-reasoning",
+      "name": "Grok 4.20 Non-Reasoning (0309)",
+      "context_window": 1000000,
+      "method": "temperature",
+      "temp_max": 2.0,
+      "api": "chat_completions"
+    }
+  ]
+}

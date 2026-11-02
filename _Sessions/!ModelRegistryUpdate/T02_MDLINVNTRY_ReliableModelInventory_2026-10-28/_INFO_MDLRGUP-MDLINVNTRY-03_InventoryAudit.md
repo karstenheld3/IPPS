@@ -4,7 +4,7 @@
 
 **Doc ID**: MDLRGUP-MDLINVNTRY-IN03
 **Goal**: Classify every value and rule in the four audited scopes as SOURCED, DERIVED, or ASSUMED
-**Timeline**: Created 2026-10-28, Updated 2 times (2026-10-28 - 2026-10-28)
+**Timeline**: Created 2026-10-28, Updated 3 times (2026-10-28 - 2026-10-29)
 **Version scope**: 2026-10-28
 
 **Depends on:**
@@ -48,9 +48,9 @@
 | L34     | WF value table (25-A 1.0, 26-A 2.0, ...)     | DERIVED | Computed from WF formula                                              |
 | L35     | One letter step = one year of progress        | ASSUMED | Design assertion without empirical evidence                           |
 | L38     | R1: YY = year of general availability         | SOURCED | Provider GA announcements                                             |
-| L39     | R2: Letter by estimated capability            | ASSUMED | Judgment heuristic; no objective criterion                            |
-| L40     | R3: October rule, highest B before Oct 1      | ASSUMED | Process rule without evidence; requires manual yearly review          |
-| L41     | R4: Observation downgrade by one letter       | SOURCED | FAILS.md and findings card documented observations                    |
+| L39     | R2: Letter by UC-1..4 tier + capability       | DERIVED | Vendor tier separation (UC-1 B > UC-2 C > UC-3 D > UC-4 E); WF ASSUMED|
+| L40     | R3: Release-month gate (A only for Oct-Dec)   | ASSUMED | Pre-October releases capped at B; prior retroactive promotion removed |
+| L41     | R4: Observation downgrade by one letter       | SOURCED | FAILS.md and findings card documented skipped-items observations      |
 | L42     | R5: Hard limit cap at 32K max output          | SOURCED | Provider models page max_output documentation                         |
 | L45     | Profile thresholds IF>=0.90, EG<=1.20 etc.    | ASSUMED | No source; unmeasured (LLMCAPCLS-IN01 L416)                          |
 | L46     | Evidence priority: ledger > obs > bench > none | ASSUMED | Ranking without external source                                       |
@@ -182,6 +182,9 @@
 - **MDLRGUP-MDLINVNTRY-SC-LOCAL-LLMCAP**: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_INFO_HOW_TO_ORGANIZE_LLMS_BY_CAPABILITY.md` - `LLMCAPCLS-IN01` Section 6 circular label derivation and L416 unmeasured profile parameters (Accessed: 2026-10-28) `[VERIFIED]`
 
 ## Document History
+
+**[2026-10-29 13:37]**
+- Fixed: Updated `R2` and `R3` audit rows to reflect release-month gate (`YY-A` only for Oct–Dec `UC-1` releases, never pre-October models) and strict `UC-1..4` vendor tier separation (`Fable` `26-B` != `Opus`/`glm-5.2` `26-C` != `Sonnet` `26-D` != `Haiku` `26-E`)
 
 **[2026-10-28 20:22]**
 - Fixed: Added `Timeline` header field, `[VERIFIED]` inline citations in Summary, `Limitations and Known Issues` section (`TF-05`), and `Sources` section (`TF-06`) during P4-S1 verification

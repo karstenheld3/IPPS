@@ -6,15 +6,15 @@ Model data for planning documents that depend on model, effort level, and contex
 
 Comparison year: `26` (generated 2026-10-29)
 
-This file holds data only. Planning techniques that use it:
+This file holds data only. Part of `@skills:llm-tools` (same folder as the source JSONs). Planning techniques that use it (`@skills:write-documents`):
 - `PROMPTS_GUIDES.md` Section 1g - prompt count, checkpoints, scope guard, context fit per model
 - `TASKS_GUIDES.md` - HWH estimation, task and STRUT step sizing, AWH estimation
 - `PROMPTS_RULES.md` PRMT-SC-05 - verification of prompts files against this data
 
 Sources (canonical, update this file when they change):
-- `skills/llm-evaluation/model-registry.json` 1.11.0 (2026-10-29) - context window, max output request limit, supported effort levels, `release_date`, `uc_class`, `eci_band`, `eci_score`, `gen_equivalent`, `capability_label`, `capability_note`, `behavior_profile`
-- `skills/llm-evaluation/model-pricing.json` (2026-10-28) - standard tier USD prices per 1M tokens
-- `skills/llm-evaluation/model-parameter-mapping.json` 2.4.0 (2026-09-05) - effort level names and thinking factors
+- `skills/llm-tools/model-registry.json` 1.11.0 (2026-10-29) - context window, max output request limit, supported effort levels, `release_date`, `uc_class`, `eci_band`, `eci_score`, `gen_equivalent`, `capability_label`, `capability_note`, `behavior_profile`
+- `skills/llm-tools/model-pricing.json` (2026-10-28) - standard tier USD prices per 1M tokens
+- `skills/llm-tools/model-parameter-mapping.json` 2.4.0 (2026-09-05) - effort level names and thinking factors
 - `skills/devin-auto-model-switcher/windsurf-model-registry.json` 2.0 (2026-08-30) - Devin cost multipliers and Devin-exposed effort levels
 - Epoch Capabilities Index `https://epoch.ai/eci` (CSV `https://epoch.ai/data/eci_scores.csv`, snapshot 2026-10-28) - `eci_score`, rounded to the 5-point `eci_band`
 - LLM-Research `TBLF-IN02` Section 5.1 (May 2026) - confirmed reliable CSV extraction rows per model and effort (`CSV rows` in Notes)
@@ -83,7 +83,7 @@ Row set: every text model in `model-registry.json` except `status: retired` (ima
 
 Sort order: 1) `Comp` (letter `A` to `Z`), 2) `Label` (newest release year first), 3) `Model` name (ascending).
 
-### 3.1 API Models (llm-evaluation registry)
+### 3.1 API Models (llm-tools registry)
 
 | Model                        | Label | Comp 26 | Profile  | Context | Efforts    | WF   | In USD | Cache USD | Out USD | Devin cost | Notes                                                                                                                        |
 |------------------------------|-------|---------|----------|---------|------------|------|--------|-----------|---------|------------|------------------------------------------------------------------------------------------------------------------------------|

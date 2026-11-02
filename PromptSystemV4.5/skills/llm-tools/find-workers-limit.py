@@ -58,6 +58,10 @@ def detect_provider(model_id: str) -> str:
     return 'anthropic'
   if model_lower.startswith('glm-'):
     return 'zai'
+  if model_lower.startswith(('gemini-', 'gemma-')):
+    return 'google'
+  if model_lower.startswith('grok-'):
+    return 'xai'
   print(f"ERROR: Cannot detect provider for model: {model_id}", file=sys.stderr)
   sys.exit(1)
 
@@ -84,6 +88,22 @@ def create_zai_client(keys: dict):
     print("ERROR: ZAI_API_KEY not found in keys file", file=sys.stderr)
     sys.exit(1)
   return OpenAI(api_key=api_key, base_url='https://api.z.ai/api/paas/v4/')
+
+def create_google_client(keys: dict):
+  """Create Google Gemini client using OpenAI SDK with base_url swap."""
+  api_key = keys.get('GEMINI_API_KEY') or keys.get('GOOGLE_API_KEY')
+  if not api_key:
+    print("ERROR: GEMINI_API_KEY not found in keys file", file=sys.stderr)
+    sys.exit(1)
+  return OpenAI(api_key=api_key, base_url='https://generativelanguage.googleapis.com/v1beta/openai/')
+
+def create_xai_client(keys: dict):
+  """Create xAI Grok client using OpenAI SDK with base_url swap."""
+  api_key = keys.get('XAI_API_KEY')
+  if not api_key:
+    print("ERROR: XAI_API_KEY not found in keys file", file=sys.stderr)
+    sys.exit(1)
+  return OpenAI(api_key=api_key, base_url='https://api.x.ai/v1')
 
 def is_rate_limit_error(e: Exception) -> bool:
   """Check if exception is a rate limit error (FR-21)."""
@@ -120,8 +140,8 @@ def single_call(client, model: str, prompt: str, provider: str,
     
   for attempt in range(max_retries):
     try:
-      if provider in ('openai', 'zai'):
-        token_param = 'max_completion_tokens' if any(x in model for x in ['gpt-5', 'o1-', 'o3-', 'o4-']) else 'max_tokens'
+      if provider in ('openai', 'zai', 'google', 'xai'):
+        token_param = 'max_completion_tokens' if any(x in model for x in ['gpt-5', 'gpt-6', 'o1-', 'o3-', 'o4-']) else 'max_tokens'
         call_params = {
           'model': model,
           'messages': [
@@ -349,6 +369,10 @@ def main():
     client = create_openai_client(keys)
   elif provider == 'zai':
     client = create_zai_client(keys)
+  elif provider == 'google':
+    client = create_google_client(keys)
+  elif provider == 'xai':
+    client = create_xai_client(keys)
   else:
     client = create_anthropic_client(keys)
     

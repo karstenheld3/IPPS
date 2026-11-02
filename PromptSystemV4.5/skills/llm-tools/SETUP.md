@@ -1,6 +1,13 @@
-# LLM Evaluation Skill Setup
+# LLM Tools Skill Setup
 
-Setup for LLM (Large Language Model) evaluation pipelines. Run once to install Python dependencies in `[WORKSPACE_FOLDER]/../.tools/llm-venv/`.
+One setup for all `llm-tools` functions (shared call scripts, evaluation, transcription, computer-use). Run once to install Python dependencies in `[WORKSPACE_FOLDER]/../.tools/llm-venv/`.
+
+## Prerequisites
+
+- Python 3.10+
+- OpenAI API key (GPT vision models, Whisper for audio)
+- Anthropic API key (Claude models; required for computer-use)
+- Windows (computer-use only)
 
 ## 1. Set Workspace Folder
 
@@ -41,26 +48,35 @@ python -m venv $venvDir
 
 ## 4. Install Dependencies
 
-**Activate venv and install:**
+**Core (all functions):**
 ```powershell
-& "$venvDir\Scripts\Activate.ps1"
-pip install "openai==2.8.0" "anthropic>=0.18.0,<1.0.0"
-deactivate
+& "$venvDir\Scripts\pip.exe" install "openai==2.8.0" "anthropic>=0.18.0,<1.0.0" httpx
 ```
 
-**Or install without activating:**
+**Computer-use (optional, Windows):**
 ```powershell
-& "$venvDir\Scripts\pip.exe" install "openai==2.8.0" "anthropic>=0.18.0,<1.0.0"
+& "$venvDir\Scripts\pip.exe" install mss pillow pyautogui
+```
+
+**Audio transcription (optional):** `ffmpeg` for format conversion
+```powershell
+winget install ffmpeg
 ```
 
 **Verify packages:**
 ```powershell
-& "$venvDir\Scripts\pip.exe" list | Select-String "openai|anthropic"
+& "$venvDir\Scripts\pip.exe" list | Select-String "openai|anthropic|httpx|mss|pillow|pyautogui"
 ```
 
 ## 5. Configure API Keys
 
-Create `.env` file in your working directory (where you run scripts). Use `--keys-file` parameter if running scripts from a different directory:
+**Standard location**: `[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt` (shared across projects). Pass it to every script via `--keys-file`. Format, one key per line:
+```
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+**Alternative**: `.env` file in your working directory (scripts default to `.env` when `--keys-file` is omitted):
 
 ```powershell
 $envFile = Join-Path (Get-Location).Path ".env"
@@ -125,22 +141,30 @@ print('[OK] Anthropic client created successfully')
 Always use the venv Python:
 
 ```powershell
-# Single call
-& "$venvDir\Scripts\python.exe" call-llm.py --model gpt-4o --input-file image.jpg --prompt-file prompt.md
+$skill = "[AGENT_FOLDER]\skills\llm-tools"
+$keys = "$toolsDir\.api-keys.txt"
 
-# Batch processing
-& "$venvDir\Scripts\python.exe" call-llm-batch.py --model claude-opus-4-20250514 --input-folder images/ --output-folder out/ --prompt-file prompt.md
+# Single call (shared)
+& "$venvDir\Scripts\python.exe" "$skill\call-llm.py" --model gpt-4o --input-file image.jpg --prompt-file prompt.md --keys-file $keys
 
-# Or activate venv first
-& "$venvDir\Scripts\Activate.ps1"
-python call-llm.py --help
-deactivate
+# Batch processing (shared)
+& "$venvDir\Scripts\python.exe" "$skill\call-llm-batch.py" --model claude-opus-4-20250514 --input-folder images/ --output-folder out/ --prompt-file prompt.md --keys-file $keys
+
+# Transcription
+& "$venvDir\Scripts\python.exe" "$skill\transcription\transcribe-image-to-markdown.py" --input-file image.png --keys-file $keys
+& "$venvDir\Scripts\python.exe" "$skill\transcription\transcribe-audio-to-markdown.py" --input recording.mp3 --output transcript.md --keys-file $keys
+
+# Computer use (dry-run)
+& "$venvDir\Scripts\python.exe" "$skill\computer-use\cli.py" -k $keys "Click the Start button"
+
+# Self-test (no API calls)
+& "$venvDir\Scripts\python.exe" "$skill\llm-tools-selftest.py" --skip-api-calls
 ```
 
 ## 8. Final Verification
 
 ```powershell
-Write-Host "=== LLM Evaluation Setup Verification ===" -ForegroundColor Cyan
+Write-Host "=== LLM Tools Setup Verification ===" -ForegroundColor Cyan
 
 # Check venv
 if (Test-Path "$venvDir\Scripts\python.exe") {
@@ -201,16 +225,24 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 ### API key not found
 
-Ensure `.env` file is in the current working directory when running scripts, or set environment variable:
+Pass `--keys-file` with the standard keys file, ensure `.env` is in the current working directory, or set environment variables:
 ```powershell
 $env:OPENAI_API_KEY = "sk-proj-your-key"
 $env:ANTHROPIC_API_KEY = "sk-ant-api03-your-key"
 ```
 
+### Unsupported file format
+
+Check supported formats in `transcription/TRANSCRIPTION.md`. For audio, ensure ffmpeg is installed.
+
+### Rate limit exceeded
+
+Wait and retry, or lower `--workers`. Use `find-workers-limit.py` to probe the provider limit.
+
 ## Completion
 
 Setup complete:
-- **Virtual environment**: `[WORKSPACE_FOLDER]/../.tools/llm-venv/`
-- **Python packages**: openai, anthropic
-- **API keys**: `.env` file (user-created)
+- **Virtual environment**: `[WORKSPACE_FOLDER]/../.tools/llm-venv/` (shared by all llm-tools functions)
+- **Python packages**: openai, anthropic, httpx (+ mss, pillow, pyautogui for computer-use)
+- **API keys**: `[WORKSPACE_FOLDER]/../.tools/.api-keys.txt` or `.env` (user-created)
 

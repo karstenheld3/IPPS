@@ -348,7 +348,7 @@ def parse_args():
 
 def main():
   args = parse_args()
-  script_dir = Path(__file__).parent
+  script_dir = Path(__file__).resolve().parent.parent  # shared model JSONs live in llm-tools/ root
     
   if args.input_folder and args.files:
     print("ERROR: Use --input-folder OR --files, not both", file=sys.stderr)

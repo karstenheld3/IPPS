@@ -30,7 +30,11 @@ DEFAULT_MAX_REFINEMENTS = 1
 DEFAULT_WORKERS = 4
 
 def get_script_dir() -> Path:
-  return Path(__file__).parent
+  return Path(__file__).resolve().parent
+
+def get_shared_config_dir() -> Path:
+  """Shared model JSONs live in llm-tools/ root (one level above transcription/)."""
+  return get_script_dir().parent
 
 def load_configs(script_dir: Path) -> tuple[dict, dict, dict | None]:
   """Load model-registry.json, model-parameter-mapping.json, model-pricing.json."""
@@ -615,7 +619,7 @@ Examples:
     
   parser.add_argument('--keys-file', type=Path, default=Path('.env'), help='API keys file (default: .env)')
   parser.add_argument('--config-folder', type=Path, default=None,
-            help='Directory containing model JSON configs (default: script dir)')
+            help='Directory containing model JSON configs (default: llm-tools root, parent of script dir)')
   parser.add_argument('--temperature', default='medium', choices=EFFORT_LEVELS,
             help='Temperature effort level (default: medium)')
   parser.add_argument('--reasoning-effort', default='medium', choices=EFFORT_LEVELS,
@@ -660,7 +664,7 @@ def main():
     if not args.output_folder:
       args.output_folder = args.input_folder / 'transcripts'
     
-  config_dir = args.config_folder if args.config_folder else get_script_dir()
+  config_dir = args.config_folder if args.config_folder else get_shared_config_dir()
   registry, mapping, pricing = load_configs(config_dir)
     
   api_keys = load_api_keys(args.keys_file)
@@ -668,7 +672,7 @@ def main():
     print("ERROR: No API keys found. Set OPENAI_API_KEY or ANTHROPIC_API_KEY in .env", file=sys.stderr)
     sys.exit(1)
     
-  prompts_dir = config_dir / 'prompts'
+  prompts_dir = get_script_dir() / 'prompts'
   if args.transcribe_prompt_file:
     transcribe_prompt = args.transcribe_prompt_file.read_text(encoding='utf-8')
   elif (prompts_dir / 'transcription.md').exists():

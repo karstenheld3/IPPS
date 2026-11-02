@@ -66,16 +66,22 @@ def build_api_params(model: str, mapping: dict, registry: dict,
     effort_value = effort_map[reasoning_effort]['openai_reasoning_effort']
     supported = model_config.get('effort', [])
     if effort_value not in supported and supported:
-      fallback_map = {'none': 'minimal', 'minimal': 'low'}
+      fallback_map = {'none': 'minimal', 'minimal': 'low', 'xhigh': 'high', 'max': 'high'}
       if effort_value in fallback_map and fallback_map[effort_value] in supported:
         print(f"[WARN] '{effort_value}' not supported by {model}, falling back to '{fallback_map[effort_value]}'", file=sys.stderr)
         effort_value = fallback_map[effort_value]
+      elif effort_value in ('none', 'minimal') and 'low' in supported:
+        print(f"[WARN] '{effort_value}' not supported by {model}, falling back to 'low'", file=sys.stderr)
+        effort_value = 'low'
+      elif effort_value in ('xhigh', 'max') and 'xhigh' in supported:
+        print(f"[WARN] '{effort_value}' not supported by {model}, falling back to 'xhigh'", file=sys.stderr)
+        effort_value = 'xhigh'
     if provider == 'zai':
       params['reasoning_effort'] = effort_value
       params['thinking'] = {'type': 'enabled'}
     else:
       params['reasoning_effort'] = effort_value
-      if verbosity:
+      if verbosity and provider == 'openai':
         params['verbosity'] = effort_map[verbosity]['openai_verbosity']
   elif method == 'effort':
     params['effort'] = effort_map[reasoning_effort]['openai_reasoning_effort']
@@ -134,12 +140,16 @@ def load_api_keys(keys_file: Path) -> dict:
 def detect_provider(model_id: str) -> str:
   """Detect provider from model ID prefix."""
   model_lower = model_id.lower()
-  if model_lower.startswith(('gpt-', 'o1-', 'o3-', 'davinci', 'curie', 'babbage', 'ada')):
+  if model_lower.startswith(('gpt-', 'o1-', 'o3-', 'o4-', 'davinci', 'curie', 'babbage', 'ada')):
     return 'openai'
   if model_lower.startswith('claude'):
     return 'anthropic'
   if model_lower.startswith('glm-'):
     return 'zai'
+  if model_lower.startswith(('gemini-', 'gemma-')):
+    return 'google'
+  if model_lower.startswith('grok-'):
+    return 'xai'
   print(f"ERROR: Cannot detect provider for model: {model_id}", file=sys.stderr)
   sys.exit(1)
 
@@ -207,6 +217,22 @@ def create_zai_client(keys: dict):
     print("ERROR: ZAI_API_KEY not found in keys file", file=sys.stderr)
     sys.exit(1)
   return OpenAI(api_key=api_key, base_url='https://api.z.ai/api/paas/v4/')
+
+def create_google_client(keys: dict):
+  """Create Google Gemini client using OpenAI SDK with base_url swap."""
+  api_key = keys.get('GEMINI_API_KEY') or keys.get('GOOGLE_API_KEY')
+  if not api_key:
+    print("ERROR: GEMINI_API_KEY not found in keys file", file=sys.stderr)
+    sys.exit(1)
+  return OpenAI(api_key=api_key, base_url='https://generativelanguage.googleapis.com/v1beta/openai/')
+
+def create_xai_client(keys: dict):
+  """Create xAI Grok client using OpenAI SDK with base_url swap."""
+  api_key = keys.get('XAI_API_KEY')
+  if not api_key:
+    print("ERROR: XAI_API_KEY not found in keys file", file=sys.stderr)
+    sys.exit(1)
+  return OpenAI(api_key=api_key, base_url='https://api.x.ai/v1')
 
 def call_openai_responses(client, model: str, prompt: str, api_params: dict,
               image_data: str = None, image_media_type: str = None):
@@ -433,6 +459,37 @@ def call_zai(client, model, prompt, api_params, method,
       result["usage"]["cached_tokens"] = cached
   return result
 
+def call_google(client, model, prompt, api_params, method,
+                image_data=None, image_media_type=None):
+  """Call Google Gemini API via OpenAI compatibility Chat Completions endpoint."""
+  if image_data:
+    content = [
+      {"type": "text", "text": prompt},
+      {"type": "image_url", "image_url": {"url": f"data:{image_media_type};base64,{image_data}"}}
+    ]
+  else:
+    content = prompt
+  messages = [{"role": "user", "content": content}]
+  call_params = {'model': model, 'messages': messages, 'max_tokens': api_params.get('max_tokens', 4096)}
+  if 'reasoning_effort' in api_params:
+    call_params['reasoning_effort'] = api_params['reasoning_effort']
+  elif 'temperature' in api_params:
+    call_params['temperature'] = api_params['temperature']
+  response = client.chat.completions.create(**call_params)
+  result = {
+    "text": response.choices[0].message.content or "",
+    "usage": {
+      "input_tokens": response.usage.prompt_tokens,
+      "output_tokens": response.usage.completion_tokens
+    },
+    "model": response.model
+  }
+  if hasattr(response.usage, 'prompt_tokens_details') and response.usage.prompt_tokens_details:
+    cached = getattr(response.usage.prompt_tokens_details, 'cached_tokens', 0)
+    if cached:
+      result["usage"]["cached_tokens"] = cached
+  return result
+
 def parse_args():
   """Parse command line arguments."""
   parser = argparse.ArgumentParser(
@@ -511,6 +568,16 @@ def main():
     call_fn = lambda: call_zai(client, args.model, prompt, api_params, method, image_data, image_media_type)
     if use_caching:
       print("[INFO] Z.AI context caching is automatic (no API changes needed)", file=sys.stderr)
+  elif provider == 'google':
+    client = create_google_client(keys)
+    call_fn = lambda: call_google(client, args.model, prompt, api_params, method, image_data, image_media_type)
+    if use_caching:
+      print("[INFO] Google Gemini implicit context caching is automatic", file=sys.stderr)
+  elif provider == 'xai':
+    client = create_xai_client(keys)
+    call_fn = lambda: call_openai(client, args.model, prompt, api_params, method, image_data, image_media_type)
+    if use_caching:
+      print("[INFO] xAI prompt caching is automatic", file=sys.stderr)
   else:
     client = create_anthropic_client(keys)
     call_fn = lambda: call_anthropic(client, args.model, prompt, api_params, method, image_data, image_media_type, use_caching)
