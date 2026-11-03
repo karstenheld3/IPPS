@@ -955,7 +955,7 @@ foreach ($tgtEntry in $syncConfig.targets) {
         }
 
         # Check for changes
-        $changes = @($results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE', 'SKIP') })
+        $changes = @($results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE') })
         if ($changes.Count -gt 0) { $hasAnyChanges = $true }
 
         if ($diff) {
@@ -1015,7 +1015,7 @@ foreach ($tgtEntry in $syncConfig.targets) {
         }
 
         # Check for changes
-        $changes = @($results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE', 'SKIP') })
+        $changes = @($results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE') })
         if ($changes.Count -gt 0) { $hasAnyChanges = $true }
 
         if ($diff) {
