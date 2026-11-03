@@ -115,7 +115,7 @@ AMINTON provides arguments    → Tree notation for structured, verifiable Minto
 
 ## Overview
 
-IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V4.5) features ten integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT (Minimal Explicit Consistent Terminology) consistency, SOCAS quality criteria, GRUC drift prevention, and AMINTON (Agentic Minto) arguments.
+IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V4.6) features ten integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT (Minimal Explicit Consistent Terminology) consistency, SOCAS quality criteria, GRUC drift prevention, and AMINTON (Agentic Minto) arguments.
 
 ### Who is this for?
 
@@ -1567,20 +1567,22 @@ Local tool installations in `../.tools/` (shared across workspaces). Run `SETUP.
 ```
 IPPS/
 ├── ../.tools/                    # Shared tool installations (parent folder, created by SETUP.md scripts)
-├── .devin/                    # Active agent configuration (synced from PromptSystemV4.5 by sync.ps1)
+├── .devin/                    # Active agent configuration (synced from PromptSystemV4.6 by sync.ps1)
 │   ├── rules/                # Agent rules (read by /prime, consumed by /verify, /improve)
 │   ├── workflows/            # Workflow definitions (invoked by slash commands)
 │   └── skills/               # Skill knowledge bases (read before executing tasks)
-├── _OldVersions/                 # Previous PromptSystem versions (V1 through V3.8, read-only archive)
-├── PromptSystemV4.5/              # Current system (source of truth, synced to .devin/)
+├── _OldVersions/                 # Previous PromptSystem versions (V1 through V4.5, read-only archive)
+├── PromptSystemV4.6/              # Current system (source of truth, synced to .devin/)
 │   ├── rules/                   # Same structure as .devin/rules/ (source)
 │   │   ├── agent-behavior.md     # Agent execution patterns and communication
 │   │   ├── agentic-english.md    # Controlled vocabulary for agent instructions
 │   │   ├── core-conventions.md   # Text formatting, document structure, character rules
-│   │   ├── promptsystem-core.md     # Workspace scenarios, folder structure, operation modes
-│   │   ├── promptsystem-ids.md      # Document and item ID conventions
+│   │   ├── devin-cascade.md      # Cascade agent rules inside Devin IDE
+│   │   ├── devin-devin.md        # Devin CLI and Devin Desktop agent rules
 │   │   ├── edird-phase-planning.md # EDIRD phase model core rules
-│   │   └── workspace-rules.md    # Workspace-specific overrides
+│   │   ├── promptsystem-core.md  # Workspace scenarios, folder structure, operation modes
+│   │   ├── promptsystem-ids.md   # Document and item ID conventions
+│   │   └── tools-and-skills.md   # Tool disambiguation, workflow-first rule, skill registry
 │   ├── skills/                   # See Skills section for details
 │   └── workflows/                # See .devin/workflows/ for file list
 ├── docs/                         # Product documentation, tool research, release notes (created by /research, /deep-research)
@@ -1680,9 +1682,10 @@ The **workspace-management** skill handles multi-repo workspace setup, PromptSys
 
 ## PromptSystem Versions
 
-- **[PromptSystemV4.5](PromptSystemV4.5/)** - Current system
+- **[PromptSystemV4.6](PromptSystemV4.6/)** - Current system
 
 Older versions in [`_OldVersions/`](_OldVersions/):
+- PromptSystemV4.5 - Research-to-writing toolchain (Layer 1-3 workflows, analysis-methods, personas), unified llm-tools skill, terminal-robustness skill, renderings skill
 - PromptSystemV4.4 - Claude Code `.claude/` deployment, DevSystem → PromptSystem rename, GRUC formalization, ascii-diagram workflow, document placement rules
 - DevSystemV4.3 - Workspace-management skill (`sync.ps1`), fact-check/investigate/write-prompts/workspace-setup workflows, Z.AI provider
 - DevSystemV4.2 - Quality pipelines (VCRIV, FACRIV), implement.md context branching, fact-check boundary enforcement

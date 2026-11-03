@@ -1,7 +1,7 @@
 # Check for references to non-existing workflows across PromptSystem
 # Usage: .\check_workflow_refs.ps1 [-PromptSystemFolder <path>]
 param(
-    [string]$PromptSystemFolder = (Join-Path $PSScriptRoot "PromptSystemV4.5")
+    [string]$PromptSystemFolder = (Join-Path $PSScriptRoot "PromptSystemV4.6")
 )
 
 $workspace = $PSScriptRoot

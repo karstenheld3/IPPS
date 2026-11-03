@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<!-- Template: MemoSigned - formal memo/letter with key-terms grid and signature blocks -->
+<meta name="render-options" content="tableFont=default; landscapeTables=0; hrPageBreak=false">
+<style>
+{{FILE:shared/tokens.css}}
+
+/* Template: MemoSigned - styles copied from hand-crafted LOI HTML */
+:root {
+  --color-primary: #2C5ED6; --color-primary-text: #003EDA;
+  --color-navy: #14213A; --color-chrome: #283552; --color-slate: #536078;
+  --color-bg: #F7FAFC; --color-bg-highlight: #E8F0FA;
+  --color-border: #C8D6E5; --color-border-blue: #A3BFE8; --color-white: #FFFFFF;
+  --print-image-max-height: 240mm;
+}
+@page { size: A4 portrait; margin: 12mm 16mm 12mm 16mm;
+  @bottom-center { content: "Page " counter(page) " of " counter(pages); font-family: var(--font-sans); font-size: 8pt; color: var(--color-slate); } }
+@page :first { @top-center { content: none; } }
+@page wide { size: A4 landscape; margin: 16mm 18mm 18mm 18mm; }
+table.landscape { page: wide; }
+
+body { font-size: 12px; line-height: 1.35; color: var(--color-navy); }
+main { padding: 0; }
+
+/* Header: wraps H1 + subtitle, border on container */
+main .header { margin-bottom: var(--s-4); padding-bottom: var(--s-2); border-bottom: 2px solid var(--color-navy); }
+main .header h1 { font-size: 18px; font-weight: 600; color: var(--color-navy); letter-spacing: -0.01em; border-bottom: none; margin: 0; padding: 0; }
+main .header .subtitle { font-size: 12px; color: var(--color-slate); margin-top: 1px; }
+
+/* Key-terms grid */
+main dl.key-terms {
+  display: grid; grid-template-columns: 140px 1fr; gap: 0 var(--s-4); margin-bottom: var(--s-4);
+}
+main dl.key-terms dt {
+  font-size: 11px; font-weight: 500; color: var(--color-chrome);
+  padding: 3px 0; border-bottom: 1px solid var(--color-border);
+}
+main dl.key-terms dd {
+  font-size: 12px; color: var(--color-navy); padding: 3px 0;
+  border-bottom: 1px solid var(--color-border); margin: 0;
+}
+main dl.key-terms dd .emphasis, main dl.key-terms dd strong { color: var(--color-primary-text); font-weight: 600; }
+
+/* Sections */
+main section { margin-bottom: var(--s-3); }
+main section h2 {
+  font-size: 14px; font-weight: 600; color: var(--color-navy);
+  margin-bottom: var(--s-1); padding-bottom: 2px; border-bottom: 1px solid var(--color-border);
+}
+main section p { margin-bottom: var(--s-1); }
+main section ol { margin: 2px 0 2px var(--s-4); }
+main section ol li { margin-bottom: 1px; }
+
+/* Clause labels: em at start of section paragraph (italic, rendered as bold+italic via ***) */
+main section p > em:first-child { font-style: italic; color: var(--color-chrome); }
+main section p > em:first-child strong, main section p > em:first-child b { font-weight: 500; }
+
+/* Signature blocks */
+main .signatures {
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-8); margin-top: var(--s-4);
+}
+main .signatures .signature-block .role {
+  font-size: 12px; font-weight: 600; color: var(--color-navy); margin-bottom: var(--s-4);
+}
+main .signatures .signature-block .sig-line {
+  border-bottom: 1.5px solid var(--color-navy); height: 36px; margin-bottom: 3px;
+}
+main .signatures .signature-block .label {
+  font-size: 10px; color: var(--color-slate); margin-bottom: var(--s-2);
+}
+main .signatures .signature-block .date-line {
+  border-bottom: 1px solid var(--color-navy); height: 22px; margin-bottom: 3px;
+}
+
+@media screen {
+  body { padding: var(--s-8) var(--s-4); }
+  main { max-width: 800px; margin: 0 auto; background: var(--color-white);
+    border: 1px solid var(--c-border-light); border-radius: var(--r-md);
+    box-shadow: var(--shadow-card); padding: var(--s-6) var(--s-8); }
+}
+@media print {
+  body { background: var(--color-white); font-size: 12px; }
+  main { max-width: none; padding: 0; }
+  main .signatures { break-inside: avoid; }
+}
+</style>
+<script>{{FILE:shared/markdown-it.min.js}}</script>
+<script type="text/markdown" id="source">{{MARKDOWN}}</script>
+</head>
+<body data-rendered="false">
+<main id="content"></main>
+<script>
+{{FILE:shared/render-common.js}}
+
+/* Converts markdown-it paragraph pairs (Term:<br>: value) into dl.key-terms */
+function convertKeyTerms(root) {
+  var children = Array.prototype.slice.call(root.children);
+  var dlTerms = [];
+  var firstH2Index = -1;
+  for (var i = 0; i < children.length; i++) {
+    if (children[i].tagName === "H2") { firstH2Index = i; break; }
+    if (children[i].tagName === "H1") continue;
+    if (children[i].tagName === "P") {
+      var html = children[i].innerHTML;
+      var match = html.match(/^(.+?)(?::)?<br>\s*:?\s*(.+)$/);
+      if (match) { dlTerms.push({ dt: match[1].trim(), dd: match[2].trim() }); }
+    }
+  }
+  if (dlTerms.length === 0 || firstH2Index < 0) return;
+  var dl = document.createElement("dl");
+  dl.className = "key-terms";
+  for (var j = 0; j < dlTerms.length; j++) {
+    var dt = document.createElement("dt");
+    dt.textContent = dlTerms[j].dt;
+    var dd = document.createElement("dd");
+    dd.innerHTML = dlTerms[j].dd;
+    dl.appendChild(dt);
+    dl.appendChild(dd);
+  }
+  root.insertBefore(dl, children[firstH2Index]);
+  for (var k = 0; k < firstH2Index; k++) {
+    if (children[k].tagName === "P") children[k].remove();
+  }
+}
+
+/* Adds a subtitle (Company - Investor short names) below the H1, matching the original HTML header */
+function addSubtitle(root) {
+  var dl = root.querySelector('dl.key-terms');
+  if (!dl) return;
+  var terms = {};
+  var dts = dl.querySelectorAll('dt');
+  for (var i = 0; i < dts.length; i++) {
+    var dd = dts[i].nextElementSibling;
+    if (dd && dd.tagName === 'DD') terms[dts[i].textContent.trim().toLowerCase()] = dd.textContent.trim();
+  }
+  var company = terms['company'] || '';
+  var investor = terms['investor'] || '';
+  if (!company && !investor) return;
+  var shortCompany = company;
+  var shortInvestor = investor.split(',')[0].trim();
+  var subtitle = shortCompany + ' - ' + shortInvestor;
+  var h1 = root.querySelector('h1');
+  if (!h1) return;
+  var div = document.createElement('div');
+  div.className = 'subtitle';
+  div.textContent = subtitle;
+  h1.insertAdjacentElement('afterend', div);
+}
+
+/* Wraps H1 + subtitle in a .header div, matching original HTML structure */
+function wrapHeader(root) {
+  var h1 = root.querySelector('h1');
+  if (!h1) return;
+  var subtitle = h1.nextElementSibling;
+  if (!subtitle || !subtitle.classList.contains('subtitle')) return;
+  var header = document.createElement('div');
+  header.className = 'header';
+  h1.parentNode.insertBefore(header, h1);
+  header.appendChild(h1);
+  header.appendChild(subtitle);
+}
+
+/* Wraps H2 + following siblings into <section> elements */
+function wrapSectionsInSections(root) {
+  var headings = root.querySelectorAll("h2");
+  for (var i = 0; i < headings.length; i++) {
+    var h2 = headings[i];
+    var section = document.createElement("section");
+    h2.parentNode.insertBefore(section, h2);
+    section.appendChild(h2);
+    var next = section.nextElementSibling;
+    while (next && next.tagName !== "H2") {
+      section.appendChild(next);
+      next = section.nextElementSibling;
+    }
+  }
+}
+
+/* Replaces last Signatures H2 content with proper signature blocks */
+function convertSignatures(root) {
+  var headings = root.querySelectorAll("h2");
+  var lastH2 = headings.length > 0 ? headings[headings.length - 1] : null;
+  if (!lastH2 || lastH2.textContent.toLowerCase().indexOf("signature") < 0) return;
+  var next = lastH2.nextElementSibling;
+  while (next && next.tagName === "P") { var after = next.nextElementSibling; next.remove(); next = after; }
+  var sigHtml = '<div class="signatures">' +
+    '<div class="signature-block"><div class="role">Investor</div>' +
+    '<div class="sig-line"></div><div class="label">Signature</div>' +
+    '<div class="date-line"></div><div class="label">Date</div></div>' +
+    '<div class="signature-block"><div class="role">Founder</div>' +
+    '<div class="sig-line"></div><div class="label">Signature</div>' +
+    '<div class="date-line"></div><div class="label">Date</div></div>' +
+    '</div>';
+  lastH2.insertAdjacentHTML("afterend", sigHtml);
+}
+
+(function () {
+  var options = readRenderOptions();
+  var source = readSource();
+  var parts = splitFrontMatter(source);
+  var md = createMarkdown();
+  var content = document.getElementById("content");
+  measureCodeLineHeight();
+  content.innerHTML = md.render(parts.body);
+  var title = document.title || parts.frontMatter.title || firstHeadingText(content) || "Memo";
+  convertKeyTerms(content);
+  addSubtitle(content);
+  wrapHeader(content);
+  wrapSectionsInSections(content);
+  convertSignatures(content);
+  postProcess(content, options).then(function () {
+    document.title = title;
+    finishRendering();
+  });
+})();
+</script>
+</body>
+</html>
