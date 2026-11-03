@@ -24,11 +24,12 @@ Agent Skills is an open format by Anthropic for packaging specialized knowledge 
 2. [How Skills Work](#2-how-skills-work)
 3. [SKILL.md Specification](#3-skillmd-specification)
 4. [Directory Structure](#4-directory-structure)
-5. [Best Practices](#5-best-practices)
-6. [Integration](#6-integration)
-7. [Windsurf Integration](#7-windsurf-integration)
-8. [Next Steps](#8-next-steps)
-9. [Sources](#9-sources)
+5. [Skill Architecture Patterns](#5-skill-architecture-patterns)
+6. [Best Practices](#6-best-practices)
+7. [Integration](#7-integration)
+8. [Windsurf Integration](#8-windsurf-integration)
+9. [Next Steps](#9-next-steps)
+10. [Sources](#10-sources)
 
 ## 1. What Are Agent Skills
 
@@ -119,7 +120,68 @@ skill-name/
 - `references/`: Technical reference docs, form templates, domain-specific guides
 - `assets/`: Document templates, images/diagrams, data files, lookup tables
 
-## 5. Best Practices
+## 5. Skill Architecture Patterns
+
+Skills follow two structural architectures: **Simple** and **Composite**. The choice depends on how many distinct functions the skill covers and whether they share infrastructure.
+
+### 5.1 Simple Skill
+
+SKILL.md contains all instructions. Flat layout. Single domain or tool. Most skills are simple.
+
+```
+my-skill/
+├── SKILL.md           # All instructions
+├── SETUP.md           # Optional
+└── REFERENCE.md       # Optional
+```
+
+Use when: one tool, one workflow, one domain. Use Intent Lookup in SKILL.md to cover multiple use cases within that domain.
+
+### 5.2 Composite Skill
+
+SKILL.md is a routing entry point that dispatches to function subfolders. Shared resources (scripts, configs, data) live at the skill root. Each function subfolder has its own guide document.
+
+```
+composite-skill/
+├── SKILL.md                     # Router: routing table, shared rules, quick commands
+├── SETUP.md, UNINSTALL.md       # Shared setup
+├── shared-script.py              # Shared scripts at root
+├── shared-config.json            # Shared data at root
+├── function-a/
+│   └── FUNCTION_A.md            # Function guide (no frontmatter)
+├── function-b/
+│   └── FUNCTION_B.md            # Function guide
+└── function-c/
+    └── FUNCTION_C.md            # Function guide
+```
+
+Use when:
+- 3+ distinct functions share scripts, configs, or data files
+- Each function is independent (own workflow) but needs common resources
+- Inlining all functions in one SKILL.md would exceed 500 lines
+- Users must discover which function applies before loading details
+
+Do NOT use when:
+- Functions are sequential steps of one workflow (keep as one SKILL.md)
+- Functions share no infrastructure (split into separate skills)
+- Fewer than 3 functions (use Intent Lookup in a flat SKILL.md instead)
+
+### 5.3 Composite Skill Rules
+
+- **Routing table**: SKILL.md contains one line per function: `- **[Goal]** → [subfolder]/[DOCUMENT].md`
+- **No frontmatter on function documents**: Function guides are not separate skills. They have no YAML frontmatter
+- **Uppercase function document names**: `EVALUATION.md`, `TRANSCRIPTION.md`, `COMPUTER_USE.md` (not `skill.md` or `guide.md`)
+- **Shared resources at root**: Scripts, configs, and data files shared across functions live at the skill root. Function subfolders contain only function-specific files
+- **Config resolution**: Subfolder scripts resolve shared configs via `Path(__file__).resolve().parent.parent`
+- **Minimum three functions**: Composite structure requires 3+ distinct functions sharing infrastructure
+
+### 5.4 Examples
+
+- **llm-tools** - routes to `evaluation/`, `transcription/`, `computer-use/`; shared model JSONs and call scripts at root
+- **hosting** - routes to `netlify/`, `vercel/`, `azure-app-service/`, `sharepoint-app-catalog/`, `zola/`; shared deploy patterns at root
+- **research-methods** - routes to `default/`, `legal/`, `market-intel/`, `profiles/`, `software/`; shared research tools at root
+
+## 6. Best Practices
 
 ### Core Principles
 
@@ -243,7 +305,7 @@ Create intermediate output (e.g., changes.json), validate with script, then exec
 - Real usage scenarios
 - At least three evaluations
 
-## 6. Integration
+## 7. Integration
 
 ### How Agents Integrate Skills
 
@@ -279,7 +341,7 @@ skills-ref validate ./my-skill
 skills-ref to-prompt ./skill1 ./skill2  # Generate prompt XML
 ```
 
-## 7. Windsurf Integration
+## 8. Windsurf Integration
 
 Windsurf implements the Agent Skills specification with full support for progressive disclosure. [TESTED]
 
@@ -343,13 +405,13 @@ Windsurf implements the Agent Skills specification with full support for progres
 └── review-template.md
 ```
 
-## 8. Next Steps
+## 9. Next Steps
 
 - Evaluate if Agent Skills format could replace or complement current Windsurf workflows/rules
 - Review example skills at https://github.com/anthropics/skills for implementation patterns
 - Consider creating a skill for common workspace tasks (PDF processing, code review)
 
-## 9. Sources
+## 10. Sources
 
 **Primary Sources:** [TESTED]
 - https://agentskills.io/home - Open format overview, what skills enable (domain expertise, capabilities, workflows, interoperability)

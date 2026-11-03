@@ -23,5 +23,6 @@ __pycache__/
 # API keys
 .api-keys.txt
 
-# Model registry source data (screenshots, DOM extractions) - local audit trail only
+# Model registry source data (screenshots, DOM extractions) - local audit trail only (legacy path; now in _Sessions/!ModelRegistryUpdate/model-sources/)
 .devin/skills/llm-evaluation/model-sources/
+.devin/skills/llm-tools/model-sources/

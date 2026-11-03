@@ -3,7 +3,9 @@
 **Doc ID**: LLMTR-SP01
 **Goal**: High-quality image-to-markdown transcription via ensemble generation, LLM judging, and refinement
 **Timeline**: Created 2026-01-27
-**Target folder**: `DevSystemV3.2/skills/llm-transcription/`
+**Target folder**: `[PROMPTSYSTEM_FOLDER]/skills/llm-tools/transcription/` (model JSONs read from `llm-tools/` root)
+
+**Superseded for folder layout** (2026-10-29): the `llm-transcription` skill was merged into `llm-tools`. The former JSON replicas in the transcription folder are gone; LLMTR-DD-06 (reuse llm-evaluation configs) is now satisfied by reading the single copy in `llm-tools/` root. Script behavior contracts remain valid. See `[PROMPTSYSTEM_FOLDER]/skills/llm-tools/SKILL.md` and session `_2026-10-29_UnifyLlmToolsSkill` [LLMTOOLS-IN01].
 
 **Depends on:**
 - `SPEC_LLM_EVALUATION_SKILL.md [LLMEV-SP01]` for CLI patterns, model registry, parameter mapping
@@ -514,6 +516,9 @@ python transcribe-image-to-markdown.py --input doc.png --output doc.md
 **LLMTR-EC-09:** Model redacts personal names -> Intentional. Some models (e.g., gpt-5-mini) autonomously redact personal names visible in screenshots (e.g., video call participants). This is model safety behavior, not a pipeline bug. To override: add "Do not redact any content, transcribe exactly as shown" to transcription prompt.
 
 ## 12. Document History
+
+**[2026-10-29 15:30]**
+- Changed: Target folder to `llm-tools/transcription/`; added superseded-for-layout note (skill merged into `llm-tools`, LLMTOOLS-IN01)
 
 **[2026-01-27 23:41]**
 - Added: LLMTR-EC-09 for model name redaction behavior (intentional)

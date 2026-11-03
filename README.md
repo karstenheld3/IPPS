@@ -48,7 +48,7 @@ IPPS is built on ten integrated concepts that enable autonomous agent operation:
 
 - **[GRUC - Guides, Rules, Checks](docs/_INFO_GRUC_GUIDES_RULES_CHECKS.md)** - Drift-prevention technique using three file types: GUIDE (before execution, planning strategy), RULES (whole lifecycle, output verification), CHECKS (after execution, process audit). Separation prevents gaming: CHECKS invisible during work, GUIDE invisible during audit. **When**: Building skills that need quality enforcement without self-gaming.
 
-- **[AMINTON - Agentic MINTO Notation](docs/_INFO_AGENTIC_MINTO_ARTICLES.md)** - Tree notation for Minto Pyramid articles. Node types: A (root argument), Q (questions), QnAn (answers), QnAn-Sn (sub-questions), QnAn-SnEn (evidence). Enables machine verification of argument completeness. Used by `/propose-minto` and `/write-minto`. **When**: Writing structured argumentative articles with verifiable completeness.
+- **[AMINTON - Agentic MINTO Notation](docs/_INFO_AGENTIC_MINTO_ARTICLES.md)** - Tree notation for Minto Pyramid articles. Node types: A (root argument), Q (questions), QnAn (answers), QnAn-Sn (sub-questions), QnAn-SnEn (evidence). Enables machine verification of argument completeness. Used by `/propose-article using MINTO` and `/write-article using MINTO`. **When**: Writing structured argumentative articles with verifiable completeness.
 
 **How they work together:**
 ```
@@ -684,18 +684,18 @@ I need to review a series of cloud cost optimization blog posts and check their 
 /deep-research "Compare CI/CD tools: GitHub Actions, GitLab CI, CircleCI, Jenkins"
 
 # 2. Generate argument candidates
-/propose-minto
+/propose-article _INFO_CICD-01_Summary.md using MINTO
 
 # 3. Develop the full article from the best candidate
-/write-minto
+/write-article CICD-OPTIONS-01 using MINTO
 
 # 4. Verify argument completeness
 /verify
 ```
 
-**What happens**: `/deep-research` gathers information on each tool. `/propose-minto` generates 3 scored argument candidates in AMINTON notation (root argument, questions, answers, evidence). You select the best candidate. `/write-minto` develops it into a full article with tree-first structure, then prose. `/verify` checks that every question has an answer and every answer has evidence.
+**What happens**: `/deep-research` gathers information on each tool. `/propose-article using MINTO` generates scored argument candidates in AMINTON notation (root argument, questions, answers, evidence). You select the best candidate. `/write-article using MINTO` develops it into a full article with tree-first structure, then prose. `/verify` checks that every question has an answer and every answer has evidence.
 
-**Files created**: `_INFO_CICD-*.md` research findings; `_MINTO_DRAFT_CICD-*.md` 3 argument candidates; `_MINTO_CICD-*.md` final article. **Files edited**: nothing (all new files).
+**Files created**: `_INFO_CICD-*.md` research findings; `MINTO-OPTIONS-01_*.md` argument candidates; `YYYY-MM-DD_*.md` final article. **Files edited**: nothing (all new files).
 
 #### Use Case 7: Multi-Session Autonomous Project
 
@@ -744,7 +744,25 @@ For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) dec
 
 ## Workflows Reference
 
-48 workflows in `.devin/workflows/`. Workflows are invoked by typing the slash command in your IDE chat (e.g., `/go`, `/verify`).
+63 workflows in `.devin/workflows/`. Workflows are invoked by typing the slash command in your IDE chat (e.g., `/go`, `/verify`).
+
+### Command Grammar
+
+Layer 3 writing workflows and `/analyze` accept a standardized parameter grammar:
+
+```text
+/<verb>-<type> <input> [using <ID>] [as <PERSONA>] [for <audience>] [tier N] [plan | plan only] [N options] [compare techniques <ID>, <ID>...] [inline]
+```
+
+- `<input>`: Input document, folder, or free text; defaults to newest DRAFT, else newest OPTIONS.
+- `using <ID>`: Select writing technique (`MINTO`, `IMINTO`, `ABTSTORY`, `KABOB`, `STA`, `PAS`, `AIDA`, `DIATAXIS`, `IMRAD`).
+- `as <PERSONA>`: Select author persona voice and style traits (e.g. `TECHNICAL-WRITER`, `INTELLECTUAL`, `ANALYST`, `JURIST`).
+- `for <audience>`: Target reader segment for tone and depth adaptation (defaults to `general`).
+- `tier N`: Execution depth override (`tier 1` single-turn, `tier 2` planned sequence, `tier 3` multi-approach program).
+- `plan` or `plan only`: Stop execution after STRUT and prompt files are written (review plan before running).
+- `N options`: Number of outline candidates to generate (2-5 options; `/propose-*` only).
+- `compare techniques`: Compare 2-4 candidate techniques with a sample chapter bake-off (`/propose-report`, `/propose-ebook`).
+- `inline`: Edit an existing document in place without creating a new deliverable file (Layer 3 writing workflows).
 
 **Entry Points** - Start here. Use `/prime` at session start, `/go` for any task.
 - [`/go`](.devin/workflows/go.md) - Autonomous loop until goal reached (BUILD or SOLVE mode, auto-creates session, follows EDIRD)
@@ -756,15 +774,87 @@ For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) dec
   - **Edits**: nothing (read-only)
   - **When**: At the start of every session. Reads `!NOTES.md`, `PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`, `ID-REGISTRY.md`, all `.devin/rules/*.md`
 
-**Document Cycle** - Spec-Driven Development pipeline. Use for COMPLEXITY-MEDIUM/HIGH features.
-- [`/research`](.devin/workflows/research.md) - Structured research with verification labels and source retention
+**Layer 1 - Classic Research** - Systematic information gathering and source collection.
+- [`/research`](.devin/workflows/research.md) - Structured research with verification labels and source retention (Tier 1)
   - **Creates**: `_INFO_[TOPIC].md` in session folder (research findings with `[VERIFIED]`/`[ASSUMED]` labels, source links)
   - **Edits**: nothing (creates new file only)
   - **When**: Gathering information before writing a spec. Use for any research that needs source tracking.
-- [`/deep-research`](.devin/workflows/deep-research.md) - Deep research (MEPI or MCPI) with domain-specific patterns
+- [`/deep-research`](.devin/workflows/deep-research.md) - Deep research (MEPI or MCPI) with domain-specific patterns (Tier 2)
   - **Creates**: `_INFO_[TOPIC].md` with multi-source analysis; `__TASKS_[TOPIC]_RESEARCH.md` (scaffolding for research tracking)
   - **Edits**: nothing (creates new files only)
   - **When**: Multi-source technology evaluation, product comparison, or any question requiring thorough investigation with MEPI (curated options) or MCPI (exhaustive options) patterns.
+- [`/research-program`](.devin/workflows/research-program.md) - Execute a multi-approach tier-3 research program with session STRUT and cross-approach synthesis (Tier 3)
+  - **Creates**: session STRUT, 1-4 approach `T##_` folders with individual STRUT and prompt sequences, session-level program Summary with Approach Comparison
+  - **Edits**: nothing (creates new files only)
+  - **When**: Evaluating complex, multi-faceted undertakings across distinct technical or architectural approaches.
+- [`/bundle`](.devin/workflows/bundle.md) - Package research sources and transcriptions into a standalone IPPSKBNDL-SP01 knowledge bundle (Tier 1)
+  - **Creates**: `_BUNDLE_[TOPIC].md` or bundle directory with inventory, summary, and topics
+  - **Edits**: nothing (creates new file only)
+  - **When**: Packaging research assets for offline retrieval or cross-repository synchronization (optional format converter).
+
+**Layer 2 - Analysis and Synthesis** - Qualitative coding, thematic clustering, hypothesis abduction, and evidence validation.
+- [`/pattern-detect`](.devin/workflows/pattern-detect.md) - Code findings, detect themes, catalog contradictions, and identify research gaps into a Pattern Map deliverable
+  - **Creates**: `_INFO_[TOPIC]-IN[NN]_PatternMap.md` (codebook, findings list, theme map, contradiction register, key assumptions, gaps)
+  - **Edits**: nothing (creates new file only)
+  - **When**: Extracting empirical patterns and fault lines from research libraries or raw text before hypothesizing.
+- [`/hypothesize`](.devin/workflows/hypothesize.md) - Formulate falsifiable, competing working hypotheses with rivals, falsifiers, and crucial test plans into a Hypothesis Register deliverable
+  - **Creates**: `_INFO_[TOPIC]-IN[NN]_HypothesisRegister.md` (statements, forms, rivals, falsifiers, test plans, ICD-203 prior likelihoods)
+  - **Edits**: nothing (creates new file only)
+  - **When**: Abducting 3-7 testable explanatory models from themes, contradictions, or evidence gaps.
+- [`/validate`](.devin/workflows/validate.md) - Weight evidence, compile ACH audit trail, log disconfirmation, and rank hypotheses into a Validation Report deliverable
+  - **Creates**: `_INFO_[TOPIC]-IN[NN]_ValidationReport.md` (two-layer weighting, ACH matrix, disconfirmation log, 0-8 ranking, Layer 1 questions, writing implications)
+  - **Edits**: nothing (creates new file only)
+  - **When**: Rigorously testing hypotheses against evidence, seeking active disconfirmation, and producing deterministic rankings.
+- [`/analyze`](.devin/workflows/analyze.md) - Execute end-to-end qualitative coding, pattern detection, hypothesis generation, and evidence validation into a single Analysis deliverable (Tier 2-3)
+  - **Creates**: `_INFO_[TOPIC]-IN[NN]_Analysis.md` (full C2 validated knowledge)
+  - **Edits**: nothing (creates new file only)
+  - **When**: Running multi-stage synthesis from a STRUT to deliver complete validated knowledge for publication authoring.
+- [`/investigate`](.devin/workflows/investigate.md) - Structured investigation with STRUT plan and append-only log
+  - **Creates**: `__STRUT_*.md` plan, append-only investigation log
+  - **Edits**: investigation log (appends findings, does not modify previous entries)
+  - **When**: Deep investigation of complex issues. STRUT plan structures the investigation, log preserves findings.
+
+**Layer 3 - Knowledge Packaging (Articles, Reports, Ebooks)** - Deliverable proposals, drafting, and publication authoring.
+- [`/propose-article`](.devin/workflows/propose-article.md) - Propose article outline candidates with scoring and recommendation
+  - **Creates**: `[ID]-OPTIONS-NN_[Title].md` with scored outline candidates and selection rationale
+  - **Edits**: nothing (creates new file only)
+  - **When**: Exploring structural angles and narrative approaches for an article before drafting.
+- [`/draft-article`](.devin/workflows/draft-article.md) - Draft working article structure, section jobs, evidence placement, and style sheet
+  - **Creates**: `[ID]-DRAFT-NN_[Title].md` with section-by-section outline, claim attribution, and style conventions
+  - **Edits**: nothing (creates new file only)
+  - **When**: Establishing argumentative architecture and style sheet before full prose authoring.
+- [`/write-article`](.devin/workflows/write-article.md) - Author finished article with line pass, copy pass, and release check
+  - **Creates**: `YYYY-MM-DD_[Title].md` publication-ready article
+  - **Edits**: existing file if called with `inline`
+  - **When**: Generating full article prose with editorial passes and release verification.
+- [`/propose-report`](.devin/workflows/propose-report.md) - Propose report outline candidates with scoring, recommendation, and optional sample bake-off
+  - **Creates**: `[ID]-OPTIONS-NN_[Title].md` with scored report architectures
+  - **Edits**: nothing (creates new file only)
+  - **When**: Architecting report outlines and executive summaries across candidate writing techniques.
+- [`/draft-report`](.devin/workflows/draft-report.md) - Draft working report structure, chapter jobs, evidence placement, and style sheet
+  - **Creates**: `[ID]-DRAFT-NN_[Title].md` with section jobs, exhibits, and style sheet
+  - **Edits**: nothing (creates new file only)
+  - **When**: Structuring institutional or technical reports before prose compilation.
+- [`/write-report`](.devin/workflows/write-report.md) - Author finished report across single-turn or planned tiers with revision passes and release check
+  - **Creates**: `YYYY-MM-DD_[Title].md` publication-ready report
+  - **Edits**: existing file if called with `inline`
+  - **When**: Compiling full report prose, exhibits, recommendations, and release check record.
+- [`/propose-ebook`](.devin/workflows/propose-ebook.md) - Propose ebook outline candidates with TOC scoring, recommendation, and optional sample bake-off
+  - **Creates**: `[ID]-OPTIONS-NN_[Title].md` with candidate book outlines and sample chapters
+  - **Edits**: nothing (creates new file only)
+  - **When**: Designing book-level table of contents and reader journeys.
+- [`/draft-ebook`](.devin/workflows/draft-ebook.md) - Draft working ebook structure, series bible style sheet, and chapter-summary memory
+  - **Creates**: `[ID]-DRAFT-NN_[Title].md` persistent series bible
+  - **Edits**: nothing (creates new file only)
+  - **When**: Establishing book architecture, pedagogy, chapter patterns, and style sheet before chapter authoring.
+- [`/write-ebook`](.devin/workflows/write-ebook.md) - Author finished ebook across compiled prompt sequence with chapter memory and release check
+  - **Creates**: `YYYY-MM-DD_[Title].md` complete book manuscript
+  - **Edits**: existing file if called with `inline`
+  - **When**: Executing multi-prompt chapter authoring, consistency passes, stitching, and release verification.
+
+> **Note on retired workflows**: The legacy workflows propose-minto and write-minto have been integrated into Layer 3; use `/propose-article using MINTO` and `/write-article using MINTO`.
+
+**Document Cycle** - Spec-Driven Development pipeline. Use for COMPLEXITY-MEDIUM/HIGH features.
 - [`/write-info`](.devin/workflows/write-info.md) - Create INFO document from research
   - **Creates**: `_INFO_[TOPIC].md` from template, populated with research findings
   - **Edits**: nothing (creates new file only)
@@ -793,14 +883,6 @@ For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) dec
   - **Creates**: `_PROMPTS_[Topic].md` with numbered prompts for sequential LLM execution
   - **Edits**: nothing (creates new file only)
   - **When**: Batch operations where each prompt picks up where the last left off (e.g., multi-document transcription, bulk API docs update). Also used to give agents more budget per step (see [Agent Budget and Prompt Sequences](#agent-budget-and-prompt-sequences)).
-- [`/propose-minto`](.devin/workflows/propose-minto.md) - Generate 3 scored Agentic Minto (AMINTON) argument candidates
-  - **Creates**: `_MINTO_DRAFT_[TOPIC].md` with 3 scored argument trees in AMINTON notation
-  - **Edits**: nothing (creates new file only)
-  - **When**: After research, before writing a structured argumentative article. You select the best candidate.
-- [`/write-minto`](.devin/workflows/write-minto.md) - Develop full Minto Pyramid article from draft
-  - **Creates**: `_MINTO_[TOPIC].md` with tree-first structure, then prose
-  - **Edits**: the draft from `/propose-minto` (develops selected candidate into full article)
-  - **When**: After `/propose-minto` and candidate selection. Produces the final article.
 - [`/implement`](.devin/workflows/implement.md) - Implement approved changes
   - **Creates**: source code files in `src/` (or session folder for IMPL-ISOLATED); may create review files (`*_CRITIQUE.md`, `*_FACT-CHECK.md`) from review pipelines
   - **Edits**: source code, configuration files, existing documents (if review pipeline context)
@@ -946,19 +1028,24 @@ For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) dec
   - **Creates**: template `.md` file with placeholders, instructions, and formatting rules
   - **Edits**: nothing (creates new file only)
   - **When**: When you need consistent, comparable document instances (e.g., review templates, analysis templates).
-- [`/investigate`](.devin/workflows/investigate.md) - Structured investigation with STRUT plan
-  - **Creates**: `__STRUT_*.md` plan, append-only investigation log
-  - **Edits**: investigation log (appends findings, does not modify previous entries)
-  - **When**: Deep investigation of complex issues. STRUT plan structures the investigation, log preserves findings.
 - [`/compare-workspace-setup`](.devin/workflows/compare-workspace-setup.md) - Compare workspace setup
   - **Creates**: comparison report in chat (differences between two workspaces)
   - **Edits**: nothing (read-only comparison)
   - **When**: Comparing workspace settings, sync configs, or NOTES.md between two workspaces.
+- [`/ascii-diagram`](.devin/workflows/ascii-diagram.md) - Create or fix ASCII art diagrams in markdown documents
+  - **Creates**: nothing
+  - **Edits**: target markdown document with structured Unicode diagrams
+  - **When**: Documenting hierarchical, layered, or sequential architecture with 3+ levels or parallel elements.
+- [`/render`](.devin/workflows/render.md) - Render Markdown files to HTML and PDF
+  - **Creates**: rendered HTML and PDF files in `_EXPORT_gitignore/`
+  - **Edits**: nothing (creates export deliverables)
+  - **When**: Converting finalized articles, reports, or documentation into publication-ready PDF and HTML.
 
 ## Skills Reference
 
-24 skills in `.devin/skills/`. Skills are knowledge bases the agent reads before executing tasks. They do not run as workflows - they provide procedures, rules, and tool guidance.
+25 skills in `.devin/skills/`. Skills are knowledge bases the agent reads before executing tasks. They do not run as workflows - they provide procedures, rules, and tool guidance.
 
+- **analysis-methods** - Qualitative coding, pattern detection, abductive hypothesis generation, evidence validation, and structured problem investigations with append-only logs. **Effect**: Creates Pattern Map, Hypothesis Register, Validation Report, and Analysis INFO documents. Rules and templates consumed by Layer 2 workflows and `/verify`.
 - **drift-control** - Drift detection/correction knowledge for `/drift-detect` and `/drift-correct`. **Effect**: No files. Provides drift lenses and templates consumed by `/drift-detect`. CHECKS files for workflows designed for future use, created on demand.
 - **coding-conventions** - Python, PowerShell coding style rules, MECT coding rules. **Effect**: No files. Rules consumed by `/verify` and `/improve` when checking code.
 - **research-methods** - Deep research strategies (MEPI/MCPI), domain-specific patterns. **Effect**: No files. Knowledge consumed by `/deep-research` workflow.
@@ -973,8 +1060,10 @@ For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) dec
 - **ms-playwright-mcp** - Browser automation via Microsoft Playwright MCP server. **Effect**: No files directly. Provides procedures for browser automation (navigate, click, type, screenshot). Downloads go to default browser location.
 - **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF. **Effect**: Creates converted PDF/image files. Edits PDFs in place (compression, optimization).
 - **playwriter-mcp** - Real browser automation with existing logins via Playwriter extension. **Effect**: No files directly. Provides procedures for browser automation with existing sessions.
+- **renderings** - Render Markdown files to HTML and PDF via headless Chromium. **Effect**: Creates HTML and PDF exports in `_EXPORT_gitignore/`.
 - **seo-tools** - SEO data APIs and search engine tools for keyword research and rank tracking. **Effect**: Creates SEO report files (CSV, JSON). Edits nothing (creates new files).
 - **session-management** - Session init, save, resume, finalize, archive. **Effect**: No files directly. Procedures consumed by `/session-*` workflows. Templates for NOTES.md, PROBLEMS.md, PROGRESS.md.
+- **terminal-robustness** - Prevent hanging terminal commands in chat mode and prompt sequences. **Effect**: No files directly. Guidelines, safe patterns, and robustness cards.
 - **travel-info** - Travel lookups: flights, trains, transit, country-specific info. **Effect**: Creates travel info `.md` files. Edits nothing (creates new files).
 - **windows-desktop-control** - Windows screenshots, window management, keyboard/mouse. **Effect**: Creates screenshot files (PNG). Edits nothing (creates new files).
 - **devin-auto-model-switcher** - Switch Cascade AI model tier programmatically. **Effect**: No files. Procedures for model switching via config files.

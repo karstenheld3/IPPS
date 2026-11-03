@@ -2,8 +2,8 @@
 
 **Doc ID**: DVDT-IN01
 **Goal**: Comprehensive reference for Devin Desktop (formerly Windsurf) - agent harnesses, AI models, customization, developer tools, enterprise controls, and architecture internals
-**Version scope**: Devin Desktop 3.8.20+ / Devin Local 2026.5.26+ / Devin Next 3.8.1020 and 3.9.1018
-**Timeline**: Created 2026-08-27, Updated 6 times (2026-08-27 - 2026-09-26)
+**Version scope**: Devin Desktop 3.10.67+ / Devin Local 2026.5.26+ / Devin Next 3.8.1020 and 3.9.1018
+**Timeline**: Created 2026-08-27, Updated 7 times (2026-08-27 - 2026-10-20)
 
 ## Summary
 
@@ -14,9 +14,23 @@
 - Cascade announced end-of-life July 1, 2026; progressively deprecated (enterprise disabled by default, JetBrains-only scope, migration wizard) [VERIFIED]
 
 **AI Models:**
-- SWE-1.7 replaces SWE-1.6 with 4.5x improvement on FrontierCode (9.4% → 42.3%) [VERIFIED]
-- Claude Fable 5 restored globally 2026-07-01 after first-ever US export control on commercial AI model [VERIFIED]
-- Claude Opus 5 and GPT-5.6 (Sol/Terra/Luna tiers) added since last version [VERIFIED]
+- SWE-2 is Cognition's latest model (Medium/High/Max effort). Free for self-serve through Oct 15, 2026; list price $3/$15/$0.30 per MTok [VERIFIED]
+- SWE-1.7 replaces SWE-1.6 with 4.5x improvement on FrontierCode (9.4% → 42.3%). Now previous flagship [VERIFIED]
+- Claude Fable 5.1 (Aug 31, 2026): 54% cheaper than Fable 5 on end-to-end tasks via 75% cache-read price cut ($0.25/M) [VERIFIED]
+- Claude Opus 5.5 (Sep 22, 2026): New #1 on FrontierCode 1.1 (65.3%). $4/$20 per MTok, 40% cheaper than Opus 5 [VERIFIED]
+- GPT-6 Astra (Sep 3, 2026): Surpasses Fable 5.1 on FrontierCode, 64% cheaper than Fable 5 [VERIFIED]
+- GPT-6.1 Sol (Sep 29, 2026): Near-Astra intelligence at 1/5 the price. $2/$10 per MTok, cached input $0.10/M [VERIFIED]
+- Gemini 4 Argon (Oct 13, 2026): FrontierCode 1.1 60.5%. Intro pricing $2/$10 per MTok through Dec 1, 2026 [VERIFIED]
+- Devin Fusion harness pairs frontier lead + cost-effective sidekick, up to 39% more efficient [VERIFIED]
+
+**Pricing and Billing:**
+- No Cascade-specific cost model change. FAQ: "Devin Local uses the exact same pricing model as Cascade" [VERIFIED]
+- Platform-wide evolution: credits → quotas (March 2026) → new self-serve plans (April 2026) [VERIFIED]
+- New plans: Free, Pro $20/mo (was $15), Max $200/mo (new), Teams $80/mo min + $40/seat (was $40/seat), Enterprise [VERIFIED]
+- Existing subscribers grandfathered at old prices ($15 Pro, $30 Teams/seat) [VERIFIED]
+- Sign in with ChatGPT (Sep 29, 2026): Link ChatGPT Go/Plus/Pro plan. GPT model usage billed to ChatGPT plan, not Devin quota. Pro/Max/Teams only [VERIFIED]
+- Voice mode: Live call uses separate agent model, consumes quota/ACUs. Audio connection not separately charged [VERIFIED]
+- SSO removed from Teams, now Enterprise-only [VERIFIED]
 
 **Permissions and Security:**
 - Agent profiles and permission modes now independent controls [VERIFIED]
@@ -363,12 +377,19 @@ Spaces group everything related to a task or project: agent sessions (local and 
 
 No direct API access - available exclusively through Devin platform (Web, Desktop, CLI). [VERIFIED]
 
+**[SWE-2](https://cognition.com/blog/swe-2)** (released 2026-10):
+- Cognition's latest software engineering model. Available in Medium, High, and Max reasoning effort
+- FrontierCode 1.1 Main: 50.0% (within 1 point of Fable 5.1 while 64% cheaper). 58% fewer turns and 81% less cost than SWE-1.7 on same benchmark
+- List price: $3/$15/$0.30 per MTok (input/output/cache input). Free for self-serve plans through October 15, 2026
+- Enterprise ACU: 75% off list price through December 31, 2026
+- Behavioral change: focused exploration (first edit after median 18 steps vs 48 for SWE-1.7), better test coverage, verification discipline
+- Trained with Pareto-informed cost-penalized RL across all effort levels in a single run [VERIFIED]
+
 **[SWE-1.7](https://cognition.com/blog/swe-1-7)** (released 2026-07-08):
-- Replaces SWE-1.6 as primary in-house model. Trained from Kimi K2.7 base using Cognition's RL pipeline
+- Previous flagship. Trained from Kimi K2.7 base using Cognition's RL pipeline
 - Cerebras inference at ~1000 tokens/second. SWE-1.7 Lightning: same intelligence, lower latency (`/fast` selects it)
 - FrontierCode 1.1 Main: 42.3% (4.5x improvement over SWE-1.6's 9.4%), Terminal-Bench 2.1: 81.5%, SWE-Bench Multilingual: 77.8%
 - Cost per FrontierCode task: $1.97
-- Behavioral change: spends more time investigating before editing, better at root causes and edge cases
 - Free on paid plans [VERIFIED]
 
 **SWE-1.6** - Previous-generation. Parallel tool calls, less looping. Free on paid plans [VERIFIED]
@@ -381,6 +402,21 @@ No direct API access - available exclusively through Devin platform (Web, Deskto
 - **SWE-check** - Quick Review model for bug detection. Free. Up to 10x faster than deep review [VERIFIED]
 
 ### 5.2 Anthropic Models
+
+**[Claude Opus 5.5](https://www.anthropic.com/claude-opus-5-5)** (released 2026-09-22):
+- $4/$20 per MTok (20% less than Opus 5). Cache reads: $0.20/M (60% less than Opus 5). Fast mode: $8/$40 (2.5x speed)
+- 1M token context, 128K max output. Knowledge cutoff: May 2026
+- New #1 on FrontierCode 1.1 Extended: 65.3% (edges out Fable 5 and GPT-6 Astra at <1/10 the cost of Fable 5)
+- 40% cheaper than Opus 5 on typical workloads, 30% faster output generation
+- Available with zero data retention (ZDR). Watermarking for EU AI Act compliance
+- First model in Claude 5.5 family [VERIFIED]
+
+**[Claude Fable 5.1](https://devin.ai/blog/fable-5-1)** (released 2026-08-31):
+- $10/$50 per MTok, cache reads $0.25/M (75% reduction from $1.00/M). 1M context, 128K max output. Knowledge cutoff: January 2026
+- 54% cheaper than Fable 5 on end-to-end tasks. 33% fewer tokens than Opus 5 on FrontierCode
+- FrontierCode 1.1 Extended: 63.6% (same as Fable 5). Devin Fusion with Fable 5.1: $1.43/task (47% cheaper)
+- Same model as Mythos 5.1 (different safeguards). Fable 5.1 generally available, Mythos 5.1 via trusted access
+- ZDR now available for Fable 5 and 5.1 (previously not available) [VERIFIED]
 
 **[Claude Opus 5](https://www.anthropic.com/research/claude-opus-5)** (released 2026-07-24):
 - $5/$25 per MTok (same as Opus 4.8); Fast mode at $10/$50 (2.5x speed)
@@ -406,7 +442,19 @@ No direct API access - available exclusively through Devin platform (Web, Deskto
 
 ### 5.3 OpenAI Models
 
-**[GPT-5.6](https://devin.ai/blog/gpt-5-6)** (released 2026-07-09):
+**[GPT-6.1 Sol](https://devin.ai/blog/gpt-6-1-sol)** (released 2026-09-29):
+- $2/$10 per MTok, cached input $0.10/M (95% less than standard input). 1M token context, 128K max output
+- Near-Astra intelligence at 1/5 the price. FrontierCode 1.1: 60.4% (in line with GPT-6 Sol at 60.7%)
+- 44-57% cheaper per task than GPT-6 Sol across all effort levels. Low effort: 58.1% for $0.21/task (highest under $0.30)
+- Reasoning effort: low, medium (default), high, xhigh, max [VERIFIED]
+
+**[GPT-6 Astra](https://devin.ai/blog/gpt-6-astra)** (released 2026-09-03):
+- $10/$50 per MTok, cached input $1.00/M. 1M token context, 128K max output
+- Surpasses Fable 5.1 on FrontierCode 1.1, second only to Fable 5 (within 0.4 points), 64% cheaper than Fable 5
+- SOTA on Devin's internal testing benchmark (more comprehensive tests, clearer reports, video evidence)
+- Also part of Devin Cloud model mixture [VERIFIED]
+
+**[GPT-5.6](https://devin.ai/blog/gpt-5-6)** (released 2026-07-16):
 - Three tiers sharing 1.05M context, 128K max output, knowledge cutoff February 16, 2026
 - Reasoning effort: none, low, medium (default), high, xhigh, max. `gpt-5.6` alias routes to Sol
 - **Sol** (flagship): $5/$30 per MTok. Fast mode: $10/$60 (2.5x speed). Long-context surcharge: 2x input / 1.5x output above 272K tokens
@@ -421,7 +469,18 @@ No direct API access - available exclusively through Devin platform (Web, Deskto
 
 ### 5.4 Other Models
 
-**[Gemini 3.7 Flash](https://devin.ai/blog/gemini-37-flash)** (released 2026-08-13, Google DeepMind):
+**[Gemini 4 Argon](https://blog.google/innovation-and-ai/technology/developers-tools/build-with-gemini-4-argon/)** (released 2026-10-13):
+- $4/$20 per MTok (regular), $0.20/M cache input. Intro pricing: $2/$10 per MTok through Dec 1, 2026. Additional 50% off ($1/$5 per MTok) through Oct 27, 2026
+- Enterprise ACU: 50% off through Dec 1, 2026, 75% off through Oct 27, 2026. Credit-based: half price (25/35/45 credits Low/Med/High) through Oct 27
+- FrontierCode 1.1: 60.5% (highest-scoring Gemini model, beats GPT-6.1 Sol at 60.4%)
+- Google's frontier model for complex workflows: code migrations, frontier research, cybersecurity defense
+- Available in Devin Desktop and Devin CLI [VERIFIED]
+
+**[Gemini 3.8 Flash](https://docs.devin.ai/desktop/models)** (released 2026):
+- Intro pricing: $0.75/$3.75 per MTok through Dec 31, 2026. Regular: $1.50/$7.50 per MTok
+- Available alongside Gemini 3.7 Flash at same pricing [VERIFIED]
+
+**[Gemini 3.7 Flash](https://devin.ai/blog/gemini-37-flash)** (released 2026-07-28, Google DeepMind):
 - $0.75/$3.75 per MTok (introductory through 2026-12-31, then $1.50/$7.50)
 - 1M token context, 64K max output. Knowledge cutoff: March 2026
 - Three thinking levels (low, medium [default], high). Multimodal: text, image, audio, video
@@ -459,11 +518,34 @@ Based on [Kimi K3 announcement](https://devin.ai/blog/kimi-k3/) benchmark chart:
 
 ### 5.6 Model Routing and Selection
 
+**[Devin Fusion](https://cognition.com/blog/local-fusion)** (introduced 2026-09-11):
+- Most efficient frontier harness for Opus, Fable, and Astra. Up to 39% more efficient than other harnesses on coding benchmarks
+- User picks two models: frontier lead (planning/review) + cost-effective sidekick (execution)
+- Recommended pairs: Opus 5.5 + SWE-2, Fable 5.1 + SWE-2, GPT-6 Astra + SWE-2
+- Available in Devin Desktop and CLI. Not available in Cascade (Devin Local only)
+- Fusion with Opus 5.5 + SWE-2: 68.1 on Artificial Analysis Coding Agent Index v1.5 at 31% lower cost than Claude Code with Opus 5.5 [VERIFIED]
+
 **Adaptive Model Router:** Automatically selects best model for each task. Pro, Max, Teams. Introductory pricing: $0.50/$2.00/$0.10 per MTok (input/output/cache read). Fixed rate regardless of underlying model. [VERIFIED]
+
+**Sign in with ChatGPT** (introduced 2026-09-29):
+- Link ChatGPT Go/Plus/Pro plan to Devin. GPT model usage billed to ChatGPT plan, not Devin quota
+- Eligible: self-serve Pro, Max, Teams only (not Free, not Enterprise)
+- Desktop/CLI: model choice unchanged. GPT requests → ChatGPT plan, all other models → Devin quota
+- Fusion: GPT lead model → ChatGPT plan, sidekick → Devin quota
+- Fast/priority GPT variants excluded. Sessions fall back to Devin quota when ChatGPT allowance exhausted
+- Setup: Settings > Connections > Continue with ChatGPT [VERIFIED]
 
 **Arena Mode:** Two models respond simultaneously, anonymously. User votes, identities revealed. Battle groups, personal/global leaderboards, sync-or-branch followup. [VERIFIED]
 
-**Model Picker:** Groups models by family with hovercards. Per-model token rates visible. Prompt cache timer. Pin favorites for quick access. [VERIFIED]
+**Model Picker:** Groups models by family with hovercards. Per-model token rates visible. Prompt cache timer. Pin favorites for quick access. Model picker remembers last variant used per family (since 3.10.67). [VERIFIED]
+
+**Cost-saving recommendations:**
+- Use Fusion for frontier performance at lower cost (39% savings typical)
+- Use SWE-2 (free for self-serve through Oct 15, 2026) as sidekick or standalone
+- Switch to SWE-1.7 or SWE-1.6 for routine tasks (free on paid plans)
+- Use mini models (Haiku, GPT 5.2 Mini, Kimi K2.5) for simple tasks
+- Stay on single model per task for caching benefits
+- Link ChatGPT plan if eligible (GPT usage offloaded from Devin quota) [VERIFIED]
 
 **Bring Your Own Key (BYOK):** Available to free and paid individual users (not Teams/Enterprise). Supported: Claude 4 Sonnet / Opus (regular and Thinking). Configure at [devin.ai/subscription/provider-api-keys](https://devin.ai/subscription/provider-api-keys). [ASSUMED URL]
 
@@ -827,6 +909,8 @@ Shell scripts running before/after agent actions. `.devin/hooks.json` or `~/.cod
 
 Legacy local agent. No longer selectable in Devin Desktop UI as of 2026-09-09. Announced EOL July 1, 2026. Enterprise could previously disable via "Enable Cascade" control or scope to JetBrains plugin only. Cascade-specific config hidden when disabled for team. See Section 12.6 for phase-out timeline. [TESTED 2026-09-09]
 
+**Cost model:** Cascade and Devin Local share the same quota-based pricing system. The [Devin Desktop FAQ](https://docs.devin.ai/desktop/devin-desktop-faq) states: "Devin Local uses the exact same pricing model as Cascade: if you are currently using prompt-based credits, you will continue to do so." No Cascade-specific cost model change was introduced. See Section 14 for full pricing details. [VERIFIED]
+
 ### 12.1 Modes
 
 Three modes, switchable via toggle below input box or `Ctrl+.`:
@@ -974,6 +1058,7 @@ CLI-specific keys in `.devin/config.json` or `~/.config/devin/config.json`. Gene
 **Windsurf Previews:** Preview web apps in IDE or browser with element selection, error capture, and agent integration. Remote ACP agent sessions proxy local dev server; captured elements and console output land in message box as pending context. [VERIFIED]
 
 **Other IDE tools:**
+- **Voice Mode** - Talk naturally with Devin via voice call. Click voice call button beside message box. Mute, hold Space to talk, silence Devin, navigate while call stays connected. Live call uses separate agent model (consumes quota/ACUs, no model-specific promotions). Recorded voice prompts: transcription free, submitted prompts billed like typed prompts. See Section 14 for pricing [VERIFIED]
 - **Vibe and Replace** - AI-powered find-and-replace. Search codebase, apply AI prompt to each match. Modes: Smart (careful), Fast
 - **Codemaps** - Visual architecture diagrams. Referenced via `@codemap-name`. Devin Local supports since 3.6.22
 - **AI Commit Messages** - Auto-generated commit messages from staged changes
@@ -984,32 +1069,46 @@ CLI-specific keys in `.devin/config.json` or `~/.config/devin/config.json`. Gene
 
 ## 14. Pricing and Plans
 
-Quota-based usage system (replaced credits March 2026). Daily and weekly allowance that refreshes automatically. Cost per token varies by model. Free models (SWE-1.5) don't count. Most users never hit limits. [VERIFIED]
+Quota-based usage system (replaced credits March 2026). Daily and weekly allowance that refreshes automatically. Cost per token varies by model. Free models (SWE-1.5, SWE-2 through Oct 15, 2026) don't count. Most users never hit limits. [VERIFIED]
 
-**Plan tiers:**
-- **Free** - Limited quota, limited model availability, unlimited Tab completions
-- **Pro** ($15/month) - Expanded quota, all models, extra usage available
-- **Max** ($60/month) - Highest individual quota, significantly higher limits
-- **Teams** ($40/user/month) - Team management, Knowledge Base, Remote Indexing, analytics, Role-Based Access Control (RBAC)
-- **Enterprise** (custom, ACU-based) - Single Sign-On (SSO)/System for Cross-domain Identity Management (SCIM), FedRAMP, system-level controls
+**Cost model evolution:**
+1. **Credits** (pre-March 2026) - Prompt credits per message. 1 credit = 1 default message. Model multipliers applied. Monthly reset, no rollover
+2. **Quotas** (March 2026) - Token-based daily/weekly budget. Replaced credits. Better reflects underlying model costs
+3. **New self-serve plans** (April 2026) - Retired Core/Team plans. New lineup: Free, Pro, Max, Teams, Enterprise. Extra usage in dollars, not ACUs. Enterprise keeps ACUs [VERIFIED]
 
-Note: Check [devin.ai/pricing](https://devin.ai/pricing) for current rates. [ASSUMED prices]
+**No Cascade-specific cost model change.** Devin Desktop FAQ states: "Devin Local uses the exact same pricing model as Cascade: if you are currently using prompt-based credits, you will continue to do so." Cascade and Devin Local share the same quota system. [VERIFIED]
 
-**Extra usage pricing (introductory):** $0.50/$2.00/$0.10 per MTok (input/output/cache read). When quota exhausted: Free waits for reset, Pro/Max/Teams purchase extra usage. [VERIFIED]
+**Plan tiers (current, as of 2026-10-20):**
+- **Free** ($0/month) - Limited quota, limited model availability, unlimited Tab completions, access to Devin Review and DeepWiki
+- **Pro** ($20/month, was $15) - Expanded quota, all models, extra usage at API pricing, Slack/Linear/MCP integrations. Daily + weekly allowance
+- **Max** ($200/month, new plan, was $60) - Significantly higher quotas, weekly allowance only (no daily cap). Priority support
+- **Teams** ($80/month minimum + $40/month per full dev seat, was $40/seat) - Up to 200 users, centralized billing, admin dashboard, analytics, priority support. Flex seats free. SSO removed (now Enterprise-only). Knowledge Base, Remote Indexing
+- **Enterprise** (custom, ACU-based) - SSO/SCIM, FedRAMP, system-level controls, dedicated account team, custom terms
 
-**Enterprise billing:** Agent Compute Units (ACUs) - tokens converted at per-token rates. Per-user or per-group caps via admin portal. Seat rotation: new member inherits remaining quota mid-cycle. [VERIFIED]
+Note: Existing subscribers grandfathered at old prices ($15 Pro, $30 Teams/seat) indefinitely. Check [devin.ai/pricing](https://devin.ai/pricing) for current rates. [VERIFIED prices]
+
+**Extra usage pricing (introductory):** $0.50/$2.00/$0.10 per MTok (input/output/cache read). When quota exhausted: Free waits for reset, Pro/Max/Teams purchase extra usage at API list prices. Priority and speed configurations (SWE-1.5 Fast, fast Opus variants) increase cost. [VERIFIED]
+
+**Sign in with ChatGPT** (2026-09-29): Link ChatGPT Go/Plus/Pro plan. GPT model requests billed to ChatGPT plan, not Devin quota. Only GPT models covered (fast/priority variants excluded). Eligible: self-serve Pro, Max, Teams (not Free, not Enterprise). Setup: Settings > Connections > Continue with ChatGPT. One toggle covers Desktop, CLI, and Cloud. [VERIFIED]
+
+**Voice mode pricing:** Live voice call uses a separate agent model from the session model. Agent model usage consumes quota or ACUs as applicable. Does not receive model-specific promotions (including free/discounted SWE-2). Live audio connection not separately charged. Recorded voice prompts: transcription free, submitted prompts billed like typed prompts under selected model. [VERIFIED]
+
+**Enterprise billing:** Agent Compute Units (ACUs) - tokens converted at per-token rates. Per-user or per-group caps via admin portal. Seat rotation: new member inherits remaining quota mid-cycle. For local agents (Cascade, Devin CLI, Devin Local), ACUs based on inference. For cloud agents and platform capabilities, ACUs reflect mix of tokens, compute, VMs, infrastructure. [VERIFIED]
+
+**Legacy enterprise credits:** Credit-based system for older enterprise plans. 1 prompt credit per message with premium model. Model multipliers apply. Monthly reset, no rollover. Add-on credits don't expire, carry over. $120 for 1000 pooled credits. Automatic refills available (configurable increments, max monthly budget caps). [VERIFIED]
 
 **When quota exhausted:**
 - **Free**: Wait for daily/weekly reset
-- **Pro/Max/Teams**: Purchase extra usage [VERIFIED]
+- **Pro/Max/Teams**: Purchase extra usage at API list prices [VERIFIED]
 
 **Making quota last:**
-- Be precise, remove unnecessary context
-- Switch to free models (SWE-1.5) for routine tasks
+- Use Fusion for frontier performance at lower cost (up to 39% savings)
+- Use SWE-2 (free for self-serve through Oct 15, 2026) as sidekick or standalone
+- Switch to SWE-1.7 or SWE-1.6 for routine tasks (free on paid plans)
 - Use smaller models (Haiku, GPT 5.2 Mini, Kimi K2.5) for simple tasks
 - Avoid unnecessarily long sessions
 - Use single model per task for caching benefits
-- Stay on Adaptive Model Router for automatic optimization [VERIFIED]
+- Link ChatGPT plan if eligible (GPT usage offloaded from Devin quota) [VERIFIED]
 
 ## 15. Enterprise Features
 
@@ -1024,6 +1123,8 @@ Admin portal at devin.ai/team/settings. User management with role assignment, us
 **Permissions:** Model access, feature access, auto-execution levels, "Disable Access" to restrict users entirely. Review model controls for team-wide enforcement. [VERIFIED]
 
 ### 15.3 Single Sign-On (SSO) and SCIM
+
+**Note:** SSO is now an Enterprise-only feature. New Teams plans no longer include SSO (removed 2026-10). Teams that already purchased the SSO add-on keep it. [VERIFIED]
 
 **Providers:** Azure AD/Entra ID, Google Workspace, Okta, OneLogin, Generic OpenID Connect (OIDC)/Security Assertion Markup Language (SAML).
 
@@ -1445,6 +1546,30 @@ The client extension never checks these fields to show/hide Cascade UI. Cascade 
 - `DVDT-IN01-SC-DVNDC-CSC`: https://docs.devin.ai/desktop/cascade/cascade - Cascade overview docs (legacy) [VERIFIED]
 - `DVDT-IN01-SC-DVNDC-ENTC`: https://docs.devin.ai/cli/enterprise/controls - Enterprise controls for Cascade disable [VERIFIED]
 
+**Pricing and Model Sources (2026-10-20):**
+- `DVDT-IN01-SC-DVNDC-QTA`: https://docs.devin.ai/desktop/accounts/quota - Quota-based usage docs [VERIFIED]
+- `DVDT-IN01-SC-DVNDC-USG`: https://docs.devin.ai/desktop/accounts/usage - Plans and usage docs [VERIFIED]
+- `DVDT-IN01-SC-DVNDC-MDL`: https://docs.devin.ai/desktop/models - AI Models docs with per-model pricing [VERIFIED]
+- `DVDT-IN01-SC-DVNDC-SSP`: https://docs.devin.ai/admin/billing/self-serve - Self-serve plan details [VERIFIED]
+- `DVDT-IN01-SC-DVNDC-CHGPT`: https://docs.devin.ai/admin/billing/chatgpt - ChatGPT plan linking docs [VERIFIED]
+- `DVDT-IN01-SC-DVNDC-VOIC`: https://docs.devin.ai/work-with-devin/voice-mode - Voice mode docs [VERIFIED]
+- `DVDT-IN01-SC-DVNAI-PRC`: https://devin.ai/pricing - Current pricing page [VERIFIED]
+- `DVDT-IN01-SC-DVNAI-SWPL`: https://devin.ai/blog/windsurf-pricing-plans - March 2026 pricing change announcement [VERIFIED]
+- `DVDT-IN01-SC-CGNTN-NSP`: https://cognition.com/blog/new-self-serve-plans-for-devin - April 2026 new self-serve plans [VERIFIED]
+- `DVDT-IN01-SC-CGNTN-SWE2`: https://cognition.com/blog/swe-2 - SWE-2 announcement [VERIFIED]
+- `DVDT-IN01-SC-DVNAI-FB51`: https://devin.ai/blog/fable-5-1 - Fable 5.1 in Devin [VERIFIED]
+- `DVDT-IN01-SC-ANTHR-OP55`: https://www.anthropic.com/claude-opus-5-5 - Claude Opus 5.5 [VERIFIED]
+- `DVDT-IN01-SC-ANTHR-FB51`: https://www.anthropic.com/claude-fable-and-mythos-5-1 - Fable 5.1 and Mythos 5.1 [VERIFIED]
+- `DVDT-IN01-SC-DVNAI-OP55`: https://devin.ai/blog/claude-opus-5-5 - Opus 5.5 in Devin [VERIFIED]
+- `DVDT-IN01-SC-DVNAI-G6AS`: https://devin.ai/blog/gpt-6-astra - GPT-6 Astra in Devin [VERIFIED]
+- `DVDT-IN01-SC-DVNAI-G61S`: https://devin.ai/blog/gpt-6-1-sol - GPT-6.1 Sol in Devin [VERIFIED]
+- `DVDT-IN01-SC-OPENAI-G61S`: https://openai.com/index/introducing-gpt-6-1-sol/ - GPT-6.1 Sol announcement [VERIFIED]
+- `DVDT-IN01-SC-DVNAI-SIGPT`: https://devin.ai/blog/sign-in-with-chatgpt - Sign in with ChatGPT announcement [VERIFIED]
+- `DVDT-IN01-SC-CGNTN-FUS`: https://cognition.com/blog/local-fusion - Devin Fusion announcement [VERIFIED]
+- `DVDT-IN01-SC-GOOG-G4AR`: https://blog.google/innovation-and-ai/technology/developers-tools/build-with-gemini-4-argon/ - Gemini 4 Argon announcement [VERIFIED]
+- `DVDT-IN01-SC-WCHPL-SWE2`: https://whichcodingplan.com/changes/2026-10-19-devin-swe-2-free-window - SWE-2 free window tracking [VERIFIED]
+- `DVDT-IN01-SC-AIBLD-PRC`: https://aibuildersuse.com/price-changes - AI tool price change log [VERIFIED]
+
 **Local Investigation Sources (2026-09-09):**
 - `DVDT-IN01-SC-LOCAL-V38`: Devin Next 3.8.1020 extension.js, package.json, product.json, language_server binary - Extracted from installed `%LOCALAPPDATA%\Programs\Devin Next` [TESTED 2026-09-09]
 - `DVDT-IN01-SC-LOCAL-V39`: Devin Next 3.9.1018 extension.js, package.json, language_server binary - Extracted from installer ZIP [TESTED 2026-09-09]
@@ -1454,6 +1579,28 @@ The client extension never checks these fields to show/hide Cascade UI. Cascade 
 - `DVDT-IN01-SC-LOCAL-WIN`: Devin Next 3.8.1020 `main.js` string extraction (`WindsurfWindowsMainManager`, `windsurfAgentWindowMainService`, `getRestoreWindowsSetting`), `main.log`, `storage.json`, `Workspaces\*\workspace.json` - double-window launch investigation [TESTED 2026-09-26]
 
 ## 20. Document History
+
+**[2026-10-20 12:00]**
+- Added: Summary "Pricing and Billing" section -- no Cascade-specific cost model change, platform-wide evolution, new plan prices, ChatGPT billing, voice mode, SSO removal
+- Added: Summary "AI Models" updates -- SWE-2, Fable 5.1, Opus 5.5, GPT-6 Astra, GPT-6.1 Sol, Gemini 4 Argon, Devin Fusion
+- Added: Section 5.1 SWE-2 -- Cognition's latest model, Medium/High/Max effort, Pareto-informed RL, list price $3/$15/$0.30
+- Added: Section 5.2 Claude Opus 5.5 -- $4/$20, #1 on FrontierCode 1.1 (65.3%), 40% cheaper than Opus 5
+- Added: Section 5.2 Claude Fable 5.1 -- 54% cheaper than Fable 5 via 75% cache-read cut, ZDR now available
+- Added: Section 5.3 GPT-6.1 Sol -- $2/$10, near-Astra at 1/5 price, cached input $0.10/M
+- Added: Section 5.3 GPT-6 Astra -- $10/$50, surpasses Fable 5.1, 64% cheaper than Fable 5
+- Added: Section 5.4 Gemini 4 Argon -- $4/$20 regular, intro pricing through Dec 1, 2026, FrontierCode 1.1 60.5%
+- Added: Section 5.4 Gemini 3.8 Flash -- intro pricing $0.75/$3.75 through Dec 31, 2026
+- Added: Section 5.5 FrontierCode 1.1 ranking updated with Opus 5.5, GPT-6 Astra, GPT-6.1 Sol, Gemini 4 Argon, SWE-2, Fusion pairs
+- Added: Section 5.6 Devin Fusion -- frontier lead + cost-effective sidekick, up to 39% more efficient
+- Added: Section 5.6 Sign in with ChatGPT -- link ChatGPT Go/Plus/Pro, GPT usage billed to ChatGPT plan
+- Added: Section 5.6 cost-saving recommendations updated with Fusion, SWE-2, ChatGPT plan
+- Added: Section 13.4 Voice Mode -- live call with separate agent model, pricing details
+- Added: Section 14 cost model evolution (credits → quotas → new plans), no Cascade-specific change, updated plan tiers, ChatGPT billing, voice mode pricing, legacy enterprise credits
+- Added: Section 15.3 SSO removed from Teams, now Enterprise-only
+- Added: 22 new pricing and model sources
+- Changed: Version scope to 3.10.67+
+- Changed: Timeline updated to 7 updates
+- Changed: SWE-1.7 updated from "primary" to "previous flagship" (superseded by SWE-2)
 
 **[2026-09-26 16:35]**
 - Added: Section 17 window management -- `windsurfAgentWindowMainService`, `WindsurfWindowsMainManager`, `windsurf.windowGroupsState` key, `workbenchMode: windsurf-agent-window`, stock `restoreWindows` logic, double-window symptom and non-working mitigations

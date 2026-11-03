@@ -15,7 +15,7 @@ Read `__CARD_UpdateClaude-Findings.md` in the repository root (create it in this
 
 Objective: source inventory recorded and the deployment target reset so the migration prompts (2, 3, and 5) rebuild `.claude\` from a clean state.
 
-Count with the find_by_name tool: markdown files in `PromptSystemV4.5\rules\` (expected 8), markdown files in `PromptSystemV4.5\workflows\` (expected 49), skill folders in `PromptSystemV4.5\skills\` (expected 24). Record the three actual counts and any deviation from the expected counts in `__CARD_UpdateClaude-Findings.md`. Delete `.claude\rules\` and `.claude\skills\` if they exist (full rebuild semantics).
+Count with the find_by_name tool: markdown files in `PromptSystemV4.5\rules\` (expected 8), markdown files in `PromptSystemV4.5\workflows\` (expected 49), skill folders in `PromptSystemV4.5\skills\` (expected 22). Record the three actual counts and any deviation from the expected counts in `__CARD_UpdateClaude-Findings.md`. Delete `.claude\rules\` and `.claude\skills\` if they exist (full rebuild semantics).
 
 Constraints:
 - Do not modify anything under `PromptSystemV4.5\` - it is the read-only source of truth
@@ -121,7 +121,7 @@ all gaps and remaining work found.
 
 ## Prompt 5 - Migrate skills
 
-<!-- Workflow skills verified. Deploys 23 skill folders with the invocation classification. -->
+<!-- Workflow skills verified. Deploys 21 skill folders with the invocation classification. -->
 
 ```
 Update Claude [ 05 / 07 ] - Migrate skills
@@ -130,11 +130,11 @@ Read `__CARD_UpdateClaude-Findings.md` and confirm the workflow-derived skill fo
 
 Objective: every agent-agnostic skill from `PromptSystemV4.5\skills\` is deployed to `.claude\skills\<name>\` with all supporting files and the invocation classification frontmatter applied. `devin-auto-model-switcher` is not deployed (agent-specific: drives the Devin Cascade model selector via keyboard simulation; Claude Code has native `/model`).
 
-Copy each skill folder from `PromptSystemV4.5\skills\` to `.claude\skills\<name>\` except `devin-auto-model-switcher`, including supporting files (progressive disclosure). Keep existing `name` and `description` frontmatter. Add `disable-model-invocation: true` to the 14 user-only skills; the 9 model-triggered skills stay without it. 6 source skills have no frontmatter at all (5 user-only: travel-info, windows-desktop-control, llm-computer-use, llm-evaluation, llm-transcription; 1 model-triggered: drift-control) - prepend frontmatter to their deployed copies only (name = folder name, description derived from the file's intro line); do not modify the sources.
+Copy each skill folder from `PromptSystemV4.5\skills\` to `.claude\skills\<name>\` except `devin-auto-model-switcher`, including supporting files (progressive disclosure). Keep existing `name` and `description` frontmatter. Add `disable-model-invocation: true` to the 11 user-only skills; the 10 model-triggered skills stay without it. 3 source skills have no frontmatter at all (2 user-only: travel-info, windows-desktop-control; 1 model-triggered: drift-control) - prepend frontmatter to their deployed copies only (name = folder name, description derived from the file's intro line); do not modify the sources. Delete stale `.claude\skills\llm-computer-use\`, `llm-evaluation\`, `llm-transcription\` if present (merged into `llm-tools` on 2026-10-29).
 
-Model-triggered (9): write-documents, session-management, coding-conventions, research-methods, workspace-management, drift-control, edird-phase-planning, git-conventions, ms-playwright-mcp
+Model-triggered (10): write-documents, session-management, coding-conventions, research-methods, workspace-management, drift-control, edird-phase-planning, git-conventions, ms-playwright-mcp, llm-tools (model-triggered because `MODEL_INVENTORY.md` is read by write-documents for PROMPTS and TASKS planning)
 
-User-only (14): travel-info, youtube-downloader, seo-tools, google-account, image-tools, pdf-tools, windows-desktop-control, playwriter-mcp, llm-computer-use, llm-evaluation, llm-transcription, github, git, hosting
+User-only (11): travel-info, youtube-downloader, seo-tools, google-account, image-tools, pdf-tools, windows-desktop-control, playwriter-mcp, github, git, hosting
 
 Constraints:
 - Do not modify skill sources
@@ -144,7 +144,7 @@ Constraints:
 
 Findings card: Load and update `__CARD_UpdateClaude-Findings.md`. File glitches and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
-Verify: deployed skill folder count equals the skill inventory count from `__CARD_UpdateClaude-Findings.md` minus 1 (expected 23; `devin-auto-model-switcher` excluded); total `.claude\skills\` folder count equals the card's deployed workflow plus skill counts (expected 71). Each of the 14 user-only SKILL.md files contains `disable-model-invocation: true`; none of the 9 model-triggered SKILL.md files does. Every deployed SKILL.md has valid frontmatter with `name` (matching the folder) and `description` (compare line-by-line, not with `$`-anchored regex - CRLF files break it).
+Verify: deployed skill folder count equals the skill inventory count from `__CARD_UpdateClaude-Findings.md` minus 1 (expected 21; `devin-auto-model-switcher` excluded); total `.claude\skills\` folder count equals the card's deployed workflow plus skill counts (expected 69). Each of the 11 user-only SKILL.md files contains `disable-model-invocation: true`; none of the 10 model-triggered SKILL.md files does. Every deployed SKILL.md has valid frontmatter with `name` (matching the folder) and `description` (compare line-by-line, not with `$`-anchored regex - CRLF files break it).
 ```
 
 ---

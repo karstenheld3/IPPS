@@ -241,3 +241,29 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **MDLRGUP** - Model Registry Update (permanent session `!ModelRegistryUpdate`: provider data extraction, canonical model JSONs, MODEL_INVENTORY.md; parent topic for nested T##_ subtopics such as MDLBHVPRM, MDLINVNTRY) - 2026-08-30
 - **LLMCAPCLS** - LLM Capability Classes (time-stable year-letter labels YY-L for workload factor sizing in MODEL_INVENTORY.md) - 2026-10-28
 - **MUSICPROMO** - Music Promotion Guide (German Ratgeber on placing and promoting melodic house tracks with labels, playlists, DJ pools, promoters; first live run of the DRSYNART three-layer pipeline) - 2026-10-28
+- **LLMTOOLS** - LLM Tools Skill (unification of llm-computer-use, llm-evaluation, llm-transcription into one `llm-tools` skill with single-source model data: call-llm.py, model JSONs, MODEL_INVENTORY.md) - 2026-10-29
+- **AIMEDIAPROD** - AI Media Production (API-driven, AI-assisted video and podcast production pipeline: recording review via transcription, asset generation, automated cutting and rendering, podcast post-production; parent topic for nested subtopic MEDIAAUTO) - 2026-10-29
+- **ABTSTORY** - And-But-Therefore Story Spine writing technique (narrative friction and resolution structure) - 2026-11-02
+- **AIDA** - Attention-Interest-Desire-Action writing technique (direct-response conversion structure) - 2026-11-02
+- **ANA** - Analysis Orchestration rules (/analyze tier selection, devil's advocate, review points) - 2026-11-02
+- **ART** - Article Document Type rules (features, essays, blogs; lead, nut graf, alternating evidence, release check) - 2026-11-02
+- **DIATAXIS** - Diataxis Documentation writing technique (tutorials, how-tos, reference, explanation) - 2026-11-02
+- **EBK** - Ebook Document Type rules (pedagogy, chapter architecture, running memory, book release check) - 2026-11-02
+- **HYP** - Hypothesis Generation rules (competing alternatives, rivals, falsifiers, crucial test plans) - 2026-11-02
+- **IMINTO** - Inverted Minto writing technique (news-style conclusion first, supporting pyramid) - 2026-11-02
+- **IMRAD** - Introduction-Methods-Results-And-Discussion writing technique (empirical research report structure) - 2026-11-02
+- **KABOB** - Wall Street Journal Kabob feature story writing technique (anecdotal lead, nut graf, meat, circular ending) - 2026-11-02
+- **PAS** - Problem-Agitation-Solution writing technique (pain-point conversion structure) - 2026-11-02
+- **PTD** - Pattern Detection rules (qualitative coding pass, theme maps, contradiction registers, gaps) - 2026-11-02
+- **RPT** - Report Document Type rules (consulting, research, institutional reports; action titles, exhibits, release check) - 2026-11-02
+- **STA** - Show-Tell-Apply writing technique (concrete demonstration, conceptual principles, guided application) - 2026-11-02
+- **VAL** - Validation and Evidence Weighting rules (GRADE certainty, Toulmin warrants, ACH audit trail, disconfirmation, 0-8 ranking) - 2026-11-02
+- **ABT-STORY-SPINE** - (renamed to ABTSTORY per DRSYNART-DD-20)
+- **DIATAXIS-DOCUMENTATION** - (renamed to DIATAXIS per DRSYNART-DD-20)
+- **IMRAD-RESEARCH-REPORT** - (renamed to IMRAD per DRSYNART-DD-20)
+- **INVERTED-PYRAMID** - (renamed to IMINTO per DRSYNART-DD-20)
+- **KABOB-FEATURE-STORY** - (renamed to KABOB per DRSYNART-DD-20)
+- **PAS-AIDA-CONVERSION** - (renamed and split into PAS and AIDA per DRSYNART-DD-20)
+- **SCQA-PYRAMID** - (renamed to MINTO per DRSYNART-DD-20)
+- **SHOW-TELL-APPLY** - (renamed to STA per DRSYNART-DD-20)
+

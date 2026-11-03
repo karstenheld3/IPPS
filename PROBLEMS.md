@@ -24,6 +24,8 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
 
 2. **Additional workflows or commands**
    - **write-prompts** - Writes 1 or many prompts into a `_PROMPTS_[TopicsOrTask].md` file
+     - needs handling of skipped prompts: What has to happen if expected work is not found and the whole prompt sequence cant be run?
+	 - needs model tiering so work can be partitioned correctly across prompts using target model capability and context window size.
    - **execute** - Execute defined workflow, tasks, prompts as sequence with self-reflection
    - **propose** - Propose options in chat
    - **draft** - Create annotated drafts (templates, conversations, specs, info, etc.). How to draft skeletons first and then fill sections later.
@@ -33,7 +35,9 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
    - **write-skill** - Create agent skills based on rules and templates
    - **write-code** - Language-independent rules with language-specific rules as extensions (subfolders)
    - **write-workflow** - Standardized part of skill, replaces current Cascade workflows and old Claude Code commands
-   - **compare** - Branching comparison workflow: 1) different versions of same file: use classic diff, 2) different files: use LLM compare with document-type-aware prompts and focuses, 3) folders, projects, office files: use extra tools and branching to create useful outputs. Must produce standardized file that is then used with sync.md to check dependent files for change propagation.
+   - **compare** - Branching comparison workflow: 1) different versions of same file: use classic diff, 2) different files: use LLM compare with document-type-aware prompts and focuses, 3) folders, projects, office files: use extra tools and branching to create useful outputs. Must produce standardized file that is then used with sync.md to check dependent files for change propagation. This is intended to become the major workflow for verified document intelligence features that produce INFO documents and reports
+     - Compare 2 or more contracts, summarize each version with a standardized format: Unique parts, major / minor deviations, omissions, common parts.
+	 - Compare 2 or more specifications
    - **migrate** - Cross-project and cross-workspace migration: 1) migrate code from one project to another (extract, adapt imports/paths, verify), 2) migrate documents and folders from one workspace to another (preserve IDs, update references, handle naming conflicts)
 
 3. **Generic self-reflection using MNF**

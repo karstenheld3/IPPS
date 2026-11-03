@@ -1,5 +1,32 @@
 # Failure Log
 
+## 2026-11-02 - MINTO Set Renamed by Token Substitution, Semantics Not Migrated
+
+### [HIGH] [RESOLVED 2026-11-02] `DRSYNART-FL-0002` MINTO GUIDES/RULES/TEMPLATE kept pre-DD-16 lifecycle after the -DRAFT to -OPTIONS rename
+
+- **When**: 2026-10-29 (Increment A migration), discovered 2026-11-02 21:30 during `/critique` (T05 `CONCEPTCRIT`)
+- **Where**: `[PROMPTSYSTEM_FOLDER]/skills/write-documents/writing_techniques/MINTO_GUIDES.md` Section 2 (lines 23-26), `MINTO_RULES.md` MINTO-DS-06, `TEMPLATES/MINTO_OPTIONS_TEMPLATE.md` line 1
+- **What**: FR-22 required every `-DRAFT` term renamed to `-OPTIONS` and the MINTO set merged into the new library. The rename was executed as token substitution: MINTO_GUIDES still names OPTIONS files `__MINTO-OPTIONS_*.md`, calls them "Scaffolding... Deleted by `/cleanup`" (contradicts DD-36: OPTIONS are deliverables), names the output `_MINTO_*.md` (contradicts DD-16: `YYYY-MM-DD_[Title].md`), and references `MINTO-OPTIONS_TEMPLATE.md` (actual path `TEMPLATES/MINTO_OPTIONS_TEMPLATE.md`); MINTO-DS-06 repeats the wrong filename; the OPTIONS template H1 still reads "# Minto Draft:". The template also lacks the OPTIONS header block (`**Doc ID**`, `**Document Type**`, `**Technique**`), so FR-06 header-based detection fails on MINTO OPTIONS files
+- **Why it went wrong**: Same pattern as `GLOB-FL-037` and `IPPSKBNDL-FL-0001` - a rename requirement treated as a string replacement, not as a requirement over all semantics (naming, lifecycle, placement, template references); no post-rename grep for the old patterns; the DD-42/43 implementation pass touched only MINTO_GUIDES 3.1 and left Section 2 stale
+- **Evidence**: `_SPEC_IPPS_RESEARCH_AND_WRITING_TOOLS_CRITIQUE.md [DRSYNART-SP01-RV02]` findings `DRSYNART-CONCEPTCRIT-RV-004`, `RV-005`
+- **Suggested fix**: Rewrite MINTO_GUIDES Section 2 to DD-16/DD-36 semantics, fix MINTO-DS-06, retitle and add header block to MINTO_OPTIONS_TEMPLATE, then grep library for `__MINTO`, `_MINTO_`, `MINTO-OPTIONS_TEMPLATE` to confirm zero stale hits before claiming done
+- **Prevention rule**: A rename decision (DD-16 style) is complete only when 1) old name grep = 0 hits, 2) lifecycle statements (scaffolding vs deliverable, cleanup behavior, placement) match the new decision, 3) all cross-references point to existing paths
+- **Resolved**: 2026-11-02 in S02 CONCEPTCRIT phase P2: MINTO_GUIDES Section 2 rewritten to DD-16/DD-36 working files and AMINTON options exemption; MINTO_RULES MINTO-DS-06 corrected; MINTO_OPTIONS_TEMPLATE given proper H1 and header block; sweeps for `__MINTO`, `_MINTO_`, `MINTO-DRAFT`, `MINTO-OPTIONS_TEMPLATE` confirmed 0 hits.
+
+## 2026-10-29 - SPEC Restated and Overrode Confirmed User Decisions
+
+### [HIGH] `DRSYNART-FL-0001` SPEC restated confirmed decisions from a secondary INFO instead of NOTES.md and overrode four of them
+
+- **When**: 2026-10-29 21:30 UTC+01:00 (discovered 2026-10-29 21:40 during inline `/critique`)
+- **Where**: `_SPEC_IPPS_RESEARCH_AND_WRITING_TOOLS.md [DRSYNART-SP01]` Section 6 and FR-11, FR-13, FR-22, Section 12
+- **What**: Section 6 restated DD-02, DD-03, DD-06, DD-09 with content that does not match the session NOTES.md Key Decisions. Four confirmed decisions were overridden under "decide in favour of simplicity": `/bundle` dropped (DD-01, DD-03), PAS/AIDA split made conditional (DD-20), research subfolder renames skipped (DD-05), `INVESTIGATION_*` kept outside `analysis-methods` (DD-01). The `/analyze` contract also contradicted DD-04 (no STRUT at tier 1, three output files at tier 3)
+- **Why it went wrong**:
+  - Decision restatements were written from the target-architecture INFO and memory, not copied from NOTES.md, the authoritative record
+  - "Decide in favour of simplicity" was applied to already-decided questions instead of only to open ones
+  - No traceability check from each confirmed decision to an FR before finishing the SPEC
+- **Evidence**: inline critique findings C-01, C-02, C-03 against NOTES.md lines 83-131
+- **Suggested fix**: Restate every confirmed decision from NOTES.md, mark it `[CONFIRMED]`, cite where it is applied; apply simplicity only to undecided questions; add an IG that maps each confirmed decision to an FR. Applied in DRSYNART-SP01 update 2026-10-29 21:45 [RESOLVED]
+
 ## 2026-09-15 - Document History Claimed Removal That Was Not Completed
 
 ### [LOW] `IPPSKBNDL-FL-0001` History entry "Removed: All mentions of ZipDoc" while four mentions remain in the spec

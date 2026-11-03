@@ -250,7 +250,7 @@ Instructions: SINGLE-PROJECT mode — one repo, one `[RELEASE_REPO]` block. Semv
 
 ## find-workers-limit.py Changes (2026-09-16)
 
-**Location**: `[PROMPTSYSTEM_FOLDER]/skills/llm-evaluation/find-workers-limit.py`
+**Location**: `[PROMPTSYSTEM_FOLDER]/skills/llm-tools/find-workers-limit.py` (was `skills/llm-evaluation/` until 2026-10-29)
 **Source session**: KarstensWorkspace `_2026-09-16_TranscriptionSkillRewrite`
 
 ### Changes

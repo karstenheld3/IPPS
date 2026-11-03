@@ -1,7 +1,7 @@
 # Check for references to non-existing workflows across PromptSystem
 # Usage: .\check_workflow_refs.ps1 [-PromptSystemFolder <path>]
 param(
-    [string]$PromptSystemFolder = (Join-Path $PSScriptRoot (Get-Content (Join-Path $PSScriptRoot "NOTES.md") | Where-Object { $_ -match 'Current \[PROMPTSYSTEM\]: (\S+)' } | ForEach-Object { $Matches[1] }))
+    [string]$PromptSystemFolder = (Join-Path $PSScriptRoot "PromptSystemV4.5")
 )
 
 $workspace = $PSScriptRoot
@@ -27,7 +27,7 @@ $allFiles = foreach ($dir in $searchDirs) {
 }
 
 # False positives: generic doc references, template placeholders, Ghostscript settings
-$ignoredRefs = @("workflow", "other-workflow", "screen", "ebook", "printer", "prepress")
+$ignoredRefs = @("workflow", "other-workflow", "screen", "ebook", "printer", "prepress", "name")
 
 $pattern = '`/([a-z][a-z0-9-]+)`'
 $missing = @()
@@ -35,8 +35,8 @@ $missing = @()
 foreach ($file in $allFiles) {
     $content = Get-Content $file.FullName -Raw -ErrorAction SilentlyContinue
     if (-not $content) { continue }
-    $matches = [regex]::Matches($content, $pattern)
-    foreach ($m in $matches) {
+    $allMatches = [regex]::Matches($content, $pattern)
+    foreach ($m in $allMatches) {
         $wfName = $m.Groups[1].Value
         if ($wfName -notin $existingWorkflows -and $wfName -notin $ignoredRefs) {
             $lineNum = ($content.Substring(0, $m.Index) -split "`n").Count

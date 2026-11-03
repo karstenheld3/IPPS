@@ -4,7 +4,9 @@
 **Goal**: Generic skill for LLM evaluation pipelines - works with images, text documents, or any content
 **Timeline**: Created 2026-01-22, Updated 0 times
 
-**Target folder**: `.devin/skills/llm-evaluation/`
+**Target folder**: `[PROMPTSYSTEM_FOLDER]/skills/llm-tools/` (shared scripts and model JSONs at root; pipeline scripts in `evaluation/`)
+
+**Superseded for folder layout** (2026-10-29): the `llm-evaluation` skill was merged into `llm-tools` together with `llm-transcription` and `llm-computer-use`. File paths and folder trees below describe the pre-merge layout; script behavior contracts (FR, IG, DD, EC) remain valid. Current layout: `[PROMPTSYSTEM_FOLDER]/skills/llm-tools/SKILL.md`, session `_2026-10-29_UnifyLlmToolsSkill` [LLMTOOLS-IN01].
 
 ## MUST-NOT-FORGET
 
@@ -747,6 +749,9 @@ python call-llm.py --model gpt-4o --prompt-file prompts/transcribe-page.md --hel
 ```
 
 ## 11. Document History
+
+**[2026-10-29 15:30]**
+- Changed: Target folder to `llm-tools/`; added superseded-for-layout note (skill merged into `llm-tools`, LLMTOOLS-IN01)
 
 **[2026-01-23 10:36]**
 - Changed: Default schema categories to generic types (medium_inference, hard_reasoning, hard_details)
