@@ -33,8 +33,8 @@ Core definitions and structure for the development system.
 
 - **[RULES]**: The current set of agent rules in `[AGENT_FOLDER]/rules/`
 - **[WORKFLOWS]**: The current set of agent workflows in `[AGENT_FOLDER]/workflows/`
-- **[SKILLS]**: Agent Skills in `[AGENT_FOLDER]/skills/`
-- **[GRUC]**: Guides, Rules, Checks - pre-calculated compliance criteria. GUIDE + RULES in each skill folder; CHECKS in each skill folder (for skills) or `drift-control/` (for workflows). Exception: `write-documents` keeps all GRUC types in its own folder.
+- **[SKILLS]**: Agent Skills in `[AGENT_FOLDER]/skills/` (including `write-documents`, `research-methods`, `analysis-methods`)
+- **[GRUC]**: Guides, Rules, Checks - pre-calculated compliance criteria. GUIDE + RULES in each skill folder; CHECKS in each skill folder (for skills) or `drift-control/` (for workflows). Exception: `write-documents` and `analysis-methods` maintain consolidated checks.
 
 ### Document Types
 
@@ -235,6 +235,8 @@ See workspace-management WORKSPACE-RULES.md WS-DP-01 through WS-DP-06 for enforc
 
 These folders are optional by default (see WS-DP-06). /prime does not create them. If folders exist, documents MUST be placed per the rules above. If folders do not exist and no session is active, the agent places documents directly in the workspace folder root. If a session is active, session-scoped documents (_IMPL_*, _TEST_*, _TASKS_*) go in the session folder.
 
+- **OPTIONS and DRAFT Placement (DRSYNART-DD-36)**: `[ID]-OPTIONS-NN_` and `[ID]-DRAFT-NN_` files are deliverables in the active working folder, never in `_agentwork/`. They persist across prompt sequences, hold user annotations and style sheets, and must not be deleted by `/cleanup`.
+
 <!-- END: Skill: workspace-management -->
 
 <!-- START: Core -->
@@ -317,7 +319,7 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 - `/learn` - Extract learnings from resolved problems
 - `/prime` - Load workspace context
 - `/project-release` - Create a dated release with comprehensive release notes
-- `/propose-minto` - Generate AMINTON argument candidates from research material
+- `/propose-article` - Propose article outline candidates with scoring and recommendation
 - `/reconcile` - Pragmatic review of critique and fact-check findings
 - `/remove` - Remove session content, conversation content, or specific files with preview and confirmation
 - `/rename` - Global/local refactoring with verification
@@ -332,9 +334,9 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 - `/transcribe` - PDF/web to markdown transcription
 - `/translate` - Translate markdown or PDF files to target languages
 - `/verify` - Verify work against specs and rules
+- `/write-article` - Author finished article with line pass, copy pass, and release check
 - `/write-impl-plan` - Create implementation plan from spec
 - `/write-info` - Create INFO document from research
-- `/write-minto` - Develop full Minto Pyramid article from draft
 - `/write-spec` - Create specification from requirements
 - `/write-strut` - Create STRUT plans with proper format
 - `/write-tasks-plan` - Create tasks plan from IMPL/TEST

@@ -18,7 +18,7 @@ Created from partitioned IMPL/TEST plans.
 ## Task Overview
 
 - Total tasks: N
-- Estimated total: X HHW
+- Estimated total: X HWH
 - Parallelizable: M tasks
 
 ## Task 0 - Baseline (MANDATORY)
@@ -39,10 +39,13 @@ Created from partitioned IMPL/TEST plans.
   - Depends: none | TK-NNN
   - Parallel: [P] or blank
   - Model: Sonnet | Opus | Haiku
-  - Est: 0.5 HHW
+  - Est: 0.5 HWH
 
 Required: Task ID, description, Files, Done when, Est.
 Optional: Verify, Guardrails, Depends, Parallel, Model.
+
+Est = HWH (Human Work Hours): hours a skilled human needs for the task. Estimated total = sum of all Est values.
+Estimate with the buckets in TASKS_GUIDES.md Section 2. /write-prompts uses the sum of Est values of the covered tasks as task HWH in PROMPTS_GUIDES.md Section 1g (prompt count and cost per model).
 
 Model hints from !NOTES.md (model switching section; Devin: `## Cascade Model Switching`). Recommendations only.
 -->
@@ -52,7 +55,7 @@ Model hints from !NOTES.md (model switching section; Devin: `## Cascade Model Sw
 - [ ] **[TOPIC]-TK-001** - [Description]
   - Files: [files affected]
   - Done when: [completion criteria]
-  - Est: [N] HHW
+  - Est: [N] HWH
 
 ## Task N - Final Verification (MANDATORY)
 
@@ -93,7 +96,7 @@ Model hints from !NOTES.md (model switching section; Devin: `## Cascade Model Sw
 ## Task Overview
 
 - Total tasks: 5
-- Estimated total: 2.5 HHW
+- Estimated total: 2.0 HWH
 - Parallelizable: 2 tasks
 
 ## Task 0 - Baseline (MANDATORY)
@@ -110,7 +113,7 @@ Run before starting any implementation:
   - Files: src/models/user.py
   - Done when: User model with email, password_hash fields exists
   - Verify: python -m pytest tests/models/
-  - Est: 0.5 HHW
+  - Est: 0.5 HWH
 
 ### Service Layer
 
@@ -120,14 +123,14 @@ Run before starting any implementation:
   - Verify: python -m pytest tests/services/test_auth.py
   - Guardrails: Must use bcrypt, not MD5
   - Depends: TK-001
-  - Est: 0.5 HHW
+  - Est: 0.5 HWH
 
 - [ ] **AUTH-TK-003** - Implement JWT tokens
   - Files: src/services/auth.py
   - Done when: create_token and verify_token functions work
   - Verify: python -m pytest tests/services/test_auth.py
   - Parallel: [P]
-  - Est: 0.5 HHW
+  - Est: 0.5 HWH
 
 ### API Layer
 
@@ -136,7 +139,7 @@ Run before starting any implementation:
   - Done when: POST /login returns JWT on valid credentials
   - Verify: python -m pytest tests/api/test_auth.py
   - Depends: TK-002, TK-003
-  - Est: 0.5 HHW
+  - Est: 0.5 HWH
 
 ## Task N - Final Verification (MANDATORY)
 

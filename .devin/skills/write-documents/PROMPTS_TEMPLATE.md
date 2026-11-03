@@ -13,12 +13,12 @@ Execution model (PRMT-EX-01/02): Each prompt is a separate turn for an execution
 
 <!-- Optional Execution Frontmatter (PRMT-FT-08): YAML block at file start.
 Provides execution hints to the execution engine. The engine MAY honor or override.
-Omit entirely if no execution hints needed. Remove this block if not used.
+Required for multi-prompt files (PRMT-SC-05). Omit only for single-prompt, model-agnostic files.
 Supported keys: intended_model, context_window_size, effort, prompt_system -->
 ---
 intended_model: [model identifier, e.g., claude-sonnet-5]
 context_window_size: [e.g., 200k, 128k, 1M]
-effort: [low | medium | high | extra-high]
+effort: [low | medium | high | extra-high | max]
 prompt_system: [e.g., IPPS]
 ---
 
@@ -89,6 +89,12 @@ Constraints:
 Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
 Verify: [Observable success criteria]
+
+**STOP.** Report: items completed, final run status, and a clickable summary artifact list with multiple headings for each output group formatted as:
+### [Output Group Heading]
+<what was done and what do these files contain>
+- [filename](file:///path) - <description of file purpose or content>
+(Do not wrap the list in code fences).
 ````
 
 <!-- EXAMPLE: Reference only. Do not copy into new documents. Shows a completed 2-prompt file with optional frontmatter and headings (PRMT-FT-07/08). -->
@@ -170,5 +176,11 @@ Constraints:
 Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
 Verify: Run `pnpm test:auth`. All tests pass. The specific vulnerability from step 1 is no longer present.
+
+**STOP.** Report: test pass status, final run status, and a clickable summary artifact list with multiple headings for each output group formatted as:
+### [Output Group Heading]
+<what was done and what do these files contain>
+- [filename](file:///path) - <description of file purpose or content>
+(Do not wrap the list in code fences).
 ````
 `````

@@ -256,9 +256,9 @@ Use `**Doc ID**:` without suffixes. `(TDID)` is redundant - all Doc IDs follow t
 
 ## TMPL-HD-02: Doc ID Applicability
 
-Doc ID required for per-task documents only: INFO, SPEC, IMPL, TEST, TASKS, REVIEW, MINTO, DEFERRED_IMPROVEMENTS, FIXES.
+Doc ID required for per-task documents and the three DD-16 deliverable file kinds (OPTIONS, DRAFT, dated publication output): INFO, SPEC, IMPL, TEST, TASKS, REVIEW, MINTO, DEFERRED_IMPROVEMENTS, FIXES, and document-type templates.
 
-Not applicable for: tracking logs (FAILS, LEARNINGS), scaffolding (MINTO-DRAFT, STRUT), reusable artifacts (SKILL, WORKFLOW), embedded notation, or conversation tracking (CONVERSATION).
+Not applicable for: tracking logs (FAILS, LEARNINGS), scaffolding (STRUT), reusable artifacts (SKILL, WORKFLOW), embedded notation, or conversation tracking (CONVERSATION).
 
 ## TMPL-HD-03: Topic ID XML Comment
 
@@ -290,7 +290,7 @@ Format: `Created YYYY-MM-DD, Updated N times (YYYY-MM-DD - YYYY-MM-DD)`
 
 ## TMPL-SN-01: Document History
 
-Required in all per-task document templates. Format per `core-conventions.md`: reverse chronological, action prefixes (Added, Changed, Fixed, Removed, Moved).
+Required in all per-task document templates and the three DD-16 deliverable file kinds (OPTIONS, DRAFT, dated publication output). Format per `core-conventions.md`: reverse chronological, action prefixes (Added, Changed, Fixed, Removed, Moved).
 
 Not required for: tracking logs, scaffolding, reusable artifacts, embedded notation.
 
@@ -300,7 +300,7 @@ Required for planning documents: SPEC, IMPL, TEST.
 
 Also used in: INFO (research scope), CONVERSATION (formatting rules).
 
-Not required for: REVIEW, MINTO, MINTO-DRAFT, FIXES, DEFERRED, FAILS, LEARNINGS, TASKS.
+Not required for: REVIEW, MINTO, FIXES, DEFERRED, FAILS, LEARNINGS, TASKS, or DD-16 deliverable files (OPTIONS, DRAFT, dated output).
 
 ## TMPL-SN-03: Table of Contents
 

@@ -171,7 +171,7 @@ Documents may opt-in to use Markdown tables or emojis by adding a PromptSystem t
 
 **Excluded from the no-tables default (tables ALWAYS allowed, no opt-in tag needed):**
 - The following document types are exempt from the default "no tables" rule. They may use Markdown tables freely without `<PromptSystem MarkdownTablesAllowed=true />`:
-  - Minto Pyramid articles (output of `/write-minto`, `/propose-minto`)
+  - Minto Pyramid articles (output of `/write-article` or `/propose-article` using MINTO)
   - Blog posts and essays
   - Whitepapers and publication-ready reports
   - Any document whose primary purpose is to be read as prose (not reference/lookup)

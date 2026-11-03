@@ -41,7 +41,7 @@ def parse_arguments():
   parser = argparse.ArgumentParser(description="Render Markdown to HTML and PDF via an HTML template and headless Chromium.")
   parser.add_argument("inputs", nargs="*", help="Markdown files, folders, or glob patterns")
   parser.add_argument("--format", choices=["html", "pdf", "both"], default="both")
-  parser.add_argument("--template", default="document", help="template name in templates/ or path to an HTML file")
+  parser.add_argument("--template", default="DocumentDefault", help="template name in templates/ or path to an HTML file")
   parser.add_argument("--options", help='override the template <meta name="render-options"> content, e.g. "columns=DE:DE,EN:EN,PT:PT; markers=^###\\s*DE,^###\\s*EN,^###\\s*PT"')
   parser.add_argument("--output-dir", help="output folder (default: next to each input)")
   parser.add_argument("--paper", choices=["A4", "Letter"], help="override template page size")

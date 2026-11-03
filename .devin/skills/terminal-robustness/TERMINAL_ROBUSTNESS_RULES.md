@@ -16,6 +16,8 @@ Execution Patterns (EX)
 - TERMROBUSTNESS-EX-01: Redirect verbose output to file, read with file tool
 - TERMROBUSTNESS-EX-02: Time cap on every process-running command
 - TERMROBUSTNESS-EX-03: Process-tree kill with survivor sweep
+- TERMROBUSTNESS-EX-04: Inline whitelist, everything else via `_agentwork/.tmp_` script
+- TERMROBUSTNESS-EX-05: Delete temp script and output files after consumption
 
 Card Definition (CD)
 - TERMROBUSTNESS-CD-01: Card created from agent template, never from scratch
@@ -32,7 +34,7 @@ npm install 2>&1
 
 **GOOD:**
 ```powershell
-npm install 2>".tmp_install_stderr.txt"
+npm install 2>"_agentwork/.tmp_install_stderr.txt"
 ```
 
 ## TERMROBUSTNESS-HG-02: No stdin, pager, or key waits
@@ -87,7 +89,7 @@ Get-ChildItem -Recurse | Select-String "pattern"
 
 **BAD:** Long inline pipeline whose output returns through the terminal tool.
 
-**GOOD:** Write a `.tmp_*.ps1`/`.py` script, redirect all output to `.tmp_` files, run it, then `read_file` the results.
+**GOOD:** Write a `_agentwork/.tmp_*.ps1`/`.py` script, redirect all output to `_agentwork/.tmp_` files, run it, then `read_file` the results.
 
 ## TERMROBUSTNESS-EX-02: Time cap on every process-running command
 
@@ -106,6 +108,27 @@ Run the test suite non-blocking with a 10-minute cap. On cap: kill the process t
 **BAD:** `Stop-Process -Id $pid -Force` (kills only the parent; grandchildren keep the pipe open).
 
 **GOOD:** Recursive `Stop-ProcessTree` (children and grandchildren), then sweep by command-line pattern for orphans whose parent PID no longer maps to a running process.
+
+## TERMROBUSTNESS-EX-04: Inline whitelist, everything else via `_agentwork/.tmp_` script
+
+Inline only if ALL apply: single command, no `|`, no `;`, no loop or script block, no `2>&1`, under 200 characters, under 10 seconds, under 50 output lines.
+
+**BAD:**
+```powershell
+Get-ChildItem -Recurse -Filter *.md | Where-Object { $_.Length -gt 10000 } | Select-Object FullName, Length
+```
+
+**GOOD:**
+```powershell
+pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_large_md.ps1 > _agentwork/.tmp_large_md_out.txt 2> _agentwork/.tmp_large_md_err.txt
+```
+Then `read_file` both output files.
+
+## TERMROBUSTNESS-EX-05: Delete temp script and output files after consumption
+
+**BAD:** `.tmp_large_md.ps1` and its `_out.txt` / `_err.txt` remain after the results were read and used.
+
+**GOOD:** Delete the script and its output files in the same task once their content is consumed; `/cleanup` only catches leftovers.
 
 ## TERMROBUSTNESS-CD-01: Card created from agent template, never from scratch
 

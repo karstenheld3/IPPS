@@ -129,6 +129,25 @@ Agent-created files (helper scripts, intermediate data, temp artifacts) MUST res
 
 Forbidden: System temp (`%TEMP%`, `$env:TEMP`, `/tmp/`), user home, Program Files, or any location outside workspace/session/target scope. No exceptions.
 
+### `_agent_work/` Folder
+
+Every working folder (session root, `T##_*`, or `S##_*` subfolder) has an `_agent_work/` subfolder for all operational artifacts that can be deleted without losing final output. In PROJECT-MODE the folder is `[WORKSPACE_FOLDER]/_agent_work/`.
+
+**In** (must go into `_agent_work/`):
+- `_PROMPTS_*` files (written by `/write-prompts`)
+- `__STRUT_*`, `__TASKS_*` scaffolding (written by `/go`, `/deep-research`, `/bugfix`, `/write-strut`)
+- `__CARD_*` prompt cards (findings, robustness)
+- `__DRIFT_*`, `DRIFTS.md` (written by `/drift-detect`, consumed by `/drift-correct`)
+- `partition-observations.jsonl` (observation ledger)
+- `.tmp_*` temp scripts and data
+
+**Out** (must NOT go into `_agent_work/`):
+- Tracking documents: `NOTES.md`, `PROGRESS.md`, `PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`
+- Deliverables: `_INFO_*`, `_SPEC_*`, `_IMPL_*`, `_TEST_*`
+- Review and improve outputs: `*_CRITIQUE.md`, `*_FACT-CHECK.md`, `_vN` backups, `*_DEFERRED_IMPROVEMENTS.md` - these belong beside the document they concern
+
+**Cleanup**: `/cleanup` deletes `_agent_work/` recursively but refuses while an un-ingested `*.jsonl` exists (run `/session-finalize` first). `/session-archive` expects no `_agent_work/` to remain.
+
 Naming:
 - `.tmp_` prefix for scripts and temp data. Example: `.tmp_fix_quotes.ps1`
 - `__` prefix for scaffolding documents (STRUTs, TASKS, templates auto-created by workflows). Example: `__STRUT_TOPIC.md`

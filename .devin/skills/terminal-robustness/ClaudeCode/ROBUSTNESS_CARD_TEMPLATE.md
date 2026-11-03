@@ -1,6 +1,6 @@
 # Robustness Card Template (ClaudeCode)
 
-Re-usable card for Claude Code agents. Copy to project root as `__CARD_[TOPIC]-Robustness.md` and extend with project-specific entries. Generic defaults only - replace bracketed placeholders.
+Re-usable card for Claude Code agents. Copy to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder and extend with project-specific entries. Generic defaults only - replace bracketed placeholders.
 
 ```markdown
 # Robustness Card: [TOPIC]
@@ -35,7 +35,7 @@ Re-usable card for Claude Code agents. Copy to project root as `__CARD_[TOPIC]-R
 - Stderr redirected to file, never merged with `2>&1`
 - File and content search uses rg.exe instead of recursive shell enumeration
 - Stray processes stopped after every command execution
-- Verbose output (>few KB) goes through script + redirect + file-read
+- Commands outside the inline whitelist run as `_agentwork/.tmp_` script + redirect to `_agentwork/.tmp_` files + file-read; script and output files deleted after consumption
 
 ## On-cap behavior
 

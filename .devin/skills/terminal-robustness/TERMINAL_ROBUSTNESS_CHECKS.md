@@ -41,6 +41,20 @@ Audits process discipline and quality of terminal command execution. Consumed AF
 - Failure indicator: a hang discussed in conversation with no card entry
 - References: TERMROBUSTNESS-CD-04
 
+### TERMROBUSTNESS-PD-06: Non-whitelisted commands ran as temp scripts
+
+- Action: Every command outside the inline whitelist ran as `_agentwork/.tmp_` script with output redirected to `_agentwork/.tmp_` files and read with the file tool
+- Evidence: command history shows only whitelisted inline commands and `pwsh -File _agentwork/.tmp_*.ps1 > ... 2> ...` lines
+- Failure indicator: inline pipeline, multi-statement, loop, or long command line in the terminal; results read from terminal output
+- References: TERMROBUSTNESS-EX-04
+
+### TERMROBUSTNESS-PD-07: Temp files removed after consumption
+
+- Action: Temp scripts and their output files deleted once their content was consumed
+- Evidence: no `.tmp_*` files from the task remain in `_agentwork/` at task end
+- Failure indicator: `.tmp_*` scripts or `_out.txt` / `_err.txt` files left after the task
+- References: TERMROBUSTNESS-EX-05
+
 ## Quality Improvement (QI)
 
 ### TERMROBUSTNESS-QI-01: Cap sizing judgment
@@ -55,10 +69,10 @@ Audits process discipline and quality of terminal command execution. Consumed AF
 
 ### TERMROBUSTNESS-QI-03: Redirect-pattern adoption
 
-- Question: Could verbose inline commands have been replaced by the tmp-script + redirect + file-read pattern?
-- Improvement tip: When output exceeds a few KB, switch to the redirect pattern rather than narrowing pipelines - it eliminates all three mechanisms at once
+- Question: Did inline commands stay within the whitelist, or did borderline commands slip through inline?
+- Improvement tip: When in doubt, use the temp-script pattern rather than narrowing pipelines - it eliminates all three mechanisms at once
 
-### TERMROBUSTNESS-QI-04: Card reuse across sessions
+### TERMROBUSTNESS-QI-04: Card reuse within the working folder
 
-- Question: Is the card durable (project root) and extended over time, or recreated per session?
-- Improvement tip: Store the card at project root, reference it from prompt sequences, and extend its Findings Feed - institutional memory beats per-session rediscovery
+- Question: Is the card in `_agentwork/` extended over the working folder's lifetime, or recreated per prompt?
+- Improvement tip: Keep one card per working folder in `_agentwork/`, reference it from prompt sequences, and extend its Findings Feed; promote recurring findings to the agent `ROBUSTNESS_CARD_TEMPLATE.md` before `/cleanup`

@@ -10,15 +10,16 @@ Two-step renderer: `render.py` injects Markdown into an HTML template that carri
 
 **References** (loaded on demand):
 - [SETUP.md](SETUP.md) - venv check, browser install, verification
-- [templates/document.html](templates/document.html) - single reading column
-- [templates/columns.html](templates/columns.html) - parallel streams (languages, versions) as aligned columns per section
+- [templates/DocumentDefault.html](templates/DocumentDefault.html) - single reading column
+- [templates/DocumentMultiLingual-Columns.html](templates/DocumentMultiLingual-Columns.html) - parallel streams (languages, versions) as aligned columns per section
+- [templates/MemoSigned.html](templates/MemoSigned.html) - formal memo/letter with key-terms grid and signature blocks
 - [templates/shared/tokens.css](templates/shared/tokens.css) - palette, fonts, type scale, base element rules
 - [templates/shared/render-common.js](templates/shared/render-common.js) - shared template helpers (front matter, anchors, task lists, code classes, page breaks, image wait, table fitting, page header, done signal)
 
 ## MUST-NOT-FORGET
 
 1. Run with the venv Python: `& "[SKILL_TOOLS_FOLDER]\llm-venv\Scripts\python.exe" [AGENT_FOLDER]\skills\renderings\render.py ...`
-2. Pick the template first: documents with parallel language streams (`### DE (Original)` style markers) → `columns` with `--options`; everything else → `document`
+2. Pick the template first: documents with parallel language streams (`### DE (Original)` style markers) → `DocumentMultiLingual-Columns` with `--options`; formal memos/letters with signature blocks → `MemoSigned`; everything else → `DocumentDefault`
 3. Output goes next to the input unless `--output-dir` is given; existing files are skipped unless `--overwrite`
 4. Images stay linked files (never embedded): keep them in `_assets/` next to the Markdown and link `![Alt](_assets/name.png)`. The HTML keeps the same relative `src` (GitHub-compatible); with `--output-dir` the referenced images are copied to the same relative path. Ship the HTML together with its `_assets/` folder
 5. Templates must set `body[data-rendered="true"]` when done; `render.py` waits for it before printing. A template that never sets it fails after `--render-timeout` seconds
@@ -32,7 +33,7 @@ Two-step renderer: `render.py` injects Markdown into an HTML template that carri
 - **Render a multilingual document side by side** → Procedure 2
 - **Only HTML, or only PDF** → `--format html` or `--format pdf` (`--keep-html` keeps the intermediate file)
 - **Letter paper or landscape** → `--paper Letter`, `--landscape`
-- **`---` should start a new page in the PDF** → `--options "hrPageBreak=true"` (document template)
+- **`---` should start a new page in the PDF** → `--options "hrPageBreak=true"` (DocumentDefault template)
 - **Wide tables print too small or wrap too much** → `--options "landscapeTables=7"` (tables with 7+ columns get their own landscape page) or `--options "tableFont=condensed"` (see Template Catalog)
 - **Create a new layout** → Procedure 3
 
@@ -42,7 +43,7 @@ Two-step renderer: `render.py` injects Markdown into an HTML template that carri
 
 ```
 1. Resolve inputs: files, folders (*.md), or globs
-2. Run: python render.py <inputs> --output-dir <folder>            (template 'document', HTML and PDF)
+2. Run: python render.py <inputs> --output-dir <folder>            (template 'DocumentDefault', HTML and PDF)
 3. Read the report lines: html size | pdf pages size | seconds; DONE line with ok/failed/skipped counts
 4. Exit code 0 = all ok or skipped, 1 = some inputs failed (others rendered), 2 = setup or argument error
 ```
@@ -51,8 +52,8 @@ Two-step renderer: `render.py` injects Markdown into an HTML template that carri
 
 ```
 1. Identify the marker line that starts each language stream in the source, e.g. `### DE (Original)`, `### EN (Translation)`, `### PT (Tradução)`
-2. Run with the columns template and matching options:
-   python render.py file.md --template columns --options "columns=DE:DE,EN:EN,PT:PT; markers=^###\s*DE\s*\(Original\),^###\s*EN\s*\(Translation\),^###\s*PT\s*\(Tradu; scope=document; sectionLevels=1-4; wideColumns=4"
+2. Run with the DocumentMultiLingual-Columns template and matching options:
+   python render.py file.md --template DocumentMultiLingual-Columns --options "columns=DE:DE,EN:EN,PT:PT; markers=^###\s*DE\s*\(Original\),^###\s*EN\s*\(Translation\),^###\s*PT\s*\(Tradu; scope=document; sectionLevels=1-4; wideColumns=4"
 3. For documents organized as dated entries whose language blocks start with bold markers (`**DE (Original)**`), use scope=entry:
    --options "columns=DE:DE,EN:EN,PT:PT; markers=^\*\*DE \(Original\)\*\*,^\*\*EN \(Translation\)\*\*,^\*\*PT \(Tradu; scope=entry; entryLevel=2; sectionLevels=3-4"
 4. Check the first PDF page: one card per section, one column per language, wide tables stacked
@@ -66,16 +67,16 @@ Options (`;`-separated `key=value` pairs, override the template's `<meta name="r
 - `sectionLevels` - heading levels that split each stream into sections, `low-high` (default `1-4`); section i of every stream forms one card
 - `wideColumns` - tables with at least this many columns make their card stack the languages vertically (default 4)
 
-Options of the `document` template (same `--options` syntax):
+Options of the `DocumentDefault` template (same `--options` syntax):
 - `tableFont` - `default` or `condensed`; `condensed` renders tables in the condensed font stack (`Arial Narrow`, `Roboto Condensed`, `Bahnschrift SemiCondensed`, falling back to the sans stack when none is installed)
 - `landscapeTables` - `0` (off, default) or N; tables with N or more columns print on their own A4 landscape page
-- `hrPageBreak` - `false` (default) or `true`; every thematic break (`---`, `***`, `___`) starts a new page in print, the screen keeps the divider line. A break as first or last block or directly after another break is dropped (no empty pages). Ignored by the `columns` template (`---` separates streams there)
+- `hrPageBreak` - `false` (default) or `true`; every thematic break (`---`, `***`, `___`) starts a new page in print, the screen keeps the divider line. A break as first or last block or directly after another break is dropped (no empty pages). Ignored by the `DocumentMultiLingual-Columns` template (`---` separates streams there)
 - When passing `--options`, repeat every option you want: the value replaces the whole template default
 
 ### 3. Write a new template
 
 ```
-1. Copy templates/document.html to templates/<name>.html
+1. Copy templates/DocumentDefault.html to templates/<name>.html
 2. Keep the placeholders: {{TITLE}}, {{LANG}}, {{MARKDOWN}} and the includes {{FILE:shared/tokens.css}}, {{FILE:shared/markdown-it.min.js}}, {{FILE:shared/render-common.js}}
 3. Keep the render script's last call finishRendering() - it sets data-rendered after fonts are ready
 4. Put layout in the template's own <style>: @page size and margins, margin boxes for header/footer, column CSS
@@ -99,26 +100,27 @@ render.py <inputs...> [--format html|pdf|both] [--template NAME|PATH] [--options
 
 - `inputs` - files, folders (`*.md` inside), or glob patterns; dotfiles skipped; duplicates removed
 - `--format` - default `both`; `pdf` alone writes a temporary HTML that is removed after a successful print unless `--keep-html`
-- `--template` - `document` (default) or `columns`, or a path to any template file
+- `--template` - `DocumentDefault` (default), `DocumentMultiLingual-Columns`, `MemoSigned`, or a path to any template file
 - `--render-timeout` - seconds to wait for `data-rendered` (default 30)
 - `--list-templates` - prints available template names and exits
 
 ## Template Catalog
 
-- **document** - single column, A4 portrait, margins 20/18/22/18 mm, static title header on pages 2+, "Page N of M" footer, GitHub-compatible heading ids (TOC links work), task lists, code blocks unwrapped up to 110 characters per line then soft-wrapped, language label on fenced code, code line box measured from the monospace font so box-drawing diagrams have no row gaps, headings wrap anywhere (long file-name titles stay inside the page)
+- **DocumentDefault** - single column, A4 portrait, margins 20/18/22/18 mm, static title header on pages 2+, "Page N of M" footer, GitHub-compatible heading ids (TOC links work), task lists, code blocks unwrapped up to 110 characters per line then soft-wrapped, language label on fenced code, code line box measured from the monospace font so box-drawing diagrams have no row gaps, headings wrap anywhere (long file-name titles stay inside the page)
   - Tables: full width, repeated header rows, words break only when a single word is wider than its column; tables with 6+ columns start one size smaller; a table wider than the page steps its font down (13 / 12 / 11 px, 8.5 / 8 / 7.5 pt) until it fits; a table that still does not fit gets a horizontal scrollbar on screen, is clipped in PDF, and is reported as `WARNING: N tables wider than the page ...` on the file's report line. Opt-ins: `tableFont=condensed`, `landscapeTables=N`
   - Color: accent only on links; list markers and checkboxes use the text color
   - Images: never cropped (no rounded corners, no clipping); block and centered, scaled to the column width and to 90% of the window height on screen, to 240 mm in print (fits one A4 page); images next to text in a paragraph stay inline; table fitting runs after all images loaded. Opt-in: `hrPageBreak=true`
-- **columns** - one card per section with N language columns, combined section title colored per column, block and table-row height alignment across columns (measured after images loaded), wide-table cards stacked vertically in print, landscape when more than 3 columns, single-column fallback with a notice when no marker matches; images follow the document rules with a print limit of 230 mm portrait and 143 mm landscape inside a column
+- **DocumentMultiLingual-Columns** - one card per section with N language columns, combined section title colored per column, block and table-row height alignment across columns (measured after images loaded), wide-table cards stacked vertically in print, landscape when more than 3 columns, single-column fallback with a notice when no marker matches; images follow the document rules with a print limit of 230 mm portrait and 143 mm landscape inside a column
+- **MemoSigned** - formal memo/letter layout with key-terms grid (dl/dt/dd), sectioned content, and signature blocks; A4 portrait, compact 12px body, navy/chrome/slate palette, page footer; designed for LOIs, term sheets, and similar signed documents
 
-Both templates: no external resources, `-webkit-print-color-adjust: exact`, PDF bookmarks from headings (`outline=True`), tagged PDF.
+All three templates: no external resources, `-webkit-print-color-adjust: exact`, PDF bookmarks from headings (`outline=True`), tagged PDF.
 
 ## Gotchas
 
 - **Browser revision mismatch** - Playwright Python pins one Chromium build; a build installed by another tool (Node Playwright MCP) has a different revision. `render.py` falls back to the newest installed `chromium-*` build, then to system Chrome, then exits 2 with the install command. Run the SETUP.md install once to remove the fallback
 - **Running section titles** - Chromium does not support CSS `string-set`; the page header shows the document title, not the current section
 - **Variable fonts** - Chromium embeds variable fonts (e.g. Cascadia) as Type3 outlines in PDF; the code font stack starts with static Consolas, JetBrains Mono, DejaVu Sans Mono for clean embedding
-- **Markers inside code fences** are ignored by the columns template; markers must be plain lines
+- **Markers inside code fences** are ignored by the DocumentMultiLingual-Columns template; markers must be plain lines
 - **Commas in marker regexes** are not possible (comma separates patterns); use `\s` or character classes instead
 - **`<PromptSystem .../>` lines** are removed before rendering; other raw HTML passes through unchanged
 - **Image WARNING lines** on the file's report line (exit code stays 0; singular for 1): `WARNING: 2 images not found (first: src)` - local file missing; `WARNING: 1 image path outside the input folder (first: src)` - `../` or absolute path with `--output-dir` elsewhere, not copied, will not resolve from the HTML; `WARNING: 1 image failed to load (first: src)` - PDF pass, image missing or not decodable (remote images need network access). Image syntax inside code fences and code spans is ignored
@@ -138,5 +140,5 @@ Both templates: no external resources, `-webkit-print-color-adjust: exact`, PDF 
 $py = "[SKILL_TOOLS_FOLDER]\llm-venv\Scripts\python.exe"
 $render = "[AGENT_FOLDER]\skills\renderings\render.py"
 & $py $render "docs\*.md" --output-dir "docs\rendered" --overwrite
-& $py $render "report_DE-EN-PT.md" --template columns --options "columns=DE:DE,EN:EN,PT:PT; markers=^###\s*DE,^###\s*EN,^###\s*PT" --lang de
+& $py $render "report_DE-EN-PT.md" --template DocumentMultiLingual-Columns --options "columns=DE:DE,EN:EN,PT:PT; markers=^###\s*DE,^###\s*EN,^###\s*PT" --lang de
 ```

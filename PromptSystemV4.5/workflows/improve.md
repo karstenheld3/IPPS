@@ -369,28 +369,28 @@ Detection: determine context from file naming and content, then apply matching s
 
 **Integration**: New findings marked `[IMPROVED]`, challenged claims marked `[CHALLENGED]`. Update Sources section and Document History.
 
-## Minto Documents
+## Authored Documents
 
-**Lens**: Argument Architect - evaluate structural integrity, evidence density, and persuasive power of AMINTON trees.
+**Lens**: Editorial Architect - evaluate structural integrity, evidence placement, stylistic discipline, and persuasive clarity.
 
-**Phase 1 reads**: `MINTO_RULES.md`, `MINTO_GUIDES.md` (@skills:write-documents), source material listed in draft header
+**Phase 1 reads**: Detect `[TYPE]`, `[ID]`, and `[PERSONA]` from header block or `[ID]-OPTIONS-` / `[ID]-DRAFT-` filename (`DRSYNART-FR-06`). Read Quality Improvement (QI) sections of `[AGENT_FOLDER]/skills/write-documents/document_types/[TYPE]_CHECKS.md` and (when technique specified) `[AGENT_FOLDER]/skills/write-documents/writing_techniques/[ID]_CHECKS.md`; source material listed in draft header.
 
-**Phase 1 research**: Evaluate evidence strength per branch. Search for stronger evidence, counter-arguments, or alternative framings that would strengthen the tree.
+**Phase 1 research**: Evaluate evidence strength per section. Search for stronger evidence, counter-arguments, or alternative framings that would strengthen the document.
 
 **Specialized issues** (in addition to GLOBAL):
-- Thin branches - answers with only 1 evidence item where 2-3 would strengthen credibility
-- Evidence recycling - same finding (Fnn) used more than 3 times across the tree, indicating narrow evidence base
-- Magnet drift - root argument (A) no longer connects to listener motivator after drill-down development
-- Question-answer mismatch - answer does not actually address the question posed
-- Closing inflation - closing adds nuance or claims not present in the tree
-- MECE (Mutually Exclusive, Collectively Exhaustive) violations - overlapping questions or answers within the same parent
+- Weak sections - sections with only 1 evidence item where 2-3 would strengthen credibility
+- Evidence recycling - same finding used excessively across the document, indicating narrow evidence base
+- Theme drift - core governing thought or promise no longer connects to audience motivator after section development
+- Section goal mismatch - section does not actually address its assigned role or question
+- Ending inflation - conclusion adds unproven nuance or claims not present in the body
+- Structural overlap - overlapping section goals or duplicate arguments across chapters
 
 **Adversarial Collaborator techniques** (in addition to cross-context):
-- Challenge each Q1A1 claim: "What would make this false?"
-- For each E-node: "Is there a more compelling piece of evidence available?"
-- For the closing: "Does this summary actually follow from what was proved?"
+- Challenge each primary claim: "What would make this false?"
+- For each evidence node: "Is there a more compelling piece of evidence available?"
+- For the ending: "Does this conclusion actually follow from what was proved?"
 
-**Improvement references**: `MINTO_RULES.md` MINTO-TI-*, MINTO-ME-*, MINTO-CL-* for structural targets
+**Improvement references**: CHECKS QI items in companion `[TYPE]_CHECKS.md` and `[ID]_CHECKS.md` for quality improvement targets
 
 ## Translation Output
 
@@ -455,7 +455,7 @@ Detection: determine context from file naming and content, then apply matching s
    - `_TEST_*` or TC-XX IDs → TEST Plan
    - `_TASKS_*` / `__TASKS_*` or TK-XX IDs → TASKS Plan
    - `.py`, `.ps1`, `.js`, `.ts` etc. → Code
-   - `__MINTO-DRAFT_*` or `_MINTO_*` → Minto Documents
+   - `[ID]-OPTIONS-*`, `[ID]-DRAFT-*`, or header block with `**Document Type**` (article, report, ebook) → Authored Documents
    - `*_[LANG].md` or `*_[LANG].srt` with corresponding source file → Translation Output
    - Workflow folder `.md` files → Workflow
    - Skill folder files → Skill
@@ -475,7 +475,7 @@ Detection: determine context from file naming and content, then apply matching s
    - **Folder**: `__<foldername>_DEFERRED_IMPROVEMENTS.md` in that folder
    - **Conversation context**: `__<session_topic_or_timestamp>_DEFERRED_IMPROVEMENTS.md` in session folder
    - Example: scope `_INFO_CRAWLER_SOURCES.md` → `__INFO_CRAWLER_SOURCES_DEFERRED_IMPROVEMENTS.md`
-6. **Create STRUT plan** via `/write-strut` - Track phases 1-4 with checkboxes. Save as `.tmp_STRUT_IMPROVE_<YYYY-MM-DD_HH-MM>.md` in scope folder (or session folder in SESSION-MODE).
+6. **Create STRUT plan** via `/write-strut` - Track phases 1-4 with checkboxes. Save as `_agentwork/.tmp_STRUT_IMPROVE_<YYYY-MM-DD_HH-MM>.md` in scope folder (or session folder in SESSION-MODE).
 7. **Backup scoped files** - MANDATORY. Execute IMMEDIATELY after step 6, BEFORE Phase 1:
    - **Code files** (`.py`, `.ps1`, `.js`, `.ts`, `.jsx`, `.tsx`, `.css`, `.html`, etc.):
      - **NEVER create `_vN` copies** of source code files
@@ -593,7 +593,7 @@ If 3 consecutive fix attempts cause regressions:
 
 ## Cleanup
 
-1. Delete `.tmp_STRUT_IMPROVE_<timestamp>.md` - plan is complete
+1. Delete `_agentwork/.tmp_STRUT_IMPROVE_<timestamp>.md` - plan is complete
 2. Keep all `_vN` backups (non-code) - only user may delete them. Code improvements committed as single atomic commit for clean diff/revert.
 3. If `[DEFERRED_FILE]` has entries, suggest `/reconcile` for pragmatic review
 

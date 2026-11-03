@@ -18,7 +18,7 @@ Turn one or more Markdown files into self-contained HTML and A4 PDF files using 
 ## MUST-NOT-FORGET
 
 - Use the venv Python from `[SKILL_TOOLS_FOLDER]\llm-venv`; never system Python
-- Choose the template before running: parallel language streams → `columns` with `--options` matching the marker lines; otherwise `document`
+- Choose the template before running: parallel language streams → `DocumentMultiLingual-Columns` with `--options` matching the marker lines; formal memos/letters with signature blocks → `MemoSigned`; otherwise `DocumentDefault`
 - Default output folder is `_EXPORT_gitignore` relative to the input's parent (session folder, workspace root, or the folder containing the inputs). Only use a different folder when the user explicitly provides `--output-dir` or names a target
 - Never pass `--overwrite` on existing deliverables unless the user asked to replace them
 - Report the artifact list (path, pages, size) back to the user
@@ -34,7 +34,7 @@ Turn one or more Markdown files into self-contained HTML and A4 PDF files using 
 ## Steps
 
 1. Resolve the inputs from the prompt: explicit files, a folder, or a glob. Determine the output folder: if the user specified `--output-dir` or named a target folder, use that; otherwise default to `_EXPORT_gitignore` under the input's parent directory (e.g. `[SESSION_FOLDER]/_EXPORT_gitignore/`, or `[WORKSPACE]/_EXPORT_gitignore/`, or `<input-folder>/_EXPORT_gitignore/`)
-2. Inspect one input: if it contains marker lines that start language or version streams (headings like `### XX (Original)` or bold lines like `**XX (Original)**`), use `--template columns` and build `--options` per the skill's Procedure 2; otherwise use the default `document` template
+2. Inspect one input: if it contains marker lines that start language or version streams (headings like `### XX (Original)` or bold lines like `**XX (Original)**`), use `--template DocumentMultiLingual-Columns` and build `--options` per the skill's Procedure 2; if it is a formal memo/letter with signature blocks, use `--template MemoSigned`; otherwise use the default `DocumentDefault` template
 3. Run `render.py` with `--output-dir <resolved folder>` and `--format both` unless the user asked for one format; add `--lang` for non-English documents, `--paper Letter` or `--landscape` when requested
 4. Read the report: any `FAILED` line → fix the cause (encoding, missing browser, template option) and rerun only the failed inputs
 5. Open one HTML in the browser preview and check one PDF page (page counter, header, tables) before reporting

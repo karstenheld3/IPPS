@@ -27,13 +27,13 @@ Template inconsistencies compound: every document inherits them, and mixed forma
 
 Created once per task, versioned, referenced by Doc ID. Require: Doc ID, Goal, Timeline, Document History.
 
-Templates: INFO, SPEC, IMPL, TEST, TASKS, REVIEW, MINTO, DEFERRED_IMPROVEMENTS, FIXES.
+Templates: INFO, SPEC, IMPL, TEST, TASKS, REVIEW, MINTO, DEFERRED_IMPROVEMENTS, FIXES, and the three DD-16 deliverable file kinds (OPTIONS, DRAFT, dated output).
 
 ### 3.2 Other Templates
 
 Tracking logs, scaffolding, reusable artifacts, or embedded notation. Doc ID, Timeline, and Document History do not apply.
 
-Templates: FAILS, LEARNINGS, MINTO-DRAFT, CONVERSATION, SKILL, WORKFLOW, STRUT.
+Templates: FAILS, LEARNINGS, CONVERSATION, SKILL, WORKFLOW, STRUT.
 
 ## 4. Template Structure
 

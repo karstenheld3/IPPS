@@ -61,7 +61,7 @@ Use appropriate notation based on scope:
 
 - **TASKS** - Low-level execution for granular task coordination
   - When: Single-phase execution, partitioned IMPL steps, research file-by-file work
-  - Contains: Task items with files, done-when criteria, verification commands, **task durations**
+  - Contains: Task items with files, done-when criteria, verification commands, **task estimates in HWH (Human Work Hours)** (per @skills:write-documents `TASKS_GUIDES.md`)
   - Tracks: Individual task progress, timing `[HH:MM-HH:MM]`, parallel execution
   - Created via: [PARTITION] verb from IMPL plan or Phase 4 of research strategies
 

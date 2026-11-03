@@ -1,170 +1,71 @@
 ---
 name: write-documents
-description: Apply when creating or editing INFO, SPEC, IMPL, TEST, FIX documents, STRUT plans, or CONVERSATION files
+description: Single source of truth for all document writing - system and planning documents (INFO, SPEC, IMPL, TEST, TASKS, PROMPTS, STRUT, CONVERSATION), document types (articles, reports, ebooks), writing techniques (MINTO, IMINTO, ABTSTORY, KABOB, STA, PAS, AIDA, DIATAXIS, IMRAD), and writing personas. Apply when planning, drafting, reviewing, or writing any document.
 ---
 
-# Document Writing Guide
+# Document Writing Skill
 
-This skill contains document templates, formatting rules, and writing quality standards.
+Single skill for planning, creating, reviewing, and packaging documents. Root holds system and planning document standards; function subfolders hold deliverable document types, macro-structure writing techniques, and writing personas.
 
-**Writing quality standard:** All documents MUST follow:
-- `APAPALAN_RULES.md` - Precision formatting, brevity, document structure, naming conventions
-- `MECT_WRITING_RULES.md` - Voice, word choice, terminology design, heading/list construction, description types
+## Routing
 
-**Quality evaluation:** `SOCAS_RULES.md` - Signs of Confusion and Sloppiness (15 criteria). Used by `/verify`, `/critique`, `/improve`, `/research`.
+Read this file, then jump to exactly one target:
 
-**Translation quality:** `TRANSLATION_RULES.md` - Quality dimensions, term pairs, prompt templates, improvement cycle. Used by `/translate`, `/verify`, `/improve`.
+- **Create or edit INFO documents** (research synthesis, analysis, option evaluation) -> `INFO_GUIDES.md`, `INFO_RULES.md`, `INFO_TEMPLATE.md`
+- **Create or edit SPEC documents** (technical specifications, requirements, architecture) -> `SPEC_RULES.md`, `SPEC_TEMPLATE.md`
+- **Create or edit IMPL plans** (implementation plans, steps, edge cases) -> `IMPL_TEMPLATE.md`
+- **Create or edit TEST plans** (test plans, test cases, verification checklist) -> `TEST_TEMPLATE.md`
+- **Create or edit TASKS documents** (partitioned work items, model sizing) -> `TASKS_GUIDES.md`, `TASKS_TEMPLATE.md`, `@skills:llm-tools` `MODEL_INVENTORY.md`
+- **Create or edit PROMPTS queue files** (headless execution sequences) -> `PROMPTS_GUIDES.md`, `PROMPTS_RULES.md`, `PROMPTS_TEMPLATE.md`, `PROMPTS_ROBUSTNESS_GUIDES.md`, `@skills:llm-tools` `MODEL_INVENTORY.md`
+- **Create or insert STRUT plans** (structured execution plans with gates) -> `STRUT_TEMPLATE.md`
+- **Create review documents** (`*_CRITIQUE.md`, `*_FACT-CHECK.md` for `/critique`, `/fact-check`) -> `CRITIQUE_TEMPLATE.md`, `FACT-CHECK_TEMPLATE.md`
+- **Track implementation fixes** (`_IMPL_[COMPONENT]_FIXES.md`) -> `FIXES_TEMPLATE.md`
+- **Record failures and lessons learned** (`FAILS.md`) -> `FAILS_TEMPLATE.md`
+- **Track deferred improvements** (`*_DEFERRED_IMPROVEMENTS.md`) -> `DEFERRED_IMPROVEMENTS_TEMPLATE.md`
+- **Create or update CONVERSATION documents** (email, WhatsApp) -> `CONVERSATION_RULES.md`, `CONVERSATION_HUMANIZING_RULES.md`, `CONVERSATION_TEMPLATE.md`
+- **Create or update SKILL documents** (`SKILL.md` in skills/[name]/) -> `SKILL_GUIDES.md`, `SKILL_RULES.md`, `SKILL_TEMPLATE.md`
+- **Create or update WORKFLOW documents** (`.md` in workflows/) -> `WORKFLOW_GUIDES.md`, `WORKFLOW_RULES.md`, `WORKFLOW_TEMPLATE.md`
+- **Create or update TEMPLATE files** -> `TEMPLATE_GUIDES.md`, `TEMPLATE_RULES.md`
+- **Create or fix ASCII art diagrams** -> `ASCII_ART_GUIDES.md`, `ASCII_ART_RULES.md`
+- **Step-by-step investigation log** (`_INVESTIGATION_[TOPIC].md` for `/investigate`) -> `@skills:analysis-methods` `INVESTIGATION_GUIDES.md`, `INVESTIGATION_LOG_RULES.md`, `INVESTIGATION_LOG_TEMPLATE.md`
+- **Write articles, reports, or ebooks** (DD-20 coverage: landing pages are articles, user manuals are ebooks, reference documentation is reports) -> `document_types/ARTICLE_GUIDES.md`, `document_types/REPORT_GUIDES.md`, `document_types/EBOOK_GUIDES.md`
+- **Apply a writing technique** (macro-structure: MINTO, IMINTO, ABTSTORY, KABOB, STA, PAS, AIDA, DIATAXIS, IMRAD) -> `writing_techniques/README.md`
+- **Apply a writing persona** (voice sliders, traits, zero-bullshit baseline) -> `writing_personas/README.md`
 
-Read APAPALAN and MECT before writing any document. Read SOCAS when evaluating quality.
-
-## Verb Mapping
-
-This skill implements:
-- [WRITE-INFO] - Create INFO documents (use `INFO_TEMPLATE.md`, read `INFO_GUIDES.md`, `INFO_RULES.md`)
-- [WRITE-SPEC] - Create SPEC documents (use `SPEC_TEMPLATE.md`, read `SPEC_RULES.md`)
-- [WRITE-IMPL-PLAN] - Create IMPL documents (use `IMPL_TEMPLATE.md`)
-- [WRITE-TEST-PLAN] - Create TEST documents (use `TEST_TEMPLATE.md`)
-- [WRITE-FIX] - Create FIX documents (use `FIXES_TEMPLATE.md`)
-- [WRITE-FAIL] - Create/update FAILS.md (use `FAILS_TEMPLATE.md`)
-- [WRITE-REVIEW] - Create critique/fact-check review documents (`*_CRITIQUE.md`, `*_FACT-CHECK.md`; use `CRITIQUE_TEMPLATE.md` for `/critique`, `FACT-CHECK_TEMPLATE.md` for `/fact-check`)
-- [WRITE-TASKS-PLAN] - Create TASKS documents (use `TASKS_TEMPLATE.md`)
-- [WRITE-PROMPTS] - Create prompt queue files (use `PROMPTS_TEMPLATE.md`, read `PROMPTS_GUIDES.md`, `PROMPTS_RULES.md`, `PROMPTS_ROBUSTNESS_GUIDES.md`; see `PROMPTS_EXAMPLE_*.md` for worked examples)
-- [WRITE-STRUT] - Create/insert STRUT plans (use `STRUT_TEMPLATE.md`)
-- [WRITE-SKILL] - Create/update skill folders (use `SKILL_TEMPLATE.md`, read `SKILL_GUIDES.md`, `SKILL_RULES.md`)
-- [WRITE-CONVERSATION] - Create conversation files (use `CONVERSATION_TEMPLATE.md`, read `CONVERSATION_RULES.md`)
-- [UPDATE-CONVERSATION] - Update existing conversation files (read `CONVERSATION_RULES.md`)
-- [ASCII-DIAGRAM] - Create or fix ASCII art diagrams (read `ASCII_ART_GUIDES.md` before execution; `ASCII_ART_RULES.md` consumed by `/verify` post-execution)
-
-## Diagram Auto-Trigger
-
-When creating any document, evaluate diagram triggers before finalizing. Diagrams are mandatory when triggers apply:
-1. 3+ components with connections → component diagram
-2. Multi-tier architecture → layer diagram
-3. UI screens or forms → UX mockup
-4. State transitions or cycles → state machine
-5. Sequential process with 3+ stages → pipeline or flowchart
-6. Research findings with 3+ parallel options → comparison or chart
-7. MINTO tree with 3+ Q-branches → tree diagram in appendix
-
-Read `ASCII_ART_GUIDES.md` before drawing. Use Unicode box-drawing characters per `core-conventions.md`.
-
-## MUST-NOT-FORGET
-
-- Read `APAPALAN_RULES.md` before writing - precision first, then brevity
-- Read `MECT_WRITING_RULES.md` before writing - voice, word choice, terminology design
-- Use lists, not Markdown tables
-- No emojis - ASCII only, no `---` markers between sections
-- Header block: Doc ID (required), Goal (required), Target file, Depends on (omit if N/A)
-- Every document MUST have a unique ID
-- Reference other docs by filename AND Doc ID: `_SPEC_CRAWLENG.md [CRAWLENG-SP01]`
-- Topic IDs: 7-14 uppercase chars
-- Nested Doc IDs inside T##/S## folders: `[TOPIC]-[SUBTOPIC]-[DOC][NN]` (see promptsystem-ids.md)
-- Be exhaustive: list ALL domain objects, actions, functions
-- Document History section at end, reverse chronological
-- Use box-drawing characters (├── └── │) for trees
-- SPEC, IMPL, TEST documents MUST have MUST-NOT-FORGET section (after header block, before TOC)
-- Place documents per workspace-management WORKSPACE-RULES.md WS-DP rules: _SPEC_*, _IMPL_*, _TEST_* in specs/, _INFO_* in docs/ (unless referenced as SPEC dependency). _TASKS_* in session folders. Folders are optional by default, enforced when workspace-management is active (WS-DP-06).
-
-## Document Types and When to Use
-
-**Research and Knowledge:**
-- **INFO** (`_INFO_[TOPIC].md`) - Research, analysis, option evaluation. Use when gathering information before making decisions. Read template: `INFO_TEMPLATE.md`, guide: `INFO_GUIDES.md`, rules: `INFO_RULES.md`
-- **REVIEW** (`*_CRITIQUE.md`, `*_FACT-CHECK.md`) - Structured review of existing documents. Use for `/critique` and `/fact-check` outputs. Read template: `CRITIQUE_TEMPLATE.md` (for `/critique`), `FACT-CHECK_TEMPLATE.md` (for `/fact-check`)
-
-**Planning:**
-- **SPEC** (`_SPEC_[COMPONENT].md`) - Technical specifications. Define WHAT to build and WHY, never HOW (no code, line numbers, or function signatures - those belong in IMPL). Read template: `SPEC_TEMPLATE.md`, rules: `SPEC_RULES.md`
-- **IMPL** (`_IMPL_[COMPONENT].md`) - Implementation plans. Use to define HOW to build what SPEC describes. Read template: `IMPL_TEMPLATE.md`
-- **TEST** (`_TEST_[COMPONENT].md`) - Test plans. Use to define how to VERIFY what SPEC requires. Read template: `TEST_TEMPLATE.md`
-- **TASKS** (`TASKS_[TOPIC].md`) - Partitioned task lists from IMPL/TEST plans. Use to break plans into discrete work items. Read template: `TASKS_TEMPLATE.md`
-
-**Execution:**
-- **PROMPTS** (`_PROMPTS_[NN]-[Topic].md`) - Prompt queue files for headless agent execution. Use to define sequential prompts that execute as turns of one session. Read template: `PROMPTS_TEMPLATE.md`, guide: `PROMPTS_GUIDES.md`, rules: `PROMPTS_RULES.md`, robustness: `PROMPTS_ROBUSTNESS_GUIDES.md`. Examples: `PROMPTS_EXAMPLE_01-SelfContainedSequence.md`, `PROMPTS_EXAMPLE_03-FindingsCard.md`. Robustness card templates: @skills:terminal-robustness
-
-**Execution Tracking:**
-- **STRUT** (embedded in any document) - Structured execution plans with checkboxes. Use for phased work with verification gates. Read template: `STRUT_TEMPLATE.md`
-- **FIXES** (`_IMPL_[COMPONENT]_FIXES.md`) - Fix tracking during implementation. Read template: `FIXES_TEMPLATE.md`
-- **FAILS** (`FAILS.md`) - Failure log, lessons learned. Use to record mistakes and prevent repetition. Read template: `FAILS_TEMPLATE.md`
-
-**Session Tracking** (templates from @skills:session-management):
-- **NOTES** (`NOTES.md`) - Session notes and context
-- **PROBLEMS** (`PROBLEMS.md`) - Problem tracking
-- **PROGRESS** (`PROGRESS.md`) - Progress tracking
-
-**Conversation Tracking:**
-- **CONVERSATION** (`CONVERSATION_[COUNTERPARTY].md`) - Email/WhatsApp conversation tracking. Read template: `CONVERSATION_TEMPLATE.md`, rules: `CONVERSATION_RULES.md`
-
-**Workflow Documents:**
-- **WORKFLOW** (`.md` in workflows/) - Agent workflow definitions. Read template: `WORKFLOW_TEMPLATE.md`, rules: `WORKFLOW_RULES.md`
-
-**Skill Documents:**
-- **SKILL** (`SKILL.md` in skills/[name]/) - Agent skill definitions. Read template: `SKILL_TEMPLATE.md`, rules: `SKILL_RULES.md`
-
-## Document Dependency Chain
+## Folder Layout
 
 ```
-INFO (research) → SPEC (what) → IMPL (how) → TASKS (work items)
-                      │                             │
-                      └──> TEST (verify) ───────────┘
+write-documents/
+├── SKILL.md                         this file (router)
+├── APAPALAN_RULES.md, MECT_WRITING_RULES.md, SOCAS_RULES.md, TRANSLATION_RULES.md
+├── [root system and planning GRUC files: INFO_*, SPEC_*, IMPL_*, TEST_*, TASKS_*, PROMPTS_*, STRUT_*, ...]
+├── document_types/                  ARTICLE_*, REPORT_*, EBOOK_* (GUIDES, RULES, CHECKS, TEMPLATE)
+├── writing_techniques/              README.md, 9 technique sets (GUIDES, RULES, CHECKS, TEMPLATES, EXAMPLES)
+└── writing_personas/                README.md, 20 persona files
 ```
 
-Each document type builds on the previous. INFO informs SPEC decisions. SPEC defines what IMPL must build. TEST verifies what SPEC requires. TASKS partitions IMPL and TEST into discrete work items.
+## Shared Rules
 
-## Usage
+- **Writing quality standards**: All documents follow `APAPALAN_RULES.md` (precision, brevity, document structure) and `MECT_WRITING_RULES.md` (voice, word choice, terminology design). Evaluated via `SOCAS_RULES.md`. Translations follow `TRANSLATION_RULES.md`.
+- **User-only selection (DRSYNART-DD-08)**: Only the user selects `using <ID>` and `as <persona>`. Without explicit user keywords, the agent follows document-type defaults. Partial selections are never completed; agent suggests library options only when the user explicitly requests advice on style or technique.
+- **Discovery by filename pattern (DRSYNART-FR-05)**: Document types are discovered via `document_types/[TYPE]_GUIDES.md`; techniques via `writing_techniques/[ID]_GUIDES.md`; personas via `writing_personas/[PERSONA].md`. Adding a new file requires no edits to workflows or routing tables.
+- **Deliverable file naming (DRSYNART-DD-16)**: Deliverable documents follow three sequential file kinds: options proposal `[ID]-OPTIONS-NN_[Title].md`, working draft `[ID]-DRAFT-NN_[Title].md`, and final publication output `YYYY-MM-DD_[Title].md`.
+- **CHECKS isolation (DRSYNART-FR-32, GRUC-IG-03)**: CHECKS files are NEVER loaded during execution by `/propose-*`, `/draft-*`, `/write-*`, or any generated prompt. CHECKS are consumed only post-execution by `/drift-detect` (PD) and `/improve` (QI).
+- **Consistency layer stack (DRSYNART-FR-35)**: House style (`[AGENT_FOLDER]/rules/core-conventions.md`, `APAPALAN_RULES.md`, `MECT_WRITING_RULES.md`) > Document-type GRUC (`document_types/`) > Technique GRUC (`writing_techniques/`, overrides macro-structure only) > Persona file (`writing_personas/`, adjusts voice only) > Per-document Style Sheet (DRAFT section) > Edit passes. Lower layers add where higher layers are silent and never contradict higher layers.
+- **Formatting discipline**: No Markdown tables, no emojis, ASCII quotes, generic examples only (Pre-Write Privacy Gate).
 
-1. Read this SKILL.md for core rules
-2. Read `APAPALAN_RULES.md` for precision, brevity, structure, naming
-3. Read `MECT_WRITING_RULES.md` for voice, word choice, terminology, headings, lists
-4. Read the template for your document type (required)
-5. For INFO documents: also read `INFO_GUIDES.md` (before writing) and `INFO_RULES.md` (required)
-6. For SPEC documents: also read `SPEC_RULES.md` (required)
-7. For WORKFLOW documents: also read `WORKFLOW_RULES.md` (required)
-8. For SKILL documents: also read `SKILL_RULES.md` (required)
-9. For CONVERSATION documents: also read `CONVERSATION_RULES.md` (required)
-10. For PROMPTS files: also read `PROMPTS_GUIDES.md` (before writing), `PROMPTS_RULES.md` (required), and `PROMPTS_ROBUSTNESS_GUIDES.md` (before writing). See `PROMPTS_EXAMPLE_*.md` for worked examples
-11. For creating/modifying templates: also read `TEMPLATE_GUIDES.md` (before writing) and `TEMPLATE_RULES.md` (required)
-12. Follow the template structure exactly, except when user requests exceptions
+## Quick Commands
 
-## Document Writing Rules
+Execute deliverable writing workflows using the standard command grammar (`DRSYNART-FR-04`, Section 8.2):
 
-- Enumerations: use comma-separated format (`.pdf, .docx, .ppt`), NOT slash-separated (`.pdf/.docx/.ppt`)
-- Ambiguous modifiers: when a clause can attach to multiple nouns, split into separate sentences
-  - BAD: "Files starting with '!' signify high relevance that must be treated with extra attention."
-  - GOOD: "Files starting with '!' indicate high relevance. This information must be treated with extra attention."
+```text
+/<verb>-<type> <input> [using <ID>] [as <PERSONA>] [for <audience>] [tier N] [plan | plan only] [N options] [compare techniques <ID>, <ID>] [inline]
+```
 
-## File Naming
-
-- `_INFO_[TOPIC].md` - Research, analysis, preparation documents
-- `_SPEC_[COMPONENT].md` - Technical specifications
-- `_SPEC_[COMPONENT]_UI.md` - UI specifications
-- `_IMPL_[COMPONENT].md` - Implementation plans
-- `_IMPL_[COMPONENT]_FIXES.md` - Fix tracking during implementation
-- `SPEC_[COMPONENT]_TEST.md` - Test plan for specification
-- `IMPL_[COMPONENT]_TEST.md` - Test plan for implementation
-- `TASKS_[TOPIC].md` - Task plans (partitioned work items)
-- `CONVERSATION_[COUNTERPARTY].md` - Conversation tracking (never plain `CONVERSATION.md`)
-- `!` prefix for priority docs that must be read first
-
-## Agent Behavior
-
-- Follow APAPALAN + MECT: precision first, then cut every unnecessary word
-- NEVER ask for continuations when following plans
-- Before assumptions, propose 2-3 implementation alternatives
-- List assumptions at spec start for user verification
-- Optimize for simplicity
-- Re-use existing code by default (DRY principle)
-- Research APIs before suggesting; rely on primary sources only
-- Document user decisions in "Key Mechanisms" and "What we don't want" sections
-
-## ID System
-
-See `[AGENT_FOLDER]/rules/promptsystem-ids.md` rule (always-on) for complete ID system.
-
-**Quick Reference:**
-- Document: `[TOPIC]-[DOC][NN]` (IN = Info, SP = Spec, IP = Impl Plan, TP = Test Plan)
-  - Example: `CRAWLENG-SP01`, `AUTHSYST-IP01`
-- Nested: `[TOPIC]-[SUBTOPIC]-[DOC][NN]` (inside T##/S## folders)
-  - Example: `AIDETECT-STYLMTRY-IN01`
-- Spec-Level: `[TOPIC]-[TYPE]-[NN]` (FR = Functional Requirement, IG = Implementation Guarantee, DD = Design Decision)
-  - Example: `CRAWLENG-FR-01`, `AUTHSYST-DD-03`
-- Plan-Level: `[TOPIC]-[DOC][NN]-[TYPE]-[NN]` (EC = Edge Case, IS = Implementation Step, VC = Verification Checklist, TC = Test Case)
-  - Example: `CRAWLENG-IP01-EC-01`, `AUTHSYST-TP01-TC-05`
+Examples:
+- `/propose-article _INFO_TOPIC-IN01_Summary.md using ABTSTORY`
+- `/draft-report REPORT-OPTIONS-01_InfrastructureConsolidation.md`
+- `/write-article DRAFT as FOUNDER-ESSAYIST for practitioners`
+- `/write-report for executive leadership tier 2`
+- `/propose-ebook compare techniques MINTO, STA, DIATAXIS`
+- `/write-ebook EBOOK-DRAFT-01_QueueReliabilityHandbook.md as BOOK-AUTHOR`

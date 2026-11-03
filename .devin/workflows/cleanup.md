@@ -75,6 +75,7 @@ All categories auto-delete after preview. No confirmation needed. User can run `
 - Category 4: MCP config backups - superseded config snapshots
 - Category 5: Review output files (`*_CRITIQUE.md`, `*_FACT-CHECK.md`) - findings should be addressed before cleanup
 - Category 6: Workflow scaffolding (`__*.md`, legacy `STRUT_*`) - consumed process artifacts
+- Category 7: Agent work folders (`_agentwork/`) - all operational artifacts (cards, prompts, STRUTs, scripts, temp output) per `agent-behavior.md` File Placement
 - INFO marker stripping (`[VERIFIED]` labels) - in-place text modification
 
 **Execution flow:**
@@ -107,8 +108,8 @@ Delete files and directories matching these patterns:
 ### 1. Agent Temp Files [AUTO-DELETE]
 
 - **Pattern**: `.tmp_*` files, `*.tmp` files
-- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSIONS_FOLDER]` recursive
-- **Source**: Agent scripts, `/test`, `/implement`, `/go`, `/improve` STRUT plans, youtube-downloader metadata
+- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSIONS_FOLDER]` recursive (expected inside `_agentwork/`; matches outside it are misplaced leftovers)
+- **Source**: Agent scripts and their `_out.txt` / `_err.txt` files, `/test`, `/implement`, `/go`, `/improve` STRUT plans, youtube-downloader metadata
 - **Note**: `.tmp_*` files are dotfiles - invisible to `fd`/`find_by_name` by default. Always use PowerShell `Get-ChildItem -Force` or `fd --hidden` to scan for them.
 
 ### 2. Python Build Artifacts [AUTO-DELETE]
@@ -142,6 +143,13 @@ Delete files and directories matching these patterns:
 - **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSION_FOLDER]` recursive, excluding `_Archive/`, `_OldDevSystemVersions/`, and skill folders
 - **Source**: `/deep-research` (STRUTs, TASKS, templates), `/go` (TASKS), `/bugfix` (STRUTs). These are process-tracking files auto-created by workflows. User-invoked outputs (`TASKS_[TOPIC].md` from `/write-tasks-plan`, `STRUT_[TOPIC].md` from `/write-strut`) are deliverables and MUST NOT be matched.
 - **Transition note**: Legacy patterns (`STRUT_*.md` without `__`, `_TASKS_*.md`) exist in older sessions. Match both old and new conventions. Exclude `STRUT_TEMPLATE.md` and `TASKS_TEMPLATE.md` (skill resources).
+
+### 7. Agent Work Folders [AUTO-DELETE]
+
+- **Pattern**: `_agentwork/` directories, deleted recursively
+- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSION_FOLDER]` recursive, excluding `_Archive/` and `_OldDevSystemVersions/`
+- **Source**: All workflows and agent work per `agent-behavior.md` `_agentwork/` Folder (cards, `_PROMPTS_*`, `__STRUT_*`, `__TASKS_*`, `__DRIFT_*`, `.tmp_*` scripts and output files)
+- **Guard**: Skip any `_agentwork/` that contains a `*.jsonl` file (un-ingested observation ledger). Report it and point to `/session-finalize`
 
 ## File Transformation
 
@@ -265,7 +273,7 @@ Detect applicable contexts:
 
 Scan per active context. Collect full paths.
 
-**File Cleanup scan:**
+**File Cleanup scan:** run the commands below as a hang-safe temp script (`agent-behavior.md` Terminal Hang Prevention): write them into `[WORKSPACE_FOLDER]/_agentwork/.tmp_cleanup_scan.ps1`, emit full paths with `Write-Output`, run `pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_cleanup_scan.ps1 > _agentwork/.tmp_cleanup_scan_out.txt 2> _agentwork/.tmp_cleanup_scan_err.txt`, then `read_file` both output files. Never run these pipelines inline. Exclude the scan script and its output files from the preview; delete them last.
 
 ```powershell
 # 1. Agent temp files (dotfiles: -Force required)
@@ -289,12 +297,18 @@ Get-ChildItem -Path "[SCOPE]" -Recurse -File | Where-Object { ($_.Name -like '*_
 Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "__*.md" | Where-Object { $_.DirectoryName -notmatch '_Archive|_OldDevSystemVersions|skills' }
 # Legacy: standalone STRUT files (not STRUT_TEMPLATE.md, not in skill folders)
 Get-ChildItem -Path "[SCOPE]" -Recurse -File | Where-Object { $_.Name -match '^STRUT_' -and $_.Name -ne 'STRUT_TEMPLATE.md' -and $_.DirectoryName -notmatch '_Archive|_OldDevSystemVersions|skills' }
+
+# 7. Agent work folders (flag folders holding an un-ingested *.jsonl)
+Get-ChildItem -Path "[SCOPE]" -Recurse -Directory -Force -Filter "_agentwork" | Where-Object { $_.FullName -notmatch '_Archive|_OldDevSystemVersions' } | ForEach-Object {
+  $hasJsonl = [bool](Get-ChildItem -LiteralPath $_.FullName -Recurse -File -Force -Filter "*.jsonl")
+  Write-Output "$($_.FullName) jsonl=$hasJsonl"
+}
 ```
 
 **INFO marker scan (normal modes only):**
 
 ```powershell
-# 7. INFO verification markers (count files and occurrences)
+# 8. INFO verification markers (count files and occurrences)
 Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "_INFO_*.md" | Where-Object {
     $_.DirectoryName -notmatch '_Archive|_OldDevSystemVersions' -and
     (Select-String -Path $_.FullName -Pattern '\[VERIFIED\]|VERIFIED, ' -Quiet)
@@ -334,6 +348,10 @@ Workflow Scaffolding (N files):
   [full path 1] (__STRUT_*)
   [full path 2] (__TASKS_*)
 
+Agent Work Folders (N folders):
+  [full path 1]
+  [full path 2] (SKIPPED: un-ingested *.jsonl - run /session-finalize first)
+
 INFO Verification Markers (N files to modify):
   [full path 1] (M occurrences)
   [full path 2] (M occurrences)
@@ -349,7 +367,8 @@ If no items found: report "Workspace is clean - nothing to delete" and exit.
 
 Delete all found items immediately after preview (normal mode only):
 - Files: `Remove-Item -Force -Confirm:$false`
-- Directories (`__pycache__/`, `.pytest_cache/`, `.mypy_cache/`): `Remove-Item -Recurse -Force -Confirm:$false`
+- Directories (`__pycache__/`, `.pytest_cache/`, `.mypy_cache/`, `_agentwork/` without `*.jsonl`): `Remove-Item -Recurse -Force -Confirm:$false`
+- Run deletions through the same temp-script pattern as the scan when more than a few items are affected
 - INFO markers: strip `[VERIFIED]` and `VERIFIED, ` via text replacement
 
 ```powershell
@@ -375,6 +394,7 @@ Deleted:
   MCP Config Backups: N files
   Review Output Files: N files
   Workflow Scaffolding: N files
+  Agent Work Folders: N folders (N skipped: un-ingested *.jsonl)
   INFO Markers Stripped: N files
 
 Total: N items deleted, N files modified
@@ -525,6 +545,8 @@ File size: [before] -> [after]
 
 - [ ] Scope inferred as narrowest that covers working context
 - [ ] All target locations scanned before any deletion
+- [ ] Scans ran as `_agentwork/.tmp_` script, not inline pipelines
+- [ ] `_agentwork/` folders holding `*.jsonl` skipped and reported
 - [ ] Protected locations excluded from results
 - [ ] Preview shown in chat with full paths
 - [ ] If explicit path provided: scan STRICTLY limited to that path, no other locations scanned

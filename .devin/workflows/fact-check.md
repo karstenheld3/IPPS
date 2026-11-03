@@ -18,7 +18,7 @@ Verify factual claims in documents by extracting sources, facts, and conclusions
 - @skills:write-documents for review document output (use `FACT-CHECK_TEMPLATE.md`)
 - @skills:research-methods for source collection tools (use `RESEARCH_TOOLS.md`)
 - @skills:pdf-tools for PDF processing pipeline
-- @skills:llm-transcription for image and scanned document transcription
+- @skills:llm-tools (`transcription/`) for image and scanned document transcription
 - @skills:ms-playwright-mcp for web page access and full-page capture
 
 ## MUST-NOT-FORGET
@@ -141,8 +141,8 @@ Download and transcribe URL sources to local storage for reliable verification.
 1. Create `_DOWNLOADS_gitignore/` and `_SOURCES/` subfolders adjacent to review output location
 2. For each URL source:
    - Web pages: `read_url_content` (preferred; Cascade: not for `gesetze-im-internet.de`) or ms-playwright-mcp `browser_navigate` + `browser_snapshot` (fallback). Save text to `_SOURCES/[SOURCE_ID]_[name].md`. Visual archive: `browser_take_screenshot(fullPage: true, type: "jpeg")` to `_DOWNLOADS_gitignore/`
-   - PDFs: download to `_DOWNLOADS_gitignore/[SOURCE_ID]_[name].pdf`, process via @skills:pdf-tools (`pdftotext` for text-native, `convert-pdf-to-jpg` + @skills:llm-transcription for scanned). Save transcription to `_SOURCES/`
-   - Images: download to `_DOWNLOADS_gitignore/`, transcribe via @skills:llm-transcription to `_SOURCES/`
+   - PDFs: download to `_DOWNLOADS_gitignore/[SOURCE_ID]_[name].pdf`, process via @skills:pdf-tools (`pdftotext` for text-native, `convert-pdf-to-jpg` + @skills:llm-tools transcription for scanned). Save transcription to `_SOURCES/`
+   - Images: download to `_DOWNLOADS_gitignore/`, transcribe via @skills:llm-tools transcription to `_SOURCES/`
 3. For file/document sources: read directly (no download needed)
 4. If access fails after 2 retries: search archive.org or cached version. If none found: mark as `inaccessible`, proceed
 5. Max 3 inaccessible sources before logging a warning in the review

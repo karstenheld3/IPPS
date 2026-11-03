@@ -91,6 +91,27 @@ Every document MUST have an ID in its header block.
 - `CRAWLNXT-IP01` - V2 Crawler Implementation Plan 1
 - `CRAWLNXT-TP01` - V2 Crawler Test Plan 1
 
+## Deliverable Writing Document IDs (OPTIONS, DRAFT, Output)
+
+Deliverable writing documents produced by `/propose-*`, `/draft-*`, and `/write-*` (Layer 3) use a dedicated Doc ID format matching DD-37 and DD-45 to avoid collisions across concurrent candidate techniques.
+
+**Format:**
+- Options proposal: `[TOPIC]-[ID]-OPTIONS-[NN]`
+- Working draft: `[TOPIC]-[ID]-DRAFT-[NN]`
+- Final publication output: `[TOPIC]-[TYPE]-[NN]`
+
+**Rules:**
+- `[TOPIC]` - The project or session topic (7-14 uppercase characters, registered in `ID-REGISTRY.md`)
+- `[ID]` - Technique ID (`MINTO`, `ABTSTORY`, `KABOB`, etc.) when `using <ID>` is active, else document type (`ARTICLE`, `REPORT`, `EBOOK`)
+- `[TYPE]` - Document type uppercase: `ARTICLE`, `REPORT`, `EBOOK` (output document Doc ID is unchanged per DD-37)
+- `[NN]` - Two-digit sequence counter, continuous per `[ID]` in the working folder
+
+**Examples:**
+- `MUSICPROMO-KABOB-OPTIONS-01` - First KABOB options proposal for music promotion
+- `MUSICPROMO-ARTICLE-OPTIONS-01` - First untechniqued article options proposal
+- `MUSICPROMO-KABOB-DRAFT-01` - First KABOB draft
+- `MUSICPROMO-ARTICLE-01` - Final publication article deliverable
+
 ## Nested Document IDs
 
 Documents inside `T##_` (Topic) or `S##_` (Step) session subfolders use nested IDs to avoid collisions when the same subject is researched in multiple sessions or contexts.

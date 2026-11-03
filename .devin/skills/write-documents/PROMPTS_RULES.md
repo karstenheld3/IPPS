@@ -22,14 +22,15 @@ Structure (ST)
 - PRMT-ST-01: Every prompt has an identifiable objective
 - PRMT-ST-02: Implementation prompts include constraints
 - PRMT-ST-03: Implementation prompts include verification criteria
-- PRMT-ST-04: One reasoning mode per prompt
-- PRMT-ST-05: Limit high-priority instructions to ~5-8 per prompt
+- PRMT-ST-04: Reasoning modes mixed in one prompt only within the run budget; each mode's output named
+- PRMT-ST-05: Numbered instruction items per prompt at or below the Items value of the model row
 
 Sequence (SQ)
 - PRMT-SQ-01: No contradiction between prompts
 - PRMT-SQ-02: Dependent prompts reference prior output explicitly
 - PRMT-SQ-03: Commentary documents expected state between prompts
-- PRMT-SQ-04: Interleaved verification prompts in sequences with 4+ implementation prompts
+- PRMT-SQ-04: Interleaved verification prompts after every checkpoint interval (from Items) plus a final checkpoint per file
+- PRMT-SQ-05: Final prompt requires clickable summary artifact list with heading, what was done / file contents, and clickable links with descriptions
 
 Content (CT)
 - PRMT-CT-01: Objectives are specific and verifiable
@@ -51,7 +52,7 @@ Self-Contained (SC)
 - PRMT-SC-01: Self-contained opening — context-loading directive, "treat earlier conversation as compacted", step identifier
 - PRMT-SC-02: No conversation dependency — no "the previous step" or "as discussed above" without naming where output lives in a file
 - PRMT-SC-03: Idempotency constraint — implementation prompts must include idempotency constraint
-- PRMT-SC-04: Chain length limit — sequences under 6 steps; longer workflows split into sub-chains with checkpoints
+- PRMT-SC-04: Chain length limit — max 10 implementation prompts per file (verification checkpoints do not count); longer sequences continue in the next numbered prompts file
 - PRMT-SC-05: Effort and model specification — frontmatter must specify intended_model, context_window_size, effort level; prompts scoped to effort budget; values and per-prompt scope consistent with @skills:llm-tools MODEL_INVENTORY.md
 - PRMT-SC-06: Planning document reference — prompt sequences from planning documents must reference the document by filename and step ID
 - PRMT-SC-07: Load-based workflow partitioning — before writing a prompt that invokes workflows, assess the load of each workflow invocation (files read, artifacts produced, reasoning depth) against the run budget given by intended_model, context_window_size, and effort; group workflows into prompts so each run is neither overloaded (multiple heavy workflows squeezed into one run) nor underloaded (one light workflow alone in a run); the assessment and the resulting grouping are stated in the prompts file commentary
@@ -386,13 +387,13 @@ Verify: Run `pnpm test:payments`. All tests pass. Order total for a 100 EUR item
 ```
 `````
 
-## PRMT-ST-04: One Reasoning Mode Per Prompt
+## PRMT-ST-04: Reasoning Modes Within Run Budget
 
-Each prompt should perform one type of cognitive work. Mixing modes degrades quality because the model has no signal which role it is playing.
+Mix reasoning modes in one prompt only when the combined load fits one run budget (PRMT-SC-05, PRMT-SC-07, `PROMPTS_GUIDES.md` Sections 1f, 1g). Otherwise split: one reasoning mode per prompt. When modes are mixed, the prompt names the output of each mode (e.g., the research result file the implementation step reads), so the model knows which role it plays at each point.
 
 Reasoning modes: research, analysis, planning, implementation, testing, formatting, review.
 
-**BAD** (research + implement + test in one prompt):
+**BAD** (research + implement + test in one sentence, no named outputs, no budget check):
 `````markdown
 ```
 Research the best auth library for Express, implement it, and write tests.
@@ -422,9 +423,11 @@ Write tests for the authentication endpoints. Cover: valid login, invalid creden
 
 ## PRMT-ST-05: Instruction Density Limit
 
-Practitioner heuristic: limit each prompt to ~5-8 high-priority rules or instructions. Beyond that, the model tends to skip items in the middle of long lists (lost-in-the-middle effect). The exact threshold varies by model and task.
+Limit each implementation prompt to the Items value of the `intended_model` row in `MODEL_INVENTORY.md`: numbered instruction items the model completes without skips. Beyond that, the model skips items in the middle of long lists (lost-in-the-middle effect). Model not listed: Items 4 (`PROMPTS_GUIDES.md` Section 1g step 1).
 
-**BAD** (12 constraints in one prompt):
+Verifiable from artifact: count numbered instruction items and constraints per implementation prompt; compare against Items of the frontmatter model.
+
+**BAD** (12 constraints in one prompt, above every Items value):
 `````markdown
 ```
 Build the dashboard.
@@ -833,14 +836,14 @@ An optional YAML block at the very top of the file (before any Commentary or Ope
 **Supported keys:**
 - `intended_model`: Model identifier (e.g., `claude-sonnet-4-5`, `gpt-4o`)
 - `context_window_size`: Context window size (e.g., `200k`, `128k`, `1M`)
-- `effort`: Effort level (`low` | `medium` | `high` | `extra-high`)
+- `effort`: Effort level (`low` | `medium` | `high` | `extra-high` | `max`), matching the Efforts codes `L M H X MX` in `MODEL_INVENTORY.md`
 - `prompt_system`: Prompt system identifier (e.g., `IPPS`)
 
 **Rules:**
 1. If present, frontmatter MUST be the first content in the file (no blank lines before opening `---`)
 2. Only one frontmatter block allowed (at file start only)
 3. Frontmatter is never sent to the model
-4. Frontmatter is OPTIONAL - omit entirely if no execution hints needed
+4. Frontmatter is OPTIONAL only for single-prompt, model-agnostic files; multi-prompt files MUST include it (PRMT-SC-05)
 5. Unknown keys are ignored by the parser (forward compatibility)
 6. If user explicitly requests prompt system independence, `prompt_system` MUST be empty or omitted. This signals that prompts do not depend on any specific workflow ecosystem.
 
@@ -918,9 +921,9 @@ Read `__CARD_00-Rules.md`...
 There is no minimum prompt count threshold. The marker is required for all sequences, including single-prompt files.
 
 **Rules:**
-1. Zero-padded to match the width of the total count (e.g., 5 prompts → 2 digits, 23 prompts → 2 digits, 100+ → 3 digits)
-2. Total count is the number of prompts in the file, not the number of STRUT steps
-3. If the file uses sub-chains with checkpoints (PRMT-SC-04), the total count is the number of prompts in the current sub-chain file
+1. Zero-padded to match the width of the total count (e.g., 5 prompts → 2 digits, 12 prompts → 2 digits)
+2. Total count is the number of prompts in the file (implementation prompts plus verification checkpoints), not the number of STRUT steps
+3. If the sequence continues across files (PRMT-SC-04), the total count is the number of prompts in the current file
 4. The marker appears inside the fence as first line of prompt content — the model sees it for progress tracking
 5. The marker is updated when prompts are added or removed
 6. The marker line MUST include a summary: `[NN]-[Topic] [ NN / NN ] - [brief summary]`. The summary matches the heading text
@@ -1128,7 +1131,7 @@ The Topic in the filename describes the prompts file purpose, not the project or
 
 **GOOD:** `_PROMPTS_01-SetupProject.md`, `_PROMPTS_02-MigrateAuth.md`
 
-When a chain is split into sub-chains (PRMT-SC-04), each sub-chain file gets its own number in the same sequence: `_PROMPTS_01-ImplCore.md`, `_PROMPTS_02-ImplAuth.md`, `_PROMPTS_03-Verify.md`.
+When a sequence continues across files (PRMT-SC-04), each file gets its own number in the same sequence: `_PROMPTS_01-ImplCore.md`, `_PROMPTS_02-ImplAuth.md`, `_PROMPTS_03-Verify.md`.
 
 ## PRMT-NM-04: Topic Uniqueness and Brevity
 
@@ -1262,13 +1265,13 @@ Constraints:
 
 ## PRMT-SC-04: Chain Length Limit
 
-Prompt sequences must stay under 6 steps. For longer workflows, split into sub-chains with checkpoints between them. Each sub-chain completes, commits, and the next sub-chain starts fresh with its own self-contained opening.
+A prompts file holds max 10 implementation prompts. Verification checkpoints (PRMT-SQ-04) do not count. Longer sequences continue in the next numbered prompts file (PRMT-NM-03). Each file ends with its final checkpoint and a commit; the next file starts with its own self-contained opening.
 
-Error rates compound across steps. A 5% per-step error rate yields 14% end-to-end failure at 3 steps, 26% at 6 steps, 40% at 10 steps. Keeping sequences under 6 steps limits the blast radius of a single step failure.
+Rationale: Error rates compound only across unchecked steps. Verification checkpoints find and fix glitches before later prompts build on them, so reliability depends on per-prompt load (PRMT-SC-05, PRMT-SC-07) and checkpoint interval, not on chain length. The 10-prompt limit keeps files reviewable and limits a restart to one file. Fill a file up to 10 implementation prompts before starting the next file; many short files add context loading and checkpoint overhead without reliability gain.
 
-Verifiable from artifact: count the number of prompts (fenced blocks separated by `---`) in the file. If the count exceeds 6, check whether the file is explicitly documented as a sub-chain with a checkpoint reference to the next sub-chain.
+Verifiable from artifact: count implementation prompts (fenced blocks separated by `---`, excluding `## Verification Checkpoint N` blocks) in the file. Count above 10 = violation. A file that ends below 10 implementation prompts while the next file of the same sequence exists = fragmentation finding.
 
-**BAD** (10-prompt sequence with no sub-chain structure):
+**BAD** (12 implementation prompts in one file, no checkpoints):
 `````markdown
 ## Prompt 1 - Analyze
 ```
@@ -1319,11 +1322,21 @@ Verifiable from artifact: count the number of prompts (fenced blocks separated b
 ```
 ...
 ```
+---
+## Prompt 11 - Update docs
+```
+...
+```
+---
+## Prompt 12 - Release notes
+```
+...
+```
 `````
 
-**GOOD** (sub-chain with checkpoint, under 6 steps):
+**GOOD** (file 1 of 2, continuation in the next numbered file):
 `````markdown
-<!-- Sub-chain 1 of 2: Setup and implementation. Checkpoint after Prompt 4 commits. Sub-chain 2 starts fresh. -->
+<!-- File 1 of 2 `_PROMPTS_01-ImplCore.md`: implementation prompts 1-10 with checkpoints per Items (prompts 5-10 omitted here). Final checkpoint and commit; `_PROMPTS_02-ImplRelease.md` continues with implementation prompts 11-12. -->
 
 ## Prompt 1 - Analyze requirements
 ```
@@ -1420,9 +1433,9 @@ Implement the user authentication module with JWT tokens as specified in `__STRU
 
 ## PRMT-SC-07: Load-Based Workflow Partitioning
 
-Prompts that invoke workflows must group invocations by assessed load against the run budget so that no run is overloaded or underloaded. The grouping rationale must be stated in the sub-chain commentary. See `PROMPTS_GUIDES.md` Section 1f for the assessment procedure.
+Prompts that invoke workflows must group invocations by assessed load against the run budget so that no run is overloaded or underloaded. The grouping rationale must be stated in the file commentary. See `PROMPTS_GUIDES.md` Section 1f for the assessment procedure.
 
-Verifiable from artifact: count workflow invocations (standalone slash-command lines per PRMT-CT-08) per fence; check sub-chain commentary for a grouping rationale. A fence with three or more workflow invocations each reading and writing multiple files, or a fence invoking both a detection and a correction workflow on the same target, is overloaded regardless of budget. A fence with one light workflow alone in a high-effort large-context run with no grouping rationale is underloaded.
+Verifiable from artifact: count workflow invocations (standalone slash-command lines per PRMT-CT-08) per fence; check file commentary for a grouping rationale. A fence with three or more workflow invocations each reading and writing multiple files, or a fence invoking both a detection and a correction workflow on the same target, is overloaded regardless of budget. A fence with one light workflow alone in a high-effort large-context run with no grouping rationale is underloaded.
 
 **BAD** (five workflows in one fence, no grouping rationale in commentary):
 `````markdown
@@ -1815,15 +1828,15 @@ Verifiable from artifact: check that PROBLEMS.md entries describe problems requi
 
 ## PRMT-SQ-04: Interleaved Verification Prompts
 
-Sequences with 4 or more implementation prompts must include interleaved verification prompts every 2-3 implementation prompts. A verification prompt runs `/verify` against the planning document (STRUT or TASKS) and the prompts file for prompts executed so far, then runs `/fix` to address gaps and remaining work. This catches drift early — before downstream prompts build on incorrect state.
+Insert a verification prompt after every checkpoint interval of implementation prompts, plus a final checkpoint at the end of every prompts file. The checkpoint interval comes from the Items value of the `intended_model` row in `MODEL_INVENTORY.md`: Items 8 every 3 implementation prompts, Items 6 every 2, Items 5 or less after every prompt (`PROMPTS_GUIDES.md` Section 1g step 6). A verification prompt runs `/verify` against the planning document (STRUT or TASKS) and the prompts file for prompts executed so far, then runs `/fix` to address gaps and remaining work. This catches drift early — before downstream prompts build on incorrect state.
 
-Rationale: A Lana-V2-Dev SecurityRemediation sequence had 5 sub-chains with 3-5 prompts each. Without interleaved verification, spec-code mismatches accumulated across prompts and were only caught at the end, requiring expensive rework. Interleaved verification prompts inserted after every 2 implementation prompts would have caught drift at the point of occurrence, limiting blast radius to 2 prompts instead of the full sequence.
+Rationale: An observed security remediation sequence had 5 sub-chains with 3-5 prompts each. Without interleaved verification, spec-code mismatches accumulated across prompts and were only caught at the end, requiring expensive rework. Interleaved verification catches drift at the point of occurrence, limiting blast radius to one checkpoint interval instead of the full sequence.
 
-Verification prompts are NOT implementation prompts — they do not run code, tests, or builds. They run `/verify` and `/fix` workflows only. They do not count toward the chain length limit (PRMT-SC-04).
+Verification prompts are NOT implementation prompts — they do not run code, tests, or builds. They run `/verify` and `/fix` workflows only. They do not count toward the 10 implementation prompts per file (PRMT-SC-04).
 
-Verifiable from artifact: check that sequences with 4+ implementation prompts contain at least one verification prompt (containing `/verify` and `/fix` workflow calls) between implementation prompts, not only at the end.
+Verifiable from artifact: no run of consecutive implementation prompts is longer than the checkpoint interval, and the last prompt of the file is a verification prompt (containing `/verify` and `/fix` workflow calls).
 
-**BAD** (5 implementation prompts, no interleaved verification):
+**BAD** (5 implementation prompts at Items 6, no interleaved verification):
 `````markdown
 ## Prompt 1 - Setup
 ```
@@ -1851,7 +1864,7 @@ Verifiable from artifact: check that sequences with 4+ implementation prompts co
 ```
 `````
 
-**GOOD** (5 implementation prompts with interleaved verification after prompt 2 and prompt 4):
+**GOOD** (5 implementation prompts at Items 6, checkpoints after prompt 2, prompt 4, and final):
 `````markdown
 ## Prompt 1 - Setup
 ```
@@ -1909,6 +1922,66 @@ all gaps and remaining work.
 ```
 [implementation prompt]
 ```
+---
+## Verification Checkpoint 3
+
+<!-- Final checkpoint: verify prompts 1-5 against STRUT. -->
+
+```
+Read `__CARD_00-Rules.md` and `__STRUT_[Topic].md`. Treat earlier conversation as compacted. Final verification checkpoint after prompt 5.
+
+/verify
+
+current state against `__STRUT_[Topic].md` for all prompts.
+
+/fix
+
+all gaps and remaining work.
+```
+`````
+
+## PRMT-SQ-05: Clickable Summary Artifact List at Sequence End
+
+The final prompt of every prompt sequence file (the final checkpoint or final implementation prompt) MUST require the executing agent to conclude its report with a clickable summary artifact list of all output files created, modified, or verified by the sequence.
+
+The summary list must NOT be wrapped in code fences (agent responses are rendered as Markdown directly). Artifacts MUST be organized with multiple headings, one for each output group:
+
+### [Group 1 Heading]
+<what was done and what do these files contain>
+- [filename1](file:///path/to/file1) - <description of file purpose or content>
+- [filename2](file:///path/to/file2) - <description of file purpose or content>
+
+### [Group 2 Heading]
+<what was done and what do these files contain>
+- [filename3](file:///path/to/file3) - <description of file purpose or content>
+
+Format elements:
+- **Multiple headings for output groups**: Organize files into distinct categories with Markdown headings (e.g., `### Primary Deliverables`, `### Run Reports & Data`, `### Session Tracking`).
+- **`<what was done and what do these files contain>`**: Directly under each group heading, provide a clear, concise overview summarizing the actions performed and explaining what content the output files in that group contain.
+- **`- [filename](file:///path) - <description of file purpose or content>`**: A bulleted list where each link is a standard Markdown link formatted as `[filename](file:///path)` (or workspace-relative path), followed by ` - ` and a concise description of the file's purpose or content.
+- **No code fences**: Output standard Markdown directly so links remain clickable in the chat panel, IDE, or document renderer.
+
+Rationale: At sequence completion, the reviewer needs immediate, one-click access to all deliverables without hunting through directories or parsing terminal logs. Plain text paths or `@path` citation strings are not clickable in standard Markdown viewers or chat panels. Grouping by multiple headings with explanatory context provides immediate orientation before the reviewer inspects the files.
+
+Verifiable from artifact: The final prompt in `_PROMPTS_*.md` contains an instruction in its STOP directive requiring a clickable summary artifact list with multiple headings for each output group, what was done / file contents description under each heading, and clickable Markdown links (`[label](file:///path)`) with descriptions, without code fence wrapping.
+
+**BAD** (final prompt STOP report does not require clickable artifact list, or only asks for plain status):
+`````markdown
+**STOP.** Report: items completed, tests passed, and final status.
+`````
+
+**BAD** (asks for plain text paths or citations):
+`````markdown
+**STOP.** Report: list of files modified (@path:line format).
+`````
+
+**GOOD** (final prompt specifies multiple headings per output group, explanation, and clickable links):
+`````markdown
+**STOP.** Report: verify findings fixed / open, commit hash, final run status, and a clickable summary artifact list with separate headings for each output group formatted as:
+Heading
+<what was done and what do these files contain>
+- [filename](file:///path) - <description of file purpose or content>
+(Do not wrap the list in code fences).
 `````
 
 ## PRMT-CT-12: Prefer Agent Tools Over Shell Commands for File Operations

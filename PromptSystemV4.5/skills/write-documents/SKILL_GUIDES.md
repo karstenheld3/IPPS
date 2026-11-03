@@ -27,6 +27,52 @@ This determines format density:
 - Resource/lookup → compact format (one line per resource, no bullets)
 - Setup-heavy → verbose SETUP.md/UNINSTALL.md with verification steps
 
+## 2.1 Determine Skill Architecture
+
+After classifying content type, determine structural architecture:
+
+- **Simple Skill** - SKILL.md contains all instructions. Flat layout. Single domain or tool. Most skills
+- **Composite Skill** - SKILL.md routes to function subfolders. Shared resources at root. Multiple distinct functions sharing infrastructure
+
+**Use Composite when:**
+- 3+ distinct functions share scripts, configs, or data files
+- Each function is independent (own workflow) but needs common resources
+- Inlining all functions in one SKILL.md would exceed 500 lines
+- Users must discover which function applies before loading details
+
+**Do NOT use Composite when:**
+- Functions are sequential steps of one workflow (keep as one SKILL.md)
+- Functions share no infrastructure (split into separate skills)
+- Fewer than 3 functions (use Intent Lookup in a flat SKILL.md instead)
+
+**Composite Skill layout:**
+```
+composite-skill/
+├── SKILL.md                     Router: routing table, shared rules, quick commands
+├── SETUP.md, UNINSTALL.md       Shared setup
+├── shared-script.py             Shared scripts at root
+├── shared-config.json           Shared data at root
+├── function-a/
+│   └── FUNCTION_A.md            Function guide (no frontmatter, not a separate skill)
+├── function-b/
+│   └── FUNCTION_B.md            Function guide
+└── function-c/
+    └── FUNCTION_C.md            Function guide
+```
+
+**Composite Skill rules:**
+- SKILL.md contains a routing table: one line per function, `- **[Goal]** → [subfolder]/[DOCUMENT].md`
+- Function documents have NO YAML frontmatter (they are not separate skills)
+- Function documents use UPPERCASE naming (e.g., `EVALUATION.md`, not `skill.md`)
+- Shared scripts and configs live at the skill root, not in function subfolders
+- Subfolder scripts resolve shared configs via `Path(__file__).resolve().parent.parent`
+- SK-FL-01 (flat layout) does not apply to composite skills; subfolders are structural, not organizational
+
+**Examples:**
+- `llm-tools` - routes to `evaluation/`, `transcription/`, `computer-use/`; shared model JSONs and call scripts at root
+- `hosting` - routes to `netlify/`, `vercel/`, `azure-app-service/`, `sharepoint-app-catalog/`, `zola/`; shared deploy patterns at root
+- `research-methods` - routes to `research_areas/`, `research_profiles/`; shared research tools at root
+
 ## 3. Write SKILL.md
 
 Follow `SKILL_TEMPLATE.md` structure. Key decisions:
@@ -350,3 +396,5 @@ Before publishing:
 - [ ] No content replication between GRUC files (reference by ID only)
 - [ ] EXAMPLE files (if any) linked from SKILL_GUIDES.md, not from SKILL.md
 - [ ] If skill has a template: SKILL_TEMPLATE.md exists with `_TEMPLATE` suffix
+- [ ] Architecture classified as Simple or Composite (section 2.1)
+- [ ] If Composite: routing table in SKILL.md, function docs have no frontmatter, shared resources at root (SK-AR-*)

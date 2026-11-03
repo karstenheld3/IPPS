@@ -46,7 +46,7 @@ Hang prevention, banned commands, time caps. Referenced by every implementation 
 Hang-risky commands (product runs, full suites, live calls) execute via
 `Start-Process -PassThru -NoNewWindow -RedirectStandardOutput <file> -RedirectStandardError <file>`
 followed by `WaitForExit(<cap_ms>)`; on timeout kill the process tree recursively (children first).
-Output files use `.tmp_*` prefix under `[SESSION_FOLDER]` and are deleted by the prompt that created them.
+Output files use `.tmp_*` prefix under `[SESSION_FOLDER]/_agentwork/` and are deleted by the prompt that created them.
 
 ## Default Test Command
 

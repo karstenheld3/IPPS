@@ -118,9 +118,10 @@ Plans created via [PLAN] must define:
 
 ### Scope Calibration
 
-- **Too big**: Step takes >30min AWT or touches >3 files → decompose further
-- **Too small**: Step takes <2min AWT → combine with adjacent step
+- **Too big**: Step takes >30min AWH or touches >3 files → decompose further
+- **Too small**: Step takes <2min AWH → combine with adjacent step
 - **Right size**: Verifiable outcome, clear done criteria, single responsibility
+- **Prompt-executed steps**: size per @skills:write-documents `TASKS_GUIDES.md` Section 3 instead of the minute-based limits above
 
 ### Dependency Mapping
 
@@ -134,7 +135,7 @@ Ask for each step:
 - **Vague objectives**: "Make it work" → Define specific success criteria
 - **Missing dependencies**: Steps that assume prior work → Explicit `← Px-Sy`
 - **Over-sequencing**: All steps linear when some could parallelize
-- **Under-estimating**: No AWT in Strategy → Add time budget
+- **Under-estimating**: No AWH in Strategy → Add time budget
 - **Skipping verification**: No test step after implement → Add [TEST] or [VERIFY]
 
 ## Next Action Logic
@@ -153,8 +154,8 @@ Ask for each step:
 
 ### Time Units
 
-- **AWT** (Agentic Work Time) - Agent processing time, excludes user wait
-- **HHW** (Human-Hour Work) - Human equivalent effort for task sizing
+- **AWH** (Agent Work Hours) - Agent processing time, excludes user wait
+- **HWH** (Human Work Hours) - Human equivalent effort for task sizing. TASKS items carry HWH estimates (@skills:write-documents `TASKS_GUIDES.md` Section 2); `PROMPTS_GUIDES.md` Section 1g converts HWH into prompt count and cost per model
 
 ### Phase Budgets by Complexity
 
@@ -166,7 +167,7 @@ Ask for each step:
 | REFINE | 5min | 15min | 30min |
 | DELIVER | 2min | 5min | 10min |
 
-Values are AWT guidelines, not hard limits.
+Values are AWH guidelines, not hard limits.
 
 ### Diminishing Returns
 

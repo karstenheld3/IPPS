@@ -34,7 +34,7 @@ Invoke based on context:
 
 - Always run tests before committing
 - Use existing test infrastructure when available
-- Clean up `.tmp_*` test files after completion
+- Clean up `_agentwork/.tmp_*` test files and their output files after completion
 - Document flaky tests in PROBLEMS.md with reproduction steps
 
 # CONTEXT-SPECIFIC
@@ -55,7 +55,7 @@ Test code against IMPL and TEST plans.
 
 1. Gather test cases from TEST plan (or IMPL if no TEST)
 2. Run tests using existing test framework or temporary scripts
-3. For temporary scripts: prefix with `.tmp_` for cleanup
+3. For temporary scripts: write `_agentwork/.tmp_*` and run per `agent-behavior.md` Terminal Hang Prevention (output redirected to `_agentwork/.tmp_` files, read with `read_file`)
 4. Verify all test cases pass
 5. Document problems in PROBLEMS.md and failures in FAILS.md
 

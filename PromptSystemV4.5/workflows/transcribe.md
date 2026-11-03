@@ -15,7 +15,7 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 
 - @pdf-tools for PDF to image conversion
 - @ms-playwright-mcp for web page screenshots
-- @llm-transcription (optional) for advanced LLM-based transcription
+- @llm-tools (optional, `transcription/`) for advanced LLM-based transcription
 
 ## MUST-NOT-FORGET
 
@@ -28,7 +28,7 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 ## Prerequisites
 
 - @pdf-tools available for PDF to JPG conversion
-- For TRANSCRIBE_SCRIPT: @llm-transcription skill + API keys file required
+- For TRANSCRIBE_SCRIPT: @llm-tools skill + API keys file required
 - For TRANSCRIBE_PROMPT: No additional prerequisites
 
 ## GLOBAL-RULES
@@ -52,7 +52,7 @@ Apply to ALL contexts before any context-specific steps.
 Two dimensions determine the execution path:
 
 **Method** (detected in Step 1):
-- **TRANSCRIBE_SCRIPT** - `transcribe-image-to-markdown.py` with ensemble + judge + refinement. Requires @llm-transcription skill + API keys.
+- **TRANSCRIBE_SCRIPT** - `transcribe-image-to-markdown.py` with ensemble + judge + refinement. Requires @llm-tools skill + API keys.
 - **TRANSCRIBE_PROMPT** - Built-in transcription prompt (see Appendix). Fallback when skill or keys unavailable.
 
 **Scope** (determined by input):
@@ -65,7 +65,7 @@ Prepare source first (see Source Preparation Reference), then run script. Script
 
 ```powershell
 $venv = "../.tools/llm-venv/Scripts/python.exe"
-$skill = "[AGENT_FOLDER]/skills/llm-transcription"
+$skill = "[AGENT_FOLDER]/skills/llm-tools/transcription"
 
 # Single page transcription
 & $venv "$skill/transcribe-image-to-markdown.py" `
@@ -176,14 +176,14 @@ If method or scope is unclear, ask user:
 ### Method Detection
 
 ```powershell
-# Check for llm-transcription skill
-$skillPath = "[AGENT_FOLDER]/skills/llm-transcription/transcribe-image-to-markdown.py"
+# Check for llm-tools skill (transcription function)
+$skillPath = "[AGENT_FOLDER]/skills/llm-tools/transcription/transcribe-image-to-markdown.py"
 $keysFile = "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt"
 $hasSkill = Test-Path $skillPath
 $hasKeys = Test-Path $keysFile
 
 if ($hasSkill -and $hasKeys) {
-    Write-Host "METHOD: TRANSCRIBE_SCRIPT (llm-transcription skill)"
+    Write-Host "METHOD: TRANSCRIBE_SCRIPT (llm-tools skill)"
 } else {
     Write-Host "METHOD: TRANSCRIBE_PROMPT (built-in)"
     if (-not $hasSkill) { Write-Host "  - Missing: $skillPath" }
@@ -571,7 +571,7 @@ Index file format:
 
 ## Built-in Transcription Prompt (TRANSCRIBE_PROMPT)
 
-Use this prompt when llm-transcription skill is not available:
+Use this prompt when llm-tools skill is not available:
 
 ---
 

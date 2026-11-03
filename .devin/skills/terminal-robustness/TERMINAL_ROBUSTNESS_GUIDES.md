@@ -20,13 +20,13 @@ A child that spawns background processes (dev servers, watchers, daemons, `start
 
 ## 2. Why the Redirect Pattern Defeats All Three
 
-The established mitigation - run the command from a `.tmp_*.ps1`/`.py` script, redirect ALL output to files, then read the files with `read_file`:
+The established mitigation - run the command from a `_agentwork/.tmp_*.ps1`/`.py` script, redirect ALL output to `_agentwork/.tmp_` files, then read the files with `read_file`:
 
 - File handles have no 4KB pipe limit and no drain-rate throttle
 - No shell merge point, no record wrapping, no merge OOM
 - Grandchildren inherit file handles, not pipe write handles - the tool's pipes EOF at parent exit and the command returns immediately
 
-This is mechanical, not folklore. Prefer it whenever a command writes more than a few KB.
+This is mechanical, not folklore. It is the default for every command outside the inline whitelist (`agent-behavior.md` Terminal Hang Prevention, TERMROBUSTNESS-EX-04). Delete script and output files after consumption (TERMROBUSTNESS-EX-05).
 
 ## 3. Safe Command Patterns (Selection)
 
@@ -41,18 +41,18 @@ This is mechanical, not folklore. Prefer it whenever a command writes more than 
 
 ## 4. The Robustness Card
 
-A robustness card (`__CARD_[TOPIC]-Robustness.md` in the project or session root) is the durable per-project protection: banned commands, time caps, always rules, on-cap behavior, kill procedure, findings feed.
+A robustness card (`_agentwork/__CARD_[TOPIC]-Robustness.md` in the current working folder; `[WORKSPACE_FOLDER]/_agentwork/` in PROJECT-MODE) is the per-working-folder protection, kept until `/cleanup` deletes `_agentwork/`: banned commands, time caps, always rules, on-cap behavior, kill procedure, findings feed.
 
 ### 4.1 Card lifecycle
 
 ```
 copy agent ROBUSTNESS_CARD_TEMPLATE.md
-└─> name __CARD_[TOPIC]-Robustness.md in project root
+└─> name _agentwork/__CARD_[TOPIC]-Robustness.md in working folder
     └─> extend banned list + caps with project-specific entries
         ├─> chat mode: loaded before risky commands
         ├─> prompt sequences: hang-safety clause references the card
         ├─> /verify: instance checked against ROBUSTNESS_CARD_SKELETON.md
-        └─> findings feed grows across sessions
+        └─> findings feed grows until /cleanup deletes _agentwork/
 ```
 
 ### 4.2 Who consumes the card
@@ -89,7 +89,9 @@ For processes that may still exit cleanly: SIGTERM first (`Stop-Process -Id <pid
 
 - [ ] Classified the command risk before running (interactive / volume / child)
 - [ ] Loaded the project card if it exists; created one from the agent template if not
-- [ ] No `2>&1` on stderr-heavy commands; output redirected to files
+- [ ] Non-whitelisted commands ran as `_agentwork/.tmp_` script; output redirected to files and read with `read_file`
+- [ ] Temp scripts and output files deleted after consumption
+- [ ] No `2>&1`
 - [ ] No stdin/pager waits; no unbounded background children
 - [ ] Time cap set for every process-running command
 - [ ] Kills recorded; new findings added to the card's Findings Feed

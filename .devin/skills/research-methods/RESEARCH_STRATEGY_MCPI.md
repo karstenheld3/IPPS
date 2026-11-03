@@ -34,9 +34,9 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
   ```
 - **Domain identification**:
   1. Determine research domain from prompt context
-  2. Read corresponding `[domain]/DOMAIN_*.md` profile (if available)
+  2. Read corresponding `research_areas/[domain]/DOMAIN_*.md` profile (if available)
   3. Incorporate domain-specific rules (source tiers, document handling, template additions, quality criteria)
-  4. If no matching profile, use `default/DOMAIN_DEFAULT.md` and document in STRUT
+  4. If no matching profile, use `research_areas/default/DOMAIN_DEFAULT.md` and document in STRUT
 - STRUT MUST include the active domain profile and its rules
 - Answer 7 decomposition questions per SKILL.md, store PromptDecomposition in STRUT
 - Run `/verify` on STRUT plan
@@ -144,7 +144,7 @@ Create Summary file (skeletal), topic template, TASKS plan, run second VCRIV.
 
 - Create `__TASKS_[TOPIC]_RESEARCH.md` using `/write-tasks-plan` workflow
 - Partition topics from Summary file into discrete tasks
-- Each task: Status, Estimated effort, Sources (official + community), Items to document, Done-when criteria
+- Each task: Status, Estimated effort (`Est: [N] HWH`, Human Work Hours), Sources (official + community), Items to document, Done-when criteria
 - **Task timing format**: `- [ ] TK-01: [Description] [HH:MM-HH:MM] Xm`
   - Mark parallel tasks with `(parallel)` suffix
 - **Done when**: All topics have corresponding tasks, effort estimates assigned

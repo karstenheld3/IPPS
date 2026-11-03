@@ -156,14 +156,33 @@ Agent-created files (helper scripts, intermediate data, temp artifacts) MUST res
 
 Forbidden: System temp (`%TEMP%`, `$env:TEMP`, `/tmp/`), user home, Program Files, or any location outside workspace/session/target scope. No exceptions.
 
+### `_agentwork/` Folder
+
+Every working folder (session root, `T##_*`, or `S##_*` subfolder) has an `_agentwork/` subfolder for all operational artifacts that can be deleted without losing final output. In PROJECT-MODE the folder is `[WORKSPACE_FOLDER]/_agentwork/`.
+
+**In** (must go into `_agentwork/`):
+- `_PROMPTS_*` files (written by `/write-prompts`)
+- `__STRUT_*`, `__TASKS_*` scaffolding (written by `/go`, `/deep-research`, `/bugfix`, `/write-strut`)
+- `__CARD_*` cards (findings, robustness) - all cards, no exceptions
+- `__DRIFT_*`, `DRIFTS.md` (written by `/drift-detect`, consumed by `/drift-correct`)
+- `partition-observations.jsonl` (observation ledger)
+- `.tmp_*` temp scripts, data, and command output files (`.tmp_*_out.txt`, `.tmp_*_err.txt`)
+
+**Out** (must NOT go into `_agentwork/`):
+- Tracking documents: `NOTES.md`, `PROGRESS.md`, `PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md`
+- Deliverables: `_INFO_*`, `_SPEC_*`, `_IMPL_*`, `_TEST_*`
+- Review and improve outputs: `*_CRITIQUE.md`, `*_FACT-CHECK.md`, `_vN` backups, `*_DEFERRED_IMPROVEMENTS.md` - these belong beside the document they concern
+
+**Cleanup**: `/cleanup` deletes `_agentwork/` recursively (Category 7) but refuses while an un-ingested `*.jsonl` exists (run `/session-finalize` first). `/session-archive` expects no `_agentwork/` to remain.
+
 Naming:
 - `.tmp_` prefix for scripts and temp data. Example: `.tmp_fix_quotes.ps1`
 - `__` prefix for scaffolding documents (STRUTs, TASKS, templates auto-created by workflows). Example: `__STRUT_TOPIC.md`
 
 Lifecycle:
-- `.tmp_` = single-run temp. Deleted within same workflow or by `/cleanup`
+- `.tmp_` = single-run temp. Deleted as soon as its content is consumed (same task); `/cleanup` catches leftovers. Never committed
 - `__` = multi-run scaffolding. Persists during active work, deleted by `/cleanup` after goal reached
-- Commit both along with task or session files. Only delete after final goal is reached.
+- Commit `__` files along with task or session files. Only delete them after final goal is reached.
 
 ## Large File Writes
 
@@ -212,7 +231,7 @@ During execution:
 
 - Use absolute paths (PowerShell jobs lose relative context)
 - Use non-blocking execution for parallel tasks
-- Redirect command output to a `.tmp_` file in [SESSION_FOLDER] and read it with read_file - never build long PowerShell pipelines with `Select-Object` / `Select-String` / `Where-Object`; they hang the terminal. One redirect per command, delete the `.tmp_` file after use
+- Run every non-whitelisted command as a hang-safe temp script (see Terminal Hang Prevention)
 - After first job completes, verify output before assuming rest will succeed
 
 ## Long-Running Commands (over 60 seconds)
@@ -234,5 +253,13 @@ After canceling or completing:
 
 ## Terminal Hang Prevention
 
-Three hard bans, no exceptions: (1) no `2>&1` on commands writing more than a few KB of stderr - redirect to a file instead; (2) no unbounded background children (`--watch`, dev servers, daemons inheriting std handles); (3) no stdin/pager waits (`Read-Host`, `pause`, pagers, `Get-Content -Wait`).
-Before process-running commands, load `@skills:terminal-robustness TERMINAL_ROBUSTNESS_GUIDES.md` (mechanisms, safe patterns) and the project's `__CARD_*-Robustness.md` if one exists. Time-cap everything; on cap kill the process tree and record in PROBLEMS.md.
+Inline terminal commands are allowed ONLY if ALL apply: single command, no pipe `|`, no `;` or multiple statements, no loop or script block, no `2>&1`, under 200 characters, expected runtime under 10 seconds, expected output under 50 lines. Examples: `git status`, `git --no-pager log -n 5`, `python --version`.
+
+Everything else runs as a hang-safe temp script:
+1. Write `_agentwork/.tmp_[purpose].ps1` (or `.py`) in the current working folder (`[WORKSPACE_FOLDER]/_agentwork/` in PROJECT-MODE)
+2. Run: `pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt` - non-blocking with time cap ~3x expected duration when runtime is uncertain
+3. Read results only with `read_file` from the `_out.txt` / `_err.txt` files - never from terminal output
+4. Delete script and output files as soon as their content is consumed (same task). `/cleanup` catches leftovers
+
+Hard bans, no exceptions: (1) no `2>&1` - redirect stderr to a file; (2) no unbounded background children (`--watch`, dev servers, daemons inheriting std handles); (3) no stdin/pager waits (`Read-Host`, `pause`, pagers, `Get-Content -Wait`).
+Before process-running commands, load `@skills:terminal-robustness TERMINAL_ROBUSTNESS_GUIDES.md` (mechanisms, safe patterns) and the `_agentwork/__CARD_*-Robustness.md` if one exists. On cap: kill the process tree, record in PROBLEMS.md.

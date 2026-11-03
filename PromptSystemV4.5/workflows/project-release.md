@@ -152,7 +152,7 @@ User invokes /project-release
 ├─> [DEV REPO]
 │   ├─> Run tests (if test_command configured)
 │   │   └─> If tests fail: halt
-│   ├─> Research last evaluation results (from session artifacts, llm-evaluation skill outputs)
+│   ├─> Research last evaluation results (from session artifacts, llm-tools evaluation outputs)
 │   ├─> Generate dev release notes referencing product release
 │   ├─> Commit dev release notes
 │   │   └─> Commit message: `docs: add release notes for [TAG]`

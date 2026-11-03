@@ -16,6 +16,14 @@ Systematic research using MCPI (Most Complete Point of Information) or MEPI (Mos
 - Evaluating risks, trade-offs, or consequences
 - Gathering exhaustive knowledge on a topic
 
+## Intent Lookup
+
+- **Tier selection and research orchestration** -> `RESEARCH_GUIDES.md`
+- **Rapid single-turn topic research** -> `RESEARCH_GUIDES.md` (workflow `/research`, Tier 1)
+- **Focused multi-source deep research** -> `RESEARCH_GUIDES.md` (workflow `/deep-research`, Tier 2)
+- **Multi-approach research program** -> `RESEARCH_GUIDES.md` (workflow `/research-program`, Tier 3)
+- **Package research assets into standalone bundle** -> `RESEARCH_GUIDES.md` (workflow `/bundle`)
+
 ## Quick Start
 
 1. Read this SKILL.md for core principles
@@ -217,11 +225,11 @@ Referenced files MUST exist in `_SOURCES/` subfolder (transcribed markdown).
 ## Domain Profiles
 
 Read one profile per session based on Q6:
-- [DOMAIN_SOFTWARE.md](software/DOMAIN_SOFTWARE.md) - APIs, frameworks, libraries
-- [DOMAIN_MARKET_INTEL.md](market-intel/DOMAIN_MARKET_INTEL.md) - Companies, financials
-- [DOMAIN_LEGAL.md](legal/DOMAIN_LEGAL.md) - Legislation, case law
-- [DOMAIN_PROFILES.md](profiles/DOMAIN_PROFILES.md) - People, companies, organizations, networks
-- [DOMAIN_DEFAULT.md](default/DOMAIN_DEFAULT.md) - Generic (use when none match)
+- [DOMAIN_SOFTWARE.md](research_areas/software/DOMAIN_SOFTWARE.md) - APIs, frameworks, libraries
+- [DOMAIN_MARKET_INTEL.md](research_areas/market-intel/DOMAIN_MARKET_INTEL.md) - Companies, financials
+- [DOMAIN_LEGAL.md](research_areas/legal/DOMAIN_LEGAL.md) - Legislation, case law
+- [DOMAIN_PROFILES.md](research_profiles/DOMAIN_PROFILES.md) - People, companies, organizations, networks
+- [DOMAIN_DEFAULT.md](research_areas/default/DOMAIN_DEFAULT.md) - Generic (use when none match)
 
 ## Output Format
 
@@ -252,11 +260,11 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 - [RESEARCH_SUMMARY_TEMPLATE.md](RESEARCH_SUMMARY_TEMPLATE.md) - Summary file template
 - [RESEARCH_CREATE_SUMMARY.md](RESEARCH_CREATE_SUMMARY.md) - Summary creation workflow
 
-**Profile Templates and Rules** (in `profiles/` subfolder, see [DOMAIN_PROFILES.md](profiles/DOMAIN_PROFILES.md) for full instructions):
-- [PERSONAL_PROFILE_TEMPLATE.md](profiles/PERSONAL_PROFILE_TEMPLATE.md) + [PERSONAL_PROFILE_RULES.md](profiles/PERSONAL_PROFILE_RULES.md)
-- [COMPANY_PROFILE_TEMPLATE.md](profiles/COMPANY_PROFILE_TEMPLATE.md) + [COMPANY_PROFILE_RULES.md](profiles/COMPANY_PROFILE_RULES.md)
-- [ORGA_PROFILE_TEMPLATE.md](profiles/ORGA_PROFILE_TEMPLATE.md) + [ORGA_PROFILE_RULES.md](profiles/ORGA_PROFILE_RULES.md)
-- [NETWORK_PROFILE_TEMPLATE.md](profiles/NETWORK_PROFILE_TEMPLATE.md) + [NETWORK_PROFILE_RULES.md](profiles/NETWORK_PROFILE_RULES.md)
+**Profile Templates and Rules** (in `research_profiles/` subfolder, see [DOMAIN_PROFILES.md](research_profiles/DOMAIN_PROFILES.md) for full instructions):
+- [PERSONAL_PROFILE_TEMPLATE.md](research_profiles/PERSONAL_PROFILE_TEMPLATE.md) + [PERSONAL_PROFILE_RULES.md](research_profiles/PERSONAL_PROFILE_RULES.md)
+- [COMPANY_PROFILE_TEMPLATE.md](research_profiles/COMPANY_PROFILE_TEMPLATE.md) + [COMPANY_PROFILE_RULES.md](research_profiles/COMPANY_PROFILE_RULES.md)
+- [ORGA_PROFILE_TEMPLATE.md](research_profiles/ORGA_PROFILE_TEMPLATE.md) + [ORGA_PROFILE_RULES.md](research_profiles/ORGA_PROFILE_RULES.md)
+- [NETWORK_PROFILE_TEMPLATE.md](research_profiles/NETWORK_PROFILE_TEMPLATE.md) + [NETWORK_PROFILE_RULES.md](research_profiles/NETWORK_PROFILE_RULES.md)
 
 **Output Rules** (global invariant):
 

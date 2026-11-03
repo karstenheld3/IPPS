@@ -177,7 +177,7 @@ WHILE goal not reached AND iteration_count < 10:
             Execute next task
 
         IF blocker unresolved after alternatives:
-            /write-info `.tmp_INFO_[BLOCKER].md` (root cause analysis)
+            /write-info `_agentwork/.tmp_INFO_[BLOCKER].md` (root cause analysis)
             /critique -> /reconcile
             If still stuck: Hard stop, escalate to user
 ```

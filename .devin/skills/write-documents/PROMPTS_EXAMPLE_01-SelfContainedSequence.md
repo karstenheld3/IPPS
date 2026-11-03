@@ -6,7 +6,7 @@ Demonstrates a 3-prompt self-contained sequence for a generic API module setup t
 
 This example shows how to write a prompt sequence where each prompt is self-contained: it carries its own context-loading directive, treats earlier conversation as compacted, and names its dependencies by file path. The sequence is anchored by a STRUT planning document and uses context cards for shared state.
 
-The task: create a generic REST API module with user endpoints. Three prompts cover analysis, implementation, and testing. The sequence stays under 6 steps (PRMT-SC-04) and uses `effort: high` in frontmatter, so fewer prompts are needed.
+The task: create a generic REST API module with user endpoints. Three prompts cover analysis, implementation, and testing. The sequence stays within 10 implementation prompts per file (PRMT-SC-04) and uses `effort: high` in frontmatter, so fewer prompts are needed.
 
 ## Document
 

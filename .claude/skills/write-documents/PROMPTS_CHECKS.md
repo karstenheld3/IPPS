@@ -16,7 +16,7 @@ Process Discipline (PD)
 
 Quality Improvement (QI)
 - PRMT-QI-01: Is each prompt self-contained?
-- PRMT-QI-02: Does the sequence stay under 6 steps?
+- PRMT-QI-02: Does each file hold max 10 implementation prompts, without fragmentation into short files?
 - PRMT-QI-03: Are prompts scoped to the effort budget?
 - PRMT-QI-04: Do implementation prompts include idempotency constraints?
 - PRMT-QI-05: Does the sequence use context cards for shared state?
@@ -24,10 +24,12 @@ Quality Improvement (QI)
 - PRMT-QI-07: Does the sequence designate a findings card for inter-prompt problem filing?
 - PRMT-QI-08: Do prompt bodies use agent tool directives instead of shell commands for file operations?
 - PRMT-QI-09: Do verification sections run specific test files instead of full suite during implementation?
-- PRMT-QI-10: Do sequences with 4+ implementation prompts include interleaved verification checkpoints?
+- PRMT-QI-10: Does every file include verification checkpoints after every checkpoint interval and a final checkpoint?
 - PRMT-QI-11: Do implementation prompts include "Execute without asking for confirmation" in Constraints?
 - PRMT-QI-12: Do Document History timestamps use request metadata, not extrapolated times?
 - PRMT-QI-13: Does the Verify section check spec-code consistency when the prompt changes code with an associated spec?
+- PRMT-QI-14: Does every prompt declare absolute session folder and working folder after the Prompt Marker?
+- PRMT-QI-15: Does the final prompt require a clickable summary artifact list with heading, what was done / file contents, and clickable links with descriptions?
 
 ## Process Discipline (PD)
 
@@ -48,7 +50,7 @@ Quality Improvement (QI)
 ### PRMT-PD-03: Checked Effort Budget
 
 - Action: Agent checked effort budget when partitioning prompts
-- Evidence: frontmatter includes `effort` level; prompt count is consistent with effort scope (low effort = more tightly scoped prompts, high effort = fewer broader prompts)
+- Evidence: frontmatter includes `effort` level; opening commentary contains the budget line of `PROMPTS_GUIDES.md` Section 1g step 9; prompt count within the PRMT-SC-05 bounds
 - Failure indicator: 8 prompts at low effort for a task that fits 2 prompts at high effort; 1 prompt at low effort for a multi-step pipeline requiring 5 prompts
 - References: PRMT-SC-05
 
@@ -68,9 +70,9 @@ Quality Improvement (QI)
 
 ### PRMT-PD-06: Prompt Markers in All Sequences
 
-- Action: Agent included `Human Readable Prefix [ NN / NN ] - [brief summary]` Prompt Markers inside each prompt's fence as first line for all prompt sequences; the summary matches the heading text; when using a planning document (PRMT-SC-06), the summary includes plan phase/step references: `Human Readable Prefix [ NN / NN ] - [plan step ID] [brief summary]`
-- Evidence: each prompt's first line inside the fence contains a zero-padded Prompt Marker with current count, total count, and a summary; an empty line follows the marker before the prompt content; when a planning document is referenced, the summary includes plan phase/step references matching the heading text
-- Failure indicator: any prompt sequence with no Prompt Marker inside fence; marker in heading instead of inside fence; marker without summary; inconsistent zero-padding; no empty line after marker; planning document used but summary lacks plan phase/step references
+- Action: Agent included `[NN]-[Topic] [ NN / NN ] - [brief summary]` Prompt Markers inside each prompt's fence as first line for all prompt sequences; `[NN]-[Topic]` is the file identifier derived from the filename `_PROMPTS_[NN]-[Topic].md`; the summary matches the heading text; when using a planning document (PRMT-SC-06), the summary includes plan phase/step references: `[NN]-[Topic] [ NN / NN ] - [plan step ID] [brief summary]`
+- Evidence: each prompt's first line inside the fence contains a file identifier prefix `[NN]-[Topic]` matching the filename, a zero-padded Prompt Marker with current count, total count, and a summary; an empty line follows the marker before the prompt content; when a planning document is referenced, the summary includes plan phase/step references matching the heading text
+- Failure indicator: any prompt sequence with no Prompt Marker inside fence; marker in heading instead of inside fence; marker without summary; inconsistent zero-padding; no empty line after marker; planning document used but summary lacks plan phase/step references; generic topic label instead of file identifier prefix; file identifier does not match the filename
 - References: PRMT-FT-10
 
 ## Quality Improvement (QI)
@@ -82,8 +84,8 @@ Quality Improvement (QI)
 
 ### PRMT-QI-02: Chain Length Quality
 
-- Question: Does the prompt sequence stay under 6 steps? If longer, are sub-chains with checkpoints used?
-- Improvement tip: Split sequences longer than 6 prompts into sub-chains. Each sub-chain completes, commits, and the next sub-chain starts fresh with its own self-contained opening. Add a checkpoint comment documenting where one sub-chain ends and the next begins.
+- Question: Does each prompts file hold max 10 implementation prompts (verification checkpoints excluded)? Are files filled up to 10 implementation prompts before the next file starts?
+- Improvement tip: Continue sequences longer than 10 implementation prompts in the next numbered prompts file. Each file ends with its final checkpoint and a commit; the next file starts with its own self-contained opening. Merge short files of the same sequence when the merged file stays at or below 10 implementation prompts.
 
 ### PRMT-QI-03: Effort Budget Quality
 
@@ -103,7 +105,7 @@ Quality Improvement (QI)
 ### PRMT-QI-06: Hang-Safety Clause Quality
 
 - Question: Does every implementation prompt include a hang-safety clause with project-specific banned commands, time caps, and on-cap behavior?
-- Improvement tip: Add a hang-safety clause to the Constraints section of each implementation prompt. Reference `__CARD_01-Robustness.md` for the banned list instead of repeating it in every prompt. See `PROMPTS_EXAMPLE_02-RobustnessCard.md` for a complete robustness card example.
+- Improvement tip: Add a hang-safety clause to the Constraints section of each implementation prompt. Reference the project's `__CARD_*-Robustness.md` for the banned list instead of repeating it in every prompt. Card structure and agent defaults: @skills:terminal-robustness `ROBUSTNESS_CARD_TEMPLATE.md`.
 
 ### PRMT-QI-07: Findings Card Quality
 
@@ -128,10 +130,10 @@ Quality Improvement (QI)
 
 ### PRMT-QI-10: Interleaved Verification Prompts Quality
 
-- Question: If the sequence has 4+ implementation prompts, does it include verification checkpoints every 2-3 implementation prompts?
-- Evidence: count implementation prompts (excluding verification prompts); if 4+, check for `## Verification Checkpoint N` headings between implementation prompts containing `/verify` and `/fix` workflow calls
-- Failure indicator: 5 implementation prompts with no verification checkpoint between them; verification only at the end of the sequence; verification prompt containing implementation content (code, tests, builds)
-- Improvement tip: Insert a `## Verification Checkpoint N` prompt after every 2-3 implementation prompts. Each checkpoint runs `/verify` against the planning document and `/fix` for gaps. Verification prompts are self-contained (read rules card and planning document), do NOT count toward chain length limit, and use `## Verification Checkpoint N` heading (not `## Prompt N`).
+- Question: Does the file include a verification checkpoint after every checkpoint interval (Items 8: 3, Items 6: 2, Items 5 or less: 1 implementation prompts) and a final checkpoint?
+- Evidence: count consecutive implementation prompts (excluding verification prompts) between `## Verification Checkpoint N` headings containing `/verify` and `/fix` workflow calls; compare against the interval of the `intended_model` row in `MODEL_INVENTORY.md`
+- Failure indicator: a run of implementation prompts longer than the interval; no final checkpoint; verification prompt containing implementation content (code, tests, builds)
+- Improvement tip: Insert a `## Verification Checkpoint N` prompt after every checkpoint interval and after the last implementation prompt. Each checkpoint runs `/verify` against the planning document and `/fix` for gaps. Verification prompts are self-contained (read rules card and planning document), do NOT count toward the 10 implementation prompts per file, and use `## Verification Checkpoint N` heading (not `## Prompt N`).
 - References: PRMT-SQ-04
 
 ### PRMT-QI-11: Execution Authority Quality
@@ -157,3 +159,20 @@ Quality Improvement (QI)
 - Failure indicator: prompt changes code but Verify section does not mention the spec file; spec drifts without detection
 - Improvement tip: add spec-code consistency check to Verify section: "Check `_SPEC_[Name].md` section [N] still matches the code change. Update spec if drifted." (PRMT-HS-10)
 - References: PRMT-HS-10
+
+### PRMT-QI-14: Session Anchor Quality
+
+- Question: Does every prompt declare absolute session folder and working folder after the Prompt Marker? Do implementation prompts include the working-folder constraint?
+- Evidence: scan each prompt for `Session:` and `Working folder:` lines with absolute paths between the Prompt Marker and the context-loading directive; scan implementation prompt Constraints for the working-folder boundary
+- Failure indicator: prompt missing `Session:` or `Working folder:` line; paths are relative instead of absolute; implementation prompt missing working-folder constraint; anchor placed after context-loading directive instead of before it
+- Improvement tip: add `Session:` and `Working folder:` lines with absolute paths after the Prompt Marker and empty line, before the context-loading directive. Add "All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt" as first constraint in implementation prompts.
+- References: PRMT-SC-08
+
+### PRMT-QI-15: Clickable Summary Artifact List Quality
+
+- Question: Does the final prompt of the sequence require a clickable summary artifact list at the end of the sequence with multiple headings for each output group, summary of what was done/contains, and clickable links without code fences?
+- Evidence: inspect the final prompt (final checkpoint or final implementation prompt) in `_PROMPTS_*.md` for a STOP instruction requiring a summary artifact list organized with separate headings for each output group, `<what was done and what do these files contain>` under each heading, and `- [filename](file:///path) - <description>`
+- Failure indicator: final prompt STOP directive only asks for bare status; final prompt dumps all files into a single flat list without category headings; final prompt wraps output in code fences; final prompt asks for `@path` citations or plain text filenames instead of clickable Markdown links; final prompt missing summary of what was done and what the files contain
+- Improvement tip: update the final prompt's STOP instruction to: `**STOP.** Report: verify findings fixed / open, commit hash, final run status, and a clickable summary artifact list organized with separate headings for each output group, where each group contains: heading, summary of what was done and what the files contain, and bulleted clickable Markdown links with file purpose/content (- [filename](file:///path) - <description>). Do not wrap the list in code fences.` (PRMT-SQ-05)
+- References: PRMT-SQ-05
+

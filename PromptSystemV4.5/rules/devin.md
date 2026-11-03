@@ -16,19 +16,11 @@ Agent-specific rules for Windsurf/Devin (Cascade) environments. Excluded from sy
 
 **Cascade terminal limit (2026-03-09):** Max 4 concurrent terminals. Additional terminals are queued/delayed.
 
-Before processing multiple files:
+Command execution follows `agent-behavior.md` Terminal Hang Prevention and Batch Operations. Cascade specifics:
 
-1. Run `tool --help` or read source
-2. Execute on single file first
-3. Verify output location and format
-4. Scale to full batch
-
-During execution:
-
-- Use absolute paths (PowerShell jobs lose relative context)
-- Use `run_command` with `Blocking: false` for parallel tasks
+- Non-whitelisted commands: `run_command` runs only the `pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > ... 2> ...` line; read results with `read_file`
+- Use `run_command` with `Blocking: false` for parallel or slow tasks, poll with `command_status`
 - Never open external terminals unless explicitly requested
-- After first job completes, verify output before assuming rest will succeed
 
 ## Agent Folder Mapping
 

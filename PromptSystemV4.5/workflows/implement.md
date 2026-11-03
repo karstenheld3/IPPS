@@ -188,7 +188,7 @@ If 3 consecutive fix attempts fail:
 - [ ] All approved changes applied
 - [ ] No original intent lost (review: corrections match findings; build: code matches IMPL)
 - [ ] PROGRESS.md updated
-- [ ] Temporary `.tmp_*` files removed
+- [ ] Temporary `_agentwork/.tmp_*` scripts and output files removed
 
 ## Verification
 

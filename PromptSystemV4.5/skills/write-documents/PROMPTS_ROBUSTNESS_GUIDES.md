@@ -18,18 +18,19 @@ A well-structured prompt sequence with precise objectives, clean state flow, and
 
 ## 2. The Hang-Safety Clause
 
-Every implementation prompt (any prompt that runs commands) MUST include a hang-safety clause in the Constraints section. The clause has three parts:
+Every implementation prompt (any prompt that runs commands) MUST include a hang-safety clause in the Constraints section. The clause has four parts:
 
 1. **Prohibition**: no command may wait for a key, stdin, a pager, or an unbounded child
-2. **Banned list**: referenced from the project robustness card by filename
-3. **Cap behavior**: what to do when a command exceeds its time cap
+2. **Temp-script rule**: commands outside the inline whitelist (`agent-behavior.md` Terminal Hang Prevention) run as `_agentwork/.tmp_` scripts with output redirected to `_agentwork/.tmp_` files, read with the file tool, deleted after consumption
+3. **Banned list**: referenced from the robustness card by filename
+4. **Cap behavior**: what to do when a command exceeds its time cap
 
 ### Clause Template
 
-Adapt the banned list and caps from the project robustness card (`__CARD_[TOPIC]-Robustness.md`, created and extended via @skills:terminal-robustness). The clause references the card instead of repeating the full list:
+Adapt the banned list and caps from the robustness card (`_agentwork/__CARD_[TOPIC]-Robustness.md`, created and extended via @skills:terminal-robustness). The clause references the card instead of repeating the full list:
 
 ```
-Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Banned: see `__CARD_[TOPIC]-Robustness.md`. Test suites run non-blocking with a [N]-minute cap. On a cap: kill the process tree, record command and cap in PROBLEMS.md, continue.
+Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Commands outside the inline whitelist run as `_agentwork/.tmp_` script with output redirected to `_agentwork/.tmp_` files, read with the file tool, deleted after use. Banned: see `_agentwork/__CARD_[TOPIC]-Robustness.md`. Test suites run non-blocking with a [N]-minute cap. On a cap: kill the process tree, record command and cap in PROBLEMS.md, continue.
 ```
 
 ### Where to Place the Clause
@@ -279,12 +280,17 @@ Verify: Confirm STRUT step [prior step ID] is `[x]` in [STRUT filename].
 
 ### 7.6 Interleaved Verification Prompts as Drift Prevention
 
-Sequences with 4 or more implementation prompts must include interleaved verification prompts every 2-3 implementation prompts (PRMT-SQ-04). These are verification-only prompts that run `/verify` against the planning document and `/fix` to address gaps — not implementation prompts with verification sections.
+Insert a verification prompt after every checkpoint interval (Items 8: 3 implementation prompts, Items 6: 2, Items 5 or less: 1) plus a final checkpoint per file (PRMT-SQ-04, `PROMPTS_GUIDES.md` Section 3a). These are verification-only prompts that run `/verify` against the planning document and `/fix` to address gaps — not implementation prompts with verification sections.
 
-**Why this is a robustness concern**: Without interleaved checkpoints, spec-code drift accumulates silently. A Lana-V2-Dev SecurityRemediation sequence had 5 sub-chains where drift was only caught at the end, requiring rework across the full sequence. Interleaved verification limits blast radius to 2-3 prompts.
+**Why this is a robustness concern**: Without interleaved checkpoints, spec-code drift accumulates silently. An observed security remediation sequence had 5 sub-chains where drift was only caught at the end, requiring rework across the full sequence. Interleaved verification limits blast radius to one checkpoint interval.
 
 **Verification prompt template**:
 ```
+[NN]-[Topic] [ NN / NN ] - Verification Checkpoint [N]
+
+Session: `[SESSION_FOLDER]`
+Working folder: `[WORKING_FOLDER]`
+
 Read `__CARD_00-Rules.md` and `__STRUT_[Topic].md`. Treat earlier conversation as compacted. Verification checkpoint after prompts [N]-[M].
 
 /verify
@@ -297,10 +303,10 @@ all gaps and remaining work.
 ```
 
 **Key properties**:
-- Self-contained opening reads rules card and planning document (PRMT-SC-01)
+- Prompt Marker (PRMT-FT-10), Session Anchor (PRMT-SC-08), self-contained opening reads rules card and planning document (PRMT-SC-01)
 - `/verify` and `/fix` are standalone workflow calls (PRMT-CT-08)
 - No implementation content — no code, tests, or builds
-- Does NOT count toward chain length limit (PRMT-SC-04)
+- Does NOT count toward the 10 implementation prompts per file (PRMT-SC-04)
 - Heading: `## Verification Checkpoint N` (not `## Prompt N`)
 
 ## 8. Project-Specific Banned Lists
@@ -411,7 +417,7 @@ Before considering a prompt file complete, verify robustness:
 - [ ] Banned-term sweep recordings describe pattern shape, do not spell banned literals (PRMT-CT-14)
 - [ ] Verification runs specific test files, not full suite, during implementation steps (PRMT-HS-09)
 - [ ] Verify section checks spec-code consistency when prompt changes code with associated spec (PRMT-HS-10)
-- [ ] Sequences with 4+ implementation prompts include interleaved verification prompts every 2-3 prompts (PRMT-SQ-04)
+- [ ] Verification checkpoints after every checkpoint interval plus a final checkpoint per file (PRMT-SQ-04)
 - [ ] Every implementation prompt includes "Execute without asking for confirmation" in Constraints (PRMT-EX-03)
 
 **Verification depth**:

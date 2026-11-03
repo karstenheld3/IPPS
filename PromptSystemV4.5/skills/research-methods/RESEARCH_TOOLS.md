@@ -22,8 +22,8 @@
 
 ### Transcription Tools
 
-- **`transcribe-image-to-markdown.py`** (llm-transcription) - Image to structured markdown. Best for screenshots, diagrams.
-- **`transcribe-audio-to-markdown.py`** (llm-transcription) - Audio to markdown transcript. Best for conference talks, podcasts.
+- **`transcribe-image-to-markdown.py`** (`@skills:llm-tools` `transcription/`) - Image to structured markdown. Best for screenshots, diagrams.
+- **`transcribe-audio-to-markdown.py`** (`@skills:llm-tools` `transcription/`) - Audio to markdown transcript. Best for conference talks, podcasts.
 
 ## When to Use Each Tool
 
@@ -398,5 +398,5 @@ Mandatory tool overrides for specific websites. These rules take precedence over
 ## Tool Locations
 
 - **pdf-tools** - `../.tools/` (binaries), `[PROMPTSYSTEM_FOLDER]/skills/pdf-tools/` (scripts)
-- **llm-transcription** - `[PROMPTSYSTEM_FOLDER]/skills/llm-transcription/`
+- **llm-tools** (transcription) - `[PROMPTSYSTEM_FOLDER]/skills/llm-tools/transcription/`
 - **ms-playwright-mcp** - MCP server (configured in mcp_config.json)

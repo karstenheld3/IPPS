@@ -78,6 +78,13 @@ PD items verify the agent followed the correct process during skill creation. Ea
 - Failure indicator: `**Bold**` used for emphasis (not in BAD/GOOD labels) in GRUC files
 - References: SKILL_GUIDES.md section 4, SK-CT-05
 
+### SK-PD-11: Architecture Decision Documented
+
+- Action: Agent classified skill as Simple or Composite before writing, and documented the decision
+- Evidence: SKILL.md structure matches the chosen architecture (flat with Intent Lookup vs routing table with subfolders)
+- Failure indicator: Skill has subfolders but SKILL.md has no routing table, or skill has 3+ functions inlined in SKILL.md exceeding 500 lines
+- References: SKILL_GUIDES.md section 2.1, SK-AR-01, SK-AR-07
+
 ## Quality Improvement (QI)
 
 QI items are judgment-based improvement tips. Not binary pass/fail. Each item: quality question + improvement tip.
@@ -116,3 +123,8 @@ QI items are judgment-based improvement tips. Not binary pass/fail. Each item: q
 
 - Question: If SKILL_CHECKS.md exists, do PD items have concrete evidence sources?
 - Improvement tip: Replace vague evidence ("agent followed process") with concrete evidence ("git history shows research commit before skill commit"). Evidence must be observable in artifacts.
+
+### SK-QI-08: Composite Routing Table Completeness
+
+- Question: If composite, does the routing table cover all functions and all common user goals?
+- Improvement tip: Add a routing entry for each function. Map user goals to functions. If a user goal does not map to any function, either add a function or clarify the routing entry.

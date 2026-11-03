@@ -31,7 +31,24 @@ Long commands echo duplicated and char-truncated in the tool output - observed l
 
 ## 2. Confirmed Mitigation: tmp-script + redirect + read_file
 
-Run the command from a `.tmp_*.ps1`/`.py` script, redirect ALL output to files, then read the files with `read_file`. The child's handles point at files, not the tool's pipes: no 4KB limit, no 2.3KB/s throttle, no merge point, no OOM, and grandchildren inherit file handles - the tool's pipes EOF at parent exit [@I001.019]. This is the default pattern for anything writing more than a few KB.
+Run the command from a `_agentwork/.tmp_*.ps1`/`.py` script, redirect ALL output to `_agentwork/.tmp_` files, then read the files with `read_file`. The child's handles point at files, not the tool's pipes: no 4KB limit, no 2.3KB/s throttle, no merge point, no OOM, and grandchildren inherit file handles - the tool's pipes EOF at parent exit [@I001.019]. This is the default pattern for every command outside the inline whitelist (`agent-behavior.md` Terminal Hang Prevention).
+
+Script skeleton:
+
+```powershell
+$ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
+# work here: absolute paths, non-interactive flags, no 2>&1, no Read-Host/pause
+Write-Output "DONE"
+```
+
+`run_command` line (only this line goes to the terminal):
+
+```powershell
+pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt
+```
+
+Then `read_file` both output files. A missing `DONE` line means the script stopped early - check `_err.txt`. Delete script and output files after their content is consumed.
 
 ## 3. Timeout Execution Pattern (tier 2) `[TESTED]`
 
@@ -45,12 +62,12 @@ function Stop-ProcessTree {
   try { Stop-Process -Id $ProcessId -Force } catch {}
 }
 
-$proc = Start-Process -FilePath "pwsh" -ArgumentList "-NoProfile","-Command", "<command>" -PassThru -NoNewWindow -RedirectStandardOutput ".tmp_cmd_stdout.txt" -RedirectStandardError ".tmp_cmd_stderr.txt"
+$proc = Start-Process -FilePath "pwsh" -ArgumentList "-NoProfile","-Command", "<command>" -PassThru -NoNewWindow -RedirectStandardOutput "_agentwork/.tmp_cmd_stdout.txt" -RedirectStandardError "_agentwork/.tmp_cmd_stderr.txt"
 if (-not $proc.WaitForExit(<cap_ms>)) {
   Stop-ProcessTree -ProcessId $proc.Id
   Write-Output "TIMEOUT: <command> exceeded <cap> cap"
 } else {
-  (Get-Content ".tmp_cmd_stdout.txt" -Raw) ?? ''
+  (Get-Content "_agentwork/.tmp_cmd_stdout.txt" -Raw) ?? ''
 }
 ```
 
@@ -77,4 +94,4 @@ A process blocked on a full pipe is alive but produces nothing - blind polling c
 
 ## 6. Card Usage
 
-Copy `DevinCascade/ROBUSTNESS_CARD_TEMPLATE.md` to the project root as `__CARD_[TOPIC]-Robustness.md`, extend, follow it. The card absorbs the `[TESTED]` defaults from this variant; prompts reference the card instead of repeating patterns.
+Copy `DevinCascade/ROBUSTNESS_CARD_TEMPLATE.md` to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder, extend, follow it. The card absorbs the `[TESTED]` defaults from this variant; prompts reference the card instead of repeating patterns.

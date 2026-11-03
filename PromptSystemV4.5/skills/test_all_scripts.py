@@ -22,40 +22,45 @@ SKILLS_DIR = Path(__file__).parent
 WORKSPACE = SKILLS_DIR.parent.parent
 ORIGINAL_SKILLS = WORKSPACE / "DevSystemV3.5" / "skills"
 
+LLM_TOOLS = "llm-tools"
+LLM_EVAL = f"{LLM_TOOLS}/evaluation"
+LLM_TRANS = f"{LLM_TOOLS}/transcription"
+LLM_CU = f"{LLM_TOOLS}/computer-use"
+
 ALL_SCRIPTS = [
   "coding-conventions/reindent.py",
-  "llm-evaluation/call-llm.py",
-  "llm-evaluation/call-llm-batch.py",
-  "llm-evaluation/generate-questions.py",
-  "llm-evaluation/generate-answers.py",
-  "llm-evaluation/evaluate-answers.py",
-  "llm-evaluation/analyze-costs.py",
-  "llm-evaluation/compare-transcription-runs.py",
-  "llm-evaluation/find-workers-limit.py",
-  "llm-evaluation/test-call-llm.py",
-  "llm-evaluation/llm-evaluation-selftest.py",
-  "llm-transcription/transcribe-image-to-markdown.py",
-  "llm-transcription/transcribe-audio-to-markdown.py",
+  f"{LLM_TOOLS}/call-llm.py",
+  f"{LLM_TOOLS}/call-llm-batch.py",
+  f"{LLM_TOOLS}/find-workers-limit.py",
+  f"{LLM_TOOLS}/test-call-llm.py",
+  f"{LLM_TOOLS}/llm-tools-selftest.py",
+  f"{LLM_EVAL}/generate-questions.py",
+  f"{LLM_EVAL}/generate-answers.py",
+  f"{LLM_EVAL}/evaluate-answers.py",
+  f"{LLM_EVAL}/analyze-costs.py",
+  f"{LLM_EVAL}/compare-transcription-runs.py",
+  f"{LLM_TRANS}/transcribe-image-to-markdown.py",
+  f"{LLM_TRANS}/transcribe-audio-to-markdown.py",
   "pdf-tools/compress-pdf.py",
   "pdf-tools/convert-pdf-to-jpg.py",
   "pdf-tools/downsize-pdf-images.py",
-  "llm-computer-use/llm_computer_use/cli.py",
-  "llm-computer-use/llm_computer_use/core.py",
+  f"{LLM_CU}/cli.py",
+  f"{LLM_CU}/core.py",
 ]
 
 HELP_SCRIPTS = [
   "coding-conventions/reindent.py",
-  "llm-evaluation/call-llm.py",
-  "llm-evaluation/call-llm-batch.py",
-  "llm-evaluation/generate-questions.py",
-  "llm-evaluation/generate-answers.py",
-  "llm-evaluation/evaluate-answers.py",
-  "llm-evaluation/analyze-costs.py",
-  "llm-evaluation/compare-transcription-runs.py",
-  "llm-evaluation/find-workers-limit.py",
-  "llm-evaluation/test-call-llm.py",
-  "llm-transcription/transcribe-image-to-markdown.py",
-  "llm-transcription/transcribe-audio-to-markdown.py",
+  f"{LLM_TOOLS}/call-llm.py",
+  f"{LLM_TOOLS}/call-llm-batch.py",
+  f"{LLM_TOOLS}/find-workers-limit.py",
+  f"{LLM_TOOLS}/test-call-llm.py",
+  f"{LLM_EVAL}/generate-questions.py",
+  f"{LLM_EVAL}/generate-answers.py",
+  f"{LLM_EVAL}/evaluate-answers.py",
+  f"{LLM_EVAL}/analyze-costs.py",
+  f"{LLM_EVAL}/compare-transcription-runs.py",
+  f"{LLM_TRANS}/transcribe-image-to-markdown.py",
+  f"{LLM_TRANS}/transcribe-audio-to-markdown.py",
   "pdf-tools/compress-pdf.py",
   "pdf-tools/convert-pdf-to-jpg.py",
   "pdf-tools/downsize-pdf-images.py",
@@ -164,19 +169,21 @@ def test_2_help(R):
     else:
       R.fail(f"--help: {s} -> exit {code}, err: {err[:200]}")
 
-  # llm-computer-use --version (package module)
-  cu_dir = SKILLS_DIR / "llm-computer-use"
+  # computer-use --version (flat cli.py, needs mss/pyautogui importable)
+  cu_dir = SKILLS_DIR / LLM_CU
   try:
     r = subprocess.run(
-      [sys.executable, "-m", "llm_computer_use", "--version"],
+      [sys.executable, str(cu_dir / "cli.py"), "--version"],
       capture_output=True, encoding='utf-8', env={**os.environ, 'PYTHONUTF8': '1'}, timeout=10, cwd=str(cu_dir)
     )
-    if r.returncode == 0 and "llm-computer-use" in (r.stdout + r.stderr):
-      R.ok("--version: llm-computer-use (package)")
+    if r.returncode == 0 and "computer-use" in (r.stdout + r.stderr):
+      R.ok("--version: llm-tools computer-use")
+    elif "ModuleNotFoundError" in r.stderr:
+      R.skip(f"computer-use --version -> missing dependency ({r.stderr.strip().splitlines()[-1]})")
     else:
-      R.fail(f"--version: llm-computer-use -> exit {r.returncode}")
+      R.fail(f"--version: computer-use -> exit {r.returncode}")
   except Exception as e:
-    R.skip(f"llm-computer-use --version -> {e}")
+    R.skip(f"computer-use --version -> {e}")
 
 
 # ==============================================================
@@ -184,7 +191,7 @@ def test_2_help(R):
 # ==============================================================
 def test_3_configs(R):
   print("\n=== TEST 3: Config loading (JSON) ===")
-  for skill_dir in ["llm-evaluation", "llm-transcription"]:
+  for skill_dir in [LLM_TOOLS]:
     for name in ["model-registry.json", "model-parameter-mapping.json", "model-pricing.json"]:
       fp = SKILLS_DIR / skill_dir / name
       if not fp.exists():
@@ -245,7 +252,7 @@ def test_4a_reindent(R):
 # ==============================================================
 def test_4b_call_llm(R):
   print("\n=== TEST 4b: call-llm.py functions ===")
-  eval_dir = SKILLS_DIR / "llm-evaluation"
+  eval_dir = SKILLS_DIR / LLM_TOOLS
   mod = load_mod("call_llm", eval_dir / "call-llm.py")
   if not mod:
     R.skip("call-llm.py: could not import (missing openai/anthropic?)")
@@ -311,7 +318,7 @@ def test_4b_call_llm(R):
 # ==============================================================
 def test_4c_call_llm_batch(R):
   print("\n=== TEST 4c: call-llm-batch.py functions ===")
-  eval_dir = SKILLS_DIR / "llm-evaluation"
+  eval_dir = SKILLS_DIR / LLM_TOOLS
   mod = load_mod("call_llm_batch", eval_dir / "call-llm-batch.py")
   if not mod:
     R.skip("call-llm-batch.py: could not import")
@@ -350,7 +357,7 @@ def test_4c_call_llm_batch(R):
 # ==============================================================
 def test_4d_transcribe_image(R):
   print("\n=== TEST 4d: transcribe-image-to-markdown.py functions ===")
-  trans_dir = SKILLS_DIR / "llm-transcription"
+  trans_dir = SKILLS_DIR / LLM_TRANS
   mod = load_mod("transcribe_img", trans_dir / "transcribe-image-to-markdown.py")
   if not mod:
     R.skip("transcribe-image-to-markdown.py: could not import")
@@ -358,7 +365,8 @@ def test_4d_transcribe_image(R):
 
   # load_configs
   try:
-    registry, mapping, pricing = mod.load_configs(trans_dir)
+    registry, mapping, pricing = mod.load_configs(mod.get_shared_config_dir())
+    R.check(mod.get_shared_config_dir() == (SKILLS_DIR / LLM_TOOLS).resolve(), "trans: shared config dir is llm-tools root")
     R.check(isinstance(registry, dict), "trans: registry dict")
     R.check(isinstance(mapping, dict), "trans: mapping dict")
   except SystemExit:
@@ -398,7 +406,7 @@ def test_5_error_messages(R):
   print("\n=== TEST 5: Error messages for missing files ===")
 
   # call-llm.py with missing keys file
-  fp = SKILLS_DIR / "llm-evaluation" / "call-llm.py"
+  fp = SKILLS_DIR / LLM_TOOLS / "call-llm.py"
   code, out, err = run_script(fp, [
     "--model", "gpt-4o",
     "--prompt-file", "nonexistent_prompt.md",
@@ -421,7 +429,7 @@ def test_5_error_messages(R):
        "compress-pdf.py reports error for missing input")
 
   # analyze-costs.py with missing folder
-  fp = SKILLS_DIR / "llm-evaluation" / "analyze-costs.py"
+  fp = SKILLS_DIR / LLM_EVAL / "analyze-costs.py"
   code, out, err = run_script(fp, [
     "--input-folder", "nonexistent_folder",
     "--output-file", "out.json"
@@ -441,14 +449,15 @@ def test_6_compare_originals(R):
     return
 
   # Compare function signatures and key logic by loading both versions
+  # (module name, original path in DevSystemV3.5, current path, function)
   pairs = [
-    ("call_llm_orig", "llm-evaluation/call-llm.py", "build_api_params"),
-    ("call_llm_batch_orig", "llm-evaluation/call-llm-batch.py", "build_api_params"),
-    ("reindent_orig", "coding-conventions/reindent.py", "detect_indentation"),
+    ("call_llm_orig", "llm-evaluation/call-llm.py", f"{LLM_TOOLS}/call-llm.py", "build_api_params"),
+    ("call_llm_batch_orig", "llm-evaluation/call-llm-batch.py", f"{LLM_TOOLS}/call-llm-batch.py", "build_api_params"),
+    ("reindent_orig", "coding-conventions/reindent.py", "coding-conventions/reindent.py", "detect_indentation"),
   ]
 
-  for mod_name, rel_path, func_name in pairs:
-    orig_path = ORIGINAL_SKILLS / rel_path
+  for mod_name, orig_rel, rel_path, func_name in pairs:
+    orig_path = ORIGINAL_SKILLS / orig_rel
     new_path = SKILLS_DIR / rel_path
     if not orig_path.exists():
       R.skip(f"Original not found: {rel_path}")
@@ -481,7 +490,7 @@ def test_6_compare_originals(R):
     )
 
   # Compare build_api_params output for same inputs
-  eval_dir = SKILLS_DIR / "llm-evaluation"
+  eval_dir = SKILLS_DIR / LLM_TOOLS
   orig_mod = load_mod("call_llm_cmp_orig", ORIGINAL_SKILLS / "llm-evaluation" / "call-llm.py")
   new_mod = load_mod("call_llm_cmp_new", eval_dir / "call-llm.py")
 

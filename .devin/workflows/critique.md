@@ -338,24 +338,26 @@ When reviewing error logs or console output:
 
 4. **Update** `_PROBLEMS_CRITIQUE.md` and `FAILS.md` with root causes found
 
-### Minto Documents
+### Writing Documents
 
-Detect by: `__MINTO-DRAFT_*` or `_MINTO_*` filename pattern.
+Detect by: header block fields (`**Document Type**`, `**Technique**`, `**Persona**`) or filename pattern `[ID]-OPTIONS-*.md`, `[ID]-DRAFT-*.md`, or `YYYY-MM-DD_*.md` with document-type header (`DRSYNART-FR-06`).
 
-**Read**: @skills:write-documents `MINTO_GUIDES.md` for intended structure; `MINTO_RULES.md` for rule IDs; `SOCAS_RULES.md` for logic attack patterns.
+**Read**: @skills:write-documents `document_types/[TYPE]_GUIDES.md` for craft decisions and intended structure; when Technique `[ID]` is set: `writing_techniques/[ID]_GUIDES.md` and `writing_techniques/[ID]_RULES.md`; `SOCAS_RULES.md` for logic attack patterns.
 
-**Attack vectors** (reference AMINTON node IDs in findings):
-- **Magnet failure** - A does not connect to listener motivator (MINTO-AQ-01)
-- **Circular evidence** - E-node restates parent answer instead of providing independent proof
-- **False MECE** - questions/answers appear distinct but test reveals overlap
-- **Unsupported claim** - answer in prose has no corresponding E-node in appendix
-- **Closing creep** - closing adds nuance, qualification, or claims not in tree (MINTO-CL-04)
-- **Single-source dependency** - entire branch rests on one finding that could be wrong
-- **Misapplied statistic** - evidence (Fnn) cited does not actually support the claim made (SOCAS-10)
-- **Absolute claim vulnerability** - "all", "none", "always", "never" invite counter-examples
-- **Hidden trade-off** - positioning argument hides an obvious buyer objection or known downside
+**General attack vectors**:
+- Theme/Governing thought drift - apex answer does not solve the reader's problem or answer the core question
+- Unsupported claim - prose asserts key metrics or facts without source finding IDs or `[ASSUMED]` tags
+- Flawed key line - arguments below governing thought fail inductive or deductive grouping tests
+- Section goal mismatch - section fails its stated goal or fails to advance reader transformation path
+- Hidden trade-off - text obscures known operational downsides, counter-evidence, or implementation risks
+- Misapplied evidence - cited finding does not actually substantiate the claim made (`SOCAS-10`)
 
-**Output format**: Each finding references AMINTON node IDs: "C-01 (Q1A2-S1E1): [description]"
+**When Technique `[ID]` is set:**
+- Read the detected technique's `@skills:write-documents` `writing_techniques/[ID]_RULES.md` and `writing_techniques/[ID]_GUIDES.md`
+- Apply its named failure modes and structural rules
+- Attack vector checks evaluate against the technique's structural constraints
+
+**Output format**: Each finding references section headings, claim IDs, or technique-specific node IDs: "C-01 ([Section/Node]): [description]"
 
 ## Devil's Advocate Questions
 

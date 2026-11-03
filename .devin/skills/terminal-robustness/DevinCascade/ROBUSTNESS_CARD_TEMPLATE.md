@@ -1,6 +1,6 @@
 # Robustness Card Template (DevinCascade)
 
-Re-usable card for Devin/Cascade agents. Copy to project root as `__CARD_[TOPIC]-Robustness.md` and extend with project-specific entries. Defaults are tested or evidence-cited - replace bracketed placeholders.
+Re-usable card for Devin/Cascade agents. Copy to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder and extend with project-specific entries. Defaults are tested or evidence-cited - replace bracketed placeholders.
 
 ```markdown
 # Robustness Card: [TOPIC]
@@ -33,7 +33,7 @@ Re-usable card for Devin/Cascade agents. Copy to project root as `__CARD_[TOPIC]
 
 ## Always rules
 
-- Verbose output (>few KB) runs as .tmp_ script + redirect to file + read_file - defeats pipe buffer, drain throttle, merge point, and handle inheritance - evidence: @I001.019
+- Commands outside the inline whitelist run as `_agentwork/.tmp_` script + redirect to `_agentwork/.tmp_` files + read_file, script and output files deleted after consumption - defeats pipe buffer, drain throttle, merge point, and handle inheritance - evidence: @I001.019
 - Test suites run with `--ci` / `--timeout` (non-blocking, no watch mode)
 - Git commands use `--no-pager`
 - `npx` commands use `--yes`; in two-layer commands (`npm create` / `npx` + `--`) the runner-level `--yes` goes BEFORE `--` - evidence: @I001.025

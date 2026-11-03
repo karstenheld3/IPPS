@@ -13,6 +13,10 @@ Use this workflow to move a completed session folder to the archive.
 
 ## Steps
 
+0. **Check for `_agentwork/` leftovers**
+   - Search `[SESSION_FOLDER]` with `find_by_name` (Pattern `_agentwork`, Type `directory`)
+   - If any found: run `/cleanup [SESSION_FOLDER]` first. Archive expects no `_agentwork/` to remain
+
 1. **Move session folder to Archive**
 // turbo
    ```powershell
@@ -23,12 +27,15 @@ Use this workflow to move a completed session folder to the archive.
 2. **Commit archive**
 // turbo
    ```powershell
-   git add -A && git commit -m "[type](scope): [description] - archive session"
+   git add -A
+   git commit -m "[type](scope): [description] - archive session"
    ```
+   Run as two separate commands (inline whitelist: no chained statements)
 
 ## Example
 
 ```powershell
 Move-Item -Path "_2026-01-10_DontOverwriteWithEmptyValues" -Destination "_Archive\"
-git add -A && git commit -m "fix(sap-import): preserve user data during SAP import - archive session"
+git add -A
+git commit -m "fix(sap-import): preserve user data during SAP import - archive session"
 ```

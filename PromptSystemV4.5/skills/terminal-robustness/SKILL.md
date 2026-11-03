@@ -14,9 +14,10 @@ Agents issue commands that hang indefinitely: pipes that never EOF, stderr that 
 ## MUST-NOT-FORGET
 
 - Read `TERMINAL_ROBUSTNESS_GUIDES.md` BEFORE running risky commands (anything spawning processes, building, testing, or writing >4KB stderr)
-- Three hard bans always apply: no `2>&1` on stderr-heavy commands, no unbounded background children, no stdin/pager waits
+- Inline commands only within the whitelist in `agent-behavior.md` Terminal Hang Prevention; everything else runs as `_agentwork/.tmp_[purpose].ps1` with output redirected to `_agentwork/.tmp_[purpose]_out.txt` / `_err.txt`, read with `read_file`, deleted after consumption
+- Three hard bans always apply: no `2>&1`, no unbounded background children, no stdin/pager waits
 - Determine your agent and load the matching variant subfolder (`ClaudeCode/` or `DevinCascade/`)
-- If the project has a `__CARD_*-Robustness.md`, load it before running commands and follow its banned list and caps
+- If `_agentwork/__CARD_*-Robustness.md` exists, load it before running commands and follow its banned list and caps
 - Never create a robustness card from scratch - copy the agent's `ROBUSTNESS_CARD_TEMPLATE.md` and extend it
 - CHECKS files are for post-execution audit only (`/drift-detect`, `/improve`) - never read them to game compliance
 
@@ -41,12 +42,12 @@ Dispatch keys on the agent folder in use or explicit user context. Shared files 
 ### 2. Load protection
 
 - Project robustness card exists → follow its banned list, caps, and always rules
-- No card, risky commands expected → copy the agent's `ROBUSTNESS_CARD_TEMPLATE.md` to the project root as `__CARD_[TOPIC]-Robustness.md`, extend banned list and caps, then follow it
+- No card, risky commands expected → copy the agent's `ROBUSTNESS_CARD_TEMPLATE.md` to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder, extend banned list and caps, then follow it
 
 ### 3. Execute safely
 
 - Prefer agent tools (grep_search, read_file, find_by_name) over shell commands for file operations
-- Redirect verbose output to a `.tmp_` file and read it with `read_file` - never merge stderr with `2>&1`
+- Non-whitelisted commands run as `_agentwork/.tmp_` script with all output redirected to `_agentwork/.tmp_` files, read with `read_file`, deleted after consumption - never merge stderr with `2>&1`
 - Run hang-risky commands non-blocking with a time cap; poll status
 - On cap: kill the process tree, record command and cap in PROBLEMS.md, continue
 

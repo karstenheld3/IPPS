@@ -362,42 +362,25 @@ Detect by: filename pattern `*_TEMPLATE.md` in skill or workflow folder, or `__T
 
 Detect by: filename pattern `_PROMPTS_*.md` or file starts with a fenced code block (opening fence as first non-empty line) and contains `---` separators between fenced blocks.
 
-**Read**: @skills:write-documents `PROMPTS_RULES.md` (all PRMT-* rules), `PROMPTS_GUIDES.md`, `APAPALAN_RULES.md`
+**Read**: @skills:write-documents `PROMPTS_RULES.md` (all PRMT-* rules), `PROMPTS_GUIDES.md`, `APAPALAN_RULES.md`; @skills:llm-tools `MODEL_INVENTORY.md`
 
 - Verify against all PRMT-* rules in `PROMPTS_RULES.md` — all categories: FT, ST, SQ, CT, SC, EX, NM
+- For PRMT-SC-05 (effort and model specification): run its model-data checks against the `MODEL_INVENTORY.md` row of `intended_model`
 - Verify against `APAPALAN_RULES.md` (precision, brevity)
 - For PRMT-CT-08/CT-10 (workflow call formatting): check every backtick-wrapped workflow name inside a fence for execution verbs (run, use, execute, call, invoke, perform, apply, do). If found → violation. If no execution verb → correct reference.
 - For PRMT-CT-11 (existing workflows): scan `[AGENT_FOLDER]/workflows/` frontmatters to verify prompts reference or invoke matching workflows instead of reinventing logic
 
-## Minto Documents
+## Authored Documents
 
-Detect by: filename pattern `__MINTO-DRAFT_*.md` (draft) or `_MINTO_*.md` (article).
+Detect by: header block fields (`**Document Type**`, `**Technique**`, `**Persona**`) or filename pattern `[ID]-OPTIONS-*.md`, `[ID]-DRAFT-*.md`, or `YYYY-MM-DD_*.md` with document-type header (`DRSYNART-FR-06`).
 
-**Read**: @skills:write-documents `MINTO_RULES.md`, `MINTO-DRAFT_TEMPLATE.md`, `MINTO_TEMPLATE.md`
+**Read**: @skills:write-documents RULES and TEMPLATE of `document_types/[TYPE]_RULES.md` and `document_types/[TYPE]_TEMPLATE.md`; when Technique `[ID]` is set: `writing_techniques/[ID]_RULES.md` and `writing_techniques/TEMPLATES/[ID]_TEMPLATE.md`; when Persona `[PERSONA]` is set: `writing_personas/[PERSONA].md`. Never read CHECKS files during execution (`DRSYNART-FR-32`, `GRUC-IG-03`).
 
-**Verification checklist for Minto Draft (`__MINTO-DRAFT_*`):**
-- Structure matches `MINTO-DRAFT_TEMPLATE.md` (MINTO-DS-06):
-  - Header block: Generated, Source material, Purpose, Listener, Action
-  - Findings Inventory section with Fnn entries (source + label)
-  - Selection Criteria section with weights
-  - Per candidate: Score, Magnet, One-Argument Test, Question ordering, AMINTON tree, Same Kind check
-- Verify against MINTO-DS-* rules (3 candidates, recommended marked, criteria, inventory)
-- Verify against MINTO-AQ-* rules (magnet, ordering, one-argument test, declarative answers, same kind)
-- Verify against MINTO-ME-* rules (Mutually Exclusive, Collectively Exhaustive (MECE) at all levels)
-
-**Verification checklist for Minto Article (`_MINTO_*`):**
-- Structure matches `MINTO_TEMPLATE.md` (MINTO-AS-08):
-  - Header block: Doc ID, Source, Argument
-  - Executive Summary with SCQA (Situation, Complication, Answer)
-  - One section per Q with idea-stating heading (not category label)
-  - Bold claim per answer, evidence woven into paragraphs
-  - Conclusion: one summary line per Q + restated A
-  - Appendix: full AMINTON (Agentic MINTO Notation) tree (A through E-nodes with source Fnn refs)
-- Verify against MINTO-TI-* rules (sub-questions, evidence, no orphans, source references)
-- Verify against MINTO-AS-* rules (Doc ID, SCQA Executive Summary, section per Q, appendix, top-down order)
-- Verify against MINTO-CL-* rules (closing present, one line per answer, no new claims)
-- Verify against MINTO-ME-* rules (MECE at all levels)
-- Every prose paragraph maps to an AMINTON node (no unmapped content)
+**Verification checklist for Authored Documents:**
+- Structure matches matching section of `document_types/[TYPE]_TEMPLATE.md` (OPTIONS, DRAFT, Output)
+- Verify against `[TYPE]_RULES.md` rules: header block completeness (FR-24 fields), structural integrity, claim attribution, style sheet consistency, release check record format; when the `**Technique**` header is set, skip `[STRUCTURE-DEFAULT]` rules of the document type (only `[TYPE-OWNED]` rules remain binding)
+- When Technique `[ID]` is set: read the detected technique's `@skills:write-documents` `writing_techniques/[ID]_RULES.md` and `writing_techniques/[ID]_GUIDES.md`, and verify against its structural rules, template conventions, and named failure modes
+- When Persona `[PERSONA]` is set: verify voice sliders and micro-dose trait budgets against `writing_personas/[PERSONA].md`
 
 ## Translation Output
 
@@ -472,7 +455,7 @@ Verify when STRUT plan is created or updated:
 - [ ] Transitions reference Deliverables (not Objectives)
 - [ ] Steps use valid AGEN verbs with `[VERB](params)` format
 - [ ] Problem/goal addressed by Objectives?
-- [ ] Strategy includes approach summary (AWT estimate optional)
+- [ ] Strategy includes approach summary (AWH estimate optional)
 
 ## STRUT Plans (Transition Phase)
 

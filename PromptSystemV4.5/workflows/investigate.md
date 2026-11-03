@@ -15,7 +15,7 @@ Scope: Deep problem analysis requiring multi-phase investigation. Use `/research
 
 ## Required Skills
 
-- @skills:write-documents for INVESTIGATION_LOG_TEMPLATE, INVESTIGATION_GUIDES, INVESTIGATION_LOG_RULES, STRUT_TEMPLATE
+- @skills:analysis-methods for INVESTIGATION_LOG_TEMPLATE, INVESTIGATION_GUIDES, INVESTIGATION_LOG_RULES; @skills:write-documents for STRUT_TEMPLATE
 
 ## MUST-NOT-FORGET
 
@@ -46,8 +46,8 @@ _LOG_[TOPIC].md             ← Append-only investigation log
 
 ## Phase 1: Setup
 
-1. Read @skills:write-documents `INVESTIGATION_LOG_TEMPLATE.md` for log file format
-2. Read @skills:write-documents `INVESTIGATION_GUIDES.md` for entry type guidance
+1. Read @skills:analysis-methods `INVESTIGATION_LOG_TEMPLATE.md` for log file format
+2. Read @skills:analysis-methods `INVESTIGATION_GUIDES.md` for entry type guidance
 3. Read @skills:write-documents `STRUT_TEMPLATE.md` for STRUT format
 
 4. Formulate investigation goal in one sentence

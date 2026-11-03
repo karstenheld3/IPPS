@@ -16,7 +16,7 @@ Scope: Single-topic research producing one `_INFO_*.md`. Use `/deep-research` fo
 ## Required Skills
 
 Read before proceeding:
-- `[AGENT_FOLDER]/rules/research-and-report-writing-rules.md` for Most Executable Point of Information (MEPI) / Most Complete Point of Information (MCPI) research depth
+- @skills:research-methods `RESEARCH_GUIDES.md` for Most Executable Point of Information (MEPI) / Most Complete Point of Information (MCPI) research depth
 - @write-documents `INFO_GUIDES.md` and `INFO_RULES.md` for INFO document structure
 - @write-documents `APAPALAN_RULES.md` for writing quality
 
@@ -67,8 +67,8 @@ Apply to ALL branches below (profiles and general topics alike):
 
 Detect by: research subject is a **person** (name, email address, contact).
 
-1. Read @skills:research-methods `profiles/PERSONAL_PROFILE_TEMPLATE.md` for document structure
-2. Read @skills:research-methods `profiles/PERSONAL_PROFILE_RULES.md` for quality rules (PP-* rules)
+1. Read @skills:research-methods `research_profiles/PERSONAL_PROFILE_TEMPLATE.md` for document structure
+2. Read @skills:research-methods `research_profiles/PERSONAL_PROFILE_RULES.md` for quality rules (PP-* rules)
 3. Follow template section by section, applying all PP-* rules
 4. Skip sections with no findings (PP-AC-02) but fill all others (PP-HD-01)
 5. Apply MUST-NOT-FORGET items (verification labels, source retention, SOCAS)
@@ -77,8 +77,8 @@ Detect by: research subject is a **person** (name, email address, contact).
 
 Detect by: research subject is a **non-commercial organization** (university, association, NGO, government agency, foundation, standards body, research institute, professional network).
 
-1. Read @skills:research-methods `profiles/ORGA_PROFILE_TEMPLATE.md` for document structure
-2. Read @skills:research-methods `profiles/ORGA_PROFILE_RULES.md` for quality rules (OP-* rules)
+1. Read @skills:research-methods `research_profiles/ORGA_PROFILE_TEMPLATE.md` for document structure
+2. Read @skills:research-methods `research_profiles/ORGA_PROFILE_RULES.md` for quality rules (OP-* rules)
 3. Follow template section by section, applying all OP-* rules
 4. Skip sections with no findings but fill all others
 5. Apply MUST-NOT-FORGET items (verification labels, source retention, SOCAS)
@@ -87,8 +87,8 @@ Detect by: research subject is a **non-commercial organization** (university, as
 
 Detect by: research subject is a **commercial company** (startup, corporation, GmbH, LLC, AG, Ltd, SaaS vendor, consultancy, agency).
 
-1. Read @skills:research-methods `profiles/COMPANY_PROFILE_TEMPLATE.md` for document structure
-2. Read @skills:research-methods `profiles/COMPANY_PROFILE_RULES.md` for quality rules (CP-* rules)
+1. Read @skills:research-methods `research_profiles/COMPANY_PROFILE_TEMPLATE.md` for document structure
+2. Read @skills:research-methods `research_profiles/COMPANY_PROFILE_RULES.md` for quality rules (CP-* rules)
 3. Follow template section by section, applying all CP-* rules
 4. Skip sections with no findings but fill all others
 5. Apply MUST-NOT-FORGET items (verification labels, source retention, SOCAS)

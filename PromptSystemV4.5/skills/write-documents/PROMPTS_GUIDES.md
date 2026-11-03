@@ -61,16 +61,11 @@ Good prompt sequences are anchored by a persisted planning document. The prompts
 
 ## 1e. Chain Length Limits
 
-Error rates compound across steps. A 5% per-step error rate yields:
+Error rates compound only across unchecked steps. The common estimate "5% per-step error = 26% end-to-end failure at 6 steps" assumes every glitch propagates to all later steps. Verification checkpoints (Section 3a) find and fix glitches before later prompts build on them. Chain reliability therefore depends on per-prompt load (Sections 1f, 1g) and checkpoint interval, not on chain length. A model that is not overloaded and has high instruction following completes long chains; occasional glitches are caught by the next checkpoint.
 
-- 3 steps: 14% end-to-end failure rate
-- 6 steps: 26% end-to-end failure rate
-- 10 steps: 40% end-to-end failure rate
-- 15 steps: 54% end-to-end failure rate
+Limit: max 10 implementation prompts per prompts file (PRMT-SC-04). Verification checkpoints do not count. For more than 10 implementation prompts, continue in the next file of the same sequence (`_PROMPTS_[NN+1]-[Topic].md`, PRMT-NM-03). Each file ends with its final checkpoint and a commit; the next file starts with its own self-contained opening. The limit keeps files reviewable and limits a restart to one file. It is not an error-rate limit.
 
-Keep sequences under 6 steps. For longer workflows, split into sub-chains with checkpoints between them. Each sub-chain completes, commits, and the next sub-chain starts fresh with its own self-contained opening. This limits the blast radius of a single step failure to its sub-chain, not the entire workflow (PRMT-SC-04).
-
-Common mistake: splitting every task into 5 prompts. Static decomposition with no conditional logic costs more than a monolithic prompt if early steps fail and force reruns of all downstream steps. Balance chain length against the effort budget (Section 1c).
+Common mistake: splitting a sequence into many short files to satisfy a fixed step limit. Every file adds context loading, a self-contained opening, and a final checkpoint. Fill a file up to 10 implementation prompts before starting the next file.
 
 ## 1f. Load-Based Workflow Partitioning
 
@@ -87,7 +82,7 @@ Workflows are the main load carriers. `/verify`, `/critique`, `/reconcile`, `/im
    - **Reasoning depth**: judgment required (rule conformance check = shallow; finding flawed assumptions or reconciling conflicting findings = deep)
 3. Compare the summed load of a candidate grouping against the run budget from the frontmatter. Quantify the budget with the `intended_model` row of `MODEL_INVENTORY.md`: the steps grouped into one prompt stay within 1 HWH and within the row's Items after the explicitness expansion of Section 1g
 4. Group so each prompt lands in the productive range: one heavy workflow alone, or two to three light ones together
-5. Record the grouping and its rationale in the sub-chain commentary so a reviewer sees why the split was chosen
+5. Record the grouping and its rationale in the file commentary so a reviewer sees why the split was chosen
 
 **Examples of the same pipeline partitioned differently by load:**
 
@@ -118,7 +113,7 @@ Size the sequence to the executing model with the data in `MODEL_INVENTORY.md`. 
 3. Check that `effort` is listed in the Efforts column (`L M H X MX`). If not listed, choose the nearest listed level and state the change in the commentary. Notes `adaptive`: do not plan Medium for structured-data work
 4. Take task HWH as the sum of the `Est: [N] HWH` values of the TASKS items the sequence covers. STRUT steps or tasks without `Est`: estimate each step with the buckets in `TASKS_GUIDES.md` Section 2 and state the estimates in the commentary
 5. Read the effective rung: Depth shifted by effort (`MODEL_INVENTORY.md` Section 2: `H`, `X`, `MX` no shift; `M` no shift except adaptive-thinking models one lower; `L` one lower; `-` two lower). The effective rung sets the explicitness level and the items per outcome unit: `D10+` goal-level 0.5, `D7-D9` outcome plus named files 1, `D4-D6` step-level 2.5, `D1-D3` keystroke-level 4. `expanded_items` = outcome units times that factor
-6. Count implementation prompts: `prompt_count = max(ceil(expanded_items / Items), ceil(total_files / max_files), ceil(task_HWH / 1))`. Items from the row (measured `[n]m` or the default of the effective rung); max_files and checkpoint interval from Items (Items 8: 6 files, every 3 prompts; Items 6: 3 files, every 2; Items 5 or less: 2 files, every prompt). If the count exceeds the chain length limit (PRMT-SC-04), split into sub-chains
+6. Count implementation prompts: `prompt_count = max(ceil(expanded_items / Items), ceil(total_files / max_files), ceil(task_HWH / 1))`. Items from the row (measured `[n]m` or the default of the effective rung); max_files and checkpoint interval from Items (Items 8: 6 files, every 3 prompts; Items 6: 3 files, every 2; Items 5 or less: 2 files, every prompt). If the count exceeds 10, continue in the next prompts file (Section 1e, PRMT-SC-04)
 7. Insert a `/verify` + `/fix` checkpoint after every checkpoint interval of implementation prompts (PRMT-SQ-04), plus the final checkpoint
 8. Notes `scope guard strict`: add this scope guard to every implementation prompt: "Do ONLY the numbered items below. Do not refactor, rename, add tests, or touch files not listed. Report any item you could not complete as NOT DONE". Otherwise list the files each implementation prompt may change
 9. Check context fit: input read by one prompt stays at or below 50% of the Context value. Long-context benchmarks show effective context of about half the claimed window for most tested models
@@ -133,12 +128,13 @@ Common mistake: sizing by effort level alone. Two models at the same effort can 
 ## 2. Decide Decomposition
 
 Split into multiple prompts when:
-- The task has more than one reasoning mode (research vs implementation vs validation)
+- The work exceeds one run budget (Sections 1f, 1g): more items than Items, more files than max_files, or more than 1 HWH
+- The task mixes reasoning modes (research vs implementation vs validation) and the combined load exceeds one run budget
 - Intermediate output should be reviewed before continuing
 - One step produces a large artifact the next step consumes
 
 Keep as one prompt when:
-- Single reasoning mode (one edit, one search, one generation)
+- The work fits one run budget, including mixed reasoning modes at high effective rungs (Section 1c)
 - No intermediate checkpoint needed
 - Splitting adds coordination overhead without quality benefit
 
@@ -159,18 +155,18 @@ When a prompt must produce output in a specific format, add an optional 5th elem
 
 ## 3a. Interleaved Verification Prompts
 
-Sequences with 4 or more implementation prompts must include interleaved verification prompts every 2-3 implementation prompts (PRMT-SQ-04). A verification prompt runs `/verify` against the planning document (STRUT or TASKS) and the prompts file for prompts executed so far, then runs `/fix` to address gaps and remaining work.
+Insert a verification prompt after every checkpoint interval of implementation prompts, plus a final checkpoint at the end of every prompts file (PRMT-SQ-04). The checkpoint interval comes from the Items value of the `intended_model` row (Section 1g step 6): Items 8 every 3 implementation prompts, Items 6 every 2, Items 5 or less after every prompt. A verification prompt runs `/verify` against the planning document (STRUT or TASKS) and the prompts file for prompts executed so far, then runs `/fix` to address gaps and remaining work.
 
-**Why interleave verification**: Without checkpoints, spec-code drift accumulates across prompts. A Lana-V2-Dev SecurityRemediation sequence had 5 sub-chains with 3-5 prompts each. Drift was only caught at the end, requiring expensive rework across the full sequence. Interleaved verification catches drift at the point of occurrence, limiting blast radius to 2-3 prompts.
+**Why interleave verification**: Without checkpoints, spec-code drift accumulates across prompts. An observed security remediation sequence had 5 sub-chains with 3-5 prompts each and no interleaved checkpoints. Drift was only caught at the end, requiring expensive rework across the full sequence. Interleaved verification catches drift at the point of occurrence, limiting blast radius to one checkpoint interval. Checkpoints, not short chains, keep long sequences reliable (Section 1e).
 
 **Verification prompt structure**:
-- Self-contained opening (PRMT-SC-01): reads rules card and planning document
+- Prompt Marker (PRMT-FT-10), Session Anchor (PRMT-SC-08), and self-contained opening (PRMT-SC-01): reads rules card and planning document
 - `/verify` workflow call on standalone line (PRMT-CT-08): verifies current state against planning document for prompts executed so far
 - `/fix` workflow call on standalone line (PRMT-CT-08): fixes all gaps and remaining work
 - No implementation content — no code, tests, or builds
-- Does NOT count toward chain length limit (PRMT-SC-04)
+- Does NOT count toward the 10 implementation prompts per file (PRMT-SC-04)
 
-**Placement**: Insert after every 2-3 implementation prompts. For a 5-prompt sequence: after prompt 2 and after prompt 4. For a 3-prompt sequence: no interleaved verification needed (final verification suffices).
+**Placement**: 5 implementation prompts at Items 6: checkpoints after prompt 2, after prompt 4, and final after prompt 5. 3 implementation prompts at Items 8: final checkpoint only.
 
 **Example verification prompt**:
 `````markdown
@@ -179,6 +175,11 @@ Sequences with 4 or more implementation prompts must include interleaved verific
 <!-- Verify prompts 1-2 against STRUT before continuing. -->
 
 ```
+01-ApiMod-Setup [ 03 / 07 ] - Verification Checkpoint 1
+
+Session: `[SESSION_FOLDER]`
+Working folder: `[WORKING_FOLDER]`
+
 Read `__CARD_00-Rules.md` and `__STRUT_[Topic].md`. Treat earlier conversation as compacted. Verification checkpoint after prompts 1-2.
 
 /verify
@@ -193,6 +194,35 @@ all gaps and remaining work.
 
 **Heading convention**: Use `## Verification Checkpoint N` (not `## Prompt N`) to distinguish verification prompts from implementation prompts. This makes it easy to count implementation prompts for chain length and identify which prompts are checkpoints.
 
+## 3b. Final Checkpoint and Clickable Summary Artifact List
+
+Every prompt sequence file ends with a final checkpoint (PRMT-SQ-04), or with the final prompt if the sequence has no separate checkpoint. The final prompt's STOP instruction MUST require the executing agent to output a clickable summary artifact list of all output files created, modified, or verified by the prompt sequence (PRMT-SQ-05).
+
+The output must NOT be wrapped in code fences (agent responses are rendered as Markdown directly). Output artifacts MUST be partitioned into multiple logical output groups, each with its own heading:
+
+### [Group 1 Heading]
+<what was done and what do these files contain>
+- [filename1](file:///path/to/file1) - <description of file purpose or content>
+- [filename2](file:///path/to/file2) - <description of file purpose or content>
+
+### [Group 2 Heading]
+<what was done and what do these files contain>
+- [filename3](file:///path/to/file3) - <description of file purpose or content>
+
+**Structure details:**
+- **Multiple headings for output groups**: Organize files into distinct functional categories (e.g., `### Primary Deliverables`, `### Run Reports & Matching Artifacts`, `### Raw Scraped Data`, `### Session Tracking & Verification`). Do not dump all files into a single flat list.
+- **`<what was done and what do these files contain>`**: Directly under each group heading, provide a concise sentence or brief paragraph summarizing the actions performed and explaining what content the files in that group contain.
+- **`- [filename](file:///path) - <description of file purpose or content>`**: A bulleted list of standard Markdown links using `[filename](file:///path)` (or workspace-relative path), followed by ` - ` and a clear statement of the file's purpose or content.
+- **No code fences**: Output standard Markdown directly so links remain clickable in the chat panel, IDE, or document renderer.
+
+**Why standard Markdown links**:
+Plain text citations (such as `@path:1` or bare paths) are not clickable links in standard Markdown viewers, IDE chat windows, or browser renderers. Standard Markdown links formatted as `[label](file:///...)` allow the reviewer or user to open, inspect, and verify each deliverable with a single click immediately upon prompt sequence completion.
+
+**Example STOP instruction in the final prompt**:
+```
+**STOP.** Report: final run status, items completed, and a clickable summary artifact list organized with separate headings for each output group, where each group contains: heading, summary of what was done and what the files contain, and bulleted clickable Markdown links with file purpose/content (- [filename](file:///path) - <description>). Do not wrap the list in code fences.
+```
+
 ## 4. Plan State Flow
 
 In a `_PROMPTS_[NN]-[Topic].md` file, prompts run as turns of one session but must not rely on conversation history. Each prompt must be self-contained: it names its dependencies by file path, not by conversation reference. The chain holds the state through files, not through model memory of prior prompts.
@@ -202,19 +232,18 @@ Plan what each prompt produces that the next one needs:
 - Do not reference "the previous step" or "as discussed above" without naming where the output lives in a file (PRMT-SC-02)
 - Do not assume the model remembers prior conversation — treat earlier conversation as compacted; reconstruct state from files
 - Never contradict constraints from earlier prompts
-- Use commentary sections to document expected state for human readers, not to carry model context
 
-Use commentary sections (before the first prompt or between `---` and next fence) to document expected state for human readers. Commentary notes MUST be wrapped in HTML comments (`<!-- ... -->`). Commentary density depends on file type:
+Use commentary sections (before the first prompt or between `---` and next fence) to document expected state for human readers, not to carry model context. Commentary notes MUST be wrapped in HTML comments (`<!-- ... -->`). Commentary density depends on file type:
 
 - **Final output files**: heading + max 1 sentence in one HTML comment per prompt. The sentence captures expected state for the human reviewer. More than one sentence is noise — the prompt itself carries the detail.
 - **Template files**: no limit. Templates need authoring instructions, placeholder explanations, and conditional guidance that get removed when filling the template.
 
 ## 5. Manage Prompt Density
 
-Practitioner heuristic: limit each prompt to 5-8 high-priority rules or instructions. Beyond that, the model tends to skip items in the middle of long lists (lost-in-the-middle effect). The exact threshold varies by model: the Items value of the model's row in `MODEL_INVENTORY.md` takes precedence over this heuristic.
+Limit each implementation prompt to the Items value of the `intended_model` row in `MODEL_INVENTORY.md` (Section 1g): the number of numbered instruction items the model completes without skips. Beyond that, the model skips items in the middle of long lists (lost-in-the-middle effect). Model not listed: Items 4 (Section 1g step 1).
 
-If a prompt needs more than 8 instructions:
-- Split into two prompts (first sets up, second executes)
+If a prompt needs more items than Items:
+- Move the surplus items to the next prompt (the item count already drives `prompt_count` in Section 1g step 6)
 - Move standing rules into the agent's rules file instead of repeating per-prompt
 - Promote the most critical constraints to the top and bottom of the prompt (models attend to edges)
 
@@ -233,7 +262,7 @@ Every prompt in a sequence must be self-contained: it carries all information ne
 
 The core principle: treat earlier conversation as compacted. Prior conversation is not in context; reconstruct state from files, not from memory. Each prompt opens with a context-loading directive that names the files to read before doing anything else. The prompt never relies on model memory of prior prompts (PRMT-SC-01).
 
-Every prompt begins with three elements:
+After the Prompt Marker (Section 11) and the Session Anchor (Section 6i), every prompt opens with three elements:
 
 1. A context-loading directive naming the files or cards to read
 2. An explicit statement that earlier conversation is not in context: "Treat earlier conversation as compacted"
@@ -300,7 +329,7 @@ Shell commands are for process execution only: builds, tests, git operations, an
 - Agent built-in tools are non-hanging by design — no pipe deadlocks, no recursive enumeration hangs
 - Agent tools respect workspace permissions and gitignore rules
 - Agent tools are faster for single-file reads and targeted searches
-- Shell commands for file operations were a primary hang source in a Lana-V2-Dev session: `Get-ChildItem -Recurse` on large trees, `Select-String -Recurse`, `Get-Content -Wait`
+- Shell commands for file operations were a primary hang source in an observed session: `Get-ChildItem -Recurse` on large trees, `Select-String -Recurse`, `Get-Content -Wait`
 
 **Where shell commands ARE acceptable**:
 - Verify sections: residual sweeps (`Select-String -Pattern 'old_term' -Path src/` returns zero matches)
@@ -353,7 +382,7 @@ When a prompt changes code that has an associated spec, the Verify section must 
 
 ## 6i. Session Anchor in Prompts
 
-When multiple prompt sequences execute in parallel (e.g., two Lana instances running different sequences), the agent may resolve relative file references against the wrong session folder. This is session spill — the agent "forgets" which session it operates in and starts reading or writing files in a different session.
+When multiple prompt sequences execute in parallel (e.g., two execution engine instances running different sequences), the agent may resolve relative file references against the wrong session folder. This is session spill — the agent "forgets" which session it operates in and starts reading or writing files in a different session.
 
 The Session Anchor (PRMT-SC-08) prevents this by declaring the absolute session folder and working folder in every prompt. The anchor is placed after the Prompt Marker and empty line, before the context-loading directive:
 
@@ -416,7 +445,7 @@ MECT's "deliberate redundancy" applies here: restating a referent ("the authenti
 After precision is secured, cut aggressively:
 
 - **Filler phrases** - "I would like you to please" → just state the objective
-- **Restating known context** - If prompt 1 established the tech stack, prompt 3 does not need to repeat it (conversation history persists)
+- **Restating shared context** - Put context shared by several prompts (tech stack, conventions) into a context card or rules file once; each prompt references it by path instead of repeating it inline (Section 6a). Conversation history is not a carrier: treat earlier conversation as compacted
 - **Generic instructions** - "Write clean, well-documented code" adds zero signal. The model already does this by default
 - **Implementation micromanagement** - "Open file X, go to line Y, add Z" wastes tokens on steps the model can determine itself (PRMT-CT-04)
 - **Politeness tokens** - "Could you kindly", "Thank you in advance" - the model does not respond to social cues
@@ -465,25 +494,19 @@ Examples containing code blocks require deeper outer fences. A prompt showing a 
 
 ## 10. Optional Execution Frontmatter
 
-Execution Frontmatter (PRMT-FT-08) is an optional YAML block at the very top of the file. It provides execution hints to the execution engine.
+Execution Frontmatter (PRMT-FT-08) is a YAML block at the very top of the file. It provides execution hints to the execution engine (honoring them is optional, Section 10.3) and the sizing inputs for Section 1g (required for multi-prompt files, Section 10.1).
 
 ### 10.1 When to Include Frontmatter
 
-Include frontmatter when:
-- The prompts are designed for a specific model or reasoning level
-- The execution engine supports frontmatter and benefits from hints
-- The prompt sequence is part of a prompt system (e.g., IPPS)
+Include frontmatter in every multi-prompt file: PRMT-SC-05 requires `intended_model`, `context_window_size`, and `effort` to size the sequence (Section 1g). Also include it when the prompt sequence is part of a prompt system (e.g., IPPS).
 
-Omit frontmatter when:
-- The prompts are model-agnostic
-- No specific reasoning settings are needed
-- Simplicity is preferred over explicitness
+Omit frontmatter only for single-prompt files that are model-agnostic.
 
 ### 10.2 Supported Keys
 
 - `intended_model`: Model identifier (e.g., `claude-sonnet-4-5`, `gpt-4o`)
 - `context_window_size`: Context window size (e.g., `200k`, `128k`, `1M`)
-- `effort`: Effort level (`low` | `medium` | `high` | `extra-high`)
+- `effort`: Effort level (`low` | `medium` | `high` | `extra-high` | `max`), matching the Efforts codes `L M H X MX` in `MODEL_INVENTORY.md`
 - `prompt_system`: Prompt system identifier (e.g., `IPPS`)
 
 ### 10.3 Key Principles
@@ -498,7 +521,7 @@ Omit frontmatter when:
 Every prompt MUST include a Prompt Marker as the first line inside each prompt's fence, followed by an empty line before the prompt content (PRMT-FT-10). The marker identifies the source file, shows the current prompt number and total count in zero-padded format, and summarizes the prompt's purpose:
 
 ```
-01-SetupApiModule [ 01 / 23 ] - Analyze requirements
+01-SetupApiModule [ 01 / 12 ] - Analyze requirements
 
 Read `__CARD_00-Rules.md`...
 ```
@@ -524,9 +547,9 @@ Read `__CARD_00-Rules.md`...
 ### 11.2 Format Rules
 
 - The marker prefix is the file identifier `[NN]-[Topic]` from the filename `_PROMPTS_[NN]-[Topic].md`, used verbatim — do not abbreviate, rephrase, or replace with a topic label
-- Zero-padded to match the width of the total count (5 prompts → 2 digits, 23 prompts → 2 digits)
-- Total count is the number of prompts in the file, not STRUT steps
-- For sub-chains (PRMT-SC-04): total count is the number of prompts in the current sub-chain file
+- Zero-padded to match the width of the total count (5 prompts → 2 digits, 12 prompts → 2 digits)
+- Total count is the number of prompts in the file (implementation prompts plus verification checkpoints), not STRUT steps
+- For sequences continued across files (PRMT-SC-04): total count is the number of prompts in the current file
 - The marker goes inside the fence as the first line of prompt content, followed by an empty line before the prompt content — the model sees it for progress tracking
 - The marker line MUST include a summary: `[NN]-[Topic] [ NN / NN ] - [brief summary]`. The summary matches the heading text
 - When using a planning document (PRMT-SC-06), the summary MUST include plan phase/step references: `[NN]-[Topic] [ NN / NN ] - [plan step ID] [brief summary]`
@@ -542,11 +565,11 @@ Each turn receives the agent's full context engineering, input rendering, and co
 
 - **Context engineering**: The agent applies its internal input rendering mechanisms to each turn independently. Concatenating prompts bypasses this.
 - **Compute budget**: Each turn gets fresh reasoning compute. A 3-prompt sequence gets 3x the compute when run as separate turns vs one concatenated run.
-- **Execution depth**: A single run produces one response with limited depth. Separate turns allow each step to produce a full response, building on prior turns.
+- **Execution depth**: A single run produces one response with limited depth. Separate turns allow each step to produce a full response, building on the files written by prior turns.
 
 ### 12.2 Agent Role vs Execution Engine Role
 
-The writing agent creates the prompt file. The execution engine (Lana, headless runner, or human submitting one prompt at a time) runs it. These are separate roles.
+The writing agent creates the prompt file. The execution engine (headless runner or human submitting one prompt at a time) runs it. These are separate roles.
 
 An agent that writes a prompt file and then immediately executes all prompts in a single response is NOT executing the prompt file - it is circumventing the format. The agent collapses the sequence into one turn, losing per-turn context engineering and compute allocation.
 
@@ -567,7 +590,7 @@ Before considering the prompts file complete:
 - [ ] First non-empty line is optional frontmatter (PRMT-FT-08), Commentary, or opening fence (no other frontmatter)
 - [ ] Each prompt has a clear objective (verifiable from artifact per PRMT-ST-01)
 - [ ] Implementation prompts have constraints and verification criteria
-- [ ] No prompt mixes more than one reasoning mode (research + implement = split)
+- [ ] Prompts mix reasoning modes (research + implement) only when the combined load fits one run budget (Sections 1f, 1g)
 - [ ] Sequential prompts do not contradict earlier constraints
 - [ ] Later prompts explicitly reference prior output when dependent
 - [ ] Commentary sections explain purpose for human readers, not duplicate prompts
@@ -584,7 +607,7 @@ Before considering the prompts file complete:
 - [ ] Each prompt declares absolute session folder and working folder after the Prompt Marker (PRMT-SC-08); implementation prompts include working-folder constraint
 - [ ] No prompt references "the previous step" or "as discussed above" without naming where output lives in a file (PRMT-SC-02)
 - [ ] Implementation prompts include idempotency constraint: re-running must not corrupt state or waste cost (PRMT-SC-03)
-- [ ] Sequence stays under 6 steps; longer workflows use sub-chains with checkpoints (PRMT-SC-04)
+- [ ] Max 10 implementation prompts per file; longer sequences continue in the next numbered file, each ending with a final checkpoint (PRMT-SC-04)
 - [ ] Frontmatter specifies effort level; prompt count matches effort budget (PRMT-SC-05)
 - [ ] Prompt count, checkpoints, and scope guard follow Section 1g; opening commentary states model row, Depth, effective rung, explicitness level, Items, task HWH, prompt count, cost (PRMT-SC-05)
 - [ ] Prompt sequences from planning documents reference the document by filename and step ID (PRMT-SC-06)
@@ -609,7 +632,8 @@ Before considering the prompts file complete:
 - [ ] No contradictions between prompts in the same file (PRMT-SQ-01)
 - [ ] Dependent prompts reference prior output by file path (PRMT-SQ-02)
 - [ ] Commentary documents expected state between prompts (PRMT-SQ-03)
-- [ ] Sequences with 4+ implementation prompts include interleaved verification prompts (PRMT-SQ-04)
+- [ ] Verification checkpoints after every checkpoint interval (Items 8: 3, Items 6: 2, Items 5 or less: 1) plus a final checkpoint per file (PRMT-SQ-04)
+- [ ] Final prompt of sequence requires a clickable summary artifact list with heading, what was done / file contents summary, and clickable Markdown links with descriptions (PRMT-SQ-05)
 - [ ] Verification runs specific test files, not full suite, during implementation steps (PRMT-HS-09)
 - [ ] Document History timestamps use request metadata, not extrapolated times (PRMT-CT-13)
 - [ ] Banned-term sweep recordings describe pattern shape, do not spell banned literals (PRMT-CT-14)
