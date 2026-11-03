@@ -146,20 +146,49 @@ function Invoke-FileFilter {
     $excludePatterns = @($TargetEntry.exclude)
     if (-not $excludePatterns) { $excludePatterns = @() }
 
+    # Default built-in exclude patterns for build artifacts, VCS, and temporary files
+    $defaultExcludes = @(
+        '**/__pycache__/**',
+        '__pycache__/**',
+        '*.pyc',
+        '**/*.pyc',
+        '**/.git/**',
+        '.git/**',
+        '**/.pytest_cache/**',
+        '.pytest_cache/**',
+        '**/.mypy_cache/**',
+        '.mypy_cache/**',
+        '**/.tmp_*',
+        '.tmp_*',
+        '**/*.tmp',
+        '*.tmp',
+        '**/.DS_Store',
+        '.DS_Store',
+        '**/Thumbs.db',
+        'Thumbs.db'
+    )
+
     foreach ($file in $Files) {
         $relPath = $file.RelativePath
         $excludeReason = $null
 
-        # Step 1: target include (whitelist)
-        $passesInclude = $false
-        foreach ($pattern in $includePatterns) {
-            if (Test-GlobMatch -Path $relPath -Patterns @($pattern)) {
-                $passesInclude = $true
-                break
-            }
+        # Step 0: built-in hygiene exclusion
+        if (Test-GlobMatch -Path $relPath -Patterns $defaultExcludes) {
+            $excludeReason = 'default exclude'
         }
-        if (-not $passesInclude) {
-            $excludeReason = 'target include'
+
+        # Step 1: target include (whitelist)
+        if ($null -eq $excludeReason) {
+            $passesInclude = $false
+            foreach ($pattern in $includePatterns) {
+                if (Test-GlobMatch -Path $relPath -Patterns @($pattern)) {
+                    $passesInclude = $true
+                    break
+                }
+            }
+            if (-not $passesInclude) {
+                $excludeReason = 'target include'
+            }
         }
 
         # Step 2: target exclude (blacklist)
@@ -237,9 +266,14 @@ function Compare-Files {
                     $isLocallyModified = $false
                     if ($LastSync) {
                         try {
-                            $lastSyncDate = [datetime]::Parse($LastSync)
-                            $targetLastWrite = (Get-Item -LiteralPath $targetPath).LastWriteTime
-                            if ($targetLastWrite -gt $lastSyncDate) {
+                            $lastSyncUtc = [datetime]::Parse(
+                                $LastSync,
+                                [System.Globalization.CultureInfo]::InvariantCulture,
+                                [System.Globalization.DateTimeStyles]::AdjustToUniversal
+                            )
+                            $targetItem = Get-Item -LiteralPath $targetPath
+                            $targetLastWriteUtc = $targetItem.LastWriteTimeUtc
+                            if ($targetLastWriteUtc -gt $lastSyncUtc) {
                                 $isLocallyModified = $true
                             }
                         } catch {
