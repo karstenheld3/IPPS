@@ -13,9 +13,9 @@
 
 ## Summary
 
-- 5 categories, 6 failure modes, 2 instances recorded
-- Categories: Attention Dilution, Context Processing Variance, Hallucination, Probabilistic Variance, Output Scale Miscalibration
-- Failure Modes: Constraint Decay, Process Discipline Collapse, Budget Misallocation, Self-Correction Shortcutting, Context Bleeding, Regeneration Overhead
+- 6 categories, 7 failure modes, 5 instances recorded
+- Categories: Attention Dilution, Context Processing Variance, Hallucination, Probabilistic Variance, Output Scale Miscalibration, Tool-Call Argument Misparsing
+- Failure Modes: Constraint Decay, Process Discipline Collapse, Budget Misallocation, Self-Correction Shortcutting, Context Bleeding, Regeneration Overhead, Payload Type Rejection
 - Large tool calls that exceed execution limits force content regeneration in smaller edits, duplicating generation cost [OBSERVED]
 
 ## Table of Contents
@@ -66,6 +66,14 @@ The model misjudges the maximum output size that can be successfully delivered t
 
 **Distinguishing feature**: The content was correct and complete. The failure was in the delivery mechanism (tool call exceeded size limits), not in the generation quality.
 
+### CAT-06: Tool-Call Argument Misparsing
+
+The agent harness interprets a string argument by its content instead of its declared type. A string that is itself valid JSON is deserialized into an object, and the tool rejects the call because it expected a string.
+
+**Mechanism**: Tool calls travel as JSON. The harness serializer parses nested JSON text inside a string argument as structure. The tool receives an object where its schema requires a string.
+
+**Distinguishing feature**: Size is irrelevant. The same payload fails every time; the content type (JSON text) triggers the failure.
+
 ## 2. Failure Modes
 
 Observable behavior and patterns. Each failure mode may be caused by one or more categories.
@@ -114,6 +122,13 @@ When a large tool call fails due to output size limits, the model must regenerat
 - **Observable**: Model generates a large file in a single tool call, call fails, model re-generates the same content across multiple smaller edits. Generation cost is effectively doubled.
 - **Caused by**: CAT-05 (Output Scale Miscalibration)
 
+### FM-07: Payload Type Rejection
+
+A write tool rejects a correct payload with an argument-type error. The agent retries the identical payload and fails again.
+
+- **Observable**: Error `Invalid argument type for 'CodeContent': expected string but got object` on a JSON file write, repeated on retry
+- **Caused by**: CAT-06 (Tool-Call Argument Misparsing)
+
 ## 3. Instances
 
 ### INST-001: Private path leaked into reusable template
@@ -134,6 +149,33 @@ When a large tool call fails due to output size limits, the model must regenerat
 - **What happened**: When using expensive models to write large amounts of data into a single file, the Cascade agent frequently fails to execute the tool call. The model then has to re-generate the same content in multiple smaller edits, effectively duplicating the generation cost. The content was correct in the first attempt but exceeded the tool call execution limit.
 - **Rule violated**: N/A (no existing rule addresses output scale calibration for tool calls)
 
+### INST-003: Cascade tool calls stall below the generic 4,000-token split limit
+
+- **FAILS ref**: (none)
+- **Date**: 2026-11-03
+- **Categories**: CAT-05 (Output Scale Miscalibration)
+- **Failure modes**: FM-06 (Regeneration Overhead)
+- **What happened**: During a deep-research prompt sequence, the Cascade agent hung repeatedly while updating a 319-line INFO summary and a 246-line STRUT. Prompts and `agent-behavior.md` allowed writes up to ~4,000 tokens per edit and recommended `multi_edit`, which sends all edits in one tool call. The agent reported tool calls above ~3,000 tokens dropping before execution and recovered only with edits below ~1,500 tokens.
+- **Rule violated**: N/A (generic limit was followed; the limit was too high for Cascade)
+
+### INST-004: Cascade write_to_file rejects JSON content as object
+
+- **FAILS ref**: (none)
+- **Date**: 2026-09-25
+- **Categories**: CAT-06 (Tool-Call Argument Misparsing)
+- **Failure modes**: FM-07 (Payload Type Rejection)
+- **What happened**: In Lana-V1-Dev, `write_to_file` for a JSON file failed twice on the same payload with `Invalid argument type for 'CodeContent': expected string but got object`. A Hera-V1-Dev robustness card records the same failure for JSON content. Sources: Lana-V1-Dev `!NOTES.md` Agent Tooling Notes, Hera-V1-Dev `__CARD_01-Robustness.md`
+- **Rule violated**: N/A (no rule addressed JSON content in tool arguments)
+
+### INST-005: Cascade edit fails at 1,800 characters in one session
+
+- **FAILS ref**: (none)
+- **Date**: 2026-10-19
+- **Categories**: CAT-05 (Output Scale Miscalibration)
+- **Failure modes**: FM-06 (Regeneration Overhead)
+- **What happened**: In a deep-research prompt sequence, two `write_to_file` calls and three `edit` calls with `new_string` of 1,800-2,600 characters failed with `invalid json in tool call: unexpected end of JSON input`; about 40 calls at 1,500 characters or less succeeded; one `write_to_file` of ~3,000 characters succeeded. The agent then asked the user instead of splitting, and the prompt ended
+- **Rule violated**: `agent-behavior.md` Attitude (never ask); the size limit in force (~4,000 tokens) was above the observed threshold
+
 ## Sources
 
 - `AGNTPROB-IN01-SC-IPPS-FAILS`: `E:\Dev\IPPS\FAILS.md` - 34 failure entries (GLOB-FL-001 through GLOB-FL-034)
@@ -141,6 +183,15 @@ When a large tool call fails due to output size limits, the model must regenerat
 - `AGNTPROB-IN01-SC-KWRK-DRAFT`: `E:\Dev\KarstensWorkspace\_Sessions\_2026-07-02_AgentischesDesignVortrag\DRAFT_VORTRAG.md` - Presentation draft identifying 4 root causes and compliance measurements
 
 ## Document History
+
+**[2026-11-03 19:44]**
+- Added: CAT-06 (Tool-Call Argument Misparsing), FM-07 (Payload Type Rejection)
+- Added: INST-004 (JSON content rejected), INST-005 (edit fails at 1,800 characters)
+- Changed: Summary counts
+
+**[2026-11-03 19:36]**
+- Added: INST-003 (Cascade tool-call stall below generic 4,000-token split limit)
+- Changed: Summary instance count to 3
 
 **[2026-09-16 00:32]**
 - Added: CAT-05 (Output Scale Miscalibration)

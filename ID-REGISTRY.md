@@ -243,6 +243,8 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **MUSICPROMO** - Music Promotion Guide (German Ratgeber on placing and promoting melodic house tracks with labels, playlists, DJ pools, promoters; first live run of the DRSYNART three-layer pipeline) - 2026-10-28
 - **LLMTOOLS** - LLM Tools Skill (unification of llm-computer-use, llm-evaluation, llm-transcription into one `llm-tools` skill with single-source model data: call-llm.py, model JSONs, MODEL_INVENTORY.md) - 2026-10-29
 - **AIMEDIAPROD** - AI Media Production (API-driven, AI-assisted video and podcast production pipeline: recording review via transcription, asset generation, automated cutting and rendering, podcast post-production; parent topic for nested subtopic MEDIAAUTO) - 2026-10-29
+- **SEOFIRST** - SEO-First Skill (deep research and guides for demand-first ideation, SEO/GEO/agent discoverability optimization across all media, audit ranking, campaigns, metadata; upgrade of `seo-tools` skill; parent topic for nested subtopic SEOGUIDE) - 2026-11-03
+- **AGENSYNTAX** - AGEN Syntax (generic verb-object-modifier prompt syntax extending AGEN; workflow prompt signatures; workflow count reduction) - 2026-11-03
 - **ABTSTORY** - And-But-Therefore Story Spine writing technique (narrative friction and resolution structure) - 2026-11-02
 - **AIDA** - Attention-Interest-Desire-Action writing technique (direct-response conversion structure) - 2026-11-02
 - **ANA** - Analysis Orchestration rules (/analyze tier selection, devil's advocate, review points) - 2026-11-02

@@ -1,5 +1,18 @@
 # Failure Log
 
+## 2026-11-03 - Recommendation Asserted a Mapping Property Without Checking It
+
+### [MEDIUM] [RESOLVED 2026-11-03] `AGENSYNTAX-FL-0001` INFO recommended combination claimed "A keywords map 1:1 to B parameter names" while the lists have 9 vs 12 entries
+
+- **When**: 2026-11-03 16:45 (discovered 2026-11-03 17:30 during `/critique`)
+- **Where**: `_INFO_IPPS_UNIFIED_WORKFLOW_PROPOSALS.md [AGENSYNTAX-IN02]` Summary, Section 5.1, Section 11
+- **What**: The recommended combination rests on a 1:1 mapping between Concept A keywords and Concept B parameters. A has 9 keywords, B has 12 parameter names; `for`, `using`, `with` each map to 2 parameters. Section 5.1 also claimed "Parameter names equal slot names" (3 slots). Same document scored Concept E with E2's workflow count while presenting E as "3 or 31"
+- **Why it went wrong**: Structural claims about lists (1:1, equal, same count) were written from the design intent, not by placing the two lists side by side; `/verify` checked arithmetic but not set relations
+- **Evidence**: `_INFO_IPPS_UNIFIED_WORKFLOW_PROPOSALS_CRITIQUE-implemented.md [AGENSYNTAX-IN02-RV01]` findings `AGENSYNTAX-RV-009`, `AGENSYNTAX-RV-002`
+- **Suggested fix**: Write the explicit mapping; score E1 and E2 separately
+- **Prevention rule**: Before claiming a mapping property (1:1, equal, covers all) between two lists, write both lists side by side and count
+- **Resolved**: 2026-11-03 17:50 - AGENSYNTAX-IN02 Section 5.2 now lists the explicit keyword-to-parameter mapping; Summary and Section 11 no longer claim 1:1; Section 10.2 scores E1 (3.75) and E2 (3.95) separately
+
 ## 2026-11-02 - MINTO Set Renamed by Token Substitution, Semantics Not Migrated
 
 ### [HIGH] [RESOLVED 2026-11-02] `DRSYNART-FL-0002` MINTO GUIDES/RULES/TEMPLATE kept pre-DD-16 lifecycle after the -DRAFT to -OPTIONS rename
