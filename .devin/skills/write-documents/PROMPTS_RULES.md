@@ -1948,40 +1948,41 @@ The summary list must NOT be wrapped in code fences (agent responses are rendere
 
 ### [Group 1 Heading]
 <what was done and what do these files contain>
-- [filename1](file:///path/to/file1) - <description of file purpose or content>
-- [filename2](file:///path/to/file2) - <description of file purpose or content>
+- `relative/path/to/file1` - <description of file purpose or content>
+- `relative/path/to/file2` - <description of file purpose or content>
 
 ### [Group 2 Heading]
 <what was done and what do these files contain>
-- [filename3](file:///path/to/file3) - <description of file purpose or content>
+- `relative/path/to/file3` - <description of file purpose or content>
 
 Format elements:
 - **Multiple headings for output groups**: Organize files into distinct categories with Markdown headings (e.g., `### Primary Deliverables`, `### Run Reports & Data`, `### Session Tracking`).
 - **`<what was done and what do these files contain>`**: Directly under each group heading, provide a clear, concise overview summarizing the actions performed and explaining what content the output files in that group contain.
-- **`- [filename](file:///path) - <description of file purpose or content>`**: A bulleted list where each link is a standard Markdown link formatted as `[filename](file:///path)` (or workspace-relative path), followed by ` - ` and a concise description of the file's purpose or content.
-- **No code fences**: Output standard Markdown directly so links remain clickable in the chat panel, IDE, or document renderer.
+- **`- `relative/path/to/file` - <description of file purpose or content>`**: A bulleted list where each file path is enclosed in backticks as a workspace-relative path with forward slashes (e.g., `` `docs/_INFO_HOW_DEVIN_WORKS.md` ``), followed by ` - ` and a concise description of the file's purpose or content.
+- **No code fences**: Output standard Markdown directly so paths are rendered as interactive chips in the chat panel.
+- **No `file:///` links or raw HTML**: Never use `[filename](file:///path)` or `<a href="...">`. Devin Desktop's Markdown renderer strips `file:` protocol URLs, rendering them as unclickable dead links (`href=""` with `preventDefault()`). Backticked workspace-relative paths are automatically parsed by Devin's chat engine (`PDo` pattern), converted to internal `cci:` URIs, and rendered as interactive clickable chips that jump directly to the file in the editor upon clicking.
 
-Rationale: At sequence completion, the reviewer needs immediate, one-click access to all deliverables without hunting through directories or parsing terminal logs. Plain text paths or `@path` citation strings are not clickable in standard Markdown viewers or chat panels. Grouping by multiple headings with explanatory context provides immediate orientation before the reviewer inspects the files.
+Rationale: At sequence completion, the reviewer needs immediate, one-click access to all deliverables without hunting through directories or parsing terminal logs. In Devin / Cascade, `file:///` URLs are stripped by protocol sanitization and render as unclickable dead links. Backticked workspace-relative paths with forward slashes (`path/to/file.ext`) are recognized by Devin's chat transformer, verified against disk, and rendered as clickable file chips with editor jumps. Grouping by multiple headings with explanatory context provides immediate orientation before the reviewer inspects the files.
 
-Verifiable from artifact: The final prompt in `_PROMPTS_*.md` contains an instruction in its STOP directive requiring a clickable summary artifact list with multiple headings for each output group, what was done / file contents description under each heading, and clickable Markdown links (`[label](file:///path)`) with descriptions, without code fence wrapping.
+Verifiable from artifact: The final prompt in `_PROMPTS_*.md` contains an instruction in its STOP directive requiring a clickable summary artifact list with multiple headings for each output group, what was done / file contents description under each heading, and backticked workspace-relative paths (`` `relative/path/to/file` ``) with descriptions, without code fence wrapping or `file:///` URLs.
 
 **BAD** (final prompt STOP report does not require clickable artifact list, or only asks for plain status):
 `````markdown
 **STOP.** Report: items completed, tests passed, and final status.
 `````
 
-**BAD** (asks for plain text paths or citations):
+**BAD** (uses unclickable file:/// links or raw HTML):
 `````markdown
-**STOP.** Report: list of files modified (@path:line format).
+**STOP.** Report: list of files modified formatted as [filename](file:///path/to/file) or <a href="...">.
 `````
 
-**GOOD** (final prompt specifies multiple headings per output group, explanation, and clickable links):
+**GOOD** (final prompt specifies multiple headings per output group, explanation, and backticked workspace paths):
 `````markdown
 **STOP.** Report: verify findings fixed / open, commit hash, final run status, and a clickable summary artifact list with separate headings for each output group formatted as:
-Heading
+### [Output Group Heading]
 <what was done and what do these files contain>
-- [filename](file:///path) - <description of file purpose or content>
-(Do not wrap the list in code fences).
+- `relative/path/to/file` - <description of file purpose or content>
+(Do not wrap the list in code fences. Use backticked workspace-relative paths with forward slashes so Devin renders them as clickable file chips. Never use file:/// links or raw HTML).
 `````
 
 ## PRMT-CT-12: Prefer Agent Tools Over Shell Commands for File Operations

@@ -3,7 +3,7 @@
 **Doc ID**: DVDT-IN01
 **Goal**: Comprehensive reference for Devin Desktop (formerly Windsurf) - agent harnesses, AI models, customization, developer tools, enterprise controls, and architecture internals
 **Version scope**: Devin Desktop 3.10.67+ / Devin Local 2026.5.26+ / Devin Next 3.8.1020 and 3.9.1018
-**Timeline**: Created 2026-08-27, Updated 7 times (2026-08-27 - 2026-10-20)
+**Timeline**: Created 2026-08-27, Updated 8 times (2026-08-27 - 2026-11-03)
 
 ## Summary
 
@@ -54,6 +54,7 @@
 - Auto-update controlled by `product.json` `updateUrl` field, not `update.mode` setting [TESTED 2026-09-09]
 - Running user-scope Windows install as Administrator disables updates entirely (inherited VS Code OSS behavior) [TESTED 2026-09-17]
 - Agent Windows are untitled workspaces (`workbenchMode: windsurf-agent-window`) restored by Devin's own `WindsurfWindowsMainManager`, not by VS Code `window.restoreWindows` [TESTED 2026-09-26]
+- Chat link formatting: Markdown links whitelist only http, https, mailto, tel; file:/// and raw HTML are stripped to empty href with preventDefault (unclickable). Clickable file links in chat require backticked workspace-relative paths (`path/file.ext`) or @citations (@/path), which Devin converts to cci: URIs with openFilePointer editor jumps [TESTED 2026-11-03]
 
 **Version Differences (3.8.1020 vs 3.9.1018):**
 - 3.9 adds multimodal support: DocumentData, VideoData protobuf types, ChatMessagePrompt fields 20-21, ModelFeatures fields 27-30 [VERIFIED]
@@ -81,6 +82,7 @@
 15. [Enterprise Features](#15-enterprise-features)
 16. [Settings and Configuration](#16-settings-and-configuration)
 17. [Architecture Internals](#17-architecture-internals)
+    - [17.1 Chat Markdown and Link Formatting (Devin / Cascade UI)](#171-chat-markdown-and-link-formatting-devin--cascade-ui)
 18. [Version Differences: 3.8 vs 3.9](#18-version-differences-38-vs-39)
 19. [Sources](#19-sources)
 20. [Document History](#20-document-history)
@@ -1375,6 +1377,53 @@ Devin adds two main-process services on top of stock VS Code window handling. Bo
 
 Stale Agent Window references were found in: `Local Storage\leveldb\*.ldb`, `User\workspaceStorage\<workspace-id>\state.vscdb`, `User\History\<hash>\entries.json`, and `User\globalStorage\storage.json` (`backupWorkspaces`, `profileAssociations`, `windowSplashWorkspaceOverride`). Symptom stopped after both windows were closed manually via the window close button (not via `.bat` relaunch) and the app was restarted; which change resolved it was not isolated. [TESTED 2026-09-26]
 
+### 17.1 Chat Markdown and Link Formatting (Devin / Cascade UI)
+
+Reverse-engineering of the chat message rendering pipeline in `workbench.desktop.main.js` reveals how Devin Desktop (both Cascade and Devin Local) renders links and file references in chat:
+
+**Link URI Protocol Whitelisting (`Oko`, `eDo`, `Bka`, `Nko`) [TESTED 2026-11-03]:**
+- Standard Markdown links `[label](url)` are sanitized through strict protocol whitelists:
+  - `Bka = /^(https?|ircs?|mailto|xmpp)$/i` in `eDo(href)`
+  - `Nko = ["http:", "https:", "mailto:", "tel:"]` in `Oko(href)`
+- Any protocol not matching these schemes (notably `file:`, `vscode:`, or Windows drive letters like `e:`) is sanitized to an empty string `""` or `null`.
+- In the React `ChatLink` (`dT`) component, link click events are handled via:
+  ```javascript
+  onClick: y => {
+    if (y.preventDefault(), m?.(y), !d) return;
+    let k = M1r(y, E) ? { forceExternal: !0 } : void 0;
+    s(d, k) || w(d, k);
+    y.stopPropagation();
+  }
+  ```
+- When `href` is sanitized to `""`, clicking calls `y.preventDefault()` and immediately returns without opening anything.
+- **Consequence:** Markdown file links (`[filename](file:///path)` or `[filename](e:\path)`) and raw HTML anchor tags (`<a href="file:///...">`) render as dead, unclickable elements in the chat window.
+
+**How Devin Renders Clickable File Links in Chat [TESTED 2026-11-03]:**
+Before Markdown rendering, assistant messages pass through a message transformer (`OMa` -> `ZTa` -> `FDo`) that detects local file references using two patterns:
+1. **Workspace-relative paths in backticks (`PDo` pattern):**
+   - Regex: `/(?<![`\w@])`([a-zA-Z0-9_.~][^\s`:#]*\/[^\s`:#]*)(?:[#:](\d+)(?:[:-](\d+))?)?(\s?)`/g`
+   - Formats: `` `path/to/file.ext` `` or `` `path/to/file.ext:line` `` or `` `path/to/file.ext:start-end` ``
+   - Requires enclosing backticks and at least one forward slash `/`.
+   - The engine validates file existence against the workspace via `fs.stat` (`JFo`).
+2. **At-mention citations (`tlr` pattern):**
+   - Regex: `/(?<![`\w])(`|`{3})?(\w*)@((?:\/|(?=[^\s]*\/[^\s]))[^#:\s`]*)(?:[#:](\d+)(?:[:-](\d+))?)?(\s?)\1/g`
+   - Formats: `@/path/to/file` or `` `@/path/to/file` `` (supports Unix absolute paths with forward slashes).
+3. **Code block citations (`XAa` pattern):**
+   - Regex: `/^@((?:\/|[a-zA-Z]:[\\/])[^\s:]*(?:[\\/][^\s:]+)+)(?::(\d+)(?:-(\d+))?)?$/`
+   - Formats: ```` ```@<absolute_path>:<start_line>-<end_line> ```` (supports both Windows `C:\` / `C:/` and Unix `/` paths).
+
+**Code Context Item (CCI) Resolution (`BDo`, `ODo`, `jFo`) [TESTED 2026-11-03]:**
+- When a file path is verified on disk, `BDo` converts it into an internal Code Context Item URI:
+  `[<path>](cci:4://file://<encodedPath>:<startLine>:0-<endLine>:999)`
+- The Markdown renderer explicitly whitelists `cci:` (`D1r`).
+- The link renderer (`jFo`) parses `cci:` URIs, extracts line numbers and file paths, and renders an interactive `<ipt>` chip with the file icon and path tooltip.
+- Clicking the chip invokes `openFilePointer()`, which calls VS Code's `_editorService.openEditor({ resource: fileUri, options: { selection: ... } })`, instantly opening the file in the editor and jumping to the specified line/range.
+
+**Clickable Link Guidelines for Chat & Prompts:**
+- **Workspace file deliverables:** Use backticked workspace-relative paths with forward slashes: `` `relative/path/to/file.ext` `` (e.g., `` `docs/_INFO_HOW_DEVIN_WORKS.md` ``). Devin automatically verifies them and renders interactive, clickable chips.
+- **Web URLs:** Use standard Markdown links: `[label](https://...)` or plain `https://...`.
+- **Banned:** Never output `file:///` URLs, raw HTML `<a>` tags, or `[label](file:///...)` in chat; they are stripped by the protocol whitelist and remain dead/unclickable.
+
 ## 18. Version Differences: 3.8 vs 3.9
 
 Binary and source analysis of Devin Next 3.8.1020 vs 3.9.1018. All findings from reverse-engineering minified extension.js and Go binary string extraction. [TESTED 2026-09-09]
@@ -1579,6 +1628,11 @@ The client extension never checks these fields to show/hide Cascade UI. Cascade 
 - `DVDT-IN01-SC-LOCAL-WIN`: Devin Next 3.8.1020 `main.js` string extraction (`WindsurfWindowsMainManager`, `windsurfAgentWindowMainService`, `getRestoreWindowsSetting`), `main.log`, `storage.json`, `Workspaces\*\workspace.json` - double-window launch investigation [TESTED 2026-09-26]
 
 ## 20. Document History
+
+**[2026-11-03 11:30]**
+- Added: Section 17.1 Chat Markdown and Link Formatting (Devin / Cascade UI) -- reverse-engineered protocol whitelist (`Oko`, `eDo`, `Bka`, `Nko`), click interception (`dT`), file link stripping (`file:///` -> dead link), pre-render message transformation (`OMa`, `ZTa`, `FDo`, `PDo`, `tlr`), `cci:` URI resolution, and `openFilePointer` editor jumping
+- Added: Chat link guidelines for prompt deliverables (use backticked workspace-relative paths instead of `file:///` links)
+- Changed: Timeline updated from 7 to 8 updates
 
 **[2026-10-20 12:00]**
 - Added: Summary "Pricing and Billing" section -- no Cascade-specific cost model change, platform-wide evolution, new plan prices, ChatGPT billing, voice mode, SSO removal

@@ -202,25 +202,26 @@ The output must NOT be wrapped in code fences (agent responses are rendered as M
 
 ### [Group 1 Heading]
 <what was done and what do these files contain>
-- [filename1](file:///path/to/file1) - <description of file purpose or content>
-- [filename2](file:///path/to/file2) - <description of file purpose or content>
+- `relative/path/to/file1` - <description of file purpose or content>
+- `relative/path/to/file2` - <description of file purpose or content>
 
 ### [Group 2 Heading]
 <what was done and what do these files contain>
-- [filename3](file:///path/to/file3) - <description of file purpose or content>
+- `relative/path/to/file3` - <description of file purpose or content>
 
 **Structure details:**
 - **Multiple headings for output groups**: Organize files into distinct functional categories (e.g., `### Primary Deliverables`, `### Run Reports & Matching Artifacts`, `### Raw Scraped Data`, `### Session Tracking & Verification`). Do not dump all files into a single flat list.
 - **`<what was done and what do these files contain>`**: Directly under each group heading, provide a concise sentence or brief paragraph summarizing the actions performed and explaining what content the files in that group contain.
-- **`- [filename](file:///path) - <description of file purpose or content>`**: A bulleted list of standard Markdown links using `[filename](file:///path)` (or workspace-relative path), followed by ` - ` and a clear statement of the file's purpose or content.
-- **No code fences**: Output standard Markdown directly so links remain clickable in the chat panel, IDE, or document renderer.
+- **`- `relative/path/to/file` - <description of file purpose or content>`**: A bulleted list of file paths enclosed in backticks as workspace-relative paths with forward slashes (e.g., `` `docs/_INFO_HOW_DEVIN_WORKS.md` ``), followed by ` - ` and a clear statement of the file's purpose or content.
+- **No code fences**: Output standard Markdown directly so links/chips remain clickable in the chat panel, IDE, or document renderer.
+- **No `file:///` links or raw HTML**: In Devin Desktop (Cascade and Devin Local), the Markdown link parser sanitizes URLs against a strict protocol allowlist (`http:`, `https:`, `mailto:`, `tel:`). Any `file:` scheme is stripped to an empty string (`href=""`) and its click handler intercepts the event with `preventDefault()`, leaving the link completely dead and unclickable. Raw HTML `<a>` tags are likewise escaped or stripped.
 
-**Why standard Markdown links**:
-Plain text citations (such as `@path:1` or bare paths) are not clickable links in standard Markdown viewers, IDE chat windows, or browser renderers. Standard Markdown links formatted as `[label](file:///...)` allow the reviewer or user to open, inspect, and verify each deliverable with a single click immediately upon prompt sequence completion.
+**Why backticked workspace paths (and why file:/// fails)**:
+In Devin Desktop's chat rendering pipeline (`workbench.desktop.main.js`), any workspace-relative path enclosed in backticks that contains a forward slash (the `PDo` regex pattern) is automatically intercepted, verified against disk, and transformed into an internal Code Context Item URI (`cci:4://file://...`). Devin renders this as an interactive, clickable chip with a file icon and tooltip. Clicking it immediately opens the file in VS Code (`openFilePointer`). Standard Markdown links with `file:///` fail because the protocol is stripped by the chat sanitizer.
 
 **Example STOP instruction in the final prompt**:
 ```
-**STOP.** Report: final run status, items completed, and a clickable summary artifact list organized with separate headings for each output group, where each group contains: heading, summary of what was done and what the files contain, and bulleted clickable Markdown links with file purpose/content (- [filename](file:///path) - <description>). Do not wrap the list in code fences.
+**STOP.** Report: final run status, items completed, and a clickable summary artifact list organized with separate headings for each output group, where each group contains: heading, summary of what was done and what the files contain, and bulleted clickable file paths with file purpose/content (- `relative/path/to/file` - <description>). Do not wrap the list in code fences, and never use file:/// links or raw HTML.
 ```
 
 ## 4. Plan State Flow

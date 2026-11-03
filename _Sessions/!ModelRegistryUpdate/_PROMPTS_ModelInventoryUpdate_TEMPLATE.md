@@ -431,7 +431,7 @@ Findings card: Load and update `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.
 
 Verify: Gates 5, 6, 7, 9, and 9.4 pass; zero `.tmp_*` files remain in `[RUN_FOLDER]\_agentwork\`; `git status --porcelain -- "[SKILL_FOLDER]"` is empty; `[SESSION_FOLDER]\NOTES.md` lists the `[DATE] [RUN_MODE]` run.
 
-**STOP.** Report: verify findings fixed / open, commit hash, total net time across the run from `__CARD_MDLRGUP-Findings.md`, final run status, and a clickable summary artifact list with separate headings for each output group formatted as: heading, summary of what was done and what the files contain, and bulleted clickable Markdown links with file purpose/content (`- [filename](file:///path) - <description>`). Do not wrap the list in code fences.
+**STOP.** Report: verify findings fixed / open, commit hash, total net time across the run from `__CARD_MDLRGUP-Findings.md`, final run status, and a clickable summary artifact list with separate headings for each output group formatted as: heading, summary of what was done and what the files contain, and bulleted clickable file paths with file purpose/content (`- `relative/path/to/file` - <description>`). Do not wrap the list in code fences, and never use file:/// links or raw HTML.
 ```
 
 <!-- EXAMPLE: Reference only. Do not copy into new documents. Shows a completed NEWMODEL run instance (Prompt 1 resolved and the Prompt 4 STOP report; Prompt 3 omitted because [INCLUDE_SCREENSHOTS] = NO, renumbered to [ 01 / 07 ] - [ 07 / 07 ]). Model IDs and statements are illustrative.

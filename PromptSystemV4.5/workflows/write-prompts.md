@@ -349,7 +349,7 @@ all gaps and remaining work.
 
 **Final checkpoint STOP directive** (PRMT-SQ-05): The final checkpoint of every prompt sequence file MUST conclude with a STOP instruction requiring a clickable summary artifact list with multiple headings for each output group (do not wrap in code fences):
 ```
-**STOP.** Report: final run status, items completed, and a clickable summary artifact list with separate headings for each output group, where each group contains: heading, summary of what was done and what the files contain, and bulleted clickable Markdown links with file purpose/content (- [filename](file:///path) - <description>). Do not wrap the list in code fences.
+**STOP.** Report: final run status, items completed, and a clickable summary artifact list with separate headings for each output group, where each group contains: heading, summary of what was done and what the files contain, and bulleted clickable file paths with file purpose/content (- `relative/path/to/file` - <description>). Do not wrap the list in code fences, and never use file:/// links or raw HTML.
 ```
 
 ## Step 5: Verify
