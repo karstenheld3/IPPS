@@ -38,4 +38,4 @@
 - Added: `MDLRGUP-MDLINVNTRY-PR-0002` under Resolved (`R3` pre-October `26-A` ban, `R2` strict `UC-1..4` tier separation, `glm-5.2` in `26-C`)
 
 **[2026-10-28 20:22]**
-- Added: `MDLRGUP-MDLINVNTRY-PR-0001` under Resolved (synced from `_agent_work/__CARD_MDLINVNTRY-Findings.md`); confirmed 0 open problems at P4 close
+- Added: `MDLRGUP-MDLINVNTRY-PR-0001` under Resolved (synced from `_agentwork/__CARD_MDLINVNTRY-Findings.md`); confirmed 0 open problems at P4 close

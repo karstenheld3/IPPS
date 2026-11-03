@@ -54,7 +54,7 @@
   - Content: DOM extraction procedure, Sources section (A1-A4, O1-O3, Z1-Z3), verification gates, distribution targets
   - Role: Procedure of record for sourcing provider data; source of provider URLs
 
-- **MDLRGUP-MDLINVNTRY-SC-IPPS-FAILS** - `e:\dev\IPPS\FAILS.md` and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_agent_work\__CARD_MDLINVNTRY-Findings.md` (Accessed: 2026-10-28)
+- **MDLRGUP-MDLINVNTRY-SC-IPPS-FAILS** - `e:\dev\IPPS\FAILS.md` and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_agentwork\__CARD_MDLINVNTRY-Findings.md` (Accessed: 2026-10-28)
   - Content: Workspace failure log and sequence findings card with Partition Observations ledger
   - Role: Empirical observation source for R4 downgrades and behavior evidence (1/28 coverage: `glm-5.2`)
 
@@ -81,7 +81,7 @@
   - Role: Consumer of inventory data; defines what fields the partitioning system needs
 
 - **MDLRGUP-MDLINVNTRY-SC-LOCAL-FDBKLP** - `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\T01_MDLBHVPRM_BehavioralParameterBenchmarks_2026-10-19\_INFO_MDLBHVPRM-07_PromptFeedbackLoop.md` [MDLRGUP-MDLBHVPRM-IN07] (Accessed: 2026-10-28)
-  - Content: Drift-detection checkpoint design, per-prompt planned-vs-actual observations, _agent_work/ folder definition
+  - Content: Drift-detection checkpoint design, per-prompt planned-vs-actual observations, _agentwork/ folder definition
   - Role: Defines the feedback loop that calibrates WF; checkpoint ledger concept
 
 - **MDLRGUP-MDLINVNTRY-SC-KWRK-TMPLTE** - `e:\Dev\KarstensWorkspace\_Sessions\_!AINewsResearch\_PROMPTS_AI-News-Research_TEMPLATE.md` (Accessed: 2026-10-28)

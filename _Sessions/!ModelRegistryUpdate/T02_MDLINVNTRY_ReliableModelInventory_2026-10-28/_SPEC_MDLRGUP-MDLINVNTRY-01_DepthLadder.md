@@ -381,7 +381,7 @@ Layering depth ladder from model-registry.json 1.12.0 and 2026-11-28_Epoch-ECI-M
 - The layering script reads the registry and the run's match file only; it has no network access
 - The inventory script reads the four registries (`model-registry.json`, `model-pricing.json`, `model-parameter-mapping.json`, `windsurf-model-registry.json`) and writes `MODEL_INVENTORY.md` only
 - Gate 9.4 compares against the previous committed registry (git `HEAD`), so the registry must be committed before each run
-- `.tmp_dominance_ladder.py` in `_Sessions/!ModelRegistryUpdate/_agent_work/` is the reference implementation of the layering (bootstrap mode, E1/E2/E3/E5, manual edges); E6, insert-only mode, and validation are not yet implemented there
+- `.tmp_dominance_ladder.py` in `_Sessions/!ModelRegistryUpdate/_agentwork/` is the reference implementation of the layering (bootstrap mode, E1/E2/E3/E5, manual edges); E6, insert-only mode, and validation are not yet implemented there
 - Skill files are general-purpose: no session paths, no real identifiers in illustrative content
 
 ## 13. Document History

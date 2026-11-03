@@ -285,7 +285,7 @@ Proposed changes; nothing below is applied yet. `MODEL_INVENTORY.md` stays a gen
   MODEL_INVENTORY.md ──> /write-tasks-plan, /write-strut, /write-prompts, /verify
               ^
               │  /session-finalize: ledger → registry.observed → items, scope_guard review
-  _agent_work/partition-observations.jsonl  <── Final Checkpoint of every prompts file
+  _agentwork/partition-observations.jsonl  <── Final Checkpoint of every prompts file
 ```
 
 ### 5.1 Registry Properties (1.12.0)
@@ -316,7 +316,7 @@ Sort: Depth descending, then Model ascending. Prompts files cite `Depth` and `It
 
 ### 5.3 Scripts
 
-- **`layer-depth-ladder.py`** (new, from `_agent_work/.tmp_dominance_ladder.py`): reads registry and the run's Epoch match file; builds E1, E2, E3, E5 edges plus manual `deeper_than`; for models with `depth` present it verifies the stored rung is still consistent (reports, never rewrites); for models without `depth` it applies the online insertion rule (Section 2.4) and writes `depth`, `depth_evidence`, `depth_estimated`; applies E6 for unscored models; aborts on a cycle and names the two edges. `--bootstrap` performs the one-time Section 2.3 layering and is refused when any `depth` exists
+- **`layer-depth-ladder.py`** (new, from `_agentwork/.tmp_dominance_ladder.py`): reads registry and the run's Epoch match file; builds E1, E2, E3, E5 edges plus manual `deeper_than`; for models with `depth` present it verifies the stored rung is still consistent (reports, never rewrites); for models without `depth` it applies the online insertion rule (Section 2.4) and writes `depth`, `depth_evidence`, `depth_estimated`; applies E6 for unscored models; aborts on a cycle and names the two edges. `--bootstrap` performs the one-time Section 2.3 layering and is refused when any `depth` exists
 - **`match-epoch-eci.py`**: keeps download and name matching; outputs `eci_score`, `eci_ci_low`, `eci_ci_high`; drops `eci_band`, `band_action`, `gen_equivalent`, and the UC inference (`uc_class` is human-set in the registry; the script lists new models whose `uc_class` is missing)
 - **`update-model-inventory.py`**: removes `anchor`, `letter_index`, `label_from`, WF formula, profile and Comp columns; reads `depth`, `items`, `scope_guard`; renders the header `Top rung`; keeps `CSV rows` and adaptive Medium markers, price columns, Devin-only Section 3.2
 - **`verify-and-distribute-registry.ps1` Gate 9.4**: every text model not `retired` has `depth`; no `depth` differs from the previous committed registry except `depth_estimated` → measured; every `deeper_than` entry has a source; inventory sort order; `Top rung` equals max `depth`
@@ -377,7 +377,7 @@ One-paragraph explanation: "HWH says how big a job is for a skilled human; no pr
 - **Effort shift sizes are assumed**: direction is measured on three configurations (`TBLF-IN02`); the one-rung and two-rung sizes are not
 - **Observations depend on the execution framework**: framework explains 56% of over-eagerness variance, base model 21% ([SNARE](https://arxiv.org/abs/2605.28122)) [VERIFIED - LLMCAPCLS-IN01-SC-SNARE]. Ledger lines carry `engine`; Items measured under `cascade` may not hold under `claude-code`
 - **The E6 `*` → measured transition is the one rung change**: it breaks the append-only guarantee for estimated rungs only; Gate 9.4 allows exactly this change
-- **The ladder is a session artifact until applied**: `.tmp_dominance_ladder.py` and `.tmp_manual_edges.json` live in `_agent_work/`; no canonical file carries `depth` yet
+- **The ladder is a session artifact until applied**: `.tmp_dominance_ladder.py` and `.tmp_manual_edges.json` live in `_agentwork/`; no canonical file carries `depth` yet
 - **Two registry release dates are wrong** (EC-9): `claude-fable-5-1` 2026-09-01 per vendor (registry 2026-09-25), `claude-opus-5-5` announced 2026-09-22 (registry 2026-10-14). E2 ordering is unaffected in both cases
 
 ## 9. Next Steps
@@ -393,7 +393,7 @@ One-paragraph explanation: "HWH says how big a job is for a skilled human; no pr
 
 **Primary Sources (providers, research organizations, local files):**
 - `LLMCAPCLS-IN01-SC-EPOCH-CSV`: https://epoch.ai/data/eci_scores.csv - Epoch Capabilities Index scores with 95% confidence intervals per model; snapshot 2026-10-28 in `_2026-10-28_PRICES/2026-10-28_eci-leaderboard.csv`, matched to registry IDs in `2026-10-28_Epoch-ECI-Match.json` (76 of 100 models scored) [VERIFIED]
-- `LLMCAPCLS-IN01-SC-IPPS-LADDER`: `_agent_work/.tmp_dominance_ladder.py`, `.tmp_ladder.json`, `.tmp_ladder.txt`, `.tmp_manual_edges.json`, `.tmp_ladder_dd11.json` - E1/E2/E3/E5 edge construction plus manual `deeper_than` edges and fixed-point layering over 92 text models; result 11 rungs without and 12 rungs with the two Fable edges, no cycle, no contradiction; first run with release-order insertion produced 22 conflicts (2026-11-02) [TESTED]
+- `LLMCAPCLS-IN01-SC-IPPS-LADDER`: `_agentwork/.tmp_dominance_ladder.py`, `.tmp_ladder.json`, `.tmp_ladder.txt`, `.tmp_manual_edges.json`, `.tmp_ladder_dd11.json` - E1/E2/E3/E5 edge construction plus manual `deeper_than` edges and fixed-point layering over 92 text models; result 11 rungs without and 12 rungs with the two Fable edges, no cycle, no contradiction; first run with release-order insertion produced 22 conflicts (2026-11-02) [TESTED]
 - `LLMCAPCLS-IN01-SC-IPPS-MREG`: `PromptSystemV4.5/skills/llm-tools/model-registry.json` 1.11.0 - `uc_class`, `release_date`, `eci_score`, `status` per model (E1, E2 inputs) [VERIFIED]
 - `LLMCAPCLS-IN01-SC-IPPS-MINV`: `PromptSystemV4.5/skills/llm-tools/MODEL_INVENTORY.md` (2026-10-29) - letter scheme output used in Section 1; prices and Devin cost multipliers [VERIFIED]
 - `LLMCAPCLS-IN01-SC-TBLF-IN02`: `e:\Dev\LLM-Research\_Sessions\_2026-03-05_TabularDataFormatsForLLMs\01_CSVScaleLimits\_INFO_01_CSVScaleLimits-TestResults.md` [TBLF-IN02] Section 5.1 and `_INFO_02_CSVScaleLimits-Findings.md` [TBLF-IN03] E1 - confirmed CSV extraction rows per model and effort (20 configurations, n=3, about 28% variance, May 2026); adaptive thinking at Medium skips reasoning [VERIFIED]

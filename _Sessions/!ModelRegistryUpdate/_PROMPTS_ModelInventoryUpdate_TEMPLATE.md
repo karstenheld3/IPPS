@@ -7,24 +7,24 @@ prompt_system: IPPS
 
 <!-- PROMPTS TEMPLATE
 Filename: _PROMPTS_ModelInventoryUpdate_TEMPLATE.md
-Instance naming: _PROMPTS_[DATE]_ModelInventoryUpdate.md
-Location: [SESSION_FOLDER]\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md (template); [RUN_FOLDER]\_PROMPTS_[DATE]_ModelInventoryUpdate.md (generated instance)
+Instance naming: _PROMPTS_01-MdlInv-[RUN_MODE].md
+Location: [SESSION_FOLDER]\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md (template); [RUN_FOLDER]\_agentwork\_PROMPTS_01-MdlInv-[RUN_MODE].md (generated instance)
 Specification: [SESSION_FOLDER]\T02_MDLINVNTRY_ReliableModelInventory_2026-10-28\_SPEC_MDLRGUP-MDLINVNTRY-01_DepthLadder.md [MDLRGUP-MDLINVNTRY-SP01]; design in [SESSION_FOLDER]\_INFO_HOW_TO_ORGANIZE_LLMS_BY_CAPABILITY.md [LLMCAPCLS-IN01]
-Previous version: _PROMPTS_ModelInventoryUpdate_TEMPLATE_v0.md (year-letter labels, ECI bands, WF; superseded 2026-11-02)
+Previous version: _PROMPTS_ModelInventoryUpdate_TEMPLATE_v0.md (year-letter labels, ECI bands, WF; superseded 2026-11-02; removed by /cleanup 2026-11-02, retrievable from git history)
 
 Purpose: Self-contained recurring pipeline to refresh model-registry.json, model-pricing.json, model-parameter-mapping.json, and MODEL_INVENTORY.md from authoritative provider DOM tables, Epoch ECI scores with confidence intervals, vendor capability statements (depth ladder edges), and the observation ledger (Items).
 Replaces the former root-level update-model-registry.md workflow and isolates all run artifacts inside a datestamped run folder.
 
 Run modes ([RUN_MODE]):
-- FULL: Complete refresh across all providers in [TARGET_PROVIDERS] — DOM extraction (Prompt 2), full-page screenshot archive and markdown transcription (Prompt 3), capability evidence: Epoch ECI intervals, new-model metadata, depth edge research (Prompt 4), canonical JSON updates with Gates 5-7 (Prompt 5), live API tests + depth layering + MODEL_INVENTORY.md regeneration + Phase 10 report (Prompt 6), confirmation-gated distribution (Prompt 7), and Final Checkpoint (Prompt 8).
+- FULL: Complete refresh across all providers in [TARGET_PROVIDERS] — DOM extraction (Prompt 2), full-page screenshot archive and markdown transcription (Prompt 3), capability evidence: Epoch ECI intervals, new-model metadata, depth edge research (Prompt 4), canonical JSON updates with Gates 5-7 (Prompt 5), live API tests + depth layering + MODEL_INVENTORY.md regeneration + Phase 10 report (Prompt 6), distribution incl. external Lana-V1 config (Prompt 7), and Final Checkpoint (Prompt 8).
 - PRICES: Fast price and model metadata refresh — executes Prompts 2, 4 (if capability scheme active), 5, 6, 7, 8. Excludes Prompt 3 (screenshots and image transcription).
 - NEWMODEL: Targeted onboarding for newly released model(s) specified in [TARGET_MODELS] — executes Prompts 2 (affected providers only), 4, 5, 6, 7, 8. Excludes Prompt 3 unless [INCLUDE_SCREENSHOTS] = YES.
 
 Run folder structure:
 - Each run creates an isolated datestamped folder in the session root: [SESSION_FOLDER]\_[DATE]_[RUN_MODE]\ (e.g., e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\)
-- [RUN_FOLDER]\_PROMPTS_[DATE]_ModelInventoryUpdate.md - Generated prompt sequence for this run (excludes Prompt 1 Bootstrap)
-- [RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md - Run-scoped findings card and Partition Observations ledger
-- [RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md - Run-scoped hang-safety and Playwright robustness card
+- [RUN_FOLDER]\_agentwork\_PROMPTS_01-MdlInv-[RUN_MODE].md - Generated prompt sequence for this run (excludes Prompt 1 Bootstrap)
+- [RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md - Run-scoped findings card and Partition Observations ledger
+- [RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md - Run-scoped hang-safety and Playwright robustness card
 - [RUN_FOLDER]\[DATE]_Anthropic-Pricing-DOM.json, [DATE]_Anthropic-ModelIDs-DOM.json - Anthropic DOM extracts (A1-A4)
 - [RUN_FOLDER]\[DATE]_OpenAI-Standard-DOM.json, [DATE]_OpenAI-Batch-DOM.json, [DATE]_OpenAI-Compare-DOM.json - OpenAI DOM extracts (O1-O3)
 - [RUN_FOLDER]\[DATE]_Google-Pricing-DOM.json, [DATE]_Google-Models-DOM.json - Google Gemini DOM extracts (G1-G3)
@@ -69,13 +69,13 @@ Placeholder registry:
 - [TRANSCRIPTION_SCRIPT] - Image-to-markdown transcription script ([AGENT_FOLDER]\skills\llm-tools\transcription\transcribe-image-to-markdown.py)
 
 Load-based partition table (PRMT-SC-07 assessment for [MODEL] at [EFFORT] effort, [CONTEXT_WINDOW_SIZE] context):
-- Prompt 1 (Bootstrap, ~15k tokens, 4 items): Detect [RUN_MODE], [DATE], [PROMPTSYSTEM_FOLDER], create [RUN_FOLDER] and _agent_work cards, generate instance _PROMPTS_[DATE]_ModelInventoryUpdate.md via /write-prompts.
+- Prompt 1 (Bootstrap, ~15k tokens, 4 items): Detect [RUN_MODE], [DATE], [PROMPTSYSTEM_FOLDER], create [RUN_FOLDER] and _agentwork cards, generate instance _PROMPTS_01-MdlInv-[RUN_MODE].md via /write-prompts.
 - Prompt 2 (Phases 1 + 2 DOM Extraction, ~45k tokens, 7 items): Pre-flight Gate 1 + Playwright DOM extraction across [TARGET_PROVIDERS] (Anthropic A1-A4, OpenAI O1-O3, Google Gemini G1-G3, Z.AI Z1-Z3, xAI X1-X3) + Gate 2 check.
 - Prompt 3 (Phases 3 + 4 Screenshots & Transcription, ~40k tokens, 4 items, Conditional on [INCLUDE_SCREENSHOTS] = YES): Full-page scroll capture, copy to [RUN_FOLDER]\[DATE]_screenshots\, run transcribe-image-to-markdown.py, stitch markdowns, verify Gates 3-4.
 - Prompt 4 (Capability Evidence, ~35k tokens, 4 items, Conditional on [CAPABILITY_SCHEME] = LADDER): Download Epoch ECI CSV and match scores + intervals ([DATE]_Epoch-ECI-Match.json); read vendor model pages for new models (release_date, uc_class); resolve edge cases EC-1 to EC-9 into [DATE]_Depth-Edges.json.
 - Prompt 5 (Phases 5 + 6 + 7 Canonical JSON Updates, ~35k tokens, 5 items): Derive change set (Phase 5.0), update model-registry.json including eci_score, eci_ci, uc_class, release_date, deeper_than (Phase 5 + Gate 5), update model-pricing.json (Phase 6 + Gate 6), verify model-parameter-mapping.json (Phase 7 + Gate 7).
 - Prompt 6 (Phase 8 + Phase 9.4 + Phase 10, ~30k tokens, 4 items): Run test-call-llm.py for new enabled models (Phase 8 + Gate 8), run layer-depth-ladder.py insert-only, copy items / scope_guard from observed, regenerate [INVENTORY_FILE] (Phase 9.4 + Gate 9.4), write [RUN_FOLDER]\[DATE]_RunReport.md (Phase 10).
-- Prompt 7 (Phase 9 Distribution, ~15k tokens, 2 items, Confirmation-Gated): Copy canonical JSONs and [INVENTORY_FILE] to [AGENT_FOLDER]\skills\llm-tools\ (9.1), copy to external Lana targets (9.3) ONLY if user confirmed, run Gate 9 hash check.
+- Prompt 7 (Phase 9 Distribution, ~15k tokens, 2 items): Copy canonical JSONs and [INVENTORY_FILE] to [AGENT_FOLDER]\skills\llm-tools\ (9.1), copy JSONs to external target `e:\Dev\Lana-V1\.agent-data\config` (9.3, always; user decision DD-14 2026-11-02: the entire update chain runs inside the prompts file), run Gate 9 hash check.
 - Prompt 8 (Final Checkpoint, ~20k tokens, 3 items): Run /verify across updated JSONs, [INVENTORY_FILE], and [DATE]_RunReport.md; fix any gaps inline (max 2 cycles); update session NOTES.md.
 
 Conditional prompts:
@@ -101,14 +101,14 @@ Context management:
 - Later prompts must NOT re-read large files already in conversation history from earlier turns in the same session.
 - Playwright MCP calls may hang; enforce a 60s timeout per page and use an isolated browser.newContext() if the default tab has concurrent navigation.
 
-Remove template-instruction XML comments (this block, Conditional comments, and the EXAMPLE block at the end) when instantiating _PROMPTS_[DATE]_ModelInventoryUpdate.md; keep the opening load-grouping comment and the 1-sentence commentary comment under each ## Prompt N heading (PRMT-FT-04, PRMT-SC-05, PRMT-SC-07).
+Remove template-instruction XML comments (this block, Conditional comments, and the EXAMPLE block at the end) when instantiating _PROMPTS_01-MdlInv-[RUN_MODE].md; keep the opening load-grouping comment and the 1-sentence commentary comment under each ## Prompt N heading (PRMT-FT-04, PRMT-SC-05, PRMT-SC-07).
 -->
 
-<!-- Model: [MODEL] (effort: [EFFORT], context: [CONTEXT_WINDOW_SIZE]). Load grouping (PRMT-SC-07): 10 phases of the model inventory update pipeline partitioned into [TOTAL_PROMPTS] prompts (<= 7 items, <= 4 modified files, <= 1 heavy workflow per prompt) so Playwright DOM scraping, screenshot transcription, Epoch matching and vendor edge research, JSON updates, depth layering, API testing, and confirmation-gated distribution stay within single-turn budgets. -->
+<!-- Model: [MODEL] (effort: [EFFORT], context: [CONTEXT_WINDOW_SIZE]). Load grouping (PRMT-SC-07): 10 phases of the model inventory update pipeline partitioned into [TOTAL_PROMPTS] prompts (<= 7 items, <= 4 modified files, <= 1 heavy workflow per prompt) so Playwright DOM scraping, screenshot transcription, Epoch matching and vendor edge research, JSON updates, depth layering, API testing, and distribution stay within single-turn budgets. -->
 
 ## Prompt 1 - Bootstrap: Detect Context, Create Run Folder, and Generate Instance
 
-<!-- Detects [RUN_MODE] and [DATE], creates [RUN_FOLDER] and _agent_work cards, and instantiates _PROMPTS_[DATE]_ModelInventoryUpdate.md. -->
+<!-- Detects [RUN_MODE] and [DATE], creates [RUN_FOLDER] and _agentwork cards, and instantiates _PROMPTS_01-MdlInv-[RUN_MODE].md. -->
 
 ```
 01-MdlInv-[RUN_MODE] [ 01 / 08 ] - P3-Bootstrap Detect run parameters, initialize run folder, and generate prompts instance
@@ -116,7 +116,7 @@ Remove template-instruction XML comments (this block, Conditional comments, and 
 Session: `[SESSION_FOLDER]`
 Working folder: `[SESSION_FOLDER]`
 
-Read `[SESSION_FOLDER]\NOTES.md`, `[SESSION_FOLDER]\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md` (Placeholders, Run modes, Run folder structure, Depth ladder invariants), and `[SESSION_FOLDER]\_agent_work\__CARD_MDLINVNTRY-Robustness.md`. Treat earlier conversation as compacted. Step P3-Bootstrap.
+Read `[SESSION_FOLDER]\NOTES.md`, `[SESSION_FOLDER]\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md` (Placeholders, Run modes, Run folder structure, Depth ladder invariants), and `[SESSION_FOLDER]\_agentwork\__CARD_MDLINVNTRY-Robustness.md`. Treat earlier conversation as compacted. Step P3-Bootstrap.
 Planning document: `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`, Prompt 1 Bootstrap.
 
 Initialize a datestamped model inventory update run folder and instantiate a ready-to-run prompts file from `[SESSION_FOLDER]\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`.
@@ -125,9 +125,9 @@ Initialize a datestamped model inventory update run folder and instantiate a rea
    - Resolve `[WORKSPACE_FOLDER]`, active `[PROMPTSYSTEM_FOLDER]` (e.g., `PromptSystemV4.5`), `[AGENT_FOLDER]` (`.devin`), `[SKILL_FOLDER]`, `[INVENTORY_FILE]`, and `[DESIGN_INFO]`
    - Set `[DATE]` from request metadata (`YYYY-MM-DD`), `[RUN_MODE]` (`FULL` | `PRICES` | `NEWMODEL`, default `PRICES` unless user specified otherwise), `[TARGET_PROVIDERS]` (default `Anthropic, OpenAI, Google, Z.AI, xAI`), `[TARGET_MODELS]` (`ALL` or user-specified model IDs), `[INCLUDE_SCREENSHOTS]` (`YES` if `FULL`, else `NO`), and `[CAPABILITY_SCHEME]` (from `[SESSION_FOLDER]\NOTES.md` Key Decisions `DD-10`, default `LADDER`)
    - Verify `git status --porcelain -- "[SKILL_FOLDER]\model-registry.json"` is empty (Gate 9.4 compares `depth` against the committed registry); if not empty, stop and report: the registry must be committed before the run
-2. Create the isolated run folder `[RUN_FOLDER]` (`[SESSION_FOLDER]\_[DATE]_[RUN_MODE]\`) and `[RUN_FOLDER]\_agent_work\`; if `[INCLUDE_SCREENSHOTS] = YES`, also create `[RUN_FOLDER]\[DATE]_screenshots\` subfolders (`Anthropic-Pricing`, `Anthropic-ModelOverview`, `Anthropic-Deprecations`, `OpenAI-Standard`, `OpenAI-Batch`, `OpenAI-Compare`, `Google-Pricing`, `Google-Models`, `ZAI-Pricing`, `ZAI-Models`, `xAI-Pricing`, `xAI-Models`)
-3. Copy `__CARD_MDLINVNTRY-Robustness.md` to `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md` and initialize `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md` with `# Findings Card: MDLRGUP ([DATE] [RUN_MODE])`, `## Partition Observations`, `## Unresolved`, and `## Resolved`
-4. Generate `[RUN_FOLDER]\_PROMPTS_[DATE]_ModelInventoryUpdate.md` from `[SESSION_FOLDER]\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`:
+2. Create the isolated run folder `[RUN_FOLDER]` (`[SESSION_FOLDER]\_[DATE]_[RUN_MODE]\`) and `[RUN_FOLDER]\_agentwork\`; if `[INCLUDE_SCREENSHOTS] = YES`, also create `[RUN_FOLDER]\[DATE]_screenshots\` subfolders (`Anthropic-Pricing`, `Anthropic-ModelOverview`, `Anthropic-Deprecations`, `OpenAI-Standard`, `OpenAI-Batch`, `OpenAI-Compare`, `Google-Pricing`, `Google-Models`, `ZAI-Pricing`, `ZAI-Models`, `xAI-Pricing`, `xAI-Models`)
+3. Copy `__CARD_MDLINVNTRY-Robustness.md` to `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md` and initialize `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md` with `# Findings Card: MDLRGUP ([DATE] [RUN_MODE])`, `## Partition Observations`, `## Unresolved`, and `## Resolved`
+4. Generate `[RUN_FOLDER]\_agentwork\_PROMPTS_01-MdlInv-[RUN_MODE].md` from `[SESSION_FOLDER]\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`:
    - Exclude Prompt 1 (already executed in this turn)
    - Remove conditional prompts that do not apply (`Prompt 3` when `[INCLUDE_SCREENSHOTS] = NO`; `Prompt 4` when `[CAPABILITY_SCHEME] = NONE`)
    - Replace all `[PLACEHOLDER]` tokens with resolved values, strip template-instruction XML comments while keeping the opening load-grouping comment and 1-sentence prompt commentary comments, and renumber Prompt Markers sequentially up to `[TOTAL_PROMPTS]`
@@ -139,12 +139,12 @@ Constraints:
 - Do ONLY the numbered items above. Report any item you could not complete as NOT DONE
 - Do NOT execute Phase 2 DOM extraction or modify any JSON file in `[SKILL_FOLDER]` during Bootstrap
 - Execute without asking for confirmation
-- Re-running this prompt must not corrupt state: if `[RUN_FOLDER]` already exists, reuse it and overwrite only `_PROMPTS_[DATE]_ModelInventoryUpdate.md`
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[SESSION_FOLDER]\_agent_work\__CARD_MDLINVNTRY-Robustness.md`. 120s per-command cap. On cap: kill, record in `[SESSION_FOLDER]\PROBLEMS.md`, continue
+- Re-running this prompt must not corrupt state: if `[RUN_FOLDER]` already exists, reuse it and overwrite only `_PROMPTS_01-MdlInv-[RUN_MODE].md`
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[SESSION_FOLDER]\_agentwork\__CARD_MDLINVNTRY-Robustness.md`. 120s per-command cap. On cap: kill, record in `[SESSION_FOLDER]\PROBLEMS.md`, continue
 
-Findings card: Load and update `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line for Bootstrap.
+Findings card: Load and update `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line for Bootstrap.
 
-Verify: `[RUN_FOLDER]` exists; `__CARD_MDLRGUP-Findings.md` and `__CARD_MDLRGUP-Robustness.md` exist in `[RUN_FOLDER]\_agent_work\`; `[RUN_FOLDER]\_PROMPTS_[DATE]_ModelInventoryUpdate.md` exists with zero unresolved `[PLACEHOLDER]` tokens; `model-registry.json` has no uncommitted changes.
+Verify: `[RUN_FOLDER]` exists; `__CARD_MDLRGUP-Findings.md` and `__CARD_MDLRGUP-Robustness.md` exist in `[RUN_FOLDER]\_agentwork\`; `[RUN_FOLDER]\_agentwork\_PROMPTS_01-MdlInv-[RUN_MODE].md` exists with zero unresolved `[PLACEHOLDER]` tokens; `model-registry.json` has no uncommitted changes.
 
 **STOP.** Report: resolved placeholders (`[DATE]`, `[RUN_MODE]`, `[TARGET_PROVIDERS]`, `[INCLUDE_SCREENSHOTS]`, `[CAPABILITY_SCHEME]`, `[TOTAL_PROMPTS]`), `[RUN_FOLDER]` path, generated prompts file path, and total prompts in generated sequence. Do NOT execute Prompt 2.
 ```
@@ -161,7 +161,7 @@ Verify: `[RUN_FOLDER]` exists; `__CARD_MDLRGUP-Findings.md` and `__CARD_MDLRGUP-
 Session: `[SESSION_FOLDER]`
 Working folder: `[RUN_FOLDER]`
 
-Read `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md`, `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`, and `[SESSION_FOLDER]\T02_MDLINVNTRY_ReliableModelInventory_2026-10-28\_INFO_MDLRGUP-MDLINVNTRY-04_SourcesPerField.md` (Sections 1-9 provider extraction rules). Treat earlier conversation as compacted. Step Phase 1 + Phase 2.
+Read `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md`, `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`, and `[SESSION_FOLDER]\T02_MDLINVNTRY_ReliableModelInventory_2026-10-28\_INFO_MDLRGUP-MDLINVNTRY-04_SourcesPerField.md` (Sections 1-9 provider extraction rules). Treat earlier conversation as compacted. Step Phase 1 + Phase 2.
 Planning document: `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`, Phase 1 and Phase 2 (Anthropic A1-A4, OpenAI O1-O3, Google G1-G3, Z.AI Z1-Z3, xAI X1-X3).
 
 Execute Phase 1 Pre-Flight Checks and Phase 2 DOM Extraction across `[TARGET_PROVIDERS]` (for `[TARGET_MODELS]`), saving all `*-DOM.json` extracts into `[RUN_FOLDER]`. For every page: navigate, resize to `1920x1080`, dismiss cookie/modal overlays, and expand any `"All models" / "View more" / "Show all" / "Expand"` buttons before extracting `<table>` rows.
@@ -183,9 +183,9 @@ Constraints:
 - If Playwright MCP default tab experiences concurrent navigation interference, run extractions inside an isolated `page.context().browser().newContext()` and close it immediately after extraction
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state: overwrite `[RUN_FOLDER]\[DATE]_*-DOM.json` cleanly if already present
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md`. 60s per-page Playwright cap (max 2 attempts per URL). On second failure: record URL in `[SESSION_FOLDER]\PROBLEMS.md` and continue with remaining providers
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md`. 60s per-page Playwright cap (max 2 attempts per URL). On second failure: record URL in `[SESSION_FOLDER]\PROBLEMS.md` and continue with remaining providers
 
-Findings card: Load and update `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and record any URL redirects or DOM selector changes.
+Findings card: Load and update `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and record any URL redirects or DOM selector changes.
 
 Verify: Gate 1 and Gate 2 pass; non-empty `[DATE]_*-DOM.json` files exist in `[RUN_FOLDER]` for every provider in `[TARGET_PROVIDERS]`; Playwright browser is closed.
 
@@ -206,7 +206,7 @@ Verify: Gate 1 and Gate 2 pass; non-empty `[DATE]_*-DOM.json` files exist in `[R
 Session: `[SESSION_FOLDER]`
 Working folder: `[RUN_FOLDER]`
 
-Read `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md` and `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`. Treat earlier conversation as compacted. Step Phase 3 + Phase 4.
+Read `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md` and `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`. Treat earlier conversation as compacted. Step Phase 3 + Phase 4.
 Planning document: `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`, Phase 3 and Phase 4.
 
 Execute Phase 3 (Screenshot Archive) and Phase 4 (Transcribe Screenshots) into `[RUN_FOLDER]`.
@@ -222,9 +222,9 @@ Constraints:
 - Do NOT modify canonical JSONs in `[SKILL_FOLDER]` or run Phase 9 distribution
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state: `--force` overwrites partial transcriptions cleanly
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md`. 60s per-page Playwright cap, 180s per-folder transcription cap. On cap: kill, record in `[SESSION_FOLDER]\PROBLEMS.md`, continue (Gate 4 does not block Phase 5)
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md`. 60s per-page Playwright cap, 180s per-folder transcription cap. On cap: kill, record in `[SESSION_FOLDER]\PROBLEMS.md`, continue (Gate 4 does not block Phase 5)
 
-Findings card: Load and update `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line.
+Findings card: Load and update `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line.
 
 Verify: Gate 3 and Gate 4 pass; `[RUN_FOLDER]\[DATE]_screenshots\` subfolders contain `.jpg` files and stitched `[RUN_FOLDER]\[DATE]_*.md` files exist; Playwright browser is closed.
 
@@ -244,7 +244,7 @@ Verify: Gate 3 and Gate 4 pass; `[RUN_FOLDER]\[DATE]_screenshots\` subfolders co
 Session: `[SESSION_FOLDER]`
 Working folder: `[RUN_FOLDER]`
 
-Read `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md`, `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`, `[SESSION_FOLDER]\T02_MDLINVNTRY_ReliableModelInventory_2026-10-28\_INFO_MDLRGUP-MDLINVNTRY-04_SourcesPerField.md` (Section 6 Capability Evidence), and `[DESIGN_INFO]` Sections 2.2 (evidence kinds E1-E6) and 2.6 (edge cases EC-1 to EC-9). Treat earlier conversation as compacted. Step Capability Evidence.
+Read `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md`, `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`, `[SESSION_FOLDER]\T02_MDLINVNTRY_ReliableModelInventory_2026-10-28\_INFO_MDLRGUP-MDLINVNTRY-04_SourcesPerField.md` (Section 6 Capability Evidence), and `[DESIGN_INFO]` Sections 2.2 (evidence kinds E1-E6) and 2.6 (edge cases EC-1 to EC-9). Treat earlier conversation as compacted. Step Capability Evidence.
 Planning document: `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`, Prompt 4 Capability Evidence.
 
 Refresh the Epoch ECI score and 95% interval of every registry model, collect `release_date` and `uc_class` for models that are new in `[RUN_FOLDER]\[DATE]_*-DOM.json`, and resolve every depth edge case for those models from vendor pages, writing the outcomes to `[RUN_FOLDER]\[DATE]_Depth-Edges.json`. No registry file is modified in this prompt.
@@ -268,9 +268,9 @@ Constraints:
 - Do NOT modify `[SKILL_FOLDER]` JSONs or `[INVENTORY_FILE]` in this prompt
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state: overwrite `[RUN_FOLDER]\[DATE]_Epoch-ECI-Match.json` and `[RUN_FOLDER]\[DATE]_Depth-Edges.json` cleanly
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md`. 60s Playwright/download cap (max 2 attempts per URL). On CSV failure: record in `[SESSION_FOLDER]\PROBLEMS.md`, fall back to the most recent `*_Epoch-ECI-Match.json` in `[SESSION_FOLDER]`, and continue. On vendor page failure: record the model as `ties[]` with `reason: "source unreachable"` and the URL in `[SESSION_FOLDER]\PROBLEMS.md`
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md`. 60s Playwright/download cap (max 2 attempts per URL). On CSV failure: record in `[SESSION_FOLDER]\PROBLEMS.md`, fall back to the most recent `*_Epoch-ECI-Match.json` in `[SESSION_FOLDER]`, and continue. On vendor page failure: record the model as `ties[]` with `reason: "source unreachable"` and the URL in `[SESSION_FOLDER]\PROBLEMS.md`
 
-Findings card: Load and update `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line; note new models without an Epoch row and every edge case resolved as a tie because the source was silent.
+Findings card: Load and update `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line; note new models without an Epoch row and every edge case resolved as a tie because the source was silent.
 
 Verify: both JSON files exist and are valid; every `new_models[]` ID has `release_date`, `uc_class`, and an edge-case entry; Playwright browser is closed.
 
@@ -289,7 +289,7 @@ Verify: both JSON files exist and are valid; every `new_models[]` ID has `releas
 Session: `[SESSION_FOLDER]`
 Working folder: `[RUN_FOLDER]`
 
-Read `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md` and `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`. Treat earlier conversation as compacted. Step Phase 5 + Phase 6 + Phase 7.
+Read `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md` and `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`. Treat earlier conversation as compacted. Step Phase 5 + Phase 6 + Phase 7.
 Planning document: `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`, Prompt 5 (Phases 5, 6, and 7).
 
 Execute Phases 5, 6, and 7 using the DOM extracts, Epoch matches, and edge outcomes in `[RUN_FOLDER]` to update `[SKILL_FOLDER]\model-registry.json`, `[SKILL_FOLDER]\model-pricing.json`, and `[SKILL_FOLDER]\model-parameter-mapping.json`, and verify Gates 5, 6, and 7. `depth`, `depth_evidence`, and `depth_estimated` are NOT written here (Prompt 6 layering).
@@ -308,9 +308,9 @@ Constraints:
 - Do NOT edit `[AGENT_FOLDER]` directly and do NOT execute Phase 9 distribution in this prompt
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state: JSON updates are idempotent and verified by Gates 5-7
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md`. 120s per-command cap. On cap: kill, record in `[SESSION_FOLDER]\PROBLEMS.md`, continue
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md`. 120s per-command cap. On cap: kill, record in `[SESSION_FOLDER]\PROBLEMS.md`, continue
 
-Findings card: Load and update `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and record any prefix gaps or new effort methods.
+Findings card: Load and update `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and record any prefix gaps or new effort methods.
 
 Verify: `[RUN_FOLDER]\[DATE]_ChangeSet.json` exists; Gates 5, 6, and 7 pass with exit code 0; `format-model-registry.py --check` passes; `_updated` / `last_updated` in modified `[SKILL_FOLDER]` JSONs equal `[DATE]`; `git --no-pager diff --stat -- "[SKILL_FOLDER]\model-registry.json"` shows no line where a `"depth":` value changed.
 
@@ -329,7 +329,7 @@ Verify: `[RUN_FOLDER]\[DATE]_ChangeSet.json` exists; Gates 5, 6, and 7 pass with
 Session: `[SESSION_FOLDER]`
 Working folder: `[RUN_FOLDER]`
 
-Read `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md`, `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`, `[RUN_FOLDER]\[DATE]_ChangeSet.json`, `[RUN_FOLDER]\[DATE]_Depth-Edges.json` (`ties`, `estimates`), and `[INVENTORY_FILE]` Sections 1-2. Treat earlier conversation as compacted. Step Phase 8 + Phase 9.4 + Phase 10.
+Read `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md`, `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`, `[RUN_FOLDER]\[DATE]_ChangeSet.json`, `[RUN_FOLDER]\[DATE]_Depth-Edges.json` (`ties`, `estimates`), and `[INVENTORY_FILE]` Sections 1-2. Treat earlier conversation as compacted. Step Phase 8 + Phase 9.4 + Phase 10.
 Planning document: `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`, Prompt 6 (Phase 8, Phase 9.4, and Phase 10).
 
 Execute Phase 8 (Test New Models), Phase 9.4 (Depth Layering and `MODEL_INVENTORY.md` Regeneration), and Phase 10 (Report), saving the run summary report to `[RUN_FOLDER]\[DATE]_RunReport.md`.
@@ -351,20 +351,20 @@ Constraints:
 - Do NOT execute Phase 9.1-9.3 distribution in this prompt (distribution is isolated in Prompt 7)
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state: layering is insert-only and idempotent for models that already have `depth`; `MODEL_INVENTORY.md` regeneration and `[DATE]_RunReport.md` are idempotent
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md`. 120s per-model API test cap, 60s layering cap. On timeout: retry once, then record in `[RUN_FOLDER]\[DATE]_RunReport.md` and `[SESSION_FOLDER]\PROBLEMS.md`, continue
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md`. 120s per-model API test cap, 60s layering cap. On timeout: retry once, then record in `[RUN_FOLDER]\[DATE]_RunReport.md` and `[SESSION_FOLDER]\PROBLEMS.md`, continue
 
-Findings card: Load and update `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and record any API test failures (e.g., rejected effort values), squeezes, and contradictions.
+Findings card: Load and update `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and record any API test failures (e.g., rejected effort values), squeezes, and contradictions.
 
 Verify: Gate 8 and Gate 9.4 pass; `[RUN_FOLDER]\[DATE]_DepthLadder.log` ends with `OK:` (0 cycles, 0 rejected); `[INVENTORY_FILE]` `Top rung` equals the maximum `depth` in the registry; `[RUN_FOLDER]\[DATE]_RunReport.md` exists with all 12 Phase 10 report sections.
 
-**STOP.** Report: items DONE / NOT DONE, Phase 8 test pass/fail summary, inserted rungs (model, `D[n]`, evidence), squeezes and contradictions, Gate 9.4 status, and path to `[RUN_FOLDER]\[DATE]_RunReport.md`. Ask user to confirm whether Prompt 7 should include external config distribution (`e:\Dev\Lana-V1\config`, `e:\Dev\Lana-V2\config`).
+**STOP.** Report: items DONE / NOT DONE, Phase 8 test pass/fail summary, inserted rungs (model, `D[n]`, evidence), squeezes and contradictions, Gate 9.4 status, and path to `[RUN_FOLDER]\[DATE]_RunReport.md`.
 ```
 
 ---
 
-## Prompt 7 - Phase 9 Distribution and Gate 9 Sync Check (Confirmation-Gated)
+## Prompt 7 - Phase 9 Distribution and Gate 9 Sync Check
 
-<!-- Expected state: Phase 8 tests, Phase 9.4 layering and MODEL_INVENTORY.md update, and Phase 10 report are complete; distributes updated files to in-workspace targets and (only if confirmed) external Lana targets, then verifies Gate 9. -->
+<!-- Expected state: Phase 8 tests, Phase 9.4 layering and MODEL_INVENTORY.md update, and Phase 10 report are complete; distributes updated files to `.devin` and the Lana-V1 runtime config, then verifies Gate 9. -->
 
 ```
 01-MdlInv-[RUN_MODE] [ 07 / 08 ] - Phase 9 Distribute canonical JSONs and MODEL_INVENTORY.md and verify Gate 9
@@ -372,27 +372,28 @@ Verify: Gate 8 and Gate 9.4 pass; `[RUN_FOLDER]\[DATE]_DepthLadder.log` ends wit
 Session: `[SESSION_FOLDER]`
 Working folder: `[RUN_FOLDER]`
 
-Read `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md` and `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`. Treat earlier conversation as compacted. Step Phase 9.
+Read `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md` and `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`. Treat earlier conversation as compacted. Step Phase 9.
 Planning document: `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`, Prompt 7 (Phase 9.1-9.3 and Gate 9).
 
 Distribute the updated canonical JSON files (`model-pricing.json`, `model-registry.json`, `model-parameter-mapping.json`) and `[INVENTORY_FILE]` from `[PROMPTSYSTEM_FOLDER]` to all authorized distribution targets and verify file-hash identity via Gate 9.
 
-1. Execute Phases 9.1 (`[AGENT_FOLDER]\skills\llm-tools\`: 3 JSONs, `test-call-llm.py`, `MODEL_INVENTORY.md`), 9.3 (external targets only if user confirmed; Phase 9.2 dependent-skill replicas no longer exist since the 2026-10-29 `llm-tools` merge), and Gate 9 via `& "[SESSION_FOLDER]\verify-and-distribute-registry.ps1" -Mode Distribute -RunFolder "[RUN_FOLDER]" -Date "[DATE]" -SkillFolder "[SKILL_FOLDER]" -InventoryFile "[INVENTORY_FILE]" -AgentFolder "[AGENT_FOLDER]" -PromptSystemFolder "[PROMPTSYSTEM_FOLDER]"` (append `-IncludeExternal` ONLY if user explicitly confirmed external target distribution to `e:\Dev\Lana-V1\config` and `e:\Dev\Lana-V2\config`)
-2. Append the Phase 9 distribution and Gate 9 sync verification result (noting whether Phase 9.3 external targets were synced or skipped) to `[RUN_FOLDER]\[DATE]_RunReport.md`
+1. Execute Phases 9.1 (`[AGENT_FOLDER]\skills\llm-tools\`: 3 JSONs, `test-call-llm.py`, `MODEL_INVENTORY.md`), 9.3 (3 JSONs to `e:\Dev\Lana-V1\.agent-data\config`; Phase 9.2 dependent-skill replicas no longer exist since the 2026-10-29 `llm-tools` merge), and Gate 9 via `& "[SESSION_FOLDER]\verify-and-distribute-registry.ps1" -Mode Distribute -RunFolder "[RUN_FOLDER]" -Date "[DATE]" -SkillFolder "[SKILL_FOLDER]" -InventoryFile "[INVENTORY_FILE]" -AgentFolder "[AGENT_FOLDER]" -PromptSystemFolder "[PROMPTSYSTEM_FOLDER]" -IncludeExternal`
+2. Append the Phase 9 distribution and Gate 9 sync verification result (targets synced, SHA-256 match count) to `[RUN_FOLDER]\[DATE]_RunReport.md`
 
 Constraints:
-- All file operations MUST stay within `[RUN_FOLDER]`, `[AGENT_FOLDER]\skills\llm-tools\`, and (only when explicitly confirmed by user) `e:\Dev\Lana-V1\config` and `e:\Dev\Lana-V2\config`
-- CONFIRMATION GATE: Never copy files to `e:\Dev\Lana-V1\config` or `e:\Dev\Lana-V2\config` without explicit user confirmation
+- All file operations MUST stay within `[RUN_FOLDER]`, `[AGENT_FOLDER]\skills\llm-tools\`, and `e:\Dev\Lana-V1\.agent-data\config` (3 model JSONs only; never touch other files there, e.g. `agent-config.json`, `.api-keys.txt`)
+- External distribution to `e:\Dev\Lana-V1\.agent-data\config` is pre-authorized by the user (DD-14, 2026-11-02); do not ask
 - Distribution requires Gate 9.4 passed in Prompt 6; if `[RUN_FOLDER]\[DATE]_DepthLadder.log` does not end with `OK:`, stop and report
 - Do ONLY the numbered items above. Report any item you could not complete as NOT DONE
+- Execute without asking for confirmation
 - Re-running this prompt must not corrupt state: `Copy-Item -Force` and hash verification are idempotent
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md`. 60s per-command cap. On cap: kill, record in `[SESSION_FOLDER]\PROBLEMS.md`, continue
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md`. 60s per-command cap. On cap: kill, record in `[SESSION_FOLDER]\PROBLEMS.md`, continue
 
-Findings card: Load and update `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line.
+Findings card: Load and update `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line.
 
 Verify: Gate 9 passes with zero SHA-256 hash mismatches across all synced targets; `[AGENT_FOLDER]\skills\llm-tools\MODEL_INVENTORY.md` hash matches `[INVENTORY_FILE]`.
 
-**STOP.** Report: items DONE / NOT DONE, targets synced (with SHA-256 match count), whether Phase 9.3 external targets were synced or skipped, and Gate 9 status.
+**STOP.** Report: items DONE / NOT DONE, targets synced (with SHA-256 match count), and Gate 9 status.
 ```
 
 ---
@@ -407,30 +408,30 @@ Verify: Gate 9 passes with zero SHA-256 hash mismatches across all synced target
 Session: `[SESSION_FOLDER]`
 Working folder: `[RUN_FOLDER]`
 
-Read `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md`, `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`, and `[RUN_FOLDER]\[DATE]_RunReport.md`. Treat earlier conversation as compacted. Step Final Checkpoint.
+Read `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md`, `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`, and `[RUN_FOLDER]\[DATE]_RunReport.md`. Treat earlier conversation as compacted. Step Final Checkpoint.
 Planning document: `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`, Prompt 8 Final Checkpoint.
 
 Verify all outputs of the `[DATE]` `[RUN_MODE]` model inventory update run against Gates 1-9.4 and the depth ladder invariants, fix any gaps inline within 2 cycles, commit the run, and record the completed run in `[SESSION_FOLDER]\NOTES.md`.
 
 /verify
 
-1. Run `& "[SESSION_FOLDER]\verify-and-distribute-registry.ps1" -Mode VerifyAll -RunFolder "[RUN_FOLDER]" -Date "[DATE]" -SkillFolder "[SKILL_FOLDER]" -InventoryFile "[INVENTORY_FILE]" -AgentFolder "[AGENT_FOLDER]" -PromptSystemFolder "[PROMPTSYSTEM_FOLDER]"` to verify Gates 2, 5, 6, 7, 9, and 9.4, `[DATE]_RunReport.md`, and zero leftover `.tmp_*` scripts in `[RUN_FOLDER]\_agent_work\`
-2. Check that `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md` `## Unresolved` is empty (or copied to `[SESSION_FOLDER]\PROBLEMS.md`) and that every Pending resolution item of `[DATE]_RunReport.md` Section 9 (squeezes, contradictions, silent-source ties) has a `[SESSION_FOLDER]\PROBLEMS.md` entry
-3. Fix any verification gaps inline (max 2 gate cycles; on second failure record in `[SESSION_FOLDER]\PROBLEMS.md` and stop); commit `[SKILL_FOLDER]`, `[AGENT_FOLDER]\skills\llm-tools\`, and `[RUN_FOLDER]` with message `chore(llm-tools): model inventory [RUN_MODE] run [DATE]` (the next run's Gate 9.4 compares `depth` against this commit); update `[SESSION_FOLDER]\NOTES.md` with a 1-line entry recording `[DATE] [RUN_MODE]` completion, `Top rung`, and `[RUN_FOLDER]` path
+1. Run `& "[SESSION_FOLDER]\verify-and-distribute-registry.ps1" -Mode VerifyAll -RunFolder "[RUN_FOLDER]" -Date "[DATE]" -SkillFolder "[SKILL_FOLDER]" -InventoryFile "[INVENTORY_FILE]" -AgentFolder "[AGENT_FOLDER]" -PromptSystemFolder "[PROMPTSYSTEM_FOLDER]" -IncludeExternal` to verify Gates 2, 5, 6, 7, 9 (incl. Lana-V1 config), and 9.4, `[DATE]_RunReport.md`, and zero leftover `.tmp_*` scripts in `[RUN_FOLDER]\_agentwork\`
+2. Check that `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md` `## Unresolved` is empty (or copied to `[SESSION_FOLDER]\PROBLEMS.md`) and that every Pending resolution item of `[DATE]_RunReport.md` Section 9 (squeezes, contradictions, silent-source ties) has a `[SESSION_FOLDER]\PROBLEMS.md` entry
+3. Fix any verification gaps inline (max 2 gate cycles; on second failure record in `[SESSION_FOLDER]\PROBLEMS.md` and stop); commit `[SKILL_FOLDER]`, `[AGENT_FOLDER]\skills\llm-tools\`, and `[RUN_FOLDER]` with message `chore(llm-tools): model inventory [RUN_MODE] run [DATE]` (the next run's Gate 9.4 compares `depth` against this commit); in repo `e:\Dev\Lana-V1` commit only `.agent-data/config/model-pricing.json`, `.agent-data/config/model-registry.json`, `.agent-data/config/model-parameter-mapping.json` with message `chore(config): model registry update [DATE]` (skip when unchanged); update `[SESSION_FOLDER]\NOTES.md` with a 1-line entry recording `[DATE] [RUN_MODE]` completion, `Top rung`, and `[RUN_FOLDER]` path
 
 Constraints:
-- All file operations MUST stay within `[RUN_FOLDER]`, `[SESSION_FOLDER]\NOTES.md`, `[SESSION_FOLDER]\PROBLEMS.md`, `[SKILL_FOLDER]`, `[INVENTORY_FILE]`, and `[AGENT_FOLDER]\skills\`
+- All file operations MUST stay within `[RUN_FOLDER]`, `[SESSION_FOLDER]\NOTES.md`, `[SESSION_FOLDER]\PROBLEMS.md`, `[SKILL_FOLDER]`, `[INVENTORY_FILE]`, `[AGENT_FOLDER]\skills\`, and the 3 model JSONs in `e:\Dev\Lana-V1\.agent-data\config`
 - Do ONLY the numbered items above. Report any item you could not complete as NOT DONE
-- Do NOT run unconfirmed external distribution to `e:\Dev\Lana-V1\config` or `e:\Dev\Lana-V2\config`
+- In `e:\Dev\Lana-V1`, stage only the 3 model JSONs by explicit path; never `git add -A` or commit other changes in that repo
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state: verification and `NOTES.md` status update are idempotent; the commit is skipped when the working tree is clean
-- Hang safety: see `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Robustness.md`
+- Hang safety: see `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Robustness.md`
 
-Findings card: Load and update `[RUN_FOLDER]\_agent_work\__CARD_MDLRGUP-Findings.md`. Append final Partition Observations line.
+Findings card: Load and update `[RUN_FOLDER]\_agentwork\__CARD_MDLRGUP-Findings.md`. Append final Partition Observations line.
 
-Verify: Gates 5, 6, 7, 9, and 9.4 pass; zero `.tmp_*` files remain in `[RUN_FOLDER]\_agent_work\`; `git status --porcelain -- "[SKILL_FOLDER]"` is empty; `[SESSION_FOLDER]\NOTES.md` lists the `[DATE] [RUN_MODE]` run.
+Verify: Gates 5, 6, 7, 9, and 9.4 pass; zero `.tmp_*` files remain in `[RUN_FOLDER]\_agentwork\`; `git status --porcelain -- "[SKILL_FOLDER]"` is empty; `[SESSION_FOLDER]\NOTES.md` lists the `[DATE] [RUN_MODE]` run.
 
-**STOP.** Report: verify findings fixed / open, commit hash, total net time across the run from `__CARD_MDLRGUP-Findings.md`, and final run status.
+**STOP.** Report: verify findings fixed / open, commit hash, total net time across the run from `__CARD_MDLRGUP-Findings.md`, final run status, and a clickable summary artifact list with separate headings for each output group formatted as: heading, summary of what was done and what the files contain, and bulleted clickable Markdown links with file purpose/content (`- [filename](file:///path) - <description>`). Do not wrap the list in code fences.
 ```
 
 <!-- EXAMPLE: Reference only. Do not copy into new documents. Shows a completed NEWMODEL run instance (Prompt 1 resolved and the Prompt 4 STOP report; Prompt 3 omitted because [INCLUDE_SCREENSHOTS] = NO, renumbered to [ 01 / 07 ] - [ 07 / 07 ]). Model IDs and statements are illustrative.
@@ -445,11 +446,11 @@ effort: high
 prompt_system: IPPS
 ---
 
-<!-- Model: claude-opus-5 (effort: high, context: 1000k). Load grouping (PRMT-SC-07): 10 phases of the model inventory update pipeline partitioned into 07 prompts (<= 7 items, <= 4 modified files, <= 1 heavy workflow per prompt) so Playwright DOM scraping, Epoch matching and vendor edge research, JSON updates, depth layering, API testing, and confirmation-gated distribution stay within single-turn budgets. -->
+<!-- Model: claude-opus-5 (effort: high, context: 1000k). Load grouping (PRMT-SC-07): 10 phases of the model inventory update pipeline partitioned into 07 prompts (<= 7 items, <= 4 modified files, <= 1 heavy workflow per prompt) so Playwright DOM scraping, Epoch matching and vendor edge research, JSON updates, depth layering, API testing, and distribution stay within single-turn budgets. -->
 
 ## Prompt 1 - Bootstrap: Detect Context, Create Run Folder, and Generate Instance
 
-<!-- Detects NEWMODEL and 2026-12-01, creates _2026-12-01_NEWMODEL and _agent_work cards, and instantiates _PROMPTS_2026-12-01_ModelInventoryUpdate.md. -->
+<!-- Detects NEWMODEL and 2026-12-01, creates _2026-12-01_NEWMODEL and _agentwork cards, and instantiates _PROMPTS_01-MdlInv-NEWMODEL.md. -->
 
 ```
 01-MdlInv-NEWMODEL [ 01 / 07 ] - P3-Bootstrap Detect run parameters, initialize run folder, and generate prompts instance
@@ -457,7 +458,7 @@ prompt_system: IPPS
 Session: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate`
 Working folder: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate`
 
-Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\NOTES.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md` (Placeholders, Run modes, Run folder structure, Depth ladder invariants), and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_agent_work\__CARD_MDLINVNTRY-Robustness.md`. Treat earlier conversation as compacted. Step P3-Bootstrap.
+Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\NOTES.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md` (Placeholders, Run modes, Run folder structure, Depth ladder invariants), and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_agentwork\__CARD_MDLINVNTRY-Robustness.md`. Treat earlier conversation as compacted. Step P3-Bootstrap.
 Planning document: `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`, Prompt 1 Bootstrap.
 
 Initialize a datestamped model inventory update run folder and instantiate a ready-to-run prompts file from `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`.
@@ -466,9 +467,9 @@ Initialize a datestamped model inventory update run folder and instantiate a rea
    - Resolve `e:\dev\IPPS`, active `e:\dev\IPPS\PromptSystemV4.5`, `e:\dev\IPPS\.devin`, `e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools`, `e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools\MODEL_INVENTORY.md`, and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_INFO_HOW_TO_ORGANIZE_LLMS_BY_CAPABILITY.md`
    - Set `2026-12-01` from request metadata, `NEWMODEL`, `Anthropic`, `claude-opus-5-6, claude-sonnet-5-6`, `NO` (`INCLUDE_SCREENSHOTS`), `LADDER` (`CAPABILITY_SCHEME` from `NOTES.md` Key Decisions `DD-10`), and `06` (`TOTAL_PROMPTS` in generated instance after excluding Bootstrap and Prompt 3)
    - Verify `git status --porcelain -- "e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools\model-registry.json"` is empty
-2. Create the isolated run folder `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL` and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL\_agent_work\`
-3. Copy `__CARD_MDLINVNTRY-Robustness.md` to `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL\_agent_work\__CARD_MDLRGUP-Robustness.md` and initialize `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL\_agent_work\__CARD_MDLRGUP-Findings.md` with `# Findings Card: MDLRGUP (2026-12-01 NEWMODEL)`, `## Partition Observations`, `## Unresolved`, and `## Resolved`
-4. Generate `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL\_PROMPTS_2026-12-01_ModelInventoryUpdate.md` from `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`:
+2. Create the isolated run folder `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL` and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL\_agentwork\`
+3. Copy `__CARD_MDLINVNTRY-Robustness.md` to `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL\_agentwork\__CARD_MDLRGUP-Robustness.md` and initialize `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL\_agentwork\__CARD_MDLRGUP-Findings.md` with `# Findings Card: MDLRGUP (2026-12-01 NEWMODEL)`, `## Partition Observations`, `## Unresolved`, and `## Resolved`
+4. Generate `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL\_agentwork\_PROMPTS_01-MdlInv-NEWMODEL.md` from `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_PROMPTS_ModelInventoryUpdate_TEMPLATE.md`:
    - Exclude Prompt 1 (already executed in this turn)
    - Remove Prompt 3 (`INCLUDE_SCREENSHOTS = NO`), keeping Prompts 2, 4, 5, 6, 7, 8 as `[ 01 / 06 ]` to `[ 06 / 06 ]`
    - Replace all placeholders with resolved values and strip template-instruction XML comments
@@ -480,12 +481,12 @@ Constraints:
 - Do ONLY the numbered items above. Report any item you could not complete as NOT DONE
 - Do NOT execute Phase 2 DOM extraction or modify any JSON file in `e:\dev\IPPS\PromptSystemV4.5\skills\llm-tools` during Bootstrap
 - Execute without asking for confirmation
-- Re-running this prompt must not corrupt state: if `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL` already exists, reuse it and overwrite only `_PROMPTS_2026-12-01_ModelInventoryUpdate.md`
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_agent_work\__CARD_MDLINVNTRY-Robustness.md`. 120s per-command cap. On cap: kill, record in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`, continue
+- Re-running this prompt must not corrupt state: if `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL` already exists, reuse it and overwrite only `_PROMPTS_01-MdlInv-NEWMODEL.md`
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_agentwork\__CARD_MDLINVNTRY-Robustness.md`. 120s per-command cap. On cap: kill, record in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`, continue
 
-Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line for Bootstrap.
+Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL\_agentwork\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line for Bootstrap.
 
-Verify: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL` exists; `__CARD_MDLRGUP-Findings.md` and `__CARD_MDLRGUP-Robustness.md` exist in `_agent_work\`; `_PROMPTS_2026-12-01_ModelInventoryUpdate.md` exists with zero unresolved placeholders; `model-registry.json` has no uncommitted changes.
+Verify: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-12-01_NEWMODEL` exists; `__CARD_MDLRGUP-Findings.md` and `__CARD_MDLRGUP-Robustness.md` exist in `_agentwork\`; `_PROMPTS_01-MdlInv-NEWMODEL.md` exists with zero unresolved placeholders; `model-registry.json` has no uncommitted changes.
 
 **STOP.** Report: resolved placeholders (`2026-12-01`, `NEWMODEL`, `Anthropic`, `NO`, `LADDER`, `06`), run folder path, generated prompts file path, and total prompts (`06`). Do NOT execute Prompt 2.
 ```

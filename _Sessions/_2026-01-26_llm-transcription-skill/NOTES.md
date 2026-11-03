@@ -3,6 +3,8 @@
 **Doc ID**: 2026-01-26_llm-transcription-skill-NOTES
 **TOPIC**: LLMTR (registered in ID-REGISTRY.md)
 
+> **Status 2026-10-29**: The `llm-transcription` skill produced by this session was merged into `[PROMPTSYSTEM_FOLDER]/skills/llm-tools/transcription/` (scripts, prompts) by session `_2026-10-29_UnifyLlmToolsSkill` [LLMTOOLS-IN01]. Its model JSON replicas were deleted; the single copy lives in `llm-tools/` root. `SKILL.md` became `TRANSCRIPTION.md`; `@skills:llm-tools` is the skill reference. Paths below are historical.
+
 ## Session Info
 
 - **Started**: 2026-01-26

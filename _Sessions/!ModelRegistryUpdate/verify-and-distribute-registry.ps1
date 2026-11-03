@@ -30,6 +30,8 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+$ExternalTargets = @("e:\Dev\Lana-V1\.agent-data\config")
+
 function Invoke-Gate1 {
   $p = Get-Content "$SkillFolder\model-pricing.json" -Raw -Encoding UTF8 | ConvertFrom-Json
   $r = Get-Content "$SkillFolder\model-registry.json" -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -240,13 +242,11 @@ function Invoke-Distribute {
   }
   Copy-Item $InventoryFile "$agentToolsDst\MODEL_INVENTORY.md" -Force
 
-  $externalTargets = @("e:\Dev\Lana-V1\config", "e:\Dev\Lana-V2\config")
   if ($IncludeExternal) {
-    foreach ($dst in $externalTargets) {
+    foreach ($dst in $ExternalTargets) {
+      if (-not (Test-Path $dst)) { throw "Distribute FAIL: external target folder missing: $dst" }
       foreach ($f in $jsonFiles) {
-        if (Test-Path "$dst\$f") {
-          Copy-Item "$SkillFolder\$f" "$dst\$f" -Force
-        }
+        Copy-Item "$SkillFolder\$f" "$dst\$f" -Force
       }
     }
   }
@@ -260,17 +260,16 @@ function Invoke-Gate9 {
     "$AgentFolder\skills\llm-tools"
   )
   if ($IncludeExternal) {
-    $targets += @("e:\Dev\Lana-V1\config", "e:\Dev\Lana-V2\config")
+    $targets += $ExternalTargets
   }
   $matchCount = 0
   foreach ($dst in $targets) {
     foreach ($f in $jsonFiles) {
-      if (Test-Path "$dst\$f") {
-        if ((Get-FileHash "$SkillFolder\$f").Hash -ne (Get-FileHash "$dst\$f").Hash) {
-          throw "Gate 9 FAIL: SHA-256 mismatch at $dst\$f"
-        }
-        $matchCount++
+      if (-not (Test-Path "$dst\$f")) { throw "Gate 9 FAIL: missing $dst\$f" }
+      if ((Get-FileHash "$SkillFolder\$f").Hash -ne (Get-FileHash "$dst\$f").Hash) {
+        throw "Gate 9 FAIL: SHA-256 mismatch at $dst\$f"
       }
+      $matchCount++
     }
   }
   if ((Get-FileHash $InventoryFile).Hash -ne (Get-FileHash "$AgentFolder\skills\llm-tools\MODEL_INVENTORY.md").Hash) {
@@ -291,8 +290,8 @@ switch ($Mode) {
     Invoke-Gate567
     Invoke-Gate94
     Invoke-Gate9
-    $tmpFiles = Get-ChildItem "$RunFolder\_agent_work\.tmp_*" -ErrorAction SilentlyContinue
-    if ($tmpFiles) { throw "VerifyAll FAIL: Leftover .tmp_ files in _agent_work: $($tmpFiles.Name -join ', ')" }
+    $tmpFiles = Get-ChildItem "$RunFolder\_agentwork\.tmp_*" -ErrorAction SilentlyContinue
+    if ($tmpFiles) { throw "VerifyAll FAIL: Leftover .tmp_ files in _agentwork: $($tmpFiles.Name -join ', ')" }
     if (-not (Test-Path "$RunFolder\${Date}_RunReport.md")) { throw "VerifyAll FAIL: Missing ${Date}_RunReport.md" }
     Write-Output "VerifyAll: PASS (All Gates 2, 5, 6, 7, 9, 9.4 + RunReport + 0 temp files verified)"
   }

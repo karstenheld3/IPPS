@@ -33,7 +33,7 @@
 - [x] **[2026-10-28 20:22]** P3-S1..S5 [READ+WRITE+VERIFY]: created `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md` (8 prompts, 20 registered placeholders, FULL/PRICES/NEWMODEL modes, PRICES full example in XML comment, verified against TMPL-* and PRMT-*, P3-D1 checked)
 - [x] **[2026-10-28 20:22]** P1-S8+S9 [EVALUATE+WRITE]: evaluated 5 work-per-prompt options (`a`-`e`) in `_INFO_MDLRGUP-MDLINVNTRY-05_WorkPerPromptOptions.md` (P1-D4 checked), finalized `_INFO_MDLRGUP-MDLINVNTRY-01_Summary.md` (P1-D5 checked), and presented `DD-01..05` in chat
 - [x] **[2026-10-28 20:21]** P1-S4..S7 [RESEARCH]: ECI match (28/28), METR horizons (6/28 exact, 7/28 with family prefix), Google Pricing and Models DOM extraction, provider URLs A1-A4/O1-O3/Z1-Z2 batch check (5 checked, 4 redirected, 0 dead), `_INFO_MDLRGUP-MDLINVNTRY-04_SourcesPerField.md` written (P1-D3 checked), preflight assumptions closed (7/7 verified)
-- [x] **[2026-10-28 19:12]** P1-S1 part 1: T02 folder, `_agent_work\`, NOTES.md, PROGRESS.md
+- [x] **[2026-10-28 19:12]** P1-S1 part 1: T02 folder, `_agentwork\`, NOTES.md, PROGRESS.md
 - [x] **[2026-10-28 19:19]** P1-S1 part 2: PROBLEMS.md, research STRUT with decomposition and assumptions
 - [x] **[2026-10-28 19:19]** P1-S1 complete, P1-D1 checked
 - [x] **[2026-10-28 19:12]** P1-S2: read AINWSRCH tier design, created Sources file (28 entries), verified assumptions (1 CORRECT, 2 PARTIAL, 4 pending web check)

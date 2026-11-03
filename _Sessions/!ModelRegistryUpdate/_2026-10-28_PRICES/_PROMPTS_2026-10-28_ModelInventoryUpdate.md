@@ -17,7 +17,7 @@ prompt_system: IPPS
 Session: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate`
 Working folder: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES`
 
-Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Robustness.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Findings.md`, `e:\dev\IPPS\update-model-registry.md` (Sources, Pricing Dimensions, Common Procedures, Phase 1, Phase 2), and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\T02_MDLINVNTRY_ReliableModelInventory_2026-10-28\_INFO_MDLRGUP-MDLINVNTRY-04_SourcesPerField.md` (Section 9 Google Gemini extraction rules). Treat earlier conversation as compacted. Step Phase 1 + Phase 2.
+Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Robustness.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Findings.md`, `e:\dev\IPPS\update-model-registry.md` (Sources, Pricing Dimensions, Common Procedures, Phase 1, Phase 2), and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\T02_MDLINVNTRY_ReliableModelInventory_2026-10-28\_INFO_MDLRGUP-MDLINVNTRY-04_SourcesPerField.md` (Section 9 Google Gemini extraction rules). Treat earlier conversation as compacted. Step Phase 1 + Phase 2.
 Planning document: `update-model-registry.md`, Phase 1 and Phase 2 (2.1-2.6 + Google G1-G3).
 
 Execute `update-model-registry.md` Phase 1 Pre-Flight Checks and Phase 2 DOM Extraction across `Anthropic, OpenAI, Google, Z.AI` (for `ALL` models), saving all `*-DOM.json` extracts into `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES`.
@@ -38,9 +38,9 @@ Constraints:
 - If Playwright MCP default tab experiences concurrent navigation interference, run extractions inside an isolated `page.context().browser().newContext()` and close it immediately after extraction
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state: overwrite `2026-10-28_*-DOM.json` cleanly if already present
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Robustness.md`. 60s per-page Playwright cap (max 2 attempts per URL). On second failure: record URL in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md` and continue with remaining providers
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Robustness.md`. 60s per-page Playwright cap (max 2 attempts per URL). On second failure: record URL in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md` and continue with remaining providers
 
-Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and record any URL redirects or DOM selector changes.
+Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and record any URL redirects or DOM selector changes.
 
 Verify: Gate 1 and Gate 2 pass; non-empty `2026-10-28_*-DOM.json` files exist in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES` for Anthropic, OpenAI, Google, and Z.AI; Playwright browser is closed.
 
@@ -59,7 +59,7 @@ Verify: Gate 1 and Gate 2 pass; non-empty `2026-10-28_*-DOM.json` files exist in
 Session: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate`
 Working folder: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES`
 
-Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Robustness.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Findings.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\T02_MDLINVNTRY_ReliableModelInventory_2026-10-28\_INFO_MDLRGUP-MDLINVNTRY-04_SourcesPerField.md` (Section 6 Capability Evidence), and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_agent_work\__STRUT_MDLRGUP-MDLINVNTRY.md` (Existing Tier Design). Treat earlier conversation as compacted. Step Capability Evidence.
+Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Robustness.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Findings.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\T02_MDLINVNTRY_ReliableModelInventory_2026-10-28\_INFO_MDLRGUP-MDLINVNTRY-04_SourcesPerField.md` (Section 6 Capability Evidence), and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_agentwork\__STRUT_MDLRGUP-MDLINVNTRY.md` (Existing Tier Design). Treat earlier conversation as compacted. Step Capability Evidence.
 Planning document: `update-model-registry.md`, Phase 5 and Phase 9.4 capability input.
 
 Download the current Epoch Capabilities Index (ECI) CSV from `https://epoch.ai/eci` and match every inventory model (including any new models found in `2026-10-28_*-DOM.json`) to its 5-point ECI band, Universal Class (`UC-1..5`), and generation equivalent.
@@ -76,9 +76,9 @@ Constraints:
 - Do NOT modify `e:\dev\IPPS\PromptSystemV4.5\skills\llm-evaluation` JSONs or `e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md` in this prompt
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state: overwrite `2026-10-28_Epoch-ECI-Match.json` cleanly
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Robustness.md`. 60s Playwright/download cap. On cap after 2 attempts: record in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`, fall back to the most recent `*_Epoch-ECI-Match.json` in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate`, and continue
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Robustness.md`. 60s Playwright/download cap. On cap after 2 attempts: record in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`, fall back to the most recent `*_Epoch-ECI-Match.json` in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate`, and continue
 
-Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and note any newly released models that have `< 4` benchmarks (no ECI row yet).
+Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and note any newly released models that have `< 4` benchmarks (no ECI row yet).
 
 Verify: `2026-10-28_Epoch-ECI-Match.json` exists and is valid JSON; every matched model has `uc_class` and `eci_band` populated (or `eci_band: null` with `uc_class` fallback documented for brand-new models); Playwright browser is closed.
 
@@ -97,7 +97,7 @@ Verify: `2026-10-28_Epoch-ECI-Match.json` exists and is valid JSON; every matche
 Session: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate`
 Working folder: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES`
 
-Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Robustness.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Findings.md`, and `e:\dev\IPPS\update-model-registry.md` (Phase 5, Phase 6, Phase 7). Treat earlier conversation as compacted. Step Phase 5 + Phase 6 + Phase 7.
+Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Robustness.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Findings.md`, and `e:\dev\IPPS\update-model-registry.md` (Phase 5, Phase 6, Phase 7). Treat earlier conversation as compacted. Step Phase 5 + Phase 6 + Phase 7.
 Planning document: `update-model-registry.md`, Phase 5, Phase 6, and Phase 7.
 
 Execute `update-model-registry.md` Phases 5, 6, and 7 using the DOM extracts and capability data in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES` to update `e:\dev\IPPS\PromptSystemV4.5\skills\llm-evaluation\model-registry.json`, `e:\dev\IPPS\PromptSystemV4.5\skills\llm-evaluation\model-pricing.json`, and `e:\dev\IPPS\PromptSystemV4.5\skills\llm-evaluation\model-parameter-mapping.json`, and verify Gates 5, 6, and 7.
@@ -115,9 +115,9 @@ Constraints:
 - Do NOT edit `e:\dev\IPPS\.devin` directly and do NOT execute Phase 9 distribution in this prompt
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state: JSON updates are idempotent and verified by Gates 5-7
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Robustness.md`. 120s per-command cap. On cap: kill, record in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`, continue
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Robustness.md`. 120s per-command cap. On cap: kill, record in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`, continue
 
-Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and record any prefix gaps or new effort methods.
+Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and record any prefix gaps or new effort methods.
 
 Verify: `2026-10-28_ChangeSet.json` exists; Gates 5, 6, and 7 pass with exit code 0; `_updated` / `last_updated` in modified JSONs equal `2026-10-28`.
 
@@ -136,7 +136,7 @@ Verify: `2026-10-28_ChangeSet.json` exists; Gates 5, 6, and 7 pass with exit cod
 Session: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate`
 Working folder: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES`
 
-Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Robustness.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Findings.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\2026-10-28_ChangeSet.json`, `e:\dev\IPPS\update-model-registry.md` (Phase 8, Phase 9.4, Phase 10), and `e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md`. Treat earlier conversation as compacted. Step Phase 8 + Phase 9.4 + Phase 10.
+Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Robustness.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Findings.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\2026-10-28_ChangeSet.json`, `e:\dev\IPPS\update-model-registry.md` (Phase 8, Phase 9.4, Phase 10), and `e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md`. Treat earlier conversation as compacted. Step Phase 8 + Phase 9.4 + Phase 10.
 Planning document: `update-model-registry.md`, Phase 8, Phase 9.4, and Phase 10.
 
 Execute `update-model-registry.md` Phase 8 (Test New Models), Phase 9.4 (Update `MODEL_INVENTORY.md`), and Phase 10 (Report), saving the run summary report to `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\2026-10-28_RunReport.md`.
@@ -152,9 +152,9 @@ Constraints:
 - Do NOT execute Phase 9.1-9.3 distribution in this prompt (distribution is isolated in Prompt 5)
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state: `MODEL_INVENTORY.md` regeneration and `2026-10-28_RunReport.md` are idempotent
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Robustness.md`. 120s per-model API test cap. On timeout: retry once, then record in `2026-10-28_RunReport.md` and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`, continue
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Robustness.md`. 120s per-model API test cap. On timeout: retry once, then record in `2026-10-28_RunReport.md` and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`, continue
 
-Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and record any API test failures (e.g., rejected effort values).
+Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line and record any API test failures (e.g., rejected effort values).
 
 Verify: Gate 8 and Gate 9.4 pass; `e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md` source versions/dates match JSONs; `2026-10-28_RunReport.md` exists with all 11 Phase 10 report sections.
 
@@ -173,7 +173,7 @@ Verify: Gate 8 and Gate 9.4 pass; `e:\dev\IPPS\PromptSystemV4.5\skills\write-doc
 Session: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate`
 Working folder: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES`
 
-Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Robustness.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Findings.md`, and `e:\dev\IPPS\update-model-registry.md` (Distribution Targets, Phase 9.1-9.3, Gate 9). Treat earlier conversation as compacted. Step Phase 9.
+Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Robustness.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Findings.md`, and `e:\dev\IPPS\update-model-registry.md` (Distribution Targets, Phase 9.1-9.3, Gate 9). Treat earlier conversation as compacted. Step Phase 9.
 Planning document: `update-model-registry.md`, Phase 9 (9.1-9.3 and Gate 9).
 
 Distribute the updated canonical JSON files (`model-pricing.json`, `model-registry.json`, `model-parameter-mapping.json`) and `e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md` from `e:\dev\IPPS\PromptSystemV4.5` to all authorized distribution targets and verify file-hash identity via Gate 9.
@@ -188,9 +188,9 @@ Constraints:
 - CONFIRMATION GATE: Never copy files to `e:\Dev\Lana-V1\config` or `e:\Dev\Lana-V2\config` without explicit user confirmation
 - Do ONLY the numbered items above. Report any item you could not complete as NOT DONE
 - Re-running this prompt must not corrupt state: `Copy-Item -Force` and hash verification are idempotent
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Robustness.md`. 60s per-command cap. On cap: kill, record in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`, continue
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Robustness.md`. 60s per-command cap. On cap: kill, record in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`, continue
 
-Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line.
+Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Findings.md`. Append one Partition Observations line.
 
 Verify: Gate 9 passes with zero SHA-256 hash mismatches across all synced targets; `e:\dev\IPPS\.devin\skills\write-documents\MODEL_INVENTORY.md` hash matches `e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md`.
 
@@ -209,7 +209,7 @@ Verify: Gate 9 passes with zero SHA-256 hash mismatches across all synced target
 Session: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate`
 Working folder: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES`
 
-Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Robustness.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Findings.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\2026-10-28_RunReport.md`, and `e:\dev\IPPS\update-model-registry.md` (Gates 1-9.4). Treat earlier conversation as compacted. Step Final Checkpoint.
+Read `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Robustness.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Findings.md`, `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\2026-10-28_RunReport.md`, and `e:\dev\IPPS\update-model-registry.md` (Gates 1-9.4). Treat earlier conversation as compacted. Step Final Checkpoint.
 Planning document: `update-model-registry.md`, Gates 1-9.4 and Phase 10.
 
 Verify all outputs of the `2026-10-28` `PRICES` model inventory update run against `update-model-registry.md` Gates 1-9.4 and `MODEL_INVENTORY.md` consistency rules, fix any gaps inline within 2 cycles, and record the completed run in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\NOTES.md`.
@@ -217,7 +217,7 @@ Verify all outputs of the `2026-10-28` `PRICES` model inventory update run again
 /verify
 
 1. Verify `update-model-registry.md` Gates 5, 6, 7, 8, 9, and 9.4 (`e:\dev\IPPS\PromptSystemV4.5\skills\llm-evaluation` JSONs, `e:\dev\IPPS\PromptSystemV4.5\skills\write-documents\MODEL_INVENTORY.md`, and `e:\dev\IPPS\.devin` mirror hashes)
-2. Verify `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES` completeness (`2026-10-28_*-DOM.json`, `2026-10-28_ChangeSet.json`, `2026-10-28_RunReport.md`, and zero leftover `.tmp_*` scripts in `_agent_work\`) and check that `__CARD_MDLRGUP-Findings.md` `## Unresolved` is empty (or copied to `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`)
+2. Verify `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES` completeness (`2026-10-28_*-DOM.json`, `2026-10-28_ChangeSet.json`, `2026-10-28_RunReport.md`, and zero leftover `.tmp_*` scripts in `_agentwork\`) and check that `__CARD_MDLRGUP-Findings.md` `## Unresolved` is empty (or copied to `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md`)
 3. Fix any verification gaps inline (max 2 gate cycles; on second failure record in `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\PROBLEMS.md` and stop), and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\NOTES.md` with a 1-line entry recording `2026-10-28 PRICES` completion and `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES` path
 
 Constraints:
@@ -226,11 +226,11 @@ Constraints:
 - Do NOT run unconfirmed external distribution to `e:\Dev\Lana-V1\config` or `e:\Dev\Lana-V2\config`
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state: verification and `NOTES.md` status update are idempotent
-- Hang safety: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Robustness.md`
+- Hang safety: see `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Robustness.md`
 
-Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agent_work\__CARD_MDLRGUP-Findings.md`. Append final Partition Observations line.
+Findings card: Load and update `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-10-28_PRICES\_agentwork\__CARD_MDLRGUP-Findings.md`. Append final Partition Observations line.
 
-Verify: Gates 5, 6, 7, 9, and 9.4 pass; zero `.tmp_*` files remain in `_agent_work\`; `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\NOTES.md` lists the `2026-10-28 PRICES` run.
+Verify: Gates 5, 6, 7, 9, and 9.4 pass; zero `.tmp_*` files remain in `_agentwork\`; `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\NOTES.md` lists the `2026-10-28 PRICES` run.
 
 **STOP.** Report: verify findings fixed / open, total net time across the run from `__CARD_MDLRGUP-Findings.md`, and final run status.
 ```

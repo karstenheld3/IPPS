@@ -2,6 +2,8 @@
 
 **Doc ID**: 2026-01-27_llm-computer-use-NOTES
 
+> **Status 2026-10-29**: The `llm-computer-use` skill produced by this session was merged into `[PROMPTSYSTEM_FOLDER]/skills/llm-tools/computer-use/` by session `_2026-10-29_UnifyLlmToolsSkill` [LLMTOOLS-IN01]. The `llm_computer_use/` package was flattened: `cli.py` and `core.py` sit directly in `computer-use/`, entry point is `python computer-use/cli.py` (no `python -m`), `SKILL.md` became `COMPUTER_USE.md`, pricing is read from the shared `llm-tools/model-pricing.json`. Version 0.6.0. Paths below are historical.
+
 ## Initial Request
 
 ```
