@@ -115,7 +115,7 @@ AMINTON provides arguments    → Tree notation for structured, verifiable Minto
 
 ## Overview
 
-IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V4.4) features ten integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT (Minimal Explicit Consistent Terminology) consistency, SOCAS quality criteria, GRUC drift prevention, and AMINTON (Agentic Minto) arguments.
+IPPS provides structured rules, workflows, and skills for AI agents to follow consistent conventions during pair programming sessions. The current version (V4.5) features ten integrated concepts: AGEN vocabulary, EDIRD phases, STRUT notation, TRACTFUL documents, MNF checklists, APAPALAN precision, MECT (Minimal Explicit Consistent Terminology) consistency, SOCAS quality criteria, GRUC drift prevention, and AMINTON (Agentic Minto) arguments.
 
 ### Who is this for?
 
@@ -744,7 +744,7 @@ For low-budget agents, [`/write-prompts`](.devin/workflows/write-prompts.md) dec
 
 ## Workflows Reference
 
-63 workflows in `.devin/workflows/`. Workflows are invoked by typing the slash command in your IDE chat (e.g., `/go`, `/verify`).
+62 workflows in `.devin/workflows/`. Workflows are invoked by typing the slash command in your IDE chat (e.g., `/go`, `/verify`).
 
 ### Command Grammar
 
@@ -787,10 +787,6 @@ Layer 3 writing workflows and `/analyze` accept a standardized parameter grammar
   - **Creates**: session STRUT, 1-4 approach `T##_` folders with individual STRUT and prompt sequences, session-level program Summary with Approach Comparison
   - **Edits**: nothing (creates new files only)
   - **When**: Evaluating complex, multi-faceted undertakings across distinct technical or architectural approaches.
-- [`/bundle`](.devin/workflows/bundle.md) - Package research sources and transcriptions into a standalone IPPSKBNDL-SP01 knowledge bundle (Tier 1)
-  - **Creates**: `_BUNDLE_[TOPIC].md` or bundle directory with inventory, summary, and topics
-  - **Edits**: nothing (creates new file only)
-  - **When**: Packaging research assets for offline retrieval or cross-repository synchronization (optional format converter).
 
 **Layer 2 - Analysis and Synthesis** - Qualitative coding, thematic clustering, hypothesis abduction, and evidence validation.
 - [`/pattern-detect`](.devin/workflows/pattern-detect.md) - Code findings, detect themes, catalog contradictions, and identify research gaps into a Pattern Map deliverable
@@ -1687,6 +1683,8 @@ The **workspace-management** skill handles multi-repo workspace setup, PromptSys
 - **[PromptSystemV4.5](PromptSystemV4.5/)** - Current system
 
 Older versions in [`_OldVersions/`](_OldVersions/):
+- PromptSystemV4.4 - Claude Code `.claude/` deployment, DevSystem → PromptSystem rename, GRUC formalization, ascii-diagram workflow, document placement rules
+- DevSystemV4.3 - Workspace-management skill (`sync.ps1`), fact-check/investigate/write-prompts/workspace-setup workflows, Z.AI provider
 - DevSystemV4.2 - Quality pipelines (VCRIV, FACRIV), implement.md context branching, fact-check boundary enforcement
 - DevSystemV4.1 - Conversation intelligence, agent research, write-documents refinement
 - DevSystemV4.0 - GRUC drift prevention, AMINTON structured argumentation, 10 core concepts
@@ -1749,6 +1747,5 @@ Older versions in [`_OldVersions/`](_OldVersions/):
 
 ### Technical Reference
 
-- [OpenAI and Anthropic Model Costs](docs/_INFO_OPENAI_ANTHROPIC_MODEL_COSTS.md) - Token pricing and credit multiplier analysis
 - [ASCII Art Width Test](docs/_TEST_ASCII_ART_WIDTH.md) - Unicode character width testing for monospace fonts
 - [ASCII Art Transcription Cost/Quality Eval](_Sessions/_Archive/_2026-01-23_JpgToAsciiArtTranscriptionCostQualityEval/INFO_ASCII_ART_TRANSCRIPTION_COST_QUALITY_EVAL.md) - LLM model comparison for image-to-ASCII transcription

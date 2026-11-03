@@ -22,6 +22,7 @@ Create a config-driven project release supporting single-repo and multi-repo wor
 8. No git tag is created before release notes are committed to the product repo
 9. No GitHub release is created without explicit user confirmation, unless `github_release_confirm: false` is set in `[RELEASE_CONFIG]` (confirmation then given once, by config)
 10. All paths in config use workspace constants - no absolute paths
+11. Release notes MUST NOT include `Sessions` (or `Sessions Overview`) or `Document History` sections
 
 ## Prerequisites
 
@@ -181,50 +182,33 @@ User invokes /project-release
 
 ## Release Notes Template
 
-The workflow uses this standard template (defined by the workflow, not per-workspace):
+The workflow uses this standard template (defined by the workflow, not per-workspace). Do NOT include `Sessions` (or `Sessions Overview`) or `Document History` sections in release notes:
 
 ```markdown
 # Release Notes: [TAG]
 
 ## Summary
 
-This release covers [N] sessions from [date range], focusing on [themes].
+This release covers work from [date range], focusing on [themes].
 
-## Sessions Overview
+## Changes Since [PREVIOUS_TAG]
 
-### [N]. [Session_Name]
-
-**Goal**: [from session NOTES.md]
-
-**Outcome**: [summary of what was achieved]
-
-**Artifacts:**
-- `[filename]` - [description]
-
-**Key Findings:** (if any)
-- [finding 1]
-- [finding 2]
-
----
-
-[Repeat for each session]
-
-## New Skills Deployed
+### New Skills Deployed
 
 [List any new skills added to agent folder]
 
-## New Workflows
+### New Workflows
 
 [List any new workflows added to agent folder]
 
-## Workspace Files
+### Workspace Files
 
 [List changes to workspace-level files: FAILS.md, NOTES.md, etc.]
 
 ## Statistics
 
-- **Total Sessions**: [N]
-- **Total Documents Created**: [N]
+- **Commits since [PREVIOUS_TAG]**: [N]
+- **Files changed**: [N]
 - [Other relevant stats]
 ```
 

@@ -1,5 +1,6 @@
 ---
-trigger: always_on
+trigger: model_decision
+description: When working with "Devin CLI" or "Devin Desktop" (not Cascade)
 ---
 
 # Devin Agent Rules

@@ -1,5 +1,6 @@
 ---
-trigger: always_on
+trigger: model_decision
+description: When working with "Cascade" agent inside Devin IDE (not "Devin CLI" or "Devin Desktop" agents)
 ---
 
 # Devin Cascade Rules

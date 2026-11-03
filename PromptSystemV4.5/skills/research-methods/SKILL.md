@@ -22,7 +22,6 @@ Systematic research using MCPI (Most Complete Point of Information) or MEPI (Mos
 - **Rapid single-turn topic research** -> `RESEARCH_GUIDES.md` (workflow `/research`, Tier 1)
 - **Focused multi-source deep research** -> `RESEARCH_GUIDES.md` (workflow `/deep-research`, Tier 2)
 - **Multi-approach research program** -> `RESEARCH_GUIDES.md` (workflow `/research-program`, Tier 3)
-- **Package research assets into standalone bundle** -> `RESEARCH_GUIDES.md` (workflow `/bundle`)
 
 ## Quick Start
 

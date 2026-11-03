@@ -1,10 +1,10 @@
 # Research Orchestration Guide
 
-Read BEFORE selecting a research tier, executing research with `/research`, `/deep-research`, or `/research-program`, or packaging sources with `/bundle`.
+Read BEFORE selecting a research tier or executing research with `/research`, `/deep-research`, or `/research-program`.
 
 ## 1. Purpose and Reader Outcome
 
-After reading this GUIDE, you can select the appropriate execution tier for any research mandate, define calibrated scopes, choose between curated (MEPI) and exhaustive (MCPI) strategies, route domain areas and entity profiles, enforce prompt load boundaries, architect scalable multi-approach programs without context overflow, and configure knowledge bundles.
+After reading this GUIDE, you can select the appropriate execution tier for any research mandate, define calibrated scopes, choose between curated (MEPI) and exhaustive (MCPI) strategies, route domain areas and entity profiles, enforce prompt load boundaries, and architect scalable multi-approach programs without context overflow.
 
 ## 2. Research Decisions in Working Order
 
@@ -94,15 +94,6 @@ Executing research follows seven core strategic decisions in the sequence below.
   - Summary cross-document synthesis: `_INFO_[TOPIC]-01_Summary.md` synthesizes findings across all topic files, answering each research question with explicit topic-file and source citations, rather than merely concatenating topic intros.
 - **Criterion**: Every topic file must include a section on implications for downstream GRUC assets (how findings affect rules, templates, or workflows). The Summary must provide substantive cross-topic synthesis, explicit trade-offs, and an actionable decision matrix.
 - **Rule Reference**: RESEARCH_SUMMARY_RULES.md, DRSYNART-FR-10.
-
-### Decision 9: Knowledge Bundle Configuration (Optional `/bundle`)
-
-- **Question**: When and how are research assets packaged into an IPPS bundle?
-- **Options**:
-  - IPPSKBNDL-SP01 bundle (`_BUNDLE_[TOPIC].md`): compiles C1 summary, sources, and full Markdown transcriptions into a portable standalone file using `@skills:llm-tools`.
-  - Omitted bundle: downstream layers read C1 files directly from the research folder.
-- **Criterion**: `/bundle` is optional; Layer 2 and Layer 3 operate directly on C1 folders without it. Create a bundle only when exporting knowledge across repositories or packaging for offline LLM consumption.
-- **Rule Reference**: DRSYNART-DD-03, DRSYNART-DD-31.
 
 ## 3. Robustness Rules (MUST-NOT-FORGET)
 
