@@ -58,6 +58,10 @@ Recursive Stop-ProcessTree (see DevinCascade guide Section 3) - kills children a
 
 Hang-risky commands execute via Start-Process + WaitForExit with redirect-to-file and process-tree kill on timeout. Full tested pattern: DevinCascade/TERMINAL_ROBUSTNESS_GUIDES.md Section 3.
 
+## Agent tool limits
+
+[copy verbatim the bullet list of `devin-cascade.md` section "Tool-Call Payload Limit"; do not edit values in the card]
+
 ## Findings feed
 
 (extend with one entry per hang or near-hang: what, why, prevention)

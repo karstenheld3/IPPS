@@ -6,11 +6,12 @@ Read BEFORE writing `_PROMPTS_[NN]-[Topic].md` files. Pairs with `PROMPTS_GUIDES
 
 Prompt sequences run unattended across multiple turns. Each prompt depends on the state left by prior prompts. A single failure — a hung command, a skipped prerequisite, an unrecorded glitch — propagates through every later prompt. The execution engine cannot skip a failed prompt; it either hangs, produces broken output, or silently proceeds with corrupted state.
 
-Robustness has three pillars:
+Robustness has four pillars:
 
-1. **Hang-prevention**: no command blocks the sequence indefinitely
-2. **Findings-card mechanism**: glitches and working solutions are recorded in a findings card between prompts so later prompts can learn from earlier ones
-3. **Verification depth**: verification sections catch real defects, not just "tests pass"
+1. **Hang-prevention**: no command blocks the sequence indefinitely (terminal robustness: what runs in the terminal)
+2. **Agent tool limits**: no tool call stalls on payload size (agent-tool robustness: what runs via agent tools; Section 2a)
+3. **Findings-card mechanism**: glitches and working solutions are recorded in a findings card between prompts so later prompts can learn from earlier ones
+4. **Verification depth**: verification sections catch real defects, not just "tests pass"
 
 A well-structured prompt sequence with precise objectives, clean state flow, and verified idempotency is worthless if the agent issues a single hanging command in prompt 3 of 5, or if a test regression from prompt 2 survives until prompt 5 because nobody recorded it.
 
@@ -42,6 +43,15 @@ The hang-safety clause goes in the Constraints section of each implementation pr
 - **Implementation prompts** (modify files, run tests, execute builds): ALWAYS include
 - **Research/analysis prompts** (read files, write findings): include if the prompt runs any commands beyond file reads
 - **Pure generation prompts** (write a document from scratch, no command execution): exempt, but include if the prompt might trigger commands indirectly (e.g., `/verify` workflow call)
+
+## 2a. Agent Tool Limits (PRMT-HS-11)
+
+Agent tools (file write, edit, multi-edit) stall or drop calls whose arguments exceed the agent's payload limit. The writing agent is assumed to be the executing agent.
+
+- Single source: the writing agent's agent-specific rule file, section Tool-Call Payload Limit; if absent, `agent-behavior.md` Large File Writes
+- Copy that section verbatim into the robustness card `## Agent tool limits` when creating or refreshing the card
+- Every prompt that writes or edits files adds the constraint: `Agent tool limits: see _agentwork/__CARD_[TOPIC]-Robustness.md section "Agent tool limits"; one section per tool call`
+- Prompts never restate a token number
 
 **Cascade site ban**: prompts that may touch German law add to Constraints: `gesetze-im-internet.de: Playwright only, no search_web / read_url_content (crashes conversation).`
 
@@ -412,6 +422,7 @@ Before considering a prompt file complete, verify robustness:
 - [ ] No prompt contains `git log`, `git diff`, `git show` without `--no-pager` (PRMT-HS-06)
 - [ ] Hang-risky commands without native safe parameters use the Start-Process + WaitForExit timeout pattern (PRMT-HS-03)
 - [ ] No shell commands for file search/read in prompt bodies — agent tools only (PRMT-CT-12)
+- [ ] Card `## Agent tool limits` equals the writing agent's rule; file-writing prompts reference it; no token numbers in prompts (PRMT-HS-11)
 - [ ] Cascade: prompts touching German law carry the `gesetze-im-internet.de` site ban (Section 2)
 - [ ] Document History timestamps use request metadata, not extrapolated times (PRMT-CT-13)
 - [ ] Banned-term sweep recordings describe pattern shape, do not spell banned literals (PRMT-CT-14)

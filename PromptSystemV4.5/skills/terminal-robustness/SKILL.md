@@ -25,10 +25,11 @@ Agents issue commands that hang indefinitely: pipes that never EOF, stderr that 
 
 Determine the active agent, then load the variant files in addition to the shared files:
 
-1. **DevinCascade** (`.devin/` agent folder, Windsurf/Devin IDE terminal tool) → load `DevinCascade/TERMINAL_ROBUSTNESS_GUIDES.md` (full empirical findings) and `DevinCascade/ROBUSTNESS_CARD_TEMPLATE.md`
+1. **DevinCascade** (you are Cascade; rule `devin-cascade.md`) → load `DevinCascade/TERMINAL_ROBUSTNESS_GUIDES.md` (full empirical findings) and `DevinCascade/ROBUSTNESS_CARD_TEMPLATE.md`
 2. **ClaudeCode** (`.claude/` agent folder) → load `ClaudeCode/TERMINAL_ROBUSTNESS_GUIDES.md` (minimum: generic patterns only) and `ClaudeCode/ROBUSTNESS_CARD_TEMPLATE.md`
+3. **Devin agent** (you are Devin, not Cascade; rule `devin-devin.md`) → no tested variant; load the `ClaudeCode/` minimum files and fill the card section `## Agent tool limits` from `devin-devin.md`
 
-Dispatch keys on the agent folder in use or explicit user context. Shared files load regardless of agent.
+Dispatch keys on agent identity (system prompt), not on the agent folder: Cascade and the Devin agent both use `.devin/`. Shared files load regardless of agent.
 
 ## Core Procedures
 

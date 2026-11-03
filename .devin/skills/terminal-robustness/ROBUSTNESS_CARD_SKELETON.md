@@ -33,6 +33,10 @@ Canonical structure for robustness cards. Copy an agent `ROBUSTNESS_CARD_TEMPLAT
 
 [kill method: process-tree kill, survivor sweep by command-line pattern]
 
+## Agent tool limits
+
+[verbatim copy of the writing agent's (= executing agent's) agent-specific rule file, section Tool-Call Payload Limit; if absent, `agent-behavior.md` Large File Writes - never edited in the card]
+
 ## Findings feed
 
 ### [N]. [Title]

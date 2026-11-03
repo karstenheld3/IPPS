@@ -74,6 +74,7 @@ Hang Safety (HS)
 - PRMT-HS-08: Prior-step verification for dependent prompts
 - PRMT-HS-09: Targeted test scope — specific test files during implementation, full suite only in final verification
 - PRMT-HS-10: Spec-code consistency check in Verify when prompt changes code with associated spec
+- PRMT-HS-11: Agent tool limits copied verbatim into the robustness card; prompts reference the card, never restate token numbers
 
 Robustness (RB)
 - PRMT-RB-01: Findings card designated for the sequence
@@ -2144,3 +2145,27 @@ Verify: Run `npx jest tests/unit/auth.test.ts`. All tests pass. Check `_SPEC_Aut
 ```
 `````
 Result: Code changed, spec verified and updated if needed. Spec-code consistency maintained.
+
+## PRMT-HS-11: Agent Tool Limits from the Robustness Card
+
+Agent-tool robustness (tool-call payload size, edit chunking, stall recovery) is separate from terminal robustness (commands run in the terminal). The prompt-writing agent is assumed to be the prompt-executing agent, so the single source is the writing agent's agent-specific rule file, section Tool-Call Payload Limit; if absent, `agent-behavior.md` Large File Writes. The robustness card section `## Agent tool limits` holds a verbatim copy of that rule. Prompts that write or edit files reference the card; they never restate a token number.
+
+A token number written into a prompt goes stale when the rule changes and overrides the agent-specific limit (a "~4,000 tokens" prompt hangs an agent whose limit is lower).
+
+Verifiable from artifact: 1) the card has `## Agent tool limits` whose text equals the source rule of the writing agent, 2) every prompt that writes or edits files has an `Agent tool limits: see [card]` constraint, 3) no prompt contains a per-write token number.
+
+**BAD** (token number restated in prompt):
+`````markdown
+```
+- Follow `core-conventions.md`; split writes above ~4,000 tokens into sequential edits
+```
+`````
+Result: An agent with a lower limit follows the prompt, sends 3,500-token edits, tool calls stall.
+
+**GOOD** (card reference):
+`````markdown
+```
+- Agent tool limits: see `_agentwork/__CARD_[TOPIC]-Robustness.md` section "Agent tool limits"; one section or media type per tool call
+```
+`````
+Result: Limit comes from the agent rule via the card; rule changes propagate on the next card refresh.

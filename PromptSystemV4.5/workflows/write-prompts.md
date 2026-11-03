@@ -45,6 +45,7 @@ Create `_PROMPTS_[NN]-[Topic].md` files containing an ordered list of prompts. E
 - **Planning document anchor** (PRMT-SC-06): Prompt sequences from planning documents (TASKS, STRUT) must reference the document by filename and step ID. See `PROMPTS_GUIDES.md` Section 1d.
 - **Load-based workflow partitioning** (PRMT-SC-07): Prompts invoking workflows must group invocations by assessed load against the run budget. See `PROMPTS_GUIDES.md` Section 1f for the assessment procedure.
 - **Hang-safety clause** (PRMT-HS-01): Every implementation prompt MUST include a hang-safety clause in Constraints: prohibition (no stdin/pager/unbounded child), project-specific banned list, time caps, on-cap behavior. Banned list and caps come from the project robustness card; if none exists, create one from the agent's `ROBUSTNESS_CARD_TEMPLATE.md` (@skills:terminal-robustness). See `PROMPTS_ROBUSTNESS_GUIDES.md` for the clause template and problem-filing directive.
+- **Agent tool limits** (PRMT-HS-11): You (the writer) are assumed to be the executor. Copy your agent-specific rule file, section Tool-Call Payload Limit (if absent, `agent-behavior.md` Large File Writes), verbatim into the robustness card `## Agent tool limits`. File-writing prompts reference the card; never restate token numbers. See `PROMPTS_ROBUSTNESS_GUIDES.md` Section 2a.
 - **Verification specificity** (PRMT-HS-07): Verification sections must name specific test files when code changes affect tests, include residual sweeps when concepts are removed, and confirm prior steps when dependencies exist.
 - **Prior-step verification** (PRMT-HS-08): Dependent prompts must verify the prior step is done before proceeding.
 - **Agent tools over shell** (PRMT-CT-12): Prompt bodies must use agent tool directives (grep_search, read_file, find_by_name, code_search) for file search/read, not shell commands. Shell commands for file operations only in Verify sections for residual sweeps.
@@ -83,7 +84,7 @@ This workflow has two modes. Determine the mode from the user's request:
 
 Read `PROMPTS_GUIDES.md` from @skills:write-documents. Classify the task, decide decomposition, plan state flow between prompts.
 
-**Hang-safety planning**: Read `PROMPTS_ROBUSTNESS_GUIDES.md` from @skills:write-documents for the clause template. Then load @skills:terminal-robustness (agent variant per SKILL.md dispatch). If a robustness card (`_agentwork/__CARD_*-Robustness.md`) exists, build the hang-safety clause from its banned list and caps. If not, copy the agent's `ROBUSTNESS_CARD_TEMPLATE.md` to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder, extend it with project-specific entries (commands that wait on stdin, launch pagers, run unbounded children), and use it. The clause references the card by filename instead of repeating the full list.
+**Hang-safety planning**: Read `PROMPTS_ROBUSTNESS_GUIDES.md` from @skills:write-documents for the clause template. Then load @skills:terminal-robustness (agent variant per SKILL.md dispatch). If a robustness card (`_agentwork/__CARD_*-Robustness.md`) exists, build the hang-safety clause from its banned list and caps. If not, copy the agent's `ROBUSTNESS_CARD_TEMPLATE.md` to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder, extend it with project-specific entries (commands that wait on stdin, launch pagers, run unbounded children), and use it. The clause references the card by filename instead of repeating the full list. Copy your own Tool-Call Payload Limit section verbatim into the card `## Agent tool limits` (PRMT-HS-11); on an existing card, refresh that section from the rule.
 
 **Findings-card planning**: Designate a `_agentwork/__CARD_[TOPIC]-Findings.md` card for the sequence. Every implementation prompt includes a `Findings card:` directive pointing to this card. The card is loaded at prompt startup and updated at end-of-prompt with glitches, spec-code mismatches, and unexpected findings. Session PROBLEMS.md records problems encountered during prompt execution that must be approached later (blockers, deferred issues).
 
@@ -362,7 +363,7 @@ Check output against all PRMT-* rules in `PROMPTS_RULES.md`:
 - [ ] Content (CT): PRMT-CT-01 through PRMT-CT-14
 - [ ] Self-Contained (SC): PRMT-SC-01 (self-contained opening), PRMT-SC-02 (no conversation dependency), PRMT-SC-03 (idempotency constraint), PRMT-SC-04 (max 10 implementation prompts per file), PRMT-SC-05 (effort and model specification, model-data checks against the `MODEL_INVENTORY.md` row), PRMT-SC-06 (planning document reference), PRMT-SC-08 (session anchor with absolute paths)
 - [ ] Execution (EX): PRMT-EX-01 (one prompt per turn), PRMT-EX-02 (no self-execution), PRMT-EX-03 (execution authority)
-- [ ] Hang Safety (HS): PRMT-HS-01 through PRMT-HS-10
+- [ ] Hang Safety (HS): PRMT-HS-01 through PRMT-HS-11
 - [ ] Robustness (RB): PRMT-RB-01 through PRMT-RB-07 (findings card designated, directive in every implementation prompt, card read at startup, glitches filed before commit, entry format, card system integration, PROBLEMS.md distinction)
 - [ ] Naming (NM): PRMT-NM-01 (filename pattern `_PROMPTS_[NN]-[Topic].md`), PRMT-NM-02 (Topic describes purpose), PRMT-NM-03 ([NN] zero-padded sequence number), PRMT-NM-04 (Topic contains domain prefix ensuring [NN]-[Topic] uniqueness across session; topic under 30 chars)
 
@@ -469,6 +470,7 @@ The filled file must pass all PRMT-* rules as a standalone prompts file:
 - [ ] PRMT-HS-09: Targeted test scope — specific test files, not full suite, in implementation prompts
 - [ ] PRMT-SC-08: Session anchor with absolute paths in every prompt; working-folder constraint in implementation prompts
 - [ ] PRMT-HS-10: Spec-code consistency check in Verify when prompt changes code with associated spec
+- [ ] PRMT-HS-11: Card `## Agent tool limits` copied from own rule; file-writing prompts reference it; no token numbers in prompts
 - [ ] PRMT-CT-12: No shell commands for file search/read in prompt bodies — agent tools only
 - [ ] PRMT-RB-01: Findings card designated for the sequence
 - [ ] PRMT-RB-02: Findings-card directive in every implementation prompt

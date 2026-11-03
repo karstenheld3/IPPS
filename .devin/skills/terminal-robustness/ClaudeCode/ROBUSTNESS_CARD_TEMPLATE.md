@@ -47,6 +47,10 @@ Re-usable card for Claude Code agents. Copy to `_agentwork/__CARD_[TOPIC]-Robust
 
 Recursive Stop-ProcessTree: enumerate children by ParentProcessId, recurse, force-kill. After the kill, sweep for orphans by command-line pattern (their parent PID no longer maps to a running process).
 
+## Agent tool limits
+
+[copy verbatim the bullet list of `agent-behavior.md` section "Large File Writes"; do not edit values in the card]
+
 ## Findings feed
 
 (extend with one entry per hang or near-hang: what, why, prevention)

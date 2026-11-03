@@ -189,6 +189,8 @@ Lifecycle:
 - If a single file write exceeds ~4000 tokens, MUST split it into multiple smaller edits (e.g., create file with first part, append remaining parts via follow-up edits)
 - Reason: large single writes frequently fail, forcing re-generation of the entire content. Smaller edits fail less and cost less to retry
 - If a multi-edit tool is available, prefer it: multiple small edits in one tool call are more reliable than one large write
+- The agent-specific rule file may override this section in its section Tool-Call Payload Limit
+- This section (or the agent-specific override) is the single source for agent-tool limits. Prompt sequences copy it verbatim into the robustness card `## Agent tool limits` (PRMT-HS-11); prompts never restate token numbers
 
 ## Prompt Templates in NOTES.md
 

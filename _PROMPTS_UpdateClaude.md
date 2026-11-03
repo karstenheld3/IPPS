@@ -33,27 +33,27 @@ Verify: `__CARD_UpdateClaude-Findings.md` exists and lists actual counts for rul
 
 ## Prompt 2 - Migrate rules
 
-<!-- Expected state: counts recorded, target subtrees absent. Deploys 7 of 8 rule files unchanged. -->
+<!-- Expected state: counts recorded, target subtrees absent. Deploys 7 of 9 rule files unchanged. -->
 
 ```
 Update Claude [ 02 / 07 ] - Migrate rules
 
 Read `__CARD_UpdateClaude-Findings.md` and confirm the rule inventory count is recorded (prior-step verification). Treat earlier conversation as compacted. Step 2 of 7. Authority: `_PROMPTS_UpdateClaude.md` Prompt 2 design (source: CLAUDEIPPS-IN02 section 3.1).
 
-Objective: `.claude\rules\` contains exact copies of every agent-agnostic rule file from `PromptSystemV4.5\rules\`; `devin.md` is not deployed.
+Objective: `.claude\rules\` contains exact copies of every agent-agnostic rule file from `PromptSystemV4.5\rules\`; `devin-cascade.md` and `devin-devin.md` are not deployed.
 
-Copy each rule file from `PromptSystemV4.5\rules\` to `.claude\rules\` except `devin.md` (Devin/Cascade-specific tool constraints, meaningless for Claude Code). No content transform - the deployed rules are agent-agnostic by design and the `[AGENT_FOLDER]` placeholder resolves per agent.
+Copy each rule file from `PromptSystemV4.5\rules\` to `.claude\rules\` except `devin-cascade.md` and `devin-devin.md` (Cascade and Devin agent tool constraints, meaningless for Claude Code). No content transform - the deployed rules are agent-agnostic by design and the `[AGENT_FOLDER]` placeholder resolves per agent.
 
 Constraints:
 - Do not modify the source files
-- Do not deploy `devin.md`
+- Do not deploy `devin-cascade.md` or `devin-devin.md`
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost (overwrite, never append)
 - Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: Read-Host, pause, Get-Credential, Get-Content -Wait, 2>&1 with Blocking:true. File operations use agent tools. 1-minute cap per command. On cap: stop the process, record command and cap in PROBLEMS.md, continue.
 
 Findings card: Load and update `__CARD_UpdateClaude-Findings.md`. File glitches and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
-Verify: `.claude\rules\` contains 7 files (rule inventory count minus 1). Get-FileHash of each deployed file matches its source file. No `devin.md` in `.claude\rules\`.
+Verify: `.claude\rules\` contains 7 files (rule inventory count minus 2). Get-FileHash of each deployed file matches its source file. No `devin-*.md` in `.claude\rules\`.
 ```
 
 ---
