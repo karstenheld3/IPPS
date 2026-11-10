@@ -5,7 +5,7 @@ Numbered procedures per lifecycle stage. Each step names the rules it applies (`
 ## MUST-NOT-FORGET
 
 - Free-first: use $0 sources before any DataForSEO call; run `dataforseo/query.py balance` before paid batches (SEO-TLS-01, SEO-TLS-05)
-- Never Google Indexing API for regular pages (SEO-TLS-02)
+- Google Indexing API only for `JobPosting` or `BroadcastEvent` pages, never for regular pages (SEO-TLS-02)
 - Run the pre-publish gate (`SEO_CHECKS.md` section 2) before anything goes live (SEO-MTD-12)
 - State evidence labels when recommending; practices in the Do-Not-Do list are never recommended
 - Examples use `example.com`; never invent limits not in `SEO_RULES.md`

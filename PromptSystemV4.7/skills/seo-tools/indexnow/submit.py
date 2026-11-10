@@ -130,6 +130,11 @@ def validate_hosts(urls: list, host: str):
     for url in mismatched[:10]: log(f"  Host mismatch: '{url}'")
     fail(f"{plural(len(mismatched), 'URL')} not on host '{host}'.", 2)
 
+# Key shortened to its first 4 characters for output; the full key is only sent to the endpoint
+def mask_key(text: str, key: str) -> str:
+  if not key: return text
+  return text.replace(key, key[:4] + "...")
+
 def describe_status(status_code: int) -> str:
   return STATUS_MEANINGS.get(status_code, "Unexpected status")
 
@@ -155,7 +160,7 @@ def cmd_submit(args) -> dict:
     chunk = urls[chunk_index * MAX_URLS_PER_POST:(chunk_index + 1) * MAX_URLS_PER_POST]
     body = {"host": args.host, "key": key, "keyLocation": key_location, "urlList": chunk}
     if args.dry_run:
-      print(f"DRY RUN: [ {chunk_index + 1} / {chunk_count} ] POST {ENDPOINT} host='{args.host}' keyLocation='{key_location}' urlList={plural(len(chunk), 'URL')}")
+      print(f"DRY RUN: [ {chunk_index + 1} / {chunk_count} ] POST {ENDPOINT} host='{args.host}' keyLocation='{mask_key(key_location, key)}' urlList={plural(len(chunk), 'URL')}")
       rows.append({"chunk": chunk_index + 1, "urls": len(chunk), "status": "dry-run"})
       continue
     response = http_request("POST", ENDPOINT, headers={"Content-Type": "application/json; charset=utf-8"}, json_body=body)
@@ -167,19 +172,20 @@ def cmd_submit(args) -> dict:
 def cmd_verify_key(args) -> dict:
   key = resolve_key(args)
   key_location = args.key_location or f"https://{args.host}/{key}.txt"
-  log(f"Fetching key file '{key_location}'...")
+  shown_location = mask_key(key_location, key)
+  log(f"Fetching key file '{shown_location}'...")
   try:
     response = requests.get(key_location, timeout=30)
   except requests.RequestException as error:
-    fail(f"Key file not reachable -> '{key_location}' -> {type(error).__name__}", 1)
+    fail(f"Key file not reachable -> '{shown_location}' -> {type(error).__name__}", 1)
   if response.status_code != 200:
     log(f"  FAIL: HTTP {response.status_code} -> key file not found.")
-    return {"rows": [{"key_location": key_location, "result": "FAIL", "reason": f"HTTP {response.status_code}"}], "exit_code": 1}
+    return {"rows": [{"key_location": shown_location, "result": "FAIL", "reason": f"HTTP {response.status_code}"}], "exit_code": 1}
   if response.text.strip() != key:
     log("  FAIL: Key file content does not match the key.")
-    return {"rows": [{"key_location": key_location, "result": "FAIL", "reason": "content mismatch"}], "exit_code": 1}
+    return {"rows": [{"key_location": shown_location, "result": "FAIL", "reason": "content mismatch"}], "exit_code": 1}
   log("  PASS: Key file matches.")
-  return {"rows": [{"key_location": key_location, "result": "PASS"}], "exit_code": 0}
+  return {"rows": [{"key_location": shown_location, "result": "PASS"}], "exit_code": 0}
 
 # ----------------------------------------- END: IndexNow ----------------------------------------------------------------------
 

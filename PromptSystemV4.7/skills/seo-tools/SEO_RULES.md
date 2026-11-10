@@ -116,7 +116,7 @@ Metadata (MTD)
 
 Tools and data (TLS)
 - SEO-TLS-01: Free-first escalation
-- SEO-TLS-02: Google Indexing API scope restriction
+- SEO-TLS-02: Indexing API only for JobPosting and BroadcastEvent pages
 - SEO-TLS-03: GSC access via service account script
 - SEO-TLS-04: DataForSEO access via cost-gated script
 - SEO-TLS-05: Pre-flight cost estimation with verified rates
@@ -656,7 +656,7 @@ Query $0 first-party sources first: GSC Search Analytics and URL Inspection, GSC
 Evidence: [VERIFIED]
 Sources: https://support.google.com/webmasters/answer/16984139; https://blogs.bing.com/search/2026/6/New-AI-Visibility-Insights-in-Bing-Webmaster-Tools-Intents-Topics-Citation-Share-Compare/; https://dataforseo.com/pricing
 
-### SEO-TLS-02: Google Indexing API scope restriction
+### SEO-TLS-02: Indexing API only for JobPosting and BroadcastEvent pages
 Never call the Google Indexing API (`urlNotifications:publish`) for regular pages, posts, docs, or product pages; it is limited to pages with `JobPosting` or `BroadcastEvent` embedded in a `VideoObject` (200 URLs per day, 100 calls per batch) [LITERAL: 2026-11-03]. For other URLs: IndexNow for Bing, Yandex, Naver, Seznam, Yep (at most 10,000 URLs per POST); for Google, accurate sitemap `<lastmod>` and GSC URL Inspection.
 Evidence: [VERIFIED]
 Sources: https://developers.google.com/search/apis/indexing-api/v3/quickstart; https://www.indexnow.org/documentation
