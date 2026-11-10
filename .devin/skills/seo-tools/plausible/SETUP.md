@@ -1,88 +1,66 @@
 # Plausible Analytics Setup
 
-## Prerequisites
+Privacy-first web analytics (no cookies). Use for conversion and traffic-source questions: which pages and sources produce goals.
 
-- Plausible account (cloud: https://plausible.io or self-hosted)
-- Site added to Plausible dashboard
-- Business plan or higher for Stats API access (cloud)
+## Plan Requirements [LITERAL: 2026-11-03]
 
-## Authentication
+- Self-hosted Community Edition: $0, Stats API included
+- Cloud Starter (€9/mo) and Growth (€14/mo): no Stats API
+- Cloud Business (€19/mo): Stats API included, 600 requests per hour
 
-Bearer token from dashboard:
+## Pre-Installation Verification
 
-1. Go to https://plausible.io/settings/api-keys (cloud) or your instance
-2. Create new API key
-3. Copy token (shown once)
+1. Python 3.10+ with `requests`: `python -c "import requests; print(requests.__version__)"` -> version number
+2. Plausible site with tracking script installed and data visible in the dashboard
 
-Store in: `E:\Dev\.tools\.api-keys.txt`
-```
-PLAUSIBLE_API_KEY=your_token_here
-PLAUSIBLE_BASE_URL=https://plausible.io
-```
+## API Key
 
-## Verify Connection
+1. Plausible dashboard -> account settings -> API Keys -> New API key -> type "Stats API"
+2. Add to `[API_KEYS_FILE]`:
+   ```
+   PLAUSIBLE_API_KEY=placeholder-token
+   PLAUSIBLE_BASE_URL=https://plausible.io
+   ```
+   Self-hosted: set `PLAUSIBLE_BASE_URL` to your instance URL. The key is scoped to the team that owns the site.
+
+## Verify ($0)
 
 ```powershell
-$token = (Get-Content -LiteralPath "E:\Dev\.tools\.api-keys.txt" -Encoding UTF8 | Where-Object { $_ -match "^PLAUSIBLE_API_KEY=" }) -replace "PLAUSIBLE_API_KEY=", ""
-$headers = @{ Authorization = "Bearer $token" }
-Invoke-RestMethod -Uri "https://plausible.io/api/v2/query" -Headers $headers -Method Post -Body '{"site_id":"yourdomain.com","metrics":["visitors"],"date_range":"7d"}' -ContentType "application/json"
+python query.py summary example.com --range 7d
+```
+Expected:
+```
+Querying 'https://plausible.io/api/v2/query' (site 'example.com', range '7d')...
+  1 row received.
+visitors  pageviews  bounce_rate  visit_duration
+...
+OK.
 ```
 
-Expected: JSON with visitor count for last 7 days.
+## Commands
 
-## Stats API v2 (Key Queries)
+- `summary SITE` - visitors, pageviews, bounce rate, visit duration
+- `top-pages SITE` - pages by visitors (`event:page`)
+- `sources SITE` - traffic sources (`visit:source`)
+- `goals SITE` - goal conversions (`event:goal`)
+- `raw SITE --query-file FILE` - custom Stats API v2 body (`metrics`, `date_range`, `dimensions`, `filters`, `order_by`, `pagination`); `site_id` is set from SITE
 
-Base: `https://plausible.io/api/v2/query` (POST)
+Options: `--range day|7d|30d|month|6mo|12mo|all` (default `30d`), `--limit` (default 20).
 
-### Visitors last 30 days
+Example `query.json` for goal conversions by source:
 ```json
-{
-  "site_id": "yourdomain.com",
-  "metrics": ["visitors", "pageviews", "bounce_rate", "visit_duration"],
-  "date_range": "30d"
-}
+{"metrics": ["visitors", "events"], "date_range": "30d", "dimensions": ["visit:source"], "filters": [["is", "event:goal", ["Signup"]]]}
 ```
 
-### Top pages
-```json
-{
-  "site_id": "yourdomain.com",
-  "metrics": ["visitors", "pageviews"],
-  "date_range": "30d",
-  "dimensions": ["event:page"],
-  "order_by": [["visitors", "desc"]],
-  "limit": 20
-}
-```
+## Troubleshooting
 
-### Traffic sources
-```json
-{
-  "site_id": "yourdomain.com",
-  "metrics": ["visitors"],
-  "date_range": "30d",
-  "dimensions": ["visit:source"],
-  "order_by": [["visitors", "desc"]]
-}
-```
+- HTTP 401 -> key invalid or revoked
+- HTTP 402 or 403 -> Cloud plan without Stats API (Starter, Growth) or key from another team
+- HTTP 400 -> invalid metric, dimension, or filter in `raw` body
+- HTTP 429 -> more than 600 requests per hour (script retries 3 times)
 
-### Goal conversions (demo requests, form submissions)
-```json
-{
-  "site_id": "yourdomain.com",
-  "metrics": ["visitors", "events"],
-  "date_range": "30d",
-  "dimensions": ["event:goal"],
-  "filters": [["is", "event:goal", ["Demo Request", "Whitepaper Download"]]]
-}
-```
+## Removal
 
-## Key Facts
-
-- Auth: Bearer token in Authorization header
-- API: Stats API v2 (POST-based query interface)
-- Rate limit: 600 requests/hour (cloud)
-- No cookie consent required (privacy-first)
-- GDPR/PECR/CCPA compliant by default
-- Cloud: from $9/month (Stats API on Business plan)
-- Self-hosted: free (Docker), Stats API included
+1. Delete `PLAUSIBLE_API_KEY` and `PLAUSIBLE_BASE_URL` lines from `[API_KEYS_FILE]`
+2. Plausible -> API Keys -> revoke the key
+3. No other files to delete

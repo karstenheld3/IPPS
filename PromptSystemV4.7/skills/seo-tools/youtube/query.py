@@ -87,22 +87,35 @@ def plural(count: int, singular_word: str, plural_word: str = "") -> str:
   if count == 1: return f"{count} {singular_word}"
   return f"{count:,} {plural_word or singular_word + 's'}"
 
-# Print rows as aligned table; columns = list of (header, key, width)
+# Text of one table cell: floats rounded, numbers never truncated
+def format_cell(value: object) -> str:
+  if value is None: return ""
+  if isinstance(value, bool): return str(value)
+  if isinstance(value, float):
+    if abs(value) >= 1000: return f"{value:,.1f}"
+    return f"{value:.4f}".rstrip("0").rstrip(".")
+  return str(value)
+
+# Print rows as aligned table; columns = list of (header, key, width); text columns are cut at width, number columns are widened
 def print_table(rows: list, columns: list):
-  header_parts = []
-  total_width = 2 * (len(columns) - 1)
-  for header, key, width in columns:
-    header_parts.append(f"{header:<{width}}")
-    total_width += width
-  print("  ".join(header_parts))
-  print("-" * total_width)
+  cell_rows = []
+  widths = []
+  for header, key, width in columns: widths.append(width)
   for row in rows:
+    cells = []
+    for column_index in range(len(columns)):
+      value = row.get(columns[column_index][1], "")
+      text = format_cell(value)
+      if isinstance(value, (int, float)) and not isinstance(value, bool): widths[column_index] = max(widths[column_index], len(text))
+      cells.append(text)
+    cell_rows.append(cells)
+  header_parts = []
+  for column_index in range(len(columns)): header_parts.append(f"{columns[column_index][0]:<{widths[column_index]}}")
+  print("  ".join(header_parts))
+  print("-" * (sum(widths) + 2 * (len(columns) - 1)))
+  for cells in cell_rows:
     parts = []
-    for header, key, width in columns:
-      value = row.get(key, "")
-      if value is None: value = ""
-      if isinstance(value, float): value = f"{value:.4f}".rstrip("0").rstrip(".")
-      parts.append(f"{str(value)[:width]:<{width}}")
+    for column_index in range(len(columns)): parts.append(f"{cells[column_index][:widths[column_index]]:<{widths[column_index]}}")
     print("  ".join(parts))
 
 def emit(result: dict, output_format: str, columns: list = None):

@@ -1,92 +1,73 @@
 # DataForSEO Setup
 
-## Prerequisites
+Paid pay-per-call SEO data (keyword volume, Labs keyword and competitor data, live SERPs with AI Overview, backlinks). Use only after free sources (see `SKILL.md` When-to-Query-What matrix).
 
-- Account at https://app.dataforseo.com ($50 minimum deposit)
-- PowerShell 7+ or Python 3.10+
+## Pre-Installation Verification
 
-## Credentials
+1. Python 3.10+ with `requests`:
+   ```powershell
+   python -c "import requests, sys; print(sys.version.split()[0], requests.__version__)"
+   ```
+   Expected: version numbers, no `ModuleNotFoundError`
+2. Credentials file `[API_KEYS_FILE]` exists (default `[WORKSPACE_FOLDER]/../.tools/.api-keys.txt`)
 
-1. Go to https://app.dataforseo.com/api-access
-2. API login = registration email
-3. API password = auto-generated (NOT account password)
-4. Base64 = `login:password` encoded in Base64
+## Account and Credentials
 
-Stored in: `E:\Dev\.tools\.api-keys.txt`
-```
-DATAFORSEO_LOGIN=your_email@example.com
-DATAFORSEO_PASSWORD=your_api_password
-DATAFORSEO_BASE64=base64_encoded_login:password
-```
+1. Create account at https://app.dataforseo.com (new accounts receive $1 trial credit; minimum top-up $50, credits do not expire) [LITERAL: 2026-11-03]
+2. Open https://app.dataforseo.com/api-access
+3. API login = registration email; API password = generated API password (not the account password)
+4. Add to `[API_KEYS_FILE]`:
+   ```
+   DATAFORSEO_LOGIN=user@example.com
+   DATAFORSEO_PASSWORD=0000000000000000
+   ```
+5. Verify the account (email and profile). Unverified accounts can read the balance, but data endpoints fail
 
-## Authentication Method
+A `DATAFORSEO_BASE64` line from older setups is ignored; the script builds Basic auth from login and password.
 
-Basic HTTP Auth. Include in every request:
-```
-Authorization: Basic {DATAFORSEO_BASE64}
-```
+## Verify Connection ($0)
 
-No OAuth. No token refresh. No expiry. Credentials valid until password is reset in dashboard.
-
-## Verify Connection
-
-PowerShell:
 ```powershell
-$base64 = (Get-Content -LiteralPath "E:\Dev\.tools\.api-keys.txt" -Encoding UTF8 | Where-Object { $_ -match "^DATAFORSEO_BASE64=" }) -replace "DATAFORSEO_BASE64=", ""
-$headers = @{ Authorization = "Basic $base64" }
-$result = Invoke-RestMethod -Uri "https://api.dataforseo.com/v3/appendix/user_data" -Headers $headers
-Write-Host "Balance: $($result.tasks[0].result[0].money.balance)"
+python query.py balance
+```
+Expected:
+```
+Fetching account balance...
+Balance USD   Total spent USD   Daily limit
+--------------------------------------------
+51.0          0                 [UNKNOWN]
+Balance: $51.00
+...
+OK.
 ```
 
-Expected: `Balance: 51` (or current balance > 0)
+## First Paid Call (cost gate)
 
-Python:
-```python
-import requests, os
-
-api_keys = {}
-with open(r"E:\Dev\.tools\.api-keys.txt") as f:
-    for line in f:
-        if "=" in line:
-            k, v = line.strip().split("=", 1)
-            api_keys[k] = v
-
-headers = {"Authorization": f"Basic {api_keys['DATAFORSEO_BASE64']}"}
-r = requests.get("https://api.dataforseo.com/v3/appendix/user_data", headers=headers)
-print(f"Balance: {r.json()['tasks'][0]['result'][0]['money']['balance']}")
+```powershell
+python query.py serp "project management software"
 ```
-
-## MCP Server Config
-
-Add to your agent's MCP config (Devin: `~/.codeium/windsurf/mcp_config.json`, legacy Windsurf path; Claude Code: `claude mcp add <name> -- <command>`; Codex: `~/.codex/config.toml`):
-```json
-{
-  "mcpServers": {
-    "dataforseo": {
-      "command": "npx",
-      "args": ["-y", "@anthropic/dataforseo-mcp"],
-      "env": {
-        "DATAFORSEO_LOGIN": "your_email@example.com",
-        "DATAFORSEO_PASSWORD": "your_api_password"
-      }
-    }
-  }
-}
-```
-
-Note: Verify exact MCP package name before installing. Alternative: use scripts directly (no MCP dependency).
-
-## IP Whitelisting (Optional)
-
-Dashboard > API Access > IP Access section. Leave empty for access from any IP. Add specific IPs only if running from fixed servers.
+Expected: `Estimate: $0.0020 (limit $0.10).`, then results and `Actual cost: $0.0020.`
+Raise the limit for larger batches: `--max-cost 0.50`.
 
 ## Key Facts
 
-- Base URL: `https://api.dataforseo.com/v3/`
-- Auth: Basic HTTP (login:password Base64)
-- Encoding: UTF-8 request, gzip response
-- Format: JSON default, XML (append `.xml`), HTML (append `.html`)
-- Rate limits: per-endpoint, check `X-RateLimit-Limit` and `X-RateLimit-Remaining` headers
-- Results storage: 30 days (Standard/task_post), not stored (Live)
-- Minimum deposit: $50 (credits roll over indefinitely)
-- No subscription, no monthly fee
+- Base URL `https://api.dataforseo.com/v3/`, sandbox `https://sandbox.dataforseo.com/v3/` (`--sandbox`, dummy data)
+- Auth: HTTP Basic, no token expiry; valid until the API password is reset
+- Prices and endpoint bodies: `ENDPOINTS.md`
+- Rate limits per endpoint: `X-RateLimit-Limit` and `X-RateLimit-Remaining` response headers
+- Live results are not stored; task_post results are stored 30 days
+- IP allow list (optional): dashboard -> API Access -> IP Access; leave empty for any IP
+
+## Troubleshooting
+
+- `ERROR: Keys file not found` -> create `[API_KEYS_FILE]` or pass `--keys-file`
+- `ERROR: Key 'DATAFORSEO_LOGIN' not found` -> add the line from step 4
+- `API error -> 40100` or `401xx` -> wrong login or API password
+- `402xx` -> balance too low or account not verified
+- `Estimate exceeds limit` -> intended; rerun with the `--max-cost` value printed
+
+## Removal
+
+1. Delete `DATAFORSEO_LOGIN` and `DATAFORSEO_PASSWORD` lines from `[API_KEYS_FILE]`
+2. Reset the API password at https://app.dataforseo.com/api-access (invalidates the old one)
+3. No other files to delete

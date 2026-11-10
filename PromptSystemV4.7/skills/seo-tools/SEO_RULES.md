@@ -673,9 +673,9 @@ Evidence: [VERIFIED]
 Sources: https://dataforseo.com/pricing; https://docs.dataforseo.com/v3/
 
 ### SEO-TLS-05: Pre-flight cost estimation with verified rates
-Before a DataForSEO batch, check balance (`GET /v3/appendix/user_data`, $0) and compute cost with rates [LITERAL: 2026-11-03]: SERP Standard $0.0006/SERP, SERP Live $0.002/SERP, Labs $0.012/task + $0.00012/item, Keywords Data (Google or Bing Ads) $0.06/task with up to 700 keywords per task (never 1 keyword per task), Backlinks $0.024/task + $0.000036/row, On-Page from $0.00015/page, AI Keyword Search Volume $0.01/task + $0.0001/row, LLM Mentions $0.10/task + $0.001/row.
+Before a DataForSEO batch, check balance (`GET /v3/appendix/user_data`, $0) and compute cost with rates [LITERAL: 2026-11-03]: SERP Standard $0.0006/SERP, SERP Live $0.002/SERP, Labs $0.012/task + $0.00012/item, Keywords Data (Google or Bing Ads) Standard $0.06/task, Live $0.09/task, up to 1,000 keywords per task (never 1 keyword per task; re-verified 2026-11-10), Backlinks $0.024/task + $0.000036/row, On-Page from $0.00015/page, AI Keyword Search Volume $0.01/task + $0.0001/row, LLM Mentions $0.10/task + $0.001/row.
 Evidence: [VERIFIED]
-Sources: https://dataforseo.com/pricing
+Sources: https://dataforseo.com/pricing; https://dataforseo.com/pricing/keywords-data/google-ads (checked 2026-11-10)
 Script: `dataforseo/query.py balance`; every paid command prints the estimate
 
 ### SEO-TLS-06: load_async_ai_overview on live SERP calls

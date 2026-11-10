@@ -8,12 +8,12 @@ Prices: [LITERAL: 2026-11-03], source https://dataforseo.com/pricing (checked 20
 
 - live: submit and receive result in one call; higher price; used by `query.py`
 - task_post: queue task, fetch later with `task_get/{id}`; lower price (SERP Standard $0.0006); results stored 30 days
-- One request may carry several tasks; `query.py` sends one task per request and splits search volume lists into tasks of 700 keywords
+- One request may carry several tasks; `query.py` sends one task per request and splits search volume lists into tasks of 1,000 keywords
 
 ## Price Table [LITERAL: 2026-11-03]
 
 - SERP Google Organic: Standard (task_post) $0.0006/SERP, Live $0.002/SERP
-- Keywords Data Google Ads or Bing Ads search volume: $0.06/task, up to 700 keywords per task
+- Keywords Data Google Ads or Bing Ads search volume: Standard queue $0.06/task, Live $0.09/task, up to 1,000 keywords per task; Live is limited to 12 requests per minute per account (re-verified 2026-11-10 at https://dataforseo.com/pricing/keywords-data/google-ads; `query.py` uses Live)
 - DataForSEO Labs (keyword suggestions, keyword ideas, competitors, ranked keywords): $0.012/task + $0.00012/item
 - Clickstream data: $0.012/task + $0.00012/item
 - Google Trends: $0.0027/task
@@ -31,7 +31,7 @@ Prices: [LITERAL: 2026-11-03], source https://dataforseo.com/pricing (checked 20
 
 - `balance` -> `GET /v3/appendix/user_data` -> $0
 - `keywords SEED` -> `POST /v3/dataforseo_labs/google/keyword_suggestions/live` -> $0.012 + limit x $0.00012
-- `search-volume KW...` -> `POST /v3/keywords_data/google_ads/search_volume/live` -> $0.06 per 700 keywords
+- `search-volume KW...` -> `POST /v3/keywords_data/google_ads/search_volume/live` -> $0.09 per 1,000 keywords (Live; Standard queue $0.06)
 - `serp KEYWORD` -> `POST /v3/serp/google/organic/live/advanced` with `load_async_ai_overview: true` -> $0.002
 - `competitors DOMAIN` -> `POST /v3/dataforseo_labs/google/competitors_domain/live` -> $0.012 + limit x $0.00012
 - `backlinks DOMAIN` -> `POST /v3/backlinks/summary/live` -> $0.024 + $0.000036 per row
@@ -52,7 +52,7 @@ Fetch: `GET /v3/serp/google/organic/task_get/advanced/{task_id}`
 
 ## Keywords Data API
 
-Search volume (up to 700 keywords per task):
+Search volume (up to 1,000 keywords per task):
 ```json
 [{"keywords": ["kanban board", "gantt chart", "task tracker"], "location_code": 2840, "language_code": "en"}]
 ```
@@ -107,7 +107,7 @@ Not wrapped by `query.py`; call manually only after a cost estimate.
 ## Typical Research Session Cost
 
 - 3 Labs suggestion calls with 100 items each: 3 x ($0.012 + 100 x $0.00012) = $0.072
-- 2 search volume tasks (up to 1,400 keywords): 2 x $0.06 = $0.12
+- 2 search volume tasks (up to 2,000 keywords): 2 x $0.09 = $0.18
 - 10 live SERPs: 10 x $0.002 = $0.02
 - 1 backlinks summary: $0.024 + $0.000036 = ~$0.024
-- Total: ~$0.24
+- Total: ~$0.30

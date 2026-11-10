@@ -3,7 +3,7 @@
 **Doc ID**: SEOFIRST-SP01
 **Feature**: SEOTOOLS_SKILL
 **Goal**: Specify the upgrade of the `seo-tools` skill from raw data retrieval to an SEO-first working skill with lifecycle guides, normative rules, executable checks, and MCP-free Python provider scripts
-**Timeline**: Created 2026-11-10, Updated 3 times (2026-11-10 - 2026-11-10)
+**Timeline**: Created 2026-11-10, Updated 5 times (2026-11-10 - 2026-11-10)
 **Target file(s)**:
 - `[PROMPTSYSTEM_FOLDER]/skills/seo-tools/` (all files, see SEOFIRST-FR-01)
 
@@ -91,6 +91,8 @@ seo-tools/
 │  youtube/query.py ────────────> YouTube Data API v3              ($0, quota) │
 │  plausible/query.py ──────────> Plausible Stats API v2   ($0 CE / paid plan) │
 │  dataforseo/query.py ─────────> DataForSEO v3 (cost gate)        (paid)      │
+│  trendsmcp/query.py ──────────> cross-platform trend index (REST) (credits)  │
+│  scrapecreators/query.py ─────> social post-level data (REST)    (credits)   │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -100,8 +102,9 @@ seo-tools/
 - Consumers: writing workflows (`/write-article`, `/write-report`, `/write-ebook`, `/propose-*`), `/deploy` as pre-publish gate, and standalone use (audit, campaign planning, research questions)
 - The agent has terminal, Python venv at `[SKILL_TOOLS_FOLDER]/llm-venv/`, Playwright MCP (agent tool, not part of the skill), and web search
 - Content source: deep research `SEOFIRST-SEOGUIDE-IN01..IN12` (87 sources, 72 metadata field specs, accessed 2026-11-03). The research has 101 rules: 97 domain rules (carried into the skill) and 4 blueprint rules `BLP-01..04` about the skill itself (implemented by this SPEC, not copied). The research lives in a private session folder; the skill must be self-contained and must not reference research document IDs or paths
+- Acronyms added 2026-11-10: Model Context Protocol (MCP), Representational State Transfer application programming interface (REST API); "Trends MCP" is a vendor name, the skill calls only its REST API
 - User decisions 2026-11-10: 4-file root layout; no MCP, Python scripts only; repair existing scripts and add Bing Webmaster script and pre-publish linter; SPEC in `[DEV_SPECS_FOLDER]`, IMPL in session; zero-cost tests plus one capped DataForSEO live test (`< $1`); standardized credential key names registered in `SKILL.md`; relative file paths in `[API_KEYS_FILE]`
-- Decision IDs: `SEOFIRST-DD-01..09` are user decisions recorded in the session; this SPEC reuses those IDs where it states the same decision and numbers its own engineering decisions from `SEOFIRST-DD-10`
+- Decision IDs: `SEOFIRST-DD-01..09` are user decisions recorded in the session; this SPEC reuses those IDs where it states the same decision and numbers its own engineering decisions from `SEOFIRST-DD-10` to `SEOFIRST-DD-20`; `SEOFIRST-DD-21` is a later user decision (trend and social providers) recorded in the session under the same ID
 - Acronyms: Search Engine Results Page (SERP), click-through rate (CTR), Generative Engine Optimization (GEO), Kindle Direct Publishing (KDP), Google Business Profile (GBP), Plausible Community Edition (CE, self-hosted), year over year (YoY)
 
 ## 3. Domain Objects
@@ -142,7 +145,7 @@ A **Gate Check** is a PASS/FAIL item of the pre-publish gate in `SEO_CHECKS.md`.
 A **Provider Script** is a Python CLI wrapping one data source.
 - `path` - `[provider]/query.py`, `indexnow/submit.py`, `agent-readiness/check.py`, or root `prepublish-lint.py`
 - `commands` - CLI subcommands
-- `cost_class` - `free`, `quota` (free with daily quota), `paid`
+- `cost_class` - `free`, `quota` (free with daily quota), `credits` (prepaid credits, free tier available), `paid`
 - `credential_keys` - key names read from `[API_KEYS_FILE]`
 
 ### Credential Entry
@@ -156,6 +159,8 @@ A **Credential Entry** is one `KEY=VALUE` line in `[API_KEYS_FILE]`. Name format
 - `PLAUSIBLE_API_KEY` - required for `plausible/query.py`
 - `PLAUSIBLE_BASE_URL` - optional for `plausible/query.py`; default `https://plausible.io`
 - `YOUTUBE_API_KEY` - required for `youtube/query.py`
+- `TRENDSMCP_API_KEY` - required for `trendsmcp/query.py` (REST API key; the vendor name contains "MCP", the skill uses REST only)
+- `SCRAPECREATORS_API_KEY` - required for `scrapecreators/query.py`; sent as `x-api-key` header
 - Not part of the standard: `DATAFORSEO_BASE64` (legacy line, ignored; scripts build Basic auth from login and password)
 
 ### Opportunity Score (MOS)
@@ -178,6 +183,8 @@ An **Opportunity Score** ranks audit fixes and content opportunities.
 - `indexnow/`: `SETUP.md`, `submit.py`
 - `plausible/`: `SETUP.md`, `query.py`
 - `youtube/`: `SETUP.md`, `query.py`
+- `trendsmcp/`: `SETUP.md`, `query.py` (SEOFIRST-DD-21)
+- `scrapecreators/`: `SETUP.md`, `query.py` (SEOFIRST-DD-21)
 - `agent-readiness/`: `check.py` (no credentials, usage documented in `SKILL.md`)
 - No other files. Removed: `dataforseo/query.ps1`, `indexnow/submit.ps1`
 - No `UNINSTALL.md` files (SEOFIRST-DD-20)
@@ -190,6 +197,7 @@ An **Opportunity Score** ranks audit fixes and content opportunities.
 - Architecture: knowledge files and scripts with their relations (diagram)
 - Lifecycle router: each stage `IDEATE`, `CREATE`, `PUBLISH`, `IMPROVE`, `RESEARCH`, `MONITOR` with trigger condition and pointer to the `SEO_GUIDES.md` section
 - When-to-Query-What matrix: 10 question types (demand trajectory, keyword sizing, SERP overlap, competitor gap, technical and agent readiness, owned ranking and decay, backlinks, AI citation, conversion, indexing push), each with 1st free source and 2nd paid fallback, mapped to a script command or a manual UI step
+- Trend discovery order in the matrix row for demand trajectory: 1) free sources, 2) one `trendsmcp` call (`growth` or `board`) to find candidates, 3) `scrapecreators` depth calls only for the top candidates (SEOFIRST-DD-21)
 - Intent lookup: user intent → exact script command line
 - Provider registry: per script commands, cost class, `SETUP.md` pointer; credentials referenced by pointing to section "Credential Keys" (key names are not repeated)
 - Limitations: UI-only data (GSC Generative AI report, Bing AI Performance), deferred sources (SEOFIRST-FR-16), no rank tracking history beyond GSC 16 months
@@ -213,7 +221,7 @@ An **Opportunity Score** ranks audit fixes and content opportunities.
 - Rule Index at top: one line per rule ID with title, grouped by domain
 - Each rule: ID, title, statement, evidence label, source URLs with access date
 - BAD/GOOD example pair for every rule whose statement constrains a concrete field, markup, or file (domains `MTD`, `MTX`, `MAV`, `AGT`, `FND` where applicable); examples use `example.com` and generic products
-- Platform metadata field section: 72 field specs in 10 platform groups, one line per field, limits tagged `[LITERAL: 2026-11-03]`
+- Platform metadata field section: the 72 research fields in 10 platform groups, written as 54 entries (related fields share one entry, one line per entry), limits tagged `[LITERAL: 2026-11-03]`
 - Rules contain no procedure steps (those go to `SEO_GUIDES.md`) and no checklists (those go to `SEO_CHECKS.md`)
 
 **SEOFIRST-FR-05: `SEO_CHECKS.md` gates, audit, scoring, alerts**
@@ -258,7 +266,7 @@ An **Opportunity Score** ranks audit fixes and content opportunities.
 **SEOFIRST-FR-09: `dataforseo/query.py`** (paid)
 - `balance` - `GET /v3/appendix/user_data` ($0)
 - `keywords SEED` - Labs `keyword_suggestions/live` ($0.012/task + $0.00012/item)
-- `search-volume KW [KW...] | --file PATH` - Keywords Data `google_ads/search_volume/live`, up to 700 keywords per task ($0.06/task); splits larger lists into tasks
+- `search-volume KW [KW...] | --file PATH` - Keywords Data `google_ads/search_volume/live`, up to 1,000 keywords per task (Live $0.09/task, Standard queue $0.06/task; Live limited to 12 requests per minute; re-verified 2026-11-10); splits larger lists into tasks
 - `serp KEYWORD` - SERP `google/organic/live/advanced` with `load_async_ai_overview` true ($0.002/SERP); prints top 10 organic, AI Overview presence, SERP feature types
 - `competitors DOMAIN` - Labs `competitors_domain/live` ($0.012/task + $0.00012/item)
 - `backlinks DOMAIN` - Backlinks `summary/live` ($0.024/task + $0.000036/row)
@@ -298,12 +306,13 @@ An **Opportunity Score** ranks audit fixes and content opportunities.
 
 **SEOFIRST-FR-14: `youtube/query.py`** (free with quota)
 - Auth: `YOUTUBE_API_KEY`
-- `search QUERY` - `search.list` (`order=relevance`, `--max-results` default 25, `--region`, `--lang`), 100 units per call
+- `search QUERY` - `search.list` (`order=relevance`, `--max-results` default 25, `--region`, `--lang`), counted as one of at most 100 search calls per day (Google documents this as 100 units of the 10,000-unit quota or as a separate bucket of 100 calls; both allow 100 searches per day)
 - `videos ID [ID...]` - `videos.list` statistics and snippet, 1 unit per call (batches of 50)
-- Prints quota units consumed per run (daily default 10,000)
+- Prints search calls and units consumed per run (daily default 10,000 units)
 
 **SEOFIRST-FR-15: `agent-readiness/check.py`** (free, no credentials)
 - `check URL --site-type A|B|C|D` (default A)
+- Site types are cumulative: B = A + B checks, C = A + C checks, D = A + B + D checks (API platforms have documentation; ecommerce checks do not apply to them)
 - Type A checks: `robots.txt` reachable and parseable, `Sitemap:` line, per-class AI bot directives (search/grounding vs training vs user agents), `Content-Signal` presence, `Accept: text/markdown` response with `Content-Type: text/markdown` and `Vary: Accept`
 - Type B adds: `{url}/index.md`, root `/llms.txt` and content type
 - Type C adds: `Product` JSON-LD on given URL; WebMCP is listed as INFO "manual check" (not detectable by HTTP probe)
@@ -314,6 +323,35 @@ An **Opportunity Score** ranks audit fixes and content opportunities.
 **SEOFIRST-FR-16: Deferred data sources (documented, not scripted)**
 - Google Ads `KeywordPlanIdeaService` (requires Ads account and developer token) and Google Trends API alpha (requires allowlist access): listed in the matrix as "manual or not available" with DataForSEO `search-volume` and Google Trends web UI as fallbacks
 - Ahrefs and Semrush: listed as subscription alternatives without integration
+- X trends and X search: official X API pay-per-use (Trends `$0.010` per request, post read `$0.005`) or `twitterapi.io`; listed in the matrix as optional alternatives without script (SEOFIRST-DD-21)
+- AIsa (single-balance aggregator): listed as alternative to the two credit providers pending live test; no script
+
+### Trend and social providers (added by SEOFIRST-DD-21; IDs continue after FR-19)
+
+**SEOFIRST-FR-20: `trendsmcp/query.py`** (credits; free tier 100 requests/month) - SEOFIRST-DD-21
+- Auth: `TRENDSMCP_API_KEY` as `Authorization: Bearer` header; REST only, no MCP
+- One endpoint: `POST https://api.trendsmcp.ai/api` with JSON body whose `mode` selects the operation `[VERIFIED: vendor API reference, 2026-11-10]`
+- Commands and modes: `history KEYWORD --source S` → `get_time_series` (about 260 weekly points, fields `date`, `value`, `volume` where the source has it); `growth KEYWORD --source S --window W [W...]` → `get_growth` (`percent_growth` windows such as `7D`, `3M`, `12M`, `YTD`; result per window with `growth`, `direction`, `volume_growth`); `board --type T [--limit N] [--climbers]` → `get_top_trends` (ranked board; `--climbers` sets `sort` to `rank_change`); `posts KEYWORD --source S [--days N]` → `get_context` (posts, videos, news with engagement)
+- `get_reviews` is not wrapped
+- Source and board names (for example `Google Search`, `Google Trends`, `News`, `YouTube`, `TikTok`, `Reddit`, `X`) are taken from the vendor data catalog `https://www.trendsmcp.ai/data-catalog` at implementation time and stored in `SETUP.md`; 54 sources in total (vendor claim)
+- Billing: 1 request = 1 credit (vendor claim); `get_top_trends` costs 1 credit per 10 rows (`limit=5` charged 1 credit `[TESTED 2026-11-10, TREND-T1]`), the estimate is `ceil(limit / 10)` per board and the charged value is read from `requests_charged`; cost gate per SEOFIRST-FR-22
+- Source and board names are validated against the stored catalog (updated 2026-11-06) before any request; unknown name → exit 2 listing valid names
+- Known vendor issue `[TESTED 2026-11-10]`: `posts --source Reddit` returned a vendor-side status 502; `scrapecreators` `reddit-search` is the fallback
+- Output shows the 0-100 `value` index and `volume` when the source returns it; the index compares momentum, absolute volume exists only where `volume` is present
+
+**SEOFIRST-FR-21: `scrapecreators/query.py`** (credits; 100 free credits) - SEOFIRST-DD-21
+- Auth: `SCRAPECREATORS_API_KEY` as `x-api-key` header; base `https://api.scrapecreators.com`
+- Commands (one per documented vendor endpoint): `tiktok-popular-videos`, `tiktok-popular-songs`, `tiktok-trending-feed`, `tiktok-search KEYWORD`, `youtube-trending-shorts`, `youtube-search QUERY`, `reddit-search QUERY`, `reddit-subreddit NAME`, `pinterest-topic URL`, `instagram-search-reels QUERY`, `credit-balance` (free)
+- Vendor endpoints used: `/v1/tiktok/videos/popular`, `/v1/tiktok/songs/popular`, `/v1/tiktok/get-trending-feed`, `/v1/tiktok/search/keyword`, `/v1/youtube/shorts/trending`, `/v1/youtube/search`, `/v1/reddit/search`, `/v1/reddit/subreddit`, `/v1/pinterest/topic`, `/v2/instagram/reels/search`, `/v1/credit-balance`; parameters verified by test `TREND-T2`
+- Most endpoints cost 1 credit; some cost 10 or more; cache hits cost 0; per-endpoint credit table (`ENDPOINTS` constant) is stored in the script and in `SETUP.md` with access date; every response carries `credits_charged` and `credits_remaining`
+- `[TESTED 2026-11-10, TREND-T2]`: `credit-balance`, `reddit-search`, `youtube-trending-shorts`, `tiktok-trending-feed`, `instagram-search-reels` (1 credit each; failed calls not charged); `tiktok-popular-videos` and `tiktok-popular-songs` returned vendor HTTP 400 (TikTok Creative Center down); parameter names of those two and of `pinterest-topic` stay `[ASSUMED]`
+- X is not covered at depth by this vendor; X trends are deferred (SEOFIRST-FR-16)
+
+**SEOFIRST-FR-22: Cost gate for credit providers**
+- Applies to `trendsmcp/query.py` and `scrapecreators/query.py`
+- Before every request or batch: print estimated credits and estimated USD (`credits * price_per_credit`, price per credit configurable, default from lowest-volume pack: Trends MCP `0.025`, ScrapeCreators `0.00188`, `[LITERAL: 2026-11-10]`)
+- `--max-credits N` (default `20`); estimate above limit → exit 2 without request; a running batch stops when the credits actually charged reach `--max-credits`, so an endpoint that costs more than its table value cannot run away
+- After the request: print remaining balance when the API returns it (ScrapeCreators `credit-balance`), else the estimate
 
 ### Linter and removals
 
@@ -343,8 +381,8 @@ An **Opportunity Score** ranks audit fixes and content opportunities.
 ## 5. Non-Functional Requirements
 
 **SEOFIRST-NFR-01: Cost - zero by default**
-- Every command except DataForSEO data commands costs $0
-- Verification: SKILL.md provider registry lists cost class per command; DataForSEO commands refuse to run above `--max-cost`
+- Every command except DataForSEO data commands, `trendsmcp` commands, and `scrapecreators` commands costs $0; credit provider commands use free tiers first
+- Verification: SKILL.md provider registry lists cost class per command; DataForSEO commands refuse to run above `--max-cost`; credit provider commands refuse to run above `--max-credits`
 
 **SEOFIRST-NFR-02: Security - secrets**
 - No secret value appears in stdout, stderr, or JSON output
@@ -373,7 +411,7 @@ An **Opportunity Score** ranks audit fixes and content opportunities.
 
 **SEOFIRST-DD-06:** Default credentials path derived from script location (`[WORKSPACE_FOLDER]/../.tools/.api-keys.txt`), override with `--keys-file`. Rationale: matches the `tools-and-skills.md` default; works from `[PROMPTSYSTEM_FOLDER]` and `[AGENT_FOLDER]` because both have the same depth; no machine path in skill files.
 
-**SEOFIRST-DD-09:** Credential key names are standardized as `[PROVIDER]_[QUALIFIER_][SUFFIX]` and registered in one place, `SKILL.md` section "Credential Keys". Provider prefixes (one per provider folder): `DATAFORSEO`, `GSC`, `BING_WEBMASTER`, `INDEXNOW`, `PLAUSIBLE`, `YOUTUBE`. Qualifier (optional, names what the credential belongs to): currently only `SERVICE_ACCOUNT`. Suffixes (closed set): `API_KEY`, `LOGIN`, `PASSWORD`, `BASE_URL`, `FILE` (`FILE` values are file names relative to the `[API_KEYS_FILE]` folder). Names already present in the user's keys file keep their spelling; `INDEXNOW_KEY` becomes `INDEXNOW_API_KEY`; `DATAFORSEO_BASE64` is dropped because it duplicates login and password. Rationale: user decision 2026-11-10; one registry prevents name drift between scripts, `SETUP.md` files, and the keys file.
+**SEOFIRST-DD-09:** Credential key names are standardized as `[PROVIDER]_[QUALIFIER_][SUFFIX]` and registered in one place, `SKILL.md` section "Credential Keys". Provider prefixes (one per provider folder): `DATAFORSEO`, `GSC`, `BING_WEBMASTER`, `INDEXNOW`, `PLAUSIBLE`, `YOUTUBE`, `TRENDSMCP`, `SCRAPECREATORS`. Qualifier (optional, names what the credential belongs to): currently only `SERVICE_ACCOUNT`. Suffixes (closed set): `API_KEY`, `LOGIN`, `PASSWORD`, `BASE_URL`, `FILE` (`FILE` values are file names relative to the `[API_KEYS_FILE]` folder). Names already present in the user's keys file keep their spelling; `INDEXNOW_KEY` becomes `INDEXNOW_API_KEY`; `DATAFORSEO_BASE64` is dropped because it duplicates login and password. Rationale: user decision 2026-11-10; one registry prevents name drift between scripts, `SETUP.md` files, and the keys file.
 
 **SEOFIRST-DD-10:** Self-contained scripts without a shared helper module. Rationale: provider folders stay independently copyable; avoids `sys.path` manipulation; cost is about 40 duplicated lines (key loading, HTTP retry, output) per script.
 
@@ -387,7 +425,7 @@ An **Opportunity Score** ranks audit fixes and content opportunities.
 
 **SEOFIRST-DD-15:** Google Ads `KeywordPlanIdeaService` and Google Trends API alpha are deferred (SEOFIRST-FR-16). Rationale: both need gated access (Ads developer token, alpha allowlist); DataForSEO `search-volume` and the Trends web UI cover the questions until access exists.
 
-**SEOFIRST-DD-16:** Cost gate default `--max-cost 0.10` USD per command. Rationale: covers a single SERP ($0.002), a 100-item Labs call (~$0.024), one search-volume task ($0.06), one backlinks summary (~$0.024); larger batches require an explicit decision.
+**SEOFIRST-DD-16:** Cost gate default `--max-cost 0.10` USD per command. Rationale: covers a single SERP ($0.002), a 100-item Labs call (~$0.024), one search-volume task ($0.09 Live), one backlinks summary (~$0.024); larger batches require an explicit decision.
 
 **SEOFIRST-DD-17:** Folklore lives in a Do-Not-Do list in `SEO_GUIDES.md` without rule IDs. Rationale: rule IDs signal norms; negative-evidence practices must stay visible as warnings without looking like requirements.
 
@@ -397,19 +435,21 @@ An **Opportunity Score** ranks audit fixes and content opportunities.
 
 **SEOFIRST-DD-20:** No `UNINSTALL.md` files; each provider `SETUP.md` has a "Removal" section instead. Rationale: `AGENT-SKILL-RULES.md` requires `UNINSTALL.md` when `SETUP.md` installs software or changes agent configuration; these `SETUP.md` files only create provider accounts and add lines to `[API_KEYS_FILE]`, so removal is 3 steps and 6 extra files would contradict the few-files rule.
 
+**SEOFIRST-DD-21:** Trend and social discovery uses two credit providers behind Python scripts: `trendsmcp` for cross-platform trend index and live boards, `scrapecreators` for post-level social data; DataForSEO stays the Google provider. No MCP (SEOFIRST-DD-04). Rationale: user decision 2026-11-10 (option 1 of the provider comparison); no single provider covers Google, X, YouTube, TikTok, and Reddit at depth, DataForSEO retired its Social Media API on 2026-09-16, both vendors sell credits that never expire without a required subscription; trend-index calls cost about 10x raw social calls, so trend discovery runs first and depth calls only on top candidates. Free-first order is unchanged (free sources, then trend index, then depth).
+
 ## 7. Implementation Guarantees
 
 **SEOFIRST-IG-01:** No file in `seo-tools/` contains a drive-letter path, `npx`, `uvx`, `mcpServers`, `.ps1`, `submit_url`, or `pytrends`.
 
-**SEOFIRST-IG-02:** No paid request is sent without a printed estimate `<= --max-cost`.
+**SEOFIRST-IG-02:** No paid request is sent without a printed estimate `<= --max-cost` (DataForSEO) or `<= --max-credits` (credit providers).
 
 **SEOFIRST-IG-03:** Every script prints help with exit 0 when run with `--help`, without keys file and without network.
 
-**SEOFIRST-IG-04:** Every `SEO-*` rule in `SEO_RULES.md` has an evidence label and at least one source URL with access date.
+**SEOFIRST-IG-04:** Every `SEO-*` rule in `SEO_RULES.md` has an evidence label and at least one source URL with access date; exception: `SEO-TLS-10` is `[ASSUMED]` with "Sources: none" (internal convention without external source).
 
 **SEOFIRST-IG-05:** Every rule ID referenced in `SKILL.md`, `SEO_GUIDES.md`, `SEO_CHECKS.md`, and `prepublish-lint.py` exists in `SEO_RULES.md`.
 
-**SEOFIRST-IG-06:** No secret value from `[API_KEYS_FILE]` appears in any script output.
+**SEOFIRST-IG-06:** No secret value from `[API_KEYS_FILE]` appears in any script output; the IndexNow key is masked to its first 4 characters.
 
 **SEOFIRST-IG-07:** Google Indexing API appears only together with the `JobPosting` / `BroadcastEvent` restriction.
 
@@ -421,7 +461,7 @@ An **Opportunity Score** ranks audit fixes and content opportunities.
 
 **Free-first escalation:** For each question type, the router names a $0 source first; the paid fallback is used only when the free source cannot answer (unowned competitor data, keyword difficulty, third-party backlinks, bulk SERPs above 10 queries, third-party LLM panels).
 
-**Cost estimate:** `estimate = Σ tasks * task_price + Σ items * item_price`; items = `--limit` for Labs, expected rows for Backlinks; search-volume tasks = `ceil(keywords / 700)`.
+**Cost estimate:** `estimate = Σ tasks * task_price + Σ items * item_price`; items = `--limit` for Labs, expected rows for Backlinks; search-volume tasks = `ceil(keywords / 1,000)`; board rows = `ceil(limit / 10)` credits.
 
 **Credential loading:** Parse keys file once; return dict; lookup with explicit error naming the key; DataForSEO Basic auth built from `DATAFORSEO_LOGIN` and `DATAFORSEO_PASSWORD`.
 
@@ -443,6 +483,7 @@ Agent receives SEO-relevant task
 │   │       ├─> Apply SEO_RULES.md rules referenced by each step
 │   │       └─> Needs data? → When-to-Query-What matrix
 │   │           ├─> Free source → run script (gsc, bing, youtube, agent-readiness, plausible)
+│   │           ├─> Trend discovery → trendsmcp/query.py (credit gate) → scrapecreators/query.py for top candidates
 │   │           └─> Paid needed → dataforseo/query.py balance
 │   │               └─> dataforseo/query.py CMD --max-cost N
 │   │                   ├─> Estimate <= N → request → print actual cost
@@ -466,6 +507,8 @@ INDEXNOW_API_KEY=0123456789abcdef0123456789abcdef
 PLAUSIBLE_API_KEY=placeholder-token
 PLAUSIBLE_BASE_URL=https://plausible.io
 YOUTUBE_API_KEY=placeholder-key
+TRENDSMCP_API_KEY=placeholder-key
+SCRAPECREATORS_API_KEY=placeholder-key
 ```
 
 **Script JSON output envelope (`--format json`):**
@@ -514,9 +557,26 @@ OK.
 
 **Expected output when the cost gate blocks:**
 ```
-Estimating cost for 'search-volume' (3 tasks)...
+Estimating cost for 'search-volume' (2 tasks, 1,500 keywords)...
   Estimate: $0.18 (limit $0.10).
 ERROR: Estimate exceeds limit -> rerun with --max-cost 0.18 to allow.
+```
+
+**Expected output for a credit provider call:**
+```
+Estimating credits for 'growth' (1 request, 2 windows)...
+  Estimate: 1 credit, about $0.0166 (limit 20 credits).
+Querying 'POST https://api.trendsmcp.ai/api' (mode 'get_growth')...
+  2 windows received.
+  Charged: 1 credit.
+OK.
+```
+
+**Expected output when the credit gate blocks:**
+```
+Estimating credits for 'tiktok-search' (30 requests)...
+  Estimate: 30 credits, about $0.056 (limit 20 credits).
+ERROR: Estimate exceeds limit -> rerun with --max-credits 30 to allow.
 ```
 
 **Expected output for a missing key:**
@@ -530,13 +590,26 @@ ERROR: Key 'BING_WEBMASTER_API_KEY' not found in '[API_KEYS_FILE]' -> see 'bing-
 - GSC: Search Analytics `<= 25,000` rows per request, 16-month retention, 2-3 day lag; URL Inspection 2,000/day and 600/minute per property; service account must be added as user to the property
 - Bing Webmaster: SOAP and POX endpoints retired 2026-08-31; JSON endpoint only; AI Performance has no API
 - IndexNow: `<= 10,000` URLs per POST; key 8-128 characters `[a-zA-Z0-9-]`; key file reachable over HTTPS
-- YouTube Data API: 10,000 units/day default; `search.list` 100 units, `videos.list` 1 unit
-- DataForSEO: account verification required for data endpoints; balance endpoint works unverified; `$50` minimum top-up
+- YouTube Data API: 10,000 units/day default; max 100 `search.list` calls per day (documentation shows 100 units per call or a separate 100-call bucket); `videos.list` 1 unit
+- Trends MCP (REST): free 100 requests/month; credit packs 600 / 2,500 / 12,000 at 2.5 / 1.96 / 1.66 cents per credit, credits never expire, failed calls free `[LITERAL: 2026-11-10]`
+- ScrapeCreators: 100 free credits; packs 25,000 credits `$47` and 500,000 credits `$497`, credits never expire, cache hit 0 credits `[LITERAL: 2026-11-10]`
+- DataForSEO: account verification required for data endpoints; balance endpoint works unverified; `$50` minimum top-up; Keywords Data Live `$0.09`/task, Standard `$0.06`/task, up to 1,000 keywords per task, Live 12 requests per minute `[LITERAL: 2026-11-10]`
 - Plausible Stats API: 600 requests/hour; API key scoped to owning team
 - Google Indexing API: only `JobPosting` and `BroadcastEvent` in `VideoObject`; 200 URLs/day
 - Sync: `[PROMPTSYSTEM_FOLDER]` → `[AGENT_FOLDER]` by robocopy; `.claude/` regeneration via `_PROMPTS_UpdateClaude.md` is a separate step outside this spec
 
 ## 13. Document History
+
+**[2026-11-10 21:30]**
+- Fixed: reverse sync from implementation and live tests - Keywords Data Live $0.09/task and 1,000 keywords per task (PR-0010), YouTube quota wording, 54 field entries for 72 fields, `SEO-TLS-10` exception, cumulative site types, IndexNow key masking (PR-0013)
+- Changed: FR-20 board billing 1 credit per 10 rows and source name validation, FR-21 tested endpoints and vendor outages, FR-22 running-batch stop
+
+**[2026-11-10 20:25]**
+- Fixed: `/verify` - FR order (FR-16 before FR-20), FR-20 rewritten to the verified Trends MCP REST contract (single endpoint, `mode` values, `requests_charged`), DD-09 prefix list, Context decision IDs and acronyms, matrix trend order, action flow, credit gate log examples
+
+**[2026-11-10 20:15]**
+- Added: SEOFIRST-DD-21 (user decision: Trends MCP + ScrapeCreators + DataForSEO, Python scripts, no MCP), SEOFIRST-FR-20..22, credential keys `TRENDSMCP_API_KEY` and `SCRAPECREATORS_API_KEY`, folders `trendsmcp/` and `scrapecreators/`, `credits` cost class
+- Changed: SEOFIRST-FR-16 (X trends and AIsa deferred), NFR-01, IG-02, technical constraints
 
 **[2026-11-10 19:45]**
 - Changed: `/verify` - SPEC design decisions renumbered to match session decision IDs (DD-03, DD-04, DD-06, DD-09 = user decisions; engineering decisions DD-10..DD-20); DD-14 naming standard is now DD-09
