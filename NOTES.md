@@ -54,10 +54,10 @@
 [DEV_SPECS_FOLDER]: `[WORKSPACE_FOLDER]\specs`
 - Specs folder containing shared specifications, design guidelines, SOPs.
 
-[PRODUCT_VERSION]: `4.6`
+[PRODUCT_VERSION]: `4.7`
 - Current PromptSystem version. Update on version changes (SOPS SOP 4/7).
 
-[PROMPTSYSTEM_FOLDER]: `[WORKSPACE_FOLDER]\PromptSystemV4.6`
+[PROMPTSYSTEM_FOLDER]: `[WORKSPACE_FOLDER]\PromptSystemV4.7`
 - Source of truth for all rules, workflows, skills. Never edit `.devin/` directly. Repo-specific — not in template.
 
 [AGENT_FOLDER]: `[WORKSPACE_FOLDER]\.devin`
