@@ -163,7 +163,7 @@ $targetServer = @{
 
 # Read existing config (handle empty/missing)
 if (Test-Path $configPath) {
-    $config = Get-Content $configPath -Raw | ConvertFrom-Json -AsHashtable
+    $config = Get-Content $configPath -Raw -Encoding UTF8 | ConvertFrom-Json -AsHashtable
 } else {
     $config = @{ mcpServers = @{} }
 }
@@ -193,7 +193,7 @@ Copy-Item $configPath $backupPath -ErrorAction SilentlyContinue
 $config.mcpServers["server-name"] = $targetServer
 
 # Write config
-$config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
+$config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding utf8NoBOM
 ```
 
 Key requirements:
@@ -201,6 +201,7 @@ Key requirements:
 - Backup first - always backup before modifying
 - Handle PSCustomObject - JSON parsing returns PSCustomObject, convert to Hashtable
 - Compare before write - don't modify if already correct
+- PowerShell 7 required (`-AsHashtable`, `utf8NoBOM`); JSON without BOM per `UNICODE_RULES.md` UNICODE-BM-01
 
 ### 3.3 Post-Installation Verification
 
@@ -271,10 +272,10 @@ npx -y some-mcp-server --help  # Downloads and tests, doesn't modify agent confi
 
 # GOOD: Check config state before modifying
 $configPath = "$env:USERPROFILE\.codeium\windsurf\mcp_config.json"
-if (Test-Path $configPath) { Get-Content $configPath }
+if (Test-Path $configPath) { Get-Content -LiteralPath $configPath -Raw -Encoding UTF8 }
 
 # BAD: Modify first, test later
-Set-Content $configPath $newConfig  # Don't do this before verification
+[System.IO.File]::WriteAllText($configPath, $newConfig, (New-Object System.Text.UTF8Encoding $false))  # Don't do this before verification
 ```
 
 ## 6. Documentation Quality

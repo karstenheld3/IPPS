@@ -6,9 +6,19 @@ disable-model-invocation: true
 
 # New Session Workflow
 
+**Goal**: Session folder with tracking files created for a stated goal.
+
+**Why**: A session gives long-running work persistent, resumable structure.
+
 ## Required Skills
 
 - @skills:session-management for session folder structure and tracking files
+
+## MUST-NOT-FORGET
+
+- Folder already has NOTES.md, PROGRESS.md, PROBLEMS.md and no new work stream requested: run `/session-load` instead
+- Folder name is `_YYYY-MM-DD_[PROBLEM_DESCRIPTION]` with alphanumerical characters only
+- Every problem from the initial request gets a unique ID in PROBLEMS.md
 
 ## Step 1: Check for Existing Session
 

@@ -19,7 +19,7 @@ Verify factual claims in documents by extracting sources, facts, and conclusions
 - @skills:write-documents for review document output (use `FACT-CHECK_TEMPLATE.md`)
 - @skills:research-methods for source collection tools (use `RESEARCH_TOOLS.md`)
 - @skills:pdf-tools for PDF processing pipeline
-- @skills:llm-transcription for image and scanned document transcription
+- @skills:llm-tools (`transcription/`) for image and scanned document transcription
 - @skills:ms-playwright-mcp for web page access and full-page capture
 
 ## MUST-NOT-FORGET
@@ -29,9 +29,10 @@ Verify factual claims in documents by extracting sources, facts, and conclusions
 - Documentation is secondary, not primary - the shipped product (running API, source code, test output) is the primary source
 - Trust hierarchy: observed behavior > source code > official docs > community sources > LLM output
 - Source verification MUST happen before fact verification - a hallucinated source invalidates all facts citing it
-- Download source files to `_DOWNLOADS_gitignore/` (not checked in)
-- Transcribe sources to `_SOURCES/` (checked in - preserves evidence)
+- Download source files to `_download_gitignore/` (not checked in)
+- Transcribe sources to `_sources/` (checked in - preserves evidence)
 - Full-page screenshots MUST use `fullPage: true, type: "jpeg"` per @skills:ms-playwright-mcp
+- **Cascade: `gesetze-im-internet.de` Playwright only** - `search_web` / `read_url_content` crash the conversation
 - Run `/verify` after workflow complete
 
 ## Mandatory Re-read
@@ -56,7 +57,7 @@ Apply to ALL input types before context-specific steps.
 5. Graceful degradation: if a source is inaccessible, assign `inaccessible` verdict and continue. Never abort because one source failed
 6. Unfalsifiable claims (opinions, subjective assessments) are flagged but never verified
 7. Privacy gate: review document is general-purpose. All examples and evidence descriptions must use generic references
-8. Triage-informed priority: scan for hallucination triage signals before deep verification. Seven signals: generic phrasing (SOCAS-08), stale info (SOCAS-12), empty structure (SOCAS-13), vague claims (AP-PR-07), wrong terms (MW-WC-01), assumptions stated as facts (SOCAS-10), unsupported conclusions (SOCAS-06). Facts matching triage signals get priority, but ALL facts get verdicts
+8. Triage-informed priority: scan for hallucination triage signals before deep verification. Seven signals: generic phrasing (SOCAS-CR-08), stale info (SOCAS-CR-12), empty structure (SOCAS-CR-13), vague claims (APAPL-PR-07), wrong terms (MECT-WC-01), assumptions stated as facts (SOCAS-CR-10), unsupported conclusions (SOCAS-CR-06). Facts matching triage signals get priority, but ALL facts get verdicts
 
 # CONTEXT-SPECIFIC
 
@@ -138,16 +139,16 @@ Output: numbered source list [S01, S02, ...], fact list [F01, F02, ...], conclus
 
 Download and transcribe URL sources to local storage for reliable verification.
 
-1. Create `_DOWNLOADS_gitignore/` and `_SOURCES/` subfolders adjacent to review output location
+1. Create `_download_gitignore/` and `_sources/` subfolders adjacent to review output location
 2. For each URL source:
-   - Web pages: `read_url_content` (preferred) or ms-playwright-mcp `browser_navigate` + `browser_snapshot` (fallback). Save text to `_SOURCES/[SOURCE_ID]_[name].md`. Visual archive: `browser_take_screenshot(fullPage: true, type: "jpeg")` to `_DOWNLOADS_gitignore/`
-   - PDFs: download to `_DOWNLOADS_gitignore/[SOURCE_ID]_[name].pdf`, process via @skills:pdf-tools (`pdftotext` for text-native, `convert-pdf-to-jpg` + @skills:llm-transcription for scanned). Save transcription to `_SOURCES/`
-   - Images: download to `_DOWNLOADS_gitignore/`, transcribe via @skills:llm-transcription to `_SOURCES/`
+   - Web pages: `read_url_content` (preferred; Cascade: not for `gesetze-im-internet.de`) or ms-playwright-mcp `browser_navigate` + `browser_snapshot` (fallback). Save text to `_sources/[SOURCE_ID]_[name].md`. Visual archive: `browser_take_screenshot(fullPage: true, type: "jpeg")` to `_download_gitignore/`
+   - PDFs: download to `_download_gitignore/[SOURCE_ID]_[name].pdf`, process via @skills:pdf-tools (`pdftotext` for text-native, `convert-pdf-to-jpg` + @skills:llm-tools transcription for scanned). Save transcription to `_sources/`
+   - Images: download to `_download_gitignore/`, transcribe via @skills:llm-tools transcription to `_sources/`
 3. For file/document sources: read directly (no download needed)
 4. If access fails after 2 retries: search archive.org or cached version. If none found: mark as `inaccessible`, proceed
 5. Max 3 inaccessible sources before logging a warning in the review
 
-Output: materialized source content in `_SOURCES/` and `_DOWNLOADS_gitignore/`
+Output: materialized source content in `_sources/` and `_download_gitignore/`
 
 ## Phase 3: Verify
 
@@ -156,7 +157,7 @@ Verify in source-first order. Cascading invalidation applies.
 ### 3.1 Verify Sources
 
 For each source, verify it exists and contains what the document claims:
-- URL sources: verify against materialized local copy in `_SOURCES/`
+- URL sources: verify against materialized local copy in `_sources/`
 - File sources: check file exists at referenced path, read and compare
 - Document sources: check PromptSystem document exists, read and compare
 - Implicit sources: flag as `unsourced`
@@ -188,7 +189,7 @@ Generate `[filename]_FACT-CHECK.md` following @skills:write-documents `FACT-CHEC
 
 1. Header: Doc ID (`[SOURCE-DOC-ID]-RV[NN]`), review date, context summary (document type, source/fact/conclusion counts)
 2. Fact-Check Summary: verdict counts per category, overall recommendation
-3. Source Verdicts: confirmed and failed sources with `_SOURCES/` references for materialized copies
+3. Source Verdicts: confirmed and failed sources with `_sources/` references for materialized copies
 4. Fact Verdicts: grouped by severity
    - Critical = refuted
    - High = weakened or unsupported
@@ -211,7 +212,7 @@ Recommendation thresholds:
 - [ ] Cascading invalidation applied: failed sources → weakened facts → weakened/refuted conclusions
 - [ ] Unfalsifiable claims flagged separately, not given truth verdicts
 - [ ] Review file created, no original files modified
-- [ ] `_SOURCES/` contains materialized evidence for URL sources
+- [ ] `_sources/` contains materialized evidence for URL sources
 
 Pass: Complete | Fail: Review missed items
 
@@ -235,5 +236,10 @@ Run `/verify` on generated `[filename]_FACT-CHECK.md` to check:
 ## Output
 
 - `[filename]_FACT-CHECK.md` - fact-check review with all verdicts and recommendations
-- `_SOURCES/` - transcribed source content (checked in, naming: `[SOURCE_ID]_[descriptive-name].md`)
-- `_DOWNLOADS_gitignore/` - raw downloads (not checked in, naming: `[SOURCE_ID]_[original-name].[ext]`)
+- `_sources/` - transcribed source content (checked in, naming: `[SOURCE_ID]_[descriptive-name].md`)
+- `_download_gitignore/` - raw downloads (not checked in, naming: `[SOURCE_ID]_[original-name].[ext]`)
+
+## Agent-Created Folders
+
+- `_sources/` - role: sources; parent: working folder (adjacent to the review output); creator: Phase 2 materialization; content: transcribed source text
+- `_download_gitignore/` - role: download; parent: working folder (adjacent to the review output); creator: Phase 2 materialization; content: raw downloads, full-page screenshots

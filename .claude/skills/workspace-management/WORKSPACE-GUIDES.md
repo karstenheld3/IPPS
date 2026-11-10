@@ -33,6 +33,8 @@ DevRepo structure:
 - specs/ (shared specifications, design guidelines, SOPs)
 - docs/ (explanatory knowledge documents)
 - _sessions/ (session folders)
+- _archive_gitignore/ (archived sessions, not versioned; created by `/session-archive`)
+- `.gitignore` with the standard patterns `.tmp_*`, `*_gitignore/`, `_agentwork/`
 
 ProductRepo structure:
 - README.md (from PRODUCT_REPO_README_TEMPLATE.md)

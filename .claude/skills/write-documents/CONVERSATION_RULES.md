@@ -20,11 +20,13 @@ Translation (TR)
 
 Email (EM)
 - CV-EM-01: Email header format with all fields on one line
-- CV-EM-02: Send via Playwright Gmail UI, never CLI tools
+- CV-EM-02: Compose via Playwright Gmail UI, never CLI tools
 - CV-EM-03: Email signature included only on first occurrence per sender
 - CV-EM-04: Draft emails marked with `**STATUS: DRAFT - NOT SENT**`
+- CV-EM-05: NEVER SEND - agent drafts, user sends. Applies to email, WhatsApp, Signal, contact forms, and every other outbound message
+- CV-EM-06: No Markdown in draft bodies - plain text only, no bold/italic/bullets/headers
 
-Effective Writing - see `APAPALAN_RULES.md` Communication (CM) section: AP-CM-01, AP-CM-02, AP-CM-03
+Effective Writing - see `APAPALAN_RULES.md` Communication (CM) section: APAPL-CM-01, APAPL-CM-02, APAPL-CM-03
 
 WhatsApp (WA)
 - CV-WA-01: Message format `**HH:MM Person**: message`
@@ -41,8 +43,8 @@ Attachments (AT)
 - CV-AT-01: Check downloaded images - delete email garbage (signatures, logos, spacers)
 - CV-AT-02: Ignore files pattern maintained per conversation
 - CV-AT-03: Auto-transcribe attachments via `/transcribe` when `CONVERSATION_AUTO_TRANSCRIBE_ATTACHMENTS=true`
-- CV-AT-04: Binary files (PDF, ZIP, images) in `[ConversationFolder]/Attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/`
-- CV-AT-05: Text files (.md, .txt, .csv, etc.) in `[ConversationFolder]/Attachments/YYYY-MM-DD_HH-MM_[Topic]/`
+- CV-AT-04: Binary files (PDF, ZIP, images) in `[ConversationFolder]/_attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/`
+- CV-AT-05: Markdown transcripts and translations of attachments in `[ConversationFolder]/_attachments_markdown/YYYY-MM-DD_HH-MM_[Topic]/`
 
 Todos (TD)
 - CV-TD-01: Todo format with timestamp, item, deadline, status
@@ -57,17 +59,17 @@ Variables (VR)
 - CV-VR-03: Missing variables in NOTES.md default to `=true` and are added back
 
 Links (LN)
-- CV-LN-01: All URLs as clickable Markdown links
+- CV-LN-01: All URLs in the "Links and shared documents" section as clickable Markdown links
 - CV-LN-02: Links section groups by date with description
 - CV-LN-03: All attachments, transcriptions, and translations recorded in Links and shared documents
 - CV-LN-04: All links absolute - full clickable paths, never relative paths or `...` abbreviations
-- CV-LN-05: Explicit inline URLs when referencing sources in emails - URL at point of reference, not only in Links section
+- CV-LN-05: Explicit inline URLs when referencing sources in emails - plain full URL at point of reference, not only in Links section. Email bodies never use Markdown link syntax (lost on copy/paste)
 
 History Integrity (HY)
 - CV-HY-01: Sent emails are immutable - NEVER edit, correct, or modify emails in History that have already been sent. They are a factual record of what was actually communicated. Corrections go in a NEW follow-up email/message.
 
 Literals (LT)
-- CV-LT-01: Addresses, IBANs, reference numbers, and identifiers in outbound communication (drafts, emails, letters) MUST be copied from `[LITERAL]`-marked values or verified against official source documents (government registration, contract, bank confirmation). Never type from memory or copy from secondary documents. See `core-conventions.md` "Authoritative Literals" and AP-PR-13.
+- CV-LT-01: Addresses, IBANs, reference numbers, and identifiers in outbound communication (drafts, emails, letters) MUST be copied from `[LITERAL]`-marked values or verified against official source documents (government registration, contract, bank confirmation). Never type from memory or copy from secondary documents. See `core-conventions.md` "Authoritative Literals" and APAPL-PR-13.
 
 Humanizing (HM) - see [CONVERSATION_HUMANIZING_RULES.md](CONVERSATION_HUMANIZING_RULES.md)
 - CV-HM-01: Override Scope - MECT/APAPALAN baseline + 1-5% humanizing for user-voice drafts
@@ -86,6 +88,7 @@ Humanizing (HM) - see [CONVERSATION_HUMANIZING_RULES.md](CONVERSATION_HUMANIZING
 - [Native Characters](#native-characters)
 - [Email Header Format](#email-header-format)
 - [Email Sending](#email-sending)
+- [Never Send](#never-send)
 - [Draft Emails](#draft-emails)
 - [WhatsApp Message Format](#whatsapp-message-format)
 - [WhatsApp Section Heading](#whatsapp-section-heading)
@@ -229,7 +232,43 @@ Always use Playwright Gmail UI. CLI send tools have body encoding failures.
 
 **BAD:** `cli-tool send --to "contact@example.com" --subject "Re: Meeting" --body "..."`
 
-**GOOD:** Open Gmail in Playwright, compose and send via UI.
+**GOOD:** Open Gmail in Playwright, compose via UI, leave as draft. The user clicks Send (CV-EM-05).
+
+## Never Send
+
+The agent never sends, submits, or posts any outbound message. It drafts (in the conversation file, in chat, or as a Gmail draft via Playwright) and stops. The user reviews and sends. No exception for "send it", "go ahead", or autonomous workflows (`/go`).
+
+**BAD:**
+```
+Agent composes the reply in Gmail and clicks Send.
+Agent fills the contact form and clicks Submit.
+```
+
+**GOOD:**
+```
+Agent composes the reply in Gmail, attaches files, saves the draft, and reports:
+"Draft ready in Gmail - review and send."
+```
+
+## No Markdown in Draft Bodies
+
+Email and message draft bodies are plain text. No Markdown formatting: no bold (**text**), no italic (*text*), no bullet lists (- item), no numbered lists (1. item), no Markdown headers (##). Structural formatting (paragraphs, blank lines) only. Markdown is lost on copy/paste into email clients and reads as formatting artifacts.
+
+**BAD:**
+```
+**Question:** Does Tuesday work?
+
+- **Point 1:** First item
+- **Point 2:** Second item
+```
+
+**GOOD:**
+```
+Question: Does Tuesday work?
+
+Point 1: First item
+Point 2: Second item
+```
 
 ## Draft Emails
 
@@ -327,7 +366,7 @@ Bold timestamp, main topic on same line. Sub-items indented with Decision/Action
 - **2026-03-17 14:30** - Discussed Q2 timeline adjustments
   - Decision: Move milestone 2 to April 15
   - Action: Send updated Gantt chart by Friday
-  - Attachment: [Q2_Timeline.pdf](Attachments_gitignore/2026-03-17_14-30_Q2Timeline/Q2_Timeline.pdf)
+  - Attachment: [Q2_Timeline.pdf](_attachments_gitignore/2026-03-17_14-30_Q2Timeline/Q2_Timeline.pdf)
   - [Email](#2026-03-17-1430---q2-timeline-discussion)
 ```
 
@@ -387,21 +426,21 @@ Timestamp, item, optional deadline, status with action type.
 ## Attachment Folder Format
 
 Two mirrored folder trees per conversation:
-- `Attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/` - binary files (PDF, ZIP, images) - excluded from git
-- `Attachments/YYYY-MM-DD_HH-MM_[Topic]/` - text files (.md, .txt, .csv, etc.) - tracked in git
+- `_attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/` - binary files (PDF, ZIP, images) - excluded from git
+- `_attachments_markdown/YYYY-MM-DD_HH-MM_[Topic]/` - markdown transcripts and translations - tracked in git
 
 **BAD:**
 ```
-Attachments_gitignore/contract.pdf
-Attachments_gitignore/March2026/contract.pdf
-Attachments_gitignore/2026-03-16_16-50_Contract/contract.md
+_attachments_gitignore/contract.pdf
+_attachments_gitignore/March2026/contract.pdf
+_attachments_gitignore/2026-03-16_16-50_Contract/contract.md
 ```
 
 **GOOD:**
 ```
-Attachments_gitignore/2026-03-16_16-50_RentalContract/CT_Arrendamento.pdf
-Attachments/2026-03-16_16-50_RentalContract/CT_Arrendamento.md
-Attachments/2026-03-16_16-50_RentalContract/CT_Arrendamento_en.md
+_attachments_gitignore/2026-03-16_16-50_RentalContract/CT_Arrendamento.pdf
+_attachments_markdown/2026-03-16_16-50_RentalContract/CT_Arrendamento.md
+_attachments_markdown/2026-03-16_16-50_RentalContract/CT_Arrendamento_en.md
 ```
 
 ## Image Cleanup
@@ -415,18 +454,30 @@ Maintain per-conversation Ignore Files pattern list for recurring garbage.
 
 ## URL Format
 
-All URLs as clickable Markdown links with descriptive title.
+"Links and shared documents" section: clickable Markdown links. Everywhere else (Log, History, email bodies): plain full URLs - Markdown link syntax is lost on copy/paste.
 
-**BAD:**
+**In "Links and shared documents" section:**
+
+BAD (bare URL without title):
 ```
 Check https://www.company.com for details.
-See provider.com/services/energy/
 ```
 
-**GOOD:**
+GOOD:
 ```
 Check [Company Name](https://www.company.com) for details.
-See [Provider Energy](https://provider.com/services/energy/)
+```
+
+**Everywhere else, including email bodies:**
+
+BAD (Markdown syntax - lost on copy/paste):
+```
+Check [Company Name](https://www.company.com) for details.
+```
+
+GOOD (plain full URL, always with scheme):
+```
+Check https://www.company.com for details.
 ```
 
 ## Absolute Links
@@ -435,13 +486,13 @@ File paths, attachment references, and source links must be full absolute clicka
 
 **BAD:**
 ```
-See Attachments/.../contract.md
+See _attachments_markdown/.../contract.md
 Transcription: ../2026-03-16_RentalContract/contract.md
 ```
 
 **GOOD:**
 ```
-See [contract.md](e:/Conversations/MariaSilva-Landlord/Attachments/2026-03-16_16-50_RentalContract/contract.md)
+See [contract.md](e:/Conversations/MariaSilva-Landlord/_attachments_markdown/2026-03-16_16-50_RentalContract/contract.md)
 ```
 
 ## Source References
@@ -561,41 +612,41 @@ Applies to: Log summaries, Key outcomes, Status updates, Todo items. Does NOT ap
 
 ## Auto-Transcribe Attachments
 
-When `CONVERSATION_AUTO_TRANSCRIBE_ATTACHMENTS=true`, transcribe PDF and image attachments using `/transcribe` workflow with: 1 candidate, 120 DPI, min-score=4.5. Output `.md` file in mirrored `Attachments/` folder (same subfolder name).
+When `CONVERSATION_AUTO_TRANSCRIBE_ATTACHMENTS=true`, transcribe PDF and image attachments using `/transcribe` workflow with: 1 candidate, 120 DPI, min-score=4.5. Output `.md` file in mirrored `_attachments_markdown/` folder (same subfolder name).
 
 **BAD** (transcription in same folder as binary):
 ```
-Attachments_gitignore/2026-03-16_16-50_Contract/
+_attachments_gitignore/2026-03-16_16-50_Contract/
 ├── contract.pdf
 └── contract.md
 ```
 
 **GOOD** (binary and transcription separated):
 ```
-Attachments_gitignore/2026-03-16_16-50_Contract/
+_attachments_gitignore/2026-03-16_16-50_Contract/
 └── contract.pdf
-Attachments/2026-03-16_16-50_Contract/
+_attachments_markdown/2026-03-16_16-50_Contract/
 └── contract.md
 ```
 
-If `CONVERSATION_AUTO_TRANSLATE=true` and transcribed content is not in `CONVERSATION_DO_NOT_TRANSLATE_LIST`, also produce translated version in `Attachments/`: `contract_en.md`.
+If `CONVERSATION_AUTO_TRANSLATE=true` and transcribed content is not in `CONVERSATION_DO_NOT_TRANSLATE_LIST`, also produce translated version in `_attachments_markdown/`: `contract_en.md`.
 
 ## Attachment Folder Location
 
 Attachments live inside the conversation folder with two sibling trees:
-- `Attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/` - binaries (git-excluded)
-- `Attachments/YYYY-MM-DD_HH-MM_[Topic]/` - text files (git-tracked)
+- `_attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/` - binaries (git-excluded)
+- `_attachments_markdown/YYYY-MM-DD_HH-MM_[Topic]/` - markdown transcripts and translations (git-tracked)
 
 **BAD:**
 ```
-_!EmailConversations/Attachments_gitignore/2026-03-16_Contract/file.pdf
+_!EmailConversations/_attachments_gitignore/2026-03-16_Contract/file.pdf
 SharedAttachments/file.pdf
 ```
 
 **GOOD:**
 ```
-MariaSilva-Landlord/Attachments_gitignore/2026-03-16_16-50_RentalContract/contract.pdf
-MariaSilva-Landlord/Attachments/2026-03-16_16-50_RentalContract/contract.md
+MariaSilva-Landlord/_attachments_gitignore/2026-03-16_16-50_RentalContract/contract.pdf
+MariaSilva-Landlord/_attachments_markdown/2026-03-16_16-50_RentalContract/contract.md
 ```
 
 ## Links Completeness
@@ -606,14 +657,14 @@ All attachments, transcriptions, and translations must be recorded in the Links 
 ```
 ## Links and shared documents
 - **2026-03-16 16:50** - Rental Contract
-  - [contract.pdf](Attachments_gitignore/2026-03-16_16-50_RentalContract/contract.pdf)
+  - [contract.pdf](_attachments_gitignore/2026-03-16_16-50_RentalContract/contract.pdf)
 ```
 
 **GOOD:**
 ```
 ## Links and shared documents
 - **2026-03-16 16:50** - Rental Contract
-  - [contract.pdf](Attachments_gitignore/2026-03-16_16-50_RentalContract/contract.pdf)
-  - [contract.md](Attachments/2026-03-16_16-50_RentalContract/contract.md) (transcription)
-  - [contract_en.md](Attachments/2026-03-16_16-50_RentalContract/contract_en.md) (translation)
+  - [contract.pdf](_attachments_gitignore/2026-03-16_16-50_RentalContract/contract.pdf)
+  - [contract.md](_attachments_markdown/2026-03-16_16-50_RentalContract/contract.md) (transcription)
+  - [contract_en.md](_attachments_markdown/2026-03-16_16-50_RentalContract/contract_en.md) (translation)
 ```

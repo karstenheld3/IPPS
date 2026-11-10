@@ -11,10 +11,10 @@
     One or more YouTube URLs (video, playlist, or channel).
 
 .PARAMETER Topic
-    Topic name used in the output filename: .tmp_[TOPIC]_youtube-metadata.json
+    Topic name used in the output filename: .tmp_extracted/[TOPIC]_youtube-metadata.json
 
 .PARAMETER OutputFolder
-    Directory for the output JSON file.
+    Directory that receives the .tmp_extracted subfolder holding the output JSON file.
 
 .PARAMETER ToolsFolder
     Location for yt-dlp binary. Defaults to [WORKSPACE]/../.tools/youtube-downloader
@@ -51,7 +51,9 @@ begin {
     $ErrorActionPreference = "Stop"
 
     # Output file path
-    $OutputFile = Join-Path $OutputFolder ".tmp_${Topic}_youtube-metadata.json"
+    $ExtractedFolder = Join-Path $OutputFolder ".tmp_extracted"
+    $OutputFile = Join-Path $ExtractedFolder "${Topic}_youtube-metadata.json"
+    $OutputFile = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputFile)   # absolute: [IO.File] ignores the PowerShell location
 
     # Check existing file
     if ((Test-Path $OutputFile) -and -not $Force) {
@@ -67,8 +69,8 @@ begin {
     }
 
     # Ensure output folder exists
-    if (-not (Test-Path $OutputFolder)) {
-        New-Item -ItemType Directory -Path $OutputFolder -Force | Out-Null
+    if (-not (Test-Path $ExtractedFolder)) {
+        New-Item -ItemType Directory -Path $ExtractedFolder -Force | Out-Null
     }
 
     $allVideos = [System.Collections.Generic.List[object]]::new()
@@ -183,9 +185,9 @@ end {
         videos  = $allVideos.ToArray()
     }
 
-    # Write JSON with UTF-8 encoding
+    # Write JSON as UTF-8 without BOM ([Text.Encoding]::UTF8 writes a BOM)
     $jsonText = $output | ConvertTo-Json -Depth 4
-    [System.IO.File]::WriteAllText($OutputFile, $jsonText, [System.Text.Encoding]::UTF8)
+    [System.IO.File]::WriteAllText($OutputFile, $jsonText, (New-Object System.Text.UTF8Encoding $false))
 
     # Summary
     $videoWord = if ($allVideos.Count -eq 1) { "video" } else { "videos" }

@@ -68,7 +68,7 @@ Remove this comment block after creating the document.
 
 ## Candidates
 
-### D-01: Section 7 intro lacks decision framing (AP-ST-01)
+### D-01: Section 7 intro lacks decision framing (APAPL-ST-01)
 - **Issue**: Intro states content but not WHY or what decision it enables
 - **Fix**: Add one sentence linking to comparison matrix decision criteria
 - **Effort**: Minimal

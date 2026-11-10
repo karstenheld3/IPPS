@@ -93,8 +93,8 @@ Verify: [Observable success criteria]
 **STOP.** Report: items completed, final run status, and a clickable summary artifact list with multiple headings for each output group formatted as:
 ### [Output Group Heading]
 <what was done and what do these files contain>
-- [filename](file:///path) - <description of file purpose or content>
-(Do not wrap the list in code fences).
+- `relative/path/to/file` - <description of file purpose or content>
+(Do not wrap the list in code fences. Use backticked workspace-relative paths with forward slashes so Devin renders them as clickable file chips. Never use file:/// links or raw HTML).
 ````
 
 <!-- EXAMPLE: Reference only. Do not copy into new documents. Shows a completed 2-prompt file with optional frontmatter and headings (PRMT-FT-07/08). -->
@@ -180,7 +180,7 @@ Verify: Run `pnpm test:auth`. All tests pass. The specific vulnerability from st
 **STOP.** Report: test pass status, final run status, and a clickable summary artifact list with multiple headings for each output group formatted as:
 ### [Output Group Heading]
 <what was done and what do these files contain>
-- [filename](file:///path) - <description of file purpose or content>
-(Do not wrap the list in code fences).
+- `relative/path/to/file` - <description of file purpose or content>
+(Do not wrap the list in code fences. Use backticked workspace-relative paths with forward slashes so Devin renders them as clickable file chips. Never use file:/// links or raw HTML).
 ````
 `````

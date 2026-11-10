@@ -16,7 +16,7 @@ Scope: Deep problem analysis requiring multi-phase investigation. Use `/research
 
 ## Required Skills
 
-- @skills:write-documents for INVESTIGATION_LOG_TEMPLATE, INVESTIGATION_GUIDES, INVESTIGATION_LOG_RULES, STRUT_TEMPLATE
+- @skills:analysis-methods for INVESTIGATION_LOG_TEMPLATE, INVESTIGATION_GUIDES, INVESTIGATION_LOG_RULES; @skills:write-documents for STRUT_TEMPLATE
 
 ## MUST-NOT-FORGET
 
@@ -39,7 +39,7 @@ Scope: Deep problem analysis requiring multi-phase investigation. Use `/research
 ## Output
 
 ```
-__STRUT_[TOPIC].md          ← Investigation phase plan with log checkpoints
+_agentwork/__STRUT_[TOPIC].md  ← Investigation phase plan with log checkpoints
 _LOG_[TOPIC].md             ← Append-only investigation log
 ```
 
@@ -47,8 +47,8 @@ _LOG_[TOPIC].md             ← Append-only investigation log
 
 ## Phase 1: Setup
 
-1. Read @skills:write-documents `INVESTIGATION_LOG_TEMPLATE.md` for log file format
-2. Read @skills:write-documents `INVESTIGATION_GUIDES.md` for entry type guidance
+1. Read @skills:analysis-methods `INVESTIGATION_LOG_TEMPLATE.md` for log file format
+2. Read @skills:analysis-methods `INVESTIGATION_GUIDES.md` for entry type guidance
 3. Read @skills:write-documents `STRUT_TEMPLATE.md` for STRUT format
 
 4. Formulate investigation goal in one sentence
@@ -57,7 +57,7 @@ _LOG_[TOPIC].md             ← Append-only investigation log
 7. List known knowns: what is confirmed and verified
 8. List known unknowns: what needs to be discovered or tested
 
-9. Write STRUT plan (`__STRUT_[TOPIC].md`):
+9. Write STRUT plan (`_agentwork/__STRUT_[TOPIC].md` in the working folder):
    1. Define phases where Phase 1 is the highest-priority investigation approach
    2. Each phase has Objectives, Strategy, Steps, Deliverables, Transitions
    3. Each phase MUST include mandatory log checkpoint steps:

@@ -6,6 +6,10 @@ disable-model-invocation: true
 
 # Project Release Workflow
 
+**Goal**: Versioned release with release notes, git tag, and GitHub release.
+
+**Why**: Config-driven releases are repeatable across single-repo and multi-repo workspaces.
+
 Create a config-driven project release supporting single-repo and multi-repo workspaces. All release parameters are read from `[RELEASE_CONFIG]` in workspace NOTES.md. Zero hardcoded paths, repo names, or version formats.
 
 **Spec**: `_SPEC_RELEASE_PROJECT_WORKFLOW.md [RLSPROJ-SP01]`
@@ -154,7 +158,7 @@ User invokes /project-release
 ├─> [DEV REPO]
 │   ├─> Run tests (if test_command configured)
 │   │   └─> If tests fail: halt
-│   ├─> Research last evaluation results (from session artifacts, llm-evaluation skill outputs)
+│   ├─> Research last evaluation results (from session artifacts, llm-tools evaluation outputs)
 │   ├─> Generate dev release notes referencing product release
 │   ├─> Commit dev release notes
 │   │   └─> Commit message: `docs: add release notes for [TAG]`

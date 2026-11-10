@@ -2,7 +2,7 @@
 
 Enforceable rules for Python test suites using pytest. Apply when writing, reviewing, or debugging Python tests.
 
-**Writing quality:** Apply `APAPALAN_RULES.md`. Key rules: AP-PR-07 (be specific), AP-PR-09 (consistent patterns), AP-BR-01 (single line for single statements), AP-BR-04 (compact definitions)
+**Writing quality:** Apply `APAPALAN_RULES.md`. Key rules: APAPL-PR-07 (be specific), APAPL-PR-09 (consistent patterns), APAPL-BR-01 (single line for single statements), APAPL-BR-04 (compact definitions)
 
 ## Rule Index
 

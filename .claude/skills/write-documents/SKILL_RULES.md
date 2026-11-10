@@ -2,7 +2,7 @@
 
 Rules for writing skill folders and SKILL.md files.
 
-**Writing quality:** Apply `APAPALAN_RULES.md` to all skill content. Key rules for skills: AP-PR-07 (be specific), AP-BR-02 (sacrifice grammar for brevity), AP-NM-01 (one name per concept).
+**Writing quality:** Apply `APAPALAN_RULES.md` to all skill content. Key rules for skills: APAPL-PR-07 (be specific), APAPL-BR-02 (sacrifice grammar for brevity), APAPL-NM-01 (one name per concept).
 
 ## Rule Index
 
@@ -36,6 +36,15 @@ Content (CT)
 - SK-CT-04: Quick Config section with minimal copy-paste examples
 - SK-CT-05: No visual-only formatting in LLM-consumed reference files (no bold, no filler phrases)
 - SK-CT-06: No Document History section in skill documents (SKILL.md, _RULES, _GUIDE, _CHECKS)
+
+Architecture (AR)
+- SK-AR-01: Composite skill SKILL.md is a router only - routing table, shared rules, quick commands; no function-specific procedures
+- SK-AR-02: Composite skill function documents have NO YAML frontmatter (they are not separate skills)
+- SK-AR-03: Composite skill function documents use UPPERCASE naming (e.g., EVALUATION.md)
+- SK-AR-04: Shared scripts and configs live at composite skill root, not in function subfolders
+- SK-AR-05: Subfolder scripts resolve shared configs via Path(__file__).resolve().parent.parent
+- SK-AR-06: Composite skill routing table uses one line per function: `- **[Goal]** → [path]`
+- SK-AR-07: Composite skill requires 3+ distinct functions sharing infrastructure
 
 ## SK-HD-01: Frontmatter
 
@@ -133,3 +142,78 @@ Skills teach *how* and *when*, not *what parameters exist*.
 **BAD:** "`browser_click` accepts `ref` (string), `element` (string), `button` (enum: left, right, middle)"
 
 **GOOD:** "After navigation or click, always re-snapshot before clicking - refs are ephemeral"
+
+## SK-AR-01: Router-Only SKILL.md for Composite Skills
+
+Composite skill SKILL.md contains a routing table, shared rules, and quick commands. Function-specific procedures live in subfolder documents.
+
+**BAD:** Composite SKILL.md contains full procedures for evaluation, transcription, and computer-use (300+ lines).
+
+**GOOD:** Composite SKILL.md has a routing table (10 lines), shared rules (5 lines), quick commands (5 lines). Each function's procedures are in `evaluation/EVALUATION.md`, `transcription/TRANSCRIPTION.md`, `computer-use/COMPUTER_USE.md`.
+
+## SK-AR-02: No Frontmatter on Function Documents
+
+Function subfolder documents are guides within the composite skill, not separate skills. They must not have YAML frontmatter.
+
+**BAD:**
+```yaml
+---
+name: evaluation
+description: LLM evaluation pipelines
+---
+# Evaluation Guide
+```
+
+**GOOD:**
+```markdown
+# Evaluation Guide
+
+This function covers LLM-as-judge evaluation pipelines...
+```
+
+## SK-AR-03: Uppercase Function Document Names
+
+Function documents use UPPERCASE naming to distinguish from skill entry points (always `SKILL.md`).
+
+**BAD:** `evaluation/skill.md`, `transcription/guide.md`
+
+**GOOD:** `evaluation/EVALUATION.md`, `transcription/TRANSCRIPTION.md`, `computer-use/COMPUTER_USE.md`
+
+## SK-AR-04: Shared Resources at Root
+
+Scripts, configs, and data files shared across functions live at the composite skill root. Function subfolders contain only function-specific scripts and documents.
+
+**BAD:** `evaluation/model-pricing.json` (duplicated from root)
+
+**GOOD:** `model-pricing.json` at root, `evaluation/generate-questions.py` in subfolder
+
+## SK-AR-05: Subfolder Config Resolution
+
+Scripts in function subfolders resolve shared config files by navigating to the skill root: `Path(__file__).resolve().parent.parent`.
+
+**BAD:** `Path(__file__).parent / "model-pricing.json"` (looks in subfolder)
+
+**GOOD:** `Path(__file__).resolve().parent.parent / "model-pricing.json"` (looks at skill root)
+
+## SK-AR-06: Routing Table Format
+
+Composite skill SKILL.md contains a routing table with one line per function.
+
+**BAD:** Paragraph describing each function with inline links.
+
+**GOOD:**
+```markdown
+## Routing
+
+- **Evaluate LLM output** → `evaluation/EVALUATION.md`
+- **Transcribe images or audio** → `transcription/TRANSCRIPTION.md`
+- **Automate the desktop** → `computer-use/COMPUTER_USE.md`
+```
+
+## SK-AR-07: Minimum Three Functions
+
+Composite skill structure requires 3+ distinct functions sharing infrastructure. Fewer than 3 functions should use a flat SKILL.md with Intent Lookup.
+
+**BAD:** Composite skill with 2 subfolders (use Intent Lookup instead).
+
+**GOOD:** Composite skill with 3+ subfolders, each with its own workflow and shared root resources.

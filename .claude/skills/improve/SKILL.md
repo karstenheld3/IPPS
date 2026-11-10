@@ -33,6 +33,7 @@ Autonomous self-improvement in four phases: scan with pre-flight research, fix v
 - Preserve existing IDs (FR-XX, NFR-XX, DD-XX, IS-XX, TC-XX, TK-XX, etc.)
 - Never replicate `/verify` (rule-based formal verification) or `/critique` (logic flaw detection)
 - Research enrichment adds value through new evidence, not fault-finding
+- **Cascade: `gesetze-im-internet.de` Playwright only** - `search_web` / `read_url_content` crash the conversation
 
 ## Mandatory Re-read
 
@@ -46,18 +47,18 @@ Apply to ALL contexts before any context-specific steps.
 
 ### Issue Categories (all contexts)
 
-Apply @write-documents `SOCAS_RULES.md` with context-appropriate subset. SOCAS criteria map to these categories:
+Apply @skills:write-documents `SOCAS_RULES.md` with context-appropriate subset. SOCAS criteria map to these categories:
 
-1. Contradictions (SOCAS-01)
-2. Inconsistencies (SOCAS-01)
-3. Ambiguities (SOCAS-02)
-4. Underspecified behavior (SOCAS-06)
+1. Contradictions (SOCAS-CR-01)
+2. Inconsistencies (SOCAS-CR-01)
+3. Ambiguities (SOCAS-CR-02)
+4. Underspecified behavior (SOCAS-CR-06)
 5. Broken dependencies
-6. Incorrect/unverified assumptions (SOCAS-10)
-7. Flawed logic/thinking (SOCAS-10)
-8. Unnecessary complexity (SOCAS-11)
-9. New solutions for already solved problems (SOCAS-03)
-10. Concept overlap (SOCAS-03)
+6. Incorrect/unverified assumptions (SOCAS-CR-10)
+7. Flawed logic/thinking (SOCAS-CR-10)
+8. Unnecessary complexity (SOCAS-CR-11)
+9. New solutions for already solved problems (SOCAS-CR-03)
+10. Concept overlap (SOCAS-CR-03)
 11. Broken rules
 12. Data boundary violations: private data in general-purpose documents or illustrative examples (Pre-Write Privacy Gate, `agent-behavior.md`)
 13. GDPR/privacy exposure: personal data in logs, error messages, examples, or documents beyond intended audience
@@ -82,31 +83,31 @@ The selected improvement must pass this filter before applying. Answer:
 ### Quality Polish (Phase 4, all contexts)
 
 **APAPALAN** - apply to all written documents and communications:
-- **AP-PR-07**: Be specific - replace vague statements with concrete, verifiable ones
-- **AP-PR-09**: Consistent patterns - same concept = same format everywhere
-- **AP-BR-02**: Cut filler - drop articles, verbose constructions, redundant phrases
-- **AP-NM-01**: One name per concept - find and fix synonyms and polysemy
-- **AP-NM-05**: Use standard terms - replace invented jargon with established terminology
-- **AP-ST-01**: Goal first - reader knows WHY before HOW
+- **APAPL-PR-07**: Be specific - replace vague statements with concrete, verifiable ones
+- **APAPL-PR-09**: Consistent patterns - same concept = same format everywhere
+- **APAPL-BR-02**: Cut filler - drop articles, verbose constructions, redundant phrases
+- **APAPL-NM-01**: One name per concept - find and fix synonyms and polysemy
+- **APAPL-NM-05**: Use standard terms - replace invented jargon with established terminology
+- **APAPL-ST-01**: Goal first - reader knows WHY before HOW
 
 **MECT Writing** - apply to written documents:
-- **MW-VO-01**: Active voice - actor before action
-- **MW-VO-03**: Simplest verb - "review" not "carry out a review"
-- **MW-VO-04**: Obligation words - must/must not/should/may, never "shall"
-- **MW-WC-01**: Word-level precision - accuracy != precision, simple != simplistic
-- **MW-TD-01**: Naming structure - explicit name -> specifiers -> states -> mnemonics
-- **MW-HS-01**: Informative headings - state content, not topic
-- **MW-DT-01**: Four description lenses - intentional/functional/technical/contextual
+- **MECT-VO-01**: Active voice - actor before action
+- **MECT-VO-03**: Simplest verb - "review" not "carry out a review"
+- **MECT-VO-04**: Obligation words - must/must not/should/may, never "shall"
+- **MECT-WC-01**: Word-level precision - accuracy != precision, simple != simplistic
+- **MECT-TD-01**: Naming structure - explicit name -> specifiers -> states -> mnemonics
+- **MECT-HS-01**: Informative headings - state content, not topic
+- **MECT-DT-01**: Four description lenses - intentional/functional/technical/contextual
 
 **MECT Coding** - apply to code:
-- **MC-PR-01**: One name per concept across codebase - no synonyms across layers
-- **MC-PR-03**: No meta-words without qualifier - qualify Manager, Service, Handler
-- **MC-PR-05**: Error messages state what failed, why, and recovery action
-- **MC-PR-06**: Log messages self-contained - each line understandable alone
-- **MC-BR-04**: Boolean functions use predicate prefix (is_/has_/can_), not "check_"
-- **MC-CO-01**: Corresponding pairs use same word stem (open/close, encode/decode)
-- **MC-CO-03**: Convergent naming - same term in URL, payload, variable, log, docs
-- **MC-ND-06**: Disambiguate by qualifying, not renaming
+- **MECT-PR-01**: One name per concept across codebase - no synonyms across layers
+- **MECT-PR-03**: No meta-words without qualifier - qualify Manager, Service, Handler
+- **MECT-PR-05**: Error messages state what failed, why, and recovery action
+- **MECT-PR-06**: Log messages self-contained - each line understandable alone
+- **MECT-BR-04**: Boolean functions use predicate prefix (is_/has_/can_), not "check_"
+- **MECT-CO-01**: Corresponding pairs use same word stem (open/close, encode/decode)
+- **MECT-CO-03**: Convergent naming - same term in URL, payload, variable, log, docs
+- **MECT-ND-06**: Disambiguate by qualifying, not renaming
 
 ### Fix Rules (all contexts)
 
@@ -350,7 +351,7 @@ Detection: determine context from file naming and content, then apply matching s
 - Alternative interpretations not considered
 - Search queries too narrow (premature narrowing)
 - No Google search via Playwright executed (missed PDFs and public docs)
-- No `_SOURCES/` folder (sources not transcribed for permanence)
+- No `_sources/` folder (sources not transcribed for permanence)
 - Topic files shorter than 500 words for complex subjects
 - Limitations section empty or generic
 
@@ -369,28 +370,32 @@ Detection: determine context from file naming and content, then apply matching s
 
 **Integration**: New findings marked `[IMPROVED]`, challenged claims marked `[CHALLENGED]`. Update Sources section and Document History.
 
-## Minto Documents
+## Authored Documents
 
-**Lens**: Argument Architect - evaluate structural integrity, evidence density, and persuasive power of AMINTON trees.
+**Lens**: Editorial Architect - evaluate structural integrity, evidence placement, stylistic discipline, natural prose flow, and persuasive clarity.
 
-**Phase 1 reads**: `MINTO_RULES.md`, `MINTO_GUIDES.md` (@skills:write-documents), source material listed in draft header
+**Phase 1 reads**: Detect `[TYPE]` (`article`, `report`, `ebook`), `[ID]`, and `[PERSONA]` from header block or `[ID]-OPTIONS-` / `[ID]-DRAFT-` filename (`DRSYNART-FR-06`, `DRSYNART-DD-50`). Read Quality Improvement (QI) sections of `[AGENT_FOLDER]/skills/write-documents/document_types/[TYPE]_CHECKS.md`, `[AGENT_FOLDER]/skills/write-documents/AI_WRITING_RULES.md` (scoped to publishing document types only), and (when technique specified) `[AGENT_FOLDER]/skills/write-documents/writing_techniques/[ID]_CHECKS.md`; when Persona `[PERSONA]` is set, read `[AGENT_FOLDER]/skills/write-documents/writing_personas/[PERSONA].md`; source material listed in draft header.
 
-**Phase 1 research**: Evaluate evidence strength per branch. Search for stronger evidence, counter-arguments, or alternative framings that would strengthen the tree.
+**Phase 1 research**: Evaluate evidence strength per section. Search for stronger evidence, counter-arguments, or alternative framings that would strengthen the document.
 
 **Specialized issues** (in addition to GLOBAL):
-- Thin branches - answers with only 1 evidence item where 2-3 would strengthen credibility
-- Evidence recycling - same finding (Fnn) used more than 3 times across the tree, indicating narrow evidence base
-- Magnet drift - root argument (A) no longer connects to listener motivator after drill-down development
-- Question-answer mismatch - answer does not actually address the question posed
-- Closing inflation - closing adds nuance or claims not present in the tree
-- MECE (Mutually Exclusive, Collectively Exhaustive) violations - overlapping questions or answers within the same parent
+- Weak sections - sections with only 1 evidence item where 2-3 would strengthen credibility
+- Evidence recycling - same finding used excessively across the document, indicating narrow evidence base
+- Theme drift - core governing thought or promise no longer connects to audience motivator after section development
+- Section goal mismatch - section does not actually address its assigned role or question
+- Ending inflation - conclusion adds unproven nuance or claims not present in the body
+- Structural overlap - overlapping section goals or duplicate arguments across chapters
+- AI writing artifacts (`AI_WRITING_RULES.md` `AW-SO-01` through `AW-LX-03`, fixed in Phase 2 and polished in Phase 4) - staccato fragments, contrast snaps, mechanical tricolons, uniform or punctuation-flattened cadence, compressed objection blocks, signpost openers, reflex header/list inflation, structured generic prose, prestige-register buzzwords, qualifier stacking, formal conjunctive adverbs, and noun-heavy nominalization chains that produce punchy, flow-breaking robotic writing
 
 **Adversarial Collaborator techniques** (in addition to cross-context):
-- Challenge each Q1A1 claim: "What would make this false?"
-- For each E-node: "Is there a more compelling piece of evidence available?"
-- For the closing: "Does this summary actually follow from what was proved?"
+- Challenge each primary claim: "What would make this false?"
+- For each evidence node: "Is there a more compelling piece of evidence available?"
+- For counter-arguments (`AW-ST-02`): "Are objections compressed into stiff Q&A instead of developing how substance and reasoning checks (`SOCAS-CR-01..03`, `SOCAS-CR-10..11`) resolve the tension?"
+- For the ending: "Does this conclusion actually follow from what was proved?"
 
-**Improvement references**: `MINTO_RULES.md` MINTO-TI-*, MINTO-ME-*, MINTO-CL-* for structural targets
+**Phase 4 Quality Polish (Authored Documents addition)**: In addition to APAPALAN and MECT Writing, run a natural-flow polish pass using `AI_WRITING_RULES.md` (`AW-SY-01..05`, `AW-ST-01..04`, `AW-VO-01..04`, `AW-LX-01..03`) and the active persona's length and pacing profile (`writing_personas/[PERSONA].md`), replacing punchy, flow-breaking patterns and nominalization chains with continuous verbal prose.
+
+**Improvement references**: CHECKS QI items (`*-QI-01..06`) in companion `[TYPE]_CHECKS.md` and `[ID]_CHECKS.md` for quality improvement targets
 
 ## Translation Output
 
@@ -455,7 +460,7 @@ Detection: determine context from file naming and content, then apply matching s
    - `_TEST_*` or TC-XX IDs → TEST Plan
    - `_TASKS_*` / `__TASKS_*` or TK-XX IDs → TASKS Plan
    - `.py`, `.ps1`, `.js`, `.ts` etc. → Code
-   - `__MINTO-DRAFT_*` or `_MINTO_*` → Minto Documents
+   - `[ID]-OPTIONS-*`, `[ID]-DRAFT-*`, or header block with `**Document Type**` (article, report, ebook) → Authored Documents
    - `*_[LANG].md` or `*_[LANG].srt` with corresponding source file → Translation Output
    - Workflow folder `.md` files → Workflow
    - Skill folder files → Skill
@@ -475,7 +480,7 @@ Detection: determine context from file naming and content, then apply matching s
    - **Folder**: `__<foldername>_DEFERRED_IMPROVEMENTS.md` in that folder
    - **Conversation context**: `__<session_topic_or_timestamp>_DEFERRED_IMPROVEMENTS.md` in session folder
    - Example: scope `_INFO_CRAWLER_SOURCES.md` → `__INFO_CRAWLER_SOURCES_DEFERRED_IMPROVEMENTS.md`
-6. **Create STRUT plan** via `/write-strut` - Track phases 1-4 with checkboxes. Save as `.tmp_STRUT_IMPROVE_<YYYY-MM-DD_HH-MM>.md` in scope folder (or session folder in SESSION-MODE).
+6. **Create STRUT plan** via `/write-strut` - Track phases 1-4 with checkboxes. Save as `_agentwork/__STRUT_IMPROVE_<YYYY-MM-DD_HH-MM>.md` in scope folder (or session folder in SESSION-MODE).
 7. **Backup scoped files** - MANDATORY. Execute IMMEDIATELY after step 6, BEFORE Phase 1:
    - **Code files** (`.py`, `.ps1`, `.js`, `.ts`, `.jsx`, `.tsx`, `.css`, `.html`, etc.):
      - **NEVER create `_vN` copies** of source code files
@@ -593,7 +598,7 @@ If 3 consecutive fix attempts cause regressions:
 
 ## Cleanup
 
-1. Delete `.tmp_STRUT_IMPROVE_<timestamp>.md` - plan is complete
+1. Delete `_agentwork/__STRUT_IMPROVE_<timestamp>.md` - plan is complete
 2. Keep all `_vN` backups (non-code) - only user may delete them. Code improvements committed as single atomic commit for clean diff/revert.
 3. If `[DEFERRED_FILE]` has entries, suggest `/reconcile` for pragmatic review
 

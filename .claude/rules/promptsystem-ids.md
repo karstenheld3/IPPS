@@ -39,12 +39,12 @@ All documents and items must have unique IDs for traceability.
 **GLOB Usage:**
 
 Use `GLOB` for **tracking IDs only** (workspace-level failures, problems, tasks, bugs):
-- `GLOB-BG-*` - Bugs in `_BugFixes` session (PROJECT-MODE, cross-cutting)
+- `GLOB-BG-*` - Bugs in `_bugfixes` session (PROJECT-MODE, cross-cutting)
 - `GLOB-FL-*` - PromptSystem failures (sync errors, gate bypasses, tool issues)
 - `GLOB-PR-*` - Cross-cutting problems affecting multiple components
 - `GLOB-TK-*` - Workspace-wide tasks (deployments, refactoring)
 
-**_BugFixes Session:** Uses `GLOB` prefix for all tracking IDs because bugs there span multiple components. See `/bugfix` workflow for details.
+**_bugfixes Session:** Uses `GLOB` prefix for all tracking IDs because bugs there span multiple components. See `/bugfix` workflow for details.
 
 Do NOT use `GLOB` for **document IDs** (IN, SP, IP, TP, TK):
 - Named concepts get their own TOPIC: `EDIRDMDL-IN01`, `STRUTPLN-SP01`
@@ -90,6 +90,27 @@ Every document MUST have an ID in its header block.
 - `CRAWLENG-SP01` - Crawler Engine Spec 1
 - `CRAWLNXT-IP01` - V2 Crawler Implementation Plan 1
 - `CRAWLNXT-TP01` - V2 Crawler Test Plan 1
+
+## Deliverable Writing Document IDs (OPTIONS, DRAFT, Output)
+
+Deliverable writing documents produced by `/propose-*`, `/draft-*`, and `/write-*` (Layer 3) use a dedicated Doc ID format matching DD-37 and DD-45 to avoid collisions across concurrent candidate techniques.
+
+**Format:**
+- Options proposal: `[TOPIC]-[ID]-OPTIONS-[NN]`
+- Working draft: `[TOPIC]-[ID]-DRAFT-[NN]`
+- Final publication output: `[TOPIC]-[TYPE]-[NN]`
+
+**Rules:**
+- `[TOPIC]` - The project or session topic (7-14 uppercase characters, registered in `ID-REGISTRY.md`)
+- `[ID]` - Technique ID (`MINTO`, `ABTSTORY`, `KABOB`, etc.) when `using <ID>` is active, else document type (`ARTICLE`, `REPORT`, `EBOOK`)
+- `[TYPE]` - Document type uppercase: `ARTICLE`, `REPORT`, `EBOOK` (output document Doc ID is unchanged per DD-37)
+- `[NN]` - Two-digit sequence counter, continuous per `[ID]` in the working folder
+
+**Examples:**
+- `MUSICPROMO-KABOB-OPTIONS-01` - First KABOB options proposal for music promotion
+- `MUSICPROMO-ARTICLE-OPTIONS-01` - First untechniqued article options proposal
+- `MUSICPROMO-KABOB-DRAFT-01` - First KABOB draft
+- `MUSICPROMO-ARTICLE-01` - Final publication article deliverable
 
 ## Nested Document IDs
 

@@ -10,7 +10,8 @@ Create partitioned task documents from IMPL plans.
 
 ## Required Skills
 
-- @write-documents for TASKS template and document structure
+- @skills:write-documents for TASKS template and document structure, `TASKS_GUIDES.md` for HWH (Human Work Hours) estimation and model-aware task sizing
+- @skills:llm-tools `MODEL_INVENTORY.md` for model data
 
 ## MUST-NOT-FORGET
 
@@ -27,6 +28,7 @@ Create partitioned task documents from IMPL plans.
 1. **Partition IMPL into tasks**
    - Split IMPL steps into discrete, independently executable tasks
    - Apply STRATEGY if specified
+   - Estimate and size every task per `TASKS_GUIDES.md` Sections 1-3
 
 2. **Create Tasks Plan File**
    - Create `TASKS_[TOPIC].md` in session folder
@@ -59,7 +61,7 @@ Create partitioned task documents from IMPL plans.
 ## Task Overview
 
 - Total tasks: N
-- Estimated total: X HHW
+- Estimated total: X HWH
 - Parallelizable: M tasks
 
 ## Task 1 - Baseline (MANDATORY)
@@ -79,14 +81,14 @@ Run before starting any implementation:
   - Guardrails: [must not change X]
   - Depends: none
   - Parallel: [P] or blank
-  - Est: 0.5 HHW
+  - Est: 0.5 HWH
 
 - [ ] **[TOPIC]-TK-002** - Description
   - Files: [files affected]
   - Done when: [specific completion criteria]
   - Verify: [commands to run]
   - Depends: TK-001
-  - Est: 0.25 HHW
+  - Est: 0.25 HWH
 
 ## Task N - Final Verification (MANDATORY)
 

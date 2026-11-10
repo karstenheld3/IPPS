@@ -50,6 +50,12 @@ Document Placement (DP)
 - WS-DP-05: INFO files may reside in specs/ only if referenced as SPEC dependency
 - WS-DP-06: Folder enforcement tiers (optional by default, enforced with workspace-management)
 
+Standard Folders (SF)
+- WS-SF-01: .gitignore must contain the standard folder patterns `.tmp_*`, `*_gitignore/`, `_agentwork/`
+- WS-SF-02: Agent-created utility folders must follow the name anatomy of `agent-behavior.md` section Agent-Created Folders
+- WS-SF-03: [SESSION_ARCHIVE_FOLDER] must be `[WORKSPACE_FOLDER]/_archive_gitignore` unless the workspace NOTES.md documents another archive location
+- WS-SF-04: Workspace templates and folder trees must use the standard folder names only
+
 ## WS-FL-01: Required DevRepo Files
 
 DevRepo must contain:
@@ -249,3 +255,31 @@ GOOD: Agent checks if specs/ exists, places _SPEC_*.md there if yes, in workspac
 
 BAD: Workspace created via /workspace-setup but _SPEC_*.md left in workspace root
 GOOD: Workspace created via /workspace-setup, all _SPEC_*.md in specs/ folder
+
+## WS-SF-01: Standard .gitignore Patterns
+
+.gitignore must contain `.tmp_*` (deletable folders and files), `*_gitignore/` (never-versioned folders), and `_agentwork/` (agent artifacts). Verify with `git check-ignore`: `_agentwork/x`, `.tmp_jpgs/x`, `_download_gitignore/x` are ignored; `_sources/x` is not.
+
+BAD: .gitignore without `_agentwork/` - prompt and STRUT files in `_agentwork/` get committed
+GOOD: .gitignore with all three patterns
+
+## WS-SF-02: Utility Folder Name Anatomy
+
+Agent-created utility folders match `[lifecycle prefix][base name][_qualifier][git suffix]` with prefix `_` or `.tmp_`, lower case base name, suffix none or `_gitignore`. Core roles and registrations are defined in `agent-behavior.md` section Agent-Created Folders.
+
+BAD: `Output/`, `_Temp/`, `scratch/` (no prefix or upper case)
+GOOD: `_archive_gitignore/`, `_sources/`, `_markdown/`
+
+## WS-SF-03: Session Archive Folder
+
+[SESSION_ARCHIVE_FOLDER] defaults to `[WORKSPACE_FOLDER]/_archive_gitignore`. Archived sessions leave the tracked tree on purpose; git history keeps their content. Workspaces that want archived sessions tracked use `_archive` and document it in NOTES.md.
+
+BAD: [SESSION_ARCHIVE_FOLDER] = `[SESSIONS_FOLDER]\..\Archive` (no prefix, no suffix)
+GOOD: [SESSION_ARCHIVE_FOLDER] = `[WORKSPACE_FOLDER]\_archive_gitignore`
+
+## WS-SF-04: Template Folder Names
+
+Templates, questionnaires, and folder trees in the skill use the standard folder names only.
+
+BAD: Folder tree with an archive folder inside the sessions folder
+GOOD: Folder tree with `_archive_gitignore\` at workspace level

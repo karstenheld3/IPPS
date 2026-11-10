@@ -6,11 +6,15 @@ disable-model-invocation: true
 
 # Fail Workflow
 
+**Goal**: Failure recorded in FAILS.md with cause and prevention rule.
+
+**Why**: Recorded failures are read by `/prime` and prevent repeated mistakes.
+
 Record failures to prevent repetition. Can be triggered explicitly or run analysis to detect issues.
 
 ## Required Skills
 
-- @write-documents for FAILS_TEMPLATE.md structure
+- @skills:write-documents for FAILS_TEMPLATE.md structure
 
 ## MUST-NOT-FORGET
 

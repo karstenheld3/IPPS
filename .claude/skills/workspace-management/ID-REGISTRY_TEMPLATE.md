@@ -85,8 +85,8 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 
 - **PREN** - "Proper english" - precise natural language avoiding confusion, ambiguities, term conflicts
 - **AGEN** - "Agentic english" - proper english, enriched with semantics like `@mentions`, `/workflow`, `[INSTRUCTION]`, etc.
-- **HWT** - Human Work Time. Example: "max 0.5h HWT per task"
-- **AWT** - Agentic Work Time. Agent time estimate. Example: "complete in < 5mins AWT"
+- **HWH** - Human Work Hours. Human equivalent effort estimate. Example: "max 0.5 HWH per task"
+- **AWH** - Agent Work Hours. Agent time estimate. Example: "complete in < 5mins AWH"
 - **MEPI** - Most Executable Point of Information (used for research and decision making)
 - **MCPI** - Most Complete Point of Information (used for research)
 - **SOCAS** - Signs Of Confusion And Sloppiness (17 criteria)

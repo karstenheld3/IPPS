@@ -15,7 +15,7 @@ $endpoint = "https://api.indexnow.org/IndexNow"
 
 if ($Urls.Count -eq 1) {
     # Single URL: use GET
-    $submitUrl = "https://api.indexnow.org/indexnow?url=$($Urls[0])&key=$Key"
+    $submitUrl = "https://api.indexnow.org/indexnow?url=$([uri]::EscapeDataString($Urls[0]))&key=$([uri]::EscapeDataString($Key))"   # '&', '?', non-ASCII in the URL must be percent-encoded
     Write-Host "Submitting URL '$($Urls[0])'..." -ForegroundColor Yellow
     $response = Invoke-WebRequest -Uri $submitUrl -Method Get -TimeoutSec 15
 }
@@ -29,7 +29,8 @@ else {
     } | ConvertTo-Json -Depth 3
 
     Write-Host "Submitting $($Urls.Count) URLs to IndexNow..." -ForegroundColor Yellow
-    $response = Invoke-WebRequest -Uri $endpoint -Method Post -Body $body -ContentType "application/json; charset=utf-8" -TimeoutSec 30
+    $bodyBytes = (New-Object System.Text.UTF8Encoding $false).GetBytes($body)   # 5.1 would encode a string body as ISO-8859-1
+    $response = Invoke-WebRequest -Uri $endpoint -Method Post -Body $bodyBytes -ContentType "application/json; charset=utf-8" -TimeoutSec 30 -UseBasicParsing
 }
 
 switch ($response.StatusCode) {

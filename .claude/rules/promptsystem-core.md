@@ -33,8 +33,8 @@ Core definitions and structure for the development system.
 
 - **[RULES]**: The current set of agent rules in `[AGENT_FOLDER]/rules/`
 - **[WORKFLOWS]**: The current set of agent workflows in `[AGENT_FOLDER]/workflows/`
-- **[SKILLS]**: Agent Skills in `[AGENT_FOLDER]/skills/`
-- **[GRUC]**: Guides, Rules, Checks - pre-calculated compliance criteria. GUIDE + RULES in each skill folder; CHECKS in each skill folder (for skills) or `drift-control/` (for workflows). Exception: `write-documents` keeps all GRUC types in its own folder.
+- **[SKILLS]**: Agent Skills in `[AGENT_FOLDER]/skills/` (including `write-documents`, `research-methods`, `analysis-methods`)
+- **[GRUC]**: Guides, Rules, Checks - pre-calculated compliance criteria. GUIDE + RULES in each skill folder; CHECKS in each skill folder (for skills) or `drift-control/` (for workflows). Exception: `write-documents` and `analysis-methods` maintain consolidated checks.
 
 ### Document Types
 
@@ -96,7 +96,7 @@ Determines where implementation outputs are placed:
 
 - **IMPL-ISOLATED**: Implement separately from existing codebase
   - For: [PROVE], Proofs of Concept (POCs), prototypes, self-contained test scripts
-  - Output: `[SESSION_FOLDER]/`, `[SESSION_FOLDER]/poc/`, `T##_` (Topic) folders, or `S##_` (Step) folders
+  - Output: `[SESSION_FOLDER]/`, `[SESSION_FOLDER]/_poc/`, `T##_` (Topic) folders, or `S##_` (Step) folders
   - Existing code/config/runtime MUST NOT be affected
   - NEVER create folders in workspace root
   - **REQUIRES SESSION**: If no session exists, run `/session-new` first
@@ -150,8 +150,9 @@ Five dimensions define how the agent should behave:
 │   ├── rules/              # Agent rules (.md files)
 │   ├── workflows/          # Agent workflows (.md files)
 │   └── skills/             # Agent Skills (folders with SKILL.md)
-├── _Archive/               # Archived sessions
+├── _archive_gitignore/     # Archived sessions (not versioned)
 ├── _[SESSION_FOLDER]/       # Session folders start with underscore
+│   ├── _agentwork/         # Agent artifacts (ignored, deleted by /cleanup)
 │   ├── _IMPL_*.md          # Implementation plans
 │   ├── _INFO_*.md          # Information documents
 │   ├── _SPEC_*.md          # Specifications
@@ -177,11 +178,10 @@ Five dimensions define how the agent should behave:
 │   ├── rules/              # Agent rules (.md files)
 │   ├── workflows/          # Agent workflows (.md files)
 │   └── skills/             # Agent Skills (folders with SKILL.md)
-├── _Archive/               # Archived sessions (all projects)
+├── _archive_gitignore/     # Archived sessions (all projects, not versioned)
 ├── specs/                   # Workspace-level specs ([DEV_SPECS_FOLDER])
 ├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
 ├── [PROJECT_A]/
-│   ├── _Archive/           # Project A archived sessions
 │   ├── _[SESSION_FOLDER]/   # Project A sessions
 │   ├── src/                # Project A source code
 │   ├── NOTES.md            # Project A notes
@@ -204,7 +204,7 @@ Five dimensions define how the agent should behave:
 │   ├── rules/              # Agent rules (.md files)
 │   ├── workflows/          # Agent workflows (.md files)
 │   └── skills/             # Agent Skills (folders with SKILL.md)
-├── _Archive/               # Archived sessions
+├── _archive_gitignore/     # Archived sessions (not versioned)
 ├── _[SESSION_FOLDER]/       # Session folders start with underscore
 ├── specs/                   # Workspace-level specs ([DEV_SPECS_FOLDER])
 ├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
@@ -235,6 +235,8 @@ See workspace-management WORKSPACE-RULES.md WS-DP-01 through WS-DP-06 for enforc
 
 These folders are optional by default (see WS-DP-06). /prime does not create them. If folders exist, documents MUST be placed per the rules above. If folders do not exist and no session is active, the agent places documents directly in the workspace folder root. If a session is active, session-scoped documents (_IMPL_*, _TEST_*, _TASKS_*) go in the session folder.
 
+- **OPTIONS and DRAFT Placement (DRSYNART-DD-36)**: `[ID]-OPTIONS-NN_` and `[ID]-DRAFT-NN_` files are deliverables in the active working folder, never in `_agentwork/`. They persist across prompt sequences, hold user annotations and style sheets, and must not be deleted by `/cleanup`.
+
 <!-- END: Skill: workspace-management -->
 
 <!-- START: Core -->
@@ -259,7 +261,7 @@ Files starting with `__` (double underscore) are workflow/skill-generated proces
 Scaffolding has no value after the goal is reached. Deleted by `/cleanup` category 6.
 
 **Lifecycle tiers:**
-- `.tmp_` = single-run temp (scripts, metadata). Deleted within same workflow or by `/cleanup` category 1
+- `.tmp_` = single-run temp (scripts, rebuildable folders). Deleted within same workflow or by `/cleanup` category 1
 - `__` = multi-run scaffolding (execution plans, task tracking, templates). Persists during active work, deleted by `/cleanup` after goal reached
 - `_` = deliverable (findings, specs, plans). Never auto-deleted
 
@@ -271,9 +273,9 @@ Files starting with `.` follow Unix convention - hidden from directory listings.
 
 Append `_gitignore` before the extension to exclude any file or folder from git without editing `.gitignore`:
 - `data_gitignore.json` - excluded file
-- `scratch_gitignore/` - excluded folder
+- `_download_gitignore/` - excluded folder
 
-Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
+Patterns in `.gitignore`: `*_gitignore.*`, `*_gitignore/`, `.tmp_*`, `_agentwork/`. Standard utility folder names and semantics: `agent-behavior.md` section Agent-Created Folders
 
 <!-- END: Core -->
 
@@ -289,7 +291,7 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 <!-- START: Skill: session-management -->
 
 - **[SESSIONS_FOLDER]**: Base folder for sessions (default: `[WORKSPACE_FOLDER]`, override in `!NOTES.md`)
-- **[SESSION_ARCHIVE_FOLDER]**: Archive folder for closed sessions (default: `[SESSION_FOLDER]/../_Archive`)
+- **[SESSION_ARCHIVE_FOLDER]**: Archive folder for closed sessions (default: `[WORKSPACE_FOLDER]/_archive_gitignore`)
 - **[SESSION_FOLDER]**: Absolute path of currently active session folder
 <!-- END: Skill: session-management -->
 
@@ -317,7 +319,7 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 - `/learn` - Extract learnings from resolved problems
 - `/prime` - Load workspace context
 - `/project-release` - Create a dated release with comprehensive release notes
-- `/propose-minto` - Generate AMINTON argument candidates from research material
+- `/propose-article` - Propose article outline candidates with scoring and recommendation
 - `/reconcile` - Pragmatic review of critique and fact-check findings
 - `/remove` - Remove session content, conversation content, or specific files with preview and confirmation
 - `/rename` - Global/local refactoring with verification
@@ -332,9 +334,9 @@ Patterns in `.gitignore`: `*_gitignore.*` and `*_gitignore/`
 - `/transcribe` - PDF/web to markdown transcription
 - `/translate` - Translate markdown or PDF files to target languages
 - `/verify` - Verify work against specs and rules
+- `/write-article` - Author finished article with line pass, copy pass, and release check
 - `/write-impl-plan` - Create implementation plan from spec
 - `/write-info` - Create INFO document from research
-- `/write-minto` - Develop full Minto Pyramid article from draft
 - `/write-spec` - Create specification from requirements
 - `/write-strut` - Create STRUT plans with proper format
 - `/write-tasks-plan` - Create tasks plan from IMPL/TEST

@@ -162,8 +162,8 @@ e:\Dev\IPPS\_Sessions\_2026-05-14_CrawlerRefactor/
       NOTES.md                           4 KB
       PROBLEMS.md                        2 KB
       PROGRESS.md                        3 KB
-      poc/test_crawler.py               12 KB
-      poc/results.json                 3.7 MB
+      _poc/test_crawler.py              12 KB
+      _poc/results.json                3.7 MB
   - References found: 3
       ID-REGISTRY.md:142 - CRAWLENG topic registered
       !PROGRESS.md:28 - "Crawler refactor complete (2026-05-14)"
@@ -182,6 +182,10 @@ e:\Dev\IPPS\_Sessions\_2026-05-14_CrawlerRefactor\_INFO_CRAWLENG-01.md
 
 WARNING: Other documents depend on this file. Proceeding with deletion.
 ```
+
+## No Context Match
+
+If the target matches no context above, treat it as Specific Path and preview before removal.
 
 # EXECUTION
 

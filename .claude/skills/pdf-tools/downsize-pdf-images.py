@@ -94,7 +94,7 @@ def downsize_pdf(input_pdf: str, output_dir: str, dpi: int, preset: str = None) 
   ]
     
   try:
-    result = subprocess.run(gs_args, capture_output=True, text=True)
+    result = subprocess.run(gs_args, capture_output=True, encoding='utf-8', errors='replace')   # stderr only for display
         
     if result.returncode != 0:
       print(f"ERROR: Ghostscript failed")

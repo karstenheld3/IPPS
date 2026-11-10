@@ -188,7 +188,7 @@ Scan the entire current chat for:
    - Note which platform/URL
 
 4. **Attachments mentioned**
-   - Create `Attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/` structure entries
+   - Create `_attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/` structure entries
    - Link in Log and History
 
 5. **Decisions and actions**

@@ -17,20 +17,20 @@ Scope: Single-topic research producing one `_INFO_*.md`. Use `/deep-research` fo
 ## Required Skills
 
 Read before proceeding:
-- `[AGENT_FOLDER]/rules/research-and-report-writing-rules.md` for Most Executable Point of Information (MEPI) / Most Complete Point of Information (MCPI) research depth
-- @write-documents `INFO_GUIDES.md` and `INFO_RULES.md` for INFO document structure
-- @write-documents `APAPALAN_RULES.md` for writing quality
+- @skills:research-methods `RESEARCH_GUIDES.md` for Most Executable Point of Information (MEPI) / Most Complete Point of Information (MCPI) research depth
+- @skills:write-documents `INFO_GUIDES.md` and `INFO_RULES.md` for INFO document structure
+- @skills:write-documents `APAPALAN_RULES.md` for writing quality
 
 ## MUST-NOT-FORGET
 
-- Evaluate sources with Signs of Confusion and Sloppiness (SOCAS) - apply @write-documents `SOCAS_RULES.md` Source Evaluation subset
+- Evaluate sources with Signs of Confusion and Sloppiness (SOCAS) - apply @skills:write-documents `SOCAS_RULES.md` Source Evaluation subset
 - Summary section mandatory - copy/paste ready list at document top
 - Label ALL findings: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`
 - MEPI by default (2-3 curated options); MCPI only when completeness explicitly needed
 - Deep beats wide - tokens on 2-3 well-researched options over 10+ superficial ones
 - Document exclusions - what was NOT considered and why
 - Keep ALL sources - even if findings were minimal
-- Site exceptions - use Playwright browser (NOT `search_web`/`read_url_content`) for: `gesetze-im-internet.de`
+- **Cascade: `gesetze-im-internet.de` Playwright only** - `search_web` / `read_url_content` crash the conversation
 
 ## Output
 
@@ -57,8 +57,8 @@ _INFO_[TOPIC]-IN[NN]_[Title].md
 
 Apply to ALL branches below (profiles and general topics alike):
 
-1. All INFO-* rules from @write-documents `INFO_RULES.md` apply to every output document (profiles are specialized INFO documents)
-2. All APAPALAN rules from @write-documents `APAPALAN_RULES.md` apply to all written content
+1. All INFO-* rules from @skills:write-documents `INFO_RULES.md` apply to every output document (profiles are specialized INFO documents)
+2. All APAPALAN rules from @skills:write-documents `APAPALAN_RULES.md` apply to all written content
 3. Verification labels (`[ASSUMED]`/`[VERIFIED]`/`[TESTED]`/`[PROVEN]`) required on factual claims
 4. Inline source links at first mention per INFO-SC-05
 
@@ -68,8 +68,8 @@ Apply to ALL branches below (profiles and general topics alike):
 
 Detect by: research subject is a **person** (name, email address, contact).
 
-1. Read @skills:research-methods `profiles/PERSONAL_PROFILE_TEMPLATE.md` for document structure
-2. Read @skills:research-methods `profiles/PERSONAL_PROFILE_RULES.md` for quality rules (PP-* rules)
+1. Read @skills:research-methods `research_profiles/PERSONAL_PROFILE_TEMPLATE.md` for document structure
+2. Read @skills:research-methods `research_profiles/PERSONAL_PROFILE_RULES.md` for quality rules (PP-* rules)
 3. Follow template section by section, applying all PP-* rules
 4. Skip sections with no findings (PP-AC-02) but fill all others (PP-HD-01)
 5. Apply MUST-NOT-FORGET items (verification labels, source retention, SOCAS)
@@ -78,8 +78,8 @@ Detect by: research subject is a **person** (name, email address, contact).
 
 Detect by: research subject is a **non-commercial organization** (university, association, NGO, government agency, foundation, standards body, research institute, professional network).
 
-1. Read @skills:research-methods `profiles/ORGA_PROFILE_TEMPLATE.md` for document structure
-2. Read @skills:research-methods `profiles/ORGA_PROFILE_RULES.md` for quality rules (OP-* rules)
+1. Read @skills:research-methods `research_profiles/ORGA_PROFILE_TEMPLATE.md` for document structure
+2. Read @skills:research-methods `research_profiles/ORGA_PROFILE_RULES.md` for quality rules (OP-* rules)
 3. Follow template section by section, applying all OP-* rules
 4. Skip sections with no findings but fill all others
 5. Apply MUST-NOT-FORGET items (verification labels, source retention, SOCAS)
@@ -88,8 +88,8 @@ Detect by: research subject is a **non-commercial organization** (university, as
 
 Detect by: research subject is a **commercial company** (startup, corporation, GmbH, LLC, AG, Ltd, SaaS vendor, consultancy, agency).
 
-1. Read @skills:research-methods `profiles/COMPANY_PROFILE_TEMPLATE.md` for document structure
-2. Read @skills:research-methods `profiles/COMPANY_PROFILE_RULES.md` for quality rules (CP-* rules)
+1. Read @skills:research-methods `research_profiles/COMPANY_PROFILE_TEMPLATE.md` for document structure
+2. Read @skills:research-methods `research_profiles/COMPANY_PROFILE_RULES.md` for quality rules (CP-* rules)
 3. Follow template section by section, applying all CP-* rules
 4. Skip sections with no findings but fill all others
 5. Apply MUST-NOT-FORGET items (verification labels, source retention, SOCAS)
@@ -110,3 +110,6 @@ Detect by: research subject is NOT a person, organization, or company.
 6. Write sources section (all URLs with primary findings)
 7. Write summary section at document top (copy/paste ready)
 
+## No Context Match
+
+If no profile matches, use General Topic.

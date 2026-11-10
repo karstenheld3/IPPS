@@ -3,9 +3,14 @@ name: reconcile
 description: Pragmatic review of critique and fact-check findings with actionable improvements
 disable-model-invocation: true
 ---
+
 <PromptSystem EmojisAllowed=true />
 
 # Pragmatic Programmer
+
+**Goal**: Actionable improvements derived from critique and fact-check findings.
+
+**Why**: Unfiltered findings contain false positives and over-engineering; pragmatic review keeps only changes with real benefit.
 
 Pragmatic review of critique and fact-check findings with actionable improvements.
 
@@ -16,8 +21,8 @@ Pragmatic review of critique and fact-check findings with actionable improvement
 ## Required Skills
 
 Invoke based on context:
-- @write-documents for reading FAILS.md and critique/fact-check reviews (use FAILS_TEMPLATE.md, CRITIQUE_TEMPLATE.md, FACT-CHECK_TEMPLATE.md)
-- @coding-conventions for code improvements
+- @skills:write-documents for reading FAILS.md and critique/fact-check reviews (use FAILS_TEMPLATE.md, CRITIQUE_TEMPLATE.md, FACT-CHECK_TEMPLATE.md)
+- @skills:coding-conventions for code improvements
 
 ## Input Files
 

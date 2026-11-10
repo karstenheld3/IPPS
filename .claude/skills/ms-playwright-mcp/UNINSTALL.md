@@ -42,7 +42,7 @@ if (Test-Path $npxCacheDir) {
 
 if (Test-Path $configPath) {
     try {
-        $config = Get-Content $configPath -Raw | ConvertFrom-Json -AsHashtable
+        $config = Get-Content -LiteralPath $configPath -Raw -Encoding utf8 | ConvertFrom-Json -AsHashtable
         $hasConfig = $config.mcpServers -and $config.mcpServers.ContainsKey("playwright")
     } catch { }
 }
@@ -92,7 +92,7 @@ Write-Host ""
 if ($removeConfig -and $hasConfig) {
     try {
         # Re-read config fresh to ensure we have current data
-        $configContent = Get-Content $configPath -Raw
+        $configContent = Get-Content -LiteralPath $configPath -Raw -Encoding utf8
         $config = $configContent | ConvertFrom-Json -AsHashtable
         
         # Handle PSCustomObject conversion for mcpServers
@@ -111,7 +111,7 @@ if ($removeConfig -and $hasConfig) {
             Copy-Item $configPath $backupPath -ErrorAction Stop
             
             $config.mcpServers.Remove("playwright")
-            $config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8 -ErrorAction Stop
+            $config | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $configPath -Encoding utf8NoBOM -ErrorAction Stop
             Write-Host "[C] Removed MCP config entry (backup: $backupPath)" -ForegroundColor Green
         }
     } catch {

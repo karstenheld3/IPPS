@@ -7,7 +7,7 @@ Template for creating STRUT plans (Structured Thinking notation) that can be emb
 ## When to Use
 
 STRUT plans go to:
-- **`__STRUT_[TOPIC].md`** - Standalone scaffolding file (default, deleted by `/cleanup`)
+- **`_agentwork/__STRUT_[TOPIC].md`** - Standalone scaffolding file in the working folder (default, deleted by `/cleanup`)
 - **IMPL documents** - Embedded in implementation plans
 - **TASKS documents** - Embedded in task plans
 
@@ -30,7 +30,7 @@ NEVER embed STRUTs in tracking documents (PROGRESS.md, PROBLEMS.md, NOTES.md, FA
 ├─ Objectives:
 │   ├─ [ ] Goal 1 ← P1-D1, P1-D2
 │   └─ [ ] Goal 2 ← P1-D3
-├─ Strategy: Approach description (may include AWT estimate)
+├─ Strategy: Approach description (may include AWH estimate)
 │   - Model: Claude Opus for analysis and implementation, Sonnet for fixes, Haiku for chores
 │   - Sub-item if needed
 ├─ [ ] P1-S1 [VERB](params)
@@ -53,7 +53,7 @@ NEVER embed STRUTs in tracking documents (PROGRESS.md, PROBLEMS.md, NOTES.md, FA
 ## Node Types
 
 1. **Objectives** - Success criteria linked to Deliverables (`← P1-Dx`), checkboxes, no IDs
-2. **Strategy** - Approach summary, may include AWT estimates and model hints
+2. **Strategy** - Approach summary, may include AWH estimates and model hints
 3. **Steps** - Actions using AGEN verbs (flat list with checkboxes and IDs)
 4. **Deliverables** - Expected outputs (checkboxes with IDs)
 5. **Transitions** - Flow control conditions at phase end
@@ -174,7 +174,7 @@ Use `← Px-Sy` suffix for explicit dependencies within or after Concurrent bloc
 ├─ Objectives:
 │   ├─ [ ] Know what to build ← P1-D3
 │   └─ [ ] Assess complexity ← P1-D1, P1-D2
-├─ Strategy: Ready for design in 5min AWT
+├─ Strategy: Ready for design in 5min AWH
 ├─ [ ] P1-S1 [GATHER](requirements from ticket)
 ├─ [ ] P1-S2 [ANALYZE](existing code)
 ├─ [ ] P1-S3 [ASSESS](complexity)

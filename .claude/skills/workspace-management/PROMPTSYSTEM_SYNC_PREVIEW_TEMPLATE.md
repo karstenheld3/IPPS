@@ -84,7 +84,7 @@
   - Delete: 2 deprecated files
       workflows\workspace-create.md
       skills\workspace-management\WORKSPACE_CREATION_QUESTIONNAIRE.md
-  - Excluded skills: llm-transcription, youtube-downloader, travel-info
+  - Excluded skills: llm-tools, youtube-downloader, travel-info
 
 .devin
   - Add: 158 new files
@@ -95,7 +95,7 @@
       workflows\cleanup.md
       skills\coding-conventions\SKILL.md
       skills\coding-conventions\PYTHON-RULES.md
-  - Excluded skills: llm-transcription, youtube-downloader, travel-info, hosting, seo-tools, pdf-tools, image-tools, google-account, llm-computer-use, llm-evaluation, ms-playwright-mcp, playwriter-mcp, windows-desktop-control, devin-auto-model-switcher
+  - Excluded skills: llm-tools, youtube-downloader, travel-info, hosting, seo-tools, pdf-tools, image-tools, google-account, ms-playwright-mcp, playwriter-mcp, windows-desktop-control, devin-auto-model-switcher
 
 .devin
   [UP TO DATE] 287 files unchanged

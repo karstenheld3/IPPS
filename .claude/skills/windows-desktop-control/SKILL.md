@@ -1,6 +1,6 @@
 ---
 name: windows-desktop-control
-description: Utilities for Windows desktop automation: screenshots, window management, keyboard/mouse simulation
+description: "Utilities for Windows desktop automation: screenshots, window management, keyboard/mouse simulation."
 disable-model-invocation: true
 ---
 

@@ -234,7 +234,7 @@ Use templates from this skill folder:
    └── Everything updated, committed, synced to project/workspace
 
 7. ARCHIVE: User archives session
-   └── Session folder moved to _Archive/
+   └── Session folder moved to [WORKSPACE_FOLDER]/_archive_gitignore/
 ```
 
 ## ID System

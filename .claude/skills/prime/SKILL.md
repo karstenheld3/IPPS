@@ -6,6 +6,16 @@ disable-model-invocation: true
 
 # Prime Context Workflow
 
+**Goal**: Workspace context loaded: rules, tracking documents, and workspace scenario.
+
+**Why**: An agent without context repeats past mistakes and ignores project conventions.
+
+## MUST-NOT-FORGET
+
+- Skip `.md` files starting with `_` and all folders starting with `_` or `.tmp_`
+- Read agent rules before priority (`!`) documents
+- Final output is a single row: files read, code files, mode
+
 ## Step 1: Read Agent Rules
 
 Read all .md files in the agent rules folder:
@@ -32,7 +42,7 @@ find_by_name Pattern="*.md" SearchDirectory="[WORKSPACE_FOLDER]" Type="file" Exc
 ## Exclusions
 
 - Skip .md files starting with "_"
-- Skip ALL folders starting with "_" (task folders, archive, temp, tools, etc.)
+- Skip ALL folders starting with "_" or ".tmp_" (task folders, archive, temp, tools, rebuildable folders, etc.)
 
 ## Step 4: Detect Workspace Scenario
 

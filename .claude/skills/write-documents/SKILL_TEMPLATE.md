@@ -78,3 +78,85 @@ Include based on skill complexity:
 
 **Tier 3: Comprehensive** (200+ lines, 5-8 files)
 - All sections, multiple reference files, config examples
+
+## Composite Skill Template
+
+When a skill has 3+ distinct functions sharing scripts, configs, or data, use the composite pattern. SKILL.md becomes a router; each function gets its own subfolder guide.
+
+### Composite SKILL.md Structure
+
+```markdown
+---
+name: [skill-name]
+description: [When to apply. Cover all functions and shared infrastructure in 1-3 sentences.]
+---
+
+# [Skill Title]
+
+One skill for [domain]. Root holds shared parts; function subfolders hold specialized workflows.
+
+## Routing
+
+Read this file, then jump to exactly one target:
+
+- **[Goal A]** → `[subfolder-a]/[DOCUMENT_A].md`
+- **[Goal B]** → `[subfolder-b]/[DOCUMENT_B].md`
+- **[Goal C]** → `[subfolder-c]/[DOCUMENT_C].md`
+- **Look up shared data** → `[SHARED_DATA.md]` or `[shared-config.json]`
+- **Install or remove** → `SETUP.md`, `UNINSTALL.md`
+- **Verify the skill works** → `[selftest-script]`
+
+## Do NOT Apply When
+
+- [Related but separate concern - point to the correct skill]
+
+## Folder Layout
+
+```
+[skill-name]/
+├── SKILL.md                      this file (routing)
+├── SETUP.md, UNINSTALL.md        shared setup
+├── [shared-script.py]            shared scripts at root
+├── [shared-config.json]          shared data at root
+├── [subfolder-a]/                function A
+│   └── [DOCUMENT_A].md           function guide (no frontmatter)
+├── [subfolder-b]/                function B
+│   └── [DOCUMENT_B].md           function guide
+└── [subfolder-c]/                function C
+    └── [DOCUMENT_C].md           function guide
+```
+
+## Shared Rules
+
+- All scripts resolve shared configs from the `[skill-name]/` root. Scripts in subfolders use `Path(__file__).resolve().parent.parent`
+- [Domain-specific shared rules]
+- [Tool-specific shared rules]
+
+## Quick Commands
+
+```powershell
+[Minimal copy-paste commands for each function]
+```
+```
+
+### Function Document Structure (in subfolders)
+
+```markdown
+# [Function Name] Guide
+
+[One-liner: what this function does within the composite skill.]
+
+## Procedures
+
+### 1. [Procedure Name]
+[Steps]
+
+### 2. [Procedure Name]
+[Steps]
+
+## Gotchas
+
+- **[Short label]** - [Explanation and fix]
+```
+
+No YAML frontmatter. No MUST-NOT-FORGET (that lives in the root SKILL.md). No References section (the root SKILL.md handles discovery).

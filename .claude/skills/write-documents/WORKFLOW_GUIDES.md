@@ -1,6 +1,6 @@
 # Workflow Writing Guide
 
-Strategic guide for creating well-structured IPPS workflows. Read BEFORE writing a workflow. See `specs/_SPEC_IPPS_WORKFLOWS.md [IPPSWFLW-SP01]` for the full specification.
+Strategic guide for creating well-structured IPPS workflows. Read BEFORE writing a workflow.
 
 ## 1. Determine Workflow Purpose
 

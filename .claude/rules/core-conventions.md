@@ -9,6 +9,7 @@ Universal formatting and writing conventions for all documents.
 ## Text Style (Exception: transcribed or external documents)
 
 - Use ASCII "double quotes" or 'single quotes'. Never use Non-ASCII quotes unless explicitly asked.
+- Expect international readers who are not native speakers. Write the explicit claim, not a figurative stand-in: rewrite idioms, slang, and region-dependent phrases as the claim they carry; keep established precise terms (MECT-WC-10 in @skills:write-documents `MECT_WRITING_RULES.md`)
 - No emojis in documentation (see Document Rule Exceptions below)
 - Avoid Markdown tables; use unnumbered lists with indented properties (see Document Rule Exceptions below)
 - Use Unicode box-drawing characters for structures:
@@ -51,7 +52,7 @@ Some values are **lexical, not semantic** - every character matters. Addresses, 
 - **Tax ID**: 123456789 (obtained 2026-03-10) [LITERAL]
 ```
 
-`[LITERAL]` = copy character-for-character, AP-PR-13 applies. Optional source after colon.
+`[LITERAL]` = copy character-for-character, APAPL-PR-13 applies. Optional source after colon.
 
 **Known GenAI corruption categories** (why this rule exists):
 - **Unicode normalization**: `o` → `º`, `.` → `ª`, straight quotes → curly quotes, half-width → full-width (CJK)
@@ -83,7 +84,7 @@ Never use locale-dependent formats (`03/19/2026`, `19.03.2026`, `March 19, 2026`
 
 ## Header Block
 
-All documents start with:
+All documents start with (exceptions below):
 
 ```
 # [Document Type]: [Title]
@@ -99,9 +100,13 @@ All documents start with:
 - `_SPEC_[Y].md [TOPIC-SP02]` (explicitly exclude if might seem related)
 ```
 
-- Doc ID is required for all documents
+- Doc ID is required for all documents except the exceptions below
 - Reference other docs by filename AND Doc ID: `_SPEC_CRAWLER.md [CRWL-SP01]`
 - Omit optional fields if not applicable: Target file, Depends on, Does not depend on
+
+**Exceptions** (no Header Block):
+1. Publishing documents (articles, reports, ebooks, blog posts, whitepapers) - the reader sees only title and content; no Header Block, no Doc ID
+2. Prompts, workflows, skills - use the header and sections defined in their templates and rules (`PROMPTS_RULES.md`, `WORKFLOW_RULES.md`, `SKILL_RULES.md`)
 
 ## Document History Section
 
@@ -120,6 +125,8 @@ Always at document end, reverse chronological order:
 ```
 
 **Action prefixes:** Added, Changed, Fixed, Removed, Moved
+
+**Exception:** LLM-consumed instruction files (rules, workflows, skills, standalone prompts) have no history section - see WF-CT-07 and SK-CT-06.
 
 ## Document Rule Exceptions
 
@@ -170,7 +177,7 @@ Documents may opt-in to use Markdown tables or emojis by adding a PromptSystem t
 
 **Excluded from the no-tables default (tables ALWAYS allowed, no opt-in tag needed):**
 - The following document types are exempt from the default "no tables" rule. They may use Markdown tables freely without `<PromptSystem MarkdownTablesAllowed=true />`:
-  - Minto Pyramid articles (output of `/write-minto`, `/propose-minto`)
+  - Minto Pyramid articles (output of `/write-article` or `/propose-article` using MINTO)
   - Blog posts and essays
   - Whitepapers and publication-ready reports
   - Any document whose primary purpose is to be read as prose (not reference/lookup)
@@ -204,12 +211,12 @@ All written output - documents, code comments, log messages, commit messages, co
 **Why:** Imprecise writing causes wrong assumptions. Verbose writing wastes attention. Precision prevents misunderstanding; brevity respects the reader's time. Precision always wins when the two conflict.
 
 **Minimal subset (always apply):**
-- **AP-PR-07**: Be specific - no "handles errors appropriately", say "retry 3 times with exponential backoff"
-- **AP-PR-09**: Consistent patterns - same concept = same format everywhere
-- **AP-BR-02**: Sacrifice grammar for brevity - drop articles, filler, verbose constructions
-- **AP-NM-01**: One name per concept - no synonyms, no polysemy
-- **AP-NM-05**: Use standard terms - don't invent new names for known concepts
-- **AP-ST-01**: Goal first - reader knows WHY before HOW
+- **APAPL-PR-07**: Be specific - no "handles errors appropriately", say "retry 3 times with exponential backoff"
+- **APAPL-PR-09**: Consistent patterns - same concept = same format everywhere
+- **APAPL-BR-02**: Sacrifice grammar for brevity - drop articles, filler, verbose constructions
+- **APAPL-NM-01**: One name per concept - no synonyms, no polysemy
+- **APAPL-NM-05**: Use standard terms - don't invent new names for known concepts
+- **APAPL-ST-01**: Goal first - reader knows WHY before HOW
 
 ## Transcription Output
 

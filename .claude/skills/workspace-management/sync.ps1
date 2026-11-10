@@ -146,20 +146,49 @@ function Invoke-FileFilter {
     $excludePatterns = @($TargetEntry.exclude)
     if (-not $excludePatterns) { $excludePatterns = @() }
 
+    # Default built-in exclude patterns for build artifacts, VCS, and temporary files
+    $defaultExcludes = @(
+        '**/__pycache__/**',
+        '__pycache__/**',
+        '*.pyc',
+        '**/*.pyc',
+        '**/.git/**',
+        '.git/**',
+        '**/.pytest_cache/**',
+        '.pytest_cache/**',
+        '**/.mypy_cache/**',
+        '.mypy_cache/**',
+        '**/.tmp_*',
+        '.tmp_*',
+        '**/*.tmp',
+        '*.tmp',
+        '**/.DS_Store',
+        '.DS_Store',
+        '**/Thumbs.db',
+        'Thumbs.db'
+    )
+
     foreach ($file in $Files) {
         $relPath = $file.RelativePath
         $excludeReason = $null
 
-        # Step 1: target include (whitelist)
-        $passesInclude = $false
-        foreach ($pattern in $includePatterns) {
-            if (Test-GlobMatch -Path $relPath -Patterns @($pattern)) {
-                $passesInclude = $true
-                break
-            }
+        # Step 0: built-in hygiene exclusion
+        if (Test-GlobMatch -Path $relPath -Patterns $defaultExcludes) {
+            $excludeReason = 'default exclude'
         }
-        if (-not $passesInclude) {
-            $excludeReason = 'target include'
+
+        # Step 1: target include (whitelist)
+        if ($null -eq $excludeReason) {
+            $passesInclude = $false
+            foreach ($pattern in $includePatterns) {
+                if (Test-GlobMatch -Path $relPath -Patterns @($pattern)) {
+                    $passesInclude = $true
+                    break
+                }
+            }
+            if (-not $passesInclude) {
+                $excludeReason = 'target include'
+            }
         }
 
         # Step 2: target exclude (blacklist)
@@ -237,9 +266,14 @@ function Compare-Files {
                     $isLocallyModified = $false
                     if ($LastSync) {
                         try {
-                            $lastSyncDate = [datetime]::Parse($LastSync)
-                            $targetLastWrite = (Get-Item -LiteralPath $targetPath).LastWriteTime
-                            if ($targetLastWrite -gt $lastSyncDate) {
+                            $lastSyncUtc = [datetime]::Parse(
+                                $LastSync,
+                                [System.Globalization.CultureInfo]::InvariantCulture,
+                                [System.Globalization.DateTimeStyles]::AdjustToUniversal
+                            )
+                            $targetItem = Get-Item -LiteralPath $targetPath
+                            $targetLastWriteUtc = $targetItem.LastWriteTimeUtc
+                            if ($targetLastWriteUtc -gt $lastSyncUtc) {
                                 $isLocallyModified = $true
                             }
                         } catch {
@@ -770,7 +804,8 @@ function Update-LastSync {
     $configRaw = Get-Content -LiteralPath $ConfigPath -Raw -Encoding UTF8
     $config = $configRaw | ConvertFrom-Json
     $config.last_sync = $Timestamp
-    $config | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $ConfigPath -Encoding UTF8
+    $configFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ConfigPath)
+    [System.IO.File]::WriteAllText($configFull, ($config | ConvertTo-Json -Depth 10) + [Environment]::NewLine, (New-Object System.Text.UTF8Encoding $false))   # JSON without BOM
 }
 
 function Write-VerboseLog {
@@ -920,7 +955,7 @@ foreach ($tgtEntry in $syncConfig.targets) {
         }
 
         # Check for changes
-        $changes = @($results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE', 'SKIP') })
+        $changes = @($results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE') })
         if ($changes.Count -gt 0) { $hasAnyChanges = $true }
 
         if ($diff) {
@@ -980,7 +1015,7 @@ foreach ($tgtEntry in $syncConfig.targets) {
         }
 
         # Check for changes
-        $changes = @($results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE', 'SKIP') })
+        $changes = @($results | Where-Object { $_.Action -in @('ADD', 'MODIFY', 'LOCALLY_MODIFIED', 'BREAKING_CHANGE', 'DELETE') })
         if ($changes.Count -gt 0) { $hasAnyChanges = $true }
 
         if ($diff) {
@@ -1001,16 +1036,16 @@ $outputContent = $allOutput.ToString().TrimEnd()
 
 # Write markdown preview file if requested (diff mode only)
 if ($preview_file -and $diff) {
-    $previewFileFull = [System.IO.Path]::GetFullPath($preview_file)
+    $previewFileFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($preview_file)   # [IO.Path]::GetFullPath ignores the PowerShell location
     $firstSource = if ($syncConfig.targets.Count -gt 0) { $syncConfig.targets[0].source } else { 'unknown' }
     $markdownPreview = New-MarkdownPreview -AllTargetResults $allTargetResults -DeprecatedFiles $deprecatedList -SourcePath $firstSource -TargetCount $syncConfig.targets.Count
-    $markdownPreview | Set-Content -Path $previewFileFull -Encoding UTF8
+    [System.IO.File]::WriteAllText($previewFileFull, (@($markdownPreview) -join [Environment]::NewLine) + [Environment]::NewLine, (New-Object System.Text.UTF8Encoding $false))
     Write-Output "Preview written to: '$previewFileFull'."
 }
 
 if ($output_file) {
-    $outputFileFull = [System.IO.Path]::GetFullPath($output_file)
-    $outputContent | Set-Content -Path $outputFileFull -Encoding UTF8
+    $outputFileFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($output_file)
+    [System.IO.File]::WriteAllText($outputFileFull, $outputContent + [Environment]::NewLine, (New-Object System.Text.UTF8Encoding $false))
     Write-Output "Summary: see full report at '$outputFileFull'."
 } else {
     Write-Output $outputContent

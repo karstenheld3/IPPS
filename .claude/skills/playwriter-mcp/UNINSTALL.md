@@ -22,7 +22,7 @@ if (-not (Test-Path $configPath)) {
 
 # Read existing config
 try {
-    $configContent = Get-Content $configPath -Raw
+    $configContent = Get-Content -LiteralPath $configPath -Raw -Encoding utf8
     $config = $configContent | ConvertFrom-Json -AsHashtable
 } catch {
     Write-Host "Error reading config: $_" -ForegroundColor Red
@@ -51,7 +51,7 @@ Write-Host "Backup: $backupPath" -ForegroundColor Cyan
 $config.mcpServers.Remove("playwriter")
 
 # Write updated config
-$config | ConvertTo-Json -Depth 10 | Set-Content $configPath -Encoding UTF8
+$config | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $configPath -Encoding utf8NoBOM
 Write-Host "Removed Playwriter from Devin MCP config" -ForegroundColor Green
 Write-Host "Restart Devin to complete" -ForegroundColor Yellow
 ```
@@ -110,7 +110,7 @@ npx -y skills remove remorses/playwriter
 Get-Command playwriter -ErrorAction SilentlyContinue
 
 # Check MCP config
-$config = Get-Content "$env:USERPROFILE\.codeium\windsurf\mcp_config.json" | ConvertFrom-Json  # Devin config path
+$config = Get-Content -LiteralPath "$env:USERPROFILE\.codeium\windsurf\mcp_config.json" -Raw -Encoding UTF8 | ConvertFrom-Json  # Devin config path
 $config.mcpServers | Get-Member -Name playwriter
 
 # Check data directory

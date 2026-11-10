@@ -20,7 +20,7 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 
 ### Step 1: Create STRUT and Decompose Prompt
 
-- Create `__STRUT_[TOPIC].md` using `/write-strut` workflow
+- Create `_agentwork/__STRUT_[TOPIC].md` using `/write-strut` workflow
 - STRUT defines: phases, objectives, steps, deliverables, transitions
 - STRUT enforces 3 VCRIV gate deliverables (Preflight, Planning, Final) + per-file VCRIV during research = 4 checkpoints total per SKILL.md
 - STRUT MUST include quality pipeline steps and time log:
@@ -34,9 +34,9 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
   ```
 - **Domain identification**:
   1. Determine research domain from prompt context
-  2. Read corresponding `[domain]/DOMAIN_*.md` profile (if available)
+  2. Read corresponding `research_areas/[domain]/DOMAIN_*.md` profile (if available)
   3. Incorporate domain-specific rules (source tiers, document handling, template additions, quality criteria)
-  4. If no matching profile, use `default/DOMAIN_DEFAULT.md` and document in STRUT
+  4. If no matching profile, use `research_areas/default/DOMAIN_DEFAULT.md` and document in STRUT
 - STRUT MUST include the active domain profile and its rules
 - Answer 7 decomposition questions per SKILL.md, store PromptDecomposition in STRUT
 - Run `/verify` on STRUT plan
@@ -80,7 +80,7 @@ Before collecting sources, test each discovery platform from Q7:
   - `"[SUBJECT]" site:[official-domain]` - Exhaustive official content
   - `"[SUBJECT]" [dimension keyword]` - Per-dimension discovery
   - Collect PDF URLs, documentation pages, and public resources from results
-  - Download discovered PDFs to `_DOWNLOADS_gitignore/`
+  - Download discovered PDFs to `_download_gitignore/`
   - **Google = URL discovery only**: Skip AI Overview, Featured Snippets, Knowledge Panels. Extract URLs and titles only, then click through to source websites for content. See RESEARCH_TOOLS.md "Google Search Extraction Principle".
 - **Query selected discovery platforms** from Step 3 first
 - Collect ALL official documentation URLs from vendor/project documentation
@@ -125,7 +125,7 @@ Create Summary file (skeletal), topic template, TASKS plan, run second VCRIV.
 
 ### Step 2: Template Creation
 
-- Run `/write-template` to create `__TEMPLATE_[TOPIC]_TOPIC.md` (working template, retained for research extension)
+- Run `/write-template` to create `_agentwork/__TEMPLATE_[TOPIC]_TOPIC.md` (working template, retained for research extension)
 - Template structure (base + domain-specific additions from active profile):
   - Header block (Doc ID, Goal, Dependencies, **Version/Date scope**)
   - Summary: **5-15 sentences** (scale with complexity)
@@ -142,9 +142,9 @@ Create Summary file (skeletal), topic template, TASKS plan, run second VCRIV.
 
 ### Step 3: TASKS Plan
 
-- Create `__TASKS_[TOPIC]_RESEARCH.md` using `/write-tasks-plan` workflow
+- Create `_agentwork/__TASKS_[TOPIC]_RESEARCH.md` using `/write-tasks-plan` workflow
 - Partition topics from Summary file into discrete tasks
-- Each task: Status, Estimated effort, Sources (official + community), Items to document, Done-when criteria
+- Each task: Status, Estimated effort (`Est: [N] HWH`, Human Work Hours), Sources (official + community), Items to document, Done-when criteria
 - **Task timing format**: `- [ ] TK-01: [Description] [HH:MM-HH:MM] Xm`
   - Mark parallel tasks with `(parallel)` suffix
 - **Done when**: All topics have corresponding tasks, effort estimates assigned
@@ -168,7 +168,7 @@ Adhere to TASKS plan and STRUT. Run VCRIV per granularity rules.
      - NN = sequential number starting at 03 (01=Summary, 02=Sources)
      - PascalCase for [Name]
   5. Include "Limitations and Known Issues" with community source citations
-  6. **Mandatory inline citations**: Critical conclusions MUST include `[VERIFICATION_LABEL] (SOURCE_ID | URL or filename)`. Referenced files MUST exist in `_SOURCES/`.
+  6. **Mandatory inline citations**: Critical conclusions MUST include `[VERIFICATION_LABEL] (SOURCE_ID | URL or filename)`. Referenced files MUST exist in `_sources/`.
   7. Update TASKS progress and Summary file status
 - All claims must have verification labels: [VERIFIED], [ASSUMED], [TESTED], [PROVEN], [COMMUNITY]
 

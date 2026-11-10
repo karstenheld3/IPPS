@@ -2,7 +2,7 @@
 
 Read before creating or fixing ASCII art diagrams. Consumer: working agent (before), `/critique` (after). For post-execution verification rules, see companion `ASCII_ART_RULES.md`.
 
-Writing quality: Apply `APAPALAN_RULES.md`. Key rules: AP-ST-01 (goal first), AP-PR-07 (be specific), AP-NM-01 (one name per concept).
+Writing quality: Apply `APAPALAN_RULES.md`. Key rules: APAPL-ST-01 (goal first), APAPL-PR-07 (be specific), APAPL-NM-01 (one name per concept).
 
 ## 1. Choose the Diagram Type
 
@@ -106,7 +106,7 @@ Available example files:
 - [ ] Verticals stay in one column
 - [ ] Text does not touch frame (min 1 space padding)
 - [ ] Labels are 1-3 words, one concept per box
-- [ ] Width within limit (70 for Markdown, 120 for documents, 180 max)
+- [ ] Width within limit (70 for Markdown, 100 for articles for publishing, 120 for documents, 180 max)
 - [ ] Title line, legend line, and notes present
 - [ ] 3-7 primary elements, one flow direction
 - [ ] Connectors routed in gutters, not through boxes

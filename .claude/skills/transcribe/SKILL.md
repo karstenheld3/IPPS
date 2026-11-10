@@ -14,9 +14,9 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 
 ## Required Skills
 
-- @pdf-tools for PDF to image conversion
-- @ms-playwright-mcp for web page screenshots
-- @llm-transcription (optional) for advanced LLM-based transcription
+- @skills:pdf-tools for PDF to image conversion
+- @skills:ms-playwright-mcp for web page screenshots
+- @skills:llm-tools (optional, `transcription/`) for advanced LLM-based transcription
 
 ## MUST-NOT-FORGET
 
@@ -28,8 +28,8 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 
 ## Prerequisites
 
-- @pdf-tools available for PDF to JPG conversion
-- For TRANSCRIBE_SCRIPT: @llm-transcription skill + API keys file required
+- @skills:pdf-tools available for PDF to JPG conversion
+- For TRANSCRIBE_SCRIPT: @skills:llm-tools skill + API keys file required
 - For TRANSCRIBE_PROMPT: No additional prerequisites
 
 ## GLOBAL-RULES
@@ -53,7 +53,7 @@ Apply to ALL contexts before any context-specific steps.
 Two dimensions determine the execution path:
 
 **Method** (detected in Step 1):
-- **TRANSCRIBE_SCRIPT** - `transcribe-image-to-markdown.py` with ensemble + judge + refinement. Requires @llm-transcription skill + API keys.
+- **TRANSCRIBE_SCRIPT** - `transcribe-image-to-markdown.py` with ensemble + judge + refinement. Requires @skills:llm-tools skill + API keys.
 - **TRANSCRIBE_PROMPT** - Built-in transcription prompt (see Appendix). Fallback when skill or keys unavailable.
 
 **Scope** (determined by input):
@@ -66,7 +66,7 @@ Prepare source first (see Source Preparation Reference), then run script. Script
 
 ```powershell
 $venv = "../.tools/llm-venv/Scripts/python.exe"
-$skill = "[AGENT_FOLDER]/skills/llm-transcription"
+$skill = "[AGENT_FOLDER]/skills/llm-tools/transcription"
 
 # Single page transcription
 & $venv "$skill/transcribe-image-to-markdown.py" `
@@ -79,7 +79,7 @@ $skill = "[AGENT_FOLDER]/skills/llm-transcription"
 # Batch mode (entire folder, multiple pages)
 & $venv "$skill/transcribe-image-to-markdown.py" `
     --input-folder "../.tools/_pdf_to_jpg_converted/[NAME]/" `
-    --output-folder "[SESSION_FOLDER]/transcribed/" `
+    --output-folder "[SESSION_FOLDER]/_markdown/[DocName]/" `
     --keys-file "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt" `
     --model gpt-5-mini `
     --initial-candidates 1 `
@@ -177,14 +177,14 @@ If method or scope is unclear, ask user:
 ### Method Detection
 
 ```powershell
-# Check for llm-transcription skill
-$skillPath = "[AGENT_FOLDER]/skills/llm-transcription/transcribe-image-to-markdown.py"
+# Check for llm-tools skill (transcription function)
+$skillPath = "[AGENT_FOLDER]/skills/llm-tools/transcription/transcribe-image-to-markdown.py"
 $keysFile = "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt"
 $hasSkill = Test-Path $skillPath
 $hasKeys = Test-Path $keysFile
 
 if ($hasSkill -and $hasKeys) {
-    Write-Host "METHOD: TRANSCRIBE_SCRIPT (llm-transcription skill)"
+    Write-Host "METHOD: TRANSCRIBE_SCRIPT (llm-tools skill)"
 } else {
     Write-Host "METHOD: TRANSCRIBE_PROMPT (built-in)"
     if (-not $hasSkill) { Write-Host "  - Missing: $skillPath" }
@@ -216,7 +216,7 @@ After batch transcription completes, merge individual page files into single out
 For TRANSCRIBE_SCRIPT + TRANSCRIBE_MULTI, stitching happens inline during the context-specific process.
 
 ```powershell
-$folder = "[OUTPUT_FOLDER]/02_transcribed_pages"
+$folder = "[OUTPUT_FOLDER]/_markdown/[DocName]"
 $output = "[OUTPUT_FOLDER]/[DocName].md"  # No suffix like _COMPLETE
 $files = Get-ChildItem $folder -Filter "*.md" | Where-Object { $_.Name -notlike "_*" } | Sort-Object Name
 $content = @()
@@ -228,11 +228,12 @@ foreach ($file in $files) {
     } else {
         $content += "`n---`n<!-- Page {0:D3} -->`n`n" -f $pageNum
     }
-    $content += (Get-Content $file.FullName -Raw).TrimEnd()
+    $content += (Get-Content -LiteralPath $file.FullName -Raw -Encoding UTF8).TrimEnd()   # without -Encoding, PowerShell 5.1 reads UTF-8 as ANSI
     $pageNum++
 }
 $finalContent = ($content -join "").TrimEnd()
-$finalContent | Out-File $output -Encoding UTF8
+$outputFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($output)   # .NET resolves relative paths against the process directory
+[System.IO.File]::WriteAllText($outputFull, $finalContent + "`n", (New-Object System.Text.UTF8Encoding $false))   # Out-File -Encoding UTF8 adds a BOM in 5.1
 Write-Output "Merged $($files.Count) files to $output"
 ```
 
@@ -284,9 +285,15 @@ Run `/verify` to check:
 ## Output
 
 - Converted images: `../.tools/_pdf_to_jpg_converted/[NAME]/` (default from convert-pdf-to-jpg.py, do NOT override)
-- Transcribed pages: `[SESSION_FOLDER]/02_transcribed_pages/`
+- Transcribed pages: `[SESSION_FOLDER]/_markdown/[DocName]/`
+- Rebuild: page images are rebuildable. If the image folder is missing (deleted by `/cleanup`), re-render it from the source PDF with `convert-pdf-to-jpg.py` before continuing; never fail because images are missing
 - Final merged output: `[SESSION_FOLDER]/[DocName].md`
 - Web screenshots: `../.tools/_web_screenshots/[DOMAIN]/`
+
+## Agent-Created Folders
+
+- `_markdown/[DocName]/` - role: markdown; parent: working folder; creator: Step 2 batch transcription; content: one markdown file per page
+- `_download_gitignore/` - role: download; parent: working folder; creator: Source Type "URL to PDF" download; content: downloaded PDF
 
 # CONTENT RULES
 
@@ -500,11 +507,11 @@ python [AGENT_FOLDER]/skills/pdf-tools/convert-pdf-to-jpg.py "path/to/document.p
 ```powershell
 $url = "https://example.com/document.pdf"
 $filename = [System.IO.Path]::GetFileName($url)
-# Download to _DOWNLOADS_gitignore (not checked in)
-New-Item -ItemType Directory -Path "[SESSION_FOLDER]/_DOWNLOADS_gitignore" -Force | Out-Null
-Invoke-WebRequest -Uri $url -OutFile "[SESSION_FOLDER]/_DOWNLOADS_gitignore/$filename"
+# Download to _download_gitignore (not checked in)
+New-Item -ItemType Directory -Path "[SESSION_FOLDER]/_download_gitignore" -Force | Out-Null
+Invoke-WebRequest -Uri $url -OutFile "[SESSION_FOLDER]/_download_gitignore/$filename"
 # Then convert to JPG
-python [AGENT_FOLDER]/skills/pdf-tools/convert-pdf-to-jpg.py "[SESSION_FOLDER]/_DOWNLOADS_gitignore/$filename" --dpi 120
+python [AGENT_FOLDER]/skills/pdf-tools/convert-pdf-to-jpg.py "[SESSION_FOLDER]/_download_gitignore/$filename" --dpi 120
 ```
 
 ### For Web Page
@@ -571,7 +578,7 @@ Index file format:
 
 ## Built-in Transcription Prompt (TRANSCRIBE_PROMPT)
 
-Use this prompt when llm-transcription skill is not available:
+Use this prompt when llm-tools skill is not available:
 
 ---
 

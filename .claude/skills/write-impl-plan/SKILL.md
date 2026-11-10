@@ -6,11 +6,15 @@ disable-model-invocation: true
 
 # Write Implementation Plan Workflow
 
+**Goal**: Implementation plan derived from a specification.
+
+**Why**: A plan with steps and edge cases prevents improvised implementation.
+
 Create implementation plans from specifications.
 
 ## Required Skills
 
-- @write-documents for document structure and formatting rules
+- @skills:write-documents for document structure and formatting rules
 
 ## MUST-NOT-FORGET
 
@@ -22,7 +26,7 @@ Create implementation plans from specifications.
 
 - Specification exists (`_SPEC_[COMPONENT].md`)
 - Read spec completely before starting
-- Read @write-documents skill
+- Read @skills:write-documents skill
 - Read target source files listed in spec header. SPEC defines WHAT; the codebase shows current HOW.
 
 ## Steps

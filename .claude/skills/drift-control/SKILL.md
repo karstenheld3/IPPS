@@ -1,6 +1,6 @@
 ---
 name: drift-control
-description: Drift detection knowledge, correction guidance, and process discipline audit criteria for /drift-detect and /drift-correct
+description: Drift detection knowledge, correction guidance, and process discipline audit criteria for /drift-detect and /drift-correct. Apply when running those workflows.
 ---
 
 # Drift Control Skill

@@ -6,6 +6,10 @@ disable-model-invocation: true
 
 # Load Session Workflow
 
+**Goal**: Session state restored from the session tracking files.
+
+**Why**: Resuming from memory instead of documents loses context and repeats work.
+
 ## Required Skills
 
 - @skills:session-management for session file structure

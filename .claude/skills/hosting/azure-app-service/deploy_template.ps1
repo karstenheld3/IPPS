@@ -22,7 +22,7 @@ function Read-EnvFile {
     param([Parameter(Mandatory=$true)] [string]$Path)
     $envVars = @{}
     if (!(Test-Path $Path)) { throw "File '$Path' not found." }
-    Get-Content $Path | ForEach-Object {
+    Get-Content -LiteralPath $Path -Encoding UTF8 | ForEach-Object {   # 5.1 default (ANSI) would keep a UTF-8 BOM as 3 garbage characters in the first key
         if ($_ -match '^(?!#)([^=]+)=([^#]*)(?:#.*)?$') {
             $key = $matches[1].Trim(); $value = $matches[2].Trim()
             $envVars[$key] = $value

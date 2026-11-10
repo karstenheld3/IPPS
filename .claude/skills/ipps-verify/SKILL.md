@@ -17,6 +17,7 @@ Verify work against specs, rules, and quality standards.
 Invoke based on context:
 - @skills:write-documents for document verification
 - @skills:coding-conventions for code verification
+- @skills:terminal-robustness for robustness cards and terminal command patterns - verify `__CARD_*-Robustness.md` instances against `ROBUSTNESS_CARD_SKELETON.md` and TERMROBUSTNESS-CD rules
 
 **CRITICAL**: Skill invocation returns instructions only. You MUST also read the supporting files listed in skill output (e.g., `PYTHON-RULES.md`, `WORKFLOW-RULES.md`) to get actual verification rules.
 
@@ -58,9 +59,12 @@ Invoke based on context:
 
 Apply to ALL document types and contexts:
 
-- Avoid excessive acronyms. Write out acronyms on first usage.
+- Avoid excessive acronyms. Write out acronyms on first usage. Take the expansion from the context, never from training data: acronyms have multiple meanings and a guessed one is a wrong name that propagates (MECT-WC-09).
   - BAD: `SPN not supported.`
   - GOOD: `Service Principal Name (SPN) not supported.`
+- **Explicit over figurative (MECT-WC-10)** - Audience: international readers who are not native speakers, unless the document declares otherwise. Scan prose for idioms, slang, and region-dependent phrases that carry a claim without stating it. Rewrite each as the explicit claim (number, condition, consequence). Keep established precise terms (onboarding, break-even). Exempt: quotations, transcriptions, conversation drafts written AS the user
+  - BAD: `Caching hedges against API outages.`
+  - GOOD: `When the API is down, the cache serves the last response for up to 10 minutes.`
 - Use verification labels consistently (see below)
 - Re-read relevant rules and session files before verifying
 - Make internal "MUST-NOT-FORGET" list and check after each step
@@ -80,7 +84,7 @@ Apply to ALL document types and contexts:
   - Bold for emphasis on key terms, framework names, or important concepts is acceptable
   - The "no bold" rule applies only to LLM-consumed skill resource files (see Skills section)
   - Do not strip formatting that aids human scanning and comprehension
-- **Labels decodable at point of use (AP-PR-11)** - Scan for bracket labels with 1-2 characters:
+- **Labels decodable at point of use (APAPL-PR-11)** - Scan for bracket labels with 1-2 characters:
   - Exempt: `[x]`/`[ ]` checkboxes, `[N]` retry counts
   - Exempt: Established system labels: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`
   - Short label found? Check: Is a legend visible at every usage point (no scrolling)? If yes: pass. If no: replace with full word or add legend.
@@ -104,14 +108,14 @@ Apply to ALL document types and contexts:
 ## Conceptual verification
 
 When reviewing architecture, design and solution strategy, apply @skills:write-documents `SOCAS_RULES.md` with the Agent Output Review subset. Look for:
-- inconsistencies (SOCAS-01)
-- ambiguities (SOCAS-02)
-- new solutions for already solved problems (SOCAS-03)
-- overlapping concerns (SOCAS-03)
-- underspecified behavior (SOCAS-06)
-- unverified assumptions (SOCAS-10)
-- flawed thinking and underestimated complexity (SOCAS-10)
-- over-engineering and introduction of unwanted complexity (SOCAS-11)
+- inconsistencies (SOCAS-CR-01)
+- ambiguities (SOCAS-CR-02)
+- new solutions for already solved problems (SOCAS-CR-03)
+- overlapping concerns (SOCAS-CR-03)
+- underspecified behavior (SOCAS-CR-06)
+- unverified assumptions (SOCAS-CR-10)
+- flawed thinking and underestimated complexity (SOCAS-CR-10)
+- over-engineering and introduction of unwanted complexity (SOCAS-CR-11)
 
 ## Verification Labels
 
@@ -318,6 +322,7 @@ Read the rule file for your context and verify against all rules. Also verify ag
 - Workflows → @skills:write-documents `WORKFLOW_RULES.md` (all WF-*), also @skills:coding-conventions `WORKFLOW-RULES.md` (design principles)
 - Skills → @skills:write-documents `SKILL_RULES.md` (all SK-*)
   - If SETUP.md exists: verify UNINSTALL.md also exists (not in SK-* rules)
+- Standalone prompts (single file handed to another assistant as its rulebook, not a `_PROMPTS_*.md` sequence) → @skills:write-documents `WORKFLOW_RULES.md` (applicable WF-*, especially WF-CT-07, WF-CT-08)
 - Skill Resource Files (`*_RULES.md`, `*_GUIDES.md`, `*_CHECKS.md` in skill folders) → @skills:write-documents `WORKFLOW_RULES.md` (applicable WF-*)
   - Verify SK-CT-05: no visual-only formatting (no bold, no filler phrases)
   - Verify SK-CT-06: no Document History section
@@ -359,42 +364,26 @@ Detect by: filename pattern `*_TEMPLATE.md` in skill or workflow folder, or `__T
 
 Detect by: filename pattern `_PROMPTS_*.md` or file starts with a fenced code block (opening fence as first non-empty line) and contains `---` separators between fenced blocks.
 
-**Read**: @skills:write-documents `PROMPTS_RULES.md` (all PRMT-* rules), `PROMPTS_GUIDES.md`, `APAPALAN_RULES.md`
+**Read**: @skills:write-documents `PROMPTS_RULES.md` (all PRMT-* rules), `PROMPTS_GUIDES.md`, `APAPALAN_RULES.md`; @skills:llm-tools `MODEL_INVENTORY.md`
 
 - Verify against all PRMT-* rules in `PROMPTS_RULES.md` — all categories: FT, ST, SQ, CT, SC, EX, NM
+- For PRMT-SC-05 (effort and model specification): run its model-data checks against the `MODEL_INVENTORY.md` row of `intended_model`
 - Verify against `APAPALAN_RULES.md` (precision, brevity)
 - For PRMT-CT-08/CT-10 (workflow call formatting): check every backtick-wrapped workflow name inside a fence for execution verbs (run, use, execute, call, invoke, perform, apply, do). If found → violation. If no execution verb → correct reference.
 - For PRMT-CT-11 (existing workflows): scan `[AGENT_FOLDER]/workflows/` frontmatters to verify prompts reference or invoke matching workflows instead of reinventing logic
 
-## Minto Documents
+## Authored Documents
 
-Detect by: filename pattern `__MINTO-DRAFT_*.md` (draft) or `_MINTO_*.md` (article).
+Detect by: header block fields (`**Document Type**`: `article`, `report`, `ebook`; `**Technique**`; `**Persona**`) or filename pattern `[ID]-OPTIONS-*.md`, `[ID]-DRAFT-*.md`, or `YYYY-MM-DD_*.md` with document-type header (`DRSYNART-FR-06`, `DRSYNART-DD-50`).
 
-**Read**: @skills:write-documents `MINTO_RULES.md`, `MINTO-DRAFT_TEMPLATE.md`, `MINTO_TEMPLATE.md`
+**Read**: @skills:write-documents `AI_WRITING_RULES.md` (applies ONLY to publishing document types, never SPECs or internal documents), plus RULES and TEMPLATE of `document_types/[TYPE]_RULES.md` and `document_types/[TYPE]_TEMPLATE.md`; when Technique `[ID]` is set: `writing_techniques/[ID]_RULES.md` and `writing_techniques/TEMPLATES/[ID]_TEMPLATE.md`; when Persona `[PERSONA]` is set: `writing_personas/[PERSONA].md`. Never read CHECKS files during execution (`DRSYNART-FR-32`, `GRUC-IG-03`).
 
-**Verification checklist for Minto Draft (`__MINTO-DRAFT_*`):**
-- Structure matches `MINTO-DRAFT_TEMPLATE.md` (MINTO-DS-06):
-  - Header block: Generated, Source material, Purpose, Listener, Action
-  - Findings Inventory section with Fnn entries (source + label)
-  - Selection Criteria section with weights
-  - Per candidate: Score, Magnet, One-Argument Test, Question ordering, AMINTON tree, Same Kind check
-- Verify against MINTO-DS-* rules (3 candidates, recommended marked, criteria, inventory)
-- Verify against MINTO-AQ-* rules (magnet, ordering, one-argument test, declarative answers, same kind)
-- Verify against MINTO-ME-* rules (Mutually Exclusive, Collectively Exhaustive (MECE) at all levels)
-
-**Verification checklist for Minto Article (`_MINTO_*`):**
-- Structure matches `MINTO_TEMPLATE.md` (MINTO-AS-08):
-  - Header block: Doc ID, Source, Argument
-  - Executive Summary with SCQA (Situation, Complication, Answer)
-  - One section per Q with idea-stating heading (not category label)
-  - Bold claim per answer, evidence woven into paragraphs
-  - Conclusion: one summary line per Q + restated A
-  - Appendix: full AMINTON (Argument, Main claim, Insight, Node, Tree, Opposition, Nuance) tree (A through E-nodes with source Fnn refs)
-- Verify against MINTO-TI-* rules (sub-questions, evidence, no orphans, source references)
-- Verify against MINTO-AS-* rules (Doc ID, SCQA Executive Summary, section per Q, appendix, top-down order)
-- Verify against MINTO-CL-* rules (closing present, one line per answer, no new claims)
-- Verify against MINTO-ME-* rules (MECE at all levels)
-- Every prose paragraph maps to an AMINTON node (no unmapped content)
+**Verification checklist for Authored Documents:**
+- Structure matches matching section of `document_types/[TYPE]_TEMPLATE.md` (OPTIONS, DRAFT, Output)
+- Verify against `[TYPE]_RULES.md` rules: header block completeness (FR-24 fields), structural integrity, claim attribution, style sheet consistency, release check record format; when the `**Technique**` header is set, skip `[STRUCTURE-DEFAULT]` rules of the document type (only `[TYPE-OWNED]` rules remain binding)
+- Verify against `AI_WRITING_RULES.md` (`AW-SO-01` through `AW-LX-03`): scan prose for sourcing/attribution flaws, staccato fragments, contrast snaps, mechanical tricolons, uniform or punctuation-flattened cadence, compressed objection blocks, signpost openers, reflex header/list inflation, disembodied generic prose, prestige-register buzzwords, and nominalization chains; rewrite any flow-breaking robotic pattern into continuous prose in place and confirm `<= 1` style-pattern signal in the Release Check
+- When Technique `[ID]` is set: read the detected technique's `@skills:write-documents` `writing_techniques/[ID]_RULES.md` and `writing_techniques/[ID]_GUIDES.md`, and verify against its structural rules, template conventions, and named failure modes
+- When Persona `[PERSONA]` is set: verify voice sliders, micro-dose trait budgets, and target text length and pacing profile against `writing_personas/[PERSONA].md`
 
 ## Translation Output
 
@@ -442,11 +431,11 @@ Detect by: file has `_[LANG]` suffix (e.g., `report_DE.md`, `video_DE.srt`) and 
 
 Read all three rule layers and verify in priority order:
 
-1. Read @skills:write-documents `APAPALAN_RULES.md` - verify AP-CM-01, AP-CM-02, AP-CM-03:
-   - [ ] Every commitment has action + deliverable + weekday + ISO date + time (AP-CM-01)
-   - [ ] Every question in own paragraph, "Question:" label, self-contained (AP-CM-02)
-   - [ ] Every request in own paragraph, "Request:" label, explicit timing (AP-CM-02)
-   - [ ] All dates: weekday + ISO date. Periods include year. Timezone when scheduling. (AP-CM-03)
+1. Read @skills:write-documents `APAPALAN_RULES.md` - verify APAPL-CM-01, APAPL-CM-02, APAPL-CM-03:
+   - [ ] Every commitment has action + deliverable + weekday + ISO date + time (APAPL-CM-01)
+   - [ ] Every question in own paragraph, "Question:" label, self-contained (APAPL-CM-02)
+   - [ ] Every request in own paragraph, "Request:" label, explicit timing (APAPL-CM-02)
+   - [ ] All dates: weekday + ISO date. Periods include year. Timezone when scheduling. (APAPL-CM-03)
 2. Read @skills:write-documents `CONVERSATION_HUMANIZING_RULES.md` - verify against Anti-Pattern Index:
    - [ ] Full grammar preserved (no dropped pronouns/articles) - CV-HM-07
    - [ ] Greeting/closing from user's History, not invented or rotated - CV-HM-06
@@ -469,7 +458,7 @@ Verify when STRUT plan is created or updated:
 - [ ] Transitions reference Deliverables (not Objectives)
 - [ ] Steps use valid AGEN verbs with `[VERB](params)` format
 - [ ] Problem/goal addressed by Objectives?
-- [ ] Strategy includes approach summary (AWT estimate optional)
+- [ ] Strategy includes approach summary (AWH estimate optional)
 
 ## STRUT Plans (Transition Phase)
 

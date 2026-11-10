@@ -32,7 +32,7 @@ No OAuth. No token refresh. No expiry. Credentials valid until password is reset
 
 PowerShell:
 ```powershell
-$base64 = (Get-Content "E:\Dev\.tools\.api-keys.txt" | Where-Object { $_ -match "^DATAFORSEO_BASE64=" }) -replace "DATAFORSEO_BASE64=", ""
+$base64 = (Get-Content -LiteralPath "E:\Dev\.tools\.api-keys.txt" -Encoding UTF8 | Where-Object { $_ -match "^DATAFORSEO_BASE64=" }) -replace "DATAFORSEO_BASE64=", ""
 $headers = @{ Authorization = "Basic $base64" }
 $result = Invoke-RestMethod -Uri "https://api.dataforseo.com/v3/appendix/user_data" -Headers $headers
 Write-Host "Balance: $($result.tasks[0].result[0].money.balance)"

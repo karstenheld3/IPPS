@@ -6,6 +6,10 @@ disable-model-invocation: true
 
 # Devil's Advocate
 
+**Goal**: Findings on flawed assumptions, logic errors, and hidden risks in a target document or code.
+
+**Why**: Flawed thinking found before implementation costs less than flawed thinking found after.
+
 Find flawed assumptions, logic errors, and hidden risks.
 
 **Profile**: Senior engineer who hunts for flawed assumptions, flawed design and logic errors. Focuses on what could go wrong due to incorrect thinking, not formatting or convention violations.
@@ -17,7 +21,7 @@ Find flawed assumptions, logic errors, and hidden risks.
 ## Required Skills
 
 Invoke based on context:
-- @write-documents for document review (use CRITIQUE_TEMPLATE.md, FAILS_TEMPLATE.md)
+- @skills:write-documents for document review (use CRITIQUE_TEMPLATE.md, FAILS_TEMPLATE.md)
 
 **Note**: Code review against rules/conventions is done by `/verify`. This workflow focuses on logic, strategy, and goal alignment.
 
@@ -89,11 +93,11 @@ Invoke based on context:
 - **Question assumptions** - What are we taking for granted that could be wrong?
 - **Be specific** - Vague concerns are useless. Cite line numbers, exact scenarios
 - **Prioritize by impact** - Critical logic flaws first
-- **Apply SOCAS** - Use @write-documents `SOCAS_RULES.md` for systematic quality evaluation. Report findings with SOCAS IDs and severity.
+- **Apply SOCAS** - Use @skills:write-documents `SOCAS_RULES.md` for systematic quality evaluation. Report findings with SOCAS IDs and severity.
 
-**Categories and Labels**: See FAILS_TEMPLATE.md and CRITIQUE_TEMPLATE.md in @write-documents skill.
+**Categories and Labels**: See FAILS_TEMPLATE.md and CRITIQUE_TEMPLATE.md in @skills:write-documents skill.
 
-**FAILS.md Location and Format**: See FAILS_TEMPLATE.md in @write-documents skill.
+**FAILS.md Location and Format**: See FAILS_TEMPLATE.md in @skills:write-documents skill.
 
 ## Research Phase
 
@@ -120,6 +124,8 @@ For each review, identify topics where external knowledge would strengthen the a
 ```
 
 ### Executing Research
+
+**Cascade: `gesetze-im-internet.de` Playwright only** - `search_web` / `read_url_content` crash the conversation
 
 For each topic:
 1. **Web search** for industry patterns, blog posts, case studies
@@ -337,24 +343,28 @@ When reviewing error logs or console output:
 
 4. **Update** `_PROBLEMS_CRITIQUE.md` and `FAILS.md` with root causes found
 
-### Minto Documents
+### Writing Documents
 
-Detect by: `__MINTO-DRAFT_*` or `_MINTO_*` filename pattern.
+Detect by: header block fields (`**Document Type**`: `article`, `report`, `ebook`; `**Technique**`; `**Persona**`) or filename pattern `[ID]-OPTIONS-*.md`, `[ID]-DRAFT-*.md`, or `YYYY-MM-DD_*.md` with document-type header (`DRSYNART-FR-06`, `DRSYNART-DD-50`).
 
-**Read**: @skills:write-documents `MINTO_GUIDES.md` for intended structure; `MINTO_RULES.md` for rule IDs; `SOCAS_RULES.md` for logic attack patterns.
+**Read**: @skills:write-documents `document_types/[TYPE]_GUIDES.md` for craft decisions and intended structure; `AI_WRITING_RULES.md` (`AW-SO-01..04`, `AW-SY-04`, `AW-ST-02`, `AW-VO-01..04`, scoped to publishing document types only); when Technique `[ID]` is set: `writing_techniques/[ID]_GUIDES.md` and `writing_techniques/[ID]_RULES.md`; `SOCAS_RULES.md` for logic attack patterns.
 
-**Attack vectors** (reference AMINTON node IDs in findings):
-- **Magnet failure** - A does not connect to listener motivator (MINTO-AQ-01)
-- **Circular evidence** - E-node restates parent answer instead of providing independent proof
-- **False MECE** - questions/answers appear distinct but test reveals overlap
-- **Unsupported claim** - answer in prose has no corresponding E-node in appendix
-- **Closing creep** - closing adds nuance, qualification, or claims not in tree (MINTO-CL-04)
-- **Single-source dependency** - entire branch rests on one finding that could be wrong
-- **Misapplied statistic** - evidence (Fnn) cited does not actually support the claim made (SOCAS-10)
-- **Absolute claim vulnerability** - "all", "none", "always", "never" invite counter-examples
-- **Hidden trade-off** - positioning argument hides an obvious buyer objection or known downside
+**General attack vectors**:
+- Theme/Governing thought drift - apex answer does not solve the reader's problem or answer the core question
+- Unsupported claim or authority laundering (`AW-SO-01..04`) - prose asserts key metrics, quotes, or historical attributions without verified primary-source grounding or conflates secondary internet commentary with primary texts
+- Flawed key line - arguments below governing thought fail inductive or deductive grouping tests
+- Section goal mismatch - section fails its stated goal or fails to advance reader transformation path
+- Telegraphic objection handling (`AW-ST-02`) and superficial substance checks - text compresses counter-arguments into stiff rapid-fire Q&A or cites only surface formatting checks instead of testing deep reasoning flaws (`SOCAS-CR-01/02` inconsistent or fuzzy terminology, `SOCAS-CR-03` concept overlap, `SOCAS-CR-10` gaps in reasoning, `SOCAS-CR-11` unnecessary complexity)
+- Hedge-then-assert leap (`AW-SY-04`) and performed authority (`AW-VO-01..04`) - opening hedge is silently treated as proven fact in the next sentence, or disembodied omniscient tone masks domain errors
+- Hidden trade-off - text obscures known operational downsides, counter-evidence, or implementation risks
+- Misapplied evidence - cited finding does not actually substantiate the claim made (`SOCAS-CR-10`)
 
-**Output format**: Each finding references AMINTON node IDs: "C-01 (Q1A2-S1E1): [description]"
+**When Technique `[ID]` is set:**
+- Read the detected technique's `@skills:write-documents` `writing_techniques/[ID]_RULES.md` and `writing_techniques/[ID]_GUIDES.md`
+- Apply its named failure modes and structural rules
+- Attack vector checks evaluate against the technique's structural constraints
+
+**Output format**: Each finding references section headings, claim IDs, or technique-specific node IDs: "C-01 ([Section/Node]): [description]"
 
 ## Devil's Advocate Questions
 

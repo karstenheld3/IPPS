@@ -35,9 +35,9 @@
 
 ### Confirmed Sources
 
-<!-- One entry per confirmed source. Include _SOURCES/ reference for materialized copies. -->
+<!-- One entry per confirmed source. Include _sources/ reference for materialized copies. -->
 
-- **S01** `confirmed` - [reference or URL] -> `_SOURCES/S01_[name].md`
+- **S01** `confirmed` - [reference or URL] -> `_sources/S01_[name].md`
   - Content matches document claims
 
 ### Failed Sources
@@ -47,7 +47,7 @@
 - **S02** `not-found` - [reference or URL]
   - [reason: 404, file missing, document not found]
 
-- **S03** `changed` - [reference or URL] -> `_SOURCES/S03_[name].md`
+- **S03** `changed` - [reference or URL] -> `_sources/S03_[name].md`
   - Document claims: [what the reviewed document says the source contains]
   - Actual content: [what the source actually says now]
 
@@ -150,8 +150,8 @@ These appear in a separate section to distinguish them from verified/unverified 
 - Code review: `auth_handler_FACT-CHECK.md`
 
 **Companion Artifacts**:
-- `_SOURCES/` - Transcribed source content (checked in). Naming: `[SOURCE_ID]_[descriptive-name].md`
-- `_DOWNLOADS_gitignore/` - Raw downloads (not checked in). Naming: `[SOURCE_ID]_[original-name].[ext]`
+- `_sources/` - Transcribed source content (checked in). Naming: `[SOURCE_ID]_[descriptive-name].md`
+- `_download_gitignore/` - Raw downloads (not checked in). Naming: `[SOURCE_ID]_[original-name].[ext]`
 
 **Management**: Create fresh each fact-check. Consumed by `/reconcile` or `/implement` for remediation.
 

@@ -60,7 +60,7 @@ Step 3: FINALIZE - Update status, report
 
 1. Locate `__DRIFT_[TOPIC].md`:
    - User specifies TOPIC → use that
-   - Search working directory for `__DRIFT_*.md` files
+   - Search `_agentwork/` of the working directory for `__DRIFT_*.md` files
    - If multiple found → list them, use most recent
 2. Read file, extract all FAIL items as TODO list
 3. Verify file integrity: Status should be IN_PROGRESS or BLOCKED

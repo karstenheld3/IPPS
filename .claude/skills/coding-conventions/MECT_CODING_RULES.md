@@ -14,43 +14,43 @@ Every design choice in code is either **Signal** (purposeful, carries informatio
 ## Rule Index
 
 Precision (PR) - Every name and message unambiguous
-- MC-PR-01: One name per concept across codebase
-- MC-PR-02: Unambiguous compound names (word order determines meaning)
-- MC-PR-03: No dangerous meta-words without qualifier
-- MC-PR-04: Be specific in comments - concrete, verifiable statements
-- MC-PR-05: Error messages state what failed, why, and recovery action
-- MC-PR-06: Log messages: self-contained, full disclosure
-- MC-PR-07: Include canonical identifiers in errors (file, line, entity ID)
+- MECT-PR-01: One name per concept across codebase
+- MECT-PR-02: Unambiguous compound names (word order determines meaning)
+- MECT-PR-03: No dangerous meta-words without qualifier
+- MECT-PR-04: Be specific in comments - concrete, verifiable statements
+- MECT-PR-05: Error messages state what failed, why, and recovery action
+- MECT-PR-06: Log messages: self-contained, full disclosure
+- MECT-PR-07: Include canonical identifiers in errors (file, line, entity ID)
 
 Brevity (BR) - Minimal without losing meaning
-- MC-BR-01: Simplest verb - no hidden verbs in names
-- MC-BR-02: Comments: drop filler, be direct
-- MC-BR-03: Function names describe output, not mechanism
-- MC-BR-04: Boolean functions: is_/has_/can_ prefix, no "check_"
-- MC-BR-05: Every code artifact must carry information
+- MECT-BR-01: Simplest verb - no hidden verbs in names
+- MECT-BR-02: Comments: drop filler, be direct
+- MECT-BR-03: Function names describe output, not mechanism
+- MECT-BR-04: Boolean functions: is_/has_/can_ prefix, no "check_"
+- MECT-BR-05: Every code artifact must carry information
 
 Consistency (CO) - Same pattern everywhere
-- MC-CO-01: Corresponding pairs use same word stem
-- MC-CO-02: Consistent key=value format in logs
-- MC-CO-03: Convergent naming - same terms in URL, payload, docs, logs
-- MC-CO-04: Consistent patterns across all similar constructs
-- MC-CO-05: Keep established API names - don't rename working terms
+- MECT-CO-01: Corresponding pairs use same word stem
+- MECT-CO-02: Consistent key=value format in logs
+- MECT-CO-03: Convergent naming - same terms in URL, payload, docs, logs
+- MECT-CO-04: Consistent patterns across all similar constructs
+- MECT-CO-05: Keep established API names - don't rename working terms
 
 Naming Design (ND) - Structure for scalable naming
-- MC-ND-01: Naming structure method (explicit -> specifiers -> states -> mnemonics)
-- MC-ND-02: Canonical form for IDs and data structures
-- MC-ND-03: No recursive/implicit naming
-- MC-ND-04: No product-as-term collision
-- MC-ND-05: Type name = domain concept, not implementation detail
-- MC-ND-06: Disambiguate by qualifying, not renaming
-- MC-ND-07: Intuitive opposites for paired parameters
-- MC-ND-08: No terminological synonymy - one name per concept across codebase
-- MC-ND-09: No inverted semantics - name direction must match value direction
+- MECT-ND-01: Naming structure method (explicit -> specifiers -> states -> mnemonics)
+- MECT-ND-02: Canonical form for IDs and data structures
+- MECT-ND-03: No recursive/implicit naming
+- MECT-ND-04: No product-as-term collision
+- MECT-ND-05: Type name = domain concept, not implementation detail
+- MECT-ND-06: Disambiguate by qualifying, not renaming
+- MECT-ND-07: Intuitive opposites for paired parameters
+- MECT-ND-08: No terminological synonymy - one name per concept across codebase
+- MECT-ND-09: No inverted semantics - name direction must match value direction
 
 Documentation (DC) - Code-adjacent writing
-- MC-DC-01: Four description types (what/why/how/where)
-- MC-DC-02: Match description type to audience
-- MC-DC-03: Plain language in user-facing messages
+- MECT-DC-01: Four description types (what/why/how/where)
+- MECT-DC-02: Match description type to audience
+- MECT-DC-03: Plain language in user-facing messages
 
 ## Table of Contents
 
@@ -62,7 +62,7 @@ Documentation (DC) - Code-adjacent writing
 
 ## Precision Rules (PR)
 
-### MC-PR-01: One Name Per Concept Across Codebase
+### MECT-PR-01: One Name Per Concept Across Codebase
 
 One concept = one name everywhere: variables, functions, classes, database columns, API fields, log messages, documentation. No synonyms, no polysemy.
 
@@ -93,7 +93,7 @@ class MeterContract:   # customer relationship
 
 **Cross-boundary rule:** If the database column is `workshop_id`, the API field is `workshop_id`, the variable is `workshop_id`, and the log says `workshop_id='abc'`. Never translate between layers.
 
-### MC-PR-02: Unambiguous Compound Names
+### MECT-PR-02: Unambiguous Compound Names
 
 Word order determines meaning. If a compound name has multiple readings, restructure it.
 
@@ -113,7 +113,7 @@ count_of_active_sessions  # Counting the active sessions
 
 **Test:** Read the name aloud. If a colleague could reasonably interpret it two ways, restructure it.
 
-### MC-PR-03: No Dangerous Meta-Words Without Qualifier
+### MECT-PR-03: No Dangerous Meta-Words Without Qualifier
 
 These words seem specific but hide ambiguity: Module, Service, Manager, Handler, Helper, Utility, Provider, Processor, Controller, Check, Asset, Payload.
 
@@ -136,7 +136,7 @@ class CsvRowParser:         # Clear: parses CSV rows
 
 **Rule:** If you use a meta-word, qualify it until the name answers "what does it contain/do/provide?"
 
-### MC-PR-04: Be Specific in Comments
+### MECT-PR-04: Be Specific in Comments
 
 No generic or abstract comments. Every comment must add concrete, verifiable information that the code doesn't already express.
 
@@ -158,7 +158,7 @@ No generic or abstract comments. Every comment must add concrete, verifiable inf
 
 **Test:** Delete the comment. If nothing is lost, the comment was useless. If the reader would now miss critical information, keep it.
 
-### MC-PR-05: Error Messages State What Failed, Why, and Recovery
+### MECT-PR-05: Error Messages State What Failed, Why, and Recovery
 
 Every error message answers three questions: What happened? Why? What should the user/developer do?
 
@@ -186,7 +186,7 @@ logger.error(
 )
 ```
 
-### MC-PR-07: Include Canonical Identifiers in Errors
+### MECT-PR-07: Include Canonical Identifiers in Errors
 
 Error messages must include traceable identifiers so the error can be located without debugging: entity ID, file path, line number, request ID.
 
@@ -215,7 +215,7 @@ raise FileNotFoundError(
 
 **Rule:** Every error must contain at least one canonical identifier that enables `grep` to find the related context.
 
-### MC-PR-06: Log Messages Are Self-Contained
+### MECT-PR-06: Log Messages Are Self-Contained
 
 Each log line must be understandable without reading other log lines. Include context: what operation, what data, how much, with what parameters.
 
@@ -239,7 +239,7 @@ logger.error("Order id='ORD-4521' failed: missing shipping_address field")
 
 ## Brevity Rules (BR)
 
-### MC-BR-01: Simplest Verb in Names
+### MECT-BR-01: Simplest Verb in Names
 
 Replace verbose verb phrases with single verbs. Hidden verbs bury the action inside nouns.
 
@@ -261,7 +261,7 @@ def determine(status): ...
 def calculate_total(items): ...
 ```
 
-### MC-BR-02: Comments Drop Filler
+### MECT-BR-02: Comments Drop Filler
 
 Remove articles, hedging, and verbose constructions from comments. Precision first, then cut.
 
@@ -277,7 +277,7 @@ Remove articles, hedging, and verbose constructions from comments. Precision fir
 # Retrieve user by ID from database. Returns None if not found.
 ```
 
-### MC-BR-03: Function Names Describe Output, Not Mechanism
+### MECT-BR-03: Function Names Describe Output, Not Mechanism
 
 Name functions by what they produce, not how they work internally.
 
@@ -297,7 +297,7 @@ def extract_emails(text): ...           # Describes output
 
 **Exception:** When the mechanism IS the distinguishing factor (e.g., `sort_by_merge` vs `sort_by_quick`).
 
-### MC-BR-04: Boolean Functions Use Predicate Prefix
+### MECT-BR-04: Boolean Functions Use Predicate Prefix
 
 Boolean-returning functions start with `is_`, `has_`, `can_`, `should_`, `needs_`. Never use ambiguous `check_`.
 
@@ -319,9 +319,9 @@ def validate(order):            # Raises on invalid (action, not predicate)
 
 **Rule:** `is_/has_/can_` = returns bool, never raises. Action verbs (`validate`, `ensure`, `require`) = may raise.
 
-### MC-BR-05: Every Code Artifact Must Carry Information
+### MECT-BR-05: Every Code Artifact Must Carry Information
 
-Applies the Signal vs Noise principle to code. Every artifact (comment, type hint, decorator, docstring, log prefix, wrapper) must add meaning the reader cannot get from the code structure alone. If the code already communicates something, restating it is noise. See MW-LT-04 for the writing equivalent.
+Applies the Signal vs Noise principle to code. Every artifact (comment, type hint, decorator, docstring, log prefix, wrapper) must add meaning the reader cannot get from the code structure alone. If the code already communicates something, restating it is noise. See MECT-LT-04 for the writing equivalent.
 
 **Test:** Remove the artifact. If the reader loses no information, delete it.
 
@@ -353,7 +353,7 @@ logger.info(f"Getting orders for customer_id='{cid}'")
 
 ## Consistency Rules (CO)
 
-### MC-CO-01: Corresponding Pairs Use Same Word Stem
+### MECT-CO-01: Corresponding Pairs Use Same Word Stem
 
 Opposite operations must form predictable pairs. Users predict the counterpart from the first name.
 
@@ -383,7 +383,7 @@ def close_connection(): ...
 
 **Standard pairs:** open/close, read/write, get/set, add/remove, create/delete, start/stop, begin/end, push/pop, encode/decode, serialize/deserialize, connect/disconnect, acquire/release, lock/unlock, show/hide, enable/disable, attach/detach, subscribe/unsubscribe, marshal/unmarshal
 
-### MC-CO-02: Consistent Key=Value Format in Logs
+### MECT-CO-02: Consistent Key=Value Format in Logs
 
 Pick one log format and use it everywhere. Mix of formats forces readers to parse multiple grammars.
 
@@ -404,7 +404,7 @@ logger.info(f"Processing complete: file='{filename}' status='{status}' duration=
 
 **Convention:** `key='value'` for strings, `key=value` for numbers/booleans. Consistent everywhere.
 
-### MC-CO-03: Convergent Naming
+### MECT-CO-03: Convergent Naming
 
 Same concept uses same term in URL path, request payload, response body, database column, variable name, log message, and documentation.
 
@@ -429,7 +429,7 @@ Logs:     "Processing user_id='...'"
 Docs:     "The user places an order"
 ```
 
-### MC-CO-04: Consistent Patterns Across Similar Constructs
+### MECT-CO-04: Consistent Patterns Across Similar Constructs
 
 Same type of thing = same code pattern. Don't invent new patterns for similar operations.
 
@@ -460,7 +460,7 @@ def get_product(id):
     return db.query(Product).filter_by(id=id).first()
 ```
 
-### MC-CO-05: Keep Established API Names
+### MECT-CO-05: Keep Established API Names
 
 Don't rename working terms even if they became misnomers. Users predict behavior by the evoked association field, not the literal name.
 
@@ -486,7 +486,7 @@ Like "horsepower" - the association field matters, not the literal name.
 
 ## Naming Design Rules (ND)
 
-### MC-ND-01: Naming Structure Method
+### MECT-ND-01: Naming Structure Method
 
 Build names by progressive qualification: most explicit name first, then specifiers, then states.
 
@@ -511,7 +511,7 @@ planned_project_start_date = ...
 actual_project_start_date = ...
 ```
 
-### MC-ND-02: Canonical Form for IDs and Data Structures
+### MECT-ND-02: Canonical Form for IDs and Data Structures
 
 Convert variable representations to predictable, matchable forms. Canonical forms enable automated compare, sort, match, join.
 
@@ -535,7 +535,7 @@ def to_canonical(order_text: str) -> str:
 
 **Rule:** If data comes from multiple sources in different formats, define a canonical form and convert at the boundary.
 
-### MC-ND-03: No Recursive/Implicit Naming
+### MECT-ND-03: No Recursive/Implicit Naming
 
 A name must not contain itself at a different level. A container name must describe what it contains.
 
@@ -559,7 +559,7 @@ class VehicleRegistry:
     license_plate: str
 ```
 
-### MC-ND-04: No Product-as-Term Collision
+### MECT-ND-04: No Product-as-Term Collision
 
 Avoid naming products with words that are common terms in the product's own domain.
 
@@ -581,7 +581,7 @@ ms_team = teams_client.get_team(team_id)
 workspace = collaboration_client.get_workspace(workspace_id)
 ```
 
-### MC-ND-05: Type Name = Domain Concept, Not Implementation
+### MECT-ND-05: Type Name = Domain Concept, Not Implementation
 
 Name classes and types after what they represent in the domain, not how they're implemented.
 
@@ -601,7 +601,7 @@ class EmailAddress: ...         # Domain concept
 class ShippingLabel: ...        # Domain concept
 ```
 
-### MC-ND-06: Disambiguate by Qualifying, Not Renaming
+### MECT-ND-06: Disambiguate by Qualifying, Not Renaming
 
 When two concepts collide in name, qualify both sides. Don't rename one to an unrelated term.
 
@@ -625,7 +625,7 @@ def process_request():
 
 **Why:** Renaming to an unrelated term breaks the association field. "Sequence" doesn't evoke "ordering" the way "SortOrder" does. Qualifying preserves the original concept while adding precision.
 
-### MC-ND-07: Intuitive Opposites for Paired Parameters
+### MECT-ND-07: Intuitive Opposites for Paired Parameters
 
 Parameters, return values, and configuration keys that form pairs must use predictable opposites.
 
@@ -652,7 +652,7 @@ config = {
 
 **Standard opposites:** start/end, min/max, first/last, source/target, input/output, request/response, before/after, current/previous, local/remote, internal/external, public/private
 
-### MC-ND-08: No Terminological Synonymy
+### MECT-ND-08: No Terminological Synonymy
 
 One concept = one name across the entire codebase. Multiple names for the same thing create phantom entities in the developer's mental model.
 
@@ -684,7 +684,7 @@ sdk_object.application_id = "123"  # matches API
 
 **Test:** Grep your codebase for all names referring to one concept. If you find synonyms across layers (API, SDK, database, logs), unify them to one canonical name.
 
-### MC-ND-09: No Inverted Semantics
+### MECT-ND-09: No Inverted Semantics
 
 Parameter and field names must suggest the correct direction of the value. If the name implies one direction but the value means the opposite, rename.
 
@@ -719,7 +719,7 @@ config = {
 
 ## Documentation Rules (DC)
 
-### MC-DC-01: Four Description Types
+### MECT-DC-01: Four Description Types
 
 Any code entity (function, class, module, system) can be documented from four perspectives:
 
@@ -750,7 +750,7 @@ Configured in rate_limits.yaml.
 
 Not every entity needs all four. Use judgement. But when documenting complex code, covering all four prevents "but why?" and "but where?" questions.
 
-### MC-DC-02: Match Description Type to Audience
+### MECT-DC-02: Match Description Type to Audience
 
 - **README** - intentional + functional (users need why + what)
 - **Docstrings** - functional + technical (developers need what + how)
@@ -771,7 +771,7 @@ Prevents API abuse by blocking clients that exceed 100 requests/minute.
 Blocked clients receive HTTP 429 until their window resets.
 ```
 
-### MC-DC-03: Plain Language in User-Facing Messages
+### MECT-DC-03: Plain Language in User-Facing Messages
 
 User-facing text (error messages, UI labels, help text, CLI output) uses daily words. No internal jargon, no abbreviations, no code references.
 
@@ -789,4 +789,4 @@ print("Order processing failed. Please try again or contact support.")
 print("Your session has expired. Please sign in again.")
 ```
 
-**Developer-facing messages** (logs, debug output) can use technical terms - they serve a different audience (see MC-DC-02).
+**Developer-facing messages** (logs, debug output) can use technical terms - they serve a different audience (see MECT-DC-02).

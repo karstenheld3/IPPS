@@ -10,7 +10,7 @@ Create or insert a STRUT plan (Structured Thinking notation) into any document.
 
 ## Required Skills
 
-- @write-documents for STRUT template and formatting rules
+- @skills:write-documents for STRUT template and formatting rules
 
 ## MUST-NOT-FORGET
 
@@ -20,12 +20,12 @@ Create or insert a STRUT plan (Structured Thinking notation) into any document.
 
 ## Step 1: Read Template
 
-Read `STRUT_TEMPLATE.md` from the @write-documents skill folder.
+Read `STRUT_TEMPLATE.md` from the @skills:write-documents skill folder.
 
 ## Step 2: Determine Location
 
 STRUT plans go to:
-- `__STRUT_[TOPIC].md` - Standalone scaffolding file (default, deleted by `/cleanup`)
+- `_agentwork/__STRUT_[TOPIC].md` - Standalone scaffolding file in the working folder (default, deleted by `/cleanup`)
 - `_IMPL_*.md` - Embedded in implementation plans
 - `_TASKS_*.md` - Embedded in task plans
 

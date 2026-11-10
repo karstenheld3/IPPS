@@ -2,7 +2,7 @@
 
 Rules for `_PROMPTS_[NN]-[Topic].md` files. Verifiable from the artifact alone.
 
-**Writing quality:** Apply `APAPALAN_RULES.md` to all prompt content. Key rules: AP-PR-07 (be specific), AP-BR-02 (sacrifice grammar for brevity), AP-ST-01 (goal first), AP-NM-01 (one name per concept).
+**Writing quality:** Apply `APAPALAN_RULES.md` to all prompt content. Key rules: APAPL-PR-07 (be specific), APAPL-BR-02 (sacrifice grammar for brevity), APAPL-ST-01 (goal first), APAPL-NM-01 (one name per concept).
 
 ## Rule Index
 
@@ -74,6 +74,7 @@ Hang Safety (HS)
 - PRMT-HS-08: Prior-step verification for dependent prompts
 - PRMT-HS-09: Targeted test scope — specific test files during implementation, full suite only in final verification
 - PRMT-HS-10: Spec-code consistency check in Verify when prompt changes code with associated spec
+- PRMT-HS-11: Agent tool limits copied verbatim into the robustness card; prompts reference the card, never restate token numbers
 
 Robustness (RB)
 - PRMT-RB-01: Findings card designated for the sequence
@@ -644,7 +645,7 @@ The GOOD prompt repeats "rate limiter" three times. Each repetition anchors the 
 
 ## PRMT-CT-07: Examples Over Descriptions for Format and Behavior
 
-When a prompt must produce output in a specific format, show one example instead of describing the format in prose. AP-BR-05 (show format over describing format) applies directly. Examples are simultaneously more precise AND more token-efficient than descriptions.
+When a prompt must produce output in a specific format, show one example instead of describing the format in prose. APAPL-BR-05 (show format over describing format) applies directly. Examples are simultaneously more precise AND more token-efficient than descriptions.
 
 **BAD** (describes format - 45 tokens, still ambiguous):
 `````markdown
@@ -1948,40 +1949,41 @@ The summary list must NOT be wrapped in code fences (agent responses are rendere
 
 ### [Group 1 Heading]
 <what was done and what do these files contain>
-- [filename1](file:///path/to/file1) - <description of file purpose or content>
-- [filename2](file:///path/to/file2) - <description of file purpose or content>
+- `relative/path/to/file1` - <description of file purpose or content>
+- `relative/path/to/file2` - <description of file purpose or content>
 
 ### [Group 2 Heading]
 <what was done and what do these files contain>
-- [filename3](file:///path/to/file3) - <description of file purpose or content>
+- `relative/path/to/file3` - <description of file purpose or content>
 
 Format elements:
 - **Multiple headings for output groups**: Organize files into distinct categories with Markdown headings (e.g., `### Primary Deliverables`, `### Run Reports & Data`, `### Session Tracking`).
 - **`<what was done and what do these files contain>`**: Directly under each group heading, provide a clear, concise overview summarizing the actions performed and explaining what content the output files in that group contain.
-- **`- [filename](file:///path) - <description of file purpose or content>`**: A bulleted list where each link is a standard Markdown link formatted as `[filename](file:///path)` (or workspace-relative path), followed by ` - ` and a concise description of the file's purpose or content.
-- **No code fences**: Output standard Markdown directly so links remain clickable in the chat panel, IDE, or document renderer.
+- **`- `relative/path/to/file` - <description of file purpose or content>`**: A bulleted list where each file path is enclosed in backticks as a workspace-relative path with forward slashes (e.g., `` `docs/_INFO_HOW_DEVIN_WORKS.md` ``), followed by ` - ` and a concise description of the file's purpose or content.
+- **No code fences**: Output standard Markdown directly so paths are rendered as interactive chips in the chat panel.
+- **No `file:///` links or raw HTML**: Never use `[filename](file:///path)` or `<a href="...">`. Devin Desktop's Markdown renderer strips `file:` protocol URLs, rendering them as unclickable dead links (`href=""` with `preventDefault()`). Backticked workspace-relative paths are automatically parsed by Devin's chat engine (`PDo` pattern), converted to internal `cci:` URIs, and rendered as interactive clickable chips that jump directly to the file in the editor upon clicking.
 
-Rationale: At sequence completion, the reviewer needs immediate, one-click access to all deliverables without hunting through directories or parsing terminal logs. Plain text paths or `@path` citation strings are not clickable in standard Markdown viewers or chat panels. Grouping by multiple headings with explanatory context provides immediate orientation before the reviewer inspects the files.
+Rationale: At sequence completion, the reviewer needs immediate, one-click access to all deliverables without hunting through directories or parsing terminal logs. In Devin / Cascade, `file:///` URLs are stripped by protocol sanitization and render as unclickable dead links. Backticked workspace-relative paths with forward slashes (`path/to/file.ext`) are recognized by Devin's chat transformer, verified against disk, and rendered as clickable file chips with editor jumps. Grouping by multiple headings with explanatory context provides immediate orientation before the reviewer inspects the files.
 
-Verifiable from artifact: The final prompt in `_PROMPTS_*.md` contains an instruction in its STOP directive requiring a clickable summary artifact list with multiple headings for each output group, what was done / file contents description under each heading, and clickable Markdown links (`[label](file:///path)`) with descriptions, without code fence wrapping.
+Verifiable from artifact: The final prompt in `_PROMPTS_*.md` contains an instruction in its STOP directive requiring a clickable summary artifact list with multiple headings for each output group, what was done / file contents description under each heading, and backticked workspace-relative paths (`` `relative/path/to/file` ``) with descriptions, without code fence wrapping or `file:///` URLs.
 
 **BAD** (final prompt STOP report does not require clickable artifact list, or only asks for plain status):
 `````markdown
 **STOP.** Report: items completed, tests passed, and final status.
 `````
 
-**BAD** (asks for plain text paths or citations):
+**BAD** (uses unclickable file:/// links or raw HTML):
 `````markdown
-**STOP.** Report: list of files modified (@path:line format).
+**STOP.** Report: list of files modified formatted as [filename](file:///path/to/file) or <a href="...">.
 `````
 
-**GOOD** (final prompt specifies multiple headings per output group, explanation, and clickable links):
+**GOOD** (final prompt specifies multiple headings per output group, explanation, and backticked workspace paths):
 `````markdown
 **STOP.** Report: verify findings fixed / open, commit hash, final run status, and a clickable summary artifact list with separate headings for each output group formatted as:
-Heading
+### [Output Group Heading]
 <what was done and what do these files contain>
-- [filename](file:///path) - <description of file purpose or content>
-(Do not wrap the list in code fences).
+- `relative/path/to/file` - <description of file purpose or content>
+(Do not wrap the list in code fences. Use backticked workspace-relative paths with forward slashes so Devin renders them as clickable file chips. Never use file:/// links or raw HTML).
 `````
 
 ## PRMT-CT-12: Prefer Agent Tools Over Shell Commands for File Operations
@@ -2143,3 +2145,27 @@ Verify: Run `npx jest tests/unit/auth.test.ts`. All tests pass. Check `_SPEC_Aut
 ```
 `````
 Result: Code changed, spec verified and updated if needed. Spec-code consistency maintained.
+
+## PRMT-HS-11: Agent Tool Limits from the Robustness Card
+
+Agent-tool robustness (tool-call payload size, edit chunking, stall recovery) is separate from terminal robustness (commands run in the terminal). The prompt-writing agent is assumed to be the prompt-executing agent, so the single source is the writing agent's agent-specific rule file, section Tool-Call Payload Limit; if absent, `agent-behavior.md` Large File Writes. The robustness card section `## Agent tool limits` holds a verbatim copy of that rule. Prompts that write or edit files reference the card; they never restate a token number.
+
+A token number written into a prompt goes stale when the rule changes and overrides the agent-specific limit (a "~4,000 tokens" prompt hangs an agent whose limit is lower).
+
+Verifiable from artifact: 1) the card has `## Agent tool limits` whose text equals the source rule of the writing agent, 2) every prompt that writes or edits files has an `Agent tool limits: see [card]` constraint, 3) no prompt contains a per-write token number.
+
+**BAD** (token number restated in prompt):
+`````markdown
+```
+- Follow `core-conventions.md`; split writes above ~4,000 tokens into sequential edits
+```
+`````
+Result: An agent with a lower limit follows the prompt, sends 3,500-token edits, tool calls stall.
+
+**GOOD** (card reference):
+`````markdown
+```
+- Agent tool limits: see `_agentwork/__CARD_[TOPIC]-Robustness.md` section "Agent tool limits"; one section or media type per tool call
+```
+`````
+Result: Limit comes from the agent rule via the card; rule changes propagate on the next card refresh.

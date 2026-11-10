@@ -6,7 +6,18 @@ disable-model-invocation: true
 
 # Rename / Refactor Workflow
 
+**Goal**: Pattern replaced everywhere in scope with no unintended leftovers.
+
+**Why**: Partial renames leave broken references.
+
 Robust pattern replacement across files with analysis, planning, execution, and verification.
+
+## MUST-NOT-FORGET
+
+- Search case-insensitive by default; check whether changing case breaks integrity
+- Skip binary files
+- Protected folders need file copy via PowerShell instead of direct edit
+- Re-search the old pattern after replacing: zero results except confirmed exceptions
 
 ## Workflow
 

@@ -17,8 +17,8 @@ Templates do not teach. Teaching belongs in `*_RULES.md` and `*_GUIDES.md` compa
 Template inconsistencies compound: every document inherits them, and mixed formats prevent `/verify` from determining which is correct. A `[conditional - ...]` in one template and `<!-- Conditional: ... -->` in another teaches agents both are valid.
 
 - **MECT** - Inconsistent annotation formats are noise that agents amplify
-- **APAPALAN AP-PR-09** - "Repeat established structures" - templates ARE the structures
-- **SOCAS-08** - Annotations that look like content are noise; XML comments are invisible
+- **APAPALAN APAPL-PR-09** - "Repeat established structures" - templates ARE the structures
+- **SOCAS-CR-08** - Annotations that look like content are noise; XML comments are invisible
 - **GRUC** - Rules define WHAT, Guides explain HOW, INFO documents explain WHY
 
 ## 3. Template Categories
@@ -27,13 +27,13 @@ Template inconsistencies compound: every document inherits them, and mixed forma
 
 Created once per task, versioned, referenced by Doc ID. Require: Doc ID, Goal, Timeline, Document History.
 
-Templates: INFO, SPEC, IMPL, TEST, TASKS, REVIEW, MINTO, DEFERRED_IMPROVEMENTS, FIXES.
+Templates: INFO, SPEC, IMPL, TEST, TASKS, REVIEW, MINTO, DEFERRED_IMPROVEMENTS, FIXES, and the three DD-16 deliverable file kinds (OPTIONS, DRAFT, dated output).
 
 ### 3.2 Other Templates
 
 Tracking logs, scaffolding, reusable artifacts, or embedded notation. Doc ID, Timeline, and Document History do not apply.
 
-Templates: FAILS, LEARNINGS, MINTO-DRAFT, CONVERSATION, SKILL, WORKFLOW, STRUT.
+Templates: FAILS, LEARNINGS, CONVERSATION, SKILL, WORKFLOW, STRUT.
 
 ## 4. Template Structure
 

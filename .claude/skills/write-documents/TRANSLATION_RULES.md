@@ -2,7 +2,7 @@
 
 Rules for translating documents with consistent quality, terminology, and structure. Referenced by `/translate`, `/verify`, and `/improve`.
 
-**Writing quality:** Apply `APAPALAN_RULES.md` to all translated content. Key rules: AP-PR-07 (be specific), AP-NM-01 (one name per concept), AP-PR-09 (consistent patterns).
+**Writing quality:** Apply `APAPALAN_RULES.md` to all translated content. Key rules: APAPL-PR-07 (be specific), APAPL-NM-01 (one name per concept), APAPL-PR-09 (consistent patterns).
 
 ## Rule Index
 

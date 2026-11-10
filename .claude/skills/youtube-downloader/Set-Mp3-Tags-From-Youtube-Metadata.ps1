@@ -10,7 +10,7 @@
     Preserves original file timestamps.
 
 .PARAMETER JsonPath
-    Path to the enriched .tmp_[TOPIC]_youtube-metadata.json file.
+    Path to the enriched [TOPIC]_youtube-metadata.json file (in .tmp_extracted/).
 
 .PARAMETER Mp3Folder
     Folder containing the MP3 files (named as [youtube_id].mp3 or already renamed).
@@ -19,10 +19,10 @@
     Show what would be done without modifying any files.
 
 .EXAMPLE
-    .\Set-Mp3-Tags-From-Youtube-Metadata.ps1 -JsonPath "D:\downloads\.tmp_Test_youtube-metadata.json" -Mp3Folder "D:\downloads"
+    .\Set-Mp3-Tags-From-Youtube-Metadata.ps1 -JsonPath "D:\downloads\.tmp_extracted\Test_youtube-metadata.json" -Mp3Folder "D:\downloads"
 
 .EXAMPLE
-    .\Set-Mp3-Tags-From-Youtube-Metadata.ps1 -JsonPath "D:\downloads\.tmp_Test_youtube-metadata.json" -Mp3Folder "D:\downloads" -DryRun
+    .\Set-Mp3-Tags-From-Youtube-Metadata.ps1 -JsonPath "D:\downloads\.tmp_extracted\Test_youtube-metadata.json" -Mp3Folder "D:\downloads" -DryRun
 #>
 
 [CmdletBinding()]

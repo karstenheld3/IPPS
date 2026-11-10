@@ -130,7 +130,9 @@ BAD:  │┌─────┐│    GOOD:  │ ┌─────┐ │
 
 ## AA-WD-01: Width Limits
 
-Diagram width within consumer limit: 70 chars for Markdown/mobile, 120 for documents, 180 absolute max. Above 70, use snake layout or split into two diagrams.
+Diagram width within consumer limit: 70 chars for Markdown/mobile, 100 for articles written with the goal of publishing, 120 for documents, 180 absolute max. Above the consumer limit, use snake layout or split into two diagrams.
+
+Articles for publishing (Minto articles, blog posts, whitepapers, proposals sent to external readers, documents rendered to HTML/PDF for distribution): every line of every code block - diagrams, calculation blocks, tables in code fences, footnotes inside the block - stays within 100 chars. Reason: rendered Markdown and PDF (renderings skill unwraps code up to 110 chars) wrap longer lines and break alignment. Move long annotations out of the line into numbered footnotes (`[1]`) below the block.
 
 ```
 BAD:  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────┐

@@ -39,7 +39,7 @@ Populated by `/session-new` workflow. Captures session context, decisions, and a
 - **Started**: 2026-01-15
 - **Goal**: Fix authentication token expiration handling in API client
 - **Operation Mode**: IMPL-CODEBASE | IMPL-ISOLATED
-- **Output Location**: src/features/auth/ | [SESSION_FOLDER]/poc/
+- **Output Location**: src/features/auth/ | [SESSION_FOLDER]/_poc/
 
 ## Agent Instructions
 

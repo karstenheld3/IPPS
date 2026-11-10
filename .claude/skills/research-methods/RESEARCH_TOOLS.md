@@ -22,8 +22,8 @@
 
 ### Transcription Tools
 
-- **`transcribe-image-to-markdown.py`** (llm-transcription) - Image to structured markdown. Best for screenshots, diagrams.
-- **`transcribe-audio-to-markdown.py`** (llm-transcription) - Audio to markdown transcript. Best for conference talks, podcasts.
+- **`transcribe-image-to-markdown.py`** (`@skills:llm-tools` `transcription/`) - Image to structured markdown. Best for screenshots, diagrams.
+- **`transcribe-audio-to-markdown.py`** (`@skills:llm-tools` `transcription/`) - Audio to markdown transcript. Best for conference talks, podcasts.
 
 ## When to Use Each Tool
 
@@ -41,7 +41,7 @@ Run targeted queries:
      ↓
 Collect PDF URLs, doc pages, public resources
      ↓
-Download PDFs to _DOWNLOADS_gitignore/
+Download PDFs to _download_gitignore/
 ```
 
 **Query patterns:**
@@ -156,7 +156,7 @@ Need complete visual record of web page
      ↓
 browser_navigate → browser_take_screenshot(fullPage: true, type: "jpeg")
      ↓
-MANDATORY: transcribe to _SOURCES/[SOURCE-ID]_transcription.md
+MANDATORY: transcribe to _sources/[SOURCE-ID]_transcription.md
   - Preferred: browser_snapshot + browser_evaluate (text extraction, faster)
   - Fallback: transcribe-image-to-markdown.py (OCR, for canvas/image-heavy pages)
 ```
@@ -222,7 +222,9 @@ pdftotext.exe "source.pdf" "source.txt"
 # Check: Is output meaningful? Has sufficient content?
 
 # Step 2b: Convert to images (if text extraction insufficient)
-python convert-pdf-to-jpg.py "source.pdf" --dpi 150 --output "[SESSION]/pdf_images/"
+python convert-pdf-to-jpg.py "source.pdf" --dpi 150 --output "[SESSION]/.tmp_jpgs/"
+
+# Rebuild: .tmp_jpgs/ is deleted by /cleanup; if it is missing when a later step needs it, re-run Step 2b
 
 # Step 3: Assess quality needs
 # Manually review 3-5 sample images to determine:
@@ -230,10 +232,10 @@ python convert-pdf-to-jpg.py "source.pdf" --dpi 150 --output "[SESSION]/pdf_imag
 # - What level of detail is needed?
 
 # Step 4: Batch transcribe with parallel workers
-python transcribe-image-to-markdown.py --input-folder "[SESSION]/pdf_images/" --output-folder "[SESSION]/transcribed/" --workers 60
+python transcribe-image-to-markdown.py --input-folder "[SESSION]/.tmp_jpgs/[PDF_NAME]/" --output-folder "[SESSION]/_sources/[PDF_NAME]/" --workers 60
 
 # Step 5: Archive
-python compress-pdf.py "source.pdf" --output "[SESSION]/compressed/"
+python compress-pdf.py "source.pdf" --output "[SESSION]/_download_gitignore/compressed/"
 # Copy with preserved timestamps:
 # PowerShell: Copy-Item preserves timestamps by default
 # Store: compressed PDF + all .md files in session folder
@@ -243,20 +245,22 @@ python compress-pdf.py "source.pdf" --output "[SESSION]/compressed/"
 
 ```
 [SESSION]/
-├── _DOWNLOADS_gitignore/
+├── _download_gitignore/
 │   ├── [original PDFs - not checked in]
-│   ├── pdf_images/
-│   │   └── [PDF_NAME]/
-│   │       ├── page_001.jpg
-│   │       └── ...
 │   └── compressed/
 │       └── [PDF_NAME]_compressed.pdf
-└── _SOURCES/
+├── .tmp_jpgs/                  (deletable, rebuildable)
+│   └── [PDF_NAME]/
+│       ├── page_001.jpg
+│       └── ...
+└── _sources/
     └── [PDF_NAME]/
         ├── page_001.md
         ├── page_002.md
         └── ...
 ```
+
+Folder registrations: see `SKILL.md` section Agent-Created Folders.
 
 **Decision criteria:**
 
@@ -385,7 +389,7 @@ read_url_content("https://github.com/[org]/[repo]/issues/...")
 
 Mandatory tool overrides for specific websites. These rules take precedence over the default tool selection flowchart.
 
-- **`gesetze-im-internet.de`** - MUST use Playwright browser (ms-playwright-mcp). Never use `search_web` or `read_url_content` for this domain. The `search_web` tool produces UTF-8 parsing errors on German legal text encoding and stops the agent. Navigate directly via `browser_navigate`, extract content via `browser_snapshot` or `browser_evaluate`.
+- **`gesetze-im-internet.de`** (Cascade) - Playwright only (`browser_navigate` + `browser_snapshot`). `search_web` / `read_url_content` on this domain crash the conversation (UTF-8 parsing error).
 
 ## Anti-Patterns
 
@@ -398,5 +402,5 @@ Mandatory tool overrides for specific websites. These rules take precedence over
 ## Tool Locations
 
 - **pdf-tools** - `../.tools/` (binaries), `[PROMPTSYSTEM_FOLDER]/skills/pdf-tools/` (scripts)
-- **llm-transcription** - `[PROMPTSYSTEM_FOLDER]/skills/llm-transcription/`
+- **llm-tools** (transcription) - `[PROMPTSYSTEM_FOLDER]/skills/llm-tools/transcription/`
 - **ms-playwright-mcp** - MCP server (configured in mcp_config.json)

@@ -6,12 +6,16 @@ disable-model-invocation: true
 
 # Bugfix Workflow
 
+**Goal**: Verified bug fix with root cause, test, commit, and documentation.
+
+**Why**: Untracked fixes recur and lose the investigation history.
+
 Complete bug-fixing workflow from problem discovery to verified fix and documentation.
 
 ## Required Skills
 
-- @write-documents for INFO, STRUT, and FIXES templates
-- @coding-conventions for code changes
+- @skills:write-documents for INFO, STRUT, and FIXES templates
+- @skills:coding-conventions for code changes
 - @skills:session-management for session setup (PROJECT-MODE only)
 
 ## MUST-NOT-FORGET
@@ -30,14 +34,14 @@ Complete bug-fixing workflow from problem discovery to verified fix and document
 ## Quick Reference
 
 SESSION-MODE (bug found during active session):
-- Folder: `[SESSION_FOLDER]/_BugFixes/`
+- Folder: `[SESSION_FOLDER]/_bugfixes/`
 - Bug ID: `[TOPIC]-BG-NNNN` (4-digit)
-- Bug Folder: `[SESSION_FOLDER]/_BugFixes/[TOPIC]-BG-NNNN_IssueDescription/`
+- Bug Folder: `[SESSION_FOLDER]/_bugfixes/[TOPIC]-BG-NNNN_IssueDescription/`
 - Docs: SPEC, IMPL, TEST
 - Commit: `fix([TOPIC]-BG-NNNN): description`
 
 PROJECT-MODE (bug found after session closed):
-- Folder: `[BUGFIXES_FOLDER]/` = `[SESSIONS_FOLDER]/_BugFixes/`
+- Folder: `[BUGFIXES_FOLDER]/` = `[SESSIONS_FOLDER]/_bugfixes/`
 - Bug ID: `GLOB-BG-NNNN` (4-digit, uses GLOB prefix)
 - Bug Folder: `[BUGFIXES_FOLDER]/GLOB-BG-NNNN_IssueDescription/`
 - Docs: SPEC, IMPL, TEST + `*_FIXES.md`
@@ -61,11 +65,11 @@ Folder structure:
 ```
 [SESSION_FOLDER]/
 ├── NOTES.md, PROBLEMS.md, PROGRESS.md
-└── _BugFixes/
+└── _bugfixes/
     └── [TOPIC]-BG-NNNN_IssueDescription/    <- [BUG_FOLDER]
         ├── PROBLEMS.md                      <- Full detail
-        ├── _INFO_*.md, __STRUT_*.md
-        ├── backup/, poc/, test/
+        ├── _INFO_*.md
+        └── _agentwork/, _backup/, _poc/, _test/             <- __STRUT_* in _agentwork/
 ```
 
 Documentation on completion:
@@ -79,7 +83,7 @@ Condition: No active session OR bug found after session closed/archived
 Characteristics:
 - Bug found AFTER implementation is done
 - Confirmed defect in existing code
-- Fix happens in persistent `_BugFixes` session
+- Fix happens in persistent `_bugfixes` session
 - Uses BG (Bug) tracking ID (`GLOB-BG-NNNN`, cross-cutting)
 
 Folder structure:
@@ -88,15 +92,15 @@ Folder structure:
 ├── NOTES.md, PROBLEMS.md, PROGRESS.md
 └── GLOB-BG-NNNN_IssueDescription/      <- [BUG_FOLDER] (uses GLOB prefix)
     ├── PROBLEMS.md                      <- Full detail
-    ├── _INFO_*.md, __STRUT_*.md
-    ├── backup/, poc/, test/
+    ├── _INFO_*.md
+    └── _agentwork/, _backup/, _poc/, _test/            <- __STRUT_* in _agentwork/
 ```
 
 Documentation on completion:
 - Update SPEC, IMPL, TEST docs
 - ALSO create/update `*_FIXES.md` next to component's IMPL or SPEC doc
 
-## Step 2: Ensure _BugFixes Session Exists (PROJECT-MODE only)
+## Step 2: Ensure _bugfixes Session Exists (PROJECT-MODE only)
 
 If PROJECT-MODE:
 
@@ -153,7 +157,7 @@ A problem is confirmed as a **bug** when it's a deviation from desired behavior 
 
 Create [BUG_FOLDER] (only when problem confirmed as bug):
 
-- SESSION-MODE: `[SESSION_FOLDER]/_BugFixes/[TOPIC]-BG-NNNN_IssueDescription/`
+- SESSION-MODE: `[SESSION_FOLDER]/_bugfixes/[TOPIC]-BG-NNNN_IssueDescription/`
   - Get next BG number from `[SESSION_FOLDER]/NOTES.md` "Bug List" section (count existing entries + 1)
 - PROJECT-MODE: `[BUGFIXES_FOLDER]/GLOB-BG-NNNN_IssueDescription/`
   - Get next BG number from `[BUGFIXES_FOLDER]/NOTES.md` (single source of truth)
@@ -165,7 +169,7 @@ Update parent PROBLEMS.md PR entry with note: "→ Now tracked as [TOPIC]-BG-NNN
 
 ## Step 5: Reproduce Bug
 
-- Use `.tmp` scripts or Playwright MCP
+- Use `.tmp_*` scripts in `[BUG_FOLDER]/_agentwork/` or Playwright MCP
 - Leave artifacts ONLY in `[BUG_FOLDER]`
 - Verify bug exists on current code before any changes
 - If cannot reproduce after 3 attempts → [CONSULT] with user
@@ -179,10 +183,10 @@ Run `/write-info` to create `_INFO_*.md` in `[BUG_FOLDER]`:
 
 ## Step 7: Develop Plan
 
-Run `/write-strut` to create fix plan:
+Run `/write-strut` to create fix plan (saved as `[BUG_FOLDER]/_agentwork/__STRUT_[TOPIC].md`):
 - Step-by-step plan with verifiable phases
 - Testing actions for each testable change
-- Backup affected files to `[BUG_FOLDER]/backup/`
+- Backup affected files to `[BUG_FOLDER]/_backup/`
 - Define commit strategy (NEVER commit untested code)
 
 Planning principles:
@@ -218,7 +222,7 @@ Run `/implement` principles:
 
 ### 10.1 Verify Fix
 
-- Do BEFORE/AFTER comparison using `[BUG_FOLDER]/backup/`
+- Do BEFORE/AFTER comparison using `[BUG_FOLDER]/_backup/`
 - Run all tests for impacted functionality
 - Only proceed if ALL tests pass
 
@@ -279,3 +283,11 @@ Created for PROJECT-MODE only. One file per component.
 - `path/to/spec.md`      - Added scenario for edge case X
 - `path/to/impl.md`      - Updated step Y to handle Z
 ```
+
+## Agent-Created Folders
+
+- `_bugfixes/` - role: bugfixes; parent: working folder (session root) or sessions folder (`[BUGFIXES_FOLDER]` in PROJECT-MODE); creator: Step 2 and Step 4; content: bug folders
+- `_agentwork/` - role: agentwork; parent: bug folder; creator: Step 5 and Step 7; content: `.tmp_*` scripts, `__STRUT_*`
+- `_backup/` - role: backup; parent: bug folder; creator: Step 7; content: copies of affected files before the fix
+- `_poc/` - role: poc; parent: bug folder; creator: Step 7; content: proofs of concept
+- `_test/` - role: test; parent: bug folder; creator: Step 8 and Step 9; content: test scripts and test data

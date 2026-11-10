@@ -101,7 +101,7 @@ def format_duration(seconds: float) -> str:
 
 def parse_args():
   parser = argparse.ArgumentParser(description='Write ID3v2.3 tags to MP3 files from enriched YouTube metadata JSON.')
-  parser.add_argument('json_path', type=Path, help='Path to enriched .tmp_[TOPIC]_youtube-metadata.json file')
+  parser.add_argument('json_path', type=Path, help='Path to enriched [TOPIC]_youtube-metadata.json file (in .tmp_extracted/)')
   parser.add_argument('mp3_folder', type=Path, help='Folder containing MP3 files')
   parser.add_argument('--dry-run', action='store_true', help='Show planned operations without modifying files')
   return parser.parse_args()
