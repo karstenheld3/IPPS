@@ -182,6 +182,10 @@ e:\Dev\IPPS\_Sessions\_2026-05-14_CrawlerRefactor\_INFO_CRAWLENG-01.md
 WARNING: Other documents depend on this file. Proceeding with deletion.
 ```
 
+## No Context Match
+
+If the target matches no context above, treat it as Specific Path and preview before removal.
+
 # EXECUTION
 
 ## Step 1: Determine Context

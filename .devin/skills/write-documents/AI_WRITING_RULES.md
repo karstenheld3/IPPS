@@ -1,6 +1,6 @@
 # AI Writing Rules
 
-Enforceable rules for suppressing and catching AI writing artifacts in publishing document types (`article`, `report`, `ebook`). Origin: `docs/_INFO_HOW_TO_DETECT_AI_ASSISTED_WRITING.md [AIDET-IN01]` and `specs/AI_WRITING_DETECTION_RULES.md`.
+Enforceable rules for suppressing and catching AI writing artifacts in publishing document types (`article`, `report`, `ebook`).
 
 **Writing quality:** Apply alongside `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: APAPL-PR-07 (be specific), MECT-WC-05 (one name per concept), MECT-WC-10 (explicit over figurative), MECT-VO-01 (active voice).
 

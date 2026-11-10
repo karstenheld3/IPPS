@@ -279,7 +279,7 @@ This prevents confusion between operational files and templates that require ada
 
 ## 8. GRUC File Set
 
-Every skill needs a GRUC (Guides, Rules, Checks) file set. The set depends on skill type and complexity. See `specs/_SPEC_IPPS_SKILLS.md [IPPSSKLS-SP01]` for the full specification.
+Every skill needs a GRUC (Guides, Rules, Checks) file set. The set depends on skill type and complexity.
 
 ### 8.1 Required: SKILL_RULES.md
 

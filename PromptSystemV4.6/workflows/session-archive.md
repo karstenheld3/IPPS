@@ -5,11 +5,21 @@ auto_execution_mode: 3
 
 # Archive Session Workflow
 
+**Goal**: Completed session folder moved to the archive folder and committed.
+
+**Why**: Archiving removes finished work from active context and keeps it recoverable.
+
 ## Required Skills
 
 - @skills:session-management for archive conventions
 
 Use this workflow to move a completed session folder to the archive folder `[WORKSPACE_FOLDER]/_archive_gitignore/` (`[SESSION_ARCHIVE_FOLDER]`). The archive folder is not versioned; git history keeps the session content.
+
+## MUST-NOT-FORGET
+
+- Run `/cleanup [SESSION_FOLDER]` first when `_agentwork` or `.tmp_*` folders exist
+- Never overwrite an existing archived folder of the same name
+- Run `git add` and `git commit` as two separate commands
 
 ## Steps
 

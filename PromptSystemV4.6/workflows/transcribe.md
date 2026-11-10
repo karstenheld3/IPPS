@@ -13,9 +13,9 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 
 ## Required Skills
 
-- @pdf-tools for PDF to image conversion
-- @ms-playwright-mcp for web page screenshots
-- @llm-tools (optional, `transcription/`) for advanced LLM-based transcription
+- @skills:pdf-tools for PDF to image conversion
+- @skills:ms-playwright-mcp for web page screenshots
+- @skills:llm-tools (optional, `transcription/`) for advanced LLM-based transcription
 
 ## MUST-NOT-FORGET
 
@@ -27,8 +27,8 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 
 ## Prerequisites
 
-- @pdf-tools available for PDF to JPG conversion
-- For TRANSCRIBE_SCRIPT: @llm-tools skill + API keys file required
+- @skills:pdf-tools available for PDF to JPG conversion
+- For TRANSCRIBE_SCRIPT: @skills:llm-tools skill + API keys file required
 - For TRANSCRIBE_PROMPT: No additional prerequisites
 
 ## GLOBAL-RULES
@@ -52,7 +52,7 @@ Apply to ALL contexts before any context-specific steps.
 Two dimensions determine the execution path:
 
 **Method** (detected in Step 1):
-- **TRANSCRIBE_SCRIPT** - `transcribe-image-to-markdown.py` with ensemble + judge + refinement. Requires @llm-tools skill + API keys.
+- **TRANSCRIBE_SCRIPT** - `transcribe-image-to-markdown.py` with ensemble + judge + refinement. Requires @skills:llm-tools skill + API keys.
 - **TRANSCRIBE_PROMPT** - Built-in transcription prompt (see Appendix). Fallback when skill or keys unavailable.
 
 **Scope** (determined by input):

@@ -7,6 +7,14 @@ description: Single source of truth for all document writing - system and planni
 
 Single skill for planning, creating, reviewing, and packaging documents. Root holds system and planning document standards; function subfolders hold deliverable document types, macro-structure writing techniques, and writing personas.
 
+## MUST-NOT-FORGET
+
+- Read the GUIDES and RULES files of the routed document type before writing; never write from memory
+- CHECKS files are never loaded while writing; only after execution by `/drift-detect` and `/improve`
+- Only the user selects `using <ID>` and `as <PERSONA>`
+- Publishing document types (`article`, `report`, `ebook`) also follow `AI_WRITING_RULES.md`; internal documents never do
+- No Markdown tables, no emojis, ASCII quotes, generic examples only
+
 ## Routing
 
 Read this file, then jump to exactly one target:

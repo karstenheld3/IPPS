@@ -5,10 +5,20 @@ auto_execution_mode: 3
 
 # Save Session Workflow
 
+**Goal**: Session progress persisted in tracking files and committed.
+
+**Why**: Unsaved progress is lost when the conversation ends.
+
 ## Required Skills
 
 - @skills:session-management for session file structure
-- @git-conventions for commit format
+- @skills:git-conventions for commit format
+
+## MUST-NOT-FORGET
+
+- Document only verified facts; mark with `[TESTED]` or `[ASSUMED]`
+- Update all session files, then sync topic folder progress to the parent PROGRESS.md
+- Run `/commit` last
 
 Re-read the entire conversation and find:
 - New problems found -> to be documented in session PROBLEMS.md

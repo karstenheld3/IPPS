@@ -5,6 +5,10 @@ auto_execution_mode: 3
 
 # Sync Workflow
 
+**Goal**: Dependent documents, sessions, and repos consistent with their source.
+
+**Why**: Unsynced documents drift and contradict each other.
+
 ## Required Skills
 
 Invoke based on context:
@@ -271,3 +275,7 @@ Sync direction:
 - Upstream = sync from here back to source (push local changes back to origin)
 
 Never overwrite: files matching `never_overwrite` glob patterns in promptsystem-sync.json are protected from overwrite and deletion.
+
+## No Context Match
+
+If no sync context is detected from the changed files, report `No sync context detected` and make no changes.

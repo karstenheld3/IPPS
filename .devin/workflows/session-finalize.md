@@ -5,10 +5,14 @@ auto_execution_mode: 3
 
 # Finalize Session Workflow
 
+**Goal**: Session findings synced to workspace level and session prepared for archive.
+
+**Why**: Failures and learnings left in a session folder are lost for future sessions.
+
 ## Required Skills
 
 - @skills:session-management for session lifecycle
-- @git-conventions for final commit
+- @skills:git-conventions for final commit
 
 ## MUST-NOT-FORGET
 

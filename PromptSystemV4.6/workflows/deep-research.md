@@ -4,6 +4,10 @@ description: Execute deep research (MEPI or MCPI) with domain-specific patterns 
 
 # Deep Research Workflow
 
+**Goal**: Multi-source research output with verified claims for a topic.
+
+**Why**: Shallow research produces unverified claims that propagate into specs and decisions.
+
 ## Required Skills
 
 - @skills:research-methods for research strategies, domain profiles, source processing

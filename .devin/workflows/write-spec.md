@@ -5,11 +5,15 @@ auto_execution_mode: 3
 
 # Write Specification Workflow
 
+**Goal**: Technical specification created from requirements.
+
+**Why**: A specification gives implementation and tests a single source of truth.
+
 Create technical specifications from requirements.
 
 ## Required Skills
 
-- @write-documents for document structure and formatting rules
+- @skills:write-documents for document structure and formatting rules
 
 ## MUST-NOT-FORGET
 
@@ -22,7 +26,7 @@ Create technical specifications from requirements.
 
 - User has described the problem or feature
 - Clarify scope and naming before starting
-- Read @write-documents skill
+- Read @skills:write-documents skill
 
 ## Steps
 
@@ -38,7 +42,7 @@ Create technical specifications from requirements.
 
 3. **Create Specification File**
    - Create `_SPEC_[COMPONENT].md` in session folder
-   - Follow @write-documents skill structure:
+   - Follow @skills:write-documents skill structure:
      - Header block (Goal, Target file, Dependencies)
      - Table of Contents
      - Scenario (Problem, Solution, What we don't want)

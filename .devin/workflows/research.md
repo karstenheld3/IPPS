@@ -17,12 +17,12 @@ Scope: Single-topic research producing one `_INFO_*.md`. Use `/deep-research` fo
 
 Read before proceeding:
 - @skills:research-methods `RESEARCH_GUIDES.md` for Most Executable Point of Information (MEPI) / Most Complete Point of Information (MCPI) research depth
-- @write-documents `INFO_GUIDES.md` and `INFO_RULES.md` for INFO document structure
-- @write-documents `APAPALAN_RULES.md` for writing quality
+- @skills:write-documents `INFO_GUIDES.md` and `INFO_RULES.md` for INFO document structure
+- @skills:write-documents `APAPALAN_RULES.md` for writing quality
 
 ## MUST-NOT-FORGET
 
-- Evaluate sources with Signs of Confusion and Sloppiness (SOCAS) - apply @write-documents `SOCAS_RULES.md` Source Evaluation subset
+- Evaluate sources with Signs of Confusion and Sloppiness (SOCAS) - apply @skills:write-documents `SOCAS_RULES.md` Source Evaluation subset
 - Summary section mandatory - copy/paste ready list at document top
 - Label ALL findings: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`
 - MEPI by default (2-3 curated options); MCPI only when completeness explicitly needed
@@ -56,8 +56,8 @@ _INFO_[TOPIC]-IN[NN]_[Title].md
 
 Apply to ALL branches below (profiles and general topics alike):
 
-1. All INFO-* rules from @write-documents `INFO_RULES.md` apply to every output document (profiles are specialized INFO documents)
-2. All APAPALAN rules from @write-documents `APAPALAN_RULES.md` apply to all written content
+1. All INFO-* rules from @skills:write-documents `INFO_RULES.md` apply to every output document (profiles are specialized INFO documents)
+2. All APAPALAN rules from @skills:write-documents `APAPALAN_RULES.md` apply to all written content
 3. Verification labels (`[ASSUMED]`/`[VERIFIED]`/`[TESTED]`/`[PROVEN]`) required on factual claims
 4. Inline source links at first mention per INFO-SC-05
 
@@ -109,3 +109,6 @@ Detect by: research subject is NOT a person, organization, or company.
 6. Write sources section (all URLs with primary findings)
 7. Write summary section at document top (copy/paste ready)
 
+## No Context Match
+
+If no profile matches, use General Topic.

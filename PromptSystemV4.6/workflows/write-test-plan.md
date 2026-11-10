@@ -5,11 +5,15 @@ auto_execution_mode: 3
 
 # Write Test Plan Workflow
 
+**Goal**: Test plan derived from a specification.
+
+**Why**: Test cases traced to requirements expose uncovered behavior.
+
 Create test plans from specifications.
 
 ## Required Skills
 
-- @write-documents for document structure and formatting rules
+- @skills:write-documents for document structure and formatting rules
 
 ## MUST-NOT-FORGET
 
@@ -21,7 +25,7 @@ Create test plans from specifications.
 
 - Specification exists (`_SPEC_[COMPONENT].md`)
 - Implementation plan exists (`_IMPL_[COMPONENT].md`) - optional
-- Read @write-documents skill
+- Read @skills:write-documents skill
 
 ## Steps
 

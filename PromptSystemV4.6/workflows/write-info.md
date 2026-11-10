@@ -9,7 +9,7 @@ Create research and analysis documents following INFO_TEMPLATE.md structure.
 
 ## Required Skills
 
-- @write-documents for INFO document structure and formatting rules
+- @skills:write-documents for INFO document structure and formatting rules
 
 ## MUST-NOT-FORGET
 
@@ -22,7 +22,7 @@ Create research and analysis documents following INFO_TEMPLATE.md structure.
 
 - User has described a research topic, question, or analysis goal
 - Clarify scope before starting if ambiguous
-- Read @write-documents skill and INFO_TEMPLATE.md
+- Read @skills:write-documents skill and INFO_TEMPLATE.md
 
 ## Steps
 
@@ -76,7 +76,7 @@ Create research and analysis documents following INFO_TEMPLATE.md structure.
 
 ## Document Structure
 
-See `INFO_TEMPLATE.md` in @write-documents skill for complete template.
+See `INFO_TEMPLATE.md` in @skills:write-documents skill for complete template.
 
 ```markdown
 # INFO: [Topic]

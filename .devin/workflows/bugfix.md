@@ -4,12 +4,16 @@ description: Fix bugs - record, investigate, create [BUG_FOLDER], test, commit, 
 
 # Bugfix Workflow
 
+**Goal**: Verified bug fix with root cause, test, commit, and documentation.
+
+**Why**: Untracked fixes recur and lose the investigation history.
+
 Complete bug-fixing workflow from problem discovery to verified fix and documentation.
 
 ## Required Skills
 
-- @write-documents for INFO, STRUT, and FIXES templates
-- @coding-conventions for code changes
+- @skills:write-documents for INFO, STRUT, and FIXES templates
+- @skills:coding-conventions for code changes
 - @skills:session-management for session setup (PROJECT-MODE only)
 
 ## MUST-NOT-FORGET

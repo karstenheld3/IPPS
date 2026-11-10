@@ -5,6 +5,10 @@ auto_execution_mode: 3
 
 # Devil's Advocate
 
+**Goal**: Findings on flawed assumptions, logic errors, and hidden risks in a target document or code.
+
+**Why**: Flawed thinking found before implementation costs less than flawed thinking found after.
+
 Find flawed assumptions, logic errors, and hidden risks.
 
 **Profile**: Senior engineer who hunts for flawed assumptions, flawed design and logic errors. Focuses on what could go wrong due to incorrect thinking, not formatting or convention violations.
@@ -16,7 +20,7 @@ Find flawed assumptions, logic errors, and hidden risks.
 ## Required Skills
 
 Invoke based on context:
-- @write-documents for document review (use CRITIQUE_TEMPLATE.md, FAILS_TEMPLATE.md)
+- @skills:write-documents for document review (use CRITIQUE_TEMPLATE.md, FAILS_TEMPLATE.md)
 
 **Note**: Code review against rules/conventions is done by `/verify`. This workflow focuses on logic, strategy, and goal alignment.
 
@@ -88,11 +92,11 @@ Invoke based on context:
 - **Question assumptions** - What are we taking for granted that could be wrong?
 - **Be specific** - Vague concerns are useless. Cite line numbers, exact scenarios
 - **Prioritize by impact** - Critical logic flaws first
-- **Apply SOCAS** - Use @write-documents `SOCAS_RULES.md` for systematic quality evaluation. Report findings with SOCAS IDs and severity.
+- **Apply SOCAS** - Use @skills:write-documents `SOCAS_RULES.md` for systematic quality evaluation. Report findings with SOCAS IDs and severity.
 
-**Categories and Labels**: See FAILS_TEMPLATE.md and CRITIQUE_TEMPLATE.md in @write-documents skill.
+**Categories and Labels**: See FAILS_TEMPLATE.md and CRITIQUE_TEMPLATE.md in @skills:write-documents skill.
 
-**FAILS.md Location and Format**: See FAILS_TEMPLATE.md in @write-documents skill.
+**FAILS.md Location and Format**: See FAILS_TEMPLATE.md in @skills:write-documents skill.
 
 ## Research Phase
 

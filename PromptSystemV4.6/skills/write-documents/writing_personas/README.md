@@ -34,8 +34,6 @@ Every persona file is a complete Writer Profile with 4 layers:
 └──────────────────────────────────────────────────────────────────┘
 ```
 
-Source framework: `docs/_INFO_HOW_TO_CONTROL_WRITING_STYLE_WITH_PARAMETERS_AND_TRAITS.md [DOCWRITEFW-IN01]` (17 personas). Gap analysis and 3 new personas: `_INFO_WRTSTYLTCH-03_WritingPersonasCatalogAndGaps.md [DRSYNART-WRTSTYLTCH-IN03]`.
-
 ## 2. User-Only Selection Rule (DRSYNART-DD-08)
 
 - **Rule**: Only the user chooses a persona. The agent applies a persona file only when the user passes `as <persona>`

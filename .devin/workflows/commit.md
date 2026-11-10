@@ -5,6 +5,10 @@ auto_execution_mode: 3
 
 # Commit Workflow
 
+**Goal**: All workspace changes committed as conventional commits.
+
+**Why**: Typed, scoped commits keep history searchable and revertible.
+
 Create conventional commits for staged changes.
 
 ## Required Skills

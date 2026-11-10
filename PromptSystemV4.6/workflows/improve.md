@@ -46,7 +46,7 @@ Apply to ALL contexts before any context-specific steps.
 
 ### Issue Categories (all contexts)
 
-Apply @write-documents `SOCAS_RULES.md` with context-appropriate subset. SOCAS criteria map to these categories:
+Apply @skills:write-documents `SOCAS_RULES.md` with context-appropriate subset. SOCAS criteria map to these categories:
 
 1. Contradictions (SOCAS-CR-01)
 2. Inconsistencies (SOCAS-CR-01)

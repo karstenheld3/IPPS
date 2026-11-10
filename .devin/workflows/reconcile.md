@@ -6,6 +6,10 @@ auto_execution_mode: 3
 
 # Pragmatic Programmer
 
+**Goal**: Actionable improvements derived from critique and fact-check findings.
+
+**Why**: Unfiltered findings contain false positives and over-engineering; pragmatic review keeps only changes with real benefit.
+
 Pragmatic review of critique and fact-check findings with actionable improvements.
 
 **Profile**: Experienced engineer who balances ideal solutions with practical constraints. Values simplicity, real-world evidence, and minimal change.
@@ -15,8 +19,8 @@ Pragmatic review of critique and fact-check findings with actionable improvement
 ## Required Skills
 
 Invoke based on context:
-- @write-documents for reading FAILS.md and critique/fact-check reviews (use FAILS_TEMPLATE.md, CRITIQUE_TEMPLATE.md, FACT-CHECK_TEMPLATE.md)
-- @coding-conventions for code improvements
+- @skills:write-documents for reading FAILS.md and critique/fact-check reviews (use FAILS_TEMPLATE.md, CRITIQUE_TEMPLATE.md, FACT-CHECK_TEMPLATE.md)
+- @skills:coding-conventions for code improvements
 
 ## Input Files
 

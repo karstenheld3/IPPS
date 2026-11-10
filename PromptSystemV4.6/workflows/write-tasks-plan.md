@@ -9,8 +9,8 @@ Create partitioned task documents from IMPL plans.
 
 ## Required Skills
 
-- @write-documents for TASKS template and document structure, `TASKS_GUIDES.md` for HWH (Human Work Hours) estimation and model-aware task sizing
-- @llm-tools `MODEL_INVENTORY.md` for model data
+- @skills:write-documents for TASKS template and document structure, `TASKS_GUIDES.md` for HWH (Human Work Hours) estimation and model-aware task sizing
+- @skills:llm-tools `MODEL_INVENTORY.md` for model data
 
 ## MUST-NOT-FORGET
 

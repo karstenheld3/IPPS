@@ -4,6 +4,10 @@ description: Fix any problem by reading relevant PromptSystem knowledge and appl
 
 # Fix Workflow
 
+**Goal**: Problem resolved by applying the relevant PromptSystem knowledge.
+
+**Why**: Fixes made without the applicable rules re-introduce violations.
+
 Fix any problem by reading relevant PromptSystem knowledge and applying it.
 
 ## Required Reading (Always)

@@ -153,8 +153,6 @@ Rule ID categories in every `*_RULES.md`: `[PREFIX]-ST-NN` structure, `[PREFIX]-
 
 Expansions: MINTO = Situation, Complication, Question, Answer; ABT = And, But, Therefore; PAS = Problem, Agitate, Solve; AIDA = Attention, Interest, Desire, Action; IMRaD = Introduction, Methods, Results, and Discussion; GRUC = Guides, Rules, Checks (plus Examples and Templates).
 
-Sources: `_INFO_WRTSTYLTCH-04_WritingTechniquesAndMediaMapping.md [DRSYNART-WRTSTYLTCH-IN04]` (technique research, taxonomy decision), `specs/_SPEC_GRUC_STANDARD.md [GRUC-SP01]` (file type boundaries).
-
 ## Document History
 
 **[2026-10-29 22:25]**

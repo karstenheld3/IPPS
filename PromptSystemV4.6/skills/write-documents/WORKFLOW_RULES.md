@@ -392,8 +392,8 @@ Use write-documents for templates.
 
 **GOOD:**
 ```markdown
-Read @coding-conventions for Python rules.
-Use @write-documents for templates.
+Read @skills:coding-conventions for Python rules.
+Use @skills:write-documents for templates.
 ```
 
 ## No Content Replication

@@ -5,11 +5,15 @@ auto_execution_mode: 3
 
 # Learn Workflow
 
+**Goal**: Transferable lessons from a resolved problem recorded in LEARNINGS.md.
+
+**Why**: Resolved problems repeat when the lesson stays implicit.
+
 Run after a problem is marked resolved in PROBLEMS.md to extract transferable lessons.
 
 ## Required Skills
 
-- @write-documents for LEARNINGS_TEMPLATE.md structure
+- @skills:write-documents for LEARNINGS_TEMPLATE.md structure
 
 ## MUST-NOT-FORGET
 

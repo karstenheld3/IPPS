@@ -4,7 +4,17 @@ description: Switch Cascade AI model tier (HIGH, MID, LOW)
 
 # Switch Model Workflow
 
+**Goal**: Cascade model switched to the requested tier.
+
+**Why**: Task difficulty determines which model tier is cost-effective.
+
 Switch to a different AI model tier. Direct execution - no file reads.
+
+## MUST-NOT-FORGET
+
+- Direct execution: no file reads
+- Run the script from `[AGENT_FOLDER]/skills/devin-auto-model-switcher/`
+- The switch takes effect on the next message
 
 ## Configuration
 

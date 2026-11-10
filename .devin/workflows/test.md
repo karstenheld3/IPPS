@@ -5,14 +5,18 @@ auto_execution_mode: 3
 
 # Test Workflow
 
+**Goal**: Tests run for the detected scope with results reported.
+
+**Why**: Untested changes ship defects.
+
 Run tests based on scope and context.
 
 ## Required Skills
 
 Invoke based on context:
-- @ms-playwright-mcp for UI testing
-- @write-documents for documenting problems and failures
-- @coding-conventions for code verification
+- @skills:ms-playwright-mcp for UI testing
+- @skills:write-documents for documenting problems and failures
+- @skills:coding-conventions for code verification
 
 ## Workflow
 
@@ -78,3 +82,7 @@ Test if deployment succeeded.
 3. Test core functionality works in deployed environment
 4. Verify no errors in deployment logs
 5. Document deployment issues in PROBLEMS.md
+
+## No Context Match
+
+If no test scope is detected, run Code Testing and report the detected scope.

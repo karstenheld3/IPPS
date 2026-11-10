@@ -5,6 +5,16 @@ description: Prime context with workspace files
 
 # Prime Context Workflow
 
+**Goal**: Workspace context loaded: rules, tracking documents, and workspace scenario.
+
+**Why**: An agent without context repeats past mistakes and ignores project conventions.
+
+## MUST-NOT-FORGET
+
+- Skip `.md` files starting with `_` and all folders starting with `_` or `.tmp_`
+- Read agent rules before priority (`!`) documents
+- Final output is a single row: files read, code files, mode
+
 ## Step 1: Read Agent Rules
 
 Read all .md files in the agent rules folder:

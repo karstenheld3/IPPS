@@ -5,6 +5,10 @@ auto_execution_mode: 3
 
 # Project Release Workflow
 
+**Goal**: Versioned release with release notes, git tag, and GitHub release.
+
+**Why**: Config-driven releases are repeatable across single-repo and multi-repo workspaces.
+
 Create a config-driven project release supporting single-repo and multi-repo workspaces. All release parameters are read from `[RELEASE_CONFIG]` in workspace NOTES.md. Zero hardcoded paths, repo names, or version formats.
 
 **Spec**: `_SPEC_RELEASE_PROJECT_WORKFLOW.md [RLSPROJ-SP01]`
