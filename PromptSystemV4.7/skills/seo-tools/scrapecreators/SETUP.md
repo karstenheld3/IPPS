@@ -65,9 +65,9 @@ Cost gate: the estimate is `requests x credits per request`. A batch stops when 
 
 ## Parameter status (checked 2026-11-10)
 
-- `[TESTED 2026-11-10]` live: `credit-balance`, `reddit-search`, `youtube-trending-shorts`, `tiktok-trending-feed`, `instagram-search-reels` (parameter `query`); each charged 1 credit, a failed call was not charged
+- `[TESTED 2026-11-10]` live: `credit-balance`, `reddit-search`, `youtube-trending-shorts`, `tiktok-trending-feed`, `instagram-search-reels` (parameter `query`), `pinterest-topic` (parameter `url`, ideas URL with topic id); each charged 1 credit, a failed call was not charged
 - Confirmed from the vendor endpoint specification: `tiktok-search`, `youtube-search`, `reddit-subreddit`; `pinterest-topic` costs 1 credit per request
-- `[ASSUMED]` until a live call confirms them: `tiktok-popular-videos` and `tiktok-popular-songs` parameter names (`period`, `countryCode`, `page`, `orderBy`; the endpoints were down), `pinterest-topic` parameter `url`, the 1-credit price of each endpoint not listed as tested; use `--param` to correct a name without editing the script
+- `[ASSUMED]` until a live call confirms them: `tiktok-popular-videos` and `tiktok-popular-songs` parameter names (`period`, `countryCode`, `page`, `orderBy`; the endpoints were down), the 1-credit price of each endpoint not listed as tested; use `--param` to correct a name without editing the script
 - Response parsing is tolerant: known list keys first, otherwise the first list of objects; rows carry title, author, views, likes, comments, shares, published date, and URL where the vendor sends them
 
 ## Troubleshooting
