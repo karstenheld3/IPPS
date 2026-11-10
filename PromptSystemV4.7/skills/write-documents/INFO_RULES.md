@@ -1,7 +1,7 @@
 # INFO Document Rules
 
 Verification priority:
-1. Factuality and misinterpretation prevention - verify against `APAPALAN_RULES.md`, `MECT_WRITING_RULES.md`, `SOCAS_RULES.md`
+1. Factuality and misinterpretation prevention - verify against `APAPALAN_RULES.md`, `MECT_WRITING_RULES.md`, `SOCAS_RULES.md`, `SOCAS_WRITING_RULES.md`
 2. Document structure - verify against rules below
 
 ## Rule Index

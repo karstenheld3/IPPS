@@ -51,6 +51,7 @@ When [ACTOR] must choose between options (design decisions, open questions, a/b/
 
 **Problem**: What is wrong or undecided today, observable by the user
 **Context**: Why the problem exists - the constraint, spec clause, or prior finding that created it
+**Review**: Clickable links to the files and sections the user needs to decide, e.g. `path/to/file.md` section "Heading" (line N)
 
 **Options**
 - **1) [Short name]** (recommended - only one option carries this)
@@ -68,6 +69,8 @@ Rules:
 - Decisions the agent can take alone (engineering choices with no user-visible trade-off) are NOT presented - the agent decides and records them. Present only decisions where options differ in cost, quality, scope, or user-facing behaviour
 - Close with the exact reply format expected: `DD-04 2, DD-05 1`
 - Fixed points (constraints no option can change) go under Context, not as pseudo-options
+- Review links are mandatory: every decision lists each file and section needed to decide, so [ACTOR] never searches for them. Write each file as a backticked workspace-relative path with forward slashes (rendered as a clickable chip in the Devin / Cascade chat panel, see `PROMPTS_RULES.md` clickable summary artifact list). Add the section heading and line number after the path. Never use `file:///` links or raw HTML (stripped, dead links). Do not wrap the decision block in a code fence: paths in code fences are not clickable
+- If no file backs the decision, write `Review: none (decision is self-contained)`; never omit the line
 
 ## Confirmation Rules
 

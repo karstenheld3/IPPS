@@ -17,6 +17,7 @@ Encoding standard: All code that reads or writes files, calls external programs,
 ## Files
 
 MECT_CODING_RULES.md - Code quality (precision, brevity, consistency, naming, documentation)
+SOCAS_CODING_RULES.md - Signs of Confusion and Sloppiness for code and code specifications (quick screen, runs with @skills:write-documents `SOCAS_RULES.md`)
 PYTHON-RULES.md - Python (formatting, imports, naming, comments)
 JSON-RULES.md - JSON (field naming, 2-space indent)
 UNICODE_RULES.md - Encoding rules (UNICODE-GN, -BM, -PR): explicit encoding, BOM per file type, process boundaries

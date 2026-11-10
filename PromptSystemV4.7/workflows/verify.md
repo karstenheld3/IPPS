@@ -106,15 +106,15 @@ Apply to ALL document types and contexts:
 
 ## Conceptual verification
 
-When reviewing architecture, design and solution strategy, apply @skills:write-documents `SOCAS_RULES.md` with the Agent Output Review subset. Look for:
-- inconsistencies (SOCAS-CR-01)
-- ambiguities (SOCAS-CR-02)
-- new solutions for already solved problems (SOCAS-CR-03)
-- overlapping concerns (SOCAS-CR-03)
-- underspecified behavior (SOCAS-CR-06)
-- unverified assumptions (SOCAS-CR-10)
-- flawed thinking and underestimated complexity (SOCAS-CR-10)
-- over-engineering and introduction of unwanted complexity (SOCAS-CR-11)
+When reviewing architecture, design and solution strategy, apply @skills:write-documents `SOCAS_RULES.md` plus the field file chosen by content type (SOCAS-AP-03: `SOCAS_WRITING_RULES.md`, `SOCAS_COMMUNICATION_RULES.md`, or @skills:coding-conventions `SOCAS_CODING_RULES.md`). Look for:
+- inconsistencies (SOCAS-GN-01, SOCAS-GN-02)
+- ambiguities (SOCAS-GN-03)
+- new solutions for already solved problems (SOCAS-GN-17)
+- overlapping concerns (SOCAS-GN-17)
+- underspecified behavior (SOCAS-CD-09 for code specifications, SOCAS-WR-12 for non-code normative documents)
+- unverified assumptions (SOCAS-GN-06)
+- flawed thinking and unsupported conclusions (SOCAS-GN-04, SOCAS-GN-06)
+- over-engineering and introduction of unwanted complexity (SOCAS-GN-19; SOCAS-CD-05 for code)
 
 ## Verification Labels
 

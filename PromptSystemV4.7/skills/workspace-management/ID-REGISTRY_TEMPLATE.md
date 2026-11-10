@@ -89,7 +89,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **AWH** - Agent Work Hours. Agent time estimate. Example: "complete in < 5mins AWH"
 - **MEPI** - Most Executable Point of Information (used for research and decision making)
 - **MCPI** - Most Complete Point of Information (used for research)
-- **SOCAS** - Signs Of Confusion And Sloppiness (17 criteria)
+- **SOCAS** - Signs Of Confusion And Sloppiness (quick-screen rules in 4 files by field)
 - **MNF** - Must Not Forget. Technique for critical item tracking during task execution
 - **APAPALAN** - As Precise As Possible, As Little As Necessary. Conciseness principle for workflows and documents
 - **VCRIV** - Verify, Critique, Reconcile, Implement, Verify. Quality pipeline for logic and design review. Runs `/verify` -> `/critique` -> `/reconcile` -> `/implement` -> `/verify`

@@ -92,7 +92,7 @@ Invoke based on context:
 - **Question assumptions** - What are we taking for granted that could be wrong?
 - **Be specific** - Vague concerns are useless. Cite line numbers, exact scenarios
 - **Prioritize by impact** - Critical logic flaws first
-- **Apply SOCAS** - Use @skills:write-documents `SOCAS_RULES.md` for systematic quality evaluation. Report findings with SOCAS IDs and severity.
+- **Apply SOCAS** - Use @skills:write-documents `SOCAS_RULES.md` plus the field file chosen by content type (SOCAS-AP-03) for systematic quality evaluation. Report findings with SOCAS IDs and severity.
 
 **Categories and Labels**: See FAILS_TEMPLATE.md and CRITIQUE_TEMPLATE.md in @skills:write-documents skill.
 
@@ -353,10 +353,10 @@ Detect by: header block fields (`**Document Type**`: `article`, `report`, `ebook
 - Unsupported claim or authority laundering (`AW-SO-01..04`) - prose asserts key metrics, quotes, or historical attributions without verified primary-source grounding or conflates secondary internet commentary with primary texts
 - Flawed key line - arguments below governing thought fail inductive or deductive grouping tests
 - Section goal mismatch - section fails its stated goal or fails to advance reader transformation path
-- Telegraphic objection handling (`AW-ST-02`) and superficial substance checks - text compresses counter-arguments into stiff rapid-fire Q&A or cites only surface formatting checks instead of testing deep reasoning flaws (`SOCAS-CR-01/02` inconsistent or fuzzy terminology, `SOCAS-CR-03` concept overlap, `SOCAS-CR-10` gaps in reasoning, `SOCAS-CR-11` unnecessary complexity)
+- Telegraphic objection handling (`AW-ST-02`) and superficial substance checks - text compresses counter-arguments into stiff rapid-fire Q&A or cites only surface formatting checks instead of testing deep reasoning flaws (`SOCAS-GN-01`/`GN-02`/`GN-03` inconsistent or fuzzy terminology, `SOCAS-GN-17` concept overlap, `SOCAS-GN-04`/`GN-06` gaps in reasoning, `SOCAS-GN-19` unnecessary complexity)
 - Hedge-then-assert leap (`AW-SY-04`) and performed authority (`AW-VO-01..04`) - opening hedge is silently treated as proven fact in the next sentence, or disembodied omniscient tone masks domain errors
 - Hidden trade-off - text obscures known operational downsides, counter-evidence, or implementation risks
-- Misapplied evidence - cited finding does not actually substantiate the claim made (`SOCAS-CR-10`)
+- Misapplied evidence - cited finding does not actually substantiate the claim made (`SOCAS-GN-04`)
 
 **When Technique `[ID]` is set:**
 - Read the detected technique's `@skills:write-documents` `writing_techniques/[ID]_RULES.md` and `writing_techniques/[ID]_GUIDES.md`

@@ -229,6 +229,6 @@ When reviewing or critiquing MINTO articles, verify against these nine technique
 4. **Unsupported claim** - Answer claim in prose has no corresponding E-node in the appendix tree.
 5. **Closing creep** - Closing section adds nuance, qualification, or claims absent from the tree (`MINTO-CL-04`).
 6. **Single-source dependency** - Entire argument branch rests on a single finding that could be erroneous.
-7. **Misapplied statistic** - Evidence cited does not actually support the quantitative claim made (`SOCAS-CR-10`).
+7. **Misapplied statistic** - Evidence cited does not actually support the quantitative claim made (`SOCAS-GN-04`).
 8. **Absolute claim vulnerability** - Unqualified generalizations ("all", "none", "always", "never") invite immediate counter-examples.
 9. **Hidden trade-off** - Positioning argument obscures an obvious buyer objection, known downside, or operational cost.

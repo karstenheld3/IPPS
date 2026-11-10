@@ -1,343 +1,385 @@
-# SOCAS Evaluation Rules
+# SOCAS General Rules
 
-Rules for applying Signs of Confusion and Sloppiness (SOCAS) criteria during quality evaluation. Origin: `_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md [SOCAS-IN01]` (Karsten Held, 2026).
+Signs of Confusion and Sloppiness (SOCAS) is a quick screen of simple yes/no rules for signs that content was produced by someone confused or sloppy. It flags signs; it never proves a claim true or false and never judges the author. Origin: `_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md [SOCAS-IN01]` (Karsten Held, 2026). Discarded, merged and deferred candidates with reasoning: `_INFO_SOCAS_DISCARDED_RULE_CANDIDATES.md [SOCAS-IN02]`.
 
-Use during `/verify`, `/critique`, `/improve`, and `/research` workflows.
+Use during `/verify`, `/critique`, `/improve`, `/research` and `/fact-check`.
+
+**Out of scope (separate commands)**:
+- Truth verdicts and independent evidence search: `/fact-check`
+- Logic and risk review in depth: `/critique`
+- Writing the fix: APAPALAN and MECT rules, applied by `/improve`
+- AI-authorship detection: no rule exists; detectors are unreliable ([OpenAI classifier](https://openai.com/index/new-ai-classifier-for-indicating-ai-written-text/) withdrawn 2023-07-20; [61.3% false positives on non-native essays](https://pmc.ncbi.nlm.nih.gov/articles/PMC10382961/))
+
+## SOCAS Files
+
+Every rule lives in exactly one file. A run loads this file plus one field file chosen by content type (SOCAS-AP-03):
+- `SOCAS_RULES.md` (this file, `write-documents`): general rules for logic, statistics, fallacies, manipulation and superficial signs; application and reporting rules for every run
+- `SOCAS_WRITING_RULES.md` (`write-documents`): publications, reports, websites, marketing, non-code normative documents
+- `SOCAS_COMMUNICATION_RULES.md` (`write-documents`): chat, email, orders, requests, written traces of calls, prompts
+- `SOCAS_CODING_RULES.md` (`coding-conventions`): code, repositories, dependencies, code specifications
+
+SOCAS detects signs in any content, including content written by others. APAPALAN (`APAPALAN_RULES.md`) and MECT (`MECT_WRITING_RULES.md`, `MECT_CODING_RULES.md`) prescribe how to write. Where such a rule covers a sign, the SOCAS rule keeps only its test question and cites the rule ID as the fix (`Overlap: REF`). SOCAS copies no BAD/GOOD example from them.
+
+```
+SOCAS run (one holistic pass, fixed rank order, SOCAS-AP-12)
+├─> 1) Context first (SOCAS-AP-03): type, audience, purpose, stage
+├─> 2) SOCAS_RULES.md           general rules (always)
+├─> 3) One field file by content type:
+│      ├─> SOCAS_WRITING_RULES.md
+│      ├─> SOCAS_COMMUNICATION_RULES.md
+│      └─> SOCAS_CODING_RULES.md
+├─> 4) Web checks (max 5 sources, SOCAS-AP-10) or "web checks: not run"
+└─> 5) Score and report (SOCAS-AP-02, SOCAS-RP-01, RP-02)
+```
 
 ## Rule Index
 
-Criteria (CR)
-- SOCAS-CR-01: Inconsistencies
-- SOCAS-CR-02: Ambiguous Naming and Wording
-- SOCAS-CR-03: Overlapping Concerns
-- SOCAS-CR-04: Undisclosed Contact Information
-- SOCAS-CR-05: Ineffective Communication
-- SOCAS-CR-06: Incomplete Specifications
-- SOCAS-CR-07: Confusing Elements
-- SOCAS-CR-08: Information vs Noise Imbalance
-- SOCAS-CR-09: Lack of Structure
-- SOCAS-CR-10: Gaps in Reasoning
-- SOCAS-CR-11: Unnecessary Complexity
-- SOCAS-CR-12: Presentation Sloppiness
-- SOCAS-CR-13: Empty Structure
-- SOCAS-CR-14: Arbitrary Sequencing
-- SOCAS-CR-15: Net-Negative Adoption
-- SOCAS-CR-16: Disguised Commercial Intent
-- SOCAS-CR-17: Weaponized Persuasion
+General (GN) - this file
+- SOCAS-GN-01: Contradictions and Impossible Numbers
+- SOCAS-GN-02: Inconsistent Naming and Format
+- SOCAS-GN-03: Undefined or Ambiguous Key Terms
+- SOCAS-GN-04: Unsupported Conclusion
+- SOCAS-GN-06: Assumption as Fact, Unqualified Claim, No Alternatives
+- SOCAS-GN-07: Fallacy with Quote
+- SOCAS-GN-08: Manipulation Technique
+- SOCAS-GN-09: Numbers Without Base
+- SOCAS-GN-10: Biased Counting
+- SOCAS-GN-11: Causal Claim Beyond Design
+- SOCAS-GN-12: Significance and Testing Misread
+- SOCAS-GN-13: Misleading Chart
+- SOCAS-GN-15: Noise and Filler
+- SOCAS-GN-16: Impressive Form Without Substance
+- SOCAS-GN-17: Overlapping Concerns and Duplicate Mechanisms
+- SOCAS-GN-19: Unnecessary Complexity
+- SOCAS-GN-21: Lack of Structure
+- SOCAS-GN-22: Presentation Sloppiness
 
-Application (AP)
-- SOCAS-AP-01: Cite criterion ID with quoted evidence
-- SOCAS-AP-02: 3+ criteria violated triggers rework recommendation
-- SOCAS-AP-03: Apply context-appropriate subset
-- SOCAS-AP-04: UX-specific criteria for interface review
+Application (AP) - every run
+- SOCAS-AP-01: Quote and Rule ID per Finding
+- SOCAS-AP-02: Scoring and Rework Threshold
+- SOCAS-AP-03: Context First and File Selection
+- SOCAS-AP-05: SKIP vs NO INFORMATION
+- SOCAS-AP-06: One Passage, One Finding
+- SOCAS-AP-07: Scoring Guard
+- SOCAS-AP-08: Tolerant Thresholds
+- SOCAS-AP-09: Self-Evaluation Flag
+- SOCAS-AP-10: Web Budget
+- SOCAS-AP-11: Run-to-Run Noise
+- SOCAS-AP-12: Run Order
+- SOCAS-AP-13: Presence Tests Do Not Violate Alone
 
-Reporting (RP)
-- SOCAS-RP-01: Finding format - ID, evidence, severity
-- SOCAS-RP-02: Summary format - criteria count and verdict
+Reporting (RP) - every run
+- SOCAS-RP-01: Finding Format
+- SOCAS-RP-02: Summary Format
+
+Rule IDs have gaps because discarded drafts keep their numbers. A rule ID is never reused for another sign.
 
 ## Table of Contents
 
-- [The 17 Criteria](#the-17-criteria)
+- [Priority and Rule Format](#priority-and-rule-format)
+- [Rank Order](#rank-order)
+- [General Rules](#general-rules)
 - [Application Rules](#application-rules)
-- [Context-Appropriate Subsets](#context-appropriate-subsets)
-- [UX-Specific Criteria](#ux-specific-criteria)
-- [Reporting Format](#reporting-format)
+- [Reporting Rules](#reporting-rules)
 
-## The 17 Criteria
+## Priority and Rule Format
 
-### SOCAS-CR-01: Inconsistencies
+Priority = cost / benefit of one rule. Cost (effort for the agent per run):
+- **low**: yes/no test on a quoted passage, text only
+- **medium**: needs context judgment, approximate counting, or 1 web lookup
+- **high**: needs a tool (scanner, metric), several web lookups, or visual inspection
 
-Any type of inconsistency signals confusion:
-- Same concept named multiple ways
-- Same word used for different things
-- Contradicting statements within same document
-- Format/style inconsistencies without reason
+Value (benefit when the sign is found):
+- **high**: evidence A-B and the sign puts decisions at risk
+- **medium**: evidence B-C, or high evidence with narrow scope
+- **low**: evidence D or `[ASSUMED]`
 
-### SOCAS-CR-02: Ambiguous Naming and Wording
+Priority from cost and value:
+- **P1**: low cost + high or medium value, or medium cost + high value. Runs in every SOCAS pass on matching content
+- **P2**: medium cost + medium value, low cost + low value, or high cost + high value. Runs when the content type demands it or time allows
+- **P3**: high cost + medium or low value, or medium cost + low value. Runs only on explicit request (no selected rule has this priority)
 
-Lack of clear naming scheme:
-- Undefined or hand-wavy concepts
-- Key nouns without clear definition or boundaries
-- Names that could mean multiple things
-- Missing glossary for domain terms
+Evidence grades: A = several independent studies or large audits, B = one strong study or official analysis, C = standards body or expert consensus, D = opinion only, `[ASSUMED]` = no source found. Priorities are agent judgment from evidence grades, not measured. No study validates any SOCAS-style score against outcomes.
 
-### SOCAS-CR-03: Overlapping Concerns
+Every sign rule has:
+- Signs: what to look for
+- **Applies to**: content condition; content outside it gets `SKIP` (SOCAS-AP-05)
+- **Test**: one yes/no question answered for a quoted passage
+- **Priority**: `P[N] | Cost: [level], [why] | Value: [level], [evidence]`
+- **Web**: `no`, or the lookup it needs
+- **Overlap**: `none`, or the APAPALAN or MECT rule IDs that prescribe the fix (`REF`)
 
-Redundancy with deviation indicates poor design:
-- Two components doing the same job differently
-- Concept overlap without clear boundaries
-- Responsibilities split inconsistently
-- Duplicate mechanisms with slight variations
-- Items in same grouping at wildly different levels of detail ("Revenue trends" next to "Johnson account")
+ID scheme: `SOCAS-[CAT]-[NN]`. Categories: `GN` general, `WR` writing, `CM` communication, `CD` coding, `AP` application, `RP` reporting. `SOCAS-CM-*` (communication signs) is a different rule set from `APAPL-CM-*` (APAPALAN communication production rules).
 
-### SOCAS-CR-04: Undisclosed Contact Information
+## Rank Order
 
-Organizational red flag:
-- Generic email addresses only (info@, contact@)
-- No named contacts for specific concerns
-- Hidden or hard-to-find contact details
-- No escalation path documented
+A run executes rules in this fixed order: general file first, then the field file; within each file P1 before P2, then by value (high first), cost (low first), evidence grade, ID. A time-limited run executes the P1 rules of this file and of one field file (SOCAS-AP-12). Rules whose **Applies to** condition the content does not meet return `SKIP`.
 
-### SOCAS-CR-05: Ineffective Communication
+General rules:
+- P1: SOCAS-GN-01, GN-08, GN-09, GN-11, GN-15, GN-17, GN-19, GN-21, GN-03, GN-02, GN-04, GN-06, GN-10
+- P2: SOCAS-GN-13, GN-12, GN-16, GN-07, GN-22
 
-Forces unnecessary communication loops:
-- Information scattered across multiple documents
-- Critical details buried in noise
-- Missing context requiring follow-up questions
-- No clear owner or decision maker identified
+Application and reporting rules (every run, always active):
+- P1: SOCAS-AP-01, AP-02, AP-03, AP-05 to AP-10, AP-12, AP-13, RP-01, RP-02
+- P2: SOCAS-AP-11 (decisions only)
 
-### SOCAS-CR-06: Incomplete Specifications
+## General Rules
 
-Mixing suggestions with requirements:
-- No clear distinction between MUST, SHOULD, MAY
-- Underspecified behavior for edge cases
-- Implicit assumptions left unstated
-- Conclusions not supported by evidence
+Run on every content type. These rules hold the abstract form of signs; field files hold the concrete forms. A rule whose **Applies to** condition the content does not meet returns `SKIP`; a rule whose condition is met but that has too little to test returns `NO INFORMATION` (SOCAS-AP-05). Neither is a score.
 
-### SOCAS-CR-07: Confusing Elements
+On code (source code, scripts, configuration, diffs), SOCAS-GN-02, GN-03, GN-15, GN-19, GN-21 and GN-22 return `SKIP`: naming, comments, error and log messages in code belong to `MECT_CODING_RULES.md`, complexity to SOCAS-CD-05. Technical READMEs and code specifications are text and run all general rules.
 
-Funny but confusing additions:
-- Jokes or humor that obscures meaning
-- Creative naming that sacrifices clarity
-- Excessive metaphors or analogies
-- Easter eggs in serious documentation
+### Consistency and Reasoning
 
-### SOCAS-CR-08: Information vs Noise Imbalance
+#### SOCAS-GN-01: Contradictions and Impossible Numbers
 
-Poor signal-to-noise ratio:
-- Relevant details buried in irrelevant additions
-- Verbose explanations of obvious things
-- Missing explanations of complex things
-- Filler content without substance
-- Hedging clusters adding no information ("it is important to note", "it should be mentioned", "it is worth considering")
-- Generic phrasing where domain expertise would produce specific examples
-- Repetitive thesis restatement in different words across paragraphs
+- Two statements, figures, dates, owners or scopes contradict each other
+- Message forms: two deadlines, two owners or two scopes in one message; "urgent" and "no rush" together
+- Numbers that cannot be true: parts do not sum to the total, percentages that should sum to 100 do not, a mean impossible for the stated sample size, a date before the event it describes
+- **Applies to**: all content
+- **Test**: Do two passages contradict each other, or is a number arithmetically impossible?
+- **Priority**: P1 | Cost: low, text only (arithmetic by tool when available) | Value: high, evidence A ([statcheck](https://link.springer.com/article/10.3758/s13428-015-0664-2): half of psychology papers had an inconsistent p-value)
+- **Web**: no
+- **Overlap**: none
 
-### SOCAS-CR-09: Lack of Structure
+#### SOCAS-GN-02: Inconsistent Naming and Format
 
-Unstructured writing:
-- No clear headings or sections
-- Missing enumerations for lists
-- No identifiers for referenceable content
-- Wall-of-text formatting
-- No table of contents for long documents
+- One concept with several names, one name for several concepts, format changes without reason
+- **Applies to**: all text; not code (see above)
+- **Test**: Is one thing named, numbered or formatted in two ways?
+- **Priority**: P1 | Cost: low, text only | Value: medium, evidence C (requirement consistency, [ISO 29148 summary](https://claimdig.com/guides/good-requirements/))
+- **Web**: no
+- **Overlap**: REF - fix by APAPL-NM-01, APAPL-PR-09, MECT-WC-05
 
-### SOCAS-CR-10: Gaps in Reasoning
+#### SOCAS-GN-03: Undefined or Ambiguous Key Terms
 
-Logical inconsistencies:
-- Conclusions not supported by evidence
-- Missing steps in explanations
-- Assumptions presented as facts
-- No explicit tradeoffs or alternatives discussed
-- Selection not justified ("Three problems..." - why these three and no others?)
+- Key term undefined for the intended reader; a word with several readings; a dangerous meta-word without qualifier; a creative name or hidden reference (easter egg) the reader must decode
+- **Applies to**: all text; not code (see above)
+- **Test**: Would the intended reader understand every key term the first time it appears?
+- **Priority**: P1 | Cost: low, text only | Value: medium, evidence B-C ([IBM](https://www.ibm.com/docs/en/erqa?topic=assistant-guidelines-good-requirements) and [NASA](https://www.nasa.gov/reference/appendix-c-how-to-write-a-good-requirement/) requirement guidelines; [European Union (EU) claims study](https://op.europa.eu/en/publication-detail/-/publication/f7c4cb8b-f877-11ee-a251-01aa75ed71a1/language-en): 54 of 150 claims unclear)
+- **Web**: no
+- **Overlap**: REF - fix by APAPL-PR-12, APAPL-NM-02, APAPL-NM-03, MECT-WC-01, MECT-WC-09. Abbreviations: DEFER to APAPL-PR-06. Metaphors, idioms: DEFER to MECT-WC-10
 
-### SOCAS-CR-11: Unnecessary Complexity
+#### SOCAS-GN-04: Unsupported Conclusion
 
-Abstractions that don't earn their cost:
-- Over-engineered solutions for simple problems
-- Jargon where plain language works
-- Deep nesting without clear benefit
-- Indirection without purpose
+- A conclusion does not follow from evidence stated in the content; missing steps; claim without grounds or without a link (warrant) between grounds and claim
+- **Applies to**: content that draws conclusions or makes recommendations
+- **Test**: Does each conclusion follow from evidence stated in the content, with the steps in between?
+- **Priority**: P1 | Cost: low, text only | Value: medium, evidence C ([Toulmin method](https://writing.colostate.edu/guides/guide.cfm?guideid=58): claim, grounds, warrant)
+- **Web**: no
+- **Overlap**: none
 
-### SOCAS-CR-12: Presentation Sloppiness
+#### SOCAS-GN-06: Assumption as Fact, Unqualified Claim, No Alternatives
 
-Surface-level quality issues:
-- Typos and grammatical errors
-- Stale or broken references
-- Inconsistent formatting
-- Outdated information mixed with current
-- Outdated, abandoned, or unsupported code (stale repos, unresolved issues, no recent commits)
+- Assumption presented as fact; universal or causal claim ("proves", "always", "guarantees") without stated limits or conditions; one explanation only for a surprising result; no alternatives or trade-offs; unjustified selection ("three reasons" - why these three?)
+- Appeal to an expert that fails one of the six critical questions (expertise, field, exact assertion, trustworthiness, agreement with other experts, backing evidence)
+- **Applies to**: content that makes claims, choices or recommendations
+- **Test**: Is an assumption or strong claim stated without limits, or is a choice, explanation or expert opinion given without the alternatives or evidence considered?
+- **Priority**: P1 | Cost: low, text only | Value: medium, evidence C ([Calling Bullshit course](https://www.callingbullshit.org/videos.html): generate several hypotheses; [Walton critical questions](https://cgi.csc.liv.ac.uk/~floriana/CMNA/WaltonReed.pdf))
+- **Web**: no (expert credentials: optional 1 lookup)
+- **Overlap**: none
 
-### SOCAS-CR-13: Empty Structure
+#### SOCAS-GN-07: Fallacy with Quote
 
-Structure present but hollow - author organized without synthesizing:
-- Headings label categories instead of stating ideas ("Background", "Analysis", "Results")
-- Main point buried at end or absent entirely
-- Section summaries describe what the section covers, not what was found
-- No stated purpose - reader cannot tell why the document exists
+- A passage matches one of 7 fallacy families: strawman, begging the question, equivocation, cherry-picking, appeal to popularity, suppressed evidence, post hoc. Personal attack, false dichotomy and appeal to emotion belong to SOCAS-GN-08
+- Finding needs quote, family name, one sentence of reasoning, and a check that context does not make the argument sound. No label without a quote
+- **Applies to**: content that argues for a position
+- **Test**: Does a quoted passage match a fallacy family, and does the context fail to make the argument sound?
+- **Priority**: P2 | Cost: medium, context check against false positives | Value: medium, evidence C ([Internet Encyclopedia of Philosophy](https://iep.utm.edu/fallacy/): a fallacy label cannot replace examination of the context)
+- **Web**: no
+- **Overlap**: none
 
-### SOCAS-CR-14: Arbitrary Sequencing
+#### SOCAS-GN-08: Manipulation Technique
 
-Items dumped without analyzing relationships:
-- Items in lists appear in no discernible order
-- No logical, chronological, structural, or importance-based sequence
-- Reader cannot determine why item 2 follows item 1
+- Emotionally manipulative language, incoherent arguments, false dichotomy, scapegoating, ad hominem, fake experts, false balance
+- Abstract form; concrete commercial forms in SOCAS-WR-07, message forms in SOCAS-CM-08
+- **Applies to**: content that tries to persuade or to change the reader's view
+- **Test**: Does the text use a named manipulation technique instead of evidence?
+- **Priority**: P1 | Cost: low, text only | Value: high, evidence A ([7 preregistered studies](https://www.science.org/doi/10.1126/sciadv.abo6254), n = 6464 + 22,632: technique recognition is teachable)
+- **Web**: no
+- **Overlap**: none
 
-### SOCAS-CR-15: Net-Negative Adoption
+#### SOCAS-GN-17: Overlapping Concerns and Duplicate Mechanisms
 
-Solution introduces more problems than it solves - detectable through community research:
-- GitHub issues dominated by workarounds for the tool's own limitations
-- Community forums show recurring migration-away discussions
-- Known problems acknowledged by maintainers but unresolved across major versions
-- Adopters report increased complexity, debugging time, or breaking changes disproportionate to value gained
+- Two parts of a design, process, rule set or codebase do the same job in different ways; a new mechanism for a problem the content already solves elsewhere; concepts that overlap without a stated boundary; responsibilities split inconsistently between parts; a duplicated mechanism or code block with slight variations
+- **Applies to**: content that describes a design, system, process, rule set or code (specifications, architecture and process documents, rule files, workflows, source code); not narrative or persuasive text
+- **Test**: Do two parts do the same job differently, or does the content add a mechanism for a problem it already solves elsewhere?
+- **Priority**: P1 | Cost: low, cross-passage comparison as in SOCAS-GN-01 | Value: medium, evidence B with narrow scope ([inconsistent changes to code clones](https://wwwbroy.in.tum.de/~juergens/publications/ICSE2009_RP_0110_juergens.pdf): 52% of 1,427 clone groups were changed inconsistently, every second unintentional inconsistency was a fault, 107 confirmed faults in 5 systems); transfer to non-code designs [ASSUMED]
+- **Web**: no
+- **Overlap**: none (APAPL-BR-03 and MECT-LT-02 cover repeated text and list grouping, not duplicate mechanisms; the text part stays with those rules)
 
-### SOCAS-CR-16: Disguised Commercial Intent
+### Numbers and Statistics
 
-Content whose primary purpose is selling while presenting as journalism, education, or opinion:
-- Call-to-action buried after 80%+ emotional buildup (AIDA: Attention, Interest, Desire, Action)
-- Independence or ad-free claims contradicted by undisclosed sponsorship, equity stakes, or commercial relationships
-- Purchase framed as moral imperative or identity act ("join the movement")
-- Hidden costs: price or recurring charges appear only after emotional investment
-- Confirm-shaming: decline option worded to induce guilt ("No, I prefer to stay uninformed")
-- Author condemns competitors for tactics they themselves employ
+Each rule applies only to content with figures, rates, studies or charts (see **Applies to**); otherwise `SKIP`. Training does not protect: researchers endorsed on average more than 3 of 6 false statements about confidence intervals ([Hoekstra et al. 2014](https://www.ejwagenmakers.com/inpress/HoekstraEtAlPBR.pdf)). Do not raise a score for statistical vocabulary or credentials.
 
-Detection test: remove the final CTA. If the text loses its purpose, it was funnel, not content.
+#### SOCAS-GN-09: Numbers Without Base
 
-### SOCAS-CR-17: Weaponized Persuasion
+- Percentage, ratio or "x times" without raw numbers or base; relative risk without absolute risk; test accuracy without prevalence; sample size missing or small for a strong claim; "average" without mean or median
+- **Applies to**: content with percentages, ratios, averages or study results
+- **Test**: Does each percentage, ratio or average come with its raw numbers, base and sample size?
+- **Priority**: P1 | Cost: low, text only | Value: high, evidence A-B ([natural frequencies](https://pmc.ncbi.nlm.nih.gov/articles/PMC200816/): most of 48 doctors answered correctly vs about 8% with conditional probabilities)
+- **Web**: no
+- **Overlap**: none
 
-Cialdini's influence principles (reciprocity, scarcity, authority, consistency, liking, social proof) applied deceptively:
-- Reciprocity trap: unsolicited "free" offering creating obligation to purchase
-- Artificial scarcity or deadline pressure on non-scarce goods ("offer expires Friday")
-- Authority transfer from financially interested parties presented as independent endorsement
-- Commitment escalation: small initial ask (quiz, petition, trial) leading to larger ask
-- Social proof from non-independent parties (investor endorsing own investment, unverifiable "thousands of customers")
-- Tribal framing: in-group vs. out-group language bypassing rational evaluation
-- Fear appeals solvable only by the offered product
-- False binary reducing complex issues to "our product vs. catastrophe"
+#### SOCAS-GN-10: Biased Counting
+
+- Self-selected or opt-in sample; response rate missing; only survivors or winners counted; groups that differed before the treatment compared as if randomized
+- **Applies to**: content that reports surveys, samples, case collections or success stories
+- **Test**: Does the content state who was counted and who is missing?
+- **Priority**: P1 | Cost: low, text only | Value: medium, evidence C (course material, [Huff summary](https://thinkr.org/newsletter/how-to-lie-with-statistics))
+- **Web**: no
+- **Overlap**: none
+
+#### SOCAS-GN-11: Causal Claim Beyond Design
+
+- Causal verbs (causes, drives, leads to) on observational data; before-and-after read as effect; improvement of an extreme group read as treatment effect (regression to the mean); pooled totals hiding opposite subgroup trends (Simpson's paradox); the conclusion concerns a different quantity than the one measured (survival rate read as life gained)
+- **Applies to**: content that states causes or effects from data or experience
+- **Test**: Does the causal wording match the design, and does the conclusion concern the measured quantity?
+- **Priority**: P1 | Cost: low, text only | Value: high, evidence B ([BMJ on regression to the mean](https://pmc.ncbi.nlm.nih.gov/articles/PMC1125994/); [Gigerenzer on survival rates](https://journals.sagepub.com/doi/full/10.1111/j.1539-6053.2008.00033.x))
+- **Web**: no
+- **Overlap**: none
+
+#### SOCAS-GN-12: Significance and Testing Misread
+
+- "Significant" used as "important"; no effect size or interval; "no significant difference, so no effect"; confidence interval read as probability; many outcomes measured, one reported; hypothesis formed after seeing the data
+- **Applies to**: content that reports statistical tests, significance or confidence intervals
+- **Test**: Is effect size or interval given, and is it stated how many things were tested?
+- **Priority**: P2 | Cost: medium, needs statistics judgment | Value: medium, evidence B ([American Statistical Association (ASA) statement on p-values](https://www.tandfonline.com/doi/full/10.1080/00031305.2016.1154108)) with narrow scope (research content only)
+- **Web**: no
+- **Overlap**: none
+
+#### SOCAS-GN-13: Misleading Chart
+
+- Bar axis not starting at zero; dual axes; bubbles sized by diameter; inverted axis; no axis label or unit
+- **Applies to**: content with charts or graphs
+- **Test**: Are axes, scales and sizes honest and labeled?
+- **Priority**: P2 | Cost: high, needs visual inspection | Value: high, evidence B ([ACM CHI 2015 conference study](https://dl.acm.org/doi/10.1145/2702123.2702608); [n = 329 study](https://doi.org/10.1145/3380851.3416762): misreading regardless of visualization training)
+- **Web**: no
+- **Overlap**: none
+
+### Signal, Noise and Form
+
+#### SOCAS-GN-15: Noise and Filler
+
+- Filler and hedging; obvious things explained at length while complex things stay unexplained; the same point restated in different words; jokes or humor that carry no information
+- **Applies to**: all text; not code (see above)
+- **Test**: Can you delete the passage without the reader losing information?
+- **Priority**: P1 | Cost: low, text only | Value: medium, evidence B ([concise web text](https://www.nngroup.com/articles/concise-scannable-and-objective-how-to-write-for-the-web/): +58% measured usability, 51 users)
+- **Web**: no
+- **Overlap**: REF - fix by APAPL-PR-07, APAPL-BR-02, APAPL-BR-03, MECT-LT-04 (humor: none)
+
+#### SOCAS-GN-16: Impressive Form Without Substance
+
+- Abstract statement that cannot be false (buzzword profundity); impressive detail (jargon, figures, technical terms) irrelevant to the logic of the claim; claim supported only by repeating it; boasting without facts; interesting but irrelevant material
+- **Applies to**: content that argues or explains; not reference lists, data tables or code
+- **Test**: Could the statement be false, and does the impressive detail support the argument?
+- **Priority**: P2 | Cost: medium, relevance judgment | Value: medium, evidence B ([pseudo-profound sentences](https://journal.sjdm.org/15/15923a/jdm15923a.pdf) rated 2.6 of 5; [irrelevant neuroscience](https://pmc.ncbi.nlm.nih.gov/articles/PMC2778755/) made bad explanations more satisfying to novices)
+- **Web**: no
+- **Overlap**: REF - fix by APAPL-PR-07
+
+#### SOCAS-GN-19: Unnecessary Complexity
+
+- Jargon where plain language works; complicated constructions for simple matters; long words to sound expert; a design, process or solution more complex than the problem needs (over-engineering, indirection without benefit)
+- **Applies to**: all text, including designs and processes described in text; not code (code uses SOCAS-CD-05)
+- **Test**: Is there a simpler word, sentence or solution that says or does the same?
+- **Priority**: P1 | Cost: low, text only | Value: medium, evidence B ([longer words lowered judged author intelligence](https://onlinelibrary.wiley.com/doi/10.1002/acp.1178); [accessible abstracts](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.714321/full) raised understanding 47.9% to 57.9%); design part [ASSUMED], by analogy to SOCAS-CD-05
+- **Web**: no
+- **Overlap**: REF - fix by MECT-WC-02, MECT-VO-03 (design part: none)
+
+#### SOCAS-GN-21: Lack of Structure
+
+- Long text without breaks; nothing the reader can cite (no headings, numbers, IDs); long document without table of contents
+- **Applies to**: text over about 300 words [ASSUMED threshold]; not code (see above)
+- **Test**: Can the reader find and cite a specific point?
+- **Priority**: P1 | Cost: low, text only | Value: medium, evidence B ([guideline-optimized application programming interface (API) documentation](https://doi.org/10.1145/3380851.3416759): task accuracy 86.35% vs 74.24%)
+- **Web**: no
+- **Overlap**: REF - fix by APAPL-PR-05, APAPL-ST-06, APAPL-ST-07
+
+#### SOCAS-GN-22: Presentation Sloppiness
+
+- Typos and grammatical errors; broken internal references ("see above", missing section); wrong dates. External sources: SOCAS-WR-01; outdated content: SOCAS-WR-09; stale code: SOCAS-CD-06
+- **Applies to**: all text; not code (see above)
+- **Test**: Are there typos, grammatical errors, broken internal references or wrong dates?
+- **Priority**: P2 | Cost: low, text only | Value: low, `[ASSUMED]` (no study shows sloppiness predicts unreliable content). Kept because typos are the literal sign of sloppiness, no other rule covers them and the cost is low
+- **Web**: no
+- **Overlap**: REF - fix by APAPL-PR-04
 
 ## Application Rules
 
-### SOCAS-AP-01: Cite Criterion ID with Quoted Evidence
+These rules govern every SOCAS run, in all 4 files. Format: rule, priority with reason.
 
-Every finding must reference the criterion ID and quote the specific evidence.
+### SOCAS-AP-01: Quote and Rule ID per Finding
 
-**BAD:**
-```
-The document has naming issues and some inconsistencies.
-```
+- Every finding names the rule (`[written-out name] ([ID])`), quotes the passage (max 25 words) and gives its location. No quote, no deduction
+- **Priority**: P1 | Cost: low | Value: high, evidence B ([CheckEval](https://aclanthology.org/2025.emnlp-main.796/): decomposed yes/no questions raised agreement across 12 judge models by 0.45)
 
-**GOOD:**
-```
-SOCAS-CR-01: "retry mechanism" in section 2, "reconnection logic" in section 4 - same concept, different names
-SOCAS-CR-02: "handler" used without definition - could mean error handler, event handler, or request handler
-```
+### SOCAS-AP-02: Scoring and Rework Threshold
 
-### SOCAS-AP-02: Rework Threshold
+- Per rule one of 6 values, anchored by the passages that pass the test: 0 passages = 10; 1 minor passage = 8; 2+ minor or 1 noticeable = 6; reader must ask back or may misunderstand = 4; decisions at risk or repeated across the content = 2; content unusable for its purpose = 0. 6 or lower = flagged; 4 or lower = violated
+- The verdict comes from the count of violated rules (SOCAS-RP-02); 3+ violated rules = rework recommendation. A mean score over applicable rules is informational only, with equal weights. Rules carry no dimension weights
+- **Priority**: P1 | Cost: low | Value: high, evidence A-B ([Dawes 1979](https://doi.org/10.1037/0003-066x.34.7.571): equal-weight models predict as well as fitted weights; no source found for unequal dimension weights)
 
-3+ criteria violated in one artifact = recommend rework. Below 3 = flag findings, no rework recommendation.
+### SOCAS-AP-03: Context First and File Selection
 
-**BAD:**
-```
-Found 1 minor inconsistency. Recommend complete rework of the specification.
-```
+- Before any rule runs: state content type, audience, purpose and stage (draft, working version, final version). Then load `SOCAS_RULES.md` plus one field file: writing, communication or coding. The content types of each field, including IPPS document types, are listed at the start of each field file
+- Mixed content: score each part with its own field file; violated rules of all parts add up to one verdict, and a rule violated in two parts counts once. Direct commercial messages (sales email, offer sent by chat) load the communication file plus SOCAS-WR-06 to WR-08. Content of any field that cites external sources also runs SOCAS-WR-01. Documents that recommend actions or decisions (reports, proposals, INFO documents) also run SOCAS-CM-01
+- **Priority**: P1 | Cost: low | Value: medium, evidence C (by analogy the Stop step of the [SIFT method](https://www.aft.org/ae/spring2025/caulfield_wineburg) (Stop, Investigate the source, Find other coverage, Trace the claim): 30 seconds of context improved weak critical thinkers' decisions)
 
-**GOOD:**
-```
-SOCAS violations: 5 of 17 (SOCAS-CR-01, SOCAS-CR-03, SOCAS-CR-06, SOCAS-CR-09, SOCAS-CR-10)
-Verdict: REWORK - exceeds 3-criterion threshold
-```
+### SOCAS-AP-05: SKIP vs NO INFORMATION
 
-### SOCAS-AP-03: Context-Appropriate Subsets
+- `SKIP` = the content does not meet the rule's **Applies to** condition; the finding names the unmet condition in one line. `NO INFORMATION` = the condition is met but the content gives too little to test. Neither creates a deduction. When it is unclear whether the condition is met, run the rule
+- **Priority**: P1 | Cost: low | Value: medium, evidence B ([Cochrane Risk of Bias 2 (RoB 2) tool](https://www.cochrane.org/authors/handbooks-and-manuals/handbook/current/chapter-08) uses a separate "No information" answer)
 
-Not all 17 criteria apply to every context. Apply only the relevant subset.
+### SOCAS-AP-06: One Passage, One Finding
 
-**BAD:** Flagging SOCAS-CR-04 (Undisclosed Contact Information) on a code module.
+- A passage counts for the one rule whose test fits best. The concrete field rule takes precedence over its abstract general rule (SOCAS-WR-07 before SOCAS-GN-08)
+- **Priority**: P1 | Cost: low | Value: medium, `[ASSUMED]` (prevents double deduction)
 
-**GOOD:** See [Context-Appropriate Subsets](#context-appropriate-subsets) for which criteria apply where.
+### SOCAS-AP-07: Scoring Guard
 
-## Context-Appropriate Subsets
+- No credit for polish, visual design, long words, credentials, statistical vocabulary or repeated assertion. No rule judges authorship (human or AI)
+- **Priority**: P1 | Cost: low | Value: high, evidence A-B ([design look appeared in 46.1% of 2,684 credibility comments](https://credibility.stanford.edu/pdf/How_Do_People_Evaluate_a_Web_Site%27s_Credibility_v37.pdf); AI detectors are unreliable, see the out-of-scope list above)
 
-### Agent Output Review (`/verify`, `/critique`, `/improve`)
+### SOCAS-AP-08: Tolerant Thresholds
 
-Apply when reviewing agent-generated specs, research, code, plans:
-- SOCAS-CR-01 (Inconsistencies)
-- SOCAS-CR-02 (Ambiguous Naming)
-- SOCAS-CR-03 (Overlapping Concerns)
-- SOCAS-CR-06 (Incomplete Specifications)
-- SOCAS-CR-08 (Noise Imbalance)
-- SOCAS-CR-09 (Lack of Structure)
-- SOCAS-CR-10 (Gaps in Reasoning)
-- SOCAS-CR-11 (Unnecessary Complexity)
-- SOCAS-CR-12 (Presentation Sloppiness)
-- SOCAS-CR-13 (Empty Structure)
-- SOCAS-CR-14 (Arbitrary Sequencing)
+- No exact-count thresholds unless a counting tool ran on the final text. Use "several" or "most", or label a count `approx`
+- **Priority**: P1 | Cost: low | Value: medium, evidence B ([large language models (LLMs) fail at counting repeated tokens](https://dl.acm.org/doi/10.1145/3818606))
 
-### Document Review
+### SOCAS-AP-09: Self-Evaluation Flag
 
-Apply when reviewing human-authored technical specifications, API docs, process descriptions, requirements:
-- All 17 criteria applicable
+- When the scoring agent wrote the content, the output states `self-evaluation`. When available, a model other than the author model scores the content [ASSUMED: common mitigation, not measured for SOCAS]
+- **Priority**: P1 | Cost: low | Value: medium, evidence B ([LLM judges score their own output higher](https://arxiv.org/abs/2404.13076), NeurIPS 2024)
 
-### Source Evaluation (`/research`)
+### SOCAS-AP-10: Web Budget
 
-Apply when ranking external sources for reliability:
-- SOCAS-CR-01 (Inconsistencies)
-- SOCAS-CR-02 (Ambiguous Naming)
-- SOCAS-CR-04 (Undisclosed Contact Information)
-- SOCAS-CR-05 (Ineffective Communication)
-- SOCAS-CR-06 (Incomplete Specifications)
-- SOCAS-CR-08 (Noise Imbalance)
-- SOCAS-CR-09 (Lack of Structure)
-- SOCAS-CR-10 (Gaps in Reasoning)
-- SOCAS-CR-12 (Presentation Sloppiness)
-- SOCAS-CR-13 (Empty Structure)
-- SOCAS-CR-15 (Net-Negative Adoption)
-- SOCAS-CR-16 (Disguised Commercial Intent)
-- SOCAS-CR-17 (Weaponized Persuasion)
+- Open max 5 sources per run, decision-relevant first, one claim per source. Status per source: `OK: confirmed`, `WARNING: changed`, `ERROR: not found`, `SKIP: inaccessible`. A dead link is `SKIP`, not fabrication. A run without web access prints `web checks: not run`
+- Registry and dependency lookups (SOCAS-CD-01, CD-06) run by tool when available; without a tool, unknown or unusual names come first and each lookup counts against the budget
+- **Priority**: P1 | Cost: medium, web access | Value: high, evidence B ([fact-check accuracy fell about 42% as tool calls grew from 2 to 150](https://arxiv.org/html/2605.06635v1), preprint)
 
-High SOCAS count = unreliable source. Prefer sources with low SOCAS indicators. Document findings in source notes.
+### SOCAS-AP-11: Run-to-Run Noise
 
-Also evaluate community and repo health signals:
-- High ratio of open issues with no maintainer response
-- Recurring community complaints about same problems
-- Archived/abandoned repos still referenced as active
-- Declared end-of-life or deprecated with no successor
+- Score each content separately; never rank several contents by score alone. For decisions, run twice and compare verdict bands. A SOCAS result may demote or exclude a content (for example a source), but never ranks contents against each other
+- **Priority**: P2 | Cost: medium, second run | Value: medium, evidence C ([13.6% pairwise verdict flips on identical reruns](https://arxiv.org/html/2606.13685), preprint)
 
-### Organizational Assessment
+### SOCAS-AP-12: Run Order
 
-Evaluate organizations by their public outputs (website, docs, communications):
-- All 17 criteria applicable
+- One holistic pass over all applicable rules in the fixed rank order of the Rank Order sections: general file first, then the field file; within each file P1 before P2. Quote before score: collect the quotes of all rules first, apply SOCAS-AP-06 (field rule before general rule), then score. A time-limited run stops after the P1 rules and states `P2 rules: not run`
+- **Priority**: P1 | Cost: low | Value: medium, evidence C ([scoring all criteria in one prompt preserved consistency](https://arxiv.org/html/2610.12083v1); [criteria order shifts scores](https://arxiv.org/html/2602.02219v2), so the order must be fixed; preprints)
 
-## UX-Specific Criteria
+### SOCAS-AP-13: Presence Tests Do Not Violate Alone
 
-### SOCAS-AP-04: UX Design Review
+- A rule that only tests whether a feature is present (SOCAS-WR-04 date and author, SOCAS-WR-05 responsible party, SOCAS-CD-08 tests and setup) scores 6 at worst (flagged, not violated), unless the absence blocks the purpose of the content. A finding of SOCAS-WR-01 (opened source missing or changed) can violate alone, because it rests on the source itself
+- **Priority**: P1 | Cost: low | Value: medium, evidence B by inference (easy-to-fake surface features misled historians and students, so surface features discriminate poorly; [fact-checkers who left the page](https://journals.sagepub.com/doi/10.1177/016146811912101102) judged better and faster; 45 participants)
 
-Apply these additional indicators when evaluating user interfaces. Each maps to a parent SOCAS criterion.
-
-- Breaking established patterns without substantial gain (SOCAS-CR-01)
-- Broken proximity of related UX elements (SOCAS-CR-03)
-- No tab order and keyboard support for users without mouse (SOCAS-CR-06)
-- No copy functionality for relevant textual information (SOCAS-CR-06)
-- Unclear visual hierarchy (SOCAS-CR-09)
-- Unestablished commands for standard operations - instead of OK, Cancel, Save, Load (SOCAS-CR-02)
-- Application deletes or loses data without user confirmation (SOCAS-CR-06)
-- Users can accidentally close dialogs with entered data by clicking outside (SOCAS-CR-06)
-
-## Reporting Format
+## Reporting Rules
 
 ### SOCAS-RP-01: Finding Format
 
-Each finding: criterion ID, quoted evidence, severity (LOW, MEDIUM, HIGH).
-
-**BAD:**
-```
-- The document is inconsistent
-- Naming could be better
-- Some parts are unclear
-```
-
-**GOOD:**
-```
-- SOCAS-CR-01 HIGH: "fetch handler" (line 12) vs "request processor" (line 45) - same component, different names
-- SOCAS-CR-06 MEDIUM: Edge case unspecified - what happens when input list is empty?
-- SOCAS-CR-10 LOW: "Best approach selected" - no alternatives discussed, no selection criteria stated
-```
+- Each finding: severity label, written-out rule name with ID, quote, location, one-line reason. Severity follows the rule score: `LOW` = 6, `MEDIUM` = 4, `HIGH` = 2, `CRITICAL` = 0
+- **Priority**: P1 | Cost: low | Value: high (output is checkable)
 
 ### SOCAS-RP-02: Summary Format
 
-After findings, provide summary with violation count and verdict.
+- After findings: violated rules as `N of T` applicable rules, count of `SKIP` rules, verdict, `web checks: not run` or source count, `self-evaluation` when applicable, `P2 rules: not run` for time-limited runs. Verdicts: `OK` (0 violated), `PARTIAL FAIL` (1-2), `FAIL` (3+)
+- **Priority**: P1 | Cost: low | Value: high (one-line decision)
 
-**BAD:**
-```
-Overall the document has some issues that should be addressed.
-```
-
-**GOOD:**
-```
-SOCAS: 4/17 violated (SOCAS-CR-01 HIGH, SOCAS-CR-06 MEDIUM, SOCAS-CR-10 LOW, SOCAS-CR-12 LOW)
-Verdict: REWORK - exceeds 3-criterion threshold
-```
-
-Verdict values:
-- `PASS` - 0 criteria violated
-- `ACCEPTABLE` - 1-2 criteria violated (flag findings, no rework)
-- `REWORK` - 3+ criteria violated
