@@ -4,11 +4,16 @@ Concrete enforceable rules for detecting AI-assisted writing. Each rule has meas
 
 **Principle**: Detection through signal convergence across five categories. No single signal is conclusive. Confidence increases with the number of independent signals detected.
 
-**Calibration note**: These rules target patterns arising from the token-prediction mechanic shared by all LLMs. The PLOS One 2025 study (STYLO-SC-PLOS-STYLJP) tested 7 LLMs including ChatGPT o1 and found "no significant difference" between reasoning models and GPT-4o in detectable writing patterns - 99.8% accuracy across all models. The internal chain-of-thought reasoning does not change the surface-level patterns these rules detect.
+**Calibration note (2025-2026 research):**
+- **Reasoning and post-trained models**: These rules target patterns arising from token prediction and post-training alignment (`RLHF`, `DPO`, `GRPO`). The PLOS One 2025 study (`STYLO-SC-PLOS-STYLJP`) found no difference between reasoning models (`o1`) and `GPT-4o` in detectable writing patterns (99.8% classifier accuracy vs. 50% human chance). Subsequent 2025-2026 studies confirm that instruction and preference tuning *narrow* surface stylistic diversity compared to both human prose and base models (`AIDET-IN01-SC-ARXV-HPSG26`, `AIDET-IN01-SC-ARXV-PASTA`), amplifying headers, lists, and expository framing by **1,949%-16,853%** while suppressing complex punctuation and syntactic variety to **3.2%-23.2%** of human baseline (`AIDET-IN01-SC-ARXV-COLLPS`).
+- **Generational shift (2024 clichés vs. 2026 idiolects)**: While 2026 frontier models (`GPT-5.4`, `Claude Sonnet 4.6`, `Gemini 3.1 Pro` in `AIDET-IN01-SC-ARXV-SIMPSN`) reduce obvious 2024 buzzwords (`AD-LX-01`), each model family exhibits a stable idiolect (e.g., contraction rates varying 25x from 1,200 to >30,000 per million words in `AIDET-IN01-SC-ARXV-IDIO26`), generates near its canonical stylistic equilibrium (`AIDET-IN01-SC-ARXV-STYLDC`), and compresses clauses into Biber noun-heavy structures (`AIDET-IN01-SC-ARXV-BIBR26`). Sourcing (`SO`), Structure (`ST`), and Style (`SY`) are therefore more durable indicators on 2026 frontier models than buzzword lists alone.
+- **AI generation vs. AI editing**: Across 45,000 generated and 273,420 AI-edited texts (`AIDET-IN01-SC-ARXV-EDTFT`), AI editing of human drafts does not reproduce the full AI-generation footprint; instead, it slightly lowers entropy (`d = -0.28`) and strongly shifts **lexical density** (`d = -3.10`, content-to-function word ratio) via nominalization compression.
+- **Sample length and false-positive/negative boundaries**: Samples under **10 sentences (<200 words)** lack sufficient signal density (`STYLO-SC-ARXV-STYLOREC`). Cross-generation analysis (`AIDET-IN01-SC-ARXV-XGEN26`) shows that highly structured, generic human prose causes false positives on `ST`/`SY`, whereas injecting high factual specificity into AI prompts causes false negatives on `SY`/`VO` — making **Sourcing verification (`AD-SO-01..04`)** decisive.
 
 **Abstraction levels:**
 - **_INFO_HOW_TO_DETECT_AI_ASSISTED_WRITING.md [AIDET-IN01]** = Concept, background, why detection matters
 - **AI_WRITING_DETECTION_RULES.md** (this file) = Concrete detection rules with examples. Answers: "How do I check a specific text?"
+- **AI_WRITING_RULES.md** (`@skills:write-documents`) = Companion authoring rules (`AW-*`) for suppressing and catching AI artifacts in publishing document types (`article`, `report`, `ebook`)
 - **`/detect-ai` workflow** = Step-by-step procedure for applying these rules
 
 ## Rule Index
@@ -51,13 +56,13 @@ Lexical (LX) - Supporting category
 3. Count detected signals per category
 4. Apply convergence assessment
 
-**Convergence thresholds:**
+**Convergence thresholds (20 signals across 5 categories):**
 - 0-3 signals: LOW - Insufficient evidence. Text may be human-written or heavily edited LLM output
-- 4-7 signals: MODERATE - Warrants source verification. Text may be AI-assisted
+- 4-7 signals: MODERATE - Warrants source verification. Text may be AI-assisted or AI-edited (`AIDET-IN01-SC-ARXV-EDTFT`)
 - 8-13 signals: HIGH - Multiple convergent signals. Text very likely AI-assisted
-- 14-18 signals: VERY HIGH - Signals across all categories. Text almost certainly AI-generated
+- 14-20 signals: VERY HIGH - Signals across all categories. Text almost certainly AI-generated
 
-**Category weighting:** Sourcing signals (SO) carry 2x weight. A text with 3/4 sourcing signals is more diagnostic than one with 10/14 non-sourcing signals. If SO >= 3, assessment is minimum HIGH regardless of total count.
+**Category weighting:** Sourcing signals (SO) carry 2x weight. A text with 3/4 sourcing signals is more diagnostic than one with 10/16 non-sourcing signals. If SO >= 3, assessment is minimum HIGH regardless of total count. For samples shorter than 10 sentences (<200 words), mark assessment INCONCLUSIVE unless SO >= 2 (`STYLO-SC-ARXV-STYLOREC`).
 
 ## Sourcing Rules (SO)
 
@@ -201,11 +206,11 @@ vocabulary ("Big Brother," "thoughtcrime") shapes how we discuss it.
 
 ### AD-SY-01: Staccato Fragment Pattern
 
-Short declarative sentence followed by one-word or two-word fragments used for rhetorical emphasis. Multiple occurrences in the same text.
+Short declarative sentence followed by one-word or two-word fragments or clipped two-part antithetical contrast snaps (`"Not X. Y."`, `"A did not do X. B did."`) used for rhetorical emphasis. Multiple occurrences in the same text.
 
-**Why this detects AI:** LLM persuasive outputs over-produce this pattern because it is heavily represented in engagement-optimized training data (blog posts, tweets, LinkedIn posts). Humans use it occasionally; LLMs use it systematically.
+**Why this detects AI:** LLM persuasive outputs over-produce staccato fragments and contrast snaps because they are heavily represented in engagement-optimized training data (blog posts, tweets, LinkedIn posts). Humans use them occasionally; LLMs use them systematically.
 
-**Detection test:** Count fragment-after-sentence patterns. If 3+ occur in a text under 1000 words, score DETECTED.
+**Detection test:** Count fragment-after-sentence and two-part contrast-snap patterns. If 3+ occur in a text under 1000 words, score DETECTED.
 
 **AI-LIKELY** (systematic use):
 ```
@@ -254,9 +259,9 @@ Same three-beat structure but uneven length, embedded in a run-on, self-interrup
 
 ### AD-SY-03: Absence of Rough Edges
 
-The text contains no idiosyncratic word choices, no unexpected metaphors, no self-corrections, no tangents, no humor, and no personal register shifts. Every sentence maintains the same tone and cadence throughout.
+The text contains no idiosyncratic word choices, no unexpected metaphors, no self-corrections, no tangents, no humor, and no personal register shifts. Every sentence maintains the same tone and cadence throughout, with complex punctuation (semicolons, parentheticals, interruptive dashes) suppressed in favor of uniform declarative periods.
 
-**Why this detects AI:** LLMs optimize for coherent continuation. Token-by-token generation produces uniform register. Human writers have personality artifacts: a distinctive word they favor, an odd metaphor, a parenthetical aside, a tonal shift when the topic engages them personally.
+**Why this detects AI:** LLMs optimize for coherent continuation. Token-by-token generation and post-training alignment (`RLHF`/`DPO`) produce uniform register, low-memory HPSG syntactic parse trees (`AIDET-IN01-SC-ARXV-HPSG26`), and a **76.8%-96.8% suppression of complex punctuation and syntactic variety** compared to human prose (`AIDET-IN01-SC-ARXV-COLLPS`). Human writers have personality artifacts: a distinctive word they favor, an odd metaphor, a parenthetical aside, a semicolon hinge, or a tonal shift when the topic engages them personally.
 
 **Detection test:** Read 500+ words. If no sentence surprises you stylistically - no word makes you pause, no structure breaks the pattern - score DETECTED.
 
@@ -364,11 +369,11 @@ Five beats. Starts personal. Includes doubt and correction. No emotional climax.
 
 ### AD-ST-02: Perfect Paragraph Progression
 
-Every paragraph advances exactly one conceptual step beyond the previous. No paragraph revisits, qualifies, or contradicts an earlier paragraph. The text reads as a linear ramp with no backtracking.
+Every paragraph advances exactly one conceptual step beyond the previous. No paragraph revisits, qualifies, or contradicts an earlier paragraph (or counter-arguments are bundled into a single compressed, rapid-fire Q&A paragraph that immediately dismisses each objection). The text reads as a linear ramp with no genuine backtracking.
 
-**Why this detects AI:** Token-by-token generation produces forward momentum. The model rarely generates "However, my earlier point requires qualification" because backward reference is statistically less probable than forward continuation.
+**Why this detects AI:** Token-by-token generation produces forward momentum. The model rarely generates genuine mid-argument revision because backward reference is statistically less probable than forward continuation; when prompted to address objections, it compresses them into a telegraphic speed-run rather than letting a counter-argument reshape the thesis.
 
-**Detection test:** Summarize each paragraph in one sentence. If the summaries form a strictly monotonic sequence (each builds on the last, none revises), score DETECTED.
+**Detection test:** Summarize each paragraph in one sentence. If the summaries form a strictly monotonic sequence (each builds on the last, none genuinely revises, or objections are dismissed in a single compressed Q&A block), score DETECTED.
 
 **AI-LIKELY** (monotonic):
 ```
@@ -408,7 +413,7 @@ After reading two sections, the reader can predict the function (though not the 
 
 Bulleted or numbered lists where every item follows identical grammatical structure, identical length (within 1-2 words), and identical rhetorical weight. No item breaks the pattern.
 
-**Why this detects AI:** LLMs generate list items by repeating the syntactic pattern of the first item. Each subsequent item is a high-probability continuation of the established template. Human writers create lists with varied item lengths, occasional sub-points, and items that don't quite fit the pattern.
+**Why this detects AI:** Instruction-tuned pipelines amplify low-entropy structural markers (headers and bulleted lists) by **1,949%-16,853%** over base models (`AIDET-IN01-SC-ARXV-COLLPS`). Once a model emits a header or first list item, self-reinforcing generation loops lock subsequent tokens into repeating the exact syntactic template. Human writers create lists with varied item lengths, occasional sub-points, and items that don't quite fit the pattern.
 
 **Detection test:** Identify lists with 4+ items. If all items are within 2 words of the same length AND follow identical grammatical structure AND carry identical rhetorical weight, score DETECTED.
 
@@ -538,14 +543,14 @@ Names specific sources. Acknowledges interpretive disagreement. Bounds the claim
 
 The text contains multiple words or phrases that appear with disproportionate frequency in LLM outputs compared to human writing. These are not wrong or unusual words - they are statistically over-represented in generated text.
 
-**Why this detects AI:** LLMs have vocabulary biases. Certain words occupy high-probability positions in common contexts. Human writers have individual vocabularies shaped by reading history, profession, and personality. LLM outputs converge on the same high-probability choices.
+**Why this detects AI:** Preference-stage alignment (`RLHF`/`DPO`) induces a measurable Triangulated Preference Shift (`R = 1.19-1.73` across 6 model families, `AIDET-IN01-SC-ARXV-TPSLEX`) toward a formal "language of prestige" not present in base models. While 2026 frontier models reduce obvious 2024 buzzwords in favor of model-specific idiolects (`AIDET-IN01-SC-ARXV-IDIO26`), preference-shifted prestige verbs and abstract framing nouns remain over-represented.
 
-**Detection test:** Count occurrences of known high-frequency LLM terms. If 5+ appear in a single text <1000 words, score DETECTED.
+**Detection test:** Count occurrences of known high-frequency LLM and prestige-shift terms. If 5+ appear in a single text <1000 words, score DETECTED.
 
 **High-frequency LLM terms** (non-exhaustive):
 - "delve," "crucial," "pivotal," "nuanced," "multifaceted"
 - "landscape" (non-geographic), "tapestry," "realm," "myriad"
-- "foster," "leverage," "navigate" (non-physical), "underscore"
+- "foster," "leverage," "utilize," "facilitate," "orchestrate," "spearhead," "navigate" (non-physical), "underscore"
 - "It's important to note that," "It's worth mentioning"
 - "In today's [X] landscape," "In the realm of"
 - "This speaks to," "This underscores"
@@ -568,13 +573,13 @@ in the first place. It's not stupidity. It's trust misplacement.
 ```
 No high-frequency LLM terms. Colloquial register. Direct.
 
-### AD-LX-02: Qualifier Stacking
+### AD-LX-02: Qualifier Stacking and Noun-Heavy Compression
 
-Multiple qualifiers, intensifiers, or modifiers stacked on a single claim without adding precision. The qualifiers create an impression of thoroughness or nuance without changing the meaning.
+Multiple qualifiers, intensifiers, or stacked nominalizations piled on a single claim without adding precision. The qualifiers and abstract noun chains create an impression of thoroughness or density without adding falsifiable meaning.
 
-**Why this detects AI:** LLMs generate qualifiers because they appear in formal writing training data. Each qualifier is a safe, low-cost token that maintains coherent continuation. The result is sentences that sound careful but say nothing more than the unqualified version.
+**Why this detects AI:** LLMs generate qualifiers because they are safe, low-cost tokens in formal training data, and chat-tuned models systematically compress clauses into noun-heavy nominalizations (`AIDET-IN01-SC-ARXV-BIBR26`). Moreover, when an LLM edits or polishes a human draft, it strongly shifts **lexical density** (`d = -3.10`, content-to-function word ratio, `AIDET-IN01-SC-ARXV-EDTFT`) by stripping function words and packing content into abstract noun stacks.
 
-**Detection test:** Remove all qualifiers from a sentence. If the meaning is unchanged, and this pattern appears 3+ times, score DETECTED.
+**Detection test:** Remove all qualifiers from a sentence or unpack stacked nominalizations into simple verbs. If the meaning is unchanged and this pattern appears 3+ times (or if lexical density is unnaturally noun-packed, indicating AI editing), score DETECTED.
 
 **AI-LIKELY** (qualifiers add nothing):
 ```
@@ -595,7 +600,7 @@ That's not hyperbole - there's no precedent in 234 years.
 
 Heavy reliance on formal conjunctive adverbs ("However," "Nevertheless," "Consequently," "Furthermore," "Nonetheless") where simpler connectives ("but," "so," "and," "still") would serve the same function without register inflation.
 
-**Why this detects AI:** LLMs trained on formal writing default to high-register connectives. Human writers in non-academic contexts use informal connectives naturally. The consistent use of formal adverbs in conversational or persuasive text signals register mismatch.
+**Why this detects AI:** Preference learning (`AIDET-IN01-SC-ARXV-TPSLEX`) systematically inflates high-register Latinate connectives ($R > 1$ across all tested model families). Human writers in non-academic contexts use informal connectives naturally. The consistent use of formal adverbs in conversational or persuasive text signals register mismatch.
 
 **Detection test:** Count formal conjunctive adverbs per 500 words. If >4 appear in non-academic prose, score DETECTED.
 
@@ -645,11 +650,17 @@ Count detected signals. Apply thresholds. Weight sourcing signals 2x. State conf
 
 ### Step 6: Report
 
-Format: `[SIGNAL COUNT] / 18 signals detected. Categories: SO [n/4], SY [n/5], ST [n/4], VO [n/4], LX [n/3]. Assessment: [LOW/MODERATE/HIGH/VERY HIGH].`
+Format: `[SIGNAL COUNT] / 20 signals detected. Categories: SO [n/4], SY [n/5], ST [n/4], VO [n/4], LX [n/3]. Assessment: [LOW/MODERATE/HIGH/VERY HIGH].`
 
-Example: `11/18 signals detected. Categories: SO 4/4, SY 3/5, ST 2/4, VO 2/4, LX 3/3. Assessment: HIGH.`
+Example: `11/20 signals detected. Categories: SO 4/4, SY 3/5, ST 2/4, VO 2/4, LX 3/3. Assessment: HIGH.`
 
 ## Document History
+
+**[2026-11-08 13:20]**
+- Added: 2025-2026 empirical calibration from `_INFO_HOW_TO_DETECT_AI_ASSISTED_WRITING.md [AIDET-IN01]` (`AIDET-IN01-SC-ARXV-HPSG26`, `COLLPS`, `PASTA`, `TPSLEX`, `IDIO26`, `BIBR26`, `EDTFT`, `XGEN26`)
+- Added: Companion reference to `@skills:write-documents` `AI_WRITING_RULES.md` (`AW-*`)
+- Changed: Updated `AD-SY-03` (punctuation suppression and HPSG syntactic uniformity), `AD-ST-04` (1,949%-16,853% post-training header/list amplification), `AD-LX-01` & `AD-LX-03` (Triangulated Preference Shift toward prestige register), and `AD-LX-02` (Biber noun-heavy compression and `d = -3.10` AI-editing lexical density shift)
+- Fixed: Signal total corrected from 18 to 20 across Scoring and Step 6 Report to match the 20 defined rules (SO 4 + SY 5 + ST 4 + VO 4 + LX 3)
 
 **[2026-06-05 19:20]**
 - Added: Calibration note on reasoning model scope (from `/reconcile` review AIDET-IN09-RV01)

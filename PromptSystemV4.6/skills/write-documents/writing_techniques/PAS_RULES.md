@@ -2,7 +2,7 @@
 
 Output standards for documents written `using PAS` (Problem, Agitate, Solve, plus proof, honest limit, and one call to action).
 
-**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: AP-PR-07 (be specific), MW-VO-01 (active voice), MW-VO-02 (address reader as "you"), MW-WC-02 (plain language).
+**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: APAPL-PR-07 (be specific), MECT-VO-01 (active voice), MECT-VO-02 (address reader as "you"), MECT-WC-02 (plain language).
 
 ## Rule Index
 

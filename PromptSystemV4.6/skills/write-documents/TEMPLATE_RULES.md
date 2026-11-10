@@ -159,7 +159,7 @@ Conditional sections use XML comment with insertion criteria and rule reference.
 
 ## TMPL-AN-03: No Bracket Markers
 
-Bracket markers `[text]` overlap with the placeholder convention, creating polysemy (AP-NM-01). Agents cannot distinguish `[conditional - insert when...]` from `[value to fill in]`.
+Bracket markers `[text]` overlap with the placeholder convention, creating polysemy (APAPL-NM-01). Agents cannot distinguish `[conditional - insert when...]` from `[value to fill in]`.
 
 **BAD:** `[conditional - insert when research produces actionable conclusions]`
 
@@ -167,7 +167,7 @@ Bracket markers `[text]` overlap with the placeholder convention, creating polys
 
 ## TMPL-AN-04: No Italic Markers
 
-Italic markers `*(text)*` are visible noise in rendered output (SOCAS-08). They appear as formatted text in the document instead of being invisible annotations.
+Italic markers `*(text)*` are visible noise in rendered output (SOCAS-CR-08). They appear as formatted text in the document instead of being invisible annotations.
 
 **BAD:** `*(For UI specs only)*`, `*(If fixing rule violations)*`
 
@@ -248,7 +248,7 @@ Date format IS the placeholder. No brackets needed.
 
 ## TMPL-HD-01: Doc ID Label
 
-Use `**Doc ID**:` without suffixes. `(TDID)` is redundant - all Doc IDs follow the Topic-based pattern (AP-NM-01).
+Use `**Doc ID**:` without suffixes. `(TDID)` is redundant - all Doc IDs follow the Topic-based pattern (APAPL-NM-01).
 
 **BAD:** `**Doc ID (TDID)**: [TOPIC]-SP[NN]`
 

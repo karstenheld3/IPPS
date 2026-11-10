@@ -40,8 +40,8 @@ This creates a compounding problem. Unlike code, where a bug is fixed once, temp
 **Connection to MECT, APAPALAN (As Precise As Possible, As Little As Necessary), SOCAS (Signs of Confusion and Sloppiness), and GRUC (Guides, Rules, Checks):**
 
 - **MECT Signal vs Noise** - Every formatting choice in a template is either signal (carries information) or noise (arbitrary variation the reader misinterprets). Inconsistent annotation formats are noise that agents amplify. See [`_INFO_MECT_PHILOSOPHY.md [MECT-IN01]`](_INFO_MECT_PHILOSOPHY.md) section 2.2.
-- **APAPALAN AP-PR-09** - "Repeat established structures. Do not invent new forms for similar content." Templates ARE the established structures. If the template itself uses inconsistent forms, no downstream document can be consistent. See [`_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]`](_INFO_APAPALAN_PRINCIPLE.md) section 4.1.
-- **SOCAS-08** - Information vs Noise Imbalance. Template annotations that look like content (italic markers, bracket markers) are noise that the agent may preserve in output. XML comments are automatically filtered - zero noise leakage risk. See [`_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md [SOCAS-IN01]`](_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md).
+- **APAPALAN APAPL-PR-09** - "Repeat established structures. Do not invent new forms for similar content." Templates ARE the established structures. If the template itself uses inconsistent forms, no downstream document can be consistent. See [`_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]`](_INFO_APAPALAN_PRINCIPLE.md) section 4.1.
+- **SOCAS-CR-08** - Information vs Noise Imbalance. Template annotations that look like content (italic markers, bracket markers) are noise that the agent may preserve in output. XML comments are automatically filtered - zero noise leakage risk. See [`_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md [SOCAS-IN01]`](_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md).
 - **GRUC boundary** - This document defines WHAT templates must look like (RULES territory). HOW to write them is in companion `*_GUIDES.md` files. WHY is in this section. See [`_INFO_GRUC_GUIDES_RULES_CHECKS.md [GRUC-IN01]`](_INFO_GRUC_GUIDES_RULES_CHECKS.md) section 4.
 
 ## 2. Core Principle
@@ -149,8 +149,8 @@ Template metadata: naming convention, creation trigger, lifecycle.
 - **Headings that describe sections** - `## Header Block` instead of the actual header
 - **BAD/GOOD examples inline** - Confuses instruction with template content (wrap in XML comment)
 - **Rule lists that look like document content** - "Location Rules", "Management Rules" sections
-- **Bracket markers** - `[conditional - ...]` creates polysemy with `[placeholder]` format (AP-NM-01)
-- **Italic markers** - `*(For UI specs only)*` is visible noise in rendered output (SOCAS-08)
+- **Bracket markers** - `[conditional - ...]` creates polysemy with `[placeholder]` format (APAPL-NM-01)
+- **Italic markers** - `*(For UI specs only)*` is visible noise in rendered output (SOCAS-CR-08)
 
 ## 5. Header Block Standards
 
@@ -168,7 +168,7 @@ All other templates (FAILS, LEARNINGS, MINTO-DRAFT, CONVERSATION, SKILL, WORKFLO
 
 ### 5.3 Doc ID Label Format
 
-Use `**Doc ID**:` without suffixes. `(TDID)` is redundant - all Doc IDs follow the Topic-based pattern (AP-NM-01).
+Use `**Doc ID**:` without suffixes. `(TDID)` is redundant - all Doc IDs follow the Topic-based pattern (APAPL-NM-01).
 
 ```markdown
 <!-- BAD -->
@@ -371,7 +371,7 @@ Bracket markers or italic text instead of XML comments.
 <!-- Include only for UI specifications. -->
 ```
 
-**Why**: Bracket markers `[text]` overlap with placeholder convention (AP-NM-01 polysemy). Italic markers `*(text)*` are visible noise in rendered output (SOCAS-08). XML comments are the single established format for all template annotations (AP-PR-09).
+**Why**: Bracket markers `[text]` overlap with placeholder convention (APAPL-NM-01 polysemy). Italic markers `*(text)*` are visible noise in rendered output (SOCAS-CR-08). XML comments are the single established format for all template annotations (APAPL-PR-09).
 
 ## 8. Template Audit Checklist
 
@@ -403,25 +403,25 @@ When creating or reviewing a template:
 
 **[2026-08-06 00:14]**
 - Fixed: Subsection decimal notation added to all 21 subsections (INFO-SN-02)
-- Fixed: Acronyms MECT, APAPALAN, SOCAS, GRUC expanded at first use (AP-PR-06)
+- Fixed: Acronyms MECT, APAPALAN, SOCAS, GRUC expanded at first use (APAPL-PR-06)
 
 **[2026-08-06 00:11]**
 - Added: Section 1 "Why Template Design Matters" - philosophy, compounding cost, MECT/APAPALAN/SOCAS/GRUC connections
 - Changed: Sections renumbered (1-9 -> 1-10)
 
 **[2026-08-06 00:10]**
-- Fixed: AP-01 GOOD example showed `Doc ID (TDID)` contradicting Section 5.2 rule (SOCAS-01)
-- Fixed: AP-04/AP-05 out of sequence (SOCAS-14, MECT Topology)
-- Fixed: 'annotation' / 'instruction' polysemy unified to 'annotation' (AP-NM-01)
-- Fixed: 'should' replaced with 'must' where obligation intended (MW-VO-04)
-- Changed: Summary grouped into 2 named clusters (AP-ST-07)
-- Changed: Template categories defined once, exclusion lists replaced by category references (AP-BR-03, SOCAS-03)
-- Removed: Stale status observations ('Currently only...', 'Previously affected') (SOCAS-08, SOCAS-12)
-- Removed: Verbose Doc ID explanation tightened (AP-BR-02)
+- Fixed: AP-01 GOOD example showed `Doc ID (TDID)` contradicting Section 5.2 rule (SOCAS-CR-01)
+- Fixed: AP-04/AP-05 out of sequence (SOCAS-CR-14, MECT Topology)
+- Fixed: 'annotation' / 'instruction' polysemy unified to 'annotation' (APAPL-NM-01)
+- Fixed: 'should' replaced with 'must' where obligation intended (MECT-VO-04)
+- Changed: Summary grouped into 2 named clusters (APAPL-ST-07)
+- Changed: Template categories defined once, exclusion lists replaced by category references (APAPL-BR-03, SOCAS-CR-03)
+- Removed: Stale status observations ('Currently only...', 'Previously affected') (SOCAS-CR-08, SOCAS-CR-12)
+- Removed: Verbose Doc ID explanation tightened (APAPL-BR-02)
 
 **[2026-08-05 23:58]**
 - Changed: Unified all annotations to XML comments (no bracket markers, no italic markers)
-- Added: AP-05 anti-pattern for non-XML annotation formats (AP-NM-01, AP-PR-09, SOCAS-08)
+- Added: AP-05 anti-pattern for non-XML annotation formats (APAPL-NM-01, APAPL-PR-09, SOCAS-CR-08)
 - Added: Scope restriction annotation type (`<!-- Include only for UI specifications. -->`)
 - Added: "What NOT to use" items for bracket and italic markers
 - Changed: Conditional section format from `[conditional - ...]` to `<!-- Conditional: ... -->`

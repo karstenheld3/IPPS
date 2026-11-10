@@ -2,7 +2,7 @@
 
 Output standards for documents written `using KABOB` (anecdote, nut graf, body, kicker).
 
-**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: AP-PR-07 (be specific), MW-HS-01 (informative headings), MW-WC-10 (explicit over figurative).
+**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: APAPL-PR-07 (be specific), MECT-HS-01 (informative headings), MECT-WC-10 (explicit over figurative).
 
 ## Rule Index
 

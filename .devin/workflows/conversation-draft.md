@@ -23,9 +23,9 @@ Three layers compose every draft. Higher priority wins on conflict:
 ```
 Layer 1 - MECT + APAPALAN Communication (precision, clarity)
 ├─ MECT baseline: explicit terminology, deliberate redundancy for concept matching
-├─ AP-CM-01: Accountable commitments
-├─ AP-CM-02: Labeled questions/requests
-└─ AP-CM-03: Time precision
+├─ APAPL-CM-01: Accountable commitments
+├─ APAPL-CM-02: Labeled questions/requests
+└─ APAPL-CM-03: Time precision
 
 Layer 2 - CONVERSATION_RULES.md (format)
 └─ CV-EM-*, CV-WA-*, CV-DT-*, CV-TR-*
@@ -36,16 +36,16 @@ Layer 3 - CONVERSATION_HUMANIZING_RULES.md (voice)
 
 **Conflict resolution**: Precision (Layer 1) always wins. Humanizing (Layer 3) never weakens precision or clarity.
 
-**AP-BR-02 exception**: "Sacrifice grammar for brevity" applies to agent documents, NEVER to user-voice drafts. Keep full natural grammar (CV-HM-07).
+**APAPL-BR-02 exception**: "Sacrifice grammar for brevity" applies to agent documents, NEVER to user-voice drafts. Keep full natural grammar (CV-HM-07).
 
 ## MUST-NOT-FORGET
 
 - Read `CONVERSATION_HUMANIZING_RULES.md` Anti-Pattern Index before finalizing
 - Read `APAPALAN_RULES.md` Communication (CM) section
-- AP-CM-01, AP-CM-02, AP-CM-03 apply to every draft in every language
+- APAPL-CM-01, APAPL-CM-02, APAPL-CM-03 apply to every draft in every language
 - WEEKDAY VERIFICATION: When writing any weekday-date combination, ALWAYS verify via web search first. Never calculate mentally. Never contradict user's weekday without search proof (CV-DT-04, GLOB-FL-0051)
 - TIMEZONE VERIFICATION: Use the timezone stated in Persons Involved. CET = Oct-Mar (UTC+1), CEST = Mar-Oct (UTC+2). Never default to "CET" without checking season (GLOB-FL-0054)
-- QUESTION LABEL: Every sentence ending in `?` MUST have `Question:` or `Frage:` prefix (AP-CM-02, GLOB-FL-0053)
+- QUESTION LABEL: Every sentence ending in `?` MUST have `Question:` or `Frage:` prefix (APAPL-CM-02, GLOB-FL-0053)
 - Full natural grammar: "I", "the", "a" preserved (CV-HM-07)
 - Never invent greetings/closings - use user's habitual forms (CV-HM-06)
 - Structural sections (Log, Todos, Status) = zero humanizing (CV-HM-01)
@@ -98,12 +98,12 @@ Use Humanizing Settings if populated. Otherwise extract from History:
 
 Scan draft against Anti-Pattern Index in `CONVERSATION_HUMANIZING_RULES.md`. Fix all violations.
 
-**AP-CM-02 checklist** (every `?` sentence):
+**APAPL-CM-02 checklist** (every `?` sentence):
 1. Own paragraph (blank-line separated)
 2. Labeled with `Question:`/`Request:` (or language equivalent)
 3. Self-contained (counterpart understands without re-reading)
 
-**AP-CM-03 timezone check**:
+**APAPL-CM-03 timezone check**:
 - Read timezone from Persons Involved section
 - Verify abbreviation matches season of scheduled date (CET Oct-Mar, CEST Mar-Oct)
 
@@ -119,9 +119,9 @@ Present draft in chat for user review AND persist to file. The chat output is fo
 
 ## Quality Gate
 
-- [ ] AP-CM-01, AP-CM-02, AP-CM-03 satisfied
-- [ ] AP-CM-02: every question labeled with `Question:`/`Frage:`/`Request:`
-- [ ] AP-CM-03: timezone matches season (CET Oct-Mar, CEST Mar-Oct)
+- [ ] APAPL-CM-01, APAPL-CM-02, APAPL-CM-03 satisfied
+- [ ] APAPL-CM-02: every question labeled with `Question:`/`Frage:`/`Request:`
+- [ ] APAPL-CM-03: timezone matches season (CET Oct-Mar, CEST Mar-Oct)
 - [ ] Anti-Pattern Index: zero violations
 - [ ] Draft marked `**STATUS: DRAFT - NOT SENT**` if email
 - [ ] Draft written to CONVERSATION file (History, Log, Todo) when conversation is referenced

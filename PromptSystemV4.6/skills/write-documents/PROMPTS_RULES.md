@@ -2,7 +2,7 @@
 
 Rules for `_PROMPTS_[NN]-[Topic].md` files. Verifiable from the artifact alone.
 
-**Writing quality:** Apply `APAPALAN_RULES.md` to all prompt content. Key rules: AP-PR-07 (be specific), AP-BR-02 (sacrifice grammar for brevity), AP-ST-01 (goal first), AP-NM-01 (one name per concept).
+**Writing quality:** Apply `APAPALAN_RULES.md` to all prompt content. Key rules: APAPL-PR-07 (be specific), APAPL-BR-02 (sacrifice grammar for brevity), APAPL-ST-01 (goal first), APAPL-NM-01 (one name per concept).
 
 ## Rule Index
 
@@ -645,7 +645,7 @@ The GOOD prompt repeats "rate limiter" three times. Each repetition anchors the 
 
 ## PRMT-CT-07: Examples Over Descriptions for Format and Behavior
 
-When a prompt must produce output in a specific format, show one example instead of describing the format in prose. AP-BR-05 (show format over describing format) applies directly. Examples are simultaneously more precise AND more token-efficient than descriptions.
+When a prompt must produce output in a specific format, show one example instead of describing the format in prose. APAPL-BR-05 (show format over describing format) applies directly. Examples are simultaneously more precise AND more token-efficient than descriptions.
 
 **BAD** (describes format - 45 tokens, still ambiguous):
 `````markdown

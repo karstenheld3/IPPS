@@ -1183,7 +1183,7 @@ claude -p --output-format json "List all TODO comments"
 
 **[2026-09-21 11:07]**
 - Fixed: Future-dated history timestamps corrected (11:30 → 10:30, 11:55 → 10:52; last write verified via file LastWriteTime 2026-09-21 10:52:41 - previous timestamps were future-dated, actual edit times were earlier)
-- Fixed: MCP expanded at first use in Summary (AP-PR-06)
+- Fixed: MCP expanded at first use in Summary (APAPL-PR-06)
 - Fixed: Summary bundled skills list completed to match section 7.2 (`/verify`, `/workflow-authoring` added)
 - Fixed: Inline bare URLs converted to markdown links (Agent Skills standard, skills docs, GitHub issues #13115 and #26251)
 - Added: CLCD topic registered in ID-REGISTRY.md

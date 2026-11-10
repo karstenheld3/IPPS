@@ -15,6 +15,7 @@ Author a publication-ready article in one turn from a draft, an options proposal
 
 - @skills:write-documents `document_types/ARTICLE_GUIDES.md` (craft decisions, revision passes, release check)
 - @skills:write-documents `document_types/ARTICLE_TEMPLATE.md` (section: Output; carries release-check record format)
+- @skills:write-documents `AI_WRITING_RULES.md` (anti-AI artifact suppression rules `AW-*` with BAD/GOOD examples, read BEFORE writing)
 - Technique files (`writing_techniques/[ID]_GUIDES.md`, `writing_techniques/TEMPLATES/[ID]_TEMPLATE.md`) ONLY when `using <ID>` is given
 - Persona file (`writing_personas/[PERSONA].md`) ONLY when `as <PERSONA>` is given (`DRSYNART-DD-17`)
 - Never load CHECKS files during execution (`DRSYNART-FR-32`, `GRUC-IG-03`)
@@ -50,10 +51,10 @@ Author a publication-ready article in one turn from a draft, an options proposal
    - Expand structure into full article prose: headline, lead, nut graf, section bodies with claim attribution, and resolution ending.
    - Trace all factual claims, metrics, and quotes to source IDs or mark `[ASSUMED]`.
 3. **Revision Passes (Line and Copy Editing)**:
-   - Run line editing pass: apply clarity principles (Paramedic Method, active verbs, sentence rhythm) per `document_types/ARTICLE_GUIDES.md`.
+   - Run line editing pass: apply clarity principles (Paramedic Method, active verbs, natural sentence rhythm, punctuation variety, and persona-calibrated pacing) per `document_types/ARTICLE_GUIDES.md` and eliminate staccato fragments, contrast snaps, compressed objection blocks, nominalization chains, and other punchy, flow-breaking robotic patterns (`AW-SO-01` through `AW-LX-03`) per `AI_WRITING_RULES.md`.
    - Run copy editing pass: apply style sheet conventions (terms, capitalization, numbers) from DRAFT or establish inline consistency.
 4. **Release Check and Output Compilation**:
-   - Execute release check using format from `document_types/ARTICLE_TEMPLATE.md`: verify header completeness, claim attribution, style-pattern signals, and style sheet adherence.
+   - Execute release check using format from `document_types/ARTICLE_TEMPLATE.md`: verify header completeness, claim attribution, style-pattern signals (`AI_WRITING_RULES.md`), and style sheet adherence.
    - Record release check in DRAFT if it exists, else report it in the chat response with `Status: SELF-CHECKED` and recommend running `/verify` before publishing.
    - If `inline`: update the specified target file in place.
    - Else: write `YYYY-MM-DD_[Title].md` using `document_types/ARTICLE_TEMPLATE.md` section Output.

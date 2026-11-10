@@ -2,7 +2,7 @@
 
 Rules for writing workflow documents with GOOD/BAD examples.
 
-**Writing quality:** Apply `APAPALAN_RULES.md` to all workflow content. Key rules for workflows: AP-PR-07 (be specific), AP-BR-02 (sacrifice grammar for brevity), AP-ST-01 (goal first), AP-NM-01 (one name per concept).
+**Writing quality:** Apply `APAPALAN_RULES.md` to all workflow content. Key rules for workflows: APAPL-PR-07 (be specific), APAPL-BR-02 (sacrifice grammar for brevity), APAPL-ST-01 (goal first), APAPL-NM-01 (one name per concept).
 
 ## Rule Index
 
@@ -35,7 +35,7 @@ Content (CT)
 - WF-CT-04: Avoid emojis - use text equivalents
 - WF-CT-05: Product names spelled correctly
 - WF-CT-06: APAPALAN requires examples - precision over brevity
-- WF-CT-07: No Document History section in rule files
+- WF-CT-07: No Document History, Version History or changelog section in rule files and other LLM-consumed instruction files (workflows, skills, standalone prompts handed to an assistant); a `**Version**: X.Y (YYYY-MM-DD)` header line is allowed - history costs tokens on every run and old entries read as instructions
 - WF-CT-08: Examples use generic placeholders, never real project data, never nonsensical or humorous content
 - WF-CT-09: References in skill files only to `[AGENT_FOLDER]`-internal files, never project-specific documents
 
@@ -403,19 +403,19 @@ Never copy rule descriptions, examples, or checklists from a referenced file. Re
 **BAD** (replicates rule content - creates maintenance dependency):
 ```markdown
 Effective Writing (see APAPALAN_RULES.md)
-- AP-CM-01: Accountable commitments - every commitment states action, deliverable, and timing
-- AP-CM-02: Labeled questions and requests - own paragraph, blank-line separated, labeled
-- AP-CM-03: Time precision - weekday + ISO date, timezone when scheduling
+- APAPL-CM-01: Accountable commitments - every commitment states action, deliverable, and timing
+- APAPL-CM-02: Labeled questions and requests - own paragraph, blank-line separated, labeled
+- APAPL-CM-03: Time precision - weekday + ISO date, timezone when scheduling
 ```
 
 **GOOD** (reference only):
 ```markdown
-Effective Writing - see `APAPALAN_RULES.md` Communication (CM) section: AP-CM-01, AP-CM-02, AP-CM-03
+Effective Writing - see `APAPALAN_RULES.md` Communication (CM) section: APAPL-CM-01, APAPL-CM-02, APAPL-CM-03
 ```
 
 **GOOD** (in MNF or workflow steps - ID-only reference):
 ```markdown
-- AP-CM-01, AP-CM-02, AP-CM-03 apply to every draft
+- APAPL-CM-01, APAPL-CM-02, APAPL-CM-03 apply to every draft
 - Verify against Anti-Pattern Index in `CONVERSATION_HUMANIZING_RULES.md`
 ```
 
@@ -642,8 +642,8 @@ GRUC documents are skill resource files consumed by LLMs. They have distinct ver
 - No redundancy with referenced files (`core-conventions.md`, templates, other rule files)
 - Self-contained: agent must not need external context beyond referenced companion files (WF-CT-09)
 - References point only to files within `[AGENT_FOLDER]` (skills, workflows, rules). Never reference project-specific research (`Docs/`, `_INFO_*.md`), external URLs, or documents outside agent folder hierarchy
-- APAPALAN: precise, minimal, goal-first (AP-PR-07, AP-BR-02, AP-ST-01)
-- MECT: one name per concept, no synonyms across the document (AP-NM-01)
+- APAPALAN: precise, minimal, goal-first (APAPL-PR-07, APAPL-BR-02, APAPL-ST-01)
+- MECT: one name per concept, no synonyms across the document (APAPL-NM-01)
 
 ### GRUC Verification Checklist
 

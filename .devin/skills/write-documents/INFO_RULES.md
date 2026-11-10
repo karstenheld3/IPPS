@@ -105,7 +105,7 @@ These are *research confidence labels* applied during writing. They are distinct
 
 Labels are applied by writing and verification workflows, never pre-filled in templates. Templates use `[LABEL]` as placeholder.
 
-**Related label** (data integrity, not confidence): `[LITERAL]` marks values that must be reproduced character-for-character (addresses, IBANs, reference numbers). See `core-conventions.md` "Authoritative Literals" and AP-PR-13.
+**Related label** (data integrity, not confidence): `[LITERAL]` marks values that must be reproduced character-for-character (addresses, IBANs, reference numbers). See `core-conventions.md` "Authoritative Literals" and APAPL-PR-13.
 
 **BAD:**
 ```markdown

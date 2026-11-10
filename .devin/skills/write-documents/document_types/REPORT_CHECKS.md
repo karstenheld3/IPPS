@@ -109,3 +109,8 @@ Evidence sources: final output document, options proposal (`[ID]-OPTIONS-NN_`), 
 
 - Question: Does the report acknowledge trade-offs, alternative interpretations, and data limitations fairly?
 - Improvement tip: Add a short counterpoint paragraph addressing why competing alternatives were rejected, citing specific cost or risk boundaries.
+
+### RPT-QI-06: Natural Prose Flow and Zero AI Rhetorical Artifacts
+
+- Question: Does the report narrative maintain a natural, continuous flow in the persona's voice and pacing profile, free of staccato fragments, contrast snaps, compressed objection blocks, mechanical symmetry, and other punchy, flow-breaking robotic patterns?
+- Improvement tip: Audit narrative paragraphs against `AI_WRITING_RULES.md` (`AW-SO-01` through `AW-LX-03`). Replace clipped rhetorical punchlines and compressed Q&A blocks with connected causal analysis, unpack nominalization chains into finite active verbs, vary clause structure and punctuation, and align paragraph and sentence pacing with the active persona.

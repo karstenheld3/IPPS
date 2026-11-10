@@ -7,23 +7,23 @@ Use during `/verify`, `/critique`, `/improve`, and `/research` workflows.
 ## Rule Index
 
 Criteria (CR)
-- SOCAS-01: Inconsistencies
-- SOCAS-02: Ambiguous Naming and Wording
-- SOCAS-03: Overlapping Concerns
-- SOCAS-04: Undisclosed Contact Information
-- SOCAS-05: Ineffective Communication
-- SOCAS-06: Incomplete Specifications
-- SOCAS-07: Confusing Elements
-- SOCAS-08: Information vs Noise Imbalance
-- SOCAS-09: Lack of Structure
-- SOCAS-10: Gaps in Reasoning
-- SOCAS-11: Unnecessary Complexity
-- SOCAS-12: Presentation Sloppiness
-- SOCAS-13: Empty Structure
-- SOCAS-14: Arbitrary Sequencing
-- SOCAS-15: Net-Negative Adoption
-- SOCAS-16: Disguised Commercial Intent
-- SOCAS-17: Weaponized Persuasion
+- SOCAS-CR-01: Inconsistencies
+- SOCAS-CR-02: Ambiguous Naming and Wording
+- SOCAS-CR-03: Overlapping Concerns
+- SOCAS-CR-04: Undisclosed Contact Information
+- SOCAS-CR-05: Ineffective Communication
+- SOCAS-CR-06: Incomplete Specifications
+- SOCAS-CR-07: Confusing Elements
+- SOCAS-CR-08: Information vs Noise Imbalance
+- SOCAS-CR-09: Lack of Structure
+- SOCAS-CR-10: Gaps in Reasoning
+- SOCAS-CR-11: Unnecessary Complexity
+- SOCAS-CR-12: Presentation Sloppiness
+- SOCAS-CR-13: Empty Structure
+- SOCAS-CR-14: Arbitrary Sequencing
+- SOCAS-CR-15: Net-Negative Adoption
+- SOCAS-CR-16: Disguised Commercial Intent
+- SOCAS-CR-17: Weaponized Persuasion
 
 Application (AP)
 - SOCAS-AP-01: Cite criterion ID with quoted evidence
@@ -45,7 +45,7 @@ Reporting (RP)
 
 ## The 17 Criteria
 
-### SOCAS-01: Inconsistencies
+### SOCAS-CR-01: Inconsistencies
 
 Any type of inconsistency signals confusion:
 - Same concept named multiple ways
@@ -53,7 +53,7 @@ Any type of inconsistency signals confusion:
 - Contradicting statements within same document
 - Format/style inconsistencies without reason
 
-### SOCAS-02: Ambiguous Naming and Wording
+### SOCAS-CR-02: Ambiguous Naming and Wording
 
 Lack of clear naming scheme:
 - Undefined or hand-wavy concepts
@@ -61,7 +61,7 @@ Lack of clear naming scheme:
 - Names that could mean multiple things
 - Missing glossary for domain terms
 
-### SOCAS-03: Overlapping Concerns
+### SOCAS-CR-03: Overlapping Concerns
 
 Redundancy with deviation indicates poor design:
 - Two components doing the same job differently
@@ -70,7 +70,7 @@ Redundancy with deviation indicates poor design:
 - Duplicate mechanisms with slight variations
 - Items in same grouping at wildly different levels of detail ("Revenue trends" next to "Johnson account")
 
-### SOCAS-04: Undisclosed Contact Information
+### SOCAS-CR-04: Undisclosed Contact Information
 
 Organizational red flag:
 - Generic email addresses only (info@, contact@)
@@ -78,7 +78,7 @@ Organizational red flag:
 - Hidden or hard-to-find contact details
 - No escalation path documented
 
-### SOCAS-05: Ineffective Communication
+### SOCAS-CR-05: Ineffective Communication
 
 Forces unnecessary communication loops:
 - Information scattered across multiple documents
@@ -86,7 +86,7 @@ Forces unnecessary communication loops:
 - Missing context requiring follow-up questions
 - No clear owner or decision maker identified
 
-### SOCAS-06: Incomplete Specifications
+### SOCAS-CR-06: Incomplete Specifications
 
 Mixing suggestions with requirements:
 - No clear distinction between MUST, SHOULD, MAY
@@ -94,7 +94,7 @@ Mixing suggestions with requirements:
 - Implicit assumptions left unstated
 - Conclusions not supported by evidence
 
-### SOCAS-07: Confusing Elements
+### SOCAS-CR-07: Confusing Elements
 
 Funny but confusing additions:
 - Jokes or humor that obscures meaning
@@ -102,7 +102,7 @@ Funny but confusing additions:
 - Excessive metaphors or analogies
 - Easter eggs in serious documentation
 
-### SOCAS-08: Information vs Noise Imbalance
+### SOCAS-CR-08: Information vs Noise Imbalance
 
 Poor signal-to-noise ratio:
 - Relevant details buried in irrelevant additions
@@ -113,7 +113,7 @@ Poor signal-to-noise ratio:
 - Generic phrasing where domain expertise would produce specific examples
 - Repetitive thesis restatement in different words across paragraphs
 
-### SOCAS-09: Lack of Structure
+### SOCAS-CR-09: Lack of Structure
 
 Unstructured writing:
 - No clear headings or sections
@@ -122,7 +122,7 @@ Unstructured writing:
 - Wall-of-text formatting
 - No table of contents for long documents
 
-### SOCAS-10: Gaps in Reasoning
+### SOCAS-CR-10: Gaps in Reasoning
 
 Logical inconsistencies:
 - Conclusions not supported by evidence
@@ -131,7 +131,7 @@ Logical inconsistencies:
 - No explicit tradeoffs or alternatives discussed
 - Selection not justified ("Three problems..." - why these three and no others?)
 
-### SOCAS-11: Unnecessary Complexity
+### SOCAS-CR-11: Unnecessary Complexity
 
 Abstractions that don't earn their cost:
 - Over-engineered solutions for simple problems
@@ -139,7 +139,7 @@ Abstractions that don't earn their cost:
 - Deep nesting without clear benefit
 - Indirection without purpose
 
-### SOCAS-12: Presentation Sloppiness
+### SOCAS-CR-12: Presentation Sloppiness
 
 Surface-level quality issues:
 - Typos and grammatical errors
@@ -148,7 +148,7 @@ Surface-level quality issues:
 - Outdated information mixed with current
 - Outdated, abandoned, or unsupported code (stale repos, unresolved issues, no recent commits)
 
-### SOCAS-13: Empty Structure
+### SOCAS-CR-13: Empty Structure
 
 Structure present but hollow - author organized without synthesizing:
 - Headings label categories instead of stating ideas ("Background", "Analysis", "Results")
@@ -156,14 +156,14 @@ Structure present but hollow - author organized without synthesizing:
 - Section summaries describe what the section covers, not what was found
 - No stated purpose - reader cannot tell why the document exists
 
-### SOCAS-14: Arbitrary Sequencing
+### SOCAS-CR-14: Arbitrary Sequencing
 
 Items dumped without analyzing relationships:
 - Items in lists appear in no discernible order
 - No logical, chronological, structural, or importance-based sequence
 - Reader cannot determine why item 2 follows item 1
 
-### SOCAS-15: Net-Negative Adoption
+### SOCAS-CR-15: Net-Negative Adoption
 
 Solution introduces more problems than it solves - detectable through community research:
 - GitHub issues dominated by workarounds for the tool's own limitations
@@ -171,7 +171,7 @@ Solution introduces more problems than it solves - detectable through community 
 - Known problems acknowledged by maintainers but unresolved across major versions
 - Adopters report increased complexity, debugging time, or breaking changes disproportionate to value gained
 
-### SOCAS-16: Disguised Commercial Intent
+### SOCAS-CR-16: Disguised Commercial Intent
 
 Content whose primary purpose is selling while presenting as journalism, education, or opinion:
 - Call-to-action buried after 80%+ emotional buildup (AIDA: Attention, Interest, Desire, Action)
@@ -183,7 +183,7 @@ Content whose primary purpose is selling while presenting as journalism, educati
 
 Detection test: remove the final CTA. If the text loses its purpose, it was funnel, not content.
 
-### SOCAS-17: Weaponized Persuasion
+### SOCAS-CR-17: Weaponized Persuasion
 
 Cialdini's influence principles (reciprocity, scarcity, authority, consistency, liking, social proof) applied deceptively:
 - Reciprocity trap: unsolicited "free" offering creating obligation to purchase
@@ -208,8 +208,8 @@ The document has naming issues and some inconsistencies.
 
 **GOOD:**
 ```
-SOCAS-01: "retry mechanism" in section 2, "reconnection logic" in section 4 - same concept, different names
-SOCAS-02: "handler" used without definition - could mean error handler, event handler, or request handler
+SOCAS-CR-01: "retry mechanism" in section 2, "reconnection logic" in section 4 - same concept, different names
+SOCAS-CR-02: "handler" used without definition - could mean error handler, event handler, or request handler
 ```
 
 ### SOCAS-AP-02: Rework Threshold
@@ -223,7 +223,7 @@ Found 1 minor inconsistency. Recommend complete rework of the specification.
 
 **GOOD:**
 ```
-SOCAS violations: 5 of 17 (SOCAS-01, SOCAS-03, SOCAS-06, SOCAS-09, SOCAS-10)
+SOCAS violations: 5 of 17 (SOCAS-CR-01, SOCAS-CR-03, SOCAS-CR-06, SOCAS-CR-09, SOCAS-CR-10)
 Verdict: REWORK - exceeds 3-criterion threshold
 ```
 
@@ -231,7 +231,7 @@ Verdict: REWORK - exceeds 3-criterion threshold
 
 Not all 17 criteria apply to every context. Apply only the relevant subset.
 
-**BAD:** Flagging SOCAS-04 (Undisclosed Contact Information) on a code module.
+**BAD:** Flagging SOCAS-CR-04 (Undisclosed Contact Information) on a code module.
 
 **GOOD:** See [Context-Appropriate Subsets](#context-appropriate-subsets) for which criteria apply where.
 
@@ -240,17 +240,17 @@ Not all 17 criteria apply to every context. Apply only the relevant subset.
 ### Agent Output Review (`/verify`, `/critique`, `/improve`)
 
 Apply when reviewing agent-generated specs, research, code, plans:
-- SOCAS-01 (Inconsistencies)
-- SOCAS-02 (Ambiguous Naming)
-- SOCAS-03 (Overlapping Concerns)
-- SOCAS-06 (Incomplete Specifications)
-- SOCAS-08 (Noise Imbalance)
-- SOCAS-09 (Lack of Structure)
-- SOCAS-10 (Gaps in Reasoning)
-- SOCAS-11 (Unnecessary Complexity)
-- SOCAS-12 (Presentation Sloppiness)
-- SOCAS-13 (Empty Structure)
-- SOCAS-14 (Arbitrary Sequencing)
+- SOCAS-CR-01 (Inconsistencies)
+- SOCAS-CR-02 (Ambiguous Naming)
+- SOCAS-CR-03 (Overlapping Concerns)
+- SOCAS-CR-06 (Incomplete Specifications)
+- SOCAS-CR-08 (Noise Imbalance)
+- SOCAS-CR-09 (Lack of Structure)
+- SOCAS-CR-10 (Gaps in Reasoning)
+- SOCAS-CR-11 (Unnecessary Complexity)
+- SOCAS-CR-12 (Presentation Sloppiness)
+- SOCAS-CR-13 (Empty Structure)
+- SOCAS-CR-14 (Arbitrary Sequencing)
 
 ### Document Review
 
@@ -260,19 +260,19 @@ Apply when reviewing human-authored technical specifications, API docs, process 
 ### Source Evaluation (`/research`)
 
 Apply when ranking external sources for reliability:
-- SOCAS-01 (Inconsistencies)
-- SOCAS-02 (Ambiguous Naming)
-- SOCAS-04 (Undisclosed Contact Information)
-- SOCAS-05 (Ineffective Communication)
-- SOCAS-06 (Incomplete Specifications)
-- SOCAS-08 (Noise Imbalance)
-- SOCAS-09 (Lack of Structure)
-- SOCAS-10 (Gaps in Reasoning)
-- SOCAS-12 (Presentation Sloppiness)
-- SOCAS-13 (Empty Structure)
-- SOCAS-15 (Net-Negative Adoption)
-- SOCAS-16 (Disguised Commercial Intent)
-- SOCAS-17 (Weaponized Persuasion)
+- SOCAS-CR-01 (Inconsistencies)
+- SOCAS-CR-02 (Ambiguous Naming)
+- SOCAS-CR-04 (Undisclosed Contact Information)
+- SOCAS-CR-05 (Ineffective Communication)
+- SOCAS-CR-06 (Incomplete Specifications)
+- SOCAS-CR-08 (Noise Imbalance)
+- SOCAS-CR-09 (Lack of Structure)
+- SOCAS-CR-10 (Gaps in Reasoning)
+- SOCAS-CR-12 (Presentation Sloppiness)
+- SOCAS-CR-13 (Empty Structure)
+- SOCAS-CR-15 (Net-Negative Adoption)
+- SOCAS-CR-16 (Disguised Commercial Intent)
+- SOCAS-CR-17 (Weaponized Persuasion)
 
 High SOCAS count = unreliable source. Prefer sources with low SOCAS indicators. Document findings in source notes.
 
@@ -293,14 +293,14 @@ Evaluate organizations by their public outputs (website, docs, communications):
 
 Apply these additional indicators when evaluating user interfaces. Each maps to a parent SOCAS criterion.
 
-- Breaking established patterns without substantial gain (SOCAS-01)
-- Broken proximity of related UX elements (SOCAS-03)
-- No tab order and keyboard support for users without mouse (SOCAS-06)
-- No copy functionality for relevant textual information (SOCAS-06)
-- Unclear visual hierarchy (SOCAS-09)
-- Unestablished commands for standard operations - instead of OK, Cancel, Save, Load (SOCAS-02)
-- Application deletes or loses data without user confirmation (SOCAS-06)
-- Users can accidentally close dialogs with entered data by clicking outside (SOCAS-06)
+- Breaking established patterns without substantial gain (SOCAS-CR-01)
+- Broken proximity of related UX elements (SOCAS-CR-03)
+- No tab order and keyboard support for users without mouse (SOCAS-CR-06)
+- No copy functionality for relevant textual information (SOCAS-CR-06)
+- Unclear visual hierarchy (SOCAS-CR-09)
+- Unestablished commands for standard operations - instead of OK, Cancel, Save, Load (SOCAS-CR-02)
+- Application deletes or loses data without user confirmation (SOCAS-CR-06)
+- Users can accidentally close dialogs with entered data by clicking outside (SOCAS-CR-06)
 
 ## Reporting Format
 
@@ -317,9 +317,9 @@ Each finding: criterion ID, quoted evidence, severity (LOW, MEDIUM, HIGH).
 
 **GOOD:**
 ```
-- SOCAS-01 HIGH: "fetch handler" (line 12) vs "request processor" (line 45) - same component, different names
-- SOCAS-06 MEDIUM: Edge case unspecified - what happens when input list is empty?
-- SOCAS-10 LOW: "Best approach selected" - no alternatives discussed, no selection criteria stated
+- SOCAS-CR-01 HIGH: "fetch handler" (line 12) vs "request processor" (line 45) - same component, different names
+- SOCAS-CR-06 MEDIUM: Edge case unspecified - what happens when input list is empty?
+- SOCAS-CR-10 LOW: "Best approach selected" - no alternatives discussed, no selection criteria stated
 ```
 
 ### SOCAS-RP-02: Summary Format
@@ -333,7 +333,7 @@ Overall the document has some issues that should be addressed.
 
 **GOOD:**
 ```
-SOCAS: 4/17 violated (SOCAS-01 HIGH, SOCAS-06 MEDIUM, SOCAS-10 LOW, SOCAS-12 LOW)
+SOCAS: 4/17 violated (SOCAS-CR-01 HIGH, SOCAS-CR-06 MEDIUM, SOCAS-CR-10 LOW, SOCAS-CR-12 LOW)
 Verdict: REWORK - exceeds 3-criterion threshold
 ```
 

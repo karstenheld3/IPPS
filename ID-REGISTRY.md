@@ -245,8 +245,11 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **AIMEDIAPROD** - AI Media Production (API-driven, AI-assisted video and podcast production pipeline: recording review via transcription, asset generation, automated cutting and rendering, podcast post-production; parent topic for nested subtopic MEDIAAUTO) - 2026-10-29
 - **SEOFIRST** - SEO-First Skill (deep research and guides for demand-first ideation, SEO/GEO/agent discoverability optimization across all media, audit ranking, campaigns, metadata; upgrade of `seo-tools` skill; parent topic for nested subtopic SEOGUIDE) - 2026-11-03
 - **AGENSYNTAX** - AGEN Syntax (generic verb-object-modifier prompt syntax extending AGEN; workflow prompt signatures; workflow count reduction) - 2026-11-03
+- **AGNTFOLDERS** - Agent Folders (inventory and standardization of the subfolders the agent creates automatically: names, purpose, version-control default, lifecycle) - 2026-11-09
+- **SOCASCONTEXT** - SOCAS Context Awareness (inventory of SOCAS application scenarios, clustering of rules into GENERAL + 3 field categories, context-aware applicability in SOCAS_RULES.md and the SOCAS prompt) - 2026-11-10
 - **ABTSTORY** - And-But-Therefore Story Spine writing technique (narrative friction and resolution structure) - 2026-11-02
 - **AIDA** - Attention-Interest-Desire-Action writing technique (direct-response conversion structure) - 2026-11-02
+- **AW** - AI Writing Rules (anti-AI artifact suppression and detection rules for publishing document types: articles, reports, ebooks) - 2026-11-08
 - **ANA** - Analysis Orchestration rules (/analyze tier selection, devil's advocate, review points) - 2026-11-02
 - **ART** - Article Document Type rules (features, essays, blogs; lead, nut graf, alternating evidence, release check) - 2026-11-02
 - **DIATAXIS** - Diataxis Documentation writing technique (tutorials, how-tos, reference, explanation) - 2026-11-02

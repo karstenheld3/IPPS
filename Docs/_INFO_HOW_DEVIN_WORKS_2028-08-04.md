@@ -1598,10 +1598,10 @@ Three independent network stacks:
 - Source: https://docs.devin.ai/desktop/changelog (releases 3.0.12 through latest)
 
 **[2026-06-03 18:30]**
-- Fixed: AP-PR-07 violation - removed vague "extremely performant" from CLI section
-- Fixed: AP-BR-02 - removed filler "seamlessly" from CLI section
-- Fixed: AP-BR-03 - removed redundant "Written in Rust" (already in header)
-- Fixed: AP-ST-06 - CLI section restructured: capabilities separated from installation
+- Fixed: APAPL-PR-07 violation - removed vague "extremely performant" from CLI section
+- Fixed: APAPL-BR-02 - removed filler "seamlessly" from CLI section
+- Fixed: APAPL-BR-03 - removed redundant "Written in Rust" (already in header)
+- Fixed: APAPL-ST-06 - CLI section restructured: capabilities separated from installation
 - Verified: /improve APAPALAN polish pass. No remaining filler words.
 
 **[2026-06-03 17:45]**
@@ -1615,7 +1615,7 @@ Three independent network stacks:
 - Verified: /improve comparison pass against WSRF-IN01 template
 
 **[2026-06-03 17:40]**
-- Fixed: Acronyms expanded on first use: WSL, SSE, NDJSON, MFA (AP-PR-06)
+- Fixed: Acronyms expanded on first use: WSL, SSE, NDJSON, MFA (APAPL-PR-06)
 - Verified: Final /verify pass after /critique + /reconcile + /implement cycle. All checks pass.
 
 **[2026-06-03 17:35]**
@@ -1629,7 +1629,7 @@ Three independent network stacks:
 
 **[2026-06-03 17:30]**
 - Fixed: Markdown table in "Naming and Branding" converted to list (GLOBAL-RULES)
-- Fixed: Acronyms expanded on first use: MCP, RBAC, SSO, SCIM, GPO, MDM, LSP, OTA (AP-PR-06)
+- Fixed: Acronyms expanded on first use: MCP, RBAC, SSO, SCIM, GPO, MDM, LSP, OTA (APAPL-PR-06)
 - Fixed: Arrow `->` replaced with `→` in File Path Changes (core-conventions)
 - Added: Timeline field in header block (INFO_TEMPLATE)
 - Verified: /verify pass completed

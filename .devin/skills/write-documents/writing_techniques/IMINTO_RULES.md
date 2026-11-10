@@ -2,7 +2,7 @@
 
 Output standards for documents written `using IMINTO` (lede, nut graf, decreasing-priority body).
 
-**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: AP-PR-01 (datetime format), AP-PR-07 (be specific), MW-VO-01 (active voice), AP-ST-05 (general to specific).
+**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: APAPL-PR-01 (datetime format), APAPL-PR-07 (be specific), MECT-VO-01 (active voice), APAPL-ST-05 (general to specific).
 
 ## Rule Index
 

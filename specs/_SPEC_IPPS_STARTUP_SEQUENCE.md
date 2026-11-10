@@ -527,8 +527,8 @@ Mode: WORKSPACE + SINGLE-VERSION + SESSION-MODE + SYNCED
 - Added: 4-Dimension Overview diagram in WorkspaceDimensions section showing all dimensions, states, detection signals, and example combinations in a single visual
 
 **[2026-09-04 15:55]**
-- Fixed: SOCAS-01 — added clarifying note that agent descriptions in Context are illustrative, not dependencies
-- Fixed: SOCAS-10 — added [ASSUMED] label to Dimension 4 reference (SYNCREL-SP01 not yet implemented)
+- Fixed: SOCAS-CR-01 — added clarifying note that agent descriptions in Context are illustrative, not dependencies
+- Fixed: SOCAS-CR-10 — added [ASSUMED] label to Dimension 4 reference (SYNCREL-SP01 not yet implemented)
 - Fixed: Synced workspace constant counts with WSKMGMT spec (5 base + 3 SYNCED-only)
 
 **[2026-09-04 15:46]**

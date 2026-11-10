@@ -2,7 +2,7 @@
 
 Output standards for documents written `using ABTSTORY` (And, But, Therefore plus Story Spine for embedded cases).
 
-**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: AP-PR-07 (be specific), MW-WC-10 (explicit over figurative), MW-VO-01 (active voice).
+**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: APAPL-PR-07 (be specific), MECT-WC-10 (explicit over figurative), MECT-VO-01 (active voice).
 
 ## Rule Index
 

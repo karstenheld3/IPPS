@@ -2,7 +2,7 @@
 
 Output standards for documentation written `using DIATAXIS` (tutorial, how-to guide, reference, explanation).
 
-**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: AP-PR-10 (never abbreviate keys and references), MW-VO-02 (address reader as "you"), MW-HS-03 (write for declared audience).
+**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: APAPL-PR-10 (never abbreviate keys and references), MECT-VO-02 (address reader as "you"), MECT-HS-03 (write for declared audience).
 
 ## Rule Index
 

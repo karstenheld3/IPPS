@@ -350,7 +350,7 @@ N/A: This SPEC defines document structure, workflow steps, and GRUC file content
 - Added: Acceptance Criteria section (8 AC groups, 33 checklist items) following GRUC-SP01 pattern
 
 **[2026-09-12 16:15]**
-- Fixed: FR-09 verb mapping clarified - RULES consumed by `/verify` post-execution, not by working agent during creation (SOCAS-02)
+- Fixed: FR-09 verb mapping clarified - RULES consumed by `/verify` post-execution, not by working agent during creation (SOCAS-CR-02)
 - Added: Logging Requirements section (SPEC-LG-01 compliance)
 - Fixed: TOC updated for new section numbering
 

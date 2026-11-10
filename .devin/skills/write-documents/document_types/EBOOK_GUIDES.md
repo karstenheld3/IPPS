@@ -227,7 +227,7 @@ When the user calls `/propose-ebook` with `compare techniques <ID>, <ID>[, <ID>]
 - Sample length cap: at tier 1, sample chapters in the bake-off are capped at 500 words each to protect the single-turn budget; when full-length sample chapters are requested, escalate to tier 2.
 - It scores each sample chapter against:
   1. This GUIDE's quality heuristics (advance organizer, repeating pattern, tool independence).
-  2. The style-pattern signals (`AI_WRITING_DETECTION_RULES.md`).
+  2. The style-pattern signals (`AI_WRITING_RULES.md`).
   3. CHECKS files are NEVER loaded during bake-off scoring (`DRSYNART-FR-32`).
 - Results are recorded under each option's `Sample:` field.
 
@@ -301,7 +301,8 @@ Ebooks require all four standard editorial passes plus independent fact-checking
 1. **Lanham's Paramedic Method**: Eliminate nominalizations, circle prepositions, replace passive constructions with active verbs, and reduce the lard factor below one-third.
 2. **Williams's Characters and Actions**: Make technical actors (brokers, clients, operators) the grammatical subjects and actions the verbs. Keep familiar concepts at sentence openings and push new technical terms to sentence endings.
 3. **Pinker's Classic Style**: Treat the text as a window through which reader and author gaze together at the reality of the system.
-- **Rule Reference**: `EBK-ED-01`.
+4. **Anti-AI Prose Discipline (`AI_WRITING_RULES.md`)**: Sustain continuous, natural prose flow. Avoid staccato fragments, contrast snaps, telegraphic objection blocks, mechanical tricolons, signpost openers, reflex header/list inflation, prestige-register buzzwords, and nominalization chains that produce punchy, flow-breaking robotic writing. Calibrate sentence rhythm, punctuation variety, and paragraph length to the active persona.
+- **Rule Reference**: `EBK-ED-01`, `AW-SO-01` through `AW-LX-03`.
 
 ### Fact-Checking Standard
 
@@ -324,8 +325,8 @@ Before publication, every ebook manuscript must satisfy the seven release check 
 2. Sourcing: every factual metric, benchmark, and empirical claim cited or marked `[ASSUMED]`.
 3. Numbering and cross-references: continuous chapter and exhibit numbering; all internal cross-references resolve.
 4. Presentation hygiene: zero prompt fragments, scratchpads, or temporary generation artifacts in the final text.
-5. AI-writing detection: signals below threshold (at most 1 signal across Sourcing, Style, Structure, Voice; excluding structural signals inherent to the chosen technique).
-6. Persona trait budget respected (when a persona is specified).
+5. AI-writing detection: style-pattern signals below threshold (`<= 1` signal across `AW-SO`, `AW-SY`, `AW-ST`, `AW-VO`, `AW-LX` in `AI_WRITING_RULES.md`; excluding structural signals inherent to the chosen technique).
+6. Persona trait budget and length/pacing profile respected (when a persona is specified).
 7. Word count and chapter counts within target range.
 - **Rule Reference**: `EBK-RC-01`.
 
@@ -403,3 +404,4 @@ The following rule ID ranges in `EBOOK_RULES.md` define the enforceable output s
 - `EBK-EV-01` through `EBK-EV-03`: Tool-independent exercises, inline indexing cross-references, and factual claim verification.
 - `EBK-ED-01` through `EBK-ED-03`: Line clarity with Paramedic Method lard factor, Style Sheet series bible with Chapter Summaries running memory, and recap convention with stitching assembly.
 - `EBK-RC-01`: Final release check verification standards.
+- `AW-SO-01` through `AW-LX-03` (`../AI_WRITING_RULES.md`): Anti-AI writing artifact suppression and detection across Sourcing, Style, Structure, Voice, and Lexical choice.

@@ -2,7 +2,7 @@
 
 Output standards for robustness cards and terminal command patterns. Consumed by `/verify`.
 
-**Writing quality:** Apply `APAPALAN_RULES.md`. Key rules: AP-PR-07 specific, AP-NM-01 one name per concept, AP-PR-09 consistent patterns.
+**Writing quality:** Apply `APAPALAN_RULES.md`. Key rules: APAPL-PR-07 specific, APAPL-NM-01 one name per concept, APAPL-PR-09 consistent patterns.
 
 ## Rule Index
 

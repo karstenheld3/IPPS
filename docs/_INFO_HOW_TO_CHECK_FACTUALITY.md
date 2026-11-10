@@ -14,8 +14,8 @@
 - A factcheck workflow must separately verify 1) factual claims against sources, and 2) derivative claims against the logic connecting them to supporting facts [VERIFIED]
 - The cost of undetected factual errors compounds through document dependency chains: wrong INFO leads to wrong SPEC leads to wrong IMPL leads to wrong code [VERIFIED]
 - **Separation of concerns**: `fact-check.md` verifies "Is it true?" (correspondence to external reality). `verify.md` verifies "Does it conform?" (conformance to PromptSystem rules, upstream documents like SPEC for IMPL, templates, and instructions). These are orthogonal. A document can pass verify and fail fact-check, or vice versa. [VERIFIED]
-- SOCAS-10 (Gaps in Reasoning) and SOCAS-06 (Incomplete Specifications) are the boundary rules: they check internal logic quality, not external truth. Both stay in `verify.md`. `fact-check.md` goes outside the document to test claims against reality. [VERIFIED]
-- Seven SOCAS/APAPALAN/MECT patterns serve as hallucination detection signals that `fact-check.md` should use as input: SOCAS-08 generic phrasing, SOCAS-12 stale information, SOCAS-13 empty structure, AP-PR-07 vague claims, MW-WC-01 wrong term precision, SOCAS-10 assumptions-as-facts, SOCAS-06 unsupported conclusions [VERIFIED]
+- SOCAS-CR-10 (Gaps in Reasoning) and SOCAS-CR-06 (Incomplete Specifications) are the boundary rules: they check internal logic quality, not external truth. Both stay in `verify.md`. `fact-check.md` goes outside the document to test claims against reality. [VERIFIED]
+- Seven SOCAS/APAPALAN/MECT patterns serve as hallucination detection signals that `fact-check.md` should use as input: SOCAS-CR-08 generic phrasing, SOCAS-CR-12 stale information, SOCAS-CR-13 empty structure, APAPL-PR-07 vague claims, MECT-WC-01 wrong term precision, SOCAS-CR-10 assumptions-as-facts, SOCAS-CR-06 unsupported conclusions [VERIFIED]
 - **The primary reason for `fact-check.md` is AI agent gullibility.** LLM agents trust all text unconditionally, cannot distinguish aspirational docs from actual behavior, treat documentation as ground truth rather than as claims about ground truth, and have no mechanism to detect when a source is wrong. Without a systematic adversarial process, the agent will build on unverified claims. [VERIFIED]
 - **Statistical distribution is not evidence.** LLM confidence measures popularity of a claim in training data, not its truth. In the 1960s, published consensus said sugar was healthy and smoking was safe - the statistical distribution was wrong. An agent that uses "most sources agree" as verification is using popularity as a proxy for truth. The only valid verification terminates in direct observation of the actual system. [VERIFIED]
 
@@ -703,33 +703,33 @@ Cannot catch:       Wrong SPEC (trusted as truth)        Formatting errors, miss
 **PromptSystem rules (writing quality and structure)**:
 
 **APAPALAN (all rules)**:
-- AP-PR-01 through AP-PR-13: Precision formatting, datetime, attributes, contacts, links, IDs, acronyms, specificity, examples, patterns, literals
-- AP-BR-01 through AP-BR-07: Brevity, grammar, DRY, compact definitions, show-not-describe, pipe-delimited, bold usage
-- AP-ST-01 through AP-ST-07: Structure, goal-first, self-contained units, hierarchical ordering, visual grouping, cognitive load
-- AP-CM-01 through AP-CM-03: Communication commitments, labeled questions, time precision
-- AP-NM-01 through AP-NM-05: Naming one-per-concept, unambiguous compounds, meta-words, word pairs, standard terms
+- APAPL-PR-01 through APAPL-PR-13: Precision formatting, datetime, attributes, contacts, links, IDs, acronyms, specificity, examples, patterns, literals
+- APAPL-BR-01 through APAPL-BR-07: Brevity, grammar, DRY, compact definitions, show-not-describe, pipe-delimited, bold usage
+- APAPL-ST-01 through APAPL-ST-07: Structure, goal-first, self-contained units, hierarchical ordering, visual grouping, cognitive load
+- APAPL-CM-01 through APAPL-CM-03: Communication commitments, labeled questions, time precision
+- APAPL-NM-01 through APAPL-NM-05: Naming one-per-concept, unambiguous compounds, meta-words, word pairs, standard terms
 
 **MECT (all rules)**:
-- MW-VO-01 through MW-VO-04: Active voice, reader address, simplest verb, obligation words
-- MW-WC-01 through MW-WC-08: Word precision, plain language, no recursion, no product collision, no synonymy, no inverted semantics, no premature compression, language sovereignty
-- MW-TD-01 through MW-TD-03: Naming structure, output-named procedures, stable naming
-- MW-HS-01 through MW-HS-03: Informative headings, depth limit, audience matching
-- MW-LT-01 through MW-LT-05: Two identifiers, topology grouping, indexed groups, formatting signals, adjacent comparison
-- MW-DT-01 through MW-DT-03: Description lenses, audience matching, canonical forms
-- MW-VR-01 through MW-VR-03: Visual previews, structural diagrams, five diagram categories
+- MECT-VO-01 through MECT-VO-04: Active voice, reader address, simplest verb, obligation words
+- MECT-WC-01 through MECT-WC-08: Word precision, plain language, no recursion, no product collision, no synonymy, no inverted semantics, no premature compression, language sovereignty
+- MECT-TD-01 through MECT-TD-03: Naming structure, output-named procedures, stable naming
+- MECT-HS-01 through MECT-HS-03: Informative headings, depth limit, audience matching
+- MECT-LT-01 through MECT-LT-05: Two identifiers, topology grouping, indexed groups, formatting signals, adjacent comparison
+- MECT-DT-01 through MECT-DT-03: Description lenses, audience matching, canonical forms
+- MECT-VR-01 through MECT-VR-03: Visual previews, structural diagrams, five diagram categories
 
 **SOCAS (internal quality subset)**:
-- SOCAS-01: Inconsistencies (same concept named multiple ways)
-- SOCAS-02: Ambiguous Naming (undefined concepts)
-- SOCAS-03: Overlapping Concerns (redundancy)
-- SOCAS-05: Ineffective Communication (scattered information)
-- SOCAS-07: Confusing Elements (humor obscuring meaning)
-- SOCAS-08: Noise Imbalance (verbose, filler) - the WRITING quality aspect
-- SOCAS-09: Lack of Structure (no headings, no TOC)
-- SOCAS-11: Unnecessary Complexity (over-engineering)
-- SOCAS-12: Presentation Sloppiness (typos, formatting) - the SURFACE quality aspect
-- SOCAS-13: Empty Structure (headings label topics, not ideas) - the STRUCTURAL aspect
-- SOCAS-14: Arbitrary Sequencing (no discernible order)
+- SOCAS-CR-01: Inconsistencies (same concept named multiple ways)
+- SOCAS-CR-02: Ambiguous Naming (undefined concepts)
+- SOCAS-CR-03: Overlapping Concerns (redundancy)
+- SOCAS-CR-05: Ineffective Communication (scattered information)
+- SOCAS-CR-07: Confusing Elements (humor obscuring meaning)
+- SOCAS-CR-08: Noise Imbalance (verbose, filler) - the WRITING quality aspect
+- SOCAS-CR-09: Lack of Structure (no headings, no TOC)
+- SOCAS-CR-11: Unnecessary Complexity (over-engineering)
+- SOCAS-CR-12: Presentation Sloppiness (typos, formatting) - the SURFACE quality aspect
+- SOCAS-CR-13: Empty Structure (headings label topics, not ideas) - the STRUCTURAL aspect
+- SOCAS-CR-14: Arbitrary Sequencing (no discernible order)
 
 ### 11.2 Rules That Move to fact-check.md (Truth Verification)
 
@@ -740,7 +740,7 @@ No existing rules move entirely. Instead, `fact-check.md` introduces NEW verific
 - **Primary source tracing**: For secondary/tertiary source claims, trace back toward the primary source
 - **Existence testing**: Do claimed methods, endpoints, parameters, features actually exist?
 - **Quantitative verification**: Are claimed numbers, measurements, thresholds from a verifiable source?
-- **Logic verification**: Do conclusions follow from their premises? (goes beyond SOCAS-10 by verifying the premises against external reality first)
+- **Logic verification**: Do conclusions follow from their premises? (goes beyond SOCAS-CR-10 by verifying the premises against external reality first)
 - **Negative claim scrutiny**: Claims about what does NOT exist are especially hard to verify and easy to hallucinate
 - **Cross-version verification**: Is the claim true for the version being discussed, or conflated from another version?
 
@@ -748,15 +748,15 @@ No existing rules move entirely. Instead, `fact-check.md` introduces NEW verific
 
 These SOCAS criteria appear in BOTH workflows but serve different purposes:
 
-- **SOCAS-06** (Incomplete Specifications):
+- **SOCAS-CR-06** (Incomplete Specifications):
   - In `verify.md`: "Are there implicit assumptions left unstated?" (writing completeness)
   - In `fact-check.md`: "Are stated assumptions actually true?" (factual accuracy)
 
-- **SOCAS-10** (Gaps in Reasoning):
+- **SOCAS-CR-10** (Gaps in Reasoning):
   - In `verify.md`: "Does the conclusion follow from the stated evidence?" (logical structure)
   - In `fact-check.md`: "Is the stated evidence actually correct?" (factual foundation)
 
-- **SOCAS-12** (Presentation Sloppiness):
+- **SOCAS-CR-12** (Presentation Sloppiness):
   - In `verify.md`: "Are there typos and formatting errors?" (surface quality)
   - In `fact-check.md`: "Is outdated information mixed with current?" (temporal factuality)
 
@@ -764,7 +764,7 @@ These SOCAS criteria appear in BOTH workflows but serve different purposes:
 
 Seven existing SOCAS/APAPALAN/MECT patterns serve as early-warning signals for hallucinations. `fact-check.md` should use these as **triage input** to prioritize which claims to verify first:
 
-### 12.1 SOCAS-08: Generic Phrasing (Noise Imbalance)
+### 12.1 SOCAS-CR-08: Generic Phrasing (Noise Imbalance)
 
 "Generic phrasing where domain expertise would produce specific examples."
 
@@ -772,7 +772,7 @@ When an LLM does not know the real answer, it defaults to plausible generalities
 
 **Fact-check action**: Flag generic claims for source verification. If the agent cannot cite a specific source, the claim is suspect.
 
-### 12.2 SOCAS-12: Stale Information (Presentation Sloppiness)
+### 12.2 SOCAS-CR-12: Stale Information (Presentation Sloppiness)
 
 "Outdated information mixed with current."
 
@@ -780,7 +780,7 @@ LLMs conflate versions because training data blends old and new documentation. A
 
 **Fact-check action**: For any claim about a specific system/API/library, verify the claim applies to the version being discussed.
 
-### 12.3 SOCAS-13: Empty Structure
+### 12.3 SOCAS-CR-13: Empty Structure
 
 "Section summaries describe what the section covers, not what was found."
 
@@ -788,25 +788,25 @@ When an LLM cannot fill a section with real findings, it generates structural sc
 
 **Fact-check action**: Flag hollow sections as containing no verifiable claims. Request substantive content or remove the section.
 
-### 12.4 AP-PR-07: Vague Claims (Be Specific)
+### 12.4 APAPL-PR-07: Vague Claims (Be Specific)
 
 "Performance should be acceptable" and "the feature works as expected" are unfalsifiable. They may also be masking the agent's inability to make a specific, verifiable claim.
 
 **Fact-check action**: Require specific, verifiable reformulation. "Response time < 200ms for 95th percentile" is fact-checkable. "Performance is acceptable" is not.
 
-### 12.5 MW-WC-01: Wrong Term Precision (Word-Level Precision)
+### 12.5 MECT-WC-01: Wrong Term Precision (Word-Level Precision)
 
 Using "accuracy" when "precision" is meant, or "simple" when "simplistic" applies. This can be a genuine word choice error (verify.md territory) OR a signal that the agent does not understand the domain well enough to pick the right term (fact-check territory).
 
 **Fact-check action**: When a term precision error affects a factual claim ("the system achieves high accuracy" vs "the system achieves high precision"), verify the underlying measurement against the source.
 
-### 12.6 SOCAS-10: Assumptions as Facts (Gaps in Reasoning)
+### 12.6 SOCAS-CR-10: Assumptions as Facts (Gaps in Reasoning)
 
 "Assumptions presented as facts." When an LLM states "the API requires authentication" without citing a source, it may be interpolating from patterns in training data rather than reporting a verified fact.
 
 **Fact-check action**: Any claim without a source citation is a candidate for verification. Prioritize claims that are stated with high confidence but no attribution.
 
-### 12.7 SOCAS-06: Unsupported Conclusions (Incomplete Specifications)
+### 12.7 SOCAS-CR-06: Unsupported Conclusions (Incomplete Specifications)
 
 "Conclusions not supported by evidence." A derivative claim that does not reference the facts it derives from is suspect. The reasoning may be sound, but if the supporting facts are hallucinated, the conclusion is worthless.
 
@@ -832,11 +832,11 @@ The analysis reveals that a factcheck workflow must be structurally different fr
 
 8. **The cost model favors early verification.** Factchecking during or immediately after writing is orders of magnitude cheaper than discovering errors downstream. The workflow should run as part of the document creation pipeline, not as an afterthought.
 
-9. **Seven existing rules are hallucination triage signals.** SOCAS-08, SOCAS-12, SOCAS-13, AP-PR-07, MW-WC-01, SOCAS-10, and SOCAS-06 each detect a pattern that correlates with LLM hallucination. `fact-check.md` should scan for these patterns FIRST to prioritize which claims to verify, rather than verifying every claim with equal effort.
+9. **Seven existing rules are hallucination triage signals.** SOCAS-CR-08, SOCAS-CR-12, SOCAS-CR-13, APAPL-PR-07, MECT-WC-01, SOCAS-CR-10, and SOCAS-CR-06 each detect a pattern that correlates with LLM hallucination. `fact-check.md` should scan for these patterns FIRST to prioritize which claims to verify, rather than verifying every claim with equal effort.
 
 10. **The existing `verify.md` INFO section needs adjustment.** Its "Priority 1: Factuality" currently includes light source verification ("Read them again and verify or complete findings"). With `fact-check.md` existing, this responsibility migrates there. `verify.md` retains the format/structure check ("Is the citation formatted per INFO-SC-01?").
 
-11. **Three SOCAS rules operate on the boundary.** SOCAS-06, SOCAS-10, and SOCAS-12 each have a writing-quality aspect (stays in `verify.md`) and a truth-verification aspect (moves to `fact-check.md`). The boundary is clear: internal logic = verify, external correspondence = fact-check.
+11. **Three SOCAS rules operate on the boundary.** SOCAS-CR-06, SOCAS-CR-10, and SOCAS-CR-12 each have a writing-quality aspect (stays in `verify.md`) and a truth-verification aspect (moves to `fact-check.md`). The boundary is clear: internal logic = verify, external correspondence = fact-check.
 
 ## 14. Next Steps
 

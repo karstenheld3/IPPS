@@ -2,7 +2,7 @@
 
 Output standards for documents written `using STA` (case, principle, numbered application, quick check).
 
-**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: AP-PR-07 (be specific), AP-PR-08 (examples for non-obvious rules), MW-VO-02 (address reader as "you").
+**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: APAPL-PR-07 (be specific), APAPL-PR-08 (examples for non-obvious rules), MECT-VO-02 (address reader as "you").
 
 ## Rule Index
 

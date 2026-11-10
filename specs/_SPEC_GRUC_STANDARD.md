@@ -18,6 +18,7 @@
 - Each file type has a defined purpose, consumer, lifecycle position, and content structure
 - Each workflow consumes exactly one GRUC file type - except `/verify` which reads RULES and TEMPLATE (both are structural verification files)
 - CHECKS have dual structure: Process Discipline (PD) and Quality Improvement (QI)
+- Every rule ID is `[PREFIX]-[CAT]-[NN]` with a 2-5 letter prefix per rule topic (GRUC-FR-20)
 - CHECKS are invisible to the working agent during execution (gaming prevention)
 - EXAMPLE files are linked from GUIDES, not consumed directly by any workflow
 - This SPEC is the enforceable standard; the INFO doc is the explanatory companion
@@ -199,6 +200,27 @@ For document-type-specific GRUC files within `@skills:write-documents`:
 
 GRUC files reside in the skill folder they belong to. No cross-skill GRUC references. Each skill is self-contained with its own GRUC file set.
 
+### GRUC-FR-20: Rule ID Format
+
+Every rule ID in a RULES or CHECKS file is `[PREFIX]-[CAT]-[NN]`:
+
+- `[PREFIX]` - 2 to 5 uppercase letters. One prefix per rule topic; the RULES, GUIDES and CHECKS files of that topic share it. Unique across all rule files, so that rule IDs of different files can be referenced together. Derived from the topic name; a topic name longer than 5 letters is truncated to 5 letters (SOCAS, MECT, APAPALAN becomes APAPL). Several rule files of one topic share the prefix and use disjoint categories (MECT writing: VO, WC, TD, HS, LT, DT, VR; MECT coding: PR, BR, CO, ND, DC)
+- `[CAT]` - 2 uppercase letters, the category inside the file (CR criteria, AP application, RP reporting, ST structure, CT content)
+- `[NN]` - 2 digits, never reused once published
+
+**BAD:**
+```
+SOCAS-01          (no category)
+DIATAXIS-ST-01    (prefix longer than 5 letters)
+socas-cr-1        (lowercase, 1 digit)
+```
+
+**GOOD:**
+```
+SOCAS-CR-01
+SOCAS-AP-01
+```
+
 ## 8. Content Structure Per File Type
 
 ### GRUC-FR-15: RULES File Structure
@@ -212,7 +234,7 @@ GRUC files reside in the skill folder they belong to. No cross-skill GRUC refere
 
 ## Rule Index
 
-[Category] ([2-letter prefix])
+[Category] ([CAT], 2 letters)
 - [PREFIX]-[CAT]-[NN]: [One-line rule statement]
 
 ## [Rule ID]: [Rule Name]
@@ -382,7 +404,21 @@ GRUC is a permanent architectural pattern, not a one-time change. A permanent SP
 - [ ] TEMPLATE files contain only structural skeleton and placeholders
 - [ ] Cross-references use rule IDs, not copied content
 
+### GRUC-AC-07: Rule ID Format
+
+- [ ] Every rule ID matches `[PREFIX]-[CAT]-[NN]` (GRUC-FR-20)
+- [ ] Every prefix has 2 to 5 uppercase letters
+- [ ] No two rule topics share a prefix; rule files of one topic that share a prefix use disjoint categories
+- [ ] Every category is 2 uppercase letters, every number 2 digits
+
 ## Document History
+
+**[2026-11-10 12:45]**
+- Changed: Rule ID references synced with prefix rename (`AP` -> `APAPL`, `MW` and `MC` -> `MECT`, `SOCAS-NN` -> `SOCAS-CR-NN`)
+
+**[2026-11-10 12:15]**
+- Added: GRUC-FR-20 rule ID format with 2-5 letter prefix, GRUC-AC-07
+- Changed: GRUC-FR-15 index line `[2-letter prefix]` to `[CAT], 2 letters` (the 2 letters are the category, not the prefix)
 
 **[2026-09-12 14:40]**
 - Added: TEMPLATE as fifth GRUC file type (GRUC-FR-01, FR-19, FR-13)
@@ -391,7 +427,7 @@ GRUC is a permanent architectural pattern, not a one-time change. A permanent SP
 
 **[2026-09-12 14:30]**
 - Fixed: GRUC-FR-02 title and wording to clarify CHECKS is one file type with two sections
-- Fixed: GRUC-AC-03 grouped into clusters (AP-ST-07 compliance)
+- Fixed: GRUC-AC-03 grouped into clusters (APAPL-ST-07 compliance)
 
 **[2026-09-12 14:20]**
 - Initial specification created

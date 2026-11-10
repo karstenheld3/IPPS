@@ -293,6 +293,20 @@ When a skill has multiple distinct domains, rules split by domain:
 Pattern: `[DOMAIN]_RULES.md` when SKILL_RULES.md would exceed ~200 lines.
 Pattern: `[TOPIC]_EXAMPLE_[NN]-[ExampleName].md` for example files. ExampleName uses PascalCase.
 
+### Rule ID Format
+
+Every rule ID is `[PREFIX]-[CAT]-[NN]`, for example `SOCAS-CR-01`, `MECT-WC-10` or `APAPL-PR-07`.
+
+- **PREFIX**: 2 to 5 uppercase letters, one per rule topic, shared by the RULES, GUIDES and CHECKS files of that topic. Taken from the topic name and cut to 5 letters when longer: SOCAS, MECT, APAPALAN becomes APAPL
+- **CAT**: 2 uppercase letters for the category inside the file
+- **NN**: 2 digits, never reused
+
+**Why 2-5 letters:** Rule IDs are referenced across files (a finding cites a SOCAS criterion together with an APAPALAN and a MECT rule). Short prefixes keep the references readable; a prefix of up to 5 letters is still recognizable without a legend. A 1-letter prefix collides too easily; long prefixes such as `TERMROBUSTNESS` or `DIATAXIS` make every reference long.
+
+**Why the prefix must be unique:** `SC-01` alone cannot tell a SOCAS criterion from a research source check. Unique prefixes make `grep` on an ID return only that rule.
+
+**Enforced by:** `GRUC-FR-20` and `GRUC-AC-07` in `specs/_SPEC_GRUC_STANDARD.md [GRUC-SP01]`.
+
 ### Per-Workflow Files (Future)
 
 ```
@@ -364,7 +378,7 @@ A RULES file is a verification lookup table. Its consumer is `/verify` - the wor
 
 ## Rule Index
 
-[Category] ([2-letter prefix])
+[Category] ([CAT], 2 letters)
 - [PREFIX]-[CAT]-[NN]: [One-line rule statement]
 - [PREFIX]-[CAT]-[NN]: [One-line rule statement]
 
@@ -380,8 +394,8 @@ A RULES file is a verification lookup table. Its consumer is `/verify` - the wor
 **Principles:**
 
 1. **Rule Index first** - Complete list of all rules as one-liners at the top. Reader scans index to find relevant rules without reading the full document.
-2. **Categorize rules** - Group by aspect: Header (HD), Structure (ST), Content (CT), Files (FL), Format (FT). Use 2-letter prefix.
-3. **Unique IDs** - Every rule gets `[PREFIX]-[CAT]-[NN]`. IDs must never change once published. New rules append to category.
+2. **Categorize rules** - Group by aspect: Header (HD), Structure (ST), Content (CT), Files (FL), Format (FT). Use a 2-letter category code.
+3. **Unique IDs** - Every rule gets `[PREFIX]-[CAT]-[NN]` with a 2-5 letter prefix (see Rule ID Format). IDs must never change once published. New rules append to category.
 4. **BAD/GOOD pairs** - Each rule expanded below the index with concrete examples showing violation and compliance. No abstract explanations.
 5. **Checkable from output** - Each rule must be verifiable by reading delivered artifacts. If verification needs action traces, it belongs in CHECKS.
 6. **Scope statement** - First line after title states what document type or output these rules apply to. Enables `/verify` to detect applicability.
@@ -587,14 +601,14 @@ When writing a complete GRUC set for a skill:
 - Changed: GUIDE consumer now explicitly includes `/critique` (strategic gap analysis)
 - Changed: Lifecycle positioning updated with strategic quality and improvement stages
 - Changed: Consumer mapping updated - each workflow reads exactly one GRUC type
-- Changed: Summary grouped into clusters (AP-ST-07 compliance)
-- Changed: Standardized "consumer" terminology in section 9 (SOCAS-02 fix)
+- Changed: Summary grouped into clusters (APAPL-ST-07 compliance)
+- Changed: Standardized "consumer" terminology in section 9 (SOCAS-CR-02 fix)
 - Added: EXAMPLE file type (section 2.4) - supplementary quality reference linked from GUIDES
 - Added: EXAMPLE naming convention `[TOPIC]_EXAMPLE_[NN]-[ExampleName].md`
 - Added: Section 9.4 (Writing EXAMPLE Files) with structure pattern and principles
 - Added: Boundary test entries for CHECKS QI and EXAMPLE
 - Added: QI principles and example QI items for SPECs
-- Added: CRUD acronym expansion (AP-PR-06 compliance)
+- Added: CRUD acronym expansion (APAPL-PR-06 compliance)
 - Updated: Section 9.3 (Writing CHECKS Files) with PD + QI dual structure
 - Updated: Section 9.5 (Cross-File Consistency) for 5 file types
 - Updated: Implementation status (section 8) with current state and corrected file counts

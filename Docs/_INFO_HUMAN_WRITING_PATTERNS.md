@@ -194,7 +194,7 @@ The user proposed 7 humanizing rules (CV-HM-01 through CV-HM-07). Research valid
 - Fixed: Renamed "Key Findings" to "Summary" (INFO-SM-01)
 - Fixed: Numbered H2 headings (INFO-SN-01), promoted subsections to sections
 - Fixed: Added Table of Contents (INFO-TC-01/02/03)
-- Fixed: Wrote out acronyms on first use - LLM, AR, POS (AP-PR-06)
+- Fixed: Wrote out acronyms on first use - LLM, AR, POS (APAPL-PR-06)
 - Fixed: Added missing URL for Coulthard source (INFO-SC-02)
 - Added: Section 9 "Rule Validation Against Proposed CV-HM Rules" documenting validation rationale for all 7 proposed rules
 

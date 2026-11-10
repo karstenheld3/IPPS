@@ -212,7 +212,7 @@ Not all skills have quality-critical process steps. Simple lookups and direct to
 - Changed: Summary updated for `/verify` + TEMPLATE
 
 **[2026-09-12 14:30]**
-- Fixed: IG-01, IG-02, IG-03 now reference GRUC standard by ID instead of re-defining (SOCAS-03)
+- Fixed: IG-01, IG-02, IG-03 now reference GRUC standard by ID instead of re-defining (SOCAS-CR-03)
 
 **[2026-09-12 14:00]**
 - Initial specification created

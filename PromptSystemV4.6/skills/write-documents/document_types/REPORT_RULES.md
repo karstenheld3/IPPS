@@ -2,7 +2,7 @@
 
 Output standards for reports written with `/write-report` or planned with `/propose-report` and `/draft-report`.
 
-**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: AP-PR-07 (be specific), AP-PR-05 (referenceable IDs), MW-VO-01 (active voice), MW-WC-02 (plain language).
+**Writing quality:** Apply `APAPALAN_RULES.md`, `MECT_WRITING_RULES.md`, and `AI_WRITING_RULES.md`. Key rules: APAPL-PR-07 (be specific), APAPL-PR-05 (referenceable IDs), MECT-VO-01 (active voice), MECT-WC-02 (plain language), AW-SY-01 (no antithetical snaps), AW-ST-01 (integrated counter-arguments).
 
 ## Rule Index
 
@@ -418,8 +418,8 @@ Before a report is released, it must pass the release check (`DRSYNART-SPEC-8.5`
 2. Sourcing: every empirical metric cited or marked `[ASSUMED]`.
 3. Numbering and cross-references: continuous exhibit numbering; all text references resolve.
 4. Presentation hygiene: zero agent prompts, scratchpads, or workflow metadata.
-5. Style-pattern signals below threshold: at most 1 signal detected across Sourcing, Style, Structure, and Voice (`AI_WRITING_DETECTION_RULES.md`). Structural signals produced by a technique by construction (such as fixed triad progression in MINTO) are excluded.
-6. Persona trait budget respected (when a persona is specified).
+5. Style-pattern signals below threshold: at most 1 signal detected across Sourcing, Style, Structure, Voice, and Lexical (`AI_WRITING_RULES.md`). Structural signals produced by a technique by construction (such as fixed triad progression in MINTO) are excluded.
+6. Persona trait budget and length/pacing profile respected (when a persona is specified).
 7. Word count within target envelope.
 
 **BAD (Incomplete / Failing Record):**
@@ -437,8 +437,8 @@ Before a report is released, it must pass the release check (`DRSYNART-SPEC-8.5`
 - **Claim attribution**: 22 empirical claims verified against audit ledger; 2 future cost projections labeled [ASSUMED]
 - **Structural integrity**: Exhibit 1 through Exhibit 6 continuously numbered; all in-text cross-references resolve
 - **Metadata hygiene**: Zero agent prompts, scratchpad notes, or workflow tags in body
-- **Style-pattern signals**: 0 signals detected (AD-SO: 0, AD-SY: 0, AD-ST: 0, AD-VO: 0); technique structural order excluded
-- **Persona compliance**: CXO-ADVISOR register verified; zero informal slang; micro-dose budget respected
+- **Style-pattern signals**: 0 signals detected (AW-SO: 0, AW-SY: 0, AW-ST: 0, AW-VO: 0, AW-LX: 0); technique structural order excluded
+- **Persona compliance**: CXO-ADVISOR register verified; zero informal slang; micro-dose budget and length profile respected
 - **Word count**: 4,250 words (target: 3,500 - 5,000 words)
 - **Status**: PASSED
 ```

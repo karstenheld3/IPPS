@@ -15,6 +15,7 @@ Expand an options proposal or raw research input into a structured working repor
 
 - @skills:write-documents `document_types/REPORT_GUIDES.md` (craft decisions, key-line logic, action titles)
 - @skills:write-documents `document_types/REPORT_TEMPLATE.md` (section: DRAFT)
+- @skills:write-documents `AI_WRITING_RULES.md` (anti-AI artifact suppression rules `AW-*`, read BEFORE drafting)
 - Technique files (`writing_techniques/[ID]_GUIDES.md`, `writing_techniques/TEMPLATES/[ID]_TEMPLATE.md`) ONLY when `using <ID>` is given
 - Never load CHECKS files during execution (`DRSYNART-FR-32`, `GRUC-IG-03`)
 

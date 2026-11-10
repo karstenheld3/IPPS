@@ -243,12 +243,12 @@ Not covered in this research:
 - Changed: Exclusions renumbered to 5.6
 
 **[2026-08-13 15:15]**
-- Fixed: NIST, RMF, TPU acronym expansions (AP-PR-06)
+- Fixed: NIST, RMF, TPU acronym expansions (APAPL-PR-06)
 - Fixed: "Goedel" to "Gödel" (core-conventions encoding)
 
 **[2026-08-13 15:10]**
 - Added: Section 5.5 Exclusions (drift correction)
-- Fixed: METR and GRUC acronym expansions (AP-PR-06)
+- Fixed: METR and GRUC acronym expansions (APAPL-PR-06)
 
 **[2026-08-13 14:55]**
 - Initial research document created

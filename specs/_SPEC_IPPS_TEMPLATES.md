@@ -155,7 +155,7 @@ Templates define structure (what sections exist). RULES define standards (what m
 
 ### IPPSTMPL-DD-04: Why Templates Use XML Comments for Annotations
 
-XML comments are invisible in rendered output. Bracket markers `[conditional - ...]` overlap with placeholder convention `[value to fill]`, creating polysemy (AP-NM-01). Italic markers `*(text)*` are visible noise in rendered output (SOCAS-08). XML comments are the only format that is both unambiguous and invisible.
+XML comments are invisible in rendered output. Bracket markers `[conditional - ...]` overlap with placeholder convention `[value to fill]`, creating polysemy (APAPL-NM-01). Italic markers `*(text)*` are visible noise in rendered output (SOCAS-CR-08). XML comments are the only format that is both unambiguous and invisible.
 
 ### IPPSTMPL-DD-05: Why Templates Do Not Teach
 

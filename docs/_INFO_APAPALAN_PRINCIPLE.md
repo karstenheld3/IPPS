@@ -13,7 +13,8 @@
 - MECT designs communication systems; APAPALAN applies MECT using rules for documents, code, logs, communication
 - Precision always wins over brevity - never sacrifice clarity to save words
 - Readers interpret ALL deviation as intentional signal. Unintentional variance (LLMs) causes wrong assumptions
-- 34 rules across five categories: Precision (PR), Brevity (BR), Structure (ST), Communication (CM), Naming (NM)
+- 35 rules across five categories: Precision (PR) 13, Brevity (BR) 7, Structure (ST) 7, Communication (CM) 3, Naming (NM) 5
+- Rule IDs are `APAPL-[CAT]-[NN]`: prefix `APAPL` (APAPALAN cut to 5 letters), 2-letter category, 2-digit number; format rule `GRUC-FR-20` (2-5 letter prefix per rule topic)
 - Rules are actionable: each has BAD/GOOD examples an agent or human can pattern-match against
 
 ## Table of Contents
@@ -46,7 +47,7 @@ MECT (Minimal Explicit Consistent Terminology) is the underlying philosophy. See
 - **APAPALAN** = Implementation principle with enforceable rules (the "how")
 - **APAPALAN_RULES.md** = The rule set that codifies APAPALAN
 
-Where MECT says "be consistent," APAPALAN provides rule AP-PR-10 with FAIL examples showing what inconsistency does to readers. Where MECT says "be explicit," APAPALAN provides AP-PR-07 with BAD/GOOD pairs for vague vs concrete writing.
+Where MECT says "be consistent," APAPALAN provides rule APAPL-PR-10 with FAIL examples showing what inconsistency does to readers. Where MECT says "be explicit," APAPALAN provides APAPL-PR-07 with BAD/GOOD pairs for vague vs concrete writing.
 
 ### 1.3 The Priority Order
 
@@ -83,8 +84,8 @@ The core problem: readers interpret ALL variation as intentional signal. If a do
 This is amplified with LLMs. LLMs have natural output variance - they don't reproduce formatting consistently across long outputs. Every unintentional style change becomes noise that the reader misreads as signal.
 
 **The MECT/APAPALAN response:**
-- MECT principles guide judgment: "strengthen signals, eliminate noise" (MW-LT-04, MC-BR-05)
-- APAPALAN rules enforce specific patterns: AP-PR-09 (consistent patterns), AP-BR-07 (no redundant bold)
+- MECT principles guide judgment: "strengthen signals, eliminate noise" (MECT-LT-04, MECT-BR-05)
+- APAPALAN rules enforce specific patterns: APAPL-PR-09 (consistent patterns), APAPL-BR-07 (no redundant bold)
 
 All APAPALAN rules serve one of two goals: strengthen a signal (Precision rules) or eliminate noise (Brevity rules).
 
@@ -168,7 +169,7 @@ Categories: Supported (S), Caveated (C), Unsupported (U)
 ```
 - Reader asks: "What is [S]? What is [C]? I see [ASSUMED] and elsewhere - are [S] and [C] part of the same system or something different?"
 - Wrong assumption: Reader confuses author-invented shorthand with established labels. The "Categories" line is a definition, not a legend visible at every usage point - once the list grows, it scrolls off screen.
-- Fix: Use full words (`[SUPPORTED]`, `[CAVEATED]`, `[UNSUPPORTED]`), OR add a compact legend (`S=Supported | C=Caveated | U=Unsupported`) visible at every usage point without scrolling. See AP-PR-11.
+- Fix: Use full words (`[SUPPORTED]`, `[CAVEATED]`, `[UNSUPPORTED]`), OR add a compact legend (`S=Supported | C=Caveated | U=Unsupported`) visible at every usage point without scrolling. See APAPL-PR-11.
 - Note: `CMDTY` for "Commodity" would NOT be a fail - it is a designed mnemonic where the full term is phonetically recoverable (Reconstruction Test: pass). `[S]` for "Supported" fails the Reconstruction Test.
 
 **FAIL: Over-compressed instructions**
@@ -226,7 +227,7 @@ We need boots on the ground before Q3.
 ```
 - Reader asks: "What does FAIR TO RICH mean? Is dark horse positive or negative? What are boots on the ground?"
 - Wrong assumption: Reader either skips the term (losing information) or guesses wrong ("dark horse" = negative connotation, "boots on the ground" = physical boots). Domain insiders don't notice the opacity because the terms are natural to them.
-- Fix: Replace with plain language ("unexpected strong competitor") or keep + explain ("FAIR TO RICH (reasonably priced to slightly overpriced)"). See AP-PR-12.
+- Fix: Replace with plain language ("unexpected strong competitor") or keep + explain ("FAIR TO RICH (reasonably priced to slightly overpriced)"). See APAPL-PR-12.
 
 ### 3.5 Communication Fails
 
@@ -258,52 +259,53 @@ Please update the config for the new server.
 
 ## 4. The Rule System
 
-APAPALAN rules are organized in three categories matching the priority order.
+APAPALAN rules are organized in five categories: Precision (Priority 1) and Brevity (Priority 2) follow the priority order; Structure, Communication and Naming complete the set. Every rule ID has the form `APAPL-[CAT]-[NN]` (prefix `APAPL`, category, number) as defined in `APAPALAN_RULES.md`.
 
 ### 4.1 Precision (PR): Making Every Statement Unambiguous
 
-12 rules ensuring every piece of writing can be understood without guessing.
+13 rules ensuring every piece of writing can be understood without guessing.
 
-- **AP-PR-01**: Standardized datetime format - `YYYY-MM-DD HH:MM` everywhere
-- **AP-PR-02**: Standardized attribute/property format - context-specific but consistent within context
-- **AP-PR-03**: Standardized contact information format - structured blocks with all fields
-- **AP-PR-04**: Standardized link and reference format - depends on AP-PR-05; three steps: define ID system, apply IDs, use IDs to reference
-- **AP-PR-05**: Referenceable IDs on all trackable items - prerequisite for AP-PR-04; you cannot reference what has no ID
-- **AP-PR-06**: Write out acronyms on first use - `Full Term (ACRONYM)` format
-- **AP-PR-07**: Be specific - no generic or abstract writing; concrete, verifiable statements
-- **AP-PR-08**: Every non-obvious rule needs examples - BAD/GOOD pairs for format rules and conventions
-- **AP-PR-09**: Consistent patterns - repeat established structures; style deviation = false signal
-- **AP-PR-11**: Labels decodable at point of use - full word, legend in sight, or mnemonic (Reconstruction Test)
-- **AP-PR-10**: Never abbreviate keys and references - use single quotes for literals; abbreviating creates opaque tokens that fail the reconstruction test
-- **AP-PR-12**: Explain domain jargon and idioms on first use - replace with plain language, or keep + explain in parentheses; same pattern as AP-PR-06 but for semantic opacity
+- **APAPL-PR-01**: Standardized datetime format - `YYYY-MM-DD HH:MM` everywhere
+- **APAPL-PR-02**: Standardized attribute/property format - context-specific but consistent within context
+- **APAPL-PR-03**: Standardized contact information format - structured blocks with all fields
+- **APAPL-PR-04**: Standardized link and reference format - depends on APAPL-PR-05; three steps: define ID system, apply IDs, use IDs to reference
+- **APAPL-PR-05**: Referenceable IDs on all trackable items - prerequisite for APAPL-PR-04; you cannot reference what has no ID
+- **APAPL-PR-06**: Write out acronyms on first use - `Full Term (ACRONYM)` format; the expansion comes from the context, never from training data
+- **APAPL-PR-07**: Be specific - no generic or abstract writing; concrete, verifiable statements
+- **APAPL-PR-08**: Every non-obvious rule needs examples - BAD/GOOD pairs for format rules and conventions
+- **APAPL-PR-09**: Consistent patterns - repeat established structures; style deviation = false signal
+- **APAPL-PR-10**: Never abbreviate keys and references - use single quotes for literals; abbreviating creates opaque tokens that fail the reconstruction test
+- **APAPL-PR-11**: Labels decodable at point of use - full word, legend in sight, or mnemonic (Reconstruction Test)
+- **APAPL-PR-12**: Explain domain jargon and idioms on first use - replace with plain language, or keep + explain in parentheses; same pattern as APAPL-PR-06 but for semantic opacity
+- **APAPL-PR-13**: Authoritative literals reproduced character-for-character - addresses, IDs and official names without Unicode normalization, abbreviation or reformatting
 
-The referenceability chain (AP-PR-05 -> AP-PR-04) deserves emphasis: you cannot build a useful reference system unless the referenced information has IDs in the first place. Create IDs first, then reference.
+The referenceability chain (APAPL-PR-05 -> APAPL-PR-04) deserves emphasis: you cannot build a useful reference system unless the referenced information has IDs in the first place. Create IDs first, then reference.
 
 ### 4.2 Brevity (BR): Removing Without Losing
 
 7 rules for cutting words after precision is secured.
 
-- **AP-BR-01**: Single line for single statements - if it fits on one line, keep it on one line
-- **AP-BR-02**: Sacrifice grammar for brevity - drop articles, filler words, verbose constructions (exception: user-facing text preserves full grammar)
-- **AP-BR-03**: DRY within same document scope - reference instead of restating (overridden by AP-ST-04 for delegation)
-- **AP-BR-04**: Compact object and list definitions - lists, no empty lines between properties
-- **AP-BR-05**: Show format over describing format - a format example communicates more precisely than a description
-- **AP-BR-06**: Pipe-delimited property lines - `Key: Value | Key: Value` for multi-attribute items
-- **AP-BR-07**: No redundant bold in structured lists - bold is signal ("this label is a concept"); when every label is bold, the signal becomes noise
+- **APAPL-BR-01**: Single line for single statements - if it fits on one line, keep it on one line
+- **APAPL-BR-02**: Sacrifice grammar for brevity - drop articles, filler words, verbose constructions (exception: user-facing text preserves full grammar)
+- **APAPL-BR-03**: DRY within same document scope - reference instead of restating (overridden by APAPL-ST-04 for delegation)
+- **APAPL-BR-04**: Compact object and list definitions - lists, no empty lines between properties
+- **APAPL-BR-05**: Show format over describing format - a format example communicates more precisely than a description
+- **APAPL-BR-06**: Pipe-delimited property lines - `Key: Value | Key: Value` for multi-attribute items
+- **APAPL-BR-07**: No redundant bold in structured lists - bold is signal ("this label is a concept"); when every label is bold, the signal becomes noise
 
 ### 4.3 Structure (ST): Organizing for the Reader
 
 7 rules for organizing content so readers find what they need.
 
-- **AP-ST-01**: Goal or intention captured first - reader knows WHY before HOW
-- **AP-ST-02**: Subjects direct and actionable - "ACTION: Review contract by 2026-03-20" not "Meeting"
-- **AP-ST-03**: Self-contained units - each section, log line, email understandable without external context
-- **AP-ST-04**: Anti-DRY for delegation - when requesting action from others, inline ALL needed information (overrides AP-BR-03 because the audience is different)
-- **AP-ST-05**: Hierarchical information ordering - general to specific, most important first
-- **AP-ST-06**: Visual thought grouping - related content clusters together (no empty lines); distinct thoughts separate by one empty line
-- **AP-ST-07**: Cognitive load limit - max 7 ungrouped items per list, email, or function signature (Miller's Law); beyond 7: group into named clusters
+- **APAPL-ST-01**: Goal or intention captured first - reader knows WHY before HOW
+- **APAPL-ST-02**: Subjects direct and actionable - "ACTION: Review contract by 2026-03-20" not "Meeting"
+- **APAPL-ST-03**: Self-contained units - each section, log line, email understandable without external context
+- **APAPL-ST-04**: Anti-DRY for delegation - when requesting action from others, inline ALL needed information (overrides APAPL-BR-03 because the audience is different)
+- **APAPL-ST-05**: Hierarchical information ordering - general to specific, most important first
+- **APAPL-ST-06**: Visual thought grouping - related content clusters together (no empty lines); distinct thoughts separate by one empty line
+- **APAPL-ST-07**: Cognitive load limit - max 7 ungrouped items per list, email, or function signature (Miller's Law); beyond 7: group into named clusters
 
-The DRY tension (AP-BR-03 vs AP-ST-04) is intentional: within your own document, reference instead of repeating. But when delegating to someone else, inline everything because people don't follow references.
+The DRY tension (APAPL-BR-03 vs APAPL-ST-04) is intentional: within your own document, reference instead of repeating. But when delegating to someone else, inline everything because people don't follow references.
 
 ### 4.4 Communication (CM): Writing to Counterparts
 
@@ -311,9 +313,9 @@ The DRY tension (AP-BR-03 vs AP-ST-04) is intentional: within your own document,
 
 **Scope distinction**: PR/BR/ST/NM rules apply to all text. CM rules apply ONLY to outbound communication where a counterpart reads and acts.
 
-- **AP-CM-01**: Accountable commitments - every commitment states WHAT the counterpart receives and WHEN (action + deliverable + weekday + ISO date + time)
-- **AP-CM-02**: Labeled questions and requests - every question/CTA in its own paragraph, blank-line separated, labeled (Question:/Request:), fully self-contained
-- **AP-CM-03**: Time precision in communication - weekday + ISO date, timezone when scheduling, periods include year; extends AP-PR-01 with disambiguation requirements for human readers
+- **APAPL-CM-01**: Accountable commitments - every commitment states WHAT the counterpart receives and WHEN (action + deliverable + weekday + ISO date + time)
+- **APAPL-CM-02**: Labeled questions and requests - every question/CTA in its own paragraph, blank-line separated, labeled (Question:/Request:), fully self-contained
+- **APAPL-CM-03**: Time precision in communication - weekday + ISO date, timezone when scheduling, periods include year; extends APAPL-PR-01 with disambiguation requirements for human readers
 
 CM rules relate to but are distinct from humanizing rules (`CONVERSATION_HUMANIZING_RULES.md`): CM ensures precision of CONTENT; humanizing rules (CV-HM-*) add stylistic VOICE to match the user's writing profile.
 
@@ -321,11 +323,11 @@ CM rules relate to but are distinct from humanizing rules (`CONVERSATION_HUMANIZ
 
 5 rules for naming things consistently across documents, code, logs, and communication. Derived from MECT terminology problems.
 
-- **AP-NM-01**: One name per concept - no synonyms (search failures), no polysemy (silent misunderstandings)
-- **AP-NM-02**: Unambiguous compound names - word order determines meaning (`KeyOfEmptyCollection` not `EmptyCollectionKey`)
-- **AP-NM-03**: Avoid dangerous meta-words - Module, Service, Check, etc. hide ambiguity; qualify them
-- **AP-NM-04**: Intuitive word pairs - opposites must be predictable (`Encode/Decode` not `Encode/PlainText`)
-- **AP-NM-05**: Use and keep standard terms - established terminology; don't rename (association field principle)
+- **APAPL-NM-01**: One name per concept - no synonyms (search failures), no polysemy (silent misunderstandings)
+- **APAPL-NM-02**: Unambiguous compound names - word order determines meaning (`KeyOfEmptyCollection` not `EmptyCollectionKey`)
+- **APAPL-NM-03**: Avoid dangerous meta-words - Module, Service, Check, etc. hide ambiguity; qualify them
+- **APAPL-NM-04**: Intuitive word pairs - opposites must be predictable (`Encode/Decode` not `Encode/PlainText`)
+- **APAPL-NM-05**: Use and keep standard terms - established terminology; don't rename (association field principle)
 
 ## 5. Sources
 
@@ -334,20 +336,30 @@ CM rules relate to but are distinct from humanizing rules (`CONVERSATION_HUMANIZ
 - `APAPALAN-IN01-SC-APAP-RULES`: `APAPALAN_RULES.md` in DevSystemV3.6/skills/write-documents/ - Full rule set with BAD/GOOD examples
 
 **Related Documents:**
-- `APAPALAN-IN01-SC-DSYS-IDS`: `promptsystem-ids.md` - ID system referenced by AP-PR-04 and AP-PR-05
+- `APAPALAN-IN01-SC-DSYS-IDS`: `promptsystem-ids.md` - ID system referenced by APAPL-PR-04 and APAPL-PR-05
 - `APAPALAN-IN01-SC-LOG-RULES`: `LOGGING-RULES.md` in DevSystemV3.6/skills/coding-conventions/ - Logging rules implementing APAPALAN for output
 
 ## 6. Document History
 
+**[2026-11-10 12:45]**
+- Changed: Rule ID prefix `AP` -> `APAPL` in all rule references (`GRUC-FR-20`: 2-5 letter prefix); IDs in older history entries below use the new prefix
+
+**[2026-11-10 12:30]**
+- Added: APAPL-PR-13 (Authoritative literals) to section 4.1
+- Added: Rule ID format line (`APAPL-[CAT]-[NN]`, `GRUC-FR-20`) to Summary and section 4
+- Changed: Total rule count 34 -> 35, PR count 12 -> 13; per-category counts in Summary
+- Fixed: Section 4 intro said three categories, the rule set has five
+- Fixed: APAPL-PR-10 listed before APAPL-PR-11; APAPL-PR-06 text matches `APAPALAN_RULES.md` (expansion from context)
+
 **[2026-07-16 14:14]**
-- Added: Section 4.4 Communication (CM) with 3 rules (AP-CM-01, AP-CM-02, AP-CM-03)
-- Added: AP-PR-10, AP-BR-07, AP-ST-07 (previously missing from this document)
+- Added: Section 4.4 Communication (CM) with 3 rules (APAPL-CM-01, APAPL-CM-02, APAPL-CM-03)
+- Added: APAPL-PR-10, APAPL-BR-07, APAPL-ST-07 (previously missing from this document)
 - Changed: Total rule count 27 -> 34, categories 4 -> 5
 - Changed: PR count 11 -> 12, BR count 6 -> 7, ST count 6 -> 7
 - Changed: Renumbered section 4.4 Naming -> 4.5
 
 **[2026-06-17 18:10]**
-- Added: AP-PR-12 (Explain domain jargon and idioms on first use) to section 4.1
+- Added: APAPL-PR-12 (Explain domain jargon and idioms on first use) to section 4.1
 - Added: "Unexplained insider language" fail in section 3.4 (Jargon Fails)
 - Changed: PR rule count 10 -> 11, total rule count 26 -> 27
 - Changed: Renumbered section 3.4 Communication Fails -> 3.5
@@ -355,19 +367,19 @@ CM rules relate to but are distinct from humanizing rules (`CONVERSATION_HUMANIZ
 **[2026-04-12 14:50]**
 - Added: Mnemonic vs abbreviation distinction in section 1.3 (reconstruction test boundary)
 - Added: "FAIL: Premature label compression" in section 3.2 (Brevity Fails)
-- Added: AP-PR-11 (Labels decodable at point of use) to section 4.1 rule list
+- Added: APAPL-PR-11 (Labels decodable at point of use) to section 4.1 rule list
 - Changed: PR rule count 9 -> 10
 
 **[2026-03-19 21:14]**
-- Moved: AP-PR-09 (Pipe-delimited) -> AP-BR-06 (brevity rule, not precision)
+- Moved: APAPL-PR-09 (Pipe-delimited) -> APAPL-BR-06 (brevity rule, not precision)
 - Changed: Renumbered PR-10 -> PR-09. PR count 10 -> 9, BR count 5 -> 6
 
 **[2026-03-19 21:13]**
-- Changed: Consolidated AP-PR-07 (Use Standard Industry Terms) into AP-NM-05 (Use and Keep Standard Terms)
+- Changed: Consolidated APAPL-PR-07 (Use Standard Industry Terms) into APAPL-NM-05 (Use and Keep Standard Terms)
 - Changed: Renumbered PR-08..PR-11 -> PR-07..PR-10. Rule count 27 -> 26
 
 **[2026-03-19 21:09]**
-- Added: Naming (NM) category with 5 rules (AP-NM-01 through AP-NM-05)
+- Added: Naming (NM) category with 5 rules (APAPL-NM-01 through APAPL-NM-05)
 - Changed: Rule count 22 -> 27, three -> four categories
 
 **[2026-03-19 21:01]**

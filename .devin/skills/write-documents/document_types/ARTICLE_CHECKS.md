@@ -102,3 +102,8 @@ Evidence sources: final output document, options proposal (`[ID]-OPTIONS-NN_`), 
 
 - Question: Does the ending leave the reader with a lasting insight that reinterprets the opening situation?
 - Improvement tip: Return to the specific character, scenario, or data point introduced in paragraph 1, showing how the theme transforms what it means.
+
+### ART-QI-06: Natural Prose Flow and Zero AI Rhetorical Artifacts
+
+- Question: Does the prose maintain a natural, continuous flow in the persona's voice and pacing profile, free of staccato fragments, contrast snaps, compressed objection blocks, mechanical symmetry, and other punchy, flow-breaking robotic patterns?
+- Improvement tip: Audit paragraphs against `AI_WRITING_RULES.md` (`AW-SO-01` through `AW-LX-03`). Replace clipped rhetorical punchlines and compressed Q&A blocks with connected causal sentences, unpack nominalization chains into finite active verbs, vary clause structure and punctuation, and align paragraph and sentence pacing with the active persona.

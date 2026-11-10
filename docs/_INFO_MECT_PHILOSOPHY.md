@@ -17,6 +17,7 @@
 - Good terminology enables: independent action, fast processing, computer-parseable data 
 - Key economics: changing words on paper is orders of magnitude cheaper than changing processes 
 - Applied examples: Bloomberg terminal, FUTOP-ID (Universal Future and Option Identifyer), German energy sector, musical notation 
+- Rule IDs: all MECT rules use the prefix `MECT`: `MECT_WRITING_RULES.md` (31 rules) and `MECT_CODING_RULES.md` (29 rules) with disjoint categories; APAPALAN rules `APAPL-*` enforce them (section 4.6)
 
 ## Table of Contents
 
@@ -340,6 +341,16 @@ Words that sound similar but differ in meaning. Using the wrong one corrupts the
 - Having judgement != Being judgemental
 - Account (Issue) != Account (Bank)
 
+### 4.6 Rule IDs
+
+MECT principles are written as rules with IDs of the form `[PREFIX]-[CAT]-[NN]` (prefix of 2-5 letters per rule topic, 2-letter category, 2-digit number; `GRUC-FR-20` in `_SPEC_GRUC_STANDARD.md [GRUC-SP01]`):
+
+- **`MECT-[CAT]-[NN]` writing** - `MECT_WRITING_RULES.md`, 31 rules for documents: Voice (VO) 4, Word Choice (WC) 10, Terminology Design (TD) 3, Headings and Sections (HS) 3, Lists and Tables (LT) 5, Description Types (DT) 3, Visual Representation (VR) 3
+- **`MECT-[CAT]-[NN]` coding** - `MECT_CODING_RULES.md`, 29 rules for code: Precision (PR) 7, Brevity (BR) 5, Consistency (CO) 5, Naming Design (ND) 9, Documentation (DC) 3
+- **`APAPL-[CAT]-[NN]`** - `APAPALAN_RULES.md`, 35 rules that enforce MECT with measurable criteria (see [`_INFO_APAPALAN_PRINCIPLE.md [APAPALAN-IN01]`](_INFO_APAPALAN_PRINCIPLE.md))
+
+Example: section 4.1 "Avoid 'shall'" is `MECT-VO-04`; section 3.2 "Naming Structure Method" is `MECT-TD-01` for documents and `MECT-ND-01` for code.
+
 ## 5. Examples
 
 ### 5.1 Good: Bloomberg Terminal
@@ -601,6 +612,13 @@ Every word is from daily life. No interpretation needed. The question format mak
 - `MECT-IN01-SC-FOWLR-BCTX`: Martin Fowler on Bounded Context and polysemes
 
 ## 7. Document History
+
+**[2026-11-10 12:45]**
+- Changed: Rule ID prefixes `MW` and `MC` -> `MECT` (writing categories VO, WC, TD, HS, LT, DT, VR; coding categories PR, BR, CO, ND, DC do not overlap); `AP` -> `APAPL`
+
+**[2026-11-10 12:30]**
+- Added: Section 4.6 Rule IDs - mapping of MECT principles to `MECT-*` (`MECT_WRITING_RULES.md`, `MECT_CODING_RULES.md`) and `APAPL-*` (`APAPALAN_RULES.md`), with rule and category counts
+- Added: Rule IDs bullet to Summary
 
 **[2026-07-16 14:14]**
 - Added: "Deliberate redundancy for association field strength" insight (2.3) - MECT adds words to strengthen reader's mental model and prevent interpolated knowledge

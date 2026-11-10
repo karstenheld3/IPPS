@@ -28,7 +28,7 @@ Read this file, then jump to exactly one target:
 - **Create or update TEMPLATE files** -> `TEMPLATE_GUIDES.md`, `TEMPLATE_RULES.md`
 - **Create or fix ASCII art diagrams** -> `ASCII_ART_GUIDES.md`, `ASCII_ART_RULES.md`
 - **Step-by-step investigation log** (`_INVESTIGATION_[TOPIC].md` for `/investigate`) -> `@skills:analysis-methods` `INVESTIGATION_GUIDES.md`, `INVESTIGATION_LOG_RULES.md`, `INVESTIGATION_LOG_TEMPLATE.md`
-- **Write articles, reports, or ebooks** (DD-20 coverage: landing pages are articles, user manuals are ebooks, reference documentation is reports) -> `document_types/ARTICLE_GUIDES.md`, `document_types/REPORT_GUIDES.md`, `document_types/EBOOK_GUIDES.md`
+- **Write articles, reports, or ebooks** (DD-20 coverage: landing pages are articles, user manuals are ebooks, reference documentation is reports) -> `document_types/ARTICLE_GUIDES.md`, `document_types/REPORT_GUIDES.md`, `document_types/EBOOK_GUIDES.md`, `AI_WRITING_RULES.md`
 - **Apply a writing technique** (macro-structure: MINTO, IMINTO, ABTSTORY, KABOB, STA, PAS, AIDA, DIATAXIS, IMRAD) -> `writing_techniques/README.md`
 - **Apply a writing persona** (voice sliders, traits, zero-bullshit baseline) -> `writing_personas/README.md`
 
@@ -37,7 +37,7 @@ Read this file, then jump to exactly one target:
 ```
 write-documents/
 ├── SKILL.md                         this file (router)
-├── APAPALAN_RULES.md, MECT_WRITING_RULES.md, SOCAS_RULES.md, TRANSLATION_RULES.md
+├── APAPALAN_RULES.md, MECT_WRITING_RULES.md, SOCAS_RULES.md, AI_WRITING_RULES.md, TRANSLATION_RULES.md
 ├── [root system and planning GRUC files: INFO_*, SPEC_*, IMPL_*, TEST_*, TASKS_*, PROMPTS_*, STRUT_*, ...]
 ├── document_types/                  ARTICLE_*, REPORT_*, EBOOK_* (GUIDES, RULES, CHECKS, TEMPLATE)
 ├── writing_techniques/              README.md, 9 technique sets (GUIDES, RULES, CHECKS, TEMPLATES, EXAMPLES)
@@ -46,12 +46,12 @@ write-documents/
 
 ## Shared Rules
 
-- **Writing quality standards**: All documents follow `APAPALAN_RULES.md` (precision, brevity, document structure) and `MECT_WRITING_RULES.md` (voice, word choice, terminology design). Evaluated via `SOCAS_RULES.md`. Translations follow `TRANSLATION_RULES.md`.
-- **User-only selection (DRSYNART-DD-08)**: Only the user selects `using <ID>` and `as <persona>`. Without explicit user keywords, the agent follows document-type defaults. Partial selections are never completed; agent suggests library options only when the user explicitly requests advice on style or technique.
+- **Writing quality standards**: All documents follow `APAPALAN_RULES.md` (precision, brevity, document structure) and `MECT_WRITING_RULES.md` (voice, word choice, terminology design). Evaluated via `SOCAS_RULES.md`. Publishing document types (`article`, `report`, `ebook` — never SPECs or internal documents) additionally follow `AI_WRITING_RULES.md` (`AW-*` rules) before and after writing (`DRSYNART-DD-50`). Translations follow `TRANSLATION_RULES.md`.
+- **User-only selection (DRSYNART-DD-08)**: Only the user selects `using <ID>` and `as <PERSONA>`. Without explicit user keywords, the agent follows document-type defaults. Partial selections are never completed; agent suggests library options only when the user explicitly requests advice on style or technique.
 - **Discovery by filename pattern (DRSYNART-FR-05)**: Document types are discovered via `document_types/[TYPE]_GUIDES.md`; techniques via `writing_techniques/[ID]_GUIDES.md`; personas via `writing_personas/[PERSONA].md`. Adding a new file requires no edits to workflows or routing tables.
 - **Deliverable file naming (DRSYNART-DD-16)**: Deliverable documents follow three sequential file kinds: options proposal `[ID]-OPTIONS-NN_[Title].md`, working draft `[ID]-DRAFT-NN_[Title].md`, and final publication output `YYYY-MM-DD_[Title].md`.
 - **CHECKS isolation (DRSYNART-FR-32, GRUC-IG-03)**: CHECKS files are NEVER loaded during execution by `/propose-*`, `/draft-*`, `/write-*`, or any generated prompt. CHECKS are consumed only post-execution by `/drift-detect` (PD) and `/improve` (QI).
-- **Consistency layer stack (DRSYNART-FR-35)**: House style (`[AGENT_FOLDER]/rules/core-conventions.md`, `APAPALAN_RULES.md`, `MECT_WRITING_RULES.md`) > Document-type GRUC (`document_types/`) > Technique GRUC (`writing_techniques/`, overrides macro-structure only) > Persona file (`writing_personas/`, adjusts voice only) > Per-document Style Sheet (DRAFT section) > Edit passes. Lower layers add where higher layers are silent and never contradict higher layers.
+- **Consistency layer stack (DRSYNART-FR-35)**: House style (`[AGENT_FOLDER]/rules/core-conventions.md`, `APAPALAN_RULES.md`, `MECT_WRITING_RULES.md`, and for publishing document types `AI_WRITING_RULES.md`) > Document-type GRUC (`document_types/`) > Technique GRUC (`writing_techniques/`, overrides macro-structure only) > Persona file (`writing_personas/`, adjusts voice and defines text length and pacing) > Per-document Style Sheet (DRAFT section) > Edit passes. Lower layers add where higher layers are silent and never contradict higher layers.
 - **Formatting discipline**: No Markdown tables, no emojis, ASCII quotes, generic examples only (Pre-Write Privacy Gate).
 
 ## Quick Commands

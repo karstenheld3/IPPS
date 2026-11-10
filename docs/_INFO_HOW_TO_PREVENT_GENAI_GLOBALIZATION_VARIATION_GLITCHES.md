@@ -10,7 +10,7 @@
 - 8 corruption categories identified: Unicode normalization, punctuation drift, abbreviation/expansion, sub-premise loss, identifier transposition, script mixing, postal code reformatting, hallucinated gap-filling [VERIFIED]
 - LLM tokenizers shred high-entropy strings (IBANs, UUIDs (Universally Unique Identifiers)) into 20+ subword tokens. Digit-swap error rate: ~24% per run on raw identifiers, drops to ~3% with aliases [VERIFIED]
 - Sub-premise loss (floor/unit/door number dropped) is the #1 cause of undeliverable mail in Indian, Portuguese, Japanese, and UK addresses [VERIFIED]
-- The `[LITERAL]` in-place marker system prevents corruption by signaling "copy character-for-character, do not reformat". Defined in `core-conventions.md`, enforced via AP-PR-13 and CV-LT-01 [VERIFIED]
+- The `[LITERAL]` in-place marker system prevents corruption by signaling "copy character-for-character, do not reformat". Defined in `core-conventions.md`, enforced via APAPL-PR-13 and CV-LT-01 [VERIFIED]
 - Validation APIs exist (Qiniso for identifiers, Shirabe for Japanese addresses, India Post PIN lookup) but are complementary - the marker system is the first line of defense [VERIFIED]
 
 ## Table of Contents
@@ -255,7 +255,7 @@ Mark values in-place where they are defined. No separate section, no duplication
 The `[LITERAL]` system is enforced at multiple PromptSystem layers:
 
 - **Global rule** (`core-conventions.md`): "Authoritative Literals" section defines the tag format and all 8 corruption categories
-- **Precision rule** (`APAPALAN_RULES.md`, AP-PR-13): BAD/GOOD examples for IBANs, addresses, postal codes across 4 countries
+- **Precision rule** (`APAPALAN_RULES.md`, APAPL-PR-13): BAD/GOOD examples for IBANs, addresses, postal codes across 4 countries
 - **Conversation rule** (`CONVERSATION_RULES.md`, CV-LT-01): Outbound communication must copy from `[LITERAL]`-marked source or verify against official document
 - **INFO rule** (`INFO_RULES.md`, INFO-SM-02): `[LITERAL]` documented as data-integrity label alongside confidence labels
 - **Session MNF** (`NOTES.md`): Reminder with reference to triggering failure (EMIG-FL-016)

@@ -2,7 +2,7 @@
 
 Output standards for practitioner ebooks, handbooks, and long-form guides written with `/write-ebook` or planned with `/propose-ebook` and `/draft-ebook`.
 
-**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: AP-PR-07 (be specific), AP-PR-05 (referenceable IDs), MW-VO-01 (active voice), MW-WC-02 (plain language).
+**Writing quality:** Apply `APAPALAN_RULES.md`, `MECT_WRITING_RULES.md`, and `AI_WRITING_RULES.md`. Key rules: APAPL-PR-07 (be specific), APAPL-PR-05 (referenceable IDs), MECT-VO-01 (active voice), MECT-WC-02 (plain language), AW-SY-01 (no antithetical snaps), AW-ST-01 (integrated counter-arguments).
 
 ## Rule Index
 
@@ -430,8 +430,8 @@ Before an ebook is released, it must pass the release check (`DRSYNART-SPEC-8.5`
 2. Sourcing: every empirical metric, latency figure, and command cited or marked `[ASSUMED]`.
 3. Numbering and cross-references: continuous chapter and exhibit numbering; all internal cross-references resolve.
 4. Presentation hygiene: zero agent prompts, scratchpads, or workflow metadata in final text.
-5. Style-pattern signals below threshold: at most 1 signal detected across Sourcing, Style, Structure, and Voice (`AI_WRITING_DETECTION_RULES.md`). Structural signals produced by a technique by construction (such as Show-Tell-Apply repeating blocks) are excluded.
-6. Persona trait budget respected (when a persona is specified).
+5. Style-pattern signals below threshold: at most 1 signal detected across Sourcing, Style, Structure, Voice, and Lexical (`AI_WRITING_RULES.md`). Structural signals produced by a technique by construction (such as Show-Tell-Apply repeating blocks) are excluded.
+6. Persona trait budget and length/pacing profile respected (when a persona is specified).
 7. Word count and chapter counts within target envelope.
 
 **BAD (Incomplete / Failing Record):**
@@ -449,8 +449,8 @@ Before an ebook is released, it must pass the release check (`DRSYNART-SPEC-8.5`
 - **Claim attribution**: 48 empirical metrics verified against benchmark ledger; 4 forward-looking capacity models tagged [ASSUMED]
 - **Structural integrity**: Chapters 1 through 8 continuously numbered across Parts I-III; all in-text cross-references resolve
 - **Metadata hygiene**: Zero agent prompts, scratchpad notes, or workflow tags in body
-- **Style-pattern signals**: 0 signals detected (AD-SO: 0, AD-SY: 0, AD-ST: 0, AD-VO: 0); STA pedagogical repeating structure excluded
-- **Persona compliance**: BOOK-AUTHOR register verified; zero informal slang; micro-dose trait budget respected
+- **Style-pattern signals**: 0 signals detected (AW-SO: 0, AW-SY: 0, AW-ST: 0, AW-VO: 0, AW-LX: 0); STA pedagogical repeating structure excluded
+- **Persona compliance**: BOOK-AUTHOR register verified; zero informal slang; micro-dose trait budget and length profile respected
 - **Word count**: 22,400 words across 8 chapters (target: 20,000 - 25,000 words)
 - **Status**: PASSED
 ```

@@ -19,56 +19,56 @@ Every design choice in a document is either **Signal** (purposeful, carries info
 MECT intentionally introduces MORE words when they strengthen the reader's association field and pattern matching. The goal is building the reader's mental model as effectively as possible - preventing misunderstandings, misinterpretations, and interpolated knowledge. "Minimal" in MECT refers to the terminology SET (one name per concept, minimal distinct terms), NOT to word count. MECT text may be LONGER than uncontrolled text because it repeats context, restates referents, and adds disambiguation words wherever the reader might otherwise guess wrong.
 
 **MECT vs APAPALAN on word count:**
-- APAPALAN AP-BR-* removes words that carry zero information (filler, redundant structure)
+- APAPALAN APAPL-BR-* removes words that carry zero information (filler, redundant structure)
 - MECT adds words that carry ASSOCIATION information (concept anchors, disambiguation, referent restatement)
 - Both apply simultaneously: remove noise words, add signal words
 
 ## Rule Index
 
 Voice (VO)
-- MW-VO-01: Active voice - actor before action
-- MW-VO-02: Address reader as "you"
-- MW-VO-03: Simplest verb - no hidden verbs
-- MW-VO-04: Obligation words - must/must not/may/should (never "shall")
+- MECT-VO-01: Active voice - actor before action
+- MECT-VO-02: Address reader as "you"
+- MECT-VO-03: Simplest verb - no hidden verbs
+- MECT-VO-04: Obligation words - must/must not/may/should (never "shall")
 
 Word Choice (WC)
-- MW-WC-01: Word-level precision - distinguish similar terms
-- MW-WC-02: Plain language over academic - daily words, question format
-- MW-WC-03: No recursive/implicit naming - no self-referential definitions
-- MW-WC-04: No product-as-term collision - avoid domain-common words as names
-- MW-WC-05: No terminological synonymy - one concept = one name, no phantom entities
-- MW-WC-06: No inverted semantics - name direction must match value direction
-- MW-WC-07: No premature label compression - short labels require legend in sight, mnemonic, or establishment
-- MW-WC-08: Document language is sovereign - foreign terms must be translated inline at every use
-- MW-WC-09: Acronym meaning comes from context - never invented, never adopted from training data
-- MW-WC-10: Explicit over figurative - write the claim an idiom, slang, or region-dependent phrase stands for; keep established precise terms
+- MECT-WC-01: Word-level precision - distinguish similar terms
+- MECT-WC-02: Plain language over academic - daily words, question format
+- MECT-WC-03: No recursive/implicit naming - no self-referential definitions
+- MECT-WC-04: No product-as-term collision - avoid domain-common words as names
+- MECT-WC-05: No terminological synonymy - one concept = one name, no phantom entities
+- MECT-WC-06: No inverted semantics - name direction must match value direction
+- MECT-WC-07: No premature label compression - short labels require legend in sight, mnemonic, or establishment
+- MECT-WC-08: Document language is sovereign - foreign terms must be translated inline at every use
+- MECT-WC-09: Acronym meaning comes from context - never invented, never adopted from training data
+- MECT-WC-10: Explicit over figurative - write the claim an idiom, slang, or region-dependent phrase stands for; keep established precise terms
 
 Terminology Design (TD)
-- MW-TD-01: Naming structure method (explicit -> specifiers -> states -> mnemonics)
-- MW-TD-02: Procedure/process names describe output, not mechanism
-- MW-TD-03: Stable naming over time - avoid serial renaming, ghost documentation
+- MECT-TD-01: Naming structure method (explicit -> specifiers -> states -> mnemonics)
+- MECT-TD-02: Procedure/process names describe output, not mechanism
+- MECT-TD-03: Stable naming over time - avoid serial renaming, ghost documentation
 
 Headings and Sections (HS)
-- MW-HS-01: Informative headings - state content, not topic
-- MW-HS-02: Limit heading depth to three levels
-- MW-HS-03: Write for declared audience
+- MECT-HS-01: Informative headings - state content, not topic
+- MECT-HS-02: Limit heading depth to three levels
+- MECT-HS-03: Write for declared audience
 
 Lists and Tables (LT)
-- MW-LT-01: Two identifiers per row (index AND key)
-- MW-LT-02: Group by topology - related items cluster
-- MW-LT-03: Index groups as they gain importance
-- MW-LT-04: Every formatting signal must carry information
-- MW-LT-05: Adjacent comparison - place BEFORE/AFTER states next to each other
+- MECT-LT-01: Two identifiers per row (index AND key)
+- MECT-LT-02: Group by topology - related items cluster
+- MECT-LT-03: Index groups as they gain importance
+- MECT-LT-04: Every formatting signal must carry information
+- MECT-LT-05: Adjacent comparison - place BEFORE/AFTER states next to each other
 
 Description Types (DT)
-- MW-DT-01: Four description lenses (intentional, functional, technical, contextual)
-- MW-DT-02: Match description type to audience need
-- MW-DT-03: Canonical form for matchable/sortable data
+- MECT-DT-01: Four description lenses (intentional, functional, technical, contextual)
+- MECT-DT-02: Match description type to audience need
+- MECT-DT-03: Canonical form for matchable/sortable data
 
 Visual Representation (VR)
-- MW-VR-01: Visual concepts require visual previews - text alone is insufficient
-- MW-VR-02: Structural diagrams for flows and architecture - clarify chronology, concurrency, orthogonality, mental model
-- MW-VR-03: Five categories that MUST have diagrams - file structure, architecture, branching, process, data flow
+- MECT-VR-01: Visual concepts require visual previews - text alone is insufficient
+- MECT-VR-02: Structural diagrams for flows and architecture - clarify chronology, concurrency, orthogonality, mental model
+- MECT-VR-03: Five categories that MUST have diagrams - file structure, architecture, branching, process, data flow
 
 ## Table of Contents
 
@@ -83,7 +83,7 @@ Visual Representation (VR)
 
 ## Voice Rules (VO)
 
-### MW-VO-01: Active Voice
+### MECT-VO-01: Active Voice
 
 Actor before action. Reader knows WHO does WHAT immediately.
 
@@ -103,7 +103,7 @@ The company polluted the lake.
 
 Passive voice hides the actor. "Bonds will be withheld" - by whom? "We will withhold your bond" - clear responsibility.
 
-### MW-VO-02: Address Reader as "You"
+### MECT-VO-02: Address Reader as "You"
 
 Direct address reduces ambiguity about who must act.
 
@@ -121,7 +121,7 @@ Ensure your configuration is correct.
 Verify the output before proceeding.
 ```
 
-### MW-VO-03: Simplest Verb
+### MECT-VO-03: Simplest Verb
 
 Replace verbose verb phrases with single verbs. Hidden verbs bury the action inside nouns.
 
@@ -142,7 +142,7 @@ Calculate the retry delay using exponential backoff.
 Determine which endpoints require authentication.
 ```
 
-### MW-VO-04: Obligation Words
+### MECT-VO-04: Obligation Words
 
 Use precise modal verbs. Never use "shall" - it creates ambiguity between obligation and future tense.
 
@@ -168,7 +168,7 @@ The API must return JSON.
 
 ## Word Choice Rules (WC)
 
-### MW-WC-01: Word-Level Precision
+### MECT-WC-01: Word-Level Precision
 
 Words that sound similar but differ in meaning. Using the wrong one corrupts the mental model.
 
@@ -184,9 +184,9 @@ Words that sound similar but differ in meaning. Using the wrong one corrupts the
 - 'Having judgement' (wisdom) != 'Being judgemental' (critical)
 - 'Account Issue' (problem with account) != 'Issue Account' (create an account)
 
-**Action:** When two terms seem interchangeable, look up the distinction. If the distinction matters in context, use the precise term. If it doesn't matter, pick one and use it consistently (AP-NM-01).
+**Action:** When two terms seem interchangeable, look up the distinction. If the distinction matters in context, use the precise term. If it doesn't matter, pick one and use it consistently (APAPL-NM-01).
 
-### MW-WC-02: Plain Language Over Academic
+### MECT-WC-02: Plain Language Over Academic
 
 Use daily words. Convert academic/bureaucratic language to plain language.
 
@@ -211,7 +211,7 @@ To apply for a grant, send your application to [Office Name] by [Date].
 - "Mortality" → "death"
 - "Timely manner" → specific date
 
-### MW-WC-03: No Recursive/Implicit Naming
+### MECT-WC-03: No Recursive/Implicit Naming
 
 A name must not contain itself at a different level. Definitions must not be self-referential.
 
@@ -233,7 +233,7 @@ Column "FullName" contains sub-columns "GivenName" and "Surname"
 → Clear what the container holds
 ```
 
-### MW-WC-04: No Product-as-Term Collision
+### MECT-WC-04: No Product-as-Term Collision
 
 Avoid naming concepts, projects, or document sections with words that are common terms in their own domain.
 
@@ -254,7 +254,7 @@ The "WorkTracker" feature tracks tasks across projects.
 
 **Test:** Can you write a sentence using the name AND the domain term without confusion? If not, rename.
 
-### MW-WC-05: No Terminological Synonymy
+### MECT-WC-05: No Terminological Synonymy
 
 One concept = one name. Multiple official names for the same thing create phantom entities in the reader's mental model.
 
@@ -281,7 +281,7 @@ Other names appear only in synonym tables, not in running text.
 
 **Test:** Count how many names you use for the same concept across portal, API, docs, and informal usage. If > 1, create a synonym table and pick ONE canonical name for all new writing.
 
-### MW-WC-06: No Inverted Semantics
+### MECT-WC-06: No Inverted Semantics
 
 Parameter or field names must suggest the correct direction of the value. If the name implies one direction but the value means the opposite, rename.
 
@@ -299,9 +299,9 @@ target_reduction_percent: 60
 
 **Test:** Read the name and value aloud as a sentence. "Target compression is 40 percent" - does this match the actual behavior? If not, rename until the sentence matches reality.
 
-### MW-WC-07: No Premature Label Compression
+### MECT-WC-07: No Premature Label Compression
 
-Short labels are permitted only when the reader can decode them at point of use without scrolling. Three mechanisms satisfy this (see AP-PR-11 for enforcement):
+Short labels are permitted only when the reader can decode them at point of use without scrolling. Three mechanisms satisfy this (see APAPL-PR-11 for enforcement):
 
 1. **Full word** - Always safe: `[SUPPORTED]`, `[ASSUMED]`, `(PASS)`
 2. **Legend in sight** - Short labels with visible legend (no scrolling from any usage point)
@@ -336,7 +336,7 @@ S=Supported | C=Caveated | U=Unsupported
 
 ## Language Sovereignty Rules (LS)
 
-### MW-WC-08: Document Language is Sovereign
+### MECT-WC-08: Document Language is Sovereign
 
 The document's primary language determines how all terms are presented. Foreign-language terms MUST be translated or explained inline at every point of use. Readers cannot remember, spell, or mentally index terms from a language they do not speak.
 
@@ -390,20 +390,20 @@ Fusing a foreign root with a native suffix creates a term that exists in no lang
 
 **Exception:** When the foreign term IS the established term in the reader's language (e.g., "kindergarten" in English, "software" in German), no translation needed.
 
-### MW-WC-09: Acronym Meaning Comes From Context
+### MECT-WC-09: Acronym Meaning Comes From Context
 
 Acronyms have multiple meanings; the one defined in context (document, referenced sources, defining file, `ID-REGISTRY.md`) overrules all others. Never invent an expansion, never adopt one from training data, never copy one from a secondary file unchecked. No definition in context: leave unexpanded, mark `[UNVERIFIED]`.
 
-**Why:** A guessed expansion is a wrong name (MW-WC-05) that looks authoritative and propagates.
+**Why:** A guessed expansion is a wrong name (MECT-WC-05) that looks authoritative and propagates.
 
 **BAD:** `AMINTON (Argument, Main claim, Insight, Node, Tree, Opposition, Nuance)` - backronym from the letters
 **GOOD:** `AMINTON (Agentic MINTO Notation)` - from the defining section `MINTO_GUIDES.md` Section 1
 
 **Test:** Point to the line that defines it. No line = no expansion.
 
-### MW-WC-10: Explicit Over Figurative
+### MECT-WC-10: Explicit Over Figurative
 
-**Audience:** Expect international readers who are not native speakers of the document language. This is the default for every document unless it declares a different audience (MW-HS-03).
+**Audience:** Expect international readers who are not native speakers of the document language. This is the default for every document unless it declares a different audience (MECT-HS-03).
 
 Idioms, slang, and region-dependent phrases compress a claim into an image. The reader must decode the image and guess the claim behind it. Non-native readers, readers from another region, and machine translation guess differently. Write the claim itself: number, actor, condition, consequence.
 
@@ -427,7 +427,7 @@ Postpone the proposal to the Q3 meeting.
 
 "Table the proposal" means "discuss it now" in UK English and "postpone it" in US English - one phrase, opposite instructions.
 
-**Not a word ban:** A word stays when it is the established, most precise term and the sentence states the claim around it: "onboarding takes 2 days", "the investment pays off after 14 months", "break-even", "bottleneck". Replacing a precise term with a vaguer paraphrase violates MW-WC-01.
+**Not a word ban:** A word stays when it is the established, most precise term and the sentence states the claim around it: "onboarding takes 2 days", "the investment pays off after 14 months", "break-even", "bottleneck". Replacing a precise term with a vaguer paraphrase violates MECT-WC-01.
 
 **Test:** Ask what exactly the phrase claims. If the answer contains a number, condition, or consequence the sentence does not state, write the answer instead of the phrase.
 
@@ -435,7 +435,7 @@ Postpone the proposal to the Q3 meeting.
 
 ## Terminology Design Rules (TD)
 
-### MW-TD-01: Naming Structure Method
+### MECT-TD-01: Naming Structure Method
 
 Build terminology by progressive qualification. Start explicit, add specifiers, add states, then define short forms.
 
@@ -444,7 +444,7 @@ Build terminology by progressive qualification. Start explicit, add specifiers, 
 2. **Add specifiers BEFORE the name**: "Planned Project Start Date", "Actual Project Start Date"
 3. **Add states AFTER the name**: "Planned Project Start Date Accepted"
 4. **Define short/long mnemonics**: external `ACTUAL_PROJECT_START_DATE` (`APSD`), internal `start_date` (`sd`)
-   - **WARNING**: Step 4 requires DESIGNED short forms where the full term is recoverable. First-letter extraction (`S` for Supported) is abbreviation, not mnemonic design. If the short form fails the Reconstruction Test (see MW-WC-07), stay at step 1 and use the explicit name.
+   - **WARNING**: Step 4 requires DESIGNED short forms where the full term is recoverable. First-letter extraction (`S` for Supported) is abbreviation, not mnemonic design. If the short form fails the Reconstruction Test (see MECT-WC-07), stay at step 1 and use the explicit name.
 5. **Document naming and spelling rules** per domain
 
 **BAD:**
@@ -466,7 +466,7 @@ Build terminology by progressive qualification. Start explicit, add specifiers, 
 
 **When to apply:** Whenever a domain grows beyond 5-10 named concepts. The naming structure becomes the "DNA for your field of action" - stable, predictable, extendable.
 
-### MW-TD-02: Procedure/Process Names Describe Output
+### MECT-TD-02: Procedure/Process Names Describe Output
 
 Name procedures, workflows, and process sections by what they produce - not by what mechanism they use.
 
@@ -492,7 +492,7 @@ Name procedures, workflows, and process sections by what they produce - not by w
 
 Default: name by output.
 
-### MW-TD-03: Stable Naming Over Time
+### MECT-TD-03: Stable Naming Over Time
 
 Avoid serial renaming. Each rename creates ghost documentation that misleads future readers.
 
@@ -523,7 +523,7 @@ Pick a name. Keep it. If you must rename:
 
 ## Heading and Section Rules (HS)
 
-### MW-HS-01: Informative Headings
+### MECT-HS-01: Informative Headings
 
 Headings state what the section contains or answers, not the generic topic.
 
@@ -545,7 +545,7 @@ Headings state what the section contains or answers, not the generic topic.
 
 **Test:** Can a reader decide whether to read the section from the heading alone? If the heading is "Background", the answer is no. If the heading is "Why JWT Replaced Session Cookies", the answer is yes.
 
-### MW-HS-02: Limit Heading Depth to Three Levels
+### MECT-HS-02: Limit Heading Depth to Three Levels
 
 Three levels maximum: `#`, `##`, `###`. If you need `####`, restructure the document or split the section.
 
@@ -566,7 +566,7 @@ Three levels maximum: `#`, `##`, `###`. If you need `####`, restructure the docu
 
 Deep nesting signals that the section is too broad. Split into separate documents or flatten the hierarchy.
 
-### MW-HS-03: Write for Declared Audience
+### MECT-HS-03: Write for Declared Audience
 
 State who reads the document. Write for that audience. Don't mix audiences in one section.
 
@@ -590,7 +590,7 @@ Click "Login" to sign in to your account.
 
 ## List and Table Rules (LT)
 
-### MW-LT-01: Two Identifiers Per Row
+### MECT-LT-01: Two Identifiers Per Row
 
 Every list item needs both a position index (for ordering) and a semantic key (for referencing).
 
@@ -610,7 +610,7 @@ Every list item needs both a position index (for ordering) and a semantic key (f
 
 Index (1, 2, 3) enables "the third region." Key (EU-WEST) enables "the EU-WEST region." Both enable unambiguous reference from other documents.
 
-### MW-LT-02: Group by Topology
+### MECT-LT-02: Group by Topology
 
 Related items cluster together. Group reflects real relationships, not alphabetical order.
 
@@ -637,7 +637,7 @@ Asia-Pacific:
 5. **AP-SE** - ap-southeast-1 (Singapore)
 ```
 
-### MW-LT-03: Index Groups as They Gain Importance
+### MECT-LT-03: Index Groups as They Gain Importance
 
 When groups grow beyond simple clusters, give them IDs and keys too. Groups become referenceable units.
 
@@ -660,13 +660,13 @@ Americas: us-east-1, us-west-2
 
 Now "region group RG-EU" is a valid reference target.
 
-### MW-LT-04: Every Formatting Signal Must Carry Information
+### MECT-LT-04: Every Formatting Signal Must Carry Information
 
 Applies the Signal vs Noise principle to formatting. Formatting (bold, italic, indentation, separators) is a communication channel. Each signal must add meaning the reader cannot get from structure alone. When structure already provides distinction (indent, dash, colon, heading), adding formatting on top is noise - it consumes visual weight without increasing information.
 
-**Test:** Remove the formatting. Can the reader still distinguish the elements? If yes, the formatting is noise. See AP-BR-07 for concrete enforcement patterns.
+**Test:** Remove the formatting. Can the reader still distinguish the elements? If yes, the formatting is noise. See APAPL-BR-07 for concrete enforcement patterns.
 
-### MW-LT-05: Adjacent Comparison
+### MECT-LT-05: Adjacent Comparison
 
 When comparing two states (old vs new, before vs after, option A vs option B), place them adjacent in the document. The reader should not scroll or search to perform the comparison.
 
@@ -706,7 +706,7 @@ See also SPEC-DG-04 in `SPEC_RULES.md` for spec-specific application.
 
 ## Description Type Rules (DT)
 
-### MW-DT-01: Four Description Lenses
+### MECT-DT-01: Four Description Lenses
 
 Any object can be described from four perspectives. Choose based on what the reader needs.
 
@@ -725,7 +725,7 @@ Technical: "Redis sorted set per IP. Score = timestamp. ZRANGEBYSCORE to count w
 
 Contextual: "Sits between API gateway and application handlers. Depends on Redis. Bypassed for health check endpoints. Configured per route in `rate_limits.yaml`."
 
-### MW-DT-02: Match Description Type to Audience
+### MECT-DT-02: Match Description Type to Audience
 
 - Stakeholders need intentional (why) + functional (what)
 - Developers need functional (what) + technical (how)
@@ -745,7 +745,7 @@ send more than 100 requests per minute. Blocked clients receive
 a "too many requests" error until their window resets.
 ```
 
-### MW-DT-03: Canonical Form for Matchable/Sortable Data
+### MECT-DT-03: Canonical Form for Matchable/Sortable Data
 
 When documenting data that readers (or tools) need to compare, sort, filter, or match - use a single predictable form. Convert vague property descriptions to structured, parseable formats.
 
@@ -767,7 +767,7 @@ All variants must be convertible to this form:
 
 **When to apply:**
 - IDs referenced across documents (use Doc ID system: `CRAWLENG-SP01`)
-- Dates in tables or lists (use `YYYY-MM-DD` per AP-PR-01)
+- Dates in tables or lists (use `YYYY-MM-DD` per APAPL-PR-01)
 - Status values (define enum: `TODO`, `IN_PROGRESS`, `DONE` - not free text)
 - Any data that appears in more than one place and must be matchable
 
@@ -775,7 +775,7 @@ All variants must be convertible to this form:
 
 ## Visual Representation Rules (VR)
 
-### MW-VR-01: Visual Concepts Require Visual Previews
+### MECT-VR-01: Visual Concepts Require Visual Previews
 
 When describing something visual (UI layout, page structure, component arrangement), show a diagram or wireframe. Text descriptions of visual things force the reader to mentally reconstruct the image - slow, error-prone, and different for every reader.
 
@@ -817,7 +817,7 @@ a resizable console panel.
 
 **Label ownership:** When documenting shared vs custom elements, annotate each area with who provides it (e.g., LIBRARY / YOU, SHARED / CUSTOM, FRAMEWORK / APP).
 
-### MW-VR-02: Structural Diagrams for Flows and Architecture
+### MECT-VR-02: Structural Diagrams for Flows and Architecture
 
 Flows, processes, and architectural relationships must be presented as diagrams. The diagram's structure must clarify five dimensions:
 
@@ -867,7 +867,7 @@ STREAM     JSON (fetch)
 - **Pipeline** (data flow) - Left-to-right transformation chain
 - **Anatomy** (composition) - Nested boxes showing what contains what
 
-### MW-VR-03: Five Categories That MUST Have Diagrams
+### MECT-VR-03: Five Categories That MUST Have Diagrams
 
 The following categories must always be documented with a visual diagram. Text-only descriptions are insufficient regardless of how detailed they are.
 

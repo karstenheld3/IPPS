@@ -18,8 +18,8 @@ A persona defines sentence-level voice only. Document structure (argument order,
 
 Every persona file is a complete Writer Profile with 4 layers:
 
-1. **Universal Zero-Bullshit Gate** (applies at every slider setting): Treat the reader's time as more valuable than your own (Bernoff Iron Imperative). Every sentence delivers a fact, clarifies a mechanism, or guides a decision. Zinsser Bracket Test: delete every word, aside, or metaphor that does no useful work. Plain connectives (*but, so, still, yet*), concrete verbs, natural burstiness (5-9 word sentences alternating with 18-28 word sentences), facts never altered by style
-2. **3-Line Persona Header**: `Role` (who speaks), `Audience` (who reads, what they know), `Anti-Tone` (what to strictly avoid)
+1. **Universal Zero-Bullshit Gate** (applies at every slider setting): Treat the reader's time as more valuable than your own (Bernoff Iron Imperative). Every sentence delivers a fact, clarifies a mechanism, or guides a decision. Zinsser Bracket Test: delete every word, aside, or metaphor that does no useful work. Plain connectives (*but, so, still, yet*), concrete verbs, natural sentence rhythm (vary sentence length within every paragraph; never 3+ uniform-length sentences, staccato fragment chains, or antithetical snaps per `AI_WRITING_RULES.md`), facts never altered by style
+2. **4-Line Persona Header**: `Role` (who speaks), `Audience` (who reads, what they know), `Text Length & Pacing` (default word-count envelope, paragraph length range, and sentence rhythm; overruled only by explicit user Brief `Constraints`), `Anti-Tone` (what to strictly avoid)
 3. **6 Continuous Sliders (0-10)**: Formality, Warmth, Humor & Color, Narrative Drive, Density, Technicality. Each scale is read in 5 behavioral bands (`0-1`, `2-3`, `4-6`, `7-8`, `9-10`) because Large Language Models (LLMs) cannot distinguish single integer steps without a rubric. Every slider value is always sent to the LLM with its band rule in parentheses. Sliders govern 95% of sentences
 4. **1-3 Micro-Dosed Voice Traits (`TR-01..14`)**: Binary `ON/OFF` rhetorical moves. Budget `<= 5%` of sentences: max 1 trait firing per 300-400 words (2-4 trait moments per 1,200-word article), never 2 traits in one paragraph, max 2-10 added words inside an existing sentence. Reason: LLMs over-apply persona traits 5x-10x compared to human authors (generative exaggeration)
 
@@ -28,7 +28,7 @@ Every persona file is a complete Writer Profile with 4 layers:
 │ WRITER PROFILE = GATE + HEADER + 6 SLIDERS + 1-3 TRAITS          │
 ├──────────────────────────────────────────────────────────────────┤
 │ 1. Zero-Bullshit Gate   (every sentence, every persona)          │
-│ 2. Persona Header       Role / Audience / Anti-Tone              │
+│ 2. Persona Header       Role / Audience / Length & Pacing / Anti │
 │ 3. 6 Sliders 0-10       95% of sentences, 5 bands, band rule     │
 │ 4. 1-3 Traits [ON]      <= 5% of sentences, never 2 per paragraph│
 └──────────────────────────────────────────────────────────────────┘
@@ -228,11 +228,14 @@ Use this section ONLY when the user asks for style or persona help (`DRSYNART-DD
 
 ## Document History
 
+**[2026-11-08 13:00]**
+- Changed: Removed hardcoded `5-9 / 18-28` sentence-alternation formula from Universal Zero-Bullshit Gate; added `Text Length & Pacing` field to Persona Header across all 20 personas (`DRSYNART-DD-50`, `DRSYNART-DD-32`)
+
 **[2026-10-29 16:15]**
 - Changed: Section 2 renamed to "User-Only Selection Rule"; default without persona = standard workflow instructions, templates, GRUC files; partial input never auto-completed (DRSYNART-DD-08 revision)
 
 **[2026-10-29 16:20]**
-- Fixed: Acronyms expanded (LLM, API, abbreviation legend above the table), diagram abbreviation removed, Section 5.3 short slider labels replaced with full names, figurative phrases replaced (MW-WC-10)
+- Fixed: Acronyms expanded (LLM, API, abbreviation legend above the table), diagram abbreviation removed, Section 5.3 short slider labels replaced with full names, figurative phrases replaced (MECT-WC-10)
 
 **[2026-10-29 15:50]**
 - Initial: README with architecture, DRSYNART-DD-08 unbiased default, 20-persona table, media-type and audience selectors, slider and trait reference

@@ -2,7 +2,7 @@
 
 Output standards for documents written `using IMRAD` (Abstract, Introduction, Methods, Results, Discussion, Recommendations).
 
-**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: AP-PR-07 (be specific), AP-PR-05 (referenceable IDs), AP-PR-01 (datetime format).
+**Writing quality:** Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: APAPL-PR-07 (be specific), APAPL-PR-05 (referenceable IDs), APAPL-PR-01 (datetime format).
 
 ## Rule Index
 

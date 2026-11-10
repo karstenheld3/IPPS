@@ -15,6 +15,7 @@ Expand an options proposal or raw research input into a structured working draft
 
 - @skills:write-documents `document_types/ARTICLE_GUIDES.md` (craft decisions, Brief, section goals, handoffs)
 - @skills:write-documents `document_types/ARTICLE_TEMPLATE.md` (section: DRAFT)
+- @skills:write-documents `AI_WRITING_RULES.md` (anti-AI artifact suppression rules `AW-*`, read BEFORE drafting)
 - Technique files (`writing_techniques/[ID]_GUIDES.md`, `writing_techniques/TEMPLATES/[ID]_TEMPLATE.md`) ONLY when `using <ID>` is given
 - Persona file (`writing_personas/[PERSONA].md`) ONLY when `as <PERSONA>` is given (`DRSYNART-DD-17`)
 - Never load CHECKS files during execution (`DRSYNART-FR-32`, `GRUC-IG-03`)

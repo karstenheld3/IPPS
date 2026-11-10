@@ -202,11 +202,12 @@ Developmental editing is achieved during the options and draft phases.
 
 ### Clarity Principles (Line Edit)
 
-Every article sentence must satisfy three clarity principles:
+Every article sentence must satisfy four clarity principles:
 1. **Lanham's Paramedic Method**: Circle prepositions and weak state-of-being verbs (`is`, `was`, `has`). Locate the real action, name the real actor as the grammatical subject, and express the action in an active verb. Keep the lard factor (words cut divided by original words) below one-third.
 2. **Williams's Characters and Actions**: Ensure characters are subjects and actions are verbs. Place familiar context at the beginning of sentences and push new, complex information to the stress position at the end.
 3. **Pinker's Classic Style**: Write as a seeing observer positioning the reader to see an objective reality. Eliminate bureaucratic nominalizations that bury active verbs inside Latinate nouns (e.g., replace "the implementation of the system was undertaken" with "the team implemented the system").
-- **Rule Reference**: `ART-ED-01`.
+4. **Anti-AI Prose Discipline (`AI_WRITING_RULES.md`)**: Sustain continuous, natural prose flow. Avoid staccato fragments, contrast snaps, telegraphic objection blocks, mechanical tricolons, signpost openers, reflex header/list inflation, prestige-register buzzwords, and nominalization chains that produce punchy, flow-breaking robotic writing. Calibrate sentence rhythm, punctuation variety, and paragraph length to the active persona.
+- **Rule Reference**: `ART-ED-01`, `AW-SO-01` through `AW-LX-03`.
 
 ### Fact-Checking Standard
 
@@ -229,8 +230,8 @@ Before publication, every article must pass the release check (`DRSYNART-SPEC-8.
 2. Sourcing: every factual claim cited or marked `[ASSUMED]`.
 3. Structural integrity: continuous section numbering, all markdown links resolve.
 4. Clean presentation: zero workflow or agent processing metadata in body.
-5. AI writing threshold: detection signals below threshold (no synthetic throat-clearing, balanced sentence lengths, no repetitive transition words).
-6. Word count: within target range.
+5. AI writing threshold: style-pattern signals below threshold (`<= 1` signal across `AW-SO`, `AW-SY`, `AW-ST`, `AW-VO`, `AW-LX` in `AI_WRITING_RULES.md`).
+6. Word count: within target range (defined by active persona or Brief `Constraints`).
 - **Rule Reference**: `ART-RC-01`.
 
 ### Output Naming Conventions
@@ -307,3 +308,4 @@ The following rule ID ranges in `ARTICLE_RULES.md` define the enforceable output
 - `ART-EV-01` through `ART-EV-03`: Evidence alternation, quote discipline, and factual claim attribution.
 - `ART-ED-01` through `ART-ED-02`: Line clarity, Paramedic Method lard factor, and style sheet consistency.
 - `ART-RC-01`: Final release check verification standards.
+- `AW-SO-01` through `AW-LX-03` (`../AI_WRITING_RULES.md`): Anti-AI writing artifact suppression and detection across Sourcing, Style, Structure, Voice, and Lexical choice.

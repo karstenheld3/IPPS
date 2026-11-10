@@ -1719,7 +1719,7 @@ The client extension never checks these fields to show/hide Cascade UI. Cascade 
 - Added: Sources DVDT-IN01-SC-DVNDC-ACP, DVDT-IN01-SC-DVNDC-ACPC
 
 **[2026-08-27 20:12]**
-- Fixed: AP-PR-06 acronym expansions on first use (GHSA, MoE, SSE, CORS, XSS, OIDC, SAML, FedRAMP)
+- Fixed: APAPL-PR-06 acronym expansions on first use (GHSA, MoE, SSE, CORS, XSS, OIDC, SAML, FedRAMP)
 - Fixed: FrontierCode 1.1 → FrontierCode 1.1 Main (per source benchmark name)
 
 **[2026-08-27 20:12]**

@@ -11,49 +11,49 @@ Concrete enforceable rules for applying the APAPALAN principle across all docume
 ## Rule Index
 
 Precision (PR) - Priority 1
-- AP-PR-01: Standardized datetime format
-- AP-PR-02: Standardized attribute/property format
-- AP-PR-03: Standardized contact information format
-- AP-PR-04: Standardized link and reference format
-- AP-PR-05: Referenceable IDs on all trackable items
-- AP-PR-06: Write out acronyms on first use; expansion from context, never from training data
-- AP-PR-07: Be specific - no generic or abstract writing
-- AP-PR-08: Every non-obvious rule or format needs examples
-- AP-PR-09: Consistent patterns (repeat established structures)
-- AP-PR-10: Never abbreviate keys and references (use single quotes for literals)
-- AP-PR-11: Labels decodable at point of use (full word, legend, or mnemonic)
-- AP-PR-12: Explain domain jargon and idioms on first use
-- AP-PR-13: Authoritative literals reproduced character-for-character (no Unicode normalization, no abbreviation, no reformatting)
+- APAPL-PR-01: Standardized datetime format
+- APAPL-PR-02: Standardized attribute/property format
+- APAPL-PR-03: Standardized contact information format
+- APAPL-PR-04: Standardized link and reference format
+- APAPL-PR-05: Referenceable IDs on all trackable items
+- APAPL-PR-06: Write out acronyms on first use; expansion from context, never from training data
+- APAPL-PR-07: Be specific - no generic or abstract writing
+- APAPL-PR-08: Every non-obvious rule or format needs examples
+- APAPL-PR-09: Consistent patterns (repeat established structures)
+- APAPL-PR-10: Never abbreviate keys and references (use single quotes for literals)
+- APAPL-PR-11: Labels decodable at point of use (full word, legend, or mnemonic)
+- APAPL-PR-12: Explain domain jargon and idioms on first use
+- APAPL-PR-13: Authoritative literals reproduced character-for-character (no Unicode normalization, no abbreviation, no reformatting)
 
 Brevity (BR) - Priority 2
-- AP-BR-01: Single line for single statements
-- AP-BR-02: Sacrifice grammar for brevity
-- AP-BR-03: DRY within same document scope
-- AP-BR-04: Compact object and list definitions
-- AP-BR-05: Show format over describing format
-- AP-BR-06: Pipe-delimited property lines for multi-attribute items
-- AP-BR-07: No redundant bold in structured lists
+- APAPL-BR-01: Single line for single statements
+- APAPL-BR-02: Sacrifice grammar for brevity
+- APAPL-BR-03: DRY within same document scope
+- APAPL-BR-04: Compact object and list definitions
+- APAPL-BR-05: Show format over describing format
+- APAPL-BR-06: Pipe-delimited property lines for multi-attribute items
+- APAPL-BR-07: No redundant bold in structured lists
 
 Structure (ST)
-- AP-ST-01: Goal or intention captured first
-- AP-ST-02: Subjects direct and actionable
-- AP-ST-03: Self-contained units
-- AP-ST-04: Anti-DRY for delegation (inline 100% for action requests)
-- AP-ST-05: Hierarchical information ordering (general to specific)
-- AP-ST-06: Visual thought grouping (cluster related, separate distinct)
-- AP-ST-07: Cognitive load limit (max 7 ungrouped items)
+- APAPL-ST-01: Goal or intention captured first
+- APAPL-ST-02: Subjects direct and actionable
+- APAPL-ST-03: Self-contained units
+- APAPL-ST-04: Anti-DRY for delegation (inline 100% for action requests)
+- APAPL-ST-05: Hierarchical information ordering (general to specific)
+- APAPL-ST-06: Visual thought grouping (cluster related, separate distinct)
+- APAPL-ST-07: Cognitive load limit (max 7 ungrouped items)
 
 Communication (CM) - outbound text to counterparts (emails, messages, replies)
-- AP-CM-01: Accountable commitments - every commitment states action, deliverable, and timing
-- AP-CM-02: Labeled questions and requests - own paragraph, blank-line separated, labeled (Question:/Request:), fully self-contained
-- AP-CM-03: Time precision in communication - weekday + ISO date, timezone when scheduling, periods include year
+- APAPL-CM-01: Accountable commitments - every commitment states action, deliverable, and timing
+- APAPL-CM-02: Labeled questions and requests - own paragraph, blank-line separated, labeled (Question:/Request:), fully self-contained
+- APAPL-CM-03: Time precision in communication - weekday + ISO date, timezone when scheduling, periods include year
 
 Naming (NM)
-- AP-NM-01: One name per concept (no polysemy, no synonyms)
-- AP-NM-02: Unambiguous compound names (word order determines meaning)
-- AP-NM-03: Avoid dangerous meta-words (Module, Service, Check, etc.)
-- AP-NM-04: Word pairs must form intuitive opposites
-- AP-NM-05: Use and keep standard terms (association field principle)
+- APAPL-NM-01: One name per concept (no polysemy, no synonyms)
+- APAPL-NM-02: Unambiguous compound names (word order determines meaning)
+- APAPL-NM-03: Avoid dangerous meta-words (Module, Service, Check, etc.)
+- APAPL-NM-04: Word pairs must form intuitive opposites
+- APAPL-NM-05: Use and keep standard terms (association field principle)
 
 ## Table of Contents
 
@@ -70,19 +70,19 @@ Naming (NM)
 
 **Priority 2: Brevity** - After precision is guaranteed, remove every unnecessary word. Sacrifice grammar, filler, and noise repetition. But never sacrifice a word that carries meaning.
 
-**Critical boundary - noise vs signal redundancy:** Brevity rules (AP-BR-*) cut NOISE words (filler, structural repetition that adds zero information). They NEVER cut SIGNAL redundancy (restated referents, concept anchors, disambiguation words that prevent the reader from guessing). A word is signal redundancy when removing it forces the reader to interpolate from memory or context. "The authentication retry handles transient network errors" repeats "authentication" and specifies "transient network" - both are signal redundancy that a brevity pass must preserve.
+**Critical boundary - noise vs signal redundancy:** Brevity rules (APAPL-BR-*) cut NOISE words (filler, structural repetition that adds zero information). They NEVER cut SIGNAL redundancy (restated referents, concept anchors, disambiguation words that prevent the reader from guessing). A word is signal redundancy when removing it forces the reader to interpolate from memory or context. "The authentication retry handles transient network errors" repeats "authentication" and specifies "transient network" - both are signal redundancy that a brevity pass must preserve.
 
 **Anti-pattern**: Cryptic abbreviations sacrifice precision for brevity.
 - BAD: `P=1`, `F1=1` - unclear type, unclear meaning
 - GOOD: `Precision=1.00`, `F1-Score=1.00` - full name, 2 decimals indicate float
 
-**Anti-pattern**: Verbose writing sacrifices brevity without adding precision. (See AP-BR-02 for full examples.)
+**Anti-pattern**: Verbose writing sacrifices brevity without adding precision. (See APAPL-BR-02 for full examples.)
 
 **Signal vs Noise:** Every design choice is either **Signal** (purposeful, carries information) or **Noise** (arbitrary, the reader interprets as meaningful when it isn't). Precision strengthens signals. Brevity eliminates noise. All APAPALAN rules serve one of these two goals.
 
 ## Precision Rules (PR)
 
-### AP-PR-01: Standardized Datetime Format
+### APAPL-PR-01: Standardized Datetime Format
 
 Use `YYYY-MM-DD HH:MM` everywhere. Context-specific variations:
 
@@ -109,7 +109,7 @@ last Tuesday
 2026-03-17_StatusReport.md  (filename)
 ```
 
-### AP-PR-02: Standardized Attribute/Property Format
+### APAPL-PR-02: Standardized Attribute/Property Format
 
 Context determines format. Consistency within each context is mandatory.
 
@@ -140,7 +140,7 @@ Processing file='report.csv'...
   Library: title='Documents' (id='045229b3')
 ```
 
-### AP-PR-03: Standardized Contact Information Format
+### APAPL-PR-03: Standardized Contact Information Format
 
 Structured contact blocks with all relevant fields.
 
@@ -157,9 +157,9 @@ John from Acme Corp, email john@acme.com, call him at +1 555 1234
 - Timezone: EST
 ```
 
-### AP-PR-05: Referenceable IDs on All Trackable Items
+### APAPL-PR-05: Referenceable IDs on All Trackable Items
 
-**Prerequisite for AP-PR-04.** You cannot reference what has no ID. Create IDs FIRST, then reference.
+**Prerequisite for APAPL-PR-04.** You cannot reference what has no ID. Create IDs FIRST, then reference.
 
 **What needs IDs:**
 - Requirements (FR), decisions (DD), guarantees (IG), criteria (AC)
@@ -204,10 +204,10 @@ John from Acme Corp, email john@acme.com, call him at +1 555 1234
 ```
 Now "section 2.1" is a valid reference target.
 
-### AP-PR-04: Standardized Link and Reference Format
+### APAPL-PR-04: Standardized Link and Reference Format
 
-**Depends on AP-PR-05.** A reference is only as good as the ID system it points to. Three steps:
-1. Define a consistent ID system (AP-PR-05)
+**Depends on APAPL-PR-05.** A reference is only as good as the ID system it points to. Three steps:
+1. Define a consistent ID system (APAPL-PR-05)
 2. Apply IDs to all information that should be referenced
 3. Use the IDs to reference within and across documents
 
@@ -231,11 +231,11 @@ See `_SPEC_CRAWLER.md [CRWL-SP01]` for requirements.
 Per CRWL-FR-01, the crawler must...
 ```
 
-### AP-PR-06: Write Out Acronyms on First Use
+### APAPL-PR-06: Write Out Acronyms on First Use
 
 Format: `Full Term (ACRONYM)`. After first use, acronym alone is acceptable within same document.
 
-Expansion source: research the meaning in context (document, referenced sources, agent rules, conversation, defining file, specifications, `ID-REGISTRY.md`) - never invent it, never adopt a probable meaning from training data. Reason: acronyms have multiple meanings; the one defined in context overrules all others, and a guessed expansion is a wrong name that propagates (MW-WC-09).
+Expansion source: research the meaning in context (document, referenced sources, agent rules, conversation, defining file, specifications, `ID-REGISTRY.md`) - never invent it, never adopt a probable meaning from training data. Reason: acronyms have multiple meanings; the one defined in context overrules all others, and a guessed expansion is a wrong name that propagates (MECT-WC-09).
 
 **BAD:**
 ```
@@ -249,7 +249,7 @@ Use On Behalf Of (OBO) for SharePoint Online (SPO) authentication via Managed Id
 Check the MUST-NOT-FORGET (MNF) list before completing.
 ```
 
-### AP-PR-07: Be Specific
+### APAPL-PR-07: Be Specific
 
 No generic or abstract writing. Every statement must contain concrete, verifiable information.
 
@@ -267,7 +267,7 @@ Response time < 200ms for 95th percentile under 100 concurrent users.
 Toast auto-dismisses after 5000ms, supports info/success/error/warning types.
 ```
 
-### AP-PR-08: Every Non-Obvious Rule Needs Examples
+### APAPL-PR-08: Every Non-Obvious Rule Needs Examples
 
 Rules without examples are ambiguous. Show BAD/GOOD pairs for every format rule, naming convention, and structural pattern.
 
@@ -284,7 +284,7 @@ Use descriptive names with proper prefixes.
 - `_SPEC_[COMPONENT].md` - Specifications. Example: `_SPEC_CRAWLER.md`
 ```
 
-### AP-PR-09: Consistent Patterns
+### APAPL-PR-09: Consistent Patterns
 
 Repeat established structures. Do not invent new forms for similar content.
 
@@ -304,7 +304,7 @@ Repeat established structures. Do not invent new forms for similar content.
 - Properties: `Key:` `**Key** -` `Key =` → `Key:` throughout
 - Functions: `get_` `fetch_` `load_` (same purpose) → `get_` everywhere
 
-### AP-PR-10: Never Abbreviate Keys and References
+### APAPL-PR-10: Never Abbreviate Keys and References
 
 Keys, variable names, file paths, and other referenceable identifiers must appear in full. Use single quotes to mark literal strings that can be copied or searched.
 
@@ -335,7 +335,7 @@ See 'config/auth.yaml' for details.
 
 **Exception:** Code blocks and monospace formatting (`backticks`) already signal literal values - single quotes are not needed inside code blocks.
 
-### AP-PR-11: Labels Decodable at Point of Use
+### APAPL-PR-11: Labels Decodable at Point of Use
 
 Every label, marker, and status indicator must be decodable where it appears - without scrolling to a definition elsewhere in the document.
 
@@ -372,9 +372,9 @@ S=Supported | C=Caveated | U=Unsupported
 - Plan node IDs: `P1-S1`, `P2-D1` (positional, not classification)
 - Checkbox states: `[x]`, `[ ]`, `[N]` (STRUT system)
 
-### AP-PR-12: Explain Domain Jargon and Idioms on First Use
+### APAPL-PR-12: Explain Domain Jargon and Idioms on First Use
 
-Like AP-PR-06 for acronyms, but for meaning: domain jargon, idioms, and figurative language must be explained or replaced on first use.
+Like APAPL-PR-06 for acronyms, but for meaning: domain jargon, idioms, and figurative language must be explained or replaced on first use.
 
 Either **replace** (jargon adds no value) or **keep + explain** in parentheses (term carries domain authority or is a citation).
 
@@ -392,9 +392,9 @@ Claude Code is the dark horse (unexpected strong competitor) in this market.
 
 **Test:** "Would a reader outside this domain understand this without looking it up?"
 
-**Does NOT apply to:** Terms covered by AP-PR-06, terms defined earlier in same document, terms clear from immediate context.
+**Does NOT apply to:** Terms covered by APAPL-PR-06, terms defined earlier in same document, terms clear from immediate context.
 
-### AP-PR-13: Authoritative Literals Reproduced Character-for-Character
+### APAPL-PR-13: Authoritative Literals Reproduced Character-for-Character
 
 Values marked `[LITERAL]` or stored in an "Authoritative Literals" section are lexical, not semantic. Every character matters. GenAI systematically introduces format drift: Unicode normalization (`º` for `o`), punctuation changes (dashes for commas), abbreviation, expansion.
 
@@ -435,7 +435,7 @@ Full corruption categories in `core-conventions.md` "Authoritative Literals" sec
 
 ## Brevity Rules (BR)
 
-### AP-BR-01: Single Line for Single Statements
+### APAPL-BR-01: Single Line for Single Statements
 
 If a statement, decision, or object fits on one line, keep it on one line.
 
@@ -455,7 +455,7 @@ If a statement, decision, or object fits on one line, keep it on one line.
 <button class="btn-small" onclick="controlJob(42, 'pause')"> Pause </button>
 ```
 
-### AP-BR-02: Sacrifice Grammar for Brevity
+### APAPL-BR-02: Sacrifice Grammar for Brevity
 
 Drop articles (a, the, an), filler words (basically, actually, just), and verbose constructions when meaning is preserved.
 
@@ -473,9 +473,9 @@ SESSION-MODE: Read NOTES.md, PROBLEMS.md, PROGRESS.md, FAILS.md
 
 **Exception**: User-facing text, error messages, and external communication preserve full grammar for professionalism.
 
-### AP-BR-03: DRY Within Same Document Scope
+### APAPL-BR-03: DRY Within Same Document Scope
 
-Never repeat the same information within one document. Reference instead of restating. (For action requests to others, see AP-ST-04 which overrides this.)
+Never repeat the same information within one document. Reference instead of restating. (For action requests to others, see APAPL-ST-04 which overrides this.)
 
 **Does NOT apply to:** Concept anchors and disambiguation words that reinforce the reader's mental model. Restating a referent ("the authentication retry" instead of "it") is signal redundancy, not DRY violation. DRY targets identical BLOCKS of information, not individual words that anchor concepts.
 
@@ -494,10 +494,10 @@ Remember to use `YYYY-MM-DD HH:MM` format for timestamps here too.
 Use `YYYY-MM-DD HH:MM` format for all timestamps.
 
 ## Section B
-Timestamps follow AP-PR-01.
+Timestamps follow APAPL-PR-01.
 ```
 
-### AP-BR-04: Compact Object and List Definitions
+### APAPL-BR-04: Compact Object and List Definitions
 
 Use lists. No empty lines between properties. No Markdown tables (unless opted-in).
 
@@ -521,7 +521,7 @@ Use lists. No empty lines between properties. No Markdown tables (unless opted-i
 - Entry: Start of workflow
 ```
 
-### AP-BR-05: Show Format Over Describing Format
+### APAPL-BR-05: Show Format Over Describing Format
 
 A format example communicates more precisely and more briefly than a description.
 
@@ -542,7 +542,7 @@ Example:
 - **2026-03-15 09:15** - Reply to John with proposal - Deadline: 2026-03-20, Status: TODO:REPLY
 ```
 
-### AP-BR-06: Pipe-Delimited Property Lines for Multi-Attribute Items
+### APAPL-BR-06: Pipe-Delimited Property Lines for Multi-Attribute Items
 
 For items with many properties, use ` | ` (pipe with spaces) to separate values on a single line.
 
@@ -609,9 +609,9 @@ PRD-007 - Widget Pro v2.1, costs $49.99, in stock
 - `?` for unknown values in documents (`[UNKNOWN]` is for logs)
 - Group by concern: identity/metrics, physical attributes, terms/status
 
-### AP-BR-07: No Redundant Bold in Structured Lists
+### APAPL-BR-07: No Redundant Bold in Structured Lists
 
-Implements MECT principle MW-LT-04 (every formatting signal must carry information).
+Implements MECT principle MECT-LT-04 (every formatting signal must carry information).
 
 Bold is a signal. It must introduce something the reader encounters for the first time or mark a context switch. When structure (indent, dash, colon) already provides visual distinction, bold on labels is noise.
 
@@ -659,7 +659,7 @@ Is the label a NEW CONCEPT being defined here for the first time?
 
 ## Structure Rules (ST)
 
-### AP-ST-01: Goal or Intention Captured First
+### APAPL-ST-01: Goal or Intention Captured First
 
 Every document, section, and communication starts with purpose. Reader knows WHY before HOW.
 
@@ -686,7 +686,7 @@ Why: Prevents shipping bugs, spec violations, and rule breaks
 ...
 ```
 
-### AP-ST-02: Subjects Direct and Actionable
+### APAPL-ST-02: Subjects Direct and Actionable
 
 Email subjects, headings, and labels state the action or outcome, not the topic.
 
@@ -706,7 +706,7 @@ Subject: DECISION NEEDED: Choose auth provider by Friday
 ### AUTH-DD-01: Use JWT with httpOnly Cookie Storage
 ```
 
-### AP-ST-03: Self-Contained Units
+### APAPL-ST-03: Self-Contained Units
 
 Each log line, document section, email, or message must be understandable without reading other materials. Ask: "Can the reader act on this without seeking additional information?"
 
@@ -729,9 +729,9 @@ BAD:  [ 1 / 2 ] LLM extraction run 1...
 GOOD: [ 1 / 2 ] Calling gpt-5-mini to extract 5 records from 20 rows...
 ```
 
-### AP-ST-04: Anti-DRY for Delegation (overrides AP-BR-03)
+### APAPL-ST-04: Anti-DRY for Delegation (overrides APAPL-BR-03)
 
-When requesting action from others, inline ALL needed information. Do NOT reference threads or external docs as the only source. People do not read referenced sources. This overrides AP-BR-03 (DRY) because the audience is different: BR-03 avoids self-repetition for a reader who has the full document; ST-04 ensures a recipient can act without seeking additional sources.
+When requesting action from others, inline ALL needed information. Do NOT reference threads or external docs as the only source. People do not read referenced sources. This overrides APAPL-BR-03 (DRY) because the audience is different: BR-03 avoids self-repetition for a reader who has the full document; ST-04 ensures a recipient can act without seeking additional sources.
 
 **BAD:**
 ```
@@ -765,7 +765,7 @@ Full spec: _SPEC_AUTH.md [AUTH-SP01] section 3.2
 Previous discussion: [Email 2026-03-15](#2026-03-15-1430---auth-design-review)
 ```
 
-### AP-ST-05: Hierarchical Information Ordering
+### APAPL-ST-05: Hierarchical Information Ordering
 
 Order information from general to specific. Most important first, details follow.
 
@@ -782,7 +782,7 @@ It's the main action button on the dashboard.
 Dashboard main action. Style: #0078d4, 4px border-radius.
 ```
 
-### AP-ST-06: Visual Thought Grouping
+### APAPL-ST-06: Visual Thought Grouping
 
 Related content clusters together (no empty lines); distinct thoughts separate by one empty line. Applies to specs, emails, code, logs.
 
@@ -867,7 +867,7 @@ Let me know if you have questions.
 Thanks
 ```
 
-### AP-ST-07: Cognitive Load Limit
+### APAPL-ST-07: Cognitive Load Limit
 
 People can hold roughly 5 to 7 separate items in working memory at once (Miller's Law). Lists, parameters, or sections that exceed this limit without grouping cause readers to skip, re-read, or abandon the content.
 
@@ -929,7 +929,7 @@ Rules for outbound text to counterparts: emails, WhatsApp messages, replies, mee
 
 **Scope distinction**: PR/BR/ST/NM rules apply to all text (documents, code, logs, communication). CM rules apply ONLY to outbound communication where a counterpart reads and acts.
 
-### AP-CM-01: Accountable Commitments
+### APAPL-CM-01: Accountable Commitments
 
 Every commitment in outbound communication states WHAT the counterpart receives and WHEN: action, deliverable, weekday + ISO date + time. Vague actions leave the counterpart guessing and force follow-up questions.
 
@@ -947,9 +947,9 @@ The plumber comes Friday, 2026-07-17, 09:00-12:00. I'll confirm by email once th
 I'll check the invoice and send you the payment confirmation by tomorrow evening (Friday, 2026-07-17, 18:00 CET).
 ```
 
-**Relates to** AP-PR-07 (Be Specific) and AP-ST-03 (Self-Contained Units): a commitment is a promise - it must be precise enough that the counterpart can hold you to it without asking clarifying questions.
+**Relates to** APAPL-PR-07 (Be Specific) and APAPL-ST-03 (Self-Contained Units): a commitment is a promise - it must be precise enough that the counterpart can hold you to it without asking clarifying questions.
 
-### AP-CM-02: Labeled Questions and Requests
+### APAPL-CM-02: Labeled Questions and Requests
 
 Every question and call-to-action stands in its own paragraph, separated by blank lines, labeled and fully self-contained. Label questions with "Question:" and action requests with "Request:" (DE: Frage/Bitte, FR: Question/Demande, ES: Pregunta/Solicitud). The ask carries its own context - the counterpart understands it without re-reading.
 
@@ -973,9 +973,9 @@ I've prepared the updated proposal with the Q2 2026 numbers.
 Request: Can you please review the attached proposal and send your feedback by Friday, 2026-07-17 18:00 CET?
 ```
 
-**Relates to** AP-ST-04 (Anti-DRY for Delegation): ST-04 says inline 100% for action requests. CM-02 adds the structural requirement: own paragraph, blank-line separation, label prefix, and self-containment test ("Can the counterpart answer/act without re-reading?").
+**Relates to** APAPL-ST-04 (Anti-DRY for Delegation): ST-04 says inline 100% for action requests. CM-02 adds the structural requirement: own paragraph, blank-line separation, label prefix, and self-containment test ("Can the counterpart answer/act without re-reading?").
 
-### AP-CM-03: Time Precision in Communication
+### APAPL-CM-03: Time Precision in Communication
 
 State dates as weekday + ISO date, times as `HH:MM` with timezone when scheduling across locations. Periods include the year. The weekday adds disambiguation in the reader's mind.
 
@@ -1011,11 +1011,11 @@ August = summer = CEST, not CET.
 Let's meet Wednesday, 2026-08-19 11:00 CEST.
 ```
 
-**Relates to** AP-PR-01: PR-01 defines the format (`YYYY-MM-DD HH:MM`). CM-03 adds the disambiguation requirements for communication: weekday prefix, timezone when cross-location, year on period references.
+**Relates to** APAPL-PR-01: PR-01 defines the format (`YYYY-MM-DD HH:MM`). CM-03 adds the disambiguation requirements for communication: weekday prefix, timezone when cross-location, year on period references.
 
 ## Naming Rules (NM)
 
-### AP-NM-01: One Name Per Concept
+### APAPL-NM-01: One Name Per Concept
 
 One concept = one name, used everywhere. No synonyms, no polysemy.
 
@@ -1042,7 +1042,7 @@ One concept = one name, used everywhere. No synonyms, no polysemy.
 "MeterPoint" (connection), "MeterDevice" (physical), "MeterContract" (customer)
 ```
 
-### AP-NM-02: Unambiguous Compound Names
+### APAPL-NM-02: Unambiguous Compound Names
 
 Word order determines meaning. If a compound name has multiple readings, restructure it.
 
@@ -1058,7 +1058,7 @@ KeyOfEmptyCollection  → Unambiguous: the collection is empty
 InputFromInvalidUser  → Unambiguous: the user is invalid
 ```
 
-### AP-NM-03: Avoid Dangerous Meta-Words
+### APAPL-NM-03: Avoid Dangerous Meta-Words
 
 Words that seem specific but hide ambiguity. When you must use them, qualify them.
 
@@ -1079,7 +1079,7 @@ ValidateUserExists    → Clear: returns yes/no
 RunDataCleanup        → Clear: performs action
 ```
 
-### AP-NM-04: Intuitive Word Pairs
+### APAPL-NM-04: Intuitive Word Pairs
 
 Opposites must form intuitive pairs. Users predict the counterpart from the first name.
 
@@ -1097,7 +1097,7 @@ EncodeUrl() / DecodeUrl()
 JoinRows() / ConcatStrings()
 ```
 
-### AP-NM-05: Use and Keep Standard Terms
+### APAPL-NM-05: Use and Keep Standard Terms
 
 Use established terminology. When deviating intentionally, state the deviation and reason. If a name worked for years, don't rename it - even if it became a misnomer. People predict behavior by the evoked association field, not the literal name.
 

@@ -1694,8 +1694,8 @@ RESULT: PASSED WITH FIXES
 - Updated: DD-06 clarified - checks embedded in verify.md (FR-27), not separate WORKSPACE-CHECKS.md file
 
 **[2026-09-03 17:15]**
-- Fixed: SOCAS-01 - logging example missing `[COMPANY_REPO_FOLDER]` in workspace constants list
-- Fixed: SOCAS-01 - logging example used `[WORKSPACE_FOLDER]\..\Company\knowledge` instead of `[COMPANY_REPO_FOLDER]\knowledge`
+- Fixed: SOCAS-CR-01 - logging example missing `[COMPANY_REPO_FOLDER]` in workspace constants list
+- Fixed: SOCAS-CR-01 - logging example used `[WORKSPACE_FOLDER]\..\Company\knowledge` instead of `[COMPANY_REPO_FOLDER]\knowledge`
 - Fixed: Privacy gate - removed remaining real project references from FR-13, FR-14, domain objects, and Document History
 
 **[2026-09-03 17:00]**
@@ -1721,8 +1721,8 @@ RESULT: PASSED WITH FIXES
 
 **[2026-09-03 16:10]**
 - Fixed: Privacy gate - replaced real project paths with generic placeholders in Context, Domain Objects, NFRs, "What we don't want", and logging examples
-- Fixed: AP-PR-06 - expanded GRUC, SOPs acronyms on first use
-- Fixed: SOCAS-06 - clarified FR-30 git config handling ("detect and use per-repo git config")
+- Fixed: APAPL-PR-06 - expanded GRUC, SOPs acronyms on first use
+- Fixed: SOCAS-CR-06 - clarified FR-30 git config handling ("detect and use per-repo git config")
 - Fixed: SPEC-CT-02 - removed implementation commands (git, script names, parameters) from action flows, replaced with behavioral descriptions
 
 **[2026-09-03 15:24]**

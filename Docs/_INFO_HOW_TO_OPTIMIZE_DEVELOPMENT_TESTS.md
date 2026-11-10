@@ -381,10 +381,10 @@ This INFO document served as source material for the following GRUC files in `[P
 
 **[2026-09-16 13:28]**
 - Fixed: Timeline missing "Updated 0 times" (INFO-HD-03)
-- Fixed: Acronyms TC, CLI, CI expanded on first use (AP-PR-06)
+- Fixed: Acronyms TC, CLI, CI expanded on first use (APAPL-PR-06)
 - Fixed: File trees converted to Unicode box-drawing characters (INFO-FT-03)
 - Added: Reference-run comparison flow diagram in Section 7 (INFO-FT-05)
-- Fixed: Unexplained `consult` jargon replaced with plain language (AP-PR-12)
+- Fixed: Unexplained `consult` jargon replaced with plain language (APAPL-PR-12)
 
 **[2026-09-16 13:22]**
 - Initial research document created from analysis of `_2026-09-16_TranscriptionSkillRewrite` session

@@ -622,13 +622,13 @@ This standard complements INFO-SC-05 (entity/tool linking with markdown hyperlin
 - Fixed: GOOD example "What an auditor sees" had empty verification label values; added `[VERIFIED]`
 - Fixed: GOOD registry example Key Data Points used ASCII `->` instead of Unicode `→` (core-conventions arrow rule)
 - Fixed: GOOD registry example classified TBRC as Tier 1; corrected to Tier 2 (analyst research firm per Section 5.2 definitions)
-- Fixed: `APA` acronym expanded on first use to `American Psychological Association (APA)` (AP-PR-06)
+- Fixed: `APA` acronym expanded on first use to `American Psychological Association (APA)` (APAPL-PR-06)
 
 **[2026-08-05 15:12]**
-- Fixed: "First-Reference Rule" renamed to "First-Mention Rule" - eliminates polysemy with "reference" = bibliographic entry (MW-WC-05)
+- Fixed: "First-Reference Rule" renamed to "First-Mention Rule" - eliminates polysemy with "reference" = bibliographic entry (MECT-WC-05)
 - Fixed: All "first reference" → "first mention" throughout document (7 occurrences)
-- Fixed: Undefined [COMMUNITY] label removed from Section 9.1 checklist (SOCAS-06)
-- Changed: Section 6.3 rules grouped into 3 clusters: file organization, transcription by type, documentation requirements (AP-ST-07)
+- Fixed: Undefined [COMMUNITY] label removed from Section 9.1 checklist (SOCAS-CR-06)
+- Changed: Section 6.3 rules grouped into 3 clusters: file organization, transcription by type, documentation requirements (APAPL-ST-07)
 
 **[2026-08-05 15:10]**
 - Added: Section 1.4 "Terminology" - defines all key terms upfront

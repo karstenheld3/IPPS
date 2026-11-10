@@ -197,7 +197,7 @@ When the user calls `/propose-report` with `compare techniques <ID>, <ID>[, <ID>
 - Sample length cap: at tier 1, sample sections are capped at 500 words each to protect the single-turn budget; when full-length sample sections are requested, escalate to tier 2.
 - It scores each sample section against:
   1. This GUIDE's quality heuristics (action titles, non-linear navigation, exhibit message clarity).
-  2. The style-pattern signals (`AI_WRITING_DETECTION_RULES.md`).
+  2. The style-pattern signals (`AI_WRITING_RULES.md`).
   3. CHECKS files are NEVER loaded during bake-off scoring (`DRSYNART-FR-32`).
 - Results are recorded under each option's `Sample:` field.
 
@@ -238,7 +238,8 @@ Reports require all five standard editing passes:
 1. **Lanham's Paramedic Method**: Eliminate state-of-being verbs and passive constructions; ensure the lard factor remains under one-third.
 2. **Williams's Characters and Actions**: Name institutional actors as grammatical subjects and decisions as verbs. Place familiar baselines first, then new findings.
 3. **Pinker's Classic Style**: Treat the report as a transparent lens positioning the reader to see organizational and technical realities clearly.
-- **Rule Reference**: `RPT-ED-01`.
+4. **Anti-AI Prose Discipline (`AI_WRITING_RULES.md`)**: Sustain continuous, natural prose flow. Avoid staccato fragments, contrast snaps, telegraphic objection blocks, mechanical tricolons, signpost openers, reflex header/list inflation, prestige-register buzzwords, and nominalization chains that produce punchy, flow-breaking robotic writing. Calibrate sentence rhythm, punctuation variety, and paragraph length to the active persona.
+- **Rule Reference**: `RPT-ED-01`, `AW-SO-01` through `AW-LX-03`.
 
 ### Fact-Checking Standard
 
@@ -264,8 +265,8 @@ Before release, every report must satisfy the seven release check criteria (`DRS
 2. Sourcing: every empirical metric cited or marked `[ASSUMED]`.
 3. Numbering and cross-references: continuous exhibit numbering; all text references resolve.
 4. Presentation hygiene: zero agent prompts, scratchpads, or workflow metadata.
-5. AI-writing detection: signals below threshold (at most 1 signal across Sourcing, Style, Structure, Voice; excluding structural signals produced by technique by construction).
-6. Persona trait budget respected (when a persona is specified).
+5. AI-writing detection: style-pattern signals below threshold (`<= 1` signal across `AW-SO`, `AW-SY`, `AW-ST`, `AW-VO`, `AW-LX` in `AI_WRITING_RULES.md`; excluding structural signals produced by technique by construction).
+6. Persona trait budget and length/pacing profile respected (when a persona is specified).
 7. Word count within target range.
 - **Rule Reference**: `RPT-RC-01`.
 
@@ -345,3 +346,4 @@ The following rule ID ranges in `REPORT_RULES.md` define the enforceable output 
 - `RPT-EV-01` through `RPT-EV-03`: Exhibit design and comparison types, number placement discipline, and traceable claim attribution.
 - `RPT-ED-01` through `RPT-ED-02`: Line clarity with Paramedic Method lard factor, and style sheet consistency across terms and units.
 - `RPT-RC-01`: Final release check verification standards.
+- `AW-SO-01` through `AW-LX-03` (`../AI_WRITING_RULES.md`): Anti-AI writing artifact suppression and detection across Sourcing, Style, Structure, Voice, and Lexical choice.

@@ -2,7 +2,7 @@
 
 Verification rules for pattern detection artifacts produced with `/pattern-detect` or during stage S2 of `/analyze`.
 
-Writing quality: Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: AP-PR-07 (be specific), AP-PR-05 (referenceable IDs), MW-VO-01 (active voice), MW-WC-02 (plain language).
+Writing quality: Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: APAPL-PR-07 (be specific), APAPL-PR-05 (referenceable IDs), MECT-VO-01 (active voice), MECT-WC-02 (plain language).
 
 ## Rule Index
 

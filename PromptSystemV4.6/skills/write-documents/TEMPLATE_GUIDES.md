@@ -17,8 +17,8 @@ Templates do not teach. Teaching belongs in `*_RULES.md` and `*_GUIDES.md` compa
 Template inconsistencies compound: every document inherits them, and mixed formats prevent `/verify` from determining which is correct. A `[conditional - ...]` in one template and `<!-- Conditional: ... -->` in another teaches agents both are valid.
 
 - **MECT** - Inconsistent annotation formats are noise that agents amplify
-- **APAPALAN AP-PR-09** - "Repeat established structures" - templates ARE the structures
-- **SOCAS-08** - Annotations that look like content are noise; XML comments are invisible
+- **APAPALAN APAPL-PR-09** - "Repeat established structures" - templates ARE the structures
+- **SOCAS-CR-08** - Annotations that look like content are noise; XML comments are invisible
 - **GRUC** - Rules define WHAT, Guides explain HOW, INFO documents explain WHY
 
 ## 3. Template Categories

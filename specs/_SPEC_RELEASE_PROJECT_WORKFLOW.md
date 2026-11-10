@@ -822,11 +822,11 @@ This workflow produces user-facing output (progress messages, summaries, error r
 **[2026-09-06 23:00]**
 - Added: Section 12 Logging Requirements (SPEC-LG-01)
 - Fixed: SPEC-CT-02 - abstracted git commands in FR-06, FR-10, FR-17 to requirement-level statements
-- Fixed: SOCAS-01 - domain objects RepoConfig and ReleaseConfig missing properties (test_command, github_release_notes, tag_annotation_template)
-- Fixed: SOCAS-02 - "build or ship" undefined term in action flows replaced with "build"
-- Fixed: SOCAS-06 - dev repo tests missing in multi-repo action flow (FR-19 says "for each repo")
-- Fixed: SOCAS-06 - FR-19 SOPS reference removed, test_command only from config
-- Fixed: SOCAS-10 - DD-03 rationale now shows mixed-format case (product semver, dev date-based)
+- Fixed: SOCAS-CR-01 - domain objects RepoConfig and ReleaseConfig missing properties (test_command, github_release_notes, tag_annotation_template)
+- Fixed: SOCAS-CR-02 - "build or ship" undefined term in action flows replaced with "build"
+- Fixed: SOCAS-CR-06 - dev repo tests missing in multi-repo action flow (FR-19 says "for each repo")
+- Fixed: SOCAS-CR-06 - FR-19 SOPS reference removed, test_command only from config
+- Fixed: SOCAS-CR-10 - DD-03 rationale now shows mixed-format case (product semver, dev date-based)
 
 **[2026-09-06 22:15]**
 - Added: FR-19 Run Tests Before Release with `test_command` config key
@@ -857,7 +857,7 @@ This workflow produces user-facing output (progress messages, summaries, error r
 - Fixed: FR-03 tag derivation reworded - dev repo independently derives from own version_source, not from product tag
 - Fixed: FR-13 references `github_release_notes` config field instead of ambiguous "or"
 - Fixed: FR-15 accounts for user declining GitHub release (FR-12)
-- Fixed: AP-PR-06 acronyms expanded on first use (SOP, CLI)
+- Fixed: APAPL-PR-06 acronyms expanded on first use (SOP, CLI)
 - Fixed: FR-07 artifacts defined as SPEC, IMPL, TEST, INFO documents and scripts
 
 **[2026-09-05 22:45]**

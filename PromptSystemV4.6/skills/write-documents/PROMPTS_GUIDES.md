@@ -433,11 +433,11 @@ The SKILL_GUIDES.md "Token Optimization" section (section 4) applies to skill fi
 
 Spend tokens on content that prevents misunderstanding or wrong action:
 
-- **Specific objectives** - "Fix the auth bug so expired tokens return 401" vs "Fix the auth bug" (AP-PR-07)
+- **Specific objectives** - "Fix the auth bug so expired tokens return 401" vs "Fix the auth bug" (APAPL-PR-07)
 - **Constraints** - "Do not modify the database schema" prevents a class of failures no amount of brevity recovers from
 - **Verification criteria** - "Run `pnpm test`. All tests pass" is 8 tokens that prevent unbounded debugging
 - **Disambiguation** - "The `user` table (PostgreSQL, not the application User model)" prevents the model from editing the wrong thing
-- **Examples** - A 3-line input/output example communicates format more precisely than a 10-line description (AP-BR-05)
+- **Examples** - A 3-line input/output example communicates format more precisely than a 10-line description (APAPL-BR-05)
 
 MECT's "deliberate redundancy" applies here: restating a referent ("the authentication retry" instead of "it") costs 2 tokens but prevents the model from binding "it" to the wrong antecedent. This is signal redundancy - it strengthens the model's understanding, not noise.
 
@@ -462,7 +462,7 @@ When uncertain: keep the phrase. Precision (Priority 1) wins over brevity (Prior
 
 ## 9. When to Include Examples
 
-Examples are the highest-precision, lowest-ambiguity way to communicate format and behavior. AP-BR-05 (show format over describing format) applies directly: a 3-line example replaces a 10-line description and communicates more precisely.
+Examples are the highest-precision, lowest-ambiguity way to communicate format and behavior. APAPL-BR-05 (show format over describing format) applies directly: a 3-line example replaces a 10-line description and communicates more precisely.
 
 ### 9.1 When Examples Are Worth the Tokens
 

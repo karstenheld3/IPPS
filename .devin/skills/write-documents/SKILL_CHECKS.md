@@ -41,7 +41,7 @@ PD items verify the agent followed the correct process during skill creation. Ea
 - Action: Agent provided BAD/GOOD example pairs for every non-trivial rule
 - Evidence: Each rule in SKILL_RULES.md has at least one BAD and one GOOD example
 - Failure indicator: Rule has no examples or only description without examples
-- References: SKILL_RULES.md, AP-PR-08
+- References: SKILL_RULES.md, APAPL-PR-08
 
 ### SK-PD-06: Conditional GRUC Files Created When Required
 

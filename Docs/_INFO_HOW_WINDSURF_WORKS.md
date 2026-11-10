@@ -1427,7 +1427,7 @@ Source IDs reference `_INFO_WSFT-02_Sources.md [WSFT-IN02]` in session `_2026-06
 - Added: Rules section enriched with 4 activation modes (was 2), frontmatter trigger format, character limits, glob example, discovery details, best practices (from docs.devin.com)
 - Added: Memories section enriched with storage location, workspace scoping, no-quota-cost, explicit creation prompt, recommendation to prefer Rules
 - Fixed: Acronyms expanded on first use (MCP, CLI, VM, PR, SCIM, IDE, ACU)
-- Fixed: 17 H4 headings converted to bold paragraph headers (MW-HS-02 max 3 levels)
+- Fixed: 17 H4 headings converted to bold paragraph headers (MECT-HS-02 max 3 levels)
 - Fixed: Non-standard [UPDATED] label replaced with [VERIFIED]
 - Fixed: Locale-dependent date "June 7, 2026" changed to "2026-06-07"
 - Changed: Complete document restructure from deep research session `_2026-06-01_WindsurfFeatureResearch`

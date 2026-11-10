@@ -2,7 +2,7 @@
 
 Rules for writing skill folders and SKILL.md files.
 
-**Writing quality:** Apply `APAPALAN_RULES.md` to all skill content. Key rules for skills: AP-PR-07 (be specific), AP-BR-02 (sacrifice grammar for brevity), AP-NM-01 (one name per concept).
+**Writing quality:** Apply `APAPALAN_RULES.md` to all skill content. Key rules for skills: APAPL-PR-07 (be specific), APAPL-BR-02 (sacrifice grammar for brevity), APAPL-NM-01 (one name per concept).
 
 ## Rule Index
 

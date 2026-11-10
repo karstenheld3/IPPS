@@ -340,17 +340,19 @@ When reviewing error logs or console output:
 
 ### Writing Documents
 
-Detect by: header block fields (`**Document Type**`, `**Technique**`, `**Persona**`) or filename pattern `[ID]-OPTIONS-*.md`, `[ID]-DRAFT-*.md`, or `YYYY-MM-DD_*.md` with document-type header (`DRSYNART-FR-06`).
+Detect by: header block fields (`**Document Type**`: `article`, `report`, `ebook`; `**Technique**`; `**Persona**`) or filename pattern `[ID]-OPTIONS-*.md`, `[ID]-DRAFT-*.md`, or `YYYY-MM-DD_*.md` with document-type header (`DRSYNART-FR-06`, `DRSYNART-DD-50`).
 
-**Read**: @skills:write-documents `document_types/[TYPE]_GUIDES.md` for craft decisions and intended structure; when Technique `[ID]` is set: `writing_techniques/[ID]_GUIDES.md` and `writing_techniques/[ID]_RULES.md`; `SOCAS_RULES.md` for logic attack patterns.
+**Read**: @skills:write-documents `document_types/[TYPE]_GUIDES.md` for craft decisions and intended structure; `AI_WRITING_RULES.md` (`AW-SO-01..04`, `AW-SY-04`, `AW-ST-02`, `AW-VO-01..04`, scoped to publishing document types only); when Technique `[ID]` is set: `writing_techniques/[ID]_GUIDES.md` and `writing_techniques/[ID]_RULES.md`; `SOCAS_RULES.md` for logic attack patterns.
 
 **General attack vectors**:
 - Theme/Governing thought drift - apex answer does not solve the reader's problem or answer the core question
-- Unsupported claim - prose asserts key metrics or facts without source finding IDs or `[ASSUMED]` tags
+- Unsupported claim or authority laundering (`AW-SO-01..04`) - prose asserts key metrics, quotes, or historical attributions without verified primary-source grounding or conflates secondary internet commentary with primary texts
 - Flawed key line - arguments below governing thought fail inductive or deductive grouping tests
 - Section goal mismatch - section fails its stated goal or fails to advance reader transformation path
+- Telegraphic objection handling (`AW-ST-02`) and superficial substance checks - text compresses counter-arguments into stiff rapid-fire Q&A or cites only surface formatting checks instead of testing deep reasoning flaws (`SOCAS-CR-01/02` inconsistent or fuzzy terminology, `SOCAS-CR-03` concept overlap, `SOCAS-CR-10` gaps in reasoning, `SOCAS-CR-11` unnecessary complexity)
+- Hedge-then-assert leap (`AW-SY-04`) and performed authority (`AW-VO-01..04`) - opening hedge is silently treated as proven fact in the next sentence, or disembodied omniscient tone masks domain errors
 - Hidden trade-off - text obscures known operational downsides, counter-evidence, or implementation risks
-- Misapplied evidence - cited finding does not actually substantiate the claim made (`SOCAS-10`)
+- Misapplied evidence - cited finding does not actually substantiate the claim made (`SOCAS-CR-10`)
 
 **When Technique `[ID]` is set:**
 - Read the detected technique's `@skills:write-documents` `writing_techniques/[ID]_RULES.md` and `writing_techniques/[ID]_GUIDES.md`

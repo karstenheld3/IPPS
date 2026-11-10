@@ -64,7 +64,7 @@ YAML frontmatter with `description` field required (WF-HD-01). Optional `auto_ex
 
 ### IPPSWFLW-FR-02: Goal and Why
 
-After the title, state Goal (expected outcome) and Why (purpose). Reader knows WHY before HOW (WF-HD-02, AP-ST-01).
+After the title, state Goal (expected outcome) and Why (purpose). Reader knows WHY before HOW (WF-HD-02, APAPL-ST-01).
 
 ### IPPSWFLW-FR-03: MUST-NOT-FORGET Section
 
@@ -277,8 +277,8 @@ Workflows are autonomous execution units. If the context is unknown, the workflo
 **[2026-09-12 14:30]**
 - Added: Section 5 (GRUC Files for Workflow Creation) with FR-19 through FR-22 for WORKFLOW_RULES/GUIDES/CHECKS/TEMPLATE
 - Added: AC-03 (GRUC Files for Workflow Creation Exist)
-- Fixed: FR-15, FR-16, FR-18 now reference GRUC standard by ID instead of re-defining (SOCAS-03)
-- Fixed: AC-01 grouped into 3 clusters (AP-ST-07 compliance)
+- Fixed: FR-15, FR-16, FR-18 now reference GRUC standard by ID instead of re-defining (SOCAS-CR-03)
+- Fixed: AC-01 grouped into 3 clusters (APAPL-ST-07 compliance)
 - Fixed: FR numbering updated to reflect new section 5
 
 **[2026-09-12 14:10]**

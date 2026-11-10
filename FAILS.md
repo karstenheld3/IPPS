@@ -1,5 +1,53 @@
 # Failure Log
 
+## 2026-11-10 - Reconcile Rejected a Finding Based on an Unverified Workflow Property
+
+### [MEDIUM] [RESOLVED 2026-11-10] `AGNTFOLDERS-FL-0002` Inline `/reconcile` rejected "`/cleanup` deletes `.tmp_` folders mid-pipeline" because "`/cleanup` already shows a preview"; the preview is no gate
+
+- **When**: 2026-11-10 16:45 (discovered 2026-11-10 17:10 when the user corrected it)
+- **Where**: inline critique/reconcile of `specs/_SPEC_AGENT_CREATED_FOLDERS.md [AGNTFOLDERS-SP01]`; Action Flow claimed "Preview list" before deletion
+- **What**: `workflows/cleanup.md` prints a listing and deletes immediately ("no confirmation needed"). The rejection reason was taken from the INFO wording "deletes without confirmation after a preview" without checking that the preview blocks nothing
+- **Why it went wrong**: A reconcile verdict ("already addressed") relied on a property of another workflow recalled from a summary, not read from the workflow
+- **Evidence**: user message 2026-11-10 ("We removed the preview -> cleanup deletes files period"); `workflows/cleanup.md` lines 22, 70, 83
+- **Prevention rule**: Before rejecting a finding as "already addressed by X", open X and quote the line that blocks the risk; a listing or report is not a safeguard unless it gates the action
+- **Resolved**: 2026-11-10 17:15 - FR-02 and DD-05 require rebuildable `.tmp_` content and rebuild-on-missing; Action Flow and NFR verifications corrected
+
+## 2026-11-10 - Folder SPEC Claimed Name-Agnostic Consumers While Keying Rules to Base Names
+
+### [MEDIUM] [RESOLVED 2026-11-10] `AGNTFOLDERS-FL-0001` AGNTFOLDERS-SP01 stated "consumers act on prefix and suffix only" but its own rules keyed on `_agentwork` and `_archive*`; `sources` and `markdown` overlapped
+
+- **When**: 2026-11-10 16:10-16:30 (discovered 2026-11-10 16:45 during inline `/critique`)
+- **Where**: `specs/_SPEC_AGENT_CREATED_FOLDERS.md [AGNTFOLDERS-SP01]` MNF, FR-01, FR-04, FR-10, DD-01, Key Mechanisms
+- **What**: 1) The core extensibility claim (FR-10, DD-01) contradicted the `_archive*` skip rule and the `_agentwork` deletion rule in the same section; 2) the name pattern did not separate utility folders from `_Sessions`, `_BugFixes`, and session folders `_YYYY-MM-DD_*`, so affix-based consumers would treat them as utility folders; 3) `sources` ("transcribed sources") and `markdown` ("transcriptions") were two names for one purpose, against MECT
+- **Why it went wrong**: The headline principle was written first and the consumer rules later, with no pass that checked each consumer rule against the principle; roles were defined from the user's list without testing each pair for overlap
+- **Evidence**: inline critique findings C-01, C-02, C-03 (chat 2026-11-10)
+- **Prevention rule**: After writing an invariant ("only X decides Y"), grep the document for every rule that decides Y and confirm it uses only X; for a closed set of roles, test every pair for overlapping purpose before release
+- **Resolved**: 2026-11-10 16:50 - FR-10 names the two known base names, FR-01 classification pattern added, `sources` vs `markdown` disambiguated, no core folder inside another core folder (FR-07)
+
+## 2026-11-10 - SOCAS Split Migrated Old Criteria per Criterion, Not per Sign
+
+### [MEDIUM] [RESOLVED 2026-11-10] `SOCASCONTEXT-FL-0002` 7 signs of the old `SOCAS_RULES.md` vanished in the 4-file split; the first critique pass did not catch them
+
+- **When**: 2026-11-10 14:30-15:15 (discovered 2026-11-10 15:25 when the user asked for a comparison with the old rules)
+- **Where**: `docs/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md [SOCAS-IN01]` section 8 (migration map), `docs/_INFO_SOCAS_DISCARDED_RULE_CANDIDATES.md [SOCAS-IN02]` SOCAS-GN-17
+- **What**: Lost signs: duplicate mechanisms and "new solution for an already solved problem" (old SOCAS-CR-03, deferred on the false claim that APAPL-BR-03 and MECT-LT-02 cover it), over-engineered designs outside code (CR-11), owner and decision maker in documents (CR-05), executable step order (CR-14), escalation path (CR-04), grammatical errors (CR-12), moral or identity framing of a purchase (CR-16). CR-03 and CR-11 are the main conceptual checks of `/verify` and `/improve`
+- **Why it went wrong**: Section 8 mapped each old criterion to new rule IDs and treated a mapped criterion as fully migrated; no sign-by-sign list of the old file was compared with the new rules. The inline `/critique` checked consumers and overlap claims, not sign coverage. Same family as `GLOB-FL-037` (requirement handled at the flagged location only)
+- **Evidence**: user request 2026-11-10 15:09 ("compare with old rules and see if we accidentally dropped something important")
+- **Prevention rule**: When a rule set is split or rewritten, list every sign (bullet) of the old file and give each one a target: selected rule, DEFER entry or candidate entry with reasoning. A criterion-level map is not proof of coverage
+- **Resolved**: 2026-11-10 15:27 - SOCAS-GN-17 re-entered; SOCAS-GN-19, GN-22, WR-07, WR-12, CM-01 (via SOCAS-AP-03) extended; 4 minor old signs added to SOCAS-IN02 with reasoning; SOCAS-IN01 section 8 now maps every old sign
+
+## 2026-11-10 - SOCAS Overlap Map Claimed Coverage Without Comparing Rule Bodies
+
+### [MEDIUM] [RESOLVED 2026-11-10] `SOCASCONTEXT-FL-0001` SOCAS-IN01/IN02 overlap handling contradicted its own criteria and the cited production rules
+
+- **When**: 2026-11-10 14:30-15:05 (discovered 2026-11-10 15:10 during inline `/critique`)
+- **Where**: `docs/_INFO_SOCAS_SIGNS_OF_CONFUSION_AND_SLOPPINESS.md [SOCAS-IN01]` sections 3.3, 3.4, SOCAS-GN-02, SOCAS-WR-12, SOCAS-CM-08; `docs/_INFO_SOCAS_DISCARDED_RULE_CANDIDATES.md [SOCAS-IN02]` SOCAS-GN-20, SOCAS-CM-11
+- **What**: 5 contradictions in the REF/DEFER map: 1) ask-first sign of SOCAS-CM-11 DEFERRED although DEFER-PRODUCTION requires low value (CM-11 had medium) and SOCAS-WR-10 treats the same sign as REF; 2) APAPL-CM-01 listed as DEFER while SOCAS-CM-01 tests commitments with REF to it; 3) SOCAS-WR-12 tests "who must act" but declared actor DEFER to MECT-VO-01; 4) "jokes covered by MECT-WC-10" - the rule body covers idioms, slang and region-dependent phrases only; 5) SOCAS-GN-02 claimed REF to MECT-PR-01 for code while 3.3 defers code naming to MECT
+- **Why it went wrong**: DEFER/REF was classified from rule titles and draft-level value (PROBLEMS SOCASCONTEXT-PR-0006: "rule titles only; bodies not compared"); no second pass grepped each sign and rule ID across the document after classification. Same family as `AGENSYNTAX-FL-0001` (coverage claim not checked side by side)
+- **Evidence**: inline critique 2026-11-10 findings C-02, C-03
+- **Prevention rule**: Before classifying a sign as DEFER (covered completely), open the production rule body and confirm it names the sign; check the DEFER-PRODUCTION criterion per sign, not per draft; then grep the document for every other mention of the sign and the rule ID and align REF/DEFER
+- **Resolved**: 2026-11-10 15:15 - SOCAS-IN01 3.3/3.4 (REF 16, NONE 29), SOCAS-GN-02, GN-15, WR-12, CM-08 and SOCAS-IN02 GN-20, CM-11 corrected; grep for stale terms confirmed 0 hits
+
 ## 2026-11-03 - Recommendation Asserted a Mapping Property Without Checking It
 
 ### [MEDIUM] [RESOLVED 2026-11-03] `AGENSYNTAX-FL-0001` INFO recommended combination claimed "A keywords map 1:1 to B parameter names" while the lists have 9 vs 12 entries

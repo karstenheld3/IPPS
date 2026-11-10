@@ -138,7 +138,7 @@ Controls information per sentence, parenthetical side-notes, and structural brea
 - **3-4 (Relaxed Editorial Flow)**: Smooth transitions between paragraphs, room for brief context, unhurried pacing.
 - **5-6 (Crisp & Focused - Nonfiction Sweet Spot)**: **Zero parenthetical tangents or side-remarks** (the only exception is a micro-dosed `TR-03` aside, Section 2.2). Every sentence advances the argument, the evidence, or the action step, while maintaining complete, fluid grammar.
 - **7-8 (High-Density Executive Brief)**: Tightly packed clauses, high fact-per-sentence ratio, minimal transition sentences, complete grammar preserved.
-- **9-10 (Telegraphic / APAPALAN Log Mode)**: Maximum compression; articles and pronouns may be dropped (`AP-BR-02`). **Reserved for internal agent tracking (`NOTES.md`, `PROGRESS.md`); forbidden in reader-facing articles.**
+- **9-10 (Telegraphic / APAPALAN Log Mode)**: Maximum compression; articles and pronouns may be dropped (`APAPL-BR-02`). **Reserved for internal agent tracking (`NOTES.md`, `PROGRESS.md`); forbidden in reader-facing articles.**
 
 **Examples (Density):**
 - **`Density: 2` (Spacious / Didactic)**: *"Before you run the database migration, always create a fresh snapshot first. Why does this matter? Because if a schema change fails halfway through, you will need a clean restore point so you don't lose customer records."*

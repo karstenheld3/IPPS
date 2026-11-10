@@ -439,7 +439,7 @@ Verify: Run `pnpm test:auth`. All tests pass.
 - Changed: Domain Object "Commentary" and "Prompt Queue File" definitions updated
 
 **[2026-08-31 22:20]**
-- Fixed: Term consistency - capitalized "Prompt Block" and "Commentary" as domain objects throughout (MW-WC-05)
+- Fixed: Term consistency - capitalized "Prompt Block" and "Commentary" as domain objects throughout (MECT-WC-05)
 
 **[2026-08-31 22:15]**
 - Initial specification created

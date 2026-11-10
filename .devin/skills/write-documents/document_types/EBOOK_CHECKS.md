@@ -130,3 +130,8 @@ Evidence sources: final output document, options proposal (`[ID]-OPTIONS-NN_`), 
 
 - Question: Can a reader execute every exercise in their own local environment without encountering hidden dependencies?
 - Improvement tip: Replace any proprietary software references with standard open-source tools, vendor-neutral configurations, or generic container commands.
+
+### EBK-QI-06: Natural Prose Flow and Zero AI Rhetorical Artifacts
+
+- Question: Does the chapter prose maintain a natural, continuous flow in the persona's voice and pacing profile, free of staccato fragments, contrast snaps, compressed objection blocks, mechanical symmetry, and other punchy, flow-breaking robotic patterns?
+- Improvement tip: Audit chapters against `AI_WRITING_RULES.md` (`AW-SO-01` through `AW-LX-03`). Replace clipped rhetorical punchlines and compressed Q&A blocks with connected causal prose, unpack nominalization chains into finite active verbs, vary clause structure and punctuation, and align paragraph and sentence pacing with the active persona.

@@ -18,14 +18,14 @@ Humanizing (HM)
 LLM-introduced noise patterns. Each violates a rule above - scan every draft against this list:
 
 - No humanizing applied: no greeting, no voice texture, reads as agent-generated - CV-HM-01
-- Over-humanizing: vague times, topics, commitments - CV-HM-01, AP-CM-01
+- Over-humanizing: vague times, topics, commitments - CV-HM-01, APAPL-CM-01
 - Humanizing in structural sections (Log, Todos, Status) - CV-HM-01
-- Question or call-to-action buried inside a paragraph, unlabeled, or not self-contained ("Sound good?" without context) - AP-CM-02
-- Question in own paragraph but missing `Question:`/`Frage:` label prefix ("Does Tuesday work?" instead of "Question: Does Tuesday work?") - AP-CM-02, GLOB-FL-0053
-- Bare period reference ("Q2", "next quarter") without year - AP-CM-03
-- Locale date formats ("March 24", "24.3."), missing weekday or timezone - CV-DT-01, AP-CM-03
-- Wrong timezone abbreviation: CET in summer (should be CEST) or CEST in winter (should be CET) - AP-CM-03, GLOB-FL-0054
-- Vague commitment without deliverable and timing - AP-CM-01
+- Question or call-to-action buried inside a paragraph, unlabeled, or not self-contained ("Sound good?" without context) - APAPL-CM-02
+- Question in own paragraph but missing `Question:`/`Frage:` label prefix ("Does Tuesday work?" instead of "Question: Does Tuesday work?") - APAPL-CM-02, GLOB-FL-0053
+- Bare period reference ("Q2", "next quarter") without year - APAPL-CM-03
+- Locale date formats ("March 24", "24.3."), missing weekday or timezone - CV-DT-01, APAPL-CM-03
+- Wrong timezone abbreviation: CET in summer (should be CEST) or CEST in winter (should be CET) - APAPL-CM-03, GLOB-FL-0054
+- Vague commitment without deliverable and timing - APAPL-CM-01
 - Ignoring the user's extracted profile, or extracting without applying - CV-HM-02
 - Randomized spelling variants between or within drafts - CV-HM-03
 - Zero discourse markers, forced marker stuffing, or wrong register - CV-HM-04
@@ -42,11 +42,11 @@ When writing AS the user (draft emails, WhatsApp replies, messages to third part
 
 **NEVER sacrifice clarity, disambiguation, explicit intent, or structure for humanization.** Humanizing ADDS style - it never dilutes effectiveness.
 
-**Complete natural grammar in drafts** (CV-HM-07): keep subject pronouns and articles - "I had a look at the contract", never "Had a look at contract". People like to talk about themselves; dropping pronouns and articles reads robotic. APAPALAN brevity rule AP-BR-02 (sacrifice grammar) applies to agent documents, NEVER to user-voice drafts. Fragments are allowed only as reactions and follow-ups (CV-HM-05).
+**Complete natural grammar in drafts** (CV-HM-07): keep subject pronouns and articles - "I had a look at the contract", never "Had a look at contract". People like to talk about themselves; dropping pronouns and articles reads robotic. APAPALAN brevity rule APAPL-BR-02 (sacrifice grammar) applies to agent documents, NEVER to user-voice drafts. Fragments are allowed only as reactions and follow-ups (CV-HM-05).
 
 Structural sections (Log, Context, Links, Todos, Status, MNF) remain pure MECT/APAPALAN with zero humanizing.
 
-**Precision survives humanizing**: accountable commitments (AP-CM-01), labeled self-contained asks in own paragraphs (AP-CM-02), and time precision with weekday + ISO date + timezone (AP-CM-03) apply to every draft in every language. Humanizing never weakens them. Write "Tuesday, 2026-03-24 14:00 CET", never "Tuesday-ish" - unless the user's intent is genuinely undecided.
+**Precision survives humanizing**: accountable commitments (APAPL-CM-01), labeled self-contained asks in own paragraphs (APAPL-CM-02), and time precision with weekday + ISO date + timezone (APAPL-CM-03) apply to every draft in every language. Humanizing never weakens them. Write "Tuesday, 2026-03-24 14:00 CET", never "Tuesday-ish" - unless the user's intent is genuinely undecided.
 
 **BAD** (pure MECT, no humanizing - reads as machine-generated):
 ```
@@ -247,7 +247,7 @@ Rules:
 - No 3+ consecutive sentences of similar word count (within 5 words of each other)
 - Mix fragments (1-3 words), short (4-10 words), medium (11-20 words), and long (21-35 words) sentences
 - Use fragments for reactions, confirmations, and follow-ups: "Sounds good.", "Passt.", "Will do.", "Geht klar.", "Not sure yet."
-- Questions and calls-to-action in own paragraphs, labeled (Question:/Request:), fully self-contained (AP-CM-02)
+- Questions and calls-to-action in own paragraphs, labeled (Question:/Request:), fully self-contained (APAPL-CM-02)
 - Match the user's observed burstiness profile from History
 
 **BAD** (uniform sentence length - AI pattern):

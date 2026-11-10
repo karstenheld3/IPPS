@@ -15,6 +15,7 @@ Generate scored table-of-contents outline candidates for a technical, practition
 
 - @skills:write-documents `document_types/EBOOK_GUIDES.md` (craft decisions, TOC option scoring, sample bake-off)
 - @skills:write-documents `document_types/EBOOK_TEMPLATE.md` (section: OPTIONS)
+- @skills:write-documents `AI_WRITING_RULES.md` ONLY when `compare techniques` is given (for sample chapter authoring and bake-off scoring)
 - Technique GUIDES (`writing_techniques/[ID]_GUIDES.md`) ONLY when `using <ID>` or `compare techniques` is given; the type TEMPLATE section OPTIONS wraps the technique's Section Inventory; a technique-owned OPTIONS template (`[ID]_OPTIONS_TEMPLATE.md`) exists only where the planning artifact is not a section outline (today: MINTO)
 - Never load CHECKS files during execution (`DRSYNART-FR-32`, `GRUC-IG-03`)
 
