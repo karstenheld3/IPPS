@@ -1,96 +1,66 @@
 # IndexNow Setup
 
-## Prerequisites
+Free push notification of new or changed URLs. One submission reaches Bing, Yandex, Naver, Seznam, and Yep [LITERAL: 2026-11-03]. Google does not take part: for Google, keep sitemap `<lastmod>` accurate and use Search Console URL Inspection. The Google Indexing API is only for pages with `JobPosting` or `BroadcastEvent` (in `VideoObject`) structured data, never for regular URLs.
 
-- A live website accessible via HTTPS
-- Ability to place a text file at domain root (e.g., Astro `/public/` folder)
+## Pre-Installation Verification
 
-## Authentication
+1. Python 3.10+ with `requests`: `python -c "import requests; print(requests.__version__)"` -> version number
+2. You can publish a static text file at the site root over HTTPS (for example a static `public/` folder)
 
-IndexNow uses key file verification (no dashboard, no OAuth):
+## Key Setup
 
-1. Generate key: 8-128 chars, alphanumeric + dash only
-2. Create file `{key}.txt` containing just the key string
-3. Place at domain root: `https://yourdomain.com/{key}.txt`
-4. Include key in API requests
-
-## Step-by-Step
-
-### 1. Generate Key
-
-PowerShell:
-```powershell
-$key = -join ((65..90) + (97..122) + (48..57) | Get-Random -Count 32 | ForEach-Object { [char]$_ })
-Write-Host "IndexNow Key: $key"
-Write-Host "File to create: $key.txt (content = $key)"
-```
-
-Or use: https://www.indexnow.org (generates key on page refresh)
-
-### 2. Place Key File
-
-For Astro on Netlify:
-```
-project-root/
-  public/
-    {key}.txt    <- contains just the key string
-```
-
-The file deploys to `https://yourdomain.com/{key}.txt` automatically.
-
-### 3. Store Key
-
-Add to project NOTES.md or environment:
-```
-INDEXNOW_KEY=your_generated_key
-INDEXNOW_HOST=yourdomain.com
-```
-
-### 4. Verify
-
-```powershell
-$key = "your_generated_key"
-$host = "yourdomain.com"
-Invoke-WebRequest -Uri "https://$host/$key.txt" | Select-Object -ExpandProperty Content
-```
-
-Expected: Returns the key string. If 404, file not deployed yet.
+1. Generate a key (8-128 characters, `a-z`, `A-Z`, `0-9`, `-`):
+   ```powershell
+   python -c "import secrets; print(secrets.token_hex(16))"
+   ```
+2. Create a file named `{key}.txt` containing only the key and deploy it to `https://example.com/{key}.txt`
+3. Optional: add the key to `[API_KEYS_FILE]` (otherwise pass `--key` each time):
+   ```
+   INDEXNOW_API_KEY=0123456789abcdef0123456789abcdef
+   ```
+   One key per site. With several sites, pass `--key` per call.
+4. Verify the key file:
+   ```powershell
+   python submit.py verify-key --host example.com
+   ```
+   Expected: `PASS: Key file matches.` and `OK.`
 
 ## Submit URLs
 
-### Single URL (GET)
+```powershell
+python submit.py submit https://example.com/blog/new-post --host example.com
+python submit.py submit https://example.com/a https://example.com/b --host example.com
+python submit.py submit --file urls.txt --host example.com --dry-run
 ```
-GET https://api.indexnow.org/indexnow?url=https://yourdomain.com/blog/new-post&key=YOUR_KEY
-```
+- 1 URL -> `GET https://api.indexnow.org/indexnow?url=...&key=...`
+- 2+ URLs -> `POST https://api.indexnow.org/indexnow` with JSON `{"host", "key", "keyLocation", "urlList"}`, max 10,000 URLs per POST; larger lists are split
+- All URLs must be on `--host`; mismatches stop the run (exit 2)
 
-### Batch (POST, up to 10,000)
-```
-POST https://api.indexnow.org/IndexNow
-Content-Type: application/json
+## Response Codes
 
-{
-  "host": "yourdomain.com",
-  "key": "YOUR_KEY",
-  "keyLocation": "https://yourdomain.com/YOUR_KEY.txt",
-  "urlList": [
-    "https://yourdomain.com/blog/post-1",
-    "https://yourdomain.com/blog/post-2"
-  ]
-}
-```
-
-### Response Codes
 - 200 - OK, URLs submitted
-- 202 - Key pending verification (retry in a few minutes)
-- 422 - Invalid key or URL format
-- 403 - Key file not accessible
+- 202 - Accepted, key pending verification (retry later)
+- 400 - Bad request, invalid format
+- 403 - Key not valid or key file not found
+- 422 - URLs do not belong to host or key does not match
+- 429 - Too many requests (script retries 3 times)
 
 ## Key Facts
 
-- Free, unlimited (10,000 URLs per request)
-- Covers: Bing, Yandex, Seznam, Naver
-- Does NOT cover Google (use Google Indexing API separately)
-- One submission propagates to ALL participating engines
-- Key file must be HTTPS-accessible
-- Key file name = key value + ".txt"
-- No account, no dashboard, no signup required
+- Free, no account, no dashboard
+- Submit only new, changed, or deleted URLs; repeated submission of unchanged URLs gives no benefit
+- Key file name = key value + `.txt`; must be reachable over HTTPS
+- `--key-location` allows the key file in a sub-folder; only URLs under that folder are then accepted
+
+## Troubleshooting
+
+- `Invalid key` -> regenerate with step 1
+- `verify-key` FAIL HTTP 404 -> key file not deployed or wrong path
+- 403 on submit -> key file content differs from the key (trailing whitespace is ignored by the script, not always by engines)
+- 422 -> URL host differs from `--host` (for example `www.` vs apex)
+
+## Removal
+
+1. Delete the `INDEXNOW_API_KEY` line from `[API_KEYS_FILE]`
+2. Delete `{key}.txt` from the site root
+3. No account to close
