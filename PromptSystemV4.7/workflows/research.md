@@ -22,7 +22,7 @@ Read before proceeding:
 
 ## MUST-NOT-FORGET
 
-- Rank sources by source tier (@skills:research-methods Source Hierarchy) and verification label. Screen each source with Signs of Confusion and Sloppiness (SOCAS) - apply @skills:write-documents `SOCAS_RULES.md` plus `SOCAS_WRITING_RULES.md`; findings demote a source or exclude it from the findings (it stays in the source list per Source Retention Rule), and never rank sources against each other (SOCAS-AP-11)
+- Rank sources by source tier (@skills:research-methods Source Hierarchy) and verification label. Screen each source with Signs of Confusion and Sloppiness (SOCAS) - apply @skills:write-documents `SOCAS_RULES.md` plus `SOCAS_WRITING_RULES.md`; findings demote a source or exclude it from the findings (it stays in the source list per Source Retention Rule), and never rank sources against each other (SOCAS-AP-10)
 - Summary section mandatory - copy/paste ready list at document top
 - Label ALL findings: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`
 - MEPI by default (2-3 curated options); MCPI only when completeness explicitly needed

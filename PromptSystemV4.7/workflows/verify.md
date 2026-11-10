@@ -109,12 +109,12 @@ Apply to ALL document types and contexts:
 When reviewing architecture, design and solution strategy, apply @skills:write-documents `SOCAS_RULES.md` plus the field file chosen by content type (SOCAS-AP-03: `SOCAS_WRITING_RULES.md`, `SOCAS_COMMUNICATION_RULES.md`, or @skills:coding-conventions `SOCAS_CODING_RULES.md`). Look for:
 - inconsistencies (SOCAS-GN-01, SOCAS-GN-02)
 - ambiguities (SOCAS-GN-03)
-- new solutions for already solved problems (SOCAS-GN-17)
-- overlapping concerns (SOCAS-GN-17)
-- underspecified behavior (SOCAS-CD-09 for code specifications, SOCAS-WR-12 for non-code normative documents)
-- unverified assumptions (SOCAS-GN-06)
-- flawed thinking and unsupported conclusions (SOCAS-GN-04, SOCAS-GN-06)
-- over-engineering and introduction of unwanted complexity (SOCAS-GN-19; SOCAS-CD-05 for code)
+- new solutions for already solved problems (SOCAS-GN-08)
+- overlapping concerns (SOCAS-GN-08)
+- underspecified behavior (SOCAS-CD-08 for code specifications, SOCAS-WR-11 for non-code normative documents)
+- unverified assumptions (SOCAS-GN-05)
+- flawed thinking and unsupported conclusions (SOCAS-GN-04, SOCAS-GN-05)
+- over-engineering and introduction of unwanted complexity (SOCAS-GN-16; SOCAS-CD-05 for code)
 
 ## Verification Labels
 

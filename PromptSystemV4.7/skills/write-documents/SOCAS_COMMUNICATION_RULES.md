@@ -13,10 +13,10 @@ Communication (CM)
 - SOCAS-CM-02: Lookups Needed to Act
 - SOCAS-CM-03: Unbacked Basis for Action
 - SOCAS-CM-04: Underspecified or Conflicting Order
-- SOCAS-CM-06: Tone Depends on Unstated Intent
-- SOCAS-CM-07: Rude or Hostile Language
-- SOCAS-CM-08: Pressure Without Reason or Inverted Priorities
-- SOCAS-CM-10: Omitted or Replaced Information
+- SOCAS-CM-05: Tone Depends on Unstated Intent
+- SOCAS-CM-06: Rude or Hostile Language
+- SOCAS-CM-07: Pressure Without Reason or Inverted Priorities
+- SOCAS-CM-08: Omitted or Replaced Information
 
 ## Table of Contents
 
@@ -34,17 +34,17 @@ Questions a reader asks of a message and the rules that answer them:
 - Does it require much lookup or verification effort? SOCAS-CM-02 (lookups), SOCAS-CM-03 (verification)
 - Does it contradict itself? SOCAS-GN-01 (message forms)
 - Does it contain underspecified requests or actions? SOCAS-CM-04, SOCAS-CM-01
-- Does it contain misleading or vague interpretations? SOCAS-GN-03 (ambiguous terms), SOCAS-GN-06 (assumption as fact), SOCAS-CM-06 (meaning depends on unstated tone)
-- Does it contain manipulative or aggressive language? SOCAS-GN-08, SOCAS-CM-07, SOCAS-CM-08
-- Is the tone appropriate? SOCAS-CM-06, SOCAS-CM-07; appropriateness that depends on relationship and culture has no rule (discarded until researched)
-- Does it omit or replace relevant information? SOCAS-CM-10
-- Does it invert priorities? SOCAS-CM-08
+- Does it contain misleading or vague interpretations? SOCAS-GN-03 (ambiguous terms), SOCAS-GN-05 (assumption as fact), SOCAS-CM-05 (meaning depends on unstated tone)
+- Does it contain manipulative or aggressive language? SOCAS-GN-07, SOCAS-CM-06, SOCAS-CM-07
+- Is the tone appropriate? SOCAS-CM-05, SOCAS-CM-06; appropriateness that depends on relationship and culture has no rule (discarded until researched)
+- Does it omit or replace relevant information? SOCAS-CM-08
+- Does it invert priorities? SOCAS-CM-07
 
 ## Rank Order
 
-Run after the general rules (SOCAS-AP-12). Within this file:
-- P1: SOCAS-CM-01, CM-04, CM-06, CM-07, CM-08, CM-02
-- P2: SOCAS-CM-03, CM-10
+Run after the general rules (SOCAS-AP-11). Within this file:
+- P1: SOCAS-CM-01, CM-04, CM-05, CM-06, CM-07, CM-02
+- P2: SOCAS-CM-03, CM-08
 
 ## Actionability
 
@@ -78,7 +78,7 @@ Run after the general rules (SOCAS-AP-12). Within this file:
 ### SOCAS-CM-04: Underspecified or Conflicting Order
 
 - The request leaves open a choice between valid but inconsistent results (which file, which version, which format, when done); two requirements in one order conflict. Core case: orders written for agents
-- **Applies to**: one-time orders and work requests, especially prompts written for agents; reusable procedures (workflows, SOPs) use SOCAS-WR-12
+- **Applies to**: one-time orders and work requests, especially prompts written for agents; reusable procedures (workflows, SOPs) use SOCAS-WR-11
 - **Test**: Does the order leave valid but inconsistent results open, or do two of its requirements conflict?
 - **Priority**: P1 | Cost: low, text only | Value: high, evidence B ([unstated requirements dropped agent accuracy 22.6% on average, up to 93.1%](https://aclanthology.org/2026.findings-acl.441/); Association for Computational Linguistics (ACL) Findings 2026)
 - **Web**: no
@@ -86,7 +86,7 @@ Run after the general rules (SOCAS-AP-12). Within this file:
 
 ## Tone and Pressure
 
-### SOCAS-CM-06: Tone Depends on Unstated Intent
+### SOCAS-CM-05: Tone Depends on Unstated Intent
 
 - Irony, sarcasm, humor or understatement in a text-only channel, with the intended tone not stated in words
 - **Applies to**: all messages in text-only channels
@@ -95,7 +95,7 @@ Run after the general rules (SOCAS-AP-12). Within this file:
 - **Web**: no
 - **Overlap**: none (MECT-WC-10 covers idioms, not irony)
 
-### SOCAS-CM-07: Rude or Hostile Language
+### SOCAS-CM-06: Rude or Hostile Language
 
 - Insult, threat, contempt, profanity, identity attack. Judge the sentence, not the person. Expect false positives on quoted speech and negations
 - **Applies to**: all messages
@@ -104,9 +104,9 @@ Run after the general rules (SOCAS-AP-12). Within this file:
 - **Web**: no
 - **Overlap**: none
 
-### SOCAS-CM-08: Pressure Without Reason or Inverted Priorities
+### SOCAS-CM-07: Pressure Without Reason or Inverted Priorities
 
-- Deadline, escalation threat or urgency with no stated reason; deadline or small item emphasized while the larger consequence is absent or last; the main ask comes after background or secondary items. Concrete message form of SOCAS-GN-08
+- Deadline, escalation threat or urgency with no stated reason; deadline or small item emphasized while the larger consequence is absent or last; the main ask comes after background or secondary items. Concrete message form of SOCAS-GN-07
 - **Applies to**: messages with a deadline, escalation or urgency word, or with a request
 - **Test**: Is pressure applied without a stated reason, or does the order of the message hide the main ask or the larger consequence?
 - **Priority**: P1 | Cost: low, text only | Value: high, evidence B ([spurious urgency: 31.3% vs 13.3% chose the worse task](https://academic.oup.com/jcr/article-abstract/45/3/673/4847790), 5 experiments; [reminding people of the payoffs at the moment of choice reduced the effect](https://hub.jhu.edu/2018/05/31/meeting-deadlines-time-management-behaviors/))
@@ -115,7 +115,7 @@ Run after the general rules (SOCAS-AP-12). Within this file:
 
 ## Completeness
 
-### SOCAS-CM-10: Omitted or Replaced Information
+### SOCAS-CM-08: Omitted or Replaced Information
 
 - What the reader needs to decide or act is missing (what, who, by when, impact, risks, what is unknown); a question answered with a different, easier answer
 - **Applies to**: messages that ask for a decision, answer a question or hand over work

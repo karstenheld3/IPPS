@@ -56,7 +56,7 @@ Apply to ALL input types before context-specific steps.
 5. Graceful degradation: if a source is inaccessible, assign `inaccessible` verdict and continue. Never abort because one source failed
 6. Unfalsifiable claims (opinions, subjective assessments) are flagged but never verified
 7. Privacy gate: review document is general-purpose. All examples and evidence descriptions must use generic references
-8. Triage-informed priority: scan for hallucination triage signals before deep verification. Seven signals: generic phrasing (SOCAS-GN-15, SOCAS-WR-11), stale info (SOCAS-WR-09), empty structure (SOCAS-WR-10), vague claims (APAPL-PR-07), wrong terms (MECT-WC-01), assumptions stated as facts (SOCAS-GN-06), unsupported conclusions (SOCAS-GN-04). Facts matching triage signals get priority, but ALL facts get verdicts
+8. Triage-informed priority: scan for hallucination triage signals before deep verification. Seven signals: generic phrasing (SOCAS-GN-14, SOCAS-WR-10), stale info (SOCAS-WR-08), empty structure (SOCAS-WR-09), vague claims (APAPL-PR-07), wrong terms (MECT-WC-01), assumptions stated as facts (SOCAS-GN-05), unsupported conclusions (SOCAS-GN-04). Facts matching triage signals get priority, but ALL facts get verdicts
 
 # CONTEXT-SPECIFIC
 

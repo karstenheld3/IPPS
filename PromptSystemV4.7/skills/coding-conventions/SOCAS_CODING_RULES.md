@@ -15,9 +15,9 @@ Coding (CD)
 - SOCAS-CD-04: Change Too Large to Review
 - SOCAS-CD-05: Excess Complexity
 - SOCAS-CD-06: Stale or Unhealthy Dependency
-- SOCAS-CD-08: Missing Tests, History or Setup
-- SOCAS-CD-09: Behavior, Edge Cases or Acceptance Undefined
-- SOCAS-CD-10: Unverifiable Requirement Wording
+- SOCAS-CD-07: Missing Tests, History or Setup
+- SOCAS-CD-08: Behavior, Edge Cases or Acceptance Undefined
+- SOCAS-CD-09: Unverifiable Requirement Wording
 
 ## Table of Contents
 
@@ -27,8 +27,8 @@ Coding (CD)
 
 ## Rank Order
 
-Run after the general rules (SOCAS-AP-12). On source code, scripts, configuration and diffs the general rules SOCAS-GN-02, GN-03, GN-15, GN-19, GN-21 and GN-22 return `SKIP`. Code specifications and technical READMEs are text and run all general rules. Within this file:
-- P1: SOCAS-CD-02, CD-09, CD-01, CD-10, CD-04, CD-08
+Run after the general rules (SOCAS-AP-11). On source code, scripts, configuration and diffs the general rules SOCAS-GN-02, GN-03, GN-14, GN-16, GN-17 and GN-18 return `SKIP`. Code specifications and technical READMEs are text and run all general rules. Within this file:
+- P1: SOCAS-CD-02, CD-08, CD-01, CD-09, CD-04, CD-07
 - P2: SOCAS-CD-05, CD-06, CD-03
 
 ## Code and Repository
@@ -39,7 +39,7 @@ Run after the general rules (SOCAS-AP-12). On source code, scripts, configuratio
 - **Applies to**: code, dependency manifests and documentation that name packages
 - **Test**: Does every package or import exist in its registry with a history?
 - **Priority**: P1 | Cost: medium, 1 registry lookup per name | Value: high, evidence B ([19.7% of 2.23 million packages suggested by 16 code models did not exist](https://www.usenix.org/system/files/usenixsecurity25-spracklen.pdf); USENIX Security 2025)
-- **Web**: yes, registry lookup by tool; without a tool, unknown or unusual names first within the SOCAS-AP-10 budget
+- **Web**: yes, registry lookup by tool; without a tool, unknown or unusual names first within the SOCAS-AP-09 budget
 - **Overlap**: none
 
 ### SOCAS-CD-02: Insecure Construction
@@ -87,7 +87,7 @@ Run after the general rules (SOCAS-AP-12). On source code, scripts, configuratio
 - **Web**: yes
 - **Overlap**: none
 
-### SOCAS-CD-08: Missing Tests, History or Setup
+### SOCAS-CD-07: Missing Tests, History or Setup
 
 - No tests or tests disabled; no version history or a single commit; boilerplate README without setup instructions; dead code
 - **Applies to**: repositories and code deliveries (bids, handovers); not code snippets
@@ -98,7 +98,7 @@ Run after the general rules (SOCAS-AP-12). On source code, scripts, configuratio
 
 ## Code Specifications
 
-### SOCAS-CD-09: Behavior, Edge Cases or Acceptance Undefined
+### SOCAS-CD-08: Behavior, Edge Cases or Acceptance Undefined
 
 - Behavior, edge cases (empty input, timeout, concurrent access), error handling or acceptance check not stated; two requirements conflict; unstated assumptions
 - **Applies to**: code specifications (content types above)
@@ -107,7 +107,7 @@ Run after the general rules (SOCAS-AP-12). On source code, scripts, configuratio
 - **Web**: no
 - **Overlap**: none
 
-### SOCAS-CD-10: Unverifiable Requirement Wording
+### SOCAS-CD-09: Unverifiable Requirement Wording
 
 - Escape clauses; one requirement holding several obligations; adjectives without measure; goals without tolerance range; missing units; to be determined (TBD) values without owner and date; requirement without unique ID; requirement without rationale or parent ("why is it here?")
 - **Applies to**: code specifications
