@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-YouTube Data API v3 CLI (free, 10,000 quota units per day). Video demand and competition research.
+YouTube Data API v3 CLI (free). Video demand and competition research.
 
 Usage:
   python query.py search "kanban board tutorial" --max-results 25
   python query.py videos VIDEO_ID [VIDEO_ID ...]
 
-Quota: search.list = 100 units per call, videos.list = 1 unit per call (up to 50 IDs).
+Quota: max 100 search.list calls per day (documented as 100 units of the 10,000-unit project quota or as a separate
+Search Queries bucket of 100 calls); videos.list = 1 unit per call (up to 50 IDs).
 Credentials: YOUTUBE_API_KEY in [API_KEYS_FILE] (see SKILL.md section "Credential Keys").
 """
 
@@ -19,7 +20,7 @@ SCRIPT_NAME = "youtube"
 SETUP_HINT = "youtube/SETUP.md"
 DEFAULT_KEYS_FILE = Path(__file__).resolve().parents[5] / ".tools" / ".api-keys.txt"
 API_BASE = "https://www.googleapis.com/youtube/v3"
-SEARCH_UNITS = 100
+SEARCH_CALLS_PER_DAY = 100
 VIDEOS_UNITS = 1
 VIDEOS_BATCH_SIZE = 50
 
@@ -136,7 +137,7 @@ def call_youtube(resource: str, api_key: str, params: dict) -> dict:
   fail(f"{resource} -> HTTP {response.status_code} -> {str(error.get('message', ''))[:200]}{hint}", 1)
 
 def cmd_search(args, api_key: str) -> tuple:
-  log(f"Searching YouTube for '{args.query}' (max {args.max_results} results, {SEARCH_UNITS} units)...")
+  log(f"Searching YouTube for '{args.query}' (max {args.max_results} results, 1 of {SEARCH_CALLS_PER_DAY} search calls per day)...")
   params = {"part": "snippet", "q": args.query, "type": "video", "order": "relevance", "maxResults": args.max_results}
   if args.region: params["regionCode"] = args.region
   if args.lang: params["relevanceLanguage"] = args.lang
@@ -147,7 +148,7 @@ def cmd_search(args, api_key: str) -> tuple:
     rows.append({"video_id": (item.get("id") or {}).get("videoId", ""), "title": snippet.get("title", ""), "channel": snippet.get("channelTitle", ""), "published": (snippet.get("publishedAt") or "")[:10]})
   notes = [f"Total results estimate: {(data.get('pageInfo') or {}).get('totalResults', '[UNKNOWN]')}"]
   log(f"  {plural(len(rows), 'video')} received.")
-  return rows, notes, SEARCH_UNITS
+  return rows, notes, {"search_calls": 1, "units": 0}
 
 def cmd_videos(args, api_key: str) -> tuple:
   rows = []
@@ -163,7 +164,7 @@ def cmd_videos(args, api_key: str) -> tuple:
       statistics_data = item.get("statistics") or {}
       rows.append({"video_id": item.get("id", ""), "title": snippet.get("title", ""), "channel": snippet.get("channelTitle", ""), "published": (snippet.get("publishedAt") or "")[:10], "views": int(statistics_data.get("viewCount") or 0), "likes": int(statistics_data.get("likeCount") or 0), "comments": int(statistics_data.get("commentCount") or 0)})
   log(f"  {plural(len(rows), 'video')} received.")
-  return rows, [], units
+  return rows, [], {"search_calls": 0, "units": units}
 
 COLUMNS = {
   "search": [("Video ID", "video_id", 12), ("Title", "title", 60), ("Channel", "channel", 25), ("Published", "published", 10)],
@@ -177,9 +178,9 @@ COLUMNS = {
 
 def build_parser() -> argparse.ArgumentParser:
   common = create_common_parser()
-  parser = argparse.ArgumentParser(description="YouTube Data API v3 CLI (10,000 units per day)")
+  parser = argparse.ArgumentParser(description="YouTube Data API v3 CLI (max 100 searches per day, 10,000 units per day)")
   subparsers = parser.add_subparsers(dest="command", required=True)
-  search_parser = subparsers.add_parser("search", parents=[common], help="search.list (100 units)")
+  search_parser = subparsers.add_parser("search", parents=[common], help="search.list (max 100 calls per day)")
   search_parser.add_argument("query")
   search_parser.add_argument("--max-results", type=int, default=25, help="1-50 (default: 25)")
   search_parser.add_argument("--region", default="", help="ISO 3166-1 alpha-2, e.g. US")
@@ -194,10 +195,10 @@ def main():
   args = build_parser().parse_args()
   keys = load_api_keys(args.keys_file)
   api_key = require_key(keys, "YOUTUBE_API_KEY", args.keys_file)
-  if args.command == "search": rows, notes, units = cmd_search(args, api_key)
-  else: rows, notes, units = cmd_videos(args, api_key)
-  notes.append(f"Quota units used: {units} (daily default 10,000).")
-  result = {"script": SCRIPT_NAME, "command": args.command, "ok": True, "estimated_cost_usd": 0.0, "actual_cost_usd": 0.0, "params": {"quota_units": units}, "rows": rows, "notes": notes}
+  if args.command == "search": rows, notes, quota_used = cmd_search(args, api_key)
+  else: rows, notes, quota_used = cmd_videos(args, api_key)
+  notes.append(f"Quota used: {plural(quota_used['search_calls'], 'search call')} (max {SEARCH_CALLS_PER_DAY} per day), {plural(quota_used['units'], 'unit')} (default 10,000 per day).")
+  result = {"script": SCRIPT_NAME, "command": args.command, "ok": True, "estimated_cost_usd": 0.0, "actual_cost_usd": 0.0, "params": quota_used, "rows": rows, "notes": notes}
   emit(result, args.format, COLUMNS.get(args.command))
   log("OK.")
 

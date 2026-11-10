@@ -4,9 +4,9 @@ Free video demand and competition data: which videos rank for a query, their vie
 
 ## Quota [LITERAL: 2026-11-03]
 
-- 10,000 units per day per Google Cloud project (default), reset at midnight Pacific Time
-- `search` (search.list): 100 units per call -> max about 100 searches per day
-- `videos` (videos.list): 1 unit per call for up to 50 video IDs
+- `search` (search.list): max 100 calls per day. Google documents this either as 100 units per call out of the 10,000-unit project quota or as a separate "Search Queries" bucket of 100 calls per day; both allow 100 searches per day
+- `videos` (videos.list): 1 unit per call for up to 50 video IDs, from the default 10,000 units per day
+- Quotas reset at midnight Pacific Time
 
 ## Pre-Installation Verification
 
@@ -35,7 +35,7 @@ Fetching statistics for 1 video (1 call, 1 unit)...
   1 video received.
 Video ID      Title ...  Views ...
 ...
-Quota units used: 1 (daily default 10,000).
+Quota used: 0 search calls (max 100 per day), 1 unit (default 10,000 per day).
 OK.
 ```
 
@@ -44,7 +44,7 @@ OK.
 - `search QUERY` - top videos by relevance; `--max-results 1-50`, `--region US`, `--lang en`
 - `videos ID...` - snippet and statistics for known video IDs
 
-Typical demand check: `search` once (100 units), then `videos` for the returned IDs (1 unit) to compare views and age.
+Typical demand check: `search` once (1 of 100 daily searches), then `videos` for the returned IDs (1 unit) to compare views and age.
 
 ## Troubleshooting
 
