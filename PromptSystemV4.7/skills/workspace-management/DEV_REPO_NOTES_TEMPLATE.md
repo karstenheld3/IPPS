@@ -1,35 +1,35 @@
 <!-- DEV_REPO_NOTES TEMPLATE. Remove this comment after creating. -->
 
-# NOTES
+  NOTES
 
-## MUST-NOT-FORGET
+   MUST-NOT-FORGET
 
 - [PROMPTSYSTEM_FOLDER] is the source of truth. Never edit [AGENT_FOLDER] directly
 - Sync order: 1) [PROMPTSYSTEM_FOLDER] → [AGENT_FOLDER] (robocopy /MIR), 2) [AGENT_FOLDER] → [LINKED_REPOS] (sync.ps1 -execute). Stage 2 requires stage 1 complete. Stage 3 (linked repo local mirror) is NOT automatic from source repo
 - Downstream repos pull from [AGENT_FOLDER], NOT from [PROMPTSYSTEM_FOLDER]. The local mirror is the published source for linked repos
 - Use placeholders in all workspace/session files, never ephemeral version strings or repo names
 
-## Table of Contents
+   Table of Contents
 
-- [MUST-NOT-FORGET](#must-not-forget)
-- [Project Info](#project-info)
-- [Workspace Constants](#workspace-constants)
-- [Sync Sources](#sync-sources)
-- [Prevention Rules](#prevention-rules-from-session-fails)
-- [Full Stack and Dependencies](#full-stack-and-dependencies)
-- [Build/Test Rules](#buildtest-rules)
-- [Scripts](#scripts)
-- [Runtime Environment](#runtime-environment)
-- [Architecture Decisions](#architecture-decisions)
-- [Source Control](#source-control)
-- [Agent Safety Rules](#agent-safety-rules)
-- [Key References](#key-references)
-- [Knowledge Map](#knowledge-map)
-- [Docs Map](#docs-map)
-- [Specs Map](#specs-map)
-- [Release Configuration](#release-configuration)
+- [MUST-NOT-FORGET]( must-not-forget)
+- [Project Info]( project-info)
+- [Workspace Constants]( workspace-constants)
+- [Sync Sources]( sync-sources)
+- [Prevention Rules]( prevention-rules-from-session-fails)
+- [Full Stack and Dependencies]( full-stack-and-dependencies)
+- [Build/Test Rules]( buildtest-rules)
+- [Scripts]( scripts)
+- [Runtime Environment]( runtime-environment)
+- [Architecture Decisions]( architecture-decisions)
+- [Source Control]( source-control)
+- [Agent Safety Rules]( agent-safety-rules)
+- [Key References]( key-references)
+- [Knowledge Map]( knowledge-map)
+- [Docs Map]( docs-map)
+- [Specs Map]( specs-map)
+- [Release Configuration]( release-configuration)
 
-## Project Info
+   Project Info
 
 - Project name: [project-name]
 - Project goal: [one-sentence-description]
@@ -39,7 +39,7 @@
 
 <!-- Instructions: Replace placeholder values with your project information. -->
 
-## Workspace Constants
+   Workspace Constants
 
 [WORKSPACE_FOLDER]: `[current workspace root path]`
 - Root folder of the workspace. All other paths compose from this.
@@ -113,9 +113,9 @@
 
 <!-- Conditional: Remove this entire section if SELF-CONTAINED (no external sync sources). -->
 
-## Sync Sources
+   Sync Sources
 
-### How Syncing Works
+    How Syncing Works
 
 Sync configuration lives in `promptsystem-sync.json` at `[WORKSPACE_FOLDER]` root (PULL model). This file defines:
 - **targets** array: each entry is self-contained (path, source, include, exclude, never_overwrite)
@@ -124,13 +124,13 @@ Sync configuration lives in `promptsystem-sync.json` at `[WORKSPACE_FOLDER]` roo
 
 The `sync.ps1` script in `@skills:workspace-management` performs the actual sync. Always preview with `-diff` before executing.
 
-### Sync Order (3 stages)
+    Sync Order (3 stages)
 
 1. **[PROMPTSYSTEM_FOLDER] → local [AGENT_FOLDER]** — robocopy /MIR (after every edit to source)
 2. **[AGENT_FOLDER] → [LINKED_REPOS]** — sync.ps1 -execute at each target (explicit user confirmation only). Source for targets: `../[source-repo]/[AGENT_FOLDER]`
 3. **[LINKED_REPOS] local mirror** — robocopy /MIR at each linked repo (NOT automatic from source repo)
 
-### Usage Examples
+    Usage Examples
 
 Preview changes (no files modified):
 ```powershell
@@ -149,7 +149,7 @@ Or use the `/sync` workflow which wraps these commands.
 - All include/exclude, deprecated, and never_overwrite patterns are defined in promptsystem-sync.json
 - See WSKMGMT-SP01 section 10 for the JSON schema -->
 
-## Prevention Rules (from session fails)
+   Prevention Rules (from session fails)
 
 <!-- Instructions: Add project-specific prevention rules here. These are lessons learned from session failures that must be applied going forward. Each rule has a bold label and a one-line description. -->
 
@@ -157,7 +157,7 @@ Or use the `/sync` workflow which wraps these commands.
 
 <!-- Conditional: Omit Build/Test, Runtime Environment, and Release Configuration for GENERAL workspaces (WS-CT-09). -->
 
-## Build/Test Rules
+   Build/Test Rules
 
 - Build command: [build-command]
 - Test command: [test-command]
@@ -167,7 +167,7 @@ Or use the `/sync` workflow which wraps these commands.
 
 <!-- Conditional: Applies to ProductRepo only. DevRepo and CompanyRepo are exempt (no buildable source code). -->
 
-## Scripts
+   Scripts
 
 <!-- Instructions: List all build, test, deploy, and utility scripts. Include batch file wrappers and what they do. Omit section if no scripts. -->
 
@@ -183,7 +183,7 @@ Or use the `/sync` workflow which wraps these commands.
 **Configuration:**
 - `[script-name].bat` — [description]
 
-## Runtime Environment
+   Runtime Environment
 
 - Runtime: [node|bun|deno|python|rust|zig]
 - Version file: [.nvmrc|.python-version|rust-toolchain.toml|build.zig.zon]
@@ -198,7 +198,7 @@ Or use the `/sync` workflow which wraps these commands.
 
 <!-- Conditional: Omit for GENERAL workspaces. -->
 
-## Full Stack and Dependencies
+   Full Stack and Dependencies
 
 <!-- Instructions: List the full technology stack, key dependencies, and lock files. Omit section if no product code. -->
 
@@ -215,13 +215,13 @@ Or use the `/sync` workflow which wraps these commands.
 **Dependency install command:** [command]
 **Dependency update command:** [command]
 
-## Architecture Decisions
+   Architecture Decisions
 
 <!-- Instructions: Record key architecture and design decisions. Include date and rationale. Omit section if no significant decisions. -->
 
 - **[Decision title]** ([date]): [decision and rationale]
 
-## Source Control
+   Source Control
 
 <!-- Instructions: Document what is tracked vs gitignored, git conventions, and any special gitignore patterns. Omit section if standard git workflow. -->
 
@@ -235,20 +235,20 @@ Or use the `/sync` workflow which wraps these commands.
 - `_gitignore` suffix: Append `_gitignore` before extension to exclude files/folders from git without editing `.gitignore`. Standard patterns in `.gitignore`: `*_gitignore.*`, `*_gitignore/`, `.tmp_*`, `_agentwork/` (see `agent-behavior.md` section Agent-Created Folders).
 - [any other conventions]
 
-## Agent Safety Rules
+   Agent Safety Rules
 
 <!-- Instructions: Rules to prevent agent from causing harm. Add project-specific safety rules. Omit section if none. -->
 
 - **NEVER** [specific unsafe action]
 - **Safe alternative**: [safe approach]
 
-## Key References
+   Key References
 
 <!-- Instructions: List important reference files the agent should read for context. Omit section if none. -->
 
 - `[path/to/file]` — [what it contains]
 
-## Knowledge Map
+   Knowledge Map
 
 <!-- Instructions: For repos with a knowledge/ folder, describe the local reference structure. Omit section if no knowledge folder. -->
 
@@ -257,7 +257,7 @@ Local research base under `[DEV_KNOWLEDGE_FOLDER]`.
 **[Topic area]:**
 - `[folder/path]` — [description, topic count, key files]
 
-## Docs Map
+   Docs Map
 
 <!-- Instructions: For repos with a docs/ folder, describe the local documentation structure. Omit section if no docs folder. -->
 
@@ -266,7 +266,7 @@ Local documentation under `[WORKSPACE_FOLDER]\docs`.
 **[Document type]:**
 - `[path/to/file]` — [description, purpose, key content]
 
-## Specs Map
+   Specs Map
 
 <!-- Instructions: For repos with a specs/ folder, describe the local specs structure. Omit section if no specs folder. -->
 
@@ -275,11 +275,11 @@ Local specs under `[DEV_SPECS_FOLDER]`.
 **[Spec type]:**
 - `[path/to/file]` — [description, Doc ID, status]
 
-## Release Configuration
+   Release Configuration
 
 <!-- Instructions:
 - Configure for /project-release workflow
-- All paths use workspace constants from ## Workspace Constants section above
+- All paths use workspace constants from    Workspace Constants section above
 - See _SPEC_RELEASE_PROJECT_WORKFLOW.md [RLSPROJ-SP01] for full config schema and decision guide -->
 
 ```
@@ -289,38 +289,38 @@ sessions_folder: [SESSIONS_FOLDER]
 release_notes_dir: [RELEASE_NOTES_FOLDER]
 release_notes_naming: RELEASE_NOTES_v{VERSION}_{DATE}.md
 tag_annotation_template: Release {TAG}: {SUMMARY}
-# github_release_confirm: false  # Uncomment to create GitHub releases without the y/n question (default true)
+  github_release_confirm: false    Uncomment to create GitHub releases without the y/n question (default true)
 
-# Single-repo: one [RELEASE_REPO] block
-# Multi-repo: product block first, then dev block(s)
+  Single-repo: one [RELEASE_REPO] block
+  Multi-repo: product block first, then dev block(s)
 
 [RELEASE_REPO: product]
 path: [WORKSPACE_FOLDER]
 role: product
 tag_format: [date or semver]
 version_source: [promptsystem_folder or pyproject_toml or package_json or none]
-# version_file: [PRODUCT_REPO_FOLDER]\pyproject.toml  # Required when version_source is pyproject_toml or package_json
+  version_file: [PRODUCT_REPO_FOLDER]\pyproject.toml    Required when version_source is pyproject_toml or package_json
 post_release_bump: [promptsystem_rename or patch_bump or minor_bump or none]
-# binary_build: true     # Uncomment if product has a binary
-# binary_path_pattern: dist/[appname]-{version}-win-x64.exe  # Required when binary_build is true
-# version_gate: true     # Uncomment if version consistency check needed
-# test_command: [command]  # Uncomment if tests not already defined in ## Build/Test Rules
+  binary_build: true       Uncomment if product has a binary
+  binary_path_pattern: dist/[appname]-{version}-win-x64.exe    Required when binary_build is true
+  version_gate: true       Uncomment if version consistency check needed
+  test_command: [command]    Uncomment if tests not already defined in    Build/Test Rules
 github_release: true
-# github_release_assets:  # Uncomment if binary assets to attach
-#   - dist/[appname]-{version}-win-x64.exe
+  github_release_assets:    Uncomment if binary assets to attach
+    - dist/[appname]-{version}-win-x64.exe
 
-# [RELEASE_REPO: dev]    # Uncomment for multi-repo
-# path: [WORKSPACE_FOLDER]
-# role: dev
-# tag_format: [date or semver]
-# version_source: [promptsystem_folder or pyproject_toml or package_json or none]
-# post_release_bump: [promptsystem_rename or patch_bump or minor_bump or none]
-# test_command: [command]
-# github_release: true
-# github_release_notes: reference  # Dev repo references product release
+  [RELEASE_REPO: dev]      Uncomment for multi-repo
+  path: [WORKSPACE_FOLDER]
+  role: dev
+  tag_format: [date or semver]
+  version_source: [promptsystem_folder or pyproject_toml or package_json or none]
+  post_release_bump: [promptsystem_rename or patch_bump or minor_bump or none]
+  test_command: [command]
+  github_release: true
+  github_release_notes: reference    Dev repo references product release
 ```
 
 <!-- Instructions:
 - Replace placeholder values
-- test_command lookup order: (1) [RELEASE_REPO] config, (2) ## Build/Test Rules section above, (3) skip
+- test_command lookup order: (1) [RELEASE_REPO] config, (2)    Build/Test Rules section above, (3) skip
 - If test_command already defined in Build/Test Rules, omit it from [RELEASE_REPO] config -->

@@ -130,7 +130,7 @@ A configuration block in workspace NOTES.md that defines all release parameters 
 - `release_notes_naming` - Filename pattern for release notes files
 - `sessions_folder` - Session folder path, typically `[SESSIONS_FOLDER]`
 - `tag_annotation_template` - Optional template for git tag annotation message
-- `github_release_confirm` - Optional boolean, default `true`. `false` = GitHub releases are created without the yes/no question (FR-12)
+- `github_release_confirm` - Optional boolean, default `false`. `false` = GitHub releases are created without the yes/no question (FR-12); `true` = ask yes/no first
 
 ### RepoConfig
 
@@ -254,8 +254,8 @@ Markdown document summarizing sessions, artifacts, and changes since last releas
 
 **RLSPROJ-FR-12: User Confirmation Before GitHub Release**
 - Workflow MUST present summary to user: version, sessions count, key artifacts, tag name, binary path (if applicable)
-- Workflow MUST ask explicit yes/no before creating GitHub release(s), unless `github_release_confirm: false` is set in `[RELEASE_CONFIG]`
-- No GitHub release created without explicit user confirmation; `github_release_confirm: false` counts as confirmation given once, by config
+- Workflow asks explicit yes/no before creating GitHub release(s) only when `github_release_confirm: true` is set in `[RELEASE_CONFIG]`; default `false` (invocation is the confirmation, agents never ask questions)
+- Invoking the workflow counts as confirmation unless `github_release_confirm: true` requires the yes/no question
 - If `github_release_confirm: false`: workflow presents the summary, skips the question, proceeds as confirmed
 - If user declines: workflow skips GitHub release, proceeds to post-release version bump (FR-15)
 
@@ -369,7 +369,7 @@ Rationale: SOPS files are workspace-specific and already maintained. The workflo
 
 **RLSPROJ-IG-02:** No git tag is created before release notes are committed to the product repo.
 
-**RLSPROJ-IG-03:** No GitHub release is created without explicit user confirmation. `github_release_confirm: false` in `[RELEASE_CONFIG]` is that confirmation, given once by config.
+**RLSPROJ-IG-03:** No GitHub release is created without confirmation. Invoking the workflow (default `github_release_confirm: false`) is that confirmation; `true` adds a yes/no question.
 
 **RLSPROJ-IG-04:** Post-release version bump executes only after all tags are pushed and GitHub releases are created.
 
@@ -476,7 +476,7 @@ User invokes /project-release
 ├─> Create git tag in product repo (FR-10)
 ├─> Push tag and commits to remote
 ├─> Present summary to user (FR-12)
-│   └─> Ask: "Create GitHub release? (y/n)" (skip question if github_release_confirm: false → treat as confirmed)
+│   └─> Ask: "Create GitHub release? (y/n)" (ask only if github_release_confirm: true; default false → treat as confirmed)
 ├─> [If confirmed]
 │   └─> Create GitHub release with notes and assets (FR-13)
 ├─> Execute post-release version bump without asking (FR-15)
@@ -521,7 +521,7 @@ User invokes /project-release
 │   ├─> Phase 2: Push all tags to remote (product first, then dev)
 │   │   └─> Use git push --atomic for tag + commit per repo
 │   └─> Present summary to user (FR-12)
-│       └─> Ask: "Create GitHub releases? (y/n)" (skip question if github_release_confirm: false → treat as confirmed)
+│       └─> Ask: "Create GitHub releases? (y/n)" (ask only if github_release_confirm: true; default false → treat as confirmed)
 │
 ├─> [If confirmed]
 │   ├─> Check for existing GitHub releases (FR-13 idempotency)
@@ -548,7 +548,7 @@ The `[RELEASE_CONFIG]` section uses a simple text-based key-value format readabl
 - `release_notes_dir` - (required) Path relative to product repo root where release notes are stored. May use `[PRODUCT_DOCS_FOLDER]` constant
 - `release_notes_naming` - (optional) Filename pattern. Default: `RELEASE_NOTES_v{VERSION}_{DATE}.md`. Placeholders: `{VERSION}`, `{DATE}`
 - `tag_annotation_template` - (optional) Template for git tag annotation. Default: `Release {TAG}: {SUMMARY}`
-- `github_release_confirm` - (optional) `true` or `false`. Default: `true`. `false` = create GitHub releases without asking
+- `github_release_confirm` - (optional) `true` or `false`. Default: `false`. `false` = create GitHub releases without asking; `true` = ask yes/no first
 
 ### Per-Repo Config Keys
 
@@ -671,7 +671,7 @@ sessions_folder: [SESSIONS_FOLDER]
 release_notes_dir: [RELEASE_NOTES_FOLDER]
 release_notes_naming: RELEASE_NOTES_v{VERSION}_{DATE}.md
 tag_annotation_template: Release {TAG}: {SUMMARY}
-# github_release_confirm: false  # Uncomment to create GitHub releases without the y/n question (default true)
+# github_release_confirm: true  # Uncomment to ask a y/n question before creating GitHub releases (default false)
 
 # Single-repo: one [RELEASE_REPO] block
 # Multi-repo: product block first, then dev block(s)
