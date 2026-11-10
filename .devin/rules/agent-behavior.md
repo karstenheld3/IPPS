@@ -150,8 +150,8 @@ Also avoid nonsensical or humorous examples. LLMs interpret whimsical content as
 Agent-created files (helper scripts, intermediate data, temp artifacts) MUST reside in context-appropriate locations:
 
 - `_download_gitignore/` of the working folder - Downloaded raw data. Helper scripts for download operations (enrichment, conversion, renaming) go into `_agentwork/`
-- `[SESSION_FOLDER]` - Helper scripts in SESSION-MODE (POCs, test scripts, analysis)
-- `[WORKSPACE_FOLDER]` - Helper scripts in PROJECT-MODE
+- `[SESSION_FOLDER]/_agentwork/` - Temp scripts and analysis scripts in SESSION-MODE. POCs, prototypes, and test scripts: `[SESSION_FOLDER]/_poc/`
+- `[WORKSPACE_FOLDER]/_agentwork/` - Temp scripts in PROJECT-MODE
 - `[SRC_FOLDER]` - Only production code, never temp artifacts
 
 Forbidden: System temp (`%TEMP%`, `$env:TEMP`, `/tmp/`), user home, Program Files, or any location outside workspace/session/target scope. No exceptions.
@@ -189,12 +189,13 @@ This section is the single definition of every utility folder the agent creates.
 - `backup` (`_backup/`) - copies of files before a change
 - `test` (`_test/`) - test scripts and test data of a fix or POC
 - Workflows create the default form. The other prefix or suffix form only when the user or a workspace setting asks for it
+- Allowed parents: working folder (session root, `T##_`, `S##_`, bug folder, `[WORKSPACE_FOLDER]` in PROJECT-MODE) for every role except the attachments roles; additionally content folder (any folder whose files the agent processes) for `export`, `assets`, `markdown`, `jpgs`, `extracted`; `[WORKSPACE_FOLDER]` for session archives; `[SESSIONS_FOLDER]` for `bugfixes`; conversation folder only for `attachments` and `attachments_markdown`
 - `sources` vs `markdown`: originals in `_download_gitignore/` are transcribed into `_sources/`; user content in a content folder is transcribed into `[content folder]/_markdown/`
 
 **Extension** (modules add folders without editing this section):
 - First choice: nest inside a core folder (`_download_gitignore/[SOURCE_ID]/`, `.tmp_jpgs/[PDF_NAME]/`). Nested names carry no prefix and no suffix; a core folder is never created inside another core folder
 - Fallback: a new base name, only when no core role fits and no other module has one for the same purpose. It must not equal a core role base, `sessions`, or `oldversions`
-- Every module that creates folders lists them in a section `## Agent-Created Folders` of its SKILL.md or workflow file: one line per folder with path, role, parent, creator, content; a new base name adds purpose and reason. `/verify` checks these sections
+- A module that adds a new base name lists it in a section `## Agent-Created Folders` of its SKILL.md or workflow file: one line per folder with path, role, parent, creator, content, purpose, and reason. Listing nested use is optional; skip the section where the workflow text already names the folders
 
 **Generic consumers** know only the base names `agentwork` and `archive`; all other behavior follows prefix and suffix. `/cleanup` deletes `_agentwork/` and `.tmp_*` folders and never descends into `_archive*`. `.gitignore` holds `.tmp_*`, `*_gitignore/`, `_agentwork/`.
 

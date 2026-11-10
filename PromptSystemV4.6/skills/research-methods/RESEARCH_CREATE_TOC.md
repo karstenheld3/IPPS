@@ -12,7 +12,7 @@ Global workflow for creating Table of Contents in deep research. Used by all res
 
 ## Workflow
 
-1. **Copy template file**: `Copy-Item` from `RESEARCH_TOC_TEMPLATE.md` to `__[TOPIC]_TOC.md`. Literal file copy, not regeneration from memory.
+1. **Copy template file**: `Copy-Item` from `RESEARCH_TOC_TEMPLATE.md` to `_agentwork/__[TOPIC]_TOC.md` of the research folder. Literal file copy, not regeneration from memory.
 2. **Replace placeholders**:
    - `[TOPIC]` → actual topic ID (e.g., `OAIAPI`)
    - `[SUBJECT]` → full name (e.g., `OpenAI API`)
@@ -30,7 +30,7 @@ Global workflow for creating Table of Contents in deep research. Used by all res
 
 ## File Naming
 
-Output: `__[TOPIC]_TOC.md` (double underscore = scaffolding document, deleted after Summary creation)
+Output: `_agentwork/__[TOPIC]_TOC.md` (double underscore = scaffolding document, deleted after Summary creation)
 Doc ID: `[TOPIC]-TOC` (not numbered)
 
 ## Structure Rules
@@ -54,4 +54,4 @@ Doc ID: `[TOPIC]-TOC` (not numbered)
 ## Example
 
 Input: `_INFO_OAIAPI-02_Sources.md` with 79 sources
-Output: `__OAIAPI_TOC.md` with 62 topics in 16 categories
+Output: `_agentwork/__OAIAPI_TOC.md` with 62 topics in 16 categories
