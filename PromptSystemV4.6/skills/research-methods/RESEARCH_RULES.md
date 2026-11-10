@@ -27,7 +27,7 @@ Sources (SC) - Source collection quality
 - SC-02: All sources have IDs in format `[TOPIC]-SC-[SOURCE]-[DOCREF]`
 - SC-03: All sources have `Accessed: YYYY-MM-DD` dates
 - SC-04: Source hierarchy respected (tier 1-3 for critical claims)
-- SC-05: PDF sources downloaded to `_DOWNLOADS_gitignore/` and transcribed to `_SOURCES/`
+- SC-05: PDF sources downloaded to `_download_gitignore/` and transcribed to `_sources/`
 - SC-06: Community sources labeled `[COMMUNITY]`
 - SC-07: Source count meets strategy minimum (MCPI: 15+, MEPI: 5-10 per dimension)
 - SC-08: Discovery platforms tested and classified (FREE/PAID/PARTIAL)
@@ -56,7 +56,7 @@ Topic Files (TF) - Individual topic file quality
 - TF-07: Document History section exists
 - TF-08: Critical conclusions have inline citations: `[LABEL] (SOURCE_ID | URL or filename)`
 - TF-09: All claims have verification labels: [VERIFIED], [ASSUMED], [TESTED], [PROVEN], [COMMUNITY]
-- TF-10: Referenced `_SOURCES/` files exist on disk
+- TF-10: Referenced `_sources/` files exist on disk
 - TF-11: Product/company profiles MUST include primary website URL as clickable markdown link in header block (`**Website**: [Name](URL)`)
 
 STRUT Compliance (ST) - Process execution
@@ -106,7 +106,7 @@ Read _INFO_[TOPIC]-02_Sources.md
 ├─> All entries have [TOPIC]-SC-[SOURCE]-[DOCREF] IDs? (SC-02)
 ├─> All entries have Accessed dates? (SC-03)
 ├─> Tier 1-3 cited for critical claims? (SC-04)
-├─> _DOWNLOADS_gitignore/ and _SOURCES/ present? (SC-05)
+├─> _download_gitignore/ and _sources/ present? (SC-05)
 ├─> Community sources labeled? (SC-06)
 ├─> Source count sufficient? (SC-07)
 ├─> Platforms tested? (SC-08)
@@ -143,7 +143,7 @@ For each `_INFO_[TOPIC]-[NN]_*.md` (NN >= 03):
 ├─> Document History? (TF-07)
 ├─> Inline citations on critical claims? (TF-08)
 ├─> All claims labeled? (TF-09)
-└─> Referenced _SOURCES/ files exist? (TF-10)
+└─> Referenced _sources/ files exist? (TF-10)
 ```
 
 ### 5. STRUT Check (ST-01 through ST-07)
@@ -192,7 +192,7 @@ When `/improve` targets a deep-research output folder, apply these specialized t
 - Gotchas section absent or generic
 - Summary synthesis is shallow (just lists topics without connecting findings)
 - Sources file has no PDF sources (missed downloadable content)
-- No `_SOURCES/` folder (sources not transcribed for permanence)
+- No `_sources/` folder (sources not transcribed for permanence)
 
 ### Enrichment Techniques (research-specific)
 

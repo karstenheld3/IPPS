@@ -18,7 +18,7 @@ Scope: File deletion (normal modes) or in-place text transformation (file modes)
 - **When in doubt, infer narrowest scope** - never block on scope questions
 - Scan BEFORE deleting - always show preview of what will be removed
 - NEVER delete `../.tools/` output folders (see Protected Locations)
-- NEVER delete `/bugfix` `backup/` folders or `/go` backups/zips
+- NEVER delete `/go` backups/zips. Utility folders are deleted by affix only: `_agentwork/` and `.tmp_*` (see `agent-behavior.md` section Agent-Created Folders). Never descend into `_archive*` folders
 - **All categories auto-delete after preview** - no confirmation needed
 - User can run `/commit` before `/cleanup` if backups are needed
 - Prompt system mode: always preview artifacts before transforming, never remove document content (only PromptSystem artifacts)
@@ -69,7 +69,7 @@ Apply to all cleanup runs regardless of scope.
 
 All categories auto-delete after preview. No confirmation needed. User can run `/commit` before `/cleanup` if backups are needed.
 
-- Category 1: Agent temp files (`.tmp_*`, `*.tmp`) - single-run scripts, always disposable
+- Category 1: Agent temp files and folders (`.tmp_*`, `*.tmp`) - single-run scripts and rebuildable folders (`.tmp_jpgs/`, `.tmp_extracted/`), always disposable
 - Category 2: Python build artifacts (`__pycache__/`, `*.pyc`) - regenerated automatically
 - Category 3: Improve workflow backups (`_vN.*`) - safety copies after improvement accepted
 - Category 4: MCP config backups - superseded config snapshots
@@ -107,10 +107,10 @@ Delete files and directories matching these patterns:
 
 ### 1. Agent Temp Files [AUTO-DELETE]
 
-- **Pattern**: `.tmp_*` files, `*.tmp` files
-- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSIONS_FOLDER]` recursive (expected inside `_agentwork/`; matches outside it are misplaced leftovers)
-- **Source**: Agent scripts and their `_out.txt` / `_err.txt` files, `/test`, `/implement`, `/go`, `/improve` STRUT plans, youtube-downloader metadata
-- **Note**: `.tmp_*` files are dotfiles - invisible to `fd`/`find_by_name` by default. Always use PowerShell `Get-ChildItem -Force` or `fd --hidden` to scan for them.
+- **Pattern**: `.tmp_*` files, `.tmp_*` folders (deleted recursively), `*.tmp` files
+- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSIONS_FOLDER]` recursive, excluding `_archive*` folders (script files are expected inside `_agentwork/`; matches outside it are misplaced leftovers)
+- **Source**: Agent scripts and their `_out.txt` / `_err.txt` files, `/test`, `/implement`, `/go`, rebuildable folders `.tmp_jpgs/` and `.tmp_extracted/` (consuming steps re-create them when missing)
+- **Note**: `.tmp_*` files and folders are dotfiles - invisible to `fd`/`find_by_name` by default. Always use PowerShell `Get-ChildItem -Force` or `fd --hidden` to scan for them.
 
 ### 2. Python Build Artifacts [AUTO-DELETE]
 
@@ -121,7 +121,7 @@ Delete files and directories matching these patterns:
 ### 3. Improve Workflow Artifacts [AUTO-DELETE]
 
 - **Pattern**: `*_vN.*` versioned backups (filename ending in `_v` followed by digits before extension), `*_DEFERRED_IMPROVEMENTS.md`
-- **Locations**: `[WORKSPACE_FOLDER]` recursive, excluding `_Archive/` and `_OldDevSystemVersions/`
+- **Locations**: `[WORKSPACE_FOLDER]` recursive, excluding `_archive*` folders and `_OldDevSystemVersions/`
 - **Source**: `/improve` workflow versioned backups and deferred improvement logs
 
 ### 4. MCP Config Backups [AUTO-DELETE]
@@ -133,23 +133,22 @@ Delete files and directories matching these patterns:
 ### 5. Review Output Files [AUTO-DELETE]
 
 - **Pattern**: `*_CRITIQUE.md`, `*_FACT-CHECK.md`, legacy `*_REVIEW.md`
-- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSION_FOLDER]` recursive, excluding `_Archive/` and `_OldDevSystemVersions/`
+- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSION_FOLDER]` recursive, excluding `_archive*` folders and `_OldDevSystemVersions/`
 - **Source**: `/critique` and `/fact-check` workflows create these per review run. Intended to be discarded after findings are addressed.
 - **Transition note**: `*_REVIEW.md` is the pre-rename convention. Match both old and new conventions.
 
 ### 6. Workflow Scaffolding [AUTO-DELETE]
 
 - **Pattern**: `__*.md` files (double underscore prefix). Also legacy patterns: `STRUT_*.md` (not `STRUT_TEMPLATE.md`), `_TASKS_*.md` (files auto-created by `/go` before convention change)
-- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSION_FOLDER]` recursive, excluding `_Archive/`, `_OldDevSystemVersions/`, and skill folders
+- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSION_FOLDER]` recursive, excluding `_archive*` folders, `_OldDevSystemVersions/`, and skill folders
 - **Source**: `/deep-research` (STRUTs, TASKS, templates), `/go` (TASKS), `/bugfix` (STRUTs). These are process-tracking files auto-created by workflows. User-invoked outputs (`TASKS_[TOPIC].md` from `/write-tasks-plan`, `STRUT_[TOPIC].md` from `/write-strut`) are deliverables and MUST NOT be matched.
 - **Transition note**: Legacy patterns (`STRUT_*.md` without `__`, `_TASKS_*.md`) exist in older sessions. Match both old and new conventions. Exclude `STRUT_TEMPLATE.md` and `TASKS_TEMPLATE.md` (skill resources).
 
 ### 7. Agent Work Folders [AUTO-DELETE]
 
 - **Pattern**: `_agentwork/` directories, deleted recursively
-- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSION_FOLDER]` recursive, excluding `_Archive/` and `_OldDevSystemVersions/`
+- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[SESSION_FOLDER]` recursive, excluding `_archive*` folders and `_OldDevSystemVersions/`
 - **Source**: All workflows and agent work per `agent-behavior.md` `_agentwork/` Folder (cards, `_PROMPTS_*`, `__STRUT_*`, `__TASKS_*`, `__DRIFT_*`, `.tmp_*` scripts and output files)
-- **Guard**: Skip any `_agentwork/` that contains a `*.jsonl` file (un-ingested observation ledger). Report it and point to `/session-finalize`
 
 ## File Transformation
 
@@ -183,7 +182,7 @@ Strip all PromptSystem artifacts from a markdown file to produce publishable cle
 5. Workspace constants: `[WORKSPACE_FOLDER]`, `[SESSION_FOLDER]`, `[PROMPTSYSTEM_FOLDER]`, `[AGENT_FOLDER]`, `[SESSIONS_FOLDER]`, `[SKILL_TOOLS_FOLDER]`, `[DEV_KNOWLEDGE_FOLDER]`, `[DEV_SPECS_FOLDER]`, `[PRODUCT_VERSION]`, `[PRODUCT_REPO_FOLDER]`, `[PRODUCT_SOURCE_FOLDER]`, `[PRODUCT_DOCS_FOLDER]`, `[SESSION_ARCHIVE_FOLDER]`, `[API_KEYS_FILE]`, `[SOPS_FILE]`, `[RELEASE_NOTES_FOLDER]`
 6. Annotation labels: `[VERIFIED]`, `[TESTED]`, `[LITERAL]`, `[ASSUMED]`, `[PROVEN]`, `[CRITICAL]`, `[HIGH]`, `[MEDIUM]`, `[LOW]`, `[RESOLVED]`, `[WONT-FIX]`, `[NEEDS-DISCUSSION]`, `[CONTRADICTS]`, `[OUTDATED]`, `[INCOMPLETE]`, `[UNVERIFIED]` - including any content inside the brackets when the label is a prefix (e.g., `[UNVERIFIED - Einzelfallprüfung]` → remove entire bracket construct)
 7. Skill references: `@skills:...`, `@rules:...`
-8. Rule IDs: `AP-PR-*`, `AP-NM-*`, `AP-BR-*`, `AP-ST-*`, `CV-DT-*`, `CV-TR-*`, `CV-LN-*`, `SPEC-CT-*`, `IL-*`
+8. Rule IDs: `APAPL-PR-*`, `APAPL-NM-*`, `APAPL-BR-*`, `APAPL-ST-*`, `CV-DT-*`, `CV-TR-*`, `CV-LN-*`, `SPEC-CT-*`, `IL-*`
 9. PromptSystem concept references used as rule citations: `APAPALAN`, `MECT`, `SOCAS`, `MNF`, `MEPI`, `MCPI`, `VCRIV`, `FACRIV`, `GRUC`, `EDIRD`, `STRUT`, `TRACT`
 10. Session tracking references: `NOTES.md`, `PROGRESS.md`, `PROBLEMS.md`, `FAILS.md`, `LEARNINGS.md` when referenced as workflow instructions
 11. `[CONFIRMATION_KEYWORDS]` and other system placeholder references
@@ -200,7 +199,7 @@ Strip all PromptSystem artifacts from a markdown file to produce publishable cle
 ### Judgment Rule
 
 For each PromptSystem artifact found:
-- Rule citation or compliance reference (e.g., "per AP-PR-07", "follows APAPALAN") → Remove
+- Rule citation or compliance reference (e.g., "per APAPL-PR-07", "follows APAPALAN") → Remove
 - Document topic or content (e.g., a document titled "APAPALAN Rules" discussing the principle) → Keep
 - When unclear, keep the content and note it in the report
 
@@ -222,7 +221,6 @@ These folders and their contents are EXCLUDED from all cleanup operations:
 - `[WORKSPACE_FOLDER]/../.tools/_web_screenshots/` - Web page screenshots
 - `[WORKSPACE_FOLDER]/../.tools/_image_to_markdown/` - Transcription intermediates
 - `[WORKSPACE_FOLDER]/../.tools/_installer/` - Downloaded tool installers
-- `*/backup/` inside `_BugFixes/` session folders - `/bugfix` recovery data
 - Any `.zip` or backup created by `/go` workflow
 - `T##_*/` topic folders inside sessions - these are session subfolders, not temp artifacts
 
@@ -276,33 +274,30 @@ Scan per active context. Collect full paths.
 **File Cleanup scan:** run the commands below as a hang-safe temp script (`agent-behavior.md` Terminal Hang Prevention): write them into `[WORKSPACE_FOLDER]/_agentwork/.tmp_cleanup_scan.ps1`, emit full paths with `Write-Output`, run `pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_cleanup_scan.ps1 > _agentwork/.tmp_cleanup_scan_out.txt 2> _agentwork/.tmp_cleanup_scan_err.txt`, then `read_file` both output files. Never run these pipelines inline. Exclude the scan script and its output files from the preview; delete them last.
 
 ```powershell
-# 1. Agent temp files (dotfiles: -Force required)
-Get-ChildItem -Path "[SCOPE]" -Recurse -File -Force | Where-Object { $_.Name -like '.tmp_*' -or $_.Name -like '*.tmp' }
+# 1. Agent temp files and .tmp_* folders (dotfiles: -Force required; skip archive folders and items inside a .tmp_ folder)
+Get-ChildItem -Path "[SCOPE]" -Recurse -Force | Where-Object { ($_.Name -like '.tmp_*' -or $_.Name -like '*.tmp') -and $_.FullName -notmatch '_archive' -and $_.FullName -notmatch '[\\/]\.tmp_[^\\/]*[\\/]' }
 
 # 2. Python artifacts
 Get-ChildItem -Path "[SCOPE]" -Recurse -Directory | Where-Object { $_.Name -in @('__pycache__', '.pytest_cache', '.mypy_cache') }
 Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "*.pyc"
 
 # 3. Improve artifacts (_vN backups: filename_vN.ext where N is one or more digits)
-Get-ChildItem -Path "[SCOPE]" -Recurse -File | Where-Object { $_.BaseName -match '_v\d+$' -and $_.DirectoryName -notmatch '_Archive|_OldDevSystemVersions' }
-Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "*_DEFERRED_IMPROVEMENTS.md" | Where-Object { $_.DirectoryName -notmatch '_Archive|_OldDevSystemVersions' }
+Get-ChildItem -Path "[SCOPE]" -Recurse -File | Where-Object { $_.BaseName -match '_v\d+$' -and $_.DirectoryName -notmatch '_archive|_OldDevSystemVersions' }
+Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "*_DEFERRED_IMPROVEMENTS.md" | Where-Object { $_.DirectoryName -notmatch '_archive|_OldDevSystemVersions' }
 
 # 4. MCP config backups (resolve MCP config directory first)
 Get-ChildItem -Path "[MCP_CONFIG_DIR]" -File | Where-Object { $_.Name -match '^mcp_config\.json\._' }
 
 # 5. Review output files (critique + fact-check, legacy _REVIEW)
-Get-ChildItem -Path "[SCOPE]" -Recurse -File | Where-Object { ($_.Name -like '*_CRITIQUE.md' -or $_.Name -like '*_FACT-CHECK.md' -or $_.Name -like '*_REVIEW.md') -and $_.DirectoryName -notmatch '_Archive|_OldDevSystemVersions' }
+Get-ChildItem -Path "[SCOPE]" -Recurse -File | Where-Object { ($_.Name -like '*_CRITIQUE.md' -or $_.Name -like '*_FACT-CHECK.md' -or $_.Name -like '*_REVIEW.md') -and $_.DirectoryName -notmatch '_archive|_OldDevSystemVersions' }
 
 # 6. Workflow scaffolding (__ prefix + legacy patterns)
-Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "__*.md" | Where-Object { $_.DirectoryName -notmatch '_Archive|_OldDevSystemVersions|skills' }
+Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "__*.md" | Where-Object { $_.DirectoryName -notmatch '_archive|_OldDevSystemVersions|skills' }
 # Legacy: standalone STRUT files (not STRUT_TEMPLATE.md, not in skill folders)
-Get-ChildItem -Path "[SCOPE]" -Recurse -File | Where-Object { $_.Name -match '^STRUT_' -and $_.Name -ne 'STRUT_TEMPLATE.md' -and $_.DirectoryName -notmatch '_Archive|_OldDevSystemVersions|skills' }
+Get-ChildItem -Path "[SCOPE]" -Recurse -File | Where-Object { $_.Name -match '^STRUT_' -and $_.Name -ne 'STRUT_TEMPLATE.md' -and $_.DirectoryName -notmatch '_archive|_OldDevSystemVersions|skills' }
 
-# 7. Agent work folders (flag folders holding an un-ingested *.jsonl)
-Get-ChildItem -Path "[SCOPE]" -Recurse -Directory -Force -Filter "_agentwork" | Where-Object { $_.FullName -notmatch '_Archive|_OldDevSystemVersions' } | ForEach-Object {
-  $hasJsonl = [bool](Get-ChildItem -LiteralPath $_.FullName -Recurse -File -Force -Filter "*.jsonl")
-  Write-Output "$($_.FullName) jsonl=$hasJsonl"
-}
+# 7. Agent work folders
+Get-ChildItem -Path "[SCOPE]" -Recurse -Directory -Force -Filter "_agentwork" | Where-Object { $_.FullName -notmatch '_archive|_OldDevSystemVersions' }
 ```
 
 **INFO marker scan (normal modes only):**
@@ -310,7 +305,7 @@ Get-ChildItem -Path "[SCOPE]" -Recurse -Directory -Force -Filter "_agentwork" | 
 ```powershell
 # 8. INFO verification markers (count files and occurrences)
 Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "_INFO_*.md" | Where-Object {
-    $_.DirectoryName -notmatch '_Archive|_OldDevSystemVersions' -and
+    $_.DirectoryName -notmatch '_archive|_OldDevSystemVersions' -and
     (Select-String -Path $_.FullName -Pattern '\[VERIFIED\]|VERIFIED, ' -Quiet)
 }
 ```
@@ -325,7 +320,7 @@ Display grouped results in chat:
 Cleanup Preview
 ===============
 
-Agent Temp Files (N files):
+Agent Temp Files and Folders (N items):
   [full path 1]
   [full path 2]
 
@@ -350,7 +345,7 @@ Workflow Scaffolding (N files):
 
 Agent Work Folders (N folders):
   [full path 1]
-  [full path 2] (SKIPPED: un-ingested *.jsonl - run /session-finalize first)
+  [full path 2]
 
 INFO Verification Markers (N files to modify):
   [full path 1] (M occurrences)
@@ -367,7 +362,7 @@ If no items found: report "Workspace is clean - nothing to delete" and exit.
 
 Delete all found items immediately after preview (normal mode only):
 - Files: `Remove-Item -Force -Confirm:$false`
-- Directories (`__pycache__/`, `.pytest_cache/`, `.mypy_cache/`, `_agentwork/` without `*.jsonl`): `Remove-Item -Recurse -Force -Confirm:$false`
+- Directories (`__pycache__/`, `.pytest_cache/`, `.mypy_cache/`, `.tmp_*/`, `_agentwork/`): `Remove-Item -Recurse -Force -Confirm:$false`
 - Run deletions through the same temp-script pattern as the scan when more than a few items are affected
 - INFO markers: strip `[VERIFIED]` and `VERIFIED, ` via text replacement
 
@@ -388,13 +383,13 @@ Cleanup Complete
 ================
 
 Deleted:
-  Agent Temp Files: N files
+  Agent Temp Files and Folders: N items
   Python Build Artifacts: N items
   Improve Workflow Artifacts: N files
   MCP Config Backups: N files
   Review Output Files: N files
   Workflow Scaffolding: N files
-  Agent Work Folders: N folders (N skipped: un-ingested *.jsonl)
+  Agent Work Folders: N folders
   INFO Markers Stripped: N files
 
 Total: N items deleted, N files modified
@@ -484,7 +479,7 @@ Transform the target file:
 5. Strip workspace constants (remove or replace with descriptive text if removal breaks sentence flow)
 6. Strip annotation labels (`[VERIFIED]`, `[TESTED]`, etc.)
 7. Remove `@skills:...` and `@rules:...` references
-8. Remove rule IDs (`AP-PR-*`, `CV-DT-*`, etc.) when used as citations
+8. Remove rule IDs (`APAPL-PR-*`, `CV-DT-*`, etc.) when used as citations
 9. Remove PromptSystem concept references when used as citations
 10. Remove session tracking references when used as workflow instructions
 11. Remove `[CONFIRMATION_KEYWORDS]` and system placeholders
@@ -546,7 +541,7 @@ File size: [before] -> [after]
 - [ ] Scope inferred as narrowest that covers working context
 - [ ] All target locations scanned before any deletion
 - [ ] Scans ran as `_agentwork/.tmp_` script, not inline pipelines
-- [ ] `_agentwork/` folders holding `*.jsonl` skipped and reported
+- [ ] `_archive*` folders skipped; `.tmp_*` folders and `_agentwork/` folders listed and deleted by affix only
 - [ ] Protected locations excluded from results
 - [ ] Preview shown in chat with full paths
 - [ ] If explicit path provided: scan STRICTLY limited to that path, no other locations scanned

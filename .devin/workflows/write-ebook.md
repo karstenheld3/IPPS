@@ -15,6 +15,7 @@ Produce a publication-ready ebook from a draft, an options proposal, or raw inpu
 
 - @skills:write-documents `document_types/EBOOK_GUIDES.md` (craft decisions, chapter execution, stitching sequence, release check)
 - @skills:write-documents `document_types/EBOOK_TEMPLATE.md` (section: Output; carries release-check record format)
+- @skills:write-documents `AI_WRITING_RULES.md` (anti-AI artifact suppression rules `AW-*` with BAD/GOOD examples, read BEFORE writing and referenced in chapter prompts)
 - Technique files (`writing_techniques/[ID]_GUIDES.md`, `writing_techniques/TEMPLATES/[ID]_TEMPLATE.md`) ONLY when `using <ID>` is given
 - Persona file (`writing_personas/[PERSONA].md`) ONLY when `as <PERSONA>` is given (`DRSYNART-DD-17`)
 - Never load CHECKS files during execution (`DRSYNART-FR-32`, `GRUC-IG-03`)
@@ -56,8 +57,8 @@ Produce a publication-ready ebook from a draft, an options proposal, or raw inpu
    - Validate `using <ID>` and `as <PERSONA>` against library READMEs; on mismatch list valid names and stop.
    - Scope chapter and prompt counts; verify plan satisfies NFR-01 caps or initiate part split.
 2. **Program Planning**:
-   - Run `/write-strut` for `__STRUT_[TOPIC].md`. If no DRAFT exists, compile Style Sheet and Chapter Summaries into STRUT.
-   - Run `/write-prompts` compiling Section 8.3 pass sequence: chapter prompts (1-2 chapters each reading Style Sheet and Chapter Summaries, writing `_agentwork/ch-NN_[Chapter].md`), separate checkpoint prompt after each chapter prompt, copy pass, consistency pass, stitching prompt, fact-check prompt, release check prompt, VCRIV gate.
+   - Run `/write-strut` for `_agentwork/__STRUT_[TOPIC].md`. If no DRAFT exists, compile Style Sheet and Chapter Summaries into STRUT.
+   - Run `/write-prompts` compiling Section 8.3 pass sequence: chapter prompts (1-2 chapters each reading Style Sheet, Chapter Summaries, and `AI_WRITING_RULES.md`, writing `_agentwork/ch-NN_[Chapter].md` with continuous prose free of staccato, contrast snaps, nominalization chains, and flow-breaking robotic patterns), separate checkpoint prompt after each chapter prompt, copy pass, consistency pass, stitching prompt, fact-check prompt, release check prompt, VCRIV gate.
    - If `plan` or `plan only`: report PROMPTS file paths and stop.
 3. **Program Execution**:
    - Execute compiled prompt files sequentially with human review checkpoints between files (`DRSYNART-2.3`).

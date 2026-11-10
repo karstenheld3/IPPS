@@ -46,7 +46,7 @@ Generic research domain profile. Use when no specific domain profile matches (SO
 - Audio transcription via Whisper or similar
 
 ### Source Handling
-- **Primary sources**: Download to `_DOWNLOADS_gitignore/`, transcribe to `_SOURCES/`
+- **Primary sources**: Download to `_download_gitignore/`, transcribe to `_sources/`
 - **Source IDs**: Assign in format `[TOPIC]-SC-[SOURCE]-[DOCREF]`
 - **Secondary sources**: Cite with `[COMMUNITY]` label and access date
 - **Access dates**: All sources MUST include `Accessed: YYYY-MM-DD`

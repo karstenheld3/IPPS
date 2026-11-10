@@ -662,7 +662,7 @@ def main():
       print(f"ERROR: Folder not found: '{args.input_folder}'", file=sys.stderr)
       sys.exit(1)
     if not args.output_folder:
-      args.output_folder = args.input_folder / 'transcripts'
+      args.output_folder = args.input_folder / '_markdown'
     
   config_dir = args.config_folder if args.config_folder else get_shared_config_dir()
   registry, mapping, pricing = load_configs(config_dir)

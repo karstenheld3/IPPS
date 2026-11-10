@@ -20,3 +20,8 @@ description: Execute deep research (MEPI or MCPI) with domain-specific patterns 
 3. **Register Topic ID** in ID-REGISTRY.md per Topic Registry rules in promptsystem-ids.md
 4. Read the appropriate strategy file (MCPI or MEPI) based on user intent
 5. Execute Phases 1-4 per strategy file instructions
+
+## Agent-Created Folders
+
+- `_agentwork/` - role: agentwork; parent: working folder (`T##_` topic folder); creator: Step 2; content: `__STRUT_*`, `_PROMPTS_*`, `__TASKS_*`
+- Research source folders (`_download_gitignore/`, `.tmp_jpgs/`, `_sources/`): registered in @skills:research-methods SKILL.md

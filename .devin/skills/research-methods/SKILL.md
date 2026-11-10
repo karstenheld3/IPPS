@@ -136,8 +136,8 @@ Store PromptDecomposition in STRUT plan. Do NOT proceed to source collection unt
 - **Track time** - log task start/end for net research time calculation
 - **Quality pipeline 3x** (not optional): Summary+template, each topic, complete set
 - **Source completeness**: Full PDF transcription via pipeline, no agent-selected chunks
-- **Download** source files (PDFs, images) to `_DOWNLOADS_gitignore/` subfolder (not checked in)
-- **Transcribe** downloaded sources to `_SOURCES/` subfolder (checked in, web content changes)
+- **Download** source files (PDFs, images) to `_download_gitignore/` subfolder (not checked in)
+- **Transcribe** downloaded sources to `_sources/` subfolder (checked in, web content changes)
 - **Inline citations** on critical conclusions: `[LABEL] (SOURCE_ID | URL or filename)`
 - **Identify domain** during Preflight, read corresponding DOMAIN_*.md profile
 - **Document strategy choice** - OUTPUT document must include strategy (MEPI/MCPI) + domain + rationale for both in header block
@@ -217,9 +217,9 @@ Critical conclusions MUST have: `[VERIFICATION_LABEL] (SOURCE_ID | URL or filena
 
 Examples:
 - `[VERIFIED] (GRPH-SC-MSFT-RATELMT | https://learn.microsoft.com/graph/throttling)`
-- `[VERIFIED] (ANTH-SC-ANTH-MDLCRD | _SOURCES/anthropic-model-card-2025.md)`
+- `[VERIFIED] (ANTH-SC-ANTH-MDLCRD | _sources/anthropic-model-card-2025.md)`
 
-Referenced files MUST exist in `_SOURCES/` subfolder (transcribed markdown).
+Referenced files MUST exist in `_sources/` subfolder (transcribed markdown).
 
 ## Domain Profiles
 
@@ -229,6 +229,14 @@ Read one profile per session based on Q6:
 - [DOMAIN_LEGAL.md](research_areas/legal/DOMAIN_LEGAL.md) - Legislation, case law
 - [DOMAIN_PROFILES.md](research_profiles/DOMAIN_PROFILES.md) - People, companies, organizations, networks
 - [DOMAIN_DEFAULT.md](research_areas/default/DOMAIN_DEFAULT.md) - Generic (use when none match)
+
+## Agent-Created Folders
+
+- `_download_gitignore/` - role: download; parent: working folder; creator: source collection (PDF download); content: original PDFs and images
+- `_download_gitignore/compressed/` - role: download (nested); parent: working folder; creator: PDF archive step (`compress-pdf.py`); content: compressed PDFs
+- `.tmp_jpgs/[PDF_NAME]/` - role: jpgs; parent: working folder; creator: PDF image conversion (`convert-pdf-to-jpg.py`); content: page images. Rebuildable: re-render when missing
+- `_sources/` - role: sources; parent: working folder; creator: source transcription; content: transcribed sources and screenshots, `_sources/[PDF_NAME]/` for per-page markdown
+- `_agentwork/` - role: agentwork; parent: working folder (`T##_` topic folder); creator: `/deep-research`, `/research-program`; content: `__STRUT_*`, `_PROMPTS_*`, `__TASKS_*`
 
 ## Output Format
 
@@ -245,9 +253,9 @@ MEPI uses its own output format (see RESEARCH_STRATEGY_MEPI.md) with Comparison 
 
 ## Planning Structure
 
-**STRUT** (high-level, REQUIRED): Phases, objectives, deliverables, transitions, time log. File: `__STRUT_[TOPIC].md`
+**STRUT** (high-level, REQUIRED): Phases, objectives, deliverables, transitions, time log. File: `_agentwork/__STRUT_[TOPIC].md`
 
-**TASKS** (low-level, Phase 2): Flat task list with durations and done-when criteria. File: `__TASKS_[TOPIC]_RESEARCH.md`
+**TASKS** (low-level, Phase 2): Flat task list with durations and done-when criteria. File: `_agentwork/__TASKS_[TOPIC]_RESEARCH.md`
 
 ## Reference Files
 

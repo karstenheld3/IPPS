@@ -107,7 +107,7 @@ Executing hypothesis generation follows six core analytical decisions in the seq
 ### Crucial Test Plan: H-01 vs H-02
 
 - Target evidence: Kernel lock trace logs during synthetic configuration reload.
-- Search venue: Local telemetry logs in `_SOURCES/CORP-SC-OPS-01_traces.json`.
+- Search venue: Local telemetry logs in `_sources/CORP-SC-OPS-01_traces.json`.
 - Decisive exclusion condition: If thread wait states occur in `net_rx` rather than `mutex_lock`, H-01 is refuted and H-02 is supported.
 - Cruciality: High (decisively discriminates between internal lock contention and external network partition).
 ```

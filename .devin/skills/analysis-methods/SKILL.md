@@ -43,7 +43,7 @@ Layer 2 of the research-to-deliverable pipeline. Systematic qualitative coding, 
 ## C1 -> C2 Hand-over Contract
 
 - **Input (C1 Knowledge Library or raw material)**:
-  - C1: `_INFO_[TOPIC]-IN01_Summary.md`, `_INFO_[TOPIC]-IN02_Sources.md`, topic files, `_SOURCES/`
+  - C1: `_INFO_[TOPIC]-IN01_Summary.md`, `_INFO_[TOPIC]-IN02_Sources.md`, topic files, `_sources/`
   - Any raw input: single INFO, bundle, notes, PDF transcriptions, websites, or conversation text (`DRSYNART-DD-04`). Non-C1 input triggers S1 coding pass to establish provenance (`DRSYNART-FR-12`).
 - **Output (C2 Validated Knowledge)**:
   - From `/analyze`: always one `_INFO_[TOPIC]-IN[NN]_Analysis.md` (from `ANALYSIS_TEMPLATE.md`) containing Pattern Map, Hypothesis Register, Validation Report, and Research Questions for Layer 1.

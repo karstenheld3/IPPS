@@ -5,7 +5,7 @@ transcribe-audio-to-markdown.py - Convert audio files to markdown transcripts us
 Usage:
   python transcribe-audio-to-markdown.py --input recording.mp3 --output transcript.md
   python transcribe-audio-to-markdown.py --input meeting.wav --format --output meeting.md
-  python transcribe-audio-to-markdown.py --input-dir ./audio --output-dir ./transcripts
+  python transcribe-audio-to-markdown.py --input-dir ./audio --output-dir ./_markdown
 """
 
 import os, sys, json, argparse
@@ -239,7 +239,7 @@ def main():
 Examples:
   python transcribe-audio-to-markdown.py --input recording.mp3 --output transcript.md
   python transcribe-audio-to-markdown.py --input meeting.wav --format --output meeting.md
-  python transcribe-audio-to-markdown.py --input-dir ./audio --output-dir ./transcripts --format
+  python transcribe-audio-to-markdown.py --input-dir ./audio --output-dir ./_markdown --format
     """
   )
     
@@ -285,7 +285,7 @@ Examples:
     args.output = args.input.with_suffix('.md')
     
   if batch_mode and not args.output_dir:
-    args.output_dir = args.input_dir / 'transcripts'
+    args.output_dir = args.input_dir / '_markdown'
     
   # Load API keys
   api_keys = load_api_keys()

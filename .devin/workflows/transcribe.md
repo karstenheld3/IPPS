@@ -78,7 +78,7 @@ $skill = "[AGENT_FOLDER]/skills/llm-tools/transcription"
 # Batch mode (entire folder, multiple pages)
 & $venv "$skill/transcribe-image-to-markdown.py" `
     --input-folder "../.tools/_pdf_to_jpg_converted/[NAME]/" `
-    --output-folder "[SESSION_FOLDER]/transcribed/" `
+    --output-folder "[SESSION_FOLDER]/_markdown/[DocName]/" `
     --keys-file "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt" `
     --model gpt-5-mini `
     --initial-candidates 1 `
@@ -215,7 +215,7 @@ After batch transcription completes, merge individual page files into single out
 For TRANSCRIBE_SCRIPT + TRANSCRIBE_MULTI, stitching happens inline during the context-specific process.
 
 ```powershell
-$folder = "[OUTPUT_FOLDER]/02_transcribed_pages"
+$folder = "[OUTPUT_FOLDER]/_markdown/[DocName]"
 $output = "[OUTPUT_FOLDER]/[DocName].md"  # No suffix like _COMPLETE
 $files = Get-ChildItem $folder -Filter "*.md" | Where-Object { $_.Name -notlike "_*" } | Sort-Object Name
 $content = @()
@@ -284,9 +284,15 @@ Run `/verify` to check:
 ## Output
 
 - Converted images: `../.tools/_pdf_to_jpg_converted/[NAME]/` (default from convert-pdf-to-jpg.py, do NOT override)
-- Transcribed pages: `[SESSION_FOLDER]/02_transcribed_pages/`
+- Transcribed pages: `[SESSION_FOLDER]/_markdown/[DocName]/`
+- Rebuild: page images are rebuildable. If the image folder is missing (deleted by `/cleanup`), re-render it from the source PDF with `convert-pdf-to-jpg.py` before continuing; never fail because images are missing
 - Final merged output: `[SESSION_FOLDER]/[DocName].md`
 - Web screenshots: `../.tools/_web_screenshots/[DOMAIN]/`
+
+## Agent-Created Folders
+
+- `_markdown/[DocName]/` - role: markdown; parent: working folder; creator: Step 2 batch transcription; content: one markdown file per page
+- `_download_gitignore/` - role: download; parent: working folder; creator: Source Type "URL to PDF" download; content: downloaded PDF
 
 # CONTENT RULES
 
@@ -500,11 +506,11 @@ python [AGENT_FOLDER]/skills/pdf-tools/convert-pdf-to-jpg.py "path/to/document.p
 ```powershell
 $url = "https://example.com/document.pdf"
 $filename = [System.IO.Path]::GetFileName($url)
-# Download to _DOWNLOADS_gitignore (not checked in)
-New-Item -ItemType Directory -Path "[SESSION_FOLDER]/_DOWNLOADS_gitignore" -Force | Out-Null
-Invoke-WebRequest -Uri $url -OutFile "[SESSION_FOLDER]/_DOWNLOADS_gitignore/$filename"
+# Download to _download_gitignore (not checked in)
+New-Item -ItemType Directory -Path "[SESSION_FOLDER]/_download_gitignore" -Force | Out-Null
+Invoke-WebRequest -Uri $url -OutFile "[SESSION_FOLDER]/_download_gitignore/$filename"
 # Then convert to JPG
-python [AGENT_FOLDER]/skills/pdf-tools/convert-pdf-to-jpg.py "[SESSION_FOLDER]/_DOWNLOADS_gitignore/$filename" --dpi 120
+python [AGENT_FOLDER]/skills/pdf-tools/convert-pdf-to-jpg.py "[SESSION_FOLDER]/_download_gitignore/$filename" --dpi 120
 ```
 
 ### For Web Page

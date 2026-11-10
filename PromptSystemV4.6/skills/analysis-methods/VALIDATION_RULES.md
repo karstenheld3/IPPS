@@ -2,7 +2,7 @@
 
 Verification rules for validation artifacts produced with `/validate` or during stage S4 of `/analyze`.
 
-Writing quality: Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: AP-PR-07 (be specific), AP-PR-05 (referenceable IDs), MW-VO-01 (active voice), MW-WC-02 (plain language).
+Writing quality: Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: APAPL-PR-07 (be specific), APAPL-PR-05 (referenceable IDs), MECT-VO-01 (active voice), MECT-WC-02 (plain language).
 
 ## Rule Index
 
@@ -63,7 +63,7 @@ Artifact check: Verify search records and test citations indicate local source c
 ```markdown
 ### Search Log: H-01
 
-- Local search: Inspected `_SOURCES/CORP-SC-OPS-01_traces.json` (found 4 diagnostic trace events).
+- Local search: Inspected `_sources/CORP-SC-OPS-01_traces.json` (found 4 diagnostic trace events).
 - External fallback: None required; local evidence settles lock contention mechanism.
 ```
 

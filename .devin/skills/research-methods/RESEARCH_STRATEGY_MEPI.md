@@ -26,7 +26,7 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
 
 ### Step 1: Create STRUT and Decompose Prompt
 
-- Create `__STRUT_[TOPIC].md` using `/write-strut` workflow
+- Create `_agentwork/__STRUT_[TOPIC].md` using `/write-strut` workflow
 - STRUT defines: phases, objectives, steps, deliverables, transitions
 - STRUT enforces 3 VCRIV gate deliverables (Preflight, Planning, Final) + per-file VCRIV during research = 4 checkpoints total per SKILL.md
 - STRUT MUST include quality pipeline steps and time log
@@ -58,7 +58,7 @@ Decompose prompt, document assumptions, collect sources, verify/correct, create 
   - `"[SUBJECT]" site:[official-domain]` - Official content discovery
   - `"[SUBJECT]" [dimension keyword]` - Per-dimension discovery
   - Collect PDF URLs, documentation pages, and public resources from results
-  - Download discovered PDFs to `_DOWNLOADS_gitignore/`
+  - Download discovered PDFs to `_download_gitignore/`
   - **Google = URL discovery only**: Skip AI Overview, Featured Snippets, Knowledge Panels. Extract URLs and titles only, then click through to source websites for content. See RESEARCH_TOOLS.md "Google Search Extraction Principle".
 - **Classify discovery platforms** from Q7 as FREE/PAID/PARTIAL; use FREE and PARTIAL, note PAID for user follow-up
 - Collect **5-10 sources per dimension** (focus on top-tier sources first)
@@ -95,7 +95,7 @@ Create Summary file (skeletal), topic template, TASKS plan, run second VCRIV.
 
 ### Step 2: Template Creation
 
-- Run `/write-template` to create `__TEMPLATE_[TOPIC]_TOPIC.md` (working template, retained for research extension)
+- Run `/write-template` to create `_agentwork/__TEMPLATE_[TOPIC]_TOPIC.md` (working template, retained for research extension)
 - Template structure (base + domain-specific additions from active profile):
   - Header block (Doc ID, Goal, Dependencies, **Version/Date scope**)
   - Summary (5-10 sentences)
@@ -108,7 +108,7 @@ Create Summary file (skeletal), topic template, TASKS plan, run second VCRIV.
 
 ### Step 3: TASKS Plan
 
-- Create `__TASKS_[TOPIC]_RESEARCH.md`
+- Create `_agentwork/__TASKS_[TOPIC]_RESEARCH.md`
 - Partition topics from Summary file into discrete tasks
 - Each task: Status, Estimated effort (`Est: [N] HWH`, Human Work Hours), Sources, Done-when criteria
 - Effort estimates typically 2-4 HWH total

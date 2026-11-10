@@ -8,6 +8,7 @@
 
 # Workflow scaffolding (auto-created process artifacts, not deliverables)
 __*.md
+_agentwork/
 
 # Suffix-based gitignore (append _gitignore before extension to exclude any file/folder)
 *_gitignore.*

@@ -7,7 +7,7 @@ auto_execution_mode: 1
 
 Turn one or more Markdown files into self-contained HTML and A4 PDF files using the renderings skill.
 
-**Goal**: `.html` and `.pdf` artifacts in a `_EXPORT_gitignore` subfolder (or a user-chosen folder), readable without an editor, with working TOC links, page numbers, and bookmarks.
+**Goal**: `.html` and `.pdf` artifacts in a `_export_gitignore` subfolder (or a user-chosen folder), readable without an editor, with working TOC links, page numbers, and bookmarks.
 
 **Why**: Deliverables and review copies must open anywhere. Browser print dialogs and ad hoc viewers give inconsistent results; the skill gives one command with a shared visual language.
 
@@ -19,7 +19,7 @@ Turn one or more Markdown files into self-contained HTML and A4 PDF files using 
 
 - Use the venv Python from `[SKILL_TOOLS_FOLDER]\llm-venv`; never system Python
 - Choose the template before running: parallel language streams → `DocumentMultiLingual-Columns` with `--options` matching the marker lines; formal memos/letters with signature blocks → `MemoSigned`; otherwise `DocumentDefault`
-- Default output folder is `_EXPORT_gitignore` relative to the input's parent (session folder, workspace root, or the folder containing the inputs). Only use a different folder when the user explicitly provides `--output-dir` or names a target
+- Default output folder is `_export_gitignore` relative to the input's parent (session folder, workspace root, or the folder containing the inputs). Only use a different folder when the user explicitly provides `--output-dir` or names a target
 - Never pass `--overwrite` on existing deliverables unless the user asked to replace them
 - Report the artifact list (path, pages, size) back to the user
 - Run `/verify` after workflow complete
@@ -33,7 +33,7 @@ Turn one or more Markdown files into self-contained HTML and A4 PDF files using 
 
 ## Steps
 
-1. Resolve the inputs from the prompt: explicit files, a folder, or a glob. Determine the output folder: if the user specified `--output-dir` or named a target folder, use that; otherwise default to `_EXPORT_gitignore` under the input's parent directory (e.g. `[SESSION_FOLDER]/_EXPORT_gitignore/`, or `[WORKSPACE]/_EXPORT_gitignore/`, or `<input-folder>/_EXPORT_gitignore/`)
+1. Resolve the inputs from the prompt: explicit files, a folder, or a glob. Determine the output folder: if the user specified `--output-dir` or named a target folder, use that; otherwise default to `_export_gitignore` under the input's parent directory (e.g. `[SESSION_FOLDER]/_export_gitignore/`, or `[WORKSPACE]/_export_gitignore/`, or `<input-folder>/_export_gitignore/`)
 2. Inspect one input: if it contains marker lines that start language or version streams (headings like `### XX (Original)` or bold lines like `**XX (Original)**`), use `--template DocumentMultiLingual-Columns` and build `--options` per the skill's Procedure 2; if it is a formal memo/letter with signature blocks, use `--template MemoSigned`; otherwise use the default `DocumentDefault` template
 3. Run `render.py` with `--output-dir <resolved folder>` and `--format both` unless the user asked for one format; add `--lang` for non-English documents, `--paper Letter` or `--landscape` when requested
 4. Read the report: any `FAILED` line → fix the cause (encoding, missing browser, template option) and rerun only the failed inputs
@@ -56,5 +56,9 @@ Run `/verify` to check:
 
 ## Output
 
-- Artifacts in `_EXPORT_gitignore` (default) or the user-specified `--output-dir`
+- Artifacts in `_export_gitignore` (default) or the user-specified `--output-dir`
 - Artifact list with paths, page counts, sizes in the chat response
+
+## Agent-Created Folders
+
+- `_export_gitignore/` - role: export; parent: content folder (folder of the input file); creator: Step 3; content: rendered `.html` and `.pdf`

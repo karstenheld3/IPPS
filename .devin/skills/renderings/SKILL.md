@@ -20,8 +20,8 @@ Two-step renderer: `render.py` injects Markdown into an HTML template that carri
 
 1. Run with the venv Python: `& "[SKILL_TOOLS_FOLDER]\llm-venv\Scripts\python.exe" [AGENT_FOLDER]\skills\renderings\render.py ...`
 2. Pick the template first: documents with parallel language streams (`### DE (Original)` style markers) → `DocumentMultiLingual-Columns` with `--options`; formal memos/letters with signature blocks → `MemoSigned`; everything else → `DocumentDefault`
-3. Output goes next to the input unless `--output-dir` is given; existing files are skipped unless `--overwrite`
-4. Images stay linked files (never embedded): keep them in `_assets/` next to the Markdown and link `![Alt](_assets/name.png)`. The HTML keeps the same relative `src` (GitHub-compatible); with `--output-dir` the referenced images are copied to the same relative path. Ship the HTML together with its `_assets/` folder
+3. Output goes to `_export_gitignore/` next to the input unless `--output-dir` is given; existing files are skipped unless `--overwrite`
+4. Images stay linked files (never embedded): keep them in `_assets/` next to the Markdown and link `![Alt](_assets/name.png)`. The HTML keeps the same relative `src` (GitHub-compatible); the referenced images are copied to the same relative path inside the output folder. Ship the HTML together with its `_assets/` folder
 5. Templates must set `body[data-rendered="true"]` when done; `render.py` waits for it before printing. A template that never sets it fails after `--render-timeout` seconds
 6. Output HTML is self-contained except linked local images (no external scripts, fonts, or styles); do not add CDN links to templates. The PDF embeds every image
 
@@ -129,6 +129,10 @@ All three templates: no external resources, `-webkit-print-color-adjust: exact`,
 - **No hyphenation** - the Playwright Chromium build ships without hyphenation dictionaries; `hyphens: auto` would have no effect, so table fitting relies on font size, not on breaking words
 - **Braille art** - Consolas has no Braille glyphs; they fall back to the next monospace font with a different advance width and drift against box-drawing characters in the same block
 - **Screen screenshots show colored fringes** on thin box-drawing lines (Windows ClearType sub-pixel rendering); the PDF has none
+
+## Agent-Created Folders
+
+- `_export_gitignore/` - role: export; parent: content folder (folder of the input file); creator: `render.py` default output; content: rendered `.html` and `.pdf`, copies of linked images
 
 ## Vendored Library
 

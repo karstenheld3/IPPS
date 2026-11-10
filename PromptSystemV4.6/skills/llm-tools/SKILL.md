@@ -53,6 +53,10 @@ llm-tools/
 - Python: `[SKILL_TOOLS_FOLDER]/llm-venv/Scripts/python.exe`. Keys: `[API_KEYS_FILE]` (`OPENAI_API_KEY=`, `ANTHROPIC_API_KEY=`, one per line) passed via `--keys-file`
 - Effort levels everywhere: `none | minimal | low | medium | high | xhigh | max` mapped by `model-parameter-mapping.json`; the registry lists which levels each model supports
 
+## Agent-Created Folders
+
+- `_markdown/` - role: markdown; parent: content folder (batch input folder of the script); creator: `transcribe-image-to-markdown.py` and `transcribe-audio-to-markdown.py` batch default output; content: one markdown file per input file
+
 ## Quick Commands
 
 ```powershell

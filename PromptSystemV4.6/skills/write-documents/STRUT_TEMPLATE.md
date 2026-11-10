@@ -7,7 +7,7 @@ Template for creating STRUT plans (Structured Thinking notation) that can be emb
 ## When to Use
 
 STRUT plans go to:
-- **`__STRUT_[TOPIC].md`** - Standalone scaffolding file (default, deleted by `/cleanup`)
+- **`_agentwork/__STRUT_[TOPIC].md`** - Standalone scaffolding file in the working folder (default, deleted by `/cleanup`)
 - **IMPL documents** - Embedded in implementation plans
 - **TASKS documents** - Embedded in task plans
 

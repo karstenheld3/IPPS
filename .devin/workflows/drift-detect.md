@@ -90,17 +90,17 @@ Note meta-criteria presence/absence (observational).
 
 ### Step 4: PERSIST
 
-Working directory = session folder (SESSION-MODE) or project folder (PROJECT-MODE).
+Working directory = session folder (SESSION-MODE) or project folder (PROJECT-MODE). All drift files go into its `_agentwork/` subfolder (create if missing).
 
 **Normal mode** (`/drift-detect` or `/drift-detect [directive]`):
 
-Create `__DRIFT_[TOPIC].md` in working directory using template from `@skills:drift-control` `DRIFT_TEMPLATE.md`.
+Create `_agentwork/__DRIFT_[TOPIC].md` in working directory using template from `@skills:drift-control` `DRIFT_TEMPLATE.md`.
 
 **Log mode** (`/drift-detect log`):
 
 After writing `__DRIFT_[TOPIC].md` (same as normal mode), ALSO:
 
-1. Append all FAIL and MISSED items to `DRIFTS.md` in current working directory
+1. Append all FAIL and MISSED items to `_agentwork/DRIFTS.md` in current working directory
 2. Use format from `@skills:drift-control` `DRIFTS_TEMPLATE.md`
 3. If DRIFTS.md does not exist, create with header from template
 
@@ -136,9 +136,13 @@ After writing `__DRIFT_[TOPIC].md` (same as normal mode), ALSO:
 
 ## Output
 
-- `__DRIFT_[TOPIC].md` in working directory (all modes)
-- DRIFTS.md entry appended (log mode, additional)
+- `_agentwork/__DRIFT_[TOPIC].md` in working directory (all modes)
+- `_agentwork/DRIFTS.md` entry appended (log mode, additional)
 - Detection summary reported to user
+
+## Agent-Created Folders
+
+- `_agentwork/` - role: agentwork; parent: working folder; creator: Step 4; content: `__DRIFT_*`, `DRIFTS.md`
 
 ## Trigger
 

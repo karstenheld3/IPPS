@@ -23,7 +23,7 @@ Read `STRUT_TEMPLATE.md` from the @write-documents skill folder.
 ## Step 2: Determine Location
 
 STRUT plans go to:
-- `__STRUT_[TOPIC].md` - Standalone scaffolding file (default, deleted by `/cleanup`)
+- `_agentwork/__STRUT_[TOPIC].md` - Standalone scaffolding file in the working folder (default, deleted by `/cleanup`)
 - `_IMPL_*.md` - Embedded in implementation plans
 - `_TASKS_*.md` - Embedded in task plans
 

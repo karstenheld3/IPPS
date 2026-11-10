@@ -115,7 +115,8 @@ Dispatches to existing creation flow. Preserves the original workspace creation 
    - Create NOTES.md (SINGLE-PROJECT, GENERAL) or !NOTES.md (WORKSPACE) at workspace root
    - Create PROBLEMS.md, PROGRESS.md, ID-REGISTRY.md, SOPS.md, FAILS.md
    - Copy WORKSPACE_SETUP_QUESTIONNAIRE.md from `[AGENT_FOLDER]/skills/workspace-management/` to workspace root as `_WORKSPACE_SETUP_QUESTIONNAIRE.md`
-   - Create empty folders: [AGENT_FOLDER], _sessions, _sessions/_archive, docs/
+   - Create empty folders: [AGENT_FOLDER], _sessions, _archive_gitignore, docs/
+   - Ensure `.gitignore` contains the standard folder patterns `.tmp_*`, `*_gitignore/`, `_agentwork/` (see `agent-behavior.md` section Agent-Created Folders)
    - Create IDE launcher scripts (Devin.bat, DevinNext.bat) using templates from WORKSPACE-GUIDES.md "IDE Launcher Scripts" section. Use single-repo variant for SINGLE-PROJECT/GENERAL, multi-repo variant for WORKSPACE
    - For WORKSPACE: also create [folder-name].code-workspace (named after workspace folder), product repo README.md, knowledge/, specs/
 5. Sync PromptSystem files from source to [AGENT_FOLDER] using @skills:workspace-management Procedure 2

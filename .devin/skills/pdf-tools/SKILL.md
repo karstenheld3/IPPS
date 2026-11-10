@@ -281,6 +281,12 @@ cmd /c "& '../.tools/gs/bin/gswin64c.exe' -sDEVICE=pdfwrite -dCompatibilityLevel
 5. **Clean up**: Delete old conversions when no longer needed
 6. **Two-pass for maximum compression**: Ghostscript (images) then QPDF (structure)
 
+## Agent-Created Folders
+
+- `.tmp_jpgs/[PDF_NAME]/` - role: jpgs; parent: content folder or working folder; creator: `convert-pdf-to-jpg.py --output .tmp_jpgs/`; content: page images. Rebuildable: re-run the conversion when missing
+- `_download_gitignore/compressed/` - role: download (nested); parent: working folder; creator: `compress-pdf.py --output`; content: compressed PDFs
+- Defaults of both scripts write into `../.tools/` (outside the repository, not covered by the folder standard)
+
 ## Setup
 
 For initial installation, see `SETUP.md` in this skill folder.

@@ -66,8 +66,8 @@
 [SESSIONS_FOLDER]: `[WORKSPACE_FOLDER]\_PrivateSessions_gitignore`
 - Base folder for session folders.
 
-[SESSION_ARCHIVE_FOLDER]: `[SESSIONS_FOLDER]\_Archive`
-- Archive folder for closed sessions.
+[SESSION_ARCHIVE_FOLDER]: `[WORKSPACE_FOLDER]\_archive_gitignore`
+- Archive folder for closed sessions (not versioned). Sessions archived before 2026-11-10 stay in `[SESSIONS_FOLDER]\_Archive` (no migration).
 
 [SKILL_TOOLS_FOLDER]: `[WORKSPACE_FOLDER]\..\.tools\`
 - Command line tools used by various PromptSystem skills. Shared across workspaces. Not the agent built-in tools.

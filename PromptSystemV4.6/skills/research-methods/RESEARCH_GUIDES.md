@@ -15,7 +15,7 @@ Executing research follows seven core strategic decisions in the sequence below.
 - **Question**: Which execution depth and time envelope governs the research task?
 - **Options**:
   - Tier 1 (Single-turn research, `/research`): 2-10 minutes. One conversation turn producing one standalone `_INFO_*.md` document. No STRUT, no prompt files, no topic folders. Best for factual verification, single questions, or rapid due diligence.
-  - Tier 2 (Planned deep research, `/deep-research`): 10-60 minutes. Single `T##_` topic folder containing `__STRUT_[TOPIC].md` and one compiled PROMPTS file (3-10 prompts). Runs headlessly without pause; produces full C1 Knowledge Library (Summary, Sources, topic files, `_SOURCES/`).
+  - Tier 2 (Planned deep research, `/deep-research`): 10-60 minutes. Single `T##_` topic folder whose `_agentwork/` holds `__STRUT_[TOPIC].md` and one compiled PROMPTS file (3-10 prompts). Runs headlessly without pause; produces full C1 Knowledge Library (Summary, Sources, topic files, `_sources/`).
   - Tier 3 (Program research, `/research-program`): 2-20 hours. Multi-approach program (1-4 approaches as `T##_` folders). Governed by session STRUT and 2-8 compiled PROMPTS files (10-35 prompts total). Pauses for human review between prompt files. Ends with session-level program Summary comparing approaches.
 - **Criterion**: Base choice strictly on prompt scope and time budget:
   - If question is narrow (<1 hour investigation needed) -> Tier 1.

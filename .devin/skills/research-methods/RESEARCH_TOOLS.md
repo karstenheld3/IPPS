@@ -41,7 +41,7 @@ Run targeted queries:
      ↓
 Collect PDF URLs, doc pages, public resources
      ↓
-Download PDFs to _DOWNLOADS_gitignore/
+Download PDFs to _download_gitignore/
 ```
 
 **Query patterns:**
@@ -156,7 +156,7 @@ Need complete visual record of web page
      ↓
 browser_navigate → browser_take_screenshot(fullPage: true, type: "jpeg")
      ↓
-MANDATORY: transcribe to _SOURCES/[SOURCE-ID]_transcription.md
+MANDATORY: transcribe to _sources/[SOURCE-ID]_transcription.md
   - Preferred: browser_snapshot + browser_evaluate (text extraction, faster)
   - Fallback: transcribe-image-to-markdown.py (OCR, for canvas/image-heavy pages)
 ```
@@ -222,7 +222,9 @@ pdftotext.exe "source.pdf" "source.txt"
 # Check: Is output meaningful? Has sufficient content?
 
 # Step 2b: Convert to images (if text extraction insufficient)
-python convert-pdf-to-jpg.py "source.pdf" --dpi 150 --output "[SESSION]/pdf_images/"
+python convert-pdf-to-jpg.py "source.pdf" --dpi 150 --output "[SESSION]/.tmp_jpgs/"
+
+# Rebuild: .tmp_jpgs/ is deleted by /cleanup; if it is missing when a later step needs it, re-run Step 2b
 
 # Step 3: Assess quality needs
 # Manually review 3-5 sample images to determine:
@@ -230,10 +232,10 @@ python convert-pdf-to-jpg.py "source.pdf" --dpi 150 --output "[SESSION]/pdf_imag
 # - What level of detail is needed?
 
 # Step 4: Batch transcribe with parallel workers
-python transcribe-image-to-markdown.py --input-folder "[SESSION]/pdf_images/" --output-folder "[SESSION]/transcribed/" --workers 60
+python transcribe-image-to-markdown.py --input-folder "[SESSION]/.tmp_jpgs/[PDF_NAME]/" --output-folder "[SESSION]/_sources/[PDF_NAME]/" --workers 60
 
 # Step 5: Archive
-python compress-pdf.py "source.pdf" --output "[SESSION]/compressed/"
+python compress-pdf.py "source.pdf" --output "[SESSION]/_download_gitignore/compressed/"
 # Copy with preserved timestamps:
 # PowerShell: Copy-Item preserves timestamps by default
 # Store: compressed PDF + all .md files in session folder
@@ -243,20 +245,22 @@ python compress-pdf.py "source.pdf" --output "[SESSION]/compressed/"
 
 ```
 [SESSION]/
-├── _DOWNLOADS_gitignore/
+├── _download_gitignore/
 │   ├── [original PDFs - not checked in]
-│   ├── pdf_images/
-│   │   └── [PDF_NAME]/
-│   │       ├── page_001.jpg
-│   │       └── ...
 │   └── compressed/
 │       └── [PDF_NAME]_compressed.pdf
-└── _SOURCES/
+├── .tmp_jpgs/                  (deletable, rebuildable)
+│   └── [PDF_NAME]/
+│       ├── page_001.jpg
+│       └── ...
+└── _sources/
     └── [PDF_NAME]/
         ├── page_001.md
         ├── page_002.md
         └── ...
 ```
+
+Folder registrations: see `SKILL.md` section Agent-Created Folders.
 
 **Decision criteria:**
 

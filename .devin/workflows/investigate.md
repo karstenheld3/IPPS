@@ -38,7 +38,7 @@ Scope: Deep problem analysis requiring multi-phase investigation. Use `/research
 ## Output
 
 ```
-__STRUT_[TOPIC].md          ← Investigation phase plan with log checkpoints
+_agentwork/__STRUT_[TOPIC].md  ← Investigation phase plan with log checkpoints
 _LOG_[TOPIC].md             ← Append-only investigation log
 ```
 
@@ -56,7 +56,7 @@ _LOG_[TOPIC].md             ← Append-only investigation log
 7. List known knowns: what is confirmed and verified
 8. List known unknowns: what needs to be discovered or tested
 
-9. Write STRUT plan (`__STRUT_[TOPIC].md`):
+9. Write STRUT plan (`_agentwork/__STRUT_[TOPIC].md` in the working folder):
    1. Define phases where Phase 1 is the highest-priority investigation approach
    2. Each phase has Objectives, Strategy, Steps, Deliverables, Transitions
    3. Each phase MUST include mandatory log checkpoint steps:

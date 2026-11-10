@@ -26,7 +26,7 @@
 - Log entry format: `- **YYYY-MM-DD HH:MM** - Main topic` with anchor to History - CV-ST-03
 - Todo format: `- **YYYY-MM-DD HH:MM** - Item - Deadline: YYYY-MM-DD, Status: TODO:[ACTION]/DONE` - CV-TD-01
 - Todo actions: `TODO:REPLY`, `TODO:REVIEW`, `TODO:PAY`, `TODO:PLAN`, `TODO:SCHEDULE_CALL` (web), `TODO:SCHEDULE_TRIP`, `TODO:SCHEDULE_MEETING` (in person) - CV-TD-02
-- Attachment folders: binaries in `Attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/`, text files in `Attachments/YYYY-MM-DD_HH-MM_[Topic]/` - CV-AT-04, CV-AT-05
+- Attachment folders: binaries in `_attachments_gitignore/YYYY-MM-DD_HH-MM_[Topic]/`, transcripts and translations in `_attachments_markdown/YYYY-MM-DD_HH-MM_[Topic]/` - CV-AT-04, CV-AT-05
 - AUTO-TRANSCRIBE: When enabled, transcribe attachments via `/transcribe` (1 candidate, 120dpi, min-score=4.5) - CV-AT-03
 - URLs: Clickable Markdown links only in the "Links and shared documents" section - CV-LN-01. Plain full URLs everywhere else, including email bodies (Markdown link syntax is lost on copy/paste) - CV-LN-05
 - ALL LINKS ABSOLUTE: File paths, attachment references, and source links MUST be full absolute clickable paths. Never use relative paths or `...` abbreviations - CV-LN-04
@@ -37,9 +37,9 @@
 - CONSISTENCY ANCHORING: Analyze user's prior messages before first draft. Extract greeting/closing, sentence length, punctuation, discourse markers - CV-HM-02
 - SPELLING VARIANTS: Same word = same spelling every time. Track in SPELLING_VARIANTS - CV-HM-03
 - SENTENCE RHYTHM: Vary sentence length. No 3+ consecutive sentences of similar word count - CV-HM-05
-- QUESTIONS/CTA IN OWN PARAGRAPH: Every question and call-to-action in its own paragraph, separated by blank lines, labeled (Question:/Request:), fully self-contained - AP-CM-02
-- ACCOUNTABLE COMMITMENTS: Every commitment states action, deliverable, and timing - AP-CM-01
-- TIME PRECISION: Weekday + ISO date, HH:MM with timezone when scheduling; periods include year - AP-CM-03
+- QUESTIONS/CTA IN OWN PARAGRAPH: Every question and call-to-action in its own paragraph, separated by blank lines, labeled (Question:/Request:), fully self-contained - APAPL-CM-02
+- ACCOUNTABLE COMMITMENTS: Every commitment states action, deliverable, and timing - APAPL-CM-01
+- TIME PRECISION: Weekday + ISO date, HH:MM with timezone when scheduling; periods include year - APAPL-CM-03
 
 ## Ignore Files
 
@@ -78,9 +78,9 @@ Files matching these patterns should NOT be downloaded. If downloaded, delete th
 - **2026-03-15 09:15** - Some websites to check
   - [Website Title](https://example.com)
 - **2026-03-17 14:30** - Document title
-  - [Document.pdf](Attachments_gitignore/2026-03-17_14-30_Topic/Document.pdf)
-  - [Document.md](Attachments/2026-03-17_14-30_Topic/Document.md) (transcription)
-  - [Document_en.md](Attachments/2026-03-17_14-30_Topic/Document_en.md) (translation)
+  - [Document.pdf](_attachments_gitignore/2026-03-17_14-30_Topic/Document.pdf)
+  - [Document.md](_attachments_markdown/2026-03-17_14-30_Topic/Document.md) (transcription)
+  - [Document_en.md](_attachments_markdown/2026-03-17_14-30_Topic/Document_en.md) (translation)
 
 ## Conversation Context
 
@@ -109,7 +109,7 @@ Files matching these patterns should NOT be downloaded. If downloaded, delete th
 - **2026-03-17 14:30** - Discussed Q2 timeline adjustments
   - Decision: Move milestone 2 to April 15
   - Action: Send updated document by Friday
-  - Attachment: [Doc.pdf](Attachments_gitignore/2026-03-17_14-30_Topic/Doc.pdf) | [Doc.md](Attachments/2026-03-17_14-30_Topic/Doc.md)
+  - Attachment: [Doc.pdf](_attachments_gitignore/2026-03-17_14-30_Topic/Doc.pdf) | [Doc.md](_attachments_markdown/2026-03-17_14-30_Topic/Doc.md)
   - [Email](#2026-03-17-1430---q2-timeline-discussion)
 - **2026-03-16 10:30** - DRAFT: Follow-up proposal to Jane
   - [Draft](#2026-03-16-1030---draft-follow-up-proposal-to-jane)

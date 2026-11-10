@@ -15,6 +15,7 @@ Produce a publication-ready report from a draft, an options proposal, or raw inp
 
 - @skills:write-documents `document_types/REPORT_GUIDES.md` (craft decisions, tier resolution, revision passes, release check)
 - @skills:write-documents `document_types/REPORT_TEMPLATE.md` (section: Output; carries release-check record format)
+- @skills:write-documents `AI_WRITING_RULES.md` (anti-AI artifact suppression rules `AW-*` with BAD/GOOD examples, read BEFORE writing)
 - Technique files (`writing_techniques/[ID]_GUIDES.md`, `writing_techniques/TEMPLATES/[ID]_TEMPLATE.md`) ONLY when `using <ID>` is given
 - Persona file (`writing_personas/[PERSONA].md`) ONLY when `as <PERSONA>` is given (`DRSYNART-DD-17`)
 - Never load CHECKS files during execution (`DRSYNART-FR-32`, `GRUC-IG-03`)
@@ -53,12 +54,12 @@ Produce a publication-ready report from a draft, an options proposal, or raw inp
    - Resolve `<input>`: DRAFT (`[ID]-DRAFT-NN_`), OPTIONS (`[ID]-OPTIONS-NN_`) with selected option, or raw input (`DRSYNART-DD-17`). Default to newest DRAFT, else newest OPTIONS.
    - Validate `using <ID>` and `as <PERSONA>` against library READMEs; on mismatch list valid names and stop.
 2. **Planning (Tier 2-3 only)**:
-   - Run `/write-strut` for `__STRUT_[TOPIC].md`. If no DRAFT exists, compile Style Sheet into STRUT.
+   - Run `/write-strut` for `_agentwork/__STRUT_[TOPIC].md`. If no DRAFT exists, compile Style Sheet into STRUT.
    - Run `/write-prompts` compiling Section 8.3 pass sequence and checkpoint prompts.
    - If `plan` or `plan only`: report PROMPTS file path and stop.
 3. **Execution and Revision Passes**:
-   - At Tier 1: write prose, run line and copy passes against Style Sheet, run release check per `document_types/REPORT_TEMPLATE.md` format.
-   - At Tier 2-3: execute generated prompts through pass sequence (sections, line, copy, fact-check, release check, VCRIV).
+   - At Tier 1: write prose, run line and copy passes against Style Sheet and `AI_WRITING_RULES.md` (`AW-SO-01` through `AW-LX-03` - eliminating staccato fragments, contrast snaps, compressed objection blocks, nominalization chains, and other punchy, flow-breaking robotic patterns while preserving persona pacing), and run release check per `document_types/REPORT_TEMPLATE.md` format.
+   - At Tier 2-3: execute generated prompts through pass sequence (sections, line, copy, fact-check, release check, VCRIV) with `AI_WRITING_RULES.md` enforced in the line and release-check passes.
 4. **Release Check and Output Compilation**:
    - Record release check in DRAFT if present, else in STRUT (tier 2-3) or chat response (tier 1 with `Status: SELF-CHECKED`; recommend running `/verify` before publishing).
    - If `inline`: update target file in place.

@@ -51,6 +51,8 @@ Step 3: Agent enriches JSON with mp3_* fields (title, artist, year, encoded_by, 
 Step 4: set_mp3_tags_from_youtube_metadata.py  -> Tagged and renamed MP3 files
 ```
 
+Rebuild: the metadata JSON lives in a `.tmp_extracted/` folder that `/cleanup` deletes. If it is missing when Step 3 or Step 4 starts, re-run Step 1 with the same URLs and repeat Step 3. Run Steps 3 and 4 in the same task as Step 1.
+
 ### Enrichment Rules (Step 3)
 
 - **mp3_title**: Work title only (e.g., "In den Mauern von Eryx"), never "Author: Title". The author belongs in `mp3_artist`, not duplicated in the title.
@@ -101,7 +103,7 @@ Extracts metadata from YouTube videos, playlists, or channels via `yt-dlp --dump
 - **-ToolsFolder** - yt-dlp location (default: `[WORKSPACE]/../.tools/youtube-downloader`)
 - **-Force** - Overwrite existing JSON (switch)
 
-**Output:** `.tmp_[TOPIC]_youtube-metadata.json` with `videos` array containing `youtube_id`, `title`, `url`, `description`, `published_date`, `download_filename`, and empty `mp3_*` fields (`mp3_title`, `mp3_artist`, `mp3_year`, `mp3_encoded_by`, `mp3_filename`).
+**Output:** `.tmp_extracted/[TOPIC]_youtube-metadata.json` inside `-OutputFolder` (the folder is deletable by `/cleanup`; the file name carries no `.tmp_`) with `videos` array containing `youtube_id`, `title`, `url`, `description`, `published_date`, `download_filename`, and empty `mp3_*` fields (`mp3_title`, `mp3_artist`, `mp3_year`, `mp3_encoded_by`, `mp3_filename`).
 
 ### set_mp3_tags_from_youtube_metadata.py (Default Tag Writer)
 
@@ -109,10 +111,10 @@ Writes ID3v2.3 tags to MP3 files via mutagen. Renames files from `[youtube_id].m
 
 ```powershell
 # Apply tags
-python set_mp3_tags_from_youtube_metadata.py "D:\downloads\.tmp_MyTopic_youtube-metadata.json" "D:\downloads"
+python set_mp3_tags_from_youtube_metadata.py "D:\downloads\.tmp_extracted\MyTopic_youtube-metadata.json" "D:\downloads"
 
 # Preview without changes
-python set_mp3_tags_from_youtube_metadata.py "D:\downloads\.tmp_MyTopic_youtube-metadata.json" "D:\downloads" --dry-run
+python set_mp3_tags_from_youtube_metadata.py "D:\downloads\.tmp_extracted\MyTopic_youtube-metadata.json" "D:\downloads" --dry-run
 ```
 
 **Arguments:**
@@ -129,8 +131,8 @@ python set_mp3_tags_from_youtube_metadata.py "D:\downloads\.tmp_MyTopic_youtube-
 PowerShell wrapper that calls the Python script. Use when calling Python directly is not possible.
 
 ```powershell
-.\Set-Mp3-Tags-From-Youtube-Metadata.ps1 -JsonPath "D:\downloads\.tmp_MyTopic_youtube-metadata.json" -Mp3Folder "D:\downloads"
-.\Set-Mp3-Tags-From-Youtube-Metadata.ps1 -JsonPath "D:\downloads\.tmp_MyTopic_youtube-metadata.json" -Mp3Folder "D:\downloads" -DryRun
+.\Set-Mp3-Tags-From-Youtube-Metadata.ps1 -JsonPath "D:\downloads\.tmp_extracted\MyTopic_youtube-metadata.json" -Mp3Folder "D:\downloads"
+.\Set-Mp3-Tags-From-Youtube-Metadata.ps1 -JsonPath "D:\downloads\.tmp_extracted\MyTopic_youtube-metadata.json" -Mp3Folder "D:\downloads" -DryRun
 ```
 
 ## Video Download
@@ -181,6 +183,10 @@ The agent splits URLs and runs non-blocking commands with `-UseCookies $false`.
 - **Audio**: `[WORKSPACE]/../.tools/_downloaded_audio/`
 - **Video**: `[WORKSPACE]/../.tools/_downloaded_video/`
 - **Binaries**: `[WORKSPACE]/../.tools/youtube-downloader/`
+
+## Agent-Created Folders
+
+- `.tmp_extracted/` - role: extracted; parent: content folder (`-OutputFolder` of the metadata script); creator: `Download-Youtube-Metadata.ps1`; content: `[TOPIC]_youtube-metadata.json`. Rebuildable: re-run Step 1
 
 ## Gotchas
 

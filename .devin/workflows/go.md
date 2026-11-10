@@ -40,7 +40,7 @@ Log autonomous decisions to the main progress tracking document:
 
 - If `__TASKS_*.md` exists and tracks progress → log decisions there
 - If `PROGRESS.md` is the main tracking document → log decisions there
-- If neither exists → create `__TASKS_[TOPIC].md` using @skills:write-documents, log there
+- If neither exists → create `_agentwork/__TASKS_[TOPIC].md` using @skills:write-documents, log there
 
 Format: `[DECISION] <what was decided> - <rationale> - <rules consulted>`
 
@@ -177,7 +177,7 @@ WHILE goal not reached AND iteration_count < 10:
             Execute next task
 
         IF blocker unresolved after alternatives:
-            /write-info `_agentwork/.tmp_INFO_[BLOCKER].md` (root cause analysis)
+            /write-info `_agentwork/__INFO_[BLOCKER].md` (root cause analysis)
             /critique -> /reconcile
             If still stuck: Hard stop, escalate to user
 ```

@@ -52,18 +52,18 @@ Execute a long-running, multi-approach research program across 1-4 distinct inve
 1. Emit `Tier 3 - fixed program execution` on first response line.
 2. Define 1-4 distinct investigative approaches and record pre-research assumptions (A1..An).
 3. Estimate effort (HWH) from `MODEL_INVENTORY.md` workload factors. Check NFR-01 caps; refuse and partition if exceeded.
-4. Run `/write-strut` to author session-level `__STRUT_[TOPIC].md`.
+4. Run `/write-strut` to author session-level `_agentwork/__STRUT_[TOPIC].md`.
 5. If called with `plan` or `plan only`: report STRUT path and stop.
 
 ### Phase 2: Approach STRUTs and Prompt Generation
 1. For each approach (1-4): initialize folder `T0N_[SUBTOPIC]_[Approach]_YYYY-MM-DD/`.
-2. Run `/write-strut` to create approach-level `__STRUT_[SUBTOPIC].md`.
-3. Run `/write-prompts` to compile 1-2 PROMPTS files per approach (`_PROMPTS_01..02`) with separate `/verify` + `/fix` checkpoints.
+2. Run `/write-strut` to create approach-level `_agentwork/__STRUT_[SUBTOPIC].md` in the approach folder.
+3. Run `/write-prompts` to compile 1-2 PROMPTS files per approach (`_agentwork/_PROMPTS_01..02` in the approach folder) with separate `/verify` + `/fix` checkpoints.
 4. If called with `plan` or `plan only`: report PROMPTS file paths and stop.
 
 ### Phase 3: Program Execution
 1. Execute compiled prompt files sequentially with human review checkpoints between files (`DRSYNART-2.3`).
-2. Run research topic by topic per active strategy (MEPI/MCPI) and domain profile; transcribe PDFs into `_SOURCES/`.
+2. Run research topic by topic per active strategy (MEPI/MCPI) and domain profile; transcribe PDFs into `_sources/`.
 3. Enforce separate `/verify` + `/fix` checkpoint prompts after each implementation step; enforce at most 3 full VCRIV gates.
 
 ### Phase 4: Per-Approach Synthesis
@@ -84,10 +84,16 @@ _YYYY-MM-DD_[Session]/
 ├── T01_[SUBTOPIC]_[Approach]_YYYY-MM-DD/
 │   ├── _agentwork/__STRUT_, _PROMPTS_01..02
 │   ├── _INFO_[TOPIC]-[SUBTOPIC]-01_Summary.md, -02_Sources.md
-│   └── topic files, _SOURCES/
+│   └── topic files, _sources/
 ├── T02_.../ (up to 4 approaches)
 └── _INFO_[TOPIC]-IN01_Summary.md (Approach Comparison)
 ```
+
+## Agent-Created Folders
+
+- `_agentwork/` - role: agentwork; parent: working folder (session root and each `T##_` approach folder); creator: Phase 1 and Phase 2; content: `__STRUT_*`, `_PROMPTS_*`
+- `_sources/` - role: sources; parent: working folder (each `T##_` approach folder); creator: Phase 3 transcription; content: transcribed sources
+- Other research source folders: registered in @skills:research-methods SKILL.md
 
 ## Quality Gate
 

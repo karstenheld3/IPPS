@@ -127,7 +127,7 @@ Executing validation follows eight core analytical decisions in the sequence bel
 
 - Hypothesis: H-02 (External network partition causes gateway reload stalls)
 - Predicted observation: Network interface packet drop counters should spike during reload stalls.
-- Search query: "drop_rx" OR "retransmit" across telemetry logs in `_SOURCES/CORP-SC-OPS-01_traces.json`.
+- Search query: "drop_rx" OR "retransmit" across telemetry logs in `_sources/CORP-SC-OPS-01_traces.json`.
 - Result: Retransmit counters remained flat (<0.01%) during stall window.
 - Matrix cell update: Inconsistent (refuting observation)
 - Search scope: Local traces + 1 targeted gateway benchmark

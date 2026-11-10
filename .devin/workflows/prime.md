@@ -31,7 +31,7 @@ find_by_name Pattern="*.md" SearchDirectory="[WORKSPACE_FOLDER]" Type="file" Exc
 ## Exclusions
 
 - Skip .md files starting with "_"
-- Skip ALL folders starting with "_" (task folders, archive, temp, tools, etc.)
+- Skip ALL folders starting with "_" or ".tmp_" (task folders, archive, temp, tools, rebuildable folders, etc.)
 
 ## Step 4: Detect Workspace Scenario
 

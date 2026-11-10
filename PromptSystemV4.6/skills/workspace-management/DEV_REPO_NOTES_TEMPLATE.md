@@ -73,8 +73,8 @@
 [SESSIONS_FOLDER]: `[WORKSPACE_FOLDER]\_PrivateSessions_gitignore`
 - Base folder for session folders.
 
-[SESSION_ARCHIVE_FOLDER]: `[SESSIONS_FOLDER]\..\Archive`
-- Archive folder for closed sessions.
+[SESSION_ARCHIVE_FOLDER]: `[WORKSPACE_FOLDER]\_archive_gitignore`
+- Archive folder for closed sessions (not versioned).
 
 [SKILL_TOOLS_FOLDER]: `[WORKSPACE_FOLDER]\..\.tools\`
 - Command line tools used by various PromptSystem skills. Shared across workspaces.
@@ -232,7 +232,7 @@ Or use the `/sync` workflow which wraps these commands.
 - [what is gitignored and why]
 
 **Git conventions:**
-- `_gitignore` suffix: Append `_gitignore` before extension to exclude files/folders from git without editing `.gitignore`. Patterns `*_gitignore.*` and `*_gitignore/` already in `.gitignore`.
+- `_gitignore` suffix: Append `_gitignore` before extension to exclude files/folders from git without editing `.gitignore`. Standard patterns in `.gitignore`: `*_gitignore.*`, `*_gitignore/`, `.tmp_*`, `_agentwork/` (see `agent-behavior.md` section Agent-Created Folders).
 - [any other conventions]
 
 ## Agent Safety Rules

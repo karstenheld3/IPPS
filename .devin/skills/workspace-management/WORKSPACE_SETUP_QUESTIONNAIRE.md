@@ -289,7 +289,7 @@ After all sections answered, generate these files:
   docs\                       <- empty folder (explanatory knowledge)
   docs\ReleaseNotes\          <- empty folder (if release configured)
   _sessions\                 <- empty folder
-  _sessions\_archive\        <- empty folder (session archive)
+  _archive_gitignore\       <- empty folder (session archive, not versioned)
 ```
 
 ### GENERAL Mode
@@ -312,7 +312,7 @@ After all sections answered, generate these files:
   specs\                      <- empty folder (verifiable agent instructions)
   docs\                       <- empty folder (explanatory knowledge)
   _sessions\                 <- empty folder
-  _sessions\_archive\        <- empty folder (session archive)
+  _archive_gitignore\       <- empty folder (session archive, not versioned)
 ```
 
 <!-- GENERAL mode: No product repo, no src/ folder, no docs/ReleaseNotes/.
@@ -342,7 +342,7 @@ After all sections answered, generate these files:
   specs\                      <- empty folder (verifiable agent instructions)
   docs\                       <- empty folder (explanatory knowledge)
   _sessions\                 <- empty folder
-  _sessions\_archive\        <- empty folder (session archive)
+  _archive_gitignore\       <- empty folder (session archive, not versioned)
   promptsystem-sync.json         <- sync config (if SYNCED)
 
 [PRODUCT_REPO_FOLDER]\

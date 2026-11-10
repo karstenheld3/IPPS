@@ -30,6 +30,7 @@ PROMPTSYSTEM_LINE_PATTERN = re.compile(r"^[ \t]*<PromptSystem\b[^>]*>[ \t]*\r?\n
 IMAGE_SOURCE_PATTERNS = [re.compile(r"!\[[^\]]*\]\(\s*<([^>]+)>"), re.compile(r"!\[[^\]]*\]\(\s*([^)\s<][^)\s]*)"), re.compile(r"<img\b[^>]*?\bsrc\s*=\s*[\"']([^\"']+)[\"']", re.IGNORECASE)]
 CODE_SPAN_PATTERN = re.compile(r"(`+)(.+?)\1")
 FENCE_PATTERN = re.compile(r"^[ \t]*(`{3,}|~{3,})")
+DEFAULT_EXPORT_FOLDER = "_export_gitignore"
 INSTALL_HINT = 'Run: "{python}" -m playwright install chromium-headless-shell'
 
 
@@ -43,7 +44,7 @@ def parse_arguments():
   parser.add_argument("--format", choices=["html", "pdf", "both"], default="both")
   parser.add_argument("--template", default="DocumentDefault", help="template name in templates/ or path to an HTML file")
   parser.add_argument("--options", help='override the template <meta name="render-options"> content, e.g. "columns=DE:DE,EN:EN,PT:PT; markers=^###\\s*DE,^###\\s*EN,^###\\s*PT"')
-  parser.add_argument("--output-dir", help="output folder (default: next to each input)")
+  parser.add_argument("--output-dir", help=f"output folder (default: {DEFAULT_EXPORT_FOLDER}/ next to each input)")
   parser.add_argument("--paper", choices=["A4", "Letter"], help="override template page size")
   parser.add_argument("--landscape", action="store_true", help="override template orientation")
   parser.add_argument("--lang", default=None, help="html lang attribute (default: front matter lang:, else en)")
@@ -202,7 +203,7 @@ def find_image_sources(text):
 def copy_images(document, output_dir, overwrite):
   retVal = []
   input_folder = document["path"].parent.resolve()
-  output_folder = Path(output_dir).resolve() if output_dir else input_folder
+  output_folder = Path(output_dir).resolve() if output_dir else input_folder / DEFAULT_EXPORT_FOLDER
   elsewhere = output_folder != input_folder
   not_found = []
   outside = []
@@ -269,7 +270,7 @@ def inject(template_text, document, paper, landscape):
 
 
 def output_path_for(document, output_dir, suffix):
-  folder = Path(output_dir).resolve() if output_dir else document["path"].parent
+  folder = Path(output_dir).resolve() if output_dir else document["path"].parent / DEFAULT_EXPORT_FOLDER
   return folder / (document["path"].stem + suffix)
 
 
@@ -435,7 +436,7 @@ def main():
         ok += 1
     else:
       ok += 1
-  output_folder = Path(args.output_dir).resolve() if args.output_dir else artifacts[0]["path"].parent
+  output_folder = Path(args.output_dir).resolve() if args.output_dir else artifacts[0]["path"].parent / DEFAULT_EXPORT_FOLDER
   print(f"DONE: {ok} ok, {failed} failed, {skipped} skipped. Output: {output_folder}", flush=True)
   return 1 if failed else 0
 

@@ -24,7 +24,7 @@ Common failures a fresh agent will encounter:
 
 1. **LinkedIn requires authentication** - `@skills:ms-playwright-mcp` must use a logged-in browser session. Anonymous scraping returns partial data or login walls. Always verify profile access before starting extraction.
 2. **Common name disambiguation** - "Thomas Mueller" returns hundreds of profiles. Use company + location + tenure dates to confirm identity. When uncertain, mark `[ASSUMED - based on company match]`.
-3. **Source decay** - Social media posts, company pages, and news articles disappear. Screenshot critical sources immediately. Store in `_SOURCES/` with access date.
+3. **Source decay** - Social media posts, company pages, and news articles disappear. Screenshot critical sources immediately. Store in `_sources/` with access date.
 4. **Research order for multi-profile sets** - Research companies/organizations BEFORE people. Company context helps interpret career moves, role significance, and reporting structures.
 5. **Standalone decision** - Decide during Preflight (Phase 1): only primary research subjects get standalone FULL profiles. All other entities (connections, employers, organizations) are inlined in the parent profile.
 6. **GDPR for EU subjects** - Only use publicly available information. Do not attempt to access private databases, leaked data, or non-public social media content.
@@ -32,7 +32,7 @@ Common failures a fresh agent will encounter:
 
 ## Document Handling
 
-- **LinkedIn**: Primary source for personal profiles. Use `@skills:ms-playwright-mcp` to capture full profile (requires login). Store screenshot + extracted text in `_SOURCES/`
+- **LinkedIn**: Primary source for personal profiles. Use `@skills:ms-playwright-mcp` to capture full profile (requires login). Store screenshot + extracted text in `_sources/`
 - **Company websites**: Capture "About", "Team", "Leadership" pages via browser automation or `read_url_content`
 - **News/media**: `read_url_content` for articles. Note publication date - profile information decays rapidly
 - **Academic sources**: Google Scholar for publications. University websites for academic roles
@@ -74,7 +74,7 @@ Additional checks for profile domain quality pipeline:
 
 Profile research follows the same STRUT + VCRIV discipline as all deep-research:
 
-- **STRUT required**: Always create `__STRUT_[TOPIC].md`. For single profiles this is lightweight (1 phase, 1 deliverable) but ensures planning and time tracking.
+- **STRUT required**: Always create `_agentwork/__STRUT_[TOPIC].md`. For single profiles this is lightweight (1 phase, 1 deliverable) but ensures planning and time tracking.
 - **VCRIV required**: Run on every standalone profile document. For single profiles, VCRIV can be executed in 1 consolidated step (verify + critique + reconcile + implement + verify in one pass). For multi-profile sets, run VCRIV per profile.
 
 ## Decomposition Rules

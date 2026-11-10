@@ -2,7 +2,7 @@
 
 Verification rules for hypothesis register artifacts produced with `/hypothesize` or during stage S3 of `/analyze`.
 
-Writing quality: Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: AP-PR-07 (be specific), AP-PR-05 (referenceable IDs), MW-VO-01 (active voice), MW-WC-02 (plain language).
+Writing quality: Apply `APAPALAN_RULES.md` and `MECT_WRITING_RULES.md`. Key rules: APAPL-PR-07 (be specific), APAPL-PR-05 (referenceable IDs), MECT-VO-01 (active voice), MECT-WC-02 (plain language).
 
 ## Rule Index
 
@@ -148,7 +148,7 @@ Artifact check: Verify test plan rows exist for each hypothesis and specify targ
 ### Crucial Test: H-01 vs H-02
 
 - Target evidence: Kernel lock trace logs during synthetic configuration reload.
-- Search venue: Local telemetry logs in `_SOURCES/CORP-SC-OPS-01_traces.json`.
+- Search venue: Local telemetry logs in `_sources/CORP-SC-OPS-01_traces.json`.
 - Decisive exclusion condition: If thread wait states occur in `net_rx` rather than `mutex_lock`, H-01 is refuted and H-02 is supported.
 - Cruciality: High (decisively discriminates between internal lock contention and external network partition).
 ```

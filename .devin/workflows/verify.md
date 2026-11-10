@@ -58,10 +58,10 @@ Invoke based on context:
 
 Apply to ALL document types and contexts:
 
-- Avoid excessive acronyms. Write out acronyms on first usage. Take the expansion from the context, never from training data: acronyms have multiple meanings and a guessed one is a wrong name that propagates (MW-WC-09).
+- Avoid excessive acronyms. Write out acronyms on first usage. Take the expansion from the context, never from training data: acronyms have multiple meanings and a guessed one is a wrong name that propagates (MECT-WC-09).
   - BAD: `SPN not supported.`
   - GOOD: `Service Principal Name (SPN) not supported.`
-- **Explicit over figurative (MW-WC-10)** - Audience: international readers who are not native speakers, unless the document declares otherwise. Scan prose for idioms, slang, and region-dependent phrases that carry a claim without stating it. Rewrite each as the explicit claim (number, condition, consequence). Keep established precise terms (onboarding, break-even). Exempt: quotations, transcriptions, conversation drafts written AS the user
+- **Explicit over figurative (MECT-WC-10)** - Audience: international readers who are not native speakers, unless the document declares otherwise. Scan prose for idioms, slang, and region-dependent phrases that carry a claim without stating it. Rewrite each as the explicit claim (number, condition, consequence). Keep established precise terms (onboarding, break-even). Exempt: quotations, transcriptions, conversation drafts written AS the user
   - BAD: `Caching hedges against API outages.`
   - GOOD: `When the API is down, the cache serves the last response for up to 10 minutes.`
 - Use verification labels consistently (see below)
@@ -83,7 +83,7 @@ Apply to ALL document types and contexts:
   - Bold for emphasis on key terms, framework names, or important concepts is acceptable
   - The "no bold" rule applies only to LLM-consumed skill resource files (see Skills section)
   - Do not strip formatting that aids human scanning and comprehension
-- **Labels decodable at point of use (AP-PR-11)** - Scan for bracket labels with 1-2 characters:
+- **Labels decodable at point of use (APAPL-PR-11)** - Scan for bracket labels with 1-2 characters:
   - Exempt: `[x]`/`[ ]` checkboxes, `[N]` retry counts
   - Exempt: Established system labels: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`
   - Short label found? Check: Is a legend visible at every usage point (no scrolling)? If yes: pass. If no: replace with full word or add legend.
@@ -107,14 +107,14 @@ Apply to ALL document types and contexts:
 ## Conceptual verification
 
 When reviewing architecture, design and solution strategy, apply @skills:write-documents `SOCAS_RULES.md` with the Agent Output Review subset. Look for:
-- inconsistencies (SOCAS-01)
-- ambiguities (SOCAS-02)
-- new solutions for already solved problems (SOCAS-03)
-- overlapping concerns (SOCAS-03)
-- underspecified behavior (SOCAS-06)
-- unverified assumptions (SOCAS-10)
-- flawed thinking and underestimated complexity (SOCAS-10)
-- over-engineering and introduction of unwanted complexity (SOCAS-11)
+- inconsistencies (SOCAS-CR-01)
+- ambiguities (SOCAS-CR-02)
+- new solutions for already solved problems (SOCAS-CR-03)
+- overlapping concerns (SOCAS-CR-03)
+- underspecified behavior (SOCAS-CR-06)
+- unverified assumptions (SOCAS-CR-10)
+- flawed thinking and underestimated complexity (SOCAS-CR-10)
+- over-engineering and introduction of unwanted complexity (SOCAS-CR-11)
 
 ## Verification Labels
 
@@ -321,6 +321,7 @@ Read the rule file for your context and verify against all rules. Also verify ag
 - Workflows → @skills:write-documents `WORKFLOW_RULES.md` (all WF-*), also @skills:coding-conventions `WORKFLOW-RULES.md` (design principles)
 - Skills → @skills:write-documents `SKILL_RULES.md` (all SK-*)
   - If SETUP.md exists: verify UNINSTALL.md also exists (not in SK-* rules)
+- Standalone prompts (single file handed to another assistant as its rulebook, not a `_PROMPTS_*.md` sequence) → @skills:write-documents `WORKFLOW_RULES.md` (applicable WF-*, especially WF-CT-07, WF-CT-08)
 - Skill Resource Files (`*_RULES.md`, `*_GUIDES.md`, `*_CHECKS.md` in skill folders) → @skills:write-documents `WORKFLOW_RULES.md` (applicable WF-*)
   - Verify SK-CT-05: no visual-only formatting (no bold, no filler phrases)
   - Verify SK-CT-06: no Document History section
@@ -372,15 +373,16 @@ Detect by: filename pattern `_PROMPTS_*.md` or file starts with a fenced code bl
 
 ## Authored Documents
 
-Detect by: header block fields (`**Document Type**`, `**Technique**`, `**Persona**`) or filename pattern `[ID]-OPTIONS-*.md`, `[ID]-DRAFT-*.md`, or `YYYY-MM-DD_*.md` with document-type header (`DRSYNART-FR-06`).
+Detect by: header block fields (`**Document Type**`: `article`, `report`, `ebook`; `**Technique**`; `**Persona**`) or filename pattern `[ID]-OPTIONS-*.md`, `[ID]-DRAFT-*.md`, or `YYYY-MM-DD_*.md` with document-type header (`DRSYNART-FR-06`, `DRSYNART-DD-50`).
 
-**Read**: @skills:write-documents RULES and TEMPLATE of `document_types/[TYPE]_RULES.md` and `document_types/[TYPE]_TEMPLATE.md`; when Technique `[ID]` is set: `writing_techniques/[ID]_RULES.md` and `writing_techniques/TEMPLATES/[ID]_TEMPLATE.md`; when Persona `[PERSONA]` is set: `writing_personas/[PERSONA].md`. Never read CHECKS files during execution (`DRSYNART-FR-32`, `GRUC-IG-03`).
+**Read**: @skills:write-documents `AI_WRITING_RULES.md` (applies ONLY to publishing document types, never SPECs or internal documents), plus RULES and TEMPLATE of `document_types/[TYPE]_RULES.md` and `document_types/[TYPE]_TEMPLATE.md`; when Technique `[ID]` is set: `writing_techniques/[ID]_RULES.md` and `writing_techniques/TEMPLATES/[ID]_TEMPLATE.md`; when Persona `[PERSONA]` is set: `writing_personas/[PERSONA].md`. Never read CHECKS files during execution (`DRSYNART-FR-32`, `GRUC-IG-03`).
 
 **Verification checklist for Authored Documents:**
 - Structure matches matching section of `document_types/[TYPE]_TEMPLATE.md` (OPTIONS, DRAFT, Output)
 - Verify against `[TYPE]_RULES.md` rules: header block completeness (FR-24 fields), structural integrity, claim attribution, style sheet consistency, release check record format; when the `**Technique**` header is set, skip `[STRUCTURE-DEFAULT]` rules of the document type (only `[TYPE-OWNED]` rules remain binding)
+- Verify against `AI_WRITING_RULES.md` (`AW-SO-01` through `AW-LX-03`): scan prose for sourcing/attribution flaws, staccato fragments, contrast snaps, mechanical tricolons, uniform or punctuation-flattened cadence, compressed objection blocks, signpost openers, reflex header/list inflation, disembodied generic prose, prestige-register buzzwords, and nominalization chains; rewrite any flow-breaking robotic pattern into continuous prose in place and confirm `<= 1` style-pattern signal in the Release Check
 - When Technique `[ID]` is set: read the detected technique's `@skills:write-documents` `writing_techniques/[ID]_RULES.md` and `writing_techniques/[ID]_GUIDES.md`, and verify against its structural rules, template conventions, and named failure modes
-- When Persona `[PERSONA]` is set: verify voice sliders and micro-dose trait budgets against `writing_personas/[PERSONA].md`
+- When Persona `[PERSONA]` is set: verify voice sliders, micro-dose trait budgets, and target text length and pacing profile against `writing_personas/[PERSONA].md`
 
 ## Translation Output
 
@@ -428,11 +430,11 @@ Detect by: file has `_[LANG]` suffix (e.g., `report_DE.md`, `video_DE.srt`) and 
 
 Read all three rule layers and verify in priority order:
 
-1. Read @skills:write-documents `APAPALAN_RULES.md` - verify AP-CM-01, AP-CM-02, AP-CM-03:
-   - [ ] Every commitment has action + deliverable + weekday + ISO date + time (AP-CM-01)
-   - [ ] Every question in own paragraph, "Question:" label, self-contained (AP-CM-02)
-   - [ ] Every request in own paragraph, "Request:" label, explicit timing (AP-CM-02)
-   - [ ] All dates: weekday + ISO date. Periods include year. Timezone when scheduling. (AP-CM-03)
+1. Read @skills:write-documents `APAPALAN_RULES.md` - verify APAPL-CM-01, APAPL-CM-02, APAPL-CM-03:
+   - [ ] Every commitment has action + deliverable + weekday + ISO date + time (APAPL-CM-01)
+   - [ ] Every question in own paragraph, "Question:" label, self-contained (APAPL-CM-02)
+   - [ ] Every request in own paragraph, "Request:" label, explicit timing (APAPL-CM-02)
+   - [ ] All dates: weekday + ISO date. Periods include year. Timezone when scheduling. (APAPL-CM-03)
 2. Read @skills:write-documents `CONVERSATION_HUMANIZING_RULES.md` - verify against Anti-Pattern Index:
    - [ ] Full grammar preserved (no dropped pronouns/articles) - CV-HM-07
    - [ ] Greeting/closing from user's History, not invented or rotated - CV-HM-06

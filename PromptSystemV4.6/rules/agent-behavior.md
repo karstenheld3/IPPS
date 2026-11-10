@@ -149,23 +149,67 @@ Also avoid nonsensical or humorous examples. LLMs interpret whimsical content as
 
 Agent-created files (helper scripts, intermediate data, temp artifacts) MUST reside in context-appropriate locations:
 
-- `[DOWNLOAD_FOLDER]` - Helper scripts for download operations (enrichment, conversion, renaming)
+- `_download_gitignore/` of the working folder - Downloaded raw data. Helper scripts for download operations (enrichment, conversion, renaming) go into `_agentwork/`
 - `[SESSION_FOLDER]` - Helper scripts in SESSION-MODE (POCs, test scripts, analysis)
 - `[WORKSPACE_FOLDER]` - Helper scripts in PROJECT-MODE
 - `[SRC_FOLDER]` - Only production code, never temp artifacts
 
 Forbidden: System temp (`%TEMP%`, `$env:TEMP`, `/tmp/`), user home, Program Files, or any location outside workspace/session/target scope. No exceptions.
 
-### `_agentwork/` Folder
+### Agent-Created Folders
 
-Every working folder (session root, `T##_*`, or `S##_*` subfolder) has an `_agentwork/` subfolder for all operational artifacts that can be deleted without losing final output. In PROJECT-MODE the folder is `[WORKSPACE_FOLDER]/_agentwork/`.
+This section is the single definition of every utility folder the agent creates. Other files reference it and register their folders (see Extension); they do not restate it.
+
+**Name anatomy**: `[lifecycle prefix][base name][_qualifier][git suffix]`
+- Lifecycle prefix: `_` (persistent) or `.tmp_` (deletable after processing). Required
+- Base name: role word, lower case letters, digits, `-`; one base name per role
+- Qualifier: `_` + lower case word; names an instance (`_poc_login-flow`) or a derived core role (`_attachments_markdown`); never `gitignore`. Optional
+- Git suffix: none (tracked-eligible) or `_gitignore` (never versioned, matched by `*_gitignore/`). Optional
+- Classification: a folder is a utility folder only if its name matches this pattern. Names with an upper case letter or a digit after the prefix (`_Sessions`, session folders `_YYYY-MM-DD_[Topic]`) and work-stream folders (session, `T##_`, `S##_`, bug, conversation) are not utility folders
+
+**Prefix and suffix semantics are invariant** - no module may redefine them:
+- `_` = persistent, skipped by `/prime`
+- `.tmp_` = deletable after the producing step; deleted by `/cleanup` without a gate; skipped by `/prime`; ignored by git. A `.tmp_` folder holds only content that can be rebuilt from non-`.tmp_` inputs; every step that reads a `.tmp_` folder re-creates it when missing
+- `_gitignore` = never versioned; no suffix = tracked-eligible
+- A file that a later step reads or that is kept after the run never starts with `.tmp_`
+
+**Core roles** (closed set, default form in parentheses):
+- `agentwork` (`_agentwork/`) - agent operation artifacts. Single form, ignored as folder
+- `archive` (`_archive_gitignore/`) - archived sessions and files, date-stamped zips or subfolders. Sessions go to `[WORKSPACE_FOLDER]/_archive_gitignore/`
+- `export` (`_export_gitignore/`) - rendered or transformed output ready for sharing
+- `sources` (`_sources/`) - curated evidence of a working folder: transcriptions of downloaded sources, captured web text, screenshots
+- `download` (`_download_gitignore/`) - raw downloaded data (PDF, office documents, media)
+- `assets` (`_assets/`) - images and diagrams referenced by several markdown files
+- `markdown` (`_markdown/`) - 1:1 markdown transcriptions of files in the parent folder
+- `jpgs` (`.tmp_jpgs/`) - jpg files only, produced by render steps (PDF pages, video frames)
+- `extracted` (`.tmp_extracted/`) - mixed-type extraction output (subtitles, audio tracks, metadata JSON)
+- `attachments` (`_attachments_gitignore/`) and `attachments_markdown` (`_attachments_markdown/`) - conversation attachments and their transcripts and translations
+- `bugfixes` (`_bugfixes/`) - container of bug folders
+- `poc` (`_poc/`, several: `_poc_[name]/`) - proofs of concept and prototypes
+- `backup` (`_backup/`) - copies of files before a change
+- `test` (`_test/`) - test scripts and test data of a fix or POC
+- Workflows create the default form. The other prefix or suffix form only when the user or a workspace setting asks for it
+- `sources` vs `markdown`: originals in `_download_gitignore/` are transcribed into `_sources/`; user content in a content folder is transcribed into `[content folder]/_markdown/`
+
+**Extension** (modules add folders without editing this section):
+- First choice: nest inside a core folder (`_download_gitignore/[SOURCE_ID]/`, `.tmp_jpgs/[PDF_NAME]/`). Nested names carry no prefix and no suffix; a core folder is never created inside another core folder
+- Fallback: a new base name, only when no core role fits and no other module has one for the same purpose. It must not equal a core role base, `sessions`, or `oldversions`
+- Every module that creates folders lists them in a section `## Agent-Created Folders` of its SKILL.md or workflow file: one line per folder with path, role, parent, creator, content; a new base name adds purpose and reason. `/verify` checks these sections
+
+**Generic consumers** know only the base names `agentwork` and `archive`; all other behavior follows prefix and suffix. `/cleanup` deletes `_agentwork/` and `.tmp_*` folders and never descends into `_archive*`. `.gitignore` holds `.tmp_*`, `*_gitignore/`, `_agentwork/`.
+
+**Migration is forward-only**: existing folders keep their names and are not renamed or deleted automatically. PromptSystem files, script defaults, and newly created folders use the names defined here.
+
+#### `_agentwork/` Folder
+
+Every working folder (session root, `T##_*`, or `S##_*` subfolder, bug folder) has an `_agentwork/` subfolder for all operational artifacts that can be deleted without losing final output. In PROJECT-MODE the folder is `[WORKSPACE_FOLDER]/_agentwork/`.
 
 **In** (must go into `_agentwork/`):
 - `_PROMPTS_*` files (written by `/write-prompts`)
 - `__STRUT_*`, `__TASKS_*` scaffolding (written by `/go`, `/deep-research`, `/bugfix`, `/write-strut`)
 - `__CARD_*` cards (findings, robustness) - all cards, no exceptions
 - `__DRIFT_*`, `DRIFTS.md` (written by `/drift-detect`, consumed by `/drift-correct`)
-- `partition-observations.jsonl` (observation ledger)
+- `__INFO_*` blocker analyses written by `/go`
 - `.tmp_*` temp scripts, data, and command output files (`.tmp_*_out.txt`, `.tmp_*_err.txt`)
 
 **Out** (must NOT go into `_agentwork/`):
@@ -173,7 +217,7 @@ Every working folder (session root, `T##_*`, or `S##_*` subfolder) has an `_agen
 - Deliverables: `_INFO_*`, `_SPEC_*`, `_IMPL_*`, `_TEST_*`
 - Review and improve outputs: `*_CRITIQUE.md`, `*_FACT-CHECK.md`, `_vN` backups, `*_DEFERRED_IMPROVEMENTS.md` - these belong beside the document they concern
 
-**Cleanup**: `/cleanup` deletes `_agentwork/` recursively (Category 7) but refuses while an un-ingested `*.jsonl` exists (run `/session-finalize` first). `/session-archive` expects no `_agentwork/` to remain.
+**Cleanup**: `/cleanup` deletes `_agentwork/` recursively (Category 7). `/session-archive` expects no `_agentwork/` and no `.tmp_*` folder to remain.
 
 Naming:
 - `.tmp_` prefix for scripts and temp data. Example: `.tmp_fix_quotes.ps1`
@@ -182,7 +226,7 @@ Naming:
 Lifecycle:
 - `.tmp_` = single-run temp. Deleted as soon as its content is consumed (same task); `/cleanup` catches leftovers. Never committed
 - `__` = multi-run scaffolding. Persists during active work, deleted by `/cleanup` after goal reached
-- Commit `__` files along with task or session files. Only delete them after final goal is reached.
+- `_agentwork/` and `__*.md` are never committed (ignored by `.gitignore`)
 
 ## Large File Writes
 

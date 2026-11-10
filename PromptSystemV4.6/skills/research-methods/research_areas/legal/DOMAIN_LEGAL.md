@@ -16,17 +16,17 @@ Research domain for legislation, case law, regulatory frameworks, and legal anal
 
 ## Document Handling
 
-- **Download and transcribe FULL legislation texts** - No summarization, no excerpts. The complete text must be available in `_SOURCES/`.
+- **Download and transcribe FULL legislation texts** - No summarization, no excerpts. The complete text must be available in `_sources/`.
 - For EU/national legislation: Download official PDF from EUR-Lex or national gazette, transcribe fully
 - For court decisions: Download full text, transcribe fully
 - Cross-reference between statutes and case law
-- Download to `_DOWNLOADS_gitignore/`, transcribe to `_SOURCES/`:
+- Download to `_download_gitignore/`, transcribe to `_sources/`:
   ```
-  _DOWNLOADS_gitignore/
+  _download_gitignore/
   ├── eu-ai-act-2024.pdf              # Original legislation PDF
   └── case-law-c-123-24.pdf           # Court decision PDF
 
-  _SOURCES/
+  _sources/
   ├── eu-ai-act-2024.md               # Full verbatim transcription
   └── case-law-c-123-24.md            # Court decision transcription
   ```
@@ -46,7 +46,7 @@ Add these sections to the standard topic template:
 Additional checks for legal domain quality pipeline:
 
 - Every legal conclusion MUST cite exact article/section number
-- Full source text of cited articles MUST be available in `_SOURCES/` (not just agent memory)
+- Full source text of cited articles MUST be available in `_sources/` (not just agent memory)
 - Regulation numbers verified exactly (e.g., "2024/1689" not "2024/689") - cross-check against source PDF
 - Legal terminology used exactly as defined in the legislation (no paraphrasing of defined terms)
 - Effective dates and transition periods verified against official publication
