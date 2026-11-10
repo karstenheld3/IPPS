@@ -3,7 +3,7 @@
 **Doc ID**: AGNTFOLDERS-SP01
 **Feature**: agent-created-folders
 **Goal**: Define one extendable standard for names, git status, lifecycle, and placement of every subfolder the agent creates, so that modules can add folders without changing the meaning of existing names or the logic of existing workflows
-**Timeline**: Created 2026-11-10, Updated 6 times (2026-11-10)
+**Timeline**: Created 2026-11-10, Updated 7 times (2026-11-10)
 **Target file(s)**:
 - `[PROMPTSYSTEM_FOLDER]/rules/agent-behavior.md` (central definition, section File Placement)
 - `[PROMPTSYSTEM_FOLDER]/rules/promptsystem-core.md` (folder structure, naming tiers)
@@ -16,7 +16,7 @@
 **Depends on:**
 - `_INFO_WHICH_AGENT_SUBFOLDERS_ARE_CREATED_CURRENTLY.md [AGNTFOLDERS-IN01]` (private session document in `[SESSIONS_FOLDER]/_2026-11-09_StandardizeAgentSubfolders/`) for catalog, conflicts C-01 to C-16, defining files
 - `specs/_SPEC_IPPS_SKILLS.md [IPPSSKLS-SP01]` for skill structure that hosts module folder registrations
-- `PROBLEMS.md` (workspace) item "archive" for the generic `/archive` workflow (`/archive <input_or_source> <goal_or_target> <options>`); its own SPEC follows. This SPEC fixes only the folder contract `/archive` relies on (FR-16)
+- `PROBLEMS.md` (workspace) item "archive" for the generic `/archive` workflow (`/archive <input_or_source> <goal_or_target> <options>`); its own SPEC follows. This SPEC fixes only the folder contract `/archive` relies on (FR-15)
 
 **Does not depend on:**
 - `specs/_SPEC_WORKSPACE_SETUP_SCHEMA.md` (defines workspace configuration values; this SPEC only consumes `[SESSIONS_FOLDER]` as a configured value)
@@ -81,9 +81,9 @@ FOLDER STANDARD - LAYERS
 │   2) new base name: _[base]/ declared in SKILL.md or workflow                │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │ L4 Generic Consumers (read L1 + base names agentwork, archive)               │
-│   .gitignore  /cleanup  /prime  /archive  /verify (collision check)          │
+│   .gitignore  /cleanup  /prime  /archive                                     │
 └──────────────────────────────────────────────────────────────────────────────┘
-Legend: L4 reads L1 plus the base names agentwork and archive, never L3; /verify reads L2 and L3 to detect collisions.
+Legend: L4 reads L1 plus the base names agentwork and archive, never L3.
 ```
 
 ## 2. Context
@@ -223,7 +223,7 @@ A **Folder Registration** is a declaration in a module file (SKILL.md or workflo
 - `.gitignore` holds `.tmp_*`, `*_gitignore/`, `_agentwork/`; no entry per base name
 - `/cleanup` deletes `_agentwork/` and `.tmp_*` folders in its scope; it never deletes a folder because of its base name; it never descends into `_archive*` folders
 - `/prime` skips folders starting with `_` or `.tmp_`
-- `/archive` selects archivable items by affix (FR-16) and writes into the `archive` role folder of the target scope
+- `/archive` selects archivable items by affix (FR-15) and writes into the `archive` role folder of the target scope
 - `/session-archive` is `/archive session` with the session folder as source and `[WORKSPACE_FOLDER]/_archive_gitignore/` as target
 - Adding a third base name to consumer logic requires a SPEC update
 
@@ -245,10 +245,7 @@ A **Folder Registration** is a declaration in a module file (SKILL.md or workflo
 - Names listed in section 10 Migration Map are retired; workflows, skills, and script defaults use the new names
 - A retired name found in `[PROMPTSYSTEM_FOLDER]` after migration is a defect
 
-**AGNTFOLDERS-FR-15: Collision and conformance check**
-- `/verify` checks every `## Agent-Created Folders` section: anatomy (FR-01), no redefinition (FR-02, FR-03), unique base names (FR-08), no reserved names (FR-13), no retired names (FR-14)
-
-**AGNTFOLDERS-FR-16: Archive folder contract (used by `/archive`)**
+**AGNTFOLDERS-FR-15: Archive folder contract (used by `/archive`)**
 - Scopes: 1) session files → `[SESSION_FOLDER]/_archive_gitignore/`; 2) sessions → `[WORKSPACE_FOLDER]/_archive_gitignore/`; 3) files of any folder (with or without subfolders) → that folder's `_archive_gitignore/`
 - Content forms inside an archive folder: moved items keeping their relative path, date-stamped zip files `YYYY-MM-DD_[Description].zip`, date-stamped subfolders `YYYY-MM-DD_[Description]/`
 - Leading date = archive creation date; an optional time range `[Description]-From-YYYY-MM-DD-To-YYYY-MM-DD` uses the earliest and latest last-modified dates of the archived items (valid calendar dates only)
@@ -289,7 +286,7 @@ A **Folder Registration** is a declaration in a module file (SKILL.md or workflo
 
 **AGNTFOLDERS-DD-06:** Core roles are a closed set; module roles are an open set. A module role used by 3 or more modules is promoted to a core role by a SPEC update. Rationale: keeps the core small while letting proven names become standard.
 
-**AGNTFOLDERS-DD-07:** Folder Registrations live in the module's own file, not in a central list. Rationale: adding a module never requires editing a rule file; `/verify` finds collisions by scanning all registrations.
+**AGNTFOLDERS-DD-07:** Folder Registrations live in the module's own file, not in a central list. Rationale: adding a module never requires editing a rule file; a grep over all registrations lists every folder and shows collisions.
 
 **AGNTFOLDERS-DD-08:** Folders in `[WORKSPACE_FOLDER]/../.tools/` are out of scope. Rationale: outside the repository, shared across workspaces, protected by `/cleanup`; their own lifecycle is defined by each tool's SETUP guide.
 
@@ -299,7 +296,7 @@ A **Folder Registration** is a declaration in a module file (SKILL.md or workflo
 
 **AGNTFOLDERS-DD-11:** `/cleanup` and `/archive` never descend into `_archive*` folders. Rationale: archived content is kept as it was, including any `_agentwork/` left by older sessions, and is never archived twice.
 
-**AGNTFOLDERS-DD-12:** One generic `/archive` workflow replaces scope-specific archive logic; `/session-archive` becomes a preset of `/archive`. Rationale: one consumer for the `archive` role keeps archive semantics in one place; default `_archive_gitignore/` follows the `/archive` design and D2. Staging (user, 2026-11-10): `/archive` is built later in session `_2026-11-03_GenericWorkflowSyntax` (AGENSYNTAX) against FR-16. Until then `/session-archive` stays a standalone workflow with the new target `[WORKSPACE_FOLDER]/_archive_gitignore/` and the FR-10 checks.
+**AGNTFOLDERS-DD-12:** One generic `/archive` workflow replaces scope-specific archive logic; `/session-archive` becomes a preset of `/archive`. Rationale: one consumer for the `archive` role keeps archive semantics in one place; default `_archive_gitignore/` follows the `/archive` design and D2. Staging (user, 2026-11-10): `/archive` is built later in session `_2026-11-03_GenericWorkflowSyntax` (AGENSYNTAX) against FR-15. Until then `/session-archive` stays a standalone workflow with the new target `[WORKSPACE_FOLDER]/_archive_gitignore/` and the FR-10 checks.
 
 **AGNTFOLDERS-DD-13:** Migration is forward-only. New names apply to `[PROMPTSYSTEM_FOLDER]` files, script defaults, and folders created after the change; existing session folders, archived sessions, and their documents keep their folder names. Moving existing archives or sessions happens only through an explicit `/archive` run. Rationale: existing INFO documents link to `_SOURCES/...` and similar paths; a retroactive rename breaks those links, and Windows case-only renames need extra git steps per folder.
 
@@ -349,9 +346,7 @@ Module author needs a folder for new content
 │       ├─> Found: reuse that base name (FR-08)
 │       └─> Not found: choose base name, lifecycle prefix, git suffix (FR-01 to FR-03)
 │           └─> Add registration with purpose and reason (FR-08)
-└─> /verify runs conformance check (FR-15)
-    ├─> Pass: generic consumers handle folder, no other edits (NFR-01)
-    └─> Fail: fix collision, reserved or retired name
+└─> Generic consumers handle the folder, no other edits (NFR-01)
 
 /cleanup [scope]
 ├─> Find folders named _agentwork or starting with .tmp_ (skip _archive*)
@@ -364,7 +359,7 @@ Pipeline step that reads .tmp_jpgs/[PDF_NAME]/
 
 /archive <input_or_source> <goal_or_target> <options>
 ├─> Resolve scope: session files | session | folder (with or without subfolders)
-├─> Select archivable items by name and affix (skip _archive*, .tmp_*) (FR-16)
+├─> Select archivable items by name and affix (skip _archive*, .tmp_*) (FR-15)
 ├─> preview | propose: write _agentwork/.tmp_archive_files_vNN.txt, present, stop
 ├─> zip: create [target]/_archive_gitignore/YYYY-MM-DD_[Description].zip, remove zipped originals
 └─> move: move items to [target]/_archive_gitignore/ keeping relative paths
@@ -462,16 +457,19 @@ N/A: this SPEC defines naming and placement rules for instruction files; no comp
 - `/prime` file discovery skips names by prefix; `.tmp_` must be added to its skip list
 - Script defaults (`render.py`, `transcribe-image-to-markdown.py`, `convert-pdf-to-jpg.py` when called with an explicit output, YouTube download scripts) change behavior for callers that rely on the old default; workflow call sites are updated in the same change set
 - Existing archived sessions may hold `_agentwork/` folders; DD-11 keeps them untouched
-- Moving a tracked session into `_archive_gitignore/` removes it from the tracked tree on the next commit; git history keeps the content (intended, DD-09). Workspaces that want archived sessions in the tracked tree use `_archive/` (FR-16)
+- Moving a tracked session into `_archive_gitignore/` removes it from the tracked tree on the next commit; git history keeps the content (intended, DD-09). Workspaces that want archived sessions in the tracked tree use `_archive/` (FR-15)
 - `/cleanup` has no confirmation step: its listing is printed and deletion follows immediately (`workflows/cleanup.md`)
 - Zip creation on Windows uses built-in PowerShell archive commands; no extra tool dependency
 - `[BUGFIXES_FOLDER]` is a configured value in `!NOTES.md`; workspaces with an existing `_BugFixes/` permanent session keep it (DD-13) until the user moves it
 
 ## 13. Document History
 
+**[2026-11-10 17:50]**
+- Removed: former FR-15 (`/verify` collision and conformance check) and all `/verify` references (architecture diagram, DD-07, Action Flow); `WORKSPACE-RULES.md` WS-SF-02 covers the name anatomy
+- Changed: former FR-16 (archive folder contract) renumbered to FR-15; history entries below this one keep the old numbers
+
 **[2026-11-10 17:40]**
 - Changed: implementation deviations recorded after STRUT execution - research PDF page transcripts go to `_sources/[PDF_NAME]/` (FR-04 disambiguation); `/transcribe` page transcripts go to `_markdown/[DocName]/`; registration sections are required only where a module adds a new base name (nested use optional), removed from `/conversation-start`, `/conversation-update`, and `/verify` on user request
-- Open: FR-15 has no `/verify` check (AGNTFOLDERS-PR-0005); `WORKSPACE-RULES.md` WS-SF-02 covers the name anatomy
 - Added: allowed parent folders per role in `agent-behavior.md` (FR-06)
 
 **[2026-11-10 17:25]**
