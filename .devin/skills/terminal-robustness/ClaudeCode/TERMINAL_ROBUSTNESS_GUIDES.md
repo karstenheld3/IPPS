@@ -11,13 +11,12 @@ Only patterns that hold for any terminal tool on Windows/POSIX:
 
 ## 2. Safe patterns (apply always)
 
-1. **Temp script for every non-whitelisted command** - write `_agentwork/.tmp_[purpose].ps1`, redirect stdout/stderr to `_agentwork/.tmp_` files, read files with the file tool, delete script and output files after consumption. Defeats backpressure, merge corruption, and handle inheritance in one step
+1. **Supervised runner for every non-whitelisted command** - call line and completion rule: `agent-behavior.md` Terminal Hang Prevention. The runner (`run-supervised.ps1`, PowerShell 7) works with any terminal tool: output goes to files; liveness lines, stop file, and tree kill do not depend on the tool
 2. **Non-interactive flags** - `--yes`, `--no-pager`, `--ci`, `-NonInteractive`; git log/diff/show always `--no-pager` and `-n <N>`
 3. **No stdin/pager/key waits** - ban `Read-Host`, `pause`, `Get-Credential`, REPLs without input, `Get-Content -Wait`, `tail -f`
 4. **No unbounded background children** - ban `--watch` flags, `Wait-Process` without `-Timeout`; stop spawned processes after use
 5. **`rg.exe` over recursive shell enumeration** on large trees
-6. **Time caps** on every process-running command; on cap: kill the process tree, record in PROBLEMS.md, continue
-7. **Timeout wrapper** for commands without native safe parameters: `Start-Process -PassThru -RedirectStandardOutput _agentwork/.tmp_x.txt -RedirectStandardError _agentwork/.tmp_x_err.txt` + `WaitForExit(cap_ms)` + recursive `Stop-ProcessTree` on timeout
+6. **Monitor, never cut off** - expected runtimes from the project card go to the runner as `-Expected`; a command that shows progress runs to its end, only a hang verdict ends it (shared guide Section 7). If the Bash tool has its own timeout, start long commands in the background so the tool timeout cannot end them
 
 ## 3. Card usage
 
@@ -25,4 +24,4 @@ Copy `ClaudeCode/ROBUSTNESS_CARD_TEMPLATE.md` to `_agentwork/__CARD_[TOPIC]-Robu
 
 ## 4. Observation duty
 
-When a command hangs or behaves unexpectedly under Claude Code, record the observation (command, what happened, kill method used) in the card's Findings Feed. These observations are the raw material for a future ClaudeCode full-findings variant.
+When a command hangs or behaves unexpectedly under Claude Code, record the observation (command, what happened, runner log line) in the Fails card of the working folder (created at the first failure). These observations are the raw material for a future ClaudeCode full-findings variant.

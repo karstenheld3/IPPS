@@ -2,7 +2,7 @@
 
 Audits process discipline and quality of terminal command execution. Consumed AFTER execution: PD by `/drift-detect`, QI by `/improve`. Invisible to the working agent during execution (gaming prevention).
 
-**Evidence sources:** command history in conversation, session PROBLEMS.md, robustness card Findings Feed, PROGRESS.md entries.
+**Evidence sources:** command history in conversation, runner logs (`_agentwork/.tmp_*_log.txt`), Fails card, session PROBLEMS.md, PROGRESS.md entries.
 
 ## Process Discipline (PD)
 
@@ -23,28 +23,28 @@ Audits process discipline and quality of terminal command execution. Consumed AF
 ### TERMROBUSTNESS-PD-03: No banned patterns in executed commands
 
 - Action: No `2>&1` on stderr-heavy commands, no stdin/pager waits, no unbounded children in executed commands
-- Evidence: command history shows redirects to file, `--no-pager`, caps, non-interactive flags
+- Evidence: command history shows redirects to file, `--no-pager`, non-interactive flags
 - Failure indicator: any executed command matching HG-01 through HG-04 violations
 - References: TERMROBUSTNESS-HG-01, HG-02, HG-03, HG-04
 
-### TERMROBUSTNESS-PD-04: Caps and kill protocol followed
+### TERMROBUSTNESS-PD-04: Monitored, ended only on a hang verdict
 
-- Action: Time-capped commands with process-tree kill and PROBLEMS.md recording on cap
-- Evidence: PROBLEMS.md entries for capped commands; no evidence of parent-only kills
-- Failure indicator: command ran unbounded, or cap hit with no kill/record
+- Action: Every non-whitelisted command ran through the supervised runner with `-Expected`; the agent read the `ALIVE` lines while waiting; a command was ended only after a hang verdict, through the stop file
+- Evidence: runner log lines with `expected=`; for each `KILLED` line a Fails card entry with hang evidence (wait shown in the output, or unchanged `ALIVE` values and their time span)
+- Failure indicator: command ran without the runner; `KILLED` while the preceding `ALIVE` lines showed growing `cpu=`, `out=`, or `err=` and no endless-loop evidence; `KILLED` with no record; a finished command re-run only because it was slow; agent waited on a command whose output showed an input prompt
 - References: TERMROBUSTNESS-EX-02, EX-03
 
-### TERMROBUSTNESS-PD-05: Findings recorded in the card
+### TERMROBUSTNESS-PD-05: Failures recorded in the Fails card
 
-- Action: Hangs and near-hangs recorded in the card Findings Feed
-- Evidence: Findings Feed entries added during or after the session
+- Action: Every `KILLED`, `ERROR`, unexpected exit, runtime overrun, and completion miss recorded at once in the Fails card of the working folder (created at the first failure if absent), with a "Never again" line
+- Evidence: Fails card entries whose time matches the runner log line; card exists after the first failure in chat tasks as well as in prompt sequences
 - Failure indicator: a hang discussed in conversation with no card entry
 - References: TERMROBUSTNESS-CD-04
 
-### TERMROBUSTNESS-PD-06: Non-whitelisted commands ran as temp scripts
+### TERMROBUSTNESS-PD-06: Non-whitelisted commands ran as temp scripts through the runner
 
-- Action: Every command outside the inline whitelist ran as `_agentwork/.tmp_` script with output redirected to `_agentwork/.tmp_` files and read with the file tool
-- Evidence: command history shows only whitelisted inline commands and `pwsh -File _agentwork/.tmp_*.ps1 > ... 2> ...` lines
+- Action: Every command outside the inline whitelist ran as `_agentwork/.tmp_` script through `run-supervised.ps1`; results read with the file tool
+- Evidence: command history shows only whitelisted inline commands and `run-supervised.ps1 -Script _agentwork/.tmp_*` lines
 - Failure indicator: inline pipeline, multi-statement, loop, or long command line in the terminal; results read from terminal output
 - References: TERMROBUSTNESS-EX-04
 
@@ -57,10 +57,10 @@ Audits process discipline and quality of terminal command execution. Consumed AF
 
 ## Quality Improvement (QI)
 
-### TERMROBUSTNESS-QI-01: Cap sizing judgment
+### TERMROBUSTNESS-QI-01: Expected-runtime accuracy and hang-verdict quality
 
-- Question: Are the time caps proportionate to command class (roughly 3x expected duration), or generic one-size values?
-- Improvement tip: Tune caps per command type in the card (e.g., 30s git, 3min single test file, 10min suite, 15min build) instead of a blanket cap
+- Question: Do the card's expected runtimes match the `elapsed=` values of the runner logs, and are known silent phases noted? Was every hang verdict right (the replacement command finished), and was any real hang left waiting far longer than the verdict rule requires?
+- Improvement tip: Replace starting values with measured ones per command class; note silent phases ("no output until the summary") so that silence there is not read as a hang. Give silent long scripts a progress line per step so the liveness signal is unambiguous
 
 ### TERMROBUSTNESS-QI-02: Banned-list completeness
 
@@ -70,9 +70,9 @@ Audits process discipline and quality of terminal command execution. Consumed AF
 ### TERMROBUSTNESS-QI-03: Redirect-pattern adoption
 
 - Question: Did inline commands stay within the whitelist, or did borderline commands slip through inline?
-- Improvement tip: When in doubt, use the temp-script pattern rather than narrowing pipelines - it eliminates all three mechanisms at once
+- Improvement tip: When in doubt, use a temp script through the runner rather than narrowing pipelines - it eliminates the pipe mechanisms and adds containment and liveness lines
 
 ### TERMROBUSTNESS-QI-04: Card reuse within the working folder
 
-- Question: Is the card in `_agentwork/` extended over the working folder's lifetime, or recreated per prompt?
-- Improvement tip: Keep one card per working folder in `_agentwork/`, reference it from prompt sequences, and extend its Findings Feed; promote recurring findings to the agent `ROBUSTNESS_CARD_TEMPLATE.md` before `/cleanup`
+- Question: Are the Robustness and Fails cards in `_agentwork/` reused over the working folder's lifetime, or recreated per prompt? Did the final checkpoint prompt promote "Never again" lines, and did `/cleanup` carry recurring lines out before deleting the cards?
+- Improvement tip: Keep one card of each kind per working folder; promote per the Fails card rules in `ROBUSTNESS_CARD_SKELETON.md`

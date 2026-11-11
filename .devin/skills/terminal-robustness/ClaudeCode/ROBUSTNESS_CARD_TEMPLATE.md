@@ -1,57 +1,43 @@
 # Robustness Card Template (ClaudeCode)
 
-Re-usable card for Claude Code agents. Copy to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder and extend with project-specific entries. Generic defaults only - replace bracketed placeholders.
+Re-usable card for Claude Code agents. Copy to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder and extend with project-specific entries. Generic defaults only - replace bracketed placeholders. Generic rules (whitelist, supervised runner, hang verdict, hard bans) stay in `agent-behavior.md` Terminal Hang Prevention and are not copied here.
 
 ```markdown
 # Robustness Card: [TOPIC]
 
 ## Banned commands
 
-- `2>&1` on stderr-heavy commands (npm, pip, compilers) - shell merge point can hang or crash; redirect to file instead - generic merge rule
+- Inline command with `;`, `|`, a loop, or nested quotes - unterminated string can leave pwsh at the `>>` continuation prompt - evidence: HANGBENCH HC-10
 - `git log` / `git diff` / `git show` without `--no-pager` - launches pager, waits on stdin - generic pager rule
 - `npm install` without `--yes` - prompts for confirmation on stdin - generic stdin rule
 - `npx <tool>` without `--yes` - prompts to install package - generic stdin rule
 - `npm create <tool> ... -- <flags> --yes` - `--yes` after `--` reaches the scaffold tool, not the runner's install prompt - generic stdin rule
-- `Read-Host`, `pause`, `Get-Credential` - wait for stdin - generic stdin rule
-- Any `--watch` flag, `npm run dev`, `bun --watch` - never terminates - generic unbounded-child rule
+- `Get-Credential` - waits for interactive input - generic stdin rule
 - `Wait-Process` without `-Timeout` - waits forever - generic unbounded-child rule
 - `Get-Content -Wait`, `tail -f` - stream indefinitely - generic stream rule
 - `Get-ChildItem -Recurse` / `Select-String -Recurse` on large trees - enumerates everything before returning; use rg.exe - generic enumeration rule
 - [project-specific: build.bat / ship.bat containing pause; CLI tools without non-interactive flags]
 
-## Time caps
+## Expected runtimes
 
-- Single test file: 3-minute cap
-- Full test suite: 10-minute cap
-- Build scripts: 15-minute cap
-- Git operations: 30-second cap
-- [project-specific caps]
+Typical seconds per command class, passed as `-Expected` to `run-supervised.ps1`. They start the liveness check and feed the runtime check; no command is ended for exceeding them. Starting values - replace with measured project values:
+- Single test file: 60 s; none
+- Full test suite: 200 s; none
+- Build scripts: 300 s; none
+- Git operations: 10 s; none
+- [project-specific class]: [N] s; [known silent phase or none]
 
 ## Always rules
 
-- Test suites run with non-interactive flags, non-blocking, under cap
+- Test suites run with non-interactive flags (no watch mode)
 - Git commands use `--no-pager`
 - `npx`/`npm` commands use `--yes`, placed before `--` in two-layer commands (`npm create`, `npx`)
-- Stderr redirected to file, never merged with `2>&1`
-- File and content search uses rg.exe instead of recursive shell enumeration
-- Stray processes stopped after every command execution
-- Commands outside the inline whitelist run as `_agentwork/.tmp_` script + redirect to `_agentwork/.tmp_` files + file-read; script and output files deleted after consumption
-
-## On-cap behavior
-
-1. Kill the process tree (children and grandchildren), not just the parent
-2. Record the command and cap in session PROBLEMS.md
-3. Continue with the next step - never re-run the same command unbounded
-
-## Kill procedure
-
-Recursive Stop-ProcessTree: enumerate children by ParentProcessId, recurse, force-kill. After the kill, sweep for orphans by command-line pattern (their parent PID no longer maps to a running process).
+- File and content search uses rg.exe inside the tmp script instead of recursive shell enumeration
+- [project-specific safe alternatives]
 
 ## Agent tool limits
 
-[copy verbatim the bullet list of `agent-behavior.md` section "Large File Writes"; do not edit values in the card]
-
-## Findings feed
-
-(extend with one entry per hang or near-hang: what, why, prevention)
+[copy verbatim the bullet list of `tools-and-skills.md` section "Large File Writes"; do not edit values in the card]
 ```
+
+Failures of a run go to the Fails card (`ROBUSTNESS_CARD_SKELETON.md` Fails block), not into this card; its "Never again" lines are promoted into "Banned commands" per the Fails card rules (final checkpoint prompt, or more than about 15 lines).

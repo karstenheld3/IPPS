@@ -26,7 +26,7 @@ The established mitigation - run the command from a `_agentwork/.tmp_*.ps1`/`.py
 - No shell merge point, no record wrapping, no merge OOM
 - Grandchildren inherit file handles, not pipe write handles - the tool's pipes EOF at parent exit and the command returns immediately
 
-This is mechanical, not folklore. It is the default for every command outside the inline whitelist (`agent-behavior.md` Terminal Hang Prevention, TERMROBUSTNESS-EX-04). Delete script and output files after consumption (TERMROBUSTNESS-EX-05).
+This is mechanical, not folklore. Redirecting alone does not stop waits (input, network, locks, loops): the supervised runner `run-supervised.ps1` adds the Job Object container, empty stdin, liveness lines, and the whole-tree kill the agent triggers after a hang verdict (Section 7). Call line and completion rule: `agent-behavior.md` Terminal Hang Prevention.
 
 ## 3. Safe Command Patterns (Selection)
 
@@ -36,28 +36,27 @@ This is mechanical, not folklore. It is the default for every command outside th
 4. **No stdin waits** - ban `Read-Host`, `pause`, `Get-Credential`, REPLs launched without input, `Get-Content -Wait`, `tail -f`
 5. **No unbounded children** - ban `--watch` flags, `Wait-Process` without `-Timeout`; stop spawned processes after use
 6. **Recursive enumeration** - prefer `rg.exe` (ripgrep, bundled with VS Code-based editors) over `Get-ChildItem -Recurse` / `Select-String -Recurse` on large trees
-7. **Time caps** - every process-running command gets a cap ~3x its expected duration; on cap: kill the process tree, record in PROBLEMS.md, continue
-8. **Timeout wrapper** - commands with no native safe parameter run via a separate process with redirect-to-file and process-tree kill on timeout (see the agent card template for the tested PowerShell pattern)
+7. **Monitor, never cut off** - every non-whitelisted command runs through the runner; a command that shows progress runs to its end, and only a hang verdict ends it (rule: `agent-behavior.md` Terminal Hang Prevention steps 4 and 5)
 
 ## 4. The Robustness Card
 
-A robustness card (`_agentwork/__CARD_[TOPIC]-Robustness.md` in the current working folder; `[WORKSPACE_FOLDER]/_agentwork/` in PROJECT-MODE) is the per-working-folder protection, kept until `/cleanup` deletes `_agentwork/`: banned commands, time caps, always rules, on-cap behavior, kill procedure, findings feed.
+A robustness card (`_agentwork/__CARD_[TOPIC]-Robustness.md` in the current working folder; `[WORKSPACE_FOLDER]/_agentwork/` in PROJECT-MODE) is the per-working-folder protection, kept until `/cleanup` deletes `_agentwork/`: project banned commands, expected runtimes, project always rules, agent tool limits. A Fails card (`_agentwork/__CARD_[TOPIC]-Fails.md`) is the failure memory of the same working folder, shared by chat tasks and prompt sequences and created at the first failure: "Never again" list and failure entries. Structure of both: `ROBUSTNESS_CARD_SKELETON.md`.
 
 ### 4.1 Card lifecycle
 
 ```
 copy agent ROBUSTNESS_CARD_TEMPLATE.md
 └─> name _agentwork/__CARD_[TOPIC]-Robustness.md in working folder
-    └─> extend banned list + caps with project-specific entries
+    └─> extend banned list + expected runtimes with project-specific entries
         ├─> chat mode: loaded before risky commands
         ├─> prompt sequences: hang-safety clause references the card
         ├─> /verify: instance checked against ROBUSTNESS_CARD_SKELETON.md
-        └─> findings feed grows until /cleanup deletes _agentwork/
+        └─> banned list grows from promoted Fails card lines until /cleanup
 ```
 
 ### 4.2 Who consumes the card
 
-- **Chat-mode agent**: reads the card before running risky commands; follows banned list and caps
+- **Chat-mode agent**: reads the card before running risky commands; follows the banned list and takes the expected runtimes
 - **Prompt sequences**: `/write-prompts` Step 1 builds the hang-safety clause from the card; every implementation prompt loads the card at startup
 - **`/verify`**: checks card instances against `ROBUSTNESS_CARD_SKELETON.md` structure
 
@@ -66,32 +65,43 @@ copy agent ROBUSTNESS_CARD_TEMPLATE.md
 1. Search the project for scripts containing `pause`, `Read-Host`, `ReadKey`, `Get-Credential`
 2. Search for CLI entry points reading stdin when no arguments are given
 3. Search for `--watch` flags in package.json scripts
-4. Test each suspicious command with a 5-second timeout - if it hangs, ban it
-5. Record findings in the card's Findings Feed
+4. Probe each suspicious command through the runner: if its output shows an input wait within 5 seconds, end it with the stop file and ban it
+5. Add each confirmed hang to the banned list with its evidence
 
 ## 5. Consumption Modes
 
 - **Chat mode** (no workflow active): SKILL.md dispatch + this guide + the project card govern command execution. The minimal rule in `agent-behavior.md` ("Terminal Hang Prevention") links here
 - **Prompt-sequence mode**: `/write-prompts` loads this skill; the hang-safety clause in `PROMPTS_ROBUSTNESS_GUIDES.md` (write-documents skill) references the card; prompts load the card at startup
 
-## 6. Two-Tier Defense
+## 6. Three-Tier Defense
 
-1. **Always rules** (tier 1, prevent): non-interactive flags, redirect-to-file, agent tools, caps
-2. **Timeout wrapper** (tier 2, catch): separate process + redirect + process-tree kill - for commands without native safe parameters or with lock/network risk
+1. **Prevent** (card bans and always rules): non-interactive flags, agent tools, no `2>&1`
+2. **Catch** (supervised runner + monitoring agent): empty stdin ends input waits within seconds; `ALIVE` lines show CPU time and output growth; on a hang verdict the agent's stop file ends the whole Job Object tree - catches the hangs tier 1 missed, including unknown ones, without ending work that still makes progress (HANGBENCH result: DevinCascade guide)
+3. **Remember** (Fails card): every failure becomes a "Never again" line checked before the next command
 
-Tier 1 covers the known; tier 2 catches the unknown. Both live in the agent card templates.
+The runner kills directly on the stop file (Job Object termination, no graceful signal on Windows): the verdict says the process is hung, a grace period only delays.
 
-### 6.1 On-Cap Kill Escalation
+## 7. Hang or Slow: Reading the Liveness Signals
 
-For processes that may still exit cleanly: SIGTERM first (`Stop-Process -Id <pid> -Force` on Windows, `kill -TERM` on POSIX), wait 5 seconds, then SIGKILL (`taskkill /T /F /PID <pid>` on Windows, `kill -KILL` on POSIX), then sweep orphan processes by name. Why: SIGTERM lets the process flush buffers, release locks, write state; direct SIGKILL can leave resources locked, files half-written, ports dirty. For confirmed hangs (the tested timeout pattern, DevinCascade guide Section 3), kill directly - the grace period only delays and risks re-hang during cleanup.
+Elapsed time does not separate a hang from slow work. Ending slow work throws away its whole runtime and forces a second run, which costs more than waiting. The runner therefore has no deadline. It writes one `ALIVE` line every 30 s (`elapsed=`, `cpu=` CPU seconds of the whole tree, `out=` / `err=` bytes of the output files, `procs=` living processes); the agent compares two lines:
+
+- `out=` or `err=` grew, or the work wrote its own files -> working. Keep waiting
+- Only `cpu=` grew -> computing or buffering (silent phase, compile step, pipeline that emits at the end). Keep waiting
+- All values unchanged and the last output line is a prompt, a pager, or a lock message -> hang. End it at once
+- All values unchanged and the script is inside a known silent wait (network call with its own timeout, sleep, wait for another process) -> not a hang yet. Wait until that phase must have ended
+- All values unchanged for 5 minutes past the expected runtime, no known silent phase -> hang. End it
+- Only `cpu=` grew for 10 minutes, elapsed above 3x expected, and no file the work writes has changed -> endless loop. End it
+- No new `ALIVE` line for 90 s and no end line -> the runner itself is gone (agent rule file: runner-gone check)
+
+Ending = creating the stop file; thresholds and wording: `agent-behavior.md` Terminal Hang Prevention step 5. A `DONE` far above the expected runtime is a runtime overrun: the result is used, the cause is recorded, the card's expected runtime is corrected. It is never re-run.
+
+Why no automatic kill: in HANGBENCH an idle timeout on output killed legitimate silent work (HC-03, HC-24), and a deadline kills legitimate work that only needs longer than estimated. Each single signal has a legitimate case that looks the same; only the combination, read with knowledge of what the script does, separates them.
 
 ## Review Checklist
 
+- [ ] No command ended while it showed progress; every `KILLED` has hang evidence in its Fails entry
 - [ ] Classified the command risk before running (interactive / volume / child)
 - [ ] Loaded the project card if it exists; created one from the agent template if not
-- [ ] Non-whitelisted commands ran as `_agentwork/.tmp_` script; output redirected to files and read with `read_file`
+- [ ] Non-whitelisted commands ran through `run-supervised.ps1`; completion read from the runner log
 - [ ] Temp scripts and output files deleted after consumption
-- [ ] No `2>&1`
-- [ ] No stdin/pager waits; no unbounded background children
-- [ ] Time cap set for every process-running command
-- [ ] Kills recorded; new findings added to the card's Findings Feed
+- [ ] Every failure written to the Fails card of the working folder at once, with a "Never again" line

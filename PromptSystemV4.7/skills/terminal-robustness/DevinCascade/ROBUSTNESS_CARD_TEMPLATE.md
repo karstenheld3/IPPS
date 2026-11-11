@@ -1,20 +1,19 @@
 # Robustness Card Template (DevinCascade)
 
-Re-usable card for Devin/Cascade agents. Copy to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder and extend with project-specific entries. Defaults are tested or evidence-cited - replace bracketed placeholders.
+Re-usable card for Devin/Cascade agents. Copy to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder and extend with project-specific entries. Defaults are tested or evidence-cited - replace bracketed placeholders. Generic rules (whitelist, supervised runner, hang verdict, hard bans) stay in `agent-behavior.md` Terminal Hang Prevention and are not copied here.
 
 ```markdown
 # Robustness Card: [TOPIC]
 
 ## Banned commands
 
-- `2>&1` on stderr-heavy commands (npm, pip, compilers) - pwsh becomes the merge point: OutOfMemoryException with corrupted exit code or backpressure hang - evidence: investigation log @I001.016-017
+- Inline command with `;`, `|`, a loop, or nested quotes (`"...$(...)"`) - unterminated string leaves pwsh at the `>>` continuation prompt forever - evidence: HANGBENCH HC-10
 - `git log` / `git diff` / `git show` / `git blame` without `--no-pager` - launches pager, blocks on stdin - generic pager rule
 - `npm install` without `--yes` or `--ci` - prompts on stdin - generic stdin rule
 - `npx <tool>` without `--yes` - prompts to install package - generic stdin rule
 - `npm create <tool> ... -- <flags> --yes` - `--yes` after `--` reaches the scaffold tool, not the runner; "Ok to proceed?" install prompt still waits on stdin - evidence: @I001.025
 - `node` without a script argument - starts REPL, waits on stdin - generic stdin rule
-- `Read-Host`, `pause`, `Get-Credential` - wait for stdin - generic stdin rule
-- `bun --watch`, `npm run dev`, any `--watch` flag - unbounded child; tool waits for pipe EOF until the child dies - evidence: @I001.012-013
+- `Get-Credential` - waits for interactive input - generic stdin rule
 - `Wait-Process` without `-Timeout` - waits forever - generic unbounded-child rule
 - `Get-Content -Wait`, `tail -f` - stream indefinitely - generic stream rule
 - `Get-ChildItem -Recurse` / `Select-String -Recurse` on large trees - full enumeration before return; use rg.exe - generic enumeration rule
@@ -22,47 +21,27 @@ Re-usable card for Devin/Cascade agents. Copy to `_agentwork/__CARD_[TOPIC]-Robu
 - Cascade `search_web` / `read_url_content` on `gesetze-im-internet.de` - crashes the conversation; use Playwright
 - [project-specific: build.bat / ship.bat containing pause; CLI tools without non-interactive flags; dev servers]
 
-## Time caps
+## Expected runtimes
 
-- Single test file: 3-minute cap
-- Full test suite: 10-minute cap
-- Build scripts: 15-minute cap
-- Git operations: 2-minute cap
-- Type checking: 5-minute cap
-- [project-specific caps]
+Typical seconds per command class, passed as `-Expected` to `run-supervised.ps1`. They start the liveness check and feed the runtime check; no command is ended for exceeding them. Starting values - replace with measured project values:
+- Single test file: 60 s; none
+- Full test suite: 200 s; none
+- Build scripts: 300 s; none
+- Git operations: 10 s; none
+- Type checking: 100 s; no output until the end
+- [project-specific class]: [N] s; [known silent phase or none]
 
 ## Always rules
 
-- Commands outside the inline whitelist run as `_agentwork/.tmp_` script + redirect to `_agentwork/.tmp_` files + read_file, script and output files deleted after consumption - defeats pipe buffer, drain throttle, merge point, and handle inheritance - evidence: @I001.019
-- Test suites run with `--ci` / `--timeout` (non-blocking, no watch mode)
+- Test suites run with `--ci` / `--timeout` (no watch mode)
 - Git commands use `--no-pager`
 - `npx` commands use `--yes`; in two-layer commands (`npm create` / `npx` + `--`) the runner-level `--yes` goes BEFORE `--` - evidence: @I001.025
-- Stderr redirected to file, never merged with `2>&1`
-- File and content search uses rg.exe instead of recursive shell enumeration
-- Stray processes stopped after every command execution
-- Hang-risky commands run non-blocking with status polling, not blind blocking
-- Long command echo is mangled (duplicated, truncated) - verify via artifacts on disk, never by parsing the echo - evidence: @I001.011
-
-## On-cap behavior
-
-1. Kill the process tree (children and grandchildren), not just the parent
-2. Record the command and cap in session PROBLEMS.md
-3. Continue with the next step - never re-run the same command unbounded
-4. Same command hangs twice: stop the prompt with a PROBLEMS.md entry
-
-## Kill procedure
-
-Recursive Stop-ProcessTree (see DevinCascade guide Section 3) - kills children and grandchildren, dead-PID safe. After the kill, sweep for orphaned grandchildren by command-line pattern: their parent PID no longer maps to a running process.
-
-## Execution pattern
-
-Hang-risky commands execute via Start-Process + WaitForExit with redirect-to-file and process-tree kill on timeout. Full tested pattern: DevinCascade/TERMINAL_ROBUSTNESS_GUIDES.md Section 3.
+- File and content search uses `grep_search`; outside the workspace rg.exe inside the tmp script, never recursive shell enumeration
+- [project-specific safe alternatives]
 
 ## Agent tool limits
 
 [copy verbatim the bullet list of `devin-cascade.md` section "Tool-Call Payload Limit"; do not edit values in the card]
-
-## Findings feed
-
-(extend with one entry per hang or near-hang: what, why, prevention)
 ```
+
+Failures of a run go to the Fails card (`ROBUSTNESS_CARD_SKELETON.md` Fails block), not into this card; its "Never again" lines are promoted into "Banned commands" per the Fails card rules (final checkpoint prompt, or more than about 15 lines).

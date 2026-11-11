@@ -1,0 +1,209 @@
+[
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 459,
+    "Source": "observed sequence prompt 08 screenshot",
+    "Command": "Select-String -Path \"e:\\dev\\x\\file.md\" -Pattern \"\\[\\{\"\"type\"\": \"\"file_url\"\"\" | Select-Object -First 5",
+    "Reason": "BLOCKED by hang-prevention hook: pipe in inline command. Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 456,
+    "Source": "observed sequence prompt 08 screenshot",
+    "Command": "$lines = Get-Content x.md; $verdictLines = $lines | Where-Object { $_ -match 'Verdict' }; Write-Output \"Count: $($verdictLines.Count)\"",
+    "Reason": "BLOCKED by hang-prevention hook: pipe in inline command. Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 431,
+    "Source": "HERAV1HRNS-FL-0001",
+    "Command": "bun test --timeout 20000 tests/unit/prompt_assemble.test.ts 2>&1",
+    "Reason": "BLOCKED by hang-prevention hook: 2>&1 stream merge (pwsh merge point, OOM or backpressure hang). Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 680,
+    "Source": "pager rule",
+    "Command": "git log",
+    "Reason": "BLOCKED by hang-prevention hook: git pager command without --no-pager. Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 449,
+    "Source": "GLOB-FL-020",
+    "Command": "git diff | Select-String -Pattern foo",
+    "Reason": "BLOCKED by hang-prevention hook: pipe in inline command. Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 515,
+    "Source": "GROKUPDATE card",
+    "Command": "pwsh -Command \"Get-ChildItem -Recurse\"",
+    "Reason": "BLOCKED by hang-prevention hook: pwsh -Command with script text. Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 507,
+    "Source": "GLOB-FL-020",
+    "Command": "python -c \"print(f'{x}')\"",
+    "Reason": "BLOCKED by hang-prevention hook: script block or braces in inline command. Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 577,
+    "Source": "stdin rule",
+    "Command": "Read-Host \"Continue\"",
+    "Reason": "BLOCKED by hang-prevention hook: stdin wait (Read-Host, pause, Get-Credential). Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 593,
+    "Source": "unbounded child rule",
+    "Command": "npm run dev",
+    "Reason": "BLOCKED by hang-prevention hook: unbounded child (dev server, watch mode). Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 535,
+    "Source": "SharePoint-GPT-Middleware-Dev NOTES",
+    "Command": "curl -s http://localhost:8000/ | python -c \"import sys; sys.stdin.read()\"",
+    "Reason": "BLOCKED by hang-prevention hook: pipe in inline command. Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 648,
+    "Source": "whitelist length",
+    "Command": "Get-ChildItem -Path \"e:\\dev\\aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+    "Reason": "BLOCKED by hang-prevention hook: command longer than 200 characters (229). Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 664,
+    "Source": "REPL rule",
+    "Command": "python",
+    "Reason": "BLOCKED by hang-prevention hook: interpreter without script (REPL waits on stdin). Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 482,
+    "Source": "multi-line",
+    "Command": "Write-Output 1\nWrite-Output 2",
+    "Reason": "BLOCKED by hang-prevention hook: multi-line command (continuation prompt risk). Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 607,
+    "Source": "follow rule",
+    "Command": "Get-Content log.txt -Wait",
+    "Reason": "BLOCKED by hang-prevention hook: follow mode never ends. Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 484,
+    "Source": "editor rule",
+    "Command": "git commit",
+    "Reason": "BLOCKED by hang-prevention hook: git commit without -m (opens editor). Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Block",
+    "Actual": "Block",
+    "Ms": 658,
+    "Source": "continuation prompt",
+    "Command": "Write-Output \"unterminated",
+    "Reason": "BLOCKED by hang-prevention hook: unbalanced double quotes (continuation prompt). Write the command into _agentwork/.tmp_[purpose].ps1 and run: pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > _agentwork/.tmp_[purpose]_out.txt 2> _agentwork/.tmp_[purpose]_err.txt, then read_file both files."
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Allow",
+    "Actual": "Allow",
+    "Ms": 664,
+    "Source": "card tmp-script line",
+    "Command": "pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_scan.ps1 > _agentwork/.tmp_scan_out.txt 2> _agentwork/.tmp_scan_err.txt",
+    "Reason": ""
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Allow",
+    "Actual": "Allow",
+    "Ms": 535,
+    "Source": "whitelist",
+    "Command": "git --no-pager status --short",
+    "Reason": ""
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Allow",
+    "Actual": "Allow",
+    "Ms": 519,
+    "Source": "whitelist",
+    "Command": "git --no-pager log -n 5 --oneline",
+    "Reason": ""
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Allow",
+    "Actual": "Allow",
+    "Ms": 522,
+    "Source": "whitelist",
+    "Command": "where.exe rg python pwsh",
+    "Reason": ""
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Allow",
+    "Actual": "Allow",
+    "Ms": 564,
+    "Source": "whitelist",
+    "Command": "git commit -m \"fix: message\"",
+    "Reason": ""
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Allow",
+    "Actual": "Allow",
+    "Ms": 590,
+    "Source": "wrapper line",
+    "Command": "procgov -t 60s --recursive -- pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_x.ps1",
+    "Reason": ""
+  },
+  {
+    "Verdict": "PASS",
+    "Expect": "Allow",
+    "Actual": "Allow",
+    "Ms": 572,
+    "Source": "python script line",
+    "Command": "python _agentwork/.tmp_check.py > _agentwork/.tmp_check_out.txt 2> _agentwork/.tmp_check_err.txt",
+    "Reason": ""
+  }
+]

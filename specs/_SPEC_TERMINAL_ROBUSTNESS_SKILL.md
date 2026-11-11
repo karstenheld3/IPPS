@@ -3,7 +3,8 @@
 **Doc ID**: TERMROBUSTNESS-SP01
 **Feature**: TERMINAL_ROBUSTNESS_SKILL
 **Goal**: Specify the placement, structure, and linkage of the terminal-robustness skill and robustness cards in IPPS
-**Timeline**: Created 2026-09-29, Updated 0 times
+**Timeline**: Created 2026-09-29, Updated 1 time (2026-09-29 - 2026-11-11)
+**Partially superseded by:** `_SPEC_AGENT_TERMINAL_ROBUSTNESS.md [AGENTTERMINAL-SP01]` - FR-04, FR-07, FR-11, FR-13, NFR-01
 **Target file(s)**:
 - `PromptSystemV4.5/skills/terminal-robustness/` (authoring) and `.devin/skills/terminal-robustness/` (deployment mirror)
 - `PromptSystemV4.5/rules/agent-behavior.md` + `.devin/rules/agent-behavior.md` (minimal rule section)
@@ -348,6 +349,9 @@ Verification flow:
 - Documented exceptions to `SKILL_RULES.md` (SK-FL-01, SK-FL-07): agent variant subfolders (`ClaudeCode/`, `DevinCascade/`) override the flat-layout rule per TERMROBUSTNESS-DD-03 - the agent dimension requires subfolders regardless of file count; `ROBUSTNESS_CARD_TEMPLATE.md` and `ROBUSTNESS_CARD_SKELETON.md` use [ACTOR]-mandated names instead of the `_TEMPLATE` suffix convention - the TEMPLATE marker is present and distinguishes template from operational file, satisfying the rule's intent
 
 ## 12. Document History
+
+**[2026-11-11 18:45]**
+- Changed: FR-04, FR-07, FR-11, FR-13, NFR-01 superseded by AGENTTERMINAL-SP01 (supervised runner, Fails card, one home per concept)
 
 **[2026-09-29 17:00]**
 - Added: two-layer scaffold flag placement (runner `--yes` before `--`) - shared guide Section 3.3, HG-02 BAD/GOOD pair, both agent card templates (banned + always rules) - based on field evidence I001.025 (npm create "Ok to proceed?" prompt not suppressed by tool-level `--yes`)
