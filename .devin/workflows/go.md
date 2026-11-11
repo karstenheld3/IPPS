@@ -58,7 +58,7 @@ Backups and zips created during `/go` MUST NOT be deleted by the agent, includin
 
 ## Required Reading
 
-- `rules/promptsystem-core.md` - Workflow Reference lists all available workflows and skills
+- `rules/tools-and-skills.md` - Workflow Reference lists all available workflows; Skill Registry tells how to discover skills
 
 ## MUST-NOT-FORGET
 

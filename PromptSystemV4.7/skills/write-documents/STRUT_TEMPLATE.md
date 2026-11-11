@@ -16,7 +16,7 @@ NEVER embed STRUTs in tracking documents (PROGRESS.md, PROBLEMS.md, NOTES.md, FA
 ## Core Rules
 
 - Every phase, step, deliverable has unique ID: `P1`, `P1-S1`, `P1-D1`
-- Steps use AGEN verbs: `[ ] P1-S1 [VERB](params)`
+- Steps use AGEN verbs: `[ ] P1-S1 [VERB](params)`. Verb list with meanings: @skills:promptsystem `PROMPTSYSTEM_AGENTIC_ENGLISH.md`
 - Checkbox states: `[ ]` pending, `[x]` done, `[N]` done N times (retry count)
 - **Objectives link to Deliverables**: `[ ] Goal ← P1-D1, P1-D2`
 - Use box-drawing characters: `├─` `└─` `│` `└─>`
@@ -228,6 +228,32 @@ Use `← Px-Sy` suffix for explicit dependencies within or after Concurrent bloc
 **Executing:** Start at P1-S1, execute steps, check Deliverables, follow Transitions until `[END]`
 
 **Resuming:** Find first unchecked Deliverable, read Strategy, continue
+
+## Execution Rules
+
+Summary in `promptsystem-core.md` section STRUT Execution. Full rules:
+
+### Execution Algorithm
+
+1. **Locate current position**: Find first unchecked step `[ ] Px-Sy`
+2. **Execute step**: Perform the verb action with given parameters
+3. **Update checkbox**: Mark `[x]` on success, increment `[N]` on retry
+4. **Check deliverables**: After step completion, verify if any `Px-Dy` can be checked
+5. **At phase boundary**: Run `/verify` to evaluate transition conditions
+6. **Follow transition**: Go to next phase, `[CONSULT]`, or `[END]`
+
+### Verification Gates
+
+- **Planning time**: Run `/verify` after creating STRUT plans to validate structure
+- **Phase transitions**: Run `/verify` before transitioning between phases
+- **Mandate**: Only `/verify` workflow has authority to approve autonomous phase transitions
+
+### Resuming Interrupted Plans
+
+1. Read PROGRESS.md or document containing STRUT plan
+2. Find first unchecked deliverable `[ ] Px-Dy`
+3. Identify which steps feed that deliverable
+4. Continue from first unchecked step
 
 ## Embedding in Documents
 

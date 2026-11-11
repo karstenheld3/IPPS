@@ -581,9 +581,12 @@ States (no brackets) used for branching:
 - **EDIRD-IG-05:** Workflow type (BUILD/SOLVE) is determined in EXPLORE and persists for entire workflow unless explicitly switched with [ACTOR] confirmation
 - **EDIRD-IG-06:** Implementation uses small verifiable cycles: [IMPLEMENT]→[TEST]→[FIX]→green→next. Plans must be broken into steps that can be tested end-to-end. Large monolithic implementations are prohibited
 - **EDIRD-IG-07:** Agent always knows full phase plan. PROGRESS.md maintains all 5 phases with status (pending/in_progress/done). Agent reads this on session resume.
-- **EDIRD-IG-08:** Agent always knows all gates. Gate summaries in edird-phase-planning.md rule (always-on). Full gate checklists in @edird-phase-planning skill, invoked for [PLAN] and [PARTITION].
+- **EDIRD-IG-08:** Agent always knows all gates. Gate summaries in edird-phase-planning.md rule (always-on). Full gate checklists in @skills:promptsystem `PROMPTSYSTEM_EDIRD.md`, invoked for [PLAN] and [PARTITION].
 
 ## 16. Document History
+
+**[2026-11-11 21:35]**
+- Changed: EDIRD-IG-08 - skill `edird-phase-planning` merged into skill `promptsystem` (file `PROMPTSYSTEM_EDIRD.md`); the rule `edird-phase-planning.md` keeps the short form
 
 **[2026-01-20 20:05]**
 - Added: Planning Horizon subsection to Concept - plan EXPLORE, DESIGN, DELIVER now; leave IMPLEMENT, REFINE as TBD

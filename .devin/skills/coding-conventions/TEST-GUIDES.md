@@ -68,9 +68,11 @@ Agents running test suites can hang on commands that wait for stdin, pagers, or 
 **Four sections in every robustness card:**
 
 - **Banned commands**: commands known to hang in this stack
-- **Time caps**: maximum duration per command type (single file, full suite, nightly variant, version control operations)
+- **Expected runtimes**: typical duration per command type (single file, full suite, nightly variant, version control operations) and known silent phases. They start the liveness check; they are not limits
 - **Always rules**: positive requirements (terse output flags, stray process checks after every run)
-- **On-cap behaviour**: 1) kill the process tree, 2) record in PROBLEMS.md, 3) continue, 4) same command hits cap twice = stop the prompt
+- **Agent tool limits**: verbatim copy of the executing agent's tool-call payload limit
+
+Monitoring and failure recording are not card content: a test run that shows progress runs to its end, the agent ends a run only on a hang verdict, and failures go to the Fails card (`agent-behavior.md` Terminal Hang Prevention). Ending a slow run that would finish forces a second run and costs more than waiting.
 
 **Example**: See `TEST_EXAMPLE_01-RobustnessCard.md` for a complete robustness card template with all four sections.
 
@@ -131,7 +133,7 @@ When a pipeline makes paid API calls, guard against accidental cost increases wi
 
 **Verification blocks**: every prompt ends with a `Verify:` block naming the exact test command and expected outcome (pass/xfail counts, function counts, stray process check).
 
-**Long-running test marker**: tests that run many repetitions or exercise slow paths get a marker excluding them from the default suite. They run once in the final verification phase with a longer time cap.
+**Long-running test marker**: tests that run many repetitions or exercise slow paths get a marker excluding them from the default suite. They run once in the final verification phase with a longer expected runtime.
 
 **Stray process sweep**: after every test run, verify no test processes remain running.
 
@@ -140,7 +142,7 @@ When a pipeline makes paid API calls, guard against accidental cost increases wi
 - [ ] Test runner configured for minimal output in agent sessions
 - [ ] Parallel execution enabled and tests isolated (own temp dirs, no shared state)
 - [ ] Expected-failure protocol in place (strict markers with bug IDs)
-- [ ] Robustness card exists with banned commands, time caps, and on-cap procedure
+- [ ] Robustness card exists with banned commands, expected runtimes, always rules, and agent tool limits; test commands run through the supervised runner and are ended only on a hang verdict
 - [ ] Mock transport covers all failure modes the pipeline can encounter
 - [ ] Reference-run comparison used for recovery tests
 - [ ] Cost profiles stored and guarded by tolerance-based assertions

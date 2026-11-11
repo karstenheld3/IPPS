@@ -12,14 +12,14 @@ Agent-specific rules for the Devin agent (not Cascade). IPPS has no tested findi
 ## No Agent-Specific Findings Yet
 
 - Cascade findings (`devin-cascade.md`) do NOT transfer to the Devin agent: different harness, different tools, untested limits
-- Generic rules apply unchanged: `agent-behavior.md` Terminal Hang Prevention, Large File Writes, Attitude (no clarification questions)
+- Generic rules apply unchanged: `agent-behavior.md` Terminal Hang Prevention and Attitude (no clarification questions), `tools-and-skills.md` Large File Writes
 - Terminal robustness variant: @skills:terminal-robustness `ClaudeCode/` (minimum variant: generic patterns, no tool-internals claims) until a Devin variant exists
 
 ## Tool-Call Payload Limit
 
 Agent-tool robustness (what runs via agent tools). Single source for the Devin agent; prompt sequences copy this section verbatim into the robustness card `## Agent tool limits` (PRMT-HS-11).
 
-- No tested limit. Use the generic limit in `agent-behavior.md` Large File Writes
+- No tested limit. Use the generic limit in `tools-and-skills.md` Large File Writes
 - After a failed or stalled tool call: never resend the same payload. Read the target to find what reached disk, halve the chunk size, continue
 - Record every stalled or dropped tool call with its approximate payload size in the session PROBLEMS.md, so a tested limit can be added here
 - JSON content in write tools: untested. If a write fails with an argument-type error (string expected, object received), never retry the same payload; write the file from a `_agentwork/.tmp_[name].ps1` script (JSON text verbatim in a single-quoted here-string) and record the case in PROBLEMS.md

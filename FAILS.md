@@ -1,5 +1,21 @@
 # Failure Log
 
+## 2026-11-11 - Hang Prevention Implemented as a Fixed Time Cap on Every Command
+
+### [HIGH] [RESOLVED 2026-11-11] `PRMTHANGFIX-FL-0001` Every non-whitelisted command got a deadline; the runner killed work that was still making progress
+
+- **When**: 2026-11-11 16:30-19:15 (design and implementation); discovered 2026-11-11 19:23 by the user
+- **Where**: `PromptSystemV4.7/skills/terminal-robustness/run-supervised.ps1` (`-Cap`, `processkit run --timeout`), `rules/agent-behavior.md` Terminal Hang Prevention (cap formula, retry with raised cap), `skills/coding-conventions/PYTHON-TEST-RULES.md` PY-TR-PS-02 (fixed caps per test class), robustness card "Time caps", prompt-writing files, spec `AGENTTERMINAL-SP01`, INFO `PRMTHANGFIX-IN04`
+- **What**: The session goal was hang prevention. The system ended every command at a time limit, hanging or not. A test suite needing 16 minutes under a 15-minute cap was ended at minute 15 and run again with a raised cap: finished work lost, total time more than doubled. The rule "one retry with a raised cap is the fix" made the redo part of the design
+- **Why it went wrong**:
+  - Root cause RC-3 was worded "no cap fires"; the missing piece was a way to see and end a hang, the wording made a cap the goal
+  - "Hang" was never defined; elapsed time was used as the hang signal because the runner can measure it. Elapsed time says how long, not whether the process still works
+  - The bench finding "idle timeout kills legitimate silent work" was not applied to the deadline; the bench hid it because every legit case got a cap above its runtime
+  - The requirement "compare expected and actual run time, analyze and fix the root cause if far above" asks for analysis, not a kill
+- **Evidence**: user message 2026-11-11 19:23: "Stopping a test that runs over time but would finish is causing the agent to redo work ... The agent should monitor and decide to kill tasks IF and ONLY IF they hang. HANG PREVENTION, not fixed time slots"
+- **Prevention rule**: Before automating a kill, name the condition that proves the process cannot finish. Elapsed time alone never proves it. For every protective mechanism, write down its false-positive case (legitimate work it stops) and the cost of that case before shipping; a mechanism whose false positive costs more than the failure it prevents is rejected
+- **Resolved**: 2026-11-11 20:25 - deadline removed; runner has `-Expected`, `ALIVE` liveness lines, stop file, kill script per `-Topic`; hang verdict by the agent in `agent-behavior.md`; "Expected runtimes" replace "Time caps"; bench `runner5` 27/27. Open: live test of the hang verdict (`PRMTHANGFIX-PR-0006`)
+
 ## 2026-11-10 - Reconcile Rejected a Finding Based on an Unverified Workflow Property
 
 ### [MEDIUM] [RESOLVED 2026-11-10] `AGNTFOLDERS-FL-0002` Inline `/reconcile` rejected "`/cleanup` deletes `.tmp_` folders mid-pipeline" because "`/cleanup` already shows a preview"; the preview is no gate

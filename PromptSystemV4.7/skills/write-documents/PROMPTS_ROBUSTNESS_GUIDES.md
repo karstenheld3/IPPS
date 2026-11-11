@@ -6,12 +6,13 @@ Read BEFORE writing `_PROMPTS_[NN]-[Topic].md` files. Pairs with `PROMPTS_GUIDES
 
 Prompt sequences run unattended across multiple turns. Each prompt depends on the state left by prior prompts. A single failure — a hung command, a skipped prerequisite, an unrecorded glitch — propagates through every later prompt. The execution engine cannot skip a failed prompt; it either hangs, produces broken output, or silently proceeds with corrupted state.
 
-Robustness has four pillars:
+Robustness has five pillars:
 
 1. **Hang-prevention**: no command blocks the sequence indefinitely (terminal robustness: what runs in the terminal)
 2. **Agent tool limits**: no tool call stalls on payload size (agent-tool robustness: what runs via agent tools; Section 2a)
-3. **Findings-card mechanism**: glitches and working solutions are recorded in a findings card between prompts so later prompts can learn from earlier ones
-4. **Verification depth**: verification sections catch real defects, not just "tests pass"
+3. **Fails card**: every failure and hang is recorded at once and checked before each later command, so no prompt repeats it (Section 2b)
+4. **Findings-card mechanism**: content glitches and working solutions are recorded in a findings card between prompts so later prompts can learn from earlier ones
+5. **Verification depth**: verification sections catch real defects, not just "tests pass"
 
 A well-structured prompt sequence with precise objectives, clean state flow, and verified idempotency is worthless if the agent issues a single hanging command in prompt 3 of 5, or if a test regression from prompt 2 survives until prompt 5 because nobody recorded it.
 
@@ -19,19 +20,12 @@ A well-structured prompt sequence with precise objectives, clean state flow, and
 
 ## 2. The Hang-Safety Clause
 
-Every implementation prompt (any prompt that runs commands) MUST include a hang-safety clause in the Constraints section. The clause has four parts:
-
-1. **Prohibition**: no command may wait for a key, stdin, a pager, or an unbounded child
-2. **Temp-script rule**: commands outside the inline whitelist (`agent-behavior.md` Terminal Hang Prevention) run as `_agentwork/.tmp_` scripts with output redirected to `_agentwork/.tmp_` files, read with the file tool, deleted after consumption
-3. **Banned list**: referenced from the robustness card by filename
-4. **Cap behavior**: what to do when a command exceeds its time cap
+Every implementation prompt (any prompt that runs commands) MUST include a hang-safety clause in the Constraints section. The clause is one line that points to the two sources; it never restates them. Generic rules (whitelist, supervised runner, monitoring, hang verdict, hard bans) live in `agent-behavior.md` Terminal Hang Prevention; project bans and expected runtimes live in the robustness card. No command gets a time limit: a command that shows progress runs to its end, and the agent ends a command only on a hang verdict. The prompt carries no limit and no kill text.
 
 ### Clause Template
 
-Adapt the banned list and caps from the robustness card (`_agentwork/__CARD_[TOPIC]-Robustness.md`, created and extended via @skills:terminal-robustness). The clause references the card instead of repeating the full list:
-
 ```
-Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Commands outside the inline whitelist run as `_agentwork/.tmp_` script with output redirected to `_agentwork/.tmp_` files, read with the file tool, deleted after use. Banned: see `_agentwork/__CARD_[TOPIC]-Robustness.md`. Test suites run non-blocking with a [N]-minute cap. On a cap: kill the process tree, record command and cap in PROBLEMS.md, continue.
+Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_[TOPIC]-Robustness.md`.
 ```
 
 ### Where to Place the Clause
@@ -48,12 +42,29 @@ The hang-safety clause goes in the Constraints section of each implementation pr
 
 Agent tools (file write, edit, multi-edit) stall or drop calls whose arguments exceed the agent's payload limit. The writing agent is assumed to be the executing agent.
 
-- Single source: the writing agent's agent-specific rule file, section Tool-Call Payload Limit; if absent, `agent-behavior.md` Large File Writes
+- Single source: the writing agent's agent-specific rule file, section Tool-Call Payload Limit; if absent, `tools-and-skills.md` Large File Writes
 - Copy that section verbatim into the robustness card `## Agent tool limits` when creating or refreshing the card
 - Every prompt that writes or edits files adds the constraint: `Agent tool limits: see _agentwork/__CARD_[TOPIC]-Robustness.md section "Agent tool limits"; one section per tool call`
 - Prompts never restate a token number
 
 **Cascade site ban**: prompts that may touch German law add to Constraints: `gesetze-im-internet.de: Playwright only, no search_web / read_url_content (crashes conversation).`
+
+## 2b. Runtime Check and Fails Card
+
+Every implementation prompt carries exactly one runtime-check line next to the hang-safety clause. It also loads and uses the Fails card (`_agentwork/__CARD_[TOPIC]-Fails.md`, structure and rules: @skills:terminal-robustness `ROBUSTNESS_CARD_SKELETON.md`), the failure memory of the working folder: `/write-prompts` reuses it or creates it; chat tasks in the same folder use the same card:
+
+```
+Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_[TOPIC]-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
+```
+
+Why one line instead of a protocol block: prompt bullets lose focus under workflow load (observed: clause ignored as bullet 5 of 7); the runner writes `ALIVE` lines and `elapsed=` itself, so the agent reads the liveness values while waiting and compares one number at the end.
+
+Fails card vs findings card vs PROBLEMS.md:
+- **Fails card**: every command failure and hang (classes: card skeleton); read before every command
+- **Findings card**: content glitches (spec-code mismatches, test drift, naming); no hangs
+- **PROBLEMS.md**: prompts stopped by a repeated failure (entry names the Fails entry ID), and deferred problems
+
+The final checkpoint prompt of each prompts file promotes "Never again" lines to the robustness card banned list (PRMT-SQ-04).
 
 ## 3. The Findings-Card Directive
 
@@ -110,7 +121,6 @@ File every glitch, not just blockers. The findings card is separate from session
 - **Spec-code mismatches** where the spec said one thing and the code did another
 - **Naming convention violations** caught by `tsc` or lint
 - **STRUT sequencing violations** where a step was executed out of order
-- **Hangs and timeouts** (also recorded in PROBLEMS.md, but the findings-card entry captures root cause)
 - **Test expectation drift** where a test was written before the implementation and needed updating
 - **Unexpected findings** that are not defects but affect later prompts (e.g., a file is larger than expected, a dependency is missing)
 
@@ -148,7 +158,7 @@ The card system reference:
 2. Read this card and the cards the prompt names
 3. Read session PROGRESS.md "Done" section. If the prompt's STRUT step ID is already listed as done: verify its artifacts exist, report "step already done", and stop. If the step is not listed as done, verify that artifacts from the prior step exist on disk before starting new work. Checkbox state alone is insufficient — deleted or missing artifacts mean the step must be redone.
 4. Read the STRUT step line and unit block; read the clause-map rows
-5. Load `__CARD_[TOPIC]-Findings.md` for unresolved entries from prior prompts
+5. Load `__CARD_[TOPIC]-Findings.md` for unresolved entries and the "Never again" list of `__CARD_[TOPIC]-Fails.md`
 6. Run git status --short in both repos; uncommitted work from a previous, interrupted prompt is finished or reverted before new work starts
 7. This prompt has execution authority (PRMT-EX-03). Do not ask for confirmation before executing. Execute within the Constraints section boundaries.
 
@@ -182,7 +192,7 @@ Banned lists, mechanisms, and per-tool behavior are maintained in the skill (age
 
 ## 5. Safe Command Patterns
 
-Safe command patterns (non-blocking execution with caps, process cleanup, git flags, non-interactive builds, stderr redirection, ripgrep usage) are maintained in @skills:terminal-robustness `TERMINAL_ROBUSTNESS_GUIDES.md` and the agent card templates. Reference them from the robustness card; prompts never repeat the full pattern text.
+Safe command patterns (non-blocking execution with monitoring, process cleanup, git flags, non-interactive builds, stderr redirection, ripgrep usage) are maintained in @skills:terminal-robustness `TERMINAL_ROBUSTNESS_GUIDES.md` and the agent card templates. Reference them from the robustness card; prompts never repeat the full pattern text.
 
 ### 5.1 Agent Tools Over Shell Commands for File Operations
 
@@ -190,7 +200,7 @@ Prompts must direct the agent to use built-in tools (grep_search, read_file, fin
 
 **Why this is a robustness concern**: Shell commands like `Get-ChildItem -Recurse`, `Select-String -Recurse`, and `Get-Content` were primary hang sources in a Lana-V2-Dev session. `Get-ChildItem -Recurse` on large trees enumerates every file before returning. `Select-String -Recurse` has the same problem. `Get-Content -Wait` streams indefinitely. Agent built-in tools are non-hanging by design.
 
-**Rule**: Shell commands (Select-String, Get-ChildItem, Get-Content, cat, grep, find, rg.exe) must not appear in prompt bodies for file exploration or reading. They may appear in Verify sections for residual sweeps and explicit command-based checks only.
+**Rule**: Shell commands (Select-String, Get-ChildItem, Get-Content, cat, grep, find, rg.exe) must not appear in prompt bodies for file exploration or reading. Verify sections use `grep_search` for residual sweeps too; only when `grep_search` cannot reach the folder (outside the workspace), `rg.exe` runs inside a tmp script through the supervised runner, never inline.
 
 **Prompt body — use agent tool directives**:
 ```
@@ -199,24 +209,22 @@ Read `src/auth/validator.ts`.
 Find all .ts files in src/ using the find_by_name tool.
 ```
 
-**Verify section — shell commands acceptable for residual sweeps**:
+**Verify section — residual sweep with the agent tool**:
 ```
-Verify: `Select-String -Pattern 'guard_request' -Path src/` returns zero matches.
+Verify: grep_search for 'guard_request' in src/ returns zero matches.
 ```
 
-## 6. Timeout and Cap Patterns
+## 6. Expected Runtimes and Hang Verdict
 
-### 6.1 Setting Caps
+### 6.1 Expected Runtimes
 
-Every command that runs a process gets a time cap. Default caps per command type live in the agent robustness card templates (@skills:terminal-robustness); the project card carries the tuned values.
+Every command that runs a process gets an expected runtime, not a limit. Starting values per command type live in the agent robustness card templates (@skills:terminal-robustness); the project card carries the measured values and notes known silent phases.
 
-**Heuristic**: Set the cap to roughly 3x the command's average duration. If a test suite normally runs in 8 minutes, set the cap to 25 minutes. This gives headroom for slow runs without letting a hung process run indefinitely.
+**Why no time limit**: a limit ends work that would have finished. A test suite that needs 9 minutes under an 8-minute limit is ended at minute 8 and run again: 17 minutes instead of 9, and the same can happen again. The expected runtime only tells the agent when to start reading the liveness signals.
 
-### 6.2 On-Cap Behavior
+### 6.2 Hang Verdict
 
-When a command hits its cap, the hang-safety clause must specify: kill the process tree, record the command, the cap, and the last output lines in PROBLEMS.md, continue with the next step - never re-run the same command unbounded. If the same command hangs twice, stop the prompt with a PROBLEMS.md entry.
-
-Kill and escalation mechanics (SIGTERM grace period, orphan sweep, direct kill for confirmed hangs) live in @skills:terminal-robustness shared guide Section 6 and the card templates' Kill procedure.
+The supervised runner has no deadline. It logs `ALIVE` lines (CPU time, output size); the agent ends a command only when the evidence shows a hang (`agent-behavior.md` Terminal Hang Prevention step 5) by creating the stop file, and the runner then kills the whole process tree and writes `KILLED`. The runtime-check line (Section 2b) records the failure in the Fails card and stops the prompt on a repeat. Prompts carry no separate hang or kill text.
 
 ### 6.3 Per-Test Timeouts
 
@@ -237,9 +245,9 @@ Verification sections must run specific test files, not the full test suite, dur
 Verify: Run `bun test tests/unit/auth.test.ts tests/unit/token_validator.test.ts`. All tests pass.
 ```
 
-**Final verification — full suite acceptable with cap**:
+**Final verification — full suite acceptable**:
 ```
-Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. All tests pass.
+Verify: Run `bun test --timeout 20000` (per-test timeout; expected runtime of the full suite from the robustness card). All tests pass.
 ```
 
 **Rule**: Bare `bun test` or `npm test` (full suite) in implementation prompt verification is a PRMT-HS-09 violation. Always scope to specific test files during implementation. Full suite only in the final verification step of a sequence.
@@ -269,7 +277,7 @@ Verify: spec FR-03 text matches code implementation. Run `bun tsc --noEmit` — 
 When a prompt removes concepts (old protocol, old naming), include a residual sweep:
 
 ```
-Verify: `Select-String -Pattern 'old_term'` returns zero matches in src/ and outside Document History in specs.
+Verify: grep_search for 'old_term' returns zero matches in src/ and outside Document History in specs.
 ```
 
 ### 7.4 Naming Convention Checks
@@ -380,47 +388,33 @@ Without the card, these issues would have been discovered only at the final vali
 
 ## 10. Robustness Clause Examples
 
-### 10.1 Minimal Clause (Simple Project)
+### 10.1 Implementation Prompt (Standard)
 
 ```
-Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_[TOPIC]-Robustness.md`. Test suites run with a 5-minute cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_[TOPIC]-Robustness.md`.
+- Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_[TOPIC]-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
 
 Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 ```
 
-### 10.2 Full Clause (Complex Project with Build Tools and Cards)
+### 10.2 Research Prompt (No Builds)
 
-```
-Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Banned and always rules: see `__CARD_01-Robustness.md` (banned list, time caps, always rules, on-cap behavior). On a cap: stop the process tree, record command and cap in PROBLEMS.md, continue.
+Same two Constraints lines if the prompt runs any command; prompts that only read files with agent tools are exempt (Section 2).
 
-Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File every test failure that required a code fix, every spec-code mismatch, every naming convention violation, and every STRUT sequencing issue. Read the card at prompt startup for unresolved entries from prior prompts.
-```
+## 11. Timeout Execution
 
-### 10.3 Clause for a Research Prompt (No Builds)
-
-```
-Hang safety: no command may wait for stdin or a pager. Banned: git log without --no-pager. File reads use `read_file` tool, not `Get-Content -Wait`.
-
-Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File unexpected findings for later prompts.
-```
-
-## 11. Timeout Execution Pattern
-
-The tested timeout pattern (Start-Process + WaitForExit with redirect-to-file, recursive process-tree kill, orphan sweep, gotchas: quote stripping, Write-Error vs stderr, null-safe output) is maintained in @skills:terminal-robustness `DevinCascade/TERMINAL_ROBUSTNESS_GUIDES.md` and carried by the agent card templates' Execution pattern section. Prompts reference the pattern via the robustness card instead of repeating the PowerShell block: "Hang-risky commands use the timeout pattern from `__CARD_01-Robustness.md`."
+The supervised runner `run-supervised.ps1` (@skills:terminal-robustness) is the only supervision mechanism (containment, liveness log, kill on a hang verdict; no deadline); its call line lives in `agent-behavior.md` Terminal Hang Prevention. Prompts never contain a timeout pattern, a kill procedure, or a runner call line.
 
 ## 12. Review Checklist
 
 Before considering a prompt file complete, verify robustness:
 
 **Hang-safety**:
-- [ ] Every implementation prompt includes a hang-safety clause (PRMT-HS-01)
-- [ ] The clause names project-specific banned commands (PRMT-HS-02)
-- [ ] The clause specifies time caps for command execution (PRMT-HS-03)
-- [ ] The clause specifies on-cap behavior: kill, record, continue (PRMT-HS-04)
-- [ ] The clause specifies process cleanup after command execution (PRMT-HS-05)
-- [ ] No prompt contains a bare `2>&1` without noting the `Blocking: false` requirement (PRMT-HS-06)
-- [ ] No prompt contains `git log`, `git diff`, `git show` without `--no-pager` (PRMT-HS-06)
-- [ ] Hang-risky commands without native safe parameters use the Start-Process + WaitForExit timeout pattern (PRMT-HS-03)
+- [ ] Every implementation prompt includes the one-line hang-safety clause referencing `agent-behavior.md` and the robustness card (PRMT-HS-01, PRMT-HS-02)
+- [ ] Expected runtimes live in the robustness card, not in prompts; prompts with an unusual command name its expected seconds; no prompt sets a time limit for a command (PRMT-HS-03)
+- [ ] No prompt restates hang-verdict, kill, or cleanup procedures (PRMT-HS-04, PRMT-HS-05)
+- [ ] No prompt contains `2>&1`, `git log`, `git diff`, `git show` without `--no-pager` (PRMT-HS-06)
+- [ ] Every implementation prompt includes exactly one runtime-check line pointing to the Fails card; the Fails card exists in `_agentwork/` (PRMT-RB-08)
 - [ ] No shell commands for file search/read in prompt bodies — agent tools only (PRMT-CT-12)
 - [ ] Card `## Agent tool limits` equals the writing agent's rule; file-writing prompts reference it; no token numbers in prompts (PRMT-HS-11)
 - [ ] Cascade: prompts touching German law carry the `gesetze-im-internet.de` site ban (Section 2)
@@ -449,7 +443,7 @@ Before considering a prompt file complete, verify robustness:
 
 Worked examples for card types referenced in this guide:
 
-- Robustness card structure and defaults: @skills:terminal-robustness `ROBUSTNESS_CARD_SKELETON.md` + agent `ROBUSTNESS_CARD_TEMPLATE.md`
+- Robustness card and Fails card structure: @skills:terminal-robustness `ROBUSTNESS_CARD_SKELETON.md` + agent `ROBUSTNESS_CARD_TEMPLATE.md`
 - `PROMPTS_EXAMPLE_03-FindingsCard.md` — complete `__CARD_[TOPIC]-Findings.md` with resolved glitches, unresolved blocker, six-field entry format
 
 Load these when authoring cards for a new prompt sequence. The examples are not mandatory reads — load them when unfamiliar with card structure or when a sequence has complex robustness requirements.

@@ -33,7 +33,7 @@ Naming (NM)
 
 Process Safety (PS)
 - PY-TR-PS-01: Stray process sweep after every run
-- PY-TR-PS-02: Time caps on test commands
+- PY-TR-PS-02: Test commands monitored, ended only on a hang
 
 ## Rules
 
@@ -166,7 +166,7 @@ def test_tc_155_twenty_repetitions():
 ```
 
 Default suite: `python -m pytest tests/ -m "not nightly" -q --no-header -p no:cacheprovider -n auto`
-Nightly suite: `python -m pytest tests/ -m "nightly" -q --no-header -p no:cacheprovider` (with 30-min cap)
+Nightly suite: `python -m pytest tests/ -m "nightly" -q --no-header -p no:cacheprovider` (expected runtime about 10 min; runs to its end)
 
 ### PY-TR-TI-01: tmp_path for All File I/O
 
@@ -376,18 +376,14 @@ Get-Process python* -ErrorAction SilentlyContinue
 
 If processes remain, kill them before proceeding.
 
-### PY-TR-PS-02: Time Caps on Test Commands
+### PY-TR-PS-02: Test Commands Monitored, Ended Only on a Hang
 
-Every test command must have a maximum execution time. If the cap is exceeded, kill the process tree and record the failure.
+Every test command runs through the supervised runner (`agent-behavior.md` Terminal Hang Prevention). The runner has no time limit: a test run that still shows progress (new output, growing CPU time in the `ALIVE` log lines) runs to its end, however long it takes. Ending a slow run throws away the finished part and forces a second run.
 
-**Recommended caps:**
-- Single test file: 3 min
-- Full suite: 15 min
-- Nightly variant: 30 min
-- Git operations: 30 s
+The agent ends a test command only on a hang verdict (Terminal Hang Prevention step 5), through the stop file; the failure goes to the Fails card with the hang evidence and the last 20 output lines. A run that finishes far above its expected runtime is a runtime overrun: the result is used, the cause is recorded, the expected runtime is corrected.
 
-**On-cap behaviour:**
-1. Kill the process tree (children first)
-2. Record command, cap, and last 20 output lines in `PROBLEMS.md`
-3. Continue with the next step
-4. Same command hits the cap twice: stop the prompt, record as `blocked`
+**Starting values for the robustness card `## Expected runtimes`** (replace with measured project values; they start the liveness check, they are not limits):
+- Single test file: 60 s
+- Full suite: 5 min
+- Nightly variant: 10 min
+- Git operations: 10 s

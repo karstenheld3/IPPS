@@ -192,7 +192,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **MIPPS** - Minimal IPPS (DevSystem compression pipeline) - 2026-03-20
 - **NTICP** - Network Traffic Interception (programmatic HTTPS interception for LLM prompt extraction) - 2026-01-17
 - **OCLAW** - OpenClaw exploration (remote agent interaction via WhatsApp/Cascade) - 2026-01-17
-- **PLWR** - Playwriter MCP (Chrome extension browser automation) - 2026-03-15
+- **PLWR** - DEPRECATED 2026-11-11 (skill removed). Chrome extension browser automation - 2026-03-15
 - **RECSLFIM** - Recursive Self-Improvement (AI systems accelerating or automating their own development) - 2026-08-13
 - **REPRT** - Report Writing (DevSystem capability for Minto Pyramid-based high-quality reports) - 2026-04-16
 - **RLSPROJ** - Release Project Workflow (unified multi-repo tagging and release notes process) - 2026-09-05
@@ -236,6 +236,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **CLAUDEIPPS** - Claude Code IPPS Release and Skill-Based Prompt System Migration (IPPS release for latest Claude Code; workflow-to-skill migration per SKLWRKFL-IN01 Option F) - 2026-09-21
 - **MDRENDER** - Markdown Rendering (render.md workflow, renderings skill, render.py for Markdown to HTML/PDF in Python; supersedes MDPDF research) - 2026-09-28
 - **TERMROBUSTNESS** - Terminal Robustness Skill (placement, structure, and linkage of terminal-robustness skill with agent variants in IPPS) - 2026-09-29
+- **AGENTTERMINAL** - Agent Terminal Robustness system (ownership and interplay of rules, terminal-robustness skill, supervised runner, Robustness/Fails/Findings cards, and prompt-writing files) - 2026-11-11
 - **DRSYNART** - Deep Research Synthesis to Article (post-research pipeline: data scanning, pattern detection, hypothesis development, article/report writing with storytelling) - 2026-10-19
 - **MDLBHVPRM** - Model Behavioral Parameters (eagerness and instruction-following benchmarks for LLM model registry population) - 2026-10-19
 - **MDLRGUP** - Model Registry Update (permanent session `!ModelRegistryUpdate`: provider data extraction, canonical model JSONs, MODEL_INVENTORY.md; parent topic for nested T##_ subtopics such as MDLBHVPRM, MDLINVNTRY) - 2026-08-30

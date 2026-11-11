@@ -19,10 +19,12 @@ Agent-specific rules for the Cascade agent (Windsurf/Devin IDE chat panel agent)
 
 **Cascade terminal limit (2026-03-09):** Max 4 concurrent terminals. Additional terminals are queued/delayed.
 
-Command execution follows `agent-behavior.md` Terminal Hang Prevention and Batch Operations. Cascade specifics:
+Command rules: `agent-behavior.md` Terminal Hang Prevention (whitelist, supervised runner, monitoring, hang verdict, runtime check). Cascade tool specifics:
 
-- Non-whitelisted commands: `run_command` runs only the `pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_[purpose].ps1 > ... 2> ...` line; read results with `read_file`
-- Use `run_command` with `Blocking: false` for parallel or slow tasks, poll with `command_status`
+- Every `run_command`: `Blocking: false`, `WaitMsBeforeAsync` = (expected seconds + 5) * 1000, max 60000. The tool can miss the end of a finished command and can report a running command as done (both observed 2026-11-11); a blocking call can then wait forever
+- No end line (`DONE`, `KILLED`, `ERROR`) in the runner log yet: `command_status` with `WaitDurationSeconds: 60`, then read the log again; repeat for as long as the `ALIVE` lines show progress (step 4). Never decide from `command_status` or terminal output alone, and never end a command because a wait count or a time limit is reached
+- Runner gone: no `START` 60 s after the call, or no new `ALIVE` line for 90 s and no end line -> check the runner process (`pid=` in the `START` line, `Get-Process -Id`); gone -> end surviving processes of the command and record a Fails entry (completion miss or runner error). Runner alive -> only a hang verdict (step 5) ends the command
+- Terminals are shared between concurrent Cascade conversations: tool output can contain another conversation's text, and a command reading stdin can receive another conversation's input
 - Never open external terminals unless explicitly requested
 - Terminal robustness variant: @skills:terminal-robustness `DevinCascade/`
 
@@ -30,7 +32,7 @@ Command execution follows `agent-behavior.md` Terminal Hang Prevention and Batch
 
 Agent-tool robustness (what runs via agent tools), not terminal robustness (what runs in the terminal). Single source for Cascade; prompt sequences copy this section verbatim into the robustness card `## Agent tool limits` (PRMT-HS-11).
 
-Cascade drops or stalls tool calls with large arguments: the call never executes, the generated content is lost, and the step appears to hang. Observed thresholds vary by session: failures at 3,000-4,000 tokens per call; in one session `edit` failed at 1,800-2,600 characters per `new_string` and succeeded in ~40 calls at 1,500 characters or less. The generic ~4,000-token limit in `agent-behavior.md` Large File Writes is too high for Cascade.
+Cascade drops or stalls tool calls with large arguments: the call never executes, the generated content is lost, and the step appears to hang. Observed thresholds vary by session: failures at 3,000-4,000 tokens per call; in one session `edit` failed at 1,800-2,600 characters per `new_string` and succeeded in ~40 calls at 1,500 characters or less. The generic ~4,000-token limit in `tools-and-skills.md` Large File Writes is too high for Cascade.
 
 - Default: max ~6,000 characters (about 80 lines of prose) per tool call, counting ALL arguments: `CodeContent`, `old_string` + `new_string`, every entry of `multi_edit` `edits`, `new_source`
 - After the first `invalid json in tool call: unexpected end of JSON input` error: max ~1,500 characters per string argument for the rest of the session

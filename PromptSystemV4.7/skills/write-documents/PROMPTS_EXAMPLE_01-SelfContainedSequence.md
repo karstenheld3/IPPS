@@ -74,7 +74,8 @@ Constraints:
 - Follow the existing project patterns in `src/modules/`
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost: if `src/modules/users/routes.ts` already exists and passes type checking, skip
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_01-Robustness.md`. 10 min cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_01-Robustness.md`.
+- Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_01-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
 
 Findings card: `__CARD_SetupApi-Findings.md`
 
@@ -105,7 +106,8 @@ Constraints:
 - Use the existing test framework and patterns in `tests/`
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost: if `tests/modules/users.test.ts` already exists and tests pass, skip
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_01-Robustness.md`. 10 min cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_01-Robustness.md`.
+- Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_01-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
 
 Findings card: `__CARD_SetupApi-Findings.md`
 

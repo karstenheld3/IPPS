@@ -265,7 +265,7 @@ GOOD: .gitignore with all three patterns
 
 ## WS-SF-02: Utility Folder Name Anatomy
 
-Agent-created utility folders match `[lifecycle prefix][base name][_qualifier][git suffix]` with prefix `_` or `.tmp_`, lower case base name, suffix none or `_gitignore`. Core roles and registrations are defined in `agent-behavior.md` section Agent-Created Folders.
+Agent-created utility folders match `[lifecycle prefix][base name][_qualifier][git suffix]` with prefix `_` or `.tmp_`, lower case base name, suffix none or `_gitignore`. Core roles are defined in `agent-behavior.md` section Agent-Created Folders; role descriptions, allowed parents, and registrations in @skills:promptsystem `PROMPTSYSTEM_AGENT_FOLDERS.md`.
 
 BAD: `Output/`, `_Temp/`, `scratch/` (no prefix or upper case)
 GOOD: `_archive_gitignore/`, `_sources/`, `_markdown/`

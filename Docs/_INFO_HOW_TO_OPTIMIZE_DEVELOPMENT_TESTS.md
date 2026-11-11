@@ -10,7 +10,7 @@
 - **`pytest-xdist` with `-n auto` cuts wall time proportionally to CPU cores** - 10 min serial suite becomes 2-3 min parallel; no test isolation changes needed when tests use `tmp_path` [VERIFIED]
 - **strict xfail records defects without blocking the suite** - `@pytest.mark.xfail(strict=True, reason="BUG-ID")` lets tests document expected failures; the test fails if the bug is silently fixed, forcing marker removal [VERIFIED]
 - **Parallel test-writing tracks with disjoint file ownership prevent merge conflicts** - five agent sessions write tests simultaneously because each track owns exclusive file lists, shares only a read-only contract, and defers fixes to a sequential phase [VERIFIED]
-- **A robustness card prevents agent hangs during test execution** - banned commands, time caps, on-cap kill procedures, and stray-process sweeps encoded in a single card that every prompt loads [VERIFIED]
+- **A robustness card prevents agent hangs during test execution** - banned commands, expected runtimes, and stray-process sweeps encoded in a single card that every prompt loads; test runs are ended only when they hang, never for their runtime [VERIFIED]
 - **Mock transport with scripted behaviours eliminates live API costs from the test suite** - fault injection (429, 503, timeout, hang, truncation, garbage) proves resilience without spending money [VERIFIED]
 - **Reference-run comparison replaces assertion-heavy test code** - a fault-free run's file-tree hash and call log become the reference; every recovery test asserts tree-hash equality, not individual file contents [VERIFIED]
 
@@ -155,23 +155,23 @@ Agents running test suites can hang on commands that wait for stdin, pagers, or 
 - `pytest` without a file scope in implementation prompts (full suite only in final verification)
 - Any command that waits for stdin (`Read-Host`, `pause`, etc.)
 
-**Time caps** - per command type:
-- Single test file: 3 min cap
-- Full suite: 15 min cap
-- Nightly variant: 30 min cap
-- Git operations: 30 s cap
+**Expected runtimes** - per command type (they start the liveness check; they are not limits):
+- Single test file: 60 s
+- Full suite: 5 min
+- Nightly variant: 10 min
+- Git operations: 10 s
 
 **Always rules** - positive requirements:
 - Tests always run with `-q -x --no-header -p no:cacheprovider`
 - After every test run: verify no stray python processes remain (`Get-Process python*`)
 
-**On-cap behaviour** - what to do when a cap is exceeded:
-1. Kill the process tree (children first)
-2. Record command, cap, and last 20 output lines in `PROBLEMS.md`
-3. Continue with the next step
-4. Same command hits the cap twice: stop the prompt, record as `blocked`
+**Hang handling** is not card content (rule: `agent-behavior.md` Terminal Hang Prevention). Corrected 2026-11-11: the earlier version of this section recommended time caps with a kill at the cap. A cap also ends a slow test run that would have finished and forces a second run:
+1. A test run that shows progress (new output, growing CPU time) runs to its end, however long it takes
+2. The agent ends a run only on a hang verdict: the output shows a wait that cannot end, or nothing changed for 5 minutes past the expected runtime
+3. A hang is recorded in the Fails card with its evidence and the last 20 output lines; the same hang twice stops the prompt
+4. A run that finished far above its expected runtime is used, not repeated; the expected runtime is corrected
 
-**Why this prevents cost overruns**: without the card, an agent hitting a hanging `pytest` run will wait indefinitely, burning API tokens on an idle context window. The card's time caps and kill procedures give the agent a deterministic recovery path.
+**Why this prevents cost overruns**: without the card, an agent hitting a hanging `pytest` run will wait indefinitely, burning API tokens on an idle context window. The banned list prevents the known hangs, the expected runtimes tell the agent when to look at the liveness signals, and no finished work is thrown away.
 
 ## 6. Mock Transport and Fault Injection
 
@@ -332,7 +332,7 @@ Verify: [PYTHON] -m pytest tests/test_03_backend.py -q --no-header -p no:cachepr
   Get-Process python* filtered to the venv returns nothing.
 ```
 
-**Nightly marker for long-running tests**: tests that run 20 repetitions or exercise slow paths are marked `@pytest.mark.nightly` and excluded from the default suite (`-m "not nightly"`). The nightly variant runs once in the final verification phase (P7-S3) with a 30-minute cap.
+**Nightly marker for long-running tests**: tests that run 20 repetitions or exercise slow paths are marked `@pytest.mark.nightly` and excluded from the default suite (`-m "not nightly"`). The nightly variant runs once in the final verification phase (P7-S3) and runs to its end.
 
 **Stray process sweep**: after every test run, prompts verify no python processes from the test remain:
 

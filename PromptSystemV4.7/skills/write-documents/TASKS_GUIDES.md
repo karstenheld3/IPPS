@@ -8,7 +8,7 @@ Decide who executes each task or step. Classification determines which sizing ru
 
 1. Executed by a human or by an agent in open-ended conversation: estimate HWH (Human Work Hours, Section 2), no model sizing
 2. Executed as one prompt of a prompts file: estimate HWH (Section 2) and size to the executing model (Section 3)
-3. STRUT step executed as one prompt: same as 2. STRUT steps not executed as prompts keep the minute-based scope calibration in @skills:edird-phase-planning
+3. STRUT step executed as one prompt: same as 2. STRUT steps not executed as prompts keep the minute-based scope calibration in @skills:promptsystem `PROMPTSYSTEM_EDIRD.md`
 
 If the executing model is unknown, size for the model named in the session NOTES.md model switching section; if none is named, size for an outcome-level row (`D7-D9`, Items 6, 3 files per prompt in `MODEL_INVENTORY.md`).
 

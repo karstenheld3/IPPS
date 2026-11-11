@@ -42,7 +42,7 @@ SKILL.md (router, matrix, credentials)
 ├─> SEO_GUIDES.md  procedures per stage ─┬─> SEO_RULES.md   SEO-* rules + field limits
 │                                        └─> SEO_CHECKS.md  gate, audit, MOS, decay, alerts
 └─> scripts (Python, [API_KEYS_FILE])
-    ├─> tiers.py                        tier probe (keys, balances)  $0
+    ├─> tiers.py                        tier probe $0; run flows     paid steps, budget
     ├─> prepublish-lint.py              offline metadata gate        $0
     ├─> agent-readiness/check.py        HTTP probes of a site        $0
     ├─> google-search-console/query.py  Search Analytics, Inspection $0
@@ -72,19 +72,19 @@ Tiers by cost model: Tier 1 FREE ($0 marginal: first-party APIs, free quotas, of
 Protocol for every data question (SEO-TLS-11):
 1. Probe: run `python tiers.py probe` once per task ($0; `--balances` adds the ScrapeCreators and DataForSEO balances); a tier with no usable provider is skipped and recorded as "Tier N unavailable"
 2. Tier 1 collect: run every Tier 1 source of the matrix row that a script can run; Tier 1 sources without a script (Google Trends UI, Pinterest Trends, autocomplete UI, GSC and Bing UI reports) go into the ledger as "not run (manual)" and are named to the user, never counted as a source
-3. Tier 2 enrich and verify, cheap to expensive, each step feeding the next: a) suggestion and SERP calls (`tiktok-suggestions`, `youtube-typeahead`, `google-search`; about 1 credit each) collect candidate terms and competitor domains; suggestions are candidates, not demand evidence (21 candidates: 10 had 100 or more searches per month, 4 had none, 5 were UK or other-region variants); b) one batched `dataforseo search-volume` call over all candidates (price is per task, up to 1,000 keywords, so 3 and 21 keywords cost the same $0.09), sort by volume, drop zero-volume terms; c) per-domain calls (`google-ads`) only on competitor domains found in a), never on the domain the user asked about; rows that say "none needed" (owned data) stay at Tier 1; cost gates stay on (`--max-credits`, `--max-cost`); trial budget for one question: about $0.15 in total [ASSUMED]
-4. Term level: use the exact candidate term; when a provider returns sparse or no data (fewer than 5 suggestion rows, null index), retry once with the head term and label the result "head-term proxy"; volume and trend of a head term never stand for the long-tail term
+3. Tier 2 enrich and verify: matrix rows 2, 3, 4 run as one command, `python tiers.py run keywords|serp|competitors TARGET` (default budget `--max-usd 0.15` [ASSUMED]); it runs cheap to expensive, checks each result before the next step uses it, and prints a step ledger and claim labels. Other rows: call the provider scripts in the same order: suggestion and SERP calls find candidates, one batched volume call sizes all of them, per-domain calls run only on discovered competitor domains, never on the domain the user asked about; cost gates stay on (`--max-credits`, `--max-cost`); owned-data rows stay at Tier 1
+4. Term level: suggestions are candidates until a volume call confirms them; when a provider returns sparse data (fewer than 5 suggestion rows, null index), retry once with the head term and label the result "head-term proxy"; a head term never stands for the long-tail term
 5. Tier 3 probe, enrich, verify: if the probe shows a Tier 3 key, state the estimated vendor units, call the vendor REST API for the same claims, and compare with Tiers 1 and 2; no key: skip, never block the answer
-6. Ledger: per claim type (existence, size, trend, supply, competitors) list tier, source, date, cost, and one agreement label; CONFIRMED (2 or more different providers agree on direction and order of magnitude), CONFLICT (providers disagree: report both values and the likely cause, never average), SINGLE-SOURCE (only one provider answered)
+6. Ledger: per claim type (existence, size, trend, supply, competitors) list tier, source, date, cost, and one agreement label; CONFIRMED (2 or more different providers agree on direction and order of magnitude), CONFLICT (providers disagree: report both values and the likely cause, never average), SINGLE-SOURCE (only one provider answered; "by design" when only one provider can measure the claim, e.g. Google volume); evidence for these rules: SEO-TLS-11
 7. Stop early only when the user asks for a tier cap ("free only"), a balance is zero (mark that tier unavailable), or a gate aborts; say which
 
 ## When-to-Query-What Matrix
 
 Question -> T1 free sources (run all) -> T2 prepaid (enrich and verify) -> T3 subscription (probe, then enrich and verify when a key exists). Protocol: section "Source Tiers".
 1. Demand trajectory (growing, seasonal, declining) and trend discovery -> T1: Google Trends UI with anchor term (manual), Pinterest Trends (manual), `youtube/query.py search` -> T2: one cross-platform call `trendsmcp/query.py growth|board|history KEYWORD`, then depth on the top 1-2 candidates `scrapecreators/query.py tiktok-search|youtube-search|reddit-search|pinterest-topic`; Google volume check: DataForSEO Trends via `dataforseo/ENDPOINTS.md` ($0.0012/task, manual call) -> T3: keyword overview and trend of the vendor
-2. Keyword sizing and ideas -> T1: autocomplete (manual), `google-search-console/query.py analytics SITE --dimensions query`, `youtube/query.py search QUERY` -> T2: `scrapecreators/query.py tiktok-suggestions|youtube-typeahead QUERY`, `dataforseo/query.py keywords SEED`, `search-volume KW...` -> T3: keyword volume and difficulty of the vendor
-3. SERP overlap and features (clustering, AI Overview presence) -> T1: browser check of top-10 (manual, few queries) -> T2: `scrapecreators/query.py google-search KEYWORD` (titles, URLs, descriptions), `dataforseo/query.py serp KEYWORD` ($0.002; adds AI Overview and feature types; `domain` comes from the result's display URL because the API returns Google redirect links; > 10 queries: task_post pattern in `ENDPOINTS.md`); a SERP is a sample: two calls for the same query shared only 3 of 9 hosts, so compare providers by result type and by hosts that recur, never by exact rank or URL -> T3: SERP overview of the vendor
-4. Competitor gap -> T1: `bing-webmaster/query.py query-stats SITE` (owned site only), Bing AI Performance grounding queries (UI), `youtube/query.py search "X alternatives"` -> T2: SERP competitors first: `scrapecreators/query.py google-search "X alternatives"` (hosts of the top 10; drop the own domain, reddit, and listicle sites); then verify with `dataforseo/query.py competitors DOMAIN --limit 40` after dropping generic domains: it is keyword overlap, not product similarity (asana.com: 7 real competitors among 40 rows; calendly.com: none among 26 rows, only media and book sites), so use a DataForSEO domain only when it also appears in the SERP set; when the two sets do not intersect label CONFLICT and continue with the SERP set; then `scrapecreators/query.py google-ads COMPETITOR_DOMAIN` (1 credit, first 40 ads: advertiser, format, dates; the result lists every ad that links to the domain, so group by advertiser and keep the brand's own name: 7 of 40 for acuityscheduling.com, 14 of 28 for youcanbook.me; ad copy needs `--param get_ad_details=true` = 25 credits) -> T3: organic competitors of the vendor
+2. Keyword sizing and ideas -> T1: autocomplete (manual), `google-search-console/query.py analytics SITE --dimensions query` (owned site), `youtube/query.py search QUERY` -> T2: `tiers.py run keywords SEED` (TikTok and YouTube suggestions -> one `dataforseo search-volume` call over all candidates; flags other-region and head-term-proxy rows; about $0.10); alternative seed expansion: `dataforseo/query.py keywords SEED` -> T3: keyword volume and difficulty of the vendor
+3. SERP overlap and features (clustering, AI Overview presence) -> T1: browser check of top-10 (manual, few queries) -> T2: `tiers.py run serp KEYWORD` (`scrapecreators google-search` + `dataforseo serp`; recurring hosts, AI Overview, feature types; CONFIRMED when 2 or more hosts recur; about $0.004); a SERP is a sample: compare by result type and recurring hosts, never by exact rank; > 10 queries: task_post pattern in `dataforseo/ENDPOINTS.md` -> T3: SERP overview of the vendor
+4. Competitor gap -> T1: `bing-webmaster/query.py query-stats SITE` (owned site only), Bing AI Performance grounding queries (UI), `youtube/query.py search "X alternatives"` (run by `tiers.py run competitors`) -> T2: `tiers.py run competitors DOMAIN [--brand NAME] [--ads 2]` (3 Google SERPs "X alternatives", "X competitors", "X vs" -> hosts in 2 of 3 form the competitor set; `dataforseo competitors` only confirms it; `google-ads` on the top competitors, grouped by advertiser; about $0.03); ad copy needs `scrapecreators/query.py google-ads DOMAIN --param get_ad_details=true` (25 credits) -> T3: organic competitors of the vendor
 5. Technical and agent readiness -> T1: `agent-readiness/check.py URL --site-type A|B|C|D`, `google-search-console/query.py inspect SITE URL` -> T2: none needed -> T3: none needed
 6. Owned ranking, CTR gap, decay, cannibalization -> T1: `google-search-console/query.py quick-wins|ctr-gap|decay|cannibalization SITE`, `bing-webmaster/query.py page-stats SITE` -> T2: none needed -> T3: none needed
 7. Backlinks -> T1: GSC Links report (UI), `bing-webmaster/query.py links SITE` -> T2: `dataforseo/query.py backlinks DOMAIN` -> T3: backlink index of the vendor
@@ -101,7 +101,9 @@ Question -> T1 free sources (run all) -> T2 prepaid (enrich and verify) -> T3 su
 - "What do people type into TikTok or YouTube search for X?" -> `python scrapecreators/query.py tiktok-suggestions "X"`; `youtube-typeahead "X"` (long phrases can return few rows: retry with the head term)
 - "What ranks on Google for X (titles, URLs, descriptions only)?" -> `python scrapecreators/query.py google-search "X" --region US`; SERP features and AI Overview: `dataforseo/query.py serp`
 - "What ads does competitor Y run on Google?" -> `python scrapecreators/query.py google-ads Y.com`
-- "Who competes with X?" -> matrix row 4; state the type: SERP competitors (`google-search "X alternatives"`) or product competitors (`dataforseo competitors X --limit 40`)
+- "Who competes with X?" -> `python tiers.py run competitors x.com`
+- "Which keywords should a page about X target?" -> `python tiers.py run keywords "X"`
+- "Who ranks for X and is there an AI Overview?" -> `python tiers.py run serp "X"`
 - "What does this YouTube video say?" -> `python scrapecreators/query.py youtube-transcript "URL" --cache-max-age 30d --format json`
 - "Which keywords go on one page?" -> IDEATE SERP-overlap clustering; `dataforseo/query.py serp`
 - "Name this product/book/app" -> IDEATE naming gates
@@ -113,14 +115,14 @@ Question -> T1 free sources (run all) -> T2 prepaid (enrich and verify) -> T3 su
 - "Which pages compete with each other?" -> `python google-search-console/query.py cannibalization sc-domain:example.com`
 - "Quick wins?" -> `python google-search-console/query.py quick-wins sc-domain:example.com`
 - "Tell search engines about new URLs" -> `python indexnow/submit.py submit https://example.com/new --host example.com`
-- "Who are our search competitors?" -> IMPROVE competitor gap; `python dataforseo/query.py competitors example.com --limit 20`
+- "Who are our search competitors?" -> IMPROVE competitor gap; `python tiers.py run competitors example.com`
 - "Plan a launch or campaign" -> IMPROVE campaign templates
 - "How much budget is left?" -> `python dataforseo/query.py balance`
 
 ## Provider Registry
 
 Credentials: see section "Credential Keys" (names are not repeated here).
-- `tiers.py` - Tier probe, free, offline - `probe [--balances]` - no setup
+- `tiers.py` - Tier probe ($0) and run flows (Tier 1 + Tier 2, budget `--max-usd`) - `probe [--balances]`, `run keywords|serp|competitors TARGET` - no setup
 - `prepublish-lint.py` - Tier 1, offline - payload format in `--help` - no setup
 - `agent-readiness/check.py` - Tier 1 - `URL --site-type A|B|C|D` (no subcommand; exit 1 when a check fails) (A content site, B docs, C ecommerce, D API platform) - no setup
 - `google-search-console/query.py` - Tier 1 - `sites`, `analytics`, `inspect`, `sitemaps`, `quick-wins`, `ctr-gap`, `decay`, `cannibalization` - `google-search-console/SETUP.md`

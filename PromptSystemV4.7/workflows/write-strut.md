@@ -9,6 +9,7 @@ Create or insert a STRUT plan (Structured Thinking notation) into any document.
 ## Required Skills
 
 - @skills:write-documents for STRUT template and formatting rules
+- @skills:promptsystem for the AGEN verb vocabulary (`PROMPTSYSTEM_AGENTIC_ENGLISH.md`)
 
 ## MUST-NOT-FORGET
 
@@ -20,6 +21,8 @@ Create or insert a STRUT plan (Structured Thinking notation) into any document.
 ## Step 1: Read Template
 
 Read `STRUT_TEMPLATE.md` from the @skills:write-documents skill folder.
+
+Read `PROMPTSYSTEM_AGENTIC_ENGLISH.md` from the @skills:promptsystem skill folder: every step uses a verb from this vocabulary.
 
 ## Step 2: Determine Location
 

@@ -45,11 +45,12 @@ Create `_PROMPTS_[NN]-[Topic].md` files containing an ordered list of prompts. E
 - **Effort-based partitioning** (PRMT-SC-05): Frontmatter must specify `effort` level. Prompt count must match effort budget (low effort = more tightly scoped prompts, high effort = fewer broader prompts). Take `context_window_size`, supported effort levels, Depth, Items, and Notes (scope guard) from `MODEL_INVENTORY.md`. See `PROMPTS_GUIDES.md` Sections 1c and 1g.
 - **Planning document anchor** (PRMT-SC-06): Prompt sequences from planning documents (TASKS, STRUT) must reference the document by filename and step ID. See `PROMPTS_GUIDES.md` Section 1d.
 - **Load-based workflow partitioning** (PRMT-SC-07): Prompts invoking workflows must group invocations by assessed load against the run budget. See `PROMPTS_GUIDES.md` Section 1f for the assessment procedure.
-- **Hang-safety clause** (PRMT-HS-01): Every implementation prompt MUST include a hang-safety clause in Constraints: prohibition (no stdin/pager/unbounded child), project-specific banned list, time caps, on-cap behavior. Banned list and caps come from the project robustness card; if none exists, create one from the agent's `ROBUSTNESS_CARD_TEMPLATE.md` (@skills:terminal-robustness). See `PROMPTS_ROBUSTNESS_GUIDES.md` for the clause template and problem-filing directive.
-- **Agent tool limits** (PRMT-HS-11): You (the writer) are assumed to be the executor. Copy your agent-specific rule file, section Tool-Call Payload Limit (if absent, `agent-behavior.md` Large File Writes), verbatim into the robustness card `## Agent tool limits`. File-writing prompts reference the card; never restate token numbers. See `PROMPTS_ROBUSTNESS_GUIDES.md` Section 2a.
+- **Hang-safety clause** (PRMT-HS-01): Every implementation prompt MUST include the one-line hang-safety clause in Constraints, referencing `agent-behavior.md` Terminal Hang Prevention and the project robustness card (bans, expected runtimes); never restate monitoring, hang-verdict, or kill procedures, and never give a command a time limit. If no card exists, create one from the agent's `ROBUSTNESS_CARD_TEMPLATE.md` (@skills:terminal-robustness). Clause template: `PROMPTS_ROBUSTNESS_GUIDES.md` Section 2.
+- **Runtime check and Fails card** (PRMT-RB-08): Reuse the working folder's `_agentwork/__CARD_[TOPIC]-Fails.md`, else create it from the Fails block of `ROBUSTNESS_CARD_SKELETON.md`. Every implementation prompt carries exactly one `Runtime check:` line (template: `PROMPTS_ROBUSTNESS_GUIDES.md` Section 2b).
+- **Agent tool limits** (PRMT-HS-11): You (the writer) are assumed to be the executor. Copy your agent-specific rule file, section Tool-Call Payload Limit (if absent, `tools-and-skills.md` Large File Writes), verbatim into the robustness card `## Agent tool limits`. File-writing prompts reference the card; never restate token numbers. See `PROMPTS_ROBUSTNESS_GUIDES.md` Section 2a.
 - **Verification specificity** (PRMT-HS-07): Verification sections must name specific test files when code changes affect tests, include residual sweeps when concepts are removed, and confirm prior steps when dependencies exist.
 - **Prior-step verification** (PRMT-HS-08): Dependent prompts must verify the prior step is done before proceeding.
-- **Agent tools over shell** (PRMT-CT-12): Prompt bodies must use agent tool directives (grep_search, read_file, find_by_name, code_search) for file search/read, not shell commands. Shell commands for file operations only in Verify sections for residual sweeps.
+- **Agent tools over shell** (PRMT-CT-12): Prompt bodies and Verify sections use agent tool directives (grep_search, read_file, find_by_name, code_search) for file search/read, not shell commands. Outside the workspace: `rg.exe` inside a tmp script through the supervised runner, never inline.
 - **Targeted test scope** (PRMT-HS-09): Verification must run specific test files during implementation, not the full suite. Full suite only in final verification.
 - **Interleaved verification** (PRMT-SQ-04): Insert a verification prompt after every checkpoint interval (Items 8: every 3 implementation prompts, Items 6: every 2, Items 5 or less: every prompt) plus a final checkpoint per file. Verification prompts run `/verify` against the planning document and `/fix` for gaps. They do NOT count toward the 10 implementation prompts per file.
 
@@ -85,9 +86,11 @@ This workflow has two modes. Determine the mode from the user's request:
 
 Read `PROMPTS_GUIDES.md` from @skills:write-documents. Classify the task, decide decomposition, plan state flow between prompts.
 
-**Hang-safety planning**: Read `PROMPTS_ROBUSTNESS_GUIDES.md` from @skills:write-documents for the clause template. Then load @skills:terminal-robustness (agent variant per SKILL.md dispatch). If a robustness card (`_agentwork/__CARD_*-Robustness.md`) exists, build the hang-safety clause from its banned list and caps. If not, copy the agent's `ROBUSTNESS_CARD_TEMPLATE.md` to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder, extend it with project-specific entries (commands that wait on stdin, launch pagers, run unbounded children), and use it. The clause references the card by filename instead of repeating the full list. Copy your own Tool-Call Payload Limit section verbatim into the card `## Agent tool limits` (PRMT-HS-11); on an existing card, refresh that section from the rule.
+**Hang-safety planning**: Read `PROMPTS_ROBUSTNESS_GUIDES.md` from @skills:write-documents for the clause template. Then load @skills:terminal-robustness (agent variant per SKILL.md dispatch). If a robustness card (`_agentwork/__CARD_*-Robustness.md`) exists, build the hang-safety clause from its banned list and expected runtimes. If not, copy the agent's `ROBUSTNESS_CARD_TEMPLATE.md` to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder, extend it with project-specific entries (commands that wait on stdin, launch pagers, run unbounded children), and use it. The clause references the card by filename instead of repeating the full list. Copy your own Tool-Call Payload Limit section verbatim into the card `## Agent tool limits` (PRMT-HS-11); on an existing card, refresh that section from the rule.
 
-**Findings-card planning**: Designate a `_agentwork/__CARD_[TOPIC]-Findings.md` card for the sequence. Every implementation prompt includes a `Findings card:` directive pointing to this card. The card is loaded at prompt startup and updated at end-of-prompt with glitches, spec-code mismatches, and unexpected findings. Session PROBLEMS.md records problems encountered during prompt execution that must be approached later (blockers, deferred issues).
+**Fails-card planning**: Reuse `_agentwork/__CARD_[TOPIC]-Fails.md` of the working folder if it exists (earlier sequences and chat tasks recorded there); else create it from the Fails block of `ROBUSTNESS_CARD_SKELETON.md` (empty "Never again" list, no entries). Every implementation prompt carries the `Runtime check:` line naming this card. The final checkpoint of each prompts file promotes its "Never again" lines to the robustness card banned list.
+
+**Findings-card planning**: Designate a `_agentwork/__CARD_[TOPIC]-Findings.md` card for the sequence. Every implementation prompt includes a `Findings card:` directive pointing to this card. The card is loaded at prompt startup and updated at end-of-prompt with content glitches, spec-code mismatches, and unexpected findings (command failures go to the Fails card). Session PROBLEMS.md records problems that must be approached later (blockers, prompts stopped by a repeated failure, deferred issues).
 
 **Effort-based partitioning**: Read the frontmatter `effort` level (PRMT-SC-05). Scope prompts to the effort budget: at low effort, each prompt handles one file or one edit; at high effort, a single prompt can handle multi-file analysis and implementation. Match prompt count to effort level. See `PROMPTS_GUIDES.md` Section 1c.
 
@@ -146,7 +149,8 @@ Constraints:
 - [What NOT to do]
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_[TOPIC]-Robustness.md`.
+- Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_[TOPIC]-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
 
 Verify: [Machine-checkable done criteria]
 ```
@@ -176,7 +180,8 @@ Constraints:
 - [What NOT to do]
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_[TOPIC]-Robustness.md`.
+- Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_[TOPIC]-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
 
 Verify: [Observable success criteria]
 ````
@@ -224,7 +229,8 @@ Constraints:
 - [What NOT to do]
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_[TOPIC]-Robustness.md`.
+- Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_[TOPIC]-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
 
 Verify: [Machine-checkable done criteria]
 ```
@@ -249,7 +255,8 @@ Constraints:
 - [What NOT to do]
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_[TOPIC]-Robustness.md`.
+- Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_[TOPIC]-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
 
 Verify: [Machine-checkable done criteria]
 ```
@@ -296,9 +303,10 @@ Constraints:
 - All file operations MUST stay within the declared working folder unless an absolute path outside it is explicitly named in this prompt
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: [project-specific list]. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_[TOPIC]-Robustness.md`.
+- Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_[TOPIC]-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
 
-Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. All tests pass.
+Verify: Run `bun test --timeout 20000` (per-test timeout; expected runtime of the full suite from the robustness card). All tests pass.
 ```
 `````
 
@@ -349,6 +357,8 @@ current state against [STRUT filename] for prompts executed so far.
 all gaps and remaining work.
 ```
 
+**Final checkpoint promotion** (PRMT-SQ-04): Before the STOP instruction, the final checkpoint carries one line: `Promote the "Never again" lines of _agentwork/__CARD_[TOPIC]-Fails.md to the banned list of _agentwork/__CARD_[TOPIC]-Robustness.md (Fails card rules: ROBUSTNESS_CARD_SKELETON.md).`
+
 **Final checkpoint STOP directive** (PRMT-SQ-05): The final checkpoint of every prompt sequence file MUST conclude with a STOP instruction requiring a clickable summary artifact list with multiple headings for each output group (do not wrap in code fences):
 ```
 **STOP.** Report: final run status, items completed, and a clickable summary artifact list with separate headings for each output group, where each group contains: heading, summary of what was done and what the files contain, and bulleted clickable file paths with file purpose/content (- `relative/path/to/file` - <description>). Do not wrap the list in code fences, and never use file:/// links or raw HTML.
@@ -365,7 +375,7 @@ Check output against all PRMT-* rules in `PROMPTS_RULES.md`:
 - [ ] Self-Contained (SC): PRMT-SC-01 (self-contained opening), PRMT-SC-02 (no conversation dependency), PRMT-SC-03 (idempotency constraint), PRMT-SC-04 (max 10 implementation prompts per file), PRMT-SC-05 (effort and model specification, model-data checks against the `MODEL_INVENTORY.md` row), PRMT-SC-06 (planning document reference), PRMT-SC-08 (session anchor with absolute paths)
 - [ ] Execution (EX): PRMT-EX-01 (one prompt per turn), PRMT-EX-02 (no self-execution), PRMT-EX-03 (execution authority)
 - [ ] Hang Safety (HS): PRMT-HS-01 through PRMT-HS-11
-- [ ] Robustness (RB): PRMT-RB-01 through PRMT-RB-07 (findings card designated, directive in every implementation prompt, card read at startup, glitches filed before commit, entry format, card system integration, PROBLEMS.md distinction)
+- [ ] Robustness (RB): PRMT-RB-01 through PRMT-RB-08 (findings card designated, directive in every implementation prompt, card read at startup, glitches filed before commit, entry format, card system integration, PROBLEMS.md distinction, Fails card + one runtime-check line per implementation prompt)
 - [ ] Naming (NM): PRMT-NM-01 (filename pattern `_PROMPTS_[NN]-[Topic].md`), PRMT-NM-02 (Topic describes purpose), PRMT-NM-03 ([NN] zero-padded sequence number), PRMT-NM-04 (Topic contains domain prefix ensuring [NN]-[Topic] uniqueness across session; topic under 30 chars)
 
 ### Step 5b: Workflow Call Formatting Pass
@@ -466,7 +476,7 @@ The filled file must pass all PRMT-* rules as a standalone prompts file:
 - [ ] PRMT-EX-01..03: One prompt per turn, no self-execution by writing agent, execution authority
 - [ ] PRMT-HS-01: Implementation prompts include hang-safety clause
 - [ ] PRMT-HS-02: Banned command list is project-specific
-- [ ] PRMT-HS-03..06: Time caps, on-cap behavior, process cleanup, no interactive commands
+- [ ] PRMT-HS-03..06: Expected runtimes in the robustness card; no prompt sets a time limit or restates hang-verdict or cleanup procedures; no interactive commands
 - [ ] PRMT-HS-07..08: Specific test files in verification, prior-step verification
 - [ ] PRMT-HS-09: Targeted test scope — specific test files, not full suite, in implementation prompts
 - [ ] PRMT-SC-08: Session anchor with absolute paths in every prompt; working-folder constraint in implementation prompts
@@ -477,6 +487,7 @@ The filled file must pass all PRMT-* rules as a standalone prompts file:
 - [ ] PRMT-RB-02: Findings-card directive in every implementation prompt
 - [ ] PRMT-RB-03..06: Card read at startup, glitches filed before commit, entry format, card system integration
 - [ ] PRMT-RB-07: Session PROBLEMS.md records deferred problems, not detailed glitch logs
+- [ ] PRMT-RB-08: Fails card exists (reused or created); exactly one `Runtime check:` line per implementation prompt; final checkpoint carries the promotion line
 - [ ] No unresolved `[PLACEHOLDER]` values remain in the output
 - [ ] No XML comments remain in the output
 - [ ] Privacy gate: no real user data leaked into the filled instance

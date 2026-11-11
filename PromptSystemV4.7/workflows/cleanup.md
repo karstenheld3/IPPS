@@ -1,5 +1,5 @@
 ---
-description: Delete temporary files and artifacts left by workflows and skills, or strip PromptSystem artifacts from documents for publishing
+description: Delete temporary files and artifacts left by workflows and skills, strip PromptSystem artifacts from documents for publishing, or slim tracking files for fast session load and prime
 auto_execution_mode: 3
 ---
 
@@ -11,7 +11,7 @@ Delete temporary files, build artifacts, and workflow leftovers from workspace a
 
 **Why**: Workflows and skills leave behind temp scripts, Python cache, versioned backups, and MCP config backups that accumulate over time
 
-Scope: File deletion (normal modes) or in-place text transformation (file modes). Does NOT uninstall tools, remove sessions, or modify source code.
+Scope: File deletion (normal modes), in-place text transformation (file modes), or archive-and-slim of tracking files (prime modes). Does NOT uninstall tools, remove sessions, or modify source code.
 
 ## MUST-NOT-FORGET
 
@@ -25,6 +25,7 @@ Scope: File deletion (normal modes) or in-place text transformation (file modes)
 - `to [newfile]` mode: NEVER modify the original file. Copy first, clean the copy
 - In-place mode on non-git-tracked files: create `_vN` backup before transforming (prevents unrecoverable data loss)
 - **NEVER collapse code fences**: triple backtick (```) delimiters must be preserved. Regex that removes empty backtick pairs (`` `\` ``) must NOT run on lines containing ``` - it collapses fences to single backticks. Always verify fence count before and after transformation
+- Prime modes: snapshot copy BEFORE any edit, verified by hash. Archive entries, never destroy them. Never alter workspace constants, `[LITERAL]` values, config blocks, open items, or confirmed user decisions (see Prime Mode)
 
 ## Trigger
 
@@ -42,6 +43,9 @@ Scope: File deletion (normal modes) or in-place text transformation (file modes)
 - `/cleanup [file] to [newfile] make article` - alias for prompt system mode with output file
 - `/cleanup [file] to [newfile] as article` - alias for prompt system mode with output file
 - `/cleanup [file] to [newfile] for publishing` - alias for prompt system mode with output file
+- `/cleanup workspace prime` - snapshot workspace tracking files to `[SESSION_ARCHIVE_FOLDER]/!workspace/[YYYY-MM-DD_HH-MM]/`, then slim `NOTES.md`, `PROBLEMS.md`, `FAILS.md`, `ID-REGISTRY.md`, `PROGRESS.md`
+- `/cleanup session prime` - same for the active session; snapshot and archived entries go to `[SESSION_FOLDER]/_archive/[YYYY-MM-DD_HH-MM]/`
+- `/cleanup prime` - context-dependent: session when the work context is inside a session folder, else workspace (see Prime Scope Resolution)
 
 **Path-scoped mode** (`/cleanup [path]`): When an explicit path is provided, scan is STRICTLY limited to that path. No other workspace locations are scanned. All categories still apply but only within the given path.
 
@@ -50,6 +54,8 @@ Scope: File deletion (normal modes) or in-place text transformation (file modes)
 **File mode** (`/cleanup [file]`): Text transformation on a single file. Two sub-modes:
 - General (no keyword): strip INFO verification markers (`[VERIFIED]`, `VERIFIED, `), delete `_vN` backups
 - Prompt system (`prompt system`, `make article`, `as article`, or `for publishing` keyword): strip all PromptSystem artifacts (headers, markers, references, annotations). See File Transformation section.
+
+**Prime mode** (`/cleanup [workspace|session] prime`): Archive-and-slim of tracking files so `/prime` and `/session-load` read less. No temp-file deletion, no scan of cleanup categories. See Prime Mode section.
 
 **Output target** (`to [newfile]`): When `to [newfile]` is specified, copy [file] to [newfile] first, then apply cleanup to [newfile]. Original [file] is NEVER modified. When `to [newfile]` is absent, apply cleanup in-place to [file].
 
@@ -115,8 +121,9 @@ Delete files and directories matching these patterns:
 ### 2. Python Build Artifacts [AUTO-DELETE]
 
 - **Pattern**: `__pycache__/` directories, `*.pyc` files, `.pytest_cache/`, `.mypy_cache/`
-- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[PROMPTSYSTEM_FOLDER]` recursive, `[AGENT_FOLDER]` recursive
+- **Locations**: `[WORKSPACE_FOLDER]` recursive, `[PROMPTSYSTEM_FOLDER]` recursive, `[AGENT_FOLDER]` recursive, `[LINKED_REPOS]` recursive (workspace scope only)
 - **Source**: Python script execution
+- **Linked repos**: read `[LINKED_REPOS]` list from `NOTES.md`. Each entry is a relative path from `[WORKSPACE_FOLDER]`. Scan each repo's `[AGENT_FOLDER]` and source folders. Skip `_archive*`, `.git`, `node_modules`, `venv`, `.venv`
 
 ### 3. Improve Workflow Artifacts [AUTO-DELETE]
 
@@ -128,7 +135,7 @@ Delete files and directories matching these patterns:
 
 - **Pattern**: `mcp_config.json._beforeRemoving*`, `mcp_config.json._backup_*`
 - **Location**: MCP config directory (resolve from agent-specific MCP config path - see @skills:coding-conventions AGENT-SKILL-RULES.md section 3.2.1)
-- **Source**: MCP server install/uninstall scripts (ms-playwright-mcp, playwriter-mcp)
+- **Source**: MCP server install/uninstall scripts (ms-playwright-mcp)
 
 ### 5. Review Output Files [AUTO-DELETE]
 
@@ -203,6 +210,103 @@ For each PromptSystem artifact found:
 - Document topic or content (e.g., a document titled "APAPALAN Rules" discussing the principle) → Keep
 - When unclear, keep the content and note it in the report
 
+## Prime Mode
+
+**Applies**: `/cleanup workspace prime`, `/cleanup session prime`, `/cleanup prime`
+
+**Goal**: Tracking files hold only what the next session needs. Everything else is archived, not deleted.
+
+### Prime Scope Resolution
+
+No questions. Resolve in this order, first match wins:
+
+1. Keyword `workspace` or `session` given: use it
+2. Active document or last edited file is inside `[SESSIONS_FOLDER]/_*` (or its `T##_*` subfolder): session = that folder (parent session for `T##_*`)
+3. `/session-load` or `/session-new` ran in this conversation: session = that folder
+4. Otherwise: workspace
+
+State the resolved scope in one line before starting.
+
+### Targets
+
+- **Workspace** (files at `[WORKSPACE_FOLDER]` root, with or without `!` prefix): `NOTES.md`, `PROBLEMS.md`, `FAILS.md`, `ID-REGISTRY.md`, `PROGRESS.md`. Snapshot also copies `LEARNINGS.md` (not slimmed)
+- **Session** (files at `[SESSION_FOLDER]` root): `NOTES.md`, `PROBLEMS.md`, `PROGRESS.md`, `FAILS.md`
+- Missing files are skipped. Files already below 60 lines are snapshotted but not slimmed
+- Archive folder: workspace = `[SESSION_ARCHIVE_FOLDER]/!workspace/` (default `[WORKSPACE_FOLDER]/_archive_gitignore/!workspace/`, create if missing); session = `[SESSION_FOLDER]/_archive/`. Writing into `_archive*` is allowed; the rule "never descend into `_archive*`" covers scanning only
+
+### Entry Classification
+
+Split each file into entries (heading block, list item with its sub-lines, or paragraph). Classify each:
+
+- **KEEP**: open or deferred problems, unresolved fails, current phase, to-do and in-progress items, valid MUST-NOT-FORGET items, confirmed user decisions, rules still enforced and not stated elsewhere, workspace constants, `[LITERAL]` values, config blocks (`[RELEASE_CONFIG]`, `[LINKED_REPOS]`, and similar parsed by workflows), headings other workflows read (`Current Phase`, `Significant Prompts Log`, `Topic Registry`)
+- **ARCHIVE**: resolved, wont-fix and completed items, done progress items, change logs, dated result reports and test run records of finished work, session status blocks whose work is committed, tombstones ("renamed to X"), verbatim prompts that no open item depends on
+- **COMPACT**: kept entries rewritten shorter (see Compaction)
+
+When unsure whether an entry is still needed, KEEP it and list it under "Unsure" in the report.
+
+### Per-File Rules
+
+- **NOTES.md**: archive finished-work blocks and dated result sections. Keep structure: MUST-NOT-FORGET, TOC, project info, constants, active rules, reference
+- **PROBLEMS.md**: keep `Open` and `Deferred`. Archive `Resolved` entries and `Problems Changes` log. Keep the section headings
+- **FAILS.md**: unresolved entries stay in full. Resolved entries: archive the full entry, keep one line in a `Prevention Rules` list at the top: `[ID] rule`. Rules stating the same prevention merge into one line listing all IDs. This keeps lessons loaded and entries retrievable by ID (archiving is not deletion; satisfies the never-delete-unconfirmed rule)
+- **ID-REGISTRY.md**: keep framework, identifier, label and state definitions that are not duplicated in `[AGENT_FOLDER]/rules/` (verify by grep before removing a duplicate; replace with a one-line pointer). Topics: keep ID, description cut to one line, date, for topics referenced by an open item, a non-archived session or a workspace document. All other topic IDs collapse into one `Retired topics (do not reuse)` line listing IDs only. Never drop an ID entirely: uniqueness check needs it. Tombstones join the retired line
+- **PROGRESS.md**: archive done items, keep to-do and in-progress
+
+### Compaction
+
+- One instruction, one statement. Merge duplicates inside the file; across files keep the most authoritative location and point to it
+- Remove content already stated in `[AGENT_FOLDER]/rules/` or skills (grep distinctive phrases first); do not leave a pointer unless the reader needs to know where it moved
+- Shorten prose per APAPALAN: drop filler, keep every condition, name, path, number and command exactly
+- Reorganize for discoverability: MUST-NOT-FORGET, TOC, project info, constants, active rules grouped by topic (most frequently needed first), reference last. Max 7 ungrouped items per list. Informative headings that state content, not topic
+- Do not rewrite quoted text, verbatim prompts or code fences
+- Add one pointer line per slimmed file below its title: `Older entries: [archive folder path]` (parent folder, never a dated subfolder, so it never goes stale)
+
+### Prime Steps
+
+**P1: Resolve**: scope, target files, archive folder, timestamp `[YYYY-MM-DD_HH-MM]` (local time). Read NOTES.md for `[SESSIONS_FOLDER]`, `[SESSION_ARCHIVE_FOLDER]`.
+
+**P2: Snapshot**: create `[archive folder]/[YYYY-MM-DD_HH-MM]/` and copy every existing target file (and `LEARNINGS.md` for workspace) with its original name. Compare SHA256 of each copy to its source. Any mismatch: stop, report, change nothing. Run file operations through the supervised script pattern of Step 2 when more than a few files are involved.
+
+**P3: Classify**: read each target, split into entries, classify per Entry Classification. Record before/after counts of: lines, characters, IDs (all `[TOPIC]-[TYPE]-[NNNN]` and `[TOPIC]-[TYPE]-[NN]` patterns), workspace constants (`[NAME]:` definitions), code fences.
+
+**P4: Preview** in chat, per file:
+
+```
+Prime Preview (workspace|session)
+=================================
+Snapshot: [archive folder]/[YYYY-MM-DD_HH-MM]/
+
+[file] ([before] -> [after] lines)
+  Archive: [N entries] [IDs or headings]
+  Compact: [N edits] [one-line summary each]
+  Reorganize: [yes/no, new section order]
+  Unsure (kept): [entries]
+```
+
+No confirmation gate (all cleanup categories auto-execute). The snapshot is the safety copy.
+
+**P5: Execute**: write the slimmed files UTF-8 without BOM. Write archived entries to `[archive folder]/[YYYY-MM-DD_HH-MM]/ARCHIVED_ENTRIES.md` under one heading per source file. The snapshot already holds the originals; this file lets a reader find removed entries without diffing.
+
+**P6: Verify** (any failure: restore the file from snapshot, report):
+
+- Every ID from the snapshot appears in the slimmed file, or in `ARCHIVED_ENTRIES.md`, or on the retired-topics line
+- Workspace constant definitions identical before and after (names and values)
+- Code fence count equal per file
+- TOC entries match headings of each slimmed file
+- Every open problem and unresolved fail still present
+- No dangling references: grep remaining targets for each archived ID, repoint or drop the reference
+
+**P7: Report**
+
+```
+Prime Complete (workspace|session)
+==================================
+Snapshot: [path]
+[file]: [before] -> [after] lines, [before] -> [after] chars (~[N] tokens saved)
+Archived: [N entries]  Compacted: [N]  Kept unsure: [N]
+Verification: [pass|fail per P6 check]
+```
+
 ## No Context Match
 
 If scope contains no matching patterns and no INFO documents:
@@ -239,7 +343,7 @@ Six cleanup scopes exist, from narrowest to widest:
 3. **Workflow/Skill** - artifacts from a specific workflow or skill execution (e.g., all `/improve` backups from one run)
 4. **Folder** - everything in a specific directory matching cleanup patterns (e.g., a working subfolder in a session)
 5. **Session** - everything in `[SESSION_FOLDER]` matching cleanup patterns
-6. **Workspace** - everything in `[WORKSPACE_FOLDER]` and all known locations
+6. **Workspace** - everything in `[WORKSPACE_FOLDER]`, `[PROMPTSYSTEM_FOLDER]`, `[AGENT_FOLDER]`, and `[LINKED_REPOS]` (read from NOTES.md)
 
 **Resolution rules (narrowest scope wins):**
 - **Explicit path overrides everything**: If user provides a path argument, scope is STRICTLY that path. No other locations scanned. Do not broaden.
@@ -258,12 +362,14 @@ Six cleanup scopes exist, from narrowest to widest:
 - **Workflow/Skill** → infer from conversation context, scan for its artifacts
 - **Folder** → use provided path or infer from conversation context
 - **Session** → scan `[SESSION_FOLDER]`
-- **Workspace** → scan `[WORKSPACE_FOLDER]` and all known locations
+- **Workspace** → scan `[WORKSPACE_FOLDER]`, `[PROMPTSYSTEM_FOLDER]`, `[AGENT_FOLDER]`, and `[LINKED_REPOS]` (read from NOTES.md)
 
 Detect applicable contexts:
 - File Cleanup: always active (normal modes)
 - File Transformation - General: active when `/cleanup [file]` without a publishing keyword
 - File Transformation - Prompt System: active when `prompt system`, `make article`, `as article`, or `for publishing` keyword detected (skips normal scan/delete flow)
+
+**Prime mode branch**: If keyword `prime` detected, skip Steps 2-5 and execute Prime Steps instead.
 
 **File mode branch**: If `[file]` argument detected, skip Steps 2-5 and execute File Transformation Steps instead. Within file mode, publishing keywords (`prompt system`, `make article`, `as article`, `for publishing`) select prompt system sub-mode; otherwise general sub-mode applies.
 
@@ -271,7 +377,7 @@ Detect applicable contexts:
 
 Scan per active context. Collect full paths.
 
-**File Cleanup scan:** run the commands below as a hang-safe temp script (`agent-behavior.md` Terminal Hang Prevention): write them into `[WORKSPACE_FOLDER]/_agentwork/.tmp_cleanup_scan.ps1`, emit full paths with `Write-Output`, run `pwsh -NoProfile -NonInteractive -File _agentwork/.tmp_cleanup_scan.ps1 > _agentwork/.tmp_cleanup_scan_out.txt 2> _agentwork/.tmp_cleanup_scan_err.txt`, then `read_file` both output files. Never run these pipelines inline. Exclude the scan script and its output files from the preview; delete them last.
+**File Cleanup scan:** run the commands below through the supervised runner (`agent-behavior.md` Terminal Hang Prevention): write them into `[WORKSPACE_FOLDER]/_agentwork/.tmp_cleanup_scan_[HHmmss].ps1`, emit full paths with `Write-Output`, run it with `-Expected 20 -Topic cleanup`, then `read_file` the `_log.txt` and `_out.txt` files. Never run these pipelines inline. Exclude the scan script and its output files from the preview; delete them last.
 
 ```powershell
 # 1. Agent temp files and .tmp_* folders (dotfiles: -Force required; skip archive folders and items inside a .tmp_ folder)
@@ -280,6 +386,8 @@ Get-ChildItem -Path "[SCOPE]" -Recurse -Force | Where-Object { ($_.Name -like '.
 # 2. Python artifacts
 Get-ChildItem -Path "[SCOPE]" -Recurse -Directory | Where-Object { $_.Name -in @('__pycache__', '.pytest_cache', '.mypy_cache') }
 Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "*.pyc"
+# 2b. Python artifacts in linked repos (workspace scope only; read [LINKED_REPOS] from NOTES.md)
+# foreach ($repo in $linkedRepos) { Get-ChildItem -Path $repo -Recurse -Directory | Where-Object { $_.Name -in @('__pycache__', '.pytest_cache', '.mypy_cache') -and $_.FullName -notmatch '\\.git|node_modules|venv|\.venv' } }
 
 # 3. Improve artifacts (_vN backups: filename_vN.ext where N is one or more digits)
 Get-ChildItem -Path "[SCOPE]" -Recurse -File | Where-Object { $_.BaseName -match '_v\d+$' -and $_.DirectoryName -notmatch '_archive|_OldDevSystemVersions' }
@@ -311,6 +419,8 @@ Get-ChildItem -Path "[SCOPE]" -Recurse -File -Filter "_INFO_*.md" | Where-Object
 ```
 
 Filter out protected locations from results.
+
+**Fails card carry-out** (before Agent Work Folders are deleted): for every `_agentwork/__CARD_*-Fails.md` found, select the "Never again" lines that recur or apply beyond the project and generalize them (no paths, names, values). Target: in IPPS the agent `ROBUSTNESS_CARD_TEMPLATE.md` banned list (@skills:terminal-robustness); in any other workspace the workspace `FAILS.md`. Rules: Fails card rules in `ROBUSTNESS_CARD_SKELETON.md`. Lines that apply only to the project are deleted with the folder.
 
 ## Step 3: Preview
 
@@ -346,6 +456,9 @@ Workflow Scaffolding (N files):
 Agent Work Folders (N folders):
   [full path 1]
   [full path 2]
+
+Fails Card Carry-Out (N lines, written before deletion):
+  [generalized line] -> [target file]
 
 INFO Verification Markers (N files to modify):
   [full path 1] (M occurrences)
@@ -547,6 +660,7 @@ File size: [before] -> [after]
 - [ ] If explicit path provided: scan STRICTLY limited to that path, no other locations scanned
 - [ ] If category keyword provided: only that category deleted, all others skipped
 - [ ] If file mode: appropriate sub-mode selected (general or prompt system), file transformed in-place
+- [ ] If prime mode: scope resolved without questions, snapshot hash-verified before any edit, P6 checks all pass, pointer line added to each slimmed file
 - [ ] Code fence integrity: ``` count before == after (no collapsed fences)
 - [ ] All categories deleted without asking (user runs `/commit` before if backups needed)
 - [ ] Deletion results reported with counts
@@ -558,3 +672,4 @@ File size: [before] -> [after]
 - File with INFO markers stripped and `_vN` backups deleted (general file mode)
 - Publishable clean markdown file with PromptSystem artifacts stripped (prompt system mode)
 - Transformation report with artifact counts and kept items (file modes)
+- Snapshot folder, `ARCHIVED_ENTRIES.md`, slimmed tracking files and size report (prime modes)

@@ -196,7 +196,7 @@ all gaps and remaining work.
 
 ## 3b. Final Checkpoint and Clickable Summary Artifact List
 
-Every prompt sequence file ends with a final checkpoint (PRMT-SQ-04), or with the final prompt if the sequence has no separate checkpoint. The final prompt's STOP instruction MUST require the executing agent to output a clickable summary artifact list of all output files created, modified, or verified by the prompt sequence (PRMT-SQ-05).
+Every prompt sequence file ends with a final checkpoint (PRMT-SQ-04), or with the final prompt if the sequence has no separate checkpoint. Before the STOP instruction, the final prompt promotes the Fails card "Never again" lines to the robustness card banned list (Fails card rules: @skills:terminal-robustness `ROBUSTNESS_CARD_SKELETON.md`). The final prompt's STOP instruction MUST require the executing agent to output a clickable summary artifact list of all output files created, modified, or verified by the prompt sequence (PRMT-SQ-05).
 
 The output must NOT be wrapped in code fences (agent responses are rendered as Markdown directly). Output artifacts MUST be partitioned into multiple logical output groups, each with its own heading:
 
@@ -296,17 +296,16 @@ Prompt sequences run unattended. One command waiting for a keypress, stdin, a pa
 
 A well-structured prompt sequence with precise objectives, clean state flow, and verified idempotency is worthless if the agent issues a single hanging command in prompt 3 of 5. Hangs are the most common failure mode in unattended prompt execution.
 
-**Every implementation prompt** (any prompt that runs commands) MUST include a hang-safety clause in the Constraints section. The clause has three parts:
+**Every implementation prompt** (any prompt that runs commands) MUST include a hang-safety clause in the Constraints section. The clause is one line with two references:
 
-1. **Prohibition**: no command may wait for a key, stdin, a pager, or an unbounded child
-2. **Banned list**: referenced from the project robustness card by filename
-3. **Cap behavior**: what to do when a command exceeds its time cap
+1. **Generic rule**: `agent-behavior.md` Terminal Hang Prevention (no command may wait for a key, stdin, a pager, or an unbounded child; commands are monitored and ended only on a hang verdict, never for their runtime)
+2. **Project card**: banned list and expected runtimes, referenced from the project robustness card by filename
 
 See `PROMPTS_ROBUSTNESS_GUIDES.md` for the clause template, findings-card mechanism, verification depth, and lessons from a harness rewrite session; @skills:terminal-robustness for mechanisms, safe command patterns, and robustness card templates. Verify against PRMT-HS-01 through PRMT-HS-08 and PRMT-RB-01 through PRMT-RB-07 in `PROMPTS_RULES.md`.
 
 ### Hang-Safety Clause Template
 
-The authoritative clause template lives in `PROMPTS_ROBUSTNESS_GUIDES.md` Section 2 - card-driven: the banned list and caps come from the project robustness card (`__CARD_[TOPIC]-Robustness.md`), never inlined into the prompt.
+The authoritative clause template lives in `PROMPTS_ROBUSTNESS_GUIDES.md` Section 2 - card-driven: the banned list and expected runtimes come from the project robustness card (`__CARD_[TOPIC]-Robustness.md`), never inlined into the prompt.
 
 ### Common Hang Risks
 
@@ -615,11 +614,10 @@ Before considering the prompts file complete:
 - [ ] Workflow invocations grouped by assessed load against the run budget; no prompt overloaded with several heavy workflows, none underloaded with one light workflow; grouping rationale stated in commentary (PRMT-SC-07)
 - [ ] Implementation prompts include execution authority constraint: "Execute without asking for confirmation" (PRMT-EX-03)
 - [ ] Agent does not self-execute the prompt file (PRMT-EX-02): file is delivered, not run in one response
-- [ ] Every implementation prompt includes a hang-safety clause: prohibition, banned list, cap behavior (PRMT-HS-01)
-- [ ] Banned command list is project-specific, not generic only (PRMT-HS-02)
-- [ ] Time caps specified for all command executions (PRMT-HS-03)
-- [ ] On-cap behavior: kill, record in PROBLEMS.md, continue (PRMT-HS-04)
-- [ ] Process cleanup after command execution: verify no orphans (PRMT-HS-05)
+- [ ] Every implementation prompt includes the one-line hang-safety clause referencing `agent-behavior.md` and the robustness card (PRMT-HS-01, PRMT-HS-02)
+- [ ] Expected runtimes live in the robustness card; no prompt sets a time limit or restates hang-verdict or cleanup procedures (PRMT-HS-03, PRMT-HS-04, PRMT-HS-05)
+- [ ] Every implementation prompt includes exactly one runtime-check line naming the Fails card (PRMT-RB-08)
+- [ ] Final checkpoint promotes the Fails card "Never again" lines to the robustness card banned list (PRMT-SQ-04)
 - [ ] No interactive commands: no stdin reads, pagers, unbounded children, 2>&1 blocking (PRMT-HS-06)
 - [ ] Verification names specific test files when code changes affect tests (PRMT-HS-07)
 - [ ] Verification includes residual sweeps when concepts are removed (PRMT-HS-07)

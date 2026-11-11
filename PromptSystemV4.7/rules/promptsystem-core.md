@@ -6,6 +6,8 @@ trigger: always_on
 
 Core definitions and structure for the development system.
 
+Section markers `<!-- START: Skill: X, File: Y -->` name where to read more: file `Y` of @skills:X. `Core` = defined here only.
+
 ## Definitions
 
 ### Core Concepts
@@ -16,46 +18,49 @@ Core definitions and structure for the development system.
 - **[SESSION]**: All context belonging to a work session - folder, files, conversations, commits, and tracking files (notes, problems, progress)
 <!-- END: Core -->
 
-<!-- START: Skill: workspace-management -->
-- **[PRODUCT_VERSION]**: Current product version string (e.g., `4.3`, `1.2.0`, `2026-03-15`). Used to compose `[PROMPTSYSTEM_FOLDER]` as `[WORKSPACE_FOLDER]\PromptSystem[PRODUCT_VERSION]` and for release version extraction. A workspace may be SYNCED (receives PromptSystem updates from an upstream source) or SELF-CONTAINED (manages its own PromptSystem locally)
-- **[DEV_SPECS_FOLDER]**: Folder at `[WORKSPACE_FOLDER]/specs/` containing shared specifications, design guidelines, and SOPs synced from an upstream source via `promptsystem-sync.json`. Replaces the former `rules/` folder. Specs are read-only from the agent's perspective during sync - local modifications are preserved via `never_overwrite` patterns. In SELF-CONTAINED repos, specs are authored locally without sync
-- **[DEV_KNOWLEDGE_FOLDER]**: Folder at `[WORKSPACE_FOLDER]/knowledge/` containing reference documents organized as knowledge bundles (topic folders with `.md` files). Synced from an upstream source via `promptsystem-sync.json` bundle configuration. Knowledge bundles are topic-specific (e.g., `IDE-Tips/`, `AI-Standards/`) and selected per-repo via `selected_bundles` in the sync config. In SELF-CONTAINED repos, knowledge is authored locally
-- **[PROMPTSYSTEM_SYNC_CONFIG]**: `promptsystem-sync.json` file at `[WORKSPACE_FOLDER]` root. Single source of truth for sync configuration: defines source paths, bundle definitions, include/exclude filters, deprecated files, and never_overwrite patterns. Only present in SYNCED repos. Managed by `sync.ps1` script and `/sync workspace` workflow
+<!-- START: Skill: workspace-management, File: WORKSPACE-GUIDES.md -->
+- **[PRODUCT_VERSION]**: Current product version string (e.g., `4.3`, `1.2.0`, `2026-03-15`). Composes `[PROMPTSYSTEM_FOLDER]` as `[WORKSPACE_FOLDER]\PromptSystem[PRODUCT_VERSION]`; used for release version extraction
+- **[DEV_SPECS_FOLDER]**: `[WORKSPACE_FOLDER]/specs/` - shared specifications, design guidelines, and SOPs
+- **[DEV_KNOWLEDGE_FOLDER]**: `[WORKSPACE_FOLDER]/knowledge/` - reference documents organized as knowledge bundles (topic folders with `.md` files)
+- **[PROMPTSYSTEM_SYNC_CONFIG]**: `promptsystem-sync.json` at `[WORKSPACE_FOLDER]` root, only in SYNCED repos. Single source of truth for sync configuration; managed by `sync.ps1` and `/sync workspace`
+- Specs and knowledge: synced from upstream in SYNCED repos, authored locally in SELF-CONTAINED repos
 <!-- END: Skill: workspace-management -->
 
 <!-- START: Core -->
 
 ### Agent Folder
 
-**[AGENT_FOLDER]** location depends on agent (e.g., `.devin/`, `.claude/`, `.agent/`). See agent-specific rules for details.
+**[AGENT_FOLDER]** location depends on agent (e.g., `.devin/`, `.claude/`, `.agent/`); defined in the agent-specific rule file.
 
 ### Configuration
 
 - **[RULES]**: The current set of agent rules in `[AGENT_FOLDER]/rules/`
-- **[WORKFLOWS]**: The current set of agent workflows in `[AGENT_FOLDER]/workflows/`
-- **[SKILLS]**: Agent Skills in `[AGENT_FOLDER]/skills/` (including `write-documents`, `research-methods`, `analysis-methods`)
+- **[WORKFLOWS]**: The current set of agent workflows in `[AGENT_FOLDER]/workflows/`. List by purpose and quality pipelines (VCRIV, FACRIV): `tools-and-skills.md`
+- **[SKILLS]**: Agent Skills in `[AGENT_FOLDER]/skills/`
 - **[GRUC]**: Guides, Rules, Checks - pre-calculated compliance criteria. GUIDE + RULES in each skill folder; CHECKS in each skill folder (for skills) or `drift-control/` (for workflows). Exception: `write-documents` and `analysis-methods` maintain consolidated checks.
+
+<!-- END: Core -->
+
+<!-- START: Skill: promptsystem, File: PROMPTSYSTEM_IDS.md -->
 
 ### Document Types
 
 - **[INFO]** (IN): Information gathering from web research, option and code analysis, reading documents
-  - Example: `AUTHSYST-IN01`, `CRAWLENG-IN02`
-- **[SPEC]** (SP): A specification conforming to defined rules. When implemented, must be reverse-updated (synced) from verified code changes
-  - Example: `CRAWLENG-SP01`, `AUTHSYST-SP01`
-- **[IMPL]** (IP): An implementation plan. When implemented, must be reverse-updated (synced) from verified code changes
-  - Example: `CRAWLENG-IP01`, `AUTHSYST-IP02`
+- **[SPEC]** (SP): A specification conforming to defined rules
+- **[IMPL]** (IP): An implementation plan
+- SPEC and IMPL: when implemented, must be reverse-updated (synced) from verified code changes
 - **[TEST]** (TP): Test plans suffixed to corresponding SPEC or IMPL
-  - Example: `CRAWLENG-TP01`, `AUTHSYST-TP01`
-- **[TASKS]** (TK): Partitioned task lists from IMPL/TEST plans
-  - Example: `CRAWLENG-TK01`, `AUTHSYST-TK01`
-  - Created via `/write-tasks-plan`
+- **[TASKS]** (TK): Partitioned task lists from IMPL/TEST plans, created via `/write-tasks-plan`
+- Doc IDs (`CRAWLENG-SP01`): `promptsystem-ids.md`
+<!-- END: Skill: promptsystem -->
+
+<!-- START: Core -->
 
 ### Tracking Documents
 
-Tracking documents exist at workspace, project, or session level. Only one of each type per scope.
+One of each type per scope (workspace, project, session).
 
-- **[NOTES]**: Important information. Agent MUST read to avoid unintentional behavior
-- **[PROGRESS]**: Progress tracking. Agent MUST read to avoid unintentional behavior
+- **[NOTES]**, **[PROGRESS]**: Important information and progress tracking. Agent MUST read both to avoid unintentional behavior
 - **[PROBLEMS]**: Problem tracking. Each session tracks issues in its own `PROBLEMS.md`. On `/session-finalize`, sync to project [PROBLEMS]
 - **[FAILS]**: Failure log - lessons learned from past mistakes. Agent MUST read during `/prime` to avoid repeating errors (except when using the `_` prefix). Never delete entries unconfirmed, only append or mark as resolved.
 
@@ -67,15 +72,8 @@ Tracking documents exist at workspace, project, or session level. Only one of ea
 
 Prevents critical oversights during task execution.
 
-**Planning phase:**
-1. Create `MUST-NOT-FORGET` list (5-15 items max). Name must not be changed to be greppable.
-2. Collect items from: FAILS.md, learnings, rules, specs, user instructions
-3. Include in plan or at top of working document
-
-**Completion phase:**
-1. Review each MNF item before marking task done
-2. Verify compliance or document why item doesn't apply
-3. Update FAILS.md if any MNF item was violated
+- **Planning phase**: create a `MUST-NOT-FORGET` list (5-15 items max; name must not be changed, to be greppable). Collect items from FAILS.md, learnings, rules, specs, user instructions. Include it in the plan or at the top of the working document
+- **Completion phase**: review each MNF item before marking the task done. Verify compliance or document why the item doesn't apply. Update FAILS.md if any MNF item was violated
 
 ### Complexity Levels
 
@@ -87,199 +85,62 @@ Maps to semantic versioning:
 
 ### Operation Modes
 
-Determines where implementation outputs are placed:
-
-- **IMPL-CODEBASE** (default): Implement in existing codebase
-  - For: SPEC, IMPL, TEST, [IMPLEMENT], HOTFIX, BUGFIX
-  - Output: Project source folders (`src/`, etc.)
-  - Affects existing code, configuration, runtime
-
-- **IMPL-ISOLATED**: Implement separately from existing codebase
-  - For: [PROVE], Proofs of Concept (POCs), prototypes, self-contained test scripts
-  - Output: `[SESSION_FOLDER]/`, `[SESSION_FOLDER]/_poc/`, `T##_` (Topic) folders, or `S##_` (Step) folders
-  - Existing code/config/runtime MUST NOT be affected
-  - NEVER create folders in workspace root
-  - **REQUIRES SESSION**: If no session exists, run `/session-new` first
+- **IMPL-CODEBASE** (default): Implement in existing codebase. For SPEC, IMPL, TEST, [IMPLEMENT], HOTFIX, BUGFIX. Output: project source folders (`src/`, etc.). Affects existing code, configuration, runtime
+- **IMPL-ISOLATED**: Implement separately from existing codebase. For [PROVE], Proofs of Concept (POCs), prototypes, self-contained test scripts. Output: `[SESSION_FOLDER]/`, `[SESSION_FOLDER]/_poc/`, `T##_` (Topic) folders, or `S##_` (Step) folders. Existing code/config/runtime MUST NOT be affected. NEVER create folders in workspace root. **REQUIRES SESSION**: if no session exists, run `/session-new` first
 <!-- END: Core -->
 
-<!-- START: Skill: workspace-management -->
+<!-- START: Skill: workspace-management, File: WORKSPACE-GUIDES.md -->
 
 ## Workspace Scenarios
 
-Five dimensions define how the agent should behave:
-
-### Dimension 1: Project Structure
-
-- **SINGLE-PROJECT** - Workspace contains one project
-- **MONOREPO** - Workspace contains multiple independent projects
-- **WORKSPACE** - Workspace root with multiple independent repos (not monorepo). Detected by presence of a `*.code-workspace` file
-
-### Dimension 2: Version Strategy
-
-- **SINGLE-VERSION** - One active version, no migration
-- **MULTI-VERSION** - Side-by-side versions (e.g., V1 and V2 coexisting)
+- **Dimension 1 - Project Structure**: SINGLE-PROJECT (workspace contains one project), MONOREPO (multiple independent projects), WORKSPACE (workspace root with multiple independent repos, not monorepo; detected by presence of a `*.code-workspace` file)
+- **Dimension 2 - Version Strategy**: SINGLE-VERSION (one active version, no migration), MULTI-VERSION (side-by-side versions, e.g., V1 and V2 coexisting)
 <!-- END: Skill: workspace-management -->
 
-<!-- START: Skill: session-management -->
-
-### Dimension 3: Work Mode
-
-- **SESSION-MODE** - Time-limited session with specific goals
-- **PROJECT-MODE** - Work spans entire project without session boundaries
+<!-- START: Skill: session-management, File: SKILL.md -->
+- **Dimension 3 - Work Mode**: SESSION-MODE (time-limited session with specific goals), PROJECT-MODE (work spans entire project without session boundaries)
 <!-- END: Skill: session-management -->
 
-<!-- START: Skill: workspace-management -->
-
-### Dimension 4: Sync Relationship
-
-- **SYNCED** - Repo participates in sync dependency tree (has upstream/downstream)
-- **SELF-CONTAINED** - Repo manages all content locally, no sync relationships
-
-### Dimension 5: Workspace Type
-
-- **SOFTWARE-DEV** - Software development workspace. Has product repo, build/test rules, runtime environment, release configuration. Dimension 1 applies (SINGLE-PROJECT, MONOREPO, or WORKSPACE). Examples: CLI tool workspace, web app dev+product split
-- **GENERAL** - General-purpose workspace. No product repo, no build infrastructure, no release configuration. Code allowed only in session folders (POCs, analysis scripts). Defaults to IMPL-ISOLATED. Dimension 1 = N/A (single repo, no structure mode). Examples: research workspaces, documentation hubs, tax/finance workspaces
+<!-- START: Skill: workspace-management, File: WORKSPACE-GUIDES.md -->
+- **Dimension 4 - Sync Relationship**: SYNCED (repo participates in sync dependency tree, has upstream/downstream), SELF-CONTAINED (repo manages all content locally, no sync relationships)
+- **Dimension 5 - Workspace Type**: SOFTWARE-DEV (has product repo, build/test rules, runtime environment, release configuration; Dimension 1 applies), GENERAL (research, documentation, finance; no product repo, no build infrastructure, no release configuration; code allowed only in session folders (POCs, analysis scripts); defaults to IMPL-ISOLATED; Dimension 1 = N/A)
 
 ## Folder Structure
 
-### Single Project (No Monorepo)
-
-```
-[WORKSPACE_FOLDER]/
-├── [AGENT_FOLDER]/
-│   ├── rules/              # Agent rules (.md files)
-│   ├── workflows/          # Agent workflows (.md files)
-│   └── skills/             # Agent Skills (folders with SKILL.md)
-├── _archive_gitignore/     # Archived sessions (not versioned)
-├── _[SESSION_FOLDER]/       # Session folders start with underscore
-│   ├── _agentwork/         # Agent artifacts (ignored, deleted by /cleanup)
-│   ├── _IMPL_*.md          # Implementation plans
-│   ├── _INFO_*.md          # Information documents
-│   ├── _SPEC_*.md          # Specifications
-│   ├── _TEST_*.md          # Test plans
-│   ├── NOTES.md            # Session notes
-│   ├── PROBLEMS.md         # Session problems
-│   ├── PROGRESS.md         # Session progress
-│   └── FAILS.md            # Lessons learned
-├── specs/                   # Workspace-level specs ([DEV_SPECS_FOLDER])
-├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
-├── src/                    # Source code
-├── !NOTES.md               # Workspace notes (priority file)
-├── PROBLEMS.md            # Known problems
-├── !PROGRESS.md            # Overall progress
-└── FAILS.md                # Lessons learned (workspace-level)
-```
-
-### Monorepo (Multiple Projects)
-
-```
-[WORKSPACE_FOLDER]/
-├── [AGENT_FOLDER]/
-│   ├── rules/              # Agent rules (.md files)
-│   ├── workflows/          # Agent workflows (.md files)
-│   └── skills/             # Agent Skills (folders with SKILL.md)
-├── _archive_gitignore/     # Archived sessions (all projects, not versioned)
-├── specs/                   # Workspace-level specs ([DEV_SPECS_FOLDER])
-├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
-├── [PROJECT_A]/
-│   ├── _[SESSION_FOLDER]/   # Project A sessions
-│   ├── src/                # Project A source code
-│   ├── NOTES.md            # Project A notes
-│   ├── PROBLEMS.md         # Project A problems
-│   ├── PROGRESS.md         # Project A progress
-│   └── FAILS.md            # Project A lessons learned
-├── [PROJECT_B]/
-│   └── ...                 # Same structure
-├── !NOTES.md               # Workspace-level notes
-├── PROBLEMS.md            # Workspace-level problems
-├── !PROGRESS.md            # Workspace-level progress
-└── FAILS.md                # Lessons learned (workspace-level)
-```
-
-### Multi-Repo Workspace
-
-```
-[WORKSPACE_FOLDER]/
-├── [AGENT_FOLDER]/
-│   ├── rules/              # Agent rules (.md files)
-│   ├── workflows/          # Agent workflows (.md files)
-│   └── skills/             # Agent Skills (folders with SKILL.md)
-├── _archive_gitignore/     # Archived sessions (not versioned)
-├── _[SESSION_FOLDER]/       # Session folders start with underscore
-├── specs/                   # Workspace-level specs ([DEV_SPECS_FOLDER])
-├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
-├── [folder-name].code-workspace  # References ProductRepo (may be outside [WORKSPACE_FOLDER])
-├── !NOTES.md               # Workspace notes (priority file)
-├── PROBLEMS.md            # Known problems
-├── !PROGRESS.md            # Overall progress
-└── FAILS.md                # Lessons learned (workspace-level)
-
-[PRODUCT_REPO_FOLDER]/
-├── src/                    # Product source code
-├── docs/                   # Product documentation
-└── README.md              # Product README
-```
-
-## Document Placement
-
-Two folders for workspace-level documents:
-
-- **specs/** - Verifiable agent instructions: _SPEC_*, _IMPL_*, _TEST_* files, and unprefixed rules files with enforceable IDs. The agent can verify compliance against these documents. _TASKS_* files are session-scoped and stay in session folders.
-- **docs/** - Explanatory knowledge: _INFO_* files and unprefixed research articles. Read for understanding, not for execution verification.
-
-Decision rule: "Can the agent verify compliance against this document?" If yes, specs/. Does it explain why/how something works? docs/.
-
-Exception: _INFO_* files may reside in specs/ if directly referenced as a dependency by a _SPEC_* file in the same workspace (Depends on: header block).
-
-See workspace-management WORKSPACE-RULES.md WS-DP-01 through WS-DP-06 for enforceable rules.
-
-These folders are optional by default (see WS-DP-06). /prime does not create them. If folders exist, documents MUST be placed per the rules above. If folders do not exist and no session is active, the agent places documents directly in the workspace folder root. If a session is active, session-scoped documents (_IMPL_*, _TEST_*, _TASKS_*) go in the session folder.
-
-- **OPTIONS and DRAFT Placement (DRSYNART-DD-36)**: `[ID]-OPTIONS-NN_` and `[ID]-DRAFT-NN_` files are deliverables in the active working folder, never in `_agentwork/`. They persist across prompt sequences, hold user annotations and style sheets, and must not be deleted by `/cleanup`.
+- **Single project, workspace root**: `[AGENT_FOLDER]/` (`rules/`, `workflows/`, `skills/`), `specs/` (workspace-level specs), `docs/` (INFO, research, how-tos), `src/`, `_archive_gitignore/` (archived sessions, not versioned), tracking files `!NOTES.md`, `PROBLEMS.md`, `!PROGRESS.md`, `FAILS.md`
+- **Session folder** `_[SESSION_FOLDER]/` (starts with underscore): `_agentwork/`, `_INFO_*.md`, `_SPEC_*.md`, `_IMPL_*.md`, `_TEST_*.md`, `NOTES.md`, `PROBLEMS.md`, `PROGRESS.md`, `FAILS.md`
+- **Monorepo**: same root, but each `[PROJECT]/` folder holds its own sessions, `src/`, and tracking files
+- **Multi-Repo Workspace**: same root plus `[folder-name].code-workspace`, without `src/`; product code lives in `[PRODUCT_REPO_FOLDER]/` (`src/`, `docs/`, `README.md`), which may be outside `[WORKSPACE_FOLDER]`
 
 <!-- END: Skill: workspace-management -->
 
-<!-- START: Core -->
+<!-- START: Skill: workspace-management, File: WORKSPACE-RULES.md -->
+
+## Document Placement
+
+Two folders for workspace-level documents. Enforceable rules: WS-DP-01 through WS-DP-06.
+
+- **specs/** - Verifiable agent instructions: _SPEC_*, _IMPL_*, _TEST_* files, and unprefixed rules files with enforceable IDs. _TASKS_* files are session-scoped and stay in session folders
+- **docs/** - Explanatory knowledge: _INFO_* files and unprefixed research articles. Read for understanding, not for execution verification
+- Decision rule: "Can the agent verify compliance against this document?" If yes, specs/. Does it explain why/how something works? docs/. Exception: an _INFO_* file may reside in specs/ if a _SPEC_* file in the same workspace lists it under "Depends on"
+- Both folders are optional (WS-DP-06); `/prime` does not create them. Folders exist: documents MUST be placed per the rules above. No folders and no active session: workspace folder root. Active session: session-scoped documents (_IMPL_*, _TEST_*, _TASKS_*) go in the session folder
+- **OPTIONS and DRAFT Placement (DRSYNART-DD-36)**: `[ID]-OPTIONS-NN_` and `[ID]-DRAFT-NN_` files are deliverables in the active working folder, never in `_agentwork/`; `/cleanup` must not delete them
+
+<!-- END: Skill: workspace-management -->
+
+<!-- START: Skill: promptsystem, File: PROMPTSYSTEM_AGENT_FOLDERS.md -->
 
 ## File Naming Conventions
 
-### Priority Files (! prefix)
+- **Priority files (`!` prefix)**: high relevance. Must be treated with extra attention during `/prime`
+- **Ignored files (`_` prefix)**: skipped by automatic priming workflows. Use for session-specific, WIP, or archived content. Single `_` prefix files are deliverables (INFO, SPEC, IMPL, TEST, TASKS); never auto-deleted
+- **Scaffolding files (`__` prefix)**: process artifacts that workflows and skills auto-create during execution (STRUTs, TASKS, templates for self-tracking). Persist during active work, deleted by `/cleanup` after the goal is reached. Documents the user explicitly creates via `/write-tasks-plan`, `/write-strut`, `/write-spec`, etc. are deliverables (no `__`)
+- **Temp files (`.tmp_` prefix)**: single-run temp (scripts, rebuildable folders). Deleted within the same workflow or by `/cleanup`
+- **Hidden files (`.` prefix)**: Unix convention - hidden from directory listings
+- **Git exclusion suffix (`_gitignore`)**: append before the extension to exclude any file or folder from git without editing `.gitignore`: `data_gitignore.json`, `_download_gitignore/`. Patterns in `.gitignore`: `*_gitignore.*`, `*_gitignore/`, `.tmp_*`, `_agentwork/`
+<!-- END: Skill: promptsystem -->
 
-Files starting with `!` indicate high relevance. Must be treated with extra attention during `/prime`.
-
-### Ignored Files (_ prefix)
-
-Files starting with `_` are skipped by automatic priming workflows. Use for session-specific, WIP, or archived content. Single `_` prefix files are deliverables (INFO, SPEC, IMPL, TEST, TASKS).
-
-### Scaffolding Files (__ prefix)
-
-Files starting with `__` (double underscore) are workflow/skill-generated process artifacts. Distinction:
-
-- **User-explicit = deliverable** (no `__`): Documents the user explicitly creates via `/write-tasks-plan`, `/write-strut`, `/write-spec`, etc.
-- **Workflow/skill-implicit = scaffolding** (`__`): Documents that workflows auto-create during execution (STRUTs, TASKS, templates for self-tracking)
-
-Scaffolding has no value after the goal is reached. Deleted by `/cleanup` category 6.
-
-**Lifecycle tiers:**
-- `.tmp_` = single-run temp (scripts, rebuildable folders). Deleted within same workflow or by `/cleanup` category 1
-- `__` = multi-run scaffolding (execution plans, task tracking, templates). Persists during active work, deleted by `/cleanup` after goal reached
-- `_` = deliverable (findings, specs, plans). Never auto-deleted
-
-### Hidden Files (. prefix)
-
-Files starting with `.` follow Unix convention - hidden from directory listings.
-
-### Git Exclusion Suffix (_gitignore)
-
-Append `_gitignore` before the extension to exclude any file or folder from git without editing `.gitignore`:
-- `data_gitignore.json` - excluded file
-- `_download_gitignore/` - excluded folder
-
-Patterns in `.gitignore`: `*_gitignore.*`, `*_gitignore/`, `.tmp_*`, `_agentwork/`. Standard utility folder names and semantics: `agent-behavior.md` section Agent-Created Folders
-
-<!-- END: Core -->
-
-<!-- START: Skill: workspace-management -->
+<!-- START: Skill: workspace-management, File: WORKSPACE-GUIDES.md -->
 
 ## Placeholders
 
@@ -288,114 +149,21 @@ Patterns in `.gitignore`: `*_gitignore.*`, `*_gitignore/`, `.tmp_*`, `_agentwork
 - **[SRC_FOLDER]**: Absolute path of source folder
 <!-- END: Skill: workspace-management -->
 
-<!-- START: Skill: session-management -->
+<!-- START: Skill: session-management, File: SKILL.md -->
 
 - **[SESSIONS_FOLDER]**: Base folder for sessions (default: `[WORKSPACE_FOLDER]`, override in `!NOTES.md`)
 - **[SESSION_ARCHIVE_FOLDER]**: Archive folder for closed sessions (default: `[WORKSPACE_FOLDER]/_archive_gitignore`)
 - **[SESSION_FOLDER]**: Absolute path of currently active session folder
 <!-- END: Skill: session-management -->
 
-<!-- START: Core -->
-
-## Workflow Reference
-
-- `/bugfix` - Record and fix bugs (SESSION-MODE or PROJECT-MODE)
-- `/cleanup` - Delete temporary files and artifacts left by workflows
-- `/commit` - Create conventional commits
-- `/conversation-draft` - Draft emails, messages, or other text as the user
-- `/conversation-start` - Create new conversation tracking file
-- `/conversation-update` - Update existing conversation tracking file
-- `/critique` - Devil's Advocate review
-- `/deep-research` - Deep research (Most Executable Point of Information (MEPI) or Most Complete Point of Information (MCPI)) with domain-specific patterns
-- `/deploy` - Deploy project to configured hosting platform
-- `/drift-correct` - Close gaps identified by `/drift-detect`
-- `/drift-detect` - Post-execution drift detection, persist gaps to `__DRIFT_` file
-- `/fact-check` - Verify factual claims against external reality
-- `/fail` - Record failures to FAILS.md
-- `/fix` - Fix any problem by reading relevant PromptSystem knowledge
-- `/go` - Autonomous loop until goal reached
-- `/implement` - Implement approved changes - code from plans or corrections from reviews
-- `/improve` - Depth-first improvement (one proven change per run)
-- `/learn` - Extract learnings from resolved problems
-- `/prime` - Load workspace context
-- `/project-release` - Create a dated release with comprehensive release notes
-- `/propose-article` - Propose article outline candidates with scoring and recommendation
-- `/reconcile` - Pragmatic review of critique and fact-check findings
-- `/remove` - Remove session content, conversation content, or specific files with preview and confirmation
-- `/rename` - Global/local refactoring with verification
-- `/research` - Structured research with verification
-- `/session-archive` - Move session folder to archive
-- `/session-finalize` - Finalize session, sync findings, prepare for archive
-- `/session-load` - Resume existing session
-- `/session-new` - Initialize new session
-- `/session-save` - Save session progress
-- `/sync` - Document synchronization
-- `/test` - Run tests based on scope
-- `/transcribe` - PDF/web to markdown transcription
-- `/translate` - Translate markdown or PDF files to target languages
-- `/verify` - Verify work against specs and rules
-- `/write-article` - Author finished article with line pass, copy pass, and release check
-- `/write-impl-plan` - Create implementation plan from spec
-- `/write-info` - Create INFO document from research
-- `/write-spec` - Create specification from requirements
-- `/write-strut` - Create STRUT plans with proper format
-- `/write-tasks-plan` - Create tasks plan from IMPL/TEST
-- `/write-template` - Create purpose-built document templates
-- `/write-prompts` - Create prompt queue files for sequential headless execution
-- `/write-test-plan` - Create test plan from spec
-
-## Quality Pipelines
-
-**Verify-Critique-Reconcile-Implement-Verify (VCRIV)** - logic and design review:
-`/verify` → `/critique` → `/reconcile` → `/implement` → `/verify`
-
-**Fact-check-Reconcile-Implement-Verify (FACRIV)** - factual claim verification:
-`/fact-check` → `/reconcile` → `/implement` → `/verify`
-
-**Roles:** `/critique` and `/fact-check` = JUDGE (produce `*_CRITIQUE.md` / `*_FACT-CHECK.md` only, never modify originals). `/reconcile` = TRIAGE (chat output only). `/implement` = EXECUTOR (applies approved corrections to source documents).
-
-**Rules:** Sequential execution. When user says "run VCRIV" or "run FACRIV", execute full pipeline in order.
+<!-- START: Skill: write-documents, File: STRUT_TEMPLATE.md -->
 
 ## STRUT Execution
 
-STRUT plans use structured notation for progress tracking.
+STRUT plans use structured notation for progress tracking: steps `[ ] Px-Sy`, deliverables `[ ] Px-Dy`, checkbox `[x]` done or `[N]` done N times, transitions to `[PHASE-NAME]`, `[CONSULT]` (escalate to [ACTOR]), or `[END]`. Create them with `/write-strut`.
 
-**Creating STRUTs**: Use `/write-strut` workflow or invoke `@skills:write-documents` with `STRUT_TEMPLATE.md`.
-
-Execution follows these rules:
-
-### Execution Algorithm
-
-1. **Locate current position**: Find first unchecked step `[ ] Px-Sy`
-2. **Execute step**: Perform the verb action with given parameters
-3. **Update checkbox**: Mark `[x]` on success, increment `[N]` on retry
-4. **Check deliverables**: After step completion, verify if any `Px-Dy` can be checked
-5. **At phase boundary**: Run `/verify` to evaluate transition conditions
-6. **Follow transition**: Go to next phase, `[CONSULT]`, or `[END]`
-
-### Verification Gates
-
-- **Planning time**: Run `/verify` after creating STRUT plans to validate structure
-- **Phase transitions**: Run `/verify` before transitioning between phases
-- **Mandate**: Only `/verify` workflow has authority to approve autonomous phase transitions
-
-### Resuming Interrupted Plans
-
-1. Read PROGRESS.md or document containing STRUT plan
-2. Find first unchecked deliverable `[ ] Px-Dy`
-3. Identify which steps feed that deliverable
-4. Continue from first unchecked step
-
-### Checkbox States
-
-- `[ ]` - Pending (not started)
-- `[x]` - Done (completed once)
-- `[N]` - Done N times (e.g., `[2]` = retried twice)
-
-### Transition Targets
-
-- `[PHASE-NAME]` - Next phase (e.g., `[DESIGN]`, `[IMPLEMENT]`)
-- `[CONSULT]` - Escalate to [ACTOR]
-- `[END]` - Plan complete
-<!-- END: Core -->
+- **Execute**: perform the first unchecked step, update its checkbox, check deliverables, follow the transition at the phase boundary
+- **Verification gates**: run `/verify` after creating a STRUT plan and before every phase transition. Only `/verify` has authority to approve autonomous phase transitions
+- **Resume**: continue at the first unchecked step that feeds the first unchecked deliverable
+<!-- END: Skill: write-documents -->
 

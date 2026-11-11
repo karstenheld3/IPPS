@@ -3,9 +3,10 @@
 **Doc ID**: AGNTFOLDERS-SP01
 **Feature**: agent-created-folders
 **Goal**: Define one extendable standard for names, git status, lifecycle, and placement of every subfolder the agent creates, so that modules can add folders without changing the meaning of existing names or the logic of existing workflows
-**Timeline**: Created 2026-11-10, Updated 7 times (2026-11-10)
+**Timeline**: Created 2026-11-10, Updated 8 times (2026-11-10 - 2026-11-11)
 **Target file(s)**:
-- `[PROMPTSYSTEM_FOLDER]/rules/agent-behavior.md` (central definition, section File Placement)
+- `[PROMPTSYSTEM_FOLDER]/rules/agent-behavior.md` (central definition in short form, section File Placement: name anatomy, prefix and suffix semantics, default folder names, `_agentwork/` content)
+- `[PROMPTSYSTEM_FOLDER]/skills/promptsystem/PROMPTSYSTEM_AGENT_FOLDERS.md` (full wording: core role descriptions, allowed parents, classification, extension, generic consumers, migration)
 - `[PROMPTSYSTEM_FOLDER]/rules/promptsystem-core.md` (folder structure, naming tiers)
 - `[PROMPTSYSTEM_FOLDER]/workflows/cleanup.md`, `prime.md`, `session-archive.md` (generic consumers); `archive.md` deferred (DD-12)
 - Workflows, skills, and scripts listed in `AGNTFOLDERS-IN01` section 10 (registrations and defaults)
@@ -463,6 +464,9 @@ N/A: this SPEC defines naming and placement rules for instruction files; no comp
 - `[BUGFIXES_FOLDER]` is a configured value in `!NOTES.md`; workspaces with an existing `_BugFixes/` permanent session keep it (DD-13) until the user moves it
 
 ## 13. Document History
+
+**[2026-11-11 21:12]**
+- Changed (reverse-update from rule compaction): `agent-behavior.md` section Agent-Created Folders keeps the short form; core role descriptions, allowed parents (FR-06), classification, extension, generic consumers, and migration moved to `skills/promptsystem/PROMPTSYSTEM_AGENT_FOLDERS.md`, linked from the rule section. Reason: Cascade loads only about the first 12,000 bytes of an always-on rule file
 
 **[2026-11-10 17:50]**
 - Removed: former FR-15 (`/verify` collision and conformance check) and all `/verify` references (architecture diagram, DD-07, Action Flow); `WORKSPACE-RULES.md` WS-SF-02 covers the name anatomy

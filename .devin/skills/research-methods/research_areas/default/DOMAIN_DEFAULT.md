@@ -33,7 +33,6 @@ Generic research domain profile. Use when no specific domain profile matches (SO
 - `search_web` - Initial source discovery
 - `read_url_content` - Full web page content extraction
 - `Playwright MCP` - Interactive web reading, JavaScript rendering, screenshots
-- `Playwriter MCP` - Authenticated sessions, complex interactions
 
 ### Document Processing
 - `@skills:pdf-tools` - PDF to JPG conversion (`convert-pdf-to-jpg.py`)

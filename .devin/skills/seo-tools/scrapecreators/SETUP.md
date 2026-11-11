@@ -76,6 +76,10 @@ Cost gate: the estimate is `requests x credits per request`. A batch stops when 
 - Confirmed from the vendor endpoint specification: `tiktok-search`, `youtube-search`, `reddit-subreddit`; `pinterest-topic` costs 1 credit per request
 - `[ASSUMED]` until a live call confirms them: `tiktok-popular-videos` and `tiktok-popular-songs` parameter names (`period`, `countryCode`, `page`, `orderBy`; the endpoints were down), the 1-credit price of each endpoint not listed as tested; use `--param` to correct a name without editing the script
 - Response parsing is tolerant: known list keys first, otherwise the first list of objects; rows carry title, author, views, likes, comments, shares, published date, and URL where the vendor sends them
+- Observed behavior `[TESTED 2026-11-11]`:
+  - `tiktok-suggestions` with `--region US` still returned UK variants ("... uk", "under £100"); `youtube-typeahead` has no region parameter; the `score` field is relevance, not likes
+  - `youtube-typeahead` returned 4 rows for "standing desk calculator" and 14 for "standing desk"
+  - `google-ads DOMAIN` lists every ad whose destination is the domain, including customers and agencies: own-brand ads were 39 of 40 for asana.com, 35 of 40 for teamwork.com, 7 of 40 for acuityscheduling.com, 14 of 28 for youcanbook.me; group rows by advertiser
 
 ## Troubleshooting
 

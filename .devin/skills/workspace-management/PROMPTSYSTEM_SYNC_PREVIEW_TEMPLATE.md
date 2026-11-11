@@ -95,7 +95,7 @@
       workflows\cleanup.md
       skills\coding-conventions\SKILL.md
       skills\coding-conventions\PYTHON-RULES.md
-  - Excluded skills: llm-tools, youtube-downloader, travel-info, hosting, seo-tools, pdf-tools, image-tools, google-account, ms-playwright-mcp, playwriter-mcp, windows-desktop-control, devin-auto-model-switcher
+  - Excluded skills: llm-tools, youtube-downloader, travel-info, hosting, seo-tools, pdf-tools, image-tools, google-account, ms-playwright-mcp, windows-desktop-control, devin-auto-model-switcher
 
 .devin
   [UP TO DATE] 287 files unchanged

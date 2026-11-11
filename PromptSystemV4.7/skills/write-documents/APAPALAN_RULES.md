@@ -431,7 +431,15 @@ SW1A1AA         (space removed from UK SW1A 1AA)
 〒 100-0000     (space after 〒 symbol, Japan)
 ```
 
-Full corruption categories in `core-conventions.md` "Authoritative Literals" section.
+**Known GenAI corruption categories** (why this rule exists; rules and marking format in `core-conventions.md` "Authoritative Literals" section):
+- **Unicode normalization**: `o` → `º`, `.` → `ª`, straight quotes → curly quotes, half-width → full-width (CJK)
+- **Punctuation drift**: commas → dashes, spaces inserted/removed in IBANs, slash direction changed
+- **Abbreviation/expansion**: "Dto." → "D", "Apt." → "Apartment", "S/O" → "Son of"
+- **Sub-premise loss**: Floor/unit/door numbers dropped or merged into building number (critical for Indian, Portuguese, Japanese addresses where "Flat 4B, 3rd Floor" or "1.o Dto." determines deliverability)
+- **Identifier transposition**: LLM token prediction silently swaps digits in similar IDs sharing a prefix (`acct_7H9j2` → `acct_7H9j3`). Corrupted ID still parses, routes to wrong record
+- **Script/romanization mixing**: Kanji address rewritten in romaji, Devanagari transliterated, Arabic addresses reversed (RTL)
+- **Postal code reformatting**: spaces added/removed (`1000-001` → `1000001`), country-specific formats broken (UK: `SW1A 1AA`, India 6-digit PIN, Japan `〒100-0000`)
+- **"Looks right" hallucination**: Model fills gaps with plausible-but-wrong values (invents house numbers, "corrects" postal codes to nearby valid ones)
 
 ## Brevity Rules (BR)
 

@@ -27,51 +27,32 @@ Universal formatting and writing conventions for all documents.
 
 - Always assume UTF-8 encoding.
 - When writing in non-English languages, use native special characters (e.g., German Umlaute: ae → ä, oe → ö, ue → ü, ss → ß). Never substitute with ASCII approximations.
-- When non-UTF-8 encoding is detected, document in workspace or session NOTES.md:
-  1. File path
-  2. Detected encoding (e.g., ISO-8859-1, Windows-1252)
-  3. How to preserve encoding (e.g., which PowerShell `[System.IO.File]::` encoding parameters)
-- Test and verify PowerShell snippets to correctly read and write file (use copy of file for testing) before recording 3. in NOTES.md.
+- When non-UTF-8 encoding is detected, document in workspace or session NOTES.md: 1) file path, 2) detected encoding (e.g., ISO-8859-1, Windows-1252), 3) how to preserve the encoding (e.g., which PowerShell `[System.IO.File]::` encoding parameters). Test the PowerShell snippet on a copy of the file before recording 3)
 
 ## Authoritative Literals
 
-Some values are **lexical, not semantic** - every character matters. Addresses, IBANs, reference numbers, registration codes, and official names must be reproduced exactly as recorded. GenAI systematically introduces format drift on these values (Unicode normalization, abbreviation, punctuation changes).
+Some values are **lexical, not semantic** - every character matters. Addresses, IBANs, reference numbers, registration codes, and official names must be reproduced exactly as recorded. GenAI systematically introduces format drift on these values.
 
-**Rules:**
-- Values marked `[LITERAL]` MUST be copied character-for-character
-- No Unicode substitution: `o` stays `o` (not `º`), `.` stays `.` (not `ª`), comma stays comma (not dash)
-- No abbreviation or expansion of any part of the literal value
-- No reformatting: punctuation, spacing, and casing exactly as recorded
-- Source of truth for new literals: official documents (government registrations, contracts, bank confirmations) - never from secondary documents
-- When a literal is used in outbound communication (emails, letters, forms), copy from the `[LITERAL]`-marked source
+- Values marked `[LITERAL]` MUST be copied character-for-character: no Unicode substitution (`o` stays `o`, not `º`; comma stays comma, not dash), no abbreviation or expansion, no reformatting of punctuation, spacing, or casing
+- Source of truth for new literals: official documents (government registrations, contracts, bank confirmations) - never secondary documents. Outbound communication (emails, letters, forms) copies from the `[LITERAL]`-marked source
+- Corruption categories with BAD/GOOD examples: @skills:write-documents `APAPALAN_RULES.md` APAPL-PR-13
 
-**Marking format** - tag values in-place where they are already defined (no separate section, no duplication):
+**Marking format** - tag values in-place where they are already defined (no separate section, no duplication); optional source after colon:
 ```
 - **Street**: Rua da Liberdade, 42, 3.o Esq. [LITERAL: registration certificate 2026-01-15]
 - **IBAN**: DE89370400440532013000 [LITERAL]
 - **Tax ID**: 123456789 (obtained 2026-03-10) [LITERAL]
 ```
 
-`[LITERAL]` = copy character-for-character, APAPL-PR-13 applies. Optional source after colon.
-
-**Known GenAI corruption categories** (why this rule exists):
-- **Unicode normalization**: `o` → `º`, `.` → `ª`, straight quotes → curly quotes, half-width → full-width (CJK)
-- **Punctuation drift**: commas → dashes, spaces inserted/removed in IBANs, slash direction changed
-- **Abbreviation/expansion**: "Dto." → "D", "Apt." → "Apartment", "S/O" → "Son of"
-- **Sub-premise loss**: Floor/unit/door numbers dropped or merged into building number (critical for Indian, Portuguese, Japanese addresses where "Flat 4B, 3rd Floor" or "1.o Dto." determines deliverability)
-- **Identifier transposition**: LLM token prediction silently swaps digits in similar IDs sharing a prefix (`acct_7H9j2` → `acct_7H9j3`). Corrupted ID still parses, routes to wrong record
-- **Script/romanization mixing**: Kanji address rewritten in romaji, Devanagari transliterated, Arabic addresses reversed (RTL)
-- **Postal code reformatting**: spaces added/removed (`1000-001` → `1000001`), country-specific formats broken (UK: `SW1A 1AA`, India 6-digit PIN, Japan `〒100-0000`)
-- **"Looks right" hallucination**: Model fills gaps with plausible-but-wrong values (invents house numbers, "corrects" postal codes to nearby valid ones)
-
 ## Date and Time Format
 
-- **In documents**: `YYYY-MM-DD HH:MM` - Example: `2026-03-19 14:30`
-- **In logging**: `YYYY-MM-DD HH:MM:SS` - Example: `2026-03-19 14:30:23`
-- **In filenames**: `YYYY-MM-DD` prefix - Example: `2026-03-19_ServerMigration.md`, `2026-03-19_14-30_MeetingNotes.md`
-- **In session folders**: `YYYY-MM-DD` prefix - Example: `_2026-03-19_FixAuthBug/`
-- **In Document History**: `[YYYY-MM-DD HH:MM]` - Example: `**[2026-03-19 14:30]**`
-- **For months**: `YYYY-MM` - Example: `2026-03`
+- **In documents**: `YYYY-MM-DD HH:MM` - `2026-03-19 14:30`
+- **In logging**: `YYYY-MM-DD HH:MM:SS` - `2026-03-19 14:30:23`
+- **In filenames**: `YYYY-MM-DD` prefix - `2026-03-19_ServerMigration.md`, `2026-03-19_14-30_MeetingNotes.md`
+- **In temp file names**: `_HHmmss` suffix - `.tmp_fix_quotes_143022.ps1`
+- **In session folders**: `YYYY-MM-DD` prefix - `_2026-03-19_FixAuthBug/`
+- **In Document History**: `[YYYY-MM-DD HH:MM]` - `**[2026-03-19 14:30]**`
+- **For months**: `YYYY-MM` - `2026-03`
 
 Never use locale-dependent formats (`03/19/2026`, `19.03.2026`, `March 19, 2026`).
 
@@ -100,9 +81,8 @@ All documents start with (exceptions below):
 - `_SPEC_[Y].md [TOPIC-SP02]` (explicitly exclude if might seem related)
 ```
 
-- Doc ID is required for all documents except the exceptions below
+- Doc ID is required for all documents except the exceptions below. Optional fields, omit if not applicable: Target file, Depends on, Does not depend on
 - Reference other docs by filename AND Doc ID: `_SPEC_CRAWLER.md [CRWL-SP01]`
-- Omit optional fields if not applicable: Target file, Depends on, Does not depend on
 
 **Exceptions** (no Header Block):
 1. Publishing documents (articles, reports, ebooks, blog posts, whitepapers) - the reader sees only title and content; no Header Block, no Doc ID
@@ -117,7 +97,6 @@ Always at document end, reverse chronological order:
 
 **[2026-01-12 14:30]**
 - Added: "Scenario" section with Problem/Solution/What we don't want
-- Changed: Placeholder standardized to `{itemId}` (camelCase)
 - Fixed: Modal OK button signature
 
 **[2026-01-12 10:00]**
@@ -130,58 +109,54 @@ Always at document end, reverse chronological order:
 
 ## Document Rule Exceptions
 
-Documents may opt-in to use Markdown tables or emojis by adding a PromptSystem tag as the **first line** of the document (before the title).
+Documents may opt-in to use Markdown tables or emojis by adding a PromptSystem tag as the **first line** of the document (before the title):
 
-**Syntax:**
 ```html
 <PromptSystem MarkdownTablesAllowed=true EmojisAllowed=true APAPALAN=true MECT=true />
 ```
 
-**Attributes:**
-- `MarkdownTablesAllowed=true` - Allow Markdown tables in this document
-- `EmojisAllowed=true` - Allow emojis in this document
-- `APAPALAN=true` - APAPALAN rules apply ("As Precise As Possible, As Little As Necessary"). Defined in `@skills:write-documents` and `@skills:coding-conventions`
-- `MECT=true` - MECT rules apply ("Minimal Explicit Consistent Terminology"). Defined in `@skills:write-documents` and `@skills:coding-conventions`
+- `MarkdownTablesAllowed=true`, `EmojisAllowed=true` - allow Markdown tables / emojis in this document. Use for comparison documents, feature matrices, compatibility charts, status dashboards
+- `APAPALAN=true`, `MECT=true` - APAPALAN / MECT rules apply. Defined in `@skills:write-documents` and `@skills:coding-conventions`
 
-**Table formatting rule:** When tables are allowed, format with aligned columns using spaces for human readability. No bold, italic, or other formatting inside table cells.
-```markdown
-| Model           | Workers | TPM   |
-|-----------------|---------|-------|
-| gpt-5-nano      | 120+    | ~402K |
-| claude-4-5-opus | 60+     | ~473K |
+**Table formatting rule:** When tables are allowed, align columns with spaces for human readability. No bold, italic, or other formatting inside table cells.
+- GOOD: `| Model      | Workers | TPM   |` above `|------------|---------|-------|`
+- BAD: `|Model|Workers|TPM|` (no spacing), `| **Model** | Workers |` (bold in cells)
+
+**Allowed emojis (when enabled):** ✅ (yes, supported, pass, enabled), ❌ (no, unsupported, fail, disabled), ⚠️ (warning, partial, caution), ★ ☆ ⯪ (filled, outlined, half-filled rating star)
+
+**Usage pattern:** Emoji first, then textual equivalent: `- **MCP** - ✅ Yes`, `- **Hooks** - ❌ No`, `- **Data** - ⚠️ Partial (read-only)`, `- **Docs** - ★★★★⯪ (4.5)`
+
+**Tables ALWAYS allowed, no opt-in tag needed:** documents whose primary purpose is to be read as prose (not reference/lookup) - Minto Pyramid articles (output of `/write-article` or `/propose-article` using MINTO), blog posts, essays, whitepapers, publication-ready reports.
+
+## Presenting Decisions
+
+When [ACTOR] must choose between options (design decisions, open questions, a/b/c problem resolutions), present every decision in this format. Bare option labels ("Outcome A", "option c", "confirm or override") without this structure count as a failed presentation.
+
+```text
+# [Decision ID]: [Question as a plain sentence]
+
+**Problem**: What is wrong or undecided today, observable by the user
+**Context**: Why the problem exists - the constraint, spec clause, or prior finding that created it
+**Review**: Clickable links to the files and sections the user needs to decide, e.g. `path/to/file.md` section "Heading" (line N)
+
+**Options**
+- **1) [Short name]** (recommended - only one option carries this)
+  - What: The concrete change or behaviour
+  - Why it works: The mechanism or evidence that makes it solve the problem
+  - Implication: Cost, side effects, what breaks or must be reverse-updated
+  - Why recommended: One sentence, only on the recommended option
+- **2) [Short name]**
+  - What / Why it works / Implication
 ```
-- BAD: `|Model|Workers|TPM|` (no spacing)
-- BAD: `| **Model** | Workers |` (bold in cells)
 
-**Allowed emojis (when enabled):**
-- ✅ - Yes, supported, pass, enabled
-- ❌ - No, unsupported, fail, disabled
-- ⚠️ - Warning, partial, caution
-- ★ - Filled star (rating)
-- ☆ - Outlined star (rating)
-- ⯪ - Half-filled star (rating)
-
-**Usage pattern:** Emoji first, then textual equivalent
-```markdown
-- **MCP** - ✅ Yes
-- **Hooks** - ❌ No
-- **Data** - ⚠️ Partial (read-only)
-- **Quality** - ★★★☆☆ (3)
-- **Docs** - ★★★★⯪ (4.5)
-```
-
-**When to use exceptions:**
-- Comparison documents where tables improve readability
-- Feature matrices and compatibility charts
-- Status dashboards
-
-**Excluded from the no-tables default (tables ALWAYS allowed, no opt-in tag needed):**
-- The following document types are exempt from the default "no tables" rule. They may use Markdown tables freely without `<PromptSystem MarkdownTablesAllowed=true />`:
-  - Minto Pyramid articles (output of `/write-article` or `/propose-article` using MINTO)
-  - Blog posts and essays
-  - Whitepapers and publication-ready reports
-  - Any document whose primary purpose is to be read as prose (not reference/lookup)
-- Reason: tables in prose-oriented content are acceptable for structured data presentation within articles
+Rules:
+- Exactly one recommendation per decision, stated on the option itself, never in a separate summary
+- List every viable option, including "do nothing" when it is viable; omit options only when they violate a spec clause and say which clause
+- Present only decisions where options differ in cost, quality, scope, or user-facing behaviour. Engineering choices with no user-visible trade-off are NOT presented - the agent decides and records them
+- Close with the exact reply format expected: `DD-04 2, DD-05 1`
+- Fixed points (constraints no option can change) go under Context, not as pseudo-options
+- Review links are mandatory, so [ACTOR] never searches: each file as a clickable path (`tools-and-skills.md` Chat Output) plus section heading and line number. Never raw HTML (stripped, dead links). Do not wrap the decision block in a code fence: paths in code fences are not clickable
+- If no file backs the decision, write `Review: none (decision is self-contained)`; never omit the line
 
 ## Confirmation Keywords
 
@@ -193,22 +168,13 @@ Workflows reference this list as `@rules:core-conventions.md [CONFIRMATION_KEYWO
 
 ## Skill References
 
-Reference skills using `@skills:skill-name` format. The skill name must match a folder in `[AGENT_FOLDER]/skills/`.
-
-- `@skills:write-documents` - Document writing skill
-- `@skills:coding-conventions` - Coding conventions skill
-- `@skills:research-methods` - Research methods skill
-
-**BAD:** `(write-documents skill)`, `write-documents skill`, `the writing skill`
-**GOOD:** `@skills:write-documents`
+Reference skills using `@skills:skill-name` format. The skill name must match a folder in `[AGENT_FOLDER]/skills/`. GOOD: `@skills:write-documents`. BAD: `(write-documents skill)`, `write-documents skill`, `the writing skill`
 
 ## APAPALAN Writing Principle
 
 **APAPALAN** = As Precise As Possible (Priority 1), As Little As Necessary (Priority 2)
 
-All written output - documents, code comments, log messages, commit messages, communications - follows this principle. Full rules in `APAPALAN_RULES.md` (@skills:write-documents skill).
-
-**Why:** Imprecise writing causes wrong assumptions. Verbose writing wastes attention. Precision prevents misunderstanding; brevity respects the reader's time. Precision always wins when the two conflict.
+All written output - documents, code comments, log messages, commit messages, communications - follows this principle. Precision always wins when the two conflict. Full rules: @skills:write-documents `APAPALAN_RULES.md`.
 
 **Minimal subset (always apply):**
 - **APAPL-PR-07**: Be specific - no "handles errors appropriately", say "retry 3 times with exponential backoff"
@@ -220,16 +186,8 @@ All written output - documents, code comments, log messages, commit messages, co
 
 ## Transcription Output
 
-Transcribed content MUST contain only the original document's content. No processing metadata, agent annotations, or workflow artifacts.
+Transcribed content MUST contain only the original document's content. No processing metadata, agent annotations, or workflow artifacts. **Text Style rules do NOT apply to transcribed content.** Transcriptions preserve the original exactly - including curly quotes, typos, unusual punctuation, and formatting choices. Only markdown structural elements (headers, lists, emphasis) are agent-created.
 
-**IMPORTANT: Text Style rules do NOT apply to transcribed content.**
-Transcriptions preserve the original exactly - including curly quotes, typos, unusual punctuation, and formatting choices. Only markdown structural elements (headers, lists, emphasis) are agent-created.
-
-**Prohibited in transcription output:**
-- Source filename, path, or URL
-- Page counts, figure counts, or statistics
-- Transcription date or processing timestamps
-- Verification status or progress markers
-- Agent notes or processing comments
+**Prohibited in transcription output:** source filename, path, or URL; page counts, figure counts, or statistics; transcription date or processing timestamps; verification status or progress markers; agent notes or processing comments.
 
 **Store metadata separately:** If tracking is needed, create a companion `[FILENAME]_meta.json` or add to session NOTES.md.

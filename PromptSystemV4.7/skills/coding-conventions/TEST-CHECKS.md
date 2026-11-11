@@ -37,8 +37,8 @@ Process discipline audit and quality improvement for test writing and execution.
 ### TST-PD-05: Robustness Card Loaded
 
 - Action: agent loaded the robustness card before executing tests
-- Evidence: test commands respect banned command list; time caps applied; on-cap behaviour documented in PROBLEMS.md when caps are hit
-- Failure indicator: agent uses banned commands (piping through streaming filters, running full suite in implementation prompts); no time caps applied; agent hangs on stuck command instead of killing and continuing
+- Evidence: test commands respect banned command list; test commands ran through the supervised runner with the card's expected runtimes; hangs and runtime overruns recorded in the Fails card
+- Failure indicator: agent uses banned commands (piping through streaming filters, running full suite in implementation prompts); test commands ran without the runner; agent waits on a command whose output shows an input prompt; agent ends a test run that still showed progress
 - References: PY-TR-RC-04, PY-TR-PS-01, PY-TR-PS-02
 
 ### TST-PD-06: Mock Transport Used (API-Calling Pipelines)
@@ -55,11 +55,11 @@ Process discipline audit and quality improvement for test writing and execution.
 - Failure indicator: no process sweep in logs; orphan processes accumulating across prompts
 - References: PY-TR-PS-01
 
-### TST-PD-08: Time Caps Applied
+### TST-PD-08: Test Runs Monitored, Ended Only on a Hang
 
-- Action: agent applied time caps to test commands and followed on-cap kill procedure
-- Evidence: PROBLEMS.md entries for cap hits include command, cap, and last 20 output lines; blocked commands recorded
-- Failure indicator: agent waits indefinitely on stuck test command; no PROBLEMS.md entry for cap exceedance; same command allowed to hang repeatedly
+- Action: agent ran test commands through the supervised runner with `-Expected` (`agent-behavior.md` Terminal Hang Prevention), read the `ALIVE` lines while waiting, ended a run only on a hang verdict, and recorded every `KILLED`
+- Evidence: runner log lines with `expected=`; Fails card entries for each `KILLED` include command, hang evidence, and last 20 output lines
+- Failure indicator: test run ended while its `ALIVE` lines showed progress; finished slow run executed again; agent waits indefinitely on a test command with no progress signal; no Fails card entry for a `KILLED` run; same command allowed to hang repeatedly
 - References: PY-TR-PS-02
 
 ## Quality Improvement (QI)

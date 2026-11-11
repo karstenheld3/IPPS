@@ -104,8 +104,8 @@ Quality Improvement (QI)
 
 ### PRMT-QI-06: Hang-Safety Clause Quality
 
-- Question: Does every implementation prompt include a hang-safety clause with project-specific banned commands, time caps, and on-cap behavior?
-- Improvement tip: Add a hang-safety clause to the Constraints section of each implementation prompt. Reference the project's `__CARD_*-Robustness.md` for the banned list instead of repeating it in every prompt. Card structure and agent defaults: @skills:terminal-robustness `ROBUSTNESS_CARD_TEMPLATE.md`.
+- Question: Does every implementation prompt include the one-line hang-safety clause and the runtime-check line, without setting a time limit and without restating monitoring, hang-verdict, or kill procedures?
+- Improvement tip: Use the two lines from `PROMPTS_ROBUSTNESS_GUIDES.md` Sections 2 and 2b; project bans and expected runtimes belong in `__CARD_*-Robustness.md`, failures in `__CARD_*-Fails.md`. Card structures: @skills:terminal-robustness `ROBUSTNESS_CARD_SKELETON.md`.
 
 ### PRMT-QI-07: Findings Card Quality
 
@@ -115,9 +115,9 @@ Quality Improvement (QI)
 ### PRMT-QI-08: Tool Preference Quality
 
 - Question: Do prompt bodies use agent tool directives (grep_search, read_file, find_by_name, code_search) for file search/read operations instead of shell commands?
-- Evidence: scan prompt bodies (excluding Verify sections) for shell file-operation commands (Select-String, Get-ChildItem, Get-Content, cat, grep, find, rg.exe); none found outside Verify sections
+- Evidence: scan prompt bodies and Verify sections for shell file-operation commands (Select-String, Get-ChildItem, Get-Content, cat, grep, find); `rg.exe` only in a tmp script through the supervised runner for folders outside the workspace
 - Failure indicator: prompt body contains `Select-String -Recurse`, `Get-ChildItem -Recurse`, `Get-Content` for file reading; shell commands used where agent tools exist
-- Improvement tip: Replace shell file-operation commands in prompt bodies with agent tool directives: "Search for X using the grep_search tool", "Read `file.ts`", "Find all .ts files using the find_by_name tool". Reserve shell commands for Verify sections (residual sweeps) and process execution (builds, tests, git).
+- Improvement tip: Replace shell file-operation commands in prompt bodies with agent tool directives: "Search for X using the grep_search tool", "Read `file.ts`", "Find all .ts files using the find_by_name tool". Reserve shell commands for process execution (builds, tests, git) through the supervised runner.
 - References: PRMT-CT-12
 
 ### PRMT-QI-09: Targeted Test Scope Quality
@@ -125,7 +125,7 @@ Quality Improvement (QI)
 - Question: Do verification sections in implementation prompts run specific test files instead of the full suite?
 - Evidence: scan Verify sections for bare `bun test`, `npm test`, or equivalent full-suite commands in implementation prompts; full suite only in explicitly marked final verification
 - Failure indicator: implementation prompt Verify section contains bare `bun test` or `npm test` without specific file paths; full suite run during implementation steps
-- Improvement tip: Replace bare `bun test` with `bun test tests/unit/auth.test.ts tests/unit/token_validator.test.ts` (specific files). Reserve full suite for the final verification step of the sequence, with a time cap and non-blocking execution.
+- Improvement tip: Replace bare `bun test` with `bun test tests/unit/auth.test.ts tests/unit/token_validator.test.ts` (specific files). Reserve full suite for the final verification step of the sequence, run through the supervised runner with non-blocking execution; it runs to its end.
 - References: PRMT-HS-09
 
 ### PRMT-QI-10: Interleaved Verification Prompts Quality

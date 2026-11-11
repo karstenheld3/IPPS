@@ -48,6 +48,88 @@ CompanyRepo structure:
 - knowledge/ (knowledge bundles shared to downstream repos)
 - specs/ (specs bundles shared to downstream repos)
 
+## Folder Structure Trees
+
+Annotated trees for the three project structures. Summary: `promptsystem-core.md` section Folder Structure.
+
+### Single Project (No Monorepo)
+
+```
+[WORKSPACE_FOLDER]/
+├── [AGENT_FOLDER]/
+│   ├── rules/              # Agent rules (.md files)
+│   ├── workflows/          # Agent workflows (.md files)
+│   └── skills/             # Agent Skills (folders with SKILL.md)
+├── _archive_gitignore/     # Archived sessions (not versioned)
+├── _[SESSION_FOLDER]/       # Session folders start with underscore
+│   ├── _agentwork/         # Agent artifacts (ignored, deleted by /cleanup)
+│   ├── _IMPL_*.md          # Implementation plans
+│   ├── _INFO_*.md          # Information documents
+│   ├── _SPEC_*.md          # Specifications
+│   ├── _TEST_*.md          # Test plans
+│   ├── NOTES.md            # Session notes
+│   ├── PROBLEMS.md         # Session problems
+│   ├── PROGRESS.md         # Session progress
+│   └── FAILS.md            # Lessons learned
+├── specs/                   # Workspace-level specs ([DEV_SPECS_FOLDER])
+├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
+├── src/                    # Source code
+├── !NOTES.md               # Workspace notes (priority file)
+├── PROBLEMS.md            # Known problems
+├── !PROGRESS.md            # Overall progress
+└── FAILS.md                # Lessons learned (workspace-level)
+```
+
+### Monorepo (Multiple Projects)
+
+```
+[WORKSPACE_FOLDER]/
+├── [AGENT_FOLDER]/
+│   ├── rules/              # Agent rules (.md files)
+│   ├── workflows/          # Agent workflows (.md files)
+│   └── skills/             # Agent Skills (folders with SKILL.md)
+├── _archive_gitignore/     # Archived sessions (all projects, not versioned)
+├── specs/                   # Workspace-level specs ([DEV_SPECS_FOLDER])
+├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
+├── [PROJECT_A]/
+│   ├── _[SESSION_FOLDER]/   # Project A sessions
+│   ├── src/                # Project A source code
+│   ├── NOTES.md            # Project A notes
+│   ├── PROBLEMS.md         # Project A problems
+│   ├── PROGRESS.md         # Project A progress
+│   └── FAILS.md            # Project A lessons learned
+├── [PROJECT_B]/
+│   └── ...                 # Same structure
+├── !NOTES.md               # Workspace-level notes
+├── PROBLEMS.md            # Workspace-level problems
+├── !PROGRESS.md            # Workspace-level progress
+└── FAILS.md                # Lessons learned (workspace-level)
+```
+
+### Multi-Repo Workspace
+
+```
+[WORKSPACE_FOLDER]/
+├── [AGENT_FOLDER]/
+│   ├── rules/              # Agent rules (.md files)
+│   ├── workflows/          # Agent workflows (.md files)
+│   └── skills/             # Agent Skills (folders with SKILL.md)
+├── _archive_gitignore/     # Archived sessions (not versioned)
+├── _[SESSION_FOLDER]/       # Session folders start with underscore
+├── specs/                   # Workspace-level specs ([DEV_SPECS_FOLDER])
+├── docs/                    # Explanatory knowledge (INFO, research, how-tos)
+├── [folder-name].code-workspace  # References ProductRepo (may be outside [WORKSPACE_FOLDER])
+├── !NOTES.md               # Workspace notes (priority file)
+├── PROBLEMS.md            # Known problems
+├── !PROGRESS.md            # Overall progress
+└── FAILS.md                # Lessons learned (workspace-level)
+
+[PRODUCT_REPO_FOLDER]/
+├── src/                    # Product source code
+├── docs/                   # Product documentation
+└── README.md              # Product README
+```
+
 ## How to Configure Sync Sources
 
 Direction definitions:

@@ -16,7 +16,7 @@ Verify work against specs, rules, and quality standards.
 Invoke based on context:
 - @skills:write-documents for document verification
 - @skills:coding-conventions for code verification
-- @skills:terminal-robustness for robustness cards and terminal command patterns - verify `__CARD_*-Robustness.md` instances against `ROBUSTNESS_CARD_SKELETON.md` and TERMROBUSTNESS-CD rules
+- @skills:terminal-robustness for cards and terminal command patterns - verify `__CARD_*-Robustness.md` and `__CARD_*-Fails.md` instances against `ROBUSTNESS_CARD_SKELETON.md` and TERMROBUSTNESS-CD rules
 
 **CRITICAL**: Skill invocation returns instructions only. You MUST also read the supporting files listed in skill output (e.g., `PYTHON-RULES.md`, `WORKFLOW-RULES.md`) to get actual verification rules.
 
@@ -365,7 +365,7 @@ Detect by: filename pattern `_PROMPTS_*.md` or file starts with a fenced code bl
 
 **Read**: @skills:write-documents `PROMPTS_RULES.md` (all PRMT-* rules), `PROMPTS_GUIDES.md`, `APAPALAN_RULES.md`; @skills:llm-tools `MODEL_INVENTORY.md`
 
-- Verify against all PRMT-* rules in `PROMPTS_RULES.md` — all categories: FT, ST, SQ, CT, SC, EX, NM
+- Verify against all PRMT-* rules in `PROMPTS_RULES.md` — all categories: FT, ST, SQ, CT, SC, EX, NM, HS (hang safety), RB (robustness)
 - For PRMT-SC-05 (effort and model specification): run its model-data checks against the `MODEL_INVENTORY.md` row of `intended_model`
 - Verify against `APAPALAN_RULES.md` (precision, brevity)
 - For PRMT-CT-08/CT-10 (workflow call formatting): check every backtick-wrapped workflow name inside a fence for execution verbs (run, use, execute, call, invoke, perform, apply, do). If found → violation. If no execution verb → correct reference.

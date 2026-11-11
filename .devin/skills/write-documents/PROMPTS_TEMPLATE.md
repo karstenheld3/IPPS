@@ -45,7 +45,8 @@ Constraints:
 - [Boundaries to respect]
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_[TOPIC]-Robustness.md`. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_[TOPIC]-Robustness.md`.
+- Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_[TOPIC]-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
 
 Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
@@ -84,7 +85,8 @@ Constraints:
 - [What NOT to do]
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_[TOPIC]-Robustness.md`. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_[TOPIC]-Robustness.md`.
+- Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_[TOPIC]-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
 
 Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
@@ -131,7 +133,8 @@ Constraints:
 - Limit analysis to src/auth/ directory only
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_[TOPIC]-Robustness.md`. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_[TOPIC]-Robustness.md`.
+- Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_[TOPIC]-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
 
 Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
@@ -171,11 +174,14 @@ Constraints:
 - Do not add new dependencies
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_[TOPIC]-Robustness.md`. [Time cap] cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_[TOPIC]-Robustness.md`.
+- Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_[TOPIC]-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
 
 Findings card: Load and update `__CARD_[TOPIC]-Findings.md`. File glitches, spec-code mismatches, and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
 Verify: Run `pnpm test:auth`. All tests pass. The specific vulnerability from step 1 is no longer present.
+
+Promote the "Never again" lines of `_agentwork/__CARD_[TOPIC]-Fails.md` to the banned list of `_agentwork/__CARD_[TOPIC]-Robustness.md` (Fails card rules: `ROBUSTNESS_CARD_SKELETON.md`).
 
 **STOP.** Report: test pass status, final run status, and a clickable summary artifact list with multiple headings for each output group formatted as:
 ### [Output Group Heading]

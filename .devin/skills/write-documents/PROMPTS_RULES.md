@@ -64,11 +64,11 @@ Execution (EX)
 - PRMT-EX-03: Execution authority - prompts in _PROMPTS_*.md files carry implicit execution authority, agent must complete without asking for confirmation
 
 Hang Safety (HS)
-- PRMT-HS-01: Hang-safety clause required in implementation prompts
-- PRMT-HS-02: Banned command list must be project-specific
-- PRMT-HS-03: Time caps on all command executions
-- PRMT-HS-04: On-cap behavior: kill, record, continue
-- PRMT-HS-05: Process cleanup after command execution
+- PRMT-HS-01: One-line hang-safety clause required in implementation prompts
+- PRMT-HS-02: Banned command list must be project-specific (in the robustness card)
+- PRMT-HS-03: Expected runtimes for command executions (in the robustness card); no time limit on any command
+- PRMT-HS-04: Hang handling is not restated in prompts (generic rule + runtime-check line)
+- PRMT-HS-05: Process cleanup is not restated in prompts (runner kills the whole tree)
 - PRMT-HS-06: No interactive commands (stdin, pager, key wait, 2>&1 blocking)
 - PRMT-HS-07: Verification names specific test files and residual sweeps
 - PRMT-HS-08: Prior-step verification for dependent prompts
@@ -83,6 +83,8 @@ Robustness (RB)
 - PRMT-RB-04: Glitches filed in findings card before end-of-prompt commit
 - PRMT-RB-05: Glitch entry format: what, expected, actual, root cause, resolution, prevention
 - PRMT-RB-06: Card system end-of-prompt protocol includes findings-card update step
+- PRMT-RB-07: Session PROBLEMS.md records deferred problems and prompts stopped by a repeated failure
+- PRMT-RB-08: Fails card designated; exactly one runtime-check line per implementation prompt
 
 Naming (NM)
 - PRMT-NM-01: Filename follows `_PROMPTS_[NN]-[Topic].md` pattern
@@ -729,7 +731,7 @@ PromptSystemV4.5/ to [AGENT_FOLDER]/
 ```
 `````
 
-This aligns with `agent-behavior.md` "Prompt Templates in NOTES.md" which requires standalone lines for workflow calls in fenced prompt blocks.
+This aligns with `tools-and-skills.md` "Prompt Templates in NOTES.md" which requires standalone lines for workflow calls in fenced prompt blocks.
 
 ## PRMT-CT-09: Formatting Discipline Inside Fences
 
@@ -1577,7 +1579,7 @@ Read `__CARD_00-Rules.md`. Treat earlier conversation as compacted. Step P1-S1.
 
 ## PRMT-HS-01: Hang-Safety Clause Required
 
-Implementation prompts (prompts that run commands, execute builds, run tests, or spawn processes) MUST include a hang-safety clause in the Constraints section. The clause states that no command may wait for a key, stdin, a pager, or an unbounded child. One hung command stops the entire prompt sequence — the execution engine cannot skip it.
+Implementation prompts (prompts that run commands, execute builds, run tests, or spawn processes) MUST include a one-line hang-safety clause in the Constraints section. The clause references `agent-behavior.md` Terminal Hang Prevention (supervised runner) and the robustness card; it does not restate them. One hung command stops the entire prompt sequence — the execution engine cannot skip it.
 
 Research or analysis prompts that only read files are exempt. Prompts that run any command beyond file reads must include the clause.
 
@@ -1604,7 +1606,7 @@ Run the test suite and verify all tests pass.
 Constraints:
 - Do not modify test files
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: see `__CARD_01-Robustness.md`. Test suites run with a 10-minute cap. On cap: kill, record in PROBLEMS.md, continue.
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_01-Robustness.md`.
 ```
 `````
 
@@ -1622,61 +1624,57 @@ Hang safety: no command may wait for stdin or a pager.
 
 **GOOD** (card-referenced banned list):
 `````markdown
-Hang safety: no command may wait for a key, stdin, a pager, or an unbounded child. Banned: see `__CARD_01-Robustness.md`. Test suites run with a 10-minute cap. On cap: kill, record in PROBLEMS.md, continue.
+Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_01-Robustness.md`.
 ```
 `````
 
-## PRMT-HS-03: Time Caps on All Command Executions
+## PRMT-HS-03: Expected Runtimes, No Time Limit
 
-Every command that runs a process (test suites, builds, application runs, long-running scripts) must specify a time cap in the hang-safety clause or verification section. The cap prevents indefinite waits when a process hangs. Default caps per command type live in the agent robustness card templates (@skills:terminal-robustness); the project card carries the tuned values.
+Every command that runs a process has an expected runtime, passed as `-Expected` to the supervised runner. It starts the liveness check and feeds the runtime check; it never ends a command. Expected runtimes per command class live in the robustness card (starting values in the agent card templates, @skills:terminal-robustness). Prompts name expected seconds only for a command class the card does not list. No prompt gives a command a time limit: a limit ends work that would have finished and forces a second run.
 
-Verifiable from artifact: check that each command-execution prompt specifies a time cap for long-running commands. Prompts that only run instant commands (git status, file reads) are exempt.
+Verifiable from artifact: the robustness card lists expected runtimes for the command classes the prompts run; a prompt with an unlisted long-running command names its expected seconds; no prompt contains a time limit with a stop instruction.
 
-**BAD** (no time cap on test suite execution):
+**BAD** (time limit ends a slow run that would finish):
 `````markdown
-Verify: Run `bun test`. All tests pass.
+Verify: Run `bun test` with a 10-minute limit; stop it when the limit is reached. All tests pass.
 ```
 `````
 
-**GOOD** (time cap specified):
+**GOOD** (expected runtime from the card, run to its end):
 `````markdown
-Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. All tests pass. On cap: kill, record in PROBLEMS.md, continue.
+Verify: Run `bun test --timeout 20000` (per-test timeout; expected runtime of the full suite from the robustness card). All tests pass.
 ```
 `````
 
-## PRMT-HS-04: On-Cap Behavior
+## PRMT-HS-04: Hang Handling
 
-The hang-safety clause must specify what happens when a command exceeds its time cap: (1) kill the process tree, (2) record the command and cap in PROBLEMS.md, (3) continue with the next step. Never re-run the same command blocking after a cap.
+Hang handling is not restated in prompts: the agent monitors the runner's `ALIVE` lines and ends a command only on a hang verdict (`agent-behavior.md` Terminal Hang Prevention step 5); the runner then kills the whole tree and logs `KILLED`; the runtime-check line (PRMT-RB-08) records the failure in the Fails card and stops the prompt when it repeats.
 
-Verifiable from artifact: check that the hang-safety clause or verification section includes on-cap behavior: kill, record, continue.
+Verifiable from artifact: no prompt contains its own time limit, kill, or hang procedure; every implementation prompt has the runtime-check line.
 
-**BAD** (no on-cap behavior):
+**BAD** (time limit and kill procedure restated, differs from the rule):
 `````markdown
-Hang safety: no command may wait for stdin. Test suites run with a 10-minute cap.
+Hang safety: no command may wait for stdin. Test suites run with a 10-minute cap. On cap: stop the process tree, record command and cap in PROBLEMS.md, continue.
 ```
 `````
 
-**GOOD** (on-cap behavior specified):
-`````markdown
-Hang safety: no command may wait for stdin. Test suites run with a 10-minute cap. On cap: stop the process tree, record command and cap in PROBLEMS.md, continue with the next step. Never re-run the same command blocking.
-```
-`````
+**GOOD**: hang-safety clause per PRMT-HS-01 plus the runtime-check line per PRMT-RB-08.
 
 ## PRMT-HS-05: Process Cleanup After Command Execution
 
-Prompts that spawn processes (test runners, builds, application runs) must specify process cleanup after execution. The clause must verify no orphan processes remain and stop them if found. This prevents orphaned processes from accumulating across prompts and consuming resources.
+Process cleanup is mechanical and is not restated in prompts: the supervised runner runs every command in a Job Object that ends all descendants when the script exits or when the agent ends it after a hang verdict (HANGBENCH: 0 survivors in 27 cases). Prompts that intentionally start a long-lived process (dev server for a test) state when it must end.
 
-Verifiable from artifact: check that prompts spawning processes include a cleanup statement: verify no orphans, stop if found.
+Verifiable from artifact: no prompt contains manual orphan sweeps (`Get-Process ... | Stop-Process`) for commands run through the runner.
 
-**BAD** (no cleanup after process-spawning command):
+**BAD** (manual sweep that duplicates the runner):
 `````markdown
-Verify: Run `bun test`. All tests pass.
+Verify: Run `bun test`. After completion: `Get-Process bun* | Stop-Process`. Orphans stopped.
 ```
 `````
 
-**GOOD** (cleanup specified):
+**GOOD**:
 `````markdown
-Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. After completion: `Get-Process [name]* -ErrorAction SilentlyContinue` returns nothing. Orphans stopped, count recorded in PROGRESS.md.
+Verify: Run `bun test tests/unit/auth.test.ts`. All tests pass.
 ```
 `````
 
@@ -1823,19 +1821,42 @@ Verifiable from artifact: check that card 00 Section 3 includes a findings-card 
 
 ## PRMT-RB-07: Session PROBLEMS.md Records Deferred Problems
 
-Session PROBLEMS.md records problems encountered during prompt execution that must be approached later. This includes: blockers that stopped a prompt from completing, deferred issues that could not be fixed in-prompt, and timeouts or hangs that require investigation. PROBLEMS.md does NOT replace the findings card — it records problems that need later attention, while the findings card captures ALL glitches including those fixed in-prompt.
+Session PROBLEMS.md records problems encountered during prompt execution that must be approached later. This includes: blockers that stopped a prompt from completing, prompts stopped because the same failure repeated (the entry names the Fails entry ID, e.g. `FL-03`), and deferred issues that could not be fixed in-prompt. PROBLEMS.md does NOT replace the findings card or the Fails card — command failures and hangs go to the Fails card (PRMT-RB-08), content glitches to the findings card.
 
-Verifiable from artifact: check that PROBLEMS.md entries describe problems requiring later attention, not detailed glitch logs. Glitch details belong in the findings card.
+Verifiable from artifact: check that PROBLEMS.md entries describe problems requiring later attention, not detailed glitch logs.
+
+## PRMT-RB-08: Fails Card and Runtime-Check Line
+
+Every prompt sequence that runs commands uses the Fails card of its working folder, `_agentwork/__CARD_[TOPIC]-Fails.md` (structure and rules: @skills:terminal-robustness `ROBUSTNESS_CARD_SKELETON.md`); `/write-prompts` reuses it if present, else creates it. Every implementation prompt carries exactly one runtime-check line in Constraints (template: `PROMPTS_ROBUSTNESS_GUIDES.md` Section 2b). The line makes the agent state the expected seconds, check the "Never again" list before each command, read the `ALIVE` lines while a command runs, end it only on a hang verdict, compare with `elapsed=` from the runner log, write a Fails entry at once on failure, and stop the prompt when the same failure repeats.
+
+Verifiable from artifact: the Fails card exists; each implementation prompt has exactly one line starting with `Runtime check:` that names the Fails card.
+
+**BAD** (time limit ends slow work, hang recorded nowhere, no expectation stated):
+`````markdown
+```
+Constraints:
+- Hang safety: no command may wait for stdin. Test suites run with a 10-minute cap. On cap: kill, record in PROBLEMS.md, continue.
+```
+`````
+
+**GOOD**:
+`````markdown
+```
+Constraints:
+- Hang safety: commands per `agent-behavior.md` Terminal Hang Prevention (supervised runner); bans and expected runtimes per `_agentwork/__CARD_01-Robustness.md`.
+- Runtime check: before each command state the expected seconds and check the "Never again" list in `_agentwork/__CARD_01-Fails.md`; while it runs read the `ALIVE` lines in the runner log and end it only on a hang verdict, never for its runtime; after it compare with `elapsed=`; on KILLED, ERROR, unexpected exit, or elapsed above both 3x expected and expected + 30 s, write a Fails card entry at once, fix the root cause, continue (a finished slow command is never re-run); same failure twice in this prompt: stop with a PROBLEMS.md entry naming the Fails entry ID.
+```
+`````
 
 ## PRMT-SQ-04: Interleaved Verification Prompts
 
-Insert a verification prompt after every checkpoint interval of implementation prompts, plus a final checkpoint at the end of every prompts file. The checkpoint interval comes from the Items value of the `intended_model` row in `MODEL_INVENTORY.md`: Items 8 every 3 implementation prompts, Items 6 every 2, Items 5 or less after every prompt (`PROMPTS_GUIDES.md` Section 1g step 6). A verification prompt runs `/verify` against the planning document (STRUT or TASKS) and the prompts file for prompts executed so far, then runs `/fix` to address gaps and remaining work. This catches drift early — before downstream prompts build on incorrect state.
+Insert a verification prompt after every checkpoint interval of implementation prompts, plus a final checkpoint at the end of every prompts file. The checkpoint interval comes from the Items value of the `intended_model` row in `MODEL_INVENTORY.md`: Items 8 every 3 implementation prompts, Items 6 every 2, Items 5 or less after every prompt (`PROMPTS_GUIDES.md` Section 1g step 6). A verification prompt runs `/verify` against the planning document (STRUT or TASKS) and the prompts file for prompts executed so far, then runs `/fix` to address gaps and remaining work. The final checkpoint of each prompts file also promotes the Fails card "Never again" lines to the robustness card banned list (Fails card rules in `ROBUSTNESS_CARD_SKELETON.md`). This catches drift early — before downstream prompts build on incorrect state.
 
 Rationale: An observed security remediation sequence had 5 sub-chains with 3-5 prompts each. Without interleaved verification, spec-code mismatches accumulated across prompts and were only caught at the end, requiring expensive rework. Interleaved verification catches drift at the point of occurrence, limiting blast radius to one checkpoint interval instead of the full sequence.
 
 Verification prompts are NOT implementation prompts — they do not run code, tests, or builds. They run `/verify` and `/fix` workflows only. They do not count toward the 10 implementation prompts per file (PRMT-SC-04).
 
-Verifiable from artifact: no run of consecutive implementation prompts is longer than the checkpoint interval, and the last prompt of the file is a verification prompt (containing `/verify` and `/fix` workflow calls).
+Verifiable from artifact: no run of consecutive implementation prompts is longer than the checkpoint interval, and the last prompt of the file is a verification prompt (containing `/verify` and `/fix` workflow calls) that names the Fails card and the robustness card for the promotion step.
 
 **BAD** (5 implementation prompts at Items 6, no interleaved verification):
 `````markdown
@@ -2054,7 +2075,7 @@ Verify: Run `bun test tests/unit/auth.test.ts tests/unit/token_validator.test.ts
 ```
 Final verification: run the full test suite to confirm no regressions.
 
-Verify: Run `bun test --timeout 20000` non-blocking with a 10-minute cap. All tests pass.
+Verify: Run `bun test --timeout 20000` (per-test timeout; expected runtime of the full suite from the robustness card). All tests pass.
 ```
 `````
 
@@ -2148,7 +2169,7 @@ Result: Code changed, spec verified and updated if needed. Spec-code consistency
 
 ## PRMT-HS-11: Agent Tool Limits from the Robustness Card
 
-Agent-tool robustness (tool-call payload size, edit chunking, stall recovery) is separate from terminal robustness (commands run in the terminal). The prompt-writing agent is assumed to be the prompt-executing agent, so the single source is the writing agent's agent-specific rule file, section Tool-Call Payload Limit; if absent, `agent-behavior.md` Large File Writes. The robustness card section `## Agent tool limits` holds a verbatim copy of that rule. Prompts that write or edit files reference the card; they never restate a token number.
+Agent-tool robustness (tool-call payload size, edit chunking, stall recovery) is separate from terminal robustness (commands run in the terminal). The prompt-writing agent is assumed to be the prompt-executing agent, so the single source is the writing agent's agent-specific rule file, section Tool-Call Payload Limit; if absent, `tools-and-skills.md` Large File Writes. The robustness card section `## Agent tool limits` holds a verbatim copy of that rule. Prompts that write or edit files reference the card; they never restate a token number.
 
 A token number written into a prompt goes stale when the rule changes and overrides the agent-specific limit (a "~4,000 tokens" prompt hangs an agent whose limit is lower).
 

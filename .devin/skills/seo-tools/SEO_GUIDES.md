@@ -144,7 +144,7 @@ Requirements per media type: `SEO_CHECKS.md` section 4. Procedure per type:
 
 ### Competitor gap method (6 steps)
 
-1. Identify search and AI competitors: domains in top-10 and AI citations for core topics; paid: `dataforseo/query.py competitors example.com --limit 20` ($0.0144) (SEO-TLS-01)
+1. Identify search and AI competitors: domains in top-10 and AI citations for core topics; paid: `python tiers.py run competitors example.com` (about $0.03; SERP-based set confirmed by `dataforseo competitors`, plus ads of the top 2) (SEO-TLS-01, SEO-TLS-11)
 2. Extract three gap types: A) classic keyword gap (>= 2 of 3 competitors rank 1-20, own domain > 20 or absent; paid Labs data); B) first-party AI citation gap (Bing grounding queries with Citation Share < 15% [ASSUMED], $0); C) third-party co-citation gap (comparison pages cite competitors, not the brand)
 3. Remove competitor brand terms (unless an "alternatives" or "vs" page is planned), unoffered features, and B = 1 queries
 4. Cluster by SERP overlap (>= 3 shared URLs); if an owned page ranks 4-30 for a cluster, route it to REFRESH or EXPAND on that URL instead of a new page (SEO-DMD-06, SEO-AUD-05)
@@ -213,7 +213,7 @@ Cadence day counts are [ASSUMED] unless stated.
 
 1. Probe the tiers once per task: `python tiers.py probe --balances`; note which tiers are unavailable (SEO-TLS-11)
 2. Find the question type in the `SKILL.md` matrix; run all its Tier 1 sources and keep their results (SEO-TLS-01)
-3. Tier 2: run the row's prepaid sources on the top 1-2 candidates; compare with Tier 1 and label CONFIRMED, CONFLICT, or SINGLE-SOURCE; rows marked "none needed" end at Tier 1 (SEO-TLS-11)
+3. Tier 2: matrix rows 2, 3, 4: `python tiers.py run keywords|serp|competitors TARGET` (checks between steps, budget `--max-usd`, claim labels); other rows: run the row's prepaid sources cheap to expensive on the candidates found so far; compare with Tier 1 and label CONFIRMED, CONFLICT, or SINGLE-SOURCE; rows marked "none needed" end at Tier 1 (SEO-TLS-11)
 4. Before a paid DataForSEO batch: `dataforseo/query.py balance`; compute the estimate with the price table in `dataforseo/ENDPOINTS.md`; batch up to 1,000 keywords per search-volume task (SEO-TLS-05)
 5. Run the command; the script prints the estimate and aborts above `--max-cost` (default $0.10) or `--max-credits` (default 20); raise the limit only for a stated reason
 6. Tier 3: when the probe lists a Tier 3 provider, state the estimated vendor units, call its REST API for the same claims, and compare with Tiers 1 and 2; otherwise record "Tier 3 unavailable"

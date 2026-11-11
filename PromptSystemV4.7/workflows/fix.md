@@ -12,7 +12,8 @@ Fix any problem by reading relevant PromptSystem knowledge and applying it.
 
 ## Required Reading (Always)
 
-- `rules/promptsystem-core.md` - Core definitions, document types, workflow reference
+- `rules/promptsystem-core.md` - Core definitions, document types
+- `rules/tools-and-skills.md` - Workflow reference, quality pipelines, tool rules
 - `rules/agent-behavior.md` - Attitude, communication, work patterns
 
 ## MUST-NOT-FORGET
@@ -49,7 +50,7 @@ DOCUMENT:
 DESIGN:
 - `workflows/critique.md` - Finding flaws (mindset, questions)
 - `workflows/reconcile.md` - Pragmatic evaluation
-- `rules/edird-phase-planning.md` - Phase gates
+- `skills/promptsystem/PROMPTSYSTEM_EDIRD.md` - Phase gates
 
 UNDERSTANDING:
 - `workflows/research.md` - Research principles (MEPI/MCPI)

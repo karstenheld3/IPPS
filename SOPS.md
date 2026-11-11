@@ -11,7 +11,7 @@
 - `[PROMPTSYSTEM_FOLDER]` — current PromptSystem source (e.g., `E:\Dev\IPPS\PromptSystemVx.y`)
 - `[WORKSPACE]` — `E:\Dev\IPPS`
 - `[AGENT_FOLDER]` — active agent config (e.g., `[WORKSPACE]\.devin`)
-- `<skill>` — skill folder name (e.g., `playwriter-mcp`)
+- `<skill>` — skill folder name (e.g., `pdf-tools`)
 - `<workflow>` — workflow filename without extension (e.g., `adp`)
 
 ## MUST-NOT-FORGET
@@ -45,7 +45,7 @@ SOPs reference this command as "sync to `[AGENT_FOLDER]`".
 
 ## SOP 1: New Skill Created
 
-**Scenario**: Adding a new skill folder (e.g., `playwriter-mcp`) to PromptSystem.
+**Scenario**: Adding a new skill folder (e.g., `pdf-tools`) to PromptSystem.
 
 ### Files to modify
 
@@ -290,11 +290,11 @@ Expected: 9 OK, 0 FAIL (3 targets x 3 files).
 
 2. **Sync to `[AGENT_FOLDER]`**: Run robocopy /MIR (see NOTES.md → PromptSystem Source/Sync Rules)
 
-3. **If new workflow**: register in `promptsystem-core.md` Workflow Reference section (alphabetical)
+3. **If new workflow**: register in `tools-and-skills.md` Workflow Reference section (in its purpose group)
 
 4. **If new workflow**: update `README.md` workflow list and count
 
-5. **Run `/sync`** to propagate changes to `promptsystem-core.md` and `README.md`
+5. **Run `/sync`** to propagate changes to `tools-and-skills.md` and `README.md`
 
 6. **If new TOPIC introduced**: register in `ID-REGISTRY.md`
 
@@ -306,13 +306,13 @@ Expected: 9 OK, 0 FAIL (3 targets x 3 files).
    ```
    Then sync: Run robocopy /MIR (see NOTES.md → PromptSystem Source/Sync Rules) — `/MIR` deletes from `.devin/` automatically
 
-2. **Remove from `promptsystem-core.md`** Workflow Reference section
+2. **Remove from `tools-and-skills.md`** Workflow Reference section
 
 3. **Remove from `README.md`** workflow list, update count
 
 4. **If workflow had a TOPIC**: mark deprecated in `ID-REGISTRY.md` (keep history)
 
-5. **Run `/sync`** to propagate removals to `promptsystem-core.md` and `README.md`
+5. **Run `/sync`** to propagate removals to `tools-and-skills.md` and `README.md`
 
 **Downstream repos**: Cross-repo sync is a separate, explicit action. Add `workflows/<workflow>.md` to `deprecated` array in `promptsystem-sync.json` for cleanup via `sync.ps1 -execute` at target.
 
@@ -449,6 +449,9 @@ Expected: `None found!` (zero broken references). Any match must be fixed before
 Run `/sync workspace -diff` in preview mode. Any unexpected items in `Add` / `Modify` / `Delete` indicate a missed sync or unregistered skill.
 
 ## Document History
+
+**[2026-11-11 21:12]**
+- Changed: SOP 6 - Workflow Reference section lives in `tools-and-skills.md` (moved from `promptsystem-core.md`, grouped by purpose instead of alphabetical)
 
 **[2026-09-06 14:50]**
 - Removed: [SKILL_CATEGORIES] section from NOTES.md and template — skills discovered by scanning skills/ folder, sync controlled by devsystem-sync.json bundles
