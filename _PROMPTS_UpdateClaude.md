@@ -15,14 +15,14 @@ Read `__CARD_UpdateClaude-Findings.md` in the repository root (create it in this
 
 Objective: source inventory recorded and the deployment target reset so the migration prompts (2, 3, and 5) rebuild `.claude\` from a clean state.
 
-Count with the find_by_name tool: markdown files in `PromptSystemV4.7\rules\` (expected 9), markdown files in `PromptSystemV4.7\workflows\` (expected 62), skill folders in `PromptSystemV4.7\skills\` (expected 25). Record the three actual counts and any deviation from the expected counts in `__CARD_UpdateClaude-Findings.md`. Delete `.claude\rules\` and `.claude\skills\` if they exist (full rebuild semantics).
+Count with the find_by_name tool: markdown files in `PromptSystemV4.7\rules\` (expected 9), markdown files in `PromptSystemV4.7\workflows\` (expected 62), skill folders in `PromptSystemV4.7\skills\` (expected 22). Record the three actual counts and any deviation from the expected counts in `__CARD_UpdateClaude-Findings.md`. Delete `.claude\rules\` and `.claude\skills\` if they exist (full rebuild semantics).
 
 Constraints:
 - Do not modify anything under `PromptSystemV4.7\` - it is the read-only source of truth
 - Do not delete any `.claude\` content other than the `rules\` and `skills\` subtrees (leave `settings.json` and any other content untouched)
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: Read-Host, pause, Get-Credential, Get-Content -Wait, 2>&1 with Blocking:true. File search and reads use agent tools (find_by_name, read_file, grep_search), not Get-ChildItem -Recurse or Select-String -Recurse. 1-minute cap per command. On cap: stop the process, record command and cap in PROBLEMS.md, continue.
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: Read-Host, pause, Get-Credential, Get-Content -Wait, 2>&1 with Blocking:true. File search and reads use agent tools (find_by_name, read_file, grep_search), not Get-ChildItem -Recurse or Select-String -Recurse. No time limit: a command that shows progress runs to its end. End a command only when it hangs (output shows a wait that cannot end, or no progress for 5 minutes past its expected runtime); then record command and hang evidence in PROBLEMS.md, continue.
 
 Findings card: Load and update `__CARD_UpdateClaude-Findings.md`. Record the source inventory counts and deviations. Read at prompt startup for unresolved entries from prior prompts.
 
@@ -49,7 +49,7 @@ Constraints:
 - Do not deploy `devin-cascade.md` or `devin-devin.md`
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost (overwrite, never append)
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: Read-Host, pause, Get-Credential, Get-Content -Wait, 2>&1 with Blocking:true. File operations use agent tools. 1-minute cap per command. On cap: stop the process, record command and cap in PROBLEMS.md, continue.
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: Read-Host, pause, Get-Credential, Get-Content -Wait, 2>&1 with Blocking:true. File operations use agent tools. No time limit: a command that shows progress runs to its end. End a command only when it hangs (output shows a wait that cannot end, or no progress for 5 minutes past its expected runtime); then record command and hang evidence in PROBLEMS.md, continue.
 
 Findings card: Load and update `__CARD_UpdateClaude-Findings.md`. File glitches and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
@@ -90,7 +90,7 @@ Constraints:
 - Do not create a `.claude\commands\` folder (skills are the recommended format; commands are legacy)
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost (folders overwritten)
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: Read-Host, pause, Get-Credential, Get-Content -Wait, 2>&1 with Blocking:true. File operations use agent tools. 1-minute cap per command. On cap: stop the process, record command and cap in PROBLEMS.md, continue.
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: Read-Host, pause, Get-Credential, Get-Content -Wait, 2>&1 with Blocking:true. File operations use agent tools. No time limit: a command that shows progress runs to its end. End a command only when it hangs (output shows a wait that cannot end, or no progress for 5 minutes past its expected runtime); then record command and hang evidence in PROBLEMS.md, continue.
 
 Findings card: Load and update `__CARD_UpdateClaude-Findings.md`. File glitches and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
@@ -121,7 +121,7 @@ all gaps and remaining work found.
 
 ## Prompt 5 - Migrate skills
 
-<!-- Workflow skills verified. Deploys 24 skill folders with the invocation classification. -->
+<!-- Workflow skills verified. Deploys 21 skill folders with the invocation classification. -->
 
 ```
 Update Claude [ 05 / 07 ] - Migrate skills
@@ -130,21 +130,21 @@ Read `__CARD_UpdateClaude-Findings.md` and confirm the workflow-derived skill fo
 
 Objective: every agent-agnostic skill from `PromptSystemV4.7\skills\` is deployed to `.claude\skills\<name>\` with all supporting files and the invocation classification frontmatter applied. `devin-auto-model-switcher` is not deployed (agent-specific: drives the Devin Cascade model selector via keyboard simulation; Claude Code has native `/model`).
 
-Copy each skill folder from `PromptSystemV4.7\skills\` to `.claude\skills\<name>\` except `devin-auto-model-switcher`, including supporting files (progressive disclosure). Keep existing `name` and `description` frontmatter. Add `disable-model-invocation: true` to the 12 user-only skills; the 12 model-triggered skills stay without it. 3 source skills have no frontmatter at all (2 user-only: travel-info, windows-desktop-control; 1 model-triggered: drift-control) - prepend frontmatter to their deployed copies only (name = folder name, description derived from the file's intro line); do not modify the sources. Delete stale `.claude\skills\llm-computer-use\`, `llm-evaluation\`, `llm-transcription\` if present (merged into `llm-tools` on 2026-10-29).
+Copy each skill folder from `PromptSystemV4.7\skills\` to `.claude\skills\<name>\` except `devin-auto-model-switcher`, including supporting files (progressive disclosure). Keep existing `name` and `description` frontmatter. Add `disable-model-invocation: true` to the 9 user-only skills; the 12 model-triggered skills stay without it. 3 source skills have no frontmatter at all (2 user-only: travel-info, windows-desktop-control; 1 model-triggered: drift-control) - prepend frontmatter to their deployed copies only (name = folder name, description derived from the file's intro line); do not modify the sources. Delete stale `.claude\skills\llm-computer-use\`, `llm-evaluation\`, `llm-transcription\` if present (merged into `llm-tools` on 2026-10-29) and `.claude\skills\edird-phase-planning\` if present (merged into `promptsystem` on 2026-11-11) and `.claude\skills\git-conventions\` if present (merged into `git` on 2026-11-11). Delete every other `.claude\skills\` folder that has no source folder in `PromptSystemV4.7\skills\` and no source workflow (skill removed from the source).
 
-Model-triggered (12): analysis-methods, terminal-robustness, write-documents, session-management, coding-conventions, research-methods, workspace-management, drift-control, edird-phase-planning, git-conventions, ms-playwright-mcp, llm-tools (model-triggered because `MODEL_INVENTORY.md` is read by write-documents for PROMPTS and TASKS planning)
+Model-triggered (12): analysis-methods, terminal-robustness, write-documents, session-management, coding-conventions, research-methods, workspace-management, drift-control, promptsystem, git (model-triggered because `GIT_CONVENTIONS.md` is read by the commit and session workflows), ms-playwright-mcp, llm-tools (model-triggered because `MODEL_INVENTORY.md` is read by write-documents for PROMPTS and TASKS planning)
 
-User-only (12): renderings, travel-info, youtube-downloader, seo-tools, google-account, image-tools, pdf-tools, windows-desktop-control, playwriter-mcp, github, git, hosting
+User-only (9): renderings, travel-info, youtube-downloader, seo-tools, google-account, image-tools, pdf-tools, windows-desktop-control, hosting
 
 Constraints:
 - Do not modify skill sources
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost (folders overwritten)
-- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: Read-Host, pause, Get-Credential, Get-Content -Wait, 2>&1 with Blocking:true. File operations use agent tools. 1-minute cap per command. On cap: stop the process, record command and cap in PROBLEMS.md, continue.
+- Hang safety: no command may wait for stdin, a pager, or an unbounded child. Banned: Read-Host, pause, Get-Credential, Get-Content -Wait, 2>&1 with Blocking:true. File operations use agent tools. No time limit: a command that shows progress runs to its end. End a command only when it hangs (output shows a wait that cannot end, or no progress for 5 minutes past its expected runtime); then record command and hang evidence in PROBLEMS.md, continue.
 
 Findings card: Load and update `__CARD_UpdateClaude-Findings.md`. File glitches and unexpected findings. Read at prompt startup for unresolved entries from prior prompts.
 
-Verify: deployed skill folder count equals the skill inventory count from `__CARD_UpdateClaude-Findings.md` minus 1 (expected 24; `devin-auto-model-switcher` excluded); total `.claude\skills\` folder count equals the card's deployed workflow plus skill counts (expected 85). Each of the 12 user-only SKILL.md files contains `disable-model-invocation: true`; none of the 12 model-triggered SKILL.md files does. Every deployed SKILL.md has valid frontmatter with `name` (matching the folder) and `description` (compare line-by-line, not with `$`-anchored regex - CRLF files break it).
+Verify: deployed skill folder count equals the skill inventory count from `__CARD_UpdateClaude-Findings.md` minus 1 (expected 21; `devin-auto-model-switcher` excluded); total `.claude\skills\` folder count equals the card's deployed workflow plus skill counts (expected 82). Each of the 9 user-only SKILL.md files contains `disable-model-invocation: true`; none of the 12 model-triggered SKILL.md files does. Every deployed SKILL.md has valid frontmatter with `name` (matching the folder) and `description` (compare line-by-line, not with `$`-anchored regex - CRLF files break it).
 ```
 
 ---
@@ -194,7 +194,7 @@ Constraints:
 - Do not change NOTES.md beyond the mechanism line
 - Execute without asking for confirmation
 - Re-running this prompt must not corrupt state or waste cost
-- Hang safety: git commands use --no-pager and commits use -m (no editor). 30-second cap per git command. On cap: stop the process, record command and cap in PROBLEMS.md, continue.
+- Hang safety: git commands use --no-pager and commits use -m (no editor). Expected runtime 10 seconds per git command; no time limit. End a git command only when it hangs (output shows a prompt or an editor wait, or no progress for 5 minutes); then record command and hang evidence in PROBLEMS.md, continue.
 
 Findings card: final update - record completion state and any unresolved entries.
 

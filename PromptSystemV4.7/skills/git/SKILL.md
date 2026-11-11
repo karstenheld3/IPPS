@@ -1,11 +1,19 @@
 ---
 name: git
-description: Apply when working with Git repositories, commit history, or recovering files from previous commits
+description: Apply when working with Git repositories, commit history, or recovering files from previous commits, when committing code, writing commit messages, or configuring .gitignore, and when working with GitHub repositories, issues, PRs, releases, or authentication via the GitHub CLI
 ---
 
-# Git Skill
+# Git and GitHub Skill
 
-Git operations with focus on commit history navigation and file recovery.
+Git operations with focus on commit history navigation and file recovery, commit conventions (message format, .gitignore), plus GitHub CLI (`gh`) operations.
+
+## Verb Mapping
+
+This skill implements:
+- [COMMIT] - Create conventional commits
+- [MERGE] - Merge branches following conventions
+
+**Phases**: IMPLEMENT, DELIVER
 
 ## MUST-NOT-FORGET
 
@@ -13,10 +21,25 @@ Git operations with focus on commit history navigation and file recovery.
 - Use `--name-status` to see A/M/D (Added/Modified/Deleted) per commit
 - To recover deleted file: checkout from commit BEFORE deletion (use `^` suffix)
 - Reflog survives even after reset/rebase - use it for recovery
+- Commits: Conventional Commits `<type>(<scope>): <description>`, imperative mood, <72 chars, no period. NEVER commit secrets (.env, *.cer, *.pfx, *.pem, *.key). Types and .gitignore rules: `GIT_CONVENTIONS.md`
+- GitHub CLI: authenticate before first use (`gh auth login`); check `gh auth status` if commands fail; use `--repo` when not in a git directory
+
+## Intent Lookup
+
+- **Navigate commit history, compare versions, recover or restore files, undo or amend commits, force push** → this file
+- **Commit message format, .gitignore rules and template** → `GIT_CONVENTIONS.md`
+- **GitHub repositories, issues, pull requests, releases, gists, Actions, authentication** → `GIT_GITHUB.md`
+- **Install Git or the GitHub CLI** → `SETUP.md`
 
 ## Setup
 
-For installation, see `SETUP.md` in this skill folder.
+For installation of Git and the GitHub CLI, see `SETUP.md` in this skill folder.
+
+## References
+
+- `GIT_CONVENTIONS.md` - Commit message format (Conventional Commits), .gitignore rules and template
+- `GIT_GITHUB.md` - GitHub CLI guide: authentication, repositories, issues, pull requests, releases, gists, Actions
+- `SETUP.md` - Git for Windows setup and GitHub CLI setup
 
 ## Commit History Navigation
 
@@ -129,12 +152,28 @@ git show <commit>:path/to/file.ext > recovered_file.ext
 
 ### Recover File from Reflog
 
+Works after an accidental `git reset --hard` if the files were committed before the reset.
+
 ```powershell
-# View reflog
+# View reflog, find entry or commit hash (e.g., abc1234)
 git reflog
 
 # Recover from specific reflog entry
 git checkout HEAD@{n} -- path/to/file.ext
+
+# Recover from commit hash found in reflog
+git checkout abc1234 -- path/to/file    # Recover specific file
+git checkout abc1234 -- .               # Recover all files from that commit
+```
+
+### Recover File from Remote
+
+If the commit was pushed before the local reset:
+
+```powershell
+git fetch origin                        # Get latest from remote
+git log --oneline origin/master -5      # Check what's on remote
+git checkout origin/master -- path/to   # Recover file from remote
 ```
 
 ## Guided Recovery Workflow
@@ -225,17 +264,37 @@ git show <commit>:path/to/file
 
 ## Undo Operations
 
+**CRITICAL**: Choose the right reset mode to avoid data loss.
+
 ### Undo Last Commit (Keep Changes)
 
 ```powershell
-git reset --soft HEAD^
+git reset --soft HEAD~1   # Undo commit, keep files STAGED
+git reset HEAD~1          # Undo commit, keep files UNSTAGED
 ```
 
-### Undo Last Commit (Discard Changes)
+### Undo Last Commit (Discard Changes) - DESTRUCTIVE
 
 ```powershell
-git reset --hard HEAD^
+git reset --hard HEAD~1   # Undo commit AND DELETE all changes
 ```
+
+**WARNING**: `--hard` deletes uncommitted files permanently (unless recoverable via reflog). Recovery: "Recover File from Reflog" and "Recover File from Remote" above.
+
+### Amend Last Commit (Not Yet Pushed)
+
+```powershell
+git add <files>
+git commit --amend -m "new message"     # Replace last commit
+```
+
+### Force Push After Amend or Reset (Remote Has Old Commit)
+
+```powershell
+git push --force-with-lease             # Safer than --force
+```
+
+**Use `--force-with-lease`**: Fails if remote changed since last fetch (prevents overwriting others' work).
 
 ### Restore File to Last Committed Version
 

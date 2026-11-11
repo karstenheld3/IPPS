@@ -13,7 +13,7 @@ Create conventional commits for staged changes.
 
 ## Required Skills
 
-- @skills:git-conventions for commit message format
+- @skills:git `GIT_CONVENTIONS.md` for commit message format
 
 ## MUST-NOT-FORGET
 
@@ -31,7 +31,7 @@ Create conventional commits for staged changes.
    - Implementation (feat/fix)
    - Tests (test)
    - Documentation (docs)
-5. Follow @skills:git-conventions for message format
+5. Follow @skills:git `GIT_CONVENTIONS.md` for message format
 6. Execute commits until all changes committed
 
 ## Execution Rules

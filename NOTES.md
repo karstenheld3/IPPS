@@ -6,6 +6,7 @@
 - Sync order: 1) [PROMPTSYSTEM_FOLDER] → [AGENT_FOLDER] (robocopy /MIR), 2) [AGENT_FOLDER] → [LINKED_REPOS] (sync.ps1 -execute). Stage 2 requires stage 1 complete. Stage 3 (linked repo local mirror) is NOT automatic from source repo
 - Downstream repos pull from [AGENT_FOLDER], NOT from [PROMPTSYSTEM_FOLDER]. The local mirror is the published source for linked repos
 - Use placeholders in all workspace/session files, never ephemeral version strings or repo names
+- Keep every rule file in [PROMPTSYSTEM_FOLDER]/rules below 11,800 bytes: Cascade loads only about the first 12,000 bytes of an always-on rule file and cuts off the rest without a warning (observed 2026-11-11 on 3 files). Detail goes to @skills:promptsystem; the rule keeps the concept and a link
 
 ## Table of Contents
 
@@ -19,6 +20,8 @@
 - [Special Workflows](#special-workflows-workspace-root)
 - [Sync Architecture](#sync-architecture-2026-09-06-revised-2026-09-12)
 - [PromptSystem 5.0 Planning](#promptsystem-50-planning)
+- [Terminal Hang Prevention (2026-11-11)](#terminal-hang-prevention-2026-11-11)
+- [SEO Tools Skill (2026-11-11)](#seo-tools-skill-2026-11-11)
 - [PERSONAL_WORKFLOWS](#personal_workflows-excluded-from-development-only-repos-deployed-only-to-all-repos)
 - [Agentic Problems Notepad](#agentic-problems-notepad)
 - [LINKED_REPOS](#linked_repos)
@@ -86,7 +89,6 @@
 
 - **Model Accuracy**: Read model requests literally. Version numbers matter (e.g., Sonnet 4 != Sonnet 4.5).
 - **Safety First**: UI automation scripts MUST have a `-DryRun` mode. Preview changes before sending irreversible keyboard events.
-- **Playwriter Timeouts**: ALWAYS pass `timeout: 1500` (default is 20000ms!). Lower to 500ms when fast.
 - **No Ask Tool**: NEVER use the `ask_user_question` tool. Resolve ambiguity through prompt analysis, not interactive prompts. See `agent-behavior.md` Attitude section.
 
 ## PromptSystem Source/Sync Rules
@@ -157,6 +159,8 @@ Automatically push commits to GitHub.
 
 **2026-01-21**: Workflow Reference in devsystem-core.md was outdated (`GLOB-FL-006`). Updated to flat list of all 28 workflows.
 
+**2026-11-11 Migration (Deprecated Skills)**: `skills/edird-phase-planning/` → removed, merged into new skill `promptsystem` (`PROMPTSYSTEM_EDIRD.md`). Downstream repos: add `skills/edird-phase-planning/*` to the `deprecated` array in `promptsystem-sync.json` (SOP 3). Workflow Reference now lives in `tools-and-skills.md`. Removed without replacement on the same day: the browser automation skill for existing logins (topic `PLWR`); downstream repos add its skill folder to the `deprecated` array as well. `skills/github/` → removed, merged into skill `git` (`GIT_GITHUB.md`, setup in `SETUP.md`); downstream repos add `skills/github/*` to the `deprecated` array. `skills/git-conventions/` → removed, merged into skill `git` (`GIT_CONVENTIONS.md`; undo, amend, and recovery commands in `SKILL.md`); workflows reference `@skills:git` `GIT_CONVENTIONS.md`; downstream repos add `skills/git-conventions/*` to the `deprecated` array.
+
 ## Special Workflows (Workspace Root)
 
 **`deploy-to-all-repos.md`** — Deleted. Replaced by `/sync workspace` (FR-49) using `sync.ps1`.
@@ -186,6 +190,47 @@ Automatically push commits to GitHub.
 - Source repo maintains `[LINKED_REPOS]` list in NOTES.md (for push operations)
 
 **Source repo**: Only references RELATIVE downstream repo paths (e.g., `../Lana-V2-Dev`), never absolute
+
+## Terminal Hang Prevention (2026-11-11)
+
+**Session**: `_PrivateSessions_gitignore/_2026-11-11_PromptSequenceHangPrevention/`
+**Source of truth**: spec `specs/_SPEC_AGENT_TERMINAL_ROBUSTNESS.md [AGENTTERMINAL-SP01]`, INFO `docs/_INFO_HOW_TO_PREVENT_AGENTS_FROM_HANGING.md [PRMTHANGFIX-IN04]`
+**Status**: Implemented in `PromptSystemV4.7/`, mirrored to `.devin/`; open: live acceptance test, `.claude/` rebuild, downstream `/sync`, commit (see PROBLEMS.md `PRMTHANGFIX-PR-0001`, `PR-0004`, `PR-0006`, `PR-0007`)
+
+- **Goal**: hang prevention, not time slots. No command is ended for its runtime; the agent ends a command if and only if it hangs (`PRMTHANGFIX-FL-0001`)
+- **Runner** `skills/terminal-robustness/run-supervised.ps1 -Script ... -Expected [s] -Topic [TOPIC]`: no deadline; `ALIVE` lines every 30 s; stop file `.tmp_*_stop.txt` ends the whole tree (`KILLED`); kill script `.tmp_kill_[TOPIC].ps1` with the process IDs of running commands, `LEFTOVER` log line after a cancelled runner
+- **Temp file names**: `.tmp_[purpose]_[HHmmss].[ext]` (convention in `agent-behavior.md` `_agentwork/` Folder)
+- **Bench gate**: `_Sessions/!TerminalHangBench/README.md`; every runner change needs runner contract tests (14/14) and a bench pass (`runner` 27/27, fallback 25/27)
+- **Known tool behavior**: Cascade terminal tool can miss completion of finished commands and report running commands as done; terminals are shared between concurrent conversations; `grep_search` is unreliable (empty results) - verify negative results with `read_file`
+
+## SEO Tools Skill (2026-11-11)
+
+**Session**: `_PrivateSessions_gitignore/_2026-11-03_SEOFirstSkill/`
+**Source of truth**: `[PROMPTSYSTEM_FOLDER]/skills/seo-tools/`
+**Status**: Implemented, tested (52 PASS, 0 FAIL, 14 SKIPPED), committed and pushed
+
+### Tier-based research workflow
+
+- **Tier 1**: Free sources, free quotas, first-party owned data, manual UI sources, offline checks
+- **Tier 2**: Prepaid providers (ScrapeCreators credits + DataForSEO pay-per-call); Trends MCP also listed
+- **Tier 3**: Subscription services (Ahrefs, Semrush); runner probes for keys but does not implement API clients
+- Runner: `tiers.py run keywords|serp|competitors TARGET`; default per-question budget `$0.15` via `--max-usd`
+- Protocol: probe → T1 collect → T2 enrich/verify → T3 probe/enrich/verify → step ledger with CONFIRMED / CONFLICT / SINGLE-SOURCE labels
+
+### Key implementation findings
+
+- DataForSEO SERP Live endpoint returns `google.com` redirect domains; true domain extracted from `breadcrumb` field
+- DataForSEO Keywords Data Live costs `$0.09/task` (not `$0.06` Standard rate); up to 1,000 keywords per task
+- ScrapeCreators `tiktok-popular-videos` and `tiktok-popular-songs` unavailable at vendor (HTTP 400, not charged)
+- ScrapeCreators `llms.txt` is stale; OpenAPI spec at `https://docs.scrapecreators.com/openapi.json` is the contract (199 operations)
+- Trends MCP `posts --source Reddit` returns vendor status 502
+- SERP is a sample: two provider calls sharing 2+ hosts = CONFIRMED; 0-1 = CONFLICT (state threshold in evidence)
+- Competitor flow: DataForSEO `competitors` is keyword overlap, not true competitor discovery; use SERP competitors as primary, DataForSEO only verifies
+- Brand matching for domain exclusion requires `MIN_BRAND_LETTERS = 4`; shorter brands match exact text only (prevents one-letter brands from excluding all hosts)
+
+### Deploy note
+
+The `/verify` fixes (strict UTF-8 subprocess decoding, plural helper, brand matching, SERP budget estimate, named sort helpers) were deployed to `.devin/skills/seo-tools/` via robocopy on 2026-11-11 17:11.
 
 ## PromptSystem 5.0 Planning
 

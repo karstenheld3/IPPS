@@ -66,7 +66,7 @@ Prevents critical oversights by making important constraints explicit and verifi
 Review each MNF item above and confirm compliance.
 ```
 
-### Skill Example (git-conventions)
+### Skill Example (git skill, `GIT_CONVENTIONS.md`)
 
 ```markdown
 ## MUST-NOT-FORGET
@@ -112,6 +112,9 @@ Review each MNF item above and confirm compliance.
 - **STRUT**: Structured plans that include MNF sections
 
 ## Document History
+
+**[2026-11-11 21:50]**
+- Changed: Skill example names skill `git`, file `GIT_CONVENTIONS.md` (skill `git-conventions` merged into skill `git`)
 
 **[2026-02-28 13:06]**
 - Added: VCRIV pipeline steps to Item Guidelines

@@ -150,7 +150,7 @@ Then configure workspace files:
 1. **NOTES.md** — Write project name, goal, and any instructions for the agent. Similar to `AGENTS.md` - just write whatever you want the agent to know. Tip: Add `read AGENTS.md` if you already have an AGENTS.md file.
 2. **ID-REGISTRY.md** (optional) — Copy from [ID-REGISTRY_TEMPLATE.md](.devin/skills/workspace-management/ID-REGISTRY_TEMPLATE.md). Will be used by agent to avoid ID conflicts.
 3. **SOPS.md** (optional) — Create standard operating procedures for your project
-4. **SETUP.md** (optional) — Run in each skill folder that requires external tools (pdf-tools, llm-tools, github, etc.)
+4. **SETUP.md** (optional) — Run in each skill folder that requires external tools (pdf-tools, llm-tools, git, etc.)
 
 For complex software development projects and multi-repo workspaces use [`/prime /workspace-setup`](.devin/workflows/workspace-setup.md) for an interactive guided setup using the [workspace questionnaire](.devin/skills/workspace-management/WORKSPACE_SETUP_QUESTIONNAIRE.md) to generate all required files interactively.
 
@@ -1039,23 +1039,20 @@ Layer 3 writing workflows and `/analyze` accept a standardized parameter grammar
 
 ## Skills Reference
 
-25 skills in `.devin/skills/`. Skills are knowledge bases the agent reads before executing tasks. They do not run as workflows - they provide procedures, rules, and tool guidance.
+22 skills in `.devin/skills/`. Skills are knowledge bases the agent reads before executing tasks. They do not run as workflows - they provide procedures, rules, and tool guidance.
 
 - **analysis-methods** - Qualitative coding, pattern detection, abductive hypothesis generation, evidence validation, and structured problem investigations with append-only logs. **Effect**: Creates Pattern Map, Hypothesis Register, Validation Report, and Analysis INFO documents. Rules and templates consumed by Layer 2 workflows and `/verify`.
 - **drift-control** - Drift detection/correction knowledge for `/drift-detect` and `/drift-correct`. **Effect**: No files. Provides drift lenses and templates consumed by `/drift-detect`. CHECKS files for workflows designed for future use, created on demand.
 - **coding-conventions** - Python, PowerShell coding style rules, MECT coding rules. **Effect**: No files. Rules consumed by `/verify` and `/improve` when checking code.
 - **research-methods** - Deep research strategies (MEPI/MCPI), domain-specific patterns. **Effect**: No files. Knowledge consumed by `/deep-research` workflow.
-- **edird-phase-planning** - EDIRD phase model with effort allocation, planning guidance, gates. **Effect**: No files. Rules consumed by `/go` workflow.
-- **git** - Commit history navigation, file recovery from previous commits. **Effect**: No files. Procedures for git operations (log, checkout, diff, revert).
-- **git-conventions** - Commit message format, .gitignore rules. **Effect**: No files. Rules consumed by `/commit` workflow.
-- **github** - GitHub CLI operations (repos, issues, PRs, releases). **Effect**: No files. Procedures for `gh` CLI commands.
+- **promptsystem** - Full information behind the compact rule files: EDIRD phase model (gates, planning guidance, effort allocation), Agentic English vocabulary, ID system, utility folder standard. **Effect**: No files. Consumed by `/go`, `/write-strut`, and by rule files that link to it.
+- **git** - Commit history navigation, file recovery from previous commits, commit conventions (message format, .gitignore rules), and GitHub CLI operations (repos, issues, PRs, releases). **Effect**: No files. Procedures for git operations (log, checkout, diff, revert) and `gh` CLI commands. Commit rules consumed by `/commit` workflow.
 - **google-account** - Google services (Gmail, Calendar, Drive, Tasks) via gogcli CLI. **Effect**: No files. Procedures for gogcli commands.
 - **hosting** - Platform-specific deployment to Netlify, Vercel, Azure App Service, SharePoint. **Effect**: No files. Procedures consumed by `/deploy` workflow.
 - **image-tools** - Image conversion, resizing, compression, batch processing (ImageMagick, Pillow). **Effect**: Creates converted/resized image files. Edits images in place (batch operations).
 - **llm-tools** - Single source of truth for script-based LLM work: shared call scripts, canonical model data (`model-registry.json`, `model-pricing.json`, `model-parameter-mapping.json`, `MODEL_INVENTORY.md`), and three functions in subfolders - `evaluation/` (questions, answers, LLM-as-judge scoring, cost analysis), `transcription/` (image/audio to markdown, ensemble + judge + refinement), `computer-use/` (desktop automation via LLM vision). **Effect**: Creates evaluation result files (JSON) and `.md` transcriptions. Computer-use edits nothing on disk but controls mouse/keyboard.
 - **ms-playwright-mcp** - Browser automation via Microsoft Playwright MCP server. **Effect**: No files directly. Provides procedures for browser automation (navigate, click, type, screenshot). Downloads go to default browser location.
 - **pdf-tools** - PDF conversion, compression, analysis using Ghostscript, Poppler, QPDF. **Effect**: Creates converted PDF/image files. Edits PDFs in place (compression, optimization).
-- **playwriter-mcp** - Real browser automation with existing logins via Playwriter extension. **Effect**: No files directly. Provides procedures for browser automation with existing sessions.
 - **renderings** - Render Markdown files to HTML and PDF via headless Chromium. **Effect**: Creates HTML and PDF exports in `_EXPORT_gitignore/`.
 - **seo-tools** - SEO-first guides, rules, and checks for ideation, creation, metadata, pre-publish gate, audit, campaigns, monitoring, and agent discoverability, plus Python scripts for Google Search Console, Bing Webmaster, IndexNow, YouTube, Plausible, DataForSEO (cost-gated), cross-platform trends (Trends MCP REST) and social post data (ScrapeCreators) with credit gates, agent readiness probes, and an offline metadata linter. **Effect**: Prints query results and gate reports to the console (table or JSON). Edits nothing.
 - **session-management** - Session init, save, resume, finalize, archive. **Effect**: No files directly. Procedures consumed by `/session-*` workflows. Templates for NOTES.md, PROBLEMS.md, PROGRESS.md.
@@ -1342,11 +1339,12 @@ Acronyms and techniques used throughout IPPS for consistent agent behavior:
 ## Key Conventions
 
 - [Core Conventions](.devin/rules/core-conventions.md) - Text formatting, document structure, header blocks
-- [PromptSystem Core](.devin/rules/promptsystem-core.md) - Workspace scenarios, folder structure, workflow reference
+- [PromptSystem Core](.devin/rules/promptsystem-core.md) - Workspace scenarios, folder structure, file naming
+- [Tools and Skills](.devin/rules/tools-and-skills.md) - Workflow reference, quality pipelines, chat output, tool rules
 - [PromptSystem IDs](.devin/rules/promptsystem-ids.md) - Document IDs, topic registry, tracking IDs
 - [Agentic English](.devin/rules/agentic-english.md) - Controlled vocabulary for agent instructions
 - [EDIRD Phase Planning](.devin/rules/edird-phase-planning.md) - Phase model core rules
-- [Git Conventions](.devin/skills/git-conventions/SKILL.md) - Commit message format, .gitignore rules
+- [Git Conventions](.devin/skills/git/GIT_CONVENTIONS.md) - Commit message format, .gitignore rules
 - [Coding Conventions](.devin/skills/coding-conventions/SKILL.md) - Python, PowerShell, workflow style rules
 - [Workflow Rules](.devin/skills/write-documents/WORKFLOW_RULES.md) - Workflow document structure and formatting
 - **Document placement**: `specs/` for verifiable agent instructions (_SPEC_*, _IMPL_*, _TEST_*, rules with IDs), `docs/` for explanatory knowledge (_INFO_*, research). _TASKS_* stays in session folders. Folders are optional by default, enforced when workspace-management is active (WS-DP-06). Decision rule: can the agent verify compliance? -> specs/. Does it explain why/how? -> docs/. See workspace-management WORKSPACE-RULES.md WS-DP-01 through WS-DP-06.
@@ -1442,18 +1440,17 @@ python .devin\skills\coding-conventions\reindent.py folder/ --to 2 --recursive
 python .devin\skills\coding-conventions\reindent.py folder/ --to 2 --recursive --dry-run
 ```
 
-### github
+### git
 
-GitHub CLI integration for repos, issues, PRs, releases.
+Git history navigation, file recovery, and undo/recovery commands, commit conventions (`GIT_CONVENTIONS.md`), plus GitHub CLI integration for repos, issues, PRs, releases (`GIT_GITHUB.md`).
 
-**Setup**: Run `SETUP.md` to install GitHub CLI in `../.tools/gh/`.
-
-### git-conventions
-
-Commit message format, undo/recovery commands, .gitignore rules.
+**Setup**: Run `SETUP.md` to install Git and the GitHub CLI (in `../.tools/gh/`).
 
 **Files**:
-- `SKILL.md` - Conventional commit format, safe undo, .gitignore template
+- `SKILL.md` - History navigation, file recovery, safe undo, amend, force push
+- `GIT_CONVENTIONS.md` - Conventional commit format, .gitignore rules and template
+- `GIT_GITHUB.md` - GitHub CLI guide
+- `SETUP.md` - Git and GitHub CLI installation
 
 **Key rules**:
 - Format: `<type>(<scope>): <description>`
@@ -1461,16 +1458,20 @@ Commit message format, undo/recovery commands, .gitignore rules.
 - Imperative mood, <72 chars, no period
 - Never commit secrets (.env, *.key, *.pem)
 
-### edird-phase-planning
+### promptsystem
 
-EDIRD phase model for long-running agentic tasks.
+Full information behind the compact rule files. Replaces the former `edird-phase-planning` skill.
 
-**Phases**: EXPLORE → DESIGN → IMPLEMENT → REFINE → DELIVER
+**Phases (EDIRD)**: EXPLORE → DESIGN → IMPLEMENT → REFINE → DELIVER
 
 **Files**:
-- `SKILL.md` - Phase gates, workflow examples, effort allocation
+- `SKILL.md` - Intent lookup and map from rule section to detail file
+- `PROMPTSYSTEM_EDIRD.md` - Phase gates, workflow types, workflow examples, effort allocation
+- `PROMPTSYSTEM_AGENTIC_ENGLISH.md` - AGEN verbs, labels, states
+- `PROMPTSYSTEM_IDS.md` - All ID types with rules and examples
+- `PROMPTSYSTEM_AGENT_FOLDERS.md` - Utility folder standard
 
-**Usage**: Invoked automatically by `/go` workflow.
+**Usage**: Invoked automatically by `/go` workflow and `/write-strut`; linked from the rule files.
 
 ### ms-playwright-mcp
 

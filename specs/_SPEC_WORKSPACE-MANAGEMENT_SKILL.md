@@ -726,9 +726,11 @@ Direction definitions:
 **WSKMGMT-FR-61: Skill-tagged sections in promptsystem-core.md and ID-REGISTRY.md**
 - promptsystem-core.md sections wrapped with `<!-- START: Core -->` ... `<!-- END: Core -->` or `<!-- START: Skill: X -->` ... `<!-- END: Skill: X -->` XML comment markers
 - Markers are organizational only — agent reads all sections regardless. No workflow or rule modifications for conditional reading
+- A Skill marker names where the agent can read more: `<!-- START: Skill: X, File: Y -->` = file `Y` of skill `X`; the END marker stays `<!-- END: Skill: X -->`. `Core` = defined in the rule only. A one-line legend at the top of promptsystem-core.md explains the markers
 - Consecutive same-owner sections merged into single START/END block to reduce clutter
 - workspace-management owns: [PRODUCT_VERSION], [DEV_SPECS_FOLDER], [DEV_KNOWLEDGE_FOLDER], [PROMPTSYSTEM_SYNC_CONFIG] concepts, Dimensions 1/2/4/5, Folder Structure, [WORKSPACE_FOLDER]/[PROJECT_FOLDER]/[SRC_FOLDER] placeholders
 - session-management owns: Dimension 3 (Work Mode), [SESSIONS_FOLDER]/[SESSION_ARCHIVE_FOLDER]/[SESSION_FOLDER] placeholders
+- Detail files named by the markers: workspace-management `WORKSPACE-GUIDES.md` (concepts, Dimensions 1/2/4/5, Folder Structure, placeholders) and `WORKSPACE-RULES.md` (Document Placement); session-management `SKILL.md`; promptsystem `PROMPTSYSTEM_IDS.md` (Document Types) and `PROMPTSYSTEM_AGENT_FOLDERS.md` (File Naming Conventions); write-documents `STRUT_TEMPLATE.md` (STRUT Execution)
 - ID-REGISTRY.md states reorganized under skill headings with START/END markers (bare enumerations, no descriptions — see promptsystem-core.md for definitions)
 
 ### Schema and Analysis (from WSKMGMT-SP02)
@@ -1219,7 +1221,7 @@ User runs /verify workspace (or /verify setup)
 │   ├─> 1) ProductRepo: detect uncommitted changes
 │   │   ├─> No changes? -> Skip silently
 │   │   ├─> Changes? -> Analyze by type (feat, fix, docs, test, chore)
-│   │   └─> Create conventional commits per @skills:git-conventions
+│   │   └─> Create conventional commits per @skills:git `GIT_CONVENTIONS.md`
 │   ├─> 2) DevRepo: detect uncommitted changes
 │   │   ├─> No changes? -> Skip silently
 │   │   ├─> Changes? -> Analyze by type
@@ -1481,6 +1483,12 @@ RESULT: PASSED WITH FIXES
 - All skill files must pass privacy gate (no real identifiers, addresses, names, project-specific data)
 
 ## 15. Document History
+
+**[2026-11-11 21:50]**
+- Changed: Multi-Repo Commit action flow references `@skills:git` `GIT_CONVENTIONS.md` (skill `git-conventions` merged into skill `git`)
+
+**[2026-11-11 21:28]**
+- Changed: FR-61 — Skill markers in promptsystem-core.md carry the detail file (`<!-- START: Skill: X, File: Y -->`); markers added for Document Types, Document Placement, File Naming Conventions, STRUT Execution; legend line added
 
 **[2026-09-12 15:45]**
 - Updated: FR-10 — DEV_REPO_NOTES_TEMPLATE.md section order (priority-first), MNF at top, TOC, new sections (Full Stack and Dependencies, Scripts, Architecture Decisions, Source Control, Agent Safety Rules, Key References, Knowledge Map, Docs Map, Specs Map)

@@ -1,8 +1,3 @@
----
-name: github
-description: Apply when working with GitHub repositories, issues, PRs, or authentication
----
-
 # GitHub CLI Guide
 
 Rules and usage for GitHub CLI in `[WORKSPACE_FOLDER]/.tools/gh/`.
@@ -183,6 +178,6 @@ Rules and usage for GitHub CLI in `[WORKSPACE_FOLDER]/.tools/gh/`.
 
 ## Setup
 
-For initial installation, see `SETUP.md` in this skill folder.
+For initial installation, see `SETUP.md` (section GitHub CLI Setup) in this skill folder.
 
 **Tool location:** `../.tools/gh/bin/gh.exe`

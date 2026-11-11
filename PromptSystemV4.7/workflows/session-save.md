@@ -12,7 +12,7 @@ auto_execution_mode: 3
 ## Required Skills
 
 - @skills:session-management for session file structure
-- @skills:git-conventions for commit format
+- @skills:git `GIT_CONVENTIONS.md` for commit format
 
 ## MUST-NOT-FORGET
 

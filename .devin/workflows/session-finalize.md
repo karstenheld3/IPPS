@@ -12,7 +12,7 @@ auto_execution_mode: 3
 ## Required Skills
 
 - @skills:session-management for session lifecycle
-- @skills:git-conventions for final commit
+- @skills:git `GIT_CONVENTIONS.md` for final commit
 
 ## MUST-NOT-FORGET
 
