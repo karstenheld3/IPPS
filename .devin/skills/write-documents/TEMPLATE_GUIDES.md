@@ -18,7 +18,7 @@ Template inconsistencies compound: every document inherits them, and mixed forma
 
 - **MECT** - Inconsistent annotation formats are noise that agents amplify
 - **APAPALAN APAPL-PR-09** - "Repeat established structures" - templates ARE the structures
-- **SOCAS-CR-08** - Annotations that look like content are noise; XML comments are invisible
+- **SOCAS-GN-14** - Annotations that look like content are noise; XML comments are invisible
 - **GRUC** - Rules define WHAT, Guides explain HOW, INFO documents explain WHY
 
 ## 3. Template Categories

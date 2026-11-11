@@ -22,7 +22,7 @@ Read before proceeding:
 
 ## MUST-NOT-FORGET
 
-- Evaluate sources with Signs of Confusion and Sloppiness (SOCAS) - apply @skills:write-documents `SOCAS_RULES.md` Source Evaluation subset
+- Rank sources by source tier (@skills:research-methods Source Hierarchy) and verification label. Screen each source with Signs of Confusion and Sloppiness (SOCAS) - apply @skills:write-documents `SOCAS_RULES.md` plus `SOCAS_WRITING_RULES.md`; findings demote a source or exclude it from the findings (it stays in the source list per Source Retention Rule), and never rank sources against each other (SOCAS-AP-10)
 - Summary section mandatory - copy/paste ready list at document top
 - Label ALL findings: `[ASSUMED]`, `[VERIFIED]`, `[TESTED]`, `[PROVEN]`
 - MEPI by default (2-3 curated options); MCPI only when completeness explicitly needed
@@ -47,7 +47,7 @@ _INFO_[TOPIC]-IN[NN]_[Title].md
 - [ ] ALL sources retained with URLs
 - [ ] Exclusions documented
 - [ ] No unverified contradictions remaining
-- [ ] SOCAS applied to source evaluation
+- [ ] Sources ranked by tier and verification label; SOCAS screen applied to demote sources or exclude them from the findings
 - [ ] Diagrams present where structure has 3+ levels or parallel elements
 
 **Source Retention Rule:** ALL sources must be kept. Never discard - even if findings were minimal or contradictory, document what was checked to prevent re-checking.

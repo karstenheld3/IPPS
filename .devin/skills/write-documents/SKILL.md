@@ -45,7 +45,8 @@ Read this file, then jump to exactly one target:
 ```
 write-documents/
 ├── SKILL.md                         this file (router)
-├── APAPALAN_RULES.md, MECT_WRITING_RULES.md, SOCAS_RULES.md, AI_WRITING_RULES.md, TRANSLATION_RULES.md
+├── APAPALAN_RULES.md, MECT_WRITING_RULES.md, AI_WRITING_RULES.md, TRANSLATION_RULES.md
+├── SOCAS_RULES.md, SOCAS_WRITING_RULES.md, SOCAS_COMMUNICATION_RULES.md
 ├── [root system and planning GRUC files: INFO_*, SPEC_*, IMPL_*, TEST_*, TASKS_*, PROMPTS_*, STRUT_*, ...]
 ├── document_types/                  ARTICLE_*, REPORT_*, EBOOK_* (GUIDES, RULES, CHECKS, TEMPLATE)
 ├── writing_techniques/              README.md, 9 technique sets (GUIDES, RULES, CHECKS, TEMPLATES, EXAMPLES)
@@ -54,7 +55,7 @@ write-documents/
 
 ## Shared Rules
 
-- **Writing quality standards**: All documents follow `APAPALAN_RULES.md` (precision, brevity, document structure) and `MECT_WRITING_RULES.md` (voice, word choice, terminology design). Evaluated via `SOCAS_RULES.md`. Publishing document types (`article`, `report`, `ebook` — never SPECs or internal documents) additionally follow `AI_WRITING_RULES.md` (`AW-*` rules) before and after writing (`DRSYNART-DD-50`). Translations follow `TRANSLATION_RULES.md`.
+- **Writing quality standards**: All documents follow `APAPALAN_RULES.md` (precision, brevity, document structure) and `MECT_WRITING_RULES.md` (voice, word choice, terminology design). Evaluated via `SOCAS_RULES.md` plus the field file by content type (`SOCAS_WRITING_RULES.md`, `SOCAS_COMMUNICATION_RULES.md`; code and code specifications use `SOCAS_CODING_RULES.md` in @skills:coding-conventions). Publishing document types (`article`, `report`, `ebook` — never SPECs or internal documents) additionally follow `AI_WRITING_RULES.md` (`AW-*` rules) before and after writing (`DRSYNART-DD-50`). Translations follow `TRANSLATION_RULES.md`.
 - **User-only selection (DRSYNART-DD-08)**: Only the user selects `using <ID>` and `as <PERSONA>`. Without explicit user keywords, the agent follows document-type defaults. Partial selections are never completed; agent suggests library options only when the user explicitly requests advice on style or technique.
 - **Discovery by filename pattern (DRSYNART-FR-05)**: Document types are discovered via `document_types/[TYPE]_GUIDES.md`; techniques via `writing_techniques/[ID]_GUIDES.md`; personas via `writing_personas/[PERSONA].md`. Adding a new file requires no edits to workflows or routing tables.
 - **Deliverable file naming (DRSYNART-DD-16)**: Deliverable documents follow three sequential file kinds: options proposal `[ID]-OPTIONS-NN_[Title].md`, working draft `[ID]-DRAFT-NN_[Title].md`, and final publication output `YYYY-MM-DD_[Title].md`.

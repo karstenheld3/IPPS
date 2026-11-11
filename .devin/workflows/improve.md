@@ -46,18 +46,18 @@ Apply to ALL contexts before any context-specific steps.
 
 ### Issue Categories (all contexts)
 
-Apply @skills:write-documents `SOCAS_RULES.md` with context-appropriate subset. SOCAS criteria map to these categories:
+Apply @skills:write-documents `SOCAS_RULES.md` plus the field file chosen by content type (SOCAS-AP-03). SOCAS rules map to these categories:
 
-1. Contradictions (SOCAS-CR-01)
-2. Inconsistencies (SOCAS-CR-01)
-3. Ambiguities (SOCAS-CR-02)
-4. Underspecified behavior (SOCAS-CR-06)
+1. Contradictions (SOCAS-GN-01)
+2. Inconsistencies (SOCAS-GN-01, SOCAS-GN-02)
+3. Ambiguities (SOCAS-GN-03)
+4. Underspecified behavior (SOCAS-CD-08 for code specifications, SOCAS-WR-11 for non-code normative documents)
 5. Broken dependencies
-6. Incorrect/unverified assumptions (SOCAS-CR-10)
-7. Flawed logic/thinking (SOCAS-CR-10)
-8. Unnecessary complexity (SOCAS-CR-11)
-9. New solutions for already solved problems (SOCAS-CR-03)
-10. Concept overlap (SOCAS-CR-03)
+6. Incorrect/unverified assumptions (SOCAS-GN-05)
+7. Flawed logic/thinking (SOCAS-GN-04, SOCAS-GN-05)
+8. Unnecessary complexity (SOCAS-GN-16; SOCAS-CD-05 for code)
+9. New solutions for already solved problems (SOCAS-GN-08)
+10. Concept overlap (SOCAS-GN-08)
 11. Broken rules
 12. Data boundary violations: private data in general-purpose documents or illustrative examples (Pre-Write Privacy Gate, `agent-behavior.md`)
 13. GDPR/privacy exposure: personal data in logs, error messages, examples, or documents beyond intended audience
@@ -159,7 +159,7 @@ Detection: determine context from file naming and content, then apply matching s
 
 **Phase 1 reads**: `SPEC_RULES.md`, `SPEC_TEMPLATE.md` (@skills:write-documents), source INFO documents
 
-**Phase 1 research**: Search for 1) existing products solving the same problem, 2) established frameworks, 3) tested and proven architectures, 4) implementation patterns. Goals: a) align with industry terminology, b) reduce complexity and integration problems, c) improve SPEC focus and separation of concerns, d) avoid multiplicative design decisions (too many parameter/testing dimensions). Use time-tested, value-proven sources only. Rank sources using SOCAS (Source Evaluation subset).
+**Phase 1 research**: Search for 1) existing products solving the same problem, 2) established frameworks, 3) tested and proven architectures, 4) implementation patterns. Goals: a) align with industry terminology, b) reduce complexity and integration problems, c) improve SPEC focus and separation of concerns, d) avoid multiplicative design decisions (too many parameter/testing dimensions). Use time-tested, value-proven sources only. Rank sources by source tier (@skills:research-methods Source Hierarchy) and verification label; use SOCAS (`SOCAS_RULES.md` plus `SOCAS_WRITING_RULES.md`) only to demote or exclude a source, never to rank sources against each other (SOCAS-AP-10).
 
 **Specialized issues** (in addition to GLOBAL):
 - Requirements phrased only as happy-path behavior
@@ -389,7 +389,7 @@ Detection: determine context from file naming and content, then apply matching s
 **Adversarial Collaborator techniques** (in addition to cross-context):
 - Challenge each primary claim: "What would make this false?"
 - For each evidence node: "Is there a more compelling piece of evidence available?"
-- For counter-arguments (`AW-ST-02`): "Are objections compressed into stiff Q&A instead of developing how substance and reasoning checks (`SOCAS-CR-01..03`, `SOCAS-CR-10..11`) resolve the tension?"
+- For counter-arguments (`AW-ST-02`): "Are objections compressed into stiff Q&A instead of developing how substance and reasoning checks (`SOCAS-GN-01` to `GN-04`, `SOCAS-GN-05`, `SOCAS-GN-16`) resolve the tension?"
 - For the ending: "Does this conclusion actually follow from what was proved?"
 
 **Phase 4 Quality Polish (Authored Documents addition)**: In addition to APAPALAN and MECT Writing, run a natural-flow polish pass using `AI_WRITING_RULES.md` (`AW-SY-01..05`, `AW-ST-01..04`, `AW-VO-01..04`, `AW-LX-01..03`) and the active persona's length and pacing profile (`writing_personas/[PERSONA].md`), replacing punchy, flow-breaking patterns and nominalization chains with continuous verbal prose.

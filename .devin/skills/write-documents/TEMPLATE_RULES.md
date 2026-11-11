@@ -167,7 +167,7 @@ Bracket markers `[text]` overlap with the placeholder convention, creating polys
 
 ## TMPL-AN-04: No Italic Markers
 
-Italic markers `*(text)*` are visible noise in rendered output (SOCAS-CR-08). They appear as formatted text in the document instead of being invisible annotations.
+Italic markers `*(text)*` are visible noise in rendered output (SOCAS-GN-14). They appear as formatted text in the document instead of being invisible annotations.
 
 **BAD:** `*(For UI specs only)*`, `*(If fixing rule violations)*`
 
