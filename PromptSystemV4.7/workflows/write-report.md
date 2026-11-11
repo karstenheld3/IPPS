@@ -22,6 +22,7 @@ Produce a publication-ready report from a draft, an options proposal, or raw inp
 
 ## MUST-NOT-FORGET
 
+- Final message starts with `Deliverables`: clickable workspace-relative paths (backticked, forward slashes) of main output files + short purpose (`agent-behavior.md` Deliverables first)
 - First response line (`DRSYNART-8.1`, `DRSYNART-NFR-03`): output `Tier N - [reason]` before any other text
 - Tier resolution (`DRSYNART-NFR-03`, `DRSYNART-2.3`): tier 1 default when input has <= 6 top-level sections and target <= 5,000 words; tier 2 when exceeding budget or keyword `tier 2`; escalates to tier 3 when tier 2 plan exceeds 10 prompts
 - `plan` or `plan only`: stop tier 2-3 execution after STRUT and PROMPTS files are written

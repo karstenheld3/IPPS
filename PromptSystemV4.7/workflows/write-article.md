@@ -22,6 +22,7 @@ Author a publication-ready article in one turn from a draft, an options proposal
 
 ## MUST-NOT-FORGET
 
+- Final message starts with `Deliverables`: clickable workspace-relative paths (backticked, forward slashes) of main output files + short purpose (`agent-behavior.md` Deliverables first)
 - User-only selection (`DRSYNART-DD-08`): load technique or persona ONLY when user specifies `using` or `as`; never guess or complete partial input
 - Unknown ID handling (`DRSYNART-FR-04`): list valid IDs from library READMEs and stop
 - CHECKS files are invisible during execution; never load them in this workflow

@@ -22,6 +22,7 @@ Produce a publication-ready ebook from a draft, an options proposal, or raw inpu
 
 ## MUST-NOT-FORGET
 
+- Final message starts with `Deliverables`: clickable workspace-relative paths (backticked, forward slashes) of main output files + short purpose (`agent-behavior.md` Deliverables first)
 - First response line (`DRSYNART-8.1`): output `Tier 3 - fixed program execution` before any other text
 - Tier 3 fixed (`DRSYNART-FR-02`, `DRSYNART-NFR-03`): always generates STRUT and PROMPTS files; executes unless `plan` or `plan only` is passed
 - Program caps (`DRSYNART-NFR-01`): max 8 prompt files, 35 prompts total, 12 deliverables; books exceeding caps must be split into parts sharing one master DRAFT

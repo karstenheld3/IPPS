@@ -247,6 +247,7 @@ Format: `[TOPIC]-[DOC]-SC-[SOURCE_ID]-[SOURCE_REF]`
 - **AGENSYNTAX** - AGEN Syntax (generic verb-object-modifier prompt syntax extending AGEN; workflow prompt signatures; workflow count reduction) - 2026-11-03
 - **AGNTFOLDERS** - Agent Folders (inventory and standardization of the subfolders the agent creates automatically: names, purpose, version-control default, lifecycle) - 2026-11-09
 - **SOCASCONTEXT** - SOCAS Context Awareness (inventory of SOCAS application scenarios, clustering of rules into GENERAL + 3 field categories, context-aware applicability in SOCAS_RULES.md and the SOCAS prompt) - 2026-11-10
+- **PRMTHANGFIX** - Prompt Sequence Hang Prevention (root causes of hanging terminal commands in prompt sequences, FAILS card, runtime expectation checks) - 2026-11-11
 - **ABTSTORY** - And-But-Therefore Story Spine writing technique (narrative friction and resolution structure) - 2026-11-02
 - **AIDA** - Attention-Interest-Desire-Action writing technique (direct-response conversion structure) - 2026-11-02
 - **AW** - AI Writing Rules (anti-AI artifact suppression and detection rules for publishing document types: articles, reports, ebooks) - 2026-11-08

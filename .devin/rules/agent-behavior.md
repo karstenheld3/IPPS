@@ -41,6 +41,13 @@ Behavioral rules for agent execution patterns.
 - Self-contained messages: Each response actionable without re-reading prior context. Never "as discussed" or "see above"
 - Cognitive load limit: Max 7 ungrouped items per list. Beyond 7: group into named clusters
 - Important first: Answer or outcome → method → edge cases. Never bury the result after 3 paragraphs of explanation
+- Deliverables first: When the request produces files (documents, prompts, code, reports), the final message starts with a `Deliverables` list. One line per main output file: backticked workspace-relative path with forward slashes (clickable chip in the Devin / Cascade chat panel) + 5-10 word purpose. Never use `file:///` links
+  - Main outputs only (the files [ACTOR] asked for or must open next). Helper, tracking, and scratch files go in a short `Also changed` line, or are omitted
+  - Place `Deliverables` before method, decisions, and details. Keep the rest of the summary short; no long "What I created" inventories
+  - Next step (one line, e.g. the command or prompt to run) follows `Deliverables`
+  - Clickable format (applies to EVERY message that names a file, including answers to "where is the file"): one path per bullet, inline single backticks, workspace-relative, forward slashes, e.g. - `docs/guides/_PROMPTS_01-Example.md` - purpose
+  - Never put paths in fenced code blocks, never use a bare absolute `[DRIVE]:\` path, never use `file:///` links: all render as plain text, not clickable. If the file is outside the workspace root, state that and give the absolute path in inline backticks
+  - Also state the file's session or folder in the purpose when it differs from the file the user has open
 
 ## Presenting Decisions
 
@@ -51,6 +58,7 @@ When [ACTOR] must choose between options (design decisions, open questions, a/b/
 
 **Problem**: What is wrong or undecided today, observable by the user
 **Context**: Why the problem exists - the constraint, spec clause, or prior finding that created it
+**Review**: Clickable links to the files and sections the user needs to decide, e.g. `path/to/file.md` section "Heading" (line N)
 
 **Options**
 - **1) [Short name]** (recommended - only one option carries this)
@@ -68,6 +76,8 @@ Rules:
 - Decisions the agent can take alone (engineering choices with no user-visible trade-off) are NOT presented - the agent decides and records them. Present only decisions where options differ in cost, quality, scope, or user-facing behaviour
 - Close with the exact reply format expected: `DD-04 2, DD-05 1`
 - Fixed points (constraints no option can change) go under Context, not as pseudo-options
+- Review links are mandatory: every decision lists each file and section needed to decide, so [ACTOR] never searches for them. Write each file as a backticked workspace-relative path with forward slashes (rendered as a clickable chip in the Devin / Cascade chat panel, see `PROMPTS_RULES.md` clickable summary artifact list). Add the section heading and line number after the path. Never use `file:///` links or raw HTML (stripped, dead links). Do not wrap the decision block in a code fence: paths in code fences are not clickable
+- If no file backs the decision, write `Review: none (decision is self-contained)`; never omit the line
 
 ## Confirmation Rules
 

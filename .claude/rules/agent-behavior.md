@@ -41,6 +41,13 @@ Behavioral rules for agent execution patterns.
 - Self-contained messages: Each response actionable without re-reading prior context. Never "as discussed" or "see above"
 - Cognitive load limit: Max 7 ungrouped items per list. Beyond 7: group into named clusters
 - Important first: Answer or outcome → method → edge cases. Never bury the result after 3 paragraphs of explanation
+- Deliverables first: When the request produces files (documents, prompts, code, reports), the final message starts with a `Deliverables` list. One line per main output file: backticked workspace-relative path with forward slashes (clickable chip in the Devin / Cascade chat panel) + 5-10 word purpose. Never use `file:///` links
+  - Main outputs only (the files [ACTOR] asked for or must open next). Helper, tracking, and scratch files go in a short `Also changed` line, or are omitted
+  - Place `Deliverables` before method, decisions, and details. Keep the rest of the summary short; no long "What I created" inventories
+  - Next step (one line, e.g. the command or prompt to run) follows `Deliverables`
+  - Clickable format (applies to EVERY message that names a file, including answers to "where is the file"): one path per bullet, inline single backticks, workspace-relative, forward slashes, e.g. - `docs/guides/_PROMPTS_01-Example.md` - purpose
+  - Never put paths in fenced code blocks, never use a bare absolute `[DRIVE]:\` path, never use `file:///` links: all render as plain text, not clickable. If the file is outside the workspace root, state that and give the absolute path in inline backticks
+  - Also state the file's session or folder in the purpose when it differs from the file the user has open
 
 ## Presenting Decisions
 

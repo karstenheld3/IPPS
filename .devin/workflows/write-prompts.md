@@ -22,6 +22,7 @@ Create `_PROMPTS_[NN]-[Topic].md` files containing an ordered list of prompts. E
 
 ## MUST-NOT-FORGET
 
+- Final message starts with `Deliverables`: clickable workspace-relative paths (backticked, forward slashes) of main output files + short purpose (`agent-behavior.md` Deliverables first)
 - First non-empty line MUST be an opening fence, Commentary (heading/notes), or optional Execution Frontmatter (per PRMT-FT-08). No other YAML frontmatter.
 - Optional Execution Frontmatter (PRMT-FT-08): YAML block at file start with `intended_model`, `context_window_size`, `effort`, `prompt_system`. Execution engine MAY honor or override. Omit if no hints needed.
 - Fence length: 3-9 backticks per prompt. Outer fence MUST exceed deepest inner fence
