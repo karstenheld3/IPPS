@@ -221,7 +221,7 @@ function firstHeadingText(root) {
 function addPageHeader(title, options) {
   var style = document.createElement("style");
   var text = JSON.stringify(title);
-  var rules = "@page { @top-center { content: " + text + "; font-family: \"Segoe UI\", \"Noto Sans\", Arial, sans-serif; font-size: 8pt; color: #536078; } }";
+  var rules = "@page { @top-center { content: " + text + "; font-family: Aileron, \"Segoe UI\", \"Noto Sans\", Arial, sans-serif; font-size: 8pt; color: #536078; } }";
   if (options && options.skipFirstPage) rules += "\n@page :first { @top-center { content: none; } }";
   style.textContent = rules;
   document.head.appendChild(style);

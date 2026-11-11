@@ -13,17 +13,19 @@ Two-step renderer: `render.py` injects Markdown into an HTML template that carri
 - [templates/DocumentDefault.html](templates/DocumentDefault.html) - single reading column
 - [templates/DocumentMultiLingual-Columns.html](templates/DocumentMultiLingual-Columns.html) - parallel streams (languages, versions) as aligned columns per section
 - [templates/MemoSigned.html](templates/MemoSigned.html) - formal memo/letter with key-terms grid and signature blocks
+- [templates/Article-2Columns.html](templates/Article-2Columns.html) - two-column editorial article, Aileron font weights, `N / T` page counter bottom right
 - [templates/shared/tokens.css](templates/shared/tokens.css) - palette, fonts, type scale, base element rules
 - [templates/shared/render-common.js](templates/shared/render-common.js) - shared template helpers (front matter, anchors, task lists, code classes, page breaks, image wait, table fitting, page header, done signal)
 
 ## MUST-NOT-FORGET
 
 1. Run with the venv Python: `& "[SKILL_TOOLS_FOLDER]\llm-venv\Scripts\python.exe" [AGENT_FOLDER]\skills\renderings\render.py ...`
-2. Pick the template first: documents with parallel language streams (`### DE (Original)` style markers) → `DocumentMultiLingual-Columns` with `--options`; formal memos/letters with signature blocks → `MemoSigned`; everything else → `DocumentDefault`
-3. Output goes to `_export_gitignore/` next to the input unless `--output-dir` is given; existing files are skipped unless `--overwrite`
-4. Images stay linked files (never embedded): keep them in `_assets/` next to the Markdown and link `![Alt](_assets/name.png)`. The HTML keeps the same relative `src` (GitHub-compatible); the referenced images are copied to the same relative path inside the output folder. Ship the HTML together with its `_assets/` folder
+2. Pick the template first: documents with parallel language streams (`### DE (Original)` style markers) → `DocumentMultiLingual-Columns` with `--options`; formal memos/letters with signature blocks → `MemoSigned`; magazine-style two-column articles → `Article-2Columns`; everything else → `DocumentDefault`
+3. Output goes next to the input unless `--output-dir` is given; existing files are skipped unless `--overwrite`
+4. Images stay linked files (never embedded): keep them in `_assets/` next to the Markdown and link `![Alt](_assets/name.png)`. The HTML keeps the same relative `src` (GitHub-compatible); with `--output-dir` the referenced images are copied to the same relative path. Ship the HTML together with its `_assets/` folder
 5. Templates must set `body[data-rendered="true"]` when done; `render.py` waits for it before printing. A template that never sets it fails after `--render-timeout` seconds
-6. Output HTML is self-contained except linked local images (no external scripts, fonts, or styles); do not add CDN links to templates. The PDF embeds every image
+6. Output HTML is self-contained except linked local images (no external scripts, fonts, or styles); do not add CDN links to templates. Embed fonts with `{{DATAURI:shared/fonts/<file>.woff}}`. The PDF embeds every image
+7. No bleeding design elements in print: office printers cannot print the paper edge (unprintable zone up to about 6.35 mm), so anything reaching the edge is cut off. Keep every printed element - backgrounds, bars, rules, images, header and footer text - at least 8 mm inside the paper edge; the print page background stays white
 
 ## Intent Lookup
 
@@ -79,7 +81,7 @@ Options of the `DocumentDefault` template (same `--options` syntax):
 1. Copy templates/DocumentDefault.html to templates/<name>.html
 2. Keep the placeholders: {{TITLE}}, {{LANG}}, {{MARKDOWN}} and the includes {{FILE:shared/tokens.css}}, {{FILE:shared/markdown-it.min.js}}, {{FILE:shared/render-common.js}}
 3. Keep the render script's last call finishRendering() - it sets data-rendered after fonts are ready
-4. Put layout in the template's own <style>: @page size and margins, margin boxes for header/footer, column CSS
+4. Put layout in the template's own <style>: @page size and margins, margin boxes for header/footer, column CSS. Page margins of 17 mm or more and margin-box text centered in a margin of 16 mm or more satisfy the no-bleed rule (MUST-NOT-FORGET 7)
 5. Test: python render.py sample.md --template templates/<name>.html --output-dir out --overwrite
 ```
 
@@ -88,6 +90,7 @@ Placeholder contract:
 - `{{TITLE}}` - HTML-escaped document title: `--title` (single input) → front matter `title:` → first `# ` heading → file stem
 - `{{LANG}}` - `--lang` → front matter `lang:` → `en`
 - `{{FILE:relative/path}}` - inlined file content from the templates folder (one level, no recursion, no `..`)
+- `{{DATAURI:relative/path}}` - base64 data URI of a binary file from the templates folder (`.woff`, `.woff2`, `.ttf`, `.otf`, `.png`, `.jpg`, `.svg`), used inside `url(...)` of `@font-face`; keeps the output HTML self-contained
 - `--paper` / `--landscape` inject a final `@page { size: ... }` rule before `</head>`
 
 ## CLI Reference
@@ -112,8 +115,9 @@ render.py <inputs...> [--format html|pdf|both] [--template NAME|PATH] [--options
   - Images: never cropped (no rounded corners, no clipping); block and centered, scaled to the column width and to 90% of the window height on screen, to 240 mm in print (fits one A4 page); images next to text in a paragraph stay inline; table fitting runs after all images loaded. Opt-in: `hrPageBreak=true`
 - **DocumentMultiLingual-Columns** - one card per section with N language columns, combined section title colored per column, block and table-row height alignment across columns (measured after images loaded), wide-table cards stacked vertically in print, landscape when more than 3 columns, single-column fallback with a notice when no marker matches; images follow the document rules with a print limit of 230 mm portrait and 143 mm landscape inside a column
 - **MemoSigned** - formal memo/letter layout with key-terms grid (dl/dt/dd), sectioned content, and signature blocks; A4 portrait, compact 12px body, navy/chrome/slate palette, page footer; designed for LOIs, term sheets, and similar signed documents
+- **Article-2Columns** - A4 portrait, two-column body (8.5 mm gap) under a centered full-width title and byline, margins 20/17/22/17 mm, no card chrome in print; Aileron embedded (Light 300 byline, Regular 400 body, SemiBold 600 headings and lead paragraph, Bold 700 title and `strong`, Regular and Bold italic); footer bottom right `N / T` (page / total), running title header on pages 2+; list markers use the text color; HTML about 320 KB because of the embedded fonts
 
-All three templates: no external resources, `-webkit-print-color-adjust: exact`, PDF bookmarks from headings (`outline=True`), tagged PDF.
+All four templates: no external resources, `-webkit-print-color-adjust: exact`, PDF bookmarks from headings (`outline=True`), tagged PDF.
 
 ## Gotchas
 
@@ -129,10 +133,6 @@ All three templates: no external resources, `-webkit-print-color-adjust: exact`,
 - **No hyphenation** - the Playwright Chromium build ships without hyphenation dictionaries; `hyphens: auto` would have no effect, so table fitting relies on font size, not on breaking words
 - **Braille art** - Consolas has no Braille glyphs; they fall back to the next monospace font with a different advance width and drift against box-drawing characters in the same block
 - **Screen screenshots show colored fringes** on thin box-drawing lines (Windows ClearType sub-pixel rendering); the PDF has none
-
-## Agent-Created Folders
-
-- `_export_gitignore/` - role: export; parent: content folder (folder of the input file); creator: `render.py` default output; content: rendered `.html` and `.pdf`, copies of linked images
 
 ## Vendored Library
 

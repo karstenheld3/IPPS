@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<meta name="render-options" content="tableFont=default; landscapeTables=0; hrPageBreak=false">
+<style>
+{{FILE:shared/tokens.css}}
+
+@font-face { font-family: Aileron; font-weight: 300; font-style: normal; src: url({{DATAURI:shared/fonts/aileron-light-webfont.woff}}) format("woff"); }
+@font-face { font-family: Aileron; font-weight: 400; font-style: normal; src: url({{DATAURI:shared/fonts/aileron-regular-webfont.woff}}) format("woff"); }
+@font-face { font-family: Aileron; font-weight: 400; font-style: italic; src: url({{DATAURI:shared/fonts/aileron-italic-webfont.woff}}) format("woff"); }
+@font-face { font-family: Aileron; font-weight: 600; font-style: normal; src: url({{DATAURI:shared/fonts/aileron-semibold-webfont.woff}}) format("woff"); }
+@font-face { font-family: Aileron; font-weight: 700; font-style: normal; src: url({{DATAURI:shared/fonts/aileron-bold-webfont.woff}}) format("woff"); }
+@font-face { font-family: Aileron; font-weight: 700; font-style: italic; src: url({{DATAURI:shared/fonts/aileron-bolditalic-webfont.woff}}) format("woff"); }
+
+:root { --print-image-max-height: 230mm; --font-article: Aileron, var(--font-sans); }
+@page { size: A4 portrait; margin: 20mm 17mm 22mm 17mm;
+  @bottom-right { content: counter(page) " / " counter(pages); font-family: Aileron, "Segoe UI", Arial, sans-serif; font-size: 8pt; font-weight: 600; color: #14213A; } }
+html { background: #F7FAFC; font-family: var(--font-article); font-weight: 400; }
+body { color: #14213A; }
+strong { font-weight: 700; }
+a { color: #2C5ED6; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+main { max-width: 960px; }
+h1 { border: 0; color: #14213A; font-size: 38px; font-weight: 700; letter-spacing: -0.028em; line-height: 1.1; text-align: center; margin: 10px 0 12px; padding: 0; column-span: all; }
+h1 + p { color: #283552; font-size: 13px; font-weight: 300; line-height: 1.45; text-align: center; margin: 0 0 26px; column-span: all; }
+h1 + p strong { font-weight: 600; }
+h1 + p + p { color: #14213A; font-size: 17px; line-height: 1.5; margin: 0 0 16px; }
+h2 { break-after: avoid; color: #14213A; font-size: 18px; font-weight: 600; letter-spacing: -0.012em; line-height: 1.25; margin: 22px 0 7px; }
+h3 { break-after: avoid; color: #283552; font-size: 15px; font-weight: 600; margin: 16px 0 5px; }
+p, li { font-size: 15.5px; line-height: 1.52; }
+p { margin: 0 0 12px; }
+ul { list-style: none; padding-left: 0; margin: 0 0 12px; }
+ul > li { position: relative; padding-left: 14px; margin-bottom: 6px; break-inside: avoid; }
+ul > li::before { content: ""; position: absolute; left: 1px; top: 0.68em; width: 3.5px; height: 3.5px; background: currentColor; border-radius: 9999px; }
+ol { padding-left: 1.25em; margin: 0 0 12px; }
+ol > li { margin-bottom: 6px; break-inside: avoid; }
+ol > li::marker { color: inherit; font-weight: 400; }
+blockquote { border-left: 2px solid #A3BFE8; background: #F7FAFC; margin: 10px 0; padding: 8px 12px; break-inside: avoid; }
+code { background: #EAF3FC; border: 1px solid #C8D6E5; font-size: 0.9em; padding: 1px 4px; border-radius: 4px; }
+pre { background: #FFFFFF; break-inside: avoid; }
+table { column-span: all; }
+@media screen {
+  body { padding: 48px 18px; }
+  main { margin: 0 auto; padding: 58px 66px 64px; background: #FFFFFF; border: 1px solid #C8D6E5; column-count: 2; column-gap: 38px; }
+}
+@media print {
+  html { background: #FFFFFF; font-size: 9.5pt; line-height: 1.4; }
+  main { max-width: none; padding: 0; column-count: 2; column-gap: 8.5mm; }
+  h1 { font-size: 26pt; margin: 5mm 0 2.2mm; }
+  h1 + p { font-size: 8.2pt; margin-bottom: 7mm; padding-bottom: 3.5mm; border-bottom: 1px solid #C8D6E5; }
+  h1 + p + p { font-size: 9.8pt; font-weight: 600; line-height: 1.42; margin-bottom: 2.8mm; }
+  h2 { font-size: 11pt; margin: 4.2mm 0 1.5mm; }
+  h3 { font-size: 9.8pt; margin: 3mm 0 1mm; }
+  p, li { font-size: 9.3pt; line-height: 1.39; }
+  p { margin: 0 0 2.4mm; }
+  ul, ol { margin: 0 0 2.4mm; }
+  ul > li, ol > li { margin-bottom: 1.3mm; }
+}
+</style>
+<script>{{FILE:shared/markdown-it.min.js}}</script>
+<script type="text/markdown" id="source">{{MARKDOWN}}</script>
+</head>
+<body data-rendered="false">
+<main id="content"></main>
+<script>
+{{FILE:shared/render-common.js}}
+(function () {
+  var options = readRenderOptions();
+  var source = readSource();
+  var parts = splitFrontMatter(source);
+  var md = createMarkdown();
+  var content = document.getElementById("content");
+  measureCodeLineHeight();
+  content.innerHTML = md.render(parts.body);
+  var title = document.title || parts.frontMatter.title || firstHeadingText(content) || "Document";
+  postProcess(content, options).then(function () {
+    document.title = title;
+    addPageHeader(title, { skipFirstPage: true });
+    finishRendering();
+  });
+})();
+</script>
+</body>
+</html>

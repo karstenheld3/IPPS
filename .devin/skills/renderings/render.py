@@ -10,6 +10,7 @@ Usage:
 Exit codes: 0 all ok or skipped, 1 at least one input failed, 2 setup or argument error.
 """
 import argparse
+import base64
 import glob
 import html
 import json
@@ -23,6 +24,8 @@ from pathlib import Path
 SCRIPT_FOLDER = Path(__file__).resolve().parent
 TEMPLATES_FOLDER = SCRIPT_FOLDER / "templates"
 INCLUDE_PATTERN = re.compile(r"\{\{FILE:([^}]+)\}\}")
+DATA_URI_PATTERN = re.compile(r"\{\{DATAURI:([^}]+)\}\}")
+DATA_URI_MIME_TYPES = {".woff": "font/woff", ".woff2": "font/woff2", ".ttf": "font/ttf", ".otf": "font/otf", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml"}
 PLACEHOLDER_PATTERN = re.compile(r"\{\{[A-Z_]+(?::[^}]*)?\}\}")
 RENDER_OPTIONS_PATTERN = re.compile(r'(<meta\s+name="render-options"\s+content=")([^"]*)(")')
 PROMPTSYSTEM_LINE_PATTERN = re.compile(r"^[ \t]*<PromptSystem\b[^>]*>[ \t]*\r?\n?", re.MULTILINE)
@@ -30,7 +33,6 @@ PROMPTSYSTEM_LINE_PATTERN = re.compile(r"^[ \t]*<PromptSystem\b[^>]*>[ \t]*\r?\n
 IMAGE_SOURCE_PATTERNS = [re.compile(r"!\[[^\]]*\]\(\s*<([^>]+)>"), re.compile(r"!\[[^\]]*\]\(\s*([^)\s<][^)\s]*)"), re.compile(r"<img\b[^>]*?\bsrc\s*=\s*[\"']([^\"']+)[\"']", re.IGNORECASE)]
 CODE_SPAN_PATTERN = re.compile(r"(`+)(.+?)\1")
 FENCE_PATTERN = re.compile(r"^[ \t]*(`{3,}|~{3,})")
-DEFAULT_EXPORT_FOLDER = "_export_gitignore"
 INSTALL_HINT = 'Run: "{python}" -m playwright install chromium-headless-shell'
 
 
@@ -44,7 +46,7 @@ def parse_arguments():
   parser.add_argument("--format", choices=["html", "pdf", "both"], default="both")
   parser.add_argument("--template", default="DocumentDefault", help="template name in templates/ or path to an HTML file")
   parser.add_argument("--options", help='override the template <meta name="render-options"> content, e.g. "columns=DE:DE,EN:EN,PT:PT; markers=^###\\s*DE,^###\\s*EN,^###\\s*PT"')
-  parser.add_argument("--output-dir", help=f"output folder (default: {DEFAULT_EXPORT_FOLDER}/ next to each input)")
+  parser.add_argument("--output-dir", help="output folder (default: next to each input)")
   parser.add_argument("--paper", choices=["A4", "Letter"], help="override template page size")
   parser.add_argument("--landscape", action="store_true", help="override template orientation")
   parser.add_argument("--lang", default=None, help="html lang attribute (default: front matter lang:, else en)")
@@ -103,16 +105,28 @@ def load_template(name_or_path):
   return text
 
 
+def resolve_template_file(relative):
+  retVal = (TEMPLATES_FOLDER / relative).resolve()
+  if TEMPLATES_FOLDER.resolve() not in retVal.parents:
+    raise SetupError(f"Include outside templates folder: {relative}")
+  if not retVal.is_file():
+    raise SetupError(f"Include not found: {retVal}")
+  return retVal
+
+
 def resolve_includes(text):
   def replace(match):
-    relative = match.group(1).strip()
-    target = (TEMPLATES_FOLDER / relative).resolve()
-    if TEMPLATES_FOLDER.resolve() not in target.parents:
-      raise SetupError(f"Include outside templates folder: {relative}")
-    if not target.is_file():
-      raise SetupError(f"Include not found: {target}")
-    return target.read_text(encoding="utf-8")
-  return INCLUDE_PATTERN.sub(replace, text)
+    return resolve_template_file(match.group(1).strip()).read_text(encoding="utf-8")
+
+  def replace_data_uri(match):
+    target = resolve_template_file(match.group(1).strip())
+    mime_type = DATA_URI_MIME_TYPES.get(target.suffix.lower())
+    if not mime_type:
+      raise SetupError(f"No MIME type for data URI include: {target.name}")
+    return f"data:{mime_type};base64," + base64.b64encode(target.read_bytes()).decode("ascii")
+  retVal = INCLUDE_PATTERN.sub(replace, text)
+  retVal = DATA_URI_PATTERN.sub(replace_data_uri, retVal)
+  return retVal
 
 
 def read_document(path, lang_override, title_override):
@@ -203,7 +217,7 @@ def find_image_sources(text):
 def copy_images(document, output_dir, overwrite):
   retVal = []
   input_folder = document["path"].parent.resolve()
-  output_folder = Path(output_dir).resolve() if output_dir else input_folder / DEFAULT_EXPORT_FOLDER
+  output_folder = Path(output_dir).resolve() if output_dir else input_folder
   elsewhere = output_folder != input_folder
   not_found = []
   outside = []
@@ -270,7 +284,7 @@ def inject(template_text, document, paper, landscape):
 
 
 def output_path_for(document, output_dir, suffix):
-  folder = Path(output_dir).resolve() if output_dir else document["path"].parent / DEFAULT_EXPORT_FOLDER
+  folder = Path(output_dir).resolve() if output_dir else document["path"].parent
   return folder / (document["path"].stem + suffix)
 
 
@@ -436,7 +450,7 @@ def main():
         ok += 1
     else:
       ok += 1
-  output_folder = Path(args.output_dir).resolve() if args.output_dir else artifacts[0]["path"].parent / DEFAULT_EXPORT_FOLDER
+  output_folder = Path(args.output_dir).resolve() if args.output_dir else artifacts[0]["path"].parent
   print(f"DONE: {ok} ok, {failed} failed, {skipped} skipped. Output: {output_folder}", flush=True)
   return 1 if failed else 0
 
