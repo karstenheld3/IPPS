@@ -1,0 +1,15 @@
+{
+  "_date": "2026-11-11",
+  "_run_mode": "NEWMODEL",
+  "_target_providers": ["Anthropic", "OpenAI", "Google", "Z.AI", "xAI"],
+  "_target_models": ["claude-fable-5-2", "claude-mythos-5-2", "gemini-4-carbon", "gpt-6-cyber", "gpt-6-astra-law"],
+  "newRegistryIds": ["gpt-6-cyber", "gpt-6-astra-law", "claude-fable-5-2", "claude-mythos-5-2", "gemini-4-carbon"],
+  "newPricingIds": ["gpt-6-cyber", "gpt-6-astra-law", "claude-fable-5-2", "claude-mythos-5-2", "gemini-4-carbon"],
+  "changedPricingIds": [],
+  "changedPricingDetails": {},
+  "ec9_corrections": [],
+  "deferred": [
+    {"model_id": "glm-ocr", "reason": "OCR models deferred by user 2026-11-11 (DD-15); release_date 2026-02-02 correction and file-based limits not applied"},
+    {"model_id": "chat-latest", "reason": "rolling alias, no pinned identity"}
+  ]
+}

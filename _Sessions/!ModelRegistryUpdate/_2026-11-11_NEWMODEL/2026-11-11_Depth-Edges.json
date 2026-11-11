@@ -1,0 +1,65 @@
+{
+  "_source": "Vendor pages read with Playwright 2026-11-11 (Anthropic, Google, OpenAI pricing and model pages); OpenAI announcement and help pages via search result summaries",
+  "_date": "2026-11-11",
+  "_extracted": "2026-11-11",
+  "new_models": {
+    "claude-fable-5-2": {
+      "model_id": "claude-fable-5-2", "provider": "anthropic", "release_date": "2026-11-09", "release_date_assumed": false, "uc_class": "UC-1 Apex",
+      "source": "https://platform.claude.com/docs/en/models/fable-5-2/overview", "accessed": "2026-11-11"
+    },
+    "claude-mythos-5-2": {
+      "model_id": "claude-mythos-5-2", "provider": "anthropic", "release_date": "2026-11-09", "release_date_assumed": false, "uc_class": "UC-1 Apex",
+      "source": "https://platform.claude.com/docs/en/models/mythos-5-2/overview", "accessed": "2026-11-11"
+    },
+    "gemini-4-carbon": {
+      "model_id": "gemini-4-carbon", "provider": "google", "release_date": "2026-10-28", "release_date_assumed": false, "uc_class": "UC-1 Apex",
+      "source": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/", "accessed": "2026-11-11"
+    },
+    "gpt-6-cyber": {
+      "model_id": "gpt-6-cyber", "provider": "openai", "release_date": "2026-11-05", "release_date_assumed": false, "uc_class": "UC-1 Apex",
+      "source": "https://openai.com/index/introducing-gpt-6-cyber", "accessed": "2026-11-11"
+    },
+    "gpt-6-astra-law": {
+      "model_id": "gpt-6-astra-law", "provider": "openai", "release_date": "2026-09-17", "release_date_assumed": true, "uc_class": "UC-1 Apex",
+      "source": "https://openai.com/index/astra-for-law/", "accessed": "2026-11-11"
+    }
+  },
+  "deeper_than_candidates": [
+    {
+      "x": "claude-fable-5-2", "model": "claude-opus-5-5", "kind": "E1",
+      "source": "https://platform.claude.com/docs/en/models/overview", "accessed": "2026-11-11",
+      "statement": "start with Claude Opus 5.5 for most workloads. Use Claude Fable 5.2 for demanding reasoning and long-horizon agentic work, or when your evals on Claude Opus 5.5 at higher effort still fall short."
+    },
+    {
+      "x": "gemini-4-carbon", "model": "gemini-4-argon", "kind": "E1",
+      "source": "https://ai.google.dev/gemini-api/docs/models", "accessed": "2026-11-11",
+      "statement": "Gemini 4 Carbon: Our strongest reasoning model, built for complex software engineering, multimodal knowledge work, scientific reasoning, and cybersecurity defense. Gemini 4 Argon: Our efficient Gemini 4 frontier reasoning model, delivering faster responses and lower token spend per turn compared to Gemini 4 Carbon across complex coding, agentic, math, and science tasks."
+    },
+    {
+      "x": "gpt-6-cyber", "model": "gpt-6-astra", "kind": "E1",
+      "source": "https://openai.com/index/introducing-gpt-6-cyber", "accessed": "2026-11-11",
+      "statement": "GPT-6 Cyber is a major step up from GPT-5.6 Cyber and outperforms GPT-6 Astra on most cyber tasks, even when Astra does not refuse the request."
+    }
+  ],
+  "ties": [
+    {
+      "x": "claude-mythos-5-2", "model": "claude-fable-5-2", "kind": "E5",
+      "source": "https://platform.claude.com/docs/en/models/fable-5-2/overview", "accessed": "2026-11-11",
+      "reason": "Claude Mythos 5.2 offers the same capabilities only to organizations verified through Anthropic's verification programs, such as the Cyber Verification Program. It shares Claude Fable 5.2's specifications and pricing. (EC-3)"
+    },
+    {
+      "x": "gpt-6-astra-law", "model": "gpt-6-astra", "kind": "E5",
+      "source": "https://help.openai.com/en/articles/20001528-astra-for-law", "accessed": "2026-11-11",
+      "reason": "Astra for Law is GPT-6 Astra tailored for professional legal work; same price (10.00 / 50.00 / 1.00 per 1M tokens). (EC-3)"
+    }
+  ],
+  "estimates": [],
+  "ec9_corrections": [],
+  "excluded": [
+    {
+      "model_id": "chat-latest", "provider": "openai",
+      "reason": "Rolling ChatGPT alias without a pinned model identity; an append-only depth rung cannot be assigned. Price seen: 5.00 input / 0.50 cached / 30.00 output.",
+      "source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard", "accessed": "2026-11-11"
+    }
+  ]
+}

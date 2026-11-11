@@ -1,0 +1,34 @@
+Layering depth ladder (insert-only) from model-registry.json 1.12.2 and 2026-11-11_Epoch-ECI-Match.json...
+  111 models, 106 with depth.
+  Manual edges: 6 valid, 0 rejected.
+  Edges: E1 90, E2 76, E3 1939, E5 11, manual 6.
+  5 models to insert.
+  [ 1 / 5 ] gpt-6-astra-law: D11 (E1 > gpt-6-sol)
+  [ 2 / 5 ] gemini-4-carbon: D11 (E1m > gemini-4-argon)
+  [ 3 / 5 ] gpt-6-cyber: D12 (E1m > gpt-6-astra)
+  [ 4 / 5 ] claude-fable-5-2: D13 (E3 > claude-fable-5)
+  [ 5 / 5 ] claude-mythos-5-2: D13 (E5 = claude-fable-5-2)
+  Existing rungs consistent: 92 / 106.
+    INCONSISTENT o3-mini D3 E3> gpt-4.1 D3 (report only, rung kept)
+    INCONSISTENT o4-mini D4 E3> o1 D4 (report only, rung kept)
+    INCONSISTENT gpt-5-nano D2 E3> claude-3-5-sonnet D2 (report only, rung kept)
+    INCONSISTENT gpt-5-nano D2 E3> gpt-4.1-mini D2 (report only, rung kept)
+    INCONSISTENT gpt-5-nano D2 E3> gemini-2.5-flash-lite D2 (report only, rung kept)
+    INCONSISTENT gpt-5.1 D6 E3> o3-pro D6 (report only, rung kept)
+    INCONSISTENT claude-opus-4-5 D6 E3> o3-pro D6 (report only, rung kept)
+    INCONSISTENT gemini-3.1-pro-preview D7 E3> gpt-5-pro D7 (report only, rung kept)
+    INCONSISTENT gemini-3.1-pro-preview D7 E3> gemini-3-flash-preview D7 (report only, rung kept)
+    INCONSISTENT grok-4.20-0309-reasoning D6 E3> o3-pro D6 (report only, rung kept)
+    INCONSISTENT grok-4.20-multi-agent-0309 D6 E3> o3-pro D6 (report only, rung kept)
+    INCONSISTENT gemini-3.5-flash-lite D4 E3> o1 D4 (report only, rung kept)
+    INCONSISTENT grok-4.5 D7 E3> gpt-5-pro D7 (report only, rung kept)
+    INCONSISTENT glm-5.2 D6 E3> o3-pro D6 (report only, rung kept)
+    INCONSISTENT glm-5.2 D6 E3> gpt-5.4-mini D6 (report only, rung kept)
+    INCONSISTENT gemini-3.6-flash D7 E3> gpt-5-pro D7 (report only, rung kept)
+    INCONSISTENT gpt-6.1-sol D10 E3> gpt-5.5-pro D10 (report only, rung kept)
+    INCONSISTENT gpt-6.1-sol D10 E3> gpt-5.6-sol D10 (report only, rung kept)
+    INCONSISTENT gpt-6.1-terra D9 E3> gpt-5.4-pro D9 (report only, rung kept)
+    INCONSISTENT gpt-6.1-terra D9 E3> gpt-5.5 D9 (report only, rung kept)
+    INCONSISTENT gpt-6.1-terra D9 E3> gpt-5.6-terra D9 (report only, rung kept)
+  Wrote e:\dev\IPPS\PromptSystemV4.7\skills\llm-tools\model-registry.json.
+OK: 5 inserted, 0 squeezed, 0 cycles.

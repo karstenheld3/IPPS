@@ -1,0 +1,1125 @@
+{
+  "_source": "e:\\dev\\IPPS\\_Sessions\\!ModelRegistryUpdate\\_2026-11-11_NEWMODEL\\2026-11-11_eci-leaderboard.csv",
+  "_url": "https://epoch.ai/eci",
+  "_direct_csv_url": "https://epoch.ai/data/eci_scores.csv",
+  "_snapshot_date": "2026-11-11",
+  "_total_csv_models": 255,
+  "_total_models_evaluated": 111,
+  "_matched_with_eci_score": 71,
+  "unmatched": [
+    "gpt-6-cyber",
+    "gpt-6-astra-law",
+    "gpt-6-rosalind",
+    "gpt-rosalind-discovery",
+    "gpt-rosalind-research",
+    "gpt-5-search-api",
+    "gpt-4-turbo-2024-04-09",
+    "gpt-4-0613",
+    "gpt-3.5-turbo",
+    "gpt-3.5-turbo-0125",
+    "gpt-5.5-cyber",
+    "gpt-5.3-codex",
+    "gpt-5.6-cyber",
+    "o1-pro",
+    "o3-deep-research",
+    "o4-mini-deep-research",
+    "claude-mythos-5-2",
+    "claude-mythos-5-1",
+    "claude-mythos-5",
+    "gemini-4-carbon",
+    "glm-4-32b-0414-128k",
+    "glm-4.5-air",
+    "glm-4.6v-flash",
+    "glm-4.6v-flashx",
+    "glm-ocr",
+    "glm-5.3-flashx",
+    "glm-5.3-flashx-legal",
+    "glm-4.7-flashx",
+    "glm-4.7-flash",
+    "glm-4.6",
+    "glm-4.6v",
+    "glm-4.5v",
+    "glm-4.5-x",
+    "glm-4.5-flash",
+    "glm-4.5-airx",
+    "glm-4.5",
+    "glm-4-air",
+    "grok-4.20-multi-agent",
+    "grok-build-0.1",
+    "grok-4.20-0309-non-reasoning"
+  ],
+  "new_models": [],
+  "missing_metadata": [],
+  "matches": [
+    {
+      "provider": "openai",
+      "model_id": "gpt-6-cyber",
+      "name": "GPT-6 Cyber",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-6-astra-law",
+      "name": "GPT-6 Astra Law",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-6-rosalind",
+      "name": "GPT-6 Rosalind",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-rosalind-discovery",
+      "name": "GPT-Rosalind Discovery",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-rosalind-research",
+      "name": "GPT-Rosalind Research",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5-search-api",
+      "name": "GPT-5 Search API",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4-turbo-2024-04-09",
+      "name": "GPT-4 Turbo (2024-04-09)",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4-0613",
+      "name": "GPT-4 (0613)",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-3.5-turbo",
+      "name": "GPT-3.5 Turbo",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-3.5-turbo-0125",
+      "name": "GPT-3.5 Turbo (0125)",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-6.1-sol",
+      "name": "GPT-6.1 Sol",
+      "epoch_name": "GPT-6.1 Sol",
+      "eci_score": 168.87,
+      "eci_ci_low": 165.9,
+      "eci_ci_high": 172.24,
+      "release_date_in_eci": "2026-09-29"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-6.1-terra",
+      "name": "GPT-6.1 Terra",
+      "epoch_name": "GPT-6.1 Terra",
+      "eci_score": 168.11,
+      "eci_ci_low": 165.09,
+      "eci_ci_high": 171.5,
+      "release_date_in_eci": "2026-10-26"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-6-sol",
+      "name": "GPT-6 Sol",
+      "epoch_name": "GPT-6 Sol",
+      "eci_score": 164.0,
+      "eci_ci_low": 161.51,
+      "eci_ci_high": 166.81,
+      "release_date_in_eci": "2026-09-22"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-6-luna",
+      "name": "GPT-6 Luna",
+      "epoch_name": "GPT-6 Luna",
+      "eci_score": 156.5,
+      "eci_ci_low": 154.6,
+      "eci_ci_high": 158.57,
+      "release_date_in_eci": "2026-09-22"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.5-cyber",
+      "name": "GPT-5.5 Cyber",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.3-codex",
+      "name": "GPT-5.3 Codex",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-6-astra",
+      "name": "GPT-6 Astra",
+      "epoch_name": "GPT-6 Astra",
+      "eci_score": 169.16,
+      "eci_ci_low": 166.19,
+      "eci_ci_high": 172.51,
+      "release_date_in_eci": "2026-09-03"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.6-sol",
+      "name": "GPT-5.6 Sol",
+      "epoch_name": "GPT-5.6 Sol",
+      "eci_score": 163.02,
+      "eci_ci_low": 160.72,
+      "eci_ci_high": 165.59,
+      "release_date_in_eci": "2026-07-09"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.6-terra",
+      "name": "GPT-5.6 Terra",
+      "epoch_name": "GPT-5.6 Terra",
+      "eci_score": 160.86,
+      "eci_ci_low": 158.62,
+      "eci_ci_high": 163.3,
+      "release_date_in_eci": "2026-07-09"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.6-luna",
+      "name": "GPT-5.6 Luna",
+      "epoch_name": "GPT-5.6 Luna",
+      "eci_score": 156.75,
+      "eci_ci_low": 154.87,
+      "eci_ci_high": 158.8,
+      "release_date_in_eci": "2026-07-09"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.6-cyber",
+      "name": "GPT-5.6 Cyber",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.5",
+      "name": "GPT-5.5",
+      "epoch_name": "GPT-5.5",
+      "eci_score": 160.06,
+      "eci_ci_low": 158.02,
+      "eci_ci_high": 162.38,
+      "release_date_in_eci": "2026-04-23"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.5-pro",
+      "name": "GPT-5.5 Pro",
+      "epoch_name": "GPT-5.5 Pro",
+      "eci_score": 162.75,
+      "eci_ci_low": 159.99,
+      "eci_ci_high": 165.79,
+      "release_date_in_eci": "2026-04-23"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.4",
+      "name": "GPT-5.4",
+      "epoch_name": "GPT-5.4",
+      "eci_score": 157.81,
+      "eci_ci_low": 155.95,
+      "eci_ci_high": 159.96,
+      "release_date_in_eci": "2026-03-05"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.4-pro",
+      "name": "GPT-5.4 Pro",
+      "epoch_name": "GPT-5.4 Pro",
+      "eci_score": 160.17,
+      "eci_ci_low": 157.72,
+      "eci_ci_high": 162.87,
+      "release_date_in_eci": "2026-03-05"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.4-mini",
+      "name": "GPT-5.4 Mini",
+      "epoch_name": "GPT-5.4 Mini",
+      "eci_score": 149.33,
+      "eci_ci_low": 147.69,
+      "eci_ci_high": 151.11,
+      "release_date_in_eci": "2026-03-17"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.4-nano",
+      "name": "GPT-5.4 Nano",
+      "epoch_name": "GPT-5.4 Nano",
+      "eci_score": 146.39,
+      "eci_ci_low": 144.73,
+      "eci_ci_high": 148.04,
+      "release_date_in_eci": "2026-03-17"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.2",
+      "name": "GPT-5.2",
+      "epoch_name": "GPT-5.2",
+      "eci_score": 154.4,
+      "eci_ci_low": 152.77,
+      "eci_ci_high": 156.24,
+      "release_date_in_eci": "2025-12-11"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.1",
+      "name": "GPT-5.1",
+      "epoch_name": "GPT-5.1",
+      "eci_score": 150.89,
+      "eci_ci_low": 149.38,
+      "eci_ci_high": 152.52,
+      "release_date_in_eci": "2025-11-13"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5",
+      "name": "GPT-5",
+      "epoch_name": "GPT-5",
+      "eci_score": 150.0,
+      "eci_ci_low": null,
+      "eci_ci_high": null,
+      "release_date_in_eci": "2025-08-07"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5-mini",
+      "name": "GPT-5 Mini",
+      "epoch_name": "GPT-5 mini",
+      "eci_score": 146.08,
+      "eci_ci_low": 144.51,
+      "eci_ci_high": 147.6,
+      "release_date_in_eci": "2025-08-07"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5-nano",
+      "name": "GPT-5 Nano",
+      "epoch_name": "GPT-5 nano",
+      "eci_score": 139.16,
+      "eci_ci_low": 137.2,
+      "eci_ci_high": 140.99,
+      "release_date_in_eci": "2025-08-07"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5.2-pro",
+      "name": "GPT-5.2 Pro",
+      "epoch_name": "GPT-5.2 Pro",
+      "eci_score": 157.21,
+      "eci_ci_low": 154.95,
+      "eci_ci_high": 159.78,
+      "release_date_in_eci": "2025-12-11"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-5-pro",
+      "name": "GPT-5 Pro",
+      "epoch_name": "GPT-5 Pro",
+      "eci_score": 151.17,
+      "eci_ci_low": 149.26,
+      "eci_ci_high": 153.17,
+      "release_date_in_eci": "2025-10-07"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4.1",
+      "name": "GPT-4.1",
+      "epoch_name": "GPT-4.1",
+      "eci_score": 136.17,
+      "eci_ci_low": 134.2,
+      "eci_ci_high": 138.04,
+      "release_date_in_eci": "2025-04-14"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4.1-mini",
+      "name": "GPT-4.1 Mini",
+      "epoch_name": "GPT-4.1 mini",
+      "eci_score": 134.27,
+      "eci_ci_low": 132.09,
+      "eci_ci_high": 136.26,
+      "release_date_in_eci": "2025-04-14"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4.1-nano",
+      "name": "GPT-4.1 Nano",
+      "epoch_name": "GPT-4.1 nano",
+      "eci_score": 126.89,
+      "eci_ci_low": 123.84,
+      "eci_ci_high": 129.6,
+      "release_date_in_eci": "2025-04-14"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4o",
+      "name": "GPT-4o",
+      "epoch_name": "GPT-4o (May 2024)",
+      "eci_score": 128.2,
+      "eci_ci_low": 125.44,
+      "eci_ci_high": 130.87,
+      "release_date_in_eci": "2024-05-13"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4o-mini",
+      "name": "GPT-4o Mini",
+      "epoch_name": "GPT-4o mini",
+      "eci_score": 124.02,
+      "eci_ci_low": 120.7,
+      "eci_ci_high": 127.05,
+      "release_date_in_eci": "2024-07-18"
+    },
+    {
+      "provider": "openai",
+      "model_id": "gpt-4o-2024-05-13",
+      "name": "GPT-4o (2024-05-13)",
+      "epoch_name": "GPT-4o (May 2024)",
+      "eci_score": 128.2,
+      "eci_ci_low": 125.44,
+      "eci_ci_high": 130.87,
+      "release_date_in_eci": "2024-05-13"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o1",
+      "name": "O1",
+      "epoch_name": "o1",
+      "eci_score": 141.16,
+      "eci_ci_low": 139.51,
+      "eci_ci_high": 142.77,
+      "release_date_in_eci": "2024-12-17"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o1-pro",
+      "name": "O1 Pro",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "o1-mini",
+      "name": "O1 Mini",
+      "epoch_name": "o1-mini",
+      "eci_score": 135.38,
+      "eci_ci_low": 133.16,
+      "eci_ci_high": 137.48,
+      "release_date_in_eci": "2024-09-12"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o3",
+      "name": "O3",
+      "epoch_name": "o3",
+      "eci_score": 147.01,
+      "eci_ci_low": 145.54,
+      "eci_ci_high": 148.54,
+      "release_date_in_eci": "2025-04-16"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o3-pro",
+      "name": "O3 Pro",
+      "epoch_name": "o3-pro",
+      "eci_score": 147.45,
+      "eci_ci_low": 145.58,
+      "eci_ci_high": 149.31,
+      "release_date_in_eci": "2025-06-10"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o3-mini",
+      "name": "O3 Mini",
+      "epoch_name": "o3-mini",
+      "eci_score": 140.65,
+      "eci_ci_low": 138.95,
+      "eci_ci_high": 142.27,
+      "release_date_in_eci": "2025-01-31"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o3-deep-research",
+      "name": "O3 Deep Research",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "openai",
+      "model_id": "o4-mini",
+      "name": "O4 Mini",
+      "epoch_name": "o4-mini",
+      "eci_score": 145.22,
+      "eci_ci_low": 143.77,
+      "eci_ci_high": 146.65,
+      "release_date_in_eci": "2025-04-16"
+    },
+    {
+      "provider": "openai",
+      "model_id": "o4-mini-deep-research",
+      "name": "O4 Mini Deep Research",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-fable-5-2",
+      "name": "Claude Fable 5.2",
+      "epoch_name": "Claude Fable 5.2",
+      "eci_score": 174.24,
+      "eci_ci_low": 170.12,
+      "eci_ci_high": 178.79,
+      "release_date_in_eci": "2026-11-09"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-mythos-5-2",
+      "name": "Claude Mythos 5.2",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-fable-5-1",
+      "name": "Claude Fable 5.1",
+      "epoch_name": "Claude Fable 5.1",
+      "eci_score": 167.04,
+      "eci_ci_low": 164.29,
+      "eci_ci_high": 170.2,
+      "release_date_in_eci": "2026-09-01"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-mythos-5-1",
+      "name": "Claude Mythos 5.1",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-5-5",
+      "name": "Claude Opus 5.5",
+      "epoch_name": "Claude Opus 5.5",
+      "eci_score": 168.67,
+      "eci_ci_low": 165.78,
+      "eci_ci_high": 171.91,
+      "release_date_in_eci": "2026-09-22"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-sonnet-5-5",
+      "name": "Claude Sonnet 5.5",
+      "epoch_name": "Claude Sonnet 5.5",
+      "eci_score": 166.32,
+      "eci_ci_low": 163.65,
+      "eci_ci_high": 169.35,
+      "release_date_in_eci": "2026-09-28"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-haiku-5-5",
+      "name": "Claude Haiku 5.5",
+      "epoch_name": "Claude Haiku 5.5",
+      "eci_score": 160.25,
+      "eci_ci_low": 158.02,
+      "eci_ci_high": 162.73,
+      "release_date_in_eci": "2026-10-07"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-fable-5",
+      "name": "Claude Fable 5",
+      "epoch_name": "Claude Fable 5",
+      "eci_score": 164.25,
+      "eci_ci_low": 161.83,
+      "eci_ci_high": 167.02,
+      "release_date_in_eci": "2026-06-09"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-mythos-5",
+      "name": "Claude Mythos 5",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-5",
+      "name": "Claude Opus 5",
+      "epoch_name": "Claude Opus 5",
+      "eci_score": 164.48,
+      "eci_ci_low": 162.02,
+      "eci_ci_high": 167.3,
+      "release_date_in_eci": "2026-07-24"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-sonnet-5",
+      "name": "Claude Sonnet 5",
+      "epoch_name": "Claude Sonnet 5",
+      "eci_score": 156.72,
+      "eci_ci_low": 154.73,
+      "eci_ci_high": 158.86,
+      "release_date_in_eci": "2026-06-30"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-4-8",
+      "name": "Claude Opus 4.8",
+      "epoch_name": "Claude Opus 4.8",
+      "eci_score": 159.91,
+      "eci_ci_low": 157.82,
+      "eci_ci_high": 162.25,
+      "release_date_in_eci": "2026-05-28"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-4-7",
+      "name": "Claude Opus 4.7",
+      "epoch_name": "Claude Opus 4.7",
+      "eci_score": 157.56,
+      "eci_ci_low": 155.69,
+      "eci_ci_high": 159.63,
+      "release_date_in_eci": "2026-04-16"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-4-6",
+      "name": "Claude Opus 4.6",
+      "epoch_name": "Claude Opus 4.6",
+      "eci_score": 156.31,
+      "eci_ci_low": 154.57,
+      "eci_ci_high": 158.22,
+      "release_date_in_eci": "2026-02-05"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-sonnet-4-6",
+      "name": "Claude Sonnet 4.6",
+      "epoch_name": "Claude Sonnet 4.6",
+      "eci_score": 152.84,
+      "eci_ci_low": 151.18,
+      "eci_ci_high": 154.58,
+      "release_date_in_eci": "2026-02-17"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-opus-4-5-20251101",
+      "name": "Claude Opus 4.5",
+      "epoch_name": "Claude Opus 4.5",
+      "eci_score": 151.83,
+      "eci_ci_low": 150.28,
+      "eci_ci_high": 153.47,
+      "release_date_in_eci": "2025-11-24"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-sonnet-4-5-20250929",
+      "name": "Claude Sonnet 4.5",
+      "epoch_name": "Claude Sonnet 4.5",
+      "eci_score": 147.6,
+      "eci_ci_low": 146.16,
+      "eci_ci_high": 149.05,
+      "release_date_in_eci": "2025-09-29"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-haiku-4-5-20251001",
+      "name": "Claude Haiku 4.5",
+      "epoch_name": "Claude Haiku 4.5",
+      "eci_score": 142.86,
+      "eci_ci_low": 141.17,
+      "eci_ci_high": 144.46,
+      "release_date_in_eci": "2025-10-15"
+    },
+    {
+      "provider": "anthropic",
+      "model_id": "claude-3-5-sonnet-20241022",
+      "name": "Claude 3.5 Sonnet",
+      "epoch_name": "Claude 3.5 Sonnet (October 2024)",
+      "eci_score": 133.46,
+      "eci_ci_low": 131.16,
+      "eci_ci_high": 135.67,
+      "release_date_in_eci": "2024-10-22"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-4-carbon",
+      "name": "Gemini 4 Carbon",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-4-argon",
+      "name": "Gemini 4 Argon",
+      "epoch_name": "Gemini 4 Argon",
+      "eci_score": 166.53,
+      "eci_ci_low": 163.88,
+      "eci_ci_high": 169.53,
+      "release_date_in_eci": "2026-09-30"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-3.8-flash",
+      "name": "Gemini 3.8 Flash",
+      "epoch_name": "Gemini 3.8 Flash",
+      "eci_score": 158.66,
+      "eci_ci_low": 156.59,
+      "eci_ci_high": 160.92,
+      "release_date_in_eci": "2026-09-02"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-3.6-flash",
+      "name": "Gemini 3.6 Flash",
+      "epoch_name": "Gemini 3.6 Flash",
+      "eci_score": 155.2,
+      "eci_ci_low": 153.32,
+      "eci_ci_high": 157.17,
+      "release_date_in_eci": "2026-07-21"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-3.5-flash-lite",
+      "name": "Gemini 3.5 Flash-Lite",
+      "epoch_name": "Gemini 3.5 Flash-Lite",
+      "eci_score": 145.58,
+      "eci_ci_low": 143.97,
+      "eci_ci_high": 147.21,
+      "release_date_in_eci": "2026-07-21"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-3.1-flash-lite",
+      "name": "Gemini 3.1 Flash-Lite",
+      "epoch_name": "Gemini 3.1 Flash-Lite",
+      "eci_score": 144.9,
+      "eci_ci_low": 142.73,
+      "eci_ci_high": 147.08,
+      "release_date_in_eci": "2026-03-03"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-3.1-pro-preview",
+      "name": "Gemini 3.1 Pro Preview",
+      "epoch_name": "Gemini 3.1 Pro",
+      "eci_score": 156.25,
+      "eci_ci_low": 154.51,
+      "eci_ci_high": 158.14,
+      "release_date_in_eci": "2026-02-19"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-3-flash-preview",
+      "name": "Gemini 3 Flash Preview",
+      "epoch_name": "Gemini 3 Flash",
+      "eci_score": 152.29,
+      "eci_ci_low": 150.73,
+      "eci_ci_high": 153.99,
+      "release_date_in_eci": "2025-12-17"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-2.5-pro",
+      "name": "Gemini 2.5 Pro",
+      "epoch_name": "Gemini 2.5 Pro (Jun 2025)",
+      "eci_score": 144.81,
+      "eci_ci_low": 143.36,
+      "eci_ci_high": 146.22,
+      "release_date_in_eci": "2025-06-05"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-2.5-flash",
+      "name": "Gemini 2.5 Flash",
+      "epoch_name": "Gemini 2.5 Flash (Sep 2025)",
+      "eci_score": 141.92,
+      "eci_ci_low": 139.25,
+      "eci_ci_high": 144.48,
+      "release_date_in_eci": "2025-09-25"
+    },
+    {
+      "provider": "google",
+      "model_id": "gemini-2.5-flash-lite",
+      "name": "Gemini 2.5 Flash-Lite",
+      "epoch_name": "Gemini 2.5 Flash-Lite (Jun 2025)",
+      "eci_score": 133.15,
+      "eci_ci_low": 129.39,
+      "eci_ci_high": 136.69,
+      "release_date_in_eci": "2025-06-17"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4-32b-0414-128k",
+      "name": "GLM-4 32B (0414) 128K",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.5-air",
+      "name": "GLM-4.5 Air",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.6v-flash",
+      "name": "GLM-4.6V Flash",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.6v-flashx",
+      "name": "GLM-4.6V FlashX",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-ocr",
+      "name": "GLM-OCR",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5.3-flashx",
+      "name": "GLM-5.3 FlashX",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5.3-flashx-legal",
+      "name": "GLM-5.3 FlashX Legal",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5.3",
+      "name": "GLM-5.3",
+      "epoch_name": "GLM-5.3",
+      "eci_score": 156.94,
+      "eci_ci_low": 154.83,
+      "eci_ci_high": 159.24,
+      "release_date_in_eci": "2026-08-14"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5.3-flash",
+      "name": "GLM-5.3 Flash",
+      "epoch_name": "GLM-5.3-Flash",
+      "eci_score": 153.6,
+      "eci_ci_low": 151.81,
+      "eci_ci_high": 155.58,
+      "release_date_in_eci": "2026-08-20"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5.2",
+      "name": "GLM-5.2",
+      "epoch_name": "GLM-5.2",
+      "eci_score": 153.01,
+      "eci_ci_low": 151.25,
+      "eci_ci_high": 154.93,
+      "release_date_in_eci": "2026-06-16"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5.1",
+      "name": "GLM-5.1",
+      "epoch_name": "GLM-5.1",
+      "eci_score": 150.72,
+      "eci_ci_low": 148.7,
+      "eci_ci_high": 152.83,
+      "release_date_in_eci": "2026-04-07"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-5",
+      "name": "GLM-5",
+      "epoch_name": "GLM-5",
+      "eci_score": 146.47,
+      "eci_ci_low": 144.9,
+      "eci_ci_high": 148.01,
+      "release_date_in_eci": "2026-02-11"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.7",
+      "name": "GLM-4.7",
+      "epoch_name": "GLM-4.7",
+      "eci_score": 143.27,
+      "eci_ci_low": 141.23,
+      "eci_ci_high": 145.19,
+      "release_date_in_eci": "2025-12-22"
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.7-flashx",
+      "name": "GLM-4.7 FlashX",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.7-flash",
+      "name": "GLM-4.7 Flash",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.6",
+      "name": "GLM-4.6",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.6v",
+      "name": "GLM-4.6V",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.5v",
+      "name": "GLM-4.5V",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.5-x",
+      "name": "GLM-4.5-X",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.5-flash",
+      "name": "GLM-4.5 Flash",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.5-airx",
+      "name": "GLM-4.5 AirX",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4.5",
+      "name": "GLM-4.5",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "zai",
+      "model_id": "glm-4-air",
+      "name": "GLM-4 Air",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.20-multi-agent",
+      "name": "Grok 4.20 Multi-Agent",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.7",
+      "name": "Grok 4.7",
+      "epoch_name": "Grok 4.7",
+      "eci_score": 156.05,
+      "eci_ci_low": 154.15,
+      "eci_ci_high": 158.13,
+      "release_date_in_eci": "2026-09-21"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.6",
+      "name": "Grok 4.6",
+      "epoch_name": "Grok 4.6",
+      "eci_score": 157.91,
+      "eci_ci_low": 155.87,
+      "eci_ci_high": 160.12,
+      "release_date_in_eci": "2026-08-12"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.5",
+      "name": "Grok 4.5",
+      "epoch_name": "Grok 4.5",
+      "eci_score": 155.08,
+      "eci_ci_low": 153.25,
+      "eci_ci_high": 157.09,
+      "release_date_in_eci": "2026-07-08"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.3",
+      "name": "Grok 4.3",
+      "epoch_name": "Grok 4.3 Beta",
+      "eci_score": 149.97,
+      "eci_ci_low": 147.97,
+      "eci_ci_high": 152.02,
+      "release_date_in_eci": "2026-04-17"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-build-0.1",
+      "name": "Grok Build 0.1",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.20-multi-agent-0309",
+      "name": "Grok 4.20 Multi-Agent (0309)",
+      "epoch_name": "Grok 4.20",
+      "eci_score": 152.27,
+      "eci_ci_low": 150.59,
+      "eci_ci_high": 154.09,
+      "release_date_in_eci": "2026-02-17"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.20-0309-reasoning",
+      "name": "Grok 4.20 Reasoning (0309)",
+      "epoch_name": "Grok 4.20",
+      "eci_score": 152.27,
+      "eci_ci_low": 150.59,
+      "eci_ci_high": 154.09,
+      "release_date_in_eci": "2026-02-17"
+    },
+    {
+      "provider": "xai",
+      "model_id": "grok-4.20-0309-non-reasoning",
+      "name": "Grok 4.20 Non-Reasoning (0309)",
+      "epoch_name": null,
+      "eci_score": null,
+      "eci_ci_low": null,
+      "eci_ci_high": null
+    }
+  ]
+}

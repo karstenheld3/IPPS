@@ -95,6 +95,7 @@ ANTHROPIC_TESTS = [
   ("claude-opus-4-8", "max", "none", None, "reasoning_effort"),
 
   # Adaptive thinking models - Claude 5.5 / 5.1 family
+  ("claude-fable-5-2", "low", "none", None, "reasoning_effort"),
   ("claude-fable-5-1", "low", "none", None, "reasoning_effort"),
   ("claude-opus-5-5", "low", "none", None, "reasoning_effort"),
   ("claude-sonnet-5-5", "low", "none", None, "reasoning_effort"),
@@ -121,6 +122,7 @@ ZAI_TESTS = [
 ]
 
 GOOGLE_TESTS = [
+  ("gemini-4-carbon", "low", "none", None, "reasoning_effort"),
   ("gemini-3.8-flash", "low", "none", None, "reasoning_effort"),
   ("gemini-3.8-flash", "medium", "none", None, "reasoning_effort"),
   ("gemini-3.8-flash", "high", "none", None, "reasoning_effort"),
