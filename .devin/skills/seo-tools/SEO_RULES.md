@@ -115,16 +115,17 @@ Metadata (MTD)
 - SEO-MTD-12: Social SEO fields and mandatory pre-publish gate
 
 Tools and data (TLS)
-- SEO-TLS-01: Free-first escalation
+- SEO-TLS-01: Free-first tier order
 - SEO-TLS-02: Indexing API only for JobPosting and BroadcastEvent pages
 - SEO-TLS-03: GSC access via service account script
 - SEO-TLS-04: DataForSEO access via cost-gated script
 - SEO-TLS-05: Pre-flight cost estimation with verified rates
 - SEO-TLS-06: load_async_ai_overview on live SERP calls
-- SEO-TLS-07: Bing JSON endpoint; Ahrefs and Semrush not integrated
+- SEO-TLS-07: Bing JSON endpoint; Ahrefs and Semrush not scripted
 - SEO-TLS-08: Plausible Stats API plan requirement and rate limit
 - SEO-TLS-09: Multi-run requirement for AI visibility panels
 - SEO-TLS-10: Credential path hygiene
+- SEO-TLS-11: Three-tier multi-source protocol
 
 Platform metadata field specifications: section "Platform Metadata Field Specifications" (10 groups).
 
@@ -651,8 +652,8 @@ Check: `prepublish-lint.py` platform `linkedin`
 
 ## Tools and Data (TLS)
 
-### SEO-TLS-01: Free-first escalation
-Query $0 first-party sources first: GSC Search Analytics and URL Inspection, GSC Generative AI report (UI), GSC social and video properties (UI), Bing Webmaster API and AI Performance (UI), Google Trends (UI or API alpha), YouTube Data API, platform autocomplete, `agent-readiness/check.py`, Plausible Stats API. Escalate to paid DataForSEO only for unowned competitor data, keyword difficulty, bulk unowned SERPs (more than 10 queries), external backlink graphs, or multi-engine LLM prompt panels. Matrix: `SKILL.md`.
+### SEO-TLS-01: Free-first tier order
+Tier 1 is always queried first and completely (all Tier 1 sources of the matrix row); Tier 2 and Tier 3 then enrich and verify per SEO-TLS-11. Tier 1 sources are $0 first-party sources: GSC Search Analytics and URL Inspection, GSC Generative AI report (UI), GSC social and video properties (UI), Bing Webmaster API and AI Performance (UI), Google Trends (UI or API alpha), YouTube Data API, platform autocomplete, `agent-readiness/check.py`, Plausible Stats API. DataForSEO (Tier 2) is used for unowned competitor data, keyword difficulty, bulk unowned SERPs (more than 10 queries), external backlink graphs, or multi-engine LLM prompt panels; for owned-data questions Tier 1 is enough. Matrix: `SKILL.md`.
 Evidence: [VERIFIED]
 Sources: https://support.google.com/webmasters/answer/16984139; https://blogs.bing.com/search/2026/6/New-AI-Visibility-Insights-in-Bing-Webmaster-Tools-Intents-Topics-Citation-Share-Compare/; https://dataforseo.com/pricing
 
@@ -684,8 +685,8 @@ Evidence: [VERIFIED]
 Sources: https://dataforseo.com/pricing; https://docs.dataforseo.com/v3/serp/google/organic/live/advanced/
 Script: `dataforseo/query.py serp` (always set)
 
-### SEO-TLS-07: Bing JSON endpoint; Ahrefs and Semrush not integrated
-Use the Bing Webmaster JSON API `https://ssl.bing.com/webmaster/api.svc/json/{Method}` (SOAP and POX retired 2026-08-31) [LITERAL: 2026-11-03]. Ahrefs and Semrush are subscription alternatives without integration in this skill.
+### SEO-TLS-07: Bing JSON endpoint; Ahrefs and Semrush not scripted
+Use the Bing Webmaster JSON API `https://ssl.bing.com/webmaster/api.svc/json/{Method}` (SOAP and POX retired 2026-08-31) [LITERAL: 2026-11-03]. Ahrefs and Semrush are Tier 3 subscription alternatives without a script in this skill; `tiers.py probe` reports whether `AHREFS_API_KEY` or `SEMRUSH_API_KEY` exists.
 Evidence: [VERIFIED]
 Sources: https://learn.microsoft.com/en-us/bingwebmaster/
 Script: `bing-webmaster/query.py`
@@ -705,6 +706,11 @@ Sources: https://arxiv.org/abs/2607.14035
 General-purpose docs and scripts reference credentials only as `[API_KEYS_FILE]` (default `[WORKSPACE_FOLDER]/../.tools/.api-keys.txt`, resolved from the script location; override `--keys-file`); file credentials are file names relative to that folder; never machine-specific drive paths.
 Evidence: [ASSUMED] (engineering convention of this skill)
 Sources: none (convention defined in `SKILL.md` section "Credential Keys")
+
+### SEO-TLS-11: Three-tier multi-source protocol
+Every data question runs through tiers in order: probe (`tiers.py probe`), Tier 1 FREE (all matrix sources), Tier 2 PREPAID (enrich and verify; cheap to expensive, each step feeding the next: suggestion and SERP calls find candidate terms and competitor domains, one batched volume call covers all candidates, per-domain calls run only on discovered competitor domains; cost gates on), Tier 3 SUBSCRIPTION (only when the probe finds a key: state estimated vendor units, then enrich and verify again). A tier without a usable provider is skipped and recorded as "Tier N unavailable". Owned-data rows (matrix rows 5, 6, 9, 10) stay at Tier 1. Tier 1 sources without a script are listed as "not run (manual)" and never counted as a source. Volume and trend of a head term never stand for a long-tail term (label "head-term proxy"). Autocomplete suggestions are candidates until a volume call confirms them. A SERP is a sample: providers are compared by result type and recurring hosts, not by exact rank. A competitor set from one provider counts only when a second provider contains it; disjoint sets are CONFLICT. The answer lists a ledger per claim type (existence, size, trend, supply, competitors) with tier, source, date, cost, and one agreement label: CONFIRMED (2 or more different providers agree on direction and order of magnitude), CONFLICT (report both values and the likely cause; never average), SINGLE-SOURCE. Two commands of the same provider count as one source. Tier caps requested by the user ("free only") and zero balances end the escalation and are stated in the answer.
+Evidence: [ASSUMED] (engineering convention of this skill)
+Sources: none (protocol defined in `SKILL.md` section "Source Tiers")
 
 ## Platform Metadata Field Specifications
 

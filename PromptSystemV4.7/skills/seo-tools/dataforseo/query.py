@@ -258,6 +258,16 @@ def cmd_search_volume(args, headers: dict, base_url: str) -> dict:
   log(f"  {plural(len(rows), 'row')} received.")
   return {"rows": rows, "notes": [], "reported_cost": total_cost if cost_reported else None}
 
+# Since 2026-11-11 live SERP items carry `google.com/goto?url=...` redirects as `url` and `google.com` as `domain`; the real host stays in `breadcrumb` ('https://host › path')
+def organic_row(item: dict) -> dict:
+  domain = item.get("domain", "")
+  url = item.get("url", "")
+  breadcrumb = item.get("breadcrumb") or ""
+  if domain == "google.com" and "/goto" in url and "://" in breadcrumb:
+    domain = breadcrumb.split(" › ")[0].split("://", 1)[1].split("/", 1)[0].lower().removeprefix("www.")
+    url = ""
+  return {"position": item.get("rank_group"), "domain": domain, "title": item.get("title", ""), "url": url, "display_url": breadcrumb, "website_name": item.get("website_name") or ""}
+
 def cmd_serp(args, headers: dict, base_url: str) -> dict:
   payload = [{"keyword": args.keyword, "location_code": args.location, "language_code": args.lang, "device": args.device, "load_async_ai_overview": True}]
   tasks, reported_cost = api_post(base_url, "serp/google/organic/live/advanced", payload, headers)
@@ -268,7 +278,7 @@ def cmd_serp(args, headers: dict, base_url: str) -> dict:
   for item in items:
     if item.get("type") == "ai_overview": ai_overview_count += 1
     if item.get("type") == "organic" and len(rows) < 10:
-      rows.append({"position": item.get("rank_group"), "domain": item.get("domain", ""), "title": item.get("title", ""), "url": item.get("url", "")})
+      rows.append(organic_row(item))
   item_types = result.get("item_types") or []
   ai_overview_note = "AI Overview present" if ai_overview_count > 0 else "AI Overview not present"
   notes = [f"{plural(len(rows), 'organic result')}, {ai_overview_note}, {plural(len(item_types), 'SERP feature type')}: {', '.join(item_types)}"]
@@ -299,7 +309,7 @@ COLUMNS = {
   "balance": [("Balance USD", "balance_usd", 12), ("Total spent USD", "total_spent_usd", 16), ("Daily limit", "limit_daily_usd", 12)],
   "keywords": [("Keyword", "keyword", 45), ("Volume", "volume", 8), ("Difficulty", "difficulty", 10), ("CPC", "cpc", 7), ("Intent", "intent", 14)],
   "search-volume": [("Keyword", "keyword", 45), ("Volume", "volume", 8), ("Competition", "competition", 12), ("CPC", "cpc", 7)],
-  "serp": [("Pos", "position", 4), ("Domain", "domain", 32), ("Title", "title", 60)],
+  "serp": [("Pos", "position", 4), ("Domain", "domain", 32), ("Title", "title", 60), ("Display URL", "display_url", 50)],
   "competitors": [("Domain", "domain", 36), ("Avg pos", "avg_position", 8), ("Overlap", "intersections", 8), ("Keywords", "keywords", 9), ("Traffic", "traffic_estimate", 10)],
   "backlinks": [("Target", "target", 30), ("Backlinks", "backlinks", 12), ("Ref domains", "referring_domains", 12), ("Rank", "rank", 6), ("Broken", "broken_backlinks", 8)],
 }

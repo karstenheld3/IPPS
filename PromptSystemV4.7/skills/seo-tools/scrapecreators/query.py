@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 """
-ScrapeCreators REST API CLI (prepaid credits, 100 free credits). Post-level social data for trend depth: TikTok, YouTube, Reddit, Pinterest, Instagram.
+ScrapeCreators REST API CLI (prepaid credits). Post-level social data for trend depth: TikTok, YouTube, Reddit, Pinterest, Instagram, plus Google results, autocomplete, ads, and transcripts.
 
 Usage:
-  python query.py tiktok-popular-videos --period 7 --country US
+  python query.py google-search "standing desk" --region US --page 1
+  python query.py tiktok-suggestions "standing desk" --region US
+  python query.py youtube-typeahead "standing desk"
+  python query.py google-ads asana.com --region US
+  python query.py youtube-transcript "https://www.youtube.com/watch?v=VIDEO_ID" --cache-max-age 7d
+  python query.py tiktok-popular-videos --period 7 --country US   (vendor endpoint unavailable on 2026-11-11)
   python query.py tiktok-search "standing desk" --sort-by most-liked --date-posted this-month
   python query.py youtube-search "standing desk" --sort-by popular --upload-date this_month
   python query.py reddit-search "standing desk" --timeframe month --sort top
@@ -11,7 +16,8 @@ Usage:
   python query.py pinterest-topic "https://www.pinterest.com/ideas/standing-desks/123456789/"
   python query.py credit-balance
 
-Billing: most endpoints cost 1 credit, cache hits cost 0 (vendor claim); the response reports `credits_charged` and `credits_remaining`.
+Billing: most endpoints cost 1 credit, cache hits cost 0 (vendor claim); data responses report `credits_charged` and `credits_remaining`, `credit-balance` reports `creditCount`.
+Expensive options (`--param get_ad_details=true` = 25 credits) raise the estimate; see SETUP.md.
 X is not covered at depth by this vendor; X trends are listed as a deferred source in SKILL.md.
 Credentials: SCRAPECREATORS_API_KEY in [API_KEYS_FILE] (see SKILL.md section "Credential Keys").
 """
@@ -30,11 +36,22 @@ DEFAULT_MAX_CREDITS = 20
 DEFAULT_TABLE_ROWS = 10
 
 # Command table [LITERAL: 2026-11-10]. positional = (argument name, API parameter) or None; options = (flag, API parameter, help); credits = vendor claim per request;
-# trim = the endpoint documents `trim=true` for a smaller response; assumed = parameter names not yet confirmed by a live call
+# trim = the endpoint documents `trim=true` for a smaller response; assumed = parameter names not yet confirmed by a live call; expensive_params = `--param` names that raise the price when set to true
 ENDPOINTS = {
-  "tiktok-popular-videos": {"path": "/v1/tiktok/videos/popular", "credits": 1, "positional": None, "trim": False, "assumed": True, "help": "Popular TikTok videos by period and country",
+  "google-search": {"path": "/v1/google/search", "credits": 1, "positional": ("queries", "query"), "trim": False, "assumed": False, "help": "Google organic results (title, URL, description), 10 per page",
+    "options": [("--region", "region", "2-letter country code, e.g. US"), ("--date-posted", "date_posted", "last-hour, last-day, last-week, last-month, last-year"), ("--page", "page", "Page 1-11")]},
+  "tiktok-suggestions": {"path": "/v1/tiktok/search/suggestions", "credits": 1, "positional": ("queries", "query"), "trim": False, "assumed": False, "help": "TikTok search autocomplete phrases",
+    "options": [("--region", "region", "Region code, e.g. US")]},
+  "youtube-typeahead": {"path": "/v1/youtube/search/typeahead", "credits": 1, "positional": ("queries", "query"), "trim": False, "assumed": False, "help": "YouTube search autocomplete phrases", "options": []},
+  "google-ads": {"path": "/v1/google/company/ads", "credits": 1, "positional": ("domains", "domain"), "trim": False, "assumed": False, "help": "Google Ads Transparency Center ads of an advertiser domain, 40 per page",
+    "expensive_params": {"get_ad_details": 25},
+    "options": [("--region", "region", "Region, default anywhere"), ("--platform", "platform", "google_maps, google_play, google_search, google_shopping, youtube"), ("--ad-format", "format", "text, image, video"),
+      ("--start-date", "start_date", "YYYY-MM-DD"), ("--end-date", "end_date", "YYYY-MM-DD"), ("--cursor", "cursor", "Cursor from a previous response")]},
+  "youtube-transcript": {"path": "/v1/youtube/video/transcript", "credits": 1, "positional": ("urls", "url"), "trim": False, "assumed": False, "help": "YouTube video or short transcript (native captions; use --format json for the full text)",
+    "options": [("--language", "language", "Language code, e.g. en, es, en-US")]},
+  "tiktok-popular-videos": {"path": "/v1/tiktok/videos/popular", "credits": 1, "positional": None, "trim": False, "assumed": True, "help": "Popular TikTok videos by period and country (vendor endpoint unavailable on 2026-11-11)",
     "options": [("--period", "period", "Days, e.g. 7 or 30"), ("--country", "countryCode", "Country code, e.g. US"), ("--page", "page", "Page number"), ("--order-by", "orderBy", "Sort order")]},
-  "tiktok-popular-songs": {"path": "/v1/tiktok/songs/popular", "credits": 1, "positional": None, "trim": False, "assumed": True, "help": "Popular TikTok songs",
+  "tiktok-popular-songs": {"path": "/v1/tiktok/songs/popular", "credits": 1, "positional": None, "trim": False, "assumed": True, "help": "Popular TikTok songs (vendor endpoint unavailable on 2026-11-11)",
     "options": [("--period", "period", "Days, e.g. 7 or 30"), ("--country", "countryCode", "Country code, e.g. US"), ("--page", "page", "Page number")]},
   "tiktok-trending-feed": {"path": "/v1/tiktok/get-trending-feed", "credits": 1, "positional": None, "trim": True, "assumed": False, "help": "TikTok trending (For You) feed for a region",
     "options": [("--region", "region", "Proxy region, required by the API (default: US)")]},
@@ -53,19 +70,27 @@ ENDPOINTS = {
     "options": []},
   "instagram-search-reels": {"path": "/v2/instagram/reels/search", "credits": 1, "positional": ("queries", "query"), "trim": False, "assumed": False, "help": "Google-indexed Instagram reels matching a keyword",
     "options": [("--page", "page", "Page 1-11")]},
-  "credit-balance": {"path": "/v1/credit-balance", "credits": 0, "positional": None, "trim": False, "assumed": False, "help": "Remaining credits (free)", "options": []},
+  "credit-balance": {"path": "/v1/account/credit-balance", "credits": 0, "positional": None, "trim": False, "assumed": False, "help": "Remaining credits (free)", "options": []},
 }
 
 NORMALIZED_FIELDS = [
-  ("title", ["desc", "title", "name", "text"]),
+  ("title", ["desc", "title", "name", "text", "advertiserName"]),
   ("author", ["author.unique_id", "author.nickname", "author.name", "author", "channel.title", "channel", "owner.username", "username"]),
   ("views", ["statistics.play_count", "viewCountInt", "views", "play_count", "view_count"]),
   ("likes", ["statistics.digg_count", "score", "ups", "likes", "like_count", "digg_count"]),
   ("comments", ["statistics.comment_count", "num_comments", "comment_count", "comments"]),
   ("shares", ["statistics.share_count", "share_count", "shares"]),
   ("published", ["create_time_utc", "publishedTime", "created_at_iso", "published", "publish_date", "date"]),
-  ("url", ["url", "permalink"]),
+  ("url", ["url", "permalink", "adUrl"]),
 ]
+
+# Fields added for single commands; (output key, source paths)
+EXTRA_FIELDS = {
+  "google-search": [("description", ["description"])],
+  "tiktok-suggestions": [("position", ["position"]), ("language", ["language"]), ("score", ["score"])],
+  "youtube-typeahead": [("type", ["type"])],
+  "google-ads": [("format", ["format"]), ("first_shown", ["firstShown"]), ("last_shown", ["lastShown"])],
+}
 
 # ----------------------------------------- START: Common script contract ------------------------------------------------------
 
@@ -177,9 +202,19 @@ def request_values(args, spec: dict) -> list:
   if spec["positional"] is None: return [None]
   return getattr(args, spec["positional"][0])
 
+# Price of one request: base price, raised by `--param KEY=true` for keys listed in the endpoint's expensive_params
+def credits_per_request(args, spec: dict) -> int:
+  retVal = spec["credits"]
+  for pair in args.param:
+    if "=" not in pair: continue
+    key, value = pair.split("=", 1)
+    if value.strip().lower() == "true": retVal = max(retVal, spec.get("expensive_params", {}).get(key.strip(), 0))
+  return retVal
+
 def estimate_credits(args, spec: dict) -> tuple:
   request_count = len(request_values(args, spec))
-  return request_count * spec["credits"], f"{plural(request_count, 'request')} x {spec['credits']} credit{'s' if spec['credits'] != 1 else ''} (vendor claim, cache hits cost 0)"
+  price = credits_per_request(args, spec)
+  return request_count * price, f"{plural(request_count, 'request')} x {price} credit{'s' if price != 1 else ''} (vendor claim, cache hits cost 0)"
 
 def enforce_credit_gate(args, spec: dict) -> int:
   estimate, formula = estimate_credits(args, spec)
@@ -237,17 +272,19 @@ def get_path(item: dict, path: str) -> object:
   if isinstance(current, (dict, list)) or current is None or current == "": return None
   return current
 
-def normalize_item(item: dict) -> dict:
+def normalize_item(item: dict, extra_fields: list = None) -> dict:
   retVal = {}
-  for output_key, paths in NORMALIZED_FIELDS:
+  for output_key, paths in NORMALIZED_FIELDS + (extra_fields or []):
     retVal[output_key] = None
     for path in paths:
       value = get_path(item, path)
       if value is not None:
         retVal[output_key] = value
         break
-  if isinstance(retVal["title"], str): retVal["title"] = " ".join(retVal["title"].split())
+  for text_key in ["title", "description"]:
+    if isinstance(retVal.get(text_key), str): retVal[text_key] = " ".join(retVal[text_key].split())
   if isinstance(retVal["published"], str): retVal["published"] = retVal["published"][:10]
+  if "score" in retVal: retVal["likes"] = None
   return retVal
 
 # Items of a response: known list keys first, otherwise the first list of dicts
@@ -257,7 +294,7 @@ def extract_items(command: str, data: dict) -> list:
     for entry in data.get("search_item_list") or []:
       if isinstance(entry, dict) and isinstance(entry.get("aweme_info"), dict): retVal.append(entry["aweme_info"])
     return retVal
-  for key in ["aweme_list", "videos", "shorts", "posts", "reels", "items", "songs", "data"]:
+  for key in ["aweme_list", "videos", "shorts", "posts", "reels", "items", "songs", "results", "suggestions", "ads", "data"]:
     value = data.get(key)
     if isinstance(value, list):
       for entry in value:
@@ -277,6 +314,14 @@ def find_balance(data: dict) -> object:
 
 COLUMNS = [("Query", "query", 20), ("Title", "title", 50), ("Author", "author", 18), ("Views", "views", 10), ("Likes", "likes", 8), ("Comments", "comments", 8), ("Published", "published", 10), ("URL", "url", 40)]
 TOPIC_COLUMNS = [("Topic", "name", 30), ("Search count", "search_count", 12), ("Updated", "updated_at", 20), ("Refinements", "refinement_count", 11), ("URL", "url", 50)]
+TRANSCRIPT_COLUMNS = [("URL", "query", 44), ("Language", "language", 10), ("Characters", "characters", 10), ("Segments", "segments", 8), ("Text", "text", 80)]
+COMMAND_COLUMNS = {
+  "google-search": [("Query", "query", 20), ("Title", "title", 50), ("Description", "description", 50), ("URL", "url", 50)],
+  "tiktok-suggestions": [("Query", "query", 20), ("Suggestion", "title", 50), ("Position", "position", 8), ("Score", "score", 8), ("Language", "language", 8)],
+  "youtube-typeahead": [("Query", "query", 20), ("Suggestion", "title", 50), ("Type", "type", 10)],
+  "google-ads": [("Query", "query", 20), ("Advertiser", "title", 30), ("Format", "format", 8), ("First shown", "first_shown", 10), ("Last shown", "last_shown", 10), ("URL", "url", 70)],
+  "youtube-transcript": TRANSCRIPT_COLUMNS,
+}
 
 # ----------------------------------------- END: Row extraction ----------------------------------------------------------------
 
@@ -298,7 +343,7 @@ def run_requests(args, spec: dict, api_key: str) -> dict:
   credits_charged = 0
   credits_remaining = None
   stopped = False
-  columns = COLUMNS
+  columns = COMMAND_COLUMNS.get(args.command, COLUMNS)
   for index in range(len(values)):
     if index > 0 and credits_charged >= args.max_credits:
       stopped = True
@@ -308,7 +353,7 @@ def run_requests(args, spec: dict, api_key: str) -> dict:
     log(f"  [ {index + 1} / {len(values)} ] {args.command} '{label}'...")
     data = call_scrapecreators(spec["path"], api_key, build_params(args, spec, values[index]))
     charged = data.get("credits_charged")
-    credits_charged += charged if isinstance(charged, (int, float)) else spec["credits"]
+    credits_charged += charged if isinstance(charged, (int, float)) else credits_per_request(args, spec)
     if data.get("credits_remaining") is not None: credits_remaining = data["credits_remaining"]
     if data.get("not_found"):
       notes.append(f"'{label}': 0 rows (not found)")
@@ -323,10 +368,17 @@ def run_requests(args, spec: dict, api_key: str) -> dict:
       if labels: notes.append(f"Refinements of '{data.get('name', label)}': {', '.join(labels)}")
       notes.append("search_count is Pinterest's native internal count; its period is unspecified, it is not monthly search volume.")
       continue
+    if args.command == "youtube-transcript":
+      text = " ".join(str(data.get("transcript_only_text") or "").split())
+      if not text:
+        notes.append(f"'{label}': 0 rows (no transcript)")
+        continue
+      rows.append({"query": label, "language": data.get("language", ""), "characters": len(text), "segments": len(data.get("transcript") or []), "text": text})
+      continue
     items = extract_items(args.command, data)
     if not items: notes.append(f"'{label}': 0 rows")
     for item in items:
-      row = normalize_item(item)
+      row = normalize_item(item, EXTRA_FIELDS.get(args.command))
       row["query"] = label
       rows.append(row)
   return {"rows": rows, "notes": notes, "credits_charged": credits_charged, "credits_remaining": credits_remaining, "columns": columns, "stopped": stopped}

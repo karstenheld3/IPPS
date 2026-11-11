@@ -10,7 +10,7 @@ Router for SEO-first work. Procedures: `SEO_GUIDES.md`. Rules and platform limit
 
 ## MUST-NOT-FORGET
 
-- Free-first: answer with $0 first-party sources before any paid call (SEO-TLS-01)
+- Tier protocol: every data question starts with Tier 1 (free), then enriches and verifies with Tier 2 (prepaid), then probes Tier 3 (subscription) and enriches and verifies again; use several sources per claim and report agreement (section "Source Tiers", SEO-TLS-01, SEO-TLS-11)
 - Paid DataForSEO calls: run `dataforseo/query.py balance` first; every paid command prints an estimate and aborts above `--max-cost` (default $0.10); never raise the limit without a stated reason (SEO-TLS-05)
 - Credit providers (`trendsmcp`, `scrapecreators`): every command prints a credit estimate and aborts above `--max-credits` (default 20); use free tiers first; discover with one `trendsmcp` call, go deep with `scrapecreators` only on the top candidates
 - Prices and limits are [LITERAL: 2026-11-03] (trend and social providers [LITERAL: 2026-11-10]); re-verify at the source before paid batches when that date is older than 6 months
@@ -42,6 +42,7 @@ SKILL.md (router, matrix, credentials)
 ├─> SEO_GUIDES.md  procedures per stage ─┬─> SEO_RULES.md   SEO-* rules + field limits
 │                                        └─> SEO_CHECKS.md  gate, audit, MOS, decay, alerts
 └─> scripts (Python, [API_KEYS_FILE])
+    ├─> tiers.py                        tier probe (keys, balances)  $0
     ├─> prepublish-lint.py              offline metadata gate        $0
     ├─> agent-readiness/check.py        HTTP probes of a site        $0
     ├─> google-search-console/query.py  Search Analytics, Inspection $0
@@ -64,19 +65,32 @@ Pick the stage, then follow the section in `SEO_GUIDES.md`.
 - RESEARCH: any step needs data -> matrix below, cost discipline
 - MONITOR: scheduled runs -> 6 alerts in `SEO_CHECKS.md` section 8
 
+## Source Tiers
+
+Tiers by cost model: Tier 1 FREE ($0 marginal: first-party APIs, free quotas, offline checks, manual UI sources), Tier 2 PREPAID (credits or balance behind a cost gate: `trendsmcp`, `scrapecreators`, `dataforseo`), Tier 3 SUBSCRIPTION (flat-fee tools: Ahrefs, Semrush; usually not available; no script). Tier of each provider: section "Provider Registry".
+
+Protocol for every data question (SEO-TLS-11):
+1. Probe: run `python tiers.py probe` once per task ($0; `--balances` adds the ScrapeCreators and DataForSEO balances); a tier with no usable provider is skipped and recorded as "Tier N unavailable"
+2. Tier 1 collect: run every Tier 1 source of the matrix row that a script can run; Tier 1 sources without a script (Google Trends UI, Pinterest Trends, autocomplete UI, GSC and Bing UI reports) go into the ledger as "not run (manual)" and are named to the user, never counted as a source
+3. Tier 2 enrich and verify, cheap to expensive, each step feeding the next: a) suggestion and SERP calls (`tiktok-suggestions`, `youtube-typeahead`, `google-search`; about 1 credit each) collect candidate terms and competitor domains; suggestions are candidates, not demand evidence (21 candidates: 10 had 100 or more searches per month, 4 had none, 5 were UK or other-region variants); b) one batched `dataforseo search-volume` call over all candidates (price is per task, up to 1,000 keywords, so 3 and 21 keywords cost the same $0.09), sort by volume, drop zero-volume terms; c) per-domain calls (`google-ads`) only on competitor domains found in a), never on the domain the user asked about; rows that say "none needed" (owned data) stay at Tier 1; cost gates stay on (`--max-credits`, `--max-cost`); trial budget for one question: about $0.15 in total [ASSUMED]
+4. Term level: use the exact candidate term; when a provider returns sparse or no data (fewer than 5 suggestion rows, null index), retry once with the head term and label the result "head-term proxy"; volume and trend of a head term never stand for the long-tail term
+5. Tier 3 probe, enrich, verify: if the probe shows a Tier 3 key, state the estimated vendor units, call the vendor REST API for the same claims, and compare with Tiers 1 and 2; no key: skip, never block the answer
+6. Ledger: per claim type (existence, size, trend, supply, competitors) list tier, source, date, cost, and one agreement label; CONFIRMED (2 or more different providers agree on direction and order of magnitude), CONFLICT (providers disagree: report both values and the likely cause, never average), SINGLE-SOURCE (only one provider answered)
+7. Stop early only when the user asks for a tier cap ("free only"), a balance is zero (mark that tier unavailable), or a gate aborts; say which
+
 ## When-to-Query-What Matrix
 
-Question -> free source first -> paid fallback (only when the free source cannot answer).
-1. Demand trajectory (growing, seasonal, declining) and trend discovery -> in this order: 1) free: Google Trends UI with anchor term (manual), Pinterest Trends (manual), `youtube/query.py search`; 2) one cross-platform call: `trendsmcp/query.py growth|board|history KEYWORD` (credits); 3) depth on the top 1-2 candidates only: `scrapecreators/query.py tiktok-search|youtube-search|reddit-search|pinterest-topic` (credits); Google volume check: DataForSEO Trends via `dataforseo/ENDPOINTS.md` ($0.0012/task, manual call)
-2. Keyword sizing and ideas -> autocomplete (manual), `google-search-console/query.py analytics SITE --dimensions query`, `youtube/query.py search QUERY` -> `dataforseo/query.py keywords SEED`, `search-volume KW...`
-3. SERP overlap and features (clustering, AI Overview presence) -> browser check of top-10 (manual, few queries) -> `dataforseo/query.py serp KEYWORD` (> 10 queries: task_post pattern in `ENDPOINTS.md`)
-4. Competitor gap -> `bing-webmaster/query.py query-stats SITE`, Bing AI Performance grounding queries (UI) -> `dataforseo/query.py competitors DOMAIN`
-5. Technical and agent readiness -> `agent-readiness/check.py URL --site-type A|B|C|D`, `google-search-console/query.py inspect SITE URL` -> none needed
-6. Owned ranking, CTR gap, decay, cannibalization -> `google-search-console/query.py quick-wins|ctr-gap|decay|cannibalization SITE`, `bing-webmaster/query.py page-stats SITE` -> none needed
-7. Backlinks -> GSC Links report (UI), `bing-webmaster/query.py links SITE` -> `dataforseo/query.py backlinks DOMAIN`
-8. AI citation and brand visibility -> GSC Generative AI report (UI), Bing AI Performance (UI), own prompt panel with >= 8 runs per prompt -> DataForSEO AI Optimization endpoints (manual, after estimate)
-9. Conversion by page and source -> `plausible/query.py goals SITE`, `sources SITE` -> none needed
-10. Indexing push -> `indexnow/submit.py submit URL... --host HOST`, sitemap `<lastmod>`, `google-search-console/query.py sitemaps SITE --submit URL` -> none needed
+Question -> T1 free sources (run all) -> T2 prepaid (enrich and verify) -> T3 subscription (probe, then enrich and verify when a key exists). Protocol: section "Source Tiers".
+1. Demand trajectory (growing, seasonal, declining) and trend discovery -> T1: Google Trends UI with anchor term (manual), Pinterest Trends (manual), `youtube/query.py search` -> T2: one cross-platform call `trendsmcp/query.py growth|board|history KEYWORD`, then depth on the top 1-2 candidates `scrapecreators/query.py tiktok-search|youtube-search|reddit-search|pinterest-topic`; Google volume check: DataForSEO Trends via `dataforseo/ENDPOINTS.md` ($0.0012/task, manual call) -> T3: keyword overview and trend of the vendor
+2. Keyword sizing and ideas -> T1: autocomplete (manual), `google-search-console/query.py analytics SITE --dimensions query`, `youtube/query.py search QUERY` -> T2: `scrapecreators/query.py tiktok-suggestions|youtube-typeahead QUERY`, `dataforseo/query.py keywords SEED`, `search-volume KW...` -> T3: keyword volume and difficulty of the vendor
+3. SERP overlap and features (clustering, AI Overview presence) -> T1: browser check of top-10 (manual, few queries) -> T2: `scrapecreators/query.py google-search KEYWORD` (titles, URLs, descriptions), `dataforseo/query.py serp KEYWORD` ($0.002; adds AI Overview and feature types; `domain` comes from the result's display URL because the API returns Google redirect links; > 10 queries: task_post pattern in `ENDPOINTS.md`); a SERP is a sample: two calls for the same query shared only 3 of 9 hosts, so compare providers by result type and by hosts that recur, never by exact rank or URL -> T3: SERP overview of the vendor
+4. Competitor gap -> T1: `bing-webmaster/query.py query-stats SITE` (owned site only), Bing AI Performance grounding queries (UI), `youtube/query.py search "X alternatives"` -> T2: SERP competitors first: `scrapecreators/query.py google-search "X alternatives"` (hosts of the top 10; drop the own domain, reddit, and listicle sites); then verify with `dataforseo/query.py competitors DOMAIN --limit 40` after dropping generic domains: it is keyword overlap, not product similarity (asana.com: 7 real competitors among 40 rows; calendly.com: none among 26 rows, only media and book sites), so use a DataForSEO domain only when it also appears in the SERP set; when the two sets do not intersect label CONFLICT and continue with the SERP set; then `scrapecreators/query.py google-ads COMPETITOR_DOMAIN` (1 credit, first 40 ads: advertiser, format, dates; the result lists every ad that links to the domain, so group by advertiser and keep the brand's own name: 7 of 40 for acuityscheduling.com, 14 of 28 for youcanbook.me; ad copy needs `--param get_ad_details=true` = 25 credits) -> T3: organic competitors of the vendor
+5. Technical and agent readiness -> T1: `agent-readiness/check.py URL --site-type A|B|C|D`, `google-search-console/query.py inspect SITE URL` -> T2: none needed -> T3: none needed
+6. Owned ranking, CTR gap, decay, cannibalization -> T1: `google-search-console/query.py quick-wins|ctr-gap|decay|cannibalization SITE`, `bing-webmaster/query.py page-stats SITE` -> T2: none needed -> T3: none needed
+7. Backlinks -> T1: GSC Links report (UI), `bing-webmaster/query.py links SITE` -> T2: `dataforseo/query.py backlinks DOMAIN` -> T3: backlink index of the vendor
+8. AI citation and brand visibility -> T1: GSC Generative AI report (UI), Bing AI Performance (UI), own prompt panel with >= 8 runs per prompt -> T2: DataForSEO AI Optimization endpoints (manual, after estimate) -> T3: AI visibility tracker of the vendor
+9. Conversion by page and source -> T1: `plausible/query.py goals SITE`, `sources SITE` -> T2: none needed -> T3: none needed
+10. Indexing push -> T1: `indexnow/submit.py submit URL... --host HOST`, sitemap `<lastmod>`, `google-search-console/query.py sitemaps SITE --submit URL` -> T2: none needed -> T3: none needed
 
 ## Intent Lookup
 
@@ -84,6 +98,11 @@ Question -> free source first -> paid fallback (only when the free source cannot
 - "What is trending right now?" -> `python trendsmcp/query.py board --type "Google Trends" --limit 10`; climbers: `board --type "TikTok Trending Hashtags" --climbers`
 - "Is topic X growing on platform Y?" -> `python trendsmcp/query.py growth "X" --source TikTok --window 7D 3M 12M`
 - "What do people post about X?" -> `python scrapecreators/query.py reddit-search "X" --timeframe month --sort top`; `tiktok-search`, `youtube-search`
+- "What do people type into TikTok or YouTube search for X?" -> `python scrapecreators/query.py tiktok-suggestions "X"`; `youtube-typeahead "X"` (long phrases can return few rows: retry with the head term)
+- "What ranks on Google for X (titles, URLs, descriptions only)?" -> `python scrapecreators/query.py google-search "X" --region US`; SERP features and AI Overview: `dataforseo/query.py serp`
+- "What ads does competitor Y run on Google?" -> `python scrapecreators/query.py google-ads Y.com`
+- "Who competes with X?" -> matrix row 4; state the type: SERP competitors (`google-search "X alternatives"`) or product competitors (`dataforseo competitors X --limit 40`)
+- "What does this YouTube video say?" -> `python scrapecreators/query.py youtube-transcript "URL" --cache-max-age 30d --format json`
 - "Which keywords go on one page?" -> IDEATE SERP-overlap clustering; `dataforseo/query.py serp`
 - "Name this product/book/app" -> IDEATE naming gates
 - "Write or structure this page/asset" -> CREATE web foundation + media playbook
@@ -101,16 +120,18 @@ Question -> free source first -> paid fallback (only when the free source cannot
 ## Provider Registry
 
 Credentials: see section "Credential Keys" (names are not repeated here).
-- `prepublish-lint.py` - free, offline - payload format in `--help` - no setup
-- `agent-readiness/check.py` - free - `check URL --site-type A|B|C|D` (A content site, B docs, C ecommerce, D API platform) - no setup
-- `google-search-console/query.py` - free - `sites`, `analytics`, `inspect`, `sitemaps`, `quick-wins`, `ctr-gap`, `decay`, `cannibalization` - `google-search-console/SETUP.md`
-- `bing-webmaster/query.py` - free - `sites`, `query-stats`, `page-stats`, `traffic`, `links`, `quota`, `submit` - `bing-webmaster/SETUP.md`
-- `indexnow/submit.py` - free - `submit`, `verify-key` - `indexnow/SETUP.md`
-- `youtube/query.py` - free with quota (max 100 searches per day, 10,000 units per day) - `search`, `videos` - `youtube/SETUP.md`
-- `plausible/query.py` - free self-hosted CE, paid Cloud Business plan - `summary`, `top-pages`, `sources`, `goals`, `raw` - `plausible/SETUP.md`
-- `trendsmcp/query.py` - credits, 100 free requests per month, REST only - `history`, `growth`, `board`, `posts` - `trendsmcp/SETUP.md`
-- `scrapecreators/query.py` - credits, 100 free credits - `tiktok-popular-videos` and `tiktok-popular-songs` (vendor-side outage on 2026-11-10), `tiktok-trending-feed`, `tiktok-search`, `youtube-trending-shorts`, `youtube-search`, `reddit-search`, `reddit-subreddit`, `pinterest-topic`, `instagram-search-reels`, `credit-balance` ($0) - `scrapecreators/SETUP.md`
-- `dataforseo/query.py` - paid with cost gate - `balance` ($0), `keywords`, `search-volume`, `serp`, `competitors`, `backlinks` - `dataforseo/SETUP.md`, prices `dataforseo/ENDPOINTS.md`
+- `tiers.py` - Tier probe, free, offline - `probe [--balances]` - no setup
+- `prepublish-lint.py` - Tier 1, offline - payload format in `--help` - no setup
+- `agent-readiness/check.py` - Tier 1 - `URL --site-type A|B|C|D` (no subcommand; exit 1 when a check fails) (A content site, B docs, C ecommerce, D API platform) - no setup
+- `google-search-console/query.py` - Tier 1 - `sites`, `analytics`, `inspect`, `sitemaps`, `quick-wins`, `ctr-gap`, `decay`, `cannibalization` - `google-search-console/SETUP.md`
+- `bing-webmaster/query.py` - Tier 1 - `sites`, `query-stats`, `page-stats`, `traffic`, `links`, `quota`, `submit` - `bing-webmaster/SETUP.md`
+- `indexnow/submit.py` - Tier 1 - `submit`, `verify-key` - `indexnow/SETUP.md`
+- `youtube/query.py` - Tier 1, free with quota (max 100 searches per day, 10,000 units per day) - `search`, `videos` - `youtube/SETUP.md`
+- `plausible/query.py` - Tier 1 (owned data), free self-hosted CE or Cloud Business plan - `summary`, `top-pages`, `sources`, `goals`, `raw` - `plausible/SETUP.md`
+- `trendsmcp/query.py` - Tier 2, credits, 100 free requests per month, REST only - `history`, `growth`, `board`, `posts` - `trendsmcp/SETUP.md`
+- `scrapecreators/query.py` - Tier 2, credits, 100 free credits - `google-search`, `tiktok-suggestions`, `youtube-typeahead`, `google-ads`, `youtube-transcript`, `tiktok-popular-videos` and `tiktok-popular-songs` (vendor-side outage on 2026-11-10 and 2026-11-11), `tiktok-trending-feed`, `tiktok-search`, `youtube-trending-shorts`, `youtube-search`, `reddit-search`, `reddit-subreddit`, `pinterest-topic`, `instagram-search-reels`, `credit-balance` ($0) - `scrapecreators/SETUP.md`
+- `dataforseo/query.py` - Tier 2, prepaid balance with cost gate - `balance` ($0), `keywords`, `search-volume`, `serp`, `competitors`, `backlinks` - `dataforseo/SETUP.md`, prices `dataforseo/ENDPOINTS.md`
+- Ahrefs, Semrush - Tier 3, subscription, no script; presence probed by `tiers.py probe` through `AHREFS_API_KEY` and `SEMRUSH_API_KEY`; usage: section "Source Tiers" step 5
 
 DataForSEO prices [LITERAL: 2026-11-03]: SERP Standard $0.0006/SERP, SERP Live $0.002/SERP; Labs $0.012/task + $0.00012/item; Keywords Data Standard $0.06/task, Live $0.09/task (up to 1,000 keywords; `query.py` uses Live); Backlinks $0.024/task + $0.000036/row.
 
@@ -129,7 +150,7 @@ Common script contract:
 Single registry of credential names in `[API_KEYS_FILE]` (`KEY=VALUE` lines, `#` comments allowed). Scripts and `SETUP.md` files use exactly these names.
 
 Name format: `[PROVIDER]_[QUALIFIER_][SUFFIX]`
-- Provider prefixes: `DATAFORSEO`, `GSC`, `BING_WEBMASTER`, `INDEXNOW`, `PLAUSIBLE`, `YOUTUBE`, `TRENDSMCP`, `SCRAPECREATORS`
+- Provider prefixes: `DATAFORSEO`, `GSC`, `BING_WEBMASTER`, `INDEXNOW`, `PLAUSIBLE`, `YOUTUBE`, `TRENDSMCP`, `SCRAPECREATORS`, `AHREFS`, `SEMRUSH`
 - Qualifier (optional): `SERVICE_ACCOUNT`
 - Suffixes: `API_KEY`, `LOGIN`, `PASSWORD`, `BASE_URL`, `FILE` (`FILE` = file name relative to the `[API_KEYS_FILE]` folder; no absolute paths)
 
@@ -144,6 +165,8 @@ Keys:
 - `YOUTUBE_API_KEY` - required by `youtube/query.py` - Google Cloud API key restricted to YouTube Data API v3 - `youtube/SETUP.md`
 - `TRENDSMCP_API_KEY` - required by `trendsmcp/query.py` - REST API key from the account dashboard (the vendor name contains "MCP"; the skill uses REST only) - `trendsmcp/SETUP.md`
 - `SCRAPECREATORS_API_KEY` - required by `scrapecreators/query.py` - API key from the dashboard, sent as `x-api-key` header - `scrapecreators/SETUP.md`
+- `AHREFS_API_KEY` - optional, read by `tiers.py probe` only (no script) - Tier 3 availability marker; vendor API token from a plan with API access
+- `SEMRUSH_API_KEY` - optional, read by `tiers.py probe` only (no script) - Tier 3 availability marker; vendor API key from a plan with API access
 
 Legacy: a `DATAFORSEO_BASE64` line is ignored (Basic auth is built from login and password).
 
@@ -159,7 +182,7 @@ Legacy: a `DATAFORSEO_BASE64` line is ignored (Basic auth is built from login an
 
 - Google Ads Keyword Planner API (`KeywordPlanIdeaService`): needs an Ads account and developer token; fallback `dataforseo/query.py search-volume` (rules in SEO-DMD-01)
 - Google Trends API alpha: needs allowlist access; fallback Trends web UI with anchor term (SEO-DMD-02)
-- Ahrefs and Semrush: subscription tools, no integration (SEO-TLS-07)
+- Ahrefs and Semrush: subscription tools, Tier 3; no script, availability probed only (SEO-TLS-07, SEO-TLS-11)
 - X (Twitter) trends and search: `trendsmcp/query.py` reads the `X (Twitter) Trending` board and `posts --source X`; for depth use the official X API pay-per-use (Trends $0.010 per request, post read $0.005) or `twitterapi.io`; `scrapecreators/query.py` is shallow on X [COMMUNITY]
 - AIsa (one balance for LLMs and 100+ data APIs): possible single-balance alternative to the two credit providers, depth unverified; no script
 

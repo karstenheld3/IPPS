@@ -57,6 +57,9 @@ Raise the limit for larger batches: `--max-cost 0.50`.
 - Rate limits per endpoint: `X-RateLimit-Limit` and `X-RateLimit-Remaining` response headers
 - Live results are not stored; task_post results are stored 30 days
 - IP allow list (optional): dashboard -> API Access -> IP Access; leave empty for any IP
+- `serp` `[TESTED 2026-11-11]`: the live API returned `domain` = `google.com` and `url` = `https://google.com/goto?url=...` for every organic result of 4 queries; the real host is only in `breadcrumb` ("https://host › path"); `query.py` sets `domain` from `breadcrumb`, empties `url`, and adds `display_url` and `website_name`. Cost per call varied: $0.002 or $0.004
+- `competitors` `[TESTED 2026-11-11]`: ranks domains by shared ranking keywords, not by product similarity; with `--limit 10` asana.com returned 1 real competitor among 9 generic sites, with `--limit 40` 7; calendly.com returned no real competitor among 26 non-generic rows (media, book, and government sites); use it only to confirm a SERP-based competitor set (`tiers.py run competitors`)
+- `search-volume` `[TESTED 2026-11-11]`: $0.09 per task for 3 and for 21 keywords (up to 1,000 per task)
 
 ## Troubleshooting
 

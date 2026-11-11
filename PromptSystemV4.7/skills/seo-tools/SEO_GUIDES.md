@@ -4,7 +4,8 @@ Numbered procedures per lifecycle stage. Each step names the rules it applies (`
 
 ## MUST-NOT-FORGET
 
-- Free-first: use $0 sources before any DataForSEO call; run `dataforseo/query.py balance` before paid batches (SEO-TLS-01, SEO-TLS-05)
+- Tier order: Tier 1 free first and complete, then Tier 2 prepaid to enrich and verify, then probe Tier 3 subscription and enrich and verify again; report per claim the sources and agreement (SEO-TLS-01, SEO-TLS-11)
+- Run `dataforseo/query.py balance` before paid DataForSEO batches (SEO-TLS-05)
 - Google Indexing API only for `JobPosting` or `BroadcastEvent` pages, never for regular pages (SEO-TLS-02)
 - Run the pre-publish gate (`SEO_CHECKS.md` section 2) before anything goes live (SEO-MTD-12)
 - State evidence labels when recommending; practices in the Do-Not-Do list are never recommended
@@ -23,7 +24,7 @@ Numbered procedures per lifecycle stage. Each step names the rules it applies (`
 
 ### Demand validation (5 steps)
 
-1. Expand seeds: collect 5-20 seed phrases for the user problem and solution category. Sources: platform autocomplete (Google, Bing, Amazon, YouTube, App Store), `youtube/query.py search "SEED"` for video and courses, `google-search-console/query.py analytics SITE --dimensions query` for owned sites. Paid fallback: `dataforseo/query.py keywords "SEED" --limit 100` ($0.024) (SEO-DMD-01, SEO-DMD-04)
+1. Expand seeds: collect 5-20 seed phrases for the user problem and solution category. Sources: platform autocomplete (Google, Bing, Amazon, YouTube, App Store), `youtube/query.py search "SEED"` for video and courses, `google-search-console/query.py analytics SITE --dimensions query` for owned sites. Tier 2 enrich and verify: `scrapecreators/query.py tiktok-suggestions|youtube-typeahead "SEED"`, `dataforseo/query.py keywords "SEED" --limit 100` ($0.024) (SEO-DMD-01, SEO-DMD-04, SEO-TLS-11)
 2. Cluster and size demand: cluster keywords by SERP overlap (step "SERP-overlap clustering" below); record cluster volume and CPC with `dataforseo/query.py search-volume --file cluster.txt` ($0.09 per 1,000 keywords, Live). High CPC (> $2.00 B2C, > $8.00 B2B) or strong category best-seller rank confirms willingness to pay [VERIFIED] (SEO-DMD-03)
 3. Verify trajectory: check the head term in Google Trends (5-year window; one shared anchor term per batch of max 8 terms) or Pinterest Trends (2-year window, max 4 terms). Classify: evergreen stable (12-month coefficient of variation < 0.25, 3-year slope within +-15%/year), recurring seasonal (> 2x baseline in the same 1-2 months yearly; publish 45-90 days before peak), breakout growth (90-day average > 1.5x prior year), fad or structural decline (spike then > 60% collapse, or > -25%/year for 3 years) -> stop or pivot on decline (SEO-DMD-02, SEO-DMD-05). To find or compare candidates across platforms, use this order: free sources first; then one `trendsmcp/query.py board --type "Google Trends"` or `growth KEYWORD --source S` call per candidate (credits, estimate printed); then depth calls with `scrapecreators/query.py` only for the top 1-2 candidates. The Trends MCP `value` is a 0-100 momentum index, not search volume; size demand with step 2
 4. Audit supply weakness and AI displacement: inspect top-10 on the target surface. Web: does an AI Overview answer fully without clicks; forum threads or pages older than 24 months in top 5. Books: top-10 in the 3 target categories, recurring 2-3 star complaints. Apps: top-10 for the target title keywords, feature gaps in recent reviews. Tools: `dataforseo/query.py serp "QUERY"` shows `AI Overview present` and feature types ($0.002) (SEO-DMD-03, SEO-DMD-07)
@@ -143,7 +144,7 @@ Requirements per media type: `SEO_CHECKS.md` section 4. Procedure per type:
 
 ### Competitor gap method (6 steps)
 
-1. Identify search and AI competitors: domains in top-10 and AI citations for core topics; paid: `dataforseo/query.py competitors example.com --limit 20` ($0.0144) (SEO-TLS-01)
+1. Identify search and AI competitors: domains in top-10 and AI citations for core topics; paid: `python tiers.py run competitors example.com` (about $0.03; SERP-based set confirmed by `dataforseo competitors`, plus ads of the top 2) (SEO-TLS-01, SEO-TLS-11)
 2. Extract three gap types: A) classic keyword gap (>= 2 of 3 competitors rank 1-20, own domain > 20 or absent; paid Labs data); B) first-party AI citation gap (Bing grounding queries with Citation Share < 15% [ASSUMED], $0); C) third-party co-citation gap (comparison pages cite competitors, not the brand)
 3. Remove competitor brand terms (unless an "alternatives" or "vs" page is planned), unoffered features, and B = 1 queries
 4. Cluster by SERP overlap (>= 3 shared URLs); if an owned page ranks 4-30 for a cluster, route it to REFRESH or EXPAND on that URL instead of a new page (SEO-DMD-06, SEO-AUD-05)
@@ -210,13 +211,15 @@ Cadence day counts are [ASSUMED] unless stated.
 
 ## RESEARCH: When-to-Query-What and Cost Discipline
 
-1. Find the question type in the `SKILL.md` matrix; use the free source first
-2. Escalate to DataForSEO only for unowned competitor data, keyword difficulty, bulk unowned SERPs (> 10), third-party backlinks, or LLM panels (SEO-TLS-01)
-3. Before a paid batch: `dataforseo/query.py balance`; compute the estimate with the price table in `dataforseo/ENDPOINTS.md`; batch up to 1,000 keywords per search-volume task (SEO-TLS-05)
-4. Run the command; the script prints the estimate and aborts above `--max-cost` (default $0.10); raise the limit only for a stated reason
-5. Record the actual cost printed by the script in the project notes
-6. Live SERP calls always include AI Overviews (`load_async_ai_overview`) (SEO-TLS-06)
-7. AI visibility panels: >= 8 repetitions per prompt, 3 stages reported (SEO-TLS-09)
+1. Probe the tiers once per task: `python tiers.py probe --balances`; note which tiers are unavailable (SEO-TLS-11)
+2. Find the question type in the `SKILL.md` matrix; run all its Tier 1 sources and keep their results (SEO-TLS-01)
+3. Tier 2: matrix rows 2, 3, 4: `python tiers.py run keywords|serp|competitors TARGET` (checks between steps, budget `--max-usd`, claim labels); other rows: run the row's prepaid sources cheap to expensive on the candidates found so far; compare with Tier 1 and label CONFIRMED, CONFLICT, or SINGLE-SOURCE; rows marked "none needed" end at Tier 1 (SEO-TLS-11)
+4. Before a paid DataForSEO batch: `dataforseo/query.py balance`; compute the estimate with the price table in `dataforseo/ENDPOINTS.md`; batch up to 1,000 keywords per search-volume task (SEO-TLS-05)
+5. Run the command; the script prints the estimate and aborts above `--max-cost` (default $0.10) or `--max-credits` (default 20); raise the limit only for a stated reason
+6. Tier 3: when the probe lists a Tier 3 provider, state the estimated vendor units, call its REST API for the same claims, and compare with Tiers 1 and 2; otherwise record "Tier 3 unavailable"
+7. Answer with a ledger per claim (tier, source, date, cost, agreement) and record the actual costs printed by the scripts in the project notes
+8. Live SERP calls always include AI Overviews (`load_async_ai_overview`) (SEO-TLS-06)
+9. AI visibility panels: >= 8 repetitions per prompt, 3 stages reported (SEO-TLS-09)
 
 ## MONITOR: Scheduled Alert Runs
 
