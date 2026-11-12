@@ -1,0 +1,212 @@
+# INFO: Agentic Problems and Failure Patterns
+
+**Doc ID**: AGNTPROB-IN01
+**Goal**: Categorize and record recurring agentic failure patterns observed during AI-assisted development
+
+## MUST-NOT-FORGET
+
+- **Categories**: Mutually exclusive problem categories. Each captures a distinct causal mechanism that must be addressed individually. Minimal overlap.
+- **Failure Modes**: Observable behavior and patterns. May be caused by multiple categories. A failure mode is what you SEE; a category is WHY it happens.
+- **Instances**: Concrete examples of failure. Every instance must reference at least 1 category and at least 1 failure mode.
+- Do NOT record fix suggestions - only record and categorize the problem
+- Every instance MUST link to its FAILS.md entry if one exists
+
+## Summary
+
+- 6 categories, 7 failure modes, 5 instances recorded
+- Categories: Attention Dilution, Context Processing Variance, Hallucination, Probabilistic Variance, Output Scale Miscalibration, Tool-Call Argument Misparsing
+- Failure Modes: Constraint Decay, Process Discipline Collapse, Budget Misallocation, Self-Correction Shortcutting, Context Bleeding, Regeneration Overhead, Payload Type Rejection
+- Large tool calls that exceed execution limits force content regeneration in smaller edits, duplicating generation cost [OBSERVED]
+
+## Table of Contents
+
+- [1. Categories](#1-categories)
+- [2. Failure Modes](#2-failure-modes)
+- [3. Instances](#3-instances)
+
+## 1. Categories
+
+### CAT-01: Attention Dilution
+
+A rule or constraint is loaded in the context window but does not activate at the moment of action. The agent "knows" the rule (it is present in system prompt or loaded rules) but generates output that violates it because task-local signals (immediate goal, user-provided artifacts, pattern completion) have stronger attention weight than the preventive constraint.
+
+**Mechanism**: Preventive rules (negative constraints like "never do X") compete with generative signals (positive task completion like "write a good example"). At generation time, the concrete task dominates the abstract constraint. The rule's presence in context is necessary but insufficient for compliance.
+
+**Distinguishing feature**: The rule was verifiably in context. The agent did not lack the information - it failed to apply it at the critical moment.
+
+### CAT-02: Context Processing Variance
+
+Depth of context processing and reasoning varies across models and across runs of the same model. More context capacity enables broader analysis but does not guarantee deeper analysis. The agent may read all sources but extract surface-level information from some while deeply analyzing others.
+
+**Mechanism**: Models allocate reasoning effort unevenly across input material. A 200-page source corpus may receive thorough analysis for the first 50 pages and shallow scanning for the rest. This is not random - it correlates with token position, source complexity, and how well the content matches the model's training distribution.
+
+**Distinguishing feature**: The input was available and accessible. The agent processed it but extracted less value than the material contained.
+
+### CAT-03: Hallucination
+
+The agent fills information gaps with probabilistic completions that are indistinguishable from factual statements. Missing data, ambiguous sources, or insufficient context trigger the model to generate plausible-sounding but fabricated content.
+
+**Mechanism**: LLMs generate text token-by-token based on probability distributions. When source material does not contain the answer, the model generates the most likely continuation rather than acknowledging the gap. The output reads identically to verified facts - no syntactic or stylistic signal distinguishes hallucinated content from grounded content.
+
+**Distinguishing feature**: The information was not in any source. The agent invented it rather than reporting a gap.
+
+### CAT-04: Probabilistic Variance
+
+Same input produces different outputs across runs due to sampling mechanics (temperature, top-p, random seed). Small differences in prompt phrasing, context ordering, or token boundaries can produce materially different results.
+
+**Mechanism**: LLM inference involves stochastic sampling from probability distributions. Even at low temperature, multiple tokens may have near-equal probability, creating branching points where different runs diverge. These divergences compound through the generation, producing structurally different outputs from identical inputs.
+
+**Distinguishing feature**: Nothing changed in the input, rules, or context. The output simply differed between runs.
+
+### CAT-05: Output Scale Miscalibration
+
+The model misjudges the maximum output size that can be successfully delivered through a single tool call. It generates content exceeding tool execution limits, causing the tool call to fail and the generated content to be lost.
+
+**Mechanism**: Models lack reliable internal estimates of output token limits for tool calls. They generate content based on task requirements without calibrating against tool execution constraints. When the generated content exceeds the limit, the tool call fails and the content is lost, requiring regeneration in smaller pieces. The cost is amplified when using expensive models: the same content is generated twice - once in the failed large call, once across multiple smaller calls.
+
+**Distinguishing feature**: The content was correct and complete. The failure was in the delivery mechanism (tool call exceeded size limits), not in the generation quality.
+
+### CAT-06: Tool-Call Argument Misparsing
+
+The agent harness interprets a string argument by its content instead of its declared type. A string that is itself valid JSON is deserialized into an object, and the tool rejects the call because it expected a string.
+
+**Mechanism**: Tool calls travel as JSON. The harness serializer parses nested JSON text inside a string argument as structure. The tool receives an object where its schema requires a string.
+
+**Distinguishing feature**: Size is irrelevant. The same payload fails every time; the content type (JSON text) triggers the failure.
+
+## 2. Failure Modes
+
+Observable behavior and patterns. Each failure mode may be caused by one or more categories.
+
+### FM-01: Constraint Decay
+
+Agent forgets or ignores constraints after a measureable amount of tokens of task-focused generation. Rules loaded at the start of a conversation or task progressively lose influence as the generation continues.
+
+- **Observable**: Rule compliance drops as output length increases. Early sections follow constraints; later sections violate them.
+- **Measured**: ~97% compliance on output structure rules vs ~45% compliance on process discipline rules (DRAFT_VORTRAG.md, line 168)
+- **Caused by**: CAT-01 (Attention Dilution), CAT-04 (Probabilistic Variance)
+
+### FM-02: Process Discipline Collapse
+
+Agent maintains output format (headings, structure, naming) but abandons process rules (verification steps, source checking, confirmation gates). Structural compliance masks procedural non-compliance.
+
+- **Observable**: Output looks correct but was produced by skipping required steps. The result may be right by accident but the process was not followed.
+- **Measured**: 97% output structure compliance vs 45% process discipline compliance (DRAFT_VORTRAG.md, line 168)
+- **Caused by**: CAT-01 (Attention Dilution), CAT-02 (Context Processing Variance)
+
+### FM-03: Budget Misallocation
+
+Agent allocates token/compute budget disproportionately to answer generation over verification, compliance checking, or source analysis. The agent prioritizes producing output over ensuring that output is correct.
+
+- **Observable**: Agent produces long, detailed answers but skips verification steps, source cross-referencing, or rule compliance checks that would have caught errors.
+- **Caused by**: CAT-01 (Attention Dilution), CAT-02 (Context Processing Variance)
+
+### FM-04: Self-Correction Shortcutting
+
+When detection and correction happen in the same pass, the agent shortcuts on detection to preserve budget for correction. Combined detect+correct passes produce shallow analysis.
+
+- **Observable**: Agent reports "no issues found" or finds only surface-level problems when detection and correction share a single generation pass. Separating into two passes (read-only detection, then correction) reveals significantly more issues.
+- **Caused by**: CAT-01 (Attention Dilution), CAT-02 (Context Processing Variance)
+
+### FM-05: Context Bleeding
+
+Information from user-provided artifacts (screenshots, conversation history, example files) leaks into outputs where it does not belong. The agent treats contextual input as template material.
+
+- **Observable**: Private paths, names, project-specific identifiers, or user-provided examples appear in reusable templates, generic documentation, or outputs intended for different audiences.
+- **Caused by**: CAT-01 (Attention Dilution)
+
+### FM-06: Regeneration Overhead
+
+When a large tool call fails due to output size limits, the model must regenerate the same content in smaller pieces, duplicating generation cost. The expensive model pays twice for the same output: once in the failed large call (content lost), once across multiple smaller calls (content delivered).
+
+- **Observable**: Model generates a large file in a single tool call, call fails, model re-generates the same content across multiple smaller edits. Generation cost is effectively doubled.
+- **Caused by**: CAT-05 (Output Scale Miscalibration)
+
+### FM-07: Payload Type Rejection
+
+A write tool rejects a correct payload with an argument-type error. The agent retries the identical payload and fails again.
+
+- **Observable**: Error `Invalid argument type for 'CodeContent': expected string but got object` on a JSON file write, repeated on retry
+- **Caused by**: CAT-06 (Tool-Call Argument Misparsing)
+
+## 3. Instances
+
+### INST-001: Private path leaked into reusable template
+
+- **FAILS ref**: `GLOB-FL-034`
+- **Date**: 2026-07-08
+- **Categories**: CAT-01 (Attention Dilution)
+- **Failure modes**: FM-05 (Context Bleeding)
+- **What happened**: Agent added CV-LN-04 rule to CONVERSATION_TEMPLATE.md requiring absolute file links. Used a real private Dropbox filesystem path as the example, copied from the user's screenshot. The template is a reusable skill file deployed to all linked repositories.
+- **Rule violated**: `agent-behavior.md` L63: "Never leak project-specific or private data into workflows, skills, or rules."
+
+### INST-002: Large file tool call failure requiring regeneration
+
+- **FAILS ref**: (none)
+- **Date**: 2026-09-16
+- **Categories**: CAT-05 (Output Scale Miscalibration)
+- **Failure modes**: FM-06 (Regeneration Overhead)
+- **What happened**: When using expensive models to write large amounts of data into a single file, the Cascade agent frequently fails to execute the tool call. The model then has to re-generate the same content in multiple smaller edits, effectively duplicating the generation cost. The content was correct in the first attempt but exceeded the tool call execution limit.
+- **Rule violated**: N/A (no existing rule addresses output scale calibration for tool calls)
+
+### INST-003: Cascade tool calls stall below the generic 4,000-token split limit
+
+- **FAILS ref**: (none)
+- **Date**: 2026-11-03
+- **Categories**: CAT-05 (Output Scale Miscalibration)
+- **Failure modes**: FM-06 (Regeneration Overhead)
+- **What happened**: During a deep-research prompt sequence, the Cascade agent hung repeatedly while updating a 319-line INFO summary and a 246-line STRUT. Prompts and `agent-behavior.md` allowed writes up to ~4,000 tokens per edit and recommended `multi_edit`, which sends all edits in one tool call. The agent reported tool calls above ~3,000 tokens dropping before execution and recovered only with edits below ~1,500 tokens.
+- **Rule violated**: N/A (generic limit was followed; the limit was too high for Cascade)
+
+### INST-004: Cascade write_to_file rejects JSON content as object
+
+- **FAILS ref**: (none)
+- **Date**: 2026-09-25
+- **Categories**: CAT-06 (Tool-Call Argument Misparsing)
+- **Failure modes**: FM-07 (Payload Type Rejection)
+- **What happened**: In Lana-V1-Dev, `write_to_file` for a JSON file failed twice on the same payload with `Invalid argument type for 'CodeContent': expected string but got object`. A Hera-V1-Dev robustness card records the same failure for JSON content. Sources: Lana-V1-Dev `!NOTES.md` Agent Tooling Notes, Hera-V1-Dev `__CARD_01-Robustness.md`
+- **Rule violated**: N/A (no rule addressed JSON content in tool arguments)
+
+### INST-005: Cascade edit fails at 1,800 characters in one session
+
+- **FAILS ref**: (none)
+- **Date**: 2026-10-19
+- **Categories**: CAT-05 (Output Scale Miscalibration)
+- **Failure modes**: FM-06 (Regeneration Overhead)
+- **What happened**: In a deep-research prompt sequence, two `write_to_file` calls and three `edit` calls with `new_string` of 1,800-2,600 characters failed with `invalid json in tool call: unexpected end of JSON input`; about 40 calls at 1,500 characters or less succeeded; one `write_to_file` of ~3,000 characters succeeded. The agent then asked the user instead of splitting, and the prompt ended
+- **Rule violated**: `agent-behavior.md` Attitude (never ask); the size limit in force (~4,000 tokens) was above the observed threshold
+
+## Sources
+
+- `AGNTPROB-IN01-SC-IPPS-FAILS`: `E:\Dev\IPPS\FAILS.md` - 34 failure entries (GLOB-FL-001 through GLOB-FL-034)
+- `AGNTPROB-IN01-SC-IPPS-LEARN`: `E:\Dev\IPPS\LEARNINGS.md` - 2 learning entries (AMSW-LN-001, MCPS-LN-001)
+- `AGNTPROB-IN01-SC-KWRK-DRAFT`: `E:\Dev\KarstensWorkspace\_Sessions\_2026-07-02_AgentischesDesignVortrag\DRAFT_VORTRAG.md` - Presentation draft identifying 4 root causes and compliance measurements
+
+## Document History
+
+**[2026-11-03 19:44]**
+- Added: CAT-06 (Tool-Call Argument Misparsing), FM-07 (Payload Type Rejection)
+- Added: INST-004 (JSON content rejected), INST-005 (edit fails at 1,800 characters)
+- Changed: Summary counts
+
+**[2026-11-03 19:36]**
+- Added: INST-003 (Cascade tool-call stall below generic 4,000-token split limit)
+- Changed: Summary instance count to 3
+
+**[2026-09-16 00:32]**
+- Added: CAT-05 (Output Scale Miscalibration)
+- Added: FM-06 (Regeneration Overhead)
+- Added: INST-002 (large file tool call failure requiring regeneration)
+- Updated: Summary with new counts and key finding
+
+**[2026-07-08 11:48]**
+- Restructured: 3-tier model (Categories, Failure Modes, Instances)
+- Added: CAT-02 (Context Processing Variance), CAT-03 (Hallucination), CAT-04 (Probabilistic Variance)
+- Added: FM-01 through FM-05
+- Updated: MNF, Summary, ToC, INST-001
+- Source: DRAFT_VORTRAG.md (4 root causes, 97%/45% compliance measurements)
+
+**[2026-07-08 11:44]**
+- Initial document created
+- Added: CAT-01 (Attention Dilution)
+- Added: INST-001 (GLOB-FL-034, private path in template)
