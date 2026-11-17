@@ -140,6 +140,20 @@ XAI_TESTS = [
   ("grok-4.5", "low", "none", None, "reasoning_effort"),
 ]
 
+DEEPSEEK_TESTS = [
+  ("deepseek-flash", "low", "none", None, "reasoning_effort"),
+  ("deepseek-flash", "max", "none", None, "reasoning_effort"),
+  ("deepseek-v4-pro", "low", "none", None, "reasoning_effort"),
+]
+
+MOONSHOT_TESTS = [
+  ("kimi-k3.1-pro", "low", "none", None, "reasoning_effort"),
+  ("kimi-k3.1-pro", "max", "none", None, "reasoning_effort"),
+  ("kimi-k3", "low", "none", None, "reasoning_effort"),
+  ("kimi-k2.6", "low", "none", None, "thinking"),
+  ("kimi-k2.6", "high", "none", None, "thinking"),
+]
+
 def get_script_dir() -> Path:
   return Path(__file__).parent
 
@@ -261,7 +275,7 @@ def run_tests(tests: list, keys_file: Path, prompt_file: Path, script_dir: Path,
 def parse_args():
   parser = argparse.ArgumentParser(description='Test all LLM models with parameter combinations')
   parser.add_argument('--keys-file', type=Path, required=True, help='Path to API keys file')
-  parser.add_argument('--provider', choices=['openai', 'anthropic', 'zai', 'google', 'xai', 'all'], default='all',
+  parser.add_argument('--provider', choices=['openai', 'anthropic', 'zai', 'google', 'xai', 'deepseek', 'moonshot', 'all'], default='all',
             help='Provider to test (default: all)')
   parser.add_argument('--model', type=str, help='Test specific model only')
   parser.add_argument('--include-fallback', action='store_true', help='Include fallback tests')
@@ -300,11 +314,15 @@ def main():
       zai_tests = [t for t in ZAI_TESTS if t[0] == args.model]
       google_tests = [t for t in GOOGLE_TESTS if t[0] == args.model]
       xai_tests = [t for t in XAI_TESTS if t[0] == args.model]
+      deepseek_tests = [t for t in DEEPSEEK_TESTS if t[0] == args.model]
+      moonshot_tests = [t for t in MOONSHOT_TESTS if t[0] == args.model]
       fallback_tests = [t for t in FALLBACK_TESTS if t[0] == args.model]
     else:
       zai_tests = ZAI_TESTS
       google_tests = GOOGLE_TESTS
       xai_tests = XAI_TESTS
+      deepseek_tests = DEEPSEEK_TESTS
+      moonshot_tests = MOONSHOT_TESTS
         
     # Run OpenAI tests
     if args.provider in ['openai', 'all'] and openai_tests:
@@ -335,6 +353,18 @@ def main():
     has_xai_key = 'XAI_API_KEY=' in keys_text
     if (args.provider == 'xai' or (args.provider == 'all' and (has_xai_key or args.model))) and xai_tests:
       passed, failed = run_tests(xai_tests, args.keys_file, prompt_file, script_dir, "xAI")
+      total_passed += passed
+      total_failed += failed
+
+    # Run DeepSeek and Moonshot tests (only in --provider mode, --model mode, or when the key is present)
+    has_deepseek_key = 'DEEPSEEK_API_KEY=' in keys_text
+    if (args.provider == 'deepseek' or (args.provider == 'all' and (has_deepseek_key or args.model))) and deepseek_tests:
+      passed, failed = run_tests(deepseek_tests, args.keys_file, prompt_file, script_dir, "DeepSeek")
+      total_passed += passed
+      total_failed += failed
+    has_moonshot_key = 'MOONSHOT_API_KEY=' in keys_text
+    if (args.provider == 'moonshot' or (args.provider == 'all' and (has_moonshot_key or args.model))) and moonshot_tests:
+      passed, failed = run_tests(moonshot_tests, args.keys_file, prompt_file, script_dir, "Moonshot")
       total_passed += passed
       total_failed += failed
         
