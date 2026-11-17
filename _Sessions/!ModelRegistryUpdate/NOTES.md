@@ -27,6 +27,10 @@ Fetch current model data from Anthropic and OpenAI provider websites, update can
 
 ## Current Phase
 
+**[2026-11-17 17:05]** 2026-11-17 NEWMODEL run completed. Run folder: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-17_NEWMODEL`. All 7 implementation prompts executed (Prompt 1 bootstrap already done). Gates 1 PASS, 2 SKIPPED, 5 PASS, 5.2 PASS, 5.3 PASS, 6 PASS, 7 PASS, 9 PASS, 9.4 PASS. Top rung D13, MODEL_INVENTORY.md 119 Section 3.1 rows. 8 target models API untested (DEEPSEEK_API_KEY and MOONSHOT_API_KEY missing). Commits: IPPS `ba59c1f` (llm-tools NEWMODEL), IPPS `d8526b1` (model-update scripts/template/.devin), Lana-V1 `f01795d` (config update). Independent spot check found zero differences for DeepSeek/Kimi prices; no systematic defect.
+**[2026-11-17 16:10]** DeepSeek and Kimi integration implemented (user: "continue"; DD-16..19 taken as recommendation 1). Canonical files changed (uncommitted): registry (8 models, `snapshot`, `point_version`, `max_output` int guard), pricing (`deepseek`, `moonshot`, `off_peak_factor`, `context_window_k` = floor), mapping (`reasoning_effort` max, thinking toggle), `call-llm.py`, `call-llm-batch.py`, `find-workers-limit.py`, `evaluation/analyze-costs.py`, `MODEL_INVENTORY.md` (119 rows). Session scripts patched: `match-epoch-eci.py`, `layer-depth-ladder.py`, `update-model-inventory.py`, `verify-and-distribute-registry.ps1`. Template now 9 prompts (DOM part A = Prompt 2, part B = Prompt 3). Run folder `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-17_NEWMODEL` (Epoch match, ChangeSet). Gates 1, 2 (skipped), 5, 5.2, 5.3, 6, 7, 9.4 PASS. Not done: live API tests (no keys), distribution to `.devin` and Lana-V1, commit. `test-layer-depth-ladder.py` TC-01..03 fail identically at git HEAD (stale snapshot, see `PROBLEMS.md`).
+**[2026-11-17 15:15]** Session reloaded. User request: integrate all DeepSeek and Kimi models into the model update, explore, test, propose template changes, max 10 prompts. Research and sandbox tests done, no canonical file changed. INFO: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\T03_MDLPRVEXT_DeepSeekKimiIntegration_2026-11-17\_INFO_MDLRGUP-MDLPRVEXT-01_DeepSeekKimiIntegration.md`. Result: 8 models (2 DeepSeek, 6 Kimi), template 8 → 9 prompts (Prompt 2 split), 9 defects `DF-01..09`, decisions `DD-16..19` open (recommendation 1 each), blocker: no `DEEPSEEK_API_KEY` / `MOONSHOT_API_KEY` in the keys file. Side finding: pricing `context_window_k` drifts from registry `context_window` (proposed `MDLRGUP-PR-0009`).
+**[2026-11-16 13:58]** Open items settled (user: DD-01..05 all option 1). DD-01: `verify-and-distribute-registry.ps1` Gate 2 now SKIPS when `ChangeSet.json` has `_run_mode: NEWMODEL`; documented in the prompts template. DD-02: `gpt-6-cyber > gpt-6-astra` re-read with Playwright on `https://openai.com/index/introducing-gpt-6-cyber` (text "outperforms GPT-6 Astra on most cyber tasks" confirmed). DD-03: **REMINDER 2026-12-01**: first run after this date refreshes `gemini-4-carbon` prices to `$4/$20` (cached `$0.20`). DD-04: PR-0001, PR-0002 deferred with triggers. DD-05: OCR stays deferred. Distribution state unchanged (no JSON changed).
 **[2026-11-11 21:00]** 2026-11-11 NEWMODEL run completed in chat (no prompts file; no DOM extracts, Gate 2 not applicable). Registry `1.12.2`: added `claude-fable-5-2`, `claude-mythos-5-2`, `gemini-4-carbon`, `gpt-6-cyber`, `gpt-6-astra-law`; 71 ECI scores refreshed; Top rung D13; Gates 5, 6, 7, 9.4, 9 PASS. OCR models deferred, `chat-latest` excluded. Run folder: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-11_NEWMODEL`. Open items `MDLRGUP-PR-0003..0006` in `PROBLEMS.md`.
 **[2026-11-11 12:55]** Session reloaded. User request: scan for new models, include the new GLM OCR model, watch comparable OCR models. Read-only scan done, no JSON changed: `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-11_NEWMODEL\2026-11-11_NewModelScan.md`. New text models: `claude-fable-5-2`, `claude-mythos-5-2` (pricing page only), `gemini-4-carbon`, `gpt-6-cyber`, `gpt-6-astra-law`, `chat-latest`. `glm-ocr` already registered 2026-11-02 (release date wrong: 2026-02-02; not chat-callable, endpoint `/api/paas/v4/layout_parsing`). Comparable OCR: Mistral OCR 4.1 / OCR 3 (provider not in registry; `DD-05` open), open-weights OXR, TeleOCR, PaddleOCR-VL, DeepSeek-OCR-2 (no first-party price). Next: decision `DD-15` (OCR scope), then NEWMODEL run.
 **[2026-11-02 14:23]** Fixed prompts-instance placement: template `_PROMPTS_ModelInventoryUpdate_TEMPLATE.md` placed the generated instance in the run-folder root as `_PROMPTS_[DATE]_ModelInventoryUpdate.md` (violates `agent-behavior.md` File Placement and PRMT-NM-01/FT-10). Now `[RUN_FOLDER]\_agentwork\_PROMPTS_01-MdlInv-[RUN_MODE].md`. Upstream: `write-prompts.md` Step 2 default location changed from session folder to `_agentwork/`. Current run instance moved to `e:\dev\IPPS\_Sessions\!ModelRegistryUpdate\_2026-11-02_PRICES\_agentwork\_PROMPTS_01-MdlInv-PRICES.md` (not yet executed).
@@ -71,11 +75,14 @@ Fetch current model data from Anthropic and OpenAI provider websites, update can
 
 **Subtopics** (session-local):
 - `MDLINVNTRY` - Model Inventory Reliability: source-backed inventory, lean TASKS/PROMPTS planning method, recurring inventory update template (nested as MDLRGUP-MDLINVNTRY)
+- `MDLPRVEXT` - Model Provider Extension: onboarding DeepSeek and Kimi (Moonshot) into the recurring update (nested as MDLRGUP-MDLPRVEXT)
 
 ## Topic Folders
 
 - **T01_MDLBHVPRM_BehavioralParameterBenchmarks_2026-10-19** - Research benchmarks for eagerness and instruction_following model parameters
 - **T02_MDLINVNTRY_ReliableModelInventory_2026-10-28** - Audit of inventory values (`IN03`), reliable sources per field (`IN04`), work-per-prompt options (`IN05`), and synthesis + `DD-01..05` (`IN01`, `IN02`)
+
+- **T03_MDLPRVEXT_DeepSeekKimiIntegration_2026-11-17** - DeepSeek and Kimi onboarding: scope, sandbox tests, script defects, template changes, decisions `DD-16..19` (`IN01`)
 
 ## Related External Design
 
@@ -90,6 +97,19 @@ Fetch current model data from Anthropic and OpenAI provider websites, update can
 - Deleted `model-sources/` from both DevSystemV4.2 and .devin
 
 ## Significant Prompts Log
+
+[2026-11-17 13:58] User reloaded the session and asked to integrate DeepSeek and Kimi models into the model update (explore, test, propose template changes, max 10 prompts, INFO for the changes)
+````text
+/session-load E:\dev\IPPS\_Sessions\!ModelRegistryUpdate
+
+I want to integrate all DeepSeek and Kimi models
+
+into the model update. explore how to do this, make some tests and propose changes that we have to do to _PROMPTS_ModelInventoryUpdate_TEMPLATE.md
+
+I want the PROMPTS file to not exceed 10 prompts
+
+/write-info for proposed changes
+````
 
 [2026-11-02 11:46] User reloaded the session, rejected the ECI-band capability metric, and asked for 3 improvement options (propose only)
 ````text
