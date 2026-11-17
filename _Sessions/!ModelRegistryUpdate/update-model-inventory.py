@@ -2,8 +2,9 @@
 """
 update-model-inventory.py - Regenerate the model tables of MODEL_INVENTORY.md from the llm-tools registries (MDLRGUP-MDLINVNTRY-SP01 FR-08, FR-13, IG-04).
 
-Columns: Model | Depth | Items | Context | Efforts | In USD | Cache USD | Out USD | Devin cost | Notes
+Columns: Model | Depth | ECI Score | Items | Context | Efforts | In USD | Cache USD | Out USD | Devin cost | Notes
   Depth  D[n] from registry depth, D[n]* when depth_estimated
+  ECI Score  registry eci_score with 1 decimal, "-" when no Epoch score
   Items  registry items as [n]m (measured), else the default from the rung: D10+ 8, D7-D9 6, D4-D6 5, D1-D3 4
   Notes  depth_evidence; UC-n; Epoch score [interval] or "no Epoch score"; status; scope guard strict; long-context price; No reasoning effort; inventory_note; CSV rows; adaptive Medium warning
 Section 3.1: every text model not retired, sorted by 1) Depth descending, 2) Model ascending. Section 3.2: hand-maintained Devin-only rows (Depth, Context, Efforts, Devin cost, Notes kept; Items and prices recomputed).
@@ -20,7 +21,7 @@ if hasattr(sys.stdout, "reconfigure"):
 
 NON_TEXT = {"computer-use-preview", "gpt-image-1.5"}
 EXCLUDED_STATUS = {"retired"}
-HEADERS = ["Model", "Depth", "Items", "Context", "Efforts", "In USD", "Cache USD", "Out USD", "Devin cost", "Notes"]
+HEADERS = ["Model", "Depth", "ECI Score", "Items", "Context", "Efforts", "In USD", "Cache USD", "Out USD", "Devin cost", "Notes"]
 EFFORT_CODES = [("low", "L"), ("medium", "M"), ("high", "H"), ("xhigh", "X"), ("max", "MX")]
 SECTION_31 = "### 3.1 API Models (llm-tools registry)"
 SECTION_32 = "### 3.2 Devin-Only Models (no API registry entry)"
@@ -59,12 +60,19 @@ def find_prefix(model_id, prefixes):
 
 def efforts_for(provider, prefix):
   if prefix is None or prefix.get("method") == "temperature": return "-"
-  if prefix.get("method") == "thinking": return "M" if provider == "zai" else "L M H X"
+  if prefix.get("method") == "thinking":
+    if provider in ("deepseek", "moonshot"): return "on/off"
+    return "M" if provider == "zai" else "L M H X"
   codes = []
   supported = set(prefix.get("effort", []))
   for name, code in EFFORT_CODES:
     if name in supported: codes.append(code)
   return " ".join(codes) if codes else "-"
+
+def eci_cell(model):
+  retVal = "-"
+  if model.get("eci_score") is not None: retVal = f"{model['eci_score']:.1f}"
+  return retVal
 
 def epoch_part(model):
   interval = model.get("eci_ci")
@@ -81,6 +89,7 @@ def notes_for(short_id, model, pricing_entry, prefix):
   long_context = pricing_entry.get("long_context")
   if long_context and long_context.get("threshold_k"):
     parts.append(f"<={long_context['threshold_k']}K tokens (${fmt_price(long_context['input_per_1m'])}/${fmt_price(long_context['output_per_1m'])} >{long_context['threshold_k']}K)")
+  if pricing_entry.get("off_peak_factor"): parts.append(f"off-peak price x{pricing_entry['off_peak_factor']:g}")
   if prefix is not None and prefix.get("method") == "temperature": parts.append("No reasoning effort")
   if model.get("inventory_note"): parts.append(model["inventory_note"])
   if short_id in CSV_ROWS: parts.append(f"CSV rows {CSV_ROWS[short_id]}")
@@ -159,7 +168,7 @@ def main():
     context_cell = f"{round(context / 1000)}K" if context else "-"
     existing = existing_31.get(short_id)
     devin_cost = existing["Devin cost"] if existing else "-"
-    rows_31.append([short_id, depth_cell, items_cell, context_cell, efforts_for(provider, prefix), fmt_price(pricing_entry.get("input_per_1m")),
+    rows_31.append([short_id, depth_cell, eci_cell(model), items_cell, context_cell, efforts_for(provider, prefix), fmt_price(pricing_entry.get("input_per_1m")),
                     fmt_price(pricing_entry.get("cached_per_1m")), fmt_price(pricing_entry.get("output_per_1m")), devin_cost, notes_for(short_id, model, pricing_entry, prefix)])
   rows_31.sort(key=sort_key)
 
@@ -167,7 +176,7 @@ def main():
   for name, existing in existing_32.items():
     if "Depth" not in existing: raise RuntimeError(f"Section 3.2 row '{name}' has no Depth column; convert the table to the depth ladder layout first")
     multiplier = float(existing["Devin cost"].rstrip("x"))
-    rows_32.append([name, existing["Depth"], str(default_items(depth_number(existing["Depth"]))), existing.get("Context", "-"), existing["Efforts"],
+    rows_32.append([name, existing["Depth"], "-", str(default_items(depth_number(existing["Depth"]))), existing.get("Context", "-"), existing["Efforts"],
                     fmt_price(multiplier * 0.50), "-", fmt_price(multiplier * 2.50), existing["Devin cost"], existing["Notes"]])
   rows_32.sort(key=sort_key)
 

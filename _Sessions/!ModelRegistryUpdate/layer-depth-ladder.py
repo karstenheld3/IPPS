@@ -78,6 +78,9 @@ def point_version(provider, model_id):
   elif provider == "xai":
     match = re.match(r"grok-(\d+(?:\.\d+)?)", model_id)
     if match: retVal = "grok-" + match.group(1)
+  elif provider == "moonshot":
+    match = re.match(r"kimi-k(\d+(?:\.\d+)?)", model_id)
+    if match: retVal = "kimi-" + match.group(1)
   return retVal or model_id
 
 def series_of(provider, model_id):
@@ -106,7 +109,7 @@ def load_models(registry, match_data):
     retVal.append({
       "id": short_id, "entry": entry, "provider": entry["provider"], "tier": tier_of(entry.get("uc_class")),
       "release_date": entry.get("release_date") or "9999-12-31", "score": score, "ci_low": ci_low, "ci_high": ci_high,
-      "point_version": point_version(entry["provider"], short_id), "series": series_of(entry["provider"], short_id),
+      "point_version": entry.get("point_version") or point_version(entry["provider"], short_id), "series": series_of(entry["provider"], short_id),
       "depth": entry.get("depth"), "estimated": bool(entry.get("depth_estimated")),
     })
   retVal.sort(key=lambda model: (model["release_date"], model["id"]))

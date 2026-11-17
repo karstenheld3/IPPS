@@ -62,6 +62,10 @@ def detect_provider(model_id: str) -> str:
     return 'google'
   if model_lower.startswith('grok-'):
     return 'xai'
+  if model_lower.startswith('deepseek-'):
+    return 'deepseek'
+  if model_lower.startswith('kimi-'):
+    return 'moonshot'
   print(f"ERROR: Cannot detect provider for model: {model_id}", file=sys.stderr)
   sys.exit(1)
 
@@ -105,6 +109,22 @@ def create_xai_client(keys: dict):
     sys.exit(1)
   return OpenAI(api_key=api_key, base_url='https://api.x.ai/v1')
 
+def create_deepseek_client(keys: dict):
+  """Create DeepSeek client using OpenAI SDK with base_url swap."""
+  api_key = keys.get('DEEPSEEK_API_KEY')
+  if not api_key:
+    print("ERROR: DEEPSEEK_API_KEY not found in keys file", file=sys.stderr)
+    sys.exit(1)
+  return OpenAI(api_key=api_key, base_url='https://api.deepseek.com')
+
+def create_moonshot_client(keys: dict):
+  """Create Moonshot (Kimi) client using OpenAI SDK with base_url swap."""
+  api_key = keys.get('MOONSHOT_API_KEY')
+  if not api_key:
+    print("ERROR: MOONSHOT_API_KEY not found in keys file", file=sys.stderr)
+    sys.exit(1)
+  return OpenAI(api_key=api_key, base_url='https://api.moonshot.ai/v1')
+
 def is_rate_limit_error(e: Exception) -> bool:
   """Check if exception is a rate limit error (FR-21)."""
   error_str = str(e).lower()
@@ -140,8 +160,8 @@ def single_call(client, model: str, prompt: str, provider: str,
     
   for attempt in range(max_retries):
     try:
-      if provider in ('openai', 'zai', 'google', 'xai'):
-        token_param = 'max_completion_tokens' if any(x in model for x in ['gpt-5', 'gpt-6', 'o1-', 'o3-', 'o4-']) else 'max_tokens'
+      if provider in ('openai', 'zai', 'google', 'xai', 'deepseek', 'moonshot'):
+        token_param = 'max_completion_tokens' if provider == 'moonshot' or any(x in model for x in ['gpt-5', 'gpt-6', 'o1-', 'o3-', 'o4-']) else 'max_tokens'
         call_params = {
           'model': model,
           'messages': [
@@ -373,6 +393,10 @@ def main():
     client = create_google_client(keys)
   elif provider == 'xai':
     client = create_xai_client(keys)
+  elif provider == 'deepseek':
+    client = create_deepseek_client(keys)
+  elif provider == 'moonshot':
+    client = create_moonshot_client(keys)
   else:
     client = create_anthropic_client(keys)
     

@@ -16,6 +16,9 @@ from anthropic import Anthropic
 
 UNKNOWN = '[UNKNOWN]'
 EFFORT_LEVELS = ['none', 'minimal', 'low', 'medium', 'high', 'xhigh', 'max']
+DEFAULT_MAX_OUTPUT = 16384
+PROVIDER_MAX_TOKENS_CAP = {'deepseek': 131072, 'moonshot': 131072}
+OPENAI_COMPATIBLE_THINKING_PROVIDERS = ('zai', 'deepseek', 'moonshot')
 
 def get_script_dir() -> Path:
   """Get directory containing this script."""
@@ -67,7 +70,7 @@ def build_api_params(model: str, mapping: dict, registry: dict,
     effort_value = effort_map[reasoning_effort]['openai_reasoning_effort']
     supported = model_config.get('effort', [])
     if effort_value not in supported and supported:
-      fallback_map = {'none': 'minimal', 'minimal': 'low', 'xhigh': 'high', 'max': 'high'}
+      fallback_map = {'none': 'minimal', 'minimal': 'low', 'medium': 'high', 'xhigh': 'high', 'max': 'high'}
       if effort_value in fallback_map and fallback_map[effort_value] in supported:
         print(f"[WARN] '{effort_value}' not supported by {model}, falling back to '{fallback_map[effort_value]}'", file=sys.stderr)
         effort_value = fallback_map[effort_value]
@@ -90,7 +93,7 @@ def build_api_params(model: str, mapping: dict, registry: dict,
     params['thinking'] = {'type': 'adaptive'}
     params['anthropic_effort'] = effort_map[reasoning_effort]['anthropic_adaptive_effort']
   elif method == 'thinking':
-    if provider == 'zai':
+    if provider in OPENAI_COMPATIBLE_THINKING_PROVIDERS:
       thinking_on = reasoning_effort in ('medium', 'high', 'xhigh', 'max')
       params['thinking'] = {'type': 'enabled' if thinking_on else 'disabled'}
     else:
@@ -100,8 +103,10 @@ def build_api_params(model: str, mapping: dict, registry: dict,
         params['thinking'] = {'type': 'enabled', 'budget_tokens': budget}
     
   output_factor = effort_map[output_length]['output_length_factor']
-  max_output = model_config.get('max_output', 16384)
+  max_output = model_config.get('max_output') or DEFAULT_MAX_OUTPUT
   params['max_tokens'] = int(output_factor * max_output)
+  if provider in PROVIDER_MAX_TOKENS_CAP:
+    params['max_tokens'] = min(params['max_tokens'], PROVIDER_MAX_TOKENS_CAP[provider])
     
   # Anthropic constraint: max_tokens must be > thinking.budget_tokens
   if 'thinking' in params and params['thinking'].get('budget_tokens', 0) > 0:
@@ -167,6 +172,10 @@ def detect_provider(model_id: str) -> str:
     return 'google'
   if model_lower.startswith('grok-'):
     return 'xai'
+  if model_lower.startswith('deepseek-'):
+    return 'deepseek'
+  if model_lower.startswith('kimi-'):
+    return 'moonshot'
   print(f"ERROR: Cannot detect provider for model: {model_id}", file=sys.stderr)
   sys.exit(1)
 
@@ -260,6 +269,22 @@ def create_xai_client(keys: dict):
     print("ERROR: XAI_API_KEY not found in keys file", file=sys.stderr)
     sys.exit(1)
   return OpenAI(api_key=api_key, base_url='https://api.x.ai/v1')
+
+def create_deepseek_client(keys: dict):
+  """Create DeepSeek client using OpenAI SDK with base_url swap."""
+  api_key = keys.get('DEEPSEEK_API_KEY')
+  if not api_key:
+    print("ERROR: DEEPSEEK_API_KEY not found in keys file", file=sys.stderr)
+    sys.exit(1)
+  return OpenAI(api_key=api_key, base_url='https://api.deepseek.com')
+
+def create_moonshot_client(keys: dict):
+  """Create Moonshot (Kimi) client using OpenAI SDK with base_url swap."""
+  api_key = keys.get('MOONSHOT_API_KEY')
+  if not api_key:
+    print("ERROR: MOONSHOT_API_KEY not found in keys file", file=sys.stderr)
+    sys.exit(1)
+  return OpenAI(api_key=api_key, base_url='https://api.moonshot.ai/v1')
 
 def call_openai_responses(client, model: str, prompt: str, api_params: dict,
               image_data: str = None, image_media_type: str = None):
@@ -485,6 +510,38 @@ def call_zai(client, model, prompt, api_params, method,
       result["usage"]["cached_tokens"] = cached
   return result
 
+def call_openai_compatible(client, provider, model, prompt, api_params, method,
+                           image_data=None, image_media_type=None):
+  """Call DeepSeek or Moonshot (Kimi) via OpenAI SDK Chat Completions. Never sends temperature or seed (fixed by the vendor)."""
+  if image_data:
+    content = [
+      {"type": "text", "text": prompt},
+      {"type": "image_url", "image_url": {"url": f"data:{image_media_type};base64,{image_data}"}}
+    ]
+  else:
+    content = prompt
+  call_params = {'model': model, 'messages': [{"role": "user", "content": content}]}
+  token_key = 'max_completion_tokens' if provider == 'moonshot' else 'max_tokens'
+  call_params[token_key] = api_params.get('max_tokens', 4096)
+  if 'reasoning_effort' in api_params:
+    call_params['reasoning_effort'] = api_params['reasoning_effort']
+  if 'thinking' in api_params:
+    call_params['extra_body'] = {'thinking': api_params['thinking']}
+  response = client.chat.completions.create(**call_params)
+  result = {
+    "text": response.choices[0].message.content or "",
+    "usage": {
+      "input_tokens": response.usage.prompt_tokens,
+      "output_tokens": response.usage.completion_tokens
+    },
+    "model": response.model
+  }
+  if hasattr(response.usage, 'prompt_tokens_details') and response.usage.prompt_tokens_details:
+    cached = getattr(response.usage.prompt_tokens_details, 'cached_tokens', 0)
+    if cached:
+      result["usage"]["cached_tokens"] = cached
+  return result
+
 def call_google(client, model, prompt, api_params, method,
                 image_data=None, image_media_type=None):
   """Call Google Gemini API via OpenAI compatibility Chat Completions endpoint."""
@@ -614,6 +671,10 @@ def process_file(worker_id: int, file_idx: int, total_files: int, input_file: Pa
       elif provider == 'xai':
         result = retry_with_backoff(
           lambda: call_openai(client, args.model, file_prompt, api_params, method, image_data, image_media_type)
+        )
+      elif provider in ('deepseek', 'moonshot'):
+        result = retry_with_backoff(
+          lambda: call_openai_compatible(client, provider, args.model, file_prompt, api_params, method, image_data, image_media_type)
         )
       else:
         result = retry_with_backoff(
@@ -749,6 +810,10 @@ def main():
     client = create_xai_client(keys)
     if use_caching:
       print("[INFO] xAI prompt caching is automatic", file=sys.stderr)
+  elif provider in ('deepseek', 'moonshot'):
+    client = create_deepseek_client(keys) if provider == 'deepseek' else create_moonshot_client(keys)
+    if use_caching:
+      print("[INFO] DeepSeek and Moonshot context caching is automatic", file=sys.stderr)
   else:
     client = create_anthropic_client(keys)
     if use_caching:

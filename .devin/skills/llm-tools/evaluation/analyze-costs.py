@@ -72,6 +72,10 @@ def detect_provider(model_id: str) -> str:
     return 'google'
   if model_lower.startswith('grok-'):
     return 'xai'
+  if model_lower.startswith('deepseek-'):
+    return 'deepseek'
+  if model_lower.startswith('kimi-'):
+    return 'moonshot'
   return 'unknown'
 
 def calculate_cost(model: str, input_tokens: int, output_tokens: int, pricing: dict, calls: int = 1) -> dict:

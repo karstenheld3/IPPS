@@ -22,10 +22,12 @@ if hasattr(sys.stdout, "reconfigure"):
 
 ECI_CSV_URL = "https://epoch.ai/data/eci_scores.csv"
 NON_TEXT = {"computer-use-preview", "gpt-image-1.5"}
-MODEL_ID_PATTERN = re.compile(r"^(claude|gpt|o\d|gemini|glm|grok)[-a-z0-9.]*$")
+MODEL_ID_PATTERN = re.compile(r"^(claude|gpt|o\d|gemini|glm|grok|deepseek|kimi)[-a-z0-9.]*$")
 SKIPPED_DOM_PATHS = ("shut_down", "retired", "specialized_endpoints")
 
 ExplicitNameMap = {
+  "deepseek-flash": "DeepSeek V4.1 Flash 1017",
+  "deepseek-v4-pro": "DeepSeek V4 Pro 0813",
   "gpt-5-mini": "GPT-5 mini",
   "gpt-5-nano": "GPT-5 nano",
   "gpt-4.1-mini": "GPT-4.1 mini",

@@ -19,7 +19,14 @@ param(
   [string]$AgentFolder = "e:\dev\IPPS\.devin",
 
   [Parameter(Mandatory = $false)]
-  [string]$PromptSystemFolder = "e:\dev\IPPS\PromptSystemV4.5",
+  [string]$PromptSystemFolder = "e:\dev\IPPS\PromptSystemV4.7",
+
+  [Parameter(Mandatory = $false)]
+  [ValidateSet("FULL", "PRICES", "NEWMODEL", "")]
+  [string]$RunMode = "",
+
+  [Parameter(Mandatory = $false)]
+  [string]$Providers = "",
 
   [Parameter(Mandatory = $false)]
   [switch]$IncludeExternal,
@@ -44,6 +51,15 @@ function Invoke-Gate1 {
 }
 
 function Invoke-Gate2 {
+  $effectiveRunMode = $RunMode
+  $changeSetPath = "$RunFolder\${Date}_ChangeSet.json"
+  if (-not $effectiveRunMode -and (Test-Path $changeSetPath)) {
+    $effectiveRunMode = (Get-Content $changeSetPath -Raw -Encoding UTF8 | ConvertFrom-Json)._run_mode
+  }
+  if ($effectiveRunMode -eq "NEWMODEL") {
+    Write-Output "Gate 2: SKIPPED (run mode NEWMODEL reads provider pages ad hoc; DOM extracts not required)"
+    return
+  }
   $domFiles = Get-ChildItem "$RunFolder\${Date}_*-DOM.json" -ErrorAction SilentlyContinue
   if (-not $domFiles -or $domFiles.Count -lt 4) {
     throw "Gate 2 FAIL: Expected at least 4 ${Date}_*-DOM.json files in $RunFolder, found $(@($domFiles).Count)"
@@ -52,7 +68,15 @@ function Invoke-Gate2 {
     if ($df.Length -lt 50) { throw "Gate 2 FAIL: Empty or truncated DOM file $($df.Name)" }
     $null = Get-Content $df.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
   }
-  Write-Output "Gate 2: PASS ($($domFiles.Count) valid DOM JSON files verified in $RunFolder)"
+  $missingProviders = @()
+  foreach ($providerName in ($Providers -split ",")) {
+    $providerKey = ($providerName -replace "[^A-Za-z0-9]", "")
+    if (-not $providerKey) { continue }
+    $providerFiles = Get-ChildItem "$RunFolder\${Date}_${providerKey}-*-DOM.json" -ErrorAction SilentlyContinue
+    if (-not $providerFiles) { $missingProviders += $providerName.Trim() }
+  }
+  if ($missingProviders.Count -gt 0) { throw "Gate 2 FAIL: No ${Date}_[Provider]-*-DOM.json for: $($missingProviders -join ', ')" }
+  Write-Output "Gate 2: PASS ($($domFiles.Count) valid DOM JSON files verified in $RunFolder, providers checked: $(if ($Providers) { $Providers } else { 'none given' }))"
 }
 
 function Invoke-Gate567 {
@@ -76,6 +100,32 @@ function Invoke-Gate567 {
   if (($ids | Sort-Object -Unique).Count -ne $ids.Count) { throw "Gate 5 FAIL: Duplicate model_ids in model-registry.json" }
   Write-Output "Gate 5: PASS (models=$($ids.Count), 0 unexpected unmatched prefixes)"
 
+  # Gate 5.2: context_window = total vendor-page window; every checked model must equal its vendor value, every new model must be checked or listed as unverified
+  $csCheckPath = "$RunFolder\${Date}_ChangeSet.json"
+  if (Test-Path $csCheckPath) {
+    $csCheck = Get-Content $csCheckPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    $contextMismatches = @()
+    $checkedIds = @()
+    foreach ($check in @($csCheck.contextChecks)) {
+      if ($null -eq $check) { continue }
+      $checkedIds += $check.model_id
+      $regModel = $r.models | Where-Object { $_.model_id -eq $check.model_id } | Select-Object -First 1
+      if (-not $regModel) { $contextMismatches += "$($check.model_id) not in registry"; continue }
+      if ([int64]$regModel.context_window -ne [int64]$check.vendor_context_window) {
+        $contextMismatches += "$($check.model_id): registry=$($regModel.context_window) vendor=$($check.vendor_context_window) ($($check.source))"
+      }
+    }
+    foreach ($newId in @($csCheck.newRegistryIds)) {
+      if ($null -eq $newId) { continue }
+      $regModel = $r.models | Where-Object { $_.model_id -eq $newId } | Select-Object -First 1
+      if ($regModel -and $null -ne $regModel.context_window -and ($checkedIds -notcontains $newId) -and (@($csCheck.contextUnverified) -notcontains $newId)) {
+        $contextMismatches += "$newId has context_window but no entry in contextChecks or contextUnverified"
+      }
+    }
+    if ($contextMismatches.Count -gt 0) { throw "Gate 5.2 FAIL: $($contextMismatches -join '; ')" }
+    Write-Output "Gate 5.2: PASS ($($checkedIds.Count) context_window values equal vendor page, $(@($csCheck.contextUnverified).Count) listed unverified)"
+  }
+
   # Gate 6
   $p = Get-Content "$SkillFolder\model-pricing.json" -Raw -Encoding UTF8 | ConvertFrom-Json
   if ($p.last_updated -ne $Date) { throw "Gate 6 FAIL: pricing last_updated ($($p.last_updated)) != $Date" }
@@ -94,6 +144,25 @@ function Invoke-Gate567 {
   } else {
     Write-Output "Gate 6: PASS (last_updated=$Date)"
   }
+
+  # Gate 5.3: pricing context_window_k = floor(registry context_window / 1000); null when the registry window is null
+  $contextKMismatches = @()
+  $contextKChecked = 0
+  foreach ($providerName in $p.pricing.PSObject.Properties.Name) {
+    foreach ($priceProperty in $p.pricing.$providerName.PSObject.Properties) {
+      $regModel = $r.models | Where-Object { $_.model_id -eq $priceProperty.Name } | Select-Object -First 1
+      if (-not $regModel) { continue }
+      $expectedK = if ($null -eq $regModel.context_window) { $null } else { [int64][math]::Floor([int64]$regModel.context_window / 1000) }
+      $actualK = $priceProperty.Value.context_window_k
+      $contextKChecked++
+      if ($null -eq $expectedK -and $null -eq $actualK) { continue }
+      if ($null -eq $expectedK -or $null -eq $actualK -or [int64]$actualK -ne $expectedK) {
+        $contextKMismatches += "$($priceProperty.Name): pricing=$actualK expected=$expectedK (registry context_window=$($regModel.context_window))"
+      }
+    }
+  }
+  if ($contextKMismatches.Count -gt 0) { throw "Gate 5.3 FAIL: $($contextKMismatches -join '; ')" }
+  Write-Output "Gate 5.3: PASS ($contextKChecked pricing entries: context_window_k = floor(registry context_window / 1000))"
 
   # Gate 7
   $m = Get-Content "$SkillFolder\model-parameter-mapping.json" -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -130,8 +199,8 @@ function Invoke-Gate94 {
     throw "Gate 9.4 FAIL: model-parameter-mapping.json version/date in MODEL_INVENTORY.md does not match $($m._version) ($($m._updated))"
   }
 
-  if ($inv -notmatch "\|\s*Model\s*\|\s*Depth\s*\|\s*Items\s*\|\s*Context\s*\|\s*Efforts\s*\|\s*In USD\s*\|\s*Cache USD\s*\|\s*Out USD\s*\|\s*Devin cost\s*\|\s*Notes\s*\|") {
-    throw "Gate 9.4 FAIL: MODEL_INVENTORY.md header is not 'Model | Depth | Items | Context | Efforts | In USD | Cache USD | Out USD | Devin cost | Notes'"
+  if ($inv -notmatch "\|\s*Model\s*\|\s*Depth\s*\|\s*ECI Score\s*\|\s*Items\s*\|\s*Context\s*\|\s*Efforts\s*\|\s*In USD\s*\|\s*Cache USD\s*\|\s*Out USD\s*\|\s*Devin cost\s*\|\s*Notes\s*\|") {
+    throw "Gate 9.4 FAIL: MODEL_INVENTORY.md header is not 'Model | Depth | ECI Score | Items | Context | Efforts | In USD | Cache USD | Out USD | Devin cost | Notes'"
   }
 
   # Registry: every non-retired text model has depth; every deeper_than item has all five fields (FR-10, IG-03)
@@ -186,10 +255,11 @@ function Invoke-Gate94 {
     $cols = ($row -split "\|") | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne "" }
     $mid = $cols[0]
     $depthCell = $cols[1]
-    $itemsCell = $cols[2]
-    $inUsd = $cols[5]
-    $cacheUsd = $cols[6]
-    $outUsd = $cols[7]
+    $eciCell = $cols[2]
+    $itemsCell = $cols[3]
+    $inUsd = $cols[6]
+    $cacheUsd = $cols[7]
+    $outUsd = $cols[8]
 
     $regEntry = $r.models | Where-Object { $_.model_id -eq $mid } | Select-Object -First 1
     if (-not $regEntry) {
@@ -201,6 +271,12 @@ function Invoke-Gate94 {
       $expDepth = "D$($regEntry.depth)" + $(if ($regEntry.depth_estimated) { "*" } else { "" })
       $d = [int]$regEntry.depth
       $expItems = if ($regEntry.items) { "$($regEntry.items)m" } elseif ($d -ge 10) { "8" } elseif ($d -ge 7) { "6" } elseif ($d -ge 4) { "5" } else { "4" }
+      $eciValue = 0.0
+      if ($null -eq $regEntry.eci_score) {
+        if ($eciCell -ne "-") { $mismatches += "ECI Score mismatch on ${mid}: inv=$eciCell vs registry=none" }
+      } elseif (-not [double]::TryParse($eciCell, [System.Globalization.NumberStyles]::Float, [System.Globalization.CultureInfo]::InvariantCulture, [ref]$eciValue) -or [math]::Abs($eciValue - [double]$regEntry.eci_score) -gt 0.0501) {
+        $mismatches += "ECI Score mismatch on ${mid}: inv=$eciCell vs registry=$($regEntry.eci_score)"
+      }
       if ($depthCell -ne $expDepth -or $itemsCell -ne $expItems) {
         $mismatches += "Mismatch on ${mid}: inv=($depthCell,$itemsCell) vs registry=($expDepth,$expItems)"
       }
