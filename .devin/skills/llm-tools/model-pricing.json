@@ -1023,6 +1023,14 @@
         "context_window_k": 1000,
         "currency": "USD"
       },
+      "deepseek-v4-flash": {
+        "input_per_1m": 0.3,
+        "cached_per_1m": 0.006,
+        "output_per_1m": 1.2,
+        "off_peak_factor": 0.5,
+        "context_window_k": 1000,
+        "currency": "USD"
+      },
       "deepseek-v4-pro": {
         "input_per_1m": 1.32,
         "cached_per_1m": 0.044,
@@ -1062,6 +1070,13 @@
         "currency": "USD"
       },
       "kimi-k2.7-code": {
+        "input_per_1m": 0.95,
+        "cached_per_1m": 0.19,
+        "output_per_1m": 4.0,
+        "context_window_k": 262,
+        "currency": "USD"
+      },
+      "kimi-k2.7": {
         "input_per_1m": 0.95,
         "cached_per_1m": 0.19,
         "output_per_1m": 4.0,
