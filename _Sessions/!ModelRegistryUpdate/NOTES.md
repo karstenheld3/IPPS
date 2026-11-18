@@ -108,6 +108,14 @@ Fetch current model data from Anthropic and OpenAI provider websites, update can
 
 ## Significant Prompts Log
 
+[2026-11-18 13:56] User reloaded the session and asked to fact-check all context window size values and effort levels in MODEL_INVENTORY.md
+````text
+/session-load E:\dev\IPPS\_Sessions\!ModelRegistryUpdate
+
+I want you to @[/fact-check] all context window size values and effort levels in
+@[e:\dev\IPPS\PromptSystemV4.7\skills\llm-tools\MODEL_INVENTORY.md:L1-L205]
+````
+
 [2026-11-17 13:58] User reloaded the session and asked to integrate DeepSeek and Kimi models into the model update (explore, test, propose template changes, max 10 prompts, INFO for the changes)
 ````text
 /session-load E:\dev\IPPS\_Sessions\!ModelRegistryUpdate
