@@ -459,6 +459,27 @@
         "output_per_1m": 10.0,
         "context_window_k": null,
         "currency": "USD"
+      },
+      "gpt-6.2-astra": {
+        "input_per_1m": 8.0,
+        "cached_per_1m": 0.4,
+        "output_per_1m": 40.0,
+        "context_window_k": 1050,
+        "currency": "USD"
+      },
+      "gpt-6.2-sol": {
+        "input_per_1m": 2.0,
+        "cached_per_1m": 0.1,
+        "output_per_1m": 10.0,
+        "context_window_k": 1050,
+        "currency": "USD"
+      },
+      "gpt-6.2-astra-law": {
+        "input_per_1m": 8.0,
+        "cached_per_1m": 0.4,
+        "output_per_1m": 40.0,
+        "context_window_k": 1050,
+        "currency": "USD"
       }
     },
     "anthropic": {
@@ -1092,7 +1113,7 @@
       }
     }
   },
-  "last_updated": "2026-11-17",
+  "last_updated": "2026-11-18",
   "sources": [
     "https://platform.claude.com/docs/en/about-claude/pricing",
     "https://developers.openai.com/api/docs/pricing?latest-pricing=standard",

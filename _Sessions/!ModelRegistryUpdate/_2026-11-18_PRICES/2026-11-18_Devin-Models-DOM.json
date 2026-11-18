@@ -1,0 +1,405 @@
+{
+  "tabs": {
+    "Self-serve": [
+      [
+        "Model",
+        "Input (per 1M tokens)",
+        "Cache read (per 1M tokens)",
+        "Cache write (per 1M tokens)",
+        "Output (per 1M tokens)"
+      ],
+      [
+        "Adaptive",
+        "$0.50",
+        "$0.10",
+        "$0.50",
+        "$2.00"
+      ],
+      [
+        "Claude Fable 5.1 Medium",
+        "$10.00",
+        "$0.25",
+        "$12.50",
+        "$50.00"
+      ],
+      [
+        "Claude Fable 5.2 Medium",
+        "$8.00",
+        "$0.20",
+        "$10.00",
+        "$40.00"
+      ],
+      [
+        "Claude Opus 5.5 Medium",
+        "$4.00",
+        "$0.20",
+        "$5.00",
+        "$20.00"
+      ],
+      [
+        "Claude Sonnet 5.5 Medium",
+        "$2.00",
+        "$0.10",
+        "$2.50",
+        "$10.00"
+      ],
+      [
+        "Gemini 3.8 Flash Medium",
+        "$0.75",
+        "$0.075",
+        "$0.75",
+        "$3.75"
+      ],
+      [
+        "Gemini 4 Argon Medium",
+        "$2.00",
+        "$0.10",
+        "$2.00",
+        "$10.00"
+      ],
+      [
+        "GLM-5.2 High",
+        "$1.40",
+        "$0.26",
+        "—",
+        "$4.40"
+      ],
+      [
+        "GLM-5.3 High",
+        "$1.40",
+        "$0.26",
+        "—",
+        "$4.40"
+      ],
+      [
+        "GLM-5.3 Low",
+        "$1.40",
+        "$0.26",
+        "—",
+        "$4.40"
+      ],
+      [
+        "GLM-5.3 Max",
+        "$1.40",
+        "$0.26",
+        "—",
+        "$4.40"
+      ],
+      [
+        "GPT-6 Astra Medium Thinking†",
+        "$10.00",
+        "$1.00",
+        "$12.50",
+        "$50.00"
+      ],
+      [
+        "GPT-6 Luna Medium Thinking†",
+        "$0.10",
+        "$0.01",
+        "$0.125",
+        "$0.50"
+      ],
+      [
+        "GPT-6 Sol Medium Thinking†",
+        "$2.00",
+        "$0.20",
+        "$2.50",
+        "$10.00"
+      ],
+      [
+        "Kimi K3.1 Pro Max",
+        "$2.00",
+        "$0.20",
+        "—",
+        "$10.00"
+      ],
+      [
+        "SWE-2 Flash Medium",
+        "Free",
+        "Free",
+        "Free",
+        "Free"
+      ],
+      [
+        "SWE-2 High",
+        "—",
+        "—",
+        "—",
+        "—"
+      ]
+    ],
+    "Enterprise (ACUs)": [
+      [
+        "Model",
+        "Input (per 1M tokens)",
+        "Cache read (per 1M tokens)",
+        "Cache write (per 1M tokens)",
+        "Output (per 1M tokens)"
+      ],
+      [
+        "Adaptive",
+        "$0.50",
+        "$0.10",
+        "$0.50",
+        "$2.00"
+      ],
+      [
+        "Claude Fable 5.1 Medium",
+        "$10.00",
+        "$0.25",
+        "$12.50",
+        "$50.00"
+      ],
+      [
+        "Claude Fable 5.2 Medium",
+        "$8.00",
+        "$0.20",
+        "$10.00",
+        "$40.00"
+      ],
+      [
+        "Claude Opus 5.5 Medium",
+        "$4.00",
+        "$0.20",
+        "$5.00",
+        "$20.00"
+      ],
+      [
+        "Claude Sonnet 5.5 Medium",
+        "$2.00",
+        "$0.10",
+        "$2.50",
+        "$10.00"
+      ],
+      [
+        "Gemini 3.8 Flash Medium",
+        "$0.75",
+        "$0.075",
+        "$0.75",
+        "$3.75"
+      ],
+      [
+        "Gemini 4 Argon Medium",
+        "$2.00",
+        "$0.10",
+        "$2.00",
+        "$10.00"
+      ],
+      [
+        "GLM-5.2 High",
+        "$1.40",
+        "$0.26",
+        "—",
+        "$4.40"
+      ],
+      [
+        "GLM-5.3 High",
+        "$1.40",
+        "$0.26",
+        "—",
+        "$4.40"
+      ],
+      [
+        "GLM-5.3 Low",
+        "$1.40",
+        "$0.26",
+        "—",
+        "$4.40"
+      ],
+      [
+        "GLM-5.3 Max",
+        "$1.40",
+        "$0.26",
+        "—",
+        "$4.40"
+      ],
+      [
+        "GPT-6 Astra Medium Thinking†",
+        "$10.00",
+        "$1.00",
+        "$12.50",
+        "$50.00"
+      ],
+      [
+        "GPT-6 Luna Medium Thinking†",
+        "$0.10",
+        "$0.01",
+        "$0.125",
+        "$0.50"
+      ],
+      [
+        "GPT-6 Sol Medium Thinking†",
+        "$2.00",
+        "$0.20",
+        "$2.50",
+        "$10.00"
+      ],
+      [
+        "Kimi K3.1 Pro Max",
+        "$2.00",
+        "$0.20",
+        "—",
+        "$10.00"
+      ],
+      [
+        "SWE-2 Flash Medium",
+        "Free",
+        "Free",
+        "Free",
+        "Free"
+      ],
+      [
+        "SWE-2 High",
+        "—",
+        "—",
+        "—",
+        "—"
+      ]
+    ],
+    "Legacy enterprise (credits)": [
+      [
+        "Model",
+        "Input (per 1M tokens)",
+        "Cache read (per 1M tokens)",
+        "Cache write (per 1M tokens)",
+        "Output (per 1M tokens)"
+      ],
+      [
+        "Adaptive",
+        "$0.50",
+        "$0.10",
+        "$0.50",
+        "$2.00"
+      ],
+      [
+        "Claude Fable 5.1 Medium",
+        "$10.00",
+        "$0.25",
+        "$12.50",
+        "$50.00"
+      ],
+      [
+        "Claude Fable 5.2 Medium",
+        "$8.00",
+        "$0.20",
+        "$10.00",
+        "$40.00"
+      ],
+      [
+        "Claude Opus 5.5 Medium",
+        "$4.00",
+        "$0.20",
+        "$5.00",
+        "$20.00"
+      ],
+      [
+        "Claude Sonnet 5.5 Medium",
+        "$2.00",
+        "$0.10",
+        "$2.50",
+        "$10.00"
+      ],
+      [
+        "Gemini 3.8 Flash Medium",
+        "$0.75",
+        "$0.075",
+        "$0.75",
+        "$3.75"
+      ],
+      [
+        "Gemini 4 Argon Medium",
+        "$2.00",
+        "$0.10",
+        "$2.00",
+        "$10.00"
+      ],
+      [
+        "GLM-5.2 High",
+        "$1.40",
+        "$0.26",
+        "—",
+        "$4.40"
+      ],
+      [
+        "GLM-5.3 High",
+        "$1.40",
+        "$0.26",
+        "—",
+        "$4.40"
+      ],
+      [
+        "GLM-5.3 Low",
+        "$1.40",
+        "$0.26",
+        "—",
+        "$4.40"
+      ],
+      [
+        "GLM-5.3 Max",
+        "$1.40",
+        "$0.26",
+        "—",
+        "$4.40"
+      ],
+      [
+        "GPT-6 Astra Medium Thinking†",
+        "$10.00",
+        "$1.00",
+        "$12.50",
+        "$50.00"
+      ],
+      [
+        "GPT-6 Luna Medium Thinking†",
+        "$0.10",
+        "$0.01",
+        "$0.125",
+        "$0.50"
+      ],
+      [
+        "GPT-6 Sol Medium Thinking†",
+        "$2.00",
+        "$0.20",
+        "$2.50",
+        "$10.00"
+      ],
+      [
+        "Kimi K3.1 Pro Max",
+        "$2.00",
+        "$0.20",
+        "—",
+        "$10.00"
+      ],
+      [
+        "SWE-2 Flash Medium",
+        "Free",
+        "Free",
+        "Free",
+        "Free"
+      ],
+      [
+        "SWE-2 High",
+        "—",
+        "—",
+        "—",
+        "—"
+      ]
+    ]
+  },
+  "errors": [],
+  "prose": "> ## Documentation Index\n> Fetch the complete documentation index at: https://docs.devin.ai/llms.txt\n> Use this file to discover all available pages before exploring further.\n\n# AI Models\n\n> Available AI models in Devin Desktop including SWE-2, Claude, and GPT. Compare model capabilities, pricing, credit costs, and performance.\n\n## Recommended\n\n> [card] [Fusion](https://docs.devin.ai/desktop/fusion.md)\n>\n> For most users, we recommend **Fusion** — it delivers frontier intelligence for cheaper by pairing a frontier lead model with a cost-efficient sidekick.\n\nThe tables show pricing for generally available models as of November 9, 2026. Check the model selector in Devin Desktop or Devin CLI for your plan's current prices and availability. [Fusion](https://docs.devin.ai/desktop/fusion.md) bills each model in a pairing at its own rate.\n\n\n\n\\> \\[tab] Self-serve\n\\>\n\\> The table shows token rates for extra usage. Quota consumption can differ from these rates.\n\\> \\\\\\[!NOTE] SWE-2 Flash is free until December 4, 2026 at 18:00 UTC. Afterward, all three variants cost \\$0.10 per million input tokens, \\$0.01 per million cache reads, \\$0.125 per million cache writes, and \\$0.50 per million output tokens.\n\\>\n\\>\n\\>\n\\>\n\\>\n\\>\n\\>\n\\>\n\\> →\n\\>\n\\>\n\\>\n\\>\n\\>\n\\> \\\\\\<table id=\"cost-table\">\\<thead>\\<tr>\\<th>Model\\</th>\n\\>                 \\\\\\<th>Input (per 1M tokens)\\</th>\n\\>                 \\\\\\<th>Cache read (per 1M tokens)\\</th>\n\\>                 \\\\\\<th>Cache write (per 1M tokens)\\</th>\n\\>                 \\\\\\<th>Output (per 1M tokens)\\</th>\\</tr>\\</thead>\n\\>             \\\\\\<tbody />\\</table>\n\\>\n\\>\n\\>\n\\>\n\\>\n\\>\n\\> SWE-2 Flash Medium is available on the Free plan. SWE-2 Flash High and Max require a paid plan.\n\\>\n\\>\n\\>     > \\\\\\[!NOTE]\n\\> >\n\\> > SWE-2 is free for self-serve plans in Devin Desktop and Devin CLI through November 30, 2026; it does not apply to Devin cloud sessions. List pricing (\\$3.00/1M input, \\$15.00/1M output, \\\\\\$0.30/1M cache input) applies afterward. Separately, Teams members can run up to 2 Devin cloud sessions at a time in \\[Free mode]\\(/admin/billing/self-serve#free-mode) at no cost.> \\\\\\[!NOTE]\n\\> >\n\\> > Gemini 3.7 Flash and Gemini 3.8 Flash are available at introductory pricing (\\$0.75/1M input, \\$3.75/1M output) through December 31, 2026. Regular pricing (\\$1.50/1M input, \\$7.50/1M output) applies afterward.> \\\\\\[!NOTE]\n\\> >\n\\> > Gemini 4 Argon costs \\$2.00/1M input, \\$10.00/1M output, and \\$0.10/1M cache reads until December 1, 2026 at 08:00 UTC. Regular pricing (\\$4.00 input, \\$20.00 output, and \\$0.20 cache reads per million tokens) applies afterward.\n\n\n\n\\> \\[tab] Enterprise (ACUs)\n\\>\n\\> The following models are available in Devin Desktop and Devin CLI.\n\\> \\\\\\[!NOTE] SWE-2 Flash is 25% off until November 18, 2026 at 18:00 UTC. Afterward, all three variants cost \\$0.10 per million input tokens, \\$0.01 per million cache reads, \\$0.125 per million cache writes, and \\$0.50 per million output tokens.\n\\>\n\\>\n\\>\n\\>\n\\>\n\\>\n\\>\n\\>\n\\> →\n\\>\n\\>\n\\>\n\\>\n\\>\n\\> \\\\\\<table id=\"cost-table\">\\<thead>\\<tr>\\<th>Model\\</th>\n\\>                 \\\\\\<th>Input (per 1M tokens)\\</th>\n\\>                 \\\\\\<th>Cache read (per 1M tokens)\\</th>\n\\>                 \\\\\\<th>Cache write (per 1M tokens)\\</th>\n\\>                 \\\\\\<th>Output (per 1M tokens)\\</th>\\</tr>\\</thead>\n\\>             \\\\\\<tbody />\\</table>\n\\>\n\\>\n\\>\n\\>\n\\>\n\\>     > \\\\\\[!NOTE]\n\\> >\n\\> > SWE-2 costs \\$0.50/1M input, \\$2.50/1M output, and \\$0.05/1M cache reads through December 31, 2026 (Pacific time). List pricing (\\$3.00 input, \\$15.00 output, and \\$0.30 cache reads per million tokens) applies afterward.> \\\\\\[!NOTE]\n\\> >\n\\> > Gemini 4 Argon is 50% off list price until December 1, 2026 at 08:00 UTC.\n\n\n\n\\> \\[tab] Legacy enterprise (credits)\n\\>\n\\> This only applies to credit-based enterprise customers. Newer enterprise plans are billed in ACUs — see the Enterprise (ACUs) tab.\n\\>\n\\>\n\\>\n\\>\n\\>\n\\>\n\\>\n\\>\n\\> →\n\\>\n\\>\n\\>\n\\>\n\\>\n\\> \\\\\\<table id=\"models-table\">\\<thead>\\<tr>\\<th>Model\\</th>\n\\>               \\\\\\<th>Credits\\</th>\\</tr>\\</thead>\n\\>           \\\\\\<tbody />\\</table>\n\n\n\nClaude Fable 5.2 is available on paid, non-trial plans as rollout reaches your organization, with Low, Medium, High, XHigh, and Max reasoning levels, Fast Mode variants of each, and as a Fusion lead. Token pricing is \\$8 per million input tokens, \\$40 per million output tokens, \\$0.20 per million cache reads, and \\$10 per million cache writes. Fast Mode costs twice the standard price. Legacy credit-based enterprise pricing matches Fable 5.1; the launch gift badge through November 23, 2026 at 18:30 UTC does not indicate a discount.\n\nOn both token-based plans, GPT-5.6 Sol's standard-context rates change on November 21, 2026 at 07:00 UTC from \\$4 to \\$5 per million input tokens and from \\$20 to \\$30 per million output tokens. Fast mode costs twice those rates.\n\n> [!NOTE]\n>\n> **Voice mode call pricing:** A live [Voice mode call](https://docs.devin.ai/work-with-devin/voice-mode.md) uses a separate agent model from the model selected for the session. Agent model usage during the call consumes quota or ACUs as applicable and does not receive model-specific promotions, including free or discounted SWE-2 usage. The live audio connection itself is not separately charged. Recorded voice prompts are different: transcription does not consume quota or ACUs, and submitted prompts are billed like typed prompts under the selected session model.\n\n# SWE-2, swe-grep, swe-check\n\nOur SWE model family of in-house frontier models are built specifically for software engineering tasks.\n\nSWE-2 and SWE-2 Flash each come in Medium, High, and Max reasoning-effort variants.\n\nOur in-house models include:\n\n* `SWE-2 Flash`: Available in Devin Desktop and Devin CLI, not in Devin cloud. Free plans can select Medium; High and Max require a paid plan.\n* `SWE-2`: Cognition's software engineering model, available in Medium, High, and Max reasoning effort.\n* `SWE-1.7`: Our previous flagship software engineering model.\n* `SWE-1.6`: Our previous-generation model built for software engineering agents, optimized for both intelligence and model UX. Read our [research announcement](https://cognition.com/blog/swe-1-6).\n* `SWE-1-mini`: Powers passive suggestions in [Tab](https://docs.devin.ai/desktop/tab/overview.md), optimized for real-time latency.\n* `swe-grep`: Powers context retrieval and [Fast Context](https://docs.devin.ai/desktop/context-awareness/fast-context.md)\n* `swe-check`: Powers [Quick Review](https://docs.devin.ai/desktop/quick-review.md) with fast, lightweight reviews optimized for common code issues.\n\n> [!TIP]\n>\n> To get the models and prices for your own account programmatically, use the [List Models API](https://docs.devin.ai/desktop/accounts/api-reference/list-models.md). Admins can change which models the team allows with the [Update Model Allowlist API](https://docs.devin.ai/desktop/accounts/api-reference/update-models.md).\n\n\nThis documentation is built and hosted on [Mintlify](https://mintlify.com), a developer documentation platform.",
+  "page_price_date": null,
+  "promotions": [
+    {
+      "kind": "free",
+      "quote": "free until December 4, 2026 at 18"
+    },
+    {
+      "kind": "discount",
+      "quote": "25% off until November 18, 2026 at 18"
+    },
+    {
+      "kind": "discount",
+      "quote": "50% off list price until December 1, 2026 at 08"
+    }
+  ]
+}

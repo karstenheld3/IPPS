@@ -1,0 +1,81 @@
+{
+  "_date": "2026-11-18",
+  "_source": "OpenAI model compare page extracted with Playwright",
+  "new_models": {
+    "gpt-6.2-astra": {
+      "release_date": "2026-11-18",
+      "release_date_assumed": true,
+      "uc_class": "UC-1 Apex",
+      "source": "https://developers.openai.com/api/docs/models/compare",
+      "accessed": "2026-11-18",
+      "snapshot": null,
+      "context_window": 1050000,
+      "max_output": 128000,
+      "input_per_1m": 8.0,
+      "output_per_1m": 40.0,
+      "deeper_than_candidates": [
+        {
+          "x": "gpt-6.2-astra",
+          "model": "gpt-6-astra",
+          "kind": "E1",
+          "source": "https://developers.openai.com/api/docs/models/compare",
+          "accessed": "2026-11-18",
+          "statement": "OpenAI model compare page names GPT-6.2 Astra as 'Our most capable model for your hardest projects, from start to finish' with a 1,050,000-token context window and $8.00/$40.00 pricing, establishing it as a new generation above GPT-6 Astra."
+        }
+      ],
+      "ties": [],
+      "estimates": []
+    },
+    "gpt-6.2-sol": {
+      "release_date": "2026-11-18",
+      "release_date_assumed": true,
+      "uc_class": "UC-2 Flagship",
+      "source": "https://developers.openai.com/api/docs/models/compare",
+      "accessed": "2026-11-18",
+      "snapshot": null,
+      "context_window": 1050000,
+      "max_output": 128000,
+      "input_per_1m": 2.0,
+      "output_per_1m": 10.0,
+      "deeper_than_candidates": [
+        {
+          "x": "gpt-6.2-sol",
+          "model": "gpt-6-sol",
+          "kind": "E1",
+          "source": "https://developers.openai.com/api/docs/models/compare",
+          "accessed": "2026-11-18",
+          "statement": "OpenAI model compare page names GPT-6.2 Sol as the 'go-to model for everyday work, from coding to powering agents at scale' with a 1,050,000-token context window and $2.00/$10.00 pricing, establishing it as the successor generation to GPT-6 Sol."
+        }
+      ],
+      "ties": [],
+      "estimates": []
+    },
+    "gpt-6.2-astra-law": {
+      "release_date": "2026-11-18",
+      "release_date_assumed": true,
+      "uc_class": "UC-1 Apex",
+      "source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard",
+      "accessed": "2026-11-18",
+      "snapshot": null,
+      "context_window": 1050000,
+      "max_output": 128000,
+      "input_per_1m": 8.0,
+      "output_per_1m": 40.0,
+      "deeper_than_candidates": [
+        {
+          "x": "gpt-6.2-astra-law",
+          "model": "gpt-6-astra-law",
+          "kind": "E4",
+          "source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard",
+          "accessed": "2026-11-18",
+          "statement": "GPT-6.2 Astra Law appears in the OpenAI Standard pricing table at $8.00/$40.00 per 1M tokens, same as GPT-6.2 Astra, as a specialized legal-domain Apex variant (EC-4)."
+        }
+      ],
+      "ties": [],
+      "estimates": []
+    }
+  },
+  "ties": [],
+  "estimates": [],
+  "ec9_corrections": []
+}

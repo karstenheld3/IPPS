@@ -1,0 +1,65 @@
+{
+  "updates": {
+    "tables": [],
+    "url": "https://api-docs.deepseek.com/updates/",
+    "title": "Change Log | DeepSeek API Docs"
+  },
+  "thinking": {
+    "tables": [
+      [
+        [
+          "",
+          "Control Parameter (OpenAI Format)",
+          "Control Parameter (Anthropic Format)",
+          "Control Parameter (Responses API Format)"
+        ],
+        [
+          "Thinking Mode Toggle(1)",
+          "{\"thinking\": {\"type\": \"enabled/disabled\"}}",
+          "{\"reasoning\": {\"effort\": \"none/low/high/max\"}}\n(none disables thinking mode)"
+        ],
+        [
+          "Thinking Effort Control(2)",
+          "{\"reasoning_effort\": \"low/high/max\"}",
+          "{\"output_config\": {\"effort\": \"low/high/max\"}}"
+        ]
+      ],
+      [
+        [
+          "Requested effort",
+          "Actual mapped effort"
+        ],
+        [
+          "minimal",
+          "low"
+        ],
+        [
+          "low",
+          "low"
+        ],
+        [
+          "medium",
+          "high"
+        ],
+        [
+          "high",
+          "high"
+        ],
+        [
+          "xhigh",
+          "high"
+        ],
+        [
+          "max",
+          "max"
+        ],
+        [
+          "ultra",
+          "max"
+        ]
+      ]
+    ],
+    "url": "https://api-docs.deepseek.com/guides/thinking_mode/",
+    "title": "Thinking Mode | DeepSeek API Docs"
+  }
+}

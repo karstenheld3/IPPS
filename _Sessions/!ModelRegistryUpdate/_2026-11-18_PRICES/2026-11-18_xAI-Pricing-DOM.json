@@ -1,0 +1,387 @@
+{
+  "tables": [
+    [
+      [
+        "Model",
+        "Context",
+        "Short context",
+        "Long context"
+      ],
+      [
+        "Input",
+        "Cached",
+        "Output",
+        "Input",
+        "Cached",
+        "Output"
+      ],
+      [
+        "grok-4.7\nLong context ≥ 200k tokens",
+        "500k",
+        "$2.00",
+        "$0.50",
+        "$6.00",
+        "$4.00",
+        "$1.00",
+        "$12.00"
+      ],
+      [
+        "grok-build-0.1\nLong context ≥ 200k tokens",
+        "256k",
+        "$1.00",
+        "$0.20",
+        "$2.00",
+        "$2.00",
+        "$0.40",
+        "$4.00"
+      ],
+      [
+        "grok-4.6\nLong context ≥ 200k tokens",
+        "500k",
+        "$2.00",
+        "$0.50",
+        "$6.00",
+        "$4.00",
+        "$1.00",
+        "$12.00"
+      ],
+      [
+        "grok-4.5\nLong context ≥ 200k tokens",
+        "500k",
+        "$2.00",
+        "$0.30",
+        "$6.00",
+        "$4.00",
+        "$0.60",
+        "$12.00"
+      ],
+      [
+        "grok-4.3\nLong context ≥ 200k tokens",
+        "1M",
+        "$1.25",
+        "$0.20",
+        "$2.50",
+        "$2.50",
+        "$0.40",
+        "$5.00"
+      ],
+      [
+        "grok-4.20-multi-agent-0309\nLong context ≥ 200k tokens",
+        "1M",
+        "$1.25",
+        "$0.20",
+        "$2.50",
+        "$2.50",
+        "$0.40",
+        "$5.00"
+      ],
+      [
+        "grok-4.20-0309-reasoning\nLong context ≥ 200k tokens",
+        "1M",
+        "$1.25",
+        "$0.20",
+        "$2.50",
+        "$2.50",
+        "$0.40",
+        "$5.00"
+      ],
+      [
+        "grok-4.20-0309-non-reasoning\nLong context ≥ 200k tokens",
+        "1M",
+        "$1.25",
+        "$0.20",
+        "$2.50",
+        "$2.50",
+        "$0.40",
+        "$5.00"
+      ]
+    ],
+    [
+      [
+        "Model",
+        "Media Input",
+        "Resolution",
+        "Output"
+      ],
+      [
+        "grok-imagine-image-2.0\nText, Image → Image",
+        "$0.01 / img",
+        "1K · Low",
+        "$0.04 / img"
+      ],
+      [
+        "1.5K · Low",
+        "$0.05 / img"
+      ],
+      [
+        "2K · Low",
+        "$0.06 / img"
+      ],
+      [
+        "1K · Medium",
+        "$0.06 / img"
+      ],
+      [
+        "1.5K · Medium",
+        "$0.07 / img"
+      ],
+      [
+        "2K · Medium",
+        "$0.08 / img"
+      ],
+      [
+        "grok-imagine-image\nText, Image → Image",
+        "$0.002 / img",
+        "1K",
+        "$0.02 / img"
+      ],
+      [
+        "2K",
+        "$0.02 / img"
+      ],
+      [
+        "grok-imagine-video-1.5\nText, Image, Audio → Video",
+        "$0.01 / img",
+        "480p",
+        "$0.08 / sec"
+      ],
+      [
+        "720p",
+        "$0.14 / sec"
+      ],
+      [
+        "1080p",
+        "$0.25 / sec"
+      ],
+      [
+        "grok-imagine-video\nText, Image, Video → Video",
+        "$0.01 / sec\n$0.002 / img",
+        "480p",
+        "$0.05 / sec"
+      ],
+      [
+        "720p",
+        "$0.07 / sec"
+      ],
+      [
+        "grok-imagine-video-1.5-lite\nText, Image → Video",
+        "$0.01 / img",
+        "480p",
+        "$0.02 / sec"
+      ],
+      [
+        "720p",
+        "$0.03 / sec"
+      ],
+      [
+        "1080p",
+        "$0.14 / sec"
+      ]
+    ],
+    [
+      [
+        "Model or mode",
+        "Cost"
+      ],
+      [
+        "Speech to Speech (grok-voice-2.0)\nDeprecated",
+        "$0.08 / min ($4.80 / hr)\n$0.004 / text input"
+      ],
+      [
+        "Speech to Speech (grok-voice-3.0)",
+        "$0.08 / min ($4.80 / hr)\n$0.004 / text input"
+      ],
+      [
+        "Speech to Text",
+        "$0.10 / hr (REST), $0.20 / hr (Streaming)"
+      ],
+      [
+        "Text to Speech",
+        "$15.00 / 1M chars"
+      ]
+    ],
+    [
+      [
+        "Tool",
+        "Tool Name",
+        "Description",
+        "Cost / 1k Calls"
+      ],
+      [
+        "Web Search",
+        "web_search",
+        "Search the internet and browse web pages",
+        "$5"
+      ],
+      [
+        "X Search",
+        "x_search",
+        "Search X posts, user profiles, and threads",
+        "$5 / 1k posts\n$10 / 1k profiles"
+      ],
+      [
+        "Code Execution",
+        "code_execution\ncode_interpreter",
+        "Run Python code in a sandboxed environment",
+        "$5"
+      ],
+      [
+        "Image Generation",
+        "image_generation",
+        "Generate and edit images",
+        "Image API rates"
+      ],
+      [
+        "File Attachments",
+        "attachment_search",
+        "Search through files attached to messages",
+        "$5"
+      ],
+      [
+        "Collections Search",
+        "collections_search\nfile_search",
+        "Query your uploaded document collections (RAG)",
+        "$2.50"
+      ],
+      [
+        "Image Understanding",
+        "view_image",
+        "Analyze images found during Web Search and X Search*",
+        "Token-based"
+      ],
+      [
+        "X Video Understanding",
+        "view_x_video",
+        "Analyze videos found during X Search*",
+        "Token-based"
+      ],
+      [
+        "Remote MCP Tools",
+        "Tool name is set by each MCP server",
+        "Connect and use custom MCP tool servers",
+        "Token-based"
+      ]
+    ],
+    [
+      [
+        "",
+        "Real-time API",
+        "Batch API"
+      ],
+      [
+        "Token pricing",
+        "Standard rates",
+        "Discounted rates (varies by model)"
+      ],
+      [
+        "Response time",
+        "Immediate (seconds)",
+        "Typically within 24 hours"
+      ],
+      [
+        "Rate limits",
+        "Per-minute limits apply",
+        "Requests don't count towards rate limits"
+      ]
+    ],
+    [
+      [
+        "Model",
+        "Batch discount"
+      ],
+      [
+        "grok-4.7\ngrok-4.6\ngrok-4.5\ngrok-4.3\ngrok-4.20-0309-reasoning\ngrok-4.20-0309-non-reasoning\ngrok-4.20-multi-agent-0309",
+        "20%"
+      ]
+    ],
+    [
+      [
+        "",
+        "Standard",
+        "Priority"
+      ],
+      [
+        "Token pricing",
+        "Standard rates",
+        "2x standard rates"
+      ],
+      [
+        "Response time",
+        "Standard scheduling priority",
+        "Higher scheduling priority"
+      ]
+    ],
+    [
+      [
+        "Prompt tokens",
+        "Input",
+        "Cached input",
+        "Output"
+      ],
+      [
+        "Below 200k",
+        "$4.00 / 1M",
+        "$1.00 / 1M",
+        "$12.00 / 1M"
+      ],
+      [
+        "Above 200k",
+        "$6.00 / 1M",
+        "$1.50 / 1M",
+        "$18.00 / 1M"
+      ]
+    ],
+    [
+      [
+        "",
+        "Global endpoint",
+        "US regional endpoint"
+      ],
+      [
+        "Base URL",
+        "https://api.x.ai/v1",
+        "https://us.api.x.ai/v1"
+      ],
+      [
+        "Token pricing",
+        "Standard rates",
+        "1.1x standard rates"
+      ],
+      [
+        "Models",
+        "All models available to your team",
+        "Currently grok-4.7 and grok-4.6 only"
+      ]
+    ],
+    [
+      [
+        "Resource",
+        "Rate"
+      ],
+      [
+        "File storage",
+        "$0.025 / GiB / day"
+      ],
+      [
+        "Collection storage",
+        "$0.10  / GiB / day"
+      ]
+    ],
+    [
+      [
+        "Resource",
+        "Rate"
+      ],
+      [
+        "File downloads",
+        "$0.20 / GiB downloaded"
+      ],
+      [
+        "Collection downloads",
+        "$0.20 / GiB downloaded"
+      ]
+    ]
+  ],
+  "url": "https://docs.x.ai/developers/pricing",
+  "title": "API Pricing | SpaceXSI Docs"
+}

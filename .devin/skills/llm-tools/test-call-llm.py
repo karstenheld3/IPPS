@@ -67,6 +67,13 @@ OPENAI_TESTS = [
   ("gpt-6.1-terra", "low", "none", None, "reasoning_effort"),
   ("gpt-6-sol", "low", "none", None, "reasoning_effort"),
   ("gpt-6-luna", "low", "none", None, "reasoning_effort"),
+
+  # Reasoning models - gpt-6.2 family (NEW 2026-11-18)
+  ("gpt-6.2-astra", "low", "none", None, "reasoning_effort"),
+  ("gpt-6.2-astra", "high", "none", None, "reasoning_effort"),
+  ("gpt-6.2-sol", "low", "none", None, "reasoning_effort"),
+  ("gpt-6.2-sol", "high", "none", None, "reasoning_effort"),
+  ("gpt-6.2-astra-law", "low", "none", None, "reasoning_effort"),
 ]
 
 ANTHROPIC_TESTS = [

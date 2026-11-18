@@ -1,0 +1,13 @@
+{
+  "_date": "2026-11-18",
+  "_run_mode": "PRICES",
+  "newRegistryIds": ["gpt-6.2-astra", "gpt-6.2-sol", "gpt-6.2-astra-law"],
+  "newPricingIds": ["gpt-6.2-astra", "gpt-6.2-sol", "gpt-6.2-astra-law"],
+  "changedPricingIds": [],
+  "contextChecks": [
+    {"model_id": "gpt-6.2-astra", "vendor_context_window": 1050000, "source": "https://developers.openai.com/api/docs/models/compare", "checked": "2026-11-18"},
+    {"model_id": "gpt-6.2-sol", "vendor_context_window": 1050000, "source": "https://developers.openai.com/api/docs/models/compare", "checked": "2026-11-18"},
+    {"model_id": "gpt-6.2-astra-law", "vendor_context_window": 1050000, "source": "https://developers.openai.com/api/docs/pricing?latest-pricing=standard", "checked": "2026-11-18"}
+  ],
+  "contextUnverified": []
+}

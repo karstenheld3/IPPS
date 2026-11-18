@@ -1,0 +1,163 @@
+{
+  "tables": [
+    [
+      [
+        "MODEL",
+        "deepseek-flash(1)",
+        "deepseek-v4-pro"
+      ],
+      [
+        "BASE URL (OpenAI Format)",
+        "https://api.deepseek.com"
+      ],
+      [
+        "BASE URL (Anthropic Format)",
+        "https://api.deepseek.com/anthropic"
+      ],
+      [
+        "MODEL VERSION",
+        "DeepSeek-V4.1-Flash-1017",
+        "DeepSeek-V4-Pro-0813"
+      ],
+      [
+        "THINKING MODE",
+        "Supports both non-thinking and thinking (default) modes\nSee Thinking Mode for how to switch"
+      ],
+      [
+        "CONTEXT LENGTH",
+        "1M"
+      ],
+      [
+        "MAX OUTPUT",
+        "MAXIMUM: 384K"
+      ],
+      [
+        "FEATURES",
+        "Json Output",
+        "✓",
+        "✓"
+      ],
+      [
+        "Tool Calls",
+        "✓",
+        "✓"
+      ],
+      [
+        "Responses API",
+        "✓",
+        "✓"
+      ],
+      [
+        "Anthropic API",
+        "✓",
+        "✓"
+      ],
+      [
+        "Chat Prefix Completion（Beta）",
+        "✓",
+        "✓"
+      ],
+      [
+        "FIM Completion（Beta）",
+        "Non-thinking mode only",
+        "Non-thinking mode only"
+      ],
+      [
+        "Vision",
+        "✓",
+        "Not supported"
+      ],
+      [
+        "PRICING(2)",
+        "1M INPUT TOKENS\n(CACHE HIT)",
+        "OFF-PEAK",
+        "$0.003",
+        "$0.022"
+      ],
+      [
+        "PEAK",
+        "$0.006",
+        "$0.044"
+      ],
+      [
+        "1M INPUT TOKENS\n(CACHE MISS)",
+        "OFF-PEAK",
+        "$0.15",
+        "$0.66"
+      ],
+      [
+        "PEAK",
+        "$0.3",
+        "$1.32"
+      ],
+      [
+        "1M OUTPUT TOKENS",
+        "OFF-PEAK",
+        "$0.6",
+        "$1.98"
+      ],
+      [
+        "PEAK",
+        "$1.2",
+        "$3.96"
+      ],
+      [
+        "Concurrency Limit(3)",
+        "2500",
+        "500"
+      ]
+    ],
+    [
+      [
+        "Item",
+        "Unit",
+        "Price"
+      ],
+      [
+        "Search API (text)",
+        "Per 1,000 successful requests",
+        "$0.75"
+      ],
+      [
+        "Fetch API",
+        "Per 1,000 successful requests",
+        "$0.75"
+      ]
+    ],
+    [
+      [
+        "Item",
+        "Unit",
+        "Price"
+      ],
+      [
+        "File parsing, OCR API",
+        "Per 1,000 pages",
+        "$0.225"
+      ]
+    ],
+    [
+      [
+        "API",
+        "Unit",
+        "List price",
+        "Limited-time price (50% off)"
+      ],
+      [
+        "Text to Speech (TTS)",
+        "Per 10,000 characters",
+        "$0.45",
+        "$0.225"
+      ],
+      [
+        "Speech to Text (ASR)",
+        "Per hour of audio",
+        "$0.116",
+        "$0.058"
+      ]
+    ]
+  ],
+  "text": "Skip to main content\nThe full suite of DeepSeek application APIs is now available: web search, file input, URL reading, model safety, ASR, TTS and more. Click here to view the guide\nDeepSeek API Docs\nctrl\nK\nResources\nEnglish\nDeepSeek Platform\nQuick Start\nAPI Guides\nAPI Reference\nNews\nChange Log\nYour First API Call\nModels & Pricing\nToken & Token Usage\nRate Limit & Isolation\nError Codes\nAgent Integrations\nDeepSeek Harness\nClaude Code\nCodex\nOpenCode\nOpenClaw\nHermes\nReasonix\nWorkBuddy/CodeBuddy\nQoder\nContribute Your Agent Integrations\nCopy Markdown\nModels & Pricing\n\nModel prices are listed in units of per 1M tokens. A token, the smallest unit of text that the model recognizes, can be a word, a number, or even a punctuation mark. We bill model usage based on the total number of input and output tokens by the model.\n\nModel Details​\nMODEL\tdeepseek-flash(1)\tdeepseek-v4-pro\nBASE URL (OpenAI Format)\thttps://api.deepseek.com\nBASE URL (Anthropic Format)\thttps://api.deepseek.com/anthropic\nMODEL VERSION\tDeepSeek-V4.1-Flash-1017\tDeepSeek-V4-Pro-0813\nTHINKING MODE\tSupports both non-thinking and thinking (default) modes\nSee Thinking Mode for how to switch\nCONTEXT LENGTH\t1M\nMAX OUTPUT\tMAXIMUM: 384K\nFEATURES\tJson Output\t✓\t✓\nTool Calls\t✓\t✓\nResponses API\t✓\t✓\nAnthropic API\t✓\t✓\nChat Prefix Completion（Beta）\t✓\t✓\nFIM Completion（Beta）\tNon-thinking mode only\tNon-thinking mode only\nVision\t✓\tNot supported\nPRICING(2)\t1M INPUT TOKENS\n(CACHE HIT)\tOFF-PEAK\t$0.003\t$0.022\nPEAK\t$0.006\t$0.044\n1M INPUT TOKENS\n(CACHE MISS)\tOFF-PEAK\t$0.15\t$0.66\nPEAK\t$0.3\t$1.32\n1M OUTPUT TOKENS\tOFF-PEAK\t$0.6\t$1.98\nPEAK\t$1.2\t$3.96\nConcurrency Limit(3)\t2500\t500\n\n(1) Use deepseek-flash as the model name. The legacy names deepseek-v4-flash and deepseek-v4-flash-vision-exp are still accepted, but the corresponding models have been retired, their requests are served by the DeepSeek-V4.1-Flash-1017 model and billed at the Flash price.\n\n(2) Off-peak rates are half of the peak rates. Peak hours are 01:00 - 04:00 and 06:00 - 10:00 UTC, Monday through Friday, excluding Chinese public holidays. All other hours are off-peak, including weekends and Chinese public holidays in full.\n\n(3) For more details on concurrency limits, please refer to Rate Limit & Isolation.\n\nSearch & Fetch API Pricing​\n\nThe Search and Fetch APIs are billed per use.\n\nItem\tUnit\tPrice\nSearch API (text)\tPer 1,000 successful requests\t$0.75\nFetch API\tPer 1,000 successful requests\t$0.75\n\nFor the billing rules, see Search & Fetch.\n\nStarting 12:00 on November 18, 2026 (Beijing Time, UTC+8), server-side search and web fetch triggered when calling the model are no longer billed; only model token usage is billed. Server-side search is triggered when you use the web tools, the web_search tool in the Anthropic API or the web_search tool in the Responses API.\n\nFile Parsing & OCR Pricing​\nItem\tUnit\tPrice\nFile parsing, OCR API\tPer 1,000 pages\t$0.225\nSpeech Pricing​\nAPI\tUnit\tList price\tLimited-time price (50% off)\nText to Speech (TTS)\tPer 10,000 characters\t$0.45\t$0.225\nSpeech to Text (ASR)\tPer hour of audio\t$0.116\t$0.058\nDeduction Rules​\n\nFor model usage, the expense = number of tokens × price. Search API and Fetch API calls are charged per use at the rates above. The corresponding fees will be directly deducted from your topped-up balance or granted balance, with a preference for using the granted balance first when both balances are available.\n\nProduct prices may vary and DeepSeek reserves the right to adjust them. We recommend topping up based on your actual usage and regularly checking this page for the most recent pricing information.\n\nPrevious\nYour First API Call\nNext\nToken & Token Usage\nModel Details\nSearch & Fetch API Pricing\nFile Parsing & OCR Pricing\nSpeech Pricing\nDeduction Rules\nWeChat Official Account\nCommunity\nEmail\nDiscord\nTwitter\nMore\nGitHub\nCopyright © 2026 DeepSeek, Inc.",
+  "url": "https://api-docs.deepseek.com/quick_start/pricing/",
+  "title": "Models & Pricing | DeepSeek API Docs"
+}

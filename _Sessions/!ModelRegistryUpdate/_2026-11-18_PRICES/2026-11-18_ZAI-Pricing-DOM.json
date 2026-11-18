@@ -1,0 +1,264 @@
+{
+  "tables": [
+    [
+      [
+        "Model",
+        "Input",
+        "Cached Input",
+        "Cached Input Storage",
+        "Output"
+      ],
+      [
+        "GLM-5.3",
+        "$1.4",
+        "$0.26",
+        "Limited-time Free",
+        "$4.4"
+      ],
+      [
+        "GLM-5.3-Flash",
+        "$0.15",
+        "$0.03",
+        "Limited-time Free",
+        "$0.50"
+      ],
+      [
+        "GLM-5.3-FlashX",
+        "$0.37",
+        "$0.075",
+        "Limited-time Free",
+        "$1.25"
+      ]
+    ],
+    [
+      [
+        "Model",
+        "Input",
+        "Cached Input",
+        "Cached Input Storage",
+        "Output"
+      ],
+      [
+        "GLM-5.3-FlashX-Legal",
+        "$0.37",
+        "$0.075",
+        "Limited-time Free",
+        "$1.25"
+      ],
+      [
+        "GLM-5.2",
+        "$1.4",
+        "$0.26",
+        "Limited-time Free",
+        "$4.4"
+      ],
+      [
+        "GLM-5.1",
+        "$1.4",
+        "$0.26",
+        "Limited-time Free",
+        "$4.4"
+      ],
+      [
+        "GLM-5",
+        "$1",
+        "$0.2",
+        "Limited-time Free",
+        "$3.2"
+      ],
+      [
+        "GLM-4.7",
+        "$0.6",
+        "$0.11",
+        "Limited-time Free",
+        "$2.2"
+      ],
+      [
+        "GLM-4.6",
+        "$0.6",
+        "$0.11",
+        "Limited-time Free",
+        "$2.2"
+      ]
+    ],
+    [
+      [
+        "Tool",
+        "Cost"
+      ],
+      [
+        "Web Search",
+        "$0.01 / use"
+      ]
+    ],
+    [
+      [
+        "Model",
+        "Price"
+      ],
+      [
+        "GLM-Image",
+        "$0.015"
+      ]
+    ],
+    [
+      [
+        "Agent",
+        "Price"
+      ],
+      [
+        "GLM Slide/Poster Agent(beta)",
+        "$0.7 / MTok"
+      ],
+      [
+        "General-Purpose Translation",
+        "$3 / MTok"
+      ],
+      [
+        "Popular Special Effects Video Templates",
+        "$0.2 / video"
+      ]
+    ],
+    [
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    ],
+    [
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    ],
+    [
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ]
+    ],
+    [
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ]
+    ],
+    [
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ]
+    ]
+  ],
+  "url": "https://docs.z.ai/guides/overview/pricing",
+  "title": "Pricing - Overview - Z.AI DEVELOPER DOCUMENT"
+}

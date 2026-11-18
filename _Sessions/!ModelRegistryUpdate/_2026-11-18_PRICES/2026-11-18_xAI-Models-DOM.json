@@ -1,0 +1,67 @@
+{
+  "models": {
+    "tables": [],
+    "url": "https://docs.x.ai/developers/models",
+    "title": "Grok Models & Pricing | SpaceXSI Docs"
+  },
+  "reasoning": {
+    "tables": [
+      [
+        [
+          "Setting",
+          "Description",
+          "Best For"
+        ],
+        [
+          "\"low\"",
+          "Uses some reasoning tokens, but still fast",
+          "Latency-sensitive agentic use and simple tool calling."
+        ],
+        [
+          "\"medium\"",
+          "More thinking for less-latency sensitive applications",
+          "Complex data analysis and long-context reasoning."
+        ],
+        [
+          "\"high\" (default)",
+          "Uses more reasoning tokens for deeper thinking",
+          "Very challenging problems, complex math, multi-step logic, competition-level tasks"
+        ],
+        [
+          "\"xhigh\"",
+          "Maximum reasoning depth, with correspondingly higher latency",
+          "The hardest problems, where answer quality matters more than response time"
+        ]
+      ],
+      [
+        [
+          "Model",
+          "reasoning parameter",
+          "Behavior"
+        ],
+        [
+          "grok-4.7",
+          "reasoning.effort: \"low\" / \"medium\" / \"high\" (default) / \"xhigh\"",
+          "Controls reasoning depth (cannot be disabled)"
+        ],
+        [
+          "grok-4.6",
+          "reasoning.effort: \"low\" / \"medium\" / \"high\" (default) / \"xhigh\"",
+          "Controls reasoning depth (cannot be disabled)"
+        ],
+        [
+          "grok-4.5",
+          "reasoning.effort: \"low\" / \"medium\" / \"high\" (default)",
+          "Controls reasoning depth (cannot be disabled)"
+        ],
+        [
+          "grok-4.20-multi-agent",
+          "reasoning.effort: \"low\" / \"medium\" / \"high\" / \"xhigh\"",
+          "Controls agent count (4 or 16)"
+        ]
+      ]
+    ],
+    "url": "https://docs.x.ai/developers/model-capabilities/text/reasoning",
+    "title": "Reasoning | SpaceXSI Docs"
+  }
+}
