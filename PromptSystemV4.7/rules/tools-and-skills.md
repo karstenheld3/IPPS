@@ -62,7 +62,7 @@ Skills are in `[AGENT_FOLDER]/skills/`. Each has a `SKILL.md` with usage instruc
 Executable tools outside the workspace:
 
 - **Python venv**: `[WORKSPACE_FOLDER]/../.tools/llm-venv/Scripts/python.exe`
-- **processkit** (supervisor for `run-supervised.ps1`): `[WORKSPACE_FOLDER]/../.tools/llm-venv/Scripts/processkit.exe` - install: `pip install processkit-py==1.5.0` into the venv (version tested in HANGBENCH)
+- **processkit** (supervisor for `run-supervised.ps1`): `[WORKSPACE_FOLDER]/../.tools/llm-venv/Scripts/processkit.exe` - install and removal: @skills:terminal-robustness `SETUP.md` and `UNINSTALL.md` (`processkit-py==1.5.0` into the venv, version tested in HANGBENCH)
 - **API keys**: `[WORKSPACE_FOLDER]/../.tools/.api-keys.txt` (default; override in session or workspace NOTES.md)
 - **Poppler** (PDF): `[WORKSPACE_FOLDER]/../.tools/poppler/Library/bin/`
 - **Ghostscript**: `[WORKSPACE_FOLDER]/../.tools/gs/bin/`
