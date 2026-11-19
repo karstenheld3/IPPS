@@ -28,6 +28,12 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
 - **Description**: Still mention caps: `specs/_SPEC_TERMINAL_ROBUSTNESS_SKILL.md`, `specs/_SPEC_IPPS_PROMPT_FILE_FORMAT.md` (DD-12, DD-14), `docs/_INFO_HOW_TO_WRITE_ROBUST_PROMPT_SEQUENCES.md`, `docs/_INFO_HOW_TO_PREVENT_AGENTS_FROM_HANGING.md` sections 7.4 and 8.1 to 8.3 (marked superseded); session `_IMPL_AGENT_TERMINAL_ROBUSTNESS.md`; `.claude/` (until rebuilt)
 - **Next Steps**: Reverse-update from `AGENTTERMINAL-SP01`
 
+**PRMTHANGFIX-PR-0008: processkit missing, supervised runner uses the Kill fallback**
+- **History**: Added 2026-11-18 15:30 (session `_Sessions/!ModelRegistryUpdate`, sequence `_PROMPTS_01-MdlGen-DepthToGeneration.md`)
+- **Description**: Every `run-supervised.ps1` log of 2026-11-18 starts with `WARN processkit not found, fallback Kill($true) misses orphaned grandchildren`; `processkit.exe` is absent from `[WORKSPACE_FOLDER]/../.tools/llm-venv/Scripts/` and from PATH
+- **Impact**: A stop file ends only the direct child tree; orphaned grandchildren survive a hang verdict
+- **Next Steps**: `pip install processkit-py==1.5.0` into the llm-venv (`tools-and-skills.md` Tool Locations), then confirm the next runner log has no WARN line
+
 **PREL-PR-0001: project-release.md should support 2 release conventions**
 - **History**: Added 2026-03-24 15:37
 - **Description**: Currently only one release convention. Should support both semantic versioning (X.Y.Z) and date-based (YYYY-MM-DD) releases
@@ -188,6 +194,9 @@ Track problems using ID format: `[TOPIC]-PR-[NNNN]`
 (none)
 
 ## Problems Changes
+
+**[2026-11-18 15:30]**
+- Added: PRMTHANGFIX-PR-0008 (processkit missing)
 
 **[2026-11-11 20:50]**
 - Added: PRMTHANGFIX-PR-0001, PR-0004, PR-0006, PR-0007 (synced from session `_2026-11-11_PromptSequenceHangPrevention`)
