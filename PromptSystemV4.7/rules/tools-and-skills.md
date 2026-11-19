@@ -90,7 +90,7 @@ The Devin / Cascade chat panel renders a backticked workspace-relative path as a
 
 - Before processing multiple files: run `tool --help` or read source, execute on a single file first, verify output location and format, then scale to full batch
 - Use absolute paths (PowerShell jobs lose relative context) and non-blocking execution for parallel tasks
-- Run every non-whitelisted command through the supervised runner (`agent-behavior.md` Terminal Hang Prevention)
+- Run every hang-risk-class command through the supervised runner (`agent-behavior.md` Terminal Hang Prevention)
 - After first job completes, verify output before assuming rest will succeed
 
 ## Long-Running Commands (over 60 seconds)

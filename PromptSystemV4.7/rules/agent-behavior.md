@@ -14,17 +14,16 @@ Behavioral rules for agent execution patterns.
   2. Conversation: derive intent from the full conversation history
   3. Workspace: read NOTES.md, PROGRESS.md, PROBLEMS.md, and referenced files
   4. Infer and act: choose the most likely interpretation, execute, and state it briefly so [ACTOR] can correct it
-  - Asking "which file?" when it is attached or in NOTES.md, or "should I X?" when the prompt verb is "implement", "fix", "deploy" = failed prompt analysis
+  - Asking "which file?" when it is attached, or "should I X?" after the verb "implement", "fix", "deploy" = failed prompt analysis
   - Only exception: two interpretations lead to destructive, irreversible, and materially different outcomes
-- Think hard, understand problem first. Gather info from local files and search before acting
+- Think hard, understand the problem first; gather info before acting. Question training assumptions: may be outdated
 
 ## Communication
 
 - APAPALAN (As Precise As Possible, As Little As Necessary) and MECT (Minimal Explicit Consistent Terminology) apply to every output: precision wins over brevity, one name per concept, same pattern = same meaning, active voice, plain language, informative headings. Rules: `core-conventions.md` APAPALAN Writing Principle; @skills:write-documents `APAPALAN_RULES.md`, `MECT_WRITING_RULES.md`
 - "Propose", "suggest", "draft", "outline" = talk ABOUT, don't modify. "Implement", "fix", "change", "update" = modify the object
-- Question training assumptions - may be outdated or biased
-- No unrelated extensions: implement only what [ACTOR] requested; extensions within scope are acceptable. Asked for "format removal" (bold markers), adding "content removal" (comments) = scope creep
-- Progress feedback during multi-step work: `3 rules files. Reading...`, `[ 4 / 12 ] workflows verified so far ( 38 / 90 secs elapsed)...`, `8 edits applied. 2 remaining...`
+- No unrelated extensions: implement only what [ACTOR] requested; extensions within scope are acceptable
+- Progress feedback during multi-step work: `[ 4 / 12 ] workflows verified so far ( 38 / 90 secs elapsed)...`
 - Goal first: state WHY before HOW
 - Important first: answer or outcome → method → edge cases. Never bury the result
 - Self-contained messages: actionable without re-reading prior context. Never "as discussed" or "see above"
@@ -40,12 +39,12 @@ Behavioral rules for agent execution patterns.
 
 - Execute verbs in phase order, check gates before transitions
 - Start small: test behavior, verify assumptions, collect evidence. Small cycles: implement → test → fix → green → next
-- Question introduced complexity: Is this in the prompt/spec? Avoid scope creep
+- Question added complexity: is it in the prompt/spec?
 - No lazy conclusions: Don't state what you can't prove. Verify before asserting
 - Dates and weekdays: ALWAYS verify today's date and weekday via web search. Never rely on training data or internal clock assumptions
-- Reduce concepts: Fewer moving parts = fewer failure modes. Merge overlapping concepts
-- Avoid contradictions, flawed logic, circular definitions. If it doesn't make sense, stop and fix or re-think
-- Always repeat the initial / overall goal to yourself to stay focused 
+- Fewer moving parts = fewer failure modes: merge overlapping concepts
+- Avoid contradictions, flawed logic, circular definitions; if it doesn't make sense, stop and re-think
+- Repeat the overall goal to yourself to stay focused
 - Track progress in PROGRESS.md, problems in PROBLEMS.md, make notes in NOTES.md
 - Run `/verify` after significant changes
 - Before ending a session: run `/session-save`
@@ -67,7 +66,13 @@ Behavioral rules for agent execution patterns.
 
 **Generic replacement examples:** IBAN `DE89370400440532013000` (Bundesbank test IBAN), address `Rua da Liberdade, 42, 3.o Esq.`, postal code `1000-001`, tax ID `123456789`, name `Jane Smith` / `Max Mustermann`, date `2026-01-15`
 
-Violation = `[CRITICAL]` in FAILS.md. Also avoid nonsensical or humorous examples: LLMs interpret whimsical content as desired quality signal.
+Violation = `[CRITICAL]` in FAILS.md. No humorous examples: LLMs read them as desired quality.
+
+## Preserve Originals
+
+- Before a destructive change (compress, convert, repair, overwrite), copy the original to `[NAME]_vNN.[ext]` in the same folder. Keep it until [ACTOR] confirms the goal
+- Small tasks use suffixes, not subfolders or moves (no `_backup/`)
+- A limit ("under 800 KB") is an upper bound: use the gentlest setting that meets it
 
 ## File Placement
 
@@ -101,18 +106,18 @@ Every working folder (session root, `T##_*` or `S##_*` subfolder, bug folder; `[
 
 Goal: no command waits forever, and none that still makes progress is stopped. No deadline: the expected runtime triggers checks, never a kill.
 
-Inline only if ALL apply: single command, no `|`, `;`, loop, script block or `2>&1`, under 200 characters, under 10 seconds, under 50 output lines. Examples: `git status`, `git --no-pager log -n 5`.
+Inline: simple, bounded, local commands (reads, listings, file operations, `git status`), under 10 s and 50 output lines. Runner: any command of a hang-risk class (network, `Select-String`, recursive search, build, test, install, stdin or pager wait, `2>&1`, unknown behavior): @skills:terminal-robustness `TERMINAL_ROBUSTNESS_GUIDES.md` Section 8. Inline with no result after 15 s: cancel, rerun through the runner.
 
-Everything else runs through the supervised runner:
+Runner steps:
 1. Write the work into `_agentwork/.tmp_[purpose]_[HHmmss].ps1` (or `.py`) of the working folder (`[WORKSPACE_FOLDER]/_agentwork/` in PROJECT-MODE); existing project scripts are called from it unchanged
 2. Run: `pwsh -NoProfile -NonInteractive -File [AGENT_FOLDER]/skills/terminal-robustness/run-supervised.ps1 -Script _agentwork/.tmp_[purpose]_[HHmmss].ps1 -Expected [seconds] -Topic [TOPIC]` - expected = Robustness card value, else your estimate (state it first); `[TOPIC]` = topic of the running prompt file or STRUT, in chat the session topic
 3. Finished = `DONE`, `KILLED`, or `ERROR` line in `_log.txt`, never the tool's status. Read `_log.txt` (`ALIVE` every 30 s: `cpu=`, `out=`, `err=`), `_out.txt`, `_err.txt` with `read_file`
-4. No end line yet: keep waiting while `cpu=`, `out=`, `err=` or the work's own files grow, however far past the expected runtime
+4. No end line yet: keep waiting while `cpu=`, `out=`, `err=` or the work's own files grow, however long
 5. Hang verdict, the ONLY reason to end a command: (a) the output ends in a wait that cannot end (prompt, pager, key, lock); (b) past the expected runtime, no `ALIVE` value changed for 5 minutes, and no known silent phase (network call, sleep, wait for another process); (c) above 3x expected, 10 minutes of only `cpu=` growth, no output or file change. Then create `_agentwork/.tmp_[purpose]_[HHmmss]_stop.txt` (line 1 = reason): the runner kills the whole tree and logs `KILLED`. In doubt, wait
 6. After the end line: failure = `KILLED`, `ERROR`, unexpected exit. `DONE` above both 3x expected and expected + 30 s = overrun: use the result, never re-run, record the cause, correct the card's expected runtime
 7. Before each command check "Never again" in `_agentwork/__CARD_[TOPIC]-Fails.md`; record every failure and overrun there at once (card rules: @skills:terminal-robustness `ROBUSTNESS_CARD_SKELETON.md`). Same failure twice: stop the prompt or task with a PROBLEMS.md entry naming the Fails ID. First `WARN` log line (processkit missing): tell the user, one PROBLEMS.md entry
-8. `LEFTOVER` log line or a cancel: run `pwsh -NoProfile -File _agentwork/.tmp_kill_[TOPIC].ps1` (the runner keeps it per topic; it ends all running commands of the topic, so run it only when none of yours runs)
+8. `LEFTOVER` log line or a cancel: run `pwsh -NoProfile -File _agentwork/.tmp_kill_[TOPIC].ps1` (ends all running commands of the topic; run it only when none of yours runs)
 9. Delete script and outputs once consumed
 
 Hard bans: (1) `2>&1` - redirect stderr to a file; (2) unbounded background children (`--watch`, dev servers); (3) stdin/pager waits (`Read-Host`, `pause`, `Get-Content -Wait`).
-Tool specifics: agent rule file (Cascade: `devin-cascade.md` Terminal Limits). Mechanisms, kill script, cards: @skills:terminal-robustness. Project bans and expected runtimes: `_agentwork/__CARD_*-Robustness.md`.
+Tool specifics: `devin-cascade.md` Terminal Limits. Mechanisms, cards: @skills:terminal-robustness. Project bans: `_agentwork/__CARD_*-Robustness.md`.

@@ -19,11 +19,12 @@ Agent-specific rules for the Cascade agent (Windsurf/Devin IDE chat panel agent)
 
 **Cascade terminal limit (2026-03-09):** Max 4 concurrent terminals. Additional terminals are queued/delayed.
 
-Command rules: `agent-behavior.md` Terminal Hang Prevention (whitelist, supervised runner, monitoring, hang verdict, runtime check). Cascade tool specifics:
+Command rules: `agent-behavior.md` Terminal Hang Prevention (inline vs runner, supervised runner, monitoring, hang verdict, runtime check). Cascade tool specifics:
 
-- Every `run_command`: `Blocking: false`, `WaitMsBeforeAsync` = (expected seconds + 5) * 1000, max 60000. The tool can miss the end of a finished command and can report a running command as done (both observed 2026-11-11); a blocking call can then wait forever
+- Every `run_command`: `Blocking: false`, `WaitMsBeforeAsync` = (expected seconds + 5) * 1000, max 60000; inline commands: 15000 (the 15 s check of the inline rule). The tool can miss the end of a finished command and can report a running command as done (both observed 2026-11-11); a blocking call can then wait forever
 - No end line (`DONE`, `KILLED`, `ERROR`) in the runner log yet: `command_status` with `WaitDurationSeconds: 60`, then read the log again; repeat for as long as the `ALIVE` lines show progress (step 4). Never decide from `command_status` or terminal output alone, and never end a command because a wait count or a time limit is reached
 - Runner gone: no `START` 60 s after the call, or no new `ALIVE` line for 90 s and no end line -> check the runner process (`pid=` in the `START` line, `Get-Process -Id`); gone -> end surviving processes of the command and record a Fails entry (completion miss or runner error). Runner alive -> only a hang verdict (step 5) ends the command
+- Never an inline command with quotes inside quotes, a backtick, or `|` inside a quoted argument (e.g. `git grep` with a regex): pwsh waits at the `>>` continuation prompt forever
 - Terminals are shared between concurrent Cascade conversations: tool output can contain another conversation's text, and a command reading stdin can receive another conversation's input
 - Never open external terminals unless explicitly requested
 - Terminal robustness variant: @skills:terminal-robustness `DevinCascade/`
