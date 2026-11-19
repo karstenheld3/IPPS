@@ -144,7 +144,7 @@ $exePath = "$installerDir\gs10060w64.exe"
 Invoke-WebRequest -Uri $gsUrl -OutFile $exePath
 
 # Extract using 7-Zip (requires full 7z.exe, not 7za.exe)
-& "$toolsDir\7z\7z.exe" x -y -o"$gsDir" "$exePath"
+& "$toolsDir\7z\7z.exe" x -y "-o$gsDir" "$exePath"
 
 # Cleanup NSIS installer artifacts
 Remove-Item "$gsDir\`$PLUGINSDIR" -Recurse -Force -ErrorAction SilentlyContinue
@@ -190,6 +190,11 @@ pip install pdf2image Pillow
 Test Poppler conversion:
 ```powershell
 & "$toolsDir\poppler\Library\bin\pdftoppm.exe" -jpeg -r 150 "input.pdf" "$toolsDir\_pdf_to_jpg_converted\output"
+```
+
+Run the test suite (all tools, scripts, and documented examples; about 1-2 minutes):
+```powershell
+python .devin/skills/pdf-tools/_test/test-pdf-tools.py
 ```
 
 ## 10. Cleanup (Optional)
