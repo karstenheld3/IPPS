@@ -2,7 +2,7 @@
 
 Canonical structure of the two command cards. Copy an agent `ROBUSTNESS_CARD_TEMPLATE.md` for the Robustness card and the Fails block below for the Fails card; `/verify` checks card instances against this structure.
 
-Cards hold only project- and run-specific content. Generic rules (inline whitelist, supervised runner, monitoring, hang verdict, runtime check, hard bans) live in `agent-behavior.md` Terminal Hang Prevention and are never copied into a card.
+Cards hold only project- and run-specific content. Generic rules (inline vs runner, supervised runner, monitoring, hang verdict, runtime check, hard bans) live in `agent-behavior.md` Terminal Hang Prevention and are never copied into a card.
 
 ## Robustness card (per working folder, kept until `/cleanup`)
 

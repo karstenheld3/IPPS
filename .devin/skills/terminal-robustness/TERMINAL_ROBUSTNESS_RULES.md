@@ -16,7 +16,7 @@ Execution Patterns (EX)
 - TERMROBUSTNESS-EX-01: Output to files, read with file tool
 - TERMROBUSTNESS-EX-02: Expected runtime stated, no runtime kill
 - TERMROBUSTNESS-EX-03: Whole-tree kill by the supervised runner
-- TERMROBUSTNESS-EX-04: Inline whitelist, everything else via `_agentwork/.tmp_` script and the supervised runner
+- TERMROBUSTNESS-EX-04: Hang-risk-class commands via `_agentwork/.tmp_` script and the supervised runner, simple bounded local commands inline
 - TERMROBUSTNESS-EX-05: Delete temp script and output files after consumption
 
 Card Definition (CD)
@@ -110,16 +110,21 @@ Run the test suite through run-supervised.ps1 with -Expected 200. Read the ALIVE
 
 **GOOD:** `run-supervised.ps1` with processkit: the whole tree lives in one Job Object and ends when the script exits or when the agent creates the stop file after a hang verdict (HANGBENCH 26/27; open: a cancelled runner leaves its tree alive, HC-27).
 
-## TERMROBUSTNESS-EX-04: Inline whitelist, everything else via `_agentwork/.tmp_` script and the supervised runner
+## TERMROBUSTNESS-EX-04: Hang-risk-class commands via `_agentwork/.tmp_` script and the supervised runner, simple bounded local commands inline
 
-Whitelist: `agent-behavior.md` Terminal Hang Prevention (single source, not repeated here).
+Decision rule: `agent-behavior.md` Terminal Hang Prevention; class list: `TERMINAL_ROBUSTNESS_GUIDES.md` Section 8 (single sources, not repeated here).
 
 **BAD:**
 ```powershell
-Get-ChildItem -Recurse -Filter *.md | Where-Object { $_.Length -gt 10000 } | Select-Object FullName, Length
+git pull
 ```
 
-**GOOD:**
+**GOOD (inline, bounded local command):**
+```powershell
+Get-ChildItem docs -Filter *.md | Select-Object -First 20 Name, Length
+```
+
+**GOOD (hang-risk class, through the runner):**
 ```powershell
 pwsh -NoProfile -NonInteractive -File [AGENT_FOLDER]/skills/terminal-robustness/run-supervised.ps1 -Script _agentwork/.tmp_large_md.ps1 -Expected 10
 ```
@@ -139,7 +144,7 @@ Then `read_file` the `_log.txt` and `_out.txt` files.
 
 ## TERMROBUSTNESS-CD-02: Card contains all skeleton sections and no generic rules
 
-**BAD:** A card with only a banned list, or a card that restates the whitelist, the runner call, or the hang verdict; a card that turns an expected runtime into a kill limit.
+**BAD:** A card with only a banned list, or a card that restates the inline-vs-runner rule, the runner call, or the hang verdict; a card that turns an expected runtime into a kill limit.
 
 **GOOD:** Robustness card: Banned commands, Expected runtimes, Always rules, Agent tool limits. Fails card: Never again, Entries. Both matching `ROBUSTNESS_CARD_SKELETON.md`.
 

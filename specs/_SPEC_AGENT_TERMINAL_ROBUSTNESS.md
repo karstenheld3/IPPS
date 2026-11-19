@@ -228,9 +228,11 @@ completion .................................... runner log end line DONE / KILLE
 - Examples, BAD/GOOD pairs, and superseded-pattern notes may quote a concept; they are marked as example or history
 - One declared exception: the runtime-check line in prompts (AGENTTERMINAL-DD-07), copied verbatim from its single template in `PROMPTS_ROBUSTNESS_GUIDES.md` Section 2b; its thresholds equal those of the generic terminal rule
 
-**AGENTTERMINAL-FR-02: Inline Whitelist**
-- A command runs inline only if it meets all whitelist criteria of the generic terminal rule (single command, no pipe, no multiple statements, no loop, no stream merge, short line, short runtime, small output)
-- Every other command runs through the supervised runner
+**AGENTTERMINAL-FR-02: Inline vs Runner by Hang-Risk Class**
+- A command runs inline if every stage is a simple, bounded, local command (expected under 10 s, under 50 output lines) and belongs to no hang-risk class; pipes, multiple statements, and line length are no reason for the runner by themselves
+- A command runs through the supervised runner if it, or any stage of its pipeline, belongs to a hang-risk class: network (including git commands that contact a remote), `Select-String` and recursive search or enumeration, build, test, install, stdin or pager or editor wait, stream merge or unbounded child, unknown behavior, large or fragile payload
+- The decision rule lives in the generic terminal rule; the class list with examples lives in `TERMINAL_ROBUSTNESS_GUIDES.md` Section 8
+- An inline command without a result after 15 s is a hang candidate: the agent cancels it, runs the same work through the runner, and records a Fails card entry with a "Never again" line (DD-15)
 
 **AGENTTERMINAL-FR-03: Supervised Execution Without Script Changes**
 - The agent writes the work into one tmp script in `_agentwork/` and runs it through the runner
@@ -395,6 +397,8 @@ completion .................................... runner log end line DONE / KILLE
 **AGENTTERMINAL-DD-13:** No deadline; the agent decides. The runner never ends a command on its own; it reports liveness, and the agent ends a command only on a hang verdict (FR-21). Rationale: a time cap ends legitimate work that only needs longer than estimated; the finished part is lost and the command runs again, so the cap costs more time than it saves (PRMTHANGFIX-FL-0001). The bench hid this because every legitimate case got a cap above its runtime. Every automatic kill on one signal (elapsed time, silence) has a legitimate case that looks the same; only the combination of signals, read with knowledge of what the script does, separates a hang from slow work. Cost: a real hang without a telling output line is ended after minutes instead of at a cap, and the verdict depends on the agent following the rule [ASSUMED - not tested live].
 
 **AGENTTERMINAL-DD-14:** Kill script instead of kill-on-runner-death. Rationale: a runner that was cancelled cannot act, and processkit without its deadline option did not end the tree in 3 of 3 bench repeats. A file with the living process IDs, kept current by the runner, survives the runner; the next runner start reports leftovers, and agent or human can end them with one command. Rejected: a runner-owned kill-on-close Job Object (about 20 lines of native Windows calls in a synced file, untested). The topic in the file name keeps sequences that share one `_agentwork/` folder apart.
+
+**AGENTTERMINAL-DD-15:** Hang-risk classes instead of a shape-based inline whitelist (user decision 2026-11-16, option 2 of DD-01 of session HANGBENCH). Rationale: the shape criteria (no pipe, no `;`, 200 characters) forced the runner for harmless commands and did not name the real causes; classes name the causes (network, `Select-String`, stdin waits, build, `2>&1`). Rejected: a named command allowlist (a listed command such as `Select-String` or network-bound git commands hangs in practice, so a list marks safety wrongly). Rejected for now: hook enforcement (DD-09). Cost: the agent must judge the class; the 15 s check and the Fails card entry limit the damage of a wrong judgment [ASSUMED - not tested live]. The rule file stays under the 11,800 byte limit because the class list lives in the skill.
 
 **AGENTTERMINAL-DD-12:** One Fails card per working folder for chat mode and prompt sequences, instead of one per sequence with PROBLEMS.md as the chat-mode target. Rationale: repeated failures in normal chat work are the most frequent case; PROBLEMS.md is not read before each command, so it cannot prevent repeats. One target removes a branch from the rule; promotion at the 15-line mark keeps the list short.
 
@@ -660,6 +664,10 @@ Delta between the target state and the files as of 2026-11-11. Done items are li
 - [ ] FR-01: runtime-check line in every prompt equals the `PROMPTS_ROBUSTNESS_GUIDES.md` Section 2b template; its thresholds equal the generic rule
 
 ## 15. Document History
+
+**[2026-11-16 15:00]**
+- Changed (user decision, DD-15): inline whitelist replaced by hang-risk classes (FR-02); class list in `TERMINAL_ROBUSTNESS_GUIDES.md` Section 8; 15 s inline check in `devin-cascade.md`; EX-04, PD-06, QI-03, card templates, skill files reworded. Not changed: runner, bench; open: bench case for the 15 s inline check, `.devin/` mirror, live test
+- Note: remaining wording "whitelist" in Sections 1 to 3, 8 to 14 of this spec means the inline-vs-runner decision rule; to be reworded in the next spec pass
 
 **[2026-11-11 21:12]**
 - Changed (reverse-update from rule compaction): section Long-Running Commands moved from `rules/agent-behavior.md` to `rules/tools-and-skills.md`, content unchanged (architecture diagram, ownership table, FR-19 checklist item). Reason: Cascade loads only about the first 12,000 bytes of an always-on rule file; `agent-behavior.md` was cut off before Terminal Hang Prevention

@@ -11,7 +11,7 @@ Only patterns that hold for any terminal tool on Windows/POSIX:
 
 ## 2. Safe patterns (apply always)
 
-1. **Supervised runner for every non-whitelisted command** - call line and completion rule: `agent-behavior.md` Terminal Hang Prevention. The runner (`run-supervised.ps1`, PowerShell 7) works with any terminal tool: output goes to files; liveness lines, stop file, and tree kill do not depend on the tool
+1. **Supervised runner for every hang-risk-class command** (`TERMINAL_ROBUSTNESS_GUIDES.md` Section 8) - call line and completion rule: `agent-behavior.md` Terminal Hang Prevention. The runner (`run-supervised.ps1`, PowerShell 7) works with any terminal tool: output goes to files; liveness lines, stop file, and tree kill do not depend on the tool
 2. **Non-interactive flags** - `--yes`, `--no-pager`, `--ci`, `-NonInteractive`; git log/diff/show always `--no-pager` and `-n <N>`
 3. **No stdin/pager/key waits** - ban `Read-Host`, `pause`, `Get-Credential`, REPLs without input, `Get-Content -Wait`, `tail -f`
 4. **No unbounded background children** - ban `--watch` flags, `Wait-Process` without `-Timeout`; stop spawned processes after use

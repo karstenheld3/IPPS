@@ -36,7 +36,7 @@ This is mechanical, not folklore. Redirecting alone does not stop waits (input, 
 4. **No stdin waits** - ban `Read-Host`, `pause`, `Get-Credential`, REPLs launched without input, `Get-Content -Wait`, `tail -f`
 5. **No unbounded children** - ban `--watch` flags, `Wait-Process` without `-Timeout`; stop spawned processes after use
 6. **Recursive enumeration** - prefer `rg.exe` (ripgrep, bundled with VS Code-based editors) over `Get-ChildItem -Recurse` / `Select-String -Recurse` on large trees
-7. **Monitor, never cut off** - every non-whitelisted command runs through the runner; a command that shows progress runs to its end, and only a hang verdict ends it (rule: `agent-behavior.md` Terminal Hang Prevention steps 4 and 5)
+7. **Monitor, never cut off** - every command of a hang-risk class (Section 8) runs through the runner; a command that shows progress runs to its end, and only a hang verdict ends it (rule: `agent-behavior.md` Terminal Hang Prevention steps 4 and 5)
 
 ## 4. The Robustness Card
 
@@ -97,11 +97,50 @@ Ending = creating the stop file; thresholds and wording: `agent-behavior.md` Ter
 
 Why no automatic kill: in HANGBENCH an idle timeout on output killed legitimate silent work (HC-03, HC-24), and a deadline kills legitimate work that only needs longer than estimated. Each single signal has a legitimate case that looks the same; only the combination, read with knowledge of what the script does, separates them.
 
+## 8. Inline or Runner: Hang-Risk Classes
+
+Rule: `agent-behavior.md` Terminal Hang Prevention. The decision keys on the cause of hangs, not on the shape of the command line: a pipe, a `;` or a long line is no reason for the runner by itself. A command runs through the runner as soon as it, or any stage of its pipeline, belongs to one hang-risk class.
+
+### 8.1 Hang-risk classes (runner required)
+
+- **Network**: `git fetch|pull|push|clone|ls-remote|remote update`, `git submodule`, any git command that may contact a remote or ask for credentials; `npm|pip|winget|choco install`, `curl`, `Invoke-WebRequest`, `Test-NetConnection`, `ssh`. Reason: no timeout of its own, credential prompts, proxy stalls (observed: network-bound git commands hang)
+- **Text search and recursive enumeration**: `Select-String` (observed: hangs; also waits on stdin when its path is missing), `findstr`, `Get-ChildItem -Recurse`, `Get-Content` on a large or growing file, `Select-String` or `rg` outside a bounded path. Use agent tools first (Section 3, item 1 and 6)
+- **Build, test, install, package manager, scaffold**: stderr volume, child processes, install prompts
+- **Stdin, pager, editor, confirmation waits**: `git log|diff|show` without `--no-pager`, `git commit` without `-m`, `Read-Host`, interactive REPL, commands that ask `[Y/n]`
+- **Stream merge and unbounded children**: `2>&1`, `--watch`, dev servers, `Start-Process -Wait`, `Wait-Process`
+- **Unknown behavior**: first use of a command whose runtime and prompts are not known; a command not seen in the Robustness card or this section
+- **Large or fragile payload**: multi-line command, unbalanced quotes, inline `python -c` or `node -e`, interpreter without script
+
+### 8.2 Inline allowed (all must hold)
+
+- Every stage is a bounded, local command: reads and listings of one folder (no `-Recurse`), file operations on named paths, OS and process queries, `git status`, `git --no-pager log|diff|show -n [N]`, `git add`, `git commit -m`, `git branch`
+- Expected under 10 s and under 50 output lines
+- No `2>&1`, no class from 8.1
+
+### 8.3 Examples
+
+**BAD** (hang-risk class inline):
+```powershell
+git pull
+Select-String -Path "docs/*.md" -Pattern "TODO"
+```
+
+**GOOD**:
+```powershell
+Get-ChildItem docs -Filter *.md | Select-Object -First 20 Name, Length
+git status --short
+```
+`git pull` and `Select-String` go into a tmp script run through the runner; for text search prefer `grep_search`.
+
+### 8.4 Fallback for a misjudged inline command
+
+An inline command without a result after 15 s is a hang candidate: cancel the call, run the same work through the runner, and write a Fails card entry with the command shape and a "Never again" line (class and replacement). The entry is the learning loop; the class list above grows from such entries.
+
 ## Review Checklist
 
 - [ ] No command ended while it showed progress; every `KILLED` has hang evidence in its Fails entry
 - [ ] Classified the command risk before running (interactive / volume / child)
 - [ ] Loaded the project card if it exists; created one from the agent template if not
-- [ ] Non-whitelisted commands ran through `run-supervised.ps1`; completion read from the runner log
+- [ ] Commands of a hang-risk class (Section 8) ran through `run-supervised.ps1`; completion read from the runner log
 - [ ] Temp scripts and output files deleted after consumption
 - [ ] Every failure written to the Fails card of the working folder at once, with a "Never again" line

@@ -29,7 +29,7 @@ Audits process discipline and quality of terminal command execution. Consumed AF
 
 ### TERMROBUSTNESS-PD-04: Monitored, ended only on a hang verdict
 
-- Action: Every non-whitelisted command ran through the supervised runner with `-Expected`; the agent read the `ALIVE` lines while waiting; a command was ended only after a hang verdict, through the stop file
+- Action: Every hang-risk-class command ran through the supervised runner with `-Expected`; the agent read the `ALIVE` lines while waiting; a command was ended only after a hang verdict, through the stop file
 - Evidence: runner log lines with `expected=`; for each `KILLED` line a Fails card entry with hang evidence (wait shown in the output, or unchanged `ALIVE` values and their time span)
 - Failure indicator: command ran without the runner; `KILLED` while the preceding `ALIVE` lines showed growing `cpu=`, `out=`, or `err=` and no endless-loop evidence; `KILLED` with no record; a finished command re-run only because it was slow; agent waited on a command whose output showed an input prompt
 - References: TERMROBUSTNESS-EX-02, EX-03
@@ -41,11 +41,11 @@ Audits process discipline and quality of terminal command execution. Consumed AF
 - Failure indicator: a hang discussed in conversation with no card entry
 - References: TERMROBUSTNESS-CD-04
 
-### TERMROBUSTNESS-PD-06: Non-whitelisted commands ran as temp scripts through the runner
+### TERMROBUSTNESS-PD-06: Hang-risk-class commands ran as temp scripts through the runner
 
-- Action: Every command outside the inline whitelist ran as `_agentwork/.tmp_` script through `run-supervised.ps1`; results read with the file tool
-- Evidence: command history shows only whitelisted inline commands and `run-supervised.ps1 -Script _agentwork/.tmp_*` lines
-- Failure indicator: inline pipeline, multi-statement, loop, or long command line in the terminal; results read from terminal output
+- Action: Every command of a hang-risk class (`TERMINAL_ROBUSTNESS_GUIDES.md` Section 8) ran as `_agentwork/.tmp_` script through `run-supervised.ps1`; results read with the file tool
+- Evidence: command history shows only inline commands outside the classes and `run-supervised.ps1 -Script _agentwork/.tmp_*` lines
+- Failure indicator: network command, `Select-String`, recursive search, build, test, install, stdin or pager wait, or `2>&1` run inline; an inline command cancelled after 15 s without a Fails entry; results of runner commands read from terminal output
 - References: TERMROBUSTNESS-EX-04
 
 ### TERMROBUSTNESS-PD-07: Temp files removed after consumption
@@ -69,8 +69,8 @@ Audits process discipline and quality of terminal command execution. Consumed AF
 
 ### TERMROBUSTNESS-QI-03: Redirect-pattern adoption
 
-- Question: Did inline commands stay within the whitelist, or did borderline commands slip through inline?
-- Improvement tip: When in doubt, use a temp script through the runner rather than narrowing pipelines - it eliminates the pipe mechanisms and adds containment and liveness lines
+- Question: Did inline commands stay outside the hang-risk classes, or did borderline commands slip through inline?
+- Improvement tip: When in doubt, use a temp script through the runner - it eliminates the pipe mechanisms and adds containment and liveness lines
 
 ### TERMROBUSTNESS-QI-04: Card reuse within the working folder
 

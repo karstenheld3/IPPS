@@ -1,13 +1,13 @@
 # Robustness Card Template (ClaudeCode)
 
-Re-usable card for Claude Code agents. Copy to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder and extend with project-specific entries. Generic defaults only - replace bracketed placeholders. Generic rules (whitelist, supervised runner, hang verdict, hard bans) stay in `agent-behavior.md` Terminal Hang Prevention and are not copied here.
+Re-usable card for Claude Code agents. Copy to `_agentwork/__CARD_[TOPIC]-Robustness.md` of the current working folder and extend with project-specific entries. Generic defaults only - replace bracketed placeholders. Generic rules (inline vs runner, supervised runner, hang verdict, hard bans) stay in `agent-behavior.md` Terminal Hang Prevention and are not copied here.
 
 ```markdown
 # Robustness Card: [TOPIC]
 
 ## Banned commands
 
-- Inline command with `;`, `|`, a loop, or nested quotes - unterminated string can leave pwsh at the `>>` continuation prompt - evidence: HANGBENCH HC-10
+- Inline command with nested or unbalanced quotes, or a multi-line body - unterminated string can leave pwsh at the `>>` continuation prompt - evidence: HANGBENCH HC-10
 - `git log` / `git diff` / `git show` without `--no-pager` - launches pager, waits on stdin - generic pager rule
 - `npm install` without `--yes` - prompts for confirmation on stdin - generic stdin rule
 - `npx <tool>` without `--yes` - prompts to install package - generic stdin rule

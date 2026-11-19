@@ -11,7 +11,7 @@ description: Prevent hanging terminal commands in chat mode and prompt sequences
 
 Agents issue commands that hang indefinitely: pipes that never EOF, stderr that throttles, merge operators that crash the shell, background grandchildren inheriting std handles, input waits, and terminal tools that miss the end of a finished command. This skill carries the confirmed mechanisms, the supervised runner `run-supervised.ps1`, and the card templates (Robustness, Fails) that make the protection durable per project.
 
-Baseline rules are NOT repeated here: inline whitelist, runner call, monitoring, hang verdict, runtime check, hard bans live in `agent-behavior.md` Terminal Hang Prevention; agent tool mechanics (blocking mode, polling) live in the agent rule file. This skill adds only mechanisms, evidence, the runner, and templates.
+Baseline rules are NOT repeated here: inline vs runner decision (hang-risk class list: `TERMINAL_ROBUSTNESS_GUIDES.md` Section 8), runner call, monitoring, hang verdict, runtime check, hard bans live in `agent-behavior.md` Terminal Hang Prevention; agent tool mechanics (blocking mode, polling) live in the agent rule file. This skill adds only mechanisms, evidence, the runner, and templates.
 
 ## MUST-NOT-FORGET
 
@@ -50,7 +50,7 @@ Dispatch keys on agent identity (system prompt), not on the agent folder: Cascad
 ### 3. Execute safely
 
 - Prefer agent tools (grep_search, read_file, find_by_name) over shell commands for file operations; where `grep_search` cannot reach a folder or returns nothing for text that exists, run `rg.exe` inside a tmp script through the runner, never an inline `Select-String` or `Get-ChildItem` pipeline
-- Non-whitelisted commands run through `run-supervised.ps1` (call line in `agent-behavior.md` Terminal Hang Prevention); the runner contains the whole process tree, gives empty stdin, and writes the log with `ALIVE` liveness lines. It has no deadline: it kills the tree only when the agent creates the stop file after a hang verdict. While commands run it keeps the kill script `_agentwork/.tmp_kill_[TOPIC].ps1` (one line per running command); after a cancelled runner that script ends the leftover processes
+- Commands of a hang-risk class (`TERMINAL_ROBUSTNESS_GUIDES.md` Section 8) run through `run-supervised.ps1` (call line in `agent-behavior.md` Terminal Hang Prevention); the runner contains the whole process tree, gives empty stdin, and writes the log with `ALIVE` liveness lines. It has no deadline: it kills the tree only when the agent creates the stop file after a hang verdict. While commands run it keeps the kill script `_agentwork/.tmp_kill_[TOPIC].ps1` (one line per running command); after a cancelled runner that script ends the leftover processes
 
 ### 4. Record failures
 
