@@ -198,7 +198,7 @@ function convertSignatures(root) {
   lastH2.insertAdjacentHTML("afterend", sigHtml);
 }
 
-(function () {
+embeddedFontsReady().then(function () {
   var options = readRenderOptions();
   var source = readSource();
   var parts = splitFrontMatter(source);
@@ -216,7 +216,7 @@ function convertSignatures(root) {
     document.title = title;
     finishRendering();
   });
-})();
+});
 </script>
 </body>
 </html>

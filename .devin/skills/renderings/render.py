@@ -3,8 +3,10 @@
 Step 1: inject the Markdown into an HTML template that renders it in the browser (styles + markdown-it inlined).
 Step 2: print the HTML with headless Chromium (Playwright) to PDF.
 
+HTML inputs (.html, .htm) are printed to PDF directly (no template); the page layout is detected (portrait, landscape) or set with --layout.
+
 Usage:
-  python render.py <inputs...> [--format html|pdf|both] [--template NAME|PATH] [--options TEXT] [--output-dir DIR] [--paper A4|Letter] [--landscape]
+  python render.py <inputs...> [--layout auto|portrait|landscape|single-page] [--format html|pdf|both] [--template NAME|PATH] [--options TEXT] [--output-dir DIR] [--paper A4|Letter] [--landscape]
                    [--lang xx] [--title TEXT] [--render-timeout S] [--keep-html] [--overwrite] [--recursive] [--quiet] [--list-templates]
 
 Exit codes: 0 all ok or skipped, 1 at least one input failed, 2 setup or argument error.
@@ -33,6 +35,14 @@ PROMPTSYSTEM_LINE_PATTERN = re.compile(r"^[ \t]*<PromptSystem\b[^>]*>[ \t]*\r?\n
 IMAGE_SOURCE_PATTERNS = [re.compile(r"!\[[^\]]*\]\(\s*<([^>]+)>"), re.compile(r"!\[[^\]]*\]\(\s*([^)\s<][^)\s]*)"), re.compile(r"<img\b[^>]*?\bsrc\s*=\s*[\"']([^\"']+)[\"']", re.IGNORECASE)]
 CODE_SPAN_PATTERN = re.compile(r"(`+)(.+?)\1")
 FENCE_PATTERN = re.compile(r"^[ \t]*(`{3,}|~{3,})")
+HTML_SUFFIXES = (".html", ".htm")
+INPUT_SUFFIXES = (".md",) + HTML_SUFFIXES
+PORTRAIT_VIEWPORT_WIDTH = 794
+LANDSCAPE_VIEWPORT_WIDTH = 1123
+SINGLE_PAGE_VIEWPORT_WIDTH = 1280
+PORTRAIT_PRINTABLE_WIDTH = 718
+LANDSCAPE_PRINTABLE_WIDTH = 1047
+MINIMUM_PRINT_SCALE = 0.4
 INSTALL_HINT = 'Run: "{python}" -m playwright install chromium-headless-shell'
 
 
@@ -42,7 +52,8 @@ class SetupError(Exception):
 
 def parse_arguments():
   parser = argparse.ArgumentParser(description="Render Markdown to HTML and PDF via an HTML template and headless Chromium.")
-  parser.add_argument("inputs", nargs="*", help="Markdown files, folders, or glob patterns")
+  parser.add_argument("inputs", nargs="*", help="Markdown or HTML files, folders (*.md), or glob patterns")
+  parser.add_argument("--layout", choices=["auto", "portrait", "landscape", "single-page"], default="auto", help="page layout for HTML inputs (default: detect)")
   parser.add_argument("--format", choices=["html", "pdf", "both"], default="both")
   parser.add_argument("--template", default="DocumentDefault", help="template name in templates/ or path to an HTML file")
   parser.add_argument("--options", help='override the template <meta name="render-options"> content, e.g. "columns=DE:DE,EN:EN,PT:PT; markers=^###\\s*DE,^###\\s*EN,^###\\s*PT"')
@@ -73,7 +84,7 @@ def resolve_inputs(patterns, recursive):
     else:
       for match in glob.glob(pattern, recursive=recursive):
         candidate = Path(match)
-        if candidate.is_file() and candidate.suffix.lower() == ".md":
+        if candidate.is_file() and candidate.suffix.lower() in INPUT_SUFFIXES:
           retVal.append(candidate.resolve())
   unique = []
   seen = set()
@@ -114,12 +125,21 @@ def resolve_template_file(relative):
   return retVal
 
 
+def resolve_skill_file(relative):
+  retVal = (SCRIPT_FOLDER / relative).resolve()
+  if SCRIPT_FOLDER.resolve() not in retVal.parents:
+    raise SetupError(f"Data URI file outside skill folder: {relative}")
+  if not retVal.is_file():
+    raise SetupError(f"Data URI file not found: {retVal}")
+  return retVal
+
+
 def resolve_includes(text):
   def replace(match):
     return resolve_template_file(match.group(1).strip()).read_text(encoding="utf-8")
 
   def replace_data_uri(match):
-    target = resolve_template_file(match.group(1).strip())
+    target = resolve_skill_file(match.group(1).strip())
     mime_type = DATA_URI_MIME_TYPES.get(target.suffix.lower())
     if not mime_type:
       raise SetupError(f"No MIME type for data URI include: {target.name}")
@@ -283,9 +303,21 @@ def inject(template_text, document, paper, landscape):
   return retVal
 
 
+def output_stem(path):
+  # Output names are never percent-encoded: Erm%C3%A4chtigung -> Ermächtigung (repeat for double encoding)
+  retVal = path.stem
+  for _ in range(3):
+    decoded = urllib.parse.unquote(retVal)
+    if decoded == retVal:
+      break
+    retVal = decoded
+  retVal = re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", retVal)
+  return retVal
+
+
 def output_path_for(document, output_dir, suffix):
   folder = Path(output_dir).resolve() if output_dir else document["path"].parent
-  return folder / (document["path"].stem + suffix)
+  return folder / (output_stem(document["path"]) + suffix)
 
 
 def write_html(html_text, target, overwrite):
@@ -329,6 +361,43 @@ def print_pdf(page, html_path, pdf_path, render_timeout):
   return retVal
 
 
+def measure_page(page, html_path, viewport_width):
+  page.set_viewport_size({"width": viewport_width, "height": 1000})
+  page.goto(html_path.resolve().as_uri(), wait_until="load")
+  try:
+    page.wait_for_load_state("networkidle", timeout=5000)
+  except Exception:
+    pass
+  page.evaluate("() => document.fonts.ready")
+  retVal = page.evaluate("() => [Math.ceil(document.documentElement.scrollWidth), Math.ceil(document.documentElement.scrollHeight)]")
+  return retVal
+
+
+def print_html_pdf(page, html_path, pdf_path, layout):
+  # Screen media keeps the page as seen in a browser; the layout is chosen from measured content width
+  page.emulate_media(media="screen")
+  pdf_path.parent.mkdir(parents=True, exist_ok=True)
+  options = {"path": str(pdf_path), "print_background": True, "outline": True, "tagged": True, "margin": {"top": "10mm", "bottom": "10mm", "left": "10mm", "right": "10mm"}}
+  if layout == "single-page":
+    width, height = measure_page(page, html_path, SINGLE_PAGE_VIEWPORT_WIDTH)
+    page.pdf(path=str(pdf_path), print_background=True, outline=True, tagged=True, width=f"{width}px", height=f"{height + 1}px", page_ranges="1")
+    return "single-page"
+  chosen = layout
+  scale = 1.0
+  width, height = measure_page(page, html_path, PORTRAIT_VIEWPORT_WIDTH)
+  if layout == "auto":
+    chosen = "portrait" if width <= PORTRAIT_VIEWPORT_WIDTH + 4 else "landscape"
+  if chosen == "portrait":
+    if width > PORTRAIT_VIEWPORT_WIDTH + 4:
+      scale = max(MINIMUM_PRINT_SCALE, PORTRAIT_PRINTABLE_WIDTH / width)
+  else:
+    width, height = measure_page(page, html_path, LANDSCAPE_VIEWPORT_WIDTH)
+    if width > LANDSCAPE_VIEWPORT_WIDTH + 4:
+      scale = max(MINIMUM_PRINT_SCALE, LANDSCAPE_PRINTABLE_WIDTH / width)
+  page.pdf(format="A4", landscape=chosen == "landscape", scale=scale, **options)
+  return chosen if scale >= 0.999 else f"{chosen}, scaled {int(scale * 100)}%"
+
+
 def pdf_page_count(pdf_path):
   try:
     import fitz
@@ -359,10 +428,12 @@ def main():
     return 2
   documents_paths = resolve_inputs(args.inputs, args.recursive)
   if not documents_paths:
-    print(f"ERROR: no Markdown files found for: {', '.join(args.inputs)}", file=sys.stderr)
+    print(f"ERROR: no Markdown or HTML files found for: {', '.join(args.inputs)}", file=sys.stderr)
     return 1
   want_html = args.format in ("html", "both")
   want_pdf = args.format in ("pdf", "both")
+  if args.format == "html" and any(path.suffix.lower() in HTML_SUFFIXES for path in documents_paths):
+    print("WARNING: HTML inputs are already HTML; they produce PDF only and are skipped for --format html", file=sys.stderr)
   formats_label = {"html": "HTML", "pdf": "PDF", "both": "HTML and PDF"}[args.format]
   log(f"Rendering {len(documents_paths)} file{'s' if len(documents_paths) != 1 else ''} with template '{args.template}' to {formats_label}...")
   artifacts = []
@@ -371,6 +442,12 @@ def main():
     started = time.perf_counter()
     artifacts.append(entry)
     try:
+      if path.suffix.lower() in HTML_SUFFIXES:
+        entry["source_html"] = True
+        entry["html"] = path
+        entry["pdf"] = (Path(args.output_dir).resolve() if args.output_dir else path.parent) / (output_stem(path) + ".pdf")
+        entry["seconds"] += time.perf_counter() - started
+        continue
       document = read_document(path, args.lang, args.title if len(documents_paths) == 1 else None)
       for warning in copy_images(document, args.output_dir, args.overwrite):
         add_warning(entry, warning)
@@ -394,7 +471,7 @@ def main():
   if want_pdf:
     pending = []
     for entry in artifacts:
-      if entry["error"]:
+      if entry["error"] or (entry.get("source_html") and not want_pdf):
         continue
       if entry["pdf"].exists() and not args.overwrite:
         entry["pdf_status"] = "skipped-exists"
@@ -409,8 +486,14 @@ def main():
           for entry in pending:
             started = time.perf_counter()
             try:
+              if entry.get("source_html"):
+                entry["layout"] = print_html_pdf(page, entry["html"], entry["pdf"], args.layout)
+                entry["pdf_status"] = "ok"
+                entry["seconds"] += time.perf_counter() - started
+                continue
               facts = print_pdf(page, entry["html"], entry["pdf"], args.render_timeout)
               entry["pdf_status"] = "ok"
+              entry["layout"] = ""
               overflowing_tables = facts["table_overflow"]
               if overflowing_tables:
                 add_warning(entry, f"WARNING: {overflowing_tables} table{'s' if overflowing_tables != 1 else ''} wider than the page after font step-down (clipped in PDF)")
@@ -464,6 +547,8 @@ def report_line(entry, log):
   if entry["pdf_status"] == "ok" and entry["pdf"] and entry["pdf"].exists():
     pages = pdf_page_count(entry["pdf"])
     parts.append(f"pdf {pages} pages {format_size(entry['pdf'])}" if pages else f"pdf {format_size(entry['pdf'])}")
+    if entry.get("layout"):
+      parts.append(f"layout {entry['layout']}")
   elif entry["pdf_status"] == "skipped-exists":
     parts.append("pdf skipped (exists)")
   if entry["error"]:

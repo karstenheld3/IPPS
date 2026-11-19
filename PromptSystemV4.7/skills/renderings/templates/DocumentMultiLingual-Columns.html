@@ -274,7 +274,7 @@ function alignColumns() {
   }
 }
 
-(function () {
+embeddedFontsReady().then(function () {
   var options = parseRenderOptions();
   var md = createMarkdown();
   var content = document.getElementById("content");
@@ -323,7 +323,7 @@ function alignColumns() {
     alignColumns();
     finishRendering();
   });
-})();
+});
 </script>
 </body>
 </html>

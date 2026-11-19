@@ -1,4 +1,11 @@
 /* Shared design tokens and base element rules for all rendering templates. Layout (columns, @page) lives in each template. */
+/* Embedded code font (SIL Open Font License 1.1, see fonts/JetBrainsMono-OFL.txt): identical code rendering on Windows, macOS, and Linux. Static woff2, no variable font (Type3 in PDF). */
+@font-face { font-family: "JetBrains Mono"; font-weight: 300 500; font-style: normal; src: url({{DATAURI:fonts/JetBrainsMono-Regular.woff2}}) format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 600 800; font-style: normal; src: url({{DATAURI:fonts/JetBrainsMono-Bold.woff2}}) format("woff2"); }
+/* Embedded UI and body font (SIL Open Font License 1.1, see fonts/Inter-LICENSE.txt): Latin, Cyrillic, Greek; Regular 400, Italic 400, SemiBold 600-800 */
+@font-face { font-family: Inter; font-weight: 300 500; font-style: normal; src: url({{DATAURI:fonts/Inter-Regular.woff2}}) format("woff2"); }
+@font-face { font-family: Inter; font-weight: 300 500; font-style: italic; src: url({{DATAURI:fonts/Inter-Italic.woff2}}) format("woff2"); }
+@font-face { font-family: Inter; font-weight: 600 800; font-style: normal; src: url({{DATAURI:fonts/Inter-SemiBold.woff2}}) format("woff2"); }
 :root {
   /* Palette */
   --c-ink: #14213A; --c-ink-2: #283552; --c-muted: #536078;
@@ -8,11 +15,11 @@
   /* Semantic */
   --c-success: #16A34A; --c-success-bg: #F0FDF4; --c-warning: #EA580C; --c-warning-bg: #FFF7ED;
   --c-caution: #CA8A04; --c-caution-bg: #FAF8EB; --c-critical: #EA2A2A; --c-critical-bg: #FEF2F2; --c-neutral: #6B7280; --c-neutral-bg: #F3F4F6;
-  /* Fonts: sans first, static monospace first (variable fonts embed as Type3 in PDF), emoji fallback last */
+  /* Fonts: embedded Inter and JetBrains Mono first, then system fonts by platform (Windows, macOS, Linux), emoji fallback last */
   --font-sans: Inter, "Segoe UI", system-ui, -apple-system, "Noto Sans", Arial, "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-  --font-mono: Consolas, "JetBrains Mono", "DejaVu Sans Mono", "Cascadia Mono", "Segoe UI Emoji", "Noto Color Emoji", monospace;
+  --font-mono: "JetBrains Mono", Consolas, Menlo, "DejaVu Sans Mono", "Liberation Mono", "Noto Sans Mono", "Segoe UI Emoji", "Noto Color Emoji", monospace;
   /* Condensed stack for dense tables (opt-in via render option tableFont=condensed); falls back to the sans stack when none is installed */
-  --font-table-dense: "Arial Narrow", "Roboto Condensed", "Bahnschrift SemiCondensed", var(--font-sans);
+  --font-table-dense: "Open Sans Condensed", "Arial Narrow", "Roboto Condensed", "Bahnschrift SemiCondensed", var(--font-sans);
   /* Type scale (screen) */
   --t-xs: 12px; --t-sm: 14px; --t-base: 16px; --t-lg: 18px; --t-xl: 20px; --t-2xl: 24px; --t-3xl: 30px; --t-4xl: 36px;
   /* Spacing, radii, shadow */

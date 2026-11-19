@@ -9,11 +9,14 @@
 <style>
 {{FILE:shared/tokens.css}}
 
+@font-face { font-family: "Open Sans Condensed"; font-weight: 300 500; font-style: normal; src: url({{DATAURI:fonts/OpenSans-CondensedRegular.woff2}}) format("woff2"); }
+@font-face { font-family: "Open Sans Condensed"; font-weight: 600 800; font-style: normal; src: url({{DATAURI:fonts/OpenSans-CondensedBold.woff2}}) format("woff2"); }
+
 /* Template: document - single reading column */
 /* Print image limit = page content height 255mm minus 15mm reserve for paragraph margin and a caption line */
 :root { --print-image-max-height: 240mm; }
 @page { size: A4 portrait; margin: 20mm 18mm 22mm 18mm;
-  @bottom-center { content: "Page " counter(page) " of " counter(pages); font-family: "Segoe UI", "Noto Sans", Arial, sans-serif; font-size: 8pt; color: #536078; } }
+  @bottom-center { content: "Page " counter(page) " of " counter(pages); font-family: Inter, "Segoe UI", "Noto Sans", Arial, sans-serif; font-size: 8pt; color: #536078; } }
 @page :first { @top-center { content: none; } }
 @page wide { size: A4 landscape; margin: 16mm 18mm 18mm 18mm; }
 table.landscape { page: wide; }
@@ -34,7 +37,7 @@ main { padding: var(--s-6) 0; }
 <script>
 {{FILE:shared/render-common.js}}
 
-(function () {
+embeddedFontsReady().then(function () {
   var options = readRenderOptions();
   var source = readSource();
   var parts = splitFrontMatter(source);
@@ -48,7 +51,7 @@ main { padding: var(--s-6) 0; }
     addPageHeader(title, { skipFirstPage: true });
     finishRendering();
   });
-})();
+});
 </script>
 </body>
 </html>

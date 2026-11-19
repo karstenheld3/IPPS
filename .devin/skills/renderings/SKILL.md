@@ -8,8 +8,9 @@ compatibility: Python venv at [SKILL_TOOLS_FOLDER]/llm-venv with playwright inst
 
 Two-step renderer: `render.py` injects Markdown into an HTML template that carries its own CSS and JavaScript Markdown renderer (step 1, Markdown → HTML), then prints that HTML with headless Chromium (step 2, HTML → PDF). Everything about layout lives in the template; Python only injects and prints.
 
-**References** (loaded on demand):
+References (loaded on demand):
 - [SETUP.md](SETUP.md) - venv check, browser install, verification
+- [UNINSTALL.md](UNINSTALL.md) - remove the browser build and skill files
 - [templates/DocumentDefault.html](templates/DocumentDefault.html) - single reading column
 - [templates/DocumentMultiLingual-Columns.html](templates/DocumentMultiLingual-Columns.html) - parallel streams (languages, versions) as aligned columns per section
 - [templates/MemoSigned.html](templates/MemoSigned.html) - formal memo/letter with key-terms grid and signature blocks
@@ -24,20 +25,21 @@ Two-step renderer: `render.py` injects Markdown into an HTML template that carri
 3. Output goes next to the input unless `--output-dir` is given; existing files are skipped unless `--overwrite`
 4. Images stay linked files (never embedded): keep them in `_assets/` next to the Markdown and link `![Alt](_assets/name.png)`. The HTML keeps the same relative `src` (GitHub-compatible); with `--output-dir` the referenced images are copied to the same relative path. Ship the HTML together with its `_assets/` folder
 5. Templates must set `body[data-rendered="true"]` when done; `render.py` waits for it before printing. A template that never sets it fails after `--render-timeout` seconds
-6. Output HTML is self-contained except linked local images (no external scripts, fonts, or styles); do not add CDN links to templates. Embed fonts with `{{DATAURI:shared/fonts/<file>.woff}}`. The PDF embeds every image
+6. Output HTML is self-contained except linked local images (no external scripts, fonts, or styles); do not add CDN links to templates. Embed fonts with `{{DATAURI:fonts/<file>.woff2}}`. The PDF embeds every image
 7. No bleeding design elements in print: office printers cannot print the paper edge (unprintable zone up to about 6.35 mm), so anything reaching the edge is cut off. Keep every printed element - backgrounds, bars, rules, images, header and footer text - at least 8 mm inside the paper edge; the print page background stays white
 
 ## Intent Lookup
 
-**User wants to...**
-- **Render one or more Markdown files to HTML and PDF** → Procedure 1
-- **Render a whole folder** → Procedure 1 with a folder or glob input, `--recursive` for subfolders
-- **Render a multilingual document side by side** → Procedure 2
-- **Only HTML, or only PDF** → `--format html` or `--format pdf` (`--keep-html` keeps the intermediate file)
-- **Letter paper or landscape** → `--paper Letter`, `--landscape`
-- **`---` should start a new page in the PDF** → `--options "hrPageBreak=true"` (DocumentDefault template)
-- **Wide tables print too small or wrap too much** → `--options "landscapeTables=7"` (tables with 7+ columns get their own landscape page) or `--options "tableFont=condensed"` (see Template Catalog)
-- **Create a new layout** → Procedure 3
+User wants to...
+- Render one or more Markdown files to HTML and PDF → Procedure 1
+- Render an HTML file to PDF → Procedure 3
+- Render a whole folder → Procedure 1 with a folder or glob input, `--recursive` for subfolders
+- Render a multilingual document side by side → Procedure 2
+- Only HTML, or only PDF → `--format html` or `--format pdf` (`--keep-html` keeps the intermediate file)
+- Letter paper or landscape → `--paper Letter`, `--landscape`
+- `---` should start a new page in the PDF → `--options "hrPageBreak=true"` (DocumentDefault template)
+- Wide tables print too small or wrap too much → `--options "landscapeTables=7"` (tables with 7+ columns get their own landscape page) or `--options "tableFont=condensed"` (see Template Catalog)
+- Create a new layout → Procedure 4
 
 ## Core Procedures
 
@@ -56,7 +58,7 @@ Two-step renderer: `render.py` injects Markdown into an HTML template that carri
 1. Identify the marker line that starts each language stream in the source, e.g. `### DE (Original)`, `### EN (Translation)`, `### PT (Tradução)`
 2. Run with the DocumentMultiLingual-Columns template and matching options:
    python render.py file.md --template DocumentMultiLingual-Columns --options "columns=DE:DE,EN:EN,PT:PT; markers=^###\s*DE\s*\(Original\),^###\s*EN\s*\(Translation\),^###\s*PT\s*\(Tradu; scope=document; sectionLevels=1-4; wideColumns=4"
-3. For documents organized as dated entries whose language blocks start with bold markers (`**DE (Original)**`), use scope=entry:
+3. For documents organized as dated entries whose language blocks start with bold markers (`DE (Original)`), use scope=entry:
    --options "columns=DE:DE,EN:EN,PT:PT; markers=^\*\*DE \(Original\)\*\*,^\*\*EN \(Translation\)\*\*,^\*\*PT \(Tradu; scope=entry; entryLevel=2; sectionLevels=3-4"
 4. Check the first PDF page: one card per section, one column per language, wide tables stacked
 ```
@@ -70,12 +72,24 @@ Options (`;`-separated `key=value` pairs, override the template's `<meta name="r
 - `wideColumns` - tables with at least this many columns make their card stack the languages vertically (default 4)
 
 Options of the `DocumentDefault` template (same `--options` syntax):
-- `tableFont` - `default` or `condensed`; `condensed` renders tables in the condensed font stack (`Arial Narrow`, `Roboto Condensed`, `Bahnschrift SemiCondensed`, falling back to the sans stack when none is installed)
+- `tableFont` - `default` or `condensed`; `condensed` renders tables in embedded Open Sans Condensed (Light for weights 300-500, Bold for 600-800), identical on Windows, macOS, and Linux; the stack falls back to `Arial Narrow`, `Roboto Condensed`, `Bahnschrift SemiCondensed`, then the sans stack
 - `landscapeTables` - `0` (off, default) or N; tables with N or more columns print on their own A4 landscape page
 - `hrPageBreak` - `false` (default) or `true`; every thematic break (`---`, `***`, `___`) starts a new page in print, the screen keeps the divider line. A break as first or last block or directly after another break is dropped (no empty pages). Ignored by the `DocumentMultiLingual-Columns` template (`---` separates streams there)
 - When passing `--options`, repeat every option you want: the value replaces the whole template default
 
-### 3. Write a new template
+### 3. Render HTML files to PDF
+
+```
+1. Run: python render.py page.html --output-dir <folder>    (inputs ending in .html or .htm; no template, no HTML output)
+2. Layout is detected: content fits A4 portrait width (794 px viewport) -> portrait, multipage; wider -> landscape, scaled down to fit (minimum 40%)
+3. Check the report line `layout ...` and view page 1 (or a browser screenshot of the HTML); override with --layout portrait|landscape|single-page and --overwrite
+4. single-page = one PDF page sized to the full page (1280 px wide viewport); use for dashboards and one-pager pages
+```
+
+- Print uses screen media (page looks as in a browser), 10 mm margins, backgrounds on, bookmarks from headings
+- Relative images, styles, and scripts load from the HTML's original folder; remote resources need network access
+
+### 4. Write a new template
 
 ```
 1. Copy templates/DocumentDefault.html to templates/<name>.html
@@ -90,49 +104,66 @@ Placeholder contract:
 - `{{TITLE}}` - HTML-escaped document title: `--title` (single input) → front matter `title:` → first `# ` heading → file stem
 - `{{LANG}}` - `--lang` → front matter `lang:` → `en`
 - `{{FILE:relative/path}}` - inlined file content from the templates folder (one level, no recursion, no `..`)
-- `{{DATAURI:relative/path}}` - base64 data URI of a binary file from the templates folder (`.woff`, `.woff2`, `.ttf`, `.otf`, `.png`, `.jpg`, `.svg`), used inside `url(...)` of `@font-face`; keeps the output HTML self-contained
+- `{{DATAURI:fonts/<file>}}` - base64 data URI of a binary file; the path is relative to the skill folder (`[AGENT_FOLDER]/skills/renderings/`, no `..`, so fonts live in `fonts/` next to `render.py`) (`.woff`, `.woff2`, `.ttf`, `.otf`, `.png`, `.jpg`, `.svg`), used inside `url(...)` of `@font-face`; keeps the output HTML self-contained
 - `--paper` / `--landscape` inject a final `@page { size: ... }` rule before `</head>`
 
 ## CLI Reference
 
 ```
-render.py <inputs...> [--format html|pdf|both] [--template NAME|PATH] [--options TEXT] [--output-dir DIR]
+render.py <inputs...> [--layout auto|portrait|landscape|single-page] [--format html|pdf|both] [--template NAME|PATH] [--options TEXT] [--output-dir DIR]
           [--paper A4|Letter] [--landscape] [--lang xx] [--title TEXT] [--render-timeout S]
           [--keep-html] [--overwrite] [--recursive] [--quiet] [--list-templates]
 ```
 
-- `inputs` - files, folders (`*.md` inside), or glob patterns; dotfiles skipped; duplicates removed
+- `inputs` - Markdown or HTML files, folders (`*.md` inside), or glob patterns; dotfiles skipped; duplicates removed
 - `--format` - default `both`; `pdf` alone writes a temporary HTML that is removed after a successful print unless `--keep-html`
-- `--template` - `DocumentDefault` (default), `DocumentMultiLingual-Columns`, `MemoSigned`, or a path to any template file
+- `--template` - `DocumentDefault` (default), `DocumentMultiLingual-Columns`, `MemoSigned`, `Article-2Columns`, or a path to any template file
 - `--render-timeout` - seconds to wait for `data-rendered` (default 30)
+- `--layout` - HTML inputs only: `auto` (default), `portrait`, `landscape`, `single-page`
 - `--list-templates` - prints available template names and exits
 
 ## Template Catalog
 
-- **DocumentDefault** - single column, A4 portrait, margins 20/18/22/18 mm, static title header on pages 2+, "Page N of M" footer, GitHub-compatible heading ids (TOC links work), task lists, code blocks unwrapped up to 110 characters per line then soft-wrapped, language label on fenced code, code line box measured from the monospace font so box-drawing diagrams have no row gaps, headings wrap anywhere (long file-name titles stay inside the page)
+- DocumentDefault - single column, A4 portrait, margins 20/18/22/18 mm, static title header on pages 2+, "Page N of M" footer, GitHub-compatible heading ids (TOC links work), task lists, code blocks unwrapped up to 110 characters per line then soft-wrapped, language label on fenced code, code line box measured from the monospace font so box-drawing diagrams have no row gaps, headings wrap anywhere (long file-name titles stay inside the page)
   - Tables: full width, repeated header rows, words break only when a single word is wider than its column; tables with 6+ columns start one size smaller; a table wider than the page steps its font down (13 / 12 / 11 px, 8.5 / 8 / 7.5 pt) until it fits; a table that still does not fit gets a horizontal scrollbar on screen, is clipped in PDF, and is reported as `WARNING: N tables wider than the page ...` on the file's report line. Opt-ins: `tableFont=condensed`, `landscapeTables=N`
   - Color: accent only on links; list markers and checkboxes use the text color
   - Images: never cropped (no rounded corners, no clipping); block and centered, scaled to the column width and to 90% of the window height on screen, to 240 mm in print (fits one A4 page); images next to text in a paragraph stay inline; table fitting runs after all images loaded. Opt-in: `hrPageBreak=true`
-- **DocumentMultiLingual-Columns** - one card per section with N language columns, combined section title colored per column, block and table-row height alignment across columns (measured after images loaded), wide-table cards stacked vertically in print, landscape when more than 3 columns, single-column fallback with a notice when no marker matches; images follow the document rules with a print limit of 230 mm portrait and 143 mm landscape inside a column
-- **MemoSigned** - formal memo/letter layout with key-terms grid (dl/dt/dd), sectioned content, and signature blocks; A4 portrait, compact 12px body, navy/chrome/slate palette, page footer; designed for LOIs, term sheets, and similar signed documents
-- **Article-2Columns** - A4 portrait, two-column body (8.5 mm gap) under a centered full-width title and byline, margins 20/17/22/17 mm, no card chrome in print; Aileron embedded (Light 300 byline, Regular 400 body, SemiBold 600 headings and lead paragraph, Bold 700 title and `strong`, Regular and Bold italic); footer bottom right `N / T` (page / total), running title header on pages 2+; list markers use the text color; HTML about 320 KB because of the embedded fonts
+- DocumentMultiLingual-Columns - one card per section with N language columns, combined section title colored per column, block and table-row height alignment across columns (measured after images loaded), wide-table cards stacked vertically in print, landscape when more than 3 columns, single-column fallback with a notice when no marker matches; images follow the document rules with a print limit of 230 mm portrait and 143 mm landscape inside a column
+- MemoSigned - formal memo/letter layout with key-terms grid (dl/dt/dd), sectioned content, and signature blocks; A4 portrait, compact 12px body, navy/chrome/slate palette, page footer; designed for LOIs, term sheets, and similar signed documents
+- Article-2Columns - A4 portrait, two-column body (8.5 mm gap) under a centered full-width title and byline, margins 20/17/22/17 mm, no card chrome in print; Aileron embedded (Light 300 byline, Regular 400 body, Bold 700 headings, lead paragraph and page counter, Heavy 800 title and `strong`; SemiBold is not used because it is barely lighter than Bold; Regular, Bold and Heavy italic); footer bottom right `N / T` (page / total), running title header on pages 2+; list markers use the text color; HTML about 320 KB because of the embedded fonts
 
-All four templates: no external resources, `-webkit-print-color-adjust: exact`, PDF bookmarks from headings (`outline=True`), tagged PDF.
+All four Markdown templates: no external resources, `-webkit-print-color-adjust: exact`, PDF bookmarks from headings (`outline=True`), tagged PDF.
 
 ## Gotchas
 
-- **Browser revision mismatch** - Playwright Python pins one Chromium build; a build installed by another tool (Node Playwright MCP) has a different revision. `render.py` falls back to the newest installed `chromium-*` build, then to system Chrome, then exits 2 with the install command. Run the SETUP.md install once to remove the fallback
-- **Running section titles** - Chromium does not support CSS `string-set`; the page header shows the document title, not the current section
-- **Variable fonts** - Chromium embeds variable fonts (e.g. Cascadia) as Type3 outlines in PDF; the code font stack starts with static Consolas, JetBrains Mono, DejaVu Sans Mono for clean embedding
-- **Markers inside code fences** are ignored by the DocumentMultiLingual-Columns template; markers must be plain lines
-- **Commas in marker regexes** are not possible (comma separates patterns); use `\s` or character classes instead
-- **`<PromptSystem .../>` lines** are removed before rendering; other raw HTML passes through unchanged
-- **Image WARNING lines** on the file's report line (exit code stays 0; singular for 1): `WARNING: 2 images not found (first: src)` - local file missing; `WARNING: 1 image path outside the input folder (first: src)` - `../` or absolute path with `--output-dir` elsewhere, not copied, will not resolve from the HTML; `WARNING: 1 image failed to load (first: src)` - PDF pass, image missing or not decodable (remote images need network access). Image syntax inside code fences and code spans is ignored
-- **Spaces and non-ASCII characters in image paths** - markdown-it percent-encodes Markdown image links (`my file.png` -> `my%20file.png`); the browser decodes them, so they resolve. Raw `<img src>` stays as written
-- **Single newlines** render as line breaks (`breaks: true`) so header blocks keep their lines; hard-wrapped paragraphs therefore also break per source line
-- **No hyphenation** - the Playwright Chromium build ships without hyphenation dictionaries; `hyphens: auto` would have no effect, so table fitting relies on font size, not on breaking words
-- **Braille art** - Consolas has no Braille glyphs; they fall back to the next monospace font with a different advance width and drift against box-drawing characters in the same block
-- **Screen screenshots show colored fringes** on thin box-drawing lines (Windows ClearType sub-pixel rendering); the PDF has none
+- Browser revision mismatch - Playwright Python pins one Chromium build; a build installed by another tool (Node Playwright MCP) has a different revision. `render.py` falls back to the newest installed `chromium-*` build, then to system Chrome, then exits 2 with the install command. Run the SETUP.md install once to remove the fallback
+- Running section titles - Chromium does not support CSS `string-set`; the page header shows the document title, not the current section
+- Variable fonts - Chromium embeds variable fonts (e.g. Cascadia) as Type3 outlines in PDF; the code font stack starts with static Consolas, JetBrains Mono, DejaVu Sans Mono for clean embedding
+- Markers inside code fences are ignored by the DocumentMultiLingual-Columns template; markers must be plain lines
+- Commas in marker regexes are not possible (comma separates patterns); use `\s` or character classes instead
+- `<PromptSystem .../>` lines are removed before rendering; other raw HTML passes through unchanged
+- Output names are percent-decoded - `Erm%C3%A4chtigung.md` or a browser-saved `Erm%C3%A4chtigung.html` produces `Ermächtigung.pdf`; characters not allowed in Windows file names become `_`
+- HTML inputs - printed as they appear in a browser (screen media); a responsive page prints portrait at 794 px width; a page with fixed wide content prints landscape scaled down (minimum 40%); remote resources need network access; `--format html` with an HTML input produces nothing (warning)
+- Image WARNING lines on the file's report line (exit code stays 0; singular for 1): `WARNING: 2 images not found (first: src)` - local file missing; `WARNING: 1 image path outside the input folder (first: src)` - `../` or absolute path with `--output-dir` elsewhere, not copied, will not resolve from the HTML; `WARNING: 1 image failed to load (first: src)` - PDF pass, image missing or not decodable (remote images need network access). Image syntax inside code fences and code spans is ignored
+- Spaces and non-ASCII characters in image paths - markdown-it percent-encodes Markdown image links (`my file.png` -> `my%20file.png`); the browser decodes them, so they resolve. Raw `<img src>` stays as written
+- Single newlines render as line breaks (`breaks: true`) so header blocks keep their lines; hard-wrapped paragraphs therefore also break per source line
+- No hyphenation - the Playwright Chromium build ships without hyphenation dictionaries; `hyphens: auto` would have no effect, so table fitting relies on font size, not on breaking words
+- Braille art - Consolas has no Braille glyphs; they fall back to the next monospace font with a different advance width and drift against box-drawing characters in the same block
+- Screen screenshots show colored fringes on thin box-drawing lines (Windows ClearType sub-pixel rendering); the PDF has none
+
+## Embedded Fonts
+
+Folder `fonts/` (next to `render.py`) holds only fonts that templates embed as data URIs; nothing is installed or fetched at render time, so PDF and HTML look the same on Windows, macOS, and Linux. Add a font by copying one file and referencing it with `{{DATAURI:fonts/<file>}}`; delete files no template references.
+- Aileron (Article-2Columns): Aileron-Light, Regular, Italic, Bold, BoldItalic, Heavy, HeavyItalic .woff2, converted from the official v1.102 OTF files (https://dotcolon.net/fonts/aileron/) with CFF outlines turned into TrueType outlines (fontTools cu2qu, max error 1 unit; Chromium embeds CFF web fonts as Type3 in PDF, TrueType as Type0), same 337 code points, CC0 1.0 public domain (Aileron-LICENSE-CC0.txt). Latin only: Cyrillic and Greek fall back to Inter (the article font stack is Aileron, then the sans stack). Lacks U+00A0 no-break space, other typographic spaces, U+2010 hyphen, ẞ, and the ordinal indicators ª º (browsers fall back to Inter for them). Fontsource and similar packages ship only the Latin subset without Latin Extended (Polish, Czech, Romanian) and map weight 300 to UltraLight, so they are not used
+- Inter (all templates, sans stack first): Inter-Regular.woff2 (weights 300-500), Inter-Italic.woff2, Inter-SemiBold.woff2 (weights 600-800); Inter 4.0 web files, SIL Open Font License 1.1 (Inter-LICENSE.txt)
+- JetBrains Mono (all templates, monospace stack first): JetBrainsMono-Regular.woff2, JetBrainsMono-Bold.woff2; v2.304, SIL Open Font License 1.1 (JetBrainsMono-OFL.txt)
+- Open Sans Condensed (DocumentDefault, option tableFont=condensed): OpenSans-CondensedRegular.woff2, OpenSans-CondensedBold.woff2, converted losslessly (same 1010 code points) from the static ttf of the googlefonts/opensans repository, SIL Open Font License 1.1 (OpenSans-OFL.txt)
+- Glyph coverage, checked with a script over 22 language and symbol sets: Inter and Open Sans Condensed cover Latin (including Polish, Czech, Hungarian, Romanian, Turkish, Baltic, Nordic, Icelandic, Maltese, Welsh), Greek, Cyrillic (Russian, Ukrainian, Serbian, Macedonian, Bulgarian), and common punctuation. Gaps: Open Sans Condensed lacks arrows and Old Irish dotted consonants (arrows fall back to the sans stack); JetBrains Mono lacks the Dutch ij ligature letters and Old Irish dotted consonants (they fall back to the system monospace font). Greek polytonic (Greek Extended) is covered by Inter (233 of 256) but not by Open Sans Condensed (2 of 256)
+- Phosphor Icons (opt-in, no template embeds them yet): Phosphor-Regular.woff2, Phosphor-Fill.woff2; Phosphor Icons 2020-2024, MIT license, commercial use allowed (Phosphor-LICENSE-MIT.txt; keep the license file with the fonts). 1530 icons; the fonts support name ligatures, so `<span class="icon">house</span>` renders the glyph. Embed in a template with `@font-face { font-family: "Phosphor"; src: url({{DATAURI:fonts/Phosphor-Regular.woff2}}) format("woff2"); }` and `.icon { font-family: "Phosphor"; font-feature-settings: "liga"; text-transform: none; font-style: normal; line-height: 1; }` (same pattern for `Phosphor-Fill`). Each embed adds about 200 KB (base64) to the HTML. Excluded from bundling for license reasons: IcoMoon Ultimate (mixed third-party licenses), Streamline, Glyphicons Pro, Flaticon (paid or per-icon attribution); Microsoft Fluent icons are MIT but only exist as SVG (no font)
+- Format choice: woff2 works in every Chromium build on Windows, macOS, and Linux and is the smallest; no other format is stored
+- Not needed and removed: eot (Internet Explorer only), svg (obsolete browsers), ttf copies, unused Aileron weights (thin, ultralight, semibold, black and their italics), the font download css and zip
+- Each DocumentDefault HTML embeds about 445 KB of Inter, 250 KB of JetBrains Mono, and 170 KB of Open Sans Condensed (base64); the HTML is about 1 MB in total
+- Fallback after the embedded fonts: system fonts by platform (Segoe UI, Menlo, DejaVu Sans Mono, Liberation Mono, Noto)
 
 ## Vendored Library
 

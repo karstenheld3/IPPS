@@ -8,27 +8,28 @@
 <style>
 {{FILE:shared/tokens.css}}
 
-@font-face { font-family: Aileron; font-weight: 300; font-style: normal; src: url({{DATAURI:shared/fonts/aileron-light-webfont.woff}}) format("woff"); }
-@font-face { font-family: Aileron; font-weight: 400; font-style: normal; src: url({{DATAURI:shared/fonts/aileron-regular-webfont.woff}}) format("woff"); }
-@font-face { font-family: Aileron; font-weight: 400; font-style: italic; src: url({{DATAURI:shared/fonts/aileron-italic-webfont.woff}}) format("woff"); }
-@font-face { font-family: Aileron; font-weight: 600; font-style: normal; src: url({{DATAURI:shared/fonts/aileron-semibold-webfont.woff}}) format("woff"); }
-@font-face { font-family: Aileron; font-weight: 700; font-style: normal; src: url({{DATAURI:shared/fonts/aileron-bold-webfont.woff}}) format("woff"); }
-@font-face { font-family: Aileron; font-weight: 700; font-style: italic; src: url({{DATAURI:shared/fonts/aileron-bolditalic-webfont.woff}}) format("woff"); }
+@font-face { font-family: Aileron; font-weight: 300; font-style: normal; src: url({{DATAURI:fonts/Aileron-Light.woff2}}) format("woff2"); }
+@font-face { font-family: Aileron; font-weight: 400; font-style: normal; src: url({{DATAURI:fonts/Aileron-Regular.woff2}}) format("woff2"); }
+@font-face { font-family: Aileron; font-weight: 400; font-style: italic; src: url({{DATAURI:fonts/Aileron-Italic.woff2}}) format("woff2"); }
+@font-face { font-family: Aileron; font-weight: 700; font-style: normal; src: url({{DATAURI:fonts/Aileron-Bold.woff2}}) format("woff2"); }
+@font-face { font-family: Aileron; font-weight: 700; font-style: italic; src: url({{DATAURI:fonts/Aileron-BoldItalic.woff2}}) format("woff2"); }
+@font-face { font-family: Aileron; font-weight: 800; font-style: normal; src: url({{DATAURI:fonts/Aileron-Heavy.woff2}}) format("woff2"); }
+@font-face { font-family: Aileron; font-weight: 800; font-style: italic; src: url({{DATAURI:fonts/Aileron-HeavyItalic.woff2}}) format("woff2"); }
 
 :root { --print-image-max-height: 230mm; --font-article: Aileron, var(--font-sans); }
 @page { size: A4 portrait; margin: 20mm 17mm 22mm 17mm;
-  @bottom-right { content: counter(page) " / " counter(pages); font-family: Aileron, "Segoe UI", Arial, sans-serif; font-size: 8pt; font-weight: 600; color: #14213A; } }
+  @bottom-right { content: counter(page) " / " counter(pages); font-family: Aileron, "Segoe UI", Arial, sans-serif; font-size: 8pt; font-weight: 700; color: #14213A; } }
 html { background: #F7FAFC; font-family: var(--font-article); font-weight: 400; }
 body { color: #14213A; }
-strong { font-weight: 700; }
+strong { font-weight: 800; }
 a { color: #2C5ED6; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
 main { max-width: 960px; }
-h1 { border: 0; color: #14213A; font-size: 38px; font-weight: 700; letter-spacing: -0.028em; line-height: 1.1; text-align: center; margin: 10px 0 12px; padding: 0; column-span: all; }
+h1 { border: 0; color: #14213A; font-size: 38px; font-weight: 800; letter-spacing: -0.028em; line-height: 1.1; text-align: center; margin: 10px 0 12px; padding: 0; column-span: all; }
 h1 + p { color: #283552; font-size: 13px; font-weight: 300; line-height: 1.45; text-align: center; margin: 0 0 26px; column-span: all; }
-h1 + p strong { font-weight: 600; }
+h1 + p strong { font-weight: 700; }
 h1 + p + p { color: #14213A; font-size: 17px; line-height: 1.5; margin: 0 0 16px; }
-h2 { break-after: avoid; color: #14213A; font-size: 18px; font-weight: 600; letter-spacing: -0.012em; line-height: 1.25; margin: 22px 0 7px; }
-h3 { break-after: avoid; color: #283552; font-size: 15px; font-weight: 600; margin: 16px 0 5px; }
+h2 { break-after: avoid; color: #14213A; font-size: 18px; font-weight: 700; letter-spacing: -0.012em; line-height: 1.25; margin: 22px 0 7px; }
+h3 { break-after: avoid; color: #283552; font-size: 15px; font-weight: 700; margin: 16px 0 5px; }
 p, li { font-size: 15.5px; line-height: 1.52; }
 p { margin: 0 0 12px; }
 ul { list-style: none; padding-left: 0; margin: 0 0 12px; }
@@ -50,7 +51,7 @@ table { column-span: all; }
   main { max-width: none; padding: 0; column-count: 2; column-gap: 8.5mm; }
   h1 { font-size: 26pt; margin: 5mm 0 2.2mm; }
   h1 + p { font-size: 8.2pt; margin-bottom: 7mm; padding-bottom: 3.5mm; border-bottom: 1px solid #C8D6E5; }
-  h1 + p + p { font-size: 9.8pt; font-weight: 600; line-height: 1.42; margin-bottom: 2.8mm; }
+  h1 + p + p { font-size: 9.8pt; font-weight: 700; line-height: 1.42; margin-bottom: 2.8mm; }
   h2 { font-size: 11pt; margin: 4.2mm 0 1.5mm; }
   h3 { font-size: 9.8pt; margin: 3mm 0 1mm; }
   p, li { font-size: 9.3pt; line-height: 1.39; }
@@ -66,7 +67,7 @@ table { column-span: all; }
 <main id="content"></main>
 <script>
 {{FILE:shared/render-common.js}}
-(function () {
+embeddedFontsReady().then(function () {
   var options = readRenderOptions();
   var source = readSource();
   var parts = splitFrontMatter(source);
@@ -80,7 +81,7 @@ table { column-span: all; }
     addPageHeader(title, { skipFirstPage: true });
     finishRendering();
   });
-})();
+});
 </script>
 </body>
 </html>

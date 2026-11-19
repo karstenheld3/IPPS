@@ -39,6 +39,16 @@ function readRenderOptions() {
   return retVal;
 }
 
+/* Resolves after the embedded fonts (JetBrains Mono, Inter, Open Sans Condensed) are loaded; templates start rendering inside it so measureCodeLineHeight and all layout measurements see the real fonts. Never rejects. */
+function embeddedFontsReady() {
+  if (!document.fonts || !document.fonts.load) return Promise.resolve();
+  var specs = [['400 14px "JetBrains Mono"', "\u2502"], ['700 14px "JetBrains Mono"', "\u2502"], ['400 16px Inter', "Aa\u0416\u03a9"], ['italic 400 16px Inter', "Aa\u0416\u03a9"],
+    ['600 16px Inter', "Aa\u0416\u03a9"], ['400 14px "Open Sans Condensed"', "Aa\u0416\u03a9"], ['700 14px "Open Sans Condensed"', "Aa\u0416\u03a9"]];
+  var loads = [];
+  for (var i = 0; i < specs.length; i++) loads.push(document.fonts.load(specs[i][0], specs[i][1]));
+  return Promise.all(loads).then(function () {}, function () {});
+}
+
 /* Sets --code-line-height to the font-box ratio of the resolved monospace font, so box-drawing glyphs (which fill the font box) touch between rows. */
 function measureCodeLineHeight() {
   var fallback = 1.2;
@@ -221,7 +231,7 @@ function firstHeadingText(root) {
 function addPageHeader(title, options) {
   var style = document.createElement("style");
   var text = JSON.stringify(title);
-  var rules = "@page { @top-center { content: " + text + "; font-family: Aileron, \"Segoe UI\", \"Noto Sans\", Arial, sans-serif; font-size: 8pt; color: #536078; } }";
+  var rules = "@page { @top-center { content: " + text + "; font-family: Aileron, Inter, \"Segoe UI\", \"Noto Sans\", Arial, sans-serif; font-size: 8pt; color: #536078; } }";
   if (options && options.skipFirstPage) rules += "\n@page :first { @top-center { content: none; } }";
   style.textContent = rules;
   document.head.appendChild(style);

@@ -5,7 +5,16 @@ auto_execution_mode: 1
 
 # Render Workflow
 
-Turn one or more Markdown files into self-contained HTML and A4 PDF files using the renderings skill.
+Turn one or more Markdown files into self-contained HTML and A4 PDF files, or HTML files into PDF files, using the renderings skill.
+
+## Invocation Modes
+
+- `/render <html>` - PDF only. Run `render.py` (layout auto-detected), then inspect the PDF page 1 or the HTML via screenshot; when the layout is wrong, rerun with `--layout portrait|landscape|single-page --overwrite`. Portrait multipage = articles, web pages, scrollable content; landscape = wide tables or wide content; single-page = one tall or dashboard-like page
+- `/render <markdown>` - PDF output; `.html` and `.pdf` both stay in the output folder (`--format both`)
+- `/render <markdown> using <template>` - same, with that template
+- `/render <markdown> to html` - HTML output only (`--format html`)
+- `/render <markdown> to html using <template>` - HTML only, with that template
+- Template name not found (`render.py --list-templates`): use `DocumentDefault` or the most appropriate template (Step 2) and say so in the report
 
 **Goal**: `.html` and `.pdf` artifacts in a `_export_gitignore` subfolder (or a user-chosen folder), readable without an editor, with working TOC links, page numbers, and bookmarks.
 
@@ -33,6 +42,7 @@ Turn one or more Markdown files into self-contained HTML and A4 PDF files using 
 
 ## Steps
 
+0. HTML input: skip Steps 2-3 template selection; run `render.py <html> --output-dir <folder>`, view the result per the mode above, then continue at Step 4
 1. Resolve the inputs from the prompt: explicit files, a folder, or a glob. Determine the output folder: if the user specified `--output-dir` or named a target folder, use that; otherwise default to `_export_gitignore` under the input's parent directory (e.g. `[SESSION_FOLDER]/_export_gitignore/`, or `[WORKSPACE]/_export_gitignore/`, or `<input-folder>/_export_gitignore/`)
 2. Inspect one input: if it contains marker lines that start language or version streams (headings like `### XX (Original)` or bold lines like `**XX (Original)**`), use `--template DocumentMultiLingual-Columns` and build `--options` per the skill's Procedure 2; if it is a formal memo/letter with signature blocks, use `--template MemoSigned`; otherwise use the default `DocumentDefault` template
 3. Run `render.py` with `--output-dir <resolved folder>` and `--format both` unless the user asked for one format; add `--lang` for non-English documents, `--paper Letter` or `--landscape` when requested
