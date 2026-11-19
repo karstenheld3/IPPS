@@ -1,5 +1,54 @@
 # Failure Log
 
+## 2026-11-19 - pdf-tools Skill Fix Started Without Reading Workspace Rules; First Guide Contained an Unverified Claim
+
+### [MEDIUM] [RESOLVED 2026-11-19] `PDFTOOLS-FL-0001` Skill edited in `.devin/`, claim "quoted AND unquoted `-sOutputFile=` work" shipped untested, probe files left in the workspace
+
+- **When**: 2026-11-19 08:15-08:45 (found by the agent during the follow-up session, before the user noticed)
+- **Where**: `.devin/skills/pdf-tools/` (edited directly), first `GHOSTSCRIPT.md`, `%TEMP%\gs_t.ps`, `e:\dev\IPPS\$o2`, `e:\dev\IPPS\$o7`, `e:\dev\IPPS\_agentwork_t.pdf`
+- **What**: 1) `/prime` was invoked but the agent went straight to the task, never read `NOTES.md`, and edited `.devin/` although `NOTES.md` MUST-NOT-FORGET says `PromptSystemV4.7/` is the source. 2) A probe checked only the exit code, not the output file, and the guide stated that unquoted `-sOutputFile=` works; it does not. 3) Probe runs wrote files to `%TEMP%` and into the workspace root (a file literally named `$o2`). 4) The agent ended the turn with a question list although `agent-behavior.md` says never ask
+- **Why it went wrong**: the priming workflow was skipped as "not needed for a small fix"; success was judged by exit code 0 (Ghostscript exits 0 after errors); probe output paths were not set to the session `_agentwork/`
+- **Evidence**: robocopy dry-run showed `.devin` ahead of the source; `$o2`/`$o7` found in the workspace root listing; `PDFTOOLS` session `NOTES.md` Important Findings
+- **Prevention rule**: Run the priming reads before any edit. For any command that should create a file, assert the file exists and is non-empty, never only the exit code. Probe outputs go to `[SESSION_FOLDER]/_agentwork/` only. Never end a turn with a question when the next step is derivable
+- **Resolved**: 2026-11-19 - edits copied to `PromptSystemV4.7/`, stray files removed, guide rewritten from tested behavior, 53 tests assert file existence; fix in session `_2026-11-19_PdfToolsSkill`
+
+## 2026-11-17 - Asked for Confirmation After the User Had Already Confirmed
+
+### [MEDIUM] `PRECONFIRM-FL-0001` `/sync` downstream: user wrote "`/sync to downstream repos -> yes`"; the agent ran only `-diff` and asked again
+
+- **When**: 2026-11-17 17:36 (discovered by the user in the chat panel)
+- **Where**: `workflows/sync.md` Workspace Sync (MUST-NOT-FORGET, Use Cases, Sync Procedure step 4); rule `agent-behavior.md` Attitude ("NEVER ask questions"), Confirmation Rules
+- **What**: The request already contained a confirmation keyword (`yes`, in `[CONFIRMATION_KEYWORDS]`). The agent produced the diff preview, then ended the turn with a decision block (SYNC-01) instead of running `-execute`. The user had to repeat the confirmation
+- **Why it went wrong**:
+  - `sync.md` says "`-execute` is the confirmation - never run it without a preceding `-diff` preview shown in chat". The agent read this as "stop after the preview and wait for a reply". It requires only the order diff, show preview, execute within one run, not a second user turn
+  - Use Cases say `/sync knowledge to targets` "Auto-executes on [CONFIRMATION_KEYWORDS]": a keyword given up front authorizes execution after the preview
+  - The agent treated the 2 locally modified files and the size of the delta (about 50 files per repo) as a reason to ask. Both are reversible (git) and were shown in the preview; the `agent-behavior.md` exception covers only destructive, irreversible, materially different outcomes
+- **Evidence**: user message 2026-11-17 17:23-17:36 ("`/sync` to downstream repos -> yes", then "didnt I say ... why is that not enough?")
+- **Prevention rule**: A confirmation keyword in the request authorizes the whole workflow. Run diff, show the preview in chat, then execute in the same turn. Ask only when the preview shows irreversible loss (unversioned files overwritten or deleted), and say why
+- **Resolved**: 2026-11-17 - sync executed after this entry; rule text in `sync.md` to be clarified (open)
+
+## 2026-11-16 - Inline Search Command With Nested Quotes Hung the Terminal; Cards Written to the Workspace Root
+
+### [MEDIUM] [RESOLVED 2026-11-16] `PRMTHANGFIX-FL-0002` Inline `git grep` with a regex holding a backtick, a pipe and nested double quotes left pwsh at the `>>` continuation prompt
+
+- **When**: 2026-11-16 15:05 (discovered by the user in the chat panel)
+- **Where**: Cascade `run_command`, `Blocking: true`, during `/verify` of the hang-risk-class change
+- **What**: The agent judged the command a simple read-only search and ran it inline right after writing the class list that names "unbalanced quotes". The command line was echoed repeatedly and ended at `>> docs`; the user cancelled the step
+- **Why it went wrong**: 1) the agent classified by intent (read-only) not by payload shape; 2) the fragile-payload class was only in the skill guide, not in the always-loaded rule (size limit); 3) `Blocking: true` against the Cascade rule; 4) an earlier inline `git grep` already showed repeated echo and was ignored
+- **Evidence**: user screenshot 2026-11-16 15:07; HANGBENCH HC-10 (same cause)
+- **Prevention rule**: Before an inline call, read the command text, not its purpose: quotes inside quotes, backticks, or `|` inside a quoted argument = tmp script or agent tool. Echoed or doubled output from a previous inline call = stop inline use for the rest of the task
+- **Resolved**: 2026-11-16 - bullet added to `rules/devin-cascade.md` Terminal Limits; Fails card entry FL-01 in the session `_agentwork/`
+
+### [LOW] [RESOLVED 2026-11-16] `AGNTFOLDERS-FL-0003` Fails card created in the workspace root `_agentwork/` while the task belonged to a session folder
+
+- **When**: 2026-11-16 15:05 (corrected 2026-11-16 15:09 after the user asked)
+- **Where**: `_agentwork/__CARD_HANGBENCH-Fails.md`, rule `agent-behavior.md` File Placement
+- **What**: The agent took the session folder for a non-session because it had no `NOTES.md`, `PROGRESS.md`, or `PROBLEMS.md`, and used PROJECT-MODE placement
+- **Why it went wrong**: Session mode was inferred from tracking files, not from where the task's files live
+- **Evidence**: user message 2026-11-16 ("When we are working in a session?")
+- **Prevention rule**: The working folder is the session folder that holds the task's files; missing tracking files do not change that
+- **Resolved**: 2026-11-16 - card moved to the session `_agentwork/`; bullet added to `rules/devin-cascade.md` Terminal Limits
+
 ## 2026-11-11 - Hang Prevention Implemented as a Fixed Time Cap on Every Command
 
 ### [HIGH] [RESOLVED 2026-11-11] `PRMTHANGFIX-FL-0001` Every non-whitelisted command got a deadline; the runner killed work that was still making progress
