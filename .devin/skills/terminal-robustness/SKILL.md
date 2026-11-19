@@ -52,7 +52,13 @@ Dispatch keys on agent identity (system prompt), not on the agent folder: Cascad
 - Prefer agent tools (grep_search, read_file, find_by_name) over shell commands for file operations; where `grep_search` cannot reach a folder or returns nothing for text that exists, run `rg.exe` inside a tmp script through the runner, never an inline `Select-String` or `Get-ChildItem` pipeline
 - Commands of a hang-risk class (`TERMINAL_ROBUSTNESS_GUIDES.md` Section 8) run through `run-supervised.ps1` (call line in `agent-behavior.md` Terminal Hang Prevention); the runner contains the whole process tree, gives empty stdin, and writes the log with `ALIVE` liveness lines. It has no deadline: it kills the tree only when the agent creates the stop file after a hang verdict. While commands run it keeps the kill script `_agentwork/.tmp_kill_[TOPIC].ps1` (one line per running command); after a cancelled runner that script ends the leftover processes
 
-### 4. Record failures
+### 4. Self-repair on `WARN processkit not found`
+
+- First `WARN` line in a runner log -> run `SETUP.md` (idempotent, one pinned package in the shared venv), without asking; confirm with a runner smoke test that the next log has no `WARN`; tell the user in one line
+- `SETUP.md` fails -> one PROBLEMS.md entry with the failing step; continue with the fallback runner
+- Workspace NOTES.md records an intentional `UNINSTALL.md` run -> skip the repair
+
+### 5. Record failures
 
 - Every failure (`KILLED` after a hang verdict, `ERROR`, unexpected exit, completion miss) and every runtime overrun goes into the Fails card of the working folder at once, with a "Never again" line; no card yet -> create it from the Fails block of `ROBUSTNESS_CARD_SKELETON.md`
 - Promotion and carry-out at `/cleanup`: Fails card rules in `ROBUSTNESS_CARD_SKELETON.md`
@@ -62,6 +68,8 @@ Dispatch keys on agent identity (system prompt), not on the agent folder: Cascad
 - `TERMINAL_ROBUSTNESS_GUIDES.md` - shared mechanisms, safe patterns, card lifecycle (read before risky work)
 - `TERMINAL_ROBUSTNESS_RULES.md` - HG/EX/CD output standards for cards and command patterns (consumed by `/verify`)
 - `TERMINAL_ROBUSTNESS_CHECKS.md` - process discipline (PD) and quality improvement (QI) audits (consumed by `/drift-detect`, `/improve`)
+- `SETUP.md` - installs processkit into the shared venv; agent self-repair procedure (pre-checks, install, runner smoke test)
+- `UNINSTALL.md` - removes processkit (pre-checks, uninstall, verification); runner falls back to `Kill($true)`
 - `run-supervised.ps1` - supervised runner: processkit Job Object container, empty stdin, live UTF-8 output files, log with `START` / `ALIVE` (CPU time, output size every 30 s) / `DONE` / `KILLED` / `ERROR` and `elapsed=`; no deadline, whole-tree kill on the stop file; kill script `.tmp_kill_[TOPIC].ps1` (`-Topic`) with the living process IDs per running command, `LEFTOVER` log line after a cancelled runner (fallback without processkit: `Kill($true)`, logged as WARN)
 - `ROBUSTNESS_CARD_SKELETON.md` - canonical structure of the Robustness card and the Fails card (`/verify` target for card instances)
 - `ClaudeCode/TERMINAL_ROBUSTNESS_GUIDES.md` - minimum variant guide
