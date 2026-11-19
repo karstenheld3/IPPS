@@ -7,6 +7,8 @@ Output [DATE]_Epoch-ECI-Match.json:
   unmatched[]         registry model IDs without an Epoch row (eci_ci null in the registry)
   new_models[]        model IDs found in [DATE]_*-DOM.json of the run folder but absent from the registry (candidates for Prompts 4 and 5)
   missing_metadata[]  registry models without uc_class or release_date (complete from the vendor model overview)
+  released_in_dom     per match entry: the released value of the run's DOM files (YYYY-MM-DD, YYYY-MM, or null); a new model's value is in new_model_releases{}
+  release_conflicts[] registry release_date differs from the DOM released value (equal, or the registry is the exact day of a DOM month, is no conflict)
 No band, no generation equivalent, no class inference: uc_class and release_date are hand-maintained registry inputs.
 
 Usage:
@@ -99,6 +101,21 @@ def collect_dom_model_ids(run_folder: Path, date: str) -> list:
       if not skipped and MODEL_ID_PATTERN.match(candidate): found[candidate] = True
   return sorted(found.keys())
 
+# Every DOM extract carries released[] = [{model_id, released, source_url, raw_text}]; released is YYYY-MM-DD, YYYY-MM (day not printed), or null (page prints no date)
+def collect_dom_releases(run_folder: Path, date: str) -> dict:
+  retVal = {}
+  for dom_file in sorted(run_folder.glob(f"{date}_*-DOM.json")):
+    document = json.loads(dom_file.read_text(encoding="utf-8"))
+    if not isinstance(document, dict): continue
+    for item in document.get("released", []) or []:
+      if item.get("model_id") and item.get("released"): retVal[item["model_id"]] = {"released": item["released"], "file": dom_file.name}
+  return retVal
+
+def release_conflicts_with(registry_value, dom_value):
+  if registry_value == dom_value: return False
+  if len(dom_value) == 7 and len(registry_value) == 10 and registry_value.startswith(dom_value): return False
+  return True
+
 def match_models(csv_path: Path, reg_path: Path, out_path: Path, run_folder: Path, snapshot_date: str) -> dict:
   with csv_path.open("r", encoding="utf-8", newline="") as handle:
     csv_rows = list(csv.DictReader(handle))
@@ -109,8 +126,9 @@ def match_models(csv_path: Path, reg_path: Path, out_path: Path, run_folder: Pat
     by_lower[name.lower()] = row
     by_lower[name.lower().replace("-", " ")] = row
   reg = json.loads(reg_path.read_text(encoding="utf-8"))
-  matches, unmatched_ids, missing_metadata = [], [], []
+  matches, unmatched_ids, missing_metadata, release_conflicts = [], [], [], []
   registry_ids = {}
+  dom_releases = collect_dom_releases(run_folder, snapshot_date)
   for model in reg["models"]:
     registry_ids[model["model_id"]] = True
     registry_ids[base_id(model["model_id"])] = True
@@ -128,6 +146,10 @@ def match_models(csv_path: Path, reg_path: Path, out_path: Path, run_folder: Pat
       entry["release_date_in_eci"] = csv_row.get("date") or None
     else:
       unmatched_ids.append(mid)
+    dom_release = dom_releases.get(mid) or dom_releases.get(base_id(mid))
+    entry["released_in_dom"] = dom_release["released"] if dom_release else None
+    if dom_release and model.get("release_date") and release_conflicts_with(model["release_date"], dom_release["released"]):
+      release_conflicts.append({"model_id": mid, "registry": model["release_date"], "dom": dom_release["released"], "file": dom_release["file"]})
     matches.append(entry)
     missing = []
     for field in ("uc_class", "release_date"):
@@ -136,10 +158,15 @@ def match_models(csv_path: Path, reg_path: Path, out_path: Path, run_folder: Pat
   new_models = []
   for candidate in collect_dom_model_ids(run_folder, snapshot_date):
     if candidate not in registry_ids and base_id(candidate) not in registry_ids: new_models.append(candidate)
+  new_model_releases = {}
+  for candidate in new_models:
+    dom_release = dom_releases.get(candidate) or dom_releases.get(base_id(candidate))
+    new_model_releases[candidate] = dom_release["released"] if dom_release else None
   retVal = {
     "_source": str(csv_path), "_url": "https://epoch.ai/eci", "_direct_csv_url": ECI_CSV_URL, "_snapshot_date": snapshot_date,
     "_total_csv_models": len(csv_rows), "_total_models_evaluated": len(matches), "_matched_with_eci_score": len(matches) - len(unmatched_ids),
-    "unmatched": unmatched_ids, "new_models": new_models, "missing_metadata": missing_metadata, "matches": matches
+    "unmatched": unmatched_ids, "new_models": new_models, "missing_metadata": missing_metadata,
+    "new_model_releases": new_model_releases, "release_conflicts": release_conflicts, "matches": matches
   }
   out_path.write_text(json.dumps(retVal, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
   return retVal
@@ -168,6 +195,12 @@ def main():
   print(f"Matched {result['_matched_with_eci_score']} / {result['_total_models_evaluated']} registry models ({with_interval} with interval, {len(result['unmatched'])} unmatched).")
   print(f"New model candidates in DOM: {len(result['new_models'])}" + (f" ({', '.join(result['new_models'])})" if result["new_models"] else ""))
   print(f"Registry models missing uc_class or release_date: {len(result['missing_metadata'])}")
+  without_dom_date = 0
+  for entry in result["matches"]:
+    if entry["released_in_dom"] is None: without_dom_date += 1
+  print(f"DOM released values: {len(result['matches']) - without_dom_date} registry models with a value, {without_dom_date} without; "
+        f"conflicts with the registry: {len(result['release_conflicts'])}")
+  for conflict in result["release_conflicts"]: print(f"  CONFLICT {conflict['model_id']}: registry {conflict['registry']} vs {conflict['file']} {conflict['dom']}")
   print(f"OK: {out_path}")
 
 if __name__ == "__main__":

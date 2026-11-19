@@ -1,0 +1,122 @@
+{
+  "compared_at": "2026-11-17T16:30:00Z",
+  "registry_file": "e:\\dev\\IPPS\\PromptSystemV4.7\\skills\\llm-tools\\model-registry.json",
+  "pricing_file": "e:\\dev\\IPPS\\PromptSystemV4.7\\skills\\llm-tools\\model-pricing.json",
+  "dom_files": [
+    "2026-11-17_DeepSeek-Pricing-DOM.json",
+    "2026-11-17_DeepSeek-Models-DOM.json",
+    "2026-11-17_Moonshot-Pricing-DOM.json",
+    "2026-11-17_Moonshot-Models-DOM.json"
+  ],
+  "differences": [
+    {
+      "model_id": "deepseek-flash",
+      "field": "release_date",
+      "registry_value": "2026-09-10",
+      "vendor_value": "2026-10-17",
+      "source": "https://api-docs.deepseek.com/updates/",
+      "note": "Registry date is from initial DeepSeek-V4.1-Flash release; vendor page shows DeepSeek-V4.1-Flash-1017 update on 2026-10-17. Snapshot field already records DeepSeek-V4.1-Flash-1017."
+    },
+    {
+      "model_id": "deepseek-flash",
+      "field": "release_date_assumed",
+      "registry_value": null,
+      "vendor_value": false,
+      "source": "https://api-docs.deepseek.com/updates/",
+      "note": "Vendor gives explicit 2026-10-17 update date; no assumption needed."
+    },
+    {
+      "model_id": "kimi-k3.1-pro",
+      "field": "release_date",
+      "registry_value": "2026-10-23",
+      "vendor_value": "2026-10-17",
+      "source": "https://platform.kimi.ai/docs/platform-changelog.md",
+      "note": "Registry used assumed 2026-10-23; vendor changelog only states October 2026 Batch API support for kimi-k3.1-pro. No exact date found on vendor page; keep release_date_assumed=true."
+    },
+    {
+      "model_id": "kimi-k3.1-pro-highspeed",
+      "field": "release_date",
+      "registry_value": "2026-10-23",
+      "vendor_value": "2026-10-17",
+      "source": "https://platform.kimi.ai/docs/platform-changelog.md (inferred from kimi-k3.1-pro)",
+      "note": "No separate release date found; keep release_date_assumed=true."
+    }
+  ],
+  "price_matches": {
+    "deepseek-flash": {
+      "registry": {"input_per_1m": 0.3, "cached_per_1m": 0.006, "output_per_1m": 1.2, "off_peak_factor": 0.5, "context_window_k": 1000},
+      "vendor": {"peak_input_per_1m": 0.3, "peak_cached_per_1m": 0.006, "peak_output_per_1m": 1.2, "off_peak_factor": 0.5, "context_window": 1000000},
+      "match": true,
+      "note": "Registry input price equals vendor PEAK input cache-miss price. Registry cached price equals vendor PEAK cache-hit price. Off-peak factor matches."
+    },
+    "deepseek-v4-pro": {
+      "registry": {"input_per_1m": 1.32, "cached_per_1m": 0.044, "output_per_1m": 3.96, "off_peak_factor": 0.5, "context_window_k": 1000},
+      "vendor": {"peak_input_per_1m": 1.32, "peak_cached_per_1m": 0.044, "peak_output_per_1m": 3.96, "off_peak_factor": 0.5, "context_window": 1000000},
+      "match": true,
+      "note": "Same as deepseek-flash; registry values match vendor PEAK prices."
+    },
+    "kimi-k3.1-pro": {
+      "registry": {"input_per_1m": 2.0, "cached_per_1m": 0.2, "output_per_1m": 10.0, "context_window_k": 1048},
+      "vendor": {"input_per_1m": 2.0, "cached_input_per_1m": 0.2, "output_per_1m": 10.0, "context_window": 1048576},
+      "match": true,
+      "note": "Registry input matches vendor 'Input'; cached matches vendor 'Cached Input'; output matches vendor 'Output'; context_window_k = floor(1048576/1000) = 1048."
+    },
+    "kimi-k3.1-pro-highspeed": {
+      "registry": {"input_per_1m": 4.0, "cached_per_1m": 0.2, "output_per_1m": 20.0, "context_window_k": 1048},
+      "vendor": {"input_per_1m": 4.0, "cached_input_per_1m": 0.2, "output_per_1m": 20.0, "context_window": 1048576},
+      "match": true
+    },
+    "kimi-k3": {
+      "registry": {"input_per_1m": 3.0, "cached_per_1m": 0.3, "output_per_1m": 15.0, "context_window_k": 1048},
+      "vendor": {"input_per_1m": 3.0, "cached_input_per_1m": 0.3, "output_per_1m": 15.0, "context_window": 1048576},
+      "match": true
+    },
+    "kimi-k2.7-code": {
+      "registry": {"input_per_1m": 0.95, "cached_per_1m": 0.19, "output_per_1m": 4.0, "context_window_k": 262},
+      "vendor": {"input_per_1m": 0.95, "cached_input_per_1m": 0.19, "output_per_1m": 4.0, "context_window": 262144},
+      "match": true
+    },
+    "kimi-k2.7-code-highspeed": {
+      "registry": {"input_per_1m": 1.9, "cached_per_1m": 0.38, "output_per_1m": 8.0, "context_window_k": 262},
+      "vendor": {"input_per_1m": 1.9, "cached_input_per_1m": 0.38, "output_per_1m": 8.0, "context_window": 262144},
+      "match": true
+    },
+    "kimi-k2.6": {
+      "registry": {"input_per_1m": 0.95, "cached_per_1m": 0.16, "output_per_1m": 4.0, "context_window_k": 262},
+      "vendor": {"input_per_1m": 0.95, "cached_input_per_1m": 0.16, "output_per_1m": 4.0, "context_window": 262144},
+      "match": true
+    }
+  },
+  "context_window_matches": {
+    "deepseek-flash": {"registry": 1000000, "vendor": 1000000, "match": true},
+    "deepseek-v4-pro": {"registry": 1000000, "vendor": 1000000, "match": true},
+    "kimi-k3.1-pro": {"registry": 1048576, "vendor": 1048576, "match": true},
+    "kimi-k3.1-pro-highspeed": {"registry": 1048576, "vendor": 1048576, "match": true},
+    "kimi-k3": {"registry": 1048576, "vendor": 1048576, "match": true},
+    "kimi-k2.7-code": {"registry": 262144, "vendor": 262144, "match": true},
+    "kimi-k2.7-code-highspeed": {"registry": 262144, "vendor": 262144, "match": true},
+    "kimi-k2.6": {"registry": 262144, "vendor": 262144, "match": true}
+  },
+  "max_output_matches": {
+    "deepseek-flash": {"registry_prefix": 384000, "vendor": "384K", "match": true},
+    "deepseek-v4-pro": {"registry_prefix": 384000, "vendor": "384K", "match": true}
+  },
+  "effort_support_matches": {
+    "deepseek-flash": {"registry": ["low", "high", "max"], "vendor": ["low", "high", "max"], "match": true},
+    "deepseek-v4-pro": {"registry": ["low", "high", "max"], "vendor": ["low", "high", "max"], "match": true},
+    "kimi-k3": {"registry": ["low", "high", "max"], "vendor": ["low", "high", "max"], "match": true},
+    "kimi-k3.1-pro": {"registry": ["low", "high", "max"], "vendor": ["low", "high", "max"], "match": true},
+    "kimi-k3.1-pro-highspeed": {"registry": ["low", "high", "max"], "vendor": ["low", "high", "max"], "match": true},
+    "kimi-k2.7-code": {"registry": "thinking on/off", "vendor": "Optional. Thinking and Preserved Thinking are always on.", "match": false, "note": "Registry prefix method is 'thinking' (on/off). Vendor says thinking is always on for k2.7-code; cannot be disabled. Need to correct method or note."},
+    "kimi-k2.7-code-highspeed": {"registry": "thinking on/off", "vendor": "Optional. Thinking and Preserved Thinking are always on.", "match": false, "note": "Same as kimi-k2.7-code."},
+    "kimi-k2.6": {"registry": "thinking on/off", "vendor": "Optional. Thinking is on by default; reasoning from previous turns is not preserved by default.", "match": true, "note": "Registry 'thinking' on/off matches vendor: thinking can be disabled via thinking.type=disabled."}
+  },
+  "new_or_changed_models_in_raw_dom": [
+    {"model_id": "deepseek-flash", "change": "snapshot updated to DeepSeek-V4.1-Flash-1017 on 2026-10-17; legacy names deepseek-v4-flash and deepseek-v4-flash-vision-exp retired and routed to this model"},
+    {"model_id": "kimi-k3.1-pro", "change": "new K3.1 series flagship, 1M context, 3T-class"},
+    {"model_id": "kimi-k3.1-pro-highspeed", "change": "high-speed variant of kimi-k3.1-pro"},
+    {"model_id": "kimi-k2.7-code", "change": "deprecated; no longer available to newly registered users; retires end of December 2026"},
+    {"model_id": "kimi-k2.7-code-highspeed", "change": "deprecated; no longer available to newly registered users; retires end of December 2026"},
+    {"model_id": "kimi-k2.6", "change": "deprecated; no longer available to newly registered users; retires end of December 2026"}
+  ]
+}

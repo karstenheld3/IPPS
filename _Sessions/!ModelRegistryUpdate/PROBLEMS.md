@@ -15,13 +15,13 @@
 
 - **[2026-11-16 14:30] MDLRGUP-PR-0007**: `context_window` of Anthropic, Google, Z.AI, and xAI registry models not re-verified against vendor pages after the OpenAI defect (PR-0008). `contextUnverified` in `_2026-11-11_NEWMODEL\2026-11-11_ChangeSet.json` lists `claude-fable-5-2`, `claude-mythos-5-2`, `gemini-4-carbon`. Trigger: next run (template Prompt 5 item 2 and Prompt 8 item 2 now require it), or earlier on request.
 
-- **[2026-11-17 16:10] MDLRGUP-PR-0010**: `test-layer-depth-ladder.py` TC-01 (38 rung differences), TC-02 (extra `gpt-5.3-codex`), TC-03 (Top rung expected D12, actual D13) fail with identical output at git HEAD and in the working tree, so they are not caused by the DeepSeek and Kimi run. Class: TEST. Cause: the test compares against the frozen 2026-10-28 snapshot (`DEFAULT_REGISTRY` still points to `PromptSystemV4.5`), but the registry gained rungs since (`1.12.x`). Trigger: next change to `layer-depth-ladder.py`; fix by freezing the snapshot inside the test or rebasing expectations on registry `1.12.0` depth values.
 - **[2026-11-17 16:10] MDLRGUP-PR-0011**: 8 DeepSeek and Kimi models are `status: untested` (no `DEEPSEEK_API_KEY`, `MOONSHOT_API_KEY` in the keys file). Body construction, parameter clamping, and detection are covered by mock checks only; no live call confirmed `reasoning_effort` values, `max_completion_tokens` for Moonshot, or the K2 `thinking` toggle. Trigger: keys added, then run `test-call-llm.py --model <id>` per model and apply Gate 8 status updates.
 
 - **[2026-11-17 15:20] MDLRGUP-PR-0009** (resolved 2026-11-17 16:10 below): `model-pricing.json` `context_window_k` drifts from registry `context_window` (13 of 119 entries differ under the floor rule, audit 2026-11-17): OpenAI `gpt-5*` 256 or 128 vs 400000 (9 models), `gpt-5.4-mini` and `gpt-5.4-nano` 272 vs 400000, `gpt-4.1*` 1024 vs 1047576 (1047 expected, 3 models), `gpt-image-1.5` 128 vs registry `null`; Google 1048 (floor) sits next to 1024 for `gpt-4.1*` (mixed conversion). Class: DATA. Root cause: 1) PR-0008 corrected only `context_window` in the registry; the duplicate field in pricing has no consumer in `llm-tools` scripts, session scripts, or gates, so nothing flagged it; 2) no rule defined the K conversion (observed: floor in 8, 16, 1048; division by 1024 in `gpt-4.1*`); 3) template Prompt 5 item 3 lists the field without a source. Fix: rule `context_window_k = floor(context_window / 1000)`, `null` when the registry window is `null`; Gate 5.3 in `verify-and-distribute-registry.ps1`; data synchronized; template Prompt 5 item 3 states the rule. Lana-V1 consumers not checked (outside workspace).
 
 ## Resolved
 
+- **[2026-11-18 16:30] MDLRGUP-PR-0010** resolved (opened 2026-11-17 16:10): `test-layer-generation-ladder.py` (formerly `test-layer-depth-ladder.py`) now restricts the registry to the 92 snapshot models, so TC-01..03 no longer depend on later registry additions; 8 of 8 tests pass against registry `1.14.0`. The remaining defect was `DEFAULT_REGISTRY` pointing to the missing folder `PromptSystemV4.5` (`FileNotFoundError` without `--registry-file`); changed to `PromptSystemV4.7`. Next version folder change needs the same one-word edit.
 - **[2026-11-18 14:48] MDLRGUP-PR-0012** resolved: `MODEL_INVENTORY.md` Context column used `round(context_window / 1000)` while `model-pricing.json` `context_window_k` used `floor(context_window / 1000)`, creating a 1K discrepancy for 17 models. Fix: changed `update-model-inventory.py` to `math.floor(context / 1000)`, updated the Context definition in `MODEL_INVENTORY.md`, clarified Section 3.2 Efforts scope, and regenerated the inventory. Verification script passes with zero context/effort mismatches.
 
 - **[2026-11-17 16:10] MDLRGUP-PR-0009** resolved: rule `context_window_k = floor(context_window / 1000)` (`null` when registry value is `null`) written into template Field semantics and Prompt 6; Gate 5.3 added and PASS (127 pricing entries); 13 drifting entries synchronized earlier in the session.
@@ -37,6 +37,9 @@
 - **[2026-11-11 21:00] MDLRGUP-PR-0006**: OCR models deferred by the user (2026-11-11, `DD-15`): `glm-ocr` correction (release date 2026-02-02, endpoint `/api/paas/v4/layout_parsing`, file-based limits instead of the unverified 8K context), Mistral OCR 4.1 / OCR 3, open-weights OCR models (list in `_2026-11-11_NEWMODEL\2026-11-11_NewModelScan.md` section 3). `chat-latest` (OpenAI rolling alias) not registered.
 
 ## Problems Changes
+
+**[2026-11-18 16:30]**
+- Resolved: `MDLRGUP-PR-0010` (test default registry path)
 
 **[2026-11-18 14:48]**
 - Resolved: `MDLRGUP-PR-0012` (Context rounding inconsistency between MODEL_INVENTORY.md and model-pricing.json)

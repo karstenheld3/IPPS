@@ -13,7 +13,7 @@
       "max_output": 128000,
       "input_per_1m": 8.0,
       "output_per_1m": 40.0,
-      "deeper_than_candidates": [
+      "higher_than_candidates": [
         {
           "x": "gpt-6.2-astra",
           "model": "gpt-6-astra",
@@ -37,7 +37,7 @@
       "max_output": 128000,
       "input_per_1m": 2.0,
       "output_per_1m": 10.0,
-      "deeper_than_candidates": [
+      "higher_than_candidates": [
         {
           "x": "gpt-6.2-sol",
           "model": "gpt-6-sol",
@@ -61,7 +61,7 @@
       "max_output": 128000,
       "input_per_1m": 8.0,
       "output_per_1m": 40.0,
-      "deeper_than_candidates": [
+      "higher_than_candidates": [
         {
           "x": "gpt-6.2-astra-law",
           "model": "gpt-6-astra-law",
@@ -77,5 +77,13 @@
   },
   "ties": [],
   "estimates": [],
-  "ec9_corrections": []
+  "ec9_corrections": [],
+  "devin_only": [
+    {"model": "SWE-2", "generation": 6, "efforts": ["M", "H", "MX"], "evidence": "E6 from SWE-1.7 (G06*)", "source": "https://docs.devin.ai/desktop/models", "accessed": "2026-11-18",
+     "statement": "Devin page: SWE-2 is Cognition's software engineering model; SWE-1.7 is the previous flagship, so SWE-2 is placed at the SWE-1.7 rung [ASSUMED rung]"},
+    {"model": "SWE-2 Flash", "generation": 5, "efforts": ["M", "H", "MX"], "evidence": "E6 from SWE-2 (G06*)", "source": "https://docs.devin.ai/desktop/models", "accessed": "2026-11-18",
+     "statement": "Devin page: SWE-2 Flash is the lighter variant of SWE-2 with the same effort levels and a lower list price; one rung below SWE-2 [ASSUMED rung]"},
+    {"model": "Adaptive", "generation": 1, "evidence": "unplaced", "source": "https://docs.devin.ai/desktop/models", "accessed": "2026-11-18",
+     "statement": "Devin routing option without a fixed model; the rung of the model it routes to applies"}
+  ]
 }

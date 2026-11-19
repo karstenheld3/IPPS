@@ -1,0 +1,72 @@
+{
+  "source_updates": "https://api-docs.deepseek.com/updates/",
+  "source_thinking": "https://api-docs.deepseek.com/guides/thinking_mode/",
+  "accessed": "2026-11-17T16:27:00Z",
+  "models": {
+    "deepseek-flash": {
+      "api_name": "deepseek-flash",
+      "model_version": "DeepSeek-V4.1-Flash-1017",
+      "release_date": "2026-10-17",
+      "release_notes": [
+        "Date: 2026-10-17 - DeepSeek-V4.1-Flash-1017 Update. DeepSeek V4.1 Flash has been upgraded to DeepSeek-V4.1-Flash-1017. The official web and APP models have also been updated to the new version. The API calling method and pricing remain unchanged — simply use deepseek-flash to access the latest model.",
+        "Date: 2026-09-10 - DeepSeek-V4.1-Flash Release. Today, we officially release the DeepSeek-V4.1-Flash model. It is the smallest model in our new architecture family, with native multimodal visual understanding. Change the model name to deepseek-flash to call the latest V4.1 Flash model. The previous-generation models V4 Flash and V4 Flash Vision Exp have been retired; for compatibility, the model names deepseek-v4-flash and deepseek-v4-flash-vision-exp are temporarily routed to V4.1 Flash."
+      ],
+      "legacy_names": {
+        "deepseek-v4-flash": "retired, routed to DeepSeek-V4.1-Flash-1017",
+        "deepseek-v4-flash-vision-exp": "retired, routed to DeepSeek-V4.1-Flash-1017"
+      },
+      "thinking": {
+        "supported": true,
+        "default": "enabled",
+        "default_effort": "high",
+        "effort_values": ["low", "high", "max"],
+        "effort_mapping": {
+          "minimal": "low",
+          "low": "low",
+          "medium": "high",
+          "high": "high",
+          "xhigh": "high",
+          "max": "max",
+          "ultra": "max"
+        },
+        "control_parameters": {
+          "openai": {"thinking": {"type": "enabled/disabled"}, "reasoning_effort": "low/high/max"},
+          "anthropic": {"reasoning": {"effort": "none/low/high/max"}, "output_config": {"effort": "low/high/max"}}
+        }
+      }
+    },
+    "deepseek-v4-pro": {
+      "api_name": "deepseek-v4-pro",
+      "model_version": "DeepSeek-V4-Pro-0813",
+      "release_date": "2026-08-13",
+      "release_notes": [
+        "Date: 2026-08-13 - DeepSeek-V4-Pro Update. The GA release of DeepSeek-V4-Pro has been rolled out on the APP, Web, and API. The API calling method remains unchanged — simply set the model name to deepseek-v4-pro to use the latest version.",
+        "Date: 2026-04-24 - DeepSeek-V4. The two legacy API model names, deepseek-chat and deepseek-reasoner, will be discontinued in three months (2026-07-24). During the current period, these two model names point to the non-thinking mode and thinking mode of deepseek-v4-flash, respectively. To access the new models, the base_url remains unchanged, and the model parameter should be set to deepseek-v4-pro or deepseek-v4-flash."
+      ],
+      "legacy_names": {
+        "deepseek-chat": "discontinued 2026-07-24",
+        "deepseek-reasoner": "discontinued 2026-07-24"
+      },
+      "thinking": {
+        "supported": true,
+        "default": "enabled",
+        "default_effort": "high",
+        "effort_values": ["low", "high", "max"],
+        "effort_mapping": {
+          "minimal": "low",
+          "low": "low",
+          "medium": "high",
+          "high": "high",
+          "xhigh": "high",
+          "max": "max",
+          "ultra": "max"
+        },
+        "control_parameters": {
+          "openai": {"thinking": {"type": "enabled/disabled"}, "reasoning_effort": "low/high/max"},
+          "anthropic": {"reasoning": {"effort": "none/low/high/max"}, "output_config": {"effort": "low/high/max"}}
+        }
+      }
+    }
+  },
+  "raw_markdown_thinking": "The DeepSeek model supports the thinking mode: before outputting the final answer, the model will first output a chain-of-thought reasoning to improve the accuracy of the final response.\n\nThinking Mode Toggle and Effort Control:\n- OpenAI Format: thinking: {type: enabled/disabled}, reasoning_effort: low/high/max\n- Anthropic Format: reasoning: {effort: none/low/high/max}, output_config: {effort: low/high/max}\n- Default thinking mode enabled, default effort high.\n\nRequested effort -> Actual mapped effort:\nminimal -> low; low -> low; medium -> high; high -> high; xhigh -> high; max -> max; ultra -> max"
+}

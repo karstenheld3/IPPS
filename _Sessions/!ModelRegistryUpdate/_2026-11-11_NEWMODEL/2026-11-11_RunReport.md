@@ -56,6 +56,7 @@ Deferred or excluded:
   - `gpt-6-cyber > gpt-6-astra` (E1, `https://openai.com/index/introducing-gpt-6-cyber`; read through search-result summary, not Playwright)
 - **ECI scores and intervals refreshed (71)** from Epoch snapshot 2026-11-11; `gpt-5` keeps `eci_ci: null` (Epoch row has no interval).
 - **EC-9 release-date corrections**: none.
+- **Post-run correction 2026-11-16** (registry `1.12.3`): 11 OpenAI `context_window` values corrected to the vendor page total window (`gpt-5.4`, `gpt-5.4-pro` `1050000`; `gpt-5.4-mini`, `gpt-5.4-nano`, `gpt-5.2`, `gpt-5.2-pro`, `gpt-5.1`, `gpt-5`, `gpt-5-mini`, `gpt-5-nano`, `gpt-5-pro` `400000`). Not re-verified: other providers (`MDLRGUP-PR-0007`).
 
 ## 5. Prefix Gaps
 

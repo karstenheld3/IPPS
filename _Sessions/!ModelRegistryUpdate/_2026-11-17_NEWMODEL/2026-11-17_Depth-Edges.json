@@ -1,0 +1,209 @@
+{
+  "generated_at": "2026-11-17T16:35:00Z",
+  "epoch_match_file": "2026-11-17_Epoch-ECI-Match.json",
+  "new_models": {
+    "deepseek-flash": {
+      "release_date": "2026-10-17",
+      "release_date_assumed": false,
+      "snapshot": "DeepSeek-V4.1-Flash-1017",
+      "uc_class": "UC-3 Balanced",
+      "page_url": "https://api-docs.deepseek.com/quick_start/pricing.md",
+      "accessed": "2026-11-17",
+      "eci_score": 159.41,
+      "eci_ci": [157.01, 162.0],
+      "deeper_than_candidates": [
+        {
+          "model": "gpt-5-pro",
+          "kind": "E3",
+          "source": "https://epoch.ai/data/eci_scores.csv",
+          "accessed": "2026-11-17",
+          "statement": "Epoch ECI score 159.41 [157.01, 162.0] > gpt-5-pro ECI 151.23 [149.31, 153.29] (non-overlapping interval)"
+        }
+      ],
+      "ties": [],
+      "estimates": [],
+      "ec_notes": "No vendor model-selection page found; source silent -> no E1/E2 edge. Price tier below deepseek-v4-pro supports UC-3 Balanced."
+    },
+    "deepseek-v4-pro": {
+      "release_date": "2026-08-13",
+      "release_date_assumed": false,
+      "snapshot": "DeepSeek-V4-Pro-0813",
+      "uc_class": "UC-2 Flagship",
+      "page_url": "https://api-docs.deepseek.com/quick_start/pricing.md",
+      "accessed": "2026-11-17",
+      "eci_score": 155.94,
+      "eci_ci": [154.06, 158.01],
+      "deeper_than_candidates": [
+        {
+          "model": "gpt-5-pro",
+          "kind": "E3",
+          "source": "https://epoch.ai/data/eci_scores.csv",
+          "accessed": "2026-11-17",
+          "statement": "Epoch ECI score 155.94 [154.06, 158.01] > gpt-5-pro ECI 151.23 [149.31, 153.29] (non-overlapping interval)"
+        }
+      ],
+      "ties": [],
+      "estimates": [],
+      "ec_notes": "No vendor model-selection page found; source silent -> no E1/E2 edge. Higher price tier than deepseek-flash supports UC-2 Flagship. Registry inventory_note 'no vision input' confirmed."
+    },
+    "kimi-k3.1-pro": {
+      "release_date": "2026-10-23",
+      "release_date_assumed": true,
+      "uc_class": "UC-2 Flagship",
+      "page_url": "https://platform.kimi.ai/docs/guide/kimi-k3-1-pro-quickstart.md",
+      "accessed": "2026-11-17",
+      "eci_score": 161.37,
+      "eci_ci": [158.99, 164.0],
+      "deeper_than_candidates": [
+        {
+          "model": "claude-opus-4-6",
+          "kind": "E3",
+          "source": "https://epoch.ai/data/eci_scores.csv",
+          "accessed": "2026-11-17",
+          "statement": "Epoch ECI score 161.37 [158.99, 164.0] > claude-opus-4-6 ECI 156.34 [154.55, 158.31] (non-overlapping interval)"
+        }
+      ],
+      "ties": [],
+      "estimates": [],
+      "ec_notes": "EC-2: Kimi K3.1 Pro is a post-trained version of Kimi K3 with substantially larger post-training compute and consistent gains (source: vendor quickstart). No explicit 'start with X, use Y when X falls short' statement -> no E1 edge. Priced as flagship ($2/$10) but open-weight benchmark positioning is Flagship, not Apex."
+    },
+    "kimi-k3.1-pro-highspeed": {
+      "release_date": "2026-10-23",
+      "release_date_assumed": true,
+      "uc_class": "UC-2 Flagship",
+      "page_url": "https://platform.kimi.ai/docs/guide/kimi-k3-1-pro-quickstart.md",
+      "accessed": "2026-11-17",
+      "eci_score": null,
+      "eci_ci": null,
+      "deeper_than_candidates": [],
+      "ties": [
+        {
+          "model": "kimi-k3.1-pro",
+          "kind": "E5",
+          "source": "https://platform.kimi.ai/docs/guide/kimi-k3-1-pro-quickstart.md",
+          "accessed": "2026-11-17",
+          "reason": "same underlying model as kimi-k3.1-pro, about 2-3x speed"
+        }
+      ],
+      "estimates": [],
+      "ec_notes": "EC-3 restricted-access twin: same intelligence as kimi-k3.1-pro, only speed differs."
+    },
+    "kimi-k3": {
+      "release_date": "2026-07-16",
+      "release_date_assumed": false,
+      "uc_class": "UC-2 Flagship",
+      "page_url": "https://platform.kimi.ai/docs/guide/kimi-k3-quickstart.md",
+      "accessed": "2026-11-17",
+      "eci_score": 158.58,
+      "eci_ci": [156.6, 160.8],
+      "deeper_than_candidates": [
+        {
+          "model": "gpt-5-pro",
+          "kind": "E3",
+          "source": "https://epoch.ai/data/eci_scores.csv",
+          "accessed": "2026-11-17",
+          "statement": "Epoch ECI score 158.58 [156.6, 160.8] > gpt-5-pro ECI 151.23 [149.31, 153.29] (non-overlapping interval)"
+        }
+      ],
+      "ties": [],
+      "estimates": [],
+      "ec_notes": "No explicit model-selection escalation statement found; source silent -> no E1 edge. Described as previous-generation flagship, priced at $3/$15 (between k3.1-pro and k2 series), supports UC-2 Flagship."
+    },
+    "kimi-k2.7-code": {
+      "release_date": "2026-06-12",
+      "release_date_assumed": false,
+      "uc_class": "UC-3 Balanced",
+      "page_url": "https://platform.kimi.ai/docs/models.md",
+      "accessed": "2026-11-17",
+      "eci_score": 151.15,
+      "eci_ci": [149.08, 153.28],
+      "deeper_than_candidates": [
+        {
+          "model": "gemini-2.5-pro",
+          "kind": "E3",
+          "source": "https://epoch.ai/data/eci_scores.csv",
+          "accessed": "2026-11-17",
+          "statement": "Epoch ECI score 151.15 [149.08, 153.28] > gemini-2.5-pro ECI 144.87 [143.39, 146.33] (non-overlapping interval)"
+        }
+      ],
+      "ties": [],
+      "estimates": [],
+      "ec_notes": "Deprecated, no longer available to newly registered users; retires end of 2026-12. Coding-focused, priced at $0.95/$4, supports UC-3 Balanced. No explicit model-selection guidance found -> no E1/E2 edge."
+    },
+    "kimi-k2.7-code-highspeed": {
+      "release_date": "2026-06-12",
+      "release_date_assumed": true,
+      "uc_class": "UC-3 Balanced",
+      "page_url": "https://platform.kimi.ai/docs/models.md",
+      "accessed": "2026-11-17",
+      "eci_score": null,
+      "eci_ci": null,
+      "deeper_than_candidates": [],
+      "ties": [
+        {
+          "model": "kimi-k2.7-code",
+          "kind": "E5",
+          "source": "https://platform.kimi.ai/docs/models.md",
+          "accessed": "2026-11-17",
+          "reason": "same underlying model as kimi-k2.7-code (high-speed variant)"
+        }
+      ],
+      "estimates": [],
+      "ec_notes": "EC-3 restricted-access twin: same model as kimi-k2.7-code, only speed differs."
+    },
+    "kimi-k2.6": {
+      "release_date": "2026-04-20",
+      "release_date_assumed": false,
+      "uc_class": "UC-3 Balanced",
+      "page_url": "https://platform.kimi.ai/docs/models.md",
+      "accessed": "2026-11-17",
+      "eci_score": 151.56,
+      "eci_ci": [149.79, 153.46],
+      "deeper_than_candidates": [
+        {
+          "model": "o3-pro",
+          "kind": "E3",
+          "source": "https://epoch.ai/data/eci_scores.csv",
+          "accessed": "2026-11-17",
+          "statement": "Epoch ECI score 151.56 [149.79, 153.46] > o3-pro ECI 147.46 [145.61, 149.34] (non-overlapping interval)"
+        }
+      ],
+      "ties": [],
+      "estimates": [],
+      "ec_notes": "Deprecated, no longer available to newly registered users; retires end of 2026-12. Priced at $0.95/$4, supports UC-3 Balanced. No explicit model-selection guidance found -> no E1/E2 edge."
+    }
+  },
+  "ec_9_corrections": [
+    {
+      "model_id": "deepseek-flash",
+      "registry_release_date": "2026-09-10",
+      "corrected_release_date": "2026-10-17",
+      "source": "https://api-docs.deepseek.com/updates/ and https://epoch.ai/data/eci_scores.csv",
+      "accessed": "2026-11-17",
+      "note": "Registry date was initial DeepSeek-V4.1-Flash release; vendor updates and Epoch both record the 2026-10-17 snapshot update."
+    }
+  ],
+  "registry_differences": [
+    {
+      "model_id": "deepseek-flash",
+      "field": "release_date",
+      "registry_value": "2026-09-10",
+      "evidence_value": "2026-10-17",
+      "source": "https://api-docs.deepseek.com/updates/"
+    },
+    {
+      "model_id": "kimi-k2.7-code",
+      "field": "thinking_method",
+      "registry_value": "thinking on/off",
+      "evidence_value": "thinking always on (cannot be disabled)",
+      "source": "https://platform.kimi.ai/docs/api/models-overview.md"
+    },
+    {
+      "model_id": "kimi-k2.7-code-highspeed",
+      "field": "thinking_method",
+      "registry_value": "thinking on/off",
+      "evidence_value": "thinking always on (cannot be disabled)",
+      "source": "https://platform.kimi.ai/docs/api/models-overview.md"
+    }
+  ]
+}

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-test-layer-depth-ladder.py - Regression test for layer-depth-ladder.py (MDLRGUP-MDLINVNTRY-SP01 NFR-01, IG-02, IG-03, IG-05).
+test-layer-generation-ladder.py - Regression test for layer-generation-ladder.py (MDLRGUP-MDLINVNTRY-SP01 NFR-01, IG-02, IG-03, IG-05).
 
 TC-01..03 re-layer the 2026-10-28 Epoch snapshot with the two FR-03 manual edges in bootstrap mode and compare against
 _INFO_HOW_TO_ORGANIZE_LLMS_BY_CAPABILITY.md [LLMCAPCLS-IN01] Section 3 (92 models, 12 rungs). The model set is restricted
 to those 92 models so later registry additions do not change the snapshot.
 
 Usage:
-  python test-layer-depth-ladder.py [--registry-file <model-registry.json>] [--match-file <2026-10-28_Epoch-ECI-Match.json>]
+  python test-layer-generation-ladder.py [--registry-file <model-registry.json>] [--match-file <2026-10-28_Epoch-ECI-Match.json>]
 """
 import argparse, copy, importlib.util, json, sys
 from pathlib import Path
@@ -16,7 +16,7 @@ if hasattr(sys.stdout, "reconfigure"):
   sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 SESSION_FOLDER = Path(__file__).resolve().parent
-DEFAULT_REGISTRY = SESSION_FOLDER.parents[1] / "PromptSystemV4.5" / "skills" / "llm-tools" / "model-registry.json"
+DEFAULT_REGISTRY = SESSION_FOLDER.parents[1] / "PromptSystemV4.7" / "skills" / "llm-tools" / "model-registry.json"
 DEFAULT_MATCH = SESSION_FOLDER / "_2026-10-28_PRICES" / "2026-10-28_Epoch-ECI-Match.json"
 
 # LLMCAPCLS-IN01 Section 3 (rung per model; "*" = E6 estimate)
@@ -48,7 +48,7 @@ class SilentLogger:
     self.lines.append(line)
 
 def load_layering_module():
-  spec = importlib.util.spec_from_file_location("layer_depth_ladder", SESSION_FOLDER / "layer-depth-ladder.py")
+  spec = importlib.util.spec_from_file_location("layer_generation_ladder", SESSION_FOLDER / "layer-generation-ladder.py")
   module = importlib.util.module_from_spec(spec)
   spec.loader.exec_module(module)
   return module
@@ -62,15 +62,15 @@ def expected_rungs():
       if name.endswith("*"): estimated[model_id] = True
   return rungs, estimated
 
-# Registry copy restricted to the snapshot models, without depth fields, with exactly the FR-03 manual edges
+# Registry copy restricted to the snapshot models, without generation fields, with exactly the FR-03 manual edges
 def snapshot_registry(registry, module, expected):
   retVal = copy.deepcopy(registry)
   kept = []
   for entry in retVal["models"]:
     if module.base_id(entry["model_id"]) not in expected: continue
-    for field in ("depth", "depth_evidence", "depth_estimated", "deeper_than"):
+    for field in ("generation", "generation_evidence", "generation_estimated", "higher_than"):
       entry.pop(field, None)
-    if entry["model_id"] in FR03_EDGES: entry["deeper_than"] = [dict(FR03_EDGES[entry["model_id"]])]
+    if entry["model_id"] in FR03_EDGES: entry["higher_than"] = [dict(FR03_EDGES[entry["model_id"]])]
     kept.append(entry)
   retVal["models"] = kept
   return retVal
@@ -81,7 +81,7 @@ def run(module, registry, match_data, bootstrap):
   return result, logger.lines
 
 def main():
-  parser = argparse.ArgumentParser(description="Regression test for layer-depth-ladder.py")
+  parser = argparse.ArgumentParser(description="Regression test for layer-generation-ladder.py")
   parser.add_argument("--registry-file", type=Path, default=DEFAULT_REGISTRY)
   parser.add_argument("--match-file", type=Path, default=DEFAULT_MATCH)
   args = parser.parse_args()
@@ -91,7 +91,7 @@ def main():
   expected, expected_estimated = expected_rungs()
   results = []
   total = 8
-  print("===================================== START: DEPTH LADDER REGRESSION TESTS =====================================")
+  print("=================================== START: GENERATION LADDER REGRESSION TESTS ===================================")
   print(f"Registry '{args.registry_file.name}' {registry.get('_version')}, snapshot '{args.match_file.name}'.")
   print("")
 
@@ -103,7 +103,8 @@ def main():
   else:
     for model_id, rung in sorted(expected.items()):
       actual = result["rung"].get(model_id)
-      if actual != rung: differences.append(f"{model_id}: expected D{rung}, actual D{actual} ({result['evidence'].get(model_id)})")
+      actual_label = f"G{actual:02d}" if actual is not None else "missing"
+      if actual != rung: differences.append(f"{model_id}: expected G{rung:02d}, actual {actual_label} ({result['evidence'].get(model_id)})")
     for model_id in result["rung"]:
       if model_id not in expected: differences.append(f"{model_id}: not in snapshot")
   if differences:
@@ -122,7 +123,7 @@ def main():
   else: print(f"  OK. {len(expected_estimated)} estimated: {', '.join(sorted(actual_estimated))}")
   results.append(not missing and not extra)
 
-  print(f"[ 3 / {total} ] TC-03: Top rung is D12...")
+  print(f"[ 3 / {total} ] TC-03: Top rung is G12...")
   print(f"  [{'equal' if result['top'] == 12 else 'different'}] Top  Expected=12  Actual={result['top']}")
   results.append(result["top"] == 12)
 
@@ -135,13 +136,13 @@ def main():
   print(f"  {'OK.' if passed else 'FAIL:'} inserted={result_insert['inserted']}; {consistent_line}")
   results.append(passed)
 
-  print(f"[ 5 / {total} ] TC-05: Bootstrap refused when depth exists (IG-02)...")
+  print(f"[ 5 / {total} ] TC-05: Bootstrap refused when generation exists (IG-02)...")
   result_refused, lines = run(module, layered, match_data, True)
   passed = not result_refused["ok"] and "refused" in " ".join(lines)
   print(f"  {'OK. Correctly refused.' if passed else 'FAIL: bootstrap ran on a layered registry'}")
   results.append(passed)
 
-  print(f"[ 6 / {total} ] TC-06: Insertion with squeeze (new model E3 > gpt-4o D1, E3 < o1-mini D2)...")
+  print(f"[ 6 / {total} ] TC-06: Insertion with squeeze (new model E3 > gpt-4o G01, E3 < o1-mini G02)...")
   squeeze_registry = copy.deepcopy(layered)
   squeeze_registry["models"].append({"provider": "openai", "model_id": "gpt-4.0-codex-test", "name": "Test", "status": "untested", "uc_class": "UC-4 Efficient", "release_date": "2026-11-02", "eci_score": 131.6, "eci_ci": [131.3, 132.0]})
   result_squeeze, lines = run(module, squeeze_registry, match_data, False)
@@ -152,10 +153,10 @@ def main():
   print(f"  {'OK.' if passed else 'FAIL:'} {inserted_line}")
   results.append(passed)
 
-  print(f"[ 7 / {total} ] TC-07: deeper_than item without 'accessed' is rejected (IG-03)...")
+  print(f"[ 7 / {total} ] TC-07: higher_than item without 'accessed' is rejected (IG-03)...")
   rejected_registry = copy.deepcopy(snapshot_registry(registry, module, expected))
   for entry in rejected_registry["models"]:
-    if entry["model_id"] == "claude-fable-5": entry["deeper_than"][0].pop("accessed")
+    if entry["model_id"] == "claude-fable-5": entry["higher_than"][0].pop("accessed")
   result_rejected, lines = run(module, rejected_registry, match_data, True)
   rejected_line = ""
   for line in lines:
@@ -167,7 +168,7 @@ def main():
   print(f"[ 8 / {total} ] TC-08: Manual edge closing a cycle aborts without writing (IG-05)...")
   cycle_registry = copy.deepcopy(snapshot_registry(registry, module, expected))
   for entry in cycle_registry["models"]:
-    if entry["model_id"] == "gpt-4o-mini": entry["deeper_than"] = [{"model": "o1", "kind": "E1", "source": "test", "accessed": "2026-11-02", "statement": "test"}]
+    if entry["model_id"] == "gpt-4o-mini": entry["higher_than"] = [{"model": "o1", "kind": "E1", "source": "test", "accessed": "2026-11-02", "statement": "test"}]
   result_cycle, lines = run(module, cycle_registry, match_data, True)
   cycle_line = ""
   for line in lines:
@@ -182,7 +183,7 @@ def main():
   print("")
   print(f"{total} tests executed. OK: {passed_count}, FAIL: {total - passed_count}.")
   print(f"RESULT: {'PASSED' if passed_count == total else 'FAILED'}")
-  print("====================================== END: DEPTH LADDER REGRESSION TESTS ======================================")
+  print("==================================== END: GENERATION LADDER REGRESSION TESTS ====================================")
   if passed_count != total: sys.exit(1)
 
 if __name__ == "__main__":

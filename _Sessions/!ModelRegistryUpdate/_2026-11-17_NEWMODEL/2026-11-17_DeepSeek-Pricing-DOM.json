@@ -1,0 +1,54 @@
+{
+  "source": "https://api-docs.deepseek.com/quick_start/pricing.md",
+  "accessed": "2026-11-17T16:27:00Z",
+  "models": {
+    "deepseek-flash": {
+      "api_name": "deepseek-flash",
+      "alias_footnote": "Use deepseek-flash as the model name. The legacy names deepseek-v4-flash and deepseek-v4-flash-vision-exp are still accepted, but the corresponding models have been retired, their requests are served by the DeepSeek-V4.1-Flash-1017 model and billed at the Flash price.",
+      "model_version": "DeepSeek-V4.1-Flash-1017",
+      "base_url_openai": "https://api.deepseek.com",
+      "base_url_anthropic": "https://api.deepseek.com/anthropic",
+      "thinking_mode": "Supports both non-thinking and thinking (default) modes",
+      "context_length": "1M",
+      "max_output": "384K",
+      "features": ["Json Output", "Tool Calls", "Responses API", "Anthropic API", "Chat Prefix Completion (Beta)", "FIM Completion (Beta) Non-thinking mode only", "Vision"],
+      "pricing_peak": {
+        "input_per_1m_cache_hit": 0.006,
+        "input_per_1m_cache_miss": 0.3,
+        "output_per_1m": 1.2
+      },
+      "pricing_off_peak": {
+        "input_per_1m_cache_hit": 0.003,
+        "input_per_1m_cache_miss": 0.15,
+        "output_per_1m": 0.6
+      },
+      "off_peak_factor": 0.5,
+      "peak_hours": "01:00 - 04:00 and 06:00 - 10:00 UTC, Monday through Friday, excluding Chinese public holidays",
+      "concurrency_limit": 2500
+    },
+    "deepseek-v4-pro": {
+      "api_name": "deepseek-v4-pro",
+      "model_version": "DeepSeek-V4-Pro-0813",
+      "base_url_openai": "https://api.deepseek.com",
+      "base_url_anthropic": "https://api.deepseek.com/anthropic",
+      "thinking_mode": "Supports both non-thinking and thinking (default) modes",
+      "context_length": "1M",
+      "max_output": "384K",
+      "features": ["Json Output", "Tool Calls", "Responses API", "Anthropic API", "Chat Prefix Completion (Beta)", "FIM Completion (Beta) Non-thinking mode only"],
+      "pricing_peak": {
+        "input_per_1m_cache_hit": 0.044,
+        "input_per_1m_cache_miss": 1.32,
+        "output_per_1m": 3.96
+      },
+      "pricing_off_peak": {
+        "input_per_1m_cache_hit": 0.022,
+        "input_per_1m_cache_miss": 0.66,
+        "output_per_1m": 1.98
+      },
+      "off_peak_factor": 0.5,
+      "peak_hours": "01:00 - 04:00 and 06:00 - 10:00 UTC, Monday through Friday, excluding Chinese public holidays",
+      "concurrency_limit": 500
+    }
+  },
+  "raw_markdown": "Models & Pricing\nModel prices are listed in units of per 1M tokens. A token, the smallest unit of text that the model recognizes, can be a word, a number, or even a punctuation mark. We bill model usage based on the total number of input and output tokens by the model.\n\n## Model Details\n| MODEL | deepseek-flash(1) | deepseek-v4-pro |\n| MODEL VERSION | DeepSeek-V4.1-Flash-1017 | DeepSeek-V4-Pro-0813 |\n| THINKING MODE | Supports both non-thinking and thinking (default) modes | Supports both non-thinking and thinking (default) modes |\n| CONTEXT LENGTH | 1M | 1M |\n| MAX OUTPUT | MAXIMUM: 384K | MAXIMUM: 384K |\n| PRICING | 1M INPUT TOKENS (CACHE HIT) OFF-PEAK $0.003 / $0.022, PEAK $0.006 / $0.044 | 1M INPUT TOKENS (CACHE MISS) OFF-PEAK $0.15 / $0.66, PEAK $0.3 / $1.32 | 1M OUTPUT TOKENS OFF-PEAK $0.6 / $1.98, PEAK $1.2 / $3.96 |\n| Concurrency Limit | 2500 | 500 |\n\n(1) Use deepseek-flash as the model name. The legacy names deepseek-v4-flash and deepseek-v4-flash-vision-exp are still accepted, but the corresponding models have been retired, their requests are served by the DeepSeek-V4.1-Flash-1017 model and billed at the Flash price.\n\n(2) Off-peak rates are half of the peak rates. Peak hours are 01:00 - 04:00 and 06:00 - 10:00 UTC, Monday through Friday, excluding Chinese public holidays."
+}

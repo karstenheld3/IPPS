@@ -1,0 +1,35 @@
+Layering depth ladder (insert-only) from model-registry.json 1.13.2 and 2026-11-17_Epoch-ECI-Match.json...
+  121 models, 119 with depth.
+  Manual edges: 6 valid, 0 rejected.
+  Edges: E1 90, E2 81, E3 2426, E5 14, manual 6.
+  2 models to insert.
+  [ 1 / 2 ] kimi-k2.7: D6 (E3 > gemini-2.5-pro)
+  [ 2 / 2 ] deepseek-v4-flash: D8 (E3 > gpt-5-pro)
+  Existing rungs consistent: 104 / 119.
+    INCONSISTENT o3-mini D3 E3> gpt-4.1 D3 (report only, rung kept)
+    INCONSISTENT o4-mini D4 E3> o1 D4 (report only, rung kept)
+    INCONSISTENT gpt-5-nano D2 E3> claude-3-5-sonnet D2 (report only, rung kept)
+    INCONSISTENT gpt-5-nano D2 E3> gpt-4.1-mini D2 (report only, rung kept)
+    INCONSISTENT gpt-5-nano D2 E3> gemini-2.5-flash-lite D2 (report only, rung kept)
+    INCONSISTENT gpt-5.1 D6 E3> o3-pro D6 (report only, rung kept)
+    INCONSISTENT claude-opus-4-5 D6 E3> o3-pro D6 (report only, rung kept)
+    INCONSISTENT gemini-3.1-pro-preview D7 E3> gpt-5-pro D7 (report only, rung kept)
+    INCONSISTENT gemini-3.1-pro-preview D7 E3> gemini-3-flash-preview D7 (report only, rung kept)
+    INCONSISTENT grok-4.20-0309-reasoning D6 E3> o3-pro D6 (report only, rung kept)
+    INCONSISTENT grok-4.20-multi-agent-0309 D6 E3> o3-pro D6 (report only, rung kept)
+    INCONSISTENT kimi-k2.6 D6 E3> o3-pro D6 (report only, rung kept)
+    INCONSISTENT gemini-3.5-flash-lite D4 E3> o1 D4 (report only, rung kept)
+    INCONSISTENT glm-5.2 D6 E3> o3-pro D6 (report only, rung kept)
+    INCONSISTENT glm-5.2 D6 E3> gpt-5.4-mini D6 (report only, rung kept)
+    INCONSISTENT gemini-3.6-flash D7 E3> gpt-5-pro D7 (report only, rung kept)
+    INCONSISTENT deepseek-v4-pro D7 E3> gpt-5-pro D7 (report only, rung kept)
+    INCONSISTENT deepseek-v4-pro D7 E3> gemini-3-flash-preview D7 (report only, rung kept)
+    INCONSISTENT gpt-6.1-terra D9 E3> gpt-5.4-pro D9 (report only, rung kept)
+    INCONSISTENT gpt-6.1-terra D9 E3> gpt-5.5 D9 (report only, rung kept)
+    INCONSISTENT gpt-6.1-terra D9 E3> gpt-5.6-terra D9 (report only, rung kept)
+    INCONSISTENT kimi-k3.1-pro D8 E3> claude-opus-4-6 D8 (report only, rung kept)
+    INCONSISTENT kimi-k3.1-pro D8 E3> gpt-5.6-luna D8 (report only, rung kept)
+    INCONSISTENT kimi-k3.1-pro D8 E3> grok-4.7 D8 (report only, rung kept)
+    INCONSISTENT kimi-k3.1-pro D8 E3> gpt-6-luna D8 (report only, rung kept)
+  Wrote e:\dev\IPPS\PromptSystemV4.7\skills\llm-tools\model-registry.json.
+OK: 2 inserted, 0 squeezed, 0 cycles.

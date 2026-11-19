@@ -1,0 +1,114 @@
+{
+  "source_models": "https://platform.kimi.ai/docs/models",
+  "source_changelog": "https://platform.kimi.ai/docs/platform-changelog.md",
+  "source_parameters": "https://platform.kimi.ai/docs/api/models-overview.md",
+  "accessed": "2026-11-17T16:28:00Z",
+  "models": {
+    "kimi-k3.1-pro": {
+      "description": "The first model of the new K3.1 series and Kimi's most capable flagship to date: a 3T-class model with native visual understanding and a 1M-token context window, delivering substantial improvements in coding, 3D creation, and financial research and modeling.",
+      "status": "available",
+      "series": "K3.1",
+      "context_window_tokens": 1048576,
+      "release_date": "2026-10-17",
+      "release_date_source": "Platform Changelog: October 2026 - Batch API now supports Kimi K3.1 Pro (implied already available); no exact release date given, derived from October 2026 changelog entry and model listing.",
+      "reasoning": {
+        "thinking": "not_supported",
+        "reasoning_effort": ["low", "high", "max"],
+        "reasoning_effort_default": "max",
+        "preserved_thinking": true
+      },
+      "uc_class_inferred": "UC-1 Apex"
+    },
+    "kimi-k3.1-pro-highspeed": {
+      "description": "The high-speed variant of Kimi K3.1 Pro — same intelligence, about 2-3× the speed.",
+      "status": "available",
+      "series": "K3.1",
+      "context_window_tokens": 1048576,
+      "release_date": "2026-10-17",
+      "reasoning": {
+        "thinking": "not_supported",
+        "reasoning_effort": ["low", "high", "max"],
+        "reasoning_effort_default": "max",
+        "preserved_thinking": true
+      },
+      "uc_class_inferred": "UC-1 Apex",
+      "notes": "Same intelligence as kimi-k3.1-pro, 2-3x speed."
+    },
+    "kimi-k3": {
+      "description": "Kimi's previous-generation flagship and the world's first open-source 3T-class model (2.8 trillion parameters); with native visual understanding and a 1M-token context window, designed for frontier intelligence scenarios such as long-horizon coding, knowledge work, and deep reasoning.",
+      "status": "available",
+      "series": "K3",
+      "context_window_tokens": 1048576,
+      "release_date": "2026-07-01",
+      "release_date_source": "Platform Changelog: July 2026 - Kimi K3 available on the Open Platform API",
+      "reasoning": {
+        "thinking": "not_supported",
+        "reasoning_effort": ["low", "high", "max"],
+        "reasoning_effort_default": "max",
+        "preserved_thinking": true
+      },
+      "uc_class_inferred": "UC-2 Flagship"
+    },
+    "kimi-k2.7-code": {
+      "description": "No longer available to newly registered users; users registered before November 1 can continue using it. Deprecation expected in late December 2026.",
+      "status": "deprecated",
+      "series": "K2.7",
+      "context_window_tokens": 256000,
+      "release_date": "2026-06-01",
+      "release_date_source": "Platform Changelog: June 2026 - Released Kimi K2.7 Code through the Open Platform API",
+      "reasoning": {
+        "thinking": "optional_always_on",
+        "reasoning_effort": null,
+        "preserved_thinking": true
+      },
+      "uc_class_inferred": "UC-4 Efficient",
+      "notes": "Deprecation expected in late December 2026."
+    },
+    "kimi-k2.7-code-highspeed": {
+      "description": "No longer available to newly registered users; users registered before November 1 can continue using it. Deprecation expected in late December 2026.",
+      "status": "deprecated",
+      "series": "K2.7",
+      "context_window_tokens": 256000,
+      "release_date": "2026-06-01",
+      "release_date_source": "Inferred from kimi-k2.7-code release.",
+      "reasoning": {
+        "thinking": "optional_always_on",
+        "reasoning_effort": null,
+        "preserved_thinking": true
+      },
+      "uc_class_inferred": "UC-4 Efficient",
+      "notes": "High-speed variant of kimi-k2.7-code."
+    },
+    "kimi-k2.6": {
+      "description": "No longer available to newly registered users; users registered before November 1 can continue using it. Deprecation expected in late December 2026.",
+      "status": "deprecated",
+      "series": "K2.6",
+      "context_window_tokens": 256000,
+      "release_date": "2026-04-01",
+      "release_date_source": "Platform Changelog: April 2026 - Released Kimi K2.6 through the Open Platform API",
+      "reasoning": {
+        "thinking": "optional_default_on",
+        "reasoning_effort": null,
+        "preserved_thinking": false
+      },
+      "uc_class_inferred": "UC-4 Efficient",
+      "notes": "Deprecation expected in late December 2026."
+    }
+  },
+  "parameter_table": {
+    "source": "https://platform.kimi.ai/docs/api/models-overview.md",
+    "k3_series": ["kimi-k3", "kimi-k3.1-pro", "kimi-k3.1-pro-highspeed"],
+    "k2_series": ["kimi-k2.7-code", "kimi-k2.7-code-highspeed", "kimi-k2.6"],
+    "parameters": {
+      "context_window": {"k3_series": "1M tokens", "kimi-k2.7-code": "256K tokens", "kimi-k2.6": "256K tokens"},
+      "thinking": {"k3_series": "Not supported", "kimi-k2.7-code": "Optional. Thinking and Preserved Thinking are always on.", "kimi-k2.6": "Optional. Thinking is on by default; reasoning from previous turns is not preserved by default."},
+      "reasoning_effort": {"k3_series": ["low", "high", "max"], "kimi-k2.7-code": null, "kimi-k2.6": null},
+      "reasoning_effort_default": {"k3_series": "max"},
+      "tool_choice": {"k3_series": ["auto", "none", "required"], "kimi-k2.7-code": ["auto", "none"], "kimi-k2.6": ["auto", "none"]},
+      "temperature": {"k3_series": "Fixed at 1.0", "kimi-k2.7-code": "Fixed at 1.0", "kimi-k2.6": "Fixed at 1.0 with thinking on and 0.6 with thinking off"},
+      "top_p": {"k3_series": "Fixed at 0.95", "kimi-k2.7-code": "Fixed at 0.95", "kimi-k2.6": "Fixed at 0.95"},
+      "n": {"k3_series": "Fixed at 1", "kimi-k2.7-code": "Fixed at 1", "kimi-k2.6": "Fixed at 1"},
+      "presence_penalty_frequency_penalty": {"k3_series": "Fixed at 0", "kimi-k2.7-code": "Fixed at 0", "kimi-k2.6": "Fixed at 0"}
+    }
+  }
+}

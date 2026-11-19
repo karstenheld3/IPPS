@@ -1,0 +1,79 @@
+{
+  "source": "https://platform.kimi.ai/docs/pricing/chat",
+  "accessed": "2026-11-17T16:28:00Z",
+  "series_context": {
+    "k3_series": "All K3 series models support a 1,048,576-token context window.",
+    "k2_series": "All K2 series models support a 262,144-token context window. Dear Kimi Users, starting October 31, 2026, K2 series models will no longer be available to newly registered users; existing users are not affected. We plan to retire all K2 series models by the end of December 2026, please prepare your migration in advance."
+  },
+  "models": {
+    "kimi-k3.1-pro": {
+      "series": "K3.1",
+      "context_window_tokens": 1048576,
+      "input_per_1m": 2.00,
+      "output_per_1m": 10.00,
+      "cached_input_per_1m": 0.20,
+      "cache_write_5m_per_1m": 2.00,
+      "cache_write_1h_per_1m": 4.00,
+      "batch_discount": 0.6,
+      "notes": "Batch API inference available, billed at 60% of standard price. Cache writes billed separately by TTL (5min / 1h)."
+    },
+    "kimi-k3.1-pro-highspeed": {
+      "series": "K3.1",
+      "context_window_tokens": 1048576,
+      "input_per_1m": 4.00,
+      "output_per_1m": 20.00,
+      "cached_input_per_1m": 0.20,
+      "cache_write_5m_per_1m": 4.00,
+      "cache_write_1h_per_1m": 8.00,
+      "batch_discount": null,
+      "notes": "High-speed variant of Kimi K3.1 Pro. Same intelligence, about 2-3x the speed."
+    },
+    "kimi-k3": {
+      "series": "K3",
+      "context_window_tokens": 1048576,
+      "input_per_1m": 3.00,
+      "output_per_1m": 15.00,
+      "cached_input_per_1m": 0.30,
+      "cache_write_5m_per_1m": 3.00,
+      "cache_write_1h_per_1m": 6.00,
+      "batch_discount": 0.6,
+      "notes": "Batch API inference available, billed at 60% of standard price."
+    },
+    "kimi-k2.7-code": {
+      "series": "K2.7",
+      "context_window_tokens": 262144,
+      "input_per_1m": 0.95,
+      "output_per_1m": 4.00,
+      "cached_input_per_1m": 0.19,
+      "cache_write_5m_per_1m": null,
+      "cache_write_1h_per_1m": null,
+      "batch_discount": null,
+      "notes": "No longer available to newly registered users; existing users registered before November 1 can continue using it. Deprecation expected in late December 2026."
+    },
+    "kimi-k2.7-code-highspeed": {
+      "series": "K2.7",
+      "context_window_tokens": 262144,
+      "input_per_1m": 1.90,
+      "output_per_1m": 8.00,
+      "cached_input_per_1m": 0.38,
+      "cache_write_5m_per_1m": null,
+      "cache_write_1h_per_1m": null,
+      "batch_discount": null,
+      "notes": "No longer available to newly registered users; existing users registered before November 1 can continue using it. Deprecation expected in late December 2026."
+    },
+    "kimi-k2.6": {
+      "series": "K2.6",
+      "context_window_tokens": 262144,
+      "input_per_1m": 0.95,
+      "output_per_1m": 4.00,
+      "cached_input_per_1m": 0.16,
+      "cache_write_5m_per_1m": null,
+      "cache_write_1h_per_1m": null,
+      "batch_discount": null,
+      "notes": "No longer available to newly registered users; existing users registered before November 1 can continue using it. Deprecation expected in late December 2026."
+    }
+  },
+  "currency": "USD",
+  "tax_note": "Prices exclude applicable taxes. Specific tax obligations are subject to local tax regulations and will be calculated at checkout based on your jurisdiction.",
+  "raw_text": "Model Pricing\nK3 Series Models\nAll K3 series models support a 1,048,576-token context window.\nModel\tBase tokens\tPrompt caching\nName\tInput\tOutput\tCached Input\t5m writes\t1h writes\nkimi-k3.1-pro\t$2.00 / MTok\t$10.00 / MTok\t$0.20 / MTok\t$2.00 / MTok\t$4.00 / MTok\nkimi-k3.1-pro-highspeed\t$4.00 / MTok\t$20.00 / MTok\t$0.20 / MTok\t$4.00 / MTok\t$8.00 / MTok\nkimi-k3\t$3.00 / MTok\t$15.00 / MTok\t$0.30 / MTok\t$3.00 / MTok\t$6.00 / MTok\nNote: The Kimi API automatically enables context caching billing for repeated request prefixes, with a default TTL (time-to-live) of 5m. For TTL settings and cost optimization tips, see Best Practices for Context Caching.\nBatch API Inference: kimi-k3.1-pro and kimi-k3 support batch inference for large-scale tasks that do not require real-time responses, billed at 60% of the standard price.\nK2 Series Models\nAll K2 series models support a 262,144-token context window.\nDear Kimi Users, starting October 31, 2026, K2 series models will no longer be available to newly registered users; existing users are not affected. We plan to retire all K2 series models by the end of December 2026, please prepare your migration in advance.\nModel\tBase tokens\tPrompt caching\nName\tInput\tOutput\tCached Input\nkimi-k2.7-code\t$0.95 / MTok\t$4.00 / MTok\t$0.19 / MTok\nkimi-k2.7-code-highspeed\t$1.90 / MTok\t$8.00 / MTok\t$0.38 / MTok\nkimi-k2.6\t$0.95 / MTok\t$4.00 / MTok\t$0.16 / MTok"
+}

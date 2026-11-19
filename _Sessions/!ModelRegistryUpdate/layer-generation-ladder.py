@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 """
-layer-depth-ladder.py - Layer the append-only depth ladder into model-registry.json (MDLRGUP-MDLINVNTRY-SP01 FR-01 to FR-03).
+layer-generation-ladder.py - Layer the append-only generation ladder into model-registry.json (MDLRGUP-MDLINVNTRY-SP01 FR-01 to FR-03).
 
 Edges (x dominates y):
   E1        strict    same provider and point version, lower uc_class number
   E2        weak      same provider, tier, and series; immediate predecessor by release_date (specialized models have none)
   E3        strict    Epoch ECI 95% intervals do not overlap: ci_low(x) > ci_high(y)
   E5        tie       no Epoch score; same provider, point version, and tier sibling with a score
-  E6        estimate  no score, no E5 sibling, rung D1: D(sibling) - (tier(x) - tier(sibling)) from the nearest-tier sibling of the same point version
-  E1m, E4m  strict    manual deeper_than entries {model, kind, source, accessed, statement}
+  E6        estimate  no score, no E5 sibling, rung G01: G(sibling) - (tier(x) - tier(sibling)) from the nearest-tier sibling of the same point version
+  E1m, E4m  strict    manual higher_than entries {model, kind, source, accessed, statement}
 Direct conflict (x > y and y > x): precedence E4 > E1 > E3, the lower edge is dropped and reported. Any other cycle aborts without writing.
 
 Modes:
-  default      insert-only: models without depth, and estimated models that gained evidence, get floor capped by their dominators; existing rungs never move
-  --bootstrap  one-time fixed-point layering of all models; refused when any depth exists
+  default      insert-only: models without generation, and estimated models that gained evidence, get floor capped by their dominators; existing rungs never move
+  --bootstrap  one-time fixed-point layering of all models; refused when any generation exists
 
 Usage:
-  python layer-depth-ladder.py --registry-file <model-registry.json> [--match-file <[DATE]_Epoch-ECI-Match.json>] [--log-file <path>] [--bootstrap] [--dry-run]
+  python layer-generation-ladder.py --registry-file <model-registry.json> [--match-file <[DATE]_Epoch-ECI-Match.json>] [--log-file <path>] [--bootstrap] [--dry-run]
 """
 import argparse, importlib.util, json, re, sys
 from pathlib import Path
@@ -89,6 +89,12 @@ def series_of(provider, model_id):
   if SPECIALIZED.search(model_id): retVal = "specialized:" + model_id
   return retVal
 
+# release_date is YYYY-MM-DD or YYYY-MM (day unknown): the earliest and latest possible day order models; a month-only date is a predecessor only of dates in a later month
+def release_bounds(release_date):
+  value = release_date or "9999-12-31"
+  if len(value) == 7: return value + "-01", value + "-31"
+  return value, value
+
 # Build the layering view of every text model that is not retired; score and interval come from the match file when present, else from the registry
 def load_models(registry, match_data):
   match_by_id = {}
@@ -106,13 +112,15 @@ def load_models(registry, match_data):
     else:
       interval = entry.get("eci_ci") or [None, None]
       score, ci_low, ci_high = entry.get("eci_score"), interval[0], interval[1]
+    release_first, release_last = release_bounds(entry.get("release_date"))
     retVal.append({
       "id": short_id, "entry": entry, "provider": entry["provider"], "tier": tier_of(entry.get("uc_class")),
-      "release_date": entry.get("release_date") or "9999-12-31", "score": score, "ci_low": ci_low, "ci_high": ci_high,
+      "release_date": entry.get("release_date") or "9999-12-31", "release_first": release_first, "release_last": release_last,
+      "score": score, "ci_low": ci_low, "ci_high": ci_high,
       "point_version": entry.get("point_version") or point_version(entry["provider"], short_id), "series": series_of(entry["provider"], short_id),
-      "depth": entry.get("depth"), "estimated": bool(entry.get("depth_estimated")),
+      "generation": entry.get("generation"), "estimated": bool(entry.get("generation_estimated")),
     })
-  retVal.sort(key=lambda model: (model["release_date"], model["id"]))
+  retVal.sort(key=lambda model: (model["release_first"], model["id"]))
   return retVal
 
 # ----------------------------------------- END: Model attributes --------------------------------------------------------------
@@ -120,7 +128,7 @@ def load_models(registry, match_data):
 
 # ----------------------------------------- START: Edges -----------------------------------------------------------------------
 
-# Validate deeper_than entries; returns (valid edges [(x, y, kind)], rejection messages)
+# Validate higher_than entries; returns (valid edges [(x, y, kind)], rejection messages)
 def validate_manual_edges(models):
   ids = set()
   for model in models:
@@ -128,7 +136,7 @@ def validate_manual_edges(models):
   valid = []
   rejected = []
   for model in models:
-    for item in model["entry"].get("deeper_than", []) or []:
+    for item in model["entry"].get("higher_than", []) or []:
       target = base_id(str(item.get("model", "")))
       problem = None
       for field in MANUAL_FIELDS:
@@ -164,7 +172,7 @@ def build_edges(models, manual_edges):
     if not x["series"].startswith("specialized"):
       predecessor = None
       for y in models:
-        if y["provider"] == x["provider"] and y["tier"] == x["tier"] and y["series"] == x["series"] and y["release_date"] < x["release_date"]: predecessor = y
+        if y["provider"] == x["provider"] and y["tier"] == x["tier"] and y["series"] == x["series"] and y["release_last"] < x["release_first"]: predecessor = y
       if predecessor is not None:
         weak[x["id"]].append((predecessor["id"], "E2"))
         counts["E2"] += 1
@@ -285,7 +293,7 @@ def bootstrap_layering(models, strict, weak, ties):
     evidence[x["id"]] = reason
   return rung, evidence, estimated, converged
 
-# Insert models without depth in dependency order; existing rungs never move
+# Insert models without generation in dependency order; existing rungs never move
 def insert_layering(models, pending_ids, rung, strict, weak, ties):
   placed = []
   pending = []
@@ -319,7 +327,7 @@ def insert_layering(models, pending_ids, rung, strict, weak, ties):
       evidence = f"{evidence}; squeezed by {cap_evidence}"
     rung[ready["id"]] = value
     if is_estimated: estimated_ids[ready["id"]] = True
-    placed.append({"model": ready, "depth": value, "evidence": evidence, "estimated": is_estimated, "squeezed": squeezed, "floor": floor})
+    placed.append({"model": ready, "generation": value, "evidence": evidence, "estimated": is_estimated, "squeezed": squeezed, "floor": floor})
   return placed
 
 # Report existing rungs that no longer satisfy an edge between two placed models (report only, never rewrite)
@@ -329,10 +337,10 @@ def check_consistency(models, rung, strict, weak, ties):
     x_id = x["id"]
     if x_id not in rung: continue
     for (y_id, kind) in strict[x_id]:
-      if y_id in rung and not rung[x_id] > rung[y_id]: retVal.append(f"{x_id} D{rung[x_id]} {kind}> {y_id} D{rung[y_id]}")
+      if y_id in rung and not rung[x_id] > rung[y_id]: retVal.append(f"{x_id} G{rung[x_id]:02d} {kind}> {y_id} G{rung[y_id]:02d}")
     for edges in (weak, ties):
       for (y_id, kind) in edges[x_id]:
-        if y_id in rung and not rung[x_id] >= rung[y_id]: retVal.append(f"{x_id} D{rung[x_id]} {kind}>= {y_id} D{rung[y_id]}")
+        if y_id in rung and not rung[x_id] >= rung[y_id]: retVal.append(f"{x_id} G{rung[x_id]:02d} {kind}>= {y_id} G{rung[y_id]:02d}")
   return retVal
 
 # ----------------------------------------- END: Layering ----------------------------------------------------------------------
@@ -349,22 +357,22 @@ def load_formatter():
 
 def layer_registry(registry, match_data, bootstrap, logger):
   """
-  Layer the registry in place (entries receive depth, depth_evidence, depth_estimated). Returns a result dict.
+  Layer the registry in place (entries receive generation, generation_evidence, generation_estimated). Returns a result dict.
 
   Example result: {"ok": True, "inserted": 2, "squeezed": 1, "top": 12, "rung": {"gpt-4o": 1, ...}, "evidence": {...}, "estimated": {...}}
   """
   retVal = {"ok": False, "inserted": 0, "squeezed": 0, "top": 0, "rung": {}, "evidence": {}, "estimated": {}}
   models = load_models(registry, match_data)
-  with_depth = 0
+  with_generation = 0
   for model in models:
-    if model["depth"] is not None: with_depth += 1
-  if bootstrap and with_depth > 0:
-    logger.log(f"  ERROR: --bootstrap refused: {plural(with_depth, 'model')} already carry depth (MDLRGUP-MDLINVNTRY-IG-02).")
+    if model["generation"] is not None: with_generation += 1
+  if bootstrap and with_generation > 0:
+    logger.log(f"  ERROR: --bootstrap refused: {plural(with_generation, 'model')} already carry generation (MDLRGUP-MDLINVNTRY-IG-02).")
     return retVal
   manual_edges, rejected = validate_manual_edges(models)
   strict, weak, ties, counts = build_edges(models, manual_edges)
   contradictions = resolve_direct_conflicts(strict)
-  logger.log(f"  {plural(len(models), 'model')}, {with_depth} with depth.")
+  logger.log(f"  {plural(len(models), 'model')}, {with_generation} with generation.")
   logger.log(f"  Manual edges: {len(manual_edges)} valid, {len(rejected)} rejected.")
   for message in rejected:
     logger.log(f"    {message}")
@@ -372,7 +380,7 @@ def layer_registry(registry, match_data, bootstrap, logger):
   for message in contradictions:
     logger.log(f"  {message}")
   if rejected:
-    logger.log(f"  ERROR: {plural(len(rejected), 'rejected deeper_than item')}; nothing written (MDLRGUP-MDLINVNTRY-IG-03).")
+    logger.log(f"  ERROR: {plural(len(rejected), 'rejected higher_than item')}; nothing written (MDLRGUP-MDLINVNTRY-IG-03).")
     return retVal
   cycle = find_cycle(models, strict, weak, ties)
   if cycle:
@@ -389,21 +397,21 @@ def layer_registry(registry, match_data, bootstrap, logger):
       return retVal
     for model in sorted(models, key=lambda item: (-rung[item["id"]], item["id"])):
       marker = "*" if model["id"] in estimated else ""
-      logger.log(f"  D{rung[model['id']]}{marker:<1} {model['id']:<30} {evidence[model['id']]}")
+      logger.log(f"  G{rung[model['id']]:02d}{marker:<1} {model['id']:<30} {evidence[model['id']]}")
     for model in models:
       entry = model["entry"]
-      entry["depth"], entry["depth_evidence"] = rung[model["id"]], evidence[model["id"]]
-      if model["id"] in estimated: entry["depth_estimated"] = True
-      else: entry.pop("depth_estimated", None)
+      entry["generation"], entry["generation_evidence"] = rung[model["id"]], evidence[model["id"]]
+      if model["id"] in estimated: entry["generation_estimated"] = True
+      else: entry.pop("generation_estimated", None)
     retVal.update({"ok": True, "inserted": len(models), "top": max(rung.values()), "rung": rung, "evidence": evidence, "estimated": estimated})
-    retVal["summary"] = f"OK: {plural(len(models), 'model')} layered, top D{retVal['top']}, {len(estimated)} estimated, 0 cycles."
+    retVal["summary"] = f"OK: {plural(len(models), 'model')} layered, top G{retVal['top']:02d}, {len(estimated)} estimated, 0 cycles."
     return retVal
   rung = {}
   pending_ids = {}
   for model in models:
     gained_evidence = model["estimated"] and (model["score"] is not None or ties[model["id"]])
-    if model["depth"] is None or gained_evidence: pending_ids[model["id"]] = True
-    else: rung[model["id"]] = model["depth"]
+    if model["generation"] is None or gained_evidence: pending_ids[model["id"]] = True
+    else: rung[model["id"]] = model["generation"]
   inconsistent = check_consistency(models, rung, strict, weak, ties)
   logger.log(f"  {plural(len(pending_ids), 'model')} to insert.")
   placed = insert_layering(models, pending_ids, rung, strict, weak, ties)
@@ -414,13 +422,13 @@ def layer_registry(registry, match_data, bootstrap, logger):
     if item["squeezed"]:
       squeezed += 1
       dominator_id = item["squeezed"].split(" ")[-1]
-      logger.log(f"  [ {index} / {len(placed)} ] {model['id']}: D{item['depth']}{marker}, squeezed by {item['squeezed']} (D{rung[dominator_id]}); floor was D{item['floor']}")
+      logger.log(f"  [ {index} / {len(placed)} ] {model['id']}: G{item['generation']:02d}{marker}, squeezed by {item['squeezed']} (G{rung[dominator_id]:02d}); floor was G{item['floor']:02d}")
     else:
-      logger.log(f"  [ {index} / {len(placed)} ] {model['id']}: D{item['depth']}{marker} ({item['evidence']})")
-    if model["estimated"] and not item["estimated"]: logger.log(f"    estimate replaced by evidence: was D{model['depth']}*")
-    entry["depth"], entry["depth_evidence"] = item["depth"], item["evidence"]
-    if item["estimated"]: entry["depth_estimated"] = True
-    else: entry.pop("depth_estimated", None)
+      logger.log(f"  [ {index} / {len(placed)} ] {model['id']}: G{item['generation']:02d}{marker} ({item['evidence']})")
+    if model["estimated"] and not item["estimated"]: logger.log(f"    estimate replaced by evidence: was G{model['generation']:02d}*")
+    entry["generation"], entry["generation_evidence"] = item["generation"], item["evidence"]
+    if item["estimated"]: entry["generation_estimated"] = True
+    else: entry.pop("generation_estimated", None)
   inconsistent_ids = {}
   for message in inconsistent:
     inconsistent_ids[message.split(" ")[0]] = True
@@ -435,18 +443,18 @@ def layer_registry(registry, match_data, bootstrap, logger):
   return retVal
 
 def main():
-  parser = argparse.ArgumentParser(description="Layer the append-only depth ladder into model-registry.json")
+  parser = argparse.ArgumentParser(description="Layer the append-only generation ladder into model-registry.json")
   parser.add_argument("--registry-file", type=Path, required=True, help="Path to model-registry.json")
   parser.add_argument("--match-file", type=Path, default=None, help="Run Epoch match file ([DATE]_Epoch-ECI-Match.json); registry eci_score / eci_ci are used when omitted")
   parser.add_argument("--log-file", type=Path, default=None, help="Write the log to this file as well")
-  parser.add_argument("--bootstrap", action="store_true", help="One-time layering of all models; refused when any depth exists")
+  parser.add_argument("--bootstrap", action="store_true", help="One-time layering of all models; refused when any generation exists")
   parser.add_argument("--dry-run", action="store_true", help="Compute and log, write nothing")
   args = parser.parse_args()
   logger = Logger()
   registry = json.loads(args.registry_file.read_text(encoding="utf-8"))
   match_data = json.loads(args.match_file.read_text(encoding="utf-8")) if args.match_file else None
   match_name = args.match_file.name if args.match_file else "registry eci_ci"
-  logger.log(f"Layering depth ladder ({'bootstrap' if args.bootstrap else 'insert-only'}) from {args.registry_file.name} {registry.get('_version')} and {match_name}...")
+  logger.log(f"Layering generation ladder ({'bootstrap' if args.bootstrap else 'insert-only'}) from {args.registry_file.name} {registry.get('_version')} and {match_name}...")
   result = layer_registry(registry, match_data, args.bootstrap, logger)
   if result["ok"] and not args.dry_run:
     formatter = load_formatter()
@@ -454,7 +462,7 @@ def main():
     logger.log(f"  Wrote {args.registry_file}.")
   elif result["ok"]:
     logger.log("  Dry run: nothing written.")
-  logger.log(result["summary"] if result["ok"] else "FAIL: depth ladder not layered.")
+  logger.log(result["summary"] if result["ok"] else "FAIL: generation ladder not layered.")
   logger.write(args.log_file)
   if not result["ok"]: sys.exit(1)
 

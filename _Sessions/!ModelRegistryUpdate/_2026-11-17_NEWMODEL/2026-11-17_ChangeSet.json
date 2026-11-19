@@ -1,0 +1,26 @@
+{
+  "_run_mode": "NEWMODEL",
+  "_note": "DeepSeek and Kimi (Moonshot) onboarding, MDLRGUP-MDLPRVEXT-IN01. Vendor pages read with Playwright 2026-11-17; no authenticated API test (no keys).",
+  "newRegistryIds": ["deepseek-flash", "deepseek-v4-pro", "kimi-k3.1-pro-highspeed", "kimi-k3.1-pro", "kimi-k3", "kimi-k2.7-code-highspeed", "kimi-k2.7-code", "kimi-k2.6"],
+  "newPricingIds": ["deepseek-flash", "deepseek-v4-pro", "kimi-k3.1-pro-highspeed", "kimi-k3.1-pro", "kimi-k3", "kimi-k2.7-code-highspeed", "kimi-k2.7-code", "kimi-k2.6"],
+  "changedPricingIds": [],
+  "contextChecks": [
+    {"model_id": "deepseek-flash", "vendor_context_window": 1000000, "source": "https://api-docs.deepseek.com/quick_start/pricing (printed as 1M)", "checked": "2026-11-17"},
+    {"model_id": "deepseek-v4-pro", "vendor_context_window": 1000000, "source": "https://api-docs.deepseek.com/quick_start/pricing (printed as 1M)", "checked": "2026-11-17"},
+    {"model_id": "kimi-k3.1-pro-highspeed", "vendor_context_window": 1048576, "source": "https://platform.kimi.ai/docs/pricing/chat (K3 series prose)", "checked": "2026-11-17"},
+    {"model_id": "kimi-k3.1-pro", "vendor_context_window": 1048576, "source": "https://platform.kimi.ai/docs/pricing/chat (K3 series prose)", "checked": "2026-11-17"},
+    {"model_id": "kimi-k3", "vendor_context_window": 1048576, "source": "https://platform.kimi.ai/docs/pricing/chat (K3 series prose)", "checked": "2026-11-17"},
+    {"model_id": "kimi-k2.7-code-highspeed", "vendor_context_window": 262144, "source": "https://platform.kimi.ai/docs/pricing/chat (K2 series prose)", "checked": "2026-11-17"},
+    {"model_id": "kimi-k2.7-code", "vendor_context_window": 262144, "source": "https://platform.kimi.ai/docs/pricing/chat (K2 series prose)", "checked": "2026-11-17"},
+    {"model_id": "kimi-k2.6", "vendor_context_window": 262144, "source": "https://platform.kimi.ai/docs/pricing/chat (K2 series prose)", "checked": "2026-11-17"}
+  ],
+  "contextUnverified": [],
+  "_reconciled_at": "2026-11-17T16:40:00Z",
+  "_registry_version_after": "1.13.1",
+  "_pricing_last_updated_after": "2026-11-17",
+  "corrections": [
+    {"model_id": "deepseek-flash", "field": "release_date", "old": "2026-09-10", "new": "2026-10-17", "source": "https://api-docs.deepseek.com/updates/"},
+    {"model_id": "deepseek-flash", "field": "max_output", "old": null, "new": 384000, "source": "https://api-docs.deepseek.com/quick_start/pricing"},
+    {"model_id": "deepseek-v4-pro", "field": "max_output", "old": null, "new": 384000, "source": "https://api-docs.deepseek.com/quick_start/pricing"}
+  ]
+}

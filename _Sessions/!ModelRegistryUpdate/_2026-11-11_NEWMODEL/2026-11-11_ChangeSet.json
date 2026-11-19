@@ -8,6 +8,21 @@
   "changedPricingIds": [],
   "changedPricingDetails": {},
   "ec9_corrections": [],
+  "contextChecks": [
+    {"model_id": "gpt-6-cyber", "vendor_context_window": 1050000, "source": "https://developers.openai.com/api/docs/models/gpt-6-cyber", "checked": "2026-11-16"},
+    {"model_id": "gpt-5.4", "vendor_context_window": 1050000, "source": "https://developers.openai.com/api/docs/models/gpt-5.4", "checked": "2026-11-16"},
+    {"model_id": "gpt-5.4-pro", "vendor_context_window": 1050000, "source": "https://developers.openai.com/api/docs/models/gpt-5.4-pro", "checked": "2026-11-16"},
+    {"model_id": "gpt-5.4-mini", "vendor_context_window": 400000, "source": "https://developers.openai.com/api/docs/models/gpt-5.4-mini", "checked": "2026-11-16"},
+    {"model_id": "gpt-5.4-nano", "vendor_context_window": 400000, "source": "https://developers.openai.com/api/docs/models/gpt-5.4-nano", "checked": "2026-11-16"},
+    {"model_id": "gpt-5.2", "vendor_context_window": 400000, "source": "https://developers.openai.com/api/docs/models/gpt-5.2", "checked": "2026-11-16"},
+    {"model_id": "gpt-5.2-pro", "vendor_context_window": 400000, "source": "https://developers.openai.com/api/docs/models/gpt-5.2-pro", "checked": "2026-11-16"},
+    {"model_id": "gpt-5.1", "vendor_context_window": 400000, "source": "https://developers.openai.com/api/docs/models/gpt-5.1", "checked": "2026-11-16"},
+    {"model_id": "gpt-5", "vendor_context_window": 400000, "source": "https://developers.openai.com/api/docs/models/gpt-5", "checked": "2026-11-16"},
+    {"model_id": "gpt-5-mini", "vendor_context_window": 400000, "source": "https://developers.openai.com/api/docs/models/gpt-5-mini", "checked": "2026-11-16"},
+    {"model_id": "gpt-5-nano", "vendor_context_window": 400000, "source": "https://developers.openai.com/api/docs/models/gpt-5-nano", "checked": "2026-11-16"},
+    {"model_id": "gpt-5-pro", "vendor_context_window": 400000, "source": "https://developers.openai.com/api/docs/models/gpt-5-pro", "checked": "2026-11-16"}
+  ],
+  "contextUnverified": ["claude-fable-5-2", "claude-mythos-5-2", "gemini-4-carbon"],
   "deferred": [
     {"model_id": "glm-ocr", "reason": "OCR models deferred by user 2026-11-11 (DD-15); release_date 2026-02-02 correction and file-based limits not applied"},
     {"model_id": "chat-latest", "reason": "rolling alias, no pinned identity"}
