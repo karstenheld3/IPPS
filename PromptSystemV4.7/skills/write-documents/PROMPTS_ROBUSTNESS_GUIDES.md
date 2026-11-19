@@ -20,7 +20,7 @@ A well-structured prompt sequence with precise objectives, clean state flow, and
 
 ## 2. The Hang-Safety Clause
 
-Every implementation prompt (any prompt that runs commands) MUST include a hang-safety clause in the Constraints section. The clause is one line that points to the two sources; it never restates them. Generic rules (whitelist, supervised runner, monitoring, hang verdict, hard bans) live in `agent-behavior.md` Terminal Hang Prevention; project bans and expected runtimes live in the robustness card. No command gets a time limit: a command that shows progress runs to its end, and the agent ends a command only on a hang verdict. The prompt carries no limit and no kill text.
+Every implementation prompt (any prompt that runs commands) MUST include a hang-safety clause in the Constraints section. The clause is one line that points to the two sources; it never restates them. Generic rules (inline vs runner, supervised runner, monitoring, hang verdict, hard bans) live in `agent-behavior.md` Terminal Hang Prevention; project bans and expected runtimes live in the robustness card. No command gets a time limit: a command that shows progress runs to its end, and the agent ends a command only on a hang verdict. The prompt carries no limit and no kill text.
 
 ### Clause Template
 

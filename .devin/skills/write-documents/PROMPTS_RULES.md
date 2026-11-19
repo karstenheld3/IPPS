@@ -1371,9 +1371,9 @@ The prompt count must match the effort budget. A task that requires 8 prompts at
 Verifiable from artifact: check frontmatter for `intended_model`, `context_window_size`, and `effort` keys. Check that prompt count is consistent with the effort level (low effort = more prompts, high effort = fewer prompts). Check against the `MODEL_INVENTORY.md` row of `intended_model`:
 - `intended_model` resolves to a row, or the commentary states "model not in MODEL_INVENTORY.md"
 - `context_window_size` matches the Context column; `effort` is listed in the Efforts column (`L M H X MX`)
-- Opening commentary states model row, Depth, effort, effective rung (Depth shifted by effort), explicitness level, Items, task HWH (Human Work Hours), prompt count, and estimated cost
+- Opening commentary states model row, Generation, effort, effective rung (Generation shifted by effort), explicitness level, Items, task HWH (Human Work Hours), prompt count, and estimated cost
 - No implementation prompt carries more than 1 HWH, more numbered items than Items, or more changed files than max_files (Items 8: 6, Items 6: 3, Items 5 or less: 2)
-- Instructions are at least as explicit as the effective rung's level (`D1-D3` keystroke, `D4-D6` step, `D7-D9` outcome plus named files, `D10+` goal)
+- Instructions are at least as explicit as the effective rung's level (`G01-G03` keystroke, `G04-G06` step, `G07-G09` outcome plus named files, `G10+` goal)
 - Prompt count is not below `max(ceil(expanded_items / Items), ceil(total_files / max_files), ceil(task_HWH / 1))` (overloaded) and not above twice that value (fragmented)
 - Checkpoints follow the checkpoint interval of Items (8: every 3, 6: every 2, 5 or less: every prompt); rows with Notes `scope guard strict` carry the strict scope guard in every implementation prompt (`PROMPTS_GUIDES.md` Section 1g step 8)
 

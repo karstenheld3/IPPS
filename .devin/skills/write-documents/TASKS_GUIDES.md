@@ -10,7 +10,7 @@ Decide who executes each task or step. Classification determines which sizing ru
 2. Executed as one prompt of a prompts file: estimate HWH (Section 2) and size to the executing model (Section 3)
 3. STRUT step executed as one prompt: same as 2. STRUT steps not executed as prompts keep the minute-based scope calibration in @skills:promptsystem `PROMPTSYSTEM_EDIRD.md`
 
-If the executing model is unknown, size for the model named in the session NOTES.md model switching section; if none is named, size for an outcome-level row (`D7-D9`, Items 6, 3 files per prompt in `MODEL_INVENTORY.md`).
+If the executing model is unknown, size for the model named in the session NOTES.md model switching section; if none is named, size for an outcome-level row (`G07-G09`, Items 6, 3 files per prompt in `MODEL_INVENTORY.md`).
 
 ## 2. Estimate HWH
 
@@ -33,10 +33,10 @@ Common mistake: estimating agent time instead of human time. HWH stays the same 
 
 Applies to classification 2 and 3 (Section 1).
 
-1. Look up the executing model's row in `MODEL_INVENTORY.md`: Depth, Items, and Notes. Shift Depth by the chosen effort to the effective rung and read its explicitness level and max_files (`MODEL_INVENTORY.md` Section 2)
+1. Look up the executing model's row in `MODEL_INVENTORY.md`: Generation, Items, and Notes. Shift Generation by the chosen effort to the effective rung and read its explicitness level and max_files (`MODEL_INVENTORY.md` Section 2)
 2. Check each task or step: `Est <= 1 HWH`, numbered instructions after explicitness expansion <= Items, changed files <= max_files
 3. If a check fails, split the task into tasks that each pass all three checks. Split along files first, then along instruction groups
-4. Write task instructions at the explicitness level of the effective rung; a shallower rung needs more, smaller items, not longer prose
+4. Write task instructions at the explicitness level of the effective rung; a lower rung needs more, smaller items, not longer prose
 
 ## 4. Estimate AWH
 

@@ -111,7 +111,7 @@ effort: high
 prompt_system: IPPS
 ---
 
-<!-- Budget (PROMPTS_GUIDES.md Section 1g): model row claude-sonnet-5, depth D8, effort high, effective rung D8, explicitness outcome, Items 6, task 1.0 HWH, 2 implementation prompts, estimated cost $3.60 -->
+<!-- Budget (PROMPTS_GUIDES.md Section 1g): model row claude-sonnet-5, generation G08, effort high, effective rung G08, explicitness outcome, Items 6, task 1.0 HWH, 2 implementation prompts, estimated cost $3.60 -->
 
 ## Prompt 1 - Security analysis
 

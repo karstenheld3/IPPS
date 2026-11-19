@@ -47,7 +47,7 @@ Effort defines two things:
 
 The model name, context window size, and effort level together determine how many prompts a task needs. A task that requires 8 prompts at low effort on a model with 8K context may require 2 prompts at high effort on a model with 200K context.
 
-When partitioning, match the prompt count to the effort budget. Mismatched effort and prompt count produces either overloaded prompts (low effort, too many steps per prompt) or underutilized prompts (high effort, unnecessary fragmentation). The frontmatter `effort` and `context_window_size` keys encode this budget (PRMT-SC-05). @skills:llm-tools `MODEL_INVENTORY.md` holds the data: depth rung, Items, context window, supported effort levels, scope guard, and price per model; one prompt carries at most 1 HWH (Human Work Hours). Section 1g turns this data into prompt count, checkpoints, and scope guard.
+When partitioning, match the prompt count to the effort budget. Mismatched effort and prompt count produces either overloaded prompts (low effort, too many steps per prompt) or underutilized prompts (high effort, unnecessary fragmentation). The frontmatter `effort` and `context_window_size` keys encode this budget (PRMT-SC-05). @skills:llm-tools `MODEL_INVENTORY.md` holds the data: generation rung, Items, context window, supported effort levels, scope guard, and price per model; one prompt carries at most 1 HWH (Human Work Hours). Section 1g turns this data into prompt count, checkpoints, and scope guard.
 
 ## 1d. Planning Document Anchor
 
@@ -108,20 +108,20 @@ Load assessment is a judgment for the writing agent, made per sequence. The fron
 
 Size the sequence to the executing model with the data in `MODEL_INVENTORY.md`. Task HWH comes from the planning document (`TASKS_GUIDES.md` Section 2). Follow the steps in order:
 
-1. Resolve `intended_model` to a `MODEL_INVENTORY.md` row by longest prefix. Not listed: plan as `D1` (keystroke-level, Items 4) and state "model not in MODEL_INVENTORY.md" in the file commentary
+1. Resolve `intended_model` to a `MODEL_INVENTORY.md` row by longest prefix. Not listed: plan as `G01` (keystroke-level, Items 4) and state "model not in MODEL_INVENTORY.md" in the file commentary
 2. Set `context_window_size` from the Context column (`1000K` becomes `1M`, `200K` becomes `200k`). Devin-only models without a value: keep the value given by the user or omit the key
 3. Check that `effort` is listed in the Efforts column (`L M H X MX`). If not listed, choose the nearest listed level and state the change in the commentary. Notes `adaptive`: do not plan Medium for structured-data work
 4. Take task HWH as the sum of the `Est: [N] HWH` values of the TASKS items the sequence covers. STRUT steps or tasks without `Est`: estimate each step with the buckets in `TASKS_GUIDES.md` Section 2 and state the estimates in the commentary
-5. Read the effective rung: Depth shifted by effort (`MODEL_INVENTORY.md` Section 2: `H`, `X`, `MX` no shift; `M` no shift except adaptive-thinking models one lower; `L` one lower; `-` two lower). The effective rung sets the explicitness level and the items per outcome unit: `D10+` goal-level 0.5, `D7-D9` outcome plus named files 1, `D4-D6` step-level 2.5, `D1-D3` keystroke-level 4. `expanded_items` = outcome units times that factor
+5. Read the effective rung: Generation shifted by effort (`MODEL_INVENTORY.md` Section 2: `H`, `X`, `MX` no shift; `M` no shift except adaptive-thinking models one lower; `L` one lower; `-` two lower). The effective rung sets the explicitness level and the items per outcome unit: `G10+` goal-level 0.5, `G07-G09` outcome plus named files 1, `G04-G06` step-level 2.5, `G01-G03` keystroke-level 4. `expanded_items` = outcome units times that factor
 6. Count implementation prompts: `prompt_count = max(ceil(expanded_items / Items), ceil(total_files / max_files), ceil(task_HWH / 1))`. Items from the row (measured `[n]m` or the default of the effective rung); max_files and checkpoint interval from Items (Items 8: 6 files, every 3 prompts; Items 6: 3 files, every 2; Items 5 or less: 2 files, every prompt). If the count exceeds 10, continue in the next prompts file (Section 1e, PRMT-SC-04)
 7. Insert a `/verify` + `/fix` checkpoint after every checkpoint interval of implementation prompts (PRMT-SQ-04), plus the final checkpoint
 8. Notes `scope guard strict`: add this scope guard to every implementation prompt: "Do ONLY the numbered items below. Do not refactor, rename, add tests, or touch files not listed. Report any item you could not complete as NOT DONE". Otherwise list the files each implementation prompt may change
 9. Check context fit: input read by one prompt stays at or below 50% of the Context value. Long-context benchmarks show effective context of about half the claimed window for most tested models
-10. State in the opening commentary: model row, Depth, effort, effective rung, explicitness level, Items, task HWH, prompt count, estimated cost (`(0.8 * In USD + 0.2 * Out USD) * tokens_per_prompt / 1M * prompt_count`)
+10. State in the opening commentary: model row, Generation, effort, effective rung, explicitness level, Items, task HWH, prompt count, estimated cost (`(0.8 * In USD + 0.2 * Out USD) * tokens_per_prompt / 1M * prompt_count`)
 
 Which limit drives the count depends on the model. Example with task 3 HWH, 18 outcome units, 7 files, High effort, about 1M tokens per prompt:
-- `claude-opus-5` (`D9`, outcome-level, Items 6, 3 files): `max(ceil(18/6), ceil(7/3), 3)` = 3 implementation prompts, checkpoint after prompt 2, about $27. Items, files, and HWH agree
-- `glm-5.2` (`D6`, step-level, Items 5, 2 files, scope guard strict): expanded 18 * 2.5 = 45; `max(9, 4, 3)` = 9 prompts, checkpoint after every prompt, strict scope guard, about $18. Explicitness drives the count
+- `claude-opus-5` (`G09`, outcome-level, Items 6, 3 files): `max(ceil(18/6), ceil(7/3), 3)` = 3 implementation prompts, checkpoint after prompt 2, about $27. Items, files, and HWH agree
+- `glm-5.2` (`G06`, step-level, Items 5, 2 files, scope guard strict): expanded 18 * 2.5 = 45; `max(9, 4, 3)` = 9 prompts, checkpoint after every prompt, strict scope guard, about $18. Explicitness drives the count
 
 Common mistake: sizing by effort level alone. Two models at the same effort can sit four rungs apart and need prompts of a different explicitness level.
 
@@ -609,7 +609,7 @@ Before considering the prompts file complete:
 - [ ] Implementation prompts include idempotency constraint: re-running must not corrupt state or waste cost (PRMT-SC-03)
 - [ ] Max 10 implementation prompts per file; longer sequences continue in the next numbered file, each ending with a final checkpoint (PRMT-SC-04)
 - [ ] Frontmatter specifies effort level; prompt count matches effort budget (PRMT-SC-05)
-- [ ] Prompt count, checkpoints, and scope guard follow Section 1g; opening commentary states model row, Depth, effective rung, explicitness level, Items, task HWH, prompt count, cost (PRMT-SC-05)
+- [ ] Prompt count, checkpoints, and scope guard follow Section 1g; opening commentary states model row, Generation, effective rung, explicitness level, Items, task HWH, prompt count, cost (PRMT-SC-05)
 - [ ] Prompt sequences from planning documents reference the document by filename and step ID (PRMT-SC-06)
 - [ ] Workflow invocations grouped by assessed load against the run budget; no prompt overloaded with several heavy workflows, none underloaded with one light workflow; grouping rationale stated in commentary (PRMT-SC-07)
 - [ ] Implementation prompts include execution authority constraint: "Execute without asking for confirmation" (PRMT-EX-03)

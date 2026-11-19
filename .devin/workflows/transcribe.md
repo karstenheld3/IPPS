@@ -24,6 +24,8 @@ Convert Portable Document Format (PDF) files and web pages to complete markdown 
 - Ensure complete file is stitched together and file path is noted
 - Keep source images for verification
 - Run `/verify` after transcription complete
+- `[SOURCE_FOLDER]/_markdown/` (folder of the original PDF; web page: working folder) contains ONLY the final stitched `[DocName].md`. Page files NEVER go there
+- Page files live in `[WORKING_FOLDER]/_agentwork/.tmp_pages_[DocName]/` and are deleted once the stitched final file is verified. Keep them only while the final file is not yet stitched and verified
 
 ## Prerequisites
 
@@ -70,7 +72,7 @@ $skill = "[AGENT_FOLDER]/skills/llm-tools/transcription"
 # Single page transcription
 & $venv "$skill/transcribe-image-to-markdown.py" `
     --input-file "../.tools/_pdf_to_jpg_converted/[NAME]/page_001.jpg" `
-    --output-file "[SESSION_FOLDER]/[DocName]_page001.md" `
+    --output-file "[WORKING_FOLDER]/_agentwork/.tmp_pages_[DocName]/page001.md" `
     --keys-file "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt" `
     --model gpt-5-mini `
     --workers 4
@@ -78,7 +80,7 @@ $skill = "[AGENT_FOLDER]/skills/llm-tools/transcription"
 # Batch mode (entire folder, multiple pages)
 & $venv "$skill/transcribe-image-to-markdown.py" `
     --input-folder "../.tools/_pdf_to_jpg_converted/[NAME]/" `
-    --output-folder "[SESSION_FOLDER]/_markdown/[DocName]/" `
+    --output-folder "[WORKING_FOLDER]/_agentwork/.tmp_pages_[DocName]/" `
     --keys-file "[WORKSPACE_FOLDER]\..\.tools\.api-keys.txt" `
     --model gpt-5-mini `
     --initial-candidates 1 `
@@ -215,8 +217,8 @@ After batch transcription completes, merge individual page files into single out
 For TRANSCRIBE_SCRIPT + TRANSCRIBE_MULTI, stitching happens inline during the context-specific process.
 
 ```powershell
-$folder = "[OUTPUT_FOLDER]/_markdown/[DocName]"
-$output = "[OUTPUT_FOLDER]/[DocName].md"  # No suffix like _COMPLETE
+$folder = "[WORKING_FOLDER]/_agentwork/.tmp_pages_[DocName]"
+$output = "[SOURCE_FOLDER]/_markdown/[DocName].md"  # No suffix like _COMPLETE; create _markdown/ if missing
 $files = Get-ChildItem $folder -Filter "*.md" | Where-Object { $_.Name -notlike "_*" } | Sort-Object Name
 $content = @()
 $pageNum = 1
@@ -270,7 +272,7 @@ If 3 consecutive attempts fail on a page or chunk:
 ## Verification
 
 Run `/verify` to check:
-1. Compare page count
+1. Compare page count (final file page markers vs. page files)
 2. Check all sections present
 3. Verify all figures have BOTH:
    - ASCII art block (` ```ascii `)
@@ -281,17 +283,32 @@ Run `/verify` to check:
 5. Cross-check text accuracy
 6. Validate XML tags are well-formed
 
+## Cleanup of Unstitched Pages
+
+Goal: no unstitched page files remain after the final file is complete.
+
+1. Condition: final file `[DocName].md` exists (Step 3), page count equals page file count, and `/verify` passed
+2. Delete the page folder `[WORKING_FOLDER]/_agentwork/.tmp_pages_[DocName]/`; `[SOURCE_FOLDER]/_markdown/` keeps only the final file
+3. Condition not met (stitch failed, `/verify` failed, `[TRANSCRIPTION FAILED: page N]` pending, run interrupted): keep the page files for resume and re-stitch
+4. Keep source images (`../.tools/_pdf_to_jpg_converted/[NAME]/`): required for `/verify`; rebuildable
+5. TRANSCRIBE_MULTI: apply per PDF as soon as that PDF is stitched and verified
+
+```powershell
+Remove-Item -LiteralPath "[WORKING_FOLDER]/_agentwork/.tmp_pages_[DocName]" -Recurse -Force
+```
+
 ## Output
 
 - Converted images: `../.tools/_pdf_to_jpg_converted/[NAME]/` (default from convert-pdf-to-jpg.py, do NOT override)
-- Transcribed pages: `[SESSION_FOLDER]/_markdown/[DocName]/`
+- Transcribed pages: `[WORKING_FOLDER]/_agentwork/.tmp_pages_[DocName]/` (temporary: deleted after the final file is stitched and verified)
 - Rebuild: page images are rebuildable. If the image folder is missing (deleted by `/cleanup`), re-render it from the source PDF with `convert-pdf-to-jpg.py` before continuing; never fail because images are missing
-- Final merged output: `[SESSION_FOLDER]/[DocName].md`
+- Final merged output: `[SOURCE_FOLDER]/_markdown/[DocName].md` (default: next to the original; `_markdown/` holds only final files). `[SOURCE_FOLDER]` = folder of the source PDF; downloaded or web sources: working folder. An explicit output location from the user overrides
 - Web screenshots: `../.tools/_web_screenshots/[DOMAIN]/`
 
 ## Agent-Created Folders
 
-- `_markdown/[DocName]/` - role: markdown; parent: working folder; creator: Step 2 batch transcription; content: one markdown file per page
+- `_markdown/` - role: markdown; parent: `[SOURCE_FOLDER]`; creator: Step 3 stitch; content: ONLY the final stitched `[DocName].md` files
+- `_agentwork/.tmp_pages_[DocName]/` - role: agentwork; parent: working folder; creator: Step 2 batch transcription; content: one markdown file per page; deleted after the final file is stitched and verified (see Cleanup of Unstitched Pages)
 - `_download_gitignore/` - role: download; parent: working folder; creator: Source Type "URL to PDF" download; content: downloaded PDF
 
 # CONTENT RULES
